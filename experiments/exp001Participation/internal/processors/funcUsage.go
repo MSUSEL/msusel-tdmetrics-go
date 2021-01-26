@@ -27,24 +27,16 @@ func (p *FuncUsage) ProcessFunction() parser.ProcessHandler {
 	return func(filename string, data interface{}) {
 		switch x := data.(type) {
 		case *handlers.FuncData:
-			p.funcParamType(x)
+			p.funcDataType(x)
 		}
 	}
 }
 
-// funcParamType process the function data by counting the parameter and receiver types.
-func (p *FuncUsage) funcParamType(d *handlers.FuncData) {
+// funcDataType process the function data by counting the parameter and receiver types.
+func (p *FuncUsage) funcDataType(d *handlers.FuncData) {
 	for _, t := range d.ParamTypes {
 		p.usage[t]++
 	}
-}
-
-// max gets the maximum integer from the two given integers.
-func max(a, b int) int {
-	if a > b {
-		return a
-	}
-	return b
 }
 
 // String will output the result from this processor as a string.
@@ -52,7 +44,9 @@ func (p *FuncUsage) String() string {
 	countMaxWidth := 0
 	for _, c := range p.usage {
 		width := len(fmt.Sprintf(`%d`, c))
-		countMaxWidth = max(countMaxWidth, width)
+		if width > countMaxWidth {
+			countMaxWidth = width
+		}
 	}
 
 	parts := make([]string, len(p.usage))

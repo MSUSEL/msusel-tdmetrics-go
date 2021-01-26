@@ -99,14 +99,13 @@ func (p *parserRunner) Await() {
 	<-p.doneCh
 }
 
-// AwaitChn will return a channel that can be selected on
+// AwaitCh will return a channel that can be selected on
 // and will be closed when the parse has finished.
 func (p *parserRunner) AwaitCh() chan bool {
 	return p.doneCh
 }
 
 // Start will start parsing the files asynchronously.
-// The returned channel can be used to await the parse to finish.
 func (p *parserRunner) Start() {
 	for i, filename := range p.filenames {
 		source := p.sources[i]
