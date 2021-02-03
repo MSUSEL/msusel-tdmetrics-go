@@ -3,11 +3,6 @@ package main
 import (
 	"fmt"
 	"os"
-	"time"
-
-	"./internal/handlers"
-	"./internal/parser"
-	"./internal/processors"
 )
 
 func main() {
@@ -18,23 +13,7 @@ func main() {
 	}
 	basePath := os.Args[1]
 
-	proc := processors.NewFuncUsage()
-	p := parser.NewParser().
-		//UpdateProgress(parser.MuteProgress).
-		AddProcessor(proc.ProcessFunction()).
-		AddHandler(handlers.JustFunctionParameterTypes)
-
-	p.AddDirRecursively(basePath).
-		FilterFilenames(parser.IsTestFile).
-		FilterFilenames(parser.IsGitFile).
-		FilterFilenames(parser.IsNotGoFile).
-		FilterFilenames(parser.IsVendorFile)
-	//fmt.Println(strings.Join(p.Filenames(), "\n"))
-
-	startTime := time.Now()
-	p.Start().Await()
-	fmt.Printf("Done (%d files in %s)\n", len(p.Filenames()), time.Since(startTime).String())
-
-	fmt.Println()
-	fmt.Println(proc.String())
+	//startTime := time.Now()
+	fmt.Println("Path:", basePath)
+	//fmt.Printf("Done (%d files in %s)\n", len(p.Filenames()), time.Since(startTime).String())
 }
