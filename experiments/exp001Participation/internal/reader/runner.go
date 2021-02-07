@@ -39,16 +39,32 @@ func (r *runner) run(basePath string, sources map[string]interface{}) {
 		files = append(files, f)
 	}
 
+	// Prepare the info for collecting data.
+	info := &types.Info{
+		Types: make(map[ast.Expr]types.TypeAndValue),
+		Defs:  make(map[*ast.Ident]types.Object),
+		Uses:  make(map[*ast.Ident]types.Object),
+	}
+
 	// Resolve types in the packages.
 	imp := importer.ForCompiler(fileset, runtime.Compiler, nil)
 	conf := types.Config{Importer: imp}
-	pkg, err := conf.Check(basePath, fileset, files, nil)
+	pkg, err := conf.Check(basePath, fileset, files, info)
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	fmt.Printf("Package  %q\n", pkg.Path())
+	fmt.Printf("Package: %q\n", pkg.Path())
 	fmt.Printf("Name:    %s\n", pkg.Name())
-	fmt.Printf("Imports: %s\n", pkg.Imports())
-	fmt.Printf("Scope:   %s\n", pkg.Scope())
+
+	fmt.Println("Defines:")
+	for id, obj := range info.Defs {
+		fmt.Printf("  %q defines %v\n", id.Name, obj)
+	}
+	fmt.Println("Uses:")
+	for id, obj := range info.Uses {
+		fmt.Printf("  %q uses %v\n", id.Name, obj)
+	}
+	fmt.Println()
+
 }
