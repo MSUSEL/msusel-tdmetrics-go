@@ -26,13 +26,8 @@ func main() {
 	fmt.Printf("Package: %q\n", project.Package.Path())
 	fmt.Printf("Name:    %s\n", project.Package.Name())
 
-	fmt.Println("Defines:")
-	for id, obj := range project.Defs {
-		fmt.Printf("  %q defines %v\n", id.Name, obj)
-	}
-	fmt.Println("Uses:")
-	for id, obj := range project.Uses {
-		fmt.Printf("  %q uses %v\n", id.Name, obj)
+	for t, ids := range project.Participation() {
+		fmt.Println(t, "=>", ids)
 	}
 	fmt.Println()
 }
