@@ -1,7 +1,6 @@
 package reader
 
 import (
-	"fmt"
 	"go/ast"
 	"go/importer"
 	"go/parser"
@@ -19,7 +18,7 @@ func newRunner() *runner {
 	return &runner{}
 }
 
-func (r *runner) run(basePath string, sources map[string]interface{}) {
+func (r *runner) run(basePath string, sources map[string]interface{}) *Project {
 	// Sort the file names
 	filenames := []string{}
 	for filename := range sources {
@@ -41,9 +40,11 @@ func (r *runner) run(basePath string, sources map[string]interface{}) {
 
 	// Prepare the info for collecting data.
 	info := &types.Info{
-		Types: make(map[ast.Expr]types.TypeAndValue),
-		Defs:  make(map[*ast.Ident]types.Object),
-		Uses:  make(map[*ast.Ident]types.Object),
+		Types:      make(map[ast.Expr]types.TypeAndValue),
+		Defs:       make(map[*ast.Ident]types.Object),
+		Uses:       make(map[*ast.Ident]types.Object),
+		Implicits:  make(map[ast.Node]types.Object),
+		Selections: make(map[*ast.SelectorExpr]*types.Selection),
 	}
 
 	// Resolve types in the packages.
@@ -54,17 +55,14 @@ func (r *runner) run(basePath string, sources map[string]interface{}) {
 		log.Fatal(err)
 	}
 
-	fmt.Printf("Package: %q\n", pkg.Path())
-	fmt.Printf("Name:    %s\n", pkg.Name())
-
-	fmt.Println("Defines:")
-	for id, obj := range info.Defs {
-		fmt.Printf("  %q defines %v\n", id.Name, obj)
+	// Gather up read results to be returned.
+	return &Project{
+		Fileset:    fileset,
+		Package:    pkg,
+		Types:      info.Types,
+		Defs:       info.Defs,
+		Uses:       info.Uses,
+		Implicits:  info.Implicits,
+		Selections: info.Selections,
 	}
-	fmt.Println("Uses:")
-	for id, obj := range info.Uses {
-		fmt.Printf("  %q uses %v\n", id.Name, obj)
-	}
-	fmt.Println()
-
 }

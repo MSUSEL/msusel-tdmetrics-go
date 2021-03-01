@@ -7,7 +7,7 @@ import (
 	"path/filepath"
 	"sort"
 
-	"../filter"
+	"github.com/MSUSEL/msusel-tdmetrics-go/exp001/internal/filter"
 )
 
 // Reader is the information used to setup how the reader
@@ -112,7 +112,7 @@ func (r *Reader) Filenames() []string {
 }
 
 // Read will perform the read of the data.
-func (r *Reader) Read() {
+func (r *Reader) Read() *Project {
 	runner := newRunner()
-	runner.run(r.basePath, r.sources)
+	return runner.run(r.basePath, r.sources)
 }
