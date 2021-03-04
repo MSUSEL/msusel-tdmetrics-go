@@ -7,7 +7,6 @@ import (
 	"go/token"
 	"go/types"
 	"log"
-	"runtime"
 	"sort"
 )
 
@@ -27,11 +26,11 @@ func (r *runner) run(basePath string, sources map[string]interface{}) *Project {
 	sort.Strings(filenames)
 
 	// Read and parse all the sources
-	fileset := token.NewFileSet()
+	fileSet := token.NewFileSet()
 	files := []*ast.File{}
 	for _, filename := range filenames {
 		source := sources[filename]
-		f, err := parser.ParseFile(fileset, filename, source, parser.ParseComments)
+		f, err := parser.ParseFile(fileSet, filename, source, parser.ParseComments)
 		if err != nil {
 			panic(err)
 		}
@@ -48,16 +47,17 @@ func (r *runner) run(basePath string, sources map[string]interface{}) *Project {
 	}
 
 	// Resolve types in the packages.
-	imp := importer.ForCompiler(fileset, runtime.Compiler, nil)
+	imp := importer.ForCompiler(fileSet, "source", nil)
 	conf := types.Config{Importer: imp}
-	pkg, err := conf.Check(basePath, fileset, files, info)
+	pkg, err := conf.Check(basePath, fileSet, files, info)
 	if err != nil {
-		log.Fatal(err)
+		log.Fatal("Type Check Failed: ", err)
 	}
 
 	// Gather up read results to be returned.
 	return &Project{
-		Fileset:    fileset,
+		BasePath:   basePath,
+		FileSet:    fileSet,
 		Package:    pkg,
 		Types:      info.Types,
 		Defs:       info.Defs,

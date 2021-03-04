@@ -26,8 +26,9 @@ func main() {
 	fmt.Printf("Package: %q\n", project.Package.Path())
 	fmt.Printf("Name:    %s\n", project.Package.Name())
 
-	for t, ids := range project.Participation() {
-		fmt.Println(t, "=>", ids)
-	}
+	project.TypeDefs()
+	// for t, ids := range project.Signatures() {
+	// 	fmt.Println(t, "=>", ids)
+	// }
 	fmt.Println()
 }

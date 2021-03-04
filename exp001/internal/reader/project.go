@@ -4,17 +4,33 @@ import (
 	"go/ast"
 	"go/token"
 	"go/types"
+	"sort"
 )
 
 // Project is the collection of compiled data for the project.
 type Project struct {
-	Fileset    *token.FileSet
+	BasePath   string
+	FileSet    *token.FileSet
 	Package    *types.Package
 	Types      map[ast.Expr]types.TypeAndValue
 	Defs       map[*ast.Ident]types.Object
 	Uses       map[*ast.Ident]types.Object
 	Implicits  map[ast.Node]types.Object
 	Selections map[*ast.SelectorExpr]*types.Selection
+}
+
+// SourceFilePaths gets the list source file paths for this project.
+func (p *Project) SourceFilePaths() []string {
+	fileSet := map[string]bool{}
+	for id := range p.Defs {
+		fileSet[p.FileSet.File(id.Pos()).Name()] = true
+	}
+	files := make([]string, 0, len(fileSet))
+	for file := range fileSet {
+		files = append(files, file)
+	}
+	sort.Strings(files)
+	return files
 }
 
 // Signatures are all the functions and methods.
@@ -29,36 +45,6 @@ func (p *Project) Signatures() map[*ast.Ident]*types.Signature {
 	return signs
 }
 
-func addPrticipationType(parts map[types.Type]map[*ast.Ident]bool, t types.Type, id *ast.Ident) {
-	// if types.Id() types.IsUntyped(t) {
-	// 	return
-	// }
-	if idMap := parts[t]; idMap != nil {
-		idMap[id] = true
-		return
-	}
-	idMap := map[*ast.Ident]bool{id: true}
-	parts[t] = idMap
-}
+func (p *Project) TypeDefs() {
 
-func (p *Project) Participation() map[types.Type][]*ast.Ident {
-	parts := make(map[types.Type]map[*ast.Ident]bool)
-	for id, sign := range p.Signatures() {
-		if sign.Recv() != nil {
-			addPrticipationType(parts, sign.Recv().Type(), id)
-		}
-		for i := sign.Params().Len() - 1; i >= 0; i-- {
-			addPrticipationType(parts, sign.Params().At(i).Type(), id)
-		}
-	}
-
-	result := make(map[types.Type][]*ast.Ident)
-	for t, idMap := range parts {
-		ids := make([]*ast.Ident, 0, len(idMap))
-		for id := range idMap {
-			ids = append(ids, id)
-		}
-		result[t] = ids
-	}
-	return result
 }
