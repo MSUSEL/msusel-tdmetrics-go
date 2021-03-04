@@ -2,6 +2,8 @@ package main
 
 import (
 	"fmt"
+	"os"
+	"path"
 
 	"github.com/MSUSEL/msusel-tdmetrics-go/exp001/internal/filter"
 	"github.com/MSUSEL/msusel-tdmetrics-go/exp001/internal/reader"
@@ -15,7 +17,7 @@ func main() {
 	// }
 	// basePath := os.Args[1]
 
-	basePath := `C:\Data\Code\Go\src\github.com\grant-nelson\goDiff\`
+	basePath := path.Join(os.Getenv("GOPATH"), `src/github.com/Grant-Nelson/goDiff/`)
 
 	project := reader.New().
 		SetBasePath(basePath).
@@ -26,9 +28,15 @@ func main() {
 	fmt.Printf("Package: %q\n", project.Package.Path())
 	fmt.Printf("Name:    %s\n", project.Package.Name())
 
-	project.TypeDefs()
-	// for t, ids := range project.Signatures() {
+	// fmt.Println("===========================")
+	// for t, ids := range project.UsedSignatures() {
 	// 	fmt.Println(t, "=>", ids)
 	// }
+	// fmt.Println("===========================")
+	// for id, f := range project.DefinedFuncs() {
+	// 	fmt.Println(id, "=> ", f)
+	// }
+	fmt.Println("===========================")
+	project.TypeDefs()
 	fmt.Println()
 }
