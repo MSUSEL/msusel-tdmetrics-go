@@ -119,9 +119,6 @@ func (r *Reader) Filenames() []string {
 
 // Read will perform the read of the data.
 func (r *Reader) Read() *Project {
-	// runner := newRunner()
-	// return runner.run(r.basePath, r.sources)
-
 	// Sort the file names
 	filenames := []string{}
 	for filename := range r.sources {
@@ -131,14 +128,21 @@ func (r *Reader) Read() *Project {
 
 	// Read and parse all the sources
 	fileSet := token.NewFileSet()
-	files := []*ast.File{}
+	files := map[string][]*ast.File{}
 	for _, filename := range filenames {
 		source := r.sources[filename]
 		f, err := parser.ParseFile(fileSet, filename, source, parser.ParseComments)
 		if err != nil {
 			panic(err)
 		}
-		files = append(files, f)
+
+		pkg := f.Name.Name
+		list := files[pkg]
+		if len(list) <= 0 {
+			list = []*ast.File{}
+		}
+		list = append(list, f)
+		files[pkg] = list
 	}
 
 	// Prepare the info for collecting data.
@@ -150,10 +154,12 @@ func (r *Reader) Read() *Project {
 		Selections: make(map[*ast.SelectorExpr]*types.Selection),
 	}
 
+	defaultPkg := `godiff` // TODO: Rework to load all packages
+
 	// Resolve types in the packages.
 	imp := importer.ForCompiler(fileSet, "source", nil)
 	conf := types.Config{Importer: imp}
-	pkg, err := conf.Check(r.basePath, fileSet, files, info)
+	pkg, err := conf.Check(r.basePath, fileSet, files[defaultPkg], info)
 	if err != nil {
 		log.Fatal("Type Check Failed: ", err)
 	}
