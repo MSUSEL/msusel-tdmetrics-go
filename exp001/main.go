@@ -37,6 +37,8 @@ func main() {
 	// 	fmt.Println(id, "=> ", f)
 	// }
 	fmt.Println("===========================")
-	project.TypeDefs()
+	for id, f := range project.Participation() {
+		fmt.Println(id, "=> ", f)
+	}
 	fmt.Println()
 }
