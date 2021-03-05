@@ -21,24 +21,17 @@ func main() {
 
 	project := reader.New().
 		SetBasePath(basePath).
-		AddDir(basePath).
+		AddDirRecursively(basePath).
 		FilterFilenames(filter.Default()).
 		Read()
 
-	fmt.Printf("Package: %q\n", project.Package.Path())
-	fmt.Printf("Name:    %s\n", project.Package.Name())
-
-	// fmt.Println("===========================")
-	// for t, ids := range project.UsedSignatures() {
-	// 	fmt.Println(t, "=>", ids)
-	// }
-	// fmt.Println("===========================")
-	// for id, f := range project.DefinedFuncs() {
-	// 	fmt.Println(id, "=> ", f)
-	// }
-	fmt.Println("===========================")
-	for id, f := range project.Participation() {
-		fmt.Println(id, "=> ", f)
+	for _, pkg := range project.Packages {
+		fmt.Printf("Package: %q\n", pkg.Package.Path())
+		fmt.Printf("Name:    %s\n", pkg.Package.Name())
+		fmt.Println("===========================")
+		for id, f := range pkg.Participation() {
+			fmt.Println(id, "=>", f)
+		}
+		fmt.Println()
 	}
-	fmt.Println()
 }

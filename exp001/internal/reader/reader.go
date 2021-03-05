@@ -14,6 +14,7 @@ import (
 	"sort"
 
 	"github.com/MSUSEL/msusel-tdmetrics-go/exp001/internal/filter"
+	"github.com/MSUSEL/msusel-tdmetrics-go/exp001/internal/utils"
 )
 
 // Reader is the information used to setup how the reader
@@ -117,18 +118,20 @@ func (r *Reader) Filenames() []string {
 	return filenames
 }
 
-// Read will perform the read of the data.
-func (r *Reader) Read() *Project {
-	// Sort the file names
-	filenames := []string{}
+// sortedFilenames gets all the filenames sorted.
+func (r *Reader) sortedFilenames() []string {
+	names := utils.NewStringSet()
 	for filename := range r.sources {
-		filenames = append(filenames, filename)
+		names.Add(filename)
 	}
-	sort.Strings(filenames)
+	return names.Values()
+}
 
-	// Read and parse all the sources
+// Read and parse all the sources and groups by package.
+func (r *Reader) parseSources() (*token.FileSet, map[string][]*ast.File) {
 	fileSet := token.NewFileSet()
-	files := map[string][]*ast.File{}
+	filesByPackage := map[string][]*ast.File{}
+	filenames := r.sortedFilenames()
 	for _, filename := range filenames {
 		source := r.sources[filename]
 		f, err := parser.ParseFile(fileSet, filename, source, parser.ParseComments)
@@ -136,15 +139,21 @@ func (r *Reader) Read() *Project {
 			panic(err)
 		}
 
+		// Using the package name to differentiate packages may not
+		// work if the same package name is used in two placed in a project.
 		pkg := f.Name.Name
-		list := files[pkg]
+		list := filesByPackage[pkg]
 		if len(list) <= 0 {
 			list = []*ast.File{}
 		}
 		list = append(list, f)
-		files[pkg] = list
+		filesByPackage[pkg] = list
 	}
+	return fileSet, filesByPackage
+}
 
+// readPackage constructs a new package with data pulled from the Go type checker.
+func (r *Reader) readPackage(proj *Project, pkgName string, files []*ast.File) *Package {
 	// Prepare the info for collecting data.
 	info := &types.Info{
 		Types:      make(map[ast.Expr]types.TypeAndValue),
@@ -154,20 +163,18 @@ func (r *Reader) Read() *Project {
 		Selections: make(map[*ast.SelectorExpr]*types.Selection),
 	}
 
-	defaultPkg := `godiff` // TODO: Rework to load all packages
-
 	// Resolve types in the packages.
-	imp := importer.ForCompiler(fileSet, "source", nil)
+	imp := importer.ForCompiler(proj.FileSet, "source", nil)
 	conf := types.Config{Importer: imp}
-	pkg, err := conf.Check(r.basePath, fileSet, files[defaultPkg], info)
+	pkg, err := conf.Check(r.basePath, proj.FileSet, files, info)
 	if err != nil {
 		log.Fatal("Type Check Failed: ", err)
 	}
 
 	// Gather up read results to be returned.
-	return &Project{
-		BasePath:   r.basePath,
-		FileSet:    fileSet,
+	return &Package{
+		Name:       pkgName,
+		Project:    proj,
 		Package:    pkg,
 		Types:      info.Types,
 		Defs:       info.Defs,
@@ -175,4 +182,21 @@ func (r *Reader) Read() *Project {
 		Implicits:  info.Implicits,
 		Selections: info.Selections,
 	}
+}
+
+// Read will perform the read of the data.
+func (r *Reader) Read() *Project {
+	fileSet, filesByPackage := r.parseSources()
+
+	proj := &Project{
+		BasePath: r.basePath,
+		FileSet:  fileSet,
+		Packages: nil,
+	}
+
+	for pkgName, files := range filesByPackage {
+		pkg := r.readPackage(proj, pkgName, files)
+		proj.Packages = append(proj.Packages, pkg)
+	}
+	return proj
 }
