@@ -17,7 +17,7 @@ func main() {
 	// }
 	// basePath := os.Args[1]
 
-	basePath := path.Join(os.Getenv("GOPATH"), `src/github.com/Grant-Nelson/goDiff/`)
+	basePath := path.Join(os.Getenv("GOPATH"), `src/github.com/MSUSEL/msusel-tdmetrics-go/testdata/dat001`)
 
 	project := reader.New().
 		SetBasePath(basePath).
