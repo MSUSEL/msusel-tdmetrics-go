@@ -71,17 +71,36 @@ func (p *Package) TypeDefs() map[*ast.Ident]*types.TypeName {
 	return result
 }
 
+// getBaseTypes gets the base types from the given type and add them to the given map.
+func getBaseTypes(t types.Type, baseTypes map[types.Type]bool) {
+	switch t2 := t.(type) {
+	case *types.Array:
+		getBaseTypes(t2.Elem(), baseTypes)
+	case *types.Chan:
+		getBaseTypes(t2.Elem(), baseTypes)
+	case *types.Map:
+		getBaseTypes(t2.Key(), baseTypes)
+		getBaseTypes(t2.Elem(), baseTypes)
+	case *types.Pointer:
+		getBaseTypes(t2.Elem(), baseTypes)
+	case *types.Slice:
+		getBaseTypes(t2.Elem(), baseTypes)
+	default:
+		baseTypes[t] = true
+	}
+}
+
 // getParticipants gets all the participants (receiver types and parameters types).
 func getParticipants(f *types.Func) map[types.Type]bool {
 	result := map[types.Type]bool{}
 	if sig, ok := f.Type().(*types.Signature); ok {
 		if recv := sig.Recv(); recv != nil {
-			result[recv.Type()] = true
+			getBaseTypes(recv.Type(), result)
 		}
 		params := sig.Params()
 		for i := 0; i < params.Len(); i++ {
 			param := params.At(i)
-			result[param.Type()] = true
+			getBaseTypes(param.Type(), result)
 		}
 	}
 	return result

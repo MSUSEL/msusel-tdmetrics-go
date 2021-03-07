@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"os"
 	"path"
 
@@ -19,19 +18,11 @@ func main() {
 
 	basePath := path.Join(os.Getenv("GOPATH"), `src/github.com/MSUSEL/msusel-tdmetrics-go/testdata/dat001`)
 
-	project := reader.New().
+	proj := reader.New().
 		SetBasePath(basePath).
 		AddDirRecursively(basePath).
 		FilterFilenames(filter.Default()).
 		Read()
 
-	for _, pkg := range project.Packages {
-		fmt.Printf("Package: %q\n", pkg.Package.Path())
-		fmt.Printf("Name:    %s\n", pkg.Package.Name())
-		fmt.Println("===========================")
-		for id, f := range pkg.Participation() {
-			fmt.Println(id, "=>", f)
-		}
-		fmt.Println()
-	}
+	proj.PrintParticipation()
 }
