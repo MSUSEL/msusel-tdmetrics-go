@@ -76,34 +76,46 @@ func getBaseTypes(t types.Type, baseTypes map[types.Type]bool) {
 	switch t2 := t.(type) {
 	case *types.Array:
 		getBaseTypes(t2.Elem(), baseTypes)
+
 	case *types.Chan:
 		getBaseTypes(t2.Elem(), baseTypes)
+
+	case *types.Interface:
+		// TODO: Implement
+		baseTypes[t] = true
+
 	case *types.Map:
 		getBaseTypes(t2.Key(), baseTypes)
 		getBaseTypes(t2.Elem(), baseTypes)
+
+	case *types.Named:
+		// TODO: Implement
+		baseTypes[t] = true
+
 	case *types.Pointer:
 		getBaseTypes(t2.Elem(), baseTypes)
+
+	case *types.Signature:
+		if recv := t2.Recv(); recv != nil {
+			getBaseTypes(recv.Type(), baseTypes)
+		}
+		params := t2.Params()
+		for i := 0; i < params.Len(); i++ {
+			param := params.At(i)
+			getBaseTypes(param.Type(), baseTypes)
+		}
+
 	case *types.Slice:
 		getBaseTypes(t2.Elem(), baseTypes)
+
+	case *types.Struct:
+		for i := 0; i < t2.NumFields(); i++ {
+			getBaseTypes(t2.Field(i).Type(), baseTypes)
+		}
+
 	default:
 		baseTypes[t] = true
 	}
-}
-
-// getParticipants gets all the participants (receiver types and parameters types).
-func getParticipants(f *types.Func) map[types.Type]bool {
-	result := map[types.Type]bool{}
-	if sig, ok := f.Type().(*types.Signature); ok {
-		if recv := sig.Recv(); recv != nil {
-			getBaseTypes(recv.Type(), result)
-		}
-		params := sig.Params()
-		for i := 0; i < params.Len(); i++ {
-			param := params.At(i)
-			getBaseTypes(param.Type(), result)
-		}
-	}
-	return result
 }
 
 // Participation gets all the functions which each type definition
@@ -111,16 +123,23 @@ func getParticipants(f *types.Func) map[types.Type]bool {
 func (p *Package) Participation() map[*ast.Ident][]*ast.Ident {
 	result := map[*ast.Ident][]*ast.Ident{}
 	typeDefs := p.TypeDefs()
+
 	defFuncs := p.DefinedFuncs()
 	for defID, def := range typeDefs {
 		funcIDs := []*ast.Ident{}
 		for funcID, funcObj := range defFuncs {
-			parts := getParticipants(funcObj)
+			parts := map[types.Type]bool{}
+			getBaseTypes(funcObj.Type(), parts)
 			if parts[def.Type()] {
 				funcIDs = append(funcIDs, funcID)
 			}
 			result[defID] = funcIDs
 		}
 	}
+
+	// TODO: Propagate to sub-types
+
+	//fmt.Println(typeDefs)
+
 	return result
 }
