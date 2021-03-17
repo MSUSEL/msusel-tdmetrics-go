@@ -71,71 +71,27 @@ func (p *Package) TypeDefs() map[*ast.Ident]*types.TypeName {
 	return result
 }
 
-// getBaseTypes gets the base types from the given type and add them to the given map.
-func getBaseTypes(t types.Type, baseTypes map[types.Type]bool) {
-	switch t2 := t.(type) {
-	case *types.Array:
-		getBaseTypes(t2.Elem(), baseTypes)
-
-	case *types.Chan:
-		getBaseTypes(t2.Elem(), baseTypes)
-
-	case *types.Interface:
-		// TODO: Implement
-		baseTypes[t] = true
-
-	case *types.Map:
-		getBaseTypes(t2.Key(), baseTypes)
-		getBaseTypes(t2.Elem(), baseTypes)
-
-	case *types.Named:
-		// TODO: Implement
-		baseTypes[t] = true
-
-	case *types.Pointer:
-		getBaseTypes(t2.Elem(), baseTypes)
-
-	case *types.Signature:
-		if recv := t2.Recv(); recv != nil {
-			getBaseTypes(recv.Type(), baseTypes)
-		}
-		params := t2.Params()
-		for i := 0; i < params.Len(); i++ {
-			param := params.At(i)
-			getBaseTypes(param.Type(), baseTypes)
-		}
-
-	case *types.Slice:
-		getBaseTypes(t2.Elem(), baseTypes)
-
-	case *types.Struct:
-		for i := 0; i < t2.NumFields(); i++ {
-			getBaseTypes(t2.Field(i).Type(), baseTypes)
-		}
-
-	default:
-		baseTypes[t] = true
-	}
-}
-
 // Participation gets all the functions which each type definition
 // from the main package has participated in.
 func (p *Package) Participation() map[*ast.Ident][]*ast.Ident {
 	result := map[*ast.Ident][]*ast.Ident{}
 	typeDefs := p.TypeDefs()
-
+	bt := NewBaseTypes()
 	defFuncs := p.DefinedFuncs()
 	for defID, def := range typeDefs {
 		funcIDs := []*ast.Ident{}
 		for funcID, funcObj := range defFuncs {
-			parts := map[types.Type]bool{}
-			getBaseTypes(funcObj.Type(), parts)
+			parts := bt.getBaseTypes(funcObj.Type())
 			if parts[def.Type()] {
 				funcIDs = append(funcIDs, funcID)
 			}
 			result[defID] = funcIDs
 		}
 	}
+
+	// for defID, def := range typeDefs {
+	// 	def.Type()
+	// }
 
 	// TODO: Propagate to sub-types
 
