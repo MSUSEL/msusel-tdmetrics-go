@@ -88,14 +88,5 @@ func (p *Package) Participation() map[*ast.Ident][]*ast.Ident {
 			result[defID] = funcIDs
 		}
 	}
-
-	// for defID, def := range typeDefs {
-	// 	def.Type()
-	// }
-
-	// TODO: Propagate to sub-types
-
-	//fmt.Println(typeDefs)
-
 	return result
 }

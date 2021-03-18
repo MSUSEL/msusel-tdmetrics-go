@@ -1,7 +1,6 @@
 package reader
 
 import (
-	"fmt"
 	"go/types"
 )
 
@@ -70,9 +69,9 @@ func (bt *BaseTypes) recurseBaseTypes(t types.Type, touchedTypes, baseTypes map[
 		bt.recurseBaseTypes(t2.Elem(), touchedTypes, baseTypes)
 
 	case *types.Named:
-		// TODO: Implement
-		fmt.Println("NAMED::", t2)
-		baseTypes[t] = true
+		// For named types the top type and its underlying type should both be added.
+		baseTypes[t2] = true
+		bt.recurseBaseTypes(t2.Underlying(), touchedTypes, baseTypes)
 
 	case *types.Pointer:
 		bt.recurseBaseTypes(t2.Elem(), touchedTypes, baseTypes)
