@@ -20,6 +20,9 @@ type (
 	Cats []*Cat
 )
 
+// log will print messages, overwrite to log out to a different place.
+var log = fmt.Println
+
 // NewCat creates a new cat instance with the given name and age.
 func NewCat(name string, age int) *Cat {
 	return &Cat{
@@ -31,7 +34,7 @@ func NewCat(name string, age int) *Cat {
 // Meow is the cat's way to tell its human servant that it
 // must have food now or the servant will suffer consequences.
 func (c *Cat) Meow() {
-	fmt.Println(c.Name, `meows`)
+	log(c.Name, `meows`)
 }
 
 // String gets the name of the cat.
@@ -50,7 +53,7 @@ func NextYear(cats ...*Cat) {
 func (cats Cats) Youngest() *Cat {
 	var youngest *Cat
 	for _, c := range cats {
-		if youngest == nil || youngest.Age < c.Age {
+		if youngest == nil || youngest.Age > c.Age {
 			youngest = c
 		}
 	}
@@ -60,5 +63,5 @@ func (cats Cats) Youngest() *Cat {
 // Pet puts the human servant in danger of being
 // murdered while trying to please its kitty master.
 func Pet(c *Cat) {
-	fmt.Println(`petting`, c.Name)
+	log(`petting`, c.Name)
 }
