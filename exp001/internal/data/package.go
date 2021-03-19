@@ -1,4 +1,4 @@
-package reader
+package data
 
 import (
 	"go/ast"

@@ -13,6 +13,7 @@ import (
 	"path/filepath"
 	"sort"
 
+	"github.com/MSUSEL/msusel-tdmetrics-go/exp001/internal/data"
 	"github.com/MSUSEL/msusel-tdmetrics-go/exp001/internal/filter"
 	"github.com/MSUSEL/msusel-tdmetrics-go/exp001/internal/utils"
 )
@@ -153,7 +154,7 @@ func (r *Reader) parseSources() (*token.FileSet, map[string][]*ast.File) {
 }
 
 // readPackage constructs a new package with data pulled from the Go type checker.
-func (r *Reader) readPackage(proj *Project, pkgName string, files []*ast.File) *Package {
+func (r *Reader) readPackage(proj *data.Project, pkgName string, files []*ast.File) *data.Package {
 	// Prepare the info for collecting data.
 	info := &types.Info{
 		Types:      make(map[ast.Expr]types.TypeAndValue),
@@ -172,7 +173,7 @@ func (r *Reader) readPackage(proj *Project, pkgName string, files []*ast.File) *
 	}
 
 	// Gather up read results to be returned.
-	return &Package{
+	return &data.Package{
 		Name:       pkgName,
 		Project:    proj,
 		Package:    pkg,
@@ -185,10 +186,10 @@ func (r *Reader) readPackage(proj *Project, pkgName string, files []*ast.File) *
 }
 
 // Read will perform the read of the data.
-func (r *Reader) Read() *Project {
+func (r *Reader) Read() *data.Project {
 	fileSet, filesByPackage := r.parseSources()
 
-	proj := &Project{
+	proj := &data.Project{
 		BasePath: r.basePath,
 		FileSet:  fileSet,
 		Packages: nil,
