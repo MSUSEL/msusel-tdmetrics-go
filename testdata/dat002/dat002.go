@@ -13,21 +13,27 @@ const (
 )
 
 type (
+	// CatBreed is a enumerator type for predefined cat breeds.
 	CatBreed int
 
+	// ID is a unique identifier used to specify cats.
 	ID string
 
+	// IDSlice is a slice of IDs.
 	IDSlice []ID
 
+	// Cat stores a single cat's information.
 	Cat struct {
 		Name  string
 		Breed CatBreed
 		Age   int
 	}
 
+	// CatTable is a collection of identified set of cats.
 	CatTable map[ID]*Cat
 )
 
+// The enumeration of all predefined cat breeds.
 const (
 	BritishShorthair = CatBreed(iota)
 	Persian
@@ -55,6 +61,7 @@ const (
 	Balinese
 )
 
+// String gets the name for a cat breed.
 func (cb CatBreed) String() string {
 	switch cb {
 	case BritishShorthair:
@@ -109,26 +116,32 @@ func (cb CatBreed) String() string {
 	return "Unknown"
 }
 
-var lastIDValue = 0
+// nextIDValue is the next value to use in constructing an ID
+var nextIDValue = 0
 
+// NewID creates a new cat ID for the table.
 func NewID() ID {
-	val := lastIDValue
-	lastIDValue++
+	val := nextIDValue
+	nextIDValue++
 	return ID(fmt.Sprintf("cat-%d", val))
 }
 
+// Len gets the number of IDs in the slice used for sorting.
 func (ids IDSlice) Len() int {
 	return len(ids)
 }
 
+// Less determines if the `i`th ID is less than the `j`th ID used for sorting.
 func (ids IDSlice) Less(i, j int) bool {
 	return ids[i] < ids[j]
 }
 
+// Swap will swap the `i`th ID with the `j`th ID.
 func (ids IDSlice) Swap(i, j int) {
 	ids[j], ids[i] = ids[i], ids[j]
 }
 
+// String gets a string of all ths IDs in the slice used for debugging.
 func (ids IDSlice) String() string {
 	var s strings.Builder
 	for i, id := range ids {
@@ -144,11 +157,13 @@ func (ids IDSlice) String() string {
 	return s.String()
 }
 
+// Has determines if there is a cat with the given ID.
 func (ct CatTable) Has(id ID) bool {
 	_, ok := ct[id]
 	return ok
 }
 
+// Adds a new cat with the given information and ID.
 func (ct CatTable) Add(id ID, name string, breed CatBreed, age int) {
 	if ct.Has(id) {
 		panic(fmt.Errorf(alreadyExistsInTable, id))
@@ -160,12 +175,14 @@ func (ct CatTable) Add(id ID, name string, breed CatBreed, age int) {
 	}
 }
 
+// Adds a new cat with a generated ID. The ID will be returned.
 func (ct CatTable) AddNew(name string, breed CatBreed, age int) ID {
 	id := NewID()
 	ct.Add(id, name, breed, age)
 	return id
 }
 
+// Name gets the name of the cat with the given ID.
 func (ct CatTable) Name(id ID) string {
 	if !ct.Has(id) {
 		panic(fmt.Errorf(doesNotExistInTable, id))
@@ -173,6 +190,7 @@ func (ct CatTable) Name(id ID) string {
 	return ct[id].Name
 }
 
+// Breed gets the breed of the cat with the given ID.
 func (ct CatTable) Breed(id ID) CatBreed {
 	if !ct.Has(id) {
 		panic(fmt.Errorf(doesNotExistInTable, id))
@@ -180,6 +198,7 @@ func (ct CatTable) Breed(id ID) CatBreed {
 	return ct[id].Breed
 }
 
+// Age gets the age of the cat with the given ID.
 func (ct CatTable) Age(id ID) int {
 	if !ct.Has(id) {
 		panic(fmt.Errorf(doesNotExistInTable, id))
@@ -187,6 +206,7 @@ func (ct CatTable) Age(id ID) int {
 	return ct[id].Age
 }
 
+// AllIDs get a slice of all the IDs in the table.
 func (ct CatTable) AllIDs() IDSlice {
 	ids := IDSlice{}
 	for id := range ct {
@@ -235,6 +255,7 @@ func (ct CatTable) AllBreeds() []CatBreed {
 	return breeds
 }
 
+// CatsWithBreed gets the IDs for all the cats of the given breed type.
 func (ct CatTable) CatsWithBreed(breed CatBreed) IDSlice {
 	ids := IDSlice{}
 	for id, c := range ct {
@@ -246,6 +267,7 @@ func (ct CatTable) CatsWithBreed(breed CatBreed) IDSlice {
 	return ids
 }
 
+// CatsWithName gets the IDs for all the cats of the given name.
 func (ct CatTable) CatsWithName(name string) IDSlice {
 	ids := IDSlice{}
 	for id, c := range ct {
@@ -257,6 +279,7 @@ func (ct CatTable) CatsWithName(name string) IDSlice {
 	return ids
 }
 
+// String returns a formatted table view of the cat table for debugging.
 func (ct CatTable) String() string {
 	idTitle, nameTitle, breedTitle, ageTitle := `ID`, `Name`, `Breed`, `Age`
 	idLenMax, nameLenMax, breedLenMax, ageLenMax :=
