@@ -25,4 +25,5 @@ func main() {
 		Read()
 
 	proj.PrintParticipation()
+	proj.PrintFuncs()
 }

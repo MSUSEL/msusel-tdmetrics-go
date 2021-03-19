@@ -42,7 +42,40 @@ func (p *Project) PrintParticipation() {
 
 		sort.Strings(parts)
 		parts = append([]string{
-			fmt.Sprintf("Package: %q", pkg.Package.Path()),
+			fmt.Sprintf("Package: %s", pkg.Package.Path()),
+			fmt.Sprintf("Name:    %s", pkg.Package.Name()),
+		}, parts...)
+		packageStrings[i] = strings.Join(parts, "\n")
+	}
+	sort.Strings(packageStrings)
+	result := strings.Join(packageStrings, "\n\n")
+	fmt.Println(result)
+}
+
+// PrintFuncs formats and prints the functions.
+func (p *Project) PrintFuncs() {
+	packageStrings := make([]string, len(p.Packages))
+	for i, pkg := range p.Packages {
+		path := pkg.Package.Path()
+		defFuncs := pkg.DefinedFuncs()
+
+		maxWidth := 0
+		for id := range defFuncs {
+			if width := len(id.String()); maxWidth < width {
+				maxWidth = width
+			}
+		}
+
+		parts := []string{}
+		for id, f := range defFuncs {
+			funcStr := strings.ReplaceAll(f.String(), path+`.`, ``)
+			part := fmt.Sprintf(`   %-*s => [%s]`, maxWidth, id.String(), funcStr)
+			parts = append(parts, part)
+		}
+
+		sort.Strings(parts)
+		parts = append([]string{
+			fmt.Sprintf("Package: %s", path),
 			fmt.Sprintf("Name:    %s", pkg.Package.Name()),
 		}, parts...)
 		packageStrings[i] = strings.Join(parts, "\n")
