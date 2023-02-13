@@ -4,4 +4,10 @@ Experiments in measuring technical debt metrics for the procedural language Go.
 
 ## Experiments
 
-1. [Participation Measurement](./goexps/exp001/)
+### Go
+
+1. [Preliminary Participation Measurement](./goexps/exp001/)
+
+### Java
+
+1. [Participation Measurement](./javaexps/exp001)
