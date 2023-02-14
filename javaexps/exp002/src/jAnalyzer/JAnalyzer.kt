@@ -1,7 +1,7 @@
 package jAnalyzer
 
-import export.EObject
-import export.Exportable
+import json.EObject
+import json.Exportable
 import kotlin.io.path.Path
 
 class JAnalyzer: Exportable {

@@ -1,17 +1,15 @@
-package export
+package json
 
 import java.rmi.UnexpectedException
-import java.util.*
-import javax.lang.model.type.UnknownTypeException
 
 class Yaml {
     private val buf = StringBuilder()
 
     fun clear() = this.buf.clear()
 
-    fun write(obj: EObject) {
+    fun write(obj: EObject?) {
         this.buf.appendLine("---")
-        write(obj, "")
+        write(obj ?: ENull(), "")
     }
 
     private fun write(obj: EObject, indent: String) {

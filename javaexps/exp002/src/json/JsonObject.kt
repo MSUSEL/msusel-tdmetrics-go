@@ -1,0 +1,3 @@
+package json
+
+interface JsonObject
