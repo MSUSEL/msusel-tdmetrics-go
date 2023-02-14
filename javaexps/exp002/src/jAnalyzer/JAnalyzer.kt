@@ -1,10 +1,11 @@
 package jAnalyzer
 
-import json.EObject
-import json.Exportable
+import json.JsonMap
+import json.JsonObj
+import json.Jsonable
 import kotlin.io.path.Path
 
-class JAnalyzer: Exportable {
+class JAnalyzer: Jsonable {
     private val root = JPath(".")
 
     fun addPath(path: String): JPath {
@@ -21,7 +22,9 @@ class JAnalyzer: Exportable {
         return parent
     }
 
-    override fun export(): EObject? {
-        TODO("Not yet implemented")
+    override fun toJson(): JsonObj? {
+        val m = JsonMap()
+        m["root"] = root.toJson()
+        return m
     }
 }

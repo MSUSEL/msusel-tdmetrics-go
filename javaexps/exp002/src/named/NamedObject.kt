@@ -1,5 +1,7 @@
 package named
 
-interface NamedObject {
+import json.Jsonable
+
+interface NamedObject: Jsonable {
     val name: String
 }

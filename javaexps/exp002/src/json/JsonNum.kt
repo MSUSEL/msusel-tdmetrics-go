@@ -1,3 +1,5 @@
 package json
 
-class JsonNum(val value: Double): JsonObject
+class JsonNum(private val value: Double): JsonObj {
+    override fun write(buf: StringBuilder) { buf.append(value) }
+}

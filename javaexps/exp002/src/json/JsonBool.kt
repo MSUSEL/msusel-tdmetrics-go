@@ -1,3 +1,5 @@
 package json
 
-class JsonBool(val value: Boolean): JsonObject
+class JsonBool(private val value: Boolean): JsonObj {
+    override fun write(buf: StringBuilder) { buf.append(value) }
+}

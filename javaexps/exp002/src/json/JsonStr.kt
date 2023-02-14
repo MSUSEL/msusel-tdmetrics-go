@@ -1,3 +1,5 @@
 package json
 
-class JsonStr(val value: String): JsonObject
+class JsonStr(private val value: String): JsonObj {
+    override fun write(buf: StringBuilder) { JsonObj.Companion.writeEscapedJsonString(buf, value) }
+}
