@@ -3,6 +3,6 @@ import json.JsonObj
 
 fun main() {
     val janis = Janis()
-    janis.addPath("C:\\Data\\Code\\Apache\\bcel-6.5.0-src")
+    janis.addPath("./testProjects/bcel/")
     print(JsonObj.Companion.toString(janis.toJson()))
 }
