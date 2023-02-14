@@ -1,8 +1,8 @@
-import jAnalyzer.JAnalyzer
+import janis.Janis
 import json.JsonObj
 
 fun main() {
-    var jana = JAnalyzer()
-    jana.addPath("/Users/grantnelson/personal/PHD-Work/Checkstyle")
-    print(JsonObj.Companion.toString(jana.toJson()))
+    val janis = Janis()
+    janis.addPath("C:\\Data\\Code\\Apache\\bcel-6.5.0-src")
+    print(JsonObj.Companion.toString(janis.toJson()))
 }

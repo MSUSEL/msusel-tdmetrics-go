@@ -2,7 +2,7 @@ package json
 
 import kotlin.collections.ArrayList
 
-class JsonList: ArrayList<JsonObj?>(), JsonObj {
+class JsonList(elements: Collection<JsonObj?> = emptyList()): ArrayList<JsonObj?>(elements), JsonObj {
     override fun write(buf: StringBuilder) {
         buf.append("[")
         var first = true

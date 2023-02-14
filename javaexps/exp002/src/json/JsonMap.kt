@@ -1,12 +1,12 @@
 package json
 
-import kotlin.collections.HashMap
+import java.util.TreeMap
 
-class JsonMap: HashMap<String, JsonObj?>(), JsonObj {
+class JsonMap: TreeMap<String, JsonObj?>(), JsonObj {
     override fun write(buf: StringBuilder) {
         buf.append("{")
         var first = true
-        for ((key, value) in this) {
+        for ((key, value) in this.toSortedMap()) {
             JsonObj.Companion.writeEscapedJsonString(buf, key)
             buf.append(":")
             JsonObj.Companion.write(buf, value)
