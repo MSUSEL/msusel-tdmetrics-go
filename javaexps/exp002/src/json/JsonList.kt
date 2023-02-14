@@ -7,9 +7,9 @@ class JsonList(elements: Collection<JsonObj?> = emptyList()): ArrayList<JsonObj?
         buf.append("[")
         var first = true
         for (elem in this) {
-            JsonObj.Companion.write(buf, elem)
             if (first) first = false
             else buf.append(",")
+            JsonObj.Companion.write(buf, elem)
         }
         buf.append("]")
     }

@@ -7,11 +7,11 @@ class JsonMap: TreeMap<String, JsonObj?>(), JsonObj {
         buf.append("{")
         var first = true
         for ((key, value) in this.toSortedMap()) {
+            if (first) first = false
+            else buf.append(",")
             JsonObj.Companion.writeEscapedJsonString(buf, key)
             buf.append(":")
             JsonObj.Companion.write(buf, value)
-            if (first) first = false
-            else buf.append(",")
         }
         buf.append("}")
     }
