@@ -1,8 +1,10 @@
 package janis
 
 import json.*
-import java.io.File
-import java.util.TreeSet
+import java.io.*
+import java.util.*
+import java.util.jar.*
+import java.util.zip.*
 
 class JFiles(): Jsonable {
     private val extensions = arrayOf("java", "jar", "class", "zip", "war")
@@ -17,7 +19,9 @@ class JFiles(): Jsonable {
         else this.files[path.extension.lowercase()]?.add(path)
     }
 
-    private fun isFile(f: File, ext: String) = f.isFile && f.extension.lowercase() == ext;
+    fun readFiles(): TreeSet<JClass> {
+
+    }
 
     override fun toJson(): JsonObj? {
         val m = JsonMap()

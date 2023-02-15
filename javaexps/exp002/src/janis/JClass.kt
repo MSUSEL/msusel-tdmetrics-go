@@ -1,0 +1,6 @@
+package janis
+
+class JClass {
+
+
+}
