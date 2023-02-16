@@ -1,18 +1,29 @@
 package janis
 
-import java.io.*
+import java.io.DataInputStream
+import java.io.File
+import java.io.IOException
+import java.io.InputStream
 import java.util.*
-import java.util.jar.*
+import java.util.jar.JarEntry
+import java.util.jar.JarFile
+
+import com.sun.tools.javac.jvm.ClassFile.*
+import java.lang.Exception
 
 class JParser(val classes: LinkedList<JClass>) {
 
-    fun parseJava(path: File) { /* Currently java files aren't parsed. */ }
+    fun parseJava(path: File) {
+        // Currently java files aren't parsed.
+    }
 
     fun parseClass(path: File) {
-        var buf: BufferedReader? = null
+        var buf: InputStream? = null
         try {
-            buf = path.bufferedReader()
-            parseClass(buf)
+            buf = path.inputStream()
+            this.parseClass(buf)
+        } catch (ex: Exception) {
+            throw IOException("Error reading Class file: ${path.name}", ex)
         } finally {
             buf?.close()
         }
@@ -22,24 +33,43 @@ class JParser(val classes: LinkedList<JClass>) {
         var jar: JarFile? = null
         try {
             jar = JarFile(path)
-            for (entry in jar.entries()) {
-                if (File(entry.name).extension.lowercase() == "class") {
-                    var buf: BufferedReader? = null
-                    try {
-                        buf = BufferedReader(InputStreamReader(jar.getInputStream(entry)))
-                        parseClass(buf)
-                    } finally {
-                        buf?.close()
-                    }
-                }
-            }
-
+            for (entry in jar.entries())
+                this.parseJarEntry(jar, entry)
+        } catch (ex: Exception) {
+            throw IOException("Error reading Jar file: ${path.name}", ex)
         } finally {
             jar?.close()
         }
     }
 
-    private fun parseClass(buf: BufferedReader) {
+    private fun parseJarEntry(jar: JarFile, entry: JarEntry) {
+        if (!isClass(entry)) return
 
+        var buf: InputStream? = null
+        try {
+            buf = jar.getInputStream(entry)
+            this.parseClass(buf)
+        } catch (ex: Exception) {
+            throw IOException("Error reading Jar Entity: ${entry.name}", ex)
+        } finally {
+            buf?.close()
+        }
+    }
+
+    private fun isClass(entry: JarEntry): Boolean {
+        val f = File(entry.name)
+        return f.isFile && f.extension.lowercase() == "class"
+    }
+
+    private fun parseClass(buf: InputStream) {
+        val dat = DataInputStream(buf)
+
+        val magic: Int = dat.readInt()
+        if (magic != JAVA_MAGIC)
+            throw IOException("Invalid Class file")
+
+
+
+        // TODO: Finish
     }
 }
