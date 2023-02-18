@@ -1,20 +1,12 @@
-package janis
+package janis.classFileParser
 
 import com.sun.tools.javac.jvm.ClassFile.*
-import com.sun.tools.javac.jvm.*
-import java.io.DataInputStream
-import java.io.File
-import java.io.IOException
-import java.io.InputStream
+import janis.JClass
+import java.io.*
 import java.util.*
-import java.util.jar.JarEntry
-import java.util.jar.JarFile
+import java.util.jar.*
 
 class JParser(val classes: LinkedList<JClass>) {
-
-    fun parseJava(path: File) {
-        // Currently java files aren't parsed.
-    }
 
     fun parseClass(path: File) {
         var buf: InputStream? = null
@@ -61,9 +53,8 @@ class JParser(val classes: LinkedList<JClass>) {
     }
 
     /**
-     * @see <https://docs.oracle.com/javase/specs/jvms/se7/html/jvms-4.html>
-     * @see <https://github.com/clarkware/jdepend>
-     * @see <https://www.geeksforgeeks.org/java-class-file/>
+     *
+     * @see <https://docs.oracle.com/javase/specs/jvms/se19/html/jvms-4.html#jvms-4>
      */
     private fun parseClass(buf: InputStream) {
         val dat = DataInputStream(buf)
@@ -74,7 +65,8 @@ class JParser(val classes: LinkedList<JClass>) {
 
         val minorVersion = dat.readUnsignedShort()
         val majorVersion = dat.readUnsignedShort()
-        val constants = JConstant.Companion.readConstantPool(dat)
+        val constantPool = JConstantPool(dat)
+
 
         // TODO: Finish
     }

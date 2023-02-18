@@ -1,5 +1,6 @@
 package janis
 
+import janis.classFileParser.JParser
 import json.*
 import java.util.*
 
