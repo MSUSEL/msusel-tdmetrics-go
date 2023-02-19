@@ -1,5 +1,7 @@
 # Experiment 002
 
+_Janis = Java Analysis_
+
 This uses [INRIA's Spoon](https://github.com/INRIA/spoon).
 
 ## Getting Test Projects
