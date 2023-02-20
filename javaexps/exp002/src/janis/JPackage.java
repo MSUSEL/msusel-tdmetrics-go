@@ -8,15 +8,16 @@ import spoon.reflect.declaration.CtPackage;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Package implements Jsonable {
+public final class JPackage implements Jsonable {
     public String name;
-    public List<Package> packages;
+    public List<JPackage> packages;
+    public List<JClass> classes;
 
-    public Package(CtPackage p) {
+    public JPackage(CtPackage p) {
         this.name = p.getQualifiedName();
         this.packages = new ArrayList<>();
         for (CtPackage sub : p.getPackages())
-            this.packages.add(new Package(sub));
+            this.packages.add(new JPackage(sub));
     }
 
     @Override

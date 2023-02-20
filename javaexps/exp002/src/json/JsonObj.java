@@ -27,14 +27,14 @@ public interface JsonObj {
         return new JsonStr(data.toString());
     }
 
-    static void write(StringBuilder buf, JsonObj obj) {
+    static void write(StringBuilder buf, Object obj) {
         if (obj == null) buf.append("null");
-        else obj.write(buf);
+        else convert(obj).write(buf);
     }
 
-    static String toString(JsonObj obj) {
+    static String toString(Object obj) {
         StringBuilder buf = new StringBuilder();
-        write(buf, obj);
+        write(buf, convert(obj));
         return buf.toString();
     }
 }

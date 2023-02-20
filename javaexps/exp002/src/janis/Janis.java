@@ -5,10 +5,10 @@ import spoon.Launcher;
 import spoon.reflect.CtModel;
 
 public class Janis {
-    private Package packages;
+    private JPackage rootPackage;
 
     public Janis() {
-        this.packages = null;
+        this.rootPackage = null;
     }
 
     public void read(String path) {
@@ -23,11 +23,11 @@ public class Janis {
     }
 
     private void readPackages(CtModel model) {
-        this.packages = new Package(model.getRootPackage());
+        this.rootPackage = new JPackage(model.getRootPackage());
     }
 
     public void write() {
-        String str = JsonObj.toString(this.packages.toJson());
-        System.out.println(str);
+        String results = JsonObj.toString(this.rootPackage);
+        System.out.println(results);
     }
 }
