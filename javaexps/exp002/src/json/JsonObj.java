@@ -3,6 +3,7 @@ package json;
 import javax.lang.model.type.UnknownTypeException;
 
 public interface JsonObj {
+    boolean isEmpty();
     void write(StringBuilder buf);
 
     static String escape(String value) {

@@ -12,39 +12,3 @@ From this same folder as this README file, run:
 
 ## Schema
 
-````
-Main{
-    packages []package;
-    data []data;
-    methods []method;
-}
-
-package {
-    name string:
-    subs []package.name;
-}
-
-data {
-    name string;
-    
-    static bool;
-    public bool;
-    interface bool;
-    external bool;
-    
-    supers []data.name;
-    fields []data.name;
-    members []method.name;
-}
-
-method {
-    name string;
-    
-    public bool;
-    static bool;
-    external bool;
-    
-    receivers []data.name;
-    parameters []data.name;
-}
-```

@@ -18,6 +18,7 @@ public final class JsonList extends ArrayList<JsonObj> implements JsonObj {
         return super.set(index, JsonObj.convert(value));
     }
 
+    @Override
     public void write(StringBuilder buf) {
         buf.append("[");
         boolean first = true;

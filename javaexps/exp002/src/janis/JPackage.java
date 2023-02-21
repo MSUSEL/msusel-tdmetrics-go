@@ -10,14 +10,13 @@ import java.util.List;
 
 public final class JPackage implements Jsonable {
     public String name;
-    public List<JPackage> packages;
-    public List<JClass> classes;
+    public List<String> subpackages;
 
     public JPackage(CtPackage p) {
-        this.name = p.getQualifiedName();
-        this.packages = new ArrayList<>();
+        this.name = p.isUnnamedPackage() ? "<root>" : p.getSimpleName();
+        this.subpackages = new ArrayList<>();
         for (CtPackage sub : p.getPackages())
-            this.packages.add(new JPackage(sub));
+            this.subpackages.add(sub.getSimpleName());
     }
 
     @Override
@@ -27,9 +26,8 @@ public final class JPackage implements Jsonable {
 
     @Override
     public JsonObj toJson() {
-        JsonMap m = new JsonMap();
-        m.put("package", this.name);
-        m.put("subpackages", this.packages);
-        return m;
+        return new JsonMap().
+            with("name", this.name).
+            withOmitEmpty("subpackages", this.subpackages);
     }
 }

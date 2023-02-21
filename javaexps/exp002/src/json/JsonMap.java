@@ -16,6 +16,18 @@ public class JsonMap extends TreeMap<String, JsonObj> implements JsonObj {
         super.put(key, JsonObj.convert(value));
     }
 
+    public JsonMap with(String key, Object value) {
+        this.put(key, value);
+        return this;
+    }
+
+    public JsonMap withOmitEmpty(String key, Object value) {
+        JsonObj jVal = JsonObj.convert(value);
+        if (!jVal.isEmpty()) this.put(key, jVal);
+        return this;
+    }
+
+    @Override
     public void write(StringBuilder buf) {
         buf.append("{");
         boolean first = true;
