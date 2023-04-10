@@ -1,9 +1,8 @@
 package json;
 
-import javax.lang.model.type.UnknownTypeException;
-
 public interface JsonObj {
-    boolean isEmpty();
+    void setOmitOnDefault(boolean omit);
+    boolean omit();
     void write(StringBuilder buf);
 
     static String escape(String value) {

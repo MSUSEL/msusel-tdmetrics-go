@@ -1,14 +1,12 @@
 package json;
 
-public record JsonStr(String value) implements JsonObj {
-
-    @Override
-    public boolean isEmpty() {
-        return this.value.length() == 0;
+public final class JsonStr extends JsonValue<String> {
+    public JsonStr(String value) {
+        super(value);
     }
 
     @Override
     public void write(StringBuilder buf) {
-        buf.append(JsonObj.escape(this.value));
+        buf.append(JsonObj.escape(this.value()));
     }
 }

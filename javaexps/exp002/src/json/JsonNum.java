@@ -1,14 +1,15 @@
 package json;
 
-public record JsonNum(double value) implements JsonObj {
-
-    @Override
-    public boolean isEmpty() {
-        return this.value == 0.0;
+public final class JsonNum extends JsonValue<Double> {
+    public JsonNum(double value) {
+        super(value);
     }
 
     @Override
-    public void write(StringBuilder buf) {
-        buf.append(this.value);
+    public String toString() {
+        String str = this.value().toString();
+        if (str.contains(".") || str.contains("e") || str.contains("E"))
+            return str;
+        return str+".0";
     }
 }
