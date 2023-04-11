@@ -8,6 +8,9 @@ import spoon.reflect.declaration.CtMethod;
 import spoon.reflect.declaration.CtPackage;
 import spoon.reflect.declaration.CtType;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Janis {
     private Janis() { }
 
@@ -60,9 +63,15 @@ public class Janis {
         JsonList methodData = new JsonList();
         for (CtType<?> t : model.getAllTypes()) {
             for (CtMethod<?> m : t.getMethods()) {
+                List params = m.getParameters();
+                List<String> parameters = new ArrayList<>(params.size());
+                // TODO: FINISH
+
                 methodData.addMap().
                     with("name", m.getSimpleName()).
                     with("receiver", t.getSimpleName());
+
+
             }
         }
         return methodData;

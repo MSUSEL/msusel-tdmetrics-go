@@ -1,7 +1,7 @@
 package json;
 
-import java.util.Map;
-import java.util.TreeMap;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class JsonMap extends TreeMap<String, JsonObj> implements JsonObj {
     private boolean omitOnEmpty;
@@ -71,19 +71,67 @@ public class JsonMap extends TreeMap<String, JsonObj> implements JsonObj {
     }
 
     @Override
+    public void removeOmitted() {
+        List<String> keys = new ArrayList();
+        for (Map.Entry<String, JsonObj> pair : this.entrySet()) {
+            final JsonObj elem = pair.getValue();
+            if (elem.omit()) keys.add(pair.getKey());
+            else elem.removeOmitted();
+        }
+        for (String key: keys) this.remove(key);
+    }
+
+    @Override
     public boolean equals(Object o) {
         if (o instanceof JsonMap other) {
             if (this.size() != other.size()) return false;
             for (Map.Entry<String, JsonObj> pair : this.entrySet()) {
-                JsonObj elem1 = pair.getValue();
-                JsonObj elem2 = other.get(pair.getKey());
-                if (elem1 == null) return elem2 == null;
-                if (elem2 == null) return false;
-                if (!elem1.equals(elem2)) return false;
+                final JsonObj elem1 = pair.getValue();
+                final JsonObj elem2 = other.get(pair.getKey());
+                if ((elem1 == null && elem2 != null) ||
+                    (!elem1.equals(elem2)))
+                    return false;
             }
             return true;
         }
         return false;
+    }
+
+    @Override
+    public void assertCompare(JsonObj obj) throws Exception {
+        if (!(obj instanceof JsonMap other))
+            throw new Exception("Expected type to be " + this.getClass().getName() + " but got " + obj.getClass().getName());
+
+        Set<String> missing = new HashSet<>();
+        Set<String> extra   = new HashSet<>(other.keySet());
+        for (Map.Entry<String, JsonObj> pair : this.entrySet()) {
+            final String key = pair.getKey();
+            if (!other.containsKey(key)) {
+                missing.add(key);
+                continue;
+            }
+            extra.remove(key);
+
+            final JsonObj elem1 = pair.getValue();
+            final JsonObj elem2 = other.get(key);
+            if (elem1 == null && elem2 != null)
+                throw new Exception("Expected value at " + JsonObj.escape(key) + " was null but got " + elem2);
+
+            if (elem2 == null)
+                throw new Exception("Expected value at " + JsonObj.escape(key) + " was " + elem1 + " but got null");
+
+            try {
+                elem1.assertCompare(elem2);
+            } catch (Exception e) {
+                throw new Exception("At " + JsonObj.escape(key) + ": " + e.getMessage());
+            }
+        }
+
+        if (missing.size() > 0 || extra.size() > 0) {
+            String missingStr = missing.stream().map(key -> JsonObj.escape(key)).collect(Collectors.joining(", ", "[", "]"));
+            String extraStr = extra.stream().map(key -> JsonObj.escape(key)).collect(Collectors.joining(", ", "[", "]"));
+            throw new Exception("Expected missing keys " + missingStr + " but got extra keys " + extraStr);
+        }
     }
 
     @Override

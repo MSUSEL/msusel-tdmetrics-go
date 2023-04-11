@@ -4,6 +4,8 @@ public interface JsonObj {
     void setOmitOnDefault(boolean omit);
     boolean omit();
     void write(StringBuilder buf);
+    void removeOmitted();
+    void assertCompare(JsonObj other) throws Exception;
 
     static String escape(String value) {
         return "\"" + value.

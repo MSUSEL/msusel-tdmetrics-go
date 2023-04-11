@@ -41,9 +41,22 @@ public abstract class JsonValue<T> implements JsonObj {
     }
 
     @Override
+    public void removeOmitted() {
+        // No effect on values
+    }
+
+    @Override
     public boolean equals(Object o) {
         return o instanceof JsonValue<?> other &&
             this.val.equals(other.val);
+    }
+
+    @Override
+    public void assertCompare(JsonObj obj) throws Exception {
+        if (!(obj instanceof JsonValue<?> other))
+            throw new Exception("Expected type to be " + this.getClass().getName() + " but got " + obj.getClass().getName());
+        if (!this.val.equals(other.val))
+            throw new Exception("Expected value to be " + this + " but got "+ other);
     }
 
     @Override
