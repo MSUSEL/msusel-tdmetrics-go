@@ -4,8 +4,8 @@ import (
 	"os"
 	"path"
 
-	"github.com/MSUSEL/msusel-tdmetrics-go/exp001/internal/filter"
-	"github.com/MSUSEL/msusel-tdmetrics-go/exp001/internal/reader"
+	"github.com/MSUSEL/msusel-tdmetrics-go/goexps/exp001/internal/filter"
+	"github.com/MSUSEL/msusel-tdmetrics-go/goexps/exp001/internal/reader"
 )
 
 func main() {

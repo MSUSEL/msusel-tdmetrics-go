@@ -13,9 +13,9 @@ import (
 	"path/filepath"
 	"sort"
 
-	"github.com/MSUSEL/msusel-tdmetrics-go/exp001/internal/data"
-	"github.com/MSUSEL/msusel-tdmetrics-go/exp001/internal/filter"
-	"github.com/MSUSEL/msusel-tdmetrics-go/exp001/internal/utils"
+	"github.com/MSUSEL/msusel-tdmetrics-go/goexps/exp001/internal/data"
+	"github.com/MSUSEL/msusel-tdmetrics-go/goexps/exp001/internal/filter"
+	"github.com/MSUSEL/msusel-tdmetrics-go/goexps/exp001/internal/utils"
 )
 
 // Reader is the information used to setup how the reader

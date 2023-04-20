@@ -20,6 +20,12 @@ public final class JsonList extends ArrayList<JsonObj> implements JsonObj {
         return m;
     }
 
+    public JsonList addList() {
+        JsonList list = new JsonList();
+        this.add(list);
+        return list;
+    }
+
     public JsonList with(Object value) {
         super.add(JsonObj.convert(value));
         return this;

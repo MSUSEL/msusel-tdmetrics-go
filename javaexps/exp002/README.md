@@ -1,7 +1,5 @@
 # Experiment 002
 
-_Janis = Java Analysis_
-
 - [Running Project Tests](#getting-test-projects)
 - [Running Experiment](#running-experiment)
 - [Getting Test Projects](#getting-test-projects)

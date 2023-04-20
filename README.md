@@ -10,4 +10,5 @@ Experiments in measuring technical debt metrics for the procedural language Go.
 
 ### Java
 
-1. [Participation Measurement](./javaexps/exp001)
+1. [Participation Measurement with Checkstyle](./javaexps/exp001)
+2. [Participation Measurement with Spoon](./javaexps/exp002)

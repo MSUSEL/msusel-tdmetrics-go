@@ -4,7 +4,7 @@ import (
 	"go/ast"
 	"go/types"
 
-	"github.com/MSUSEL/msusel-tdmetrics-go/exp001/internal/utils"
+	"github.com/MSUSEL/msusel-tdmetrics-go/goexps/exp001/internal/utils"
 )
 
 // Package is the collection of compiled data for the package.
