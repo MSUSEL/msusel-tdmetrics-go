@@ -1,7 +1,6 @@
 package json;
 
 import java.util.ArrayList;
-import java.util.Map;
 
 import static java.lang.Math.min;
 
@@ -82,9 +81,9 @@ public final class JsonList extends ArrayList<JsonObj> implements JsonObj {
             for (int i = 0; i < size; ++i) {
                 final JsonObj elem1 = this.get(i);
                 final JsonObj elem2 = other.get(i);
-                if ((elem1 == null && elem2 != null) ||
-                    (!elem1.equals(elem2)))
-                    return false;
+                if (elem1 != null) {
+                    if (!elem1.equals(elem2)) return false;
+                } else if (elem2 != null) return false;
             }
             return true;
         }

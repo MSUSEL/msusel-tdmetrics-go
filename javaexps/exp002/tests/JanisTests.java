@@ -3,6 +3,7 @@ import janis.Janis;
 import json.JsonMap;
 import json.JsonObj;
 import org.junit.jupiter.api.Test;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 public class JanisTests {
@@ -10,7 +11,7 @@ public class JanisTests {
     static private void checkJson(JsonObj obj, String... expLines) {
         JsonObj expObj = null;
         try {
-            expObj = Parser.parse(String.join("\n", expLines));
+            expObj = Parser.parse(String.join("\n", expLines).replace("'", "\""));
         } catch (Exception e) {
             fail("Expected JSON is invalid: " + e.getMessage());
         }
@@ -29,16 +30,24 @@ public class JanisTests {
         JsonMap data = Janis.read("./testProjects/test001/src/");
         checkJson(data,
             "{",
-            "   \"methods\": [",
-            "       { \"name\": \"main\", \"receiver\": \"Main\" },",
-            "       { \"name\": \"getName\", \"receiver\": \"Person\" }",
+            "   'methods': [",
+            "      {",
+            "         'name':       'main',",
+            "         'parameters': [[ 'String' ]],",
+            "         'receiver':   'Main',",
+            "         'returns':    'void'",
+            "      }, {",
+            "         'name':     'getName',",
+            "         'receiver': 'Person',",
+            "         'returns':  'String'",
+            "      }",
             "   ],",
-            "   \"packages\": [",
-            "       { \"name\": \"<root>\" }",
+            "   'packages': [",
+            "       { 'name': '<root>' }",
             "   ],",
-            "   \"types\": [",
-            "       { \"name\": \"Main\", \"package\": \"<root>\" },",
-            "       { \"name\": \"Person\", \"package\": \"<root>\" }",
+            "   'types': [",
+            "       { 'name': 'Main',   'package': '<root>' },",
+            "       { 'name': 'Person', 'package': '<root>' }",
             "   ]",
             "}");
     }

@@ -1,6 +1,11 @@
 package json;
 
-import java.util.*;
+import java.util.List;
+import java.util.ArrayList;
+import java.util.Map;
+import java.util.TreeMap;
+import java.util.Set;
+import java.util.HashSet;
 import java.util.stream.Collectors;
 
 public class JsonMap extends TreeMap<String, JsonObj> implements JsonObj {
@@ -88,9 +93,9 @@ public class JsonMap extends TreeMap<String, JsonObj> implements JsonObj {
             for (Map.Entry<String, JsonObj> pair : this.entrySet()) {
                 final JsonObj elem1 = pair.getValue();
                 final JsonObj elem2 = other.get(pair.getKey());
-                if ((elem1 == null && elem2 != null) ||
-                    (!elem1.equals(elem2)))
-                    return false;
+                if (elem1 != null) {
+                   if (!elem1.equals(elem2)) return false;
+                } else if (elem2 != null) return false;
             }
             return true;
         }
@@ -128,8 +133,8 @@ public class JsonMap extends TreeMap<String, JsonObj> implements JsonObj {
         }
 
         if (missing.size() > 0 || extra.size() > 0) {
-            String missingStr = missing.stream().map(key -> JsonObj.escape(key)).collect(Collectors.joining(", ", "[", "]"));
-            String extraStr = extra.stream().map(key -> JsonObj.escape(key)).collect(Collectors.joining(", ", "[", "]"));
+            String missingStr = missing.stream().map(JsonObj::escape).collect(Collectors.joining(", ", "[", "]"));
+            String extraStr = extra.stream().map(JsonObj::escape).collect(Collectors.joining(", ", "[", "]"));
             throw new Exception("Expected missing keys " + missingStr + " but got extra keys " + extraStr);
         }
     }

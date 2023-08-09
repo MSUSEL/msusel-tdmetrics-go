@@ -21,7 +21,7 @@ public class JsonTests {
     private void checkParseError(String json, String expErr) {
         try {
             JsonObj obj = Parser.parse(json);
-            fail("Expected an error but got "+obj);
+            fail("Expected an error but got " + obj);
         } catch (Exception e) {
             assertEquals(expErr, e.getMessage());
         }

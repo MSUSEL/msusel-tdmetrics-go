@@ -1,14 +1,16 @@
 package janis;
 
+import java.util.List;
+
 import json.JsonList;
 import json.JsonMap;
 import json.JsonObj;
 import json.JsonStr;
+
 import spoon.Launcher;
 import spoon.reflect.CtModel;
 import spoon.reflect.declaration.*;
 import spoon.reflect.reference.CtTypeReference;
-import java.util.List;
 
 /**
  * Janis is a Java Analysis tool to produce a JSON description of a module.
@@ -16,7 +18,8 @@ import java.util.List;
  * and <a href="https://spoon.gforge.inria.fr/code_elements.html">Code Elements</a>
  */
 public class Janis {
-    private Janis() { }
+    private Janis() {
+    }
 
     static public JsonMap read(String path) {
         Launcher sl = new Launcher();
