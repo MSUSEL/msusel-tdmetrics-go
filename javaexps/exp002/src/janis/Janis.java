@@ -2,10 +2,7 @@ package janis;
 
 import java.util.List;
 
-import json.JsonList;
-import json.JsonMap;
-import json.JsonObj;
-import json.JsonStr;
+import json.*;
 
 import spoon.Launcher;
 import spoon.reflect.CtModel;
@@ -35,15 +32,15 @@ public class Janis {
         return new JsonStr(p.isUnnamedPackage() ? "<root>" : p.getSimpleName());
     }
 
-    static private JsonObj readType(CtTypeReference ref) {
+    static private JsonObj readType(CtTypeReference<?> ref) {
         return new JsonStr(ref.getSimpleName());
     }
 
     static private JsonMap readModel(CtModel model) {
         return new JsonMap().
             withOmitOnDefault("packages", readPackages(model)).
-            withOmitOnDefault("types", readTypes(model)).
-            withOmitOnDefault("methods", readMethods(model));
+            withOmitOnDefault("types",    readTypes(model)).
+            withOmitOnDefault("methods",  readMethods(model));
     }
 
     static private JsonList readPackages(CtModel model) {
@@ -64,7 +61,7 @@ public class Janis {
         JsonList typesData = new JsonList();
         for (CtType<?> t : model.getAllTypes()) {
             typesData.addMap().
-                with("name", t.getSimpleName()).
+                with("name",    t.getSimpleName()).
                 with("package", readPackageName(t.getPackage()));
         }
         return typesData;
@@ -93,9 +90,8 @@ public class Janis {
                     with("name", m.getSimpleName()).
                     with("receiver", t.getSimpleName()).
                     withOmitOnDefault("parameters", readParameters(m)).
-                    withOmitOnDefault("returns", readReturns(m));
-
-                // TODO: Add cyclomatic complexity
+                    withOmitOnDefault("returns", readReturns(m)).
+                    with("cc", CyclomaticComplexity.calculate(m));
             }
         }
         return methodData;
