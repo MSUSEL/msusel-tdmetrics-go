@@ -4,6 +4,8 @@ public class Main {
         System.out.println(tennisScore(10));
         System.out.println(countVowels("cat"));
         System.out.println(readFile("file-name"));
+        System.out.println(loopWhile(24));
+        System.out.println(loopDo(35));
     }
 
     public String tennisScore(int pointsWon) {
@@ -53,5 +55,23 @@ public class Main {
             }
         }
         return text == null ? DEFAULT_TEXT : text;
+    }
+
+    public int loopWhile(int a) {
+        int count = 0;
+        while (a > 0) {
+            count++;
+            a--;
+        }
+        return count;
+    }
+
+    public int loopDo(int a) {
+        int count = 0;
+        do {
+            count++;
+            a--;
+        } while (a > 0);
+        return count;
     }
 }

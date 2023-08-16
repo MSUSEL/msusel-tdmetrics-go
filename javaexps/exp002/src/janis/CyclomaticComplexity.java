@@ -15,13 +15,6 @@ import spoon.support.reflect.code.*;
 public class CyclomaticComplexity {
     private CyclomaticComplexity() {}
 
-    // These steps need to be handled.
-    // [x] Assign one point to account for the start of the method
-    // [x] Add one point for each conditional construct, such as an "if" condition
-    // [ ] Add one point for each iterative structure
-    // [x] Add one point for each case or default block in a switch statement
-    // [x] Add one point for any additional boolean condition, such as the use of && or ||
-
     static public JsonObj calculate(CtMethod<?> m) {
         int cc = 1;
         for (CtStatement s : m.getBody()) cc += calcState(s);
@@ -41,6 +34,7 @@ public class CyclomaticComplexity {
         if (s instanceof CtCommentImpl         ) return 0;
         if (s instanceof CtConditionalImpl   st) return 1 + calcExp(st.getCondition()) + calcExp(st.getThenExpression()) + calcExp(st.getElseExpression());
         if (s instanceof CtContinueImpl        ) return 0;
+        if (s instanceof CtDoImpl            st) return 1 + calcExp(st.getLoopingExpression()) + calcState(st.getBody());
         if (s instanceof CtForImpl           st) return 1 + calcListState(st.getForInit()) + calcExp(st.getExpression()) + calcListState(st.getForUpdate()) + calcState(st.getBody());
         if (s instanceof CtForEachImpl       st) return 1 + calcExp(st.getExpression()) + calcState(st.getBody());
         if (s instanceof CtIfImpl            st) return 1 + calcExp(st.getCondition()) + calcState(st.getThenStatement()) + calcState(st.getElseStatement());
@@ -51,6 +45,7 @@ public class CyclomaticComplexity {
         if (s instanceof CtThrowImpl         st) return calcExp(st.getThrownExpression());
         if (s instanceof CtTryImpl           st) return calcListCatcher(st.getCatchers()) + calcState(st.getBody());
         if (s instanceof CtUnaryOperatorImpl st) return calcExp(st.getOperand());
+        if (s instanceof CtWhileImpl         st) return 1 + calcExp(st.getLoopingExpression()) + calcState(st.getBody());
         return unsupported("statement", s);
     }
 
