@@ -37,7 +37,7 @@ was counted equally then we could consider that participation as
 the same as partial ownership of that method.
 That participation can then be weighted by the cyclomatic complexity of the function
 to take the place of the WMC. The weighting will contribute to the sum of
-all the types used in the function's receiver or paramters.
+all the types used in the function's receiver or parameters.
 
 The Weighted Participation Counts (WPC) that are over some threshold
 along with a procedural form of TCC and ATFD would indicate the probability
