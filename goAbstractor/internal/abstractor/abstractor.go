@@ -5,11 +5,13 @@ import (
 	"go/ast"
 	"go/token"
 	"go/types"
+	"slices"
 
 	"github.com/Snow-Gremlin/goToolbox/utils"
 	"golang.org/x/tools/go/packages"
 
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/construct"
+	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/construct/typeKind"
 )
 
 // TODO:
@@ -28,7 +30,12 @@ func Abstract(ps []*packages.Package) *construct.Project {
 	return ab.abstractProject(ps)
 }
 
-type abstractor struct{}
+type abstractor struct {
+	allStructs    []*construct.Struct
+	allInterfaces []*construct.Interface
+	allSignatures []*construct.Signature
+	allTypeParam  []*construct.TypeParam
+}
 
 func (ab *abstractor) abstractProject(ps []*packages.Package) *construct.Project {
 	proj := &construct.Project{}
@@ -38,6 +45,9 @@ func (ab *abstractor) abstractProject(ps []*packages.Package) *construct.Project
 		}
 		return true
 	}, nil)
+
+	// TODO: Add allStructs, allInterfaces, allTypeParam, and allSignatures
+
 	return proj
 }
 
@@ -131,6 +141,16 @@ func pos(src *packages.Package, pos token.Pos) string {
 	return src.Fset.Position(pos).String()
 }
 
+func convertList[T, U any](n int, getter func(i int) T, convert func(value T) *U) []*U {
+	list := make([]*U, 0, n)
+	for i := range n {
+		if p := convert(getter(i)); p != nil {
+			list = append(list, p)
+		}
+	}
+	return slices.Compact(list)
+}
+
 func (ab *abstractor) convertType(t types.Type) construct.TypeDesc {
 	switch t2 := t.(type) {
 	case *types.Array:
@@ -162,7 +182,7 @@ func (ab *abstractor) convertType(t types.Type) construct.TypeDesc {
 
 func (ab *abstractor) convertArray(t *types.Array) *construct.TypeWrap {
 	return &construct.TypeWrap{
-		Kind: `array`,
+		Kind: typeKind.Array,
 		Elem: ab.convertType(t.Elem()),
 	}
 }
@@ -175,24 +195,16 @@ func (ab *abstractor) convertBasic(t *types.Basic) *construct.TypeRef {
 
 func (ab *abstractor) convertChan(t *types.Chan) *construct.TypeWrap {
 	return &construct.TypeWrap{
-		Kind: `chan`,
+		Kind: typeKind.Chan,
 		Elem: ab.convertType(t.Elem()),
 	}
 }
 
-func (ab *abstractor) convertInterface(t *types.Interface) construct.TypeDesc {
+func (ab *abstractor) convertInterface(t *types.Interface) *construct.Interface {
 	t = t.Complete()
-	if t.NumMethods() == 0 {
-		return &construct.TypeRef{Ref: `any`}
-	}
-
-	methods := make([]*construct.TypeFunc, t.NumMethods())
-	for i := range t.NumMethods() {
-		methods[i] = ab.convertFunc(t.Method(i))
-	}
-	return &construct.Interface{
-		Methods: methods,
-	}
+	return ab.registerInterface(&construct.Interface{
+		Methods: convertList(t.NumMethods(), t.Method, ab.convertFunc),
+	})
 }
 
 func (ab *abstractor) convertMap(t *types.Map) *construct.TypeMap {
@@ -217,60 +229,48 @@ func (ab *abstractor) convertFunc(t *types.Func) *construct.TypeFunc {
 
 func (ab *abstractor) convertPointer(t *types.Pointer) *construct.TypeWrap {
 	return &construct.TypeWrap{
-		Kind: `pointer`,
+		Kind: typeKind.Pointer,
 		Elem: ab.convertType(t.Elem()),
 	}
 }
 
 func (ab *abstractor) convertSignature(t *types.Signature, showKind bool) *construct.Signature {
 	// Don't output receiver or receiver type here.
-	return &construct.Signature{
+	return ab.registerSignature(&construct.Signature{
 		ShowKind:   showKind,
 		Variadic:   t.Variadic(),
 		Params:     ab.convertTuple(t.Params()),
 		Returns:    ab.convertTuple(t.Results()),
 		TypeParams: ab.convertTypeParamList(t.TypeParams()),
-	}
+	})
 }
 
 func (ab *abstractor) convertSlice(t *types.Slice) *construct.TypeWrap {
 	return &construct.TypeWrap{
-		Kind: `list`,
+		Kind: typeKind.List,
 		Elem: ab.convertType(t.Elem()),
 	}
 }
 
 func (ab *abstractor) convertStruct(t *types.Struct) *construct.Struct {
-	ts := &construct.Struct{}
-	for i := range t.NumFields() {
-		ts.Fields = append(ts.Fields, ab.convertVar(t.Field(i)))
-	}
-	return ts
+	return ab.registerStruct(&construct.Struct{
+		Fields: convertList(t.NumFields(), t.Field, ab.convertVar),
+	})
 }
 
 func (ab *abstractor) convertTuple(t *types.Tuple) []*construct.TypeVar {
-	tuple := make([]*construct.TypeVar, t.Len())
-	for i := range t.Len() {
-		tuple[i] = ab.convertVar(t.At(i))
-	}
-	return tuple
+	return convertList(t.Len(), t.At, ab.convertVar)
 }
 
 func (ab *abstractor) convertTypeParam(t *types.TypeParam) *construct.TypeParam {
-	return &construct.TypeParam{
+	return ab.registerTypeParam(&construct.TypeParam{
 		Index:      t.Index(),
 		Constraint: ab.convertType(t.Constraint()),
-	}
+	})
 }
 
 func (ab *abstractor) convertTypeParamList(t *types.TypeParamList) []*construct.TypeParam {
-	list := make([]*construct.TypeParam, 0, t.Len())
-	for i := range t.Len() {
-		if p := t.At(i); p.Index() >= 0 {
-			list = append(list, ab.convertTypeParam(p))
-		}
-	}
-	return list
+	return convertList(t.Len(), t.At, ab.convertTypeParam)
 }
 
 func (ab *abstractor) convertVar(t *types.Var) *construct.TypeVar {
@@ -278,4 +278,28 @@ func (ab *abstractor) convertVar(t *types.Var) *construct.TypeVar {
 		Name: t.Name(),
 		Type: ab.convertType(t.Type()),
 	}
+}
+
+func (ab *abstractor) registerStruct(s *construct.Struct) *construct.Struct {
+	// TODO: FINISH
+	ab.allStructs = append(ab.allStructs, s)
+	return s
+}
+
+func (ab *abstractor) registerInterface(ti *construct.Interface) *construct.Interface {
+	// TODO: FINISH
+	ab.allInterfaces = append(ab.allInterfaces, ti)
+	return ti
+}
+
+func (ab *abstractor) registerSignature(sig *construct.Signature) *construct.Signature {
+	// TODO: FINISH
+	ab.allSignatures = append(ab.allSignatures, sig)
+	return sig
+}
+
+func (ab *abstractor) registerTypeParam(tp *construct.TypeParam) *construct.TypeParam {
+	// TODO: FINISH
+	ab.allTypeParam = append(ab.allTypeParam, tp)
+	return tp
 }

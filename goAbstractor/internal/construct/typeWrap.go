@@ -1,16 +1,19 @@
 package construct
 
-import "encoding/json"
+import (
+	"encoding/json"
+
+	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/construct/typeKind"
+)
 
 type TypeWrap struct {
-	// TODO: Kind should probably be a set of constants
-	Kind string
+	Kind typeKind.TypeKind
 	Elem TypeDesc
 }
 
 func (tw *TypeWrap) MarshalJSON() ([]byte, error) {
 	data := map[string]any{
-		`kind`: tw.Kind,
+		`kind`: string(tw.Kind),
 		`elem`: tw.Elem,
 	}
 	return json.Marshal(data)

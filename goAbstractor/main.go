@@ -12,11 +12,11 @@ import (
 )
 
 type argObject struct {
-	ShowHelp bool `args:"h, help"`
-	Verbose  bool `args:"v, verbose"`
-	Minimize bool `args:"m, minimize"`
-	InPath   string
-	OutPath  string `args:"optional"`
+	ShowHelp bool   `args:"flag, h, help"`
+	Verbose  bool   `args:"flag, v, verbose"`
+	Minimize bool   `args:"flag, m, minimize"`
+	InPath   string `args:"i, in"`
+	OutPath  string `args:"o, out"`
 }
 
 func main() {
@@ -39,15 +39,15 @@ func main() {
 		fmt.Println(`Abstractor will read a Go project and output a JSON file`,
 			`designed to be used in a design recovery and participation analysis`,
 			`of the Go project.`)
-		fmt.Println(os.Args[0], `<options> inputPath [outputPath]`)
+		fmt.Println(os.Args[0], `<options> -i <inputPath> [ -o <outputPath> ]`)
 		fmt.Println(`  --help|-h: Shows this help text.`)
 		fmt.Println(`  --verbose|-v: Indicates the abstraction process should`,
 			`output additional status information.`)
 		fmt.Println(`  --minimize|-m: Indicates the JSON output should be`,
 			`minimized instead of formatted.`)
-		fmt.Println(`  inputPath: The path to the directory of the project to read.`,
-			`The directory should have a go.mod file.`)
-		fmt.Println(`  outputPath (optional): The file path to write the JSON to.`,
+		fmt.Println(`  --in|-i: The input path to the directory of the project`,
+			`to read. The directory should have a go.mod file.`)
+		fmt.Println(`  --out|-o: The output file path to write the JSON to.`,
 			`If not given, the JSON will be outputted to the console.`)
 		os.Exit(0)
 	}
