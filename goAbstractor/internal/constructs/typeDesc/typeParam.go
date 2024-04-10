@@ -1,6 +1,10 @@
-package construct
+package typeDesc
 
-import "encoding/json"
+import (
+	"encoding/json"
+
+	"github.com/Snow-Gremlin/goToolbox/utils"
+)
 
 // TODO: Need to rework
 // Type param is defined on each param/return and signature right now.
@@ -14,10 +18,17 @@ type TypeParam struct {
 }
 
 func (tp *TypeParam) MarshalJSON() ([]byte, error) {
-	data := map[string]any{
+	return json.Marshal(map[string]any{
 		`kind`:       `typeParam`,
 		`fields`:     tp.Index,
 		`constraint`: tp.Constraint,
+	})
+}
+
+func (tp *TypeParam) Equal(other TypeDesc) bool {
+	if utils.IsNil(tp) || utils.IsNil(other) {
+		return utils.IsNil(tp) && utils.IsNil(other)
 	}
-	return json.Marshal(data)
+	t2, ok := other.(*TypeParam)
+	return ok && tp.Index == t2.Index && tp.Constraint.Equal(t2.Constraint)
 }

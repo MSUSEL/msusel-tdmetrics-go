@@ -23,6 +23,7 @@ func main() {
 	defer func() {
 		if r := recover(); r != nil {
 			fmt.Printf("Panic: %v\n", r)
+			//debug.PrintStack()
 			os.Exit(1)
 		}
 	}()

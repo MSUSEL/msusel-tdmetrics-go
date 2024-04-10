@@ -10,8 +10,9 @@ import (
 	"github.com/Snow-Gremlin/goToolbox/utils"
 	"golang.org/x/tools/go/packages"
 
-	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/construct"
-	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/construct/typeKind"
+	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs"
+	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs/typeDesc"
+	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs/typeDesc/wrapKind"
 )
 
 // TODO:
@@ -25,20 +26,20 @@ import (
 //   - The set of all methods called in each method. Used for
 //     Access to Foreign Data (ATFD) and Design Recovery (DR)
 
-func Abstract(ps []*packages.Package) *construct.Project {
+func Abstract(ps []*packages.Package) *constructs.Project {
 	ab := &abstractor{}
 	return ab.abstractProject(ps)
 }
 
 type abstractor struct {
-	allStructs    []*construct.Struct
-	allInterfaces []*construct.Interface
-	allSignatures []*construct.Signature
-	allTypeParam  []*construct.TypeParam
+	allStructs    []*typeDesc.Struct
+	allInterfaces []*typeDesc.Interface
+	allSignatures []*typeDesc.Signature
+	allTypeParam  []*typeDesc.TypeParam
 }
 
-func (ab *abstractor) abstractProject(ps []*packages.Package) *construct.Project {
-	proj := &construct.Project{}
+func (ab *abstractor) abstractProject(ps []*packages.Package) *constructs.Project {
+	proj := &constructs.Project{}
 	packages.Visit(ps, func(src *packages.Package) bool {
 		if ap := ab.abstractPackage(src); ap != nil {
 			proj.Packages = append(proj.Packages, ap)
@@ -51,8 +52,8 @@ func (ab *abstractor) abstractProject(ps []*packages.Package) *construct.Project
 	return proj
 }
 
-func (ab *abstractor) abstractPackage(src *packages.Package) *construct.Package {
-	pkg := &construct.Package{
+func (ab *abstractor) abstractPackage(src *packages.Package) *constructs.Package {
+	pkg := &constructs.Package{
 		Path:    src.PkgPath,
 		Imports: utils.SortedKeys(src.Imports),
 	}
@@ -62,7 +63,7 @@ func (ab *abstractor) abstractPackage(src *packages.Package) *construct.Package 
 	return pkg
 }
 
-func (ab *abstractor) addFile(pkg *construct.Package, src *packages.Package, f *ast.File) {
+func (ab *abstractor) addFile(pkg *constructs.Package, src *packages.Package, f *ast.File) {
 	for _, decl := range f.Decls {
 		switch d := decl.(type) {
 		case *ast.GenDecl:
@@ -75,7 +76,7 @@ func (ab *abstractor) addFile(pkg *construct.Package, src *packages.Package, f *
 	}
 }
 
-func (ab *abstractor) addGenDecl(pkg *construct.Package, src *packages.Package, decl *ast.GenDecl) {
+func (ab *abstractor) addGenDecl(pkg *constructs.Package, src *packages.Package, decl *ast.GenDecl) {
 	for _, spec := range decl.Specs {
 		switch s := spec.(type) {
 		case *ast.ImportSpec:
@@ -90,19 +91,19 @@ func (ab *abstractor) addGenDecl(pkg *construct.Package, src *packages.Package, 
 	}
 }
 
-func (ab *abstractor) abstractTypeSpec(pkg *construct.Package, src *packages.Package, spec *ast.TypeSpec) {
+func (ab *abstractor) abstractTypeSpec(pkg *constructs.Package, src *packages.Package, spec *ast.TypeSpec) {
 	tv, has := src.TypesInfo.Types[spec.Type]
 	if !has {
 		panic(fmt.Errorf(`type specification not found in types info: %s`, pos(src, spec.Type.Pos())))
 	}
-	def := &construct.TypeDef{
+	def := &constructs.TypeDef{
 		Name: spec.Name.Name,
 		Type: ab.convertType(tv.Type),
 	}
 	pkg.Types = append(pkg.Types, def)
 }
 
-func (ab *abstractor) abstractValueSpec(pkg *construct.Package, src *packages.Package, spec *ast.ValueSpec) {
+func (ab *abstractor) abstractValueSpec(pkg *constructs.Package, src *packages.Package, spec *ast.ValueSpec) {
 	for _, name := range spec.Names {
 		if name.Name != `_` {
 			tv, has := src.TypesInfo.Defs[name]
@@ -110,7 +111,7 @@ func (ab *abstractor) abstractValueSpec(pkg *construct.Package, src *packages.Pa
 				panic(fmt.Errorf(`value specification not found in types info: %s`, pos(src, spec.Type.Pos())))
 			}
 
-			def := &construct.ValueDef{
+			def := &constructs.ValueDef{
 				Name: name.Name,
 				Type: ab.convertType(tv.Type()),
 			}
@@ -119,11 +120,11 @@ func (ab *abstractor) abstractValueSpec(pkg *construct.Package, src *packages.Pa
 	}
 }
 
-func (ab *abstractor) abstractFuncDecl(pkg *construct.Package, src *packages.Package, decl *ast.FuncDecl) {
+func (ab *abstractor) abstractFuncDecl(pkg *constructs.Package, src *packages.Package, decl *ast.FuncDecl) {
 	obj := src.TypesInfo.Defs[decl.Name]
-	m := &construct.Method{
+	m := &constructs.Method{
 		Name:      decl.Name.Name,
-		Signature: ab.convertSignature(obj.Type().(*types.Signature), false),
+		Signature: ab.convertSignature(obj.Type().(*types.Signature)),
 	}
 
 	if decl.Recv != nil && decl.Recv.NumFields() > 0 {
@@ -151,7 +152,7 @@ func convertList[T, U any](n int, getter func(i int) T, convert func(value T) *U
 	return slices.Compact(list)
 }
 
-func (ab *abstractor) convertType(t types.Type) construct.TypeDesc {
+func (ab *abstractor) convertType(t types.Type) typeDesc.TypeDesc {
 	switch t2 := t.(type) {
 	case *types.Array:
 		return ab.convertArray(t2)
@@ -168,7 +169,7 @@ func (ab *abstractor) convertType(t types.Type) construct.TypeDesc {
 	case *types.Pointer:
 		return ab.convertPointer(t2)
 	case *types.Signature:
-		return ab.convertSignature(t2, true)
+		return ab.convertSignature(t2)
 	case *types.Slice:
 		return ab.convertSlice(t2)
 	case *types.Struct:
@@ -180,126 +181,154 @@ func (ab *abstractor) convertType(t types.Type) construct.TypeDesc {
 	}
 }
 
-func (ab *abstractor) convertArray(t *types.Array) *construct.TypeWrap {
-	return &construct.TypeWrap{
-		Kind: typeKind.Array,
+func (ab *abstractor) convertArray(t *types.Array) *typeDesc.Wrap {
+	return &typeDesc.Wrap{
+		Kind: wrapKind.Array,
 		Elem: ab.convertType(t.Elem()),
 	}
 }
 
-func (ab *abstractor) convertBasic(t *types.Basic) *construct.TypeRef {
-	return &construct.TypeRef{
+func (ab *abstractor) convertBasic(t *types.Basic) *typeDesc.Ref {
+	return &typeDesc.Ref{
 		Ref: t.Name(),
 	}
 }
 
-func (ab *abstractor) convertChan(t *types.Chan) *construct.TypeWrap {
-	return &construct.TypeWrap{
-		Kind: typeKind.Chan,
+func (ab *abstractor) convertChan(t *types.Chan) *typeDesc.Wrap {
+	return &typeDesc.Wrap{
+		Kind: wrapKind.Chan,
 		Elem: ab.convertType(t.Elem()),
 	}
 }
 
-func (ab *abstractor) convertInterface(t *types.Interface) *construct.Interface {
+func (ab *abstractor) convertInterface(t *types.Interface) *typeDesc.Interface {
 	t = t.Complete()
-	return ab.registerInterface(&construct.Interface{
+	return ab.registerInterface(&typeDesc.Interface{
 		Methods: convertList(t.NumMethods(), t.Method, ab.convertFunc),
 	})
 }
 
-func (ab *abstractor) convertMap(t *types.Map) *construct.TypeMap {
-	return &construct.TypeMap{
+func (ab *abstractor) convertMap(t *types.Map) *typeDesc.Map {
+	return &typeDesc.Map{
 		Key:   ab.convertType(t.Key()),
 		Value: ab.convertType(t.Elem()),
 	}
 }
 
-func (ab *abstractor) convertNamed(t *types.Named) *construct.TypeRef {
-	return &construct.TypeRef{
+func (ab *abstractor) convertNamed(t *types.Named) *typeDesc.Ref {
+	return &typeDesc.Ref{
 		Ref: t.String(),
 	}
 }
 
-func (ab *abstractor) convertFunc(t *types.Func) *construct.TypeFunc {
-	return &construct.TypeFunc{
+func (ab *abstractor) convertFunc(t *types.Func) *typeDesc.Func {
+	return &typeDesc.Func{
 		Name:      t.Name(),
-		Signature: ab.convertSignature(t.Type().(*types.Signature), false),
+		Signature: ab.convertSignature(t.Type().(*types.Signature)),
 	}
 }
 
-func (ab *abstractor) convertPointer(t *types.Pointer) *construct.TypeWrap {
-	return &construct.TypeWrap{
-		Kind: typeKind.Pointer,
+func (ab *abstractor) convertPointer(t *types.Pointer) *typeDesc.Wrap {
+	return &typeDesc.Wrap{
+		Kind: wrapKind.Pointer,
 		Elem: ab.convertType(t.Elem()),
 	}
 }
 
-func (ab *abstractor) convertSignature(t *types.Signature, showKind bool) *construct.Signature {
+func (ab *abstractor) convertSignature(t *types.Signature) *typeDesc.Signature {
 	// Don't output receiver or receiver type here.
-	return ab.registerSignature(&construct.Signature{
-		ShowKind:   showKind,
+	return ab.registerSignature(&typeDesc.Signature{
 		Variadic:   t.Variadic(),
 		Params:     ab.convertTuple(t.Params()),
-		Returns:    ab.convertTuple(t.Results()),
+		Return:     ab.createReturn(ab.convertTuple(t.Results())),
 		TypeParams: ab.convertTypeParamList(t.TypeParams()),
 	})
 }
 
-func (ab *abstractor) convertSlice(t *types.Slice) *construct.TypeWrap {
-	return &construct.TypeWrap{
-		Kind: typeKind.List,
+func (ab *abstractor) convertSlice(t *types.Slice) *typeDesc.Wrap {
+	return &typeDesc.Wrap{
+		Kind: wrapKind.List,
 		Elem: ab.convertType(t.Elem()),
 	}
 }
 
-func (ab *abstractor) convertStruct(t *types.Struct) *construct.Struct {
-	return ab.registerStruct(&construct.Struct{
+func (ab *abstractor) convertStruct(t *types.Struct) *typeDesc.Struct {
+	return ab.registerStruct(&typeDesc.Struct{
 		Fields: convertList(t.NumFields(), t.Field, ab.convertVar),
 	})
 }
 
-func (ab *abstractor) convertTuple(t *types.Tuple) []*construct.TypeVar {
+func (ab *abstractor) createReturn(returns []*typeDesc.Var) typeDesc.TypeDesc {
+	switch len(returns) {
+	case 0:
+		return nil
+	case 1:
+		return returns[0]
+	default:
+		return ab.registerStruct(&typeDesc.Struct{
+			Fields: returns,
+		})
+	}
+}
+
+func (ab *abstractor) convertTuple(t *types.Tuple) []*typeDesc.Var {
 	return convertList(t.Len(), t.At, ab.convertVar)
 }
 
-func (ab *abstractor) convertTypeParam(t *types.TypeParam) *construct.TypeParam {
-	return ab.registerTypeParam(&construct.TypeParam{
+func (ab *abstractor) convertTypeParam(t *types.TypeParam) *typeDesc.TypeParam {
+	return ab.registerTypeParam(&typeDesc.TypeParam{
 		Index:      t.Index(),
 		Constraint: ab.convertType(t.Constraint()),
 	})
 }
 
-func (ab *abstractor) convertTypeParamList(t *types.TypeParamList) []*construct.TypeParam {
+func (ab *abstractor) convertTypeParamList(t *types.TypeParamList) []*typeDesc.TypeParam {
 	return convertList(t.Len(), t.At, ab.convertTypeParam)
 }
 
-func (ab *abstractor) convertVar(t *types.Var) *construct.TypeVar {
-	return &construct.TypeVar{
+func (ab *abstractor) convertVar(t *types.Var) *typeDesc.Var {
+	return &typeDesc.Var{
 		Name: t.Name(),
 		Type: ab.convertType(t.Type()),
 	}
 }
 
-func (ab *abstractor) registerStruct(s *construct.Struct) *construct.Struct {
-	// TODO: FINISH
+func (ab *abstractor) registerStruct(s *typeDesc.Struct) *typeDesc.Struct {
+	for _, s2 := range ab.allStructs {
+		if s.Equal(s2) {
+			return s2
+		}
+	}
 	ab.allStructs = append(ab.allStructs, s)
 	return s
 }
 
-func (ab *abstractor) registerInterface(ti *construct.Interface) *construct.Interface {
-	// TODO: FINISH
+func (ab *abstractor) registerInterface(ti *typeDesc.Interface) *typeDesc.Interface {
+	for _, t2 := range ab.allInterfaces {
+		if ti.Equal(t2) {
+			return t2
+		}
+	}
 	ab.allInterfaces = append(ab.allInterfaces, ti)
 	return ti
 }
 
-func (ab *abstractor) registerSignature(sig *construct.Signature) *construct.Signature {
-	// TODO: FINISH
+func (ab *abstractor) registerSignature(sig *typeDesc.Signature) *typeDesc.Signature {
+	for _, s2 := range ab.allSignatures {
+		if sig.Equal(s2) {
+			return s2
+		}
+	}
 	ab.allSignatures = append(ab.allSignatures, sig)
 	return sig
 }
 
-func (ab *abstractor) registerTypeParam(tp *construct.TypeParam) *construct.TypeParam {
-	// TODO: FINISH
+func (ab *abstractor) registerTypeParam(tp *typeDesc.TypeParam) *typeDesc.TypeParam {
+	for _, t2 := range ab.allTypeParam {
+		if tp.Equal(t2) {
+			return t2
+		}
+	}
 	ab.allTypeParam = append(ab.allTypeParam, tp)
 	return tp
 }
