@@ -10,7 +10,7 @@ type Datum interface {
 	isZero() bool
 }
 
-func New(ctx Context, value any) Datum {
+func New(ctx *Context, value any) Datum {
 	switch v := value.(type) {
 	case nil:
 		return newNull()

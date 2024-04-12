@@ -20,7 +20,7 @@ func (m *Map) isZero() bool {
 	return m == nil || len(m.data) <= 0
 }
 
-func (m *Map) Add(ctx Context, key string, value any) *Map {
+func (m *Map) Add(ctx *Context, key string, value any) *Map {
 	if m == nil {
 		m = NewMap()
 	}
@@ -28,7 +28,7 @@ func (m *Map) Add(ctx Context, key string, value any) *Map {
 	return m
 }
 
-func (m *Map) AddNonZero(ctx Context, key string, value any) *Map {
+func (m *Map) AddNonZero(ctx *Context, key string, value any) *Map {
 	if d := New(ctx, value); !d.isZero() {
 		if m == nil {
 			m = NewMap()

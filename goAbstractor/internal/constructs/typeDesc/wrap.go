@@ -12,7 +12,7 @@ type Wrap struct {
 
 func (tw *Wrap) _isTypeDesc() {}
 
-func (tw *Wrap) ToJson(ctx jsonify.Context) jsonify.Datum {
+func (tw *Wrap) ToJson(ctx *jsonify.Context) jsonify.Datum {
 	return jsonify.NewMap().
 		Add(ctx, `kind`, string(tw.Kind)).
 		Add(ctx, `elem`, tw.Elem)

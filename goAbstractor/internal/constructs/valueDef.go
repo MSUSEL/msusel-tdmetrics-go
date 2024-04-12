@@ -10,7 +10,7 @@ type ValueDef struct {
 	Type typeDesc.TypeDesc
 }
 
-func (vd *ValueDef) ToJson(ctx jsonify.Context) jsonify.Datum {
+func (vd *ValueDef) ToJson(ctx *jsonify.Context) jsonify.Datum {
 	return jsonify.NewMap().
 		Add(ctx, `name`, vd.Name).
 		Add(ctx, `type`, vd.Type)

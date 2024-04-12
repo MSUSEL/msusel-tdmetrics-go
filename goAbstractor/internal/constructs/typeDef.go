@@ -10,7 +10,7 @@ type TypeDef struct {
 	Type typeDesc.TypeDesc
 }
 
-func (td *TypeDef) ToJson(ctx jsonify.Context) jsonify.Datum {
+func (td *TypeDef) ToJson(ctx *jsonify.Context) jsonify.Datum {
 	return jsonify.NewMap().
 		AddNonZero(ctx, `name`, td.Name).
 		AddNonZero(ctx, `type`, td.Type)

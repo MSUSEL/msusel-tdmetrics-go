@@ -15,7 +15,7 @@ type TypeParam struct {
 
 func (tp *TypeParam) _isTypeDesc() {}
 
-func (tp *TypeParam) ToJson(ctx jsonify.Context) jsonify.Datum {
+func (tp *TypeParam) ToJson(ctx *jsonify.Context) jsonify.Datum {
 	return jsonify.NewMap().
 		Add(ctx, `kind`, `typeParam`).
 		Add(ctx, `index`, tp.Index).

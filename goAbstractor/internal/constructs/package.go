@@ -14,7 +14,7 @@ type Package struct {
 	Methods []*Method
 }
 
-func (p *Package) ToJson(ctx jsonify.Context) jsonify.Datum {
+func (p *Package) ToJson(ctx *jsonify.Context) jsonify.Datum {
 	return jsonify.NewMap().
 		AddNonZero(ctx, `path`, p.Path).
 		AddNonZero(ctx, `imports`, p.Imports).
@@ -24,6 +24,6 @@ func (p *Package) ToJson(ctx jsonify.Context) jsonify.Datum {
 }
 
 func (p *Package) MarshalJSON() ([]byte, error) {
-	ctx := jsonify.Context{}
+	ctx := jsonify.NewContext()
 	return json.Marshal(p.ToJson(ctx))
 }

@@ -27,7 +27,13 @@ import (
 
 func Abstract(ps []*packages.Package) *constructs.Project {
 	ab := &abstractor{}
-	return ab.abstractProject(ps)
+	proj := ab.abstractProject(ps)
+	ab.resolveInheritance()
+	ab.resolveImplementation()
+
+	// TODO: Add allStructs, allInterfaces, allTypeParam, and allSignatures
+
+	return proj
 }
 
 type abstractor struct {
@@ -45,9 +51,6 @@ func (ab *abstractor) abstractProject(ps []*packages.Package) *constructs.Projec
 		}
 		return true
 	}, nil)
-
-	// TODO: Add allStructs, allInterfaces, allTypeParam, and allSignatures
-
 	return proj
 }
 
@@ -179,4 +182,12 @@ func (ab *abstractor) registerTypeParam(tp *typeDesc.TypeParam) *typeDesc.TypePa
 	}
 	ab.allTypeParam = append(ab.allTypeParam, tp)
 	return tp
+}
+
+func (ab *abstractor) resolveInheritance() {
+	// TODO: Finish
+}
+
+func (ab *abstractor) resolveImplementation() {
+	// TODO: Finish
 }

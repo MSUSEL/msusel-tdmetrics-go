@@ -8,6 +8,6 @@ type Ref struct {
 
 func (tr *Ref) _isTypeDesc() {}
 
-func (tr *Ref) ToJson(ctx jsonify.Context) jsonify.Datum {
+func (tr *Ref) ToJson(ctx *jsonify.Context) jsonify.Datum {
 	return jsonify.New(ctx, tr.Ref)
 }

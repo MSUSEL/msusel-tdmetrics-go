@@ -16,7 +16,7 @@ func (l *List) isZero() bool {
 	return l == nil || len(l.data) <= 0
 }
 
-func (l *List) Append(ctx Context, values ...any) *List {
+func (l *List) Append(ctx *Context, values ...any) *List {
 	if l == nil {
 		l = NewList()
 	}
@@ -30,7 +30,7 @@ func (l *List) Append(ctx Context, values ...any) *List {
 	return l
 }
 
-func (l *List) AppendNonZero(ctx Context, values ...any) *List {
+func (l *List) AppendNonZero(ctx *Context, values ...any) *List {
 	if l == nil {
 		l = NewList()
 	}

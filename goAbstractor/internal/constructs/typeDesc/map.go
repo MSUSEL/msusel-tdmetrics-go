@@ -9,7 +9,7 @@ type Map struct {
 
 func (tm *Map) _isTypeDesc() {}
 
-func (tm *Map) ToJson(ctx jsonify.Context) jsonify.Datum {
+func (tm *Map) ToJson(ctx *jsonify.Context) jsonify.Datum {
 	return jsonify.NewMap().
 		Add(ctx, `kind`, `map`).
 		Add(ctx, `key`, tm.Key).

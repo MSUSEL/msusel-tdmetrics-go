@@ -11,7 +11,7 @@ type Method struct {
 	Receiver  typeDesc.TypeDesc
 }
 
-func (m *Method) ToJson(ctx jsonify.Context) jsonify.Datum {
+func (m *Method) ToJson(ctx *jsonify.Context) jsonify.Datum {
 	return jsonify.NewMap().
 		Add(ctx, `name`, m.Name).
 		Add(ctx, `signature`, m.Signature).

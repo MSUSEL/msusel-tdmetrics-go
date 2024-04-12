@@ -6,7 +6,7 @@ type Project struct {
 	Packages []*Package
 }
 
-func (p *Project) ToJson(ctx jsonify.Context) jsonify.Datum {
+func (p *Project) ToJson(ctx *jsonify.Context) jsonify.Datum {
 	return jsonify.NewMap().
 		Add(ctx, `language`, `go`).
 		AddNonZero(ctx, `packages`, p.Packages)
