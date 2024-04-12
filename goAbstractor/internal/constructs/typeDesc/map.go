@@ -1,10 +1,6 @@
 package typeDesc
 
-import (
-	"encoding/json"
-
-	"github.com/Snow-Gremlin/goToolbox/utils"
-)
+import "encoding/json"
 
 type Map struct {
 	Key   TypeDesc
@@ -19,10 +15,4 @@ func (tm *Map) MarshalJSON() ([]byte, error) {
 	})
 }
 
-func (tp *Map) Equal(other TypeDesc) bool {
-	if utils.IsNil(tp) || utils.IsNil(other) {
-		return utils.IsNil(tp) && utils.IsNil(other)
-	}
-	t2, ok := other.(*Map)
-	return ok && tp.Key.Equal(t2.Key) && tp.Value.Equal(t2.Value)
-}
+func (tp *Map) _isTypeDesc() {}

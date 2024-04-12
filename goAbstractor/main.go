@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"os"
+	"runtime/debug"
 
 	"github.com/Snow-Gremlin/goToolbox/argers/args"
 
@@ -23,7 +24,7 @@ func main() {
 	defer func() {
 		if r := recover(); r != nil {
 			fmt.Printf("Panic: %v\n", r)
-			//debug.PrintStack()
+			debug.PrintStack()
 			os.Exit(1)
 		}
 	}()

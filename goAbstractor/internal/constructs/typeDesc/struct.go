@@ -1,13 +1,9 @@
 package typeDesc
 
-import (
-	"encoding/json"
-
-	"github.com/Snow-Gremlin/goToolbox/utils"
-)
+import "encoding/json"
 
 type Struct struct {
-	Fields []*Var
+	Fields []*Field
 }
 
 func (ts *Struct) MarshalJSON() ([]byte, error) {
@@ -17,10 +13,10 @@ func (ts *Struct) MarshalJSON() ([]byte, error) {
 	})
 }
 
-func (ts *Struct) Equal(other TypeDesc) bool {
-	if utils.IsNil(ts) || utils.IsNil(other) {
-		return utils.IsNil(ts) && utils.IsNil(other)
-	}
-	t2, ok := other.(*Struct)
-	return ok && listEqual(ts.Fields, t2.Fields)
+func (ts *Struct) _isTypeDesc() {}
+
+type Field struct {
+	Anonymous bool     `json:"anonymous,omitempty"`
+	Name      string   `json:"name,omitempty"`
+	Type      TypeDesc `json:"type"`
 }

@@ -5,8 +5,12 @@ import (
 	"go/ast"
 	"go/token"
 	"go/types"
+	"reflect"
 	"slices"
 
+	"github.com/Snow-Gremlin/goToolbox/collections"
+	"github.com/Snow-Gremlin/goToolbox/collections/enumerator"
+	"github.com/Snow-Gremlin/goToolbox/collections/set"
 	"github.com/Snow-Gremlin/goToolbox/utils"
 	"golang.org/x/tools/go/packages"
 
@@ -239,8 +243,8 @@ func (ab *abstractor) convertSignature(t *types.Signature) *typeDesc.Signature {
 	// Don't output receiver or receiver type here.
 	return ab.registerSignature(&typeDesc.Signature{
 		Variadic:   t.Variadic(),
-		Params:     ab.convertTuple(t.Params()),
-		Return:     ab.createReturn(ab.convertTuple(t.Results())),
+		Params:     ab.convertParamTuple(t.Params()),
+		Return:     ab.createReturn(ab.convertFieldTuple(t.Results())),
 		TypeParams: ab.convertTypeParamList(t.TypeParams()),
 	})
 }
@@ -254,25 +258,48 @@ func (ab *abstractor) convertSlice(t *types.Slice) *typeDesc.Wrap {
 
 func (ab *abstractor) convertStruct(t *types.Struct) *typeDesc.Struct {
 	return ab.registerStruct(&typeDesc.Struct{
-		Fields: convertList(t.NumFields(), t.Field, ab.convertVar),
+		Fields: convertList(t.NumFields(), t.Field, ab.convertField),
 	})
 }
 
-func (ab *abstractor) createReturn(returns []*typeDesc.Var) typeDesc.TypeDesc {
+func uniqueName(names collections.Set[string]) string {
+	for offset := 1; offset < 10000; offset++ {
+		name := fmt.Sprintf(`value%d`, offset)
+		if !names.Contains(name) {
+			names.Add(name)
+			return name
+		}
+	}
+	return `_`
+}
+
+func (ab *abstractor) createReturn(returns []*typeDesc.Field) typeDesc.TypeDesc {
 	switch len(returns) {
 	case 0:
 		return nil
 	case 1:
-		return returns[0]
+		return returns[0].Type
 	default:
+		names := set.From(enumerator.Select(enumerator.Enumerate(returns...),
+			func(f *typeDesc.Field) string { return f.Name }).NotZero())
+		for _, f := range returns {
+			f.Anonymous = false
+			if len(f.Name) <= 0 || f.Name == `_` || f.Name == `.` {
+				f.Name = uniqueName(names)
+			}
+		}
 		return ab.registerStruct(&typeDesc.Struct{
 			Fields: returns,
 		})
 	}
 }
 
-func (ab *abstractor) convertTuple(t *types.Tuple) []*typeDesc.Var {
-	return convertList(t.Len(), t.At, ab.convertVar)
+func (ab *abstractor) convertParamTuple(t *types.Tuple) []*typeDesc.Param {
+	return convertList(t.Len(), t.At, ab.convertParam)
+}
+
+func (ab *abstractor) convertFieldTuple(t *types.Tuple) []*typeDesc.Field {
+	return convertList(t.Len(), t.At, ab.convertField)
 }
 
 func (ab *abstractor) convertTypeParam(t *types.TypeParam) *typeDesc.TypeParam {
@@ -286,16 +313,24 @@ func (ab *abstractor) convertTypeParamList(t *types.TypeParamList) []*typeDesc.T
 	return convertList(t.Len(), t.At, ab.convertTypeParam)
 }
 
-func (ab *abstractor) convertVar(t *types.Var) *typeDesc.Var {
-	return &typeDesc.Var{
+func (ab *abstractor) convertParam(t *types.Var) *typeDesc.Param {
+	return &typeDesc.Param{
 		Name: t.Name(),
 		Type: ab.convertType(t.Type()),
 	}
 }
 
+func (ab *abstractor) convertField(t *types.Var) *typeDesc.Field {
+	return &typeDesc.Field{
+		Anonymous: t.Anonymous(),
+		Name:      t.Name(),
+		Type:      ab.convertType(t.Type()),
+	}
+}
+
 func (ab *abstractor) registerStruct(s *typeDesc.Struct) *typeDesc.Struct {
 	for _, s2 := range ab.allStructs {
-		if s.Equal(s2) {
+		if reflect.DeepEqual(s, s2) {
 			return s2
 		}
 	}
@@ -305,7 +340,7 @@ func (ab *abstractor) registerStruct(s *typeDesc.Struct) *typeDesc.Struct {
 
 func (ab *abstractor) registerInterface(ti *typeDesc.Interface) *typeDesc.Interface {
 	for _, t2 := range ab.allInterfaces {
-		if ti.Equal(t2) {
+		if reflect.DeepEqual(ti, t2) {
 			return t2
 		}
 	}
@@ -315,7 +350,7 @@ func (ab *abstractor) registerInterface(ti *typeDesc.Interface) *typeDesc.Interf
 
 func (ab *abstractor) registerSignature(sig *typeDesc.Signature) *typeDesc.Signature {
 	for _, s2 := range ab.allSignatures {
-		if sig.Equal(s2) {
+		if reflect.DeepEqual(sig, s2) {
 			return s2
 		}
 	}
@@ -325,7 +360,7 @@ func (ab *abstractor) registerSignature(sig *typeDesc.Signature) *typeDesc.Signa
 
 func (ab *abstractor) registerTypeParam(tp *typeDesc.TypeParam) *typeDesc.TypeParam {
 	for _, t2 := range ab.allTypeParam {
-		if tp.Equal(t2) {
+		if reflect.DeepEqual(tp, t2) {
 			return t2
 		}
 	}

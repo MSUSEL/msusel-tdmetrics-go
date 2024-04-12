@@ -1,14 +1,10 @@
 package typeDesc
 
-import (
-	"encoding/json"
-
-	"github.com/Snow-Gremlin/goToolbox/utils"
-)
+import "encoding/json"
 
 type Signature struct {
 	Variadic   bool
-	Params     []*Var
+	Params     []*Param
 	Return     TypeDesc
 	TypeParams []*TypeParam
 }
@@ -32,14 +28,9 @@ func (sig *Signature) MarshalJSON() ([]byte, error) {
 	return json.Marshal(data)
 }
 
-func (sig *Signature) Equal(other TypeDesc) bool {
-	if utils.IsNil(sig) || utils.IsNil(other) {
-		return utils.IsNil(sig) && utils.IsNil(other)
-	}
-	t2, ok := other.(*Signature)
-	return ok &&
-		sig.Variadic == t2.Variadic &&
-		listEqual(sig.Params, t2.Params) &&
-		sig.Return.Equal(t2.Return) &&
-		listEqual(sig.TypeParams, t2.TypeParams)
+func (sig *Signature) _isTypeDesc() {}
+
+type Param struct {
+	Name string   `json:"name,omitempty"`
+	Type TypeDesc `json:"type"`
 }
