@@ -1,9 +1,29 @@
 package constructs
 
+import (
+	"encoding/json"
+
+	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/jsonify"
+)
+
 type Package struct {
-	Path    string      `json:"path,omitempty"`
-	Imports []string    `json:"imports,omitempty"`
-	Types   []*TypeDef  `json:"types,omitempty"`
-	Values  []*ValueDef `json:"values,omitempty"`
-	Methods []*Method   `json:"methods,omitempty"`
+	Path    string
+	Imports []string
+	Types   []*TypeDef
+	Values  []*ValueDef
+	Methods []*Method
+}
+
+func (p *Package) ToJson(ctx jsonify.Context) jsonify.Datum {
+	return jsonify.NewMap().
+		AddNonZero(ctx, `path`, p.Path).
+		AddNonZero(ctx, `imports`, p.Imports).
+		AddNonZero(ctx, `types`, p.Types).
+		AddNonZero(ctx, `values`, p.Values).
+		AddNonZero(ctx, `methods`, p.Methods)
+}
+
+func (p *Package) MarshalJSON() ([]byte, error) {
+	ctx := jsonify.Context{}
+	return json.Marshal(p.ToJson(ctx))
 }

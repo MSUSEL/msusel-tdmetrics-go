@@ -1,9 +1,8 @@
 package typeDesc
 
 import (
-	"encoding/json"
-
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs/typeDesc/wrapKind"
+	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/jsonify"
 )
 
 type Wrap struct {
@@ -11,11 +10,10 @@ type Wrap struct {
 	Elem TypeDesc
 }
 
-func (tw *Wrap) MarshalJSON() ([]byte, error) {
-	return json.Marshal(map[string]any{
-		`kind`: string(tw.Kind),
-		`elem`: tw.Elem,
-	})
-}
-
 func (tw *Wrap) _isTypeDesc() {}
+
+func (tw *Wrap) ToJson(ctx jsonify.Context) jsonify.Datum {
+	return jsonify.NewMap().
+		Add(ctx, `kind`, string(tw.Kind)).
+		Add(ctx, `elem`, tw.Elem)
+}

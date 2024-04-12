@@ -1,21 +1,26 @@
 package typeDesc
 
-import "encoding/json"
+import "github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/jsonify"
 
 type Interface struct {
 	Methods []*Func
 }
 
-func (ti *Interface) MarshalJSON() ([]byte, error) {
-	return json.Marshal(map[string]any{
-		`kind`:    `interface`,
-		`methods`: ti.Methods,
-	})
-}
-
 func (ti *Interface) _isTypeDesc() {}
 
+func (ti *Interface) ToJson(ctx jsonify.Context) jsonify.Datum {
+	return jsonify.NewMap().
+		Add(ctx, `kind`, `interface`).
+		AddNonZero(ctx, `methods`, ti.Methods)
+}
+
 type Func struct {
-	Name      string     `json:"name"`
-	Signature *Signature `json:"signature"`
+	Name      string
+	Signature *Signature
+}
+
+func (f *Func) ToJson(ctx jsonify.Context) jsonify.Datum {
+	return jsonify.NewMap().
+		Add(ctx, `name`, f.Name).
+		Add(ctx, `signature`, f.Signature)
 }

@@ -1,22 +1,28 @@
 package typeDesc
 
-import "encoding/json"
+import "github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/jsonify"
 
 type Struct struct {
 	Fields []*Field
 }
 
-func (ts *Struct) MarshalJSON() ([]byte, error) {
-	return json.Marshal(map[string]any{
-		`kind`:   `struct`,
-		`fields`: ts.Fields,
-	})
-}
-
 func (ts *Struct) _isTypeDesc() {}
 
+func (ts *Struct) ToJson(ctx jsonify.Context) jsonify.Datum {
+	return jsonify.NewMap().
+		Add(ctx, `kind`, `struct`).
+		Add(ctx, `fields`, ts.Fields)
+}
+
 type Field struct {
-	Anonymous bool     `json:"anonymous,omitempty"`
-	Name      string   `json:"name,omitempty"`
-	Type      TypeDesc `json:"type"`
+	Anonymous bool
+	Name      string
+	Type      TypeDesc
+}
+
+func (f *Field) ToJson(ctx jsonify.Context) jsonify.Datum {
+	return jsonify.NewMap().
+		AddNonZero(ctx, `anonymous`, f.Anonymous).
+		AddNonZero(ctx, `name`, f.Name).
+		Add(ctx, `type`, f.Type)
 }

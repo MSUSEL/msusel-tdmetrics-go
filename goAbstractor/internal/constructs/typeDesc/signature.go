@@ -1,6 +1,6 @@
 package typeDesc
 
-import "encoding/json"
+import "github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/jsonify"
 
 type Signature struct {
 	Variadic   bool
@@ -9,28 +9,24 @@ type Signature struct {
 	TypeParams []*TypeParam
 }
 
-func (sig *Signature) MarshalJSON() ([]byte, error) {
-	data := map[string]any{
-		`kind`: `signature`,
-	}
-	if sig.Variadic {
-		data[`variadic`] = true
-	}
-	if len(sig.Params) > 0 {
-		data[`params`] = sig.Params
-	}
-	if sig.Return != nil {
-		data[`return`] = sig.Return
-	}
-	if len(sig.TypeParams) > 0 {
-		data[`typeParams`] = sig.TypeParams
-	}
-	return json.Marshal(data)
-}
-
 func (sig *Signature) _isTypeDesc() {}
 
+func (sig *Signature) ToJson(ctx jsonify.Context) jsonify.Datum {
+	return jsonify.NewMap().
+		Add(ctx, `kind`, `signature`).
+		AddNonZero(ctx, `variadic`, sig.Variadic).
+		AddNonZero(ctx, `params`, sig.Params).
+		AddNonZero(ctx, `return`, sig.Return).
+		AddNonZero(ctx, `typeParams`, sig.TypeParams)
+}
+
 type Param struct {
-	Name string   `json:"name,omitempty"`
-	Type TypeDesc `json:"type"`
+	Name string
+	Type TypeDesc
+}
+
+func (p *Param) ToJson(ctx jsonify.Context) jsonify.Datum {
+	return jsonify.NewMap().
+		AddNonZero(ctx, `name`, p.Name).
+		Add(ctx, `type`, p.Type)
 }

@@ -1,17 +1,13 @@
 package constructs
 
-import "encoding/json"
+import "github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/jsonify"
 
 type Project struct {
 	Packages []*Package
 }
 
-func (p *Project) MarshalJSON() ([]byte, error) {
-	data := map[string]any{
-		`language`: `go`,
-	}
-	if len(p.Packages) > 0 {
-		data[`packages`] = p.Packages
-	}
-	return json.Marshal(data)
+func (p *Project) ToJson(ctx jsonify.Context) jsonify.Datum {
+	return jsonify.NewMap().
+		Add(ctx, `language`, `go`).
+		AddNonZero(ctx, `packages`, p.Packages)
 }

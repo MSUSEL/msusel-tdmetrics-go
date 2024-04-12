@@ -1,6 +1,6 @@
 package typeDesc
 
-import "encoding/json"
+import "github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/jsonify"
 
 // TODO: Need to rework
 // Type param is defined on each param/return and signature right now.
@@ -13,12 +13,11 @@ type TypeParam struct {
 	Constraint TypeDesc
 }
 
-func (tp *TypeParam) MarshalJSON() ([]byte, error) {
-	return json.Marshal(map[string]any{
-		`kind`:       `typeParam`,
-		`fields`:     tp.Index,
-		`constraint`: tp.Constraint,
-	})
-}
-
 func (tp *TypeParam) _isTypeDesc() {}
+
+func (tp *TypeParam) ToJson(ctx jsonify.Context) jsonify.Datum {
+	return jsonify.NewMap().
+		Add(ctx, `kind`, `typeParam`).
+		Add(ctx, `index`, tp.Index).
+		Add(ctx, `constraint`, tp.Constraint)
+}
