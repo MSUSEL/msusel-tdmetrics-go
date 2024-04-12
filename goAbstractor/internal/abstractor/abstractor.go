@@ -16,7 +16,7 @@ import (
 
 // TODO:
 // - Figure out implemented interfaces.
-// - Determine what to do with pointer receivers to make it similar o Java.
+// - Determine what to do with pointer receivers to make it similar to Java.
 // - Add analytics:
 //   - Add cyclomatic complexity per method.
 //   - The set of variables with locations that are read from and written
@@ -26,32 +26,30 @@ import (
 //     Access to Foreign Data (ATFD) and Design Recovery (DR)
 
 func Abstract(ps []*packages.Package) *constructs.Project {
-	ab := &abstractor{}
-	proj := ab.abstractProject(ps)
+	ab := &abstractor{
+		proj: &constructs.Project{},
+	}
+	ab.abstractProject(ps)
 	ab.resolveInheritance()
 	ab.resolveImplementation()
 
-	// TODO: Add allStructs, allInterfaces, allTypeParam, and allSignatures
-
-	return proj
+	// Leave indices as zero until the end so that checking equality
+	// using reflect.DeepEqual will not find differences in the indices.
+	ab.updateIndices()
+	return ab.proj
 }
 
 type abstractor struct {
-	allStructs    []*typeDesc.Struct
-	allInterfaces []*typeDesc.Interface
-	allSignatures []*typeDesc.Signature
-	allTypeParam  []*typeDesc.TypeParam
+	proj *constructs.Project
 }
 
-func (ab *abstractor) abstractProject(ps []*packages.Package) *constructs.Project {
-	proj := &constructs.Project{}
+func (ab *abstractor) abstractProject(ps []*packages.Package) {
 	packages.Visit(ps, func(src *packages.Package) bool {
 		if ap := ab.abstractPackage(src); ap != nil {
-			proj.Packages = append(proj.Packages, ap)
+			ab.proj.Packages = append(ab.proj.Packages, ap)
 		}
 		return true
 	}, nil)
-	return proj
 }
 
 func (ab *abstractor) abstractPackage(src *packages.Package) *constructs.Package {
@@ -145,42 +143,42 @@ func pos(src *packages.Package, pos token.Pos) string {
 }
 
 func (ab *abstractor) registerStruct(s *typeDesc.Struct) *typeDesc.Struct {
-	for _, s2 := range ab.allStructs {
+	for _, s2 := range ab.proj.AllStructs {
 		if reflect.DeepEqual(s, s2) {
 			return s2
 		}
 	}
-	ab.allStructs = append(ab.allStructs, s)
+	ab.proj.AllStructs = append(ab.proj.AllStructs, s)
 	return s
 }
 
 func (ab *abstractor) registerInterface(ti *typeDesc.Interface) *typeDesc.Interface {
-	for _, t2 := range ab.allInterfaces {
+	for _, t2 := range ab.proj.AllInterfaces {
 		if reflect.DeepEqual(ti, t2) {
 			return t2
 		}
 	}
-	ab.allInterfaces = append(ab.allInterfaces, ti)
+	ab.proj.AllInterfaces = append(ab.proj.AllInterfaces, ti)
 	return ti
 }
 
 func (ab *abstractor) registerSignature(sig *typeDesc.Signature) *typeDesc.Signature {
-	for _, s2 := range ab.allSignatures {
+	for _, s2 := range ab.proj.AllSignatures {
 		if reflect.DeepEqual(sig, s2) {
 			return s2
 		}
 	}
-	ab.allSignatures = append(ab.allSignatures, sig)
+	ab.proj.AllSignatures = append(ab.proj.AllSignatures, sig)
 	return sig
 }
 
 func (ab *abstractor) registerTypeParam(tp *typeDesc.TypeParam) *typeDesc.TypeParam {
-	for _, t2 := range ab.allTypeParam {
+	for _, t2 := range ab.proj.AllTypeParams {
 		if reflect.DeepEqual(tp, t2) {
 			return t2
 		}
 	}
-	ab.allTypeParam = append(ab.allTypeParam, tp)
+	ab.proj.AllTypeParams = append(ab.proj.AllTypeParams, tp)
 	return tp
 }
 
@@ -190,4 +188,19 @@ func (ab *abstractor) resolveInheritance() {
 
 func (ab *abstractor) resolveImplementation() {
 	// TODO: Finish
+}
+
+func (ab *abstractor) updateIndices() {
+	for i, c := range ab.proj.AllStructs {
+		c.Index = i
+	}
+	for i, c := range ab.proj.AllInterfaces {
+		c.Index = i
+	}
+	for i, c := range ab.proj.AllSignatures {
+		c.Index = i
+	}
+	for i, c := range ab.proj.AllTypeParams {
+		c.Index = i
+	}
 }

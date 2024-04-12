@@ -1,10 +1,6 @@
 package constructs
 
-import (
-	"encoding/json"
-
-	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/jsonify"
-)
+import "github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/jsonify"
 
 type Package struct {
 	Path    string
@@ -21,9 +17,4 @@ func (p *Package) ToJson(ctx *jsonify.Context) jsonify.Datum {
 		AddNonZero(ctx, `types`, p.Types).
 		AddNonZero(ctx, `values`, p.Values).
 		AddNonZero(ctx, `methods`, p.Methods)
-}
-
-func (p *Package) MarshalJSON() ([]byte, error) {
-	ctx := jsonify.NewContext()
-	return json.Marshal(p.ToJson(ctx))
 }
