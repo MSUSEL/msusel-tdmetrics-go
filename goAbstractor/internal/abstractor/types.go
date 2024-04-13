@@ -150,7 +150,7 @@ func (ab *abstractor) createReturn(returns []*typeDesc.Field) typeDesc.TypeDesc 
 			func(f *typeDesc.Field) string { return f.Name }).NotZero())
 		for _, f := range returns {
 			f.Anonymous = false
-			if len(f.Name) <= 0 || f.Name == `_` || f.Name == `.` {
+			if len(f.Name) <= 0 || f.Name == `_` {
 				f.Name = uniqueName(names)
 			}
 		}

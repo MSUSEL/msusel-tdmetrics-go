@@ -16,7 +16,13 @@ func Read(config *Config) (ps []*packages.Package, err error) {
 	}()
 
 	cfg := config.toParseConfig()
-	ps, err = packages.Load(cfg, config.Path)
+
+	patterns := config.Patterns
+	if len(patterns) <= 0 {
+		patterns = []string{cfg.Dir}
+	}
+
+	ps, err = packages.Load(cfg, patterns...)
 	if err != nil {
 		return nil, err
 	}

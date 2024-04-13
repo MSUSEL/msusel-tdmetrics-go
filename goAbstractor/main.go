@@ -56,14 +56,14 @@ func main() {
 
 	ps, err := reader.Read(&reader.Config{
 		Verbose: ao.Verbose,
-		Path:    ao.InPath,
+		Dir:     ao.InPath,
 	})
 	if err != nil {
 		fmt.Println(`Error reading project:`, err)
 		os.Exit(1)
 	}
 
-	proj := abstractor.Abstract(ps)
+	proj := abstractor.Abstract(ps, ao.Verbose)
 	if err = writeJson(ao.OutPath, ao.Minimize, proj); err != nil {
 		fmt.Println(`Error abstracting project:`, err)
 		os.Exit(1)

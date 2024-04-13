@@ -14,10 +14,13 @@ type Config struct {
 	// should be written to the standard out.
 	Verbose bool
 
-	// Path is the path to the main package or primary package.
+	// Dir is the path to the main package or primary package.
 	// The path should contain the mod file.
 	// The path follows the standard patter for go tools.
-	Path string
+	Dir string
+
+	// Patterns is the patterns to load the packages with.
+	Patterns []string
 
 	// Context is the optional context to cancel a build with.
 	Context context.Context
@@ -30,17 +33,15 @@ type Config struct {
 func (c Config) toParseConfig() *packages.Config {
 	const allNeeds = packages.NeedName |
 		packages.NeedFiles |
-		packages.NeedCompiledGoFiles |
 		packages.NeedImports |
 		packages.NeedDeps |
 		packages.NeedExportFile |
 		packages.NeedTypes |
 		packages.NeedSyntax |
-		packages.NeedTypesInfo |
-		packages.NeedModule
+		packages.NeedTypesInfo
 
 	cfg := &packages.Config{
-		Dir:        c.Path,
+		Dir:        c.Dir,
 		BuildFlags: c.BuildFlags,
 		Context:    c.Context,
 		Mode:       allNeeds,
@@ -48,8 +49,8 @@ func (c Config) toParseConfig() *packages.Config {
 
 	if c.Verbose {
 		cfg.Logf = func(format string, args ...any) {
-			_, err := fmt.Printf(format, args...)
-			panic(err)
+			fmt.Printf(format, args...)
+			fmt.Println()
 		}
 	}
 

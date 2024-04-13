@@ -25,12 +25,13 @@ import (
 //   - The set of all methods called in each method. Used for
 //     Access to Foreign Data (ATFD) and Design Recovery (DR)
 
-func Abstract(ps []*packages.Package) *constructs.Project {
+func Abstract(ps []*packages.Package, verbose bool) *constructs.Project {
 	ab := &abstractor{
-		proj: &constructs.Project{},
+		verbose: verbose,
+		proj:    &constructs.Project{},
 	}
 	ab.abstractProject(ps)
-	ab.resolveInheritance()
+	ab.resolveExtends()
 	ab.resolveImplementation()
 
 	// Leave indices as zero until the end so that checking equality
@@ -40,7 +41,8 @@ func Abstract(ps []*packages.Package) *constructs.Project {
 }
 
 type abstractor struct {
-	proj *constructs.Project
+	verbose bool
+	proj    *constructs.Project
 }
 
 func (ab *abstractor) abstractProject(ps []*packages.Package) {
@@ -77,6 +79,7 @@ func (ab *abstractor) addFile(pkg *constructs.Package, src *packages.Package, f 
 }
 
 func (ab *abstractor) addGenDecl(pkg *constructs.Package, src *packages.Package, decl *ast.GenDecl) {
+	isConst := decl.Tok == token.CONST
 	for _, spec := range decl.Specs {
 		switch s := spec.(type) {
 		case *ast.ImportSpec:
@@ -84,7 +87,7 @@ func (ab *abstractor) addGenDecl(pkg *constructs.Package, src *packages.Package,
 		case *ast.TypeSpec:
 			ab.abstractTypeSpec(pkg, src, s)
 		case *ast.ValueSpec:
-			ab.abstractValueSpec(pkg, src, s)
+			ab.abstractValueSpec(pkg, src, s, isConst)
 		default:
 			panic(fmt.Errorf(`unexpected specification: %s`, pos(src, spec.Pos())))
 		}
@@ -103,20 +106,26 @@ func (ab *abstractor) abstractTypeSpec(pkg *constructs.Package, src *packages.Pa
 	pkg.Types = append(pkg.Types, def)
 }
 
-func (ab *abstractor) abstractValueSpec(pkg *constructs.Package, src *packages.Package, spec *ast.ValueSpec) {
+func (ab *abstractor) abstractValueSpec(pkg *constructs.Package, src *packages.Package, spec *ast.ValueSpec, isConst bool) {
 	for _, name := range spec.Names {
-		if name.Name != `_` {
-			tv, has := src.TypesInfo.Defs[name]
-			if !has {
-				panic(fmt.Errorf(`value specification not found in types info: %s`, pos(src, spec.Type.Pos())))
-			}
+		// TODO: Need to evaluate the initial value in case
+		// it has connection to another var of calls a function.
 
-			def := &constructs.ValueDef{
-				Name: name.Name,
-				Type: ab.convertType(tv.Type()),
-			}
-			pkg.Values = append(pkg.Values, def)
+		if name.Name == `_` {
+			continue
 		}
+
+		tv, has := src.TypesInfo.Defs[name]
+		if !has {
+			panic(fmt.Errorf(`value specification not found in types info: %s`, pos(src, spec.Type.Pos())))
+		}
+
+		def := &constructs.ValueDef{
+			Name:  name.Name,
+			Const: isConst,
+			Type:  ab.convertType(tv.Type()),
+		}
+		pkg.Values = append(pkg.Values, def)
 	}
 }
 
@@ -131,10 +140,16 @@ func (ab *abstractor) abstractFuncDecl(pkg *constructs.Package, src *packages.Pa
 		if decl.Recv.NumFields() != 1 {
 			panic(fmt.Errorf(`function declaration has unexpected receiver fields: %s`, pos(src, decl.Pos())))
 		}
-		tv := src.TypesInfo.Types[decl.Recv.List[0].Type]
-		m.Receiver = ab.convertType(tv.Type)
+		recv := src.TypesInfo.Types[decl.Recv.List[0].Type].Type
+		// Ignore the pointer since abstraction doesn't need
+		// to know if a reference or pointer is being set.
+		if p, ok := recv.(*types.Pointer); ok {
+			recv = p.Elem()
+		}
+		m.Receiver = ab.convertType(recv)
 	}
 
+	// TODO: Evaluate the body of the function to abstract metrics.
 	pkg.Methods = append(pkg.Methods, m)
 }
 
@@ -182,7 +197,7 @@ func (ab *abstractor) registerTypeParam(tp *typeDesc.TypeParam) *typeDesc.TypePa
 	return tp
 }
 
-func (ab *abstractor) resolveInheritance() {
+func (ab *abstractor) resolveExtends() {
 	// TODO: Finish
 }
 

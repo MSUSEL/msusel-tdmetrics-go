@@ -1,0 +1,27 @@
+{
+  "language": "go",
+  "packages": [
+    {
+      "path": "command-line-arguments",
+      "methods": [
+        { "name": "sum",   "signature": 0 },
+        { "name": "first", "signature": 0 },
+        { "name": "last",  "signature": 0 },
+        { "name": "main",  "signature": 1 }
+      ]
+    }
+  ],
+  "signatures": [
+    {
+      "params": [
+        {
+          "name": "values",
+          "type": { "kind": "list", "elem": "int" }
+        }
+      ],
+      "return": "int",
+      "variadic": true
+    },
+    {}
+  ]
+}

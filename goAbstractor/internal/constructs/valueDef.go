@@ -6,12 +6,14 @@ import (
 )
 
 type ValueDef struct {
-	Name string
-	Type typeDesc.TypeDesc
+	Name  string
+	Const bool
+	Type  typeDesc.TypeDesc
 }
 
 func (vd *ValueDef) ToJson(ctx *jsonify.Context) jsonify.Datum {
 	return jsonify.NewMap().
 		Add(ctx, `name`, vd.Name).
+		AddNonZero(ctx, `const`, vd.Const).
 		Add(ctx, `type`, vd.Type)
 }
