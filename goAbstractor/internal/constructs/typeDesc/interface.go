@@ -15,16 +15,19 @@ func (ti *Interface) ToJson(ctx *jsonify.Context) jsonify.Datum {
 		return jsonify.New(ctx, ti.Index)
 	}
 
-	ctx = ctx.Copy().Set(`onlyIndex`, true)
+	ctx2 := ctx.Copy().
+		Remove(`noKind`).
+		Set(`onlyIndex`, true)
 
 	if len(ti.Methods) <= 0 {
-		return jsonify.New(ctx, `object`)
+		return jsonify.New(ctx2, `object`)
 	}
 
+	showKind := !ctx.GetBool(`noKind`)
 	return jsonify.NewMap().
-		Add(ctx, `kind`, `interface`).
-		AddNonZero(ctx, `inherits`, ti.Inherits).
-		AddNonZero(ctx, `methods`, ti.Methods)
+		AddIf(ctx2, showKind, `kind`, `interface`).
+		AddNonZero(ctx2, `inherits`, ti.Inherits).
+		AddNonZero(ctx2, `methods`, ti.Methods)
 }
 
 type Func struct {

@@ -14,11 +14,14 @@ func (ts *Struct) ToJson(ctx *jsonify.Context) jsonify.Datum {
 		return jsonify.New(ctx, ts.Index)
 	}
 
-	ctx = ctx.Copy().Set(`onlyIndex`, true)
+	ctx2 := ctx.Copy().
+		Remove(`noKind`).
+		Set(`onlyIndex`, true)
 
+	showKind := !ctx.GetBool(`noKind`)
 	return jsonify.NewMap().
-		Add(ctx, `kind`, `struct`).
-		Add(ctx, `fields`, ts.Fields)
+		AddIf(ctx2, showKind, `kind`, `struct`).
+		Add(ctx2, `fields`, ts.Fields)
 }
 
 type Field struct {

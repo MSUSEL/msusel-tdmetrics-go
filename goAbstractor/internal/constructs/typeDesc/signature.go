@@ -17,14 +17,17 @@ func (sig *Signature) ToJson(ctx *jsonify.Context) jsonify.Datum {
 		return jsonify.New(ctx, sig.Index)
 	}
 
-	ctx = ctx.Copy().Set(`onlyIndex`, true)
+	ctx2 := ctx.Copy().
+		Remove(`noKind`).
+		Set(`onlyIndex`, true)
 
+	showKind := !ctx.GetBool(`noKind`)
 	return jsonify.NewMap().
-		Add(ctx, `kind`, `signature`).
-		AddNonZero(ctx, `variadic`, sig.Variadic).
-		AddNonZero(ctx, `params`, sig.Params).
-		AddNonZero(ctx, `return`, sig.Return).
-		AddNonZero(ctx, `typeParams`, sig.TypeParams)
+		AddIf(ctx2, showKind, `kind`, `signature`).
+		AddNonZero(ctx2, `variadic`, sig.Variadic).
+		AddNonZero(ctx2, `params`, sig.Params).
+		AddNonZero(ctx2, `return`, sig.Return).
+		AddNonZero(ctx2, `typeParams`, sig.TypeParams)
 }
 
 type Param struct {

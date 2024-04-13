@@ -142,16 +142,6 @@ func pos(src *packages.Package, pos token.Pos) string {
 	return src.Fset.Position(pos).String()
 }
 
-func (ab *abstractor) registerStruct(s *typeDesc.Struct) *typeDesc.Struct {
-	for _, s2 := range ab.proj.AllStructs {
-		if reflect.DeepEqual(s, s2) {
-			return s2
-		}
-	}
-	ab.proj.AllStructs = append(ab.proj.AllStructs, s)
-	return s
-}
-
 func (ab *abstractor) registerInterface(ti *typeDesc.Interface) *typeDesc.Interface {
 	for _, t2 := range ab.proj.AllInterfaces {
 		if reflect.DeepEqual(ti, t2) {
@@ -170,6 +160,16 @@ func (ab *abstractor) registerSignature(sig *typeDesc.Signature) *typeDesc.Signa
 	}
 	ab.proj.AllSignatures = append(ab.proj.AllSignatures, sig)
 	return sig
+}
+
+func (ab *abstractor) registerStruct(s *typeDesc.Struct) *typeDesc.Struct {
+	for _, s2 := range ab.proj.AllStructs {
+		if reflect.DeepEqual(s, s2) {
+			return s2
+		}
+	}
+	ab.proj.AllStructs = append(ab.proj.AllStructs, s)
+	return s
 }
 
 func (ab *abstractor) registerTypeParam(tp *typeDesc.TypeParam) *typeDesc.TypeParam {
@@ -191,16 +191,20 @@ func (ab *abstractor) resolveImplementation() {
 }
 
 func (ab *abstractor) updateIndices() {
-	for i, c := range ab.proj.AllStructs {
-		c.Index = i
-	}
+	offset := 0
 	for i, c := range ab.proj.AllInterfaces {
-		c.Index = i
+		c.Index = i + offset
 	}
+	offset += len(ab.proj.AllInterfaces)
 	for i, c := range ab.proj.AllSignatures {
-		c.Index = i
+		c.Index = i + offset
 	}
+	offset += len(ab.proj.AllSignatures)
+	for i, c := range ab.proj.AllStructs {
+		c.Index = i + offset
+	}
+	offset += len(ab.proj.AllStructs)
 	for i, c := range ab.proj.AllTypeParams {
-		c.Index = i
+		c.Index = i + offset
 	}
 }

@@ -28,6 +28,13 @@ func (m *Map) Add(ctx *Context, key string, value any) *Map {
 	return m
 }
 
+func (m *Map) AddIf(ctx *Context, test bool, key string, value any) *Map {
+	if test {
+		return m.Add(ctx, key, value)
+	}
+	return m
+}
+
 func (m *Map) AddNonZero(ctx *Context, key string, value any) *Map {
 	if d := New(ctx, value); !d.isZero() {
 		if m == nil {
