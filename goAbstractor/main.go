@@ -1,7 +1,6 @@
 package main
 
 import (
-	"encoding/json"
 	"fmt"
 	"os"
 	"runtime/debug"
@@ -9,6 +8,8 @@ import (
 	"github.com/Snow-Gremlin/goToolbox/argers/args"
 
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/abstractor"
+	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs"
+	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/jsonify"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/reader"
 )
 
@@ -72,23 +73,15 @@ func main() {
 	os.Exit(0)
 }
 
-func jsonMarshal(minimize bool, data any) ([]byte, error) {
-	if minimize {
-		return json.Marshal(data)
-	}
-	return json.MarshalIndent(data, ``, `  `)
-}
-
-func writeJson(path string, minimize bool, data any) error {
-	b, err := jsonMarshal(minimize, data)
-	if err != nil {
-		return err
-	}
+func writeJson(path string, minimize bool, p *constructs.Project) error {
+	ctx := jsonify.NewContext()
+	ctx.Set(`minimize`, minimize)
+	b := jsonify.Marshal(ctx, p)
 
 	if len(path) > 0 {
 		return os.WriteFile(path, b, 0666)
 	}
 
-	_, err = fmt.Println(string(b))
+	_, err := fmt.Println(string(b))
 	return err
 }

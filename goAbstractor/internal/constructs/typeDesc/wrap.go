@@ -17,3 +17,7 @@ func (tw *Wrap) ToJson(ctx *jsonify.Context) jsonify.Datum {
 		Add(ctx, `kind`, string(tw.Kind)).
 		Add(ctx, `elem`, tw.Elem)
 }
+
+func (tw *Wrap) String() string {
+	return jsonify.ToString(tw)
+}

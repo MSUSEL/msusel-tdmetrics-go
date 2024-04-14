@@ -24,3 +24,7 @@ func (m *Method) ToJson(ctx *jsonify.Context) jsonify.Datum {
 	}
 	return data
 }
+
+func (m *Method) String() string {
+	return jsonify.ToString(m)
+}

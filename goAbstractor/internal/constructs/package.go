@@ -18,3 +18,7 @@ func (p *Package) ToJson(ctx *jsonify.Context) jsonify.Datum {
 		AddNonZero(ctx, `values`, p.Values).
 		AddNonZero(ctx, `methods`, p.Methods)
 }
+
+func (p *Package) String() string {
+	return jsonify.ToString(p)
+}

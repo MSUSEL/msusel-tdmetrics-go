@@ -19,3 +19,7 @@ func (td *TypeDef) ToJson(ctx *jsonify.Context) jsonify.Datum {
 		AddNonZero(ctx, `inherits`, td.Inherits).
 		AddNonZero(ctx, `methods`, td.Methods)
 }
+
+func (td *TypeDef) String() string {
+	return jsonify.ToString(td)
+}

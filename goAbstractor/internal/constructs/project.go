@@ -1,8 +1,6 @@
 package constructs
 
 import (
-	"encoding/json"
-
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs/typeDesc"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/jsonify"
 )
@@ -31,7 +29,6 @@ func (p *Project) ToJson(ctx *jsonify.Context) jsonify.Datum {
 	return m
 }
 
-func (p *Project) MarshalJSON() ([]byte, error) {
-	ctx := jsonify.NewContext()
-	return json.Marshal(p.ToJson(ctx))
+func (p *Project) String() string {
+	return jsonify.ToString(p)
 }

@@ -17,3 +17,7 @@ func (vd *ValueDef) ToJson(ctx *jsonify.Context) jsonify.Datum {
 		AddNonZero(ctx, `const`, vd.Const).
 		Add(ctx, `type`, vd.Type)
 }
+
+func (vd *ValueDef) String() string {
+	return jsonify.ToString(vd)
+}

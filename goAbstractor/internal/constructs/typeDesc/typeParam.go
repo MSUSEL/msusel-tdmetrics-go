@@ -21,3 +21,7 @@ func (tp *TypeParam) ToJson(ctx *jsonify.Context) jsonify.Datum {
 		Add(ctx, `index`, tp.Index).
 		Add(ctx, `constraint`, tp.Constraint)
 }
+
+func (tp *TypeParam) String() string {
+	return jsonify.ToString(tp)
+}

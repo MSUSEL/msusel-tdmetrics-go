@@ -30,6 +30,10 @@ func (sig *Signature) ToJson(ctx *jsonify.Context) jsonify.Datum {
 		AddNonZero(ctx2, `typeParams`, sig.TypeParams)
 }
 
+func (sig *Signature) String() string {
+	return jsonify.ToString(sig)
+}
+
 type Param struct {
 	Name string
 	Type TypeDesc
@@ -39,4 +43,8 @@ func (p *Param) ToJson(ctx *jsonify.Context) jsonify.Datum {
 	return jsonify.NewMap().
 		AddNonZero(ctx, `name`, p.Name).
 		Add(ctx, `type`, p.Type)
+}
+
+func (p *Param) String() string {
+	return jsonify.ToString(p)
 }

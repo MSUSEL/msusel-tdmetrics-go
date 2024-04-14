@@ -24,6 +24,10 @@ func (ts *Struct) ToJson(ctx *jsonify.Context) jsonify.Datum {
 		Add(ctx2, `fields`, ts.Fields)
 }
 
+func (ts *Struct) String() string {
+	return jsonify.ToString(ts)
+}
+
 type Field struct {
 	Anonymous bool
 	Name      string
@@ -35,4 +39,8 @@ func (f *Field) ToJson(ctx *jsonify.Context) jsonify.Datum {
 		AddNonZero(ctx, `anonymous`, f.Anonymous).
 		AddNonZero(ctx, `name`, f.Name).
 		Add(ctx, `type`, f.Type)
+}
+
+func (f *Field) String() string {
+	return jsonify.ToString(f)
 }

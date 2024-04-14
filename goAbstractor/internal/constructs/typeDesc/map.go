@@ -15,3 +15,7 @@ func (tm *Map) ToJson(ctx *jsonify.Context) jsonify.Datum {
 		Add(ctx, `key`, tm.Key).
 		Add(ctx, `value`, tm.Value)
 }
+
+func (tm *Map) String() string {
+	return jsonify.ToString(tm)
+}

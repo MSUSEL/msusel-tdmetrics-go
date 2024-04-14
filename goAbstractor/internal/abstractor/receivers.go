@@ -7,9 +7,10 @@ import (
 	"slices"
 	"strings"
 
-	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs"
 	"github.com/Snow-Gremlin/goToolbox/utils"
 	"golang.org/x/tools/go/packages"
+
+	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs"
 )
 
 func squeeze[E any, S ~[]E](s S) S {

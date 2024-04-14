@@ -51,6 +51,10 @@ func (ti *Interface) IsSupertypeOf(other *Interface) bool {
 	return true
 }
 
+func (ti *Interface) String() string {
+	return jsonify.ToString(ti)
+}
+
 type Func struct {
 	Name      string
 	Signature *Signature
@@ -60,4 +64,8 @@ func (f *Func) ToJson(ctx *jsonify.Context) jsonify.Datum {
 	return jsonify.NewMap().
 		Add(ctx, `name`, f.Name).
 		Add(ctx, `signature`, f.Signature)
+}
+
+func (f *Func) String() string {
+	return jsonify.ToString(f)
 }

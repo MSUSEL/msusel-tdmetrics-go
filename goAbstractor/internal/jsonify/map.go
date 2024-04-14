@@ -1,8 +1,6 @@
 package jsonify
 
-import (
-	"encoding/json"
-)
+import "encoding/json"
 
 type Map struct {
 	data map[string]Datum
