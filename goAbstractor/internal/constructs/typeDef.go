@@ -6,12 +6,16 @@ import (
 )
 
 type TypeDef struct {
-	Name string
-	Type typeDesc.TypeDesc
+	Name     string
+	Type     typeDesc.TypeDesc
+	Inherits []*typeDesc.Interface
+	Methods  []*Method
 }
 
 func (td *TypeDef) ToJson(ctx *jsonify.Context) jsonify.Datum {
 	return jsonify.NewMap().
-		AddNonZero(ctx, `name`, td.Name).
-		AddNonZero(ctx, `type`, td.Type)
+		Add(ctx, `name`, td.Name).
+		Add(ctx, `type`, td.Type).
+		AddNonZero(ctx, `inherits`, td.Inherits).
+		AddNonZero(ctx, `methods`, td.Methods)
 }

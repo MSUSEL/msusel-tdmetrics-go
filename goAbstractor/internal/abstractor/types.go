@@ -19,7 +19,7 @@ func convertList[T, U any](n int, getter func(i int) T, convert func(value T) *U
 			list = append(list, p)
 		}
 	}
-	return slices.Compact(list)
+	return slices.Clip(list)
 }
 
 func uniqueName(names collections.Set[string]) string {

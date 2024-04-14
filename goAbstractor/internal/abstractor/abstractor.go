@@ -30,9 +30,10 @@ func Abstract(ps []*packages.Package, verbose bool) *constructs.Project {
 		verbose: verbose,
 		proj:    &constructs.Project{},
 	}
+	ab.initialize()
 	ab.abstractProject(ps)
-	ab.resolveExtends()
-	ab.resolveImplementation()
+	ab.resolveReceivers()
+	ab.resolveInheritance()
 
 	// Leave indices as zero until the end so that checking equality
 	// using reflect.DeepEqual will not find differences in the indices.
@@ -43,6 +44,11 @@ func Abstract(ps []*packages.Package, verbose bool) *constructs.Project {
 type abstractor struct {
 	verbose bool
 	proj    *constructs.Project
+}
+
+func (ab *abstractor) initialize() {
+	// Add "any" (i.e object) to the interfaces.
+	ab.proj.AllInterfaces = append(ab.proj.AllInterfaces, &typeDesc.Interface{})
 }
 
 func (ab *abstractor) abstractProject(ps []*packages.Package) {
@@ -135,19 +141,7 @@ func (ab *abstractor) abstractFuncDecl(pkg *constructs.Package, src *packages.Pa
 		Name:      decl.Name.Name,
 		Signature: ab.convertSignature(obj.Type().(*types.Signature)),
 	}
-
-	if decl.Recv != nil && decl.Recv.NumFields() > 0 {
-		if decl.Recv.NumFields() != 1 {
-			panic(fmt.Errorf(`function declaration has unexpected receiver fields: %s`, pos(src, decl.Pos())))
-		}
-		recv := src.TypesInfo.Types[decl.Recv.List[0].Type].Type
-		// Ignore the pointer since abstraction doesn't need
-		// to know if a reference or pointer is being set.
-		if p, ok := recv.(*types.Pointer); ok {
-			recv = p.Elem()
-		}
-		m.Receiver = ab.convertType(recv)
-	}
+	ab.determineReceiver(m, src, decl)
 
 	// TODO: Evaluate the body of the function to abstract metrics.
 	pkg.Methods = append(pkg.Methods, m)
@@ -195,14 +189,6 @@ func (ab *abstractor) registerTypeParam(tp *typeDesc.TypeParam) *typeDesc.TypePa
 	}
 	ab.proj.AllTypeParams = append(ab.proj.AllTypeParams, tp)
 	return tp
-}
-
-func (ab *abstractor) resolveExtends() {
-	// TODO: Finish
-}
-
-func (ab *abstractor) resolveImplementation() {
-	// TODO: Finish
 }
 
 func (ab *abstractor) updateIndices() {

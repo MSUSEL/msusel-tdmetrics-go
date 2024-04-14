@@ -8,12 +8,19 @@ import (
 type Method struct {
 	Name      string
 	Signature *typeDesc.Signature
-	Receiver  typeDesc.TypeDesc
+
+	NoCopyRecv bool
+	Receiver   string
 }
 
 func (m *Method) ToJson(ctx *jsonify.Context) jsonify.Datum {
-	return jsonify.NewMap().
+	data := jsonify.NewMap().
 		Add(ctx, `name`, m.Name).
-		Add(ctx, `signature`, m.Signature).
-		AddNonZero(ctx, `receiver`, m.Receiver)
+		Add(ctx, `signature`, m.Signature)
+
+	if ctx.GetBool(`showReceivers`) {
+		data.AddNonZero(ctx, `noCopyRecv`, m.NoCopyRecv).
+			AddNonZero(ctx, `receiver`, m.Receiver)
+	}
+	return data
 }

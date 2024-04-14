@@ -1,0 +1,39 @@
+{
+  "interfaces": [
+    "object",
+    {
+      "inherits": [ 0 ],
+      "methods": [
+        { "name": "Pet", "signature": 2 }
+      ]
+    }
+  ],
+  "language": "go",
+  "packages": [
+    {
+      "methods": [
+        { "name": "main", "signature": 2 }
+      ],
+      "path": "command-line-arguments",
+      "types": [
+        { "name": "Animal", "type": 1 },
+        {
+          "name": "Cat", "type": 3,
+          "methods": [
+            { "name": "Pet", "signature": 2 }
+          ]
+        }
+      ]
+    }
+  ],
+  "signatures": [
+    {}
+  ],
+  "structs": [
+    {
+      "fields": [
+        { "name": "Name", "type": "string" }
+      ]
+    }
+  ]
+}
