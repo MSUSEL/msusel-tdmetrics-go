@@ -16,7 +16,7 @@ jobs:
         with:
           go-version: ${{ matrix.go-version }}
       - name: Change directory
-      - run: cd ./goAbstractor
+        run: cd ./goAbstractor
       - name: Add Cover Tool
         run: go get golang.org/x/tools/cmd/cover
       - name: Install dependencies
