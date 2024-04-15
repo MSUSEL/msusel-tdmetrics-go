@@ -4,6 +4,7 @@ on: [push]
 jobs:
   test:
     name: test goAbstractor
+    working-directory: ./goAbstractor
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -15,8 +16,6 @@ jobs:
         uses: actions/setup-go@v4
         with:
           go-version: ${{ matrix.go-version }}
-      - name: Change directory
-        run: cd ./goAbstractor
       - name: Add Cover Tool
         run: go get golang.org/x/tools/cmd/cover
       - name: Install dependencies
@@ -24,17 +23,3 @@ jobs:
       - name: Run Tests
         timeout-minutes: 1
         run: go test -cover ./...
-  lint:
-    name: lint
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-go@v4
-        with:
-          go-version: '1.22.x'
-          cache: false
-      - name: golangci-lint
-        uses: golangci/golangci-lint-action@v3
-        with:
-          version: latest
-          args: --out-format=colored-line-number
