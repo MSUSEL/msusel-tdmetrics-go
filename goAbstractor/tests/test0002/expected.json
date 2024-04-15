@@ -1,13 +1,16 @@
 {
   "language": "go",
+  "interfaces": [
+    "object"
+  ],
   "packages": [
     {
       "path": "command-line-arguments",
       "methods": [
-        { "name": "sum",   "signature": 0 },
-        { "name": "first", "signature": 0 },
-        { "name": "last",  "signature": 0 },
-        { "name": "main",  "signature": 1 }
+        { "name": "sum",   "signature": 1 },
+        { "name": "first", "signature": 1 },
+        { "name": "last",  "signature": 1 },
+        { "name": "main",  "signature": 2 }
       ]
     }
   ],

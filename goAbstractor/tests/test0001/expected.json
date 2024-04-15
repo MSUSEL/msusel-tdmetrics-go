@@ -1,10 +1,13 @@
 {
   "language": "go",
+  "interfaces": [
+    "object"
+  ],
   "packages": [
     {
       "path": "command-line-arguments",
       "methods": [
-        { "name": "main", "signature": 0 }
+        { "name": "main", "signature": 1 }
       ]
     }
   ],

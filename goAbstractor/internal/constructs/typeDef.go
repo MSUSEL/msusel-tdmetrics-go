@@ -20,6 +20,25 @@ func (td *TypeDef) ToJson(ctx *jsonify.Context) jsonify.Datum {
 		AddNonZero(ctx, `methods`, td.Methods)
 }
 
+func (td *TypeDef) HasFunc(m *typeDesc.Func) bool {
+	for _, other := range td.Methods {
+		// The signatures have been registers so they can be compared by pointers.
+		if m.Name == other.Name && m.Signature == other.Signature {
+			return true
+		}
+	}
+	return false
+}
+
+func (td *TypeDef) IsSupertypeOf(inter *typeDesc.Interface) bool {
+	for _, m := range inter.Methods {
+		if !td.HasFunc(m) {
+			return false
+		}
+	}
+	return true
+}
+
 func (td *TypeDef) String() string {
 	return jsonify.ToString(td)
 }

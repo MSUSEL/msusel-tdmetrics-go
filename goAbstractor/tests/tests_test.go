@@ -11,8 +11,13 @@ import (
 	"github.com/Snow-Gremlin/goToolbox/testers/check"
 
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/abstractor"
+	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/jsonify"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/reader"
 )
+
+func Test_T0001(t *testing.T) { runTest(t, `test0001`) }
+func Test_T0002(t *testing.T) { runTest(t, `test0002`) }
+func Test_T0003(t *testing.T) { runTest(t, `test0003`) }
 
 func runTest(t *testing.T, dir string) {
 	const verbose = true
@@ -36,7 +41,7 @@ func runTest(t *testing.T, dir string) {
 	exp, err := json.MarshalIndent(expData, ``, `  `)
 	check.NoError(t).Name(`Marshal expected json`).With(`Dir`, dir).Require(err)
 
-	gotten, err := json.MarshalIndent(proj, ``, `  `)
+	gotten, err := jsonify.Marshal(jsonify.NewContext(), proj)
 	check.NoError(t).Name(`Marshal project`).With(`Dir`, dir).Require(err)
 
 	if !slices.Equal(exp, gotten) {
@@ -46,7 +51,3 @@ func runTest(t *testing.T, dir string) {
 		t.Error(strings.Join(diffLines, "\n"))
 	}
 }
-
-func Test_T0001(t *testing.T) { runTest(t, `test0001`) }
-func Test_T0002(t *testing.T) { runTest(t, `test0002`) }
-func Test_T0003(t *testing.T) { runTest(t, `test0003`) }

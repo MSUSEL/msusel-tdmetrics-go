@@ -76,12 +76,14 @@ func main() {
 func writeJson(path string, minimize bool, p *constructs.Project) error {
 	ctx := jsonify.NewContext()
 	ctx.Set(`minimize`, minimize)
-	b := jsonify.Marshal(ctx, p)
+	b, err := jsonify.Marshal(ctx, p)
+	if err != nil {
+		return err
+	}
 
 	if len(path) > 0 {
 		return os.WriteFile(path, b, 0666)
 	}
-
-	_, err := fmt.Println(string(b))
+	_, err = fmt.Println(string(b))
 	return err
 }

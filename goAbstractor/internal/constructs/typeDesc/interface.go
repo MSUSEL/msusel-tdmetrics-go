@@ -32,7 +32,7 @@ func (ti *Interface) ToJson(ctx *jsonify.Context) jsonify.Datum {
 		AddNonZero(ctx2, `methods`, ti.Methods)
 }
 
-func (ti *Interface) HasMethod(m *Func) bool {
+func (ti *Interface) HasFunc(m *Func) bool {
 	for _, other := range ti.Methods {
 		// The signatures have been registers so they can be compared by pointers.
 		if m.Name == other.Name && m.Signature == other.Signature {
@@ -44,7 +44,7 @@ func (ti *Interface) HasMethod(m *Func) bool {
 
 func (ti *Interface) IsSupertypeOf(other *Interface) bool {
 	for _, m := range other.Methods {
-		if !ti.HasMethod(m) {
+		if !ti.HasFunc(m) {
 			return false
 		}
 	}

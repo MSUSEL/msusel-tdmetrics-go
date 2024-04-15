@@ -4,6 +4,7 @@ import (
 	"errors"
 	"fmt"
 
+	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs/typeDesc"
 )
 
@@ -18,21 +19,23 @@ func (ab *abstractor) resolveInheritance() {
 	for _, inter := range ab.proj.AllInterfaces[1:] {
 		findInheritors(obj, inter)
 	}
-
 	for _, inter := range ab.proj.AllInterfaces {
 		setInheritance(inter)
 	}
-
-	// TODO: Finish
+	for _, p := range ab.proj.Packages {
+		for _, td := range p.Types {
+			findImplements(obj, td)
+		}
+	}
 }
 
 func findInheritors(root, inter *typeDesc.Interface) bool {
-	if !root.IsSupertypeOf(inter) {
+	if !inter.IsSupertypeOf(root) {
 		return false
 	}
 
 	homed := false
-	for _, other := range inter.Inheritors {
+	for _, other := range root.Inheritors {
 		if findInheritors(other, inter) {
 			homed = true
 		}
@@ -45,7 +48,7 @@ func findInheritors(root, inter *typeDesc.Interface) bool {
 	for i, other := range root.Inheritors {
 		if other.IsSupertypeOf(inter) {
 			inter.Inheritors = append(inter.Inheritors, inter)
-			inter.Inheritors[i] = nil
+			root.Inheritors[i] = nil
 			changed = true
 		}
 	}
@@ -61,4 +64,23 @@ func setInheritance(inter *typeDesc.Interface) {
 	for _, i := range inter.Inheritors {
 		i.Inherits = append(i.Inherits, inter)
 	}
+}
+
+func findImplements(root *typeDesc.Interface, td *constructs.TypeDef) bool {
+	if !td.IsSupertypeOf(root) {
+		return false
+	}
+
+	homed := false
+	for _, other := range root.Inheritors {
+		if findImplements(other, td) {
+			homed = true
+		}
+	}
+	if homed {
+		return true
+	}
+
+	td.Inherits = append(td.Inherits, root)
+	return true
 }

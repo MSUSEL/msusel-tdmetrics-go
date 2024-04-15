@@ -6,19 +6,12 @@ type Jsonable interface {
 	ToJson(ctx *Context) Datum
 }
 
-func Marshal(ctx *Context, j Jsonable) []byte {
+func Marshal(ctx *Context, j Jsonable) ([]byte, error) {
 	data := j.ToJson(ctx)
-	var b []byte
-	var err error
 	if ctx.GetBool(`minimize`) {
-		b, err = json.MarshalIndent(data, ``, `  `)
-	} else {
-		b, err = json.Marshal(data)
+		return json.Marshal(data)
 	}
-	if err != nil {
-		panic(err)
-	}
-	return b
+	return json.MarshalIndent(data, ``, `  `)
 }
 
 func ToString(j Jsonable) string {
