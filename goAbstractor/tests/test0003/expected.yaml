@@ -1,0 +1,40 @@
+{
+  interfaces: [
+    "object", # any
+    { # interface { Pet() }
+      inherits: [ 0 ],
+      methods: [
+        { name: "Pet", signature: 2 }
+      ]
+    }
+  ],
+  language: "go",
+  packages: [
+    {
+      path: "command-line-arguments",
+      methods: [
+        { name: "main", signature: 2 } # func main()
+      ],
+      types: [
+        { name: "Animal", type: 1 }, # type Animal interface { Pet() }
+        { # type Cat struct { Name string; Pet() }
+          inherits: [ 1 ],
+          name: "Cat", type: 3,
+          methods: [
+            { name: "Pet", signature: 2 }
+          ]
+        }
+      ]
+    }
+  ],
+  signatures: [
+    {} # func()()
+  ],
+  structs: [
+    { # struct { Name string }
+      fields: [
+        { name: "Name", type: "string" }
+      ]
+    }
+  ]
+}

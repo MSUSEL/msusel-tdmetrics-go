@@ -1,0 +1,60 @@
+{
+  interfaces: [
+    "object", # any
+    { # interface { Age() int }
+      inherits: [ 0 ],
+      methods: [
+        { name: "Age", signature: 6 }
+      ]
+    },
+    { #interface { Age() int; Fly() }
+      inherits: [ 1 ],
+      methods: [
+        { name: "Age", signature: 6 },
+        { name: "Fly", signature: 7 }
+      ]
+    },
+    { # interface { Age() int; Temp() float64 }
+      inherits: [ 1 ],
+      methods: [
+        { name: "Age",  signature: 6 },
+        { name: "Temp", signature: 8 }
+      ]
+    },
+    { # interface { Age() int; Fly(); Temp() float64 }
+      inherits: [ 2, 3 ],
+      methods: [
+        { name: "Age",  signature: 6 },
+        { name: "Fly",  signature: 7 },
+        { name: "Temp", signature: 8 }
+      ]
+    },
+    { # interface { Fly() }
+      inherits: [ 0 ],
+      methods: [
+        { name: "Fly", signature: 7 }
+      ]
+    }
+  ],
+  language: "go",
+  packages: [
+    {
+      path: "command-line-arguments",
+      methods: [
+        { name: "main", signature: 7 } # func main()
+      ],
+      types: [
+        { name: "Animal", type: 1 }, # type Animal interface { Age() }
+        { name: "Bird",   type: 2 }, # type Bird interface { Animal; Fly() }
+        { name: "Mammal", type: 3 }, # type Bird interface { Animal; Temp() float64 }
+        { name: "Bat",    type: 4 }, # type Bat interface { Mammal; Fly() }
+        { name: "Flier",  type: 5 }  # type Flier interface { Fly() }
+      ]
+    }
+  ],
+  signatures: [
+    { return: "int" }, # func() int
+    {}, # func()()
+    { return: "float64" } # func() float64
+  ]
+}

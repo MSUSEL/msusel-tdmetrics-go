@@ -1,0 +1,17 @@
+{
+  language: "go",
+  interfaces: [
+    "object" # any
+  ],
+  packages: [
+    {
+      path: "command-line-arguments",
+      methods: [
+        { name: "main", signature: 1 } # func main()
+      ]
+    }
+  ],
+  signatures: [
+    {} # func()()
+  ]
+}

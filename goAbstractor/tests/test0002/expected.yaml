@@ -1,0 +1,30 @@
+{
+  language: "go",
+  interfaces: [
+    "object" # any
+  ],
+  packages: [
+    {
+      path: "command-line-arguments",
+      methods: [
+        { name: "sum",   signature: 1 }, # func sum(values ...int) int
+        { name: "first", signature: 1 }, # func first(values ...int) int
+        { name: "last",  signature: 1 }, # func last(values ...int) int
+        { name: "main",  signature: 2 }  # func main()
+      ]
+    }
+  ],
+  signatures: [
+    { # func(values ...int) int
+      params: [
+        {
+          name: "values",
+          type: { kind: "list", elem: "int" }
+        }
+      ],
+      return: "int",
+      variadic: true
+    },
+    {} # func()()
+  ]
+}

@@ -9,6 +9,7 @@ import (
 
 	"github.com/Snow-Gremlin/goToolbox/differs/diff"
 	"github.com/Snow-Gremlin/goToolbox/testers/check"
+	"gopkg.in/yaml.v3"
 
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/abstractor"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/jsonify"
@@ -32,11 +33,11 @@ func runTest(t *testing.T, dir string) {
 
 	proj := abstractor.Abstract(ps, verbose)
 
-	expFile, err := os.ReadFile(`./` + dir + `/expected.json`)
+	expFile, err := os.ReadFile(`./` + dir + `/expected.yaml`)
 	check.NoError(t).Name(`Read expected json`).With(`Dir`, dir).Require(err)
 
 	var expData any
-	err = json.Unmarshal(expFile, &expData)
+	err = yaml.Unmarshal(expFile, &expData)
 	check.NoError(t).Name(`Unmarshal expected json`).With(`Dir`, dir).Require(err)
 
 	exp, err := json.MarshalIndent(expData, ``, `  `)
