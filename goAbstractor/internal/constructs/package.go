@@ -22,3 +22,12 @@ func (p *Package) ToJson(ctx *jsonify.Context) jsonify.Datum {
 func (p *Package) String() string {
 	return jsonify.ToString(p)
 }
+
+func (p *Package) FindTypeForReceiver(receiver string) *TypeDef {
+	for _, t := range p.Types {
+		if receiver == t.Name {
+			return t
+		}
+	}
+	return nil
+}

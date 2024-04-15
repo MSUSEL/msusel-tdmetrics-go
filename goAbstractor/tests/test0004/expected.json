@@ -1,0 +1,60 @@
+{
+  "interfaces": [
+    "object",
+    {
+      "inherits": [ 0 ],
+      "methods": [
+        { "name": "Age", "signature": 6 }
+      ]
+    },
+    {
+      "inherits": [ 1 ],
+      "methods": [
+        { "name": "Age", "signature": 6 },
+        { "name": "Fly", "signature": 7 }
+      ]
+    },
+    {
+      "inherits": [ 1 ],
+      "methods": [
+        { "name": "Age",  "signature": 6 },
+        { "name": "Temp", "signature": 8 }
+      ]
+    },
+    {
+      "inherits": [ 2, 3 ],
+      "methods": [
+        { "name": "Age",  "signature": 6 },
+        { "name": "Fly",  "signature": 7 },
+        { "name": "Temp", "signature": 8 }
+      ]
+    },
+    {
+      "inherits": [ 0 ],
+      "methods": [
+        { "name": "Fly", "signature": 7 }
+      ]
+    }
+  ],
+  "language": "go",
+  "packages": [
+    {
+      "methods": [
+        { "name": "main", "signature": 7 }
+      ],
+      "path": "command-line-arguments",
+      "types": [
+        { "name": "Animal", "type": 1 },
+        { "name": "Bird",   "type": 2 },
+        { "name": "Mammal", "type": 3 },
+        { "name": "Bat",    "type": 4 },
+        { "name": "Flier",  "type": 5 }
+      ]
+    }
+  ],
+  "signatures": [
+    { "return": "int" },
+    {},
+    { "return": "float64" }
+  ]
+}

@@ -15,8 +15,6 @@ import (
 )
 
 // TODO:
-// - Figure out implemented interfaces.
-// - Determine what to do with pointer receivers to make it similar to Java.
 // - Add analytics:
 //   - Add cyclomatic complexity per method.
 //   - The set of variables with locations that are read from and written

@@ -4,6 +4,8 @@ import (
 	"errors"
 	"fmt"
 
+	"github.com/Snow-Gremlin/goToolbox/utils"
+
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs/typeDesc"
 )
@@ -24,12 +26,19 @@ func (ab *abstractor) resolveInheritance() {
 	}
 	for _, p := range ab.proj.Packages {
 		for _, td := range p.Types {
+			if _, ok := td.Type.(*typeDesc.Interface); ok {
+				// Skip over interfaces which may not have bodied methods.
+				continue
+			}
 			findImplements(obj, td)
 		}
 	}
 }
 
 func findInheritors(root, inter *typeDesc.Interface) bool {
+	if root == inter {
+		return true
+	}
 	if !inter.IsSupertypeOf(root) {
 		return false
 	}
@@ -47,13 +56,13 @@ func findInheritors(root, inter *typeDesc.Interface) bool {
 	changed := false
 	for i, other := range root.Inheritors {
 		if other.IsSupertypeOf(inter) {
-			inter.Inheritors = append(inter.Inheritors, inter)
+			inter.Inheritors = append(inter.Inheritors, other)
 			root.Inheritors[i] = nil
 			changed = true
 		}
 	}
 	if changed {
-		inter.Inheritors = squeeze(inter.Inheritors)
+		root.Inheritors = utils.RemoveZeros(root.Inheritors)
 	}
 
 	root.Inheritors = append(root.Inheritors, inter)

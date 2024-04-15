@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"go/types"
 	"slices"
+	"sort"
 
 	"github.com/Snow-Gremlin/goToolbox/collections"
 	"github.com/Snow-Gremlin/goToolbox/collections/enumerator"
@@ -19,6 +20,9 @@ func convertList[T, U any](n int, getter func(i int) T, convert func(value T) *U
 		if p := convert(getter(i)); p != nil {
 			list = append(list, p)
 		}
+	}
+	if len(list) <= 0 {
+		return nil
 	}
 	return slices.Clip(list)
 }
@@ -85,8 +89,13 @@ func (ab *abstractor) convertChan(t *types.Chan) *typeDesc.Wrap {
 
 func (ab *abstractor) convertInterface(t *types.Interface) *typeDesc.Interface {
 	t = t.Complete()
+	methods := convertList(t.NumMethods(), t.Method, ab.convertFunc)
+	// Sort interface methods since order doesn't matter.
+	sort.SliceIsSorted(methods, func(i, j int) bool {
+		return methods[i].Name < methods[j].Name
+	})
 	return ab.registerInterface(&typeDesc.Interface{
-		Methods: convertList(t.NumMethods(), t.Method, ab.convertFunc),
+		Methods: methods,
 	})
 }
 

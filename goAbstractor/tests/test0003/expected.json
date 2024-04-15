@@ -16,10 +16,7 @@
       ],
       "path": "command-line-arguments",
       "types": [
-        {
-          "inherits": [ 0 ],
-          "name": "Animal", "type": 1
-        },
+        { "name": "Animal", "type": 1 },
         {
           "inherits": [ 1 ],
           "name": "Cat", "type": 3,

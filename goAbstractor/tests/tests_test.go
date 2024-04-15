@@ -18,6 +18,7 @@ import (
 func Test_T0001(t *testing.T) { runTest(t, `test0001`) }
 func Test_T0002(t *testing.T) { runTest(t, `test0002`) }
 func Test_T0003(t *testing.T) { runTest(t, `test0003`) }
+func Test_T0004(t *testing.T) { runTest(t, `test0004`) }
 
 func runTest(t *testing.T, dir string) {
 	const verbose = true
