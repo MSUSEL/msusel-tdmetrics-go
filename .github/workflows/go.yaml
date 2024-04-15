@@ -4,7 +4,6 @@ on: [push]
 jobs:
   test:
     name: test goAbstractor
-    working-directory: ./goAbstractor
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -18,8 +17,11 @@ jobs:
           go-version: ${{ matrix.go-version }}
       - name: Add Cover Tool
         run: go get golang.org/x/tools/cmd/cover
+        working-directory: ./goAbstractor
       - name: Install dependencies
         run: go get ./...
+        working-directory: ./goAbstractor
       - name: Run Tests
         timeout-minutes: 1
         run: go test -cover ./...
+        working-directory: ./goAbstractor
