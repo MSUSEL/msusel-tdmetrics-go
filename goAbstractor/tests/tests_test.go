@@ -21,12 +21,15 @@ func Test_T0002(t *testing.T) { runTest(t, `test0002`) }
 func Test_T0003(t *testing.T) { runTest(t, `test0003`) }
 func Test_T0004(t *testing.T) { runTest(t, `test0004`) }
 
-func runTest(t *testing.T, dir string) {
+func runTest(t *testing.T, dir string, patterns ...string) {
+	if len(patterns) <= 0 {
+		patterns = []string{`main.go`}
+	}
 	const verbose = true
 	ps, err := reader.Read(&reader.Config{
 		Verbose:    verbose,
 		Dir:        `./` + dir,
-		Patterns:   []string{`main.go`},
+		Patterns:   patterns,
 		BuildFlags: []string{`-tags=test`},
 	})
 	check.NoError(t).Name(`Read project`).With(`Dir`, dir).Require(err)

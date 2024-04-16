@@ -9,7 +9,7 @@ type (
 		Age  int
 	}
 
-	// Toy represents anything to destract cats from knocking things off of counters.
+	// Toy represents anything to distract cats from knocking things off of counters.
 	Toy interface {
 
 		// Play uses this toy on the given cat.
