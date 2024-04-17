@@ -9,17 +9,17 @@ import (
 )
 
 type Cyclomatic struct {
-	start *node
+	enter *node
 	exit  *node
 }
 
 func New(b *ast.BlockStmt) *Cyclomatic {
 	c := &Cyclomatic{
-		start: newNode(`start`, b.Pos()),
+		enter: newNode(`enter`, b.Pos()),
 		exit:  newNode(`exit`, b.End()),
 	}
 	s := newScope()
-	s.setTag(startTag, c.start)
+	s.setTag(enterTag, c.enter)
 	s.setTag(exitTag, c.exit)
 	addStatements(s, b.List)
 	return c
@@ -28,7 +28,7 @@ func New(b *ast.BlockStmt) *Cyclomatic {
 func (c *Cyclomatic) String() string {
 	buf := &strings.Builder{}
 	touched := map[string]bool{}
-	c.start.format(buf, touched, `─`, ` `)
+	c.enter.format(buf, touched, `─`, ` `)
 	return buf.String()
 }
 
@@ -74,13 +74,13 @@ func addStatements(s *scope, statements []ast.Stmt) {
 			panic(fmt.Errorf(`unexpected statement in block %T: %s`, statement, statement))
 		}
 	}
-	s.getTag(startTag).addNext(s.getTag(exitTag))
+	s.getTag(enterTag).addNext(s.getTag(exitTag))
 }
 
 func addLabeledStmt(s *scope, stmt *ast.LabeledStmt) {
 	labelNode := s.getTag(stmt.Label.Name)
-	s.getTag(startTag).addNext(labelNode)
-	s.setTag(startTag, labelNode)
+	s.getTag(enterTag).addNext(labelNode)
+	s.setTag(enterTag, labelNode)
 	if stmt.Stmt != nil {
 		// TODO: determine what the stmt.Stmt in the label is.
 		//       I assume this is the switch, select, for being labelled.
@@ -99,7 +99,7 @@ func addReturnStmt(s *scope, _ *ast.ReturnStmt, i int, statements []ast.Stmt) {
 	if remainder := len(statements) - 1 - i; remainder > 0 {
 		panic(fmt.Errorf(`unexpected %d statements after return`, remainder))
 	}
-	s.getTag(startTag).addNext(s.getTag(exitTag))
+	s.getTag(enterTag).addNext(s.getTag(exitTag))
 }
 
 func addBranchStmt(_ *scope, stmt *ast.BranchStmt) {

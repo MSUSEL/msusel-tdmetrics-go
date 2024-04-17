@@ -3,7 +3,7 @@ package cyclomatic
 import "fmt"
 
 const (
-	startTag = `$start`
+	enterTag = `$enter`
 	exitTag  = `$exit`
 	beginTag = `$begin`
 	endTag   = `$end`
