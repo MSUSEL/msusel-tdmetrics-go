@@ -5,38 +5,37 @@ import (
 	"fmt"
 	"go/ast"
 	"go/token"
-	"strings"
+
+	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/cyclomatic/node"
+	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/cyclomatic/scope"
 )
 
 type Cyclomatic struct {
-	enter *node
-	exit  *node
+	enter node.Node
+	exit  node.Node
 }
 
 func New(b *ast.BlockStmt) *Cyclomatic {
 	c := &Cyclomatic{
-		enter: newNode(`enter`, b.Pos()),
-		exit:  newNode(`exit`, b.End()),
+		enter: node.New(`enter`, b.Pos()),
+		exit:  node.New(`exit`, b.End()),
 	}
-	s := newScope()
-	s.setTag(enterTag, c.enter)
-	s.setTag(exitTag, c.exit)
+	s := scope.New()
+	s.Set(scope.Enter, c.enter)
+	s.Set(scope.Exit, c.exit)
 	addStatements(s, b.List)
 	return c
 }
 
 func (c *Cyclomatic) String() string {
-	buf := &strings.Builder{}
-	touched := map[string]bool{}
-	c.enter.format(buf, touched, `─`, ` `)
-	return buf.String()
+	return c.enter.FullString()
 }
 
-func addStatements(s *scope, statements []ast.Stmt) {
+func addStatements(s scope.Scope, statements []ast.Stmt) {
 	for _, statement := range statements {
 		if stmt, ok := statement.(*ast.LabeledStmt); ok {
-			labelNode := newNode(`label`, stmt.Pos())
-			s.setTag(stmt.Label.Name, labelNode)
+			labelNode := node.New(`label`, stmt.Pos())
+			s.Set(stmt.Label.Name, labelNode)
 		}
 	}
 
@@ -74,13 +73,13 @@ func addStatements(s *scope, statements []ast.Stmt) {
 			panic(fmt.Errorf(`unexpected statement in block %T: %s`, statement, statement))
 		}
 	}
-	s.getTag(enterTag).addNext(s.getTag(exitTag))
+	s.Get(scope.Enter).AddNext(s.Get(scope.Exit))
 }
 
-func addLabeledStmt(s *scope, stmt *ast.LabeledStmt) {
-	labelNode := s.getTag(stmt.Label.Name)
-	s.getTag(enterTag).addNext(labelNode)
-	s.setTag(enterTag, labelNode)
+func addLabeledStmt(s scope.Scope, stmt *ast.LabeledStmt) {
+	labelNode := s.Get(stmt.Label.Name)
+	s.Get(scope.Enter).AddNext(labelNode)
+	s.Set(scope.Enter, labelNode)
 	if stmt.Stmt != nil {
 		// TODO: determine what the stmt.Stmt in the label is.
 		//       I assume this is the switch, select, for being labelled.
@@ -88,21 +87,21 @@ func addLabeledStmt(s *scope, stmt *ast.LabeledStmt) {
 	}
 }
 
-func addDeferStmt(s *scope, stmt *ast.DeferStmt) {
-	deferNode := newNode(`defer`, stmt.Pos())
-	deferNode.addNext(s.getTag(exitTag))
-	s.setTag(exitTag, deferNode)
+func addDeferStmt(s scope.Scope, stmt *ast.DeferStmt) {
+	deferNode := node.New(`defer`, stmt.Pos())
+	deferNode.AddNext(s.Get(scope.Exit))
+	s.Set(scope.Exit, deferNode)
 	// TODO: need to handle a function expression with a body.
 }
 
-func addReturnStmt(s *scope, _ *ast.ReturnStmt, i int, statements []ast.Stmt) {
+func addReturnStmt(s scope.Scope, _ *ast.ReturnStmt, i int, statements []ast.Stmt) {
 	if remainder := len(statements) - 1 - i; remainder > 0 {
 		panic(fmt.Errorf(`unexpected %d statements after return`, remainder))
 	}
-	s.getTag(enterTag).addNext(s.getTag(exitTag))
+	s.Get(scope.Enter).AddNext(s.Get(scope.Exit))
 }
 
-func addBranchStmt(_ *scope, stmt *ast.BranchStmt) {
+func addBranchStmt(_ scope.Scope, stmt *ast.BranchStmt) {
 	switch stmt.Tok {
 	case token.BREAK:
 		panic(errors.New(`TODO: Implement Break branch`))

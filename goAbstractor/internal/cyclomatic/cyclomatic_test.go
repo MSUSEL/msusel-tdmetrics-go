@@ -39,7 +39,6 @@ func Test_SimpleWithDefer(t *testing.T) {
 }
 
 func Test_SimpleIf(t *testing.T) {
-	t.Skip(`If is not implemented yet.`) // TODO: Finish
 	c := parseFunc(t,
 		`x := 9`,
 		`if x > 7 {`,
@@ -49,6 +48,54 @@ func Test_SimpleIf(t *testing.T) {
 	checkCyclo(t, c,
 		``)
 }
+
+/*
+	print("A ")
+	defer func() {
+		print("B ")
+	}()
+	{
+		print("C ")
+		defer func() {
+			print("D ")
+		}()
+		print("E ")
+	}
+	print("F ")
+
+	// Output: A C E F D B
+*/
+
+/*
+	print("A ")
+	defer func() {
+		print("B ")
+	}()
+	func() {
+		print("C ")
+		defer func() {
+			print("D ")
+		}()
+		print("E ")
+	}()
+	print("F ")
+
+	// Output: A C E D F B
+*/
+
+/*
+	print("A ")
+	for _ = range 4 {
+		print("B ")
+		defer func() {
+			print("C ")
+		}()
+		print("D ")
+	}
+	print("E ")
+
+	// Output: A B D B D B D B D E C C C C
+*/
 
 func parseFunc(t *testing.T, lines ...string) *Cyclomatic {
 	code := fmt.Sprintf("func() {\n%s\n}\n", strings.Join(lines, "\n"))
