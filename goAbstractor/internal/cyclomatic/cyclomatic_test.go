@@ -76,53 +76,109 @@ func Test_SimpleIfElse(t *testing.T) {
 		`     └───<endIf_69>`)
 }
 
-/*
-	print("A ")
-	defer func() {
-		print("B ")
-	}()
-	{
-		print("C ")
-		defer func() {
-			print("D ")
-		}()
-		print("E ")
-	}
-	print("F ")
+func Test_SimpleIfElseIf(t *testing.T) {
+	c := parseFunc(t,
+		`x := 9`,
+		`if x > 7 {`,
+		`  x = 4`,
+		`} else if x > 4 {`,
+		`  x = 3`,
+		`}`,
+		`println(x)`)
+	checkCyclo(t, c,
+		`─┬─[enter_8]`,
+		` └─┬─[if_17]`,
+		`   ├─┬─[ifBody_26]`,
+		`   │ └─┬─[endIf_63]`,
+		`   │   └───[exit_76]`,
+		`   └─┬─[elseBody_43]`,
+		`     └─┬─[if_43]`,
+		`       ├─┬─[ifBody_52]`,
+		`       │ └───<endIf_63>`,
+		`       └───<endIf_63>`)
+}
 
+func Test_SimpleIfElseIfElse(t *testing.T) {
+	c := parseFunc(t,
+		`x := 9`,
+		`if x > 7 {`,
+		`  x = 4`,
+		`} else if x > 4 {`,
+		`  x = 3`,
+		`} else {`,
+		`  x = 2`,
+		`}`,
+		`println(x)`)
+	checkCyclo(t, c,
+		`─┬─[enter_8]`,
+		` └─┬─[if_17]`,
+		`   ├─┬─[ifBody_26]`,
+		`   │ └─┬─[endIf_80]`,
+		`   │   └───[exit_93]`,
+		`   └─┬─[elseBody_43]`,
+		`     └─┬─[if_43]`,
+		`       ├─┬─[ifBody_52]`,
+		`       │ └───<endIf_80>`,
+		`       └─┬─[elseBody_69]`,
+		`         └───<endIf_80>`)
+}
+
+func Test_DeferInSoftBlock(t *testing.T) {
+	c := parseFunc(t,
+		`print("A ")`,
+		`defer func() {`,
+		`	print("B ")`,
+		`}()`,
+		`{`,
+		`	print("C ")`,
+		`	defer func() {`,
+		`		print("D ")`,
+		`	}()`,
+		`	print("E ")`,
+		`}`,
+		`print("F ")`)
 	// Output: A C E F D B
-*/
+	checkCyclo(t, c,
+		`─┬─[enter_8]`,
+		` └─┬─[defer_70]`,
+		`   └─┬─[defer_22]`,
+		`     └───[exit_132]`)
+}
 
-/*
-	print("A ")
-	defer func() {
-		print("B ")
-	}()
-	func() {
-		print("C ")
-		defer func() {
-			print("D ")
-		}()
-		print("E ")
-	}()
-	print("F ")
-
+func Test_DeferInHardBlock(t *testing.T) {
+	c := parseFunc(t,
+		`print("A ")`,
+		`defer func() {`,
+		`	print("B ")`,
+		`}()`,
+		`func() {`,
+		`	print("C ")`,
+		`	defer func() {`,
+		`		print("D ")`,
+		`	}()`,
+		`	print("E ")`,
+		`}()`,
+		`print("F ")`)
 	// Output: A C E D F B
-*/
+	checkCyclo(t, c,
+		``)
+}
 
-/*
-	print("A ")
-	for _ = range 4 {
-		print("B ")
-		defer func() {
-			print("C ")
-		}()
-		print("D ")
-	}
-	print("E ")
-
+func Test_ForRangeWithDefer(t *testing.T) {
+	c := parseFunc(t,
+		`print("A ")`,
+		`for _ = range 4 {`,
+		`	print("B ")`,
+		`	defer func() {`,
+		`		print("C ")`,
+		`	}()`,
+		`	print("D ")`,
+		`}`,
+		`print("E ")`)
 	// Output: A B D B D B D B D E C C C C
-*/
+	checkCyclo(t, c,
+		``)
+}
 
 func parseFunc(t *testing.T, lines ...string) *Cyclomatic {
 	code := fmt.Sprintf("func() {\n%s\n}\n", strings.Join(lines, "\n"))
