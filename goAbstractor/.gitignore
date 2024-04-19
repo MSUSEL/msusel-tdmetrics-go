@@ -10,5 +10,6 @@
 # Output of the go coverage tool
 *.out
 
-# Example output for goAbstractor
+# Output for goAbstractor
 out.json
+internal/cyclomatic/mermaid.md
