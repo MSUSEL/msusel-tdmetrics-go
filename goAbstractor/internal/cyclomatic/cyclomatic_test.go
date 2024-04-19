@@ -123,7 +123,7 @@ func Test_SimpleIfElseIfElse(t *testing.T) {
 		`         └───<endIf_80>`)
 }
 
-func Test_DeferInSoftBlock(t *testing.T) {
+func Test_DeferInBlock(t *testing.T) {
 	c := parseFunc(t,
 		`print("A ")`,
 		`defer func() {`,
@@ -145,7 +145,7 @@ func Test_DeferInSoftBlock(t *testing.T) {
 		`     └───[exit_132]`)
 }
 
-func Test_DeferInHardBlock(t *testing.T) {
+func Test_DeferInFuncLiteral(t *testing.T) {
 	c := parseFunc(t,
 		`print("A ")`,
 		`defer func() {`,
@@ -161,7 +161,22 @@ func Test_DeferInHardBlock(t *testing.T) {
 		`print("F ")`)
 	// Output: A C E D F B
 	checkCyclo(t, c,
-		``)
+		``) // TODO: Need to include body in func literal
+}
+
+func Test_DeferWithComplexity(t *testing.T) {
+	c := parseFunc(t,
+		`print("A ")`,
+		`defer func() {`,
+		`   if r := recover(); r != nil {`,
+		`		print("B ")`,
+		`       return`,
+		`   }`,
+		`	print("C ")`,
+		`}()`,
+		`print("D ")`)
+	checkCyclo(t, c,
+		``) // TODO: Need to include if in defer.
 }
 
 func Test_ForRangeWithDefer(t *testing.T) {
@@ -176,6 +191,18 @@ func Test_ForRangeWithDefer(t *testing.T) {
 		`}`,
 		`print("E ")`)
 	// Output: A B D B D B D B D E C C C C
+	checkCyclo(t, c,
+		``)
+}
+
+func Test_InfiniteGotoLoop(t *testing.T) {
+	c := parseFunc(t,
+		`print("A ")`,
+		`BEANS:`,
+		`print("B ")`,
+		`goto BEANS`,
+		`print("C ")`) // Unreachable
+	// Output: A B B B...
 	checkCyclo(t, c,
 		``)
 }
