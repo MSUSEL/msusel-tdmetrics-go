@@ -13,6 +13,7 @@ const (
 
 type Scope interface {
 	Push() Scope
-	Set(tag string, n node.Node)
+	Set(tag string, n node.Node) Scope
+	SetRange(begin, end node.Node) Scope
 	Get(tag string) node.Node
 }

@@ -21,11 +21,16 @@ func (s *scopeImp) Push() Scope {
 	return &scopeImp{prior: s}
 }
 
-func (s *scopeImp) Set(tag string, n node.Node) {
+func (s *scopeImp) Set(tag string, n node.Node) Scope {
 	if s.tags == nil {
 		s.tags = map[string]node.Node{}
 	}
 	s.tags[tag] = n
+	return s
+}
+
+func (s *scopeImp) SetRange(begin, end node.Node) Scope {
+	return s.Set(Begin, begin).Set(End, end)
 }
 
 func (s *scopeImp) Get(tag string) node.Node {

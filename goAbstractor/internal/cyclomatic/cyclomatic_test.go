@@ -204,15 +204,47 @@ func Test_InfiniteGotoLoop(t *testing.T) {
 		`print("C ")`) // Unreachable
 	// Output: A B B B...
 	checkCyclo(t, c,
+		`─┬─[enter_8]`,
+		` └─┬─[label_22]`,
+		`   └─┬─[goto_41]`,
+		`     └───<label_22>`)
+}
+
+func Test_SkippingGoto(t *testing.T) {
+	c := parseFunc(t,
+		`print("A ")`,
+		`goto BEANS`,
+		`print("B ")`, // Unreachable
+		`BEANS:`,
+		`print("C ")`)
+	// Output: A C
+	checkCyclo(t, c,
+		`─┬─[enter_8]`,
+		` └─┬─[goto_22]`,
+		`   └─┬─[label_45]`,
+		`     └───[exit_65]`)
+}
+
+func Test_GotoWithIf(t *testing.T) {
+	c := parseFunc(t,
+		`x := 10`,
+		`TOP:`,
+		`if x <= 0 {`,
+		`  goto BOTTOM`,
+		`}`,
+		`print(x)`,
+		`x--`,
+		`goto TOP`,
+		`BOTTOM:`,
+		`print("Done")`)
+	checkCyclo(t, c,
 		``)
 }
 
 func parseFunc(t *testing.T, lines ...string) *Cyclomatic {
 	code := fmt.Sprintf("func() {\n%s\n}\n", strings.Join(lines, "\n"))
 	expr, err := parser.ParseExpr(code)
-	if err != nil {
-		t.Error(err)
-	}
+	check.NoError(t).Require(err)
 	block := expr.(*ast.FuncLit).Body
 	return New(block)
 }
