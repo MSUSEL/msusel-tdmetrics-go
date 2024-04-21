@@ -4,228 +4,242 @@ import (
 	"fmt"
 	"go/ast"
 	"go/parser"
+	"go/token"
 	"strings"
 	"testing"
 
+	"github.com/Snow-Gremlin/goToolbox/differs/diff"
 	"github.com/Snow-Gremlin/goToolbox/testers/check"
 )
 
+func Test_Empty(t *testing.T) {
+	m := parseExpr(t,
+		`func() {}`)
+	checkMetrics(t, m, Metrics{
+		Complexity: 1,
+		LineCount:  1,
+		CodeCount:  0,
+		Indents:    0,
+	})
+}
+
 func Test_Simple(t *testing.T) {
-	parseFunc(t, -1,
-		`x := max(1, 3, 5)`)
-	// ─┬─[enter_8]
-	//  └───[exit_29]
+	m := parseExpr(t,
+		`func() int {`,
+		`	return max(1, 3, 5)`,
+		`}`)
+	checkMetrics(t, m, Metrics{
+		Complexity: 1,
+		LineCount:  3,
+		CodeCount:  1,
+		Indents:    1,
+	})
 }
 
 func Test_SimpleWithReturn(t *testing.T) {
-	parseFunc(t, -1,
-		`x := max(1, 3, 5)`,
-		`return x`)
-	// ─┬─[enter_8]
-	//  └───[exit_38]
+	m := parseExpr(t,
+		`func() int {`,
+		`	x := max(1, 3, 5)`,
+		`	return x`,
+		`}`)
+	checkMetrics(t, m, Metrics{
+		Complexity: 1,
+		LineCount:  4,
+		CodeCount:  2,
+		Indents:    2,
+	})
+}
+
+func Test_SimpleWithSpace(t *testing.T) {
+	m := parseExpr(t,
+		`func() int {`,
+		`   // Bacon is tasty`,
+		`   `,
+		`	return max(1, 3, 5)`,
+		`   /* This is not a comment`,
+		`	   it is a sandwich */`,
+		`   `,
+		`}`)
+	checkMetrics(t, m, Metrics{
+		Complexity: 1,
+		LineCount:  8,
+		CodeCount:  1,
+		Indents:    1,
+	})
 }
 
 func Test_SimpleWithDefer(t *testing.T) {
-	parseFunc(t, -1,
-		`x := open()`,
-		`defer x.close()`,
-		`x.doStuff()`)
-	// ─┬─[enter_8]
-	//  └─┬─[defer_22]
-	//    └───[exit_51]
+	m := parseExpr(t,
+		`func() {`,
+		`	x := open()`,
+		`	defer x.close()`,
+		`	x.doStuff()`,
+		`}`)
+	checkMetrics(t, m, Metrics{
+		Complexity: 1,
+		LineCount:  5,
+		CodeCount:  3,
+		Indents:    3,
+	})
 }
 
 func Test_SimpleIf(t *testing.T) {
-	parseFunc(t, -1,
-		`x := 9`,
-		`if x > 7 {`,
-		`  x = 4`,
-		`}`,
-		`println(x)`)
-	// ─┬─[enter_8]
-	//  └─┬─[if_17]
-	//    ├─┬─[ifBody_26]
-	//    │ └─┬─[endIf_37]
-	//    │   └───[exit_50]
-	//    └───<endIf_37>
+	m := parseExpr(t,
+		`func() {`,
+		`	x := 9`,
+		`	if x > 7 {`,
+		`		x = 4`,
+		`	}`,
+		`	println(x)`,
+		`}`)
+	checkMetrics(t, m, Metrics{
+		Complexity: 2,
+		LineCount:  7,
+		CodeCount:  5,
+		Indents:    5,
+	})
 }
 
 func Test_SimpleIfElse(t *testing.T) {
-	parseFunc(t, -1,
-		`x := 9`,
-		`if x > 7 {`,
-		`  x = 4`,
-		`} else {`,
-		`  x = 2`,
-		`  print("cat")`,
-		`}`,
-		`println(x)`)
-	// ─┬─[enter_8]
-	//  └─┬─[if_17]
-	//    ├─┬─[ifBody_26]
-	//    │ └─┬─[endIf_69]
-	//    │   └───[exit_82]
-	//    └─┬─[elseBody_43]
-	//      └───<endIf_69>
+	m := parseExpr(t,
+		`func() {`,
+		`	x := 9`,
+		`	if x > 7 {`,
+		`		x = 4`,
+		`	} else {`,
+		`		x = 2`,
+		`		print("cat")`,
+		`	}`,
+		`	println(x)`,
+		`}`)
+	checkMetrics(t, m, Metrics{
+		Complexity: 2,
+		LineCount:  10,
+		CodeCount:  4,
+		Indents:    11,
+	})
 }
 
 func Test_SimpleIfElseIf(t *testing.T) {
-	parseFunc(t, -1,
-		`x := 9`,
-		`if x > 7 {`,
-		`  x = 4`,
-		`} else if x > 4 {`,
-		`  x = 3`,
-		`}`,
-		`println(x)`)
-	// ─┬─[enter_8]
-	//  └─┬─[if_17]
-	//    ├─┬─[ifBody_26]
-	//    │ └─┬─[endIf_63]
-	//    │   └───[exit_76]
-	//    └─┬─[elseBody_43]
-	//      └─┬─[if_43]
-	//        ├─┬─[ifBody_52]
-	//        │ └───<endIf_63>
-	//        └───<endIf_63>
+	m := parseExpr(t,
+		`func() {`,
+		`	x := 9`,
+		`	if x > 7 {`,
+		`		x = 4`,
+		`	} else if x > 4 {`,
+		`		x = 3`,
+		`	}`,
+		`	println(x)`,
+		`}`)
+	checkMetrics(t, m, Metrics{
+		Complexity: 3,
+		LineCount:  9,
+		CodeCount:  6,
+		Indents:    9,
+	})
 }
 
 func Test_SimpleIfElseIfElse(t *testing.T) {
-	parseFunc(t, -1,
-		`x := 9`,
-		`if x > 7 {`,
-		`  x = 4`,
-		`} else if x > 4 {`,
-		`  x = 3`,
-		`} else {`,
-		`  x = 2`,
-		`}`,
-		`println(x)`)
-	// ─┬─[enter_8]
-	//  └─┬─[if_17]
-	//    ├─┬─[ifBody_26]
-	//    │ └─┬─[endIf_80]
-	//    │   └───[exit_93]
-	//    └─┬─[elseBody_43]
-	//      └─┬─[if_43]
-	//        ├─┬─[ifBody_52]
-	//        │ └───<endIf_80>
-	//        └─┬─[elseBody_69]
-	//          └───<endIf_80>
+	m := parseExpr(t,
+		`func() {`,
+		`	x := 9`,
+		`	if x > 7 {`,
+		`		x = 4`,
+		`	} else if x > 4 {`,
+		`		x = 3`,
+		`	} else {`,
+		`		x = 2`,
+		`	}`,
+		`	println(x)`,
+		`}`)
+	checkMetrics(t, m, Metrics{})
 }
 
 func Test_DeferInBlock(t *testing.T) {
-	parseFunc(t, -1,
-		`print("A ")`,
-		`defer func() {`,
-		`	print("B ")`,
-		`}()`,
-		`{`,
-		`	print("C ")`,
+	m := parseExpr(t,
+		`func() {`,
+		`	print("A ")`,
 		`	defer func() {`,
-		`		print("D ")`,
+		`		print("B ")`,
 		`	}()`,
-		`	print("E ")`,
-		`}`,
-		`print("F ")`)
-	// Output: A C E F D B
-	// ─┬─[enter_8]
-	//  └─┬─[defer_70]
-	//    └─┬─[defer_22]
-	//      └───[exit_132]
+		`	{`,
+		`		print("C ")`,
+		`		defer func() {`,
+		`			print("D ")`,
+		`		}()`,
+		`		print("E ")`,
+		`	}`,
+		`	print("F ")`,
+		`}`)
+	checkMetrics(t, m, Metrics{})
 }
 
 func Test_DeferInFuncLiteral(t *testing.T) {
-	parseFunc(t, -1,
-		`print("A ")`,
-		`defer func() {`,
-		`	print("B ")`,
-		`}()`,
+	m := parseExpr(t,
 		`func() {`,
-		`	print("C ")`,
+		`	print("A ")`,
 		`	defer func() {`,
-		`		print("D ")`,
+		`		print("B ")`,
 		`	}()`,
-		`	print("E ")`,
-		`}()`,
-		`print("F ")`)
-	// Output: A C E D F B
+		`	func() {`,
+		`		print("C ")`,
+		`		defer func() {`,
+		`			print("D ")`,
+		`		}()`,
+		`		print("E ")`,
+		`	}()`,
+		`	print("F ")`,
+		`}`)
+	checkMetrics(t, m, Metrics{})
 }
 
 func Test_DeferWithComplexity(t *testing.T) {
-	parseFunc(t, -1,
-		`print("A ")`,
-		`defer func() {`,
-		`   if r := recover(); r != nil {`,
-		`		print("B ")`,
-		`       return`,
-		`   }`,
-		`	print("C ")`,
-		`}()`,
-		`print("D ")`)
-}
-
-func Test_ForRangeWithDefer(t *testing.T) {
-	parseFunc(t, -1,
-		`print("A ")`,
-		`for _ = range 4 {`,
-		`	print("B ")`,
+	m := parseExpr(t,
+		`func() {`,
+		`	print("A ")`,
 		`	defer func() {`,
+		`		 if r := recover(); r != nil {`,
+		`			print("B ")`,
+		`			return`,
+		`		 }`,
 		`		print("C ")`,
 		`	}()`,
 		`	print("D ")`,
-		`}`,
-		`print("E ")`)
-	// Output: A B D B D B D B D E C C C C
+		`}`)
+	checkMetrics(t, m, Metrics{})
 }
 
-func Test_InfiniteGotoLoop(t *testing.T) {
-	parseFunc(t, -1,
-		`print("A ")`,
-		`BEANS:`,
-		`print("B ")`,
-		`goto BEANS`,
-		`print("C ")`) // Unreachable
-	// Output: A B B B...
-	// ─┬─[enter_8]
-	//  └─┬─[label_22]
-	//    └─┬─[goto_41]
-	//      └───<label_22>
+func Test_ForRangeWithDefer(t *testing.T) {
+	m := parseExpr(t,
+		`func() {`,
+		`	print("A ")`,
+		`	for _ = range 4 {`,
+		`		print("B ")`,
+		`		defer func() {`,
+		`			print("C ")`,
+		`		}()`,
+		`		print("D ")`,
+		`	}`,
+		`	print("E ")`,
+		`}`)
+	checkMetrics(t, m, Metrics{})
 }
 
-func Test_SkippingGoto(t *testing.T) {
-	parseFunc(t, -1,
-		`print("A ")`,
-		`goto BEANS`,
-		`print("B ")`, // Unreachable
-		`BEANS:`,
-		`print("C ")`)
-	// Output: A C
-	// ─┬─[enter_8]
-	//  └─┬─[goto_22]
-	//    └─┬─[label_45]
-	//      └───[exit_65]
-}
-
-func Test_GotoWithIf(t *testing.T) {
-	parseFunc(t, -1,
-		`x := 10`,
-		`TOP:`,
-		`if x <= 0 {`,
-		`  goto BOTTOM`,
-		`}`,
-		`print(x)`,
-		`x--`,
-		`goto TOP`,
-		`BOTTOM:`,
-		`print("Done")`)
-}
-
-func parseFunc(t *testing.T, exp int, lines ...string) {
-	code := fmt.Sprintf("func() {\n%s\n}\n", strings.Join(lines, "\n"))
-	expr, err := parser.ParseExpr(code)
+func parseExpr(t *testing.T, lines ...string) Metrics {
+	code := strings.Join(lines, "\n")
+	fSet := token.NewFileSet()
+	expr, err := parser.ParseExprFrom(fSet, ``, []byte(code), parser.ParseComments)
 	check.NoError(t).Require(err)
 	block := expr.(*ast.FuncLit).Body
-	m := New(block)
-	check.Equal(t, exp).Assert(m.Complexity)
+	return New(fSet, block)
+}
+
+func checkMetrics(t *testing.T, m, exp Metrics) {
+	gotLines := m.String()
+	expLines := exp.String()
+	if gotLines != expLines {
+		diff := diff.Default().PlusMinus(strings.Split(gotLines, "\n"), strings.Split(expLines, "\n"))
+		fmt.Println(strings.Join(diff, "\n"))
+		t.Fail()
+	}
 }
