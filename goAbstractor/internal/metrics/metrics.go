@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"go/ast"
 	"go/token"
+	"math"
 )
 
 type Metrics struct {
@@ -21,21 +22,36 @@ func (m Metrics) String() string {
 
 type metricsCalc struct {
 	*Metrics
-	fSet  *token.FileSet
-	block *ast.BlockStmt
-	data  map[int]int
+	fSet    *token.FileSet
+	node    ast.Node
+	minLine int
+	maxLine int
+	data    map[int]int
 }
 
-func New(fSet *token.FileSet, block *ast.BlockStmt) Metrics {
+func New(fSet *token.FileSet, node ast.Node) Metrics {
 	met := Metrics{}
 	m := &metricsCalc{
 		Metrics: &met,
 		fSet:    fSet,
-		block:   block,
+		node:    node,
+		maxLine: 0,
+		minLine: math.MaxInt,
+		data:    map[int]int{},
 	}
-	m.calculateComplexity()
-	m.calculateLineCount()
-	m.calculateCodeCounts()
+
+	m.Complexity = 1
+	ast.Inspect(m.node, m.addCodePosForNode)
+
+	fmt.Println(m.data) // TODO: REMOVE
+
+	m.LineCount = m.maxLine - m.minLine + 1
+	m.CodeCount = len(m.data)
+	m.Indents = 0
+	for _, indent := range m.data {
+		m.Indents += indent - 1
+	}
+
 	return met
 }
 
@@ -45,38 +61,15 @@ func (m *metricsCalc) incComplexity(check bool) {
 	}
 }
 
-func (m *metricsCalc) complexityNode(n ast.Node) bool {
-	switch n := n.(type) {
-	case *ast.IfStmt, *ast.ForStmt, *ast.RangeStmt:
-		m.incComplexity(true)
-	case *ast.CaseClause:
-		m.incComplexity(n.List != nil)
-	case *ast.CommClause:
-		m.incComplexity(n.Comm != nil)
-	case *ast.BinaryExpr:
-		m.incComplexity(n.Op == token.LAND || n.Op == token.LOR)
-	}
-	return true
-}
-
-func (m *metricsCalc) calculateComplexity() {
-	m.Complexity = 1
-	ast.Inspect(m.block, m.complexityNode)
-}
-
 func (m *metricsCalc) linePos(pos token.Pos) (int, int) {
 	p := m.fSet.PositionFor(pos, false)
 	return p.Line, p.Column
 }
 
-func (m *metricsCalc) calculateLineCount() {
-	first, _ := m.linePos(m.block.Lbrace)
-	last, _ := m.linePos(m.block.Rbrace)
-	m.LineCount = last - first + 1
-}
-
 func (m *metricsCalc) addCodePos(p token.Pos) {
 	lineNo, column := m.linePos(p)
+	m.maxLine = max(m.maxLine, lineNo)
+	m.minLine = min(m.minLine, lineNo)
 	if otherCol, ok := m.data[lineNo]; ok {
 		m.data[lineNo] = min(column, otherCol)
 	} else {
@@ -85,28 +78,22 @@ func (m *metricsCalc) addCodePos(p token.Pos) {
 }
 
 func (m *metricsCalc) addCodePosForNode(n ast.Node) bool {
-	switch n.(type) {
+	switch t := n.(type) {
 	case nil, *ast.Comment, *ast.CommentGroup:
 		return true
+	case *ast.IfStmt, *ast.ForStmt, *ast.RangeStmt:
+		m.incComplexity(true)
+	case *ast.CaseClause:
+		m.incComplexity(t.List != nil)
+	case *ast.CommClause:
+		m.incComplexity(t.Comm != nil)
+	case *ast.BinaryExpr:
+		m.incComplexity(t.Op == token.LAND || t.Op == token.LOR)
 	}
+
 	m.addCodePos(n.Pos())
 	if ended, has := n.(interface{ End() token.Pos }); has {
 		m.addCodePos(ended.End())
 	}
 	return true
-}
-
-func (m *metricsCalc) calculateCodeCounts() {
-	// See https://codescene.com/engineering-blog/bumpy-road-code-complexity-in-context/
-	// See https://codescene.io/docs/guides/technical/complexity-trends.html
-	m.data = map[int]int{}
-	for _, item := range m.block.List {
-		ast.Inspect(item, m.addCodePosForNode)
-	}
-	fmt.Println(m.data)
-	m.CodeCount = len(m.data)
-	m.Indents = 0
-	for _, indent := range m.data {
-		m.Indents += indent - 1
-	}
 }

@@ -18,7 +18,7 @@ func Test_Empty(t *testing.T) {
 	checkMetrics(t, m, Metrics{
 		Complexity: 1,
 		LineCount:  1,
-		CodeCount:  0,
+		CodeCount:  1,
 		Indents:    0,
 	})
 }
