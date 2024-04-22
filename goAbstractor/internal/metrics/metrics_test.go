@@ -1,13 +1,15 @@
 package metrics
 
 import (
+	"encoding/json"
 	"fmt"
-	"go/ast"
 	"go/parser"
 	"go/token"
+	"slices"
 	"strings"
 	"testing"
 
+	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/jsonify"
 	"github.com/Snow-Gremlin/goToolbox/differs/diff"
 	"github.com/Snow-Gremlin/goToolbox/testers/check"
 )
@@ -16,10 +18,10 @@ func Test_Empty(t *testing.T) {
 	m := parseExpr(t,
 		`func() {}`)
 	checkMetrics(t, m, Metrics{
-		Complexity: 1,
-		LineCount:  1,
 		CodeCount:  1,
+		Complexity: 1,
 		Indents:    0,
+		LineCount:  1,
 	})
 }
 
@@ -29,10 +31,25 @@ func Test_Simple(t *testing.T) {
 		`	return max(1, 3, 5)`,
 		`}`)
 	checkMetrics(t, m, Metrics{
+		CodeCount:  3,
 		Complexity: 1,
-		LineCount:  3,
-		CodeCount:  1,
 		Indents:    1,
+		LineCount:  3,
+	})
+}
+
+func Test_SimpleParams(t *testing.T) {
+	m := parseExpr(t,
+		`func(a int,
+			  b int,
+			  c int) int {`,
+		`	return max(a, b, c)`,
+		`}`)
+	checkMetrics(t, m, Metrics{
+		CodeCount:  1,
+		Complexity: 1,
+		Indents:    1,
+		LineCount:  3,
 	})
 }
 
@@ -43,10 +60,10 @@ func Test_SimpleWithReturn(t *testing.T) {
 		`	return x`,
 		`}`)
 	checkMetrics(t, m, Metrics{
-		Complexity: 1,
-		LineCount:  4,
 		CodeCount:  2,
+		Complexity: 1,
 		Indents:    2,
+		LineCount:  4,
 	})
 }
 
@@ -61,10 +78,10 @@ func Test_SimpleWithSpace(t *testing.T) {
 		`   `,
 		`}`)
 	checkMetrics(t, m, Metrics{
-		Complexity: 1,
-		LineCount:  8,
 		CodeCount:  1,
+		Complexity: 1,
 		Indents:    1,
+		LineCount:  8,
 	})
 }
 
@@ -76,10 +93,10 @@ func Test_SimpleWithDefer(t *testing.T) {
 		`	x.doStuff()`,
 		`}`)
 	checkMetrics(t, m, Metrics{
-		Complexity: 1,
-		LineCount:  5,
 		CodeCount:  3,
+		Complexity: 1,
 		Indents:    3,
+		LineCount:  5,
 	})
 }
 
@@ -93,10 +110,10 @@ func Test_SimpleIf(t *testing.T) {
 		`	println(x)`,
 		`}`)
 	checkMetrics(t, m, Metrics{
-		Complexity: 2,
-		LineCount:  7,
 		CodeCount:  5,
-		Indents:    5,
+		Complexity: 2,
+		Indents:    6,
+		LineCount:  7,
 	})
 }
 
@@ -113,10 +130,10 @@ func Test_SimpleIfElse(t *testing.T) {
 		`	println(x)`,
 		`}`)
 	checkMetrics(t, m, Metrics{
-		Complexity: 2,
-		LineCount:  10,
 		CodeCount:  4,
+		Complexity: 2,
 		Indents:    11,
+		LineCount:  10,
 	})
 }
 
@@ -132,10 +149,10 @@ func Test_SimpleIfElseIf(t *testing.T) {
 		`	println(x)`,
 		`}`)
 	checkMetrics(t, m, Metrics{
-		Complexity: 3,
-		LineCount:  9,
 		CodeCount:  6,
+		Complexity: 3,
 		Indents:    9,
+		LineCount:  9,
 	})
 }
 
@@ -230,16 +247,20 @@ func parseExpr(t *testing.T, lines ...string) Metrics {
 	fSet := token.NewFileSet()
 	expr, err := parser.ParseExprFrom(fSet, ``, []byte(code), parser.ParseComments)
 	check.NoError(t).Require(err)
-	block := expr.(*ast.FuncLit).Body
-	return New(fSet, block)
+	return New(fSet, expr)
 }
 
 func checkMetrics(t *testing.T, m, exp Metrics) {
-	gotLines := m.String()
-	expLines := exp.String()
-	if gotLines != expLines {
-		diff := diff.Default().PlusMinus(strings.Split(gotLines, "\n"), strings.Split(expLines, "\n"))
-		fmt.Println(strings.Join(diff, "\n"))
+	ctx := jsonify.NewContext()
+	gotData, err := json.MarshalIndent(m.ToJson(ctx), ``, `  `)
+	check.NoError(t).Assert(err)
+	expData, err := json.MarshalIndent(exp.ToJson(ctx), ``, `  `)
+	check.NoError(t).Assert(err)
+	if !slices.Equal(gotData, expData) {
+		gotLines := strings.Split(string(gotData), "\n")
+		expLines := strings.Split(string(expData), "\n")
+		d := diff.Default().PlusMinus(gotLines, expLines)
+		fmt.Println(strings.Join(d, "\n"))
 		t.Fail()
 	}
 }
