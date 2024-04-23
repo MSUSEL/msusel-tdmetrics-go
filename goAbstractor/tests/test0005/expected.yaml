@@ -1,0 +1,109 @@
+{
+  interfaces: [
+    "object", # any
+    { # interface { Play(c *Cat) }
+      inherits: [ 0 ],
+      methods: [
+        { name: "Play", signature: 2 }
+      ]
+    }
+  ],
+  language: "go",
+  packages: [
+    {
+      methods: [
+        { name: "NewCat",   signature: 4 },
+        { name: "NextYear", signature: 7 },
+        { name: "Pet",      signature: 2 }
+      ],
+      path: "command-line-arguments",
+      types: [
+        {
+          inherits: [ 0 ],
+          methods: [
+            { name: "Meow",   signature: 5 },
+            { name: "String", signature: 6 }
+          ],
+          name: "Cat", type: 9
+        },
+        { name: "Toy", type: 1 },
+        {
+          inherits: [ 0 ],
+          methods: [
+            { name: "Youngest", signature: 8 }
+          ],
+          name: "Cats",
+          type: {
+            elem: {
+              elem: "command-line-arguments.Cat",
+              kind: "pointer"
+            },
+            kind: "list"
+          }
+        }
+      ],
+      values: [
+        { name: "log", type: 3 }
+      ]
+    }
+  ],
+  signatures: [
+    { # func(c *Cat)
+      params: [
+        {
+          name: "c",
+          type: {
+            elem: "command-line-arguments.Cat",
+            kind: "pointer"
+          }
+        }
+      ]
+    },
+    { # func(value string)
+      params: [
+        { name: "value", type: "string" }
+      ]
+    },
+    { # func(name string, age int) *Cat
+      params: [
+        { name: "name", type: "string" },
+        { name: "age",  type: "int" }
+      ],
+      return: {
+        elem: "command-line-arguments.Cat",
+        kind: "pointer"
+      }
+    },
+    {}, # func()()
+    { return: "string" }, # func() string
+    { # func(cats ...*Cat)
+      params: [
+        {
+          name: "cats",
+          type: {
+            elem: {
+              elem: "command-line-arguments.Cat",
+              kind: "pointer"
+            },
+            kind: "list"
+          }
+        }
+      ],
+      variadic: true
+    },
+    { # func() *Cat
+      return: {
+        elem: "command-line-arguments.Cat",
+        kind: "pointer"
+      }
+    }
+  ],
+  structs: [
+    { # struct { Name string; Age int }
+      fields: [
+        { name: "Name", type: "string" },
+        { name: "Age",  type: "int" }
+      ]
+    }
+  ]
+}

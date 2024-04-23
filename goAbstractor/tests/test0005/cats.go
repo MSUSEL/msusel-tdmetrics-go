@@ -1,6 +1,6 @@
-package dat001
+//go:build test
 
-import "fmt"
+package cats
 
 type (
 	// Cat represents an evil murder machine.
@@ -21,7 +21,7 @@ type (
 )
 
 // log will print messages, overwrite to log out to a different place.
-var log = fmt.Println
+var log = func(value string) { println(value) }
 
 // NewCat creates a new cat instance with the given name and age.
 func NewCat(name string, age int) *Cat {
@@ -34,7 +34,7 @@ func NewCat(name string, age int) *Cat {
 // Meow is the cat's way to tell its human servant that it
 // must have food now or the servant will suffer consequences.
 func (c *Cat) Meow() {
-	log(c.Name, `meows`)
+	log(c.Name + ` meows`)
 }
 
 // String gets the name of the cat.
@@ -63,5 +63,5 @@ func (cats Cats) Youngest() *Cat {
 // Pet puts the human servant in danger of being
 // murdered while trying to please its kitty master.
 func Pet(c *Cat) {
-	log(`petting`, c.Name)
+	log(`petting ` + c.Name)
 }

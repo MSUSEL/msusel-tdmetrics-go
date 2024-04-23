@@ -49,7 +49,7 @@ func main() {
 		fmt.Println(`  --minimize|-m: Indicates the JSON output should be`,
 			`minimized instead of formatted.`)
 		fmt.Println(`  --in|-i: The input path to the directory of the project`,
-			`to read. The directory should have a go.mod file.`)
+			`or package to read. The project directory should have a go.mod file.`)
 		fmt.Println(`  --out|-o: The output file path to write the JSON to.`,
 			`If not given, the JSON will be outputted to the console.`)
 		os.Exit(0)

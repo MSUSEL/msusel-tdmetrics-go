@@ -1,4 +1,6 @@
-package dat001
+//go:build test
+
+package cats
 
 import (
 	"fmt"
@@ -50,12 +52,13 @@ func Test_Cat_Youngest(t *testing.T) {
 
 func Test_Cat_Log(t *testing.T) {
 	s := &strings.Builder{}
-	log = func(a ...interface{}) (int, error) {
-		return fmt.Fprintln(s, a...)
-	}
+	bckLog := log
 	defer func() {
-		log = fmt.Println
+		log = bckLog
 	}()
+	log = func(a string) {
+		fmt.Fprintln(s, a)
+	}
 
 	c1 := NewCat(`mittens`, 4)
 	c1.Meow()

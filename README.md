@@ -1,14 +1,16 @@
 # msusel-tdmetrics-go
 
-Experiments in measuring technical debt metrics for the procedural language Go.
+The following diagram outlines the pipeline for evaluating technical debt
+analysis for procedural and object oriented languages.
 
-## Experiments
+![diagram](./docs/diagram.svg)
 
-### Go
+1. [Go Feature Abstractor](./goAbstractor/)
+2. Java Feature Abstractor
+3. Generalized Feature Definition
+4. Design Recovery 
 
-1. [Preliminary Participation Measurement](./goexps/exp001/)
-
-### Java
+## Java Experiments
 
 1. [Participation Measurement with Checkstyle](./javaexps/exp001)
 2. [Participation Measurement with Spoon](./javaexps/exp002)

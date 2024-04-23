@@ -1,4 +1,6 @@
-package dat002
+//go:build test
+
+package cats
 
 import (
 	"fmt"
