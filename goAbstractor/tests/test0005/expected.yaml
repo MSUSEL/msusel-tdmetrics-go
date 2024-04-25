@@ -1,6 +1,6 @@
 {
   interfaces: [
-    "object", # any
+    {}, # any
     { # interface { Play(c *Cat) }
       inherits: [ 0 ],
       methods: [

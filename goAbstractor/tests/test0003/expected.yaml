@@ -1,6 +1,6 @@
 {
   interfaces: [
-    "object", # any
+    {}, # any
     { # interface { Pet() }
       inherits: [ 0 ],
       methods: [

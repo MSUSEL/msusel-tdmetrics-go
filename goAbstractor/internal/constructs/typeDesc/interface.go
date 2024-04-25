@@ -21,10 +21,6 @@ func (ti *Interface) ToJson(ctx *jsonify.Context) jsonify.Datum {
 		Remove(`noKind`).
 		Set(`onlyIndex`, true)
 
-	if len(ti.Methods) <= 0 {
-		return jsonify.New(ctx2, `object`)
-	}
-
 	showKind := !ctx.GetBool(`noKind`)
 	return jsonify.NewMap().
 		AddIf(ctx2, showKind, `kind`, `interface`).
