@@ -16,10 +16,10 @@ type Metrics struct {
 
 func (m Metrics) ToJson(ctx *jsonify.Context) jsonify.Datum {
 	return jsonify.NewMap().
-		Add(ctx, `complexity`, m.Complexity).
-		Add(ctx, `lineCount`, m.LineCount).
-		Add(ctx, `codeCount`, m.CodeCount).
-		Add(ctx, `indents`, m.Indents)
+		AddNonZero(ctx, `complexity`, m.Complexity).
+		AddNonZero(ctx, `lineCount`, m.LineCount).
+		AddNonZero(ctx, `codeCount`, m.CodeCount).
+		AddNonZero(ctx, `indents`, m.Indents)
 }
 
 func (m Metrics) String() string {

@@ -3,11 +3,13 @@ package constructs
 import (
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs/typeDesc"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/jsonify"
+	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/metrics"
 )
 
 type Method struct {
 	Name      string
 	Signature *typeDesc.Signature
+	Metrics   metrics.Metrics
 
 	NoCopyRecv bool
 	Receiver   string
@@ -16,7 +18,8 @@ type Method struct {
 func (m *Method) ToJson(ctx *jsonify.Context) jsonify.Datum {
 	data := jsonify.NewMap().
 		Add(ctx, `name`, m.Name).
-		Add(ctx, `signature`, m.Signature)
+		Add(ctx, `signature`, m.Signature).
+		AddNonZero(ctx, `metrics`, m.Metrics)
 
 	if ctx.GetBool(`showReceivers`) {
 		data.AddNonZero(ctx, `noCopyRecv`, m.NoCopyRecv).

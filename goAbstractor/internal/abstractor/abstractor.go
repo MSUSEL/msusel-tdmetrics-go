@@ -12,6 +12,7 @@ import (
 
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs/typeDesc"
+	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/metrics"
 )
 
 // TODO:
@@ -138,10 +139,9 @@ func (ab *abstractor) abstractFuncDecl(pkg *constructs.Package, src *packages.Pa
 	m := &constructs.Method{
 		Name:      decl.Name.Name,
 		Signature: ab.convertSignature(obj.Type().(*types.Signature)),
+		Metrics:   metrics.New(src.Fset, decl),
 	}
 	ab.determineReceiver(m, src, decl)
-
-	// TODO: Evaluate the body of the function to abstract metrics.
 	pkg.Methods = append(pkg.Methods, m)
 }
 

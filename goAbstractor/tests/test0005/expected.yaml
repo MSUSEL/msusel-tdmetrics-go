@@ -12,17 +12,32 @@
   packages: [
     {
       methods: [
-        { name: "NewCat",   signature: 4 },
-        { name: "NextYear", signature: 7 },
-        { name: "Pet",      signature: 2 }
+        {
+          name: "NewCat", signature: 4,
+          metrics: { codeCount: 6, complexity: 1, indents: 6, lineCount: 6 }
+        },
+        {
+          name: "NextYear", signature: 7,
+          metrics: { codeCount: 5, complexity: 2, indents: 4, lineCount: 5 }
+        },
+        {
+          name: "Pet", signature: 2,
+          metrics: { codeCount: 3, complexity: 1, indents: 1, lineCount: 3 }
+        }
       ],
       path: "command-line-arguments",
       types: [
         {
           inherits: [ 0 ],
           methods: [
-            { name: "Meow",   signature: 5 },
-            { name: "String", signature: 6 }
+            {
+              name: "Meow", signature: 5,
+              metrics: { codeCount: 3, complexity: 1, indents: 1, lineCount: 3 }
+            },
+            {
+              name: "String", signature: 6,
+              metrics: { codeCount: 3, complexity: 1, indents: 1, lineCount: 3 }
+            }
           ],
           name: "Cat", type: 9
         },
@@ -30,7 +45,10 @@
         {
           inherits: [ 0 ],
           methods: [
-            { name: "Youngest", signature: 8 }
+            {
+              name: "Youngest", signature: 8,
+              metrics: { codeCount: 9, complexity: 4, indents: 11, lineCount: 9 }
+            }
           ],
           name: "Cats",
           type: {

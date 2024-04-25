@@ -72,7 +72,7 @@ $[\;\text{offset}\;..\;\text{offset}+|\text{signatures}|\;)$
 where $\text{offset} = |\text{interfaces}|$ and
 type index of $x$ is the interface object $\text{signatures}[\;x-\text{offset}\;]$.
 
-### Signature Object
+### signature object
 
 The signature objects represents a function signature without a name or body.
 The signature has the following fields:
@@ -81,9 +81,12 @@ The signature has the following fields:
   list and is a variadic parameter.
 - `params`: This is a list of names and types for each parameter in the order
    the parameters appear in the signature.
-   - `name`: Each name should be unique.
-   - `type`:
-  
+  - `name`: Each name should be unique for a parameter.
+  - `type`: The [type](#type) of the parameter.
+- `return`: The [type](#type) to return. Must be one type only, meaning for Go
+  when multiple types are returned the return value needs to be converted
+  to a struct type.
+- `typeParam`: The type parameters for the signature.
 
 Example:
 
@@ -106,6 +109,16 @@ func(name string, age int) *Person
 
 ## structs
 
+TODO: Finish
+
 ## typeParams
 
+TBD
+
 ## packages
+
+TODO: Finish
+
+## type
+
+TODO: Finish
