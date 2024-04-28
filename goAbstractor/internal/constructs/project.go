@@ -18,13 +18,15 @@ func (p *Project) ToJson(ctx *jsonify.Context) jsonify.Datum {
 	m := jsonify.NewMap().
 		Add(ctx, `language`, `go`)
 
-	ctx1 := ctx.Copy().Set(`noKind`, true)
+	ctx1 := ctx.Copy()
+	ctx1.NoKind = true
 	m.AddNonZero(ctx1, `interfaces`, p.AllInterfaces).
 		AddNonZero(ctx1, `signatures`, p.AllSignatures).
 		AddNonZero(ctx1, `structs`, p.AllStructs).
 		AddNonZero(ctx1, `typeParams`, p.AllTypeParams)
 
-	ctx2 := ctx.Copy().Set(`onlyIndex`, true)
+	ctx2 := ctx.Copy()
+	ctx2.OnlyIndex = true
 	m.AddNonZero(ctx2, `packages`, p.Packages)
 	return m
 }

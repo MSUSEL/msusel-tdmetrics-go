@@ -75,7 +75,7 @@ func main() {
 
 func writeJson(path string, minimize bool, p *constructs.Project) error {
 	ctx := jsonify.NewContext()
-	ctx.Set(`minimize`, minimize)
+	ctx.Minimize = minimize
 	b, err := jsonify.Marshal(ctx, p)
 	if err != nil {
 		return err

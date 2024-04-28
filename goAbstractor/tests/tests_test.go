@@ -21,9 +21,8 @@ func Test_T0002(t *testing.T) { runTest(t, `test0002`) }
 func Test_T0003(t *testing.T) { runTest(t, `test0003`) }
 func Test_T0004(t *testing.T) { runTest(t, `test0004`) }
 func Test_T0005(t *testing.T) { runTest(t, `test0005`, `cats.go`) }
-
-// TODO: need to do a partial test
-//func Test_T0006(t *testing.T) { runTest(t, `test0006`, `cats.go`) }
+func Test_T0006(t *testing.T) { t.Skip(`TODO: need to do a partial test for large result`) }
+func Test_T0007(t *testing.T) { runTest(t, `test0007`) }
 
 func runTest(t *testing.T, dir string, patterns ...string) {
 	if len(patterns) <= 0 {

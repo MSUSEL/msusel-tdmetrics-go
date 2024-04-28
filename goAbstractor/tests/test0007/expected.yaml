@@ -1,0 +1,74 @@
+{
+  interfaces: [
+    {} # any
+  ],
+  language: "go",
+  packages: [
+    {
+      methods: [
+        { # func New[T string | int](v T) *Foo[T]
+          name: "New", signature: 2,
+          metrics: { codeCount: 3, complexity: 1, indents: 1, lineCount: 3 }
+        },
+        { # func main()
+          name: "main", signature: 3,
+          metrics: { codeCount: 4, complexity: 1, indents: 2, lineCount: 4 }
+        }
+      ],
+      path: "command-line-arguments",
+      types: [
+        {
+          inherits: [ 0 ],
+          name: "Foo", type: 4,
+          methods: [
+            {
+              name: "Add", signature: 1,
+              metrics: { codeCount: 4, complexity: 1, indents: 2, lineCount: 4 }
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  signatures: [
+    { # func Add(v T) T
+      params: [
+        {
+          name: "v",
+          type: { constraint: 0, # Need to define [T] type better
+          index: 5, kind: "typeParam" }
+        }
+      ],
+      return: { constraint: 0, index: 5, kind: "typeParam" }
+    },
+    { # func[T string | int](v T) *Foo[T]
+      params: [
+        {
+          name: "v",
+          type: { constraint: 0, index: 5, kind: "typeParam" }
+        }
+      ],
+      return: { # TODO: Need to indicate type param
+        elem: "command-line-arguments.Foo XX[T]",
+        kind: "pointer"
+      },
+      typeParams: [
+        { constraint: 0, index: 5, kind: "typeParam" }
+      ]
+    },
+    {}
+  ],
+  structs: [
+    {
+      fields: [
+        {
+          name: "value",
+          type: { constraint: 0, index: 5, kind: "typeParam" }
+        }
+      ]
+    }
+  ],
+  typeParams: [
+    { constraint: {}, index: 5, kind: "typeParam" }
+  ]
+}

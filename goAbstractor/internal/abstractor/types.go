@@ -87,13 +87,49 @@ func (ab *abstractor) convertChan(t *types.Chan) *typeDesc.Wrap {
 	}
 }
 
+func printInterface(t *types.Interface) {
+	fmt.Printf("--------------------\n")
+	fmt.Printf(">> %[1]s (%[1]T)\n", t)
+	fmt.Printf("  IsImplicit:   %t\n", t.IsImplicit())
+	fmt.Printf("  IsComparable: %t\n", t.IsComparable())
+	fmt.Printf("  IsMethodSet:  %t\n", t.IsMethodSet())
+
+	if t.NumMethods() > 0 {
+		fmt.Printf("  Methods (%d):\n", t.NumMethods())
+		for i := range t.NumMethods() {
+			fmt.Printf("    %[1]d) %[2]s (%[2]T)\n", i, t.Method(i))
+		}
+	}
+
+	if t.NumEmbeddeds() > 0 {
+		fmt.Printf("  Embeddeds (%d)\n", t.NumEmbeddeds())
+		for i := range t.NumEmbeddeds() {
+			fmt.Printf("    %[1]d) %[2]s (%[2]T)\n", i, t.EmbeddedType(i))
+		}
+	}
+
+	if t.NumExplicitMethods() > 0 {
+		fmt.Printf("  Explicit Methods (%d):\n", t.NumExplicitMethods())
+		for i := range t.NumExplicitMethods() {
+			fmt.Printf("    %[1]d) %[2]s (%[2]T)\n", i, t.ExplicitMethod(i))
+		}
+	}
+}
+
 func (ab *abstractor) convertInterface(t *types.Interface) *typeDesc.Interface {
 	t = t.Complete()
+	printInterface(t) // TODO: REMOVE
+
 	methods := convertList(t.NumMethods(), t.Method, ab.convertFunc)
 	// Sort interface methods since order doesn't matter.
 	sort.SliceIsSorted(methods, func(i, j int) bool {
 		return methods[i].Name < methods[j].Name
 	})
+
+	//if t.IsImplicit() {
+	//	fmt.Printf(">> %s (%T)\n", t, t)
+	//}
+
 	return ab.registerInterface(&typeDesc.Interface{
 		Methods: methods,
 	})
@@ -179,9 +215,15 @@ func (ab *abstractor) convertFieldTuple(t *types.Tuple) []*typeDesc.Field {
 }
 
 func (ab *abstractor) convertTypeParam(t *types.TypeParam) *typeDesc.TypeParam {
+
+	t2 := t.Obj().Type().Underlying()
+	fmt.Printf("%+v\n", t2)
+
+	// TODO: FIX
 	return ab.registerTypeParam(&typeDesc.TypeParam{
 		Index:      t.Index(),
 		Constraint: ab.convertType(t.Constraint()),
+		Type:       ab.convertType(t2),
 	})
 }
 

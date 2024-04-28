@@ -11,15 +11,18 @@ import "github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/jsonify"
 type TypeParam struct {
 	Index      int
 	Constraint TypeDesc
+	Type       TypeDesc
 }
 
 func (tp *TypeParam) _isTypeDesc() {}
 
 func (tp *TypeParam) ToJson(ctx *jsonify.Context) jsonify.Datum {
+	ctx.OnlyIndex = false // TODO: remove
 	return jsonify.NewMap().
 		Add(ctx, `kind`, `typeParam`).
 		Add(ctx, `index`, tp.Index).
-		Add(ctx, `constraint`, tp.Constraint)
+		Add(ctx, `constraint`, tp.Constraint).
+		Add(ctx, `type`, tp.Type)
 }
 
 func (tp *TypeParam) String() string {

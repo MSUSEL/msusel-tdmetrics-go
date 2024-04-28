@@ -13,17 +13,16 @@ type Signature struct {
 func (sig *Signature) _isTypeDesc() {}
 
 func (sig *Signature) ToJson(ctx *jsonify.Context) jsonify.Datum {
-	if ctx.GetBool(`onlyIndex`) {
+	if ctx.OnlyIndex {
 		return jsonify.New(ctx, sig.Index)
 	}
 
-	ctx2 := ctx.Copy().
-		Remove(`noKind`).
-		Set(`onlyIndex`, true)
+	ctx2 := ctx.Copy()
+	ctx2.NoKind = false
+	ctx2.OnlyIndex = true
 
-	showKind := !ctx.GetBool(`noKind`)
 	return jsonify.NewMap().
-		AddIf(ctx2, showKind, `kind`, `signature`).
+		AddIf(ctx2, !ctx.NoKind, `kind`, `signature`).
 		AddNonZero(ctx2, `variadic`, sig.Variadic).
 		AddNonZero(ctx2, `params`, sig.Params).
 		AddNonZero(ctx2, `return`, sig.Return).

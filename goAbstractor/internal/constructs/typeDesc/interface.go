@@ -13,17 +13,16 @@ type Interface struct {
 func (ti *Interface) _isTypeDesc() {}
 
 func (ti *Interface) ToJson(ctx *jsonify.Context) jsonify.Datum {
-	if ctx.GetBool(`onlyIndex`) {
+	if ctx.OnlyIndex {
 		return jsonify.New(ctx, ti.Index)
 	}
 
-	ctx2 := ctx.Copy().
-		Remove(`noKind`).
-		Set(`onlyIndex`, true)
+	ctx2 := ctx.Copy()
+	ctx2.NoKind = false
+	ctx2.OnlyIndex = true
 
-	showKind := !ctx.GetBool(`noKind`)
 	return jsonify.NewMap().
-		AddIf(ctx2, showKind, `kind`, `interface`).
+		AddIf(ctx2, !ctx.NoKind, `kind`, `interface`).
 		AddNonZero(ctx2, `inherits`, ti.Inherits).
 		AddNonZero(ctx2, `methods`, ti.Methods)
 }

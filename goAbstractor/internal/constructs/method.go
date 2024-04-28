@@ -21,7 +21,7 @@ func (m *Method) ToJson(ctx *jsonify.Context) jsonify.Datum {
 		Add(ctx, `signature`, m.Signature).
 		AddNonZero(ctx, `metrics`, m.Metrics)
 
-	if ctx.GetBool(`showReceivers`) {
+	if ctx.ShowReceivers {
 		data.AddNonZero(ctx, `noCopyRecv`, m.NoCopyRecv).
 			AddNonZero(ctx, `receiver`, m.Receiver)
 	}

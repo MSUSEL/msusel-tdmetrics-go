@@ -10,17 +10,16 @@ type Struct struct {
 func (ts *Struct) _isTypeDesc() {}
 
 func (ts *Struct) ToJson(ctx *jsonify.Context) jsonify.Datum {
-	if ctx.GetBool(`onlyIndex`) {
+	if ctx.OnlyIndex {
 		return jsonify.New(ctx, ts.Index)
 	}
 
-	ctx2 := ctx.Copy().
-		Remove(`noKind`).
-		Set(`onlyIndex`, true)
+	ctx2 := ctx.Copy()
+	ctx2.NoKind = false
+	ctx2.OnlyIndex = true
 
-	showKind := !ctx.GetBool(`noKind`)
 	return jsonify.NewMap().
-		AddIf(ctx2, showKind, `kind`, `struct`).
+		AddIf(ctx2, !ctx.NoKind, `kind`, `struct`).
 		Add(ctx2, `fields`, ts.Fields)
 }
 

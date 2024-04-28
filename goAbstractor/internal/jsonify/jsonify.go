@@ -8,7 +8,7 @@ type Jsonable interface {
 
 func Marshal(ctx *Context, j Jsonable) ([]byte, error) {
 	data := j.ToJson(ctx)
-	if ctx.GetBool(`minimize`) {
+	if ctx.Minimize {
 		return json.Marshal(data)
 	}
 	return json.MarshalIndent(data, ``, `  `)
