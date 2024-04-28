@@ -1,6 +1,10 @@
 package typeDesc
 
-import "github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/jsonify"
+import (
+	"sort"
+
+	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/jsonify"
+)
 
 type Interface struct {
 	Index    int
@@ -48,6 +52,12 @@ func (ti *Interface) IsSupertypeOf(other *Interface) bool {
 
 func (ti *Interface) String() string {
 	return jsonify.ToString(ti)
+}
+
+func (ti *Interface) SortMethods() {
+	sort.SliceIsSorted(ti.Methods, func(i, j int) bool {
+		return ti.Methods[i].Name < ti.Methods[j].Name
+	})
 }
 
 type Func struct {

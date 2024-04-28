@@ -4,14 +4,12 @@ import (
 	"fmt"
 	"go/types"
 	"slices"
-	"sort"
 
 	"github.com/Snow-Gremlin/goToolbox/collections"
 	"github.com/Snow-Gremlin/goToolbox/collections/enumerator"
 	"github.com/Snow-Gremlin/goToolbox/collections/set"
 
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs/typeDesc"
-	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs/typeDesc/wrapKind"
 )
 
 func convertList[T, U any](n int, getter func(i int) T, convert func(value T) *U) []*U {
@@ -62,15 +60,17 @@ func (ab *abstractor) convertType(t types.Type) typeDesc.TypeDesc {
 		return ab.convertStruct(t2)
 	case *types.TypeParam:
 		return ab.convertTypeParam(t2)
+	case *types.Union:
+		return ab.convertUnion(t2)
 	default:
-		panic(fmt.Errorf(`unhandled type, %T: %s`, t, t))
+		panic(fmt.Errorf(`unhandled type, %[1]T: %[1]s`, t))
 	}
 }
 
-func (ab *abstractor) convertArray(t *types.Array) *typeDesc.Wrap {
-	return &typeDesc.Wrap{
-		Kind: wrapKind.Array,
-		Elem: ab.convertType(t.Elem()),
+func (ab *abstractor) convertArray(t *types.Array) *typeDesc.Array {
+	return &typeDesc.Array{
+		Length: int(t.Len()),
+		Elem:   ab.convertType(t.Elem()),
 	}
 }
 
@@ -80,59 +80,27 @@ func (ab *abstractor) convertBasic(t *types.Basic) *typeDesc.Ref {
 	}
 }
 
-func (ab *abstractor) convertChan(t *types.Chan) *typeDesc.Wrap {
-	return &typeDesc.Wrap{
-		Kind: wrapKind.Chan,
+func (ab *abstractor) convertChan(t *types.Chan) *typeDesc.Chan {
+	return &typeDesc.Chan{
 		Elem: ab.convertType(t.Elem()),
-	}
-}
-
-func printInterface(t *types.Interface) {
-	fmt.Printf("--------------------\n")
-	fmt.Printf(">> %[1]s (%[1]T)\n", t)
-	fmt.Printf("  IsImplicit:   %t\n", t.IsImplicit())
-	fmt.Printf("  IsComparable: %t\n", t.IsComparable())
-	fmt.Printf("  IsMethodSet:  %t\n", t.IsMethodSet())
-
-	if t.NumMethods() > 0 {
-		fmt.Printf("  Methods (%d):\n", t.NumMethods())
-		for i := range t.NumMethods() {
-			fmt.Printf("    %[1]d) %[2]s (%[2]T)\n", i, t.Method(i))
-		}
-	}
-
-	if t.NumEmbeddeds() > 0 {
-		fmt.Printf("  Embeddeds (%d)\n", t.NumEmbeddeds())
-		for i := range t.NumEmbeddeds() {
-			fmt.Printf("    %[1]d) %[2]s (%[2]T)\n", i, t.EmbeddedType(i))
-		}
-	}
-
-	if t.NumExplicitMethods() > 0 {
-		fmt.Printf("  Explicit Methods (%d):\n", t.NumExplicitMethods())
-		for i := range t.NumExplicitMethods() {
-			fmt.Printf("    %[1]d) %[2]s (%[2]T)\n", i, t.ExplicitMethod(i))
-		}
 	}
 }
 
 func (ab *abstractor) convertInterface(t *types.Interface) *typeDesc.Interface {
 	t = t.Complete()
-	printInterface(t) // TODO: REMOVE
-
 	methods := convertList(t.NumMethods(), t.Method, ab.convertFunc)
-	// Sort interface methods since order doesn't matter.
-	sort.SliceIsSorted(methods, func(i, j int) bool {
-		return methods[i].Name < methods[j].Name
-	})
-
-	//if t.IsImplicit() {
-	//	fmt.Printf(">> %s (%T)\n", t, t)
-	//}
-
-	return ab.registerInterface(&typeDesc.Interface{
+	it := &typeDesc.Interface{
 		Methods: methods,
-	})
+	}
+	it.SortMethods()
+
+	if t.IsImplicit() {
+		for i := range t.NumEmbeddeds() {
+			emb := ab.convertType(t.EmbeddedType(i))
+			fmt.Printf(">> %[1]s (%[1]T)\n", emb) // TODO: Finish
+		}
+	}
+	return ab.registerInterface(it)
 }
 
 func (ab *abstractor) convertMap(t *types.Map) *typeDesc.Map {
@@ -155,9 +123,8 @@ func (ab *abstractor) convertFunc(t *types.Func) *typeDesc.Func {
 	}
 }
 
-func (ab *abstractor) convertPointer(t *types.Pointer) *typeDesc.Wrap {
-	return &typeDesc.Wrap{
-		Kind: wrapKind.Pointer,
+func (ab *abstractor) convertPointer(t *types.Pointer) *typeDesc.Pointer {
+	return &typeDesc.Pointer{
 		Elem: ab.convertType(t.Elem()),
 	}
 }
@@ -172,9 +139,8 @@ func (ab *abstractor) convertSignature(t *types.Signature) *typeDesc.Signature {
 	})
 }
 
-func (ab *abstractor) convertSlice(t *types.Slice) *typeDesc.Wrap {
-	return &typeDesc.Wrap{
-		Kind: wrapKind.List,
+func (ab *abstractor) convertSlice(t *types.Slice) *typeDesc.Slice {
+	return &typeDesc.Slice{
 		Elem: ab.convertType(t.Elem()),
 	}
 }
@@ -212,6 +178,27 @@ func (ab *abstractor) convertParamTuple(t *types.Tuple) []*typeDesc.Param {
 
 func (ab *abstractor) convertFieldTuple(t *types.Tuple) []*typeDesc.Field {
 	return convertList(t.Len(), t.At, ab.convertField)
+}
+
+func (ab *abstractor) convertTerm(t *types.Term) *typeDesc.Interface {
+	// TODO: add `getData() T` for t.Tilde()
+	//t2 := ab.convertType(t.Type())
+
+	// TODO: FINISH
+
+	return nil
+}
+
+func (ab *abstractor) convertUnion(t *types.Union) *typeDesc.Interface {
+	union := &typeDesc.Interface{}
+	for i := range t.Len() {
+		it := ab.convertTerm(t.Term(i))
+
+		// TODO: FINISH
+		panic(fmt.Errorf(`union not implemented: %[1]v (%[1]T)`, it))
+
+	}
+	return union
 }
 
 func (ab *abstractor) convertTypeParam(t *types.TypeParam) *typeDesc.TypeParam {
