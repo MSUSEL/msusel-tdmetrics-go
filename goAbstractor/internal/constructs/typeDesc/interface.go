@@ -7,10 +7,10 @@ import (
 )
 
 type Interface struct {
-	Index    int
-	Inherits []*Interface
-	Methods  []*Func
+	Methods []*Func
 
+	Index      int
+	Inherits   []*Interface
 	Inheritors []*Interface
 }
 
@@ -31,6 +31,10 @@ func (ti *Interface) ToJson(ctx *jsonify.Context) jsonify.Datum {
 		AddNonZero(ctx2, `methods`, ti.Methods)
 }
 
+func (ti *Interface) String() string {
+	return jsonify.ToString(ti)
+}
+
 func (ti *Interface) HasFunc(m *Func) bool {
 	for _, other := range ti.Methods {
 		// The signatures have been registers so they can be compared by pointers.
@@ -48,10 +52,6 @@ func (ti *Interface) IsSupertypeOf(other *Interface) bool {
 		}
 	}
 	return true
-}
-
-func (ti *Interface) String() string {
-	return jsonify.ToString(ti)
 }
 
 func (ti *Interface) SortMethods() {

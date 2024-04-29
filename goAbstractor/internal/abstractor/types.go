@@ -67,20 +67,24 @@ func (ab *abstractor) convertType(t types.Type) typeDesc.TypeDesc {
 	}
 }
 
-func (ab *abstractor) convertArray(t *types.Array) *typeDesc.Array {
+func (ab *abstractor) convertArray(t *types.Array) *typeDesc.Interface {
+	elem := ab.convertType(t.Elem())
 	return &typeDesc.Array{
 		Length: int(t.Len()),
-		Elem:   ab.convertType(t.Elem()),
+		Elem:   elem,
 	}
 }
 
-func (ab *abstractor) convertBasic(t *types.Basic) *typeDesc.Ref {
-	return &typeDesc.Ref{
-		Ref: t.Name(),
+func (ab *abstractor) convertBasic(t *types.Basic) *typeDesc.Basic {
+	if t.Info() == types.IsComplex {
+		panic(fmt.Errorf(`complex numbers currently isn't supported: %[1]v (%[1]T)`, t))
+	}
+	return &typeDesc.Basic{
+		Name: t.Name(),
 	}
 }
 
-func (ab *abstractor) convertChan(t *types.Chan) *typeDesc.Chan {
+func (ab *abstractor) convertChan(t *types.Chan) *typeDesc.Interface {
 	return &typeDesc.Chan{
 		Elem: ab.convertType(t.Elem()),
 	}
@@ -103,16 +107,16 @@ func (ab *abstractor) convertInterface(t *types.Interface) *typeDesc.Interface {
 	return ab.registerInterface(it)
 }
 
-func (ab *abstractor) convertMap(t *types.Map) *typeDesc.Map {
+func (ab *abstractor) convertMap(t *types.Map) *typeDesc.Interface {
 	return &typeDesc.Map{
 		Key:   ab.convertType(t.Key()),
 		Value: ab.convertType(t.Elem()),
 	}
 }
 
-func (ab *abstractor) convertNamed(t *types.Named) *typeDesc.Ref {
-	return &typeDesc.Ref{
-		Ref: t.String(),
+func (ab *abstractor) convertNamed(t *types.Named) *typeDesc.Named {
+	return &typeDesc.Named{
+		Name: t.String(),
 	}
 }
 
@@ -123,7 +127,7 @@ func (ab *abstractor) convertFunc(t *types.Func) *typeDesc.Func {
 	}
 }
 
-func (ab *abstractor) convertPointer(t *types.Pointer) *typeDesc.Pointer {
+func (ab *abstractor) convertPointer(t *types.Pointer) *typeDesc.Interface {
 	return &typeDesc.Pointer{
 		Elem: ab.convertType(t.Elem()),
 	}
@@ -139,7 +143,7 @@ func (ab *abstractor) convertSignature(t *types.Signature) *typeDesc.Signature {
 	})
 }
 
-func (ab *abstractor) convertSlice(t *types.Slice) *typeDesc.Slice {
+func (ab *abstractor) convertSlice(t *types.Slice) *typeDesc.Interface {
 	return &typeDesc.Slice{
 		Elem: ab.convertType(t.Elem()),
 	}
@@ -201,7 +205,7 @@ func (ab *abstractor) convertUnion(t *types.Union) *typeDesc.Interface {
 	return union
 }
 
-func (ab *abstractor) convertTypeParam(t *types.TypeParam) *typeDesc.TypeParam {
+func (ab *abstractor) convertTypeParam(t *types.TypeParam) *typeDesc.Interface {
 
 	t2 := t.Obj().Type().Underlying()
 	fmt.Printf("%+v\n", t2)
@@ -214,7 +218,7 @@ func (ab *abstractor) convertTypeParam(t *types.TypeParam) *typeDesc.TypeParam {
 	})
 }
 
-func (ab *abstractor) convertTypeParamList(t *types.TypeParamList) []*typeDesc.TypeParam {
+func (ab *abstractor) convertTypeParamList(t *types.TypeParamList) []*typeDesc.Interface {
 	return convertList(t.Len(), t.At, ab.convertTypeParam)
 }
 

@@ -3,8 +3,9 @@ package typeDesc
 import "github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/jsonify"
 
 type Struct struct {
-	Index  int
 	Fields []*Field
+
+	Index int
 }
 
 func (ts *Struct) _isTypeDesc() {}

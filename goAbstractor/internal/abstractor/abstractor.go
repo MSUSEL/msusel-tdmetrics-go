@@ -33,9 +33,6 @@ func Abstract(ps []*packages.Package, verbose bool) *constructs.Project {
 	ab.abstractProject(ps)
 	ab.resolveReceivers()
 	ab.resolveInheritance()
-
-	// Leave indices as zero until the end so that checking equality
-	// using reflect.DeepEqual will not find differences in the indices.
 	ab.updateIndices()
 	return ab.proj
 }
@@ -149,44 +146,26 @@ func pos(src *packages.Package, pos token.Pos) string {
 	return src.Fset.Position(pos).String()
 }
 
-func (ab *abstractor) registerInterface(ti *typeDesc.Interface) *typeDesc.Interface {
-	for _, t2 := range ab.proj.AllInterfaces {
-		if reflect.DeepEqual(ti, t2) {
+func (ab *abstractor) registerInterface(t *typeDesc.Interface) *typeDesc.Interface {
+	return registerType(t, &ab.proj.AllInterfaces)
+}
+
+func (ab *abstractor) registerSignature(t *typeDesc.Signature) *typeDesc.Signature {
+	return registerType(t, &ab.proj.AllSignatures)
+}
+
+func (ab *abstractor) registerStruct(t *typeDesc.Struct) *typeDesc.Struct {
+	return registerType(t, &ab.proj.AllStructs)
+}
+
+func registerType[T typeDesc.TypeDesc](t T, s *[]T) T {
+	for _, t2 := range *s {
+		if reflect.DeepEqual(t, t2) {
 			return t2
 		}
 	}
-	ab.proj.AllInterfaces = append(ab.proj.AllInterfaces, ti)
-	return ti
-}
-
-func (ab *abstractor) registerSignature(sig *typeDesc.Signature) *typeDesc.Signature {
-	for _, s2 := range ab.proj.AllSignatures {
-		if reflect.DeepEqual(sig, s2) {
-			return s2
-		}
-	}
-	ab.proj.AllSignatures = append(ab.proj.AllSignatures, sig)
-	return sig
-}
-
-func (ab *abstractor) registerStruct(s *typeDesc.Struct) *typeDesc.Struct {
-	for _, s2 := range ab.proj.AllStructs {
-		if reflect.DeepEqual(s, s2) {
-			return s2
-		}
-	}
-	ab.proj.AllStructs = append(ab.proj.AllStructs, s)
-	return s
-}
-
-func (ab *abstractor) registerTypeParam(tp *typeDesc.TypeParam) *typeDesc.TypeParam {
-	for _, t2 := range ab.proj.AllTypeParams {
-		if reflect.DeepEqual(tp, t2) {
-			return t2
-		}
-	}
-	ab.proj.AllTypeParams = append(ab.proj.AllTypeParams, tp)
-	return tp
+	*s = append(*s, t)
+	return t
 }
 
 func (ab *abstractor) updateIndices() {
@@ -200,10 +179,6 @@ func (ab *abstractor) updateIndices() {
 	}
 	offset += len(ab.proj.AllSignatures)
 	for i, c := range ab.proj.AllStructs {
-		c.Index = i + offset
-	}
-	offset += len(ab.proj.AllStructs)
-	for i, c := range ab.proj.AllTypeParams {
 		c.Index = i + offset
 	}
 }

@@ -3,11 +3,11 @@ package typeDesc
 import "github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/jsonify"
 
 type Signature struct {
-	Index      int
-	Variadic   bool
-	Params     []*Param
-	Return     TypeDesc
-	TypeParams []*TypeParam
+	Variadic bool
+	Params   []*Param
+	Return   TypeDesc
+
+	Index int
 }
 
 func (sig *Signature) _isTypeDesc() {}
@@ -25,8 +25,7 @@ func (sig *Signature) ToJson(ctx *jsonify.Context) jsonify.Datum {
 		AddIf(ctx2, !ctx.NoKind, `kind`, `signature`).
 		AddNonZero(ctx2, `variadic`, sig.Variadic).
 		AddNonZero(ctx2, `params`, sig.Params).
-		AddNonZero(ctx2, `return`, sig.Return).
-		AddNonZero(ctx2, `typeParams`, sig.TypeParams)
+		AddNonZero(ctx2, `return`, sig.Return)
 }
 
 func (sig *Signature) String() string {

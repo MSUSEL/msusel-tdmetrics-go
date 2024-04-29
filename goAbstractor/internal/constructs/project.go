@@ -11,7 +11,6 @@ type Project struct {
 	AllInterfaces []*typeDesc.Interface
 	AllSignatures []*typeDesc.Signature
 	AllStructs    []*typeDesc.Struct
-	AllTypeParams []*typeDesc.TypeParam
 }
 
 func (p *Project) ToJson(ctx *jsonify.Context) jsonify.Datum {
@@ -22,8 +21,7 @@ func (p *Project) ToJson(ctx *jsonify.Context) jsonify.Datum {
 	ctx1.NoKind = true
 	m.AddNonZero(ctx1, `interfaces`, p.AllInterfaces).
 		AddNonZero(ctx1, `signatures`, p.AllSignatures).
-		AddNonZero(ctx1, `structs`, p.AllStructs).
-		AddNonZero(ctx1, `typeParams`, p.AllTypeParams)
+		AddNonZero(ctx1, `structs`, p.AllStructs)
 
 	ctx2 := ctx.Copy()
 	ctx2.OnlyIndex = true
