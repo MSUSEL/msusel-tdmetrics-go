@@ -26,14 +26,15 @@ func convertList[T, U any](n int, getter func(i int) T, convert func(value T) *U
 }
 
 func uniqueName(names collections.Set[string]) string {
-	for offset := 1; offset < 10000; offset++ {
+	attempts := 10_000
+	for offset := 1; offset < attempts; offset++ {
 		name := fmt.Sprintf(`value%d`, offset)
 		if !names.Contains(name) {
 			names.Add(name)
 			return name
 		}
 	}
-	return `_`
+	panic(fmt.Errorf(`unable to find unique name in %d attempts`, attempts))
 }
 
 func (ab *abstractor) convertType(t types.Type) typeDesc.TypeDesc {
@@ -96,7 +97,6 @@ func (ab *abstractor) convertInterface(t *types.Interface) *typeDesc.Interface {
 	it := &typeDesc.Interface{
 		Methods: methods,
 	}
-	it.SortMethods()
 
 	if t.IsImplicit() {
 		for i := range t.NumEmbeddeds() {

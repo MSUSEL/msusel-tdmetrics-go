@@ -8,16 +8,20 @@ type Struct struct {
 	Index int
 }
 
+func NewStruct() *Struct {
+	return &Struct{}
+}
+
 func (ts *Struct) _isTypeDesc() {}
 
 func (ts *Struct) ToJson(ctx *jsonify.Context) jsonify.Datum {
-	if ctx.OnlyIndex {
+	if ctx.Short {
 		return jsonify.New(ctx, ts.Index)
 	}
 
 	ctx2 := ctx.Copy()
 	ctx2.NoKind = false
-	ctx2.OnlyIndex = true
+	ctx2.Short = true
 
 	return jsonify.NewMap().
 		AddIf(ctx2, !ctx.NoKind, `kind`, `struct`).

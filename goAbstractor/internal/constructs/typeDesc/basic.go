@@ -6,6 +6,10 @@ type Basic struct {
 	Name string
 }
 
+func NewBasic(name string) *Basic {
+	return &Basic{Name: name}
+}
+
 func (t *Basic) _isTypeDesc() {}
 
 func (t *Basic) ToJson(ctx *jsonify.Context) jsonify.Datum {

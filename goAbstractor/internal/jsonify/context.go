@@ -2,7 +2,7 @@ package jsonify
 
 type Context struct {
 	Minimize      bool
-	OnlyIndex     bool
+	Short         bool
 	NoKind        bool
 	ShowReceivers bool
 }

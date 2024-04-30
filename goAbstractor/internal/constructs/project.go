@@ -24,7 +24,7 @@ func (p *Project) ToJson(ctx *jsonify.Context) jsonify.Datum {
 		AddNonZero(ctx1, `structs`, p.AllStructs)
 
 	ctx2 := ctx.Copy()
-	ctx2.OnlyIndex = true
+	ctx2.Short = true
 	m.AddNonZero(ctx2, `packages`, p.Packages)
 	return m
 }

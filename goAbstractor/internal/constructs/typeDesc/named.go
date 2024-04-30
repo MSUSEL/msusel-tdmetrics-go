@@ -6,6 +6,10 @@ type Named struct {
 	Name string
 }
 
+func NewNamed(name string) *Named {
+	return &Named{Name: name}
+}
+
 func (t *Named) _isTypeDesc() {}
 
 func (t *Named) ToJson(ctx *jsonify.Context) jsonify.Datum {

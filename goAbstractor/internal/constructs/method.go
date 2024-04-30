@@ -15,6 +15,13 @@ type Method struct {
 	Receiver   string
 }
 
+func NewMethod(name string, sig *typeDesc.Signature) *Method {
+	return &Method{
+		Name:      name,
+		Signature: sig,
+	}
+}
+
 func (m *Method) ToJson(ctx *jsonify.Context) jsonify.Datum {
 	data := jsonify.NewMap().
 		Add(ctx, `name`, m.Name).

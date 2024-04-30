@@ -1,29 +1,35 @@
 package typeDesc
 
 import (
-	"sort"
+	"fmt"
 
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/jsonify"
 )
 
 type Interface struct {
-	Methods []*Func
+	Methods map[string]*Signature
 
 	Index      int
 	Inherits   []*Interface
 	Inheritors []*Interface
 }
 
+func NewInterface() *Interface {
+	return &Interface{
+		Methods: map[string]*Signature{},
+	}
+}
+
 func (ti *Interface) _isTypeDesc() {}
 
 func (ti *Interface) ToJson(ctx *jsonify.Context) jsonify.Datum {
-	if ctx.OnlyIndex {
+	if ctx.Short {
 		return jsonify.New(ctx, ti.Index)
 	}
 
 	ctx2 := ctx.Copy()
 	ctx2.NoKind = false
-	ctx2.OnlyIndex = true
+	ctx2.Short = true
 
 	return jsonify.NewMap().
 		AddIf(ctx2, !ctx.NoKind, `kind`, `interface`).
@@ -35,42 +41,29 @@ func (ti *Interface) String() string {
 	return jsonify.ToString(ti)
 }
 
-func (ti *Interface) HasFunc(m *Func) bool {
-	for _, other := range ti.Methods {
-		// The signatures have been registers so they can be compared by pointers.
-		if m.Name == other.Name && m.Signature == other.Signature {
-			return true
+func (ti *Interface) HasFunc(name string, sig *Signature) bool {
+	other, has := ti.Methods[name]
+	// The signature types have been registers
+	// so they can be compared by pointers.
+	return has && sig == other
+}
+
+func (ti *Interface) AddFunc(name string, sig *Signature) bool {
+	if other, has := ti.Methods[name]; has {
+		if other != sig {
+			panic(fmt.Errorf(`function %v already exists with a different signature`, name))
 		}
+		return false
 	}
-	return false
+	ti.Methods[name] = sig
+	return true
 }
 
 func (ti *Interface) IsSupertypeOf(other *Interface) bool {
-	for _, m := range other.Methods {
-		if !ti.HasFunc(m) {
+	for name, sig := range other.Methods {
+		if !ti.HasFunc(name, sig) {
 			return false
 		}
 	}
 	return true
-}
-
-func (ti *Interface) SortMethods() {
-	sort.SliceIsSorted(ti.Methods, func(i, j int) bool {
-		return ti.Methods[i].Name < ti.Methods[j].Name
-	})
-}
-
-type Func struct {
-	Name      string
-	Signature *Signature
-}
-
-func (f *Func) ToJson(ctx *jsonify.Context) jsonify.Datum {
-	return jsonify.NewMap().
-		Add(ctx, `name`, f.Name).
-		Add(ctx, `signature`, f.Signature)
-}
-
-func (f *Func) String() string {
-	return jsonify.ToString(f)
 }

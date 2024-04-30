@@ -12,6 +12,13 @@ type TypeDef struct {
 	Methods  []*Method
 }
 
+func NewTypeDef(name string, t typeDesc.TypeDesc) *TypeDef {
+	return &TypeDef{
+		Name: name,
+		Type: t,
+	}
+}
+
 func (td *TypeDef) ToJson(ctx *jsonify.Context) jsonify.Datum {
 	return jsonify.NewMap().
 		Add(ctx, `name`, td.Name).
@@ -20,10 +27,11 @@ func (td *TypeDef) ToJson(ctx *jsonify.Context) jsonify.Datum {
 		AddNonZero(ctx, `methods`, td.Methods)
 }
 
-func (td *TypeDef) HasFunc(m *typeDesc.Func) bool {
+func (td *TypeDef) HasFunc(name string, sig *typeDesc.Signature) bool {
 	for _, other := range td.Methods {
-		// The signatures have been registers so they can be compared by pointers.
-		if m.Name == other.Name && m.Signature == other.Signature {
+		// The signature types have been registers
+		// so they can be compared by pointers.
+		if name == other.Name && sig == other.Signature {
 			return true
 		}
 	}
@@ -31,8 +39,8 @@ func (td *TypeDef) HasFunc(m *typeDesc.Func) bool {
 }
 
 func (td *TypeDef) IsSupertypeOf(inter *typeDesc.Interface) bool {
-	for _, m := range inter.Methods {
-		if !td.HasFunc(m) {
+	for name, m := range inter.Methods {
+		if !td.HasFunc(name, m) {
 			return false
 		}
 	}
