@@ -150,12 +150,19 @@ func (ab *abstractor) convertSlice(t *types.Slice) *typeDesc.Interface {
 }
 
 func (ab *abstractor) convertStruct(t *types.Struct) *typeDesc.Struct {
-	return ab.registerStruct(&typeDesc.Struct{
-		Fields: convertList(t.NumFields(), t.Field, ab.convertField),
-	})
+	ts := typeDesc.NewStruct()
+	for i := range t.NumFields() {
+		f := t.Field(i)
+		field := typeDesc.NewNamed(f.Name(), ab.convertType(f.Type()))
+		ts.Fields = append(ts.Fields, field)
+		if f.Anonymous() {
+			ts.Anonymous = append(ts.Anonymous, field)
+		}
+	}
+	return ab.registerStruct(ts)
 }
 
-func (ab *abstractor) createReturn(returns []*typeDesc.Field) typeDesc.TypeDesc {
+func (ab *abstractor) createReturn(returns []*typeDesc.Named) typeDesc.TypeDesc {
 	switch len(returns) {
 	case 0:
 		return nil
@@ -163,9 +170,8 @@ func (ab *abstractor) createReturn(returns []*typeDesc.Field) typeDesc.TypeDesc 
 		return returns[0].Type
 	default:
 		names := set.From(enumerator.Select(enumerator.Enumerate(returns...),
-			func(f *typeDesc.Field) string { return f.Name }).NotZero())
+			func(f *typeDesc.Named) string { return f.Name }).NotZero())
 		for _, f := range returns {
-			f.Anonymous = false
 			if len(f.Name) <= 0 || f.Name == `_` {
 				f.Name = uniqueName(names)
 			}
@@ -176,12 +182,15 @@ func (ab *abstractor) createReturn(returns []*typeDesc.Field) typeDesc.TypeDesc 
 	}
 }
 
-func (ab *abstractor) convertParamTuple(t *types.Tuple) []*typeDesc.Param {
-	return convertList(t.Len(), t.At, ab.convertParam)
+func (ab *abstractor) convertTuple(t *types.Tuple) []*typeDesc.Named {
+	return convertList(t.Len(), t.At, ab.convertName)
 }
 
-func (ab *abstractor) convertFieldTuple(t *types.Tuple) []*typeDesc.Field {
-	return convertList(t.Len(), t.At, ab.convertField)
+func (ab *abstractor) convertName(t *types.Var) *typeDesc.Named {
+	return &typeDesc.Named{
+		Name: t.Name(),
+		Type: ab.convertType(t.Type()),
+	}
 }
 
 func (ab *abstractor) convertTerm(t *types.Term) *typeDesc.Interface {
@@ -220,13 +229,6 @@ func (ab *abstractor) convertTypeParam(t *types.TypeParam) *typeDesc.Interface {
 
 func (ab *abstractor) convertTypeParamList(t *types.TypeParamList) []*typeDesc.Interface {
 	return convertList(t.Len(), t.At, ab.convertTypeParam)
-}
-
-func (ab *abstractor) convertParam(t *types.Var) *typeDesc.Param {
-	return &typeDesc.Param{
-		Name: t.Name(),
-		Type: ab.convertType(t.Type()),
-	}
 }
 
 func (ab *abstractor) convertField(t *types.Var) *typeDesc.Field {
