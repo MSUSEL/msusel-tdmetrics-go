@@ -25,10 +25,16 @@ func convertList[T, U any](n int, getter func(i int) T, convert func(value T) *U
 	return slices.Clip(list)
 }
 
+// uniqueName returns a unique name that isn't in the set.
+// The new unique name will be added to the set.
+// This is for naming anonymous fields and unnamed return values.
 func uniqueName(names collections.Set[string]) string {
-	attempts := 10_000
+	const (
+		attempts = 10_000
+		pattern  = `$value%d`
+	)
 	for offset := 1; offset < attempts; offset++ {
-		name := fmt.Sprintf(`value%d`, offset)
+		name := fmt.Sprintf(pattern, offset)
 		if !names.Contains(name) {
 			names.Add(name)
 			return name
@@ -70,7 +76,7 @@ func (ab *abstractor) convertType(t types.Type) typeDesc.TypeDesc {
 
 func (ab *abstractor) convertArray(t *types.Array) *typeDesc.Interface {
 	elem := ab.convertType(t.Elem())
-	return &typeDesc.Array{
+	return &typeDesc.Struct{
 		Length: int(t.Len()),
 		Elem:   elem,
 	}
@@ -163,6 +169,8 @@ func (ab *abstractor) convertStruct(t *types.Struct) *typeDesc.Struct {
 }
 
 func (ab *abstractor) createReturn(returns []*typeDesc.Named) typeDesc.TypeDesc {
+	// TODO: Need to handle adding type parameters in struct
+	//       or returning a solid type if single return has type parameters.
 	switch len(returns) {
 	case 0:
 		return nil

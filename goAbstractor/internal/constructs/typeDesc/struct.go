@@ -7,8 +7,8 @@ type Struct struct {
 	TypeParams []*Named
 
 	Index int
-	// Anonymous is the subset of fields that are anonymous.
-	Anonymous []*Named
+	// Embedded is the subset of fields that are embedded.
+	Embedded []*Named
 }
 
 func NewStruct() *Struct {
@@ -31,4 +31,23 @@ func (ts *Struct) ToJson(ctx *jsonify.Context) jsonify.Datum {
 
 func (ts *Struct) String() string {
 	return jsonify.ToString(ts)
+}
+
+func (ts *Struct) AddField(name string, t TypeDesc, embedded bool) *Named {
+	tn := NewNamed(name, t)
+	ts.Fields = append(ts.Fields, tn)
+	if embedded {
+		ts.Embedded = append(ts.Embedded, tn)
+	}
+	return tn
+}
+
+func (ts *Struct) AddTypeParam(name string, t *Interface) *Named {
+	tn := NewNamed(name, t)
+	ts.TypeParams = append(ts.TypeParams, tn)
+	return tn
+}
+
+func (ts *Struct) AppendTypeParam(tp *Named) {
+	ts.TypeParams = append(ts.TypeParams, tp)
 }

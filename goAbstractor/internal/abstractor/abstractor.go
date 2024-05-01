@@ -28,6 +28,7 @@ func Abstract(ps []*packages.Package, verbose bool) *constructs.Project {
 	ab := &abstractor{
 		verbose: verbose,
 		proj:    &constructs.Project{},
+		baked:   map[string]*typeDesc.Interface{},
 	}
 	ab.initialize()
 	ab.abstractProject(ps)
@@ -41,11 +42,11 @@ func Abstract(ps []*packages.Package, verbose bool) *constructs.Project {
 type abstractor struct {
 	verbose bool
 	proj    *constructs.Project
+	baked   map[string]*typeDesc.Interface
 }
 
 func (ab *abstractor) initialize() {
-	// Add "any" (i.e object) to the interfaces.
-	ab.proj.AllInterfaces = append(ab.proj.AllInterfaces, &typeDesc.Interface{})
+	ab.bakeAny() // Prebake the "any" (i.e. object) into the interfaces.
 }
 
 func (ab *abstractor) abstractProject(ps []*packages.Package) {

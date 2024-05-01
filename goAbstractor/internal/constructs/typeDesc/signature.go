@@ -22,15 +22,24 @@ func (sig *Signature) ToJson(ctx *jsonify.Context) jsonify.Datum {
 		return jsonify.New(ctx, sig.Index)
 	}
 
-	ctx2 := ctx.HideKind().Long()
 	return jsonify.NewMap().
 		AddIf(ctx, ctx.IsKindShown(), `kind`, `signature`).
 		AddNonZero(ctx, `variadic`, sig.Variadic).
-		AddNonZero(ctx2, `params`, sig.Params).
-		AddNonZero(ctx2, `typeParams`, sig.TypeParams).
+		AddNonZero(ctx.HideKind().Long(), `params`, sig.Params).
+		AddNonZero(ctx.HideKind().Long(), `typeParams`, sig.TypeParams).
 		AddNonZero(ctx.ShowKind().Short(), `return`, sig.Return)
 }
 
 func (sig *Signature) String() string {
 	return jsonify.ToString(sig)
+}
+
+func (sig *Signature) AddParam(name string, t TypeDesc) *Named {
+	tn := NewNamed(name, t)
+	sig.Params = append(sig.Params, tn)
+	return tn
+}
+
+func (sig *Signature) AppendTypeParam(tp *Named) {
+	sig.TypeParams = append(sig.TypeParams, tp)
 }

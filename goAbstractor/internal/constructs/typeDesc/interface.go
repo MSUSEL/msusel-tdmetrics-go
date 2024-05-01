@@ -8,7 +8,7 @@ import (
 
 type Interface struct {
 	TypeParams []*Named
-	Methods    map[string]*Signature
+	Methods    map[string]TypeDesc
 
 	Index      int
 	Inherits   []*Interface
@@ -17,7 +17,7 @@ type Interface struct {
 
 func NewInterface() *Interface {
 	return &Interface{
-		Methods: map[string]*Signature{},
+		Methods: map[string]TypeDesc{},
 	}
 }
 
@@ -40,14 +40,14 @@ func (ti *Interface) String() string {
 	return jsonify.ToString(ti)
 }
 
-func (ti *Interface) HasFunc(name string, sig *Signature) bool {
+func (ti *Interface) HasFunc(name string, sig TypeDesc) bool {
 	other, has := ti.Methods[name]
 	// The signature types have been registers
 	// so they can be compared by pointers.
 	return has && sig == other
 }
 
-func (ti *Interface) AddFunc(name string, sig *Signature) bool {
+func (ti *Interface) AddFunc(name string, sig TypeDesc) bool {
 	if other, has := ti.Methods[name]; has {
 		if other != sig {
 			panic(fmt.Errorf(`function %v already exists with a different signature`, name))
@@ -56,6 +56,12 @@ func (ti *Interface) AddFunc(name string, sig *Signature) bool {
 	}
 	ti.Methods[name] = sig
 	return true
+}
+
+func (ti *Interface) AddTypeParam(name string, t *Interface) *Named {
+	tn := NewNamed(name, t)
+	ti.TypeParams = append(ti.TypeParams, tn)
+	return tn
 }
 
 func (ti *Interface) IsSupertypeOf(other *Interface) bool {
