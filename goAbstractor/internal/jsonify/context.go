@@ -1,17 +1,79 @@
 package jsonify
 
+import "maps"
+
 type Context struct {
-	Minimize      bool
-	Short         bool
-	NoKind        bool
-	ShowReceivers bool
+	state map[string]bool
 }
 
 func NewContext() *Context {
-	return &Context{}
+	return &Context{
+		state: map[string]bool{},
+	}
 }
 
-func (c *Context) Copy() *Context {
-	b := *c
-	return &b
+func (c *Context) copyAndSet(name string, state bool) *Context {
+	c2 := &Context{
+		state: maps.Clone(c.state),
+	}
+	if c2.state == nil {
+		c2.state = map[string]bool{}
+	}
+	c2.state[name] = state
+	return c2
+}
+
+// SetMinimize sets if the output JSON should be minimized.
+func (c *Context) SetMinimize(min bool) *Context {
+	return c.copyAndSet(`minimized`, min)
+}
+
+// IsMinimized indicates that the output JSON should be minimized.
+func (c *Context) IsMinimized() bool {
+	return c.state[`minimized`]
+}
+
+// Short indicates that objects should output only an index or name
+// as a reference to the rest of the object defined elsewhere.
+func (c *Context) Short() *Context {
+	return c.copyAndSet(`short`, true)
+}
+
+// Long indicates that objects should output the whole object,
+// not the shortened version.
+func (c *Context) Long() *Context {
+	return c.copyAndSet(`short`, false)
+}
+
+// IsShort indicates that objects should output only an index or name
+// as a reference to the rest of the object defined elsewhere.
+func (c *Context) IsShort() bool {
+	return c.state[`short`]
+}
+
+// ShowKind indicates that the kind field should be added to the output model.
+func (c *Context) ShowKind() *Context {
+	return c.copyAndSet(`kindShown`, true)
+}
+
+// HideKind indicates that the "kind" field can be skipped.
+func (c *Context) HideKind() *Context {
+	return c.copyAndSet(`kindShown`, false)
+}
+
+// IsKindShown indicates that the kind field should be added to the output model.
+func (c *Context) IsKindShown() bool {
+	return c.state[`kindShown`]
+}
+
+// ShowReceiver sets if the methods should include receiver information
+// in the object model. This is for debugging purposes.
+func (c *Context) ShowReceiver(show bool) *Context {
+	return c.copyAndSet(`receiverShown`, show)
+}
+
+// IsReceiverShown indicates that methods should include receiver information
+// in the object model. This is for debugging purposes.
+func (c *Context) IsReceiverShown() bool {
+	return c.state[`receiverShown`]
 }

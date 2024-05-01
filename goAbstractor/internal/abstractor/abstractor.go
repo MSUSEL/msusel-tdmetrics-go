@@ -31,9 +31,10 @@ func Abstract(ps []*packages.Package, verbose bool) *constructs.Project {
 	}
 	ab.initialize()
 	ab.abstractProject(ps)
+	ab.resolveImports()
 	ab.resolveReceivers()
 	ab.resolveInheritance()
-	ab.updateIndices()
+	ab.proj.UpdateIndices()
 	return ab.proj
 }
 
@@ -58,8 +59,8 @@ func (ab *abstractor) abstractProject(ps []*packages.Package) {
 
 func (ab *abstractor) abstractPackage(src *packages.Package) *constructs.Package {
 	pkg := &constructs.Package{
-		Path:    src.PkgPath,
-		Imports: utils.SortedKeys(src.Imports),
+		Path:        src.PkgPath,
+		ImportPaths: utils.SortedKeys(src.Imports),
 	}
 	for _, f := range src.Syntax {
 		ab.addFile(pkg, src, f)
@@ -146,6 +147,28 @@ func pos(src *packages.Package, pos token.Pos) string {
 	return src.Fset.Position(pos).String()
 }
 
+func (ab *abstractor) resolveImports() {
+	for _, p := range ab.proj.Packages {
+		p.Imports = make([]*constructs.Package, 0, len(p.ImportPaths))
+		for i, importPath := range p.ImportPaths {
+			impPackage := ab.findPackageByPath(importPath)
+			if impPackage == nil {
+				panic(fmt.Errorf(`import package not found for %s: %s`, p.Path, importPath))
+			}
+			p.Imports[i] = impPackage
+		}
+	}
+}
+
+func (ab *abstractor) findPackageByPath(path string) *constructs.Package {
+	for _, other := range ab.proj.Packages {
+		if other.Path == path {
+			return other
+		}
+	}
+	return nil
+}
+
 func (ab *abstractor) registerInterface(t *typeDesc.Interface) *typeDesc.Interface {
 	return registerType(t, &ab.proj.AllInterfaces)
 }
@@ -166,19 +189,4 @@ func registerType[T typeDesc.TypeDesc](t T, s *[]T) T {
 	}
 	*s = append(*s, t)
 	return t
-}
-
-func (ab *abstractor) updateIndices() {
-	offset := 0
-	for i, c := range ab.proj.AllInterfaces {
-		c.Index = i + offset
-	}
-	offset += len(ab.proj.AllInterfaces)
-	for i, c := range ab.proj.AllSignatures {
-		c.Index = i + offset
-	}
-	offset += len(ab.proj.AllSignatures)
-	for i, c := range ab.proj.AllStructs {
-		c.Index = i + offset
-	}
 }

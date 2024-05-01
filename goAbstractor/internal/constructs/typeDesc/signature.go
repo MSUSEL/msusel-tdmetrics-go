@@ -4,8 +4,8 @@ import "github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/jsonify"
 
 type Signature struct {
 	Variadic   bool
-	Params     []*Param
-	TypeParams []*Param
+	Params     []*Named
+	TypeParams []*Named
 	Return     TypeDesc
 
 	Index int
@@ -18,36 +18,19 @@ func NewSignature() *Signature {
 func (sig *Signature) _isTypeDesc() {}
 
 func (sig *Signature) ToJson(ctx *jsonify.Context) jsonify.Datum {
-	if ctx.Short {
+	if ctx.IsShort() {
 		return jsonify.New(ctx, sig.Index)
 	}
 
-	ctx2 := ctx.Copy()
-	ctx2.NoKind = false
-	ctx2.Short = true
-
+	ctx2 := ctx.HideKind().Long()
 	return jsonify.NewMap().
-		AddIf(ctx2, !ctx.NoKind, `kind`, `signature`).
-		AddNonZero(ctx2, `variadic`, sig.Variadic).
+		AddIf(ctx, ctx.IsKindShown(), `kind`, `signature`).
+		AddNonZero(ctx, `variadic`, sig.Variadic).
 		AddNonZero(ctx2, `params`, sig.Params).
-		AddNonZero(ctx2, `return`, sig.Return)
+		AddNonZero(ctx2, `typeParams`, sig.TypeParams).
+		AddNonZero(ctx.ShowKind().Short(), `return`, sig.Return)
 }
 
 func (sig *Signature) String() string {
 	return jsonify.ToString(sig)
-}
-
-type Param struct {
-	Name string
-	Type TypeDesc
-}
-
-func (p *Param) ToJson(ctx *jsonify.Context) jsonify.Datum {
-	return jsonify.NewMap().
-		AddNonZero(ctx, `name`, p.Name).
-		Add(ctx, `type`, p.Type)
-}
-
-func (p *Param) String() string {
-	return jsonify.ToString(p)
 }

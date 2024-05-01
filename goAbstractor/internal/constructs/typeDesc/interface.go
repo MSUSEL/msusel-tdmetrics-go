@@ -7,7 +7,8 @@ import (
 )
 
 type Interface struct {
-	Methods map[string]*Signature
+	TypeParams []*Named
+	Methods    map[string]*Signature
 
 	Index      int
 	Inherits   []*Interface
@@ -23,16 +24,14 @@ func NewInterface() *Interface {
 func (ti *Interface) _isTypeDesc() {}
 
 func (ti *Interface) ToJson(ctx *jsonify.Context) jsonify.Datum {
-	if ctx.Short {
+	if ctx.IsShort() {
 		return jsonify.New(ctx, ti.Index)
 	}
 
-	ctx2 := ctx.Copy()
-	ctx2.NoKind = false
-	ctx2.Short = true
-
+	ctx2 := ctx.HideKind().Short()
 	return jsonify.NewMap().
-		AddIf(ctx2, !ctx.NoKind, `kind`, `interface`).
+		AddIf(ctx, ctx.IsKindShown(), `kind`, `interface`).
+		AddNonZero(ctx.ShowKind().Long(), `typeParams`, ti.TypeParams).
 		AddNonZero(ctx2, `inherits`, ti.Inherits).
 		AddNonZero(ctx2, `methods`, ti.Methods)
 }

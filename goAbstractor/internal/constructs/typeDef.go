@@ -6,10 +6,11 @@ import (
 )
 
 type TypeDef struct {
-	Name     string
-	Type     typeDesc.TypeDesc
-	Inherits []*typeDesc.Interface
-	Methods  []*Method
+	Name       string
+	Type       typeDesc.TypeDesc
+	Inherits   []*typeDesc.Interface
+	Methods    []*Method
+	TypeParams []*typeDesc.Named
 }
 
 func NewTypeDef(name string, t typeDesc.TypeDesc) *TypeDef {
@@ -24,7 +25,8 @@ func (td *TypeDef) ToJson(ctx *jsonify.Context) jsonify.Datum {
 		Add(ctx, `name`, td.Name).
 		Add(ctx, `type`, td.Type).
 		AddNonZero(ctx, `inherits`, td.Inherits).
-		AddNonZero(ctx, `methods`, td.Methods)
+		AddNonZero(ctx, `methods`, td.Methods).
+		AddNonZero(ctx, `typeParams`, td.TypeParams)
 }
 
 func (td *TypeDef) HasFunc(name string, sig *typeDesc.Signature) bool {
