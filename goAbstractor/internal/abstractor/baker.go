@@ -16,6 +16,7 @@ func (ab *abstractor) bakeAny() *typeDesc.Interface {
 	return t
 }
 
+// bakeIntFunc bakes in a signature for `func() int`.
 func (ab *abstractor) bakeIntFunc() *typeDesc.Signature {
 	const bakeKey = `func() int`
 	if t, has := ab.baked[bakeKey]; has {
@@ -27,6 +28,28 @@ func (ab *abstractor) bakeIntFunc() *typeDesc.Signature {
 	f = ab.registerSignature(f)
 	ab.baked[bakeKey] = f
 	return f
+}
+
+// bakeReturnTuple bakes in a structure used for a return value
+// tuple with a variable type value and a boolean.
+//
+//	struct[T any] {
+//		value T
+//		ok    bool
+//	}
+func (ab *abstractor) bakeReturnTuple() *typeDesc.Struct {
+	const bakeKey = `struct[T] { value T; ok bool }`
+	if t, has := ab.baked[bakeKey]; has {
+		return t.(*typeDesc.Struct)
+	}
+
+	t := typeDesc.NewStruct()
+	tp := t.AddTypeParam(`T`, ab.bakeAny())
+	t.AddField(`value`, tp, false)
+	t.AddField(`ok`, typeDesc.NewBasic(`bool`), false)
+	t = ab.registerStruct(t)
+	ab.baked[bakeKey] = t
+	return t
 }
 
 // bakeArray bakes in an interface to represent a Go array:
@@ -47,9 +70,7 @@ func (ab *abstractor) bakeArray() *typeDesc.Interface {
 	t := typeDesc.NewInterface()
 	tp := t.AddTypeParam(`T`, ab.bakeAny())
 
-	lenF := typeDesc.NewSignature() // $len() int
-	lenF.Return = typeDesc.NewBasic(`int`)
-	t.AddFunc(`$len`, ab.registerSignature(lenF))
+	t.AddFunc(`$len`, ab.bakeIntFunc()) // $len() int
 
 	getF := typeDesc.NewSignature() // $get(index int) T
 	getF.AppendTypeParam(tp)
@@ -86,18 +107,11 @@ func (ab *abstractor) bakeChan() *typeDesc.Interface {
 	t := typeDesc.NewInterface()
 	tp := t.AddTypeParam(`T`, ab.bakeAny())
 
-	lenF := typeDesc.NewSignature() // $len() int
-	lenF.Return = typeDesc.NewBasic(`int`)
-	t.AddFunc(`$len`, ab.registerSignature(lenF))
-
-	getFR := typeDesc.NewStruct()
-	getFR.AppendTypeParam(tp)
-	getFR.AddField(`value`, tp, false)
-	getFR.AddField(`ok`, typeDesc.NewBasic(`bool`), false)
+	t.AddFunc(`$len`, ab.bakeIntFunc()) // $len() int
 
 	getF := typeDesc.NewSignature() // $recv() (T, bool)
 	getF.AppendTypeParam(tp)
-	getF.Return = typeDesc.NewSolid(ab.registerStruct(getFR), tp)
+	getF.Return = typeDesc.NewSolid(ab.bakeReturnTuple(), tp)
 	t.AddFunc(`$recv`, typeDesc.NewSolid(ab.registerSignature(getF), tp))
 
 	setF := typeDesc.NewSignature() // $send(value T)
@@ -129,9 +143,7 @@ func (ab *abstractor) bakeMap() *typeDesc.Interface {
 	tpKey := t.AddTypeParam(`TKey`, ab.bakeAny())
 	tpVal := t.AddTypeParam(`TValue`, ab.bakeAny())
 
-	lenF := typeDesc.NewSignature() // $len() int
-	lenF.Return = typeDesc.NewBasic(`int`)
-	t.AddFunc(`$len`, ab.registerSignature(lenF))
+	t.AddFunc(`$len`, ab.bakeIntFunc()) // $len() int
 
 	getFR := typeDesc.NewStruct()
 	getFR.AppendTypeParam(tpVal)
@@ -177,11 +189,8 @@ func (ab *abstractor) bakeSlice() *typeDesc.Interface {
 	t := typeDesc.NewInterface()
 	tp := t.AddTypeParam(`T`, ab.bakeAny())
 
-	lenF := typeDesc.NewSignature()
-	lenF.Return = typeDesc.NewBasic(`int`)
-	lenF = ab.registerSignature(lenF)
-	t.AddFunc(`$len`, lenF) // $len() int
-	t.AddFunc(`$cap`, lenF) // $cap() int
+	t.AddFunc(`$len`, ab.bakeIntFunc()) // $len() int
+	t.AddFunc(`$cap`, ab.bakeIntFunc()) // $cap() int
 
 	getF := typeDesc.NewSignature() // $get(index int) T
 	getF.AppendTypeParam(tp)
