@@ -7,13 +7,26 @@ import "github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs/t
 func (ab *abstractor) bakeAny() *typeDesc.Interface {
 	const bakeKey = `any`
 	if t, has := ab.baked[bakeKey]; has {
-		return t
+		return t.(*typeDesc.Interface)
 	}
 
 	t := typeDesc.NewInterface()
-	ab.proj.AllInterfaces = append(ab.proj.AllInterfaces, t)
+	t = ab.registerInterface(t)
 	ab.baked[bakeKey] = t
 	return t
+}
+
+func (ab *abstractor) bakeIntFunc() *typeDesc.Signature {
+	const bakeKey = `func() int`
+	if t, has := ab.baked[bakeKey]; has {
+		return t.(*typeDesc.Signature)
+	}
+
+	f := typeDesc.NewSignature() // $len() int
+	f.Return = typeDesc.NewBasic(`int`)
+	f = ab.registerSignature(f)
+	ab.baked[bakeKey] = f
+	return f
 }
 
 // bakeArray bakes in an interface to represent a Go array:
@@ -26,15 +39,15 @@ func (ab *abstractor) bakeAny() *typeDesc.Interface {
 //
 // Note: Doesn't currently have cap as defined in reflect.
 func (ab *abstractor) bakeArray() *typeDesc.Interface {
-	const bakeKey = `array`
+	const bakeKey = `array[T any]`
 	if t, has := ab.baked[bakeKey]; has {
-		return t
+		return t.(*typeDesc.Interface)
 	}
 
 	t := typeDesc.NewInterface()
 	tp := t.AddTypeParam(`T`, ab.bakeAny())
 
-	lenF := typeDesc.NewSignature() // $leg() int
+	lenF := typeDesc.NewSignature() // $len() int
 	lenF.Return = typeDesc.NewBasic(`int`)
 	t.AddFunc(`$len`, ab.registerSignature(lenF))
 
@@ -65,15 +78,15 @@ func (ab *abstractor) bakeArray() *typeDesc.Interface {
 //
 // Note: Doesn't currently have cap, trySend, or tryRecv as defined in reflect.
 func (ab *abstractor) bakeChan() *typeDesc.Interface {
-	const bakeKey = `chan`
+	const bakeKey = `chan[T any]`
 	if t, has := ab.baked[bakeKey]; has {
-		return t
+		return t.(*typeDesc.Interface)
 	}
 
 	t := typeDesc.NewInterface()
 	tp := t.AddTypeParam(`T`, ab.bakeAny())
 
-	lenF := typeDesc.NewSignature() // $leg() int
+	lenF := typeDesc.NewSignature() // $len() int
 	lenF.Return = typeDesc.NewBasic(`int`)
 	t.AddFunc(`$len`, ab.registerSignature(lenF))
 
@@ -107,16 +120,16 @@ func (ab *abstractor) bakeChan() *typeDesc.Interface {
 //
 // Note: Doesn't currently require Key to be comparable as defined in reflect.
 func (ab *abstractor) bakeMap() *typeDesc.Interface {
-	const bakeKey = `map`
+	const bakeKey = `map[TKey, TValue any]`
 	if t, has := ab.baked[bakeKey]; has {
-		return t
+		return t.(*typeDesc.Interface)
 	}
 
 	t := typeDesc.NewInterface()
 	tpKey := t.AddTypeParam(`TKey`, ab.bakeAny())
 	tpVal := t.AddTypeParam(`TValue`, ab.bakeAny())
 
-	lenF := typeDesc.NewSignature() // $leg() int
+	lenF := typeDesc.NewSignature() // $len() int
 	lenF.Return = typeDesc.NewBasic(`int`)
 	t.AddFunc(`$len`, ab.registerSignature(lenF))
 
@@ -128,9 +141,53 @@ func (ab *abstractor) bakeMap() *typeDesc.Interface {
 	getF := typeDesc.NewSignature() // $get(key TKey) (TValue, bool)
 	getF.AppendTypeParam(tpKey)
 	getF.AppendTypeParam(tpVal)
+	getF.AddParam(`key`, tpKey)
+	getF.Return = getFR
+	t.AddFunc(`$get`, typeDesc.NewSolid(ab.registerSignature(getF), tpKey, tpVal))
+
+	setF := typeDesc.NewSignature() // $set(key TKey, value TValue)
+	getF.AppendTypeParam(tpKey)
+	getF.AppendTypeParam(tpVal)
+	setF.AddParam(`key`, tpKey)
+	setF.AddParam(`value`, tpVal)
+	t.AddFunc(`$set`, typeDesc.NewSolid(ab.registerSignature(setF), tpKey, tpVal))
+
+	ab.proj.AllInterfaces = append(ab.proj.AllInterfaces, t)
+	ab.baked[bakeKey] = t
+	return t
+}
+
+func (ab *abstractor) bakePointer() *typeDesc.Interface {
+}
+
+// bakeSlice bakes in an interface to represent a Go array:
+//
+//	type slice[T any] interface {
+//		$len() int
+//		$cap() int
+//		$get(index int) T
+//		$set(index int, value T)
+//	}
+func (ab *abstractor) bakeSlice() *typeDesc.Interface {
+	const bakeKey = `array[T any]`
+	if t, has := ab.baked[bakeKey]; has {
+		return t.(*typeDesc.Interface)
+	}
+
+	t := typeDesc.NewInterface()
+	tp := t.AddTypeParam(`T`, ab.bakeAny())
+
+	lenF := typeDesc.NewSignature()
+	lenF.Return = typeDesc.NewBasic(`int`)
+	lenF = ab.registerSignature(lenF)
+	t.AddFunc(`$len`, lenF) // $len() int
+	t.AddFunc(`$cap`, lenF) // $cap() int
+
+	getF := typeDesc.NewSignature() // $get(index int) T
+	getF.AppendTypeParam(tp)
 	getF.AddParam(`index`, typeDesc.NewBasic(`int`))
 	getF.Return = tp
-	t.AddFunc(`$get`, typeDesc.NewSolid(ab.registerSignature(getF), tpVal))
+	t.AddFunc(`$get`, typeDesc.NewSolid(ab.registerSignature(getF), tp))
 
 	setF := typeDesc.NewSignature() // $set(index int, value T)
 	setF.AppendTypeParam(tp)
@@ -141,11 +198,4 @@ func (ab *abstractor) bakeMap() *typeDesc.Interface {
 	ab.proj.AllInterfaces = append(ab.proj.AllInterfaces, t)
 	ab.baked[bakeKey] = t
 	return t
-
-}
-
-func (ab *abstractor) bakePointer() *typeDesc.Interface {
-}
-
-func (ab *abstractor) bakeSlice() *typeDesc.Interface {
 }

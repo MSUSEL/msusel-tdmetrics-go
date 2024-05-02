@@ -8,14 +8,14 @@ import (
 
 type Method struct {
 	Name      string
-	Signature *typeDesc.Signature
+	Signature typeDesc.TypeDesc
 	Metrics   metrics.Metrics
 
 	NoCopyRecv bool
 	Receiver   string
 }
 
-func NewMethod(name string, sig *typeDesc.Signature) *Method {
+func NewMethod(name string, sig typeDesc.TypeDesc) *Method {
 	return &Method{
 		Name:      name,
 		Signature: sig,

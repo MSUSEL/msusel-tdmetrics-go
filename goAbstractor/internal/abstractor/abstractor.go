@@ -28,7 +28,7 @@ func Abstract(ps []*packages.Package, verbose bool) *constructs.Project {
 	ab := &abstractor{
 		verbose: verbose,
 		proj:    &constructs.Project{},
-		baked:   map[string]*typeDesc.Interface{},
+		baked:   map[string]typeDesc.TypeDesc{},
 	}
 	ab.initialize()
 	ab.abstractProject(ps)
@@ -42,7 +42,7 @@ func Abstract(ps []*packages.Package, verbose bool) *constructs.Project {
 type abstractor struct {
 	verbose bool
 	proj    *constructs.Project
-	baked   map[string]*typeDesc.Interface
+	baked   map[string]typeDesc.TypeDesc
 }
 
 func (ab *abstractor) initialize() {

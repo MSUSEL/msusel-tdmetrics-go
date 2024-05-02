@@ -29,7 +29,7 @@ func (td *TypeDef) ToJson(ctx *jsonify.Context) jsonify.Datum {
 		AddNonZero(ctx, `typeParams`, td.TypeParams)
 }
 
-func (td *TypeDef) HasFunc(name string, sig *typeDesc.Signature) bool {
+func (td *TypeDef) HasFunc(name string, sig typeDesc.TypeDesc) bool {
 	for _, other := range td.Methods {
 		// The signature types have been registers
 		// so they can be compared by pointers.
