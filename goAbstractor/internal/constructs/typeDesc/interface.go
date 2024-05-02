@@ -42,8 +42,8 @@ func (ti *Interface) String() string {
 
 func (ti *Interface) HasFunc(name string, sig TypeDesc) bool {
 	other, has := ti.Methods[name]
-	// The signature types have been registers
-	// so they can be compared by pointers.
+	// TODO: Need to handle types which have been made solid?
+	// e.g. `Foo[T](val T)` with `T` as `int` and `Bar(val int)``
 	return has && sig == other
 }
 
@@ -58,7 +58,7 @@ func (ti *Interface) AddFunc(name string, sig TypeDesc) bool {
 	return true
 }
 
-func (ti *Interface) AddTypeParam(name string, t *Interface) *Named {
+func (ti *Interface) AddTypeParam(name string, t TypeDesc) *Named {
 	tn := NewNamed(name, t)
 	ti.TypeParams = append(ti.TypeParams, tn)
 	return tn
