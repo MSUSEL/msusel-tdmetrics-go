@@ -3,7 +3,6 @@ package abstractor
 import (
 	"fmt"
 	"go/types"
-	"slices"
 
 	"github.com/Snow-Gremlin/goToolbox/collections"
 	"github.com/Snow-Gremlin/goToolbox/collections/enumerator"
@@ -11,19 +10,6 @@ import (
 
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs/typeDesc"
 )
-
-func convertList[T, U any](n int, getter func(i int) T, convert func(value T) *U) []*U {
-	list := make([]*U, 0, n)
-	for i := range n {
-		if p := convert(getter(i)); p != nil {
-			list = append(list, p)
-		}
-	}
-	if len(list) <= 0 {
-		return nil
-	}
-	return slices.Clip(list)
-}
 
 // uniqueName returns a unique name that isn't in the set.
 // The new unique name will be added to the set.
@@ -122,9 +108,8 @@ func (ab *abstractor) convertMap(t *types.Map) typeDesc.TypeDesc {
 }
 
 func (ab *abstractor) convertNamed(t *types.Named) *typeDesc.Named {
-	return &typeDesc.Named{
-		Name: t.String(),
-	}
+	// TODO: need to handle named better.
+	return typeDesc.NewNamed(t.String(), nil)
 }
 
 func (ab *abstractor) convertPointer(t *types.Pointer) typeDesc.TypeDesc {
@@ -134,12 +119,15 @@ func (ab *abstractor) convertPointer(t *types.Pointer) typeDesc.TypeDesc {
 
 func (ab *abstractor) convertSignature(t *types.Signature) *typeDesc.Signature {
 	// Don't output receiver or receiver type here.
-	return ab.registerSignature(&typeDesc.Signature{
-		Variadic:   t.Variadic(),
-		Params:     ab.convertParamTuple(t.Params()),
-		Return:     ab.createReturn(ab.convertFieldTuple(t.Results())),
-		TypeParams: ab.convertTypeParamList(t.TypeParams()),
-	})
+	sig := typeDesc.NewSignature()
+	sig.Variadic = t.Variadic()
+
+	sig.TypeParams = ab.convertTypeParamList(t.TypeParams())
+
+	sig.Params = ab.convertTuple(t.Params())
+	sig.Return = ab.createReturn(ab.convertTuple(t.Results()))
+
+	return ab.registerSignature(sig)
 }
 
 func (ab *abstractor) convertSlice(t *types.Slice) typeDesc.TypeDesc {
@@ -183,7 +171,11 @@ func (ab *abstractor) createReturn(returns []*typeDesc.Named) typeDesc.TypeDesc 
 }
 
 func (ab *abstractor) convertTuple(t *types.Tuple) []*typeDesc.Named {
-	return convertList(t.Len(), t.At, ab.convertName)
+	list := make([]*typeDesc.Named, t.Len())
+	for i := range t.Len() {
+		list[i] = ab.convertName(t.At(i))
+	}
+	return list
 }
 
 func (ab *abstractor) convertName(t *types.Var) *typeDesc.Named {
@@ -198,6 +190,7 @@ func (ab *abstractor) convertTerm(t *types.Term) *typeDesc.Interface {
 	//t2 := ab.convertType(t.Type())
 
 	// TODO: FINISH
+	fmt.Printf("convertTerm: %+v\n", t)
 
 	return nil
 }
@@ -214,27 +207,25 @@ func (ab *abstractor) convertUnion(t *types.Union) *typeDesc.Interface {
 	return union
 }
 
-func (ab *abstractor) convertTypeParam(t *types.TypeParam) *typeDesc.Interface {
+func (ab *abstractor) convertTypeParam(t *types.TypeParam) *typeDesc.Named {
 
 	t2 := t.Obj().Type().Underlying()
-	fmt.Printf("%+v\n", t2)
+	fmt.Printf("convertTypeParam: %+v\n", t2)
 
 	// TODO: FIX
-	return ab.registerTypeParam(&typeDesc.TypeParam{
-		Index:      t.Index(),
-		Constraint: ab.convertType(t.Constraint()),
-		Type:       ab.convertType(t2),
-	})
+	return typeDesc.NewNamed(
+		t.Obj().Name(),
+		ab.convertType(t2),
+	)
+	//	Index:      t.Index(),
+	//	Constraint: ab.convertType(t.Constraint()),
+	//	Type:       ab.convertType(t2),
 }
 
-func (ab *abstractor) convertTypeParamList(t *types.TypeParamList) []*typeDesc.Interface {
-	return convertList(t.Len(), t.At, ab.convertTypeParam)
-}
-
-func (ab *abstractor) convertField(t *types.Var) *typeDesc.Field {
-	return &typeDesc.Field{
-		Anonymous: t.Anonymous(),
-		Name:      t.Name(),
-		Type:      ab.convertType(t.Type()),
+func (ab *abstractor) convertTypeParamList(t *types.TypeParamList) []*typeDesc.Named {
+	list := make([]*typeDesc.Named, t.Len())
+	for i := range t.Len() {
+		list[i] = ab.convertTypeParam(t.At(i))
 	}
+	return list
 }
