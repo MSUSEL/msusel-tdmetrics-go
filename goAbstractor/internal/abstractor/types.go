@@ -74,34 +74,36 @@ func (ab *abstractor) convertType(t types.Type) typeDesc.TypeDesc {
 	}
 }
 
-func (ab *abstractor) convertArray(t *types.Array) *typeDesc.Interface {
+func (ab *abstractor) convertArray(t *types.Array) typeDesc.TypeDesc {
 	elem := ab.convertType(t.Elem())
-	return &typeDesc.Struct{
-		Length: int(t.Len()),
-		Elem:   elem,
+	return typeDesc.NewSolid(ab.bakeList(), elem)
+}
+
+func (ab *abstractor) convertBasic(t *types.Basic) typeDesc.TypeDesc {
+	switch t.Kind() {
+	case types.Complex64:
+		return ab.bakeComplex64()
+	case types.Complex128:
+		return ab.bakeComplex128()
+	default:
+		return typeDesc.NewBasic(t.Name())
 	}
 }
 
-func (ab *abstractor) convertBasic(t *types.Basic) *typeDesc.Basic {
-	if t.Info() == types.IsComplex {
-		panic(fmt.Errorf(`complex numbers currently isn't supported: %[1]v (%[1]T)`, t))
-	}
-	return &typeDesc.Basic{
-		Name: t.Name(),
-	}
-}
-
-func (ab *abstractor) convertChan(t *types.Chan) *typeDesc.Interface {
-	return &typeDesc.Chan{
-		Elem: ab.convertType(t.Elem()),
-	}
+func (ab *abstractor) convertChan(t *types.Chan) typeDesc.TypeDesc {
+	elem := ab.convertType(t.Elem())
+	return typeDesc.NewSolid(ab.bakeChan(), elem)
 }
 
 func (ab *abstractor) convertInterface(t *types.Interface) *typeDesc.Interface {
 	t = t.Complete()
-	methods := convertList(t.NumMethods(), t.Method, ab.convertFunc)
-	it := &typeDesc.Interface{
-		Methods: methods,
+
+	it := typeDesc.NewInterface()
+
+	for i := range t.NumMethods() {
+		f := t.Method(i)
+		sig := ab.convertSignature(f.Type().(*types.Signature))
+		it.AddFunc(f.Name(), sig)
 	}
 
 	if t.IsImplicit() {
@@ -113,11 +115,10 @@ func (ab *abstractor) convertInterface(t *types.Interface) *typeDesc.Interface {
 	return ab.registerInterface(it)
 }
 
-func (ab *abstractor) convertMap(t *types.Map) *typeDesc.Interface {
-	return &typeDesc.Map{
-		Key:   ab.convertType(t.Key()),
-		Value: ab.convertType(t.Elem()),
-	}
+func (ab *abstractor) convertMap(t *types.Map) typeDesc.TypeDesc {
+	key := ab.convertType(t.Key())
+	value := ab.convertType(t.Elem())
+	return typeDesc.NewSolid(ab.bakeMap(), key, value)
 }
 
 func (ab *abstractor) convertNamed(t *types.Named) *typeDesc.Named {
@@ -126,17 +127,9 @@ func (ab *abstractor) convertNamed(t *types.Named) *typeDesc.Named {
 	}
 }
 
-func (ab *abstractor) convertFunc(t *types.Func) *typeDesc.Func {
-	return &typeDesc.Func{
-		Name:      t.Name(),
-		Signature: ab.convertSignature(t.Type().(*types.Signature)),
-	}
-}
-
-func (ab *abstractor) convertPointer(t *types.Pointer) *typeDesc.Interface {
-	return &typeDesc.Pointer{
-		Elem: ab.convertType(t.Elem()),
-	}
+func (ab *abstractor) convertPointer(t *types.Pointer) typeDesc.TypeDesc {
+	elem := ab.convertType(t.Elem())
+	return typeDesc.NewSolid(ab.bakePointer(), elem)
 }
 
 func (ab *abstractor) convertSignature(t *types.Signature) *typeDesc.Signature {
@@ -149,10 +142,9 @@ func (ab *abstractor) convertSignature(t *types.Signature) *typeDesc.Signature {
 	})
 }
 
-func (ab *abstractor) convertSlice(t *types.Slice) *typeDesc.Interface {
-	return &typeDesc.Slice{
-		Elem: ab.convertType(t.Elem()),
-	}
+func (ab *abstractor) convertSlice(t *types.Slice) typeDesc.TypeDesc {
+	elem := ab.convertType(t.Elem())
+	return typeDesc.NewSolid(ab.bakeList(), elem)
 }
 
 func (ab *abstractor) convertStruct(t *types.Struct) *typeDesc.Struct {
@@ -161,8 +153,8 @@ func (ab *abstractor) convertStruct(t *types.Struct) *typeDesc.Struct {
 		f := t.Field(i)
 		field := typeDesc.NewNamed(f.Name(), ab.convertType(f.Type()))
 		ts.Fields = append(ts.Fields, field)
-		if f.Anonymous() {
-			ts.Anonymous = append(ts.Anonymous, field)
+		if f.Embedded() {
+			ts.Embedded = append(ts.Embedded, field)
 		}
 	}
 	return ab.registerStruct(ts)

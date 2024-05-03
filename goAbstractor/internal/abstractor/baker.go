@@ -52,8 +52,10 @@ func (ab *abstractor) bakeReturnTuple() *typeDesc.Struct {
 
 	t := typeDesc.NewStruct()
 	tp := t.AddTypeParam(`T`, ab.bakeAny())
+
 	t.AddField(`value`, tp, false)
 	t.AddField(`ok`, typeDesc.NewBasic(`bool`), false)
+
 	t = ab.registerStruct(t)
 	ab.baked[bakeKey] = t
 	return t
@@ -96,7 +98,7 @@ func (ab *abstractor) bakeList() *typeDesc.Interface {
 	setF = ab.registerSignature(setF)
 	t.AddFunc(`$set`, typeDesc.NewSolid(setF, tp))
 
-	ab.proj.AllInterfaces = append(ab.proj.AllInterfaces, t)
+	t = ab.registerInterface(t)
 	ab.baked[bakeKey] = t
 	return t
 }
@@ -133,7 +135,7 @@ func (ab *abstractor) bakeChan() *typeDesc.Interface {
 	setF = ab.registerSignature(setF)
 	t.AddFunc(`$send`, typeDesc.NewSolid(setF, tp))
 
-	ab.proj.AllInterfaces = append(ab.proj.AllInterfaces, t)
+	t = ab.registerInterface(t)
 	ab.baked[bakeKey] = t
 	return t
 }
@@ -175,7 +177,7 @@ func (ab *abstractor) bakeMap() *typeDesc.Interface {
 	setF = ab.registerSignature(setF)
 	t.AddFunc(`$set`, typeDesc.NewSolid(setF, tpKey, tpValue))
 
-	ab.proj.AllInterfaces = append(ab.proj.AllInterfaces, t)
+	t = ab.registerInterface(t)
 	ab.baked[bakeKey] = t
 	return t
 }
@@ -200,39 +202,49 @@ func (ab *abstractor) bakePointer() *typeDesc.Interface {
 	getF = ab.registerSignature(getF)
 	t.AddFunc(`$deref`, typeDesc.NewSolid(getF, tp))
 
-	ab.proj.AllInterfaces = append(ab.proj.AllInterfaces, t)
+	t = ab.registerInterface(t)
 	ab.baked[bakeKey] = t
 	return t
 }
 
-// bakeComplex bakes in an interface to represent a Go complex number:
-//
-//	type complex[T float32|float64] interface {
-//		$real() T
-//		$imag() T
-//	}
-func (ab *abstractor) bakeComplex() *typeDesc.Interface {
-	const bakeKey = `complex[T any]`
+// bakeComplex64 bakes in an interface to represent a Go 64-bit complex number.
+func (ab *abstractor) bakeComplex64() *typeDesc.Interface {
+	const bakeKey = `complex64`
 	if t, has := ab.baked[bakeKey]; has {
 		return t.(*typeDesc.Interface)
 	}
 
-	tc := typeDesc.NewUnion()
-	tc.AddType(typeDesc.NewBasic(`float32`))
-	tc.AddType(typeDesc.NewBasic(`float64`))
-
 	t := typeDesc.NewInterface()
-	tp := t.AddTypeParam(`T`, tc)
 
-	getF := typeDesc.NewSignature() // func() T
-	getF.AppendTypeParam(tp)
-	getF.Return = tp
+	getF := typeDesc.NewSignature() // func() float32
+	getF.Return = typeDesc.NewBasic(`float32`)
 	getF = ab.registerSignature(getF)
 
-	t.AddFunc(`$real`, typeDesc.NewSolid(getF, tp)) // $real() T
-	t.AddFunc(`$imag`, typeDesc.NewSolid(getF, tp)) // $imag() T
+	t.AddFunc(`$real`, getF) // $real() float32
+	t.AddFunc(`$imag`, getF) // $imag() float32
 
-	ab.proj.AllInterfaces = append(ab.proj.AllInterfaces, t)
+	t = ab.registerInterface(t)
+	ab.baked[bakeKey] = t
+	return t
+}
+
+// bakeComplex128 bakes in an interface to represent a Go 64-bit complex number.
+func (ab *abstractor) bakeComplex128() *typeDesc.Interface {
+	const bakeKey = `complex128`
+	if t, has := ab.baked[bakeKey]; has {
+		return t.(*typeDesc.Interface)
+	}
+
+	t := typeDesc.NewInterface()
+
+	getF := typeDesc.NewSignature() // func() float64
+	getF.Return = typeDesc.NewBasic(`float64`)
+	getF = ab.registerSignature(getF)
+
+	t.AddFunc(`$real`, getF) // $real() float64
+	t.AddFunc(`$imag`, getF) // $imag() float64
+
+	t = ab.registerInterface(t)
 	ab.baked[bakeKey] = t
 	return t
 }

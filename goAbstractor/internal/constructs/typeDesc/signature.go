@@ -40,6 +40,6 @@ func (sig *Signature) AddParam(name string, t TypeDesc) *Named {
 	return tn
 }
 
-func (sig *Signature) AppendTypeParam(tp *Named) {
-	sig.TypeParams = append(sig.TypeParams, tp)
+func (sig *Signature) AppendTypeParam(tp ...*Named) {
+	sig.TypeParams = append(sig.TypeParams, tp...)
 }

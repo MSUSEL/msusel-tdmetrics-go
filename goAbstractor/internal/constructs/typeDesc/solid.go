@@ -8,10 +8,10 @@ import "github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/jsonify"
 // e.g. a method signature inside a generic interface.
 type Solid struct {
 	Target     TypeDesc
-	TypeParams []*Named
+	TypeParams []TypeDesc
 }
 
-func NewSolid(target TypeDesc, tp ...*Named) *Solid {
+func NewSolid(target TypeDesc, tp ...TypeDesc) *Solid {
 	return &Solid{
 		Target:     target,
 		TypeParams: tp,
@@ -31,6 +31,6 @@ func (ts *Solid) String() string {
 	return jsonify.ToString(ts)
 }
 
-func (ts *Solid) AppendTypeParam(tp *Named) {
-	ts.TypeParams = append(ts.TypeParams, tp)
+func (ts *Solid) AppendTypeParam(tp ...TypeDesc) {
+	ts.TypeParams = append(ts.TypeParams, tp...)
 }

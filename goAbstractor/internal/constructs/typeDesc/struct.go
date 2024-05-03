@@ -48,6 +48,6 @@ func (ts *Struct) AddTypeParam(name string, t *Interface) *Named {
 	return tn
 }
 
-func (ts *Struct) AppendTypeParam(tp *Named) {
-	ts.TypeParams = append(ts.TypeParams, tp)
+func (ts *Struct) AppendTypeParam(tp ...*Named) {
+	ts.TypeParams = append(ts.TypeParams, tp...)
 }

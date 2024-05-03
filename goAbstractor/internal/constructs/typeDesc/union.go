@@ -24,6 +24,6 @@ func (t *Union) String() string {
 	return jsonify.ToString(t)
 }
 
-func (t *Union) AddType(td TypeDesc) {
-	t.Types = append(t.Types, td)
+func (t *Union) AppendType(td ...TypeDesc) {
+	t.Types = append(t.Types, td...)
 }
