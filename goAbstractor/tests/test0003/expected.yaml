@@ -3,9 +3,9 @@
     {}, # any
     { # interface { Pet() }
       inherits: [ 0 ],
-      methods: [
-        { name: "Pet", signature: 2 }
-      ]
+      methods: {
+        "Pet": 2
+      }
     }
   ],
   language: "go",

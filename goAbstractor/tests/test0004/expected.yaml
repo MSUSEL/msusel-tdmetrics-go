@@ -3,37 +3,37 @@
     {}, # any
     { # interface { Age() int }
       inherits: [ 0 ],
-      methods: [
-        { name: "Age", signature: 6 }
-      ]
+      methods: {
+        Age: 6
+      }
     },
     { #interface { Age() int; Fly() }
       inherits: [ 1 ],
-      methods: [
-        { name: "Age", signature: 6 },
-        { name: "Fly", signature: 7 }
-      ]
+      methods: {
+        Age: 6,
+        Fly: 7
+      }
     },
     { # interface { Age() int; Temp() float64 }
       inherits: [ 1 ],
-      methods: [
-        { name: "Age",  signature: 6 },
-        { name: "Temp", signature: 8 }
-      ]
+      methods: {
+          Age:  6,
+          Temp: 8
+        }
     },
     { # interface { Age() int; Fly(); Temp() float64 }
       inherits: [ 2, 3 ],
-      methods: [
-        { name: "Age",  signature: 6 },
-        { name: "Fly",  signature: 7 },
-        { name: "Temp", signature: 8 }
-      ]
+      methods: {
+        Age:  6,
+        Fly:  7,
+        Temp: 8
+      }
     },
     { # interface { Fly() }
       inherits: [ 0 ],
-      methods: [
-        { name: "Fly", signature: 7 }
-      ]
+      methods: {
+        Fly: 7
+      }
     }
   ],
   language: "go",

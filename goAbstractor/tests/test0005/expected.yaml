@@ -1,11 +1,41 @@
 {
   interfaces: [
     {}, # any
+    { # pointer[T]
+      inherits: [ 0 ],
+      typeParams: [
+        { name: "T", type: 0 }
+      ],
+      methods: {
+        $deref: {
+          target: 4,
+          typeParams: [ "T" ]
+        }
+      }
+    },
     { # interface { Play(c *Cat) }
       inherits: [ 0 ],
-      methods: [
-        { name: "Play", signature: 2 }
-      ]
+      methods: {
+        Play: 5
+      }
+    },
+    { # list[T]
+      inherits: [ 0 ],
+      typeParams: [
+        { name: "T", type: 0 }
+      ],
+      methods: {
+        $cap: 6,
+        $get: {
+          target: 7,
+          typeParams: [ "T" ]
+        },
+        $len: 6,
+        $set: {
+          target: 8,
+          typeParams: [ "T" ]
+        }
+      }
     }
   ],
   language: "go",
@@ -13,15 +43,15 @@
     {
       methods: [
         {
-          name: "NewCat", signature: 4,
+          name: "NewCat", signature: 10,
           metrics: { codeCount: 6, complexity: 1, indents: 6, lineCount: 6 }
         },
         {
-          name: "NextYear", signature: 7,
+          name: "NextYear", signature: 13,
           metrics: { codeCount: 5, complexity: 2, indents: 4, lineCount: 5 }
         },
         {
-          name: "Pet", signature: 2,
+          name: "Pet", signature: 5,
           metrics: { codeCount: 3, complexity: 1, indents: 1, lineCount: 3 }
         }
       ],
@@ -31,37 +61,42 @@
           inherits: [ 0 ],
           methods: [
             {
-              name: "Meow", signature: 5,
+              name: "Meow", signature: 11,
               metrics: { codeCount: 3, complexity: 1, indents: 1, lineCount: 3 }
             },
             {
-              name: "String", signature: 6,
+              name: "String", signature: 12,
               metrics: { codeCount: 3, complexity: 1, indents: 1, lineCount: 3 }
             }
           ],
-          name: "Cat", type: 9
+          name: "Cat", type: 15
         },
-        { name: "Toy", type: 1 },
+        { name: "Toy", type: 2 },
         {
           inherits: [ 0 ],
           methods: [
             {
-              name: "Youngest", signature: 8,
+              name: "Youngest", signature: 14,
               metrics: { codeCount: 9, complexity: 4, indents: 11, lineCount: 9 }
             }
           ],
           name: "Cats",
-          type: {
-            elem: {
-              elem: "command-line-arguments.Cat",
-              kind: "pointer"
-            },
-            kind: "list"
+          type: { # []*Cat
+            kind: "solid",
+            target: 3,
+            typeParams: [
+              { # *Cat
+                target: 1,
+                typeParams: [
+                  "command-line-arguments.Cat"
+                ]
+              }
+            ]
           }
         }
       ],
       values: [
-        { name: "log", type: 3 }
+        { name: "log", type: 9 }
       ]
     }
   ],

@@ -22,7 +22,7 @@ func (ts *Struct) ToJson(ctx *jsonify.Context) jsonify.Datum {
 		return jsonify.New(ctx, ts.Index)
 	}
 
-	ctx2 := ctx.ShowKind().Long()
+	ctx2 := ctx.HideKind().Long()
 	return jsonify.NewMap().
 		AddIf(ctx, ctx.IsKindShown(), `kind`, `struct`).
 		Add(ctx2, `fields`, ts.Fields).
