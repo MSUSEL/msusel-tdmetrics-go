@@ -21,7 +21,7 @@ func (p *Project) ToJson(ctx *jsonify.Context) jsonify.Datum {
 	m.AddNonZero(ctx1, `interfaces`, p.AllInterfaces).
 		AddNonZero(ctx1, `signatures`, p.AllSignatures).
 		AddNonZero(ctx1, `structs`, p.AllStructs).
-		AddNonZero(ctx.Short(), `packages`, p.Packages)
+		AddNonZero(ctx1, `packages`, p.Packages)
 	return m
 }
 
