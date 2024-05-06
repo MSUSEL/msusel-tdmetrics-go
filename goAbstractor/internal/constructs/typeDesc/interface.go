@@ -9,6 +9,7 @@ import (
 type Interface struct {
 	TypeParams []*Named
 	Methods    map[string]TypeDesc
+	Constraint *Union
 
 	Index      int
 	Inherits   []*Interface

@@ -101,15 +101,45 @@
     }
   ],
   signatures: [
+    { # func[T any]() T
+      return: "T",
+      typeParams: [
+        { name: "T", type: 0 }
+      ]
+    },
     { # func(c *Cat)
       params: [
         {
           name: "c",
           type: {
-            elem: "command-line-arguments.Cat",
-            kind: "pointer"
+            kind: "solid",
+            target: 1,
+            typeParams: [
+              "command-line-arguments.Cat"
+            ]
           }
         }
+      ]
+    },
+    { # func() int
+      return: "int"
+    },
+    { # func[T any](index int) T
+      typeParams: [
+        { name: "T", type: 0 }
+      ],
+      params: [
+        { name: "index", type: "int" }
+      ],
+      return: "T"
+    },
+    { # func[T any](index int, value T)
+      typeParams: [
+        { name: "T", type: 0 }
+      ],
+      params: [
+        { name: "index", type: "int" },
+        { name: "value", type: "T" }
       ]
     },
     { # func(value string)
@@ -123,8 +153,11 @@
         { name: "age",  type: "int" }
       ],
       return: {
-        elem: "command-line-arguments.Cat",
-        kind: "pointer"
+        kind: "solid",
+        target: 1,
+        typeParams: [
+          "command-line-arguments.Cat"
+        ]
       }
     },
     {}, # func()()
@@ -133,12 +166,17 @@
       params: [
         {
           name: "cats",
-          type: {
-            elem: {
-              elem: "command-line-arguments.Cat",
-              kind: "pointer"
-            },
-            kind: "list"
+          type: { # list[pointer[Cat]]
+            kind: "solid",
+            target: 3,
+            typeParams: [
+              { # pointer[Cat]
+                target: 1,
+                typeParams: [
+                  "command-line-arguments.Cat"
+                ]
+              }
+            ]
           }
         }
       ],
@@ -146,8 +184,11 @@
     },
     { # func() *Cat
       return: {
-        elem: "command-line-arguments.Cat",
-        kind: "pointer"
+        kind: "solid",
+        target: 1,
+        typeParams: [
+          "command-line-arguments.Cat"
+        ]
       }
     }
   ],

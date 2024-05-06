@@ -94,8 +94,12 @@ func (ab *abstractor) convertInterface(t *types.Interface) *typeDesc.Interface {
 
 	if t.IsImplicit() {
 		for i := range t.NumEmbeddeds() {
-			emb := ab.convertType(t.EmbeddedType(i))
-			fmt.Printf(">> %[1]s (%[1]T)\n", emb) // TODO: Finish
+			et := t.EmbeddedType(i)
+
+			emb := ab.convertType(et)
+
+			// TODO: Finish handling parameter type definitions.
+			panic(fmt.Errorf(`implicit not finished: %[1]s (%[1]T)`, emb))
 		}
 	}
 	return ab.registerInterface(it)
@@ -185,41 +189,33 @@ func (ab *abstractor) convertName(t *types.Var) *typeDesc.Named {
 	}
 }
 
-func (ab *abstractor) convertTerm(t *types.Term) *typeDesc.Interface {
-	// TODO: add `getData() T` for t.Tilde()
-	//t2 := ab.convertType(t.Type())
-
-	// TODO: FINISH
-	fmt.Printf("convertTerm: %+v\n", t)
-
-	return nil
+func (ab *abstractor) convertTerm(t *types.Term) typeDesc.TypeDesc {
+	// Maybe deal with t.Tilde() later.
+	return ab.convertType(t.Type())
 }
 
-func (ab *abstractor) convertUnion(t *types.Union) *typeDesc.Interface {
-	union := &typeDesc.Interface{}
+func (ab *abstractor) convertUnion(t *types.Union) *typeDesc.Union {
+	union := typeDesc.NewUnion()
 	for i := range t.Len() {
 		it := ab.convertTerm(t.Term(i))
-
-		// TODO: FINISH
-		panic(fmt.Errorf(`union not implemented: %[1]v (%[1]T)`, it))
-
+		union.AppendType(it)
 	}
 	return union
 }
 
 func (ab *abstractor) convertTypeParam(t *types.TypeParam) *typeDesc.Named {
-
 	t2 := t.Obj().Type().Underlying()
-	fmt.Printf("convertTypeParam: %+v\n", t2)
 
-	// TODO: FIX
+	// TODO: Determine if any of the other information is useful in abstracting.
+	fmt.Printf("convertTypeParam: %+v\n", t2)
+	fmt.Printf("  Index:      %d\n", t.Index())
+	fmt.Printf("  Constraint: %v\n", ab.convertType(t.Constraint()))
+	fmt.Printf("  Type:       %v\n", ab.convertType(t2))
+
 	return typeDesc.NewNamed(
 		t.Obj().Name(),
 		ab.convertType(t2),
 	)
-	//	Index:      t.Index(),
-	//	Constraint: ab.convertType(t.Constraint()),
-	//	Type:       ab.convertType(t2),
 }
 
 func (ab *abstractor) convertTypeParamList(t *types.TypeParamList) []*typeDesc.Named {

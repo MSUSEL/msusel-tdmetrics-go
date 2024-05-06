@@ -11,6 +11,7 @@ import (
 )
 
 func (ab *abstractor) resolveInheritance() {
+	ab.log(`resolve inheritance`)
 	if len(ab.proj.AllInterfaces) <= 0 {
 		panic(errors.New(`expected the object interface at minimum but found no interfaces`))
 	}

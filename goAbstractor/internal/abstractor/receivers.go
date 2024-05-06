@@ -38,6 +38,7 @@ func (ab *abstractor) determineReceiver(m *constructs.Method, src *packages.Pack
 }
 
 func (ab *abstractor) resolveReceivers() {
+	ab.log(`resolve receivers`)
 	for _, pkg := range ab.proj.Packages {
 		resolveReceiversInPackage(pkg)
 	}

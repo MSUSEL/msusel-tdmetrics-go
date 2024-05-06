@@ -17,12 +17,12 @@ import (
 
 // TODO:
 // - Add analytics:
-//   - Add cyclomatic complexity per method.
 //   - The set of variables with locations that are read from and written
 //     to in each method. Used in Tight Class Cohesion (TCC) and
 //     Design Recovery (DR).
 //   - The set of all methods called in each method. Used for
 //     Access to Foreign Data (ATFD) and Design Recovery (DR)
+//   - Indicate if a method is an accessor getter or setter (single expression).
 
 func Abstract(ps []*packages.Package, verbose bool) *constructs.Project {
 	ab := &abstractor{
@@ -45,11 +45,19 @@ type abstractor struct {
 	baked   map[string]typeDesc.TypeDesc
 }
 
+func (ab *abstractor) log(format string, args ...any) {
+	if ab.verbose {
+		fmt.Printf(format+"\n", args...)
+	}
+}
+
 func (ab *abstractor) initialize() {
+	ab.log(`initialize`)
 	ab.bakeAny() // Prebake the "any" (i.e. object) into the interfaces.
 }
 
 func (ab *abstractor) abstractProject(ps []*packages.Package) {
+	ab.log(`abstract project`)
 	packages.Visit(ps, func(src *packages.Package) bool {
 		if ap := ab.abstractPackage(src); ap != nil {
 			ab.proj.Packages = append(ab.proj.Packages, ap)
@@ -59,6 +67,7 @@ func (ab *abstractor) abstractProject(ps []*packages.Package) {
 }
 
 func (ab *abstractor) abstractPackage(src *packages.Package) *constructs.Package {
+	ab.log(`|  abstract package: %s`, src.PkgPath)
 	pkg := &constructs.Package{
 		Path:        src.PkgPath,
 		ImportPaths: utils.SortedKeys(src.Imports),
@@ -70,6 +79,7 @@ func (ab *abstractor) abstractPackage(src *packages.Package) *constructs.Package
 }
 
 func (ab *abstractor) addFile(pkg *constructs.Package, src *packages.Package, f *ast.File) {
+	ab.log(`|  |  add file to package: %s`, src.Fset.Position(f.Name.NamePos).Filename)
 	for _, decl := range f.Decls {
 		switch d := decl.(type) {
 		case *ast.GenDecl:
@@ -149,6 +159,7 @@ func pos(src *packages.Package, pos token.Pos) string {
 }
 
 func (ab *abstractor) resolveImports() {
+	ab.log(`resolve imports`)
 	for _, p := range ab.proj.Packages {
 		p.Imports = make([]*constructs.Package, 0, len(p.ImportPaths))
 		for i, importPath := range p.ImportPaths {
