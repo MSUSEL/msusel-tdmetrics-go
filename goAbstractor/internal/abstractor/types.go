@@ -96,7 +96,8 @@ func (ab *abstractor) convertInterface(t *types.Interface) *typeDesc.Interface {
 		for i := range t.NumEmbeddeds() {
 			et := t.EmbeddedType(i)
 
-			emb := ab.convertType(et)
+			imp := ab.convertType(et)
+			it.Constraint = imp
 
 			// TODO: Finish handling parameter type definitions.
 			panic(fmt.Errorf(`implicit not finished: %[1]s (%[1]T)`, emb))
@@ -189,15 +190,12 @@ func (ab *abstractor) convertName(t *types.Var) *typeDesc.Named {
 	}
 }
 
-func (ab *abstractor) convertTerm(t *types.Term) typeDesc.TypeDesc {
-	// Maybe deal with t.Tilde() later.
-	return ab.convertType(t.Type())
-}
-
 func (ab *abstractor) convertUnion(t *types.Union) *typeDesc.Union {
 	union := typeDesc.NewUnion()
 	for i := range t.Len() {
-		it := ab.convertTerm(t.Term(i))
+		term := t.Term(i)
+		// Maybe deal with t.Tilde() later.
+		it := ab.convertType(term.Type())
 		union.AppendType(it)
 	}
 	return union
