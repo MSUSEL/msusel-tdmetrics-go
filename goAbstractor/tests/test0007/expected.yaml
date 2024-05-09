@@ -1,6 +1,31 @@
 {
   interfaces: [
-    {} # any
+    {}, # any
+    {
+      "inherits": [ 0 ]
+    },
+    {
+      "inherits": [ 1 ]
+    },
+    {
+      "inherits": [
+        2
+      ],
+      "methods": {
+        "$deref": {
+          "target": 5,
+          "typeParams": [
+            "T"
+          ]
+        }
+      },
+      "typeParams": [
+        {
+          "name": "T",
+          "type": 0
+        }
+      ]
+    }
   ],
   language: "go",
   packages: [

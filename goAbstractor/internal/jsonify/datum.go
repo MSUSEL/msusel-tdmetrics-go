@@ -3,6 +3,8 @@ package jsonify
 import (
 	"fmt"
 	"reflect"
+
+	"github.com/Snow-Gremlin/goToolbox/utils"
 )
 
 type Datum interface {
@@ -11,6 +13,9 @@ type Datum interface {
 }
 
 func New(ctx *Context, value any) Datum {
+	if utils.IsNil(value) {
+		return newNull()
+	}
 	switch v := value.(type) {
 	case nil:
 		return newNull()

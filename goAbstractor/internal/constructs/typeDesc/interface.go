@@ -9,7 +9,7 @@ import (
 type Interface struct {
 	TypeParams []*Named
 	Methods    map[string]TypeDesc
-	Constraint *Union
+	Union      *Union
 
 	Index      int
 	Inherits   []*Interface
@@ -34,18 +34,12 @@ func (ti *Interface) ToJson(ctx *jsonify.Context) jsonify.Datum {
 		AddIf(ctx, ctx.IsKindShown(), `kind`, `interface`).
 		AddNonZero(ctx2.Long(), `typeParams`, ti.TypeParams).
 		AddNonZero(ctx2, `inherits`, ti.Inherits).
+		AddNonZero(ctx2, `union`, ti.Union).
 		AddNonZero(ctx2, `methods`, ti.Methods)
 }
 
 func (ti *Interface) String() string {
 	return jsonify.ToString(ti)
-}
-
-func (ti *Interface) HasFunc(name string, sig TypeDesc) bool {
-	other, has := ti.Methods[name]
-	// TODO: Need to handle types which have been made solid?
-	// e.g. `Foo[T](val T)` with `T` as `int` and `Bar(val int)``
-	return has && sig == other
 }
 
 func (ti *Interface) AddFunc(name string, sig TypeDesc) bool {
@@ -63,6 +57,15 @@ func (ti *Interface) AddTypeParam(name string, t TypeDesc) *Named {
 	tn := NewNamed(name, t)
 	ti.TypeParams = append(ti.TypeParams, tn)
 	return tn
+}
+
+func (ti *Interface) HasFunc(name string, sig TypeDesc) bool {
+	other, has := ti.Methods[name]
+	// TODO: Need to handle types which have been made solid?
+	// e.g. `Foo[T](val T)` with `T` as `int` and `Bar(val int)`
+	// See https://go.dev/doc/tutorial/generics
+	// See https://stackoverflow.com/questions/70888240/whats-the-meaning-of-the-new-tilde-token-in-go
+	return has && sig == other
 }
 
 func (ti *Interface) IsSupertypeOf(other *Interface) bool {
