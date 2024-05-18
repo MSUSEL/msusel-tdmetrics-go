@@ -1,8 +1,14 @@
 package typeDesc
 
-import "github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/jsonify"
+import (
+	"go/types"
+
+	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/jsonify"
+)
 
 type Signature struct {
+	typ *types.Signature
+
 	Variadic   bool
 	Params     []*Named
 	TypeParams []*Named
@@ -11,11 +17,15 @@ type Signature struct {
 	Index int
 }
 
-func NewSignature() *Signature {
-	return &Signature{}
+func NewSignature(typ *types.Signature) *Signature {
+	return &Signature{
+		typ: typ,
+	}
 }
 
-func (sig *Signature) _isTypeDesc() {}
+func (sig *Signature) GoType() types.Type {
+	return sig.typ
+}
 
 func (sig *Signature) ToJson(ctx *jsonify.Context) jsonify.Datum {
 	if ctx.IsShort() {

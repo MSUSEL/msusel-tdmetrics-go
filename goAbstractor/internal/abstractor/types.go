@@ -62,7 +62,7 @@ func (ab *abstractor) convertType(t types.Type) typeDesc.TypeDesc {
 
 func (ab *abstractor) convertArray(t *types.Array) typeDesc.TypeDesc {
 	elem := ab.convertType(t.Elem())
-	return typeDesc.NewSolid(ab.bakeList(), elem)
+	return typeDesc.NewSolid(t, ab.bakeList(), elem)
 }
 
 func (ab *abstractor) convertBasic(t *types.Basic) typeDesc.TypeDesc {
@@ -72,19 +72,19 @@ func (ab *abstractor) convertBasic(t *types.Basic) typeDesc.TypeDesc {
 	case types.Complex128:
 		return ab.bakeComplex128()
 	default:
-		return typeDesc.NewBasic(t.Name())
+		return typeDesc.NewBasic(t)
 	}
 }
 
 func (ab *abstractor) convertChan(t *types.Chan) typeDesc.TypeDesc {
 	elem := ab.convertType(t.Elem())
-	return typeDesc.NewSolid(ab.bakeChan(), elem)
+	return typeDesc.NewSolid(t, ab.bakeChan(), elem)
 }
 
 func (ab *abstractor) convertInterface(t *types.Interface) *typeDesc.Interface {
 	t = t.Complete()
 
-	it := typeDesc.NewInterface()
+	it := typeDesc.NewInterface(t)
 
 	for i := range t.NumMethods() {
 		f := t.Method(i)
@@ -108,7 +108,7 @@ func (ab *abstractor) convertInterface(t *types.Interface) *typeDesc.Interface {
 func (ab *abstractor) convertMap(t *types.Map) typeDesc.TypeDesc {
 	key := ab.convertType(t.Key())
 	value := ab.convertType(t.Elem())
-	return typeDesc.NewSolid(ab.bakeMap(), key, value)
+	return typeDesc.NewSolid(t, ab.bakeMap(), key, value)
 }
 
 func (ab *abstractor) convertNamed(t *types.Named) *typeDesc.Named {
@@ -118,12 +118,12 @@ func (ab *abstractor) convertNamed(t *types.Named) *typeDesc.Named {
 
 func (ab *abstractor) convertPointer(t *types.Pointer) typeDesc.TypeDesc {
 	elem := ab.convertType(t.Elem())
-	return typeDesc.NewSolid(ab.bakePointer(), elem)
+	return typeDesc.NewSolid(t, ab.bakePointer(), elem)
 }
 
 func (ab *abstractor) convertSignature(t *types.Signature) *typeDesc.Signature {
 	// Don't output receiver or receiver type here.
-	sig := typeDesc.NewSignature()
+	sig := typeDesc.NewSignature(t)
 	sig.Variadic = t.Variadic()
 
 	sig.TypeParams = ab.convertTypeParamList(t.TypeParams())
@@ -136,11 +136,11 @@ func (ab *abstractor) convertSignature(t *types.Signature) *typeDesc.Signature {
 
 func (ab *abstractor) convertSlice(t *types.Slice) typeDesc.TypeDesc {
 	elem := ab.convertType(t.Elem())
-	return typeDesc.NewSolid(ab.bakeList(), elem)
+	return typeDesc.NewSolid(t, ab.bakeList(), elem)
 }
 
 func (ab *abstractor) convertStruct(t *types.Struct) *typeDesc.Struct {
-	ts := typeDesc.NewStruct()
+	ts := typeDesc.NewStruct(t)
 	for i := range t.NumFields() {
 		f := t.Field(i)
 		field := typeDesc.NewNamed(f.Name(), ab.convertType(f.Type()))
@@ -183,14 +183,11 @@ func (ab *abstractor) convertTuple(t *types.Tuple) []*typeDesc.Named {
 }
 
 func (ab *abstractor) convertName(t *types.Var) *typeDesc.Named {
-	return &typeDesc.Named{
-		Name: t.Name(),
-		Type: ab.convertType(t.Type()),
-	}
+	return typeDesc.NewNamed(t.Name(), ab.convertType(t.Type()))
 }
 
 func (ab *abstractor) convertUnion(t *types.Union) *typeDesc.Union {
-	union := typeDesc.NewUnion()
+	union := typeDesc.NewUnion(t)
 	for i := range t.Len() {
 		term := t.Term(i)
 		it := ab.convertType(term.Type())

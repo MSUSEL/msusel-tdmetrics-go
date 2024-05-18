@@ -1,24 +1,33 @@
 package typeDesc
 
-import "github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/jsonify"
+import (
+	"go/types"
+
+	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/jsonify"
+)
 
 // Solid represents a generic type that has been resolved to a specific type
 // with specific type parameters, e.g. List<T> might be resolved to List<int>.
 // The type parameter resolution may be referencing another type parameter,
 // e.g. a method signature inside a generic interface.
 type Solid struct {
+	typ types.Type
+
 	Target     TypeDesc
 	TypeParams []TypeDesc
 }
 
-func NewSolid(target TypeDesc, tp ...TypeDesc) *Solid {
+func NewSolid(typ types.Type, target TypeDesc, tp ...TypeDesc) *Solid {
 	return &Solid{
+		typ:        typ,
 		Target:     target,
 		TypeParams: tp,
 	}
 }
 
-func (ts *Solid) _isTypeDesc() {}
+func (ts *Solid) GoType() types.Type {
+	return ts.typ
+}
 
 func (ts *Solid) ToJson(ctx *jsonify.Context) jsonify.Datum {
 	return jsonify.NewMap().

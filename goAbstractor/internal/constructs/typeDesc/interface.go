@@ -2,11 +2,14 @@ package typeDesc
 
 import (
 	"fmt"
+	"go/types"
 
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/jsonify"
 )
 
 type Interface struct {
+	typ *types.Interface
+
 	TypeParams []*Named
 	Methods    map[string]TypeDesc
 	Union      *Union
@@ -16,13 +19,16 @@ type Interface struct {
 	Inheritors []*Interface
 }
 
-func NewInterface() *Interface {
+func NewInterface(typ *types.Interface) *Interface {
 	return &Interface{
+		typ:     typ,
 		Methods: map[string]TypeDesc{},
 	}
 }
 
-func (ti *Interface) _isTypeDesc() {}
+func (ti *Interface) GoType() types.Type {
+	return ti.typ
+}
 
 func (ti *Interface) ToJson(ctx *jsonify.Context) jsonify.Datum {
 	if ctx.IsShort() {
@@ -63,8 +69,11 @@ func (ti *Interface) HasFunc(name string, sig TypeDesc) bool {
 	other, has := ti.Methods[name]
 	// TODO: Need to handle types which have been made solid?
 	// e.g. `Foo[T](val T)` with `T` as `int` and `Bar(val int)`
+	//
 	// See https://go.dev/doc/tutorial/generics
 	// See https://stackoverflow.com/questions/70888240/whats-the-meaning-of-the-new-tilde-token-in-go
+	//
+	// DON'T DO ON YOUR OWN, Use reflection and the Implements methods.
 	return has && sig == other
 }
 

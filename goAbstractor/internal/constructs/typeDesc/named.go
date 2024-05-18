@@ -1,6 +1,10 @@
 package typeDesc
 
-import "github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/jsonify"
+import (
+	"go/types"
+
+	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/jsonify"
+)
 
 type Named struct {
 	Name string
@@ -14,7 +18,9 @@ func NewNamed(name string, t TypeDesc) *Named {
 	}
 }
 
-func (t *Named) _isTypeDesc() {}
+func (t *Named) GoType() types.Type {
+	return t.Type.GoType()
+}
 
 func (t *Named) ToJson(ctx *jsonify.Context) jsonify.Datum {
 	if ctx.IsShort() {

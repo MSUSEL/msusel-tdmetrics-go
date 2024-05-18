@@ -1,6 +1,10 @@
 package typeDesc
 
-import "github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/jsonify"
+import (
+	"go/types"
+
+	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/jsonify"
+)
 
 // TODO: should this be expanded so that it can be removed?
 // e.g. `Foo[T string|int]` becomes `Foo_string` and `Foo_int`.
@@ -9,15 +13,21 @@ import "github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/jsonify"
 // Approx types are like `~string|~int` where they type may be exact or
 // an extension of the base type.
 type Union struct {
+	typ *types.Union
+
 	Exact  []TypeDesc
 	Approx []TypeDesc
 }
 
-func NewUnion() *Union {
-	return &Union{}
+func NewUnion(typ *types.Union) *Union {
+	return &Union{
+		typ: typ,
+	}
 }
 
-func (t *Union) _isTypeDesc() {}
+func (t *Union) GoType() types.Type {
+	return t.typ
+}
 
 func (t *Union) ToJson(ctx *jsonify.Context) jsonify.Datum {
 	return jsonify.NewMap().

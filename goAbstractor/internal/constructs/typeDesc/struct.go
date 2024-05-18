@@ -1,8 +1,14 @@
 package typeDesc
 
-import "github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/jsonify"
+import (
+	"go/types"
+
+	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/jsonify"
+)
 
 type Struct struct {
+	typ *types.Struct
+
 	Fields     []*Named
 	TypeParams []*Named
 
@@ -11,11 +17,15 @@ type Struct struct {
 	Embedded []*Named
 }
 
-func NewStruct() *Struct {
-	return &Struct{}
+func NewStruct(typ *types.Struct) *Struct {
+	return &Struct{
+		typ: typ,
+	}
 }
 
-func (ts *Struct) _isTypeDesc() {}
+func (ts *Struct) GoType() types.Type {
+	return ts.typ
+}
 
 func (ts *Struct) ToJson(ctx *jsonify.Context) jsonify.Datum {
 	if ctx.IsShort() {
