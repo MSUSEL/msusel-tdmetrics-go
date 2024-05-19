@@ -22,6 +22,13 @@ func (t *Named) GoType() types.Type {
 	return t.Type.GoType()
 }
 
+func (t *Named) Equal(other TypeDesc) bool {
+	return equalTest(t, other, func(a, b *Named) bool {
+		return a.Name == b.Name &&
+			equal(a.Type, b.Type)
+	})
+}
+
 func (t *Named) ToJson(ctx *jsonify.Context) jsonify.Datum {
 	if ctx.IsShort() {
 		return jsonify.New(ctx, t.Name)

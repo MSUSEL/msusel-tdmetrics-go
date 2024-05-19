@@ -5,7 +5,6 @@ import (
 	"go/ast"
 	"go/token"
 	"go/types"
-	"reflect"
 
 	"github.com/Snow-Gremlin/goToolbox/utils"
 	"golang.org/x/tools/go/packages"
@@ -195,7 +194,7 @@ func (ab *abstractor) registerStruct(t *typeDesc.Struct) *typeDesc.Struct {
 
 func registerType[T typeDesc.TypeDesc](t T, s *[]T) T {
 	for _, t2 := range *s {
-		if reflect.DeepEqual(t, t2) {
+		if t.Equal(t2) {
 			return t2
 		}
 	}

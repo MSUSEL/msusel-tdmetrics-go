@@ -29,6 +29,13 @@ func (ts *Solid) GoType() types.Type {
 	return ts.typ
 }
 
+func (ts *Solid) Equal(other TypeDesc) bool {
+	return equalTest(ts, other, func(a, b *Solid) bool {
+		return equal(a.Target, b.Target) &&
+			equalList(a.TypeParams, b.TypeParams)
+	})
+}
+
 func (ts *Solid) ToJson(ctx *jsonify.Context) jsonify.Datum {
 	return jsonify.NewMap().
 		AddIf(ctx, ctx.IsKindShown(), `kind`, `solid`).

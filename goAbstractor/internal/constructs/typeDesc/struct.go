@@ -27,6 +27,13 @@ func (ts *Struct) GoType() types.Type {
 	return ts.typ
 }
 
+func (ts *Struct) Equal(other TypeDesc) bool {
+	return equalTest(ts, other, func(a, b *Struct) bool {
+		return equalList(a.Fields, b.Fields) &&
+			equalList(a.TypeParams, b.TypeParams)
+	})
+}
+
 func (ts *Struct) ToJson(ctx *jsonify.Context) jsonify.Datum {
 	if ctx.IsShort() {
 		return jsonify.New(ctx, ts.Index)

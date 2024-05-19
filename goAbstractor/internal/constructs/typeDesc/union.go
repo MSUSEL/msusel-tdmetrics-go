@@ -29,6 +29,13 @@ func (t *Union) GoType() types.Type {
 	return t.typ
 }
 
+func (t *Union) Equal(other TypeDesc) bool {
+	return equalTest(t, other, func(a, b *Union) bool {
+		return equalList(a.Exact, b.Exact) &&
+			equalList(a.Approx, b.Approx)
+	})
+}
+
 func (t *Union) ToJson(ctx *jsonify.Context) jsonify.Datum {
 	return jsonify.NewMap().
 		AddIf(ctx, ctx.IsKindShown(), `kind`, `union`).

@@ -1,30 +1,29 @@
 {
   interfaces: [
     {}, # any
-    {
-      "inherits": [ 0 ]
+    { # interface { string | int | uint }
+      inherits: [ 0 ],
+      union: {
+        exact: [ string, int, uint ]
+      }
     },
-    {
-      "inherits": [ 1 ]
+    { # interface { string | int }
+      inherits: [ 1 ],
+      union: {
+        exact: [ string, int ]
+      }
     },
-    {
-      "inherits": [
-        2
+    { # interface[T] { $deref() T }
+      inherits: [ 2 ],
+      typeParams: [
+        { name: T, type: 0 }
       ],
-      "methods": {
-        "$deref": {
-          "target": 5,
-          "typeParams": [
-            "T"
-          ]
+      methods: {
+        $deref: {
+          target: 5,
+          typeParams: [ T ]
         }
-      },
-      "typeParams": [
-        {
-          "name": "T",
-          "type": 0
-        }
-      ]
+      }
     }
   ],
   language: "go",
@@ -32,11 +31,11 @@
     {
       methods: [
         { # func New[T string | int](v T) *Foo[T]
-          name: "New", signature: 2,
+          name: "New", signature: 6,
           metrics: { codeCount: 3, complexity: 1, indents: 1, lineCount: 3 }
         },
         { # func main()
-          name: "main", signature: 3,
+          name: "main", signature: 7,
           metrics: { codeCount: 4, complexity: 1, indents: 2, lineCount: 4 }
         }
       ],

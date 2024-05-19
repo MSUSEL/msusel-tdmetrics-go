@@ -27,6 +27,15 @@ func (sig *Signature) GoType() types.Type {
 	return sig.typ
 }
 
+func (sig *Signature) Equal(other TypeDesc) bool {
+	return equalTest(sig, other, func(a, b *Signature) bool {
+		return a.Variadic == b.Variadic &&
+			equal(a.Return, b.Return) &&
+			equalList(a.Params, b.Params) &&
+			equalList(a.TypeParams, b.TypeParams)
+	})
+}
+
 func (sig *Signature) ToJson(ctx *jsonify.Context) jsonify.Datum {
 	if ctx.IsShort() {
 		return jsonify.New(ctx, sig.Index)

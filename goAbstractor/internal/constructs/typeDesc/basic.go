@@ -31,6 +31,12 @@ func (t *Basic) GoType() types.Type {
 	return t.typ
 }
 
+func (t *Basic) Equal(other TypeDesc) bool {
+	return equalTest(t, other, func(a, b *Basic) bool {
+		return a.Name == b.Name
+	})
+}
+
 func (t *Basic) ToJson(ctx *jsonify.Context) jsonify.Datum {
 	return jsonify.New(ctx, t.Name)
 }

@@ -30,6 +30,14 @@ func (ti *Interface) GoType() types.Type {
 	return ti.typ
 }
 
+func (ti *Interface) Equal(other TypeDesc) bool {
+	return equalTest(ti, other, func(a, b *Interface) bool {
+		return equal(a.Union, b.Union) &&
+			equalList(a.TypeParams, b.TypeParams) &&
+			equalMap(a.Methods, b.Methods)
+	})
+}
+
 func (ti *Interface) ToJson(ctx *jsonify.Context) jsonify.Datum {
 	if ctx.IsShort() {
 		return jsonify.New(ctx, ti.Index)
