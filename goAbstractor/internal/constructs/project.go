@@ -13,6 +13,10 @@ type Project struct {
 	AllStructs    []*typeDesc.Struct
 }
 
+func NewProject() *Project {
+	return &Project{}
+}
+
 func (p *Project) ToJson(ctx *jsonify.Context) jsonify.Datum {
 	m := jsonify.NewMap().
 		Add(ctx, `language`, `go`)

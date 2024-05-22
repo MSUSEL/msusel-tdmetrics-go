@@ -13,6 +13,13 @@ type Package struct {
 	ImportPaths []string
 }
 
+func NewPackage(path string, importPaths []string) *Package {
+	return &Package{
+		Path:        path,
+		ImportPaths: importPaths,
+	}
+}
+
 func (p *Package) ToJson(ctx *jsonify.Context) jsonify.Datum {
 	if ctx.IsShort() {
 		return jsonify.New(ctx, p.Index)

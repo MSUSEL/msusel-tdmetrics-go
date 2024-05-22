@@ -73,23 +73,6 @@ func (ti *Interface) AddTypeParam(name string, t TypeDesc) *Named {
 	return tn
 }
 
-func (ti *Interface) HasFunc(name string, sig TypeDesc) bool {
-	other, has := ti.Methods[name]
-	// TODO: Need to handle types which have been made solid?
-	// e.g. `Foo[T](val T)` with `T` as `int` and `Bar(val int)`
-	//
-	// See https://go.dev/doc/tutorial/generics
-	// See https://stackoverflow.com/questions/70888240/whats-the-meaning-of-the-new-tilde-token-in-go
-	//
-	// DON'T DO ON YOUR OWN, Use reflection and the Implements methods.
-	return has && sig == other
-}
-
 func (ti *Interface) IsSupertypeOf(other *Interface) bool {
-	for name, sig := range other.Methods {
-		if !ti.HasFunc(name, sig) {
-			return false
-		}
-	}
-	return true
+	return types.Implements(ti.typ, other.typ)
 }

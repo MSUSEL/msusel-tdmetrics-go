@@ -26,13 +26,14 @@ import (
 func Abstract(ps []*packages.Package, verbose bool) *constructs.Project {
 	ab := &abstractor{
 		verbose: verbose,
-		proj:    &constructs.Project{},
+		proj:    constructs.NewProject(),
 		baked:   map[string]typeDesc.TypeDesc{},
 	}
 	ab.initialize()
 	ab.abstractProject(ps)
 	ab.resolveImports()
 	ab.resolveReceivers()
+	ab.resolveClasses()
 	ab.resolveInheritance()
 	ab.proj.UpdateIndices()
 	return ab.proj
@@ -67,10 +68,7 @@ func (ab *abstractor) abstractProject(ps []*packages.Package) {
 
 func (ab *abstractor) abstractPackage(src *packages.Package) *constructs.Package {
 	ab.log(`|  abstract package: %s`, src.PkgPath)
-	pkg := &constructs.Package{
-		Path:        src.PkgPath,
-		ImportPaths: utils.SortedKeys(src.Imports),
-	}
+	pkg := constructs.NewPackage(src.PkgPath, utils.SortedKeys(src.Imports))
 	for _, f := range src.Syntax {
 		ab.addFile(pkg, src, f)
 	}
@@ -112,10 +110,9 @@ func (ab *abstractor) abstractTypeSpec(pkg *constructs.Package, src *packages.Pa
 	if !has {
 		panic(fmt.Errorf(`type specification not found in types info: %s`, pos(src, spec.Type.Pos())))
 	}
-	def := &constructs.TypeDef{
-		Name: spec.Name.Name,
-		Type: ab.convertType(tv.Type),
-	}
+
+	typ := ab.convertType(tv.Type)
+	def := constructs.NewTypeDef(spec.Name.Name, typ)
 	pkg.Types = append(pkg.Types, def)
 }
 
@@ -133,22 +130,17 @@ func (ab *abstractor) abstractValueSpec(pkg *constructs.Package, src *packages.P
 			panic(fmt.Errorf(`value specification not found in types info: %s`, pos(src, spec.Type.Pos())))
 		}
 
-		def := &constructs.ValueDef{
-			Name:  name.Name,
-			Const: isConst,
-			Type:  ab.convertType(tv.Type()),
-		}
+		typ := ab.convertType(tv.Type())
+		def := constructs.NewValueDef(name.Name, isConst, typ)
 		pkg.Values = append(pkg.Values, def)
 	}
 }
 
 func (ab *abstractor) abstractFuncDecl(pkg *constructs.Package, src *packages.Package, decl *ast.FuncDecl) {
 	obj := src.TypesInfo.Defs[decl.Name]
-	m := &constructs.Method{
-		Name:      decl.Name.Name,
-		Signature: ab.convertSignature(obj.Type().(*types.Signature)),
-		Metrics:   metrics.New(src.Fset, decl),
-	}
+	sig := ab.convertSignature(obj.Type().(*types.Signature))
+	m := constructs.NewMethod(decl.Name.Name, sig)
+	m.Metrics = metrics.New(src.Fset, decl)
 	ab.determineReceiver(m, src, decl)
 	pkg.Methods = append(pkg.Methods, m)
 }
@@ -178,6 +170,10 @@ func (ab *abstractor) findPackageByPath(path string) *constructs.Package {
 		}
 	}
 	return nil
+}
+
+func (ab *abstractor) resolveClasses() {
+	// TODO: TypeDef create interfaces
 }
 
 func (ab *abstractor) registerInterface(t *typeDesc.Interface) *typeDesc.Interface {
