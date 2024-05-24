@@ -1,8 +1,14 @@
 package constructs
 
-import "github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/jsonify"
+import (
+	"golang.org/x/tools/go/packages"
+
+	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/jsonify"
+)
 
 type Package struct {
+	pkg *packages.Package
+
 	Path    string
 	Imports []*Package
 	Types   []*TypeDef
@@ -13,11 +19,16 @@ type Package struct {
 	ImportPaths []string
 }
 
-func NewPackage(path string, importPaths []string) *Package {
+func NewPackage(pkg *packages.Package, path string, importPaths []string) *Package {
 	return &Package{
+		pkg:         pkg,
 		Path:        path,
 		ImportPaths: importPaths,
 	}
+}
+
+func (p *Package) Source() *packages.Package {
+	return p.pkg
 }
 
 func (p *Package) ToJson(ctx *jsonify.Context) jsonify.Datum {

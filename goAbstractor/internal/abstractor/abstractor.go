@@ -68,7 +68,7 @@ func (ab *abstractor) abstractProject(ps []*packages.Package) {
 
 func (ab *abstractor) abstractPackage(src *packages.Package) *constructs.Package {
 	ab.log(`|  abstract package: %s`, src.PkgPath)
-	pkg := constructs.NewPackage(src.PkgPath, utils.SortedKeys(src.Imports))
+	pkg := constructs.NewPackage(src, src.PkgPath, utils.SortedKeys(src.Imports))
 	for _, f := range src.Syntax {
 		ab.addFile(pkg, src, f)
 	}
@@ -173,7 +173,31 @@ func (ab *abstractor) findPackageByPath(path string) *constructs.Package {
 }
 
 func (ab *abstractor) resolveClasses() {
-	// TODO: TypeDef create interfaces
+	for _, pkg := range ab.proj.Packages {
+		for _, td := range pkg.Types {
+			ab.resolveClass(pkg, td)
+		}
+	}
+}
+
+func (ab *abstractor) resolveClass(pkg *constructs.Package, td *constructs.TypeDef) {
+	mTyp := []*types.Func{}
+	tEmb := []types.Type{}
+
+	for _, m := range td.Methods {
+		s := m.Signature.GoType().(*types.Signature)
+		f := types.NewFunc(token.NoPos, pkg.Source().Types, m.Name, s)
+		mTyp = append(mTyp, f)
+	}
+
+	iTyp := types.NewInterfaceType(mTyp, tEmb)
+	tInt := typeDesc.NewInterface(iTyp)
+
+	for _, m := range td.Methods {
+		tInt.AddFunc(m.Name, m.Signature)
+	}
+
+	td.SetInheritance(iTyp, tInt)
 }
 
 func (ab *abstractor) registerInterface(t *typeDesc.Interface) *typeDesc.Interface {

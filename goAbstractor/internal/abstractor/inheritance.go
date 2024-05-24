@@ -77,7 +77,7 @@ func setInheritance(inter *typeDesc.Interface) {
 }
 
 func findImplements(root *typeDesc.Interface, td *constructs.TypeDef) bool {
-	if !td.IsSupertypeOf(root) {
+	if !td.Interface.IsSupertypeOf(root) {
 		return false
 	}
 
