@@ -4,89 +4,103 @@
     { # pointer[T]
       inherits: [ 0 ],
       typeParams: [
-        { name: "T", type: 0 }
+        { name: T, type: 0 }
       ],
       methods: {
         $deref: {
-          target: 4,
-          typeParams: [ "T" ]
+          target: 6,
+          typeParams: [ T ]
         }
       }
     },
     { # interface { Play(c *Cat) }
       inherits: [ 0 ],
       methods: {
-        Play: 5
+        Play: 7
       }
     },
     { # list[T]
       inherits: [ 0 ],
       typeParams: [
-        { name: "T", type: 0 }
+        { name: T, type: 0 }
       ],
       methods: {
-        $cap: 6,
+        $cap: 8,
         $get: {
-          target: 7,
-          typeParams: [ "T" ]
+          target: 9,
+          typeParams: [ T ]
         },
-        $len: 6,
+        $len: 8,
         $set: {
-          target: 8,
-          typeParams: [ "T" ]
+          target: 10,
+          typeParams: [ T ]
         }
+      }
+    },
+    {
+      inherits: [ 0 ],
+      methods: {
+        Meow: 13,
+        String: 14
+      }
+    },
+    {
+      inherits: [ 0 ],
+      methods: {
+        Youngest: 16
       }
     }
   ],
-  language: "go",
+  language: go,
   packages: [
     {
       methods: [
         {
-          name: "NewCat", signature: 10,
+          name: NewCat, signature: 12,
           metrics: { codeCount: 6, complexity: 1, indents: 6, lineCount: 6 }
         },
         {
-          name: "NextYear", signature: 13,
+          name: NextYear, signature: 15,
           metrics: { codeCount: 5, complexity: 2, indents: 4, lineCount: 5 }
         },
         {
-          name: "Pet", signature: 5,
+          name: Pet, signature: 7,
           metrics: { codeCount: 3, complexity: 1, indents: 1, lineCount: 3 }
         }
       ],
-      path: "command-line-arguments",
+      path: command-line-arguments,
       types: [
         {
-          inherits: [ 0 ],
+          name: Cat, type: 17,
+          interface: 4,
           methods: [
             {
-              name: "Meow", signature: 11,
+              name: Meow, signature: 13,
               metrics: { codeCount: 3, complexity: 1, indents: 1, lineCount: 3 }
             },
             {
-              name: "String", signature: 12,
+              name: String, signature: 14,
               metrics: { codeCount: 3, complexity: 1, indents: 1, lineCount: 3 }
             }
-          ],
-          name: "Cat", type: 15
+          ]
         },
-        { name: "Toy", type: 2 },
+        { name: Toy, type: 2 },
         {
-          inherits: [ 0 ],
+          name: Cats,
+          interface: 5,
           methods: [
             {
-              name: "Youngest", signature: 14,
+              name: Youngest, signature: 16,
               metrics: { codeCount: 9, complexity: 4, indents: 11, lineCount: 9 }
             }
           ],
-          name: "Cats",
           type: { # []*Cat
-            kind: "solid",
-            target: 3,
+            kind: solid,
+            target: 3, # slice
             typeParams: [
               { # *Cat
-                target: 1,
+                kind: solid,
+                target: 1, # pointer
                 typeParams: [
                   "command-line-arguments.Cat"
                 ]
@@ -96,23 +110,23 @@
         }
       ],
       values: [
-        { name: "log", type: 9 }
+        { name: log, type: 11 }
       ]
     }
   ],
   signatures: [
     { # func[T any]() T
-      return: "T",
+      return: T,
       typeParams: [
-        { name: "T", type: 0 }
+        { name: T, type: 0 }
       ]
     },
     { # func(c *Cat)
       params: [
         {
-          name: "c",
+          name: c,
           type: {
-            kind: "solid",
+            kind: solid,
             target: 1,
             typeParams: [
               "command-line-arguments.Cat"
@@ -122,38 +136,38 @@
       ]
     },
     { # func() int
-      return: "int"
+      return: int
     },
     { # func[T any](index int) T
       typeParams: [
-        { name: "T", type: 0 }
+        { name: T, type: 0 }
       ],
       params: [
-        { name: "index", type: "int" }
+        { name: index, type: int }
       ],
-      return: "T"
+      return: T
     },
     { # func[T any](index int, value T)
       typeParams: [
-        { name: "T", type: 0 }
+        { name: T, type: 0 }
       ],
       params: [
-        { name: "index", type: "int" },
-        { name: "value", type: "T" }
+        { name: index, type: int },
+        { name: value, type: T }
       ]
     },
     { # func(value string)
       params: [
-        { name: "value", type: "string" }
+        { name: value, type: string }
       ]
     },
     { # func(name string, age int) *Cat
       params: [
-        { name: "name", type: "string" },
-        { name: "age",  type: "int" }
+        { name: name, type: string },
+        { name: age,  type: int }
       ],
       return: {
-        kind: "solid",
+        kind: solid,
         target: 1,
         typeParams: [
           "command-line-arguments.Cat"
@@ -161,16 +175,17 @@
       }
     },
     {}, # func()()
-    { return: "string" }, # func() string
+    { return: string }, # func() string
     { # func(cats ...*Cat)
       params: [
         {
-          name: "cats",
+          name: cats,
           type: { # list[pointer[Cat]]
-            kind: "solid",
+            kind: solid,
             target: 3,
             typeParams: [
               { # pointer[Cat]
+                kind: solid,
                 target: 1,
                 typeParams: [
                   "command-line-arguments.Cat"
@@ -184,7 +199,7 @@
     },
     { # func() *Cat
       return: {
-        kind: "solid",
+        kind: solid,
         target: 1,
         typeParams: [
           "command-line-arguments.Cat"
@@ -195,8 +210,8 @@
   structs: [
     { # struct { Name string; Age int }
       fields: [
-        { name: "Name", type: "string" },
-        { name: "Age",  type: "int" }
+        { name: Name, type: string },
+        { name: Age,  type: int }
       ]
     }
   ]

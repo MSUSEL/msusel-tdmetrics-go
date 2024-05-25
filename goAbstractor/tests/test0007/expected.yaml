@@ -26,16 +26,16 @@
       }
     }
   ],
-  language: "go",
+  language: go,
   packages: [
     {
       methods: [
         { # func New[T string | int](v T) *Foo[T]
-          name: "New", signature: 6,
+          name: New, signature: 6,
           metrics: { codeCount: 3, complexity: 1, indents: 1, lineCount: 3 }
         },
         { # func main()
-          name: "main", signature: 7,
+          name: main, signature: 7,
           metrics: { codeCount: 4, complexity: 1, indents: 2, lineCount: 4 }
         }
       ],
@@ -43,10 +43,10 @@
       types: [
         {
           inherits: [ 0 ],
-          name: "Foo", type: 4,
+          name: Foo, type: 4,
           methods: [
             {
-              name: "Add", signature: 1,
+              name: Add, signature: 1,
               metrics: { codeCount: 4, complexity: 1, indents: 2, lineCount: 4 }
             }
           ]
@@ -58,41 +58,41 @@
     { # func Add(v T) T
       params: [
         {
-          name: "v",
+          name: v,
           type: { constraint: 0, # Need to define [T] type better
-          index: 5, kind: "typeParam" }
+          index: 5, kind: typeParam }
         }
       ],
-      return: { constraint: 0, index: 5, kind: "typeParam" }
+      return: { constraint: 0, index: 5, kind: typeParam }
     },
     { # func[T string | int](v T) *Foo[T]
       params: [
         {
-          name: "v",
-          type: { constraint: 0, index: 5, kind: "typeParam" }
+          name: v,
+          type: { constraint: 0, index: 5, kind: typeParam }
         }
       ],
       return: { # TODO: Need to indicate type param
         elem: "command-line-arguments.Foo XX[T]",
-        kind: "pointer"
+        kind: pointer
       },
       typeParams: [
-        { constraint: 0, index: 5, kind: "typeParam" }
+        { constraint: 0, index: 5, kind: typeParam }
       ]
     },
-    {}
+    {} # func()()
   ],
   structs: [
     {
       fields: [
         {
-          name: "value",
-          type: { constraint: 0, index: 5, kind: "typeParam" }
+          name: value,
+          type: { constraint: 0, index: 5, kind: typeParam }
         }
       ]
     }
   ],
   typeParams: [
-    { constraint: {}, index: 5, kind: "typeParam" }
+    { constraint: {}, index: 5, kind: typeParam }
   ]
 }

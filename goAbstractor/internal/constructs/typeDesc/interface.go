@@ -5,6 +5,7 @@ import (
 	"go/types"
 
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/jsonify"
+	"github.com/Snow-Gremlin/goToolbox/utils"
 )
 
 type Interface struct {
@@ -74,5 +75,10 @@ func (ti *Interface) AddTypeParam(name string, t TypeDesc) *Named {
 }
 
 func (ti *Interface) IsSupertypeOf(other *Interface) bool {
+	if utils.IsNil(ti.typ) || utils.IsNil(other.typ) {
+		// Baked in types don't have underlying interfaces
+		// but also shouldn't be needed for any inheritance.
+		return false
+	}
 	return types.Implements(ti.typ, other.typ)
 }

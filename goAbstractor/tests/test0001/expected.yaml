@@ -1,5 +1,5 @@
 {
-  language: "go",
+  language: go,
   interfaces: [
     {} # any
   ],
@@ -8,7 +8,7 @@
       path: "command-line-arguments",
       methods: [
         { # func main()
-          name: "main", signature: 1,
+          name: main, signature: 1,
           metrics: { codeCount: 3, complexity: 1, indents: 1, lineCount: 3 }
         }
       ]

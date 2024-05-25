@@ -6,6 +6,9 @@ import (
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/metrics"
 )
 
+// TODO: Need to handle when the type parameters are named differently
+// in the receiver from the ones defined on the receiver's type def.
+
 type Method struct {
 	Name      string
 	Signature typeDesc.TypeDesc

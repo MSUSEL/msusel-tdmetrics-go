@@ -1,17 +1,17 @@
 {
-  language: "go",
+  language: go,
   interfaces: [
     {}, # any
     {  # list[T]
       inherits: [ 0 ],
       typeParams: [
-        { name: "T", type: 0 }
+        { name: T, type: 0 }
       ],
       methods: {
         $cap: 2,
-        $get: { target: 3, typeParams: [ "T" ] },
+        $get: { target: 3, typeParams: [ T ] },
         $len: 2,
-        $set: { target: 4, typeParams: [ "T" ] }
+        $set: { target: 4, typeParams: [ T ] }
       }
     }
   ],
@@ -20,19 +20,19 @@
       path: "command-line-arguments",
       methods: [
         { # func sum(values ...int) int
-          name: "sum", signature: 5,
+          name: sum, signature: 5,
           metrics: { codeCount: 7, complexity: 2, indents: 6, lineCount: 7 }
         },
         { # func first(values ...int) int
-          name: "first", signature: 5,
+          name: first, signature: 5,
           metrics: { codeCount: 3, complexity: 1, indents: 1, lineCount: 3 }
         },
         { # func last(values ...int) int
-          name: "last", signature: 5,
+          name: last, signature: 5,
           metrics: { codeCount: 3, complexity: 1, indents: 1, lineCount: 3 }
         },
         { # func main()
-          name: "main", signature: 6,
+          name: main, signature: 6,
           metrics: { codeCount: 6, complexity: 1, indents: 4, lineCount: 6 }
         }
       ]
@@ -40,39 +40,39 @@
   ],
   signatures: [
     { # func() int
-      return: "int"
+      return: int
     },
     { # func[T](index int) T
       typeParams: [
-        { name: "T", type: 0 }
+        { name: T, type: 0 }
       ],
       params: [
-        { name: "index", type: "int" }
+        { name: index, type: int }
       ],
-      return: "T"
+      return: T
     },
     { # func[T](index int, value T)
       typeParams: [
-        { name: "T", type: 0 }
+        { name: T, type: 0 }
       ],
       params: [
-        { name: "index",type: "int" },
-        { name: "value", type: "T" }
+        { name: index, type: int },
+        { name: value, type: T }
       ]
     },
     { # func(values ...int) int
       params: [
         {
-          name: "values",
+          name: values,
           type: {
-            kind: "solid",
+            kind: solid,
             target: 1,
-            typeParams: [ "int" ]
+            typeParams: [ int ]
           }
         }
       ],
       variadic: true,
-      return: "int"
+      return: int
     },
     {} # func()()
   ]

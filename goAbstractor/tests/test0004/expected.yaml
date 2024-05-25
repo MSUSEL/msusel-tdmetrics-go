@@ -36,28 +36,28 @@
       }
     }
   ],
-  language: "go",
+  language: go,
   packages: [
     {
       path: "command-line-arguments",
       methods: [
         { # func main()
-          name: "main", signature: 7,
+          name: main, signature: 7,
           metrics: { codeCount: 3, complexity: 1, indents: 1, lineCount: 3 }
         }
       ],
       types: [
-        { name: "Animal", type: 1 }, # type Animal interface { Age() }
-        { name: "Bird",   type: 2 }, # type Bird interface { Animal; Fly() }
-        { name: "Mammal", type: 3 }, # type Bird interface { Animal; Temp() float64 }
-        { name: "Bat",    type: 4 }, # type Bat interface { Mammal; Fly() }
-        { name: "Flier",  type: 5 }  # type Flier interface { Fly() }
+        { name: Animal, type: 1 }, # type Animal interface { Age() }
+        { name: Bird,   type: 2 }, # type Bird interface { Animal; Fly() }
+        { name: Mammal, type: 3 }, # type Bird interface { Animal; Temp() float64 }
+        { name: Bat,    type: 4 }, # type Bat interface { Mammal; Fly() }
+        { name: Flier,  type: 5 }  # type Flier interface { Fly() }
       ]
     }
   ],
   signatures: [
-    { return: "int" }, # func() int
+    { return: int }, # func() int
     {}, # func()()
-    { return: "float64" } # func() float64
+    { return: float64 } # func() float64
   ]
 }

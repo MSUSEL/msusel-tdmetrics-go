@@ -173,31 +173,39 @@ func (ab *abstractor) findPackageByPath(path string) *constructs.Package {
 }
 
 func (ab *abstractor) resolveClasses() {
+	ab.log(`resolve classes`)
 	for _, pkg := range ab.proj.Packages {
+		ab.log(`|  resolve package: %s`, pkg.Source().PkgPath)
 		for _, td := range pkg.Types {
+			ab.log(`|  |  resolve typeDef: %s`, td.Name)
 			ab.resolveClass(pkg, td)
 		}
 	}
 }
 
 func (ab *abstractor) resolveClass(pkg *constructs.Package, td *constructs.TypeDef) {
-	mTyp := []*types.Func{}
-	tEmb := []types.Type{}
+	// TODO: Attempt to find a registered interface.
 
+	mTyp := []*types.Func{}
 	for _, m := range td.Methods {
 		s := m.Signature.GoType().(*types.Signature)
 		f := types.NewFunc(token.NoPos, pkg.Source().Types, m.Name, s)
 		mTyp = append(mTyp, f)
 	}
 
-	iTyp := types.NewInterfaceType(mTyp, tEmb)
-	tInt := typeDesc.NewInterface(iTyp)
+	tEmb := []types.Type{}
+	// TODO: Fill parameter types for interface.
 
+	iTyp := types.NewInterfaceType(mTyp, tEmb)
+	if iTyp == nil {
+		panic(fmt.Errorf(`failed to create an interface for %s.%s`, pkg.Source().PkgPath, td.Name))
+	}
+
+	tInt := typeDesc.NewInterface(iTyp)
 	for _, m := range td.Methods {
 		tInt.AddFunc(m.Name, m.Signature)
 	}
-
-	td.SetInheritance(iTyp, tInt)
+	td.Interface = ab.registerInterface(tInt)
 }
 
 func (ab *abstractor) registerInterface(t *typeDesc.Interface) *typeDesc.Interface {

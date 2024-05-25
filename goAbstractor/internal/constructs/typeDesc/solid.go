@@ -40,7 +40,7 @@ func (ts *Solid) ToJson(ctx *jsonify.Context) jsonify.Datum {
 	return jsonify.NewMap().
 		AddIf(ctx, ctx.IsKindShown(), `kind`, `solid`).
 		AddNonZero(ctx.ShowKind().Short(), `target`, ts.Target).
-		AddNonZero(ctx.HideKind().Short(), `typeParams`, ts.TypeParams)
+		AddNonZero(ctx.ShowKind().Short(), `typeParams`, ts.TypeParams)
 }
 
 func (ts *Solid) String() string {

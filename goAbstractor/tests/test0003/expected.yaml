@@ -4,28 +4,28 @@
     { # interface { Pet() }
       inherits: [ 0 ],
       methods: {
-        "Pet": 2
+        Pet: 2
       }
     }
   ],
-  language: "go",
+  language: go,
   packages: [
     {
       path: "command-line-arguments",
       methods: [
         { # func main()
-          name: "main", signature: 2,
+          name: main, signature: 2,
           metrics: { codeCount: 6, complexity: 1, indents: 5, lineCount: 6 }
         }
       ],
       types: [
-        { name: "Animal", type: 1 }, # type Animal interface { Pet() }
+        { name: Animal, type: 1 }, # type Animal interface { Pet() }
         { # type Cat struct { Name string; Pet() }
           inherits: [ 1 ],
-          name: "Cat", type: 3,
+          name: Cat, type: 3,
           methods: [
             { # Cat.Pet()
-              name: "Pet", signature: 2,
+              name: Pet, signature: 2,
               metrics: { codeCount: 3, complexity: 1, indents: 1, lineCount: 3 }
             }
           ]
@@ -39,7 +39,7 @@
   structs: [
     { # struct { Name string }
       fields: [
-        { name: "Name", type: "string" }
+        { name: Name, type: string }
       ]
     }
   ]

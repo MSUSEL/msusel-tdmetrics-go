@@ -83,6 +83,7 @@ func (ab *abstractor) bakeList() *typeDesc.Interface {
 	}
 
 	t := typeDesc.NewInterface(nil)
+	t.Inherits = append(t.Inherits, ab.bakeAny())
 	tp := t.AddTypeParam(`T`, ab.bakeAny())
 
 	t.AddFunc(`$len`, ab.bakeIntFunc()) // $len() int
@@ -123,6 +124,7 @@ func (ab *abstractor) bakeChan() *typeDesc.Interface {
 	}
 
 	t := typeDesc.NewInterface(nil)
+	t.Inherits = append(t.Inherits, ab.bakeAny())
 	tp := t.AddTypeParam(`T`, ab.bakeAny())
 
 	t.AddFunc(`$len`, ab.bakeIntFunc()) // $len() int
@@ -160,6 +162,7 @@ func (ab *abstractor) bakeMap() *typeDesc.Interface {
 	}
 
 	t := typeDesc.NewInterface(nil)
+	t.Inherits = append(t.Inherits, ab.bakeAny())
 	tpKey := t.AddTypeParam(`TKey`, ab.bakeAny())
 	tpValue := t.AddTypeParam(`TValue`, ab.bakeAny())
 
@@ -198,6 +201,7 @@ func (ab *abstractor) bakePointer() *typeDesc.Interface {
 	}
 
 	t := typeDesc.NewInterface(nil)
+	t.Inherits = append(t.Inherits, ab.bakeAny())
 	tp := t.AddTypeParam(`T`, ab.bakeAny())
 
 	getF := typeDesc.NewSignature(nil) // $deref() T
@@ -219,6 +223,7 @@ func (ab *abstractor) bakeComplex64() *typeDesc.Interface {
 	}
 
 	t := typeDesc.NewInterface(nil)
+	t.Inherits = append(t.Inherits, ab.bakeAny())
 
 	getF := typeDesc.NewSignature(nil) // func() float32
 	getF.Return = typeDesc.BasicFor[float32]()
@@ -240,6 +245,7 @@ func (ab *abstractor) bakeComplex128() *typeDesc.Interface {
 	}
 
 	t := typeDesc.NewInterface(nil)
+	t.Inherits = append(t.Inherits, ab.bakeAny())
 
 	getF := typeDesc.NewSignature(nil) // func() float64
 	getF.Return = typeDesc.BasicFor[float64]()
