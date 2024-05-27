@@ -57,3 +57,25 @@ func (p *Project) UpdateIndices() {
 		pkg.Index = i
 	}
 }
+
+func (p *Project) RegisterInterface(t *typeDesc.Interface) *typeDesc.Interface {
+	return registerType(t, &p.AllInterfaces)
+}
+
+func (p *Project) RegisterSignature(t *typeDesc.Signature) *typeDesc.Signature {
+	return registerType(t, &p.AllSignatures)
+}
+
+func (p *Project) RegisterStruct(t *typeDesc.Struct) *typeDesc.Struct {
+	return registerType(t, &p.AllStructs)
+}
+
+func registerType[T typeDesc.TypeDesc](t T, s *[]T) T {
+	for _, t2 := range *s {
+		if t.Equal(t2) {
+			return t2
+		}
+	}
+	*s = append(*s, t)
+	return t
+}

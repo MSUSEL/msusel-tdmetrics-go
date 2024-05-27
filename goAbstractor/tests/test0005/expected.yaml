@@ -37,14 +37,14 @@
         }
       }
     },
-    {
+    { # interface { Meow(); String() string }
       inherits: [ 0 ],
       methods: {
         Meow: 13,
         String: 14
       }
     },
-    {
+    { # interface { Youngest() *Cat }
       inherits: [ 0 ],
       methods: {
         Youngest: 16
@@ -174,7 +174,7 @@
         ]
       }
     },
-    {}, # func()()
+    {}, # func()
     { return: string }, # func() string
     { # func(cats ...*Cat)
       params: [

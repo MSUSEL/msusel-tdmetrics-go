@@ -205,27 +205,5 @@ func (ab *abstractor) resolveClass(pkg *constructs.Package, td *constructs.TypeD
 	for _, m := range td.Methods {
 		tInt.AddFunc(m.Name, m.Signature)
 	}
-	td.Interface = ab.registerInterface(tInt)
-}
-
-func (ab *abstractor) registerInterface(t *typeDesc.Interface) *typeDesc.Interface {
-	return registerType(t, &ab.proj.AllInterfaces)
-}
-
-func (ab *abstractor) registerSignature(t *typeDesc.Signature) *typeDesc.Signature {
-	return registerType(t, &ab.proj.AllSignatures)
-}
-
-func (ab *abstractor) registerStruct(t *typeDesc.Struct) *typeDesc.Struct {
-	return registerType(t, &ab.proj.AllStructs)
-}
-
-func registerType[T typeDesc.TypeDesc](t T, s *[]T) T {
-	for _, t2 := range *s {
-		if t.Equal(t2) {
-			return t2
-		}
-	}
-	*s = append(*s, t)
-	return t
+	td.Interface = ab.proj.RegisterInterface(tInt)
 }

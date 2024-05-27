@@ -102,7 +102,7 @@ func (ab *abstractor) convertInterface(t *types.Interface) *typeDesc.Interface {
 			}
 		}
 	}
-	return ab.registerInterface(it)
+	return ab.proj.RegisterInterface(it)
 }
 
 func (ab *abstractor) convertMap(t *types.Map) typeDesc.TypeDesc {
@@ -131,7 +131,7 @@ func (ab *abstractor) convertSignature(t *types.Signature) *typeDesc.Signature {
 	sig.Params = ab.convertTuple(t.Params())
 	sig.Return = ab.createReturn(ab.convertTuple(t.Results()))
 
-	return ab.registerSignature(sig)
+	return ab.proj.RegisterSignature(sig)
 }
 
 func (ab *abstractor) convertSlice(t *types.Slice) typeDesc.TypeDesc {
@@ -149,7 +149,7 @@ func (ab *abstractor) convertStruct(t *types.Struct) *typeDesc.Struct {
 			ts.Embedded = append(ts.Embedded, field)
 		}
 	}
-	return ab.registerStruct(ts)
+	return ab.proj.RegisterStruct(ts)
 }
 
 func (ab *abstractor) createReturn(returns []*typeDesc.Named) typeDesc.TypeDesc {
@@ -168,7 +168,7 @@ func (ab *abstractor) createReturn(returns []*typeDesc.Named) typeDesc.TypeDesc 
 				f.Name = uniqueName(names)
 			}
 		}
-		return ab.registerStruct(&typeDesc.Struct{
+		return ab.proj.RegisterStruct(&typeDesc.Struct{
 			Fields: returns,
 		})
 	}

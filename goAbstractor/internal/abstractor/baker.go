@@ -21,7 +21,7 @@ func (ab *abstractor) bakeAny() *typeDesc.Interface {
 	}
 
 	t := typeDesc.NewInterface(types.NewInterfaceType(nil, nil))
-	t = ab.registerInterface(t)
+	t = ab.proj.RegisterInterface(t)
 	ab.baked[bakeKey] = t
 	return t
 }
@@ -36,7 +36,7 @@ func (ab *abstractor) bakeIntFunc() *typeDesc.Signature {
 
 	f := typeDesc.NewSignature(nil) // func() int
 	f.Return = typeDesc.BasicFor[int]()
-	f = ab.registerSignature(f)
+	f = ab.proj.RegisterSignature(f)
 	ab.baked[bakeKey] = f
 	return f
 }
@@ -60,7 +60,7 @@ func (ab *abstractor) bakeReturnTuple() *typeDesc.Struct {
 	t.AddField(`value`, tp, false)
 	t.AddField(`ok`, typeDesc.BasicFor[bool](), false)
 
-	t = ab.registerStruct(t)
+	t = ab.proj.RegisterStruct(t)
 	ab.baked[bakeKey] = t
 	return t
 }
@@ -93,17 +93,17 @@ func (ab *abstractor) bakeList() *typeDesc.Interface {
 	getF.AppendTypeParam(tp)
 	getF.AddParam(`index`, typeDesc.BasicFor[int]())
 	getF.Return = tp
-	getF = ab.registerSignature(getF)
+	getF = ab.proj.RegisterSignature(getF)
 	t.AddFunc(`$get`, typeDesc.NewSolid(nil, getF, tp))
 
 	setF := typeDesc.NewSignature(nil) // $set(index int, value T)
 	setF.AppendTypeParam(tp)
 	setF.AddParam(`index`, typeDesc.BasicFor[int]())
 	setF.AddParam(`value`, tp)
-	setF = ab.registerSignature(setF)
+	setF = ab.proj.RegisterSignature(setF)
 	t.AddFunc(`$set`, typeDesc.NewSolid(nil, setF, tp))
 
-	t = ab.registerInterface(t)
+	t = ab.proj.RegisterInterface(t)
 	ab.baked[bakeKey] = t
 	return t
 }
@@ -132,16 +132,16 @@ func (ab *abstractor) bakeChan() *typeDesc.Interface {
 	getF := typeDesc.NewSignature(nil) // $recv() (T, bool)
 	getF.AppendTypeParam(tp)
 	getF.Return = typeDesc.NewSolid(nil, ab.bakeReturnTuple(), tp)
-	getF = ab.registerSignature(getF)
+	getF = ab.proj.RegisterSignature(getF)
 	t.AddFunc(`$recv`, typeDesc.NewSolid(nil, getF, tp))
 
 	setF := typeDesc.NewSignature(nil) // $send(value T)
 	setF.AppendTypeParam(tp)
 	setF.AddParam(`value`, tp)
-	setF = ab.registerSignature(setF)
+	setF = ab.proj.RegisterSignature(setF)
 	t.AddFunc(`$send`, typeDesc.NewSolid(nil, setF, tp))
 
-	t = ab.registerInterface(t)
+	t = ab.proj.RegisterInterface(t)
 	ab.baked[bakeKey] = t
 	return t
 }
@@ -173,7 +173,7 @@ func (ab *abstractor) bakeMap() *typeDesc.Interface {
 	getF.AppendTypeParam(tpValue)
 	getF.AddParam(`key`, tpKey)
 	getF.Return = typeDesc.NewSolid(nil, ab.bakeReturnTuple(), tpValue)
-	getF = ab.registerSignature(getF)
+	getF = ab.proj.RegisterSignature(getF)
 	t.AddFunc(`$get`, typeDesc.NewSolid(nil, getF, tpKey, tpValue))
 
 	setF := typeDesc.NewSignature(nil) // $set(key TKey, value TValue)
@@ -181,10 +181,10 @@ func (ab *abstractor) bakeMap() *typeDesc.Interface {
 	getF.AppendTypeParam(tpValue)
 	setF.AddParam(`key`, tpKey)
 	setF.AddParam(`value`, tpValue)
-	setF = ab.registerSignature(setF)
+	setF = ab.proj.RegisterSignature(setF)
 	t.AddFunc(`$set`, typeDesc.NewSolid(nil, setF, tpKey, tpValue))
 
-	t = ab.registerInterface(t)
+	t = ab.proj.RegisterInterface(t)
 	ab.baked[bakeKey] = t
 	return t
 }
@@ -207,10 +207,10 @@ func (ab *abstractor) bakePointer() *typeDesc.Interface {
 	getF := typeDesc.NewSignature(nil) // $deref() T
 	getF.AppendTypeParam(tp)
 	getF.Return = tp
-	getF = ab.registerSignature(getF)
+	getF = ab.proj.RegisterSignature(getF)
 	t.AddFunc(`$deref`, typeDesc.NewSolid(nil, getF, tp))
 
-	t = ab.registerInterface(t)
+	t = ab.proj.RegisterInterface(t)
 	ab.baked[bakeKey] = t
 	return t
 }
@@ -227,12 +227,12 @@ func (ab *abstractor) bakeComplex64() *typeDesc.Interface {
 
 	getF := typeDesc.NewSignature(nil) // func() float32
 	getF.Return = typeDesc.BasicFor[float32]()
-	getF = ab.registerSignature(getF)
+	getF = ab.proj.RegisterSignature(getF)
 
 	t.AddFunc(`$real`, getF) // $real() float32
 	t.AddFunc(`$imag`, getF) // $imag() float32
 
-	t = ab.registerInterface(t)
+	t = ab.proj.RegisterInterface(t)
 	ab.baked[bakeKey] = t
 	return t
 }
@@ -249,12 +249,12 @@ func (ab *abstractor) bakeComplex128() *typeDesc.Interface {
 
 	getF := typeDesc.NewSignature(nil) // func() float64
 	getF.Return = typeDesc.BasicFor[float64]()
-	getF = ab.registerSignature(getF)
+	getF = ab.proj.RegisterSignature(getF)
 
 	t.AddFunc(`$real`, getF) // $real() float64
 	t.AddFunc(`$imag`, getF) // $imag() float64
 
-	t = ab.registerInterface(t)
+	t = ab.proj.RegisterInterface(t)
 	ab.baked[bakeKey] = t
 	return t
 }

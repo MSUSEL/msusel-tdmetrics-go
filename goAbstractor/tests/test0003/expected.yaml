@@ -21,7 +21,7 @@
       types: [
         { name: Animal, type: 1 }, # type Animal interface { Pet() }
         { # type Cat struct { Name string; Pet() }
-          inherits: [ 1 ],
+          interface: 1,
           name: Cat, type: 3,
           methods: [
             { # Cat.Pet()
