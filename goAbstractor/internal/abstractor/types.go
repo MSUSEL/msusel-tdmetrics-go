@@ -98,7 +98,7 @@ func (ab *abstractor) convertInterface(t *types.Interface) *typeDesc.Interface {
 
 			switch et.(type) {
 			case *types.Union:
-				it.Union = ab.convertType(et).(*typeDesc.Union)
+				it.Union = ab.convertType(et).(typeDesc.Union)
 			}
 		}
 	}
@@ -144,10 +144,7 @@ func (ab *abstractor) convertStruct(t *types.Struct) *typeDesc.Struct {
 	for i := range t.NumFields() {
 		f := t.Field(i)
 		field := typeDesc.NewNamed(f.Name(), ab.convertType(f.Type()))
-		ts.Fields = append(ts.Fields, field)
-		if f.Embedded() {
-			ts.Embedded = append(ts.Embedded, field)
-		}
+		ts.AppendField(f.Embedded(), field)
 	}
 	return ab.proj.RegisterStruct(ts)
 }
@@ -168,9 +165,9 @@ func (ab *abstractor) createReturn(returns []*typeDesc.Named) typeDesc.TypeDesc 
 				f.Name = uniqueName(names)
 			}
 		}
-		return ab.proj.RegisterStruct(&typeDesc.Struct{
-			Fields: returns,
-		})
+		st := typeDesc.NewStruct(nil)
+		st.AppendField(false, returns...)
+		return ab.proj.RegisterStruct(st)
 	}
 }
 
@@ -186,7 +183,7 @@ func (ab *abstractor) convertName(t *types.Var) *typeDesc.Named {
 	return typeDesc.NewNamed(t.Name(), ab.convertType(t.Type()))
 }
 
-func (ab *abstractor) convertUnion(t *types.Union) *typeDesc.Union {
+func (ab *abstractor) convertUnion(t *types.Union) typeDesc.Union {
 	union := typeDesc.NewUnion(t)
 	for i := range t.Len() {
 		term := t.Term(i)

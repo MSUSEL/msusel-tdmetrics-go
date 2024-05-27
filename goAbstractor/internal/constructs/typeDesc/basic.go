@@ -27,6 +27,10 @@ func BasicFor[T comparable]() *Basic {
 	}
 }
 
+func (t *Basic) SetIndex(index int) {
+	// TODO: add index
+}
+
 func (t *Basic) GoType() types.Type {
 	return t.typ
 }

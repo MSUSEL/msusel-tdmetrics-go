@@ -18,6 +18,10 @@ func NewNamed(name string, t TypeDesc) *Named {
 	}
 }
 
+func (t *Named) SetIndex(index int) {
+	// TODO: add index
+}
+
 func (t *Named) GoType() types.Type {
 	return t.Type.GoType()
 }

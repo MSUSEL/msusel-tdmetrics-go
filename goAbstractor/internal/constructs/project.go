@@ -40,15 +40,15 @@ func (p *Project) UpdateIndices() {
 	// Type indices compound so that each has a unique offset.
 	index := 0
 	for _, t := range p.AllInterfaces {
-		t.Index = index
+		t.SetIndex(index)
 		index++
 	}
 	for _, t := range p.AllSignatures {
-		t.Index = index
+		t.SetIndex(index)
 		index++
 	}
 	for _, t := range p.AllStructs {
-		t.Index = index
+		t.SetIndex(index)
 		index++
 	}
 

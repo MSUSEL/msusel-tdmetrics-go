@@ -9,6 +9,9 @@ import (
 // TypeDesc is an interface for all type descriptors.
 type TypeDesc interface {
 
+	// SetIndex sets the type index.
+	SetIndex(index int)
+
 	// GoType gets the Go type associated with this type desc.
 	GoType() types.Type
 

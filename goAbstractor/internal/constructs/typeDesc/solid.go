@@ -25,6 +25,10 @@ func NewSolid(typ types.Type, target TypeDesc, tp ...TypeDesc) *Solid {
 	}
 }
 
+func (ts *Solid) SetIndex(index int) {
+	// TODO: add index
+}
+
 func (ts *Solid) GoType() types.Type {
 	return ts.typ
 }

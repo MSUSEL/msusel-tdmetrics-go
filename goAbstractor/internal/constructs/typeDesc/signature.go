@@ -14,13 +14,17 @@ type Signature struct {
 	TypeParams []*Named
 	Return     TypeDesc
 
-	Index int
+	index int
 }
 
 func NewSignature(typ *types.Signature) *Signature {
 	return &Signature{
 		typ: typ,
 	}
+}
+
+func (sig *Signature) SetIndex(index int) {
+	sig.index = index
 }
 
 func (sig *Signature) GoType() types.Type {
@@ -38,7 +42,7 @@ func (sig *Signature) Equal(other TypeDesc) bool {
 
 func (sig *Signature) ToJson(ctx *jsonify.Context) jsonify.Datum {
 	if ctx.IsShort() {
-		return jsonify.New(ctx, sig.Index)
+		return jsonify.New(ctx, sig.index)
 	}
 
 	return jsonify.NewMap().

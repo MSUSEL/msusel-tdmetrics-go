@@ -13,9 +13,9 @@ type Interface struct {
 
 	TypeParams []*Named
 	Methods    map[string]TypeDesc
-	Union      *Union
+	Union      Union
 
-	Index      int
+	index      int
 	Inherits   []*Interface
 	Inheritors []*Interface
 }
@@ -25,6 +25,10 @@ func NewInterface(typ *types.Interface) *Interface {
 		typ:     typ,
 		Methods: map[string]TypeDesc{},
 	}
+}
+
+func (ti *Interface) SetIndex(index int) {
+	ti.index = index
 }
 
 func (ti *Interface) GoType() types.Type {
@@ -41,7 +45,7 @@ func (ti *Interface) Equal(other TypeDesc) bool {
 
 func (ti *Interface) ToJson(ctx *jsonify.Context) jsonify.Datum {
 	if ctx.IsShort() {
-		return jsonify.New(ctx, ti.Index)
+		return jsonify.New(ctx, ti.index)
 	}
 
 	ctx2 := ctx.HideKind().Short()

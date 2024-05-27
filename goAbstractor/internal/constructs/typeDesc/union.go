@@ -12,45 +12,55 @@ import (
 // Exact types are like `string|int|bool` where the type must match exactly.
 // Approx types are like `~string|~int` where they type may be exact or
 // an extension of the base type.
-type Union struct {
-	typ *types.Union
+type Union interface {
+	TypeDesc
 
-	Exact  []TypeDesc
-	Approx []TypeDesc
+	AddType(approx bool, td ...TypeDesc)
 }
 
-func NewUnion(typ *types.Union) *Union {
-	return &Union{
+type unionImp struct {
+	typ *types.Union
+
+	exact  []TypeDesc
+	approx []TypeDesc
+}
+
+func NewUnion(typ *types.Union) Union {
+	return &unionImp{
 		typ: typ,
 	}
 }
 
-func (t *Union) GoType() types.Type {
+func (t *unionImp) SetIndex(index int) {
+	// TODO: add index
+}
+
+func (t *unionImp) GoType() types.Type {
 	return t.typ
 }
 
-func (t *Union) Equal(other TypeDesc) bool {
-	return equalTest(t, other, func(a, b *Union) bool {
-		return equalList(a.Exact, b.Exact) &&
-			equalList(a.Approx, b.Approx)
+func (t *unionImp) Equal(other TypeDesc) bool {
+	return equalTest(t, other, func(a, b *unionImp) bool {
+		return equalList(a.exact, b.exact) &&
+			equalList(a.approx, b.approx)
 	})
 }
 
-func (t *Union) ToJson(ctx *jsonify.Context) jsonify.Datum {
+func (t *unionImp) ToJson(ctx *jsonify.Context) jsonify.Datum {
 	return jsonify.NewMap().
 		AddIf(ctx, ctx.IsKindShown(), `kind`, `union`).
-		AddNonZero(ctx.ShowKind().Short(), `exact`, t.Exact).
-		AddNonZero(ctx.ShowKind().Short(), `approx`, t.Approx)
+		AddNonZero(ctx.ShowKind().Short(), `exact`, t.exact).
+		AddNonZero(ctx.ShowKind().Short(), `approx`, t.approx)
 }
 
-func (t *Union) String() string {
+func (t *unionImp) String() string {
 	return jsonify.ToString(t)
 }
 
-func (t *Union) AddType(approx bool, td ...TypeDesc) {
+func (t *unionImp) AddType(approx bool, td ...TypeDesc) {
 	if approx {
-		t.Approx = append(t.Approx, td...)
+		t.approx = append(t.approx, td...)
 	} else {
-		t.Exact = append(t.Exact, td...)
+		t.exact = append(t.exact, td...)
 	}
 }
