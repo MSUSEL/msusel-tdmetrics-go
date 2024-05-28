@@ -11,7 +11,7 @@ import (
 type Interface struct {
 	typ *types.Interface
 
-	TypeParams []*Named
+	TypeParams []Named
 	Methods    map[string]TypeDesc
 	Union      Union
 
@@ -72,7 +72,7 @@ func (ti *Interface) AddFunc(name string, sig TypeDesc) bool {
 	return true
 }
 
-func (ti *Interface) AddTypeParam(name string, t TypeDesc) *Named {
+func (ti *Interface) AddTypeParam(name string, t TypeDesc) Named {
 	tn := NewNamed(name, t)
 	ti.TypeParams = append(ti.TypeParams, tn)
 	return tn

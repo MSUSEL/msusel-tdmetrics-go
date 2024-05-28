@@ -10,7 +10,7 @@ type Project struct {
 
 	AllInterfaces []*typeDesc.Interface
 	AllSignatures []*typeDesc.Signature
-	AllStructs    []*typeDesc.Struct
+	AllStructs    []typeDesc.Struct
 }
 
 func NewProject() *Project {
@@ -66,7 +66,7 @@ func (p *Project) RegisterSignature(t *typeDesc.Signature) *typeDesc.Signature {
 	return registerType(t, &p.AllSignatures)
 }
 
-func (p *Project) RegisterStruct(t *typeDesc.Struct) *typeDesc.Struct {
+func (p *Project) RegisterStruct(t typeDesc.Struct) typeDesc.Struct {
 	return registerType(t, &p.AllStructs)
 }
 

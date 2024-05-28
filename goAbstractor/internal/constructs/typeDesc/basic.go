@@ -7,44 +7,47 @@ import (
 	"github.com/Snow-Gremlin/goToolbox/utils"
 )
 
-type Basic struct {
-	typ *types.Basic
-
-	Name string
+type Basic interface {
+	TypeDesc
 }
 
-func NewBasic(typ *types.Basic) *Basic {
-	return &Basic{
+type basicImp struct {
+	typ  *types.Basic
+	name string
+}
+
+func NewBasic(typ *types.Basic) Basic {
+	return &basicImp{
 		typ:  typ,
-		Name: typ.Name(),
+		name: typ.Name(),
 	}
 }
 
-func BasicFor[T comparable]() *Basic {
-	return &Basic{
+func BasicFor[T comparable]() Basic {
+	return &basicImp{
 		typ:  nil,
-		Name: utils.TypeOf[T]().Name(),
+		name: utils.TypeOf[T]().Name(),
 	}
 }
 
-func (t *Basic) SetIndex(index int) {
+func (t *basicImp) SetIndex(index int) {
 	// TODO: add index
 }
 
-func (t *Basic) GoType() types.Type {
+func (t *basicImp) GoType() types.Type {
 	return t.typ
 }
 
-func (t *Basic) Equal(other TypeDesc) bool {
-	return equalTest(t, other, func(a, b *Basic) bool {
-		return a.Name == b.Name
+func (t *basicImp) Equal(other TypeDesc) bool {
+	return equalTest(t, other, func(a, b *basicImp) bool {
+		return a.name == b.name
 	})
 }
 
-func (t *Basic) ToJson(ctx *jsonify.Context) jsonify.Datum {
-	return jsonify.New(ctx, t.Name)
+func (t *basicImp) ToJson(ctx *jsonify.Context) jsonify.Datum {
+	return jsonify.New(ctx, t.name)
 }
 
-func (t *Basic) String() string {
+func (t *basicImp) String() string {
 	return jsonify.ToString(t)
 }

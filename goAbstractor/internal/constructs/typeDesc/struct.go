@@ -6,40 +6,49 @@ import (
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/jsonify"
 )
 
-type Struct struct {
+type Struct interface {
+	TypeDesc
+
+	AddField(name string, t TypeDesc, embedded bool) Named
+	AppendField(embedded bool, fields ...Named)
+	AddTypeParam(name string, t *Interface) Named
+	AppendTypeParam(tp ...Named)
+}
+
+type structImp struct {
 	typ *types.Struct
 
-	fields     []*Named
-	typeParams []*Named
+	fields     []Named
+	typeParams []Named
 
 	index int
 
 	// embedded is the subset of fields that are embedded.
-	embedded []*Named
+	embedded []Named
 }
 
-func NewStruct(typ *types.Struct) *Struct {
-	return &Struct{
+func NewStruct(typ *types.Struct) Struct {
+	return &structImp{
 		typ: typ,
 	}
 }
 
-func (ts *Struct) SetIndex(index int) {
+func (ts *structImp) SetIndex(index int) {
 	ts.index = index
 }
 
-func (ts *Struct) GoType() types.Type {
+func (ts *structImp) GoType() types.Type {
 	return ts.typ
 }
 
-func (ts *Struct) Equal(other TypeDesc) bool {
-	return equalTest(ts, other, func(a, b *Struct) bool {
+func (ts *structImp) Equal(other TypeDesc) bool {
+	return equalTest(ts, other, func(a, b *structImp) bool {
 		return equalList(a.fields, b.fields) &&
 			equalList(a.typeParams, b.typeParams)
 	})
 }
 
-func (ts *Struct) ToJson(ctx *jsonify.Context) jsonify.Datum {
+func (ts *structImp) ToJson(ctx *jsonify.Context) jsonify.Datum {
 	if ctx.IsShort() {
 		return jsonify.New(ctx, ts.index)
 	}
@@ -51,29 +60,29 @@ func (ts *Struct) ToJson(ctx *jsonify.Context) jsonify.Datum {
 		AddNonZero(ctx2, `typeParams`, ts.typeParams)
 }
 
-func (ts *Struct) String() string {
+func (ts *structImp) String() string {
 	return jsonify.ToString(ts)
 }
 
-func (ts *Struct) AddField(name string, t TypeDesc, embedded bool) *Named {
+func (ts *structImp) AddField(name string, t TypeDesc, embedded bool) Named {
 	tn := NewNamed(name, t)
 	ts.AppendField(embedded, tn)
 	return tn
 }
 
-func (ts *Struct) AppendField(embedded bool, fields ...*Named) {
+func (ts *structImp) AppendField(embedded bool, fields ...Named) {
 	ts.fields = append(ts.fields, fields...)
 	if embedded {
 		ts.embedded = append(ts.embedded, fields...)
 	}
 }
 
-func (ts *Struct) AddTypeParam(name string, t *Interface) *Named {
+func (ts *structImp) AddTypeParam(name string, t *Interface) Named {
 	tn := NewNamed(name, t)
 	ts.typeParams = append(ts.typeParams, tn)
 	return tn
 }
 
-func (ts *Struct) AppendTypeParam(tp ...*Named) {
+func (ts *structImp) AppendTypeParam(tp ...Named) {
 	ts.typeParams = append(ts.typeParams, tp...)
 }

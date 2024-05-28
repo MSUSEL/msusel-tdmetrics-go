@@ -4,30 +4,11 @@ import (
 	"fmt"
 	"go/types"
 
-	"github.com/Snow-Gremlin/goToolbox/collections"
 	"github.com/Snow-Gremlin/goToolbox/collections/enumerator"
 	"github.com/Snow-Gremlin/goToolbox/collections/set"
 
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs/typeDesc"
 )
-
-// uniqueName returns a unique name that isn't in the set.
-// The new unique name will be added to the set.
-// This is for naming anonymous fields and unnamed return values.
-func uniqueName(names collections.Set[string]) string {
-	const (
-		attempts = 10_000
-		pattern  = `$value%d`
-	)
-	for offset := 1; offset < attempts; offset++ {
-		name := fmt.Sprintf(pattern, offset)
-		if !names.Contains(name) {
-			names.Add(name)
-			return name
-		}
-	}
-	panic(fmt.Errorf(`unable to find unique name in %d attempts`, attempts))
-}
 
 func (ab *abstractor) convertType(t types.Type) typeDesc.TypeDesc {
 	switch t2 := t.(type) {
@@ -111,7 +92,7 @@ func (ab *abstractor) convertMap(t *types.Map) typeDesc.TypeDesc {
 	return typeDesc.NewSolid(t, ab.bakeMap(), key, value)
 }
 
-func (ab *abstractor) convertNamed(t *types.Named) *typeDesc.Named {
+func (ab *abstractor) convertNamed(t *types.Named) typeDesc.Named {
 	// TODO: need to handle named better.
 	return typeDesc.NewNamed(t.String(), nil)
 }
@@ -124,12 +105,10 @@ func (ab *abstractor) convertPointer(t *types.Pointer) typeDesc.TypeDesc {
 func (ab *abstractor) convertSignature(t *types.Signature) *typeDesc.Signature {
 	// Don't output receiver or receiver type here.
 	sig := typeDesc.NewSignature(t)
-	sig.Variadic = t.Variadic()
-
-	sig.TypeParams = ab.convertTypeParamList(t.TypeParams())
-
-	sig.Params = ab.convertTuple(t.Params())
-	sig.Return = ab.createReturn(ab.convertTuple(t.Results()))
+	sig.SetVariadic(t.Variadic())
+	sig.AppendTypeParam(ab.convertTypeParamList(t.TypeParams())...)
+	sig.AppendParam(ab.convertTuple(t.Params())...)
+	sig.SetReturn(ab.createReturn(ab.convertTuple(t.Results())))
 
 	return ab.proj.RegisterSignature(sig)
 }
@@ -139,7 +118,7 @@ func (ab *abstractor) convertSlice(t *types.Slice) typeDesc.TypeDesc {
 	return typeDesc.NewSolid(t, ab.bakeList(), elem)
 }
 
-func (ab *abstractor) convertStruct(t *types.Struct) *typeDesc.Struct {
+func (ab *abstractor) convertStruct(t *types.Struct) typeDesc.Struct {
 	ts := typeDesc.NewStruct(t)
 	for i := range t.NumFields() {
 		f := t.Field(i)
@@ -149,21 +128,19 @@ func (ab *abstractor) convertStruct(t *types.Struct) *typeDesc.Struct {
 	return ab.proj.RegisterStruct(ts)
 }
 
-func (ab *abstractor) createReturn(returns []*typeDesc.Named) typeDesc.TypeDesc {
+func (ab *abstractor) createReturn(returns []typeDesc.Named) typeDesc.TypeDesc {
 	// TODO: Need to handle adding type parameters in struct
 	//       or returning a solid type if single return has type parameters.
 	switch len(returns) {
 	case 0:
 		return nil
 	case 1:
-		return returns[0].Type
+		return returns[0].Type()
 	default:
 		names := set.From(enumerator.Select(enumerator.Enumerate(returns...),
-			func(f *typeDesc.Named) string { return f.Name }).NotZero())
+			func(f typeDesc.Named) string { return f.Name() }).NotZero())
 		for _, f := range returns {
-			if len(f.Name) <= 0 || f.Name == `_` {
-				f.Name = uniqueName(names)
-			}
+			f.EnsureName(names)
 		}
 		st := typeDesc.NewStruct(nil)
 		st.AppendField(false, returns...)
@@ -171,15 +148,15 @@ func (ab *abstractor) createReturn(returns []*typeDesc.Named) typeDesc.TypeDesc 
 	}
 }
 
-func (ab *abstractor) convertTuple(t *types.Tuple) []*typeDesc.Named {
-	list := make([]*typeDesc.Named, t.Len())
+func (ab *abstractor) convertTuple(t *types.Tuple) []typeDesc.Named {
+	list := make([]typeDesc.Named, t.Len())
 	for i := range t.Len() {
 		list[i] = ab.convertName(t.At(i))
 	}
 	return list
 }
 
-func (ab *abstractor) convertName(t *types.Var) *typeDesc.Named {
+func (ab *abstractor) convertName(t *types.Var) typeDesc.Named {
 	return typeDesc.NewNamed(t.Name(), ab.convertType(t.Type()))
 }
 
@@ -193,7 +170,7 @@ func (ab *abstractor) convertUnion(t *types.Union) typeDesc.Union {
 	return union
 }
 
-func (ab *abstractor) convertTypeParam(t *types.TypeParam) *typeDesc.Named {
+func (ab *abstractor) convertTypeParam(t *types.TypeParam) typeDesc.Named {
 	t2 := t.Obj().Type().Underlying()
 	return typeDesc.NewNamed(
 		t.Obj().Name(),
@@ -201,8 +178,8 @@ func (ab *abstractor) convertTypeParam(t *types.TypeParam) *typeDesc.Named {
 	)
 }
 
-func (ab *abstractor) convertTypeParamList(t *types.TypeParamList) []*typeDesc.Named {
-	list := make([]*typeDesc.Named, t.Len())
+func (ab *abstractor) convertTypeParamList(t *types.TypeParamList) []typeDesc.Named {
+	list := make([]typeDesc.Named, t.Len())
 	for i := range t.Len() {
 		list[i] = ab.convertTypeParam(t.At(i))
 	}

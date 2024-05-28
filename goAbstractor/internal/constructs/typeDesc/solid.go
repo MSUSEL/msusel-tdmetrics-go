@@ -10,47 +10,54 @@ import (
 // with specific type parameters, e.g. List<T> might be resolved to List<int>.
 // The type parameter resolution may be referencing another type parameter,
 // e.g. a method signature inside a generic interface.
-type Solid struct {
-	typ types.Type
+type Solid interface {
+	TypeDesc
 
-	Target     TypeDesc
-	TypeParams []TypeDesc
+	AppendTypeParam(tp ...TypeDesc)
 }
 
-func NewSolid(typ types.Type, target TypeDesc, tp ...TypeDesc) *Solid {
-	return &Solid{
+type solidImp struct {
+	typ types.Type
+
+	index      int
+	target     TypeDesc
+	typeParams []TypeDesc
+}
+
+func NewSolid(typ types.Type, target TypeDesc, tp ...TypeDesc) Solid {
+	return &solidImp{
 		typ:        typ,
-		Target:     target,
-		TypeParams: tp,
+		target:     target,
+		typeParams: tp,
 	}
 }
 
-func (ts *Solid) SetIndex(index int) {
-	// TODO: add index
+func (ts *solidImp) SetIndex(index int) {
+	ts.index = index
 }
 
-func (ts *Solid) GoType() types.Type {
+func (ts *solidImp) GoType() types.Type {
 	return ts.typ
 }
 
-func (ts *Solid) Equal(other TypeDesc) bool {
-	return equalTest(ts, other, func(a, b *Solid) bool {
-		return equal(a.Target, b.Target) &&
-			equalList(a.TypeParams, b.TypeParams)
+func (ts *solidImp) Equal(other TypeDesc) bool {
+	return equalTest(ts, other, func(a, b *solidImp) bool {
+		return equal(a.target, b.target) &&
+			equalList(a.typeParams, b.typeParams)
 	})
 }
 
-func (ts *Solid) ToJson(ctx *jsonify.Context) jsonify.Datum {
+func (ts *solidImp) ToJson(ctx *jsonify.Context) jsonify.Datum {
 	return jsonify.NewMap().
 		AddIf(ctx, ctx.IsKindShown(), `kind`, `solid`).
-		AddNonZero(ctx.ShowKind().Short(), `target`, ts.Target).
-		AddNonZero(ctx.ShowKind().Short(), `typeParams`, ts.TypeParams)
+		AddNonZero(ctx.ShowKind().Short(), `target`, ts.target).
+		AddNonZero(ctx.ShowKind().Short(), `typeParams`, ts.typeParams)
 }
 
-func (ts *Solid) String() string {
+func (ts *solidImp) String() string {
 	return jsonify.ToString(ts)
 }
 
-func (ts *Solid) AppendTypeParam(tp ...TypeDesc) {
-	ts.TypeParams = append(ts.TypeParams, tp...)
+func (ts *solidImp) AppendTypeParam(tp ...TypeDesc) {
+	ts.typeParams = append(ts.typeParams, tp...)
 }

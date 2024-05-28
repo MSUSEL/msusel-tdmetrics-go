@@ -35,7 +35,7 @@ func (ab *abstractor) bakeIntFunc() *typeDesc.Signature {
 	}
 
 	f := typeDesc.NewSignature(nil) // func() int
-	f.Return = typeDesc.BasicFor[int]()
+	f.SetReturn(typeDesc.BasicFor[int]())
 	f = ab.proj.RegisterSignature(f)
 	ab.baked[bakeKey] = f
 	return f
@@ -48,10 +48,10 @@ func (ab *abstractor) bakeIntFunc() *typeDesc.Signature {
 //		value T
 //		ok    bool
 //	}
-func (ab *abstractor) bakeReturnTuple() *typeDesc.Struct {
+func (ab *abstractor) bakeReturnTuple() typeDesc.Struct {
 	const bakeKey = `struct[T] { value T; ok bool }`
 	if t, has := ab.baked[bakeKey]; has {
-		return t.(*typeDesc.Struct)
+		return t.(typeDesc.Struct)
 	}
 
 	t := typeDesc.NewStruct(nil)
@@ -92,7 +92,7 @@ func (ab *abstractor) bakeList() *typeDesc.Interface {
 	getF := typeDesc.NewSignature(nil) // $get(index int) T
 	getF.AppendTypeParam(tp)
 	getF.AddParam(`index`, typeDesc.BasicFor[int]())
-	getF.Return = tp
+	getF.SetReturn(tp)
 	getF = ab.proj.RegisterSignature(getF)
 	t.AddFunc(`$get`, typeDesc.NewSolid(nil, getF, tp))
 
@@ -131,7 +131,7 @@ func (ab *abstractor) bakeChan() *typeDesc.Interface {
 
 	getF := typeDesc.NewSignature(nil) // $recv() (T, bool)
 	getF.AppendTypeParam(tp)
-	getF.Return = typeDesc.NewSolid(nil, ab.bakeReturnTuple(), tp)
+	getF.SetReturn(typeDesc.NewSolid(nil, ab.bakeReturnTuple(), tp))
 	getF = ab.proj.RegisterSignature(getF)
 	t.AddFunc(`$recv`, typeDesc.NewSolid(nil, getF, tp))
 
@@ -172,7 +172,7 @@ func (ab *abstractor) bakeMap() *typeDesc.Interface {
 	getF.AppendTypeParam(tpKey)
 	getF.AppendTypeParam(tpValue)
 	getF.AddParam(`key`, tpKey)
-	getF.Return = typeDesc.NewSolid(nil, ab.bakeReturnTuple(), tpValue)
+	getF.SetReturn(typeDesc.NewSolid(nil, ab.bakeReturnTuple(), tpValue))
 	getF = ab.proj.RegisterSignature(getF)
 	t.AddFunc(`$get`, typeDesc.NewSolid(nil, getF, tpKey, tpValue))
 
@@ -206,7 +206,7 @@ func (ab *abstractor) bakePointer() *typeDesc.Interface {
 
 	getF := typeDesc.NewSignature(nil) // $deref() T
 	getF.AppendTypeParam(tp)
-	getF.Return = tp
+	getF.SetReturn(tp)
 	getF = ab.proj.RegisterSignature(getF)
 	t.AddFunc(`$deref`, typeDesc.NewSolid(nil, getF, tp))
 
@@ -226,7 +226,7 @@ func (ab *abstractor) bakeComplex64() *typeDesc.Interface {
 	t.Inherits = append(t.Inherits, ab.bakeAny())
 
 	getF := typeDesc.NewSignature(nil) // func() float32
-	getF.Return = typeDesc.BasicFor[float32]()
+	getF.SetReturn(typeDesc.BasicFor[float32]())
 	getF = ab.proj.RegisterSignature(getF)
 
 	t.AddFunc(`$real`, getF) // $real() float32
@@ -248,7 +248,7 @@ func (ab *abstractor) bakeComplex128() *typeDesc.Interface {
 	t.Inherits = append(t.Inherits, ab.bakeAny())
 
 	getF := typeDesc.NewSignature(nil) // func() float64
-	getF.Return = typeDesc.BasicFor[float64]()
+	getF.SetReturn(typeDesc.BasicFor[float64]())
 	getF = ab.proj.RegisterSignature(getF)
 
 	t.AddFunc(`$real`, getF) // $real() float64

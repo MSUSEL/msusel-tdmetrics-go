@@ -9,10 +9,10 @@ import (
 type Signature struct {
 	typ *types.Signature
 
-	Variadic   bool
-	Params     []*Named
-	TypeParams []*Named
-	Return     TypeDesc
+	variadic   bool
+	params     []Named
+	typeParams []Named
+	returnType TypeDesc
 
 	index int
 }
@@ -33,10 +33,10 @@ func (sig *Signature) GoType() types.Type {
 
 func (sig *Signature) Equal(other TypeDesc) bool {
 	return equalTest(sig, other, func(a, b *Signature) bool {
-		return a.Variadic == b.Variadic &&
-			equal(a.Return, b.Return) &&
-			equalList(a.Params, b.Params) &&
-			equalList(a.TypeParams, b.TypeParams)
+		return a.variadic == b.variadic &&
+			equal(a.returnType, b.returnType) &&
+			equalList(a.params, b.params) &&
+			equalList(a.typeParams, b.typeParams)
 	})
 }
 
@@ -47,22 +47,34 @@ func (sig *Signature) ToJson(ctx *jsonify.Context) jsonify.Datum {
 
 	return jsonify.NewMap().
 		AddIf(ctx, ctx.IsKindShown(), `kind`, `signature`).
-		AddNonZero(ctx, `variadic`, sig.Variadic).
-		AddNonZero(ctx.HideKind().Long(), `params`, sig.Params).
-		AddNonZero(ctx.HideKind().Long(), `typeParams`, sig.TypeParams).
-		AddNonZero(ctx.ShowKind().Short(), `return`, sig.Return)
+		AddNonZero(ctx, `variadic`, sig.variadic).
+		AddNonZero(ctx.HideKind().Long(), `params`, sig.params).
+		AddNonZero(ctx.HideKind().Long(), `typeParams`, sig.typeParams).
+		AddNonZero(ctx.ShowKind().Short(), `return`, sig.returnType)
 }
 
 func (sig *Signature) String() string {
 	return jsonify.ToString(sig)
 }
 
-func (sig *Signature) AddParam(name string, t TypeDesc) *Named {
+func (sig *Signature) SetVariadic(v bool) {
+	sig.variadic = v
+}
+
+func (sig *Signature) SetReturn(t TypeDesc) {
+	sig.returnType = t
+}
+
+func (sig *Signature) AddParam(name string, t TypeDesc) Named {
 	tn := NewNamed(name, t)
-	sig.Params = append(sig.Params, tn)
+	sig.AppendParam(tn)
 	return tn
 }
 
-func (sig *Signature) AppendTypeParam(tp ...*Named) {
-	sig.TypeParams = append(sig.TypeParams, tp...)
+func (sig *Signature) AppendParam(tn ...Named) {
+	sig.params = append(sig.params, tn...)
+}
+
+func (sig *Signature) AppendTypeParam(tp ...Named) {
+	sig.typeParams = append(sig.typeParams, tp...)
 }
