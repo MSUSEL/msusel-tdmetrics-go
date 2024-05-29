@@ -4,46 +4,59 @@ import (
 	"fmt"
 	"go/types"
 
-	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/jsonify"
 	"github.com/Snow-Gremlin/goToolbox/utils"
+
+	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/jsonify"
 )
 
-type Interface struct {
-	typ *types.Interface
+type Interface interface {
+	TypeDesc
 
-	TypeParams []Named
-	Methods    map[string]TypeDesc
-	Union      Union
-
-	index      int
-	Inherits   []*Interface
-	Inheritors []*Interface
+	SetUnion(union Union)
+	AddFunc(name string, sig TypeDesc) bool
+	AddTypeParam(name string, t TypeDesc) Named
+	IsSupertypeOf(other Interface) bool
+	AppendInherits(inherits ...Interface)
+	AddInheritors(inter Interface) bool
+	SetInheritance()
 }
 
-func NewInterface(typ *types.Interface) *Interface {
-	return &Interface{
+type interfaceImp struct {
+	typ *types.Interface
+
+	typeParams []Named
+	methods    map[string]TypeDesc
+	union      Union
+
+	index      int
+	inherits   []Interface
+	inheritors []Interface
+}
+
+func NewInterface(typ *types.Interface) Interface {
+	return &interfaceImp{
 		typ:     typ,
-		Methods: map[string]TypeDesc{},
+		methods: map[string]TypeDesc{},
 	}
 }
 
-func (ti *Interface) SetIndex(index int) {
+func (ti *interfaceImp) SetIndex(index int) {
 	ti.index = index
 }
 
-func (ti *Interface) GoType() types.Type {
+func (ti *interfaceImp) GoType() types.Type {
 	return ti.typ
 }
 
-func (ti *Interface) Equal(other TypeDesc) bool {
-	return equalTest(ti, other, func(a, b *Interface) bool {
-		return equal(a.Union, b.Union) &&
-			equalList(a.TypeParams, b.TypeParams) &&
-			equalMap(a.Methods, b.Methods)
+func (ti *interfaceImp) Equal(other TypeDesc) bool {
+	return equalTest(ti, other, func(a, b *interfaceImp) bool {
+		return equal(a.union, b.union) &&
+			equalList(a.typeParams, b.typeParams) &&
+			equalMap(a.methods, b.methods)
 	})
 }
 
-func (ti *Interface) ToJson(ctx *jsonify.Context) jsonify.Datum {
+func (ti *interfaceImp) ToJson(ctx *jsonify.Context) jsonify.Datum {
 	if ctx.IsShort() {
 		return jsonify.New(ctx, ti.index)
 	}
@@ -51,38 +64,91 @@ func (ti *Interface) ToJson(ctx *jsonify.Context) jsonify.Datum {
 	ctx2 := ctx.HideKind().Short()
 	return jsonify.NewMap().
 		AddIf(ctx, ctx.IsKindShown(), `kind`, `interface`).
-		AddNonZero(ctx2.Long(), `typeParams`, ti.TypeParams).
-		AddNonZero(ctx2, `inherits`, ti.Inherits).
-		AddNonZero(ctx2, `union`, ti.Union).
-		AddNonZero(ctx2, `methods`, ti.Methods)
+		AddNonZero(ctx2.Long(), `typeParams`, ti.typeParams).
+		AddNonZero(ctx2, `inherits`, ti.inherits).
+		AddNonZero(ctx2, `union`, ti.union).
+		AddNonZero(ctx2, `methods`, ti.methods)
 }
 
-func (ti *Interface) String() string {
+func (ti *interfaceImp) String() string {
 	return jsonify.ToString(ti)
 }
 
-func (ti *Interface) AddFunc(name string, sig TypeDesc) bool {
-	if other, has := ti.Methods[name]; has {
+func (ti *interfaceImp) SetUnion(union Union) {
+	ti.union = union
+}
+
+func (ti *interfaceImp) AddFunc(name string, sig TypeDesc) bool {
+	if other, has := ti.methods[name]; has {
 		if other != sig {
 			panic(fmt.Errorf(`function %v already exists with a different signature`, name))
 		}
 		return false
 	}
-	ti.Methods[name] = sig
+	ti.methods[name] = sig
 	return true
 }
 
-func (ti *Interface) AddTypeParam(name string, t TypeDesc) Named {
+func (ti *interfaceImp) AddTypeParam(name string, t TypeDesc) Named {
 	tn := NewNamed(name, t)
-	ti.TypeParams = append(ti.TypeParams, tn)
+	ti.typeParams = append(ti.typeParams, tn)
 	return tn
 }
 
-func (ti *Interface) IsSupertypeOf(other *Interface) bool {
-	if utils.IsNil(ti.typ) || utils.IsNil(other.typ) {
+func (ti *interfaceImp) IsSupertypeOf(other Interface) bool {
+	otherTyp, ok := other.GoType().(*types.Interface)
+	if !ok || utils.IsNil(ti.typ) || utils.IsNil(otherTyp) {
 		// Baked in types don't have underlying interfaces
 		// but also shouldn't be needed for any inheritance.
 		return false
 	}
-	return types.Implements(ti.typ, other.typ)
+	return types.Implements(ti.typ, otherTyp)
+}
+
+func (ti *interfaceImp) AppendInherits(inherits ...Interface) {
+	ti.inherits = append(ti.inherits, inherits...)
+}
+
+func (ti *interfaceImp) AddInheritors(other Interface) bool {
+	inter, ok := other.(*interfaceImp)
+	if !ok {
+		return false
+	}
+	if ti == inter {
+		return true
+	}
+	if !inter.IsSupertypeOf(ti) {
+		return false
+	}
+
+	homed := false
+	for _, other := range ti.inheritors {
+		if other.AddInheritors(inter) {
+			homed = true
+		}
+	}
+	if homed {
+		return true
+	}
+
+	changed := false
+	for i, other := range ti.inheritors {
+		if other.IsSupertypeOf(inter) {
+			inter.inheritors = append(inter.inheritors, other)
+			ti.inheritors[i] = nil
+			changed = true
+		}
+	}
+	if changed {
+		ti.inheritors = utils.RemoveZeros(ti.inheritors)
+	}
+
+	ti.inheritors = append(ti.inheritors, inter)
+	return true
+}
+
+func (ti *interfaceImp) SetInheritance() {
+	for _, other := range ti.inheritors {
+		other.AppendInherits(ti)
+	}
 }

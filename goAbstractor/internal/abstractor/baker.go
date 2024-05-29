@@ -14,10 +14,10 @@ import (
 
 // bakeAny bakes in an interface to represent "any"
 // the base object that (almost) all other types inherit from.
-func (ab *abstractor) bakeAny() *typeDesc.Interface {
+func (ab *abstractor) bakeAny() typeDesc.Interface {
 	const bakeKey = `any`
 	if t, has := ab.baked[bakeKey]; has {
-		return t.(*typeDesc.Interface)
+		return t.(typeDesc.Interface)
 	}
 
 	t := typeDesc.NewInterface(types.NewInterfaceType(nil, nil))
@@ -28,10 +28,10 @@ func (ab *abstractor) bakeAny() *typeDesc.Interface {
 
 // bakeIntFunc bakes in a signature for `func() int`.
 // This is useful for things like `cap() int` and `len() int`.
-func (ab *abstractor) bakeIntFunc() *typeDesc.Signature {
+func (ab *abstractor) bakeIntFunc() typeDesc.Signature {
 	const bakeKey = `func() int`
 	if t, has := ab.baked[bakeKey]; has {
-		return t.(*typeDesc.Signature)
+		return t.(typeDesc.Signature)
 	}
 
 	f := typeDesc.NewSignature(nil) // func() int
@@ -76,14 +76,14 @@ func (ab *abstractor) bakeReturnTuple() typeDesc.Struct {
 //
 // Note: The difference between an array and slice aren't
 // important for the abstractor, so they are combined into one.
-func (ab *abstractor) bakeList() *typeDesc.Interface {
+func (ab *abstractor) bakeList() typeDesc.Interface {
 	const bakeKey = `list[T any]`
 	if t, has := ab.baked[bakeKey]; has {
-		return t.(*typeDesc.Interface)
+		return t.(typeDesc.Interface)
 	}
 
 	t := typeDesc.NewInterface(nil)
-	t.Inherits = append(t.Inherits, ab.bakeAny())
+	t.AppendInherits(ab.bakeAny())
 	tp := t.AddTypeParam(`T`, ab.bakeAny())
 
 	t.AddFunc(`$len`, ab.bakeIntFunc()) // $len() int
@@ -117,14 +117,14 @@ func (ab *abstractor) bakeList() *typeDesc.Interface {
 //	}
 //
 // Note: Doesn't currently have cap, trySend, or tryRecv as defined in reflect.
-func (ab *abstractor) bakeChan() *typeDesc.Interface {
+func (ab *abstractor) bakeChan() typeDesc.Interface {
 	const bakeKey = `chan[T any]`
 	if t, has := ab.baked[bakeKey]; has {
-		return t.(*typeDesc.Interface)
+		return t.(typeDesc.Interface)
 	}
 
 	t := typeDesc.NewInterface(nil)
-	t.Inherits = append(t.Inherits, ab.bakeAny())
+	t.AppendInherits(ab.bakeAny())
 	tp := t.AddTypeParam(`T`, ab.bakeAny())
 
 	t.AddFunc(`$len`, ab.bakeIntFunc()) // $len() int
@@ -155,14 +155,14 @@ func (ab *abstractor) bakeChan() *typeDesc.Interface {
 //	}
 //
 // Note: Doesn't currently require Key to be comparable as defined in reflect.
-func (ab *abstractor) bakeMap() *typeDesc.Interface {
+func (ab *abstractor) bakeMap() typeDesc.Interface {
 	const bakeKey = `map[TKey, TValue any]`
 	if t, has := ab.baked[bakeKey]; has {
-		return t.(*typeDesc.Interface)
+		return t.(typeDesc.Interface)
 	}
 
 	t := typeDesc.NewInterface(nil)
-	t.Inherits = append(t.Inherits, ab.bakeAny())
+	t.AppendInherits(ab.bakeAny())
 	tpKey := t.AddTypeParam(`TKey`, ab.bakeAny())
 	tpValue := t.AddTypeParam(`TValue`, ab.bakeAny())
 
@@ -194,14 +194,14 @@ func (ab *abstractor) bakeMap() *typeDesc.Interface {
 //	type pointer[T any] interface {
 //		$deref() T
 //	}
-func (ab *abstractor) bakePointer() *typeDesc.Interface {
+func (ab *abstractor) bakePointer() typeDesc.Interface {
 	const bakeKey = `pointer[T any]`
 	if t, has := ab.baked[bakeKey]; has {
-		return t.(*typeDesc.Interface)
+		return t.(typeDesc.Interface)
 	}
 
 	t := typeDesc.NewInterface(nil)
-	t.Inherits = append(t.Inherits, ab.bakeAny())
+	t.AppendInherits(ab.bakeAny())
 	tp := t.AddTypeParam(`T`, ab.bakeAny())
 
 	getF := typeDesc.NewSignature(nil) // $deref() T
@@ -216,14 +216,14 @@ func (ab *abstractor) bakePointer() *typeDesc.Interface {
 }
 
 // bakeComplex64 bakes in an interface to represent a Go 64-bit complex number.
-func (ab *abstractor) bakeComplex64() *typeDesc.Interface {
+func (ab *abstractor) bakeComplex64() typeDesc.Interface {
 	const bakeKey = `complex64`
 	if t, has := ab.baked[bakeKey]; has {
-		return t.(*typeDesc.Interface)
+		return t.(typeDesc.Interface)
 	}
 
 	t := typeDesc.NewInterface(nil)
-	t.Inherits = append(t.Inherits, ab.bakeAny())
+	t.AppendInherits(ab.bakeAny())
 
 	getF := typeDesc.NewSignature(nil) // func() float32
 	getF.SetReturn(typeDesc.BasicFor[float32]())
@@ -238,14 +238,14 @@ func (ab *abstractor) bakeComplex64() *typeDesc.Interface {
 }
 
 // bakeComplex128 bakes in an interface to represent a Go 64-bit complex number.
-func (ab *abstractor) bakeComplex128() *typeDesc.Interface {
+func (ab *abstractor) bakeComplex128() typeDesc.Interface {
 	const bakeKey = `complex128`
 	if t, has := ab.baked[bakeKey]; has {
-		return t.(*typeDesc.Interface)
+		return t.(typeDesc.Interface)
 	}
 
 	t := typeDesc.NewInterface(nil)
-	t.Inherits = append(t.Inherits, ab.bakeAny())
+	t.AppendInherits(ab.bakeAny())
 
 	getF := typeDesc.NewSignature(nil) // func() float64
 	getF.SetReturn(typeDesc.BasicFor[float64]())

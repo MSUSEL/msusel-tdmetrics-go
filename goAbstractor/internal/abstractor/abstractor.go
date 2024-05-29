@@ -1,6 +1,7 @@
 package abstractor
 
 import (
+	"errors"
 	"fmt"
 	"go/ast"
 	"go/token"
@@ -206,4 +207,21 @@ func (ab *abstractor) resolveClass(pkg *constructs.Package, td *constructs.TypeD
 		tInt.AddFunc(m.Name, m.Signature)
 	}
 	td.Interface = ab.proj.RegisterInterface(tInt)
+}
+
+func (ab *abstractor) resolveInheritance() {
+	ab.log(`resolve inheritance`)
+	if len(ab.proj.AllInterfaces) <= 0 {
+		panic(errors.New(`expected the object interface at minimum but found no interfaces`))
+	}
+	obj := ab.proj.AllInterfaces[0]
+	if !obj.Equal(ab.bakeAny()) {
+		panic(fmt.Errorf(`expected the first interface to be the "any" interface`))
+	}
+	for _, inter := range ab.proj.AllInterfaces[1:] {
+		obj.AddInheritors(inter)
+	}
+	for _, inter := range ab.proj.AllInterfaces {
+		inter.SetInheritance()
+	}
 }

@@ -6,7 +6,17 @@ import (
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/jsonify"
 )
 
-type Signature struct {
+type Signature interface {
+	TypeDesc
+
+	SetVariadic(v bool)
+	SetReturn(t TypeDesc)
+	AddParam(name string, t TypeDesc) Named
+	AppendParam(tn ...Named)
+	AppendTypeParam(tp ...Named)
+}
+
+type signatureImp struct {
 	typ *types.Signature
 
 	variadic   bool
@@ -17,22 +27,22 @@ type Signature struct {
 	index int
 }
 
-func NewSignature(typ *types.Signature) *Signature {
-	return &Signature{
+func NewSignature(typ *types.Signature) Signature {
+	return &signatureImp{
 		typ: typ,
 	}
 }
 
-func (sig *Signature) SetIndex(index int) {
+func (sig *signatureImp) SetIndex(index int) {
 	sig.index = index
 }
 
-func (sig *Signature) GoType() types.Type {
+func (sig *signatureImp) GoType() types.Type {
 	return sig.typ
 }
 
-func (sig *Signature) Equal(other TypeDesc) bool {
-	return equalTest(sig, other, func(a, b *Signature) bool {
+func (sig *signatureImp) Equal(other TypeDesc) bool {
+	return equalTest(sig, other, func(a, b *signatureImp) bool {
 		return a.variadic == b.variadic &&
 			equal(a.returnType, b.returnType) &&
 			equalList(a.params, b.params) &&
@@ -40,7 +50,7 @@ func (sig *Signature) Equal(other TypeDesc) bool {
 	})
 }
 
-func (sig *Signature) ToJson(ctx *jsonify.Context) jsonify.Datum {
+func (sig *signatureImp) ToJson(ctx *jsonify.Context) jsonify.Datum {
 	if ctx.IsShort() {
 		return jsonify.New(ctx, sig.index)
 	}
@@ -53,28 +63,28 @@ func (sig *Signature) ToJson(ctx *jsonify.Context) jsonify.Datum {
 		AddNonZero(ctx.ShowKind().Short(), `return`, sig.returnType)
 }
 
-func (sig *Signature) String() string {
+func (sig *signatureImp) String() string {
 	return jsonify.ToString(sig)
 }
 
-func (sig *Signature) SetVariadic(v bool) {
+func (sig *signatureImp) SetVariadic(v bool) {
 	sig.variadic = v
 }
 
-func (sig *Signature) SetReturn(t TypeDesc) {
+func (sig *signatureImp) SetReturn(t TypeDesc) {
 	sig.returnType = t
 }
 
-func (sig *Signature) AddParam(name string, t TypeDesc) Named {
+func (sig *signatureImp) AddParam(name string, t TypeDesc) Named {
 	tn := NewNamed(name, t)
 	sig.AppendParam(tn)
 	return tn
 }
 
-func (sig *Signature) AppendParam(tn ...Named) {
+func (sig *signatureImp) AppendParam(tn ...Named) {
 	sig.params = append(sig.params, tn...)
 }
 
-func (sig *Signature) AppendTypeParam(tp ...Named) {
+func (sig *signatureImp) AppendTypeParam(tp ...Named) {
 	sig.typeParams = append(sig.typeParams, tp...)
 }

@@ -9,8 +9,8 @@ type TypeDef struct {
 	Name       string
 	Type       typeDesc.TypeDesc
 	Methods    []*Method
-	TypeParams []*typeDesc.Named
-	Interface  *typeDesc.Interface
+	TypeParams []typeDesc.Named
+	Interface  typeDesc.Interface
 }
 
 func NewTypeDef(name string, t typeDesc.TypeDesc) *TypeDef {

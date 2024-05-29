@@ -62,7 +62,7 @@ func (ab *abstractor) convertChan(t *types.Chan) typeDesc.TypeDesc {
 	return typeDesc.NewSolid(t, ab.bakeChan(), elem)
 }
 
-func (ab *abstractor) convertInterface(t *types.Interface) *typeDesc.Interface {
+func (ab *abstractor) convertInterface(t *types.Interface) typeDesc.Interface {
 	t = t.Complete()
 
 	it := typeDesc.NewInterface(t)
@@ -79,7 +79,7 @@ func (ab *abstractor) convertInterface(t *types.Interface) *typeDesc.Interface {
 
 			switch et.(type) {
 			case *types.Union:
-				it.Union = ab.convertType(et).(typeDesc.Union)
+				it.SetUnion(ab.convertType(et).(typeDesc.Union))
 			}
 		}
 	}
@@ -102,7 +102,7 @@ func (ab *abstractor) convertPointer(t *types.Pointer) typeDesc.TypeDesc {
 	return typeDesc.NewSolid(t, ab.bakePointer(), elem)
 }
 
-func (ab *abstractor) convertSignature(t *types.Signature) *typeDesc.Signature {
+func (ab *abstractor) convertSignature(t *types.Signature) typeDesc.Signature {
 	// Don't output receiver or receiver type here.
 	sig := typeDesc.NewSignature(t)
 	sig.SetVariadic(t.Variadic())

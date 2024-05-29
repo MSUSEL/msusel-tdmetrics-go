@@ -11,7 +11,7 @@ type Struct interface {
 
 	AddField(name string, t TypeDesc, embedded bool) Named
 	AppendField(embedded bool, fields ...Named)
-	AddTypeParam(name string, t *Interface) Named
+	AddTypeParam(name string, t Interface) Named
 	AppendTypeParam(tp ...Named)
 }
 
@@ -77,7 +77,7 @@ func (ts *structImp) AppendField(embedded bool, fields ...Named) {
 	}
 }
 
-func (ts *structImp) AddTypeParam(name string, t *Interface) Named {
+func (ts *structImp) AddTypeParam(name string, t Interface) Named {
 	tn := NewNamed(name, t)
 	ts.typeParams = append(ts.typeParams, tn)
 	return tn

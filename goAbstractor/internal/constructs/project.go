@@ -8,8 +8,8 @@ import (
 type Project struct {
 	Packages []*Package
 
-	AllInterfaces []*typeDesc.Interface
-	AllSignatures []*typeDesc.Signature
+	AllInterfaces []typeDesc.Interface
+	AllSignatures []typeDesc.Signature
 	AllStructs    []typeDesc.Struct
 }
 
@@ -58,11 +58,11 @@ func (p *Project) UpdateIndices() {
 	}
 }
 
-func (p *Project) RegisterInterface(t *typeDesc.Interface) *typeDesc.Interface {
+func (p *Project) RegisterInterface(t typeDesc.Interface) typeDesc.Interface {
 	return registerType(t, &p.AllInterfaces)
 }
 
-func (p *Project) RegisterSignature(t *typeDesc.Signature) *typeDesc.Signature {
+func (p *Project) RegisterSignature(t typeDesc.Signature) typeDesc.Signature {
 	return registerType(t, &p.AllSignatures)
 }
 
