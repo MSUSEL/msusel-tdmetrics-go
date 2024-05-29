@@ -9,6 +9,21 @@ import (
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/jsonify"
 )
 
+type Named interface {
+	TypeDesc
+
+	Name() string
+	Type() TypeDesc
+	EnsureName(names collections.Set[string])
+}
+
+func NewNamed(name string, typ TypeDesc) Named {
+	return &namedImp{
+		name: name,
+		typ:  typ,
+	}
+}
+
 // uniqueName returns a unique name that isn't in the set.
 // The new unique name will be added to the set.
 // This is for naming anonymous fields and unnamed return values.
@@ -27,42 +42,14 @@ func uniqueName(names collections.Set[string]) string {
 	panic(fmt.Errorf(`unable to find unique name in %d attempts`, attempts))
 }
 
-type Named interface {
-	TypeDesc
-
-	Name() string
-	Type() TypeDesc
-	EnsureName(names collections.Set[string])
-}
-
 type namedImp struct {
-	name string
-	typ  TypeDesc
-}
-
-func NewNamed(name string, typ TypeDesc) Named {
-	return &namedImp{
-		name: name,
-		typ:  typ,
-	}
-}
-
-func (t *namedImp) Name() string {
-	return t.name
-}
-
-func (t *namedImp) Type() TypeDesc {
-	return t.typ
-}
-
-func (t *namedImp) EnsureName(names collections.Set[string]) {
-	if len(t.name) <= 0 || t.name == `_` {
-		t.name = uniqueName(names)
-	}
+	name  string
+	typ   TypeDesc
+	index int
 }
 
 func (t *namedImp) SetIndex(index int) {
-	// TODO: add index
+	t.index = index
 }
 
 func (t *namedImp) GoType() types.Type {
@@ -78,7 +65,7 @@ func (t *namedImp) Equal(other TypeDesc) bool {
 
 func (t *namedImp) ToJson(ctx *jsonify.Context) jsonify.Datum {
 	if ctx.IsShort() {
-		return jsonify.New(ctx, t.name)
+		return jsonify.New(ctx, t.index)
 	}
 
 	return jsonify.NewMap().
@@ -89,4 +76,18 @@ func (t *namedImp) ToJson(ctx *jsonify.Context) jsonify.Datum {
 
 func (t *namedImp) String() string {
 	return jsonify.ToString(t)
+}
+
+func (t *namedImp) Name() string {
+	return t.name
+}
+
+func (t *namedImp) Type() TypeDesc {
+	return t.typ
+}
+
+func (t *namedImp) EnsureName(names collections.Set[string]) {
+	if len(t.name) <= 0 || t.name == `_` {
+		t.name = uniqueName(names)
+	}
 }

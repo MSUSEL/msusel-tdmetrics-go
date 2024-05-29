@@ -3,17 +3,13 @@ package typeDesc
 import (
 	"go/types"
 
-	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/jsonify"
 	"github.com/Snow-Gremlin/goToolbox/utils"
+
+	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/jsonify"
 )
 
 type Basic interface {
 	TypeDesc
-}
-
-type basicImp struct {
-	typ  *types.Basic
-	name string
 }
 
 func NewBasic(typ *types.Basic) Basic {
@@ -30,8 +26,14 @@ func BasicFor[T comparable]() Basic {
 	}
 }
 
+type basicImp struct {
+	typ   *types.Basic
+	name  string
+	index int
+}
+
 func (t *basicImp) SetIndex(index int) {
-	// TODO: add index
+	t.index = index
 }
 
 func (t *basicImp) GoType() types.Type {
@@ -45,6 +47,10 @@ func (t *basicImp) Equal(other TypeDesc) bool {
 }
 
 func (t *basicImp) ToJson(ctx *jsonify.Context) jsonify.Datum {
+	if ctx.IsShort() {
+		return jsonify.New(ctx, t.index)
+	}
+
 	return jsonify.New(ctx, t.name)
 }
 

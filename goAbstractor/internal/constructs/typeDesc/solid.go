@@ -16,20 +16,20 @@ type Solid interface {
 	AppendTypeParam(tp ...TypeDesc)
 }
 
-type solidImp struct {
-	typ types.Type
-
-	index      int
-	target     TypeDesc
-	typeParams []TypeDesc
-}
-
 func NewSolid(typ types.Type, target TypeDesc, tp ...TypeDesc) Solid {
 	return &solidImp{
 		typ:        typ,
 		target:     target,
 		typeParams: tp,
 	}
+}
+
+type solidImp struct {
+	typ types.Type
+
+	index      int
+	target     TypeDesc
+	typeParams []TypeDesc
 }
 
 func (ts *solidImp) SetIndex(index int) {
@@ -48,6 +48,10 @@ func (ts *solidImp) Equal(other TypeDesc) bool {
 }
 
 func (ts *solidImp) ToJson(ctx *jsonify.Context) jsonify.Datum {
+	if ctx.IsShort() {
+		return jsonify.New(ctx, ts.index)
+	}
+
 	return jsonify.NewMap().
 		AddIf(ctx, ctx.IsKindShown(), `kind`, `solid`).
 		AddNonZero(ctx.ShowKind().Short(), `target`, ts.target).

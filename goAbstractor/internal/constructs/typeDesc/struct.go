@@ -15,6 +15,12 @@ type Struct interface {
 	AppendTypeParam(tp ...Named)
 }
 
+func NewStruct(typ *types.Struct) Struct {
+	return &structImp{
+		typ: typ,
+	}
+}
+
 type structImp struct {
 	typ *types.Struct
 
@@ -25,12 +31,6 @@ type structImp struct {
 
 	// embedded is the subset of fields that are embedded.
 	embedded []Named
-}
-
-func NewStruct(typ *types.Struct) Struct {
-	return &structImp{
-		typ: typ,
-	}
 }
 
 func (ts *structImp) SetIndex(index int) {

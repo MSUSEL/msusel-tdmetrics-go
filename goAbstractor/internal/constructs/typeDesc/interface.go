@@ -21,6 +21,13 @@ type Interface interface {
 	SetInheritance()
 }
 
+func NewInterface(typ *types.Interface) Interface {
+	return &interfaceImp{
+		typ:     typ,
+		methods: map[string]TypeDesc{},
+	}
+}
+
 type interfaceImp struct {
 	typ *types.Interface
 
@@ -31,13 +38,6 @@ type interfaceImp struct {
 	index      int
 	inherits   []Interface
 	inheritors []Interface
-}
-
-func NewInterface(typ *types.Interface) Interface {
-	return &interfaceImp{
-		typ:     typ,
-		methods: map[string]TypeDesc{},
-	}
 }
 
 func (ti *interfaceImp) SetIndex(index int) {

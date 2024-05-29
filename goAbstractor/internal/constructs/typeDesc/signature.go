@@ -16,6 +16,12 @@ type Signature interface {
 	AppendTypeParam(tp ...Named)
 }
 
+func NewSignature(typ *types.Signature) Signature {
+	return &signatureImp{
+		typ: typ,
+	}
+}
+
 type signatureImp struct {
 	typ *types.Signature
 
@@ -25,12 +31,6 @@ type signatureImp struct {
 	returnType TypeDesc
 
 	index int
-}
-
-func NewSignature(typ *types.Signature) Signature {
-	return &signatureImp{
-		typ: typ,
-	}
 }
 
 func (sig *signatureImp) SetIndex(index int) {

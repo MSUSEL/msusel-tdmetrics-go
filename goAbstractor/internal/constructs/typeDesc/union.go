@@ -18,21 +18,22 @@ type Union interface {
 	AddType(approx bool, td ...TypeDesc)
 }
 
-type unionImp struct {
-	typ *types.Union
-
-	exact  []TypeDesc
-	approx []TypeDesc
-}
-
 func NewUnion(typ *types.Union) Union {
 	return &unionImp{
 		typ: typ,
 	}
 }
 
+type unionImp struct {
+	typ *types.Union
+
+	index  int
+	exact  []TypeDesc
+	approx []TypeDesc
+}
+
 func (t *unionImp) SetIndex(index int) {
-	// TODO: add index
+	t.index = index
 }
 
 func (t *unionImp) GoType() types.Type {
@@ -47,6 +48,10 @@ func (t *unionImp) Equal(other TypeDesc) bool {
 }
 
 func (t *unionImp) ToJson(ctx *jsonify.Context) jsonify.Datum {
+	if ctx.IsShort() {
+		return jsonify.New(ctx, t.index)
+	}
+
 	return jsonify.NewMap().
 		AddIf(ctx, ctx.IsKindShown(), `kind`, `union`).
 		AddNonZero(ctx.ShowKind().Short(), `exact`, t.exact).
