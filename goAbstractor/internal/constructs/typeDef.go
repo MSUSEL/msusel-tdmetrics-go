@@ -8,7 +8,7 @@ import (
 type TypeDef struct {
 	Name       string
 	Type       typeDesc.TypeDesc
-	Methods    []*Method
+	Methods    []Method
 	TypeParams []typeDesc.Named
 	Interface  typeDesc.Interface
 }

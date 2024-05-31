@@ -24,7 +24,7 @@ import (
 //     Access to Foreign Data (ATFD) and Design Recovery (DR)
 //   - Indicate if a method is an accessor getter or setter (single expression).
 
-func Abstract(ps []*packages.Package, verbose bool) *constructs.Project {
+func Abstract(ps []*packages.Package, verbose bool) constructs.Project {
 	ab := &abstractor{
 		verbose: verbose,
 		proj:    constructs.NewProject(),
@@ -42,7 +42,7 @@ func Abstract(ps []*packages.Package, verbose bool) *constructs.Project {
 
 type abstractor struct {
 	verbose bool
-	proj    *constructs.Project
+	proj    constructs.Project
 	baked   map[string]typeDesc.TypeDesc
 }
 
@@ -61,7 +61,7 @@ func (ab *abstractor) abstractProject(ps []*packages.Package) {
 	ab.log(`abstract project`)
 	packages.Visit(ps, func(src *packages.Package) bool {
 		if ap := ab.abstractPackage(src); ap != nil {
-			ab.proj.Packages = append(ab.proj.Packages, ap)
+			ab.proj.AppendPackage(ap)
 		}
 		return true
 	}, nil)
@@ -141,7 +141,7 @@ func (ab *abstractor) abstractFuncDecl(pkg *constructs.Package, src *packages.Pa
 	obj := src.TypesInfo.Defs[decl.Name]
 	sig := ab.convertSignature(obj.Type().(*types.Signature))
 	m := constructs.NewMethod(decl.Name.Name, sig)
-	m.Metrics = metrics.New(src.Fset, decl)
+	m.SetMetrics(metrics.New(src.Fset, decl))
 	ab.determineReceiver(m, src, decl)
 	pkg.Methods = append(pkg.Methods, m)
 }
@@ -152,7 +152,7 @@ func pos(src *packages.Package, pos token.Pos) string {
 
 func (ab *abstractor) resolveImports() {
 	ab.log(`resolve imports`)
-	for _, p := range ab.proj.Packages {
+	for _, p := range ab.proj.Packages() {
 		p.Imports = make([]*constructs.Package, 0, len(p.ImportPaths))
 		for i, importPath := range p.ImportPaths {
 			impPackage := ab.findPackageByPath(importPath)
@@ -165,7 +165,7 @@ func (ab *abstractor) resolveImports() {
 }
 
 func (ab *abstractor) findPackageByPath(path string) *constructs.Package {
-	for _, other := range ab.proj.Packages {
+	for _, other := range ab.proj.Packages() {
 		if other.Path == path {
 			return other
 		}
@@ -175,7 +175,7 @@ func (ab *abstractor) findPackageByPath(path string) *constructs.Package {
 
 func (ab *abstractor) resolveClasses() {
 	ab.log(`resolve classes`)
-	for _, pkg := range ab.proj.Packages {
+	for _, pkg := range ab.proj.Packages() {
 		ab.log(`|  resolve package: %s`, pkg.Source().PkgPath)
 		for _, td := range pkg.Types {
 			ab.log(`|  |  resolve typeDef: %s`, td.Name)
@@ -189,8 +189,8 @@ func (ab *abstractor) resolveClass(pkg *constructs.Package, td *constructs.TypeD
 
 	mTyp := []*types.Func{}
 	for _, m := range td.Methods {
-		s := m.Signature.GoType().(*types.Signature)
-		f := types.NewFunc(token.NoPos, pkg.Source().Types, m.Name, s)
+		s := m.Signature().GoType().(*types.Signature)
+		f := types.NewFunc(token.NoPos, pkg.Source().Types, m.Name(), s)
 		mTyp = append(mTyp, f)
 	}
 
@@ -204,24 +204,25 @@ func (ab *abstractor) resolveClass(pkg *constructs.Package, td *constructs.TypeD
 
 	tInt := typeDesc.NewInterface(iTyp)
 	for _, m := range td.Methods {
-		tInt.AddFunc(m.Name, m.Signature)
+		tInt.AddFunc(m.Name(), m.Signature())
 	}
 	td.Interface = ab.proj.RegisterInterface(tInt)
 }
 
 func (ab *abstractor) resolveInheritance() {
 	ab.log(`resolve inheritance`)
-	if len(ab.proj.AllInterfaces) <= 0 {
+	inters := ab.proj.AllInterfaces()
+	if len(inters) <= 0 {
 		panic(errors.New(`expected the object interface at minimum but found no interfaces`))
 	}
-	obj := ab.proj.AllInterfaces[0]
+	obj := inters[0]
 	if !obj.Equal(ab.bakeAny()) {
 		panic(fmt.Errorf(`expected the first interface to be the "any" interface`))
 	}
-	for _, inter := range ab.proj.AllInterfaces[1:] {
+	for _, inter := range inters[1:] {
 		obj.AddInheritors(inter)
 	}
-	for _, inter := range ab.proj.AllInterfaces {
+	for _, inter := range inters {
 		inter.SetInheritance()
 	}
 }

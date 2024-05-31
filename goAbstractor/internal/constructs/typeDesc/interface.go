@@ -15,6 +15,7 @@ type Interface interface {
 	SetUnion(union Union)
 	AddFunc(name string, sig TypeDesc) bool
 	AddTypeParam(name string, t TypeDesc) Named
+
 	IsSupertypeOf(other Interface) bool
 	AppendInherits(inherits ...Interface)
 	AddInheritors(inter Interface) bool

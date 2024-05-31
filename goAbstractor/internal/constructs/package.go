@@ -13,7 +13,7 @@ type Package struct {
 	Imports []*Package
 	Types   []*TypeDef
 	Values  []*ValueDef
-	Methods []*Method
+	Methods []Method
 
 	Index       int
 	ImportPaths []string

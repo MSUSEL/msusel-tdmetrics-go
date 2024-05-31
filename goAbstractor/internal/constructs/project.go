@@ -5,69 +5,91 @@ import (
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/jsonify"
 )
 
-type Project struct {
-	Packages []*Package
+type Project interface {
+	Packages() []*Package
+	AppendPackage(pkg ...*Package)
+	AllInterfaces() []typeDesc.Interface
 
-	AllInterfaces []typeDesc.Interface
-	AllSignatures []typeDesc.Signature
-	AllStructs    []typeDesc.Struct
+	// UpdateIndices should be called after all types have been registered
+	// and all packages have been processed. This will update all the index
+	// fields that will be used as references in the output models.
+	UpdateIndices()
+	RegisterInterface(t typeDesc.Interface) typeDesc.Interface
+	RegisterSignature(t typeDesc.Signature) typeDesc.Signature
+	RegisterStruct(t typeDesc.Struct) typeDesc.Struct
 }
 
-func NewProject() *Project {
-	return &Project{}
+type projectImp struct {
+	allPackages []*Package
+
+	allInterfaces []typeDesc.Interface
+	allSignatures []typeDesc.Signature
+	allStructs    []typeDesc.Struct
 }
 
-func (p *Project) ToJson(ctx *jsonify.Context) jsonify.Datum {
+func NewProject() Project {
+	return &projectImp{}
+}
+
+func (p *projectImp) ToJson(ctx *jsonify.Context) jsonify.Datum {
 	m := jsonify.NewMap().
 		Add(ctx, `language`, `go`)
 
 	ctx1 := ctx.HideKind()
-	m.AddNonZero(ctx1, `interfaces`, p.AllInterfaces).
-		AddNonZero(ctx1, `signatures`, p.AllSignatures).
-		AddNonZero(ctx1, `structs`, p.AllStructs).
-		AddNonZero(ctx1, `packages`, p.Packages)
+	m.AddNonZero(ctx1, `interfaces`, p.allInterfaces).
+		AddNonZero(ctx1, `signatures`, p.allSignatures).
+		AddNonZero(ctx1, `structs`, p.allStructs).
+		AddNonZero(ctx1, `packages`, p.allPackages)
 	return m
 }
 
-func (p *Project) String() string {
+func (p *projectImp) String() string {
 	return jsonify.ToString(p)
 }
 
-// UpdateIndices should only be called after all types have been registered
-// and all packages have been processed. This will update all the index
-// fields that will be used as references in the output models.
-func (p *Project) UpdateIndices() {
+func (p *projectImp) Packages() []*Package {
+	return p.allPackages
+}
+
+func (p *projectImp) AppendPackage(pkg ...*Package) {
+	p.allPackages = append(p.allPackages, pkg...)
+}
+
+func (p *projectImp) AllInterfaces() []typeDesc.Interface {
+	return p.allInterfaces
+}
+
+func (p *projectImp) UpdateIndices() {
 	// Type indices compound so that each has a unique offset.
 	index := 0
-	for _, t := range p.AllInterfaces {
-		t.SetIndex(index)
-		index++
-	}
-	for _, t := range p.AllSignatures {
-		t.SetIndex(index)
-		index++
-	}
-	for _, t := range p.AllStructs {
-		t.SetIndex(index)
-		index++
-	}
+	index = setIndices(index, p.allInterfaces)
+	index = setIndices(index, p.allSignatures)
+	setIndices(index, p.allStructs)
 
 	// Package indices are independent.
-	for i, pkg := range p.Packages {
+	for i, pkg := range p.allPackages {
 		pkg.Index = i
 	}
 }
 
-func (p *Project) RegisterInterface(t typeDesc.Interface) typeDesc.Interface {
-	return registerType(t, &p.AllInterfaces)
+func setIndices[T typeDesc.TypeDesc](index int, s []T) int {
+	for _, t := range s {
+		t.SetIndex(index)
+		index++
+	}
+	return index
 }
 
-func (p *Project) RegisterSignature(t typeDesc.Signature) typeDesc.Signature {
-	return registerType(t, &p.AllSignatures)
+func (p *projectImp) RegisterInterface(t typeDesc.Interface) typeDesc.Interface {
+	return registerType(t, &p.allInterfaces)
 }
 
-func (p *Project) RegisterStruct(t typeDesc.Struct) typeDesc.Struct {
-	return registerType(t, &p.AllStructs)
+func (p *projectImp) RegisterSignature(t typeDesc.Signature) typeDesc.Signature {
+	return registerType(t, &p.allSignatures)
+}
+
+func (p *projectImp) RegisterStruct(t typeDesc.Struct) typeDesc.Struct {
+	return registerType(t, &p.allStructs)
 }
 
 func registerType[T typeDesc.TypeDesc](t T, s *[]T) T {
