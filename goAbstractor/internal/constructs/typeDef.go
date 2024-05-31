@@ -5,30 +5,53 @@ import (
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/jsonify"
 )
 
-type TypeDef struct {
-	Name       string
-	Type       typeDesc.TypeDesc
-	Methods    []Method
-	TypeParams []typeDesc.Named
-	Interface  typeDesc.Interface
+type TypeDef interface {
+	Name() string
+	Methods() []Method
+	AppendMethod(met ...Method)
+	SetInterface(inter typeDesc.Interface)
 }
 
-func NewTypeDef(name string, t typeDesc.TypeDesc) *TypeDef {
-	return &TypeDef{
-		Name: name,
-		Type: t,
+type typeDefImp struct {
+	name       string
+	typ        typeDesc.TypeDesc
+	methods    []Method
+	typeParams []typeDesc.Named
+	inter      typeDesc.Interface
+}
+
+func NewTypeDef(name string, t typeDesc.TypeDesc) TypeDef {
+	return &typeDefImp{
+		name: name,
+		typ:  t,
 	}
 }
 
-func (td *TypeDef) ToJson(ctx *jsonify.Context) jsonify.Datum {
+func (td *typeDefImp) ToJson(ctx *jsonify.Context) jsonify.Datum {
 	return jsonify.NewMap().
-		Add(ctx, `name`, td.Name).
-		Add(ctx, `type`, td.Type).
-		AddNonZero(ctx, `methods`, td.Methods).
-		AddNonZero(ctx, `typeParams`, td.TypeParams).
-		AddNonZero(ctx, `interface`, td.Interface)
+		Add(ctx, `name`, td.name).
+		Add(ctx, `type`, td.typ).
+		AddNonZero(ctx, `methods`, td.methods).
+		AddNonZero(ctx, `typeParams`, td.typeParams).
+		AddNonZero(ctx, `interface`, td.inter)
 }
 
-func (td *TypeDef) String() string {
+func (td *typeDefImp) String() string {
 	return jsonify.ToString(td)
+}
+
+func (td *typeDefImp) Name() string {
+	return td.name
+}
+
+func (td *typeDefImp) Methods() []Method {
+	return td.methods
+}
+
+func (td *typeDefImp) AppendMethod(met ...Method) {
+	td.methods = append(td.methods, met...)
+}
+
+func (td *typeDefImp) SetInterface(inter typeDesc.Interface) {
+	td.inter = inter
 }

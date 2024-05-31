@@ -6,6 +6,7 @@ import (
 )
 
 type Project interface {
+	ToJson(ctx *jsonify.Context) jsonify.Datum
 	Packages() []*Package
 	AppendPackage(pkg ...*Package)
 	AllInterfaces() []typeDesc.Interface

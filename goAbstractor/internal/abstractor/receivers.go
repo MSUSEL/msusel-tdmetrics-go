@@ -56,7 +56,7 @@ func resolveReceiversInPackage(pkg *constructs.Package) {
 			}
 
 			pkgChanged = true
-			t.Methods = append(t.Methods, m)
+			t.AppendMethod(m)
 			pkg.Methods[i] = nil
 		}
 	}

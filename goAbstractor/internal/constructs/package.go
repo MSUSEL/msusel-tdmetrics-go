@@ -11,8 +11,8 @@ type Package struct {
 
 	Path    string
 	Imports []*Package
-	Types   []*TypeDef
-	Values  []*ValueDef
+	Types   []TypeDef
+	Values  []ValueDef
 	Methods []Method
 
 	Index       int
@@ -49,9 +49,9 @@ func (p *Package) String() string {
 	return jsonify.ToString(p)
 }
 
-func (p *Package) FindTypeForReceiver(receiver string) *TypeDef {
+func (p *Package) FindTypeForReceiver(receiver string) TypeDef {
 	for _, t := range p.Types {
-		if receiver == t.Name {
+		if receiver == t.Name() {
 			return t
 		}
 	}

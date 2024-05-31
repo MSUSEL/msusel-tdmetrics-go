@@ -73,7 +73,7 @@ func main() {
 	os.Exit(0)
 }
 
-func writeJson(path string, minimize bool, p *constructs.Project) error {
+func writeJson(path string, minimize bool, p constructs.Project) error {
 	ctx := jsonify.NewContext()
 	ctx.SetMinimize(minimize)
 	b, err := jsonify.Marshal(ctx, p)

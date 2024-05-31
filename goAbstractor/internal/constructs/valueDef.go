@@ -5,27 +5,29 @@ import (
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/jsonify"
 )
 
-type ValueDef struct {
-	Name  string
-	Const bool
-	Type  typeDesc.TypeDesc
+type ValueDef interface{}
+
+type valueDefImp struct {
+	name    string
+	isConst bool
+	typ     typeDesc.TypeDesc
 }
 
-func NewValueDef(name string, isConst bool, typ typeDesc.TypeDesc) *ValueDef {
-	return &ValueDef{
-		Name:  name,
-		Const: isConst,
-		Type:  typ,
+func NewValueDef(name string, isConst bool, typ typeDesc.TypeDesc) ValueDef {
+	return &valueDefImp{
+		name:    name,
+		isConst: isConst,
+		typ:     typ,
 	}
 }
 
-func (vd *ValueDef) ToJson(ctx *jsonify.Context) jsonify.Datum {
+func (vd *valueDefImp) ToJson(ctx *jsonify.Context) jsonify.Datum {
 	return jsonify.NewMap().
-		Add(ctx, `name`, vd.Name).
-		AddNonZero(ctx, `const`, vd.Const).
-		Add(ctx, `type`, vd.Type)
+		Add(ctx, `name`, vd.name).
+		AddNonZero(ctx, `const`, vd.isConst).
+		Add(ctx, `type`, vd.typ)
 }
 
-func (vd *ValueDef) String() string {
+func (vd *valueDefImp) String() string {
 	return jsonify.ToString(vd)
 }
