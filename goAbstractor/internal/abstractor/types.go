@@ -92,9 +92,8 @@ func (ab *abstractor) convertMap(t *types.Map) typeDesc.TypeDesc {
 	return typeDesc.NewSolid(t, ab.bakeMap(), key, value)
 }
 
-func (ab *abstractor) convertNamed(t *types.Named) typeDesc.Named {
-	// TODO: need to handle named better.
-	return typeDesc.NewNamed(t.String(), nil)
+func (ab *abstractor) convertNamed(t *types.Named) typeDesc.TypeDefRef {
+	return typeDesc.NewTypeDefRef(t.String())
 }
 
 func (ab *abstractor) convertPointer(t *types.Pointer) typeDesc.TypeDesc {

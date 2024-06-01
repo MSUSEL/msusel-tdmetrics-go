@@ -5,6 +5,7 @@ import (
 	"go/types"
 
 	"github.com/Snow-Gremlin/goToolbox/collections"
+	"github.com/Snow-Gremlin/goToolbox/utils"
 
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/jsonify"
 )
@@ -18,6 +19,9 @@ type Named interface {
 }
 
 func NewNamed(name string, typ TypeDesc) Named {
+	if utils.IsNil(typ) {
+		panic(fmt.Errorf(`must have a non-nil type for named, %q`, name))
+	}
 	return &namedImp{
 		name: name,
 		typ:  typ,

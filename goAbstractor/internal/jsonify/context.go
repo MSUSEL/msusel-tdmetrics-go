@@ -77,3 +77,15 @@ func (c *Context) ShowReceiver(show bool) *Context {
 func (c *Context) IsReceiverShown() bool {
 	return c.state[`receiverShown`]
 }
+
+// ShowReference sets if the typeDef reference should include the
+// reference name in the object model. This is for debugging purposes.
+func (c *Context) ShowReference(show bool) *Context {
+	return c.copyAndSet(`referenceShown`, show)
+}
+
+// IsReferenceShown indicates that typeDef reference should include the
+// reference name in the object model. This is for debugging purposes.
+func (c *Context) IsReferenceShown() bool {
+	return c.state[`referenceShown`]
+}
