@@ -67,7 +67,7 @@ func (ab *abstractor) abstractProject(ps []*packages.Package) {
 	}, nil)
 }
 
-func (ab *abstractor) abstractPackage(src *packages.Package) *constructs.Package {
+func (ab *abstractor) abstractPackage(src *packages.Package) constructs.Package {
 	ab.log(`|  abstract package: %s`, src.PkgPath)
 	pkg := constructs.NewPackage(src, src.PkgPath, utils.SortedKeys(src.Imports))
 	for _, f := range src.Syntax {
@@ -76,7 +76,7 @@ func (ab *abstractor) abstractPackage(src *packages.Package) *constructs.Package
 	return pkg
 }
 
-func (ab *abstractor) addFile(pkg *constructs.Package, src *packages.Package, f *ast.File) {
+func (ab *abstractor) addFile(pkg constructs.Package, src *packages.Package, f *ast.File) {
 	ab.log(`|  |  add file to package: %s`, src.Fset.Position(f.Name.NamePos).Filename)
 	for _, decl := range f.Decls {
 		switch d := decl.(type) {
@@ -90,7 +90,7 @@ func (ab *abstractor) addFile(pkg *constructs.Package, src *packages.Package, f 
 	}
 }
 
-func (ab *abstractor) addGenDecl(pkg *constructs.Package, src *packages.Package, decl *ast.GenDecl) {
+func (ab *abstractor) addGenDecl(pkg constructs.Package, src *packages.Package, decl *ast.GenDecl) {
 	isConst := decl.Tok == token.CONST
 	for _, spec := range decl.Specs {
 		switch s := spec.(type) {
@@ -106,7 +106,7 @@ func (ab *abstractor) addGenDecl(pkg *constructs.Package, src *packages.Package,
 	}
 }
 
-func (ab *abstractor) abstractTypeSpec(pkg *constructs.Package, src *packages.Package, spec *ast.TypeSpec) {
+func (ab *abstractor) abstractTypeSpec(pkg constructs.Package, src *packages.Package, spec *ast.TypeSpec) {
 	tv, has := src.TypesInfo.Types[spec.Type]
 	if !has {
 		panic(fmt.Errorf(`type specification not found in types info: %s`, pos(src, spec.Type.Pos())))
@@ -114,10 +114,10 @@ func (ab *abstractor) abstractTypeSpec(pkg *constructs.Package, src *packages.Pa
 
 	typ := ab.convertType(tv.Type)
 	def := constructs.NewTypeDef(spec.Name.Name, typ)
-	pkg.Types = append(pkg.Types, def)
+	pkg.AppendTypes(def)
 }
 
-func (ab *abstractor) abstractValueSpec(pkg *constructs.Package, src *packages.Package, spec *ast.ValueSpec, isConst bool) {
+func (ab *abstractor) abstractValueSpec(pkg constructs.Package, src *packages.Package, spec *ast.ValueSpec, isConst bool) {
 	for _, name := range spec.Names {
 		// TODO: Need to evaluate the initial value in case
 		// it has connection to another var of calls a function.
@@ -133,17 +133,17 @@ func (ab *abstractor) abstractValueSpec(pkg *constructs.Package, src *packages.P
 
 		typ := ab.convertType(tv.Type())
 		def := constructs.NewValueDef(name.Name, isConst, typ)
-		pkg.Values = append(pkg.Values, def)
+		pkg.AppendValues(def)
 	}
 }
 
-func (ab *abstractor) abstractFuncDecl(pkg *constructs.Package, src *packages.Package, decl *ast.FuncDecl) {
+func (ab *abstractor) abstractFuncDecl(pkg constructs.Package, src *packages.Package, decl *ast.FuncDecl) {
 	obj := src.TypesInfo.Defs[decl.Name]
 	sig := ab.convertSignature(obj.Type().(*types.Signature))
 	m := constructs.NewMethod(decl.Name.Name, sig)
 	m.SetMetrics(metrics.New(src.Fset, decl))
 	ab.determineReceiver(m, src, decl)
-	pkg.Methods = append(pkg.Methods, m)
+	pkg.AppendMethods(m)
 }
 
 func pos(src *packages.Package, pos token.Pos) string {
@@ -153,20 +153,21 @@ func pos(src *packages.Package, pos token.Pos) string {
 func (ab *abstractor) resolveImports() {
 	ab.log(`resolve imports`)
 	for _, p := range ab.proj.Packages() {
-		p.Imports = make([]*constructs.Package, 0, len(p.ImportPaths))
-		for i, importPath := range p.ImportPaths {
+		imports := make([]constructs.Package, 0, len(p.ImportPaths()))
+		for i, importPath := range p.ImportPaths() {
 			impPackage := ab.findPackageByPath(importPath)
 			if impPackage == nil {
-				panic(fmt.Errorf(`import package not found for %s: %s`, p.Path, importPath))
+				panic(fmt.Errorf(`import package not found for %s: %s`, p.Path(), importPath))
 			}
-			p.Imports[i] = impPackage
+			imports[i] = impPackage
 		}
+		p.SetImports(imports)
 	}
 }
 
-func (ab *abstractor) findPackageByPath(path string) *constructs.Package {
+func (ab *abstractor) findPackageByPath(path string) constructs.Package {
 	for _, other := range ab.proj.Packages() {
-		if other.Path == path {
+		if other.Path() == path {
 			return other
 		}
 	}
@@ -177,14 +178,14 @@ func (ab *abstractor) resolveClasses() {
 	ab.log(`resolve classes`)
 	for _, pkg := range ab.proj.Packages() {
 		ab.log(`|  resolve package: %s`, pkg.Source().PkgPath)
-		for _, td := range pkg.Types {
+		for _, td := range pkg.Types() {
 			ab.log(`|  |  resolve typeDef: %s`, td.Name)
 			ab.resolveClass(pkg, td)
 		}
 	}
 }
 
-func (ab *abstractor) resolveClass(pkg *constructs.Package, td constructs.TypeDef) {
+func (ab *abstractor) resolveClass(pkg constructs.Package, td constructs.TypeDef) {
 	// TODO: Attempt to find a registered interface.
 
 	mTyp := []*types.Func{}

@@ -7,8 +7,8 @@ import (
 
 type Project interface {
 	ToJson(ctx *jsonify.Context) jsonify.Datum
-	Packages() []*Package
-	AppendPackage(pkg ...*Package)
+	Packages() []Package
+	AppendPackage(pkg ...Package)
 	AllInterfaces() []typeDesc.Interface
 
 	// UpdateIndices should be called after all types have been registered
@@ -21,7 +21,7 @@ type Project interface {
 }
 
 type projectImp struct {
-	allPackages []*Package
+	allPackages []Package
 
 	allInterfaces []typeDesc.Interface
 	allSignatures []typeDesc.Signature
@@ -48,11 +48,11 @@ func (p *projectImp) String() string {
 	return jsonify.ToString(p)
 }
 
-func (p *projectImp) Packages() []*Package {
+func (p *projectImp) Packages() []Package {
 	return p.allPackages
 }
 
-func (p *projectImp) AppendPackage(pkg ...*Package) {
+func (p *projectImp) AppendPackage(pkg ...Package) {
 	p.allPackages = append(p.allPackages, pkg...)
 }
 
@@ -69,7 +69,7 @@ func (p *projectImp) UpdateIndices() {
 
 	// Package indices are independent.
 	for i, pkg := range p.allPackages {
-		pkg.Index = i
+		pkg.SetIndex(i)
 	}
 }
 

@@ -45,9 +45,10 @@ func (ab *abstractor) resolveReceivers() {
 	}
 }
 
-func resolveReceiversInPackage(pkg *constructs.Package) {
+func resolveReceiversInPackage(pkg constructs.Package) {
 	pkgChanged := false
-	for i, m := range pkg.Methods {
+	methods := pkg.Methods()
+	for i, m := range methods {
 		if len(m.Receiver()) > 0 {
 
 			t := pkg.FindTypeForReceiver(m.Receiver())
@@ -57,10 +58,10 @@ func resolveReceiversInPackage(pkg *constructs.Package) {
 
 			pkgChanged = true
 			t.AppendMethod(m)
-			pkg.Methods[i] = nil
+			methods[i] = nil
 		}
 	}
 	if pkgChanged {
-		pkg.Methods = utils.RemoveZeros(pkg.Methods)
+		pkg.SetMethods(utils.RemoveZeros(methods))
 	}
 }
