@@ -12,18 +12,18 @@ type Basic interface {
 	TypeDesc
 }
 
-func NewBasic(typ *types.Basic) Basic {
-	return &basicImp{
+func NewBasic(reg Register, typ *types.Basic) Basic {
+	return reg.RegisterBasic(&basicImp{
 		typ:  typ,
 		name: typ.Name(),
-	}
+	})
 }
 
-func BasicFor[T comparable]() Basic {
-	return &basicImp{
+func BasicFor[T comparable](reg Register) Basic {
+	return reg.RegisterBasic(&basicImp{
 		typ:  nil,
 		name: utils.TypeOf[T]().Name(),
-	}
+	})
 }
 
 type basicImp struct {

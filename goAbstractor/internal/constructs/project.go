@@ -15,17 +15,26 @@ type Project interface {
 	// and all packages have been processed. This will update all the index
 	// fields that will be used as references in the output models.
 	UpdateIndices()
+
+	RegisterBasic(t typeDesc.Basic) typeDesc.Basic
 	RegisterInterface(t typeDesc.Interface) typeDesc.Interface
+	RegisterNamed(t typeDesc.Named) typeDesc.Named
 	RegisterSignature(t typeDesc.Signature) typeDesc.Signature
+	RegisterSolid(t typeDesc.Solid) typeDesc.Solid
 	RegisterStruct(t typeDesc.Struct) typeDesc.Struct
+	RegisterUnion(t typeDesc.Union) typeDesc.Union
 }
 
 type projectImp struct {
 	allPackages []Package
 
+	allBasics     []typeDesc.Basic
 	allInterfaces []typeDesc.Interface
+	allNamed      []typeDesc.Named
 	allSignatures []typeDesc.Signature
+	allSolids     []typeDesc.Solid
 	allStructs    []typeDesc.Struct
+	allUnions     []typeDesc.Union
 }
 
 func NewProject() Project {
@@ -37,9 +46,13 @@ func (p *projectImp) ToJson(ctx *jsonify.Context) jsonify.Datum {
 		Add(ctx, `language`, `go`)
 
 	ctx1 := ctx.HideKind()
-	m.AddNonZero(ctx1, `interfaces`, p.allInterfaces).
+	m.AddNonZero(ctx1, `basics`, p.allBasics).
+		AddNonZero(ctx1, `interfaces`, p.allInterfaces).
+		AddNonZero(ctx1, `named`, p.allNamed).
 		AddNonZero(ctx1, `signatures`, p.allSignatures).
+		AddNonZero(ctx1, `solids`, p.allSolids).
 		AddNonZero(ctx1, `structs`, p.allStructs).
+		AddNonZero(ctx1, `unions`, p.allUnions).
 		AddNonZero(ctx1, `packages`, p.allPackages)
 	return m
 }
@@ -81,16 +94,32 @@ func setIndices[T typeDesc.TypeDesc](index int, s []T) int {
 	return index
 }
 
+func (p *projectImp) RegisterBasic(t typeDesc.Basic) typeDesc.Basic {
+	return registerType(t, &p.allBasics)
+}
+
 func (p *projectImp) RegisterInterface(t typeDesc.Interface) typeDesc.Interface {
 	return registerType(t, &p.allInterfaces)
+}
+
+func (p *projectImp) RegisterNamed(t typeDesc.Named) typeDesc.Named {
+	return registerType(t, &p.allNamed)
 }
 
 func (p *projectImp) RegisterSignature(t typeDesc.Signature) typeDesc.Signature {
 	return registerType(t, &p.allSignatures)
 }
 
+func (p *projectImp) RegisterSolid(t typeDesc.Solid) typeDesc.Solid {
+	return registerType(t, &p.allSolids)
+}
+
 func (p *projectImp) RegisterStruct(t typeDesc.Struct) typeDesc.Struct {
 	return registerType(t, &p.allStructs)
+}
+
+func (p *projectImp) RegisterUnion(t typeDesc.Union) typeDesc.Union {
+	return registerType(t, &p.allUnions)
 }
 
 func registerType[T typeDesc.TypeDesc](t T, s *[]T) T {

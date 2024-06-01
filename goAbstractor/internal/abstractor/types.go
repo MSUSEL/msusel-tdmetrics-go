@@ -53,7 +53,7 @@ func (ab *abstractor) convertBasic(t *types.Basic) typeDesc.TypeDesc {
 	case types.Complex128:
 		return ab.bakeComplex128()
 	default:
-		return typeDesc.NewBasic(t)
+		return typeDesc.NewBasic(ab.proj, t)
 	}
 }
 
