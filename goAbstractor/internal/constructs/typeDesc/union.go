@@ -6,39 +6,43 @@ import (
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/jsonify"
 )
 
-// TODO: should this be expanded so that it can be removed?
-// e.g. `Foo[T string|int]` becomes `Foo_string` and `Foo_int`.
-//
 // Exact types are like `string|int|bool` where the type must match exactly.
 // Approx types are like `~string|~int` where they type may be exact or
 // an extension of the base type.
 type Union interface {
 	TypeDesc
-
-	AddType(approx bool, td ...TypeDesc)
+	_union()
 }
 
-func NewUnion(typ *types.Union) Union {
-	// TODO: REGISTER
-	return &unionImp{
-		typ: typ,
-	}
+type UnionArgs struct {
+	RealType *types.Union
+	Exact    []TypeDesc
+	Approx   []TypeDesc
+}
+
+func NewUnion(reg Register, args UnionArgs) Union {
+	return reg.RegisterUnion(&unionImp{
+		realType: args.RealType,
+		exact:    args.Exact,
+		approx:   args.Approx,
+	})
 }
 
 type unionImp struct {
-	typ *types.Union
-
-	index  int
-	exact  []TypeDesc
-	approx []TypeDesc
+	realType *types.Union
+	exact    []TypeDesc
+	approx   []TypeDesc
+	index    int
 }
+
+func (t *unionImp) _union() {}
 
 func (t *unionImp) SetIndex(index int) {
 	t.index = index
 }
 
 func (t *unionImp) GoType() types.Type {
-	return t.typ
+	return t.realType
 }
 
 func (t *unionImp) Equal(other TypeDesc) bool {
@@ -61,12 +65,4 @@ func (t *unionImp) ToJson(ctx *jsonify.Context) jsonify.Datum {
 
 func (t *unionImp) String() string {
 	return jsonify.ToString(t)
-}
-
-func (t *unionImp) AddType(approx bool, td ...TypeDesc) {
-	if approx {
-		t.approx = append(t.approx, td...)
-	} else {
-		t.exact = append(t.exact, td...)
-	}
 }

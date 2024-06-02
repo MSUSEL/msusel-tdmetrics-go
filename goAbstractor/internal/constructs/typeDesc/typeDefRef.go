@@ -9,22 +9,24 @@ import (
 
 type TypeDefRef interface {
 	TypeDesc
+	_typeDefRef()
 
 	Name() string
 	SetType(typ TypeDesc)
 }
 
-func NewTypeDefRef(name string) TypeDefRef {
-	// TODO: REGISTER
-	return &typeDefRefImp{
+func NewTypeDefRef(reg Register, name string) TypeDefRef {
+	return reg.RegisterTypeDefRef(&typeDefRefImp{
 		name: name,
-	}
+	})
 }
 
 type typeDefRefImp struct {
 	name string
 	typ  TypeDesc
 }
+
+func (t *typeDefRefImp) _typeDefRef() {}
 
 func (t *typeDefRefImp) SetIndex(index int) {
 	panic(errors.New(`do not call SetIndex on TypeDefRef`))

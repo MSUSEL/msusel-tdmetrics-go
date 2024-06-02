@@ -22,6 +22,7 @@ type Project interface {
 	RegisterSignature(t typeDesc.Signature) typeDesc.Signature
 	RegisterSolid(t typeDesc.Solid) typeDesc.Solid
 	RegisterStruct(t typeDesc.Struct) typeDesc.Struct
+	RegisterTypeDefRef(t typeDesc.TypeDefRef) typeDesc.TypeDefRef
 	RegisterUnion(t typeDesc.Union) typeDesc.Union
 }
 
@@ -34,6 +35,7 @@ type projectImp struct {
 	allSignatures []typeDesc.Signature
 	allSolids     []typeDesc.Solid
 	allStructs    []typeDesc.Struct
+	allTypeDefRef []typeDesc.TypeDefRef
 	allUnions     []typeDesc.Union
 }
 
@@ -116,6 +118,10 @@ func (p *projectImp) RegisterSolid(t typeDesc.Solid) typeDesc.Solid {
 
 func (p *projectImp) RegisterStruct(t typeDesc.Struct) typeDesc.Struct {
 	return registerType(t, &p.allStructs)
+}
+
+func (p *projectImp) RegisterTypeDefRef(t typeDesc.TypeDefRef) typeDesc.TypeDefRef {
+	return registerType(t, &p.allTypeDefRef)
 }
 
 func (p *projectImp) RegisterUnion(t typeDesc.Union) typeDesc.Union {

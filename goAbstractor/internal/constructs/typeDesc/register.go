@@ -7,5 +7,6 @@ type Register interface {
 	RegisterSignature(t Signature) Signature
 	RegisterSolid(t Solid) Solid
 	RegisterStruct(t Struct) Struct
+	RegisterTypeDefRef(t TypeDefRef) TypeDefRef
 	RegisterUnion(t Union) Union
 }

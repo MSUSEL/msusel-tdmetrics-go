@@ -97,7 +97,8 @@ func (ab *abstractor) convertMap(t *types.Map) typeDesc.TypeDesc {
 }
 
 func (ab *abstractor) convertNamed(t *types.Named) typeDesc.TypeDefRef {
-	return typeDesc.NewTypeDefRef(t.String())
+	// TODO: Update
+	return typeDesc.NewTypeDefRef(ab.proj, t.String())
 }
 
 func (ab *abstractor) convertPointer(t *types.Pointer) typeDesc.TypeDesc {
@@ -200,13 +201,22 @@ func (ab *abstractor) convertTuple(t *types.Tuple) []typeDesc.Named {
 }
 
 func (ab *abstractor) convertUnion(t *types.Union) typeDesc.Union {
-	union := typeDesc.NewUnion(t)
+	exact := []typeDesc.TypeDesc{}
+	approx := []typeDesc.TypeDesc{}
 	for i := range t.Len() {
 		term := t.Term(i)
 		it := ab.convertType(term.Type())
-		union.AddType(term.Tilde(), it)
+		if term.Tilde() {
+			approx = append(approx, it)
+		} else {
+			exact = append(exact, it)
+		}
 	}
-	return union
+	return typeDesc.NewUnion(ab.proj, typeDesc.UnionArgs{
+		RealType: t,
+		Exact:    exact,
+		Approx:   approx,
+	})
 }
 
 func (ab *abstractor) convertTypeParam(t *types.TypeParam) typeDesc.Named {
