@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"go/types"
 
-	"github.com/Snow-Gremlin/goToolbox/collections"
 	"github.com/Snow-Gremlin/goToolbox/utils"
 
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/jsonify"
@@ -12,10 +11,10 @@ import (
 
 type Named interface {
 	TypeDesc
+	_named()
 
 	Name() string
 	Type() TypeDesc
-	EnsureName(names collections.Set[string])
 }
 
 func NewNamed(name string, typ TypeDesc) Named {
@@ -28,29 +27,13 @@ func NewNamed(name string, typ TypeDesc) Named {
 	}
 }
 
-// uniqueName returns a unique name that isn't in the set.
-// The new unique name will be added to the set.
-// This is for naming anonymous fields and unnamed return values.
-func uniqueName(names collections.Set[string]) string {
-	const (
-		attempts = 10_000
-		pattern  = `$value%d`
-	)
-	for offset := 1; offset < attempts; offset++ {
-		name := fmt.Sprintf(pattern, offset)
-		if !names.Contains(name) {
-			names.Add(name)
-			return name
-		}
-	}
-	panic(fmt.Errorf(`unable to find unique name in %d attempts`, attempts))
-}
-
 type namedImp struct {
 	name  string
 	typ   TypeDesc
 	index int
 }
+
+func (t *namedImp) _named() {}
 
 func (t *namedImp) SetIndex(index int) {
 	t.index = index
@@ -88,10 +71,4 @@ func (t *namedImp) Name() string {
 
 func (t *namedImp) Type() TypeDesc {
 	return t.typ
-}
-
-func (t *namedImp) EnsureName(names collections.Set[string]) {
-	if len(t.name) <= 0 || t.name == `_` {
-		t.name = uniqueName(names)
-	}
 }

@@ -8,6 +8,7 @@ import (
 
 type Signature interface {
 	TypeDesc
+	_signature()
 }
 
 type SignatureArgs struct {
@@ -38,6 +39,8 @@ type signatureImp struct {
 
 	index int
 }
+
+func (sig *signatureImp) _signature() {}
 
 func (sig *signatureImp) SetIndex(index int) {
 	sig.index = index

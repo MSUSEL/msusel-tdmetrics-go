@@ -12,6 +12,7 @@ import (
 
 type Interface interface {
 	TypeDesc
+	_interface()
 
 	IsSupertypeOf(other Interface) bool
 	AddInheritors(inter Interface) bool
@@ -47,6 +48,8 @@ type interfaceImp struct {
 	inherits   []Interface
 	inheritors []Interface
 }
+
+func (ti *interfaceImp) _interface() {}
 
 func (ti *interfaceImp) SetIndex(index int) {
 	ti.index = index

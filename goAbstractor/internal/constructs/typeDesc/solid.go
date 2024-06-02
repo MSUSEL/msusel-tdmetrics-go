@@ -1,6 +1,7 @@
 package typeDesc
 
 import (
+	"fmt"
 	"go/types"
 
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/jsonify"
@@ -12,11 +13,13 @@ import (
 // e.g. a method signature inside a generic interface.
 type Solid interface {
 	TypeDesc
-
-	AppendTypeParam(tp ...TypeDesc)
+	_solid()
 }
 
 func NewSolid(typ types.Type, target TypeDesc, tp ...TypeDesc) Solid {
+	if len(tp) <= 0 {
+		panic(fmt.Sprintf(`a solid type requires at least one type parameter %v`, target))
+	}
 	return &solidImp{
 		typ:        typ,
 		target:     target,
@@ -31,6 +34,8 @@ type solidImp struct {
 	target     TypeDesc
 	typeParams []TypeDesc
 }
+
+func (ts *solidImp) _solid() {}
 
 func (ts *solidImp) SetIndex(index int) {
 	ts.index = index
@@ -60,8 +65,4 @@ func (ts *solidImp) ToJson(ctx *jsonify.Context) jsonify.Datum {
 
 func (ts *solidImp) String() string {
 	return jsonify.ToString(ts)
-}
-
-func (ts *solidImp) AppendTypeParam(tp ...TypeDesc) {
-	ts.typeParams = append(ts.typeParams, tp...)
 }

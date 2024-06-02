@@ -10,6 +10,7 @@ import (
 
 type Basic interface {
 	TypeDesc
+	_basic()
 }
 
 func NewBasic(reg Register, typ *types.Basic) Basic {
@@ -31,6 +32,8 @@ type basicImp struct {
 	name  string
 	index int
 }
+
+func (t *basicImp) _basic() {}
 
 func (t *basicImp) SetIndex(index int) {
 	t.index = index

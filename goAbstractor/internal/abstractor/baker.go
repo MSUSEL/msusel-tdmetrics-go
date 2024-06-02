@@ -58,12 +58,14 @@ func (ab *abstractor) bakeReturnTuple() typeDesc.Struct {
 		return t.(typeDesc.Struct)
 	}
 
-	t := typeDesc.NewStruct(nil)
-	tp := t.AddTypeParam(`T`, ab.bakeAny())
-
-	t.AddField(`value`, tp, false)
-	t.AddField(`ok`, typeDesc.BasicFor[bool](ab.proj), false)
-
+	tp := typeDesc.NewNamed(`T`, ab.bakeAny())
+	t := typeDesc.NewStruct(typeDesc.StructArgs{
+		TypeParams: []typeDesc.Named{tp},
+		Fields: []typeDesc.Named{
+			typeDesc.NewNamed(`value`, tp),
+			typeDesc.NewNamed(`ok`, typeDesc.BasicFor[bool](ab.proj)),
+		},
+	})
 	t = ab.proj.RegisterStruct(t)
 	ab.baked[bakeKey] = t
 	return t

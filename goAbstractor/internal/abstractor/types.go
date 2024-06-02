@@ -4,10 +4,9 @@ import (
 	"fmt"
 	"go/types"
 
-	"github.com/Snow-Gremlin/goToolbox/collections/enumerator"
-	"github.com/Snow-Gremlin/goToolbox/collections/set"
-
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs/typeDesc"
+	"github.com/Snow-Gremlin/goToolbox/collections"
+	"github.com/Snow-Gremlin/goToolbox/collections/set"
 )
 
 func (ab *abstractor) convertType(t types.Type) typeDesc.TypeDesc {
@@ -124,12 +123,18 @@ func (ab *abstractor) convertSlice(t *types.Slice) typeDesc.TypeDesc {
 }
 
 func (ab *abstractor) convertStruct(t *types.Struct) typeDesc.Struct {
-	ts := typeDesc.NewStruct(t)
+	fields := []typeDesc.Named{}
 	for i := range t.NumFields() {
 		f := t.Field(i)
 		field := typeDesc.NewNamed(f.Name(), ab.convertType(f.Type()))
-		ts.AppendField(f.Embedded(), field)
+		fields = append(fields, field)
+		// Nothing needs to be done with f.Embedded() here.
 	}
+	ts := typeDesc.NewStruct(typeDesc.StructArgs{
+		RealType: t,
+		//TypeParams: , // TODO: Handle type params
+		Fields: fields,
+	})
 	return ab.proj.RegisterStruct(ts)
 }
 
@@ -142,27 +147,59 @@ func (ab *abstractor) createReturn(returns []typeDesc.Named) typeDesc.TypeDesc {
 	case 1:
 		return returns[0].Type()
 	default:
-		names := set.From(enumerator.Select(enumerator.Enumerate(returns...),
-			func(f typeDesc.Named) string { return f.Name() }).NotZero())
-		for _, f := range returns {
-			f.EnsureName(names)
-		}
-		st := typeDesc.NewStruct(nil)
-		st.AppendField(false, returns...)
+		st := typeDesc.NewStruct(typeDesc.StructArgs{
+			Fields: returns,
+		})
 		return ab.proj.RegisterStruct(st)
 	}
 }
 
-func (ab *abstractor) convertTuple(t *types.Tuple) []typeDesc.Named {
-	list := make([]typeDesc.Named, t.Len())
-	for i := range t.Len() {
-		list[i] = ab.convertName(t.At(i))
+// uniqueName returns a unique name that isn't in the set.
+// The new unique name will be added to the set.
+// This is for naming anonymous fields and unnamed return values.
+func uniqueName(names collections.Set[string]) string {
+	const (
+		attempts = 10_000
+		pattern  = `$value%d`
+	)
+	for offset := 1; offset < attempts; offset++ {
+		name := fmt.Sprintf(pattern, offset)
+		if !names.Contains(name) {
+			names.Add(name)
+			return name
+		}
 	}
-	return list
+	panic(fmt.Errorf(`unable to find unique name in %d attempts`, attempts))
 }
 
-func (ab *abstractor) convertName(t *types.Var) typeDesc.Named {
-	return typeDesc.NewNamed(t.Name(), ab.convertType(t.Type()))
+func blankName(name string) bool {
+	return len(name) <= 0 || name == `_` || name == `.`
+}
+
+func (ab *abstractor) convertTuple(t *types.Tuple) []typeDesc.Named {
+	count := t.Len()
+	names := make([]string, count)
+	types := make([]typeDesc.TypeDesc, count)
+	filledNames := set.New[string](count)
+	for i := range count {
+		t2 := t.At(i)
+		name := t2.Name()
+		names[i] = name
+		types[i] = ab.convertType(t2.Type())
+		if !blankName(name) {
+			filledNames.Add(name)
+		}
+	}
+
+	list := make([]typeDesc.Named, count)
+	for i := range count {
+		name := names[i]
+		if blankName(name) {
+			name = uniqueName(filledNames)
+		}
+		list[i] = typeDesc.NewNamed(name, types[i])
+	}
+	return list
 }
 
 func (ab *abstractor) convertUnion(t *types.Union) typeDesc.Union {

@@ -8,37 +8,40 @@ import (
 
 type Struct interface {
 	TypeDesc
-
-	AddField(name string, t TypeDesc, embedded bool) Named
-	AppendField(embedded bool, fields ...Named)
-	AddTypeParam(name string, t Interface) Named
-	AppendTypeParam(tp ...Named)
+	_struct()
 }
 
-func NewStruct(typ *types.Struct) Struct {
+type StructArgs struct {
+	RealType   *types.Struct
+	TypeParams []Named
+	Fields     []Named
+}
+
+func NewStruct(args StructArgs) Struct {
 	return &structImp{
-		typ: typ,
+		realType:   args.RealType,
+		typeParams: args.TypeParams,
+		fields:     args.Fields,
 	}
 }
 
 type structImp struct {
-	typ *types.Struct
+	realType *types.Struct
 
-	fields     []Named
 	typeParams []Named
+	fields     []Named
 
 	index int
-
-	// embedded is the subset of fields that are embedded.
-	embedded []Named
 }
+
+func (ts *structImp) _struct() {}
 
 func (ts *structImp) SetIndex(index int) {
 	ts.index = index
 }
 
 func (ts *structImp) GoType() types.Type {
-	return ts.typ
+	return ts.realType
 }
 
 func (ts *structImp) Equal(other TypeDesc) bool {
@@ -62,27 +65,4 @@ func (ts *structImp) ToJson(ctx *jsonify.Context) jsonify.Datum {
 
 func (ts *structImp) String() string {
 	return jsonify.ToString(ts)
-}
-
-func (ts *structImp) AddField(name string, t TypeDesc, embedded bool) Named {
-	tn := NewNamed(name, t)
-	ts.AppendField(embedded, tn)
-	return tn
-}
-
-func (ts *structImp) AppendField(embedded bool, fields ...Named) {
-	ts.fields = append(ts.fields, fields...)
-	if embedded {
-		ts.embedded = append(ts.embedded, fields...)
-	}
-}
-
-func (ts *structImp) AddTypeParam(name string, t Interface) Named {
-	tn := NewNamed(name, t)
-	ts.typeParams = append(ts.typeParams, tn)
-	return tn
-}
-
-func (ts *structImp) AppendTypeParam(tp ...Named) {
-	ts.typeParams = append(ts.typeParams, tp...)
 }
