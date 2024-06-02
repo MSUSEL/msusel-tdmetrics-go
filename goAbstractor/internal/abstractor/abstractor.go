@@ -186,16 +186,17 @@ func (ab *abstractor) resolveClasses() {
 }
 
 func (ab *abstractor) resolveClass(pkg constructs.Package, td constructs.TypeDef) {
-	// TODO: Attempt to find a registered interface.
-
 	mTyp := []*types.Func{}
+	methods := map[string]typeDesc.TypeDesc{}
 	for _, m := range td.Methods() {
 		s := m.Signature().GoType().(*types.Signature)
 		f := types.NewFunc(token.NoPos, pkg.Source().Types, m.Name(), s)
 		mTyp = append(mTyp, f)
+		methods[m.Name()] = m.Signature()
 	}
 
 	tEmb := []types.Type{}
+	typeParams := []typeDesc.Named{}
 	// TODO: Fill parameter types for interface.
 
 	iTyp := types.NewInterfaceType(mTyp, tEmb)
@@ -203,10 +204,7 @@ func (ab *abstractor) resolveClass(pkg constructs.Package, td constructs.TypeDef
 		panic(fmt.Errorf(`failed to create an interface for %s.%s`, pkg.Source().PkgPath, td.Name()))
 	}
 
-	tInt := typeDesc.NewInterface(iTyp)
-	for _, m := range td.Methods() {
-		tInt.AddFunc(m.Name(), m.Signature())
-	}
+	tInt := typeDesc.NewInterface(iTyp, nil, methods, typeParams...)
 	td.SetInterface(ab.proj.RegisterInterface(tInt))
 }
 

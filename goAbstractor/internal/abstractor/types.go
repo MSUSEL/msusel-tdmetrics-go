@@ -65,24 +65,25 @@ func (ab *abstractor) convertChan(t *types.Chan) typeDesc.TypeDesc {
 func (ab *abstractor) convertInterface(t *types.Interface) typeDesc.Interface {
 	t = t.Complete()
 
-	it := typeDesc.NewInterface(t)
-
+	methods := map[string]typeDesc.TypeDesc{}
 	for i := range t.NumMethods() {
 		f := t.Method(i)
 		sig := ab.convertSignature(f.Type().(*types.Signature))
-		it.AddFunc(f.Name(), sig)
+		methods[f.Name()] = sig
 	}
 
+	var union typeDesc.Union
 	if t.IsImplicit() {
 		for i := range t.NumEmbeddeds() {
 			et := t.EmbeddedType(i)
-
 			switch et.(type) {
 			case *types.Union:
-				it.SetUnion(ab.convertType(et).(typeDesc.Union))
+				union = ab.convertType(et).(typeDesc.Union)
 			}
 		}
 	}
+
+	it := typeDesc.NewInterface(t, union, methods)
 	return ab.proj.RegisterInterface(it)
 }
 

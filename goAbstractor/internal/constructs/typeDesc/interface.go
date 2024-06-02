@@ -1,8 +1,8 @@
 package typeDesc
 
 import (
-	"fmt"
 	"go/types"
+	"maps"
 
 	"github.com/Snow-Gremlin/goToolbox/utils"
 
@@ -12,20 +12,18 @@ import (
 type Interface interface {
 	TypeDesc
 
-	SetUnion(union Union)
-	AddFunc(name string, sig TypeDesc) bool
-	AddTypeParam(name string, t TypeDesc) Named
-
 	IsSupertypeOf(other Interface) bool
 	AppendInherits(inherits ...Interface)
 	AddInheritors(inter Interface) bool
 	SetInheritance()
 }
 
-func NewInterface(typ *types.Interface) Interface {
+func NewInterface(typ *types.Interface, union Union, methods map[string]TypeDesc, typeParams ...Named) Interface {
 	return &interfaceImp{
-		typ:     typ,
-		methods: map[string]TypeDesc{},
+		typ:        typ,
+		typeParams: typeParams,
+		methods:    maps.Clone(methods),
+		union:      union,
 	}
 }
 
@@ -73,27 +71,6 @@ func (ti *interfaceImp) ToJson(ctx *jsonify.Context) jsonify.Datum {
 
 func (ti *interfaceImp) String() string {
 	return jsonify.ToString(ti)
-}
-
-func (ti *interfaceImp) SetUnion(union Union) {
-	ti.union = union
-}
-
-func (ti *interfaceImp) AddFunc(name string, sig TypeDesc) bool {
-	if other, has := ti.methods[name]; has {
-		if other != sig {
-			panic(fmt.Errorf(`function %v already exists with a different signature`, name))
-		}
-		return false
-	}
-	ti.methods[name] = sig
-	return true
-}
-
-func (ti *interfaceImp) AddTypeParam(name string, t TypeDesc) Named {
-	tn := NewNamed(name, t)
-	ti.typeParams = append(ti.typeParams, tn)
-	return tn
 }
 
 func (ti *interfaceImp) IsSupertypeOf(other Interface) bool {
