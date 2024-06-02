@@ -8,22 +8,28 @@ import (
 
 type Signature interface {
 	TypeDesc
-
-	SetVariadic(v bool)
-	SetReturn(t TypeDesc)
-	AddParam(name string, t TypeDesc) Named
-	AppendParam(tn ...Named)
-	AppendTypeParam(tp ...Named)
 }
 
-func NewSignature(typ *types.Signature) Signature {
+type SignatureArgs struct {
+	RealType   *types.Signature
+	Variadic   bool
+	Params     []Named
+	TypeParams []Named
+	Return     TypeDesc
+}
+
+func NewSignature(args SignatureArgs) Signature {
 	return &signatureImp{
-		typ: typ,
+		realType:   args.RealType,
+		variadic:   args.Variadic,
+		params:     args.Params,
+		typeParams: args.TypeParams,
+		returnType: args.Return,
 	}
 }
 
 type signatureImp struct {
-	typ *types.Signature
+	realType *types.Signature
 
 	variadic   bool
 	params     []Named
@@ -38,7 +44,7 @@ func (sig *signatureImp) SetIndex(index int) {
 }
 
 func (sig *signatureImp) GoType() types.Type {
-	return sig.typ
+	return sig.realType
 }
 
 func (sig *signatureImp) Equal(other TypeDesc) bool {
@@ -65,26 +71,4 @@ func (sig *signatureImp) ToJson(ctx *jsonify.Context) jsonify.Datum {
 
 func (sig *signatureImp) String() string {
 	return jsonify.ToString(sig)
-}
-
-func (sig *signatureImp) SetVariadic(v bool) {
-	sig.variadic = v
-}
-
-func (sig *signatureImp) SetReturn(t TypeDesc) {
-	sig.returnType = t
-}
-
-func (sig *signatureImp) AddParam(name string, t TypeDesc) Named {
-	tn := NewNamed(name, t)
-	sig.AppendParam(tn)
-	return tn
-}
-
-func (sig *signatureImp) AppendParam(tn ...Named) {
-	sig.params = append(sig.params, tn...)
-}
-
-func (sig *signatureImp) AppendTypeParam(tp ...Named) {
-	sig.typeParams = append(sig.typeParams, tp...)
 }

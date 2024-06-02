@@ -1,6 +1,7 @@
 package typeDesc
 
 import (
+	"fmt"
 	"go/types"
 	"maps"
 
@@ -13,22 +14,30 @@ type Interface interface {
 	TypeDesc
 
 	IsSupertypeOf(other Interface) bool
-	AppendInherits(inherits ...Interface)
 	AddInheritors(inter Interface) bool
 	SetInheritance()
 }
 
-func NewInterface(typ *types.Interface, union Union, methods map[string]TypeDesc, typeParams ...Named) Interface {
+type InterfaceArgs struct {
+	RealType     *types.Interface
+	Union        Union
+	Methods      map[string]TypeDesc
+	TypeParams   []Named
+	InitInherits []Interface
+}
+
+func NewInterface(args InterfaceArgs) Interface {
 	return &interfaceImp{
-		typ:        typ,
-		typeParams: typeParams,
-		methods:    maps.Clone(methods),
-		union:      union,
+		realType:   args.RealType,
+		typeParams: args.TypeParams,
+		methods:    maps.Clone(args.Methods),
+		union:      args.Union,
+		inherits:   args.InitInherits,
 	}
 }
 
 type interfaceImp struct {
-	typ *types.Interface
+	realType *types.Interface
 
 	typeParams []Named
 	methods    map[string]TypeDesc
@@ -44,7 +53,7 @@ func (ti *interfaceImp) SetIndex(index int) {
 }
 
 func (ti *interfaceImp) GoType() types.Type {
-	return ti.typ
+	return ti.realType
 }
 
 func (ti *interfaceImp) Equal(other TypeDesc) bool {
@@ -75,16 +84,12 @@ func (ti *interfaceImp) String() string {
 
 func (ti *interfaceImp) IsSupertypeOf(other Interface) bool {
 	otherTyp, ok := other.GoType().(*types.Interface)
-	if !ok || utils.IsNil(ti.typ) || utils.IsNil(otherTyp) {
+	if !ok || utils.IsNil(ti.realType) || utils.IsNil(otherTyp) {
 		// Baked in types don't have underlying interfaces
 		// but also shouldn't be needed for any inheritance.
 		return false
 	}
-	return types.Implements(ti.typ, otherTyp)
-}
-
-func (ti *interfaceImp) AppendInherits(inherits ...Interface) {
-	ti.inherits = append(ti.inherits, inherits...)
+	return types.Implements(ti.realType, otherTyp)
 }
 
 func (ti *interfaceImp) AddInheritors(other Interface) bool {
@@ -127,6 +132,10 @@ func (ti *interfaceImp) AddInheritors(other Interface) bool {
 
 func (ti *interfaceImp) SetInheritance() {
 	for _, other := range ti.inheritors {
-		other.AppendInherits(ti)
+		otherInter, ok := other.(*interfaceImp)
+		if !ok {
+			panic(fmt.Sprintf(`interfaces in inheritors must be interfaceImps but got (%[1]T) %[1]v`, other))
+		}
+		otherInter.inherits = append(otherInter.inherits, ti)
 	}
 }

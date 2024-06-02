@@ -20,7 +20,9 @@ func (ab *abstractor) bakeAny() typeDesc.Interface {
 		return t.(typeDesc.Interface)
 	}
 
-	t := typeDesc.NewInterface(types.NewInterfaceType(nil, nil), nil, nil)
+	t := typeDesc.NewInterface(typeDesc.InterfaceArgs{
+		RealType: types.NewInterfaceType(nil, nil),
+	})
 	t = ab.proj.RegisterInterface(t)
 	ab.baked[bakeKey] = t
 	return t
@@ -34,8 +36,10 @@ func (ab *abstractor) bakeIntFunc() typeDesc.Signature {
 		return t.(typeDesc.Signature)
 	}
 
-	f := typeDesc.NewSignature(nil) // func() int
-	f.SetReturn(typeDesc.BasicFor[int](ab.proj))
+	// func() int
+	f := typeDesc.NewSignature(typeDesc.SignatureArgs{
+		Return: typeDesc.BasicFor[int](ab.proj),
+	})
 	f = ab.proj.RegisterSignature(f)
 	ab.baked[bakeKey] = f
 	return f
@@ -84,26 +88,37 @@ func (ab *abstractor) bakeList() typeDesc.Interface {
 
 	tp := typeDesc.NewNamed(`T`, ab.bakeAny())
 
-	methods := map[string]typeDesc.TypeDesc{}
-	methods[`$len`] = ab.bakeIntFunc() // $len() int
-	methods[`$cap`] = ab.bakeIntFunc() // $cap() int
+	intFunc := ab.bakeIntFunc()
+	indexParam := typeDesc.NewNamed(`index`, typeDesc.BasicFor[int](ab.proj))
+	valueParam := typeDesc.NewNamed(`value`, tp)
 
-	getF := typeDesc.NewSignature(nil) // $get(index int) T
-	getF.AppendTypeParam(tp)
-	getF.AddParam(`index`, typeDesc.BasicFor[int](ab.proj))
-	getF.SetReturn(tp)
+	methods := map[string]typeDesc.TypeDesc{}
+	methods[`$len`] = intFunc // $len() int
+	methods[`$cap`] = intFunc // $cap() int
+
+	// $get(index int) T
+	getF := typeDesc.NewSignature(typeDesc.SignatureArgs{
+		TypeParams: []typeDesc.Named{tp},
+		Params:     []typeDesc.Named{indexParam},
+		Return:     tp,
+	})
 	getF = ab.proj.RegisterSignature(getF)
 	methods[`$get`] = typeDesc.NewSolid(nil, getF, tp)
 
-	setF := typeDesc.NewSignature(nil) // $set(index int, value T)
-	setF.AppendTypeParam(tp)
-	setF.AddParam(`index`, typeDesc.BasicFor[int](ab.proj))
-	setF.AddParam(`value`, tp)
+	// $set(index int, value T)
+	setF := typeDesc.NewSignature(typeDesc.SignatureArgs{
+		TypeParams: []typeDesc.Named{tp},
+		Params:     []typeDesc.Named{indexParam, valueParam},
+	})
 	setF = ab.proj.RegisterSignature(setF)
 	methods[`$set`] = typeDesc.NewSolid(nil, setF, tp)
 
-	t := typeDesc.NewInterface(nil, nil, methods, tp)
-	t.AppendInherits(ab.bakeAny())
+	// list[T any] interface
+	t := typeDesc.NewInterface(typeDesc.InterfaceArgs{
+		TypeParams:   []typeDesc.Named{tp},
+		Methods:      methods,
+		InitInherits: []typeDesc.Interface{ab.bakeAny()},
+	})
 	t = ab.proj.RegisterInterface(t)
 	ab.baked[bakeKey] = t
 	return t
@@ -125,24 +140,33 @@ func (ab *abstractor) bakeChan() typeDesc.Interface {
 	}
 
 	tp := typeDesc.NewNamed(`T`, ab.bakeAny())
-
 	methods := map[string]typeDesc.TypeDesc{}
-	methods[`$len`] = ab.bakeIntFunc() // $len() int
 
-	getF := typeDesc.NewSignature(nil) // $recv() (T, bool)
-	getF.AppendTypeParam(tp)
-	getF.SetReturn(typeDesc.NewSolid(nil, ab.bakeReturnTuple(), tp))
+	// $len() int
+	methods[`$len`] = ab.bakeIntFunc()
+
+	// $recv() (T, bool)
+	getF := typeDesc.NewSignature(typeDesc.SignatureArgs{
+		TypeParams: []typeDesc.Named{tp},
+		Return:     typeDesc.NewSolid(nil, ab.bakeReturnTuple(), tp),
+	})
 	getF = ab.proj.RegisterSignature(getF)
 	methods[`$recv`] = typeDesc.NewSolid(nil, getF, tp)
 
-	setF := typeDesc.NewSignature(nil) // $send(value T)
-	setF.AppendTypeParam(tp)
-	setF.AddParam(`value`, tp)
+	// $send(value T)
+	setF := typeDesc.NewSignature(typeDesc.SignatureArgs{
+		TypeParams: []typeDesc.Named{tp},
+		Params:     []typeDesc.Named{typeDesc.NewNamed(`value`, tp)},
+	})
 	setF = ab.proj.RegisterSignature(setF)
 	methods[`$send`] = typeDesc.NewSolid(nil, setF, tp)
 
-	t := typeDesc.NewInterface(nil, nil, methods, tp)
-	t.AppendInherits(ab.bakeAny())
+	// chan[T any] interface
+	t := typeDesc.NewInterface(typeDesc.InterfaceArgs{
+		TypeParams:   []typeDesc.Named{tp},
+		Methods:      methods,
+		InitInherits: []typeDesc.Interface{ab.bakeAny()},
+	})
 	t = ab.proj.RegisterInterface(t)
 	ab.baked[bakeKey] = t
 	return t
@@ -165,28 +189,38 @@ func (ab *abstractor) bakeMap() typeDesc.Interface {
 
 	tpKey := typeDesc.NewNamed(`TKey`, ab.bakeAny())
 	tpValue := typeDesc.NewNamed(`TValue`, ab.bakeAny())
-
+	tp := []typeDesc.Named{tpKey, tpValue}
 	methods := map[string]typeDesc.TypeDesc{}
-	methods[`$len`] = ab.bakeIntFunc() // $len() int
 
-	getF := typeDesc.NewSignature(nil) // $get(key TKey) (TValue, bool)
-	getF.AppendTypeParam(tpKey)
-	getF.AppendTypeParam(tpValue)
-	getF.AddParam(`key`, tpKey)
-	getF.SetReturn(typeDesc.NewSolid(nil, ab.bakeReturnTuple(), tpValue))
+	// $len() int
+	methods[`$len`] = ab.bakeIntFunc()
+
+	// $get(key TKey) (TValue, bool)
+	getF := typeDesc.NewSignature(typeDesc.SignatureArgs{
+		TypeParams: tp,
+		Params:     []typeDesc.Named{typeDesc.NewNamed(`key`, tpKey)},
+		Return:     typeDesc.NewSolid(nil, ab.bakeReturnTuple(), tpValue),
+	})
 	getF = ab.proj.RegisterSignature(getF)
 	methods[`$get`] = typeDesc.NewSolid(nil, getF, tpKey, tpValue)
 
-	setF := typeDesc.NewSignature(nil) // $set(key TKey, value TValue)
-	getF.AppendTypeParam(tpKey)
-	getF.AppendTypeParam(tpValue)
-	setF.AddParam(`key`, tpKey)
-	setF.AddParam(`value`, tpValue)
+	// $set(key TKey, value TValue)
+	setF := typeDesc.NewSignature(typeDesc.SignatureArgs{
+		TypeParams: tp,
+		Params: []typeDesc.Named{
+			typeDesc.NewNamed(`key`, tpKey),
+			typeDesc.NewNamed(`value`, tpValue),
+		},
+	})
 	setF = ab.proj.RegisterSignature(setF)
 	methods[`$set`] = typeDesc.NewSolid(nil, setF, tpKey, tpValue)
 
-	t := typeDesc.NewInterface(nil, nil, methods, tpKey, tpValue)
-	t.AppendInherits(ab.bakeAny())
+	// map[TKey, TValue any] interface
+	t := typeDesc.NewInterface(typeDesc.InterfaceArgs{
+		TypeParams:   tp,
+		Methods:      methods,
+		InitInherits: []typeDesc.Interface{ab.bakeAny()},
+	})
 	t = ab.proj.RegisterInterface(t)
 	ab.baked[bakeKey] = t
 	return t
@@ -204,16 +238,22 @@ func (ab *abstractor) bakePointer() typeDesc.Interface {
 	}
 
 	tp := typeDesc.NewNamed(`T`, ab.bakeAny())
-
 	methods := map[string]typeDesc.TypeDesc{}
-	getF := typeDesc.NewSignature(nil) // $deref() T
-	getF.AppendTypeParam(tp)
-	getF.SetReturn(tp)
+
+	// $deref() T
+	getF := typeDesc.NewSignature(typeDesc.SignatureArgs{
+		TypeParams: []typeDesc.Named{tp},
+		Return:     tp,
+	})
 	getF = ab.proj.RegisterSignature(getF)
 	methods[`$deref`] = typeDesc.NewSolid(nil, getF, tp)
 
-	t := typeDesc.NewInterface(nil, nil, methods, tp)
-	t.AppendInherits(ab.bakeAny())
+	// pointer[T any] interface
+	t := typeDesc.NewInterface(typeDesc.InterfaceArgs{
+		TypeParams:   []typeDesc.Named{tp},
+		Methods:      methods,
+		InitInherits: []typeDesc.Interface{ab.bakeAny()},
+	})
 	t = ab.proj.RegisterInterface(t)
 	ab.baked[bakeKey] = t
 	return t
@@ -226,16 +266,21 @@ func (ab *abstractor) bakeComplex64() typeDesc.Interface {
 		return t.(typeDesc.Interface)
 	}
 
-	getF := typeDesc.NewSignature(nil) // func() float32
-	getF.SetReturn(typeDesc.BasicFor[float32](ab.proj))
+	// func() float32
+	getF := typeDesc.NewSignature(typeDesc.SignatureArgs{
+		Return: typeDesc.BasicFor[float32](ab.proj),
+	})
 	getF = ab.proj.RegisterSignature(getF)
 
 	methods := map[string]typeDesc.TypeDesc{}
 	methods[`$real`] = getF // $real() float32
 	methods[`$imag`] = getF // $imag() float32
 
-	t := typeDesc.NewInterface(nil, nil, methods)
-	t.AppendInherits(ab.bakeAny())
+	// complex64
+	t := typeDesc.NewInterface(typeDesc.InterfaceArgs{
+		Methods:      methods,
+		InitInherits: []typeDesc.Interface{ab.bakeAny()},
+	})
 	t = ab.proj.RegisterInterface(t)
 	ab.baked[bakeKey] = t
 	return t
@@ -248,16 +293,21 @@ func (ab *abstractor) bakeComplex128() typeDesc.Interface {
 		return t.(typeDesc.Interface)
 	}
 
-	getF := typeDesc.NewSignature(nil) // func() float64
-	getF.SetReturn(typeDesc.BasicFor[float64](ab.proj))
+	// func() float64
+	getF := typeDesc.NewSignature(typeDesc.SignatureArgs{
+		Return: typeDesc.BasicFor[float64](ab.proj),
+	})
 	getF = ab.proj.RegisterSignature(getF)
 
 	methods := map[string]typeDesc.TypeDesc{}
 	methods[`$real`] = getF // $real() float32
 	methods[`$imag`] = getF // $imag() float32
 
-	t := typeDesc.NewInterface(nil, nil, methods)
-	t.AppendInherits(ab.bakeAny())
+	// complex128
+	t := typeDesc.NewInterface(typeDesc.InterfaceArgs{
+		Methods:      methods,
+		InitInherits: []typeDesc.Interface{ab.bakeAny()},
+	})
 	t = ab.proj.RegisterInterface(t)
 	ab.baked[bakeKey] = t
 	return t

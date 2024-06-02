@@ -83,7 +83,11 @@ func (ab *abstractor) convertInterface(t *types.Interface) typeDesc.Interface {
 		}
 	}
 
-	it := typeDesc.NewInterface(t, union, methods)
+	it := typeDesc.NewInterface(typeDesc.InterfaceArgs{
+		RealType: t,
+		Union:    union,
+		Methods:  methods,
+	})
 	return ab.proj.RegisterInterface(it)
 }
 
@@ -104,12 +108,13 @@ func (ab *abstractor) convertPointer(t *types.Pointer) typeDesc.TypeDesc {
 
 func (ab *abstractor) convertSignature(t *types.Signature) typeDesc.Signature {
 	// Don't output receiver or receiver type here.
-	sig := typeDesc.NewSignature(t)
-	sig.SetVariadic(t.Variadic())
-	sig.AppendTypeParam(ab.convertTypeParamList(t.TypeParams())...)
-	sig.AppendParam(ab.convertTuple(t.Params())...)
-	sig.SetReturn(ab.createReturn(ab.convertTuple(t.Results())))
-
+	sig := typeDesc.NewSignature(typeDesc.SignatureArgs{
+		RealType:   t,
+		Variadic:   t.Variadic(),
+		TypeParams: ab.convertTypeParamList(t.TypeParams()),
+		Params:     ab.convertTuple(t.Params()),
+		Return:     ab.createReturn(ab.convertTuple(t.Results())),
+	})
 	return ab.proj.RegisterSignature(sig)
 }
 
