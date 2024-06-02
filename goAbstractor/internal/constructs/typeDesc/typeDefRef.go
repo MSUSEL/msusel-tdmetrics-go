@@ -15,7 +15,10 @@ type TypeDefRef interface {
 }
 
 func NewTypeDefRef(name string) TypeDefRef {
-	return &typeDefRefImp{name: name}
+	// TODO: REGISTER
+	return &typeDefRefImp{
+		name: name,
+	}
 }
 
 type typeDefRefImp struct {

@@ -19,6 +19,7 @@ type Union interface {
 }
 
 func NewUnion(typ *types.Union) Union {
+	// TODO: REGISTER
 	return &unionImp{
 		typ: typ,
 	}

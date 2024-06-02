@@ -4,9 +4,10 @@ import (
 	"fmt"
 	"go/types"
 
-	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs/typeDesc"
 	"github.com/Snow-Gremlin/goToolbox/collections"
 	"github.com/Snow-Gremlin/goToolbox/collections/set"
+
+	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs/typeDesc"
 )
 
 func (ab *abstractor) convertType(t types.Type) typeDesc.TypeDesc {
@@ -42,7 +43,7 @@ func (ab *abstractor) convertType(t types.Type) typeDesc.TypeDesc {
 
 func (ab *abstractor) convertArray(t *types.Array) typeDesc.TypeDesc {
 	elem := ab.convertType(t.Elem())
-	return typeDesc.NewSolid(t, ab.bakeList(), elem)
+	return typeDesc.NewSolid(ab.proj, t, ab.bakeList(), elem)
 }
 
 func (ab *abstractor) convertBasic(t *types.Basic) typeDesc.TypeDesc {
@@ -58,7 +59,7 @@ func (ab *abstractor) convertBasic(t *types.Basic) typeDesc.TypeDesc {
 
 func (ab *abstractor) convertChan(t *types.Chan) typeDesc.TypeDesc {
 	elem := ab.convertType(t.Elem())
-	return typeDesc.NewSolid(t, ab.bakeChan(), elem)
+	return typeDesc.NewSolid(ab.proj, t, ab.bakeChan(), elem)
 }
 
 func (ab *abstractor) convertInterface(t *types.Interface) typeDesc.Interface {
@@ -82,18 +83,17 @@ func (ab *abstractor) convertInterface(t *types.Interface) typeDesc.Interface {
 		}
 	}
 
-	it := typeDesc.NewInterface(typeDesc.InterfaceArgs{
+	return typeDesc.NewInterface(ab.proj, typeDesc.InterfaceArgs{
 		RealType: t,
 		Union:    union,
 		Methods:  methods,
 	})
-	return ab.proj.RegisterInterface(it)
 }
 
 func (ab *abstractor) convertMap(t *types.Map) typeDesc.TypeDesc {
 	key := ab.convertType(t.Key())
 	value := ab.convertType(t.Elem())
-	return typeDesc.NewSolid(t, ab.bakeMap(), key, value)
+	return typeDesc.NewSolid(ab.proj, t, ab.bakeMap(), key, value)
 }
 
 func (ab *abstractor) convertNamed(t *types.Named) typeDesc.TypeDefRef {
@@ -102,40 +102,38 @@ func (ab *abstractor) convertNamed(t *types.Named) typeDesc.TypeDefRef {
 
 func (ab *abstractor) convertPointer(t *types.Pointer) typeDesc.TypeDesc {
 	elem := ab.convertType(t.Elem())
-	return typeDesc.NewSolid(t, ab.bakePointer(), elem)
+	return typeDesc.NewSolid(ab.proj, t, ab.bakePointer(), elem)
 }
 
 func (ab *abstractor) convertSignature(t *types.Signature) typeDesc.Signature {
 	// Don't output receiver or receiver type here.
-	sig := typeDesc.NewSignature(typeDesc.SignatureArgs{
+	return typeDesc.NewSignature(ab.proj, typeDesc.SignatureArgs{
 		RealType:   t,
 		Variadic:   t.Variadic(),
 		TypeParams: ab.convertTypeParamList(t.TypeParams()),
 		Params:     ab.convertTuple(t.Params()),
 		Return:     ab.createReturn(ab.convertTuple(t.Results())),
 	})
-	return ab.proj.RegisterSignature(sig)
 }
 
 func (ab *abstractor) convertSlice(t *types.Slice) typeDesc.TypeDesc {
 	elem := ab.convertType(t.Elem())
-	return typeDesc.NewSolid(t, ab.bakeList(), elem)
+	return typeDesc.NewSolid(ab.proj, t, ab.bakeList(), elem)
 }
 
 func (ab *abstractor) convertStruct(t *types.Struct) typeDesc.Struct {
 	fields := []typeDesc.Named{}
 	for i := range t.NumFields() {
 		f := t.Field(i)
-		field := typeDesc.NewNamed(f.Name(), ab.convertType(f.Type()))
+		field := typeDesc.NewNamed(ab.proj, f.Name(), ab.convertType(f.Type()))
 		fields = append(fields, field)
 		// Nothing needs to be done with f.Embedded() here.
 	}
-	ts := typeDesc.NewStruct(typeDesc.StructArgs{
+	return typeDesc.NewStruct(ab.proj, typeDesc.StructArgs{
 		RealType: t,
 		//TypeParams: , // TODO: Handle type params
 		Fields: fields,
 	})
-	return ab.proj.RegisterStruct(ts)
 }
 
 func (ab *abstractor) createReturn(returns []typeDesc.Named) typeDesc.TypeDesc {
@@ -147,10 +145,9 @@ func (ab *abstractor) createReturn(returns []typeDesc.Named) typeDesc.TypeDesc {
 	case 1:
 		return returns[0].Type()
 	default:
-		st := typeDesc.NewStruct(typeDesc.StructArgs{
+		return typeDesc.NewStruct(ab.proj, typeDesc.StructArgs{
 			Fields: returns,
 		})
-		return ab.proj.RegisterStruct(st)
 	}
 }
 
@@ -197,7 +194,7 @@ func (ab *abstractor) convertTuple(t *types.Tuple) []typeDesc.Named {
 		if blankName(name) {
 			name = uniqueName(filledNames)
 		}
-		list[i] = typeDesc.NewNamed(name, types[i])
+		list[i] = typeDesc.NewNamed(ab.proj, name, types[i])
 	}
 	return list
 }
@@ -214,10 +211,7 @@ func (ab *abstractor) convertUnion(t *types.Union) typeDesc.Union {
 
 func (ab *abstractor) convertTypeParam(t *types.TypeParam) typeDesc.Named {
 	t2 := t.Obj().Type().Underlying()
-	return typeDesc.NewNamed(
-		t.Obj().Name(),
-		ab.convertType(t2),
-	)
+	return typeDesc.NewNamed(ab.proj, t.Obj().Name(), ab.convertType(t2))
 }
 
 func (ab *abstractor) convertTypeParamList(t *types.TypeParamList) []typeDesc.Named {

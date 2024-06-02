@@ -19,14 +19,14 @@ type SignatureArgs struct {
 	Return     TypeDesc
 }
 
-func NewSignature(args SignatureArgs) Signature {
-	return &signatureImp{
+func NewSignature(reg Register, args SignatureArgs) Signature {
+	return reg.RegisterSignature(&signatureImp{
 		realType:   args.RealType,
 		variadic:   args.Variadic,
 		params:     args.Params,
 		typeParams: args.TypeParams,
 		returnType: args.Return,
-	}
+	})
 }
 
 type signatureImp struct {

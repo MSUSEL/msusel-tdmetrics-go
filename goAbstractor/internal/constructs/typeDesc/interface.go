@@ -27,14 +27,14 @@ type InterfaceArgs struct {
 	InitInherits []Interface
 }
 
-func NewInterface(args InterfaceArgs) Interface {
-	return &interfaceImp{
+func NewInterface(reg Register, args InterfaceArgs) Interface {
+	return reg.RegisterInterface(&interfaceImp{
 		realType:   args.RealType,
 		typeParams: args.TypeParams,
 		methods:    maps.Clone(args.Methods),
 		union:      args.Union,
 		inherits:   args.InitInherits,
-	}
+	})
 }
 
 type interfaceImp struct {

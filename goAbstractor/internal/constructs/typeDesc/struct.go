@@ -17,12 +17,12 @@ type StructArgs struct {
 	Fields     []Named
 }
 
-func NewStruct(args StructArgs) Struct {
-	return &structImp{
+func NewStruct(reg Register, args StructArgs) Struct {
+	return reg.RegisterStruct(&structImp{
 		realType:   args.RealType,
 		typeParams: args.TypeParams,
 		fields:     args.Fields,
-	}
+	})
 }
 
 type structImp struct {

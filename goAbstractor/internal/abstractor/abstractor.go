@@ -204,12 +204,12 @@ func (ab *abstractor) resolveClass(pkg constructs.Package, td constructs.TypeDef
 		panic(fmt.Errorf(`failed to create an interface for %s.%s`, pkg.Source().PkgPath, td.Name()))
 	}
 
-	tInt := typeDesc.NewInterface(typeDesc.InterfaceArgs{
+	tInt := typeDesc.NewInterface(ab.proj, typeDesc.InterfaceArgs{
 		RealType:   iTyp,
 		Methods:    methods,
 		TypeParams: typeParams,
 	})
-	td.SetInterface(ab.proj.RegisterInterface(tInt))
+	td.SetInterface(tInt)
 }
 
 func (ab *abstractor) resolveInheritance() {

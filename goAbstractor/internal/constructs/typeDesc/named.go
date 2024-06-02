@@ -17,14 +17,14 @@ type Named interface {
 	Type() TypeDesc
 }
 
-func NewNamed(name string, typ TypeDesc) Named {
+func NewNamed(reg Register, name string, typ TypeDesc) Named {
 	if utils.IsNil(typ) {
 		panic(fmt.Errorf(`must have a non-nil type for named, %q`, name))
 	}
-	return &namedImp{
+	return reg.RegisterNamed(&namedImp{
 		name: name,
 		typ:  typ,
-	}
+	})
 }
 
 type namedImp struct {
