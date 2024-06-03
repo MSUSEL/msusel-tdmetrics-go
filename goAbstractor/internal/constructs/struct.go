@@ -1,4 +1,4 @@
-package typeDesc
+package constructs
 
 import (
 	"go/types"

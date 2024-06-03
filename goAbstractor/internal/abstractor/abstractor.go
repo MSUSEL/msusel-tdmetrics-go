@@ -11,7 +11,6 @@ import (
 	"golang.org/x/tools/go/packages"
 
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs"
-	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs/typeDesc"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/metrics"
 )
 
@@ -28,7 +27,7 @@ func Abstract(ps []*packages.Package, verbose bool) constructs.Project {
 	ab := &abstractor{
 		verbose: verbose,
 		proj:    constructs.NewProject(),
-		baked:   map[string]typeDesc.TypeDesc{},
+		baked:   map[string]constructs.TypeDesc{},
 	}
 	ab.initialize()
 	ab.abstractProject(ps)
@@ -36,6 +35,7 @@ func Abstract(ps []*packages.Package, verbose bool) constructs.Project {
 	ab.resolveReceivers()
 	ab.resolveClasses()
 	ab.resolveInheritance()
+	ab.resolveReferences()
 	ab.proj.UpdateIndices()
 	return ab.proj
 }
@@ -43,7 +43,7 @@ func Abstract(ps []*packages.Package, verbose bool) constructs.Project {
 type abstractor struct {
 	verbose bool
 	proj    constructs.Project
-	baked   map[string]typeDesc.TypeDesc
+	baked   map[string]constructs.TypeDesc
 }
 
 func (ab *abstractor) log(format string, args ...any) {
@@ -187,7 +187,7 @@ func (ab *abstractor) resolveClasses() {
 
 func (ab *abstractor) resolveClass(pkg constructs.Package, td constructs.TypeDef) {
 	mTyp := []*types.Func{}
-	methods := map[string]typeDesc.TypeDesc{}
+	methods := map[string]constructs.TypeDesc{}
 	for _, m := range td.Methods() {
 		s := m.Signature().GoType().(*types.Signature)
 		f := types.NewFunc(token.NoPos, pkg.Source().Types, m.Name(), s)
@@ -196,7 +196,7 @@ func (ab *abstractor) resolveClass(pkg constructs.Package, td constructs.TypeDef
 	}
 
 	tEmb := []types.Type{}
-	typeParams := []typeDesc.Named{}
+	typeParams := []constructs.Named{}
 	// TODO: Fill parameter types for interface.
 
 	iTyp := types.NewInterfaceType(mTyp, tEmb)
@@ -204,7 +204,7 @@ func (ab *abstractor) resolveClass(pkg constructs.Package, td constructs.TypeDef
 		panic(fmt.Errorf(`failed to create an interface for %s.%s`, pkg.Source().PkgPath, td.Name()))
 	}
 
-	tInt := typeDesc.NewInterface(ab.proj, typeDesc.InterfaceArgs{
+	tInt := constructs.NewInterface(ab.proj, constructs.InterfaceArgs{
 		RealType:   iTyp,
 		Methods:    methods,
 		TypeParams: typeParams,
@@ -227,5 +227,13 @@ func (ab *abstractor) resolveInheritance() {
 	}
 	for _, inter := range inters {
 		inter.SetInheritance()
+	}
+}
+
+func (ab *abstractor) resolveReferences() {
+	for _, ref := range ab.proj.AllReferences() {
+		pkg := ab.findPackageByPath(ref.PackagePath())
+		def := pkg.FindTypeDef(ref.Name())
+		ref.SetType(def.Typ)
 	}
 }

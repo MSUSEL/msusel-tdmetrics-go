@@ -1,7 +1,6 @@
 package constructs
 
 import (
-	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs/typeDesc"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/jsonify"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/metrics"
 )
@@ -11,7 +10,7 @@ import (
 
 type Method interface {
 	Name() string
-	Signature() typeDesc.TypeDesc
+	Signature() TypeDesc
 	SetReceiver(noCopyRecv bool, receiver string)
 	Receiver() string
 	SetMetrics(met metrics.Metrics)
@@ -19,14 +18,14 @@ type Method interface {
 
 type methodImp struct {
 	name      string
-	signature typeDesc.TypeDesc
+	signature TypeDesc
 	metrics   metrics.Metrics
 
 	noCopyRecv bool
 	receiver   string
 }
 
-func NewMethod(name string, sig typeDesc.TypeDesc) Method {
+func NewMethod(name string, sig TypeDesc) Method {
 	return &methodImp{
 		name:      name,
 		signature: sig,
@@ -54,7 +53,7 @@ func (m *methodImp) Name() string {
 	return m.name
 }
 
-func (m *methodImp) Signature() typeDesc.TypeDesc {
+func (m *methodImp) Signature() TypeDesc {
 	return m.signature
 }
 

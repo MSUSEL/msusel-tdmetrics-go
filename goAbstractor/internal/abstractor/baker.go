@@ -10,13 +10,12 @@ import (
 	"fmt"
 	"go/types"
 
+	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs"
 	"github.com/Snow-Gremlin/goToolbox/utils"
-
-	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs/typeDesc"
 )
 
 // TODO: finish updating to use bakeOnce
-func bakeOnce[T typeDesc.TypeDesc](ab *abstractor, key string, create func() T) T {
+func bakeOnce[T constructs.TypeDesc](ab *abstractor, key string, create func() T) T {
 	if baked, has := ab.baked[key]; has {
 		t, ok := baked.(T)
 		if ok {
@@ -32,10 +31,10 @@ func bakeOnce[T typeDesc.TypeDesc](ab *abstractor, key string, create func() T) 
 
 // bakeAny bakes in an interface to represent "any"
 // the base object that (almost) all other types inherit from.
-func (ab *abstractor) bakeAny() typeDesc.Interface {
-	return bakeOnce(ab, `any`, func() typeDesc.Interface {
+func (ab *abstractor) bakeAny() constructs.Interface {
+	return bakeOnce(ab, `any`, func() constructs.Interface {
 		// any
-		return typeDesc.NewInterface(ab.proj, typeDesc.InterfaceArgs{
+		return constructs.NewInterface(ab.proj, constructs.InterfaceArgs{
 			RealType: types.NewInterfaceType(nil, nil),
 		})
 	})
@@ -43,11 +42,11 @@ func (ab *abstractor) bakeAny() typeDesc.Interface {
 
 // bakeIntFunc bakes in a signature for `func() int`.
 // This is useful for things like `cap() int` and `len() int`.
-func (ab *abstractor) bakeIntFunc() typeDesc.Signature {
-	return bakeOnce(ab, `func() int`, func() typeDesc.Signature {
+func (ab *abstractor) bakeIntFunc() constructs.Signature {
+	return bakeOnce(ab, `func() int`, func() constructs.Signature {
 		// func() int
-		return typeDesc.NewSignature(ab.proj, typeDesc.SignatureArgs{
-			Return: typeDesc.BasicFor[int](ab.proj),
+		return constructs.NewSignature(ab.proj, constructs.SignatureArgs{
+			Return: constructs.BasicFor[int](ab.proj),
 		})
 	})
 }
@@ -59,15 +58,15 @@ func (ab *abstractor) bakeIntFunc() typeDesc.Signature {
 //		value T
 //		ok    bool
 //	}
-func (ab *abstractor) bakeReturnTuple() typeDesc.Struct {
-	return bakeOnce(ab, `struct[T] { value T; ok bool }`, func() typeDesc.Struct {
-		tp := typeDesc.NewNamed(ab.proj, `T`, ab.bakeAny())
-		fieldValue := typeDesc.NewNamed(ab.proj, `value`, tp)
-		fieldOk := typeDesc.NewNamed(ab.proj, `ok`, typeDesc.BasicFor[bool](ab.proj))
+func (ab *abstractor) bakeReturnTuple() constructs.Struct {
+	return bakeOnce(ab, `struct[T] { value T; ok bool }`, func() constructs.Struct {
+		tp := constructs.NewNamed(ab.proj, `T`, ab.bakeAny())
+		fieldValue := constructs.NewNamed(ab.proj, `value`, tp)
+		fieldOk := constructs.NewNamed(ab.proj, `ok`, constructs.BasicFor[bool](ab.proj))
 		// struct[T any]s
-		return typeDesc.NewStruct(ab.proj, typeDesc.StructArgs{
-			TypeParams: []typeDesc.Named{tp},
-			Fields:     []typeDesc.Named{fieldValue, fieldOk},
+		return constructs.NewStruct(ab.proj, constructs.StructArgs{
+			TypeParams: []constructs.Named{tp},
+			Fields:     []constructs.Named{fieldValue, fieldOk},
 		})
 	})
 }
@@ -83,42 +82,42 @@ func (ab *abstractor) bakeReturnTuple() typeDesc.Struct {
 //
 // Note: The difference between an array and slice aren't
 // important for the abstractor, so they are combined into one.
-func (ab *abstractor) bakeList() typeDesc.Interface {
+func (ab *abstractor) bakeList() constructs.Interface {
 	const bakeKey = `list[T any]`
 	if t, has := ab.baked[bakeKey]; has {
-		return t.(typeDesc.Interface)
+		return t.(constructs.Interface)
 	}
 
-	tp := typeDesc.NewNamed(ab.proj, `T`, ab.bakeAny())
+	tp := constructs.NewNamed(ab.proj, `T`, ab.bakeAny())
 
 	intFunc := ab.bakeIntFunc()
-	indexParam := typeDesc.NewNamed(ab.proj, `index`, typeDesc.BasicFor[int](ab.proj))
-	valueParam := typeDesc.NewNamed(ab.proj, `value`, tp)
+	indexParam := constructs.NewNamed(ab.proj, `index`, constructs.BasicFor[int](ab.proj))
+	valueParam := constructs.NewNamed(ab.proj, `value`, tp)
 
-	methods := map[string]typeDesc.TypeDesc{}
+	methods := map[string]constructs.TypeDesc{}
 	methods[`$len`] = intFunc // $len() int
 	methods[`$cap`] = intFunc // $cap() int
 
 	// $get(index int) T
-	getF := typeDesc.NewSignature(ab.proj, typeDesc.SignatureArgs{
-		TypeParams: []typeDesc.Named{tp},
-		Params:     []typeDesc.Named{indexParam},
+	getF := constructs.NewSignature(ab.proj, constructs.SignatureArgs{
+		TypeParams: []constructs.Named{tp},
+		Params:     []constructs.Named{indexParam},
 		Return:     tp,
 	})
-	methods[`$get`] = typeDesc.NewSolid(ab.proj, nil, getF, tp)
+	methods[`$get`] = constructs.NewSolid(ab.proj, nil, getF, tp)
 
 	// $set(index int, value T)
-	setF := typeDesc.NewSignature(ab.proj, typeDesc.SignatureArgs{
-		TypeParams: []typeDesc.Named{tp},
-		Params:     []typeDesc.Named{indexParam, valueParam},
+	setF := constructs.NewSignature(ab.proj, constructs.SignatureArgs{
+		TypeParams: []constructs.Named{tp},
+		Params:     []constructs.Named{indexParam, valueParam},
 	})
-	methods[`$set`] = typeDesc.NewSolid(ab.proj, nil, setF, tp)
+	methods[`$set`] = constructs.NewSolid(ab.proj, nil, setF, tp)
 
 	// list[T any] interface
-	t := typeDesc.NewInterface(ab.proj, typeDesc.InterfaceArgs{
-		TypeParams:   []typeDesc.Named{tp},
+	t := constructs.NewInterface(ab.proj, constructs.InterfaceArgs{
+		TypeParams:   []constructs.Named{tp},
 		Methods:      methods,
-		InitInherits: []typeDesc.Interface{ab.bakeAny()},
+		InitInherits: []constructs.Interface{ab.bakeAny()},
 	})
 	ab.baked[bakeKey] = t
 	return t
@@ -133,37 +132,37 @@ func (ab *abstractor) bakeList() typeDesc.Interface {
 //	}
 //
 // Note: Doesn't currently have cap, trySend, or tryRecv as defined in reflect.
-func (ab *abstractor) bakeChan() typeDesc.Interface {
+func (ab *abstractor) bakeChan() constructs.Interface {
 	const bakeKey = `chan[T any]`
 	if t, has := ab.baked[bakeKey]; has {
-		return t.(typeDesc.Interface)
+		return t.(constructs.Interface)
 	}
 
-	tp := typeDesc.NewNamed(ab.proj, `T`, ab.bakeAny())
-	methods := map[string]typeDesc.TypeDesc{}
+	tp := constructs.NewNamed(ab.proj, `T`, ab.bakeAny())
+	methods := map[string]constructs.TypeDesc{}
 
 	// $len() int
 	methods[`$len`] = ab.bakeIntFunc()
 
 	// $recv() (T, bool)
-	getF := typeDesc.NewSignature(ab.proj, typeDesc.SignatureArgs{
-		TypeParams: []typeDesc.Named{tp},
-		Return:     typeDesc.NewSolid(ab.proj, nil, ab.bakeReturnTuple(), tp),
+	getF := constructs.NewSignature(ab.proj, constructs.SignatureArgs{
+		TypeParams: []constructs.Named{tp},
+		Return:     constructs.NewSolid(ab.proj, nil, ab.bakeReturnTuple(), tp),
 	})
-	methods[`$recv`] = typeDesc.NewSolid(ab.proj, nil, getF, tp)
+	methods[`$recv`] = constructs.NewSolid(ab.proj, nil, getF, tp)
 
 	// $send(value T)
-	setF := typeDesc.NewSignature(ab.proj, typeDesc.SignatureArgs{
-		TypeParams: []typeDesc.Named{tp},
-		Params:     []typeDesc.Named{typeDesc.NewNamed(ab.proj, `value`, tp)},
+	setF := constructs.NewSignature(ab.proj, constructs.SignatureArgs{
+		TypeParams: []constructs.Named{tp},
+		Params:     []constructs.Named{constructs.NewNamed(ab.proj, `value`, tp)},
 	})
-	methods[`$send`] = typeDesc.NewSolid(ab.proj, nil, setF, tp)
+	methods[`$send`] = constructs.NewSolid(ab.proj, nil, setF, tp)
 
 	// chan[T any] interface
-	t := typeDesc.NewInterface(ab.proj, typeDesc.InterfaceArgs{
-		TypeParams:   []typeDesc.Named{tp},
+	t := constructs.NewInterface(ab.proj, constructs.InterfaceArgs{
+		TypeParams:   []constructs.Named{tp},
 		Methods:      methods,
-		InitInherits: []typeDesc.Interface{ab.bakeAny()},
+		InitInherits: []constructs.Interface{ab.bakeAny()},
 	})
 	ab.baked[bakeKey] = t
 	return t
@@ -178,43 +177,43 @@ func (ab *abstractor) bakeChan() typeDesc.Interface {
 //	}
 //
 // Note: Doesn't currently require Key to be comparable as defined in reflect.
-func (ab *abstractor) bakeMap() typeDesc.Interface {
+func (ab *abstractor) bakeMap() constructs.Interface {
 	const bakeKey = `map[TKey, TValue any]`
 	if t, has := ab.baked[bakeKey]; has {
-		return t.(typeDesc.Interface)
+		return t.(constructs.Interface)
 	}
 
-	tpKey := typeDesc.NewNamed(ab.proj, `TKey`, ab.bakeAny())
-	tpValue := typeDesc.NewNamed(ab.proj, `TValue`, ab.bakeAny())
-	tp := []typeDesc.Named{tpKey, tpValue}
-	methods := map[string]typeDesc.TypeDesc{}
+	tpKey := constructs.NewNamed(ab.proj, `TKey`, ab.bakeAny())
+	tpValue := constructs.NewNamed(ab.proj, `TValue`, ab.bakeAny())
+	tp := []constructs.Named{tpKey, tpValue}
+	methods := map[string]constructs.TypeDesc{}
 
 	// $len() int
 	methods[`$len`] = ab.bakeIntFunc()
 
 	// $get(key TKey) (TValue, bool)
-	getF := typeDesc.NewSignature(ab.proj, typeDesc.SignatureArgs{
+	getF := constructs.NewSignature(ab.proj, constructs.SignatureArgs{
 		TypeParams: tp,
-		Params:     []typeDesc.Named{typeDesc.NewNamed(ab.proj, `key`, tpKey)},
-		Return:     typeDesc.NewSolid(ab.proj, nil, ab.bakeReturnTuple(), tpValue),
+		Params:     []constructs.Named{constructs.NewNamed(ab.proj, `key`, tpKey)},
+		Return:     constructs.NewSolid(ab.proj, nil, ab.bakeReturnTuple(), tpValue),
 	})
-	methods[`$get`] = typeDesc.NewSolid(ab.proj, nil, getF, tpKey, tpValue)
+	methods[`$get`] = constructs.NewSolid(ab.proj, nil, getF, tpKey, tpValue)
 
 	// $set(key TKey, value TValue)
-	setF := typeDesc.NewSignature(ab.proj, typeDesc.SignatureArgs{
+	setF := constructs.NewSignature(ab.proj, constructs.SignatureArgs{
 		TypeParams: tp,
-		Params: []typeDesc.Named{
-			typeDesc.NewNamed(ab.proj, `key`, tpKey),
-			typeDesc.NewNamed(ab.proj, `value`, tpValue),
+		Params: []constructs.Named{
+			constructs.NewNamed(ab.proj, `key`, tpKey),
+			constructs.NewNamed(ab.proj, `value`, tpValue),
 		},
 	})
-	methods[`$set`] = typeDesc.NewSolid(ab.proj, nil, setF, tpKey, tpValue)
+	methods[`$set`] = constructs.NewSolid(ab.proj, nil, setF, tpKey, tpValue)
 
 	// map[TKey, TValue any] interface
-	t := typeDesc.NewInterface(ab.proj, typeDesc.InterfaceArgs{
+	t := constructs.NewInterface(ab.proj, constructs.InterfaceArgs{
 		TypeParams:   tp,
 		Methods:      methods,
-		InitInherits: []typeDesc.Interface{ab.bakeAny()},
+		InitInherits: []constructs.Interface{ab.bakeAny()},
 	})
 	ab.baked[bakeKey] = t
 	return t
@@ -225,77 +224,77 @@ func (ab *abstractor) bakeMap() typeDesc.Interface {
 //	type pointer[T any] interface {
 //		$deref() T
 //	}
-func (ab *abstractor) bakePointer() typeDesc.Interface {
+func (ab *abstractor) bakePointer() constructs.Interface {
 	const bakeKey = `pointer[T any]`
 	if t, has := ab.baked[bakeKey]; has {
-		return t.(typeDesc.Interface)
+		return t.(constructs.Interface)
 	}
 
-	tp := typeDesc.NewNamed(ab.proj, `T`, ab.bakeAny())
-	methods := map[string]typeDesc.TypeDesc{}
+	tp := constructs.NewNamed(ab.proj, `T`, ab.bakeAny())
+	methods := map[string]constructs.TypeDesc{}
 
 	// $deref() T
-	getF := typeDesc.NewSignature(ab.proj, typeDesc.SignatureArgs{
-		TypeParams: []typeDesc.Named{tp},
+	getF := constructs.NewSignature(ab.proj, constructs.SignatureArgs{
+		TypeParams: []constructs.Named{tp},
 		Return:     tp,
 	})
-	methods[`$deref`] = typeDesc.NewSolid(ab.proj, nil, getF, tp)
+	methods[`$deref`] = constructs.NewSolid(ab.proj, nil, getF, tp)
 
 	// pointer[T any] interface
-	t := typeDesc.NewInterface(ab.proj, typeDesc.InterfaceArgs{
-		TypeParams:   []typeDesc.Named{tp},
+	t := constructs.NewInterface(ab.proj, constructs.InterfaceArgs{
+		TypeParams:   []constructs.Named{tp},
 		Methods:      methods,
-		InitInherits: []typeDesc.Interface{ab.bakeAny()},
+		InitInherits: []constructs.Interface{ab.bakeAny()},
 	})
 	ab.baked[bakeKey] = t
 	return t
 }
 
 // bakeComplex64 bakes in an interface to represent a Go 64-bit complex number.
-func (ab *abstractor) bakeComplex64() typeDesc.Interface {
+func (ab *abstractor) bakeComplex64() constructs.Interface {
 	const bakeKey = `complex64`
 	if t, has := ab.baked[bakeKey]; has {
-		return t.(typeDesc.Interface)
+		return t.(constructs.Interface)
 	}
 
 	// func() float32
-	getF := typeDesc.NewSignature(ab.proj, typeDesc.SignatureArgs{
-		Return: typeDesc.BasicFor[float32](ab.proj),
+	getF := constructs.NewSignature(ab.proj, constructs.SignatureArgs{
+		Return: constructs.BasicFor[float32](ab.proj),
 	})
 
-	methods := map[string]typeDesc.TypeDesc{}
+	methods := map[string]constructs.TypeDesc{}
 	methods[`$real`] = getF // $real() float32
 	methods[`$imag`] = getF // $imag() float32
 
 	// complex64
-	t := typeDesc.NewInterface(ab.proj, typeDesc.InterfaceArgs{
+	t := constructs.NewInterface(ab.proj, constructs.InterfaceArgs{
 		Methods:      methods,
-		InitInherits: []typeDesc.Interface{ab.bakeAny()},
+		InitInherits: []constructs.Interface{ab.bakeAny()},
 	})
 	ab.baked[bakeKey] = t
 	return t
 }
 
 // bakeComplex128 bakes in an interface to represent a Go 64-bit complex number.
-func (ab *abstractor) bakeComplex128() typeDesc.Interface {
+func (ab *abstractor) bakeComplex128() constructs.Interface {
 	const bakeKey = `complex128`
 	if t, has := ab.baked[bakeKey]; has {
-		return t.(typeDesc.Interface)
+		return t.(constructs.Interface)
 	}
 
 	// func() float64
-	getF := typeDesc.NewSignature(ab.proj, typeDesc.SignatureArgs{
-		Return: typeDesc.BasicFor[float64](ab.proj),
+	getF := constructs.NewSignature(ab.proj, constructs.SignatureArgs{
+		Return: constructs.BasicFor[float64](ab.proj),
 	})
 
-	methods := map[string]typeDesc.TypeDesc{}
+	methods := map[string]constructs.TypeDesc{}
 	methods[`$real`] = getF // $real() float32
 	methods[`$imag`] = getF // $imag() float32
 
 	// complex128
-	t := typeDesc.NewInterface(ab.proj, typeDesc.InterfaceArgs{
+	t := constructs.NewInterface(ab.proj, constructs.InterfaceArgs{
 		Methods:      methods,
-		InitInherits: []typeDesc.Interface{ab.bakeAny()},
+		InitInherits: []constructs.Interface{ab.bakeAny()},
 	})
 	ab.baked[bakeKey] = t
 	return t

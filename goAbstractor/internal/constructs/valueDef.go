@@ -1,7 +1,6 @@
 package constructs
 
 import (
-	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs/typeDesc"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/jsonify"
 )
 
@@ -10,10 +9,10 @@ type ValueDef interface{}
 type valueDefImp struct {
 	name    string
 	isConst bool
-	typ     typeDesc.TypeDesc
+	typ     TypeDesc
 }
 
-func NewValueDef(name string, isConst bool, typ typeDesc.TypeDesc) ValueDef {
+func NewValueDef(name string, isConst bool, typ TypeDesc) ValueDef {
 	return &valueDefImp{
 		name:    name,
 		isConst: isConst,

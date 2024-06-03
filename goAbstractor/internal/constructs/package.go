@@ -8,7 +8,7 @@ import (
 
 type Package interface {
 	Source() *packages.Package
-	FindTypeForReceiver(receiver string) TypeDef
+	FindTypeDef(name string) TypeDef
 	SetIndex(index int)
 	Path() string
 	ImportPaths() []string
@@ -64,9 +64,9 @@ func (p *packageImp) String() string {
 	return jsonify.ToString(p)
 }
 
-func (p *packageImp) FindTypeForReceiver(receiver string) TypeDef {
+func (p *packageImp) FindTypeDef(name string) TypeDef {
 	for _, t := range p.types {
-		if receiver == t.Name() {
+		if name == t.Name() {
 			return t
 		}
 	}

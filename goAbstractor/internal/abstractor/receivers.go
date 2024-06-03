@@ -51,7 +51,7 @@ func resolveReceiversInPackage(pkg constructs.Package) {
 	for i, m := range methods {
 		if len(m.Receiver()) > 0 {
 
-			t := pkg.FindTypeForReceiver(m.Receiver())
+			t := pkg.FindTypeDef(m.Receiver())
 			if t == nil {
 				panic(fmt.Errorf(`failed to find receiver for %s`, m.Receiver()))
 			}

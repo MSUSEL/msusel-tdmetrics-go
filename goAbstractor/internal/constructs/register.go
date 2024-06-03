@@ -1,4 +1,4 @@
-package typeDesc
+package constructs
 
 type Register interface {
 	RegisterBasic(t Basic) Basic

@@ -1,7 +1,6 @@
 package constructs
 
 import (
-	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs/typeDesc"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/jsonify"
 )
 
@@ -9,18 +8,18 @@ type TypeDef interface {
 	Name() string
 	Methods() []Method
 	AppendMethod(met ...Method)
-	SetInterface(inter typeDesc.Interface)
+	SetInterface(inter Interface)
 }
 
 type typeDefImp struct {
 	name       string
-	typ        typeDesc.TypeDesc
+	typ        TypeDesc
 	methods    []Method
-	typeParams []typeDesc.Named
-	inter      typeDesc.Interface
+	typeParams []Named
+	inter      Interface
 }
 
-func NewTypeDef(name string, t typeDesc.TypeDesc) TypeDef {
+func NewTypeDef(name string, t TypeDesc) TypeDef {
 	return &typeDefImp{
 		name: name,
 		typ:  t,
@@ -52,6 +51,6 @@ func (td *typeDefImp) AppendMethod(met ...Method) {
 	td.methods = append(td.methods, met...)
 }
 
-func (td *typeDefImp) SetInterface(inter typeDesc.Interface) {
+func (td *typeDefImp) SetInterface(inter Interface) {
 	td.inter = inter
 }
