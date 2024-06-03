@@ -98,7 +98,7 @@ func (ab *abstractor) convertMap(t *types.Map) constructs.TypeDesc {
 func (ab *abstractor) convertNamed(t *types.Named) constructs.TypeDefRef {
 	pkgPath := t.Obj().Pkg().Path()
 	name := t.Obj().Name()
-	return constructs.NewTypeDefRef(ab.proj, pkgPath, name)
+	return constructs.NewTypeDefRef(ab.proj, t, pkgPath, name)
 }
 
 func (ab *abstractor) convertPointer(t *types.Pointer) constructs.TypeDesc {

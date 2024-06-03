@@ -233,7 +233,13 @@ func (ab *abstractor) resolveInheritance() {
 func (ab *abstractor) resolveReferences() {
 	for _, ref := range ab.proj.AllReferences() {
 		pkg := ab.findPackageByPath(ref.PackagePath())
+		if pkg == nil {
+			panic(fmt.Errorf(`failed to find package for type def reference for %q in %q`, ref.Name(), ref.PackagePath()))
+		}
 		def := pkg.FindTypeDef(ref.Name())
-		ref.SetType(def.Typ)
+		if def == nil {
+			panic(fmt.Errorf(`failed to find type for type def reference for %q in %q`, ref.Name(), ref.PackagePath()))
+		}
+		ref.SetType(def)
 	}
 }

@@ -16,17 +16,19 @@ type TypeDefRef interface {
 	SetType(typ TypeDef)
 }
 
-func NewTypeDefRef(reg Register, pkgPath, name string) TypeDefRef {
+func NewTypeDefRef(reg Register, realType *types.Named, pkgPath, name string) TypeDefRef {
 	return reg.RegisterTypeDefRef(&typeDefRefImp{
-		pkgPath: pkgPath,
-		name:    name,
+		realType: realType,
+		pkgPath:  pkgPath,
+		name:     name,
 	})
 }
 
 type typeDefRefImp struct {
-	pkgPath string
-	name    string
-	typ     TypeDef
+	realType *types.Named
+	pkgPath  string
+	name     string
+	typ      TypeDef
 }
 
 func (t *typeDefRefImp) _typeDefRef() {}
@@ -36,7 +38,7 @@ func (t *typeDefRefImp) SetIndex(index int) {
 }
 
 func (t *typeDefRefImp) GoType() types.Type {
-	return t.typ.GoType()
+	return t.realType
 }
 
 func (t *typeDefRefImp) Equal(other TypeDesc) bool {

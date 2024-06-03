@@ -1,10 +1,10 @@
 package constructs
 
-import (
-	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/jsonify"
-)
+import "github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/jsonify"
 
 type Project interface {
+	Register
+
 	ToJson(ctx *jsonify.Context) jsonify.Datum
 	Packages() []Package
 	AppendPackage(pkg ...Package)
@@ -15,15 +15,6 @@ type Project interface {
 	// and all packages have been processed. This will update all the index
 	// fields that will be used as references in the output models.
 	UpdateIndices()
-
-	RegisterBasic(t Basic) Basic
-	RegisterInterface(t Interface) Interface
-	RegisterNamed(t Named) Named
-	RegisterSignature(t Signature) Signature
-	RegisterSolid(t Solid) Solid
-	RegisterStruct(t Struct) Struct
-	RegisterTypeDefRef(t TypeDefRef) TypeDefRef
-	RegisterUnion(t Union) Union
 }
 
 type projectImp struct {
