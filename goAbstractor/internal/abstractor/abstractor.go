@@ -179,13 +179,18 @@ func (ab *abstractor) resolveClasses() {
 	for _, pkg := range ab.proj.Packages() {
 		ab.log(`|  resolve package: %s`, pkg.Source().PkgPath)
 		for _, td := range pkg.Types() {
-			ab.log(`|  |  resolve typeDef: %s`, td.Name)
+			ab.log(`|  |  resolve typeDef: %s`, td.Name())
 			ab.resolveClass(pkg, td)
 		}
 	}
 }
 
 func (ab *abstractor) resolveClass(pkg constructs.Package, td constructs.TypeDef) {
+	if tTyp, ok := td.Type().(constructs.Interface); ok {
+		td.SetInterface(tTyp)
+		return
+	}
+
 	mTyp := []*types.Func{}
 	methods := map[string]constructs.TypeDesc{}
 	for _, m := range td.Methods() {
@@ -240,6 +245,6 @@ func (ab *abstractor) resolveReferences() {
 		if def == nil {
 			panic(fmt.Errorf(`failed to find type for type def reference for %q in %q`, ref.Name(), ref.PackagePath()))
 		}
-		ref.SetType(def)
+		ref.SetType(pkg, def)
 	}
 }

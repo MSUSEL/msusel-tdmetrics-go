@@ -13,7 +13,7 @@ type TypeDefRef interface {
 
 	PackagePath() string
 	Name() string
-	SetType(typ TypeDef)
+	SetType(pkg Package, typ TypeDef)
 }
 
 func NewTypeDefRef(reg Register, realType *types.Named, pkgPath, name string) TypeDefRef {
@@ -28,6 +28,7 @@ type typeDefRefImp struct {
 	realType *types.Named
 	pkgPath  string
 	name     string
+	pkg      Package
 	typ      TypeDef
 }
 
@@ -48,16 +49,17 @@ func (t *typeDefRefImp) Equal(other TypeDesc) bool {
 }
 
 func (t *typeDefRefImp) ToJson(ctx *jsonify.Context) jsonify.Datum {
+	ctx2 := ctx.HideKind().Short()
 	if ctx.IsReferenceShown() {
-		ctx2 := ctx.HideKind().Short()
 		return jsonify.NewMap().
 			AddIf(ctx, ctx.IsKindShown(), `kind`, `ref`).
 			Add(ctx2, `packagePath`, t.pkgPath).
 			Add(ctx2, `name`, t.name).
+			Add(ctx2, `package`, t.pkg).
 			Add(ctx2, `type`, t.typ)
 	}
 
-	return jsonify.New(ctx, t.typ)
+	return jsonify.New(ctx2, t.typ)
 }
 
 func (t *typeDefRefImp) String() string {
@@ -72,6 +74,7 @@ func (t *typeDefRefImp) Name() string {
 	return t.name
 }
 
-func (t *typeDefRefImp) SetType(typ TypeDef) {
+func (t *typeDefRefImp) SetType(pkg Package, typ TypeDef) {
+	t.pkg = pkg
 	t.typ = typ
 }

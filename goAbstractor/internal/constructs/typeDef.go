@@ -1,11 +1,13 @@
 package constructs
 
-import (
-	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/jsonify"
-)
+import "github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/jsonify"
 
 type TypeDef interface {
+	_typeDef()
+
+	SetIndex(index int)
 	Name() string
+	Type() TypeDesc
 	Methods() []Method
 	AppendMethod(met ...Method)
 	SetInterface(inter Interface)
@@ -17,6 +19,7 @@ type typeDefImp struct {
 	methods    []Method
 	typeParams []Named
 	inter      Interface
+	index      int
 }
 
 func NewTypeDef(name string, t TypeDesc) TypeDef {
@@ -26,7 +29,17 @@ func NewTypeDef(name string, t TypeDesc) TypeDef {
 	}
 }
 
+func (td *typeDefImp) _typeDef() {}
+
+func (td *typeDefImp) SetIndex(index int) {
+	td.index = index
+}
+
 func (td *typeDefImp) ToJson(ctx *jsonify.Context) jsonify.Datum {
+	if ctx.IsShort() {
+		return jsonify.New(ctx, td.index)
+	}
+
 	ctx2 := ctx.HideKind().Short()
 	return jsonify.NewMap().
 		Add(ctx2, `name`, td.name).
@@ -42,6 +55,10 @@ func (td *typeDefImp) String() string {
 
 func (td *typeDefImp) Name() string {
 	return td.name
+}
+
+func (td *typeDefImp) Type() TypeDesc {
+	return td.typ
 }
 
 func (td *typeDefImp) Methods() []Method {

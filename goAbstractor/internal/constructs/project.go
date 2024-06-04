@@ -20,14 +20,14 @@ type Project interface {
 type projectImp struct {
 	allPackages []Package
 
-	allBasics     []Basic
-	allInterfaces []Interface
-	allNamed      []Named
-	allSignatures []Signature
-	allSolids     []Solid
-	allStructs    []Struct
-	allTypeDefRef []TypeDefRef
-	allUnions     []Union
+	allBasics      []Basic
+	allInterfaces  []Interface
+	allNamed       []Named
+	allSignatures  []Signature
+	allSolids      []Solid
+	allStructs     []Struct
+	allTypeDefRefs []TypeDefRef
+	allUnions      []Union
 }
 
 func NewProject() Project {
@@ -45,7 +45,7 @@ func (p *projectImp) ToJson(ctx *jsonify.Context) jsonify.Datum {
 		AddNonZero(ctx1, `signatures`, p.allSignatures).
 		AddNonZero(ctx1, `solids`, p.allSolids).
 		AddNonZero(ctx1, `structs`, p.allStructs).
-		// Don't output typeDefRef.
+		// Don't output p.allTypeDefRefs
 		AddNonZero(ctx1, `unions`, p.allUnions).
 		AddNonZero(ctx1, `packages`, p.allPackages)
 	return m
@@ -68,12 +68,12 @@ func (p *projectImp) AllInterfaces() []Interface {
 }
 
 func (p *projectImp) AllReferences() []TypeDefRef {
-	return p.allTypeDefRef
+	return p.allTypeDefRefs
 }
 
 func (p *projectImp) UpdateIndices() {
 	// Type indices compound so that each has a unique offset.
-	// Don't index typeDefRefs since they aren't outputted.
+	// The typeDefs in each package are also uniquely offset.
 	index := 1
 	index = setIndices(index, p.allBasics)
 	index = setIndices(index, p.allInterfaces)
@@ -81,11 +81,10 @@ func (p *projectImp) UpdateIndices() {
 	index = setIndices(index, p.allSignatures)
 	index = setIndices(index, p.allSolids)
 	index = setIndices(index, p.allStructs)
-	setIndices(index, p.allUnions)
-
-	// Package indices are independent.
+	// Don't index p.allTypeDefRefs
+	index = setIndices(index, p.allUnions)
 	for i, pkg := range p.allPackages {
-		pkg.SetIndex(i)
+		index = pkg.SetIndices(i+1, index)
 	}
 }
 
@@ -122,7 +121,7 @@ func (p *projectImp) RegisterStruct(t Struct) Struct {
 }
 
 func (p *projectImp) RegisterTypeDefRef(t TypeDefRef) TypeDefRef {
-	return registerType(t, &p.allTypeDefRef)
+	return registerType(t, &p.allTypeDefRefs)
 }
 
 func (p *projectImp) RegisterUnion(t Union) Union {

@@ -9,7 +9,7 @@ import (
 type Package interface {
 	Source() *packages.Package
 	FindTypeDef(name string) TypeDef
-	SetIndex(index int)
+	SetIndices(pkgIndex, typeDefIndex int) int
 	Path() string
 	ImportPaths() []string
 	SetImports(imports []Package)
@@ -51,14 +51,14 @@ func (p *packageImp) ToJson(ctx *jsonify.Context) jsonify.Datum {
 		return jsonify.New(ctx, p.index)
 	}
 
-	ctx2 := ctx.HideKind().Short()
+	ctx2 := ctx.HideKind()
 	return jsonify.NewMap().
 		AddIf(ctx, ctx.IsKindShown(), `kind`, `package`).
 		AddNonZero(ctx2, `path`, p.path).
-		AddNonZero(ctx2, `imports`, p.imports).
-		AddNonZero(ctx2, `types`, p.types).
-		AddNonZero(ctx2, `values`, p.values).
-		AddNonZero(ctx2, `methods`, p.methods)
+		AddNonZero(ctx2.Short(), `imports`, p.imports).
+		AddNonZero(ctx2.Long(), `types`, p.types).
+		AddNonZero(ctx2.Long(), `values`, p.values).
+		AddNonZero(ctx2.Long(), `methods`, p.methods)
 }
 
 func (p *packageImp) String() string {
@@ -74,8 +74,13 @@ func (p *packageImp) FindTypeDef(name string) TypeDef {
 	return nil
 }
 
-func (p *packageImp) SetIndex(index int) {
-	p.index = index
+func (p *packageImp) SetIndices(pkgIndex, typeDefIndex int) int {
+	p.index = pkgIndex
+	for _, td := range p.types {
+		td.SetIndex(typeDefIndex)
+		typeDefIndex++
+	}
+	return typeDefIndex
 }
 
 func (p *packageImp) Path() string {

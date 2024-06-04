@@ -1,45 +1,53 @@
 {
+  language: go,
+  basics: [
+    string # 1. string
+  ],
   interfaces: [
-    {}, # any
-    { # interface { Pet() }
-      inherits: [ 0 ],
+    {}, # 2. any
+    { # 3. interface { Pet() }
+      inherits: [ 2 ],
       methods: {
-        Pet: 2
+        Pet: 5
       }
     }
   ],
-  language: go,
+  named: [
+    { name: Name, type: 1 } # 4. Name string
+  ],
+  signatures: [
+    {} # 5. func()()
+  ],
+  structs: [
+    { # 6. struct { Name string }
+      fields: [ 4 ]
+    }
+  ],
   packages: [
     {
       path: "command-line-arguments",
       methods: [
         { # func main()
-          name: main, signature: 2,
+          name: main, signature: 5,
           metrics: { codeCount: 6, complexity: 1, indents: 5, lineCount: 6 }
         }
       ],
       types: [
-        { name: Animal, type: 1 }, # type Animal interface { Pet() }
+        { # type Animal interface { Pet() }
+          name: Animal,
+          interface: 3,
+          type: 3
+        },
         { # type Cat struct { Name string; Pet() }
-          interface: 1,
-          name: Cat, type: 3,
+          interface: 3,
+          name: Cat, type: 6,
           methods: [
             { # Cat.Pet()
-              name: Pet, signature: 2,
+              name: Pet, signature: 5,
               metrics: { codeCount: 3, complexity: 1, indents: 1, lineCount: 3 }
             }
           ]
         }
-      ]
-    }
-  ],
-  signatures: [
-    {} # func()()
-  ],
-  structs: [
-    { # struct { Name string }
-      fields: [
-        { name: Name, type: string }
       ]
     }
   ]
