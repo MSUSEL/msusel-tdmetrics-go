@@ -1,18 +1,52 @@
 {
   language: go,
+  basics: [
+    int # 1. int
+  ],
   interfaces: [
-    {}, # any
-    {  # list[T]
-      inherits: [ 0 ],
-      typeParams: [
-        { name: T, type: 0 }
-      ],
+    {}, # 2. any
+    {   # 3. list[T]
+      inherits: [ 2 ],
+      typeParams: [ 4 ],
       methods: {
-        $cap: 2,
-        $get: { target: 3, typeParams: [ T ] },
-        $len: 2,
-        $set: { target: 4, typeParams: [ T ] }
+        $cap: 9,
+        $get: 10,
+        $len: 9,
+        $set: 11
       }
+    }
+  ],
+  named: [
+    { name: T,       type:  2 }, # 4. T any
+    { name: index,   type:  1 }, # 5. index int
+    { name: value,   type:  4 }, # 6. value T
+    { name: values,  type: 14 }, # 7. values []int
+    { name: $value1, type:  1 }  # 8. $value1 int
+  ],
+  signatures: [
+    { # 9. func() int
+      return: 1
+    },
+    { # 10. func[T](index int) T
+      typeParams: [ 4 ],
+      params: [ 5 ],
+      return: 4
+    },
+    { # 11. func[T](index int, value T)
+      typeParams: [ 4 ],
+      params: [ 5, 6 ]
+    },
+    { # 12. func(values ...int) int
+      params: [ 7 ],
+      variadic: true,
+      return: 1
+    },
+    {} # 13. func()()
+  ],
+  solids: [
+    { # 14. []int
+      typeParams: [ 1 ],
+      target: 3
     }
   ],
   packages: [
@@ -20,60 +54,22 @@
       path: "command-line-arguments",
       methods: [
         { # func sum(values ...int) int
-          name: sum, signature: 5,
+          name: sum, signature: 12,
           metrics: { codeCount: 7, complexity: 2, indents: 6, lineCount: 7 }
         },
         { # func first(values ...int) int
-          name: first, signature: 5,
+          name: first, signature: 12,
           metrics: { codeCount: 3, complexity: 1, indents: 1, lineCount: 3 }
         },
         { # func last(values ...int) int
-          name: last, signature: 5,
+          name: last, signature: 12,
           metrics: { codeCount: 3, complexity: 1, indents: 1, lineCount: 3 }
         },
         { # func main()
-          name: main, signature: 6,
+          name: main, signature: 13,
           metrics: { codeCount: 6, complexity: 1, indents: 4, lineCount: 6 }
         }
       ]
     }
-  ],
-  signatures: [
-    { # func() int
-      return: int
-    },
-    { # func[T](index int) T
-      typeParams: [
-        { name: T, type: 0 }
-      ],
-      params: [
-        { name: index, type: int }
-      ],
-      return: T
-    },
-    { # func[T](index int, value T)
-      typeParams: [
-        { name: T, type: 0 }
-      ],
-      params: [
-        { name: index, type: int },
-        { name: value, type: T }
-      ]
-    },
-    { # func(values ...int) int
-      params: [
-        {
-          name: values,
-          type: {
-            kind: solid,
-            target: 1,
-            typeParams: [ int ]
-          }
-        }
-      ],
-      variadic: true,
-      return: int
-    },
-    {} # func()()
   ]
 }

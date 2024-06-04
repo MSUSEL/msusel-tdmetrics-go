@@ -49,11 +49,12 @@ func (t *typeDefRefImp) Equal(other TypeDesc) bool {
 
 func (t *typeDefRefImp) ToJson(ctx *jsonify.Context) jsonify.Datum {
 	if ctx.IsReferenceShown() {
+		ctx2 := ctx.HideKind().Short()
 		return jsonify.NewMap().
 			AddIf(ctx, ctx.IsKindShown(), `kind`, `ref`).
-			Add(ctx, `packagePath`, t.pkgPath).
-			Add(ctx, `name`, t.name).
-			Add(ctx, `type`, t.typ)
+			Add(ctx2, `packagePath`, t.pkgPath).
+			Add(ctx2, `name`, t.name).
+			Add(ctx2, `type`, t.typ)
 	}
 
 	return jsonify.New(ctx, t.typ)

@@ -33,10 +33,12 @@ func NewMethod(name string, sig TypeDesc) Method {
 }
 
 func (m *methodImp) ToJson(ctx *jsonify.Context) jsonify.Datum {
+	ctx2 := ctx.HideKind().Short()
 	data := jsonify.NewMap().
-		Add(ctx, `name`, m.name).
-		Add(ctx, `signature`, m.signature).
-		AddNonZero(ctx, `metrics`, m.metrics)
+		AddIf(ctx, ctx.IsKindShown(), `kind`, `method`).
+		Add(ctx2, `name`, m.name).
+		Add(ctx2, `signature`, m.signature).
+		AddNonZero(ctx2, `metrics`, m.metrics)
 
 	if ctx.IsReceiverShown() {
 		data.AddNonZero(ctx, `noCopyRecv`, m.noCopyRecv).

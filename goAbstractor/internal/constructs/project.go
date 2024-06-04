@@ -74,7 +74,7 @@ func (p *projectImp) AllReferences() []TypeDefRef {
 func (p *projectImp) UpdateIndices() {
 	// Type indices compound so that each has a unique offset.
 	// Don't index typeDefRefs since they aren't outputted.
-	index := 0
+	index := 1
 	index = setIndices(index, p.allBasics)
 	index = setIndices(index, p.allInterfaces)
 	index = setIndices(index, p.allNamed)

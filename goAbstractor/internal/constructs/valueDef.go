@@ -21,10 +21,11 @@ func NewValueDef(name string, isConst bool, typ TypeDesc) ValueDef {
 }
 
 func (vd *valueDefImp) ToJson(ctx *jsonify.Context) jsonify.Datum {
+	ctx2 := ctx.HideKind().Short()
 	return jsonify.NewMap().
-		Add(ctx, `name`, vd.name).
-		AddNonZero(ctx, `const`, vd.isConst).
-		Add(ctx, `type`, vd.typ)
+		Add(ctx2, `name`, vd.name).
+		AddNonZero(ctx2, `const`, vd.isConst).
+		Add(ctx2, `type`, vd.typ)
 }
 
 func (vd *valueDefImp) String() string {

@@ -55,10 +55,11 @@ func (t *namedImp) ToJson(ctx *jsonify.Context) jsonify.Datum {
 		return jsonify.New(ctx, t.index)
 	}
 
+	ctx2 := ctx.HideKind().Short()
 	return jsonify.NewMap().
 		AddIf(ctx, ctx.IsKindShown(), `kind`, `named`).
-		Add(ctx, `name`, t.name).
-		Add(ctx.ShowKind().Short(), `type`, t.typ)
+		Add(ctx2, `name`, t.name).
+		Add(ctx2, `type`, t.typ)
 }
 
 func (t *namedImp) String() string {

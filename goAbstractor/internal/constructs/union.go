@@ -57,10 +57,11 @@ func (t *unionImp) ToJson(ctx *jsonify.Context) jsonify.Datum {
 		return jsonify.New(ctx, t.index)
 	}
 
+	ctx2 := ctx.HideKind().Short()
 	return jsonify.NewMap().
 		AddIf(ctx, ctx.IsKindShown(), `kind`, `union`).
-		AddNonZero(ctx.ShowKind().Short(), `exact`, t.exact).
-		AddNonZero(ctx.ShowKind().Short(), `approx`, t.approx)
+		AddNonZero(ctx2, `exact`, t.exact).
+		AddNonZero(ctx2, `approx`, t.approx)
 }
 
 func (t *unionImp) String() string {

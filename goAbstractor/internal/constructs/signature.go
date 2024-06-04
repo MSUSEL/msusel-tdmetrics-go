@@ -64,12 +64,13 @@ func (sig *signatureImp) ToJson(ctx *jsonify.Context) jsonify.Datum {
 		return jsonify.New(ctx, sig.index)
 	}
 
+	ctx2 := ctx.HideKind().Short()
 	return jsonify.NewMap().
 		AddIf(ctx, ctx.IsKindShown(), `kind`, `signature`).
-		AddNonZero(ctx, `variadic`, sig.variadic).
-		AddNonZero(ctx.HideKind().Long(), `params`, sig.params).
-		AddNonZero(ctx.HideKind().Long(), `typeParams`, sig.typeParams).
-		AddNonZero(ctx.ShowKind().Short(), `return`, sig.returnType)
+		AddNonZero(ctx2, `variadic`, sig.variadic).
+		AddNonZero(ctx2, `params`, sig.params).
+		AddNonZero(ctx2, `typeParams`, sig.typeParams).
+		AddNonZero(ctx2, `return`, sig.returnType)
 }
 
 func (sig *signatureImp) String() string {

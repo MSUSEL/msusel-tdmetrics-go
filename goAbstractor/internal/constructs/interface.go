@@ -75,7 +75,7 @@ func (ti *interfaceImp) ToJson(ctx *jsonify.Context) jsonify.Datum {
 	ctx2 := ctx.HideKind().Short()
 	return jsonify.NewMap().
 		AddIf(ctx, ctx.IsKindShown(), `kind`, `interface`).
-		AddNonZero(ctx2.Long(), `typeParams`, ti.typeParams).
+		AddNonZero(ctx2, `typeParams`, ti.typeParams).
 		AddNonZero(ctx2, `inherits`, ti.inherits).
 		AddNonZero(ctx2, `union`, ti.union).
 		AddNonZero(ctx2, `methods`, ti.methods)

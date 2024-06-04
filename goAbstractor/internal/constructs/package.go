@@ -51,8 +51,9 @@ func (p *packageImp) ToJson(ctx *jsonify.Context) jsonify.Datum {
 		return jsonify.New(ctx, p.index)
 	}
 
-	ctx2 := ctx.ShowKind().Short()
+	ctx2 := ctx.HideKind().Short()
 	return jsonify.NewMap().
+		AddIf(ctx, ctx.IsKindShown(), `kind`, `package`).
 		AddNonZero(ctx2, `path`, p.path).
 		AddNonZero(ctx2, `imports`, p.imports).
 		AddNonZero(ctx2, `types`, p.types).

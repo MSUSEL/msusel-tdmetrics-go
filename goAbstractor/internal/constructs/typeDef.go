@@ -27,12 +27,13 @@ func NewTypeDef(name string, t TypeDesc) TypeDef {
 }
 
 func (td *typeDefImp) ToJson(ctx *jsonify.Context) jsonify.Datum {
+	ctx2 := ctx.HideKind().Short()
 	return jsonify.NewMap().
-		Add(ctx, `name`, td.name).
-		Add(ctx, `type`, td.typ).
-		AddNonZero(ctx, `methods`, td.methods).
-		AddNonZero(ctx, `typeParams`, td.typeParams).
-		AddNonZero(ctx, `interface`, td.inter)
+		Add(ctx2, `name`, td.name).
+		Add(ctx2, `type`, td.typ).
+		AddNonZero(ctx2, `methods`, td.methods).
+		AddNonZero(ctx2, `typeParams`, td.typeParams).
+		AddNonZero(ctx2, `interface`, td.inter)
 }
 
 func (td *typeDefImp) String() string {
