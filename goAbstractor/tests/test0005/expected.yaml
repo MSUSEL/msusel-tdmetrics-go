@@ -113,61 +113,46 @@
     {
       methods: [
         { # NewCat(name string, age int) *Cat
-          name: NewCat, signature: 12,
+          name: NewCat, signature: 27,
           metrics: { codeCount: 6, complexity: 1, indents: 6, lineCount: 6 }
         },
         { # NextYear(cats ...*Cat)
-          name: NextYear, signature: 15,
+          name: NextYear, signature: 30,
           metrics: { codeCount: 5, complexity: 2, indents: 4, lineCount: 5 }
         },
         { # Pet(c *Cat)
-          name: Pet, signature: 7,
+          name: Pet, signature: 22,
           metrics: { codeCount: 3, complexity: 1, indents: 1, lineCount: 3 }
         }
       ],
       path: command-line-arguments,
       types: [
-        { # 35. Cat struct
-          name: Cat, type: 17,
-          interface: 4,
+        { # 35. Cat struct { Name string; Age int }
+          name: Cat, type: 34, interface: 7,
           methods: [
-            {
-              name: Meow, signature: 13,
+            { # func (c *Cat) Meow()
+              name: Meow, signature: 28,
               metrics: { codeCount: 3, complexity: 1, indents: 1, lineCount: 3 }
             },
-            {
-              name: String, signature: 14,
+            { # func (c *Cat) String() string
+              name: String, signature: 29,
               metrics: { codeCount: 3, complexity: 1, indents: 1, lineCount: 3 }
             }
           ]
         },
-        { name: Toy, type: 2 },
-        {
-          name: Cats,
-          interface: 5,
+        { name: Toy, type: 5, interface: 5 }, # 36. Toy interface { Play(c *Cat) }
+        { # 37. Cats []*Cat
+          name: Cats, type: 33, interface: 8,
           methods: [
-            {
-              name: Youngest, signature: 16,
+            { # func (cats Cats) Youngest() *Cat
+              name: Youngest, signature: 31,
               metrics: { codeCount: 9, complexity: 4, indents: 11, lineCount: 9 }
             }
-          ],
-          type: { # []*Cat
-            kind: solid,
-            target: 3, # slice
-            typeParams: [
-              { # *Cat
-                kind: solid,
-                target: 1, # pointer
-                typeParams: [
-                  "command-line-arguments.Cat"
-                ]
-              }
-            ]
-          }
+          ]
         }
       ],
       values: [
-        { name: log, type: 11 }
+        { name: log, type: 26 } # log func(value string)
       ]
     }
   ]

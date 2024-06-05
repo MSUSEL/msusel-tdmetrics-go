@@ -1,98 +1,97 @@
 {
+  language: go,
+  basics: [
+    string, # 1. string
+    int,    # 2. int
+    uint    # 3. uint
+  ],
   interfaces: [
-    {}, # any
-    { # interface { string | int | uint }
-      inherits: [ 0 ],
-      union: {
-        exact: [ string, int, uint ]
-      }
+    {}, # 4. any
+    {   # 5. interface { string | int | uint }
+      inherits: [ 4 ],
+      union: 23
     },
-    { # interface { string | int }
-      inherits: [ 1 ],
-      union: {
-        exact: [ string, int ]
-      }
+    { # 6. interface { string | int }
+      inherits: [ 5 ],
+      union: 24
     },
-    { # interface[T] { $deref() T }
-      inherits: [ 2 ],
-      typeParams: [
-        { name: T, type: 0 }
-      ],
+    { # 7. interface[T] { $deref() T }
+      inherits: [ 4 ],
+      typeParams: [ 15 ],
       methods: {
-        $deref: {
-          target: 5,
-          typeParams: [ T ]
-        }
+        $deref: 18
+      }
+    },
+    { # 8. interface[T] { Add(v T) T }
+      inherits: [ 4 ],
+      methods: {
+        Add: 17
       }
     }
   ],
-  language: go,
+  named: [
+    { name: T,       type:  5 }, #  9. T string|int|uint
+    { name: value,   type:  9 }, # 10. value T
+    { name: v,       type:  9 }, # 11. v T
+    { name: $value1, type:  9 }, # 12. $value1 T
+    { name: T,       type:  6 }, # 13. T string|int
+    { name: v,       type: 13 }, # 14. v T
+    { name: T,       type:  4 }, # 15. T any
+    { name: $value1, type: 21 }  # 16. $value1 *Foo[T]
+  ],
+  signatures: [
+    { # 17. func[T](v T) T
+      params: [ 11 ],
+      return: 9
+    },
+    { # 18. func[T any]() T
+      typeParams: [ 15 ],
+      return: 15
+    },
+    { # 19. func[T string|int](v T) *Foo[T]
+      typeParams: [ 13 ],
+      params: [ 14 ],
+      return: 21
+    },
+    {} # 20. func()()
+  ],
+  solids: [
+    { # 21. *Foo[T]
+      typeParams: [ 25 ],
+      target: 7
+    }
+  ],
+  structs: [
+    { fields: [ 10 ] } # 22. struct { value T }
+  ],
+  unions: [
+    { exact: [ 1, 2, 3 ] }, # 23. string | int | uint
+    { exact: [ 1, 2 ] }     # 24. string | int
+  ],
   packages: [
     {
       methods: [
         { # func New[T string | int](v T) *Foo[T]
-          name: New, signature: 6,
+          name: New, signature: 19,
           metrics: { codeCount: 3, complexity: 1, indents: 1, lineCount: 3 }
         },
         { # func main()
-          name: main, signature: 7,
+          name: main, signature: 20,
           metrics: { codeCount: 4, complexity: 1, indents: 2, lineCount: 4 }
         }
       ],
       path: "command-line-arguments",
       types: [
-        {
-          inherits: [ 0 ],
-          name: Foo, type: 4,
+        { # 25. Foo struct { value T }
+          name: Foo, type: 22, interface: 8,
           methods: [
-            {
-              name: Add, signature: 1,
+            { # func Add[T](v T) T
+              name: Add, signature: 17,
               metrics: { codeCount: 4, complexity: 1, indents: 2, lineCount: 4 }
             }
           ]
         }
       ]
     }
-  ],
-  signatures: [
-    { # func Add(v T) T
-      params: [
-        {
-          name: v,
-          type: { constraint: 0, # Need to define [T] type better
-          index: 5, kind: typeParam }
-        }
-      ],
-      return: { constraint: 0, index: 5, kind: typeParam }
-    },
-    { # func[T string | int](v T) *Foo[T]
-      params: [
-        {
-          name: v,
-          type: { constraint: 0, index: 5, kind: typeParam }
-        }
-      ],
-      return: { # TODO: Need to indicate type param
-        elem: "command-line-arguments.Foo XX[T]",
-        kind: pointer
-      },
-      typeParams: [
-        { constraint: 0, index: 5, kind: typeParam }
-      ]
-    },
-    {} # func()()
-  ],
-  structs: [
-    {
-      fields: [
-        {
-          name: value,
-          type: { constraint: 0, index: 5, kind: typeParam }
-        }
-      ]
-    }
-  ],
-  typeParams: [
-    { constraint: {}, index: 5, kind: typeParam }
   ]
 }
