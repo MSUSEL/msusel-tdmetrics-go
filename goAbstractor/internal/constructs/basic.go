@@ -35,6 +35,8 @@ type basicImp struct {
 
 func (t *basicImp) _basic() {}
 
+func (t *basicImp) Visit(v Visitor) {}
+
 func (t *basicImp) SetIndex(index int) {
 	t.index = index
 }

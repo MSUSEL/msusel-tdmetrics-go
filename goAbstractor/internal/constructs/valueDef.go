@@ -1,10 +1,10 @@
 package constructs
 
-import (
-	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/jsonify"
-)
+import "github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/jsonify"
 
-type ValueDef interface{}
+type ValueDef interface {
+	Visitable
+}
 
 type valueDefImp struct {
 	name    string
@@ -26,6 +26,10 @@ func (vd *valueDefImp) ToJson(ctx *jsonify.Context) jsonify.Datum {
 		Add(ctx2, `name`, vd.name).
 		AddNonZero(ctx2, `const`, vd.isConst).
 		Add(ctx2, `type`, vd.typ)
+}
+
+func (vd *valueDefImp) Visit(v Visitor) {
+	visitTest(v, vd.typ)
 }
 
 func (vd *valueDefImp) String() string {

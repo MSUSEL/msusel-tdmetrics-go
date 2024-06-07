@@ -8,6 +8,7 @@ import (
 
 // TypeDesc is an interface for all type descriptors.
 type TypeDesc interface {
+	Visitable
 
 	// SetIndex sets the type index.
 	SetIndex(index int)

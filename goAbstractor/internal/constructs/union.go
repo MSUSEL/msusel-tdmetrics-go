@@ -37,6 +37,11 @@ type unionImp struct {
 
 func (t *unionImp) _union() {}
 
+func (t *unionImp) Visit(v Visitor) {
+	visitList(v, t.exact)
+	visitList(v, t.approx)
+}
+
 func (t *unionImp) SetIndex(index int) {
 	t.index = index
 }

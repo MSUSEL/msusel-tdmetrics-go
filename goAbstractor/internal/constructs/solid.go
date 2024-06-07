@@ -37,6 +37,11 @@ type solidImp struct {
 
 func (ts *solidImp) _solid() {}
 
+func (ts *solidImp) Visit(v Visitor) {
+	visitTest(v, ts.target)
+	visitList(v, ts.typeParams)
+}
+
 func (ts *solidImp) SetIndex(index int) {
 	ts.index = index
 }

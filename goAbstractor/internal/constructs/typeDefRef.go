@@ -34,6 +34,8 @@ type typeDefRefImp struct {
 
 func (t *typeDefRefImp) _typeDefRef() {}
 
+func (t *typeDefRefImp) Visit(v Visitor) {}
+
 func (t *typeDefRefImp) SetIndex(index int) {
 	panic(errors.New(`do not call SetIndex on TypeDefRef`))
 }

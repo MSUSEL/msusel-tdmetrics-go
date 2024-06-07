@@ -7,6 +7,7 @@ import (
 )
 
 type Package interface {
+	Visitable
 	Source() *packages.Package
 	FindTypeDef(name string) TypeDef
 	SetIndices(pkgIndex, typeDefIndex int) int
@@ -59,6 +60,13 @@ func (p *packageImp) ToJson(ctx *jsonify.Context) jsonify.Datum {
 		AddNonZero(ctx2.Long(), `types`, p.types).
 		AddNonZero(ctx2.Long(), `values`, p.values).
 		AddNonZero(ctx2.Long(), `methods`, p.methods)
+}
+
+func (p *packageImp) Visit(v Visitor) {
+	visitList(v, p.imports)
+	visitList(v, p.types)
+	visitList(v, p.values)
+	visitList(v, p.methods)
 }
 
 func (p *packageImp) String() string {

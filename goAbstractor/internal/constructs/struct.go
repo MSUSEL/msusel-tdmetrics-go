@@ -36,6 +36,11 @@ type structImp struct {
 
 func (ts *structImp) _struct() {}
 
+func (ts *structImp) Visit(v Visitor) {
+	visitList(v, ts.typeParams)
+	visitList(v, ts.fields)
+}
+
 func (ts *structImp) SetIndex(index int) {
 	ts.index = index
 }

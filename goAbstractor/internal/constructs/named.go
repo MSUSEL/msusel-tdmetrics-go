@@ -35,6 +35,10 @@ type namedImp struct {
 
 func (t *namedImp) _named() {}
 
+func (t *namedImp) Visit(v Visitor) {
+	visitTest(v, t.typ)
+}
+
 func (t *namedImp) SetIndex(index int) {
 	t.index = index
 }

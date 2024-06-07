@@ -51,6 +51,14 @@ type interfaceImp struct {
 
 func (ti *interfaceImp) _interface() {}
 
+func (ti *interfaceImp) Visit(v Visitor) {
+	visitList(v, ti.typeParams)
+	visitMap(v, ti.methods)
+	visitTest(v, ti.union)
+	visitList(v, ti.inherits)
+	visitList(v, ti.inheritors)
+}
+
 func (ti *interfaceImp) SetIndex(index int) {
 	ti.index = index
 }

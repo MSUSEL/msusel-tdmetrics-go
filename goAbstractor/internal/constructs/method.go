@@ -9,6 +9,7 @@ import (
 // in the receiver from the ones defined on the receiver's type def.
 
 type Method interface {
+	Visitable
 	Name() string
 	Signature() TypeDesc
 	SetReceiver(noCopyRecv bool, receiver string)
@@ -45,6 +46,10 @@ func (m *methodImp) ToJson(ctx *jsonify.Context) jsonify.Datum {
 			AddNonZero(ctx, `receiver`, m.receiver)
 	}
 	return data
+}
+
+func (m *methodImp) Visit(v Visitor) {
+	visitTest(v, m.signature)
 }
 
 func (m *methodImp) String() string {

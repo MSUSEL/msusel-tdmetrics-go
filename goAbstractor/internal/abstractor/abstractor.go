@@ -210,7 +210,7 @@ func (ab *abstractor) resolveClass(pkg constructs.Package, td constructs.TypeDef
 		panic(fmt.Errorf(`failed to create an interface for %s.%s`, pkg.Source().PkgPath, td.Name()))
 	}
 
-	tInt := constructs.NewInterface(ab.proj, constructs.InterfaceArgs{
+	tInt := constructs.NewInterface(ab.proj.Types(), constructs.InterfaceArgs{
 		RealType:   iTyp,
 		Methods:    methods,
 		TypeParams: typeParams,
@@ -220,7 +220,7 @@ func (ab *abstractor) resolveClass(pkg constructs.Package, td constructs.TypeDef
 
 func (ab *abstractor) resolveInheritance() {
 	ab.log(`resolve inheritance`)
-	inters := ab.proj.AllInterfaces()
+	inters := ab.proj.Types().AllInterfaces()
 	if len(inters) <= 0 {
 		panic(errors.New(`expected the object interface at minimum but found no interfaces`))
 	}
@@ -237,7 +237,7 @@ func (ab *abstractor) resolveInheritance() {
 }
 
 func (ab *abstractor) resolveReferences() {
-	for _, ref := range ab.proj.AllReferences() {
+	for _, ref := range ab.proj.Types().AllReferences() {
 		pkg := ab.findPackageByPath(ref.PackagePath())
 		if pkg == nil {
 			panic(fmt.Errorf(`failed to find package for type def reference for %q in %q`, ref.Name(), ref.PackagePath()))
@@ -252,4 +252,5 @@ func (ab *abstractor) resolveReferences() {
 
 func (ab *abstractor) prune() {
 	// TODO: Finish
+
 }

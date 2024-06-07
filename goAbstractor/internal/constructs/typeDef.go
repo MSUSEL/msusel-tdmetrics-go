@@ -3,6 +3,7 @@ package constructs
 import "github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/jsonify"
 
 type TypeDef interface {
+	Visitable
 	_typeDef()
 
 	SetIndex(index int)
@@ -47,6 +48,13 @@ func (td *typeDefImp) ToJson(ctx *jsonify.Context) jsonify.Datum {
 		AddNonZero(ctx2, `methods`, td.methods).
 		AddNonZero(ctx2, `typeParams`, td.typeParams).
 		AddNonZero(ctx2, `interface`, td.inter)
+}
+
+func (td *typeDefImp) Visit(v Visitor) {
+	visitTest(v, td.typ)
+	visitList(v, td.methods)
+	visitList(v, td.typeParams)
+	visitTest(v, td.inter)
 }
 
 func (td *typeDefImp) String() string {

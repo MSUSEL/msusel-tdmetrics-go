@@ -42,6 +42,12 @@ type signatureImp struct {
 
 func (sig *signatureImp) _signature() {}
 
+func (sig *signatureImp) Visit(v Visitor) {
+	visitList(v, sig.params)
+	visitList(v, sig.typeParams)
+	visitTest(v, sig.returnType)
+}
+
 func (sig *signatureImp) SetIndex(index int) {
 	sig.index = index
 }
