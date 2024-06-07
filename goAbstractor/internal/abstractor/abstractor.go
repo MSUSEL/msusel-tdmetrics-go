@@ -36,6 +36,7 @@ func Abstract(ps []*packages.Package, verbose bool) constructs.Project {
 	ab.resolveClasses()
 	ab.resolveInheritance()
 	ab.resolveReferences()
+	ab.prune()
 	ab.proj.UpdateIndices()
 	return ab.proj
 }
@@ -247,4 +248,8 @@ func (ab *abstractor) resolveReferences() {
 		}
 		ref.SetType(pkg, def)
 	}
+}
+
+func (ab *abstractor) prune() {
+	// TODO: Finish
 }

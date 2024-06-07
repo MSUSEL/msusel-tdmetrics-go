@@ -35,6 +35,8 @@ func (ab *abstractor) determineReceiver(m constructs.Method, src *packages.Packa
 			name = name[index+1:]
 		}
 		m.SetReceiver(noCopyRecv, name)
+		// TODO: Need to rework so that receivers are created when methods
+		// are read so that the types can be relabelled
 	}
 }
 
