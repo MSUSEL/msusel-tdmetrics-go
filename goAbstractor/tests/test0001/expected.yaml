@@ -1,14 +1,9 @@
 {
   language: go,
-  interfaces: [
-    {} # 1. any
-  ],
-  signatures: [
-    {} # 2. func()()
-  ],
   packages: [
     {
-      path: "command-line-arguments",
+      path: command-line-arguments,
+      name: main,
       methods: [
         { # func main()
           name: main, signature: 2,
@@ -16,5 +11,13 @@
         }
       ]
     }
-  ]
+  ],
+  types: {
+    interfaces: [
+      {} # 1. any
+    ],
+    signatures: [
+      {} # 2. func()()
+    ],
+  }
 }

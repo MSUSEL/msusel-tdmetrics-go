@@ -1,31 +1,9 @@
 {
   language: go,
-  basics: [
-    string # 1. string
-  ],
-  interfaces: [
-    {}, # 2. any
-    { # 3. interface { Pet() }
-      inherits: [ 2 ],
-      methods: {
-        Pet: 5
-      }
-    }
-  ],
-  named: [
-    { name: Name, type: 1 } # 4. Name string
-  ],
-  signatures: [
-    {} # 5. func()()
-  ],
-  structs: [
-    { # 6. struct { Name string }
-      fields: [ 4 ]
-    }
-  ],
   packages: [
     {
-      path: "command-line-arguments",
+      path: command-line-arguments,
+      name: main,
       methods: [
         { # func main()
           name: main, signature: 5,
@@ -50,5 +28,30 @@
         }
       ]
     }
-  ]
+  ],
+  types: {
+    basics: [
+      string # 1. string
+    ],
+    interfaces: [
+      {}, # 2. any
+      { # 3. interface { Pet() }
+        inherits: [ 2 ],
+        methods: {
+          Pet: 5
+        }
+      }
+    ],
+    named: [
+      { name: Name, type: 1 } # 4. Name string
+    ],
+    signatures: [
+      {} # 5. func()()
+    ],
+    structs: [
+      { # 6. struct { Name string }
+        fields: [ 4 ]
+      }
+    ],
+  }
 }

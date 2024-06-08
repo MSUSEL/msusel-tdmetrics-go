@@ -26,6 +26,7 @@ type packageImp struct {
 	pkg *packages.Package
 
 	path    string
+	name    string
 	imports []Package
 	types   []TypeDef
 	values  []ValueDef
@@ -35,10 +36,11 @@ type packageImp struct {
 	importPaths []string
 }
 
-func NewPackage(pkg *packages.Package, path string, importPaths []string) Package {
+func NewPackage(pkg *packages.Package, path, name string, importPaths []string) Package {
 	return &packageImp{
 		pkg:         pkg,
 		path:        path,
+		name:        name,
 		importPaths: importPaths,
 	}
 }
@@ -56,6 +58,7 @@ func (p *packageImp) ToJson(ctx *jsonify.Context) jsonify.Datum {
 	return jsonify.NewMap().
 		AddIf(ctx, ctx.IsKindShown(), `kind`, `package`).
 		AddNonZero(ctx2, `path`, p.path).
+		AddNonZero(ctx2, `name`, p.name).
 		AddNonZero(ctx2.Short(), `imports`, p.imports).
 		AddNonZero(ctx2.Long(), `types`, p.types).
 		AddNonZero(ctx2.Long(), `values`, p.values).

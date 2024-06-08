@@ -1,116 +1,9 @@
 {
   language: go,
-  basics: [
-    string, # 1. string
-    int     # 2. int
-  ],
-  interfaces: [
-    {}, # 3. any
-    {   # 4. pointer[T]
-      inherits: [ 3 ],
-      typeParams: [ 11 ],
-      methods: {
-        $deref: 21
-      }
-    },
-    { # 5. interface { Play(c *Cat) }
-      inherits: [ 3 ],
-      methods: {
-        Play: 22
-      }
-    },
-    { # 6. list[T]
-      inherits: [ 3 ],
-      typeParams: [ 11 ],
-      methods: {
-        $cap: 23,
-        $get: 24,
-        $len: 23,
-        $set: 25
-      }
-    },
-    { # 7. interface { Meow(); String() string }
-      inherits: [ 3 ],
-      methods: {
-        Meow: 28,
-        String: 29
-      }
-    },
-    { # 8. interface { Youngest() *Cat }
-      inherits: [ 3 ],
-      methods: {
-        Youngest: 31
-      }
-    }
-  ],
-  named: [
-    { name: Name,    type:  1 }, #  9. Name string
-    { name: Age,     type:  2 }, # 10. Age int
-    { name: T,       type:  3 }, # 11. T any
-    { name: c,       type: 32 }, # 12. c *Cat
-    { name: index,   type:  2 }, # 13. index int
-    { name: value,   type: 11 }, # 14. value T
-    { name: value,   type:  1 }, # 15. value string
-    { name: name,    type:  1 }, # 16. name string
-    { name: age,     type:  2 }, # 17. age int
-    { name: $value1, type: 32 }, # 18. $value1 *Cat
-    { name: $value1, type:  1 }, # 19. $value1 string
-    { name: cats,    type: 33 }  # 20. cats []*Cat
-  ],
-  signatures: [
-    { # 21. func[T any]() T
-      typeParams: [ 11 ],
-      return: 11
-    },
-    { # 22. func(c *Cat)
-      params: [ 12 ]
-    },
-    { # 23. func() int
-      return: 2
-    },
-    { # 24. func[T any](index int) T
-      typeParams: [ 11 ],
-      params: [ 13 ],
-      return: 11
-    },
-    { # 25. func[T any](index int, value T)
-      typeParams: [ 11 ],
-      params: [ 13, 14 ]
-    },
-    { # 26. func(value string)
-      params: [ 15 ]
-    },
-    { # 27. func(name string, age int) *Cat
-      params: [ 16, 17 ],
-      return: 32
-    },
-    {}, # 28. func()
-    { return: 1 }, # 29. func() string
-    { # 30. func(cats ...*Cat)
-      params: [ 20 ],
-      variadic: true
-    },
-    { # 31. func() *Cat
-      return: 32
-    }
-  ],
-  solids: [
-    { # 32. *Cat
-      typeParams: [ 35 ],
-      target: 4
-    },
-    { # 33. []*Cat
-      typeParams: [ 32 ],
-      target: 6
-    }
-  ],
-  structs: [
-    { # 34. struct { Name string; Age int }
-      fields: [ 9, 10 ]
-    }
-  ],
   packages: [
     {
+      path: command-line-arguments,
+      name: cats,
       methods: [
         { # NewCat(name string, age int) *Cat
           name: NewCat, signature: 27,
@@ -125,7 +18,6 @@
           metrics: { codeCount: 3, complexity: 1, indents: 1, lineCount: 3 }
         }
       ],
-      path: command-line-arguments,
       types: [
         { # 35. Cat struct { Name string; Age int }
           name: Cat, type: 34, interface: 7,
@@ -140,7 +32,9 @@
             }
           ]
         },
-        { name: Toy, type: 5, interface: 5 }, # 36. Toy interface { Play(c *Cat) }
+        { # 36. Toy interface { Play(c *Cat) }
+          name: Toy, type: 5, interface: 5
+        },
         { # 37. Cats []*Cat
           name: Cats, type: 33, interface: 8,
           methods: [
@@ -155,5 +49,116 @@
         { name: log, type: 26 } # log func(value string)
       ]
     }
-  ]
+  ],
+  types: {
+    basics: [
+      string, # 1. string
+      int     # 2. int
+    ],
+    interfaces: [
+      {}, # 3. any
+      {   # 4. pointer[T]
+        inherits: [ 3 ],
+        typeParams: [ 11 ],
+        methods: {
+          $deref: 21
+        }
+      },
+      { # 5. interface { Play(c *Cat) }
+        inherits: [ 3 ],
+        methods: {
+          Play: 22
+        }
+      },
+      { # 6. list[T]
+        inherits: [ 3 ],
+        typeParams: [ 11 ],
+        methods: {
+          $cap: 23,
+          $get: 24,
+          $len: 23,
+          $set: 25
+        }
+      },
+      { # 7. interface { Meow(); String() string }
+        inherits: [ 3 ],
+        methods: {
+          Meow: 28,
+          String: 29
+        }
+      },
+      { # 8. interface { Youngest() *Cat }
+        inherits: [ 3 ],
+        methods: {
+          Youngest: 31
+        }
+      }
+    ],
+    named: [
+      { name: Name,    type:  1 }, #  9. Name string
+      { name: Age,     type:  2 }, # 10. Age int
+      { name: T,       type:  3 }, # 11. T any
+      { name: c,       type: 32 }, # 12. c *Cat
+      { name: index,   type:  2 }, # 13. index int
+      { name: value,   type: 11 }, # 14. value T
+      { name: value,   type:  1 }, # 15. value string
+      { name: name,    type:  1 }, # 16. name string
+      { name: age,     type:  2 }, # 17. age int
+      { name: $value1, type: 32 }, # 18. $value1 *Cat
+      { name: $value1, type:  1 }, # 19. $value1 string
+      { name: cats,    type: 33 }  # 20. cats []*Cat
+    ],
+    signatures: [
+      { # 21. func[T any]() T
+        typeParams: [ 11 ],
+        return: 11
+      },
+      { # 22. func(c *Cat)
+        params: [ 12 ]
+      },
+      { # 23. func() int
+        return: 2
+      },
+      { # 24. func[T any](index int) T
+        typeParams: [ 11 ],
+        params: [ 13 ],
+        return: 11
+      },
+      { # 25. func[T any](index int, value T)
+        typeParams: [ 11 ],
+        params: [ 13, 14 ]
+      },
+      { # 26. func(value string)
+        params: [ 15 ]
+      },
+      { # 27. func(name string, age int) *Cat
+        params: [ 16, 17 ],
+        return: 32
+      },
+      {}, # 28. func()
+      { return: 1 }, # 29. func() string
+      { # 30. func(cats ...*Cat)
+        params: [ 20 ],
+        variadic: true
+      },
+      { # 31. func() *Cat
+        return: 32
+      }
+    ],
+    solids: [
+      { # 32. *Cat
+        typeParams: [ 35 ],
+        target: 4
+      },
+      { # 33. []*Cat
+        typeParams: [ 32 ],
+        target: 6
+      }
+    ],
+    structs: [
+      { # 34. struct { Name string; Age int }
+        fields: [ 9, 10 ]
+      }
+    ],
+  }
 }

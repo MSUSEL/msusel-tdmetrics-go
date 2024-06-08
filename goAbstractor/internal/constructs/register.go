@@ -1,6 +1,11 @@
 package constructs
 
-import "github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/jsonify"
+import (
+	"github.com/Snow-Gremlin/goToolbox/collections"
+	"github.com/Snow-Gremlin/goToolbox/collections/list"
+
+	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/jsonify"
+)
 
 type Register interface {
 	AllInterfaces() []Interface
@@ -18,31 +23,40 @@ type Register interface {
 }
 
 func NewRegister() Register {
-	return &registerImp{}
+	return &registerImp{
+		allBasics:      list.New[Basic](),
+		allInterfaces:  list.New[Interface](),
+		allNamed:       list.New[Named](),
+		allSignatures:  list.New[Signature](),
+		allSolids:      list.New[Solid](),
+		allStructs:     list.New[Struct](),
+		allTypeDefRefs: list.New[TypeDefRef](),
+		allUnions:      list.New[Union](),
+	}
 }
 
 type registerImp struct {
-	allBasics      []Basic
-	allInterfaces  []Interface
-	allNamed       []Named
-	allSignatures  []Signature
-	allSolids      []Solid
-	allStructs     []Struct
-	allTypeDefRefs []TypeDefRef
-	allUnions      []Union
+	allBasics      collections.List[Basic]
+	allInterfaces  collections.List[Interface]
+	allNamed       collections.List[Named]
+	allSignatures  collections.List[Signature]
+	allSolids      collections.List[Solid]
+	allStructs     collections.List[Struct]
+	allTypeDefRefs collections.List[TypeDefRef]
+	allUnions      collections.List[Union]
 }
 
 func (r *registerImp) ToJson(ctx *jsonify.Context) jsonify.Datum {
 	ctx2 := ctx.HideKind()
 	return jsonify.NewMap().
-		AddNonZero(ctx2, `basics`, r.allBasics).
-		AddNonZero(ctx2, `interfaces`, r.allInterfaces).
-		AddNonZero(ctx2, `named`, r.allNamed).
-		AddNonZero(ctx2, `signatures`, r.allSignatures).
-		AddNonZero(ctx2, `solids`, r.allSolids).
-		AddNonZero(ctx2, `structs`, r.allStructs).
+		AddNonZero(ctx2, `basics`, r.allBasics.ToSlice()).
+		AddNonZero(ctx2, `interfaces`, r.allInterfaces.ToSlice()).
+		AddNonZero(ctx2, `named`, r.allNamed.ToSlice()).
+		AddNonZero(ctx2, `signatures`, r.allSignatures.ToSlice()).
+		AddNonZero(ctx2, `solids`, r.allSolids.ToSlice()).
+		AddNonZero(ctx2, `structs`, r.allStructs.ToSlice()).
 		// Don't output r.allTypeDefRefs
-		AddNonZero(ctx2, `unions`, r.allUnions)
+		AddNonZero(ctx2, `unions`, r.allUnions.ToSlice())
 }
 
 func (r *registerImp) AllInterfaces() []Interface {
@@ -67,52 +81,52 @@ func (r *registerImp) UpdateIndices(index int) int {
 	return index
 }
 
-func setIndices[T TypeDesc](index int, s []T) int {
-	for _, t := range s {
-		t.SetIndex(index)
+func setIndices[T TypeDesc](index int, s collections.List[T]) int {
+	for it := s.Enumerate().Iterate(); it.Next(); {
+		it.Current().SetIndex(index)
 		index++
 	}
 	return index
 }
 
 func (r *registerImp) RegisterBasic(t Basic) Basic {
-	return registerType(t, &r.allBasics)
+	return registerType(t, r.allBasics)
 }
 
 func (r *registerImp) RegisterInterface(t Interface) Interface {
-	return registerType(t, &r.allInterfaces)
+	return registerType(t, r.allInterfaces)
 }
 
 func (r *registerImp) RegisterNamed(t Named) Named {
-	return registerType(t, &r.allNamed)
+	return registerType(t, r.allNamed)
 }
 
 func (r *registerImp) RegisterSignature(t Signature) Signature {
-	return registerType(t, &r.allSignatures)
+	return registerType(t, r.allSignatures)
 }
 
 func (r *registerImp) RegisterSolid(t Solid) Solid {
-	return registerType(t, &r.allSolids)
+	return registerType(t, r.allSolids)
 }
 
 func (r *registerImp) RegisterStruct(t Struct) Struct {
-	return registerType(t, &r.allStructs)
+	return registerType(t, r.allStructs)
 }
 
 func (r *registerImp) RegisterTypeDefRef(t TypeDefRef) TypeDefRef {
-	return registerType(t, &r.allTypeDefRefs)
+	return registerType(t, r.allTypeDefRefs)
 }
 
 func (r *registerImp) RegisterUnion(t Union) Union {
-	return registerType(t, &r.allUnions)
+	return registerType(t, r.allUnions)
 }
 
-func registerType[T TypeDesc](t T, s *[]T) T {
-	for _, t2 := range *s {
-		if t.Equal(t2) {
+func registerType[T TypeDesc](t T, s collections.List[T]) T {
+	for it := s.Enumerate().Iterate(); it.Next(); {
+		if t2 := it.Current(); t.Equal(t2) {
 			return t2
 		}
 	}
-	*s = append(*s, t)
+	s.Append(t)
 	return t
 }

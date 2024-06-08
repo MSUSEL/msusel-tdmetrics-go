@@ -1,58 +1,9 @@
 {
   language: go,
-  basics: [
-    int,    # 1. int
-    float64 # 2. float64
-  ],
-  interfaces: [
-    {}, # 3. any
-    { # 4. interface { Age() int }
-      inherits: [ 3 ],
-      methods: {
-        Age: 11
-      }
-    },
-    { # 5. interface { Age() int; Fly() }
-      inherits: [ 4 ],
-      methods: {
-        Age: 11,
-        Fly: 12
-      }
-    },
-    { # 6. interface { Age() int; Temp() float64 }
-      inherits: [ 4 ],
-      methods: {
-          Age:  11,
-          Temp: 13
-        }
-    },
-    { # 7. interface { Age() int; Fly(); Temp() float64 }
-      inherits: [ 5, 6 ],
-      methods: {
-        Age:  11,
-        Fly:  12,
-        Temp: 13
-      }
-    },
-    { # 8. interface { Fly() }
-      inherits: [ 3 ],
-      methods: {
-        Fly: 12
-      }
-    }
-  ],
-  named: [
-    { name: $value1, type: 1 }, #  9. $value1 int
-    { name: $value1, type: 2 }  # 10. $value1 string
-  ],
-  signatures: [
-    { return: 1 }, # 11. func() int
-    {},            # 12. func()()
-    { return: 2 }  # 13. func() float64
-  ],
   packages: [
     {
-      path: "command-line-arguments",
+      path: command-line-arguments,
+      name: main,
       methods: [
         { # func main()
           name: main, signature: 12,
@@ -67,5 +18,57 @@
         { name: Flier,  interface: 8, type: 8 }  # type Flier interface { Fly() }
       ]
     }
-  ]
+  ],
+  types: {
+    basics: [
+      int,    # 1. int
+      float64 # 2. float64
+    ],
+    interfaces: [
+      {}, # 3. any
+      { # 4. interface { Age() int }
+        inherits: [ 3 ],
+        methods: {
+          Age: 11
+        }
+      },
+      { # 5. interface { Age() int; Fly() }
+        inherits: [ 4 ],
+        methods: {
+          Age: 11,
+          Fly: 12
+        }
+      },
+      { # 6. interface { Age() int; Temp() float64 }
+        inherits: [ 4 ],
+        methods: {
+            Age:  11,
+            Temp: 13
+          }
+      },
+      { # 7. interface { Age() int; Fly(); Temp() float64 }
+        inherits: [ 5, 6 ],
+        methods: {
+          Age:  11,
+          Fly:  12,
+          Temp: 13
+        }
+      },
+      { # 8. interface { Fly() }
+        inherits: [ 3 ],
+        methods: {
+          Fly: 12
+        }
+      }
+    ],
+    named: [
+      { name: $value1, type: 1 }, #  9. $value1 int
+      { name: $value1, type: 2 }  # 10. $value1 string
+    ],
+    signatures: [
+      { return: 1 }, # 11. func() int
+      {},            # 12. func()()
+      { return: 2 }  # 13. func() float64
+    ],
+  }
 }

@@ -70,7 +70,7 @@ func (ab *abstractor) abstractProject(ps []*packages.Package) {
 
 func (ab *abstractor) abstractPackage(src *packages.Package) constructs.Package {
 	ab.log(`|  abstract package: %s`, src.PkgPath)
-	pkg := constructs.NewPackage(src, src.PkgPath, utils.SortedKeys(src.Imports))
+	pkg := constructs.NewPackage(src, src.PkgPath, src.Name, utils.SortedKeys(src.Imports))
 	for _, f := range src.Syntax {
 		ab.addFile(pkg, src, f)
 	}
@@ -251,6 +251,17 @@ func (ab *abstractor) resolveReferences() {
 }
 
 func (ab *abstractor) prune() {
-	// TODO: Finish
+	touched := map[constructs.Visitable]bool{}
+	ab.proj.Visit(func(value constructs.Visitable) bool {
+		if touched[value] {
+			return false
+		}
+		touched[value] = true
+
+		if r, ok := value.(constructs.TypeDesc); ok {
+			remove[r] = false
+		}
+		return true
+	})
 
 }

@@ -12,36 +12,35 @@ type Project interface {
 	// and all packages have been processed. This will update all the index
 	// fields that will be used as references in the output models.
 	UpdateIndices()
+	Visit(v Visitor)
 }
 
 type projectImp struct {
 	allPackages []Package
-	reg         Register
+	allTypes    Register
 }
 
 func NewProject() Project {
 	return &projectImp{
-		reg: NewRegister(),
+		allTypes: NewRegister(),
 	}
 }
 
 func (p *projectImp) Types() Register {
-	return p.reg
+	return p.allTypes
 }
 
 func (p *projectImp) ToJson(ctx *jsonify.Context) jsonify.Datum {
-	m := jsonify.NewMap().
-		Add(ctx, `language`, `go`)
-
-	ctx1 := ctx.HideKind()
-	m.AddNonZero(ctx1, `types`, p.reg).
-		AddNonZero(ctx1, `packages`, p.allPackages)
-	return m
+	ctx2 := ctx.HideKind()
+	return jsonify.NewMap().
+		Add(ctx2, `language`, `go`).
+		AddNonZero(ctx2, `types`, p.allTypes).
+		AddNonZero(ctx2, `packages`, p.allPackages)
 }
 
 func (p *projectImp) Visit(v Visitor) {
 	visitList(v, p.allPackages)
-	// Do not visit the types.
+	// Do not visit the registered types.
 }
 
 func (p *projectImp) String() string {
@@ -60,7 +59,7 @@ func (p *projectImp) UpdateIndices() {
 	// Type indices compound so that each has a unique offset.
 	// The typeDefs in each package are also uniquely offset.
 	index := 1
-	index = p.reg.UpdateIndices(index)
+	index = p.allTypes.UpdateIndices(index)
 	for i, pkg := range p.allPackages {
 		index = pkg.SetIndices(i+1, index)
 	}
