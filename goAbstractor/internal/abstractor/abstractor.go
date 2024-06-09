@@ -251,17 +251,18 @@ func (ab *abstractor) resolveReferences() {
 }
 
 func (ab *abstractor) prune() {
-	touched := map[constructs.Visitable]bool{}
+	touched := map[constructs.Visitable]bool{
+		ab.bakeAny(): true,
+	}
 	ab.proj.Visit(func(value constructs.Visitable) bool {
 		if touched[value] {
 			return false
 		}
 		touched[value] = true
-
-		if r, ok := value.(constructs.TypeDesc); ok {
-			remove[r] = false
-		}
 		return true
 	})
 
+	ab.proj.Types().Remove(func(td constructs.TypeDesc) bool {
+		return !touched[td]
+	})
 }

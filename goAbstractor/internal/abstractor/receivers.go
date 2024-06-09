@@ -27,6 +27,8 @@ func (ab *abstractor) determineReceiver(m constructs.Method, src *packages.Packa
 		if !ok {
 			panic(fmt.Errorf(`function declaration has unexpected receiver type: %T: %s`, recv, pos(src, decl.Pos())))
 		}
+
+		fmt.Printf(">> %v\n", n.Origin())
 		name := n.String()
 		if index := strings.Index(name, `[`); index >= 0 {
 			name = name[:index]
@@ -34,9 +36,7 @@ func (ab *abstractor) determineReceiver(m constructs.Method, src *packages.Packa
 		if index := strings.LastIndexAny(name, `/.`); index >= 0 {
 			name = name[index+1:]
 		}
-		m.SetReceiver(noCopyRecv, name)
-		// TODO: Need to rework so that receivers are created when methods
-		// are read so that the types can be relabelled
+		m.SetReceiver(n, noCopyRecv, name)
 	}
 }
 
@@ -66,4 +66,6 @@ func resolveReceiversInPackage(pkg constructs.Package) {
 	if pkgChanged {
 		pkg.SetMethods(utils.RemoveZeros(methods))
 	}
+	// TODO: Need to rework so that receivers are created when methods
+	// are read so that the types can be relabelled
 }
