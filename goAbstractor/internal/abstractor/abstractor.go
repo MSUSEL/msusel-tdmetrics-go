@@ -11,7 +11,6 @@ import (
 	"golang.org/x/tools/go/packages"
 
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs"
-	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/metrics"
 )
 
 // TODO:
@@ -45,6 +44,8 @@ type abstractor struct {
 	verbose bool
 	proj    constructs.Project
 	baked   map[string]constructs.TypeDesc
+
+	typeParamReplacer map[*types.TypeParam]*types.TypeParam
 }
 
 func (ab *abstractor) log(format string, args ...any) {
@@ -136,15 +137,6 @@ func (ab *abstractor) abstractValueSpec(pkg constructs.Package, src *packages.Pa
 		def := constructs.NewValueDef(name.Name, isConst, typ)
 		pkg.AppendValues(def)
 	}
-}
-
-func (ab *abstractor) abstractFuncDecl(pkg constructs.Package, src *packages.Package, decl *ast.FuncDecl) {
-	obj := src.TypesInfo.Defs[decl.Name]
-	sig := ab.convertSignature(obj.Type().(*types.Signature))
-	m := constructs.NewMethod(decl.Name.Name, sig)
-	m.SetMetrics(metrics.New(src.Fset, decl))
-	ab.determineReceiver(m, src, decl)
-	pkg.AppendMethods(m)
 }
 
 func pos(src *packages.Package, pos token.Pos) string {

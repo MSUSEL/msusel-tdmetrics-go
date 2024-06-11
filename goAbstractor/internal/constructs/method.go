@@ -1,8 +1,6 @@
 package constructs
 
 import (
-	"go/types"
-
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/jsonify"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/metrics"
 )
@@ -14,25 +12,24 @@ type Method interface {
 	Visitable
 	Name() string
 	Signature() TypeDesc
-	SetReceiver(rev *types.Named, noCopyRecv bool, receiver string)
 	Receiver() string
 	SetMetrics(met metrics.Metrics)
 }
 
 type methodImp struct {
-	name      string
-	signature TypeDesc
-	metrics   metrics.Metrics
-
-	rev        *types.Named
+	name       string
+	signature  TypeDesc
+	metrics    metrics.Metrics
 	noCopyRecv bool
 	receiver   string
 }
 
-func NewMethod(name string, sig TypeDesc) Method {
+func NewMethod(name string, sig TypeDesc, noCopyRecv bool, receiver string) Method {
 	return &methodImp{
-		name:      name,
-		signature: sig,
+		name:       name,
+		signature:  sig,
+		noCopyRecv: noCopyRecv,
+		receiver:   receiver,
 	}
 }
 
@@ -65,12 +62,6 @@ func (m *methodImp) Name() string {
 
 func (m *methodImp) Signature() TypeDesc {
 	return m.signature
-}
-
-func (m *methodImp) SetReceiver(rev *types.Named, noCopyRecv bool, receiver string) {
-	m.rev = rev
-	m.noCopyRecv = noCopyRecv
-	m.receiver = receiver
 }
 
 func (m *methodImp) Receiver() string {

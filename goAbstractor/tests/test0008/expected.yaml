@@ -1,51 +1,54 @@
 {
   language: go,
-  interfaces: [
-    {}, # 1. any
-    {   # 2. interface { Get() X }
-      inherits: [ 1 ],
-      methods: {
-        Get: 7
-      }
-    }
-  ],
-  named: [
-    { name: T,       type: 1 }, # 3. T any
-    { name: value,   type: 3 }, # 4. value T
-    { name: X,       type: 1 }, # 5. X any
-    { name: $value1, type: 5 }  # 6. $value1 X
-  ],
-  signatures: [
-    { # 7. func() X
-      return: 5
-    },
-    {} # 8. func()()
-  ],
-  structs: [
-    { # 9. struct { value T }
-      fields: [ 4 ]
-    }
-  ],
+ 
   packages: [
     {
+      name: main,
+      path: "command-line-arguments",
       methods: [
         { # main()
-          name: main, signature: 8,
+          name: main, signature: 7,
           metrics: { codeCount: 4, complexity: 1, indents: 2, lineCount: 4 }
         }
       ],
-      path: "command-line-arguments",
       types: [
-        { # 10. Foo struct { value T }
-          name: Foo, type: 9, interface: 2,
+        { # 9. Foo struct { value T }
+          name: Foo, type: 8, interface: 2,
           methods: [
             { # Get() X
-              name: Get, signature: 7,
+              name: Get, signature: 6,
               metrics: { codeCount: 3, complexity: 1, indents: 1, lineCount: 3 }
             }
           ]
         }
       ]
     }
-  ]
+  ],
+  types: {
+    interfaces: [
+      {}, # 1. any
+      {   # 2. interface { Get() X }
+        inherits: [ 1 ],
+        methods: {
+          Get: 6
+        }
+      }
+    ],
+    named: [
+      { name: T,       type: 1 }, # 3. T any
+      { name: value,   type: 3 }, # 4. value T
+      { name: XXXXX,       type: 1 }, # 5. X any
+    ],
+    signatures: [
+      { # 6. func() X
+        return: 5
+      },
+      {} # 7. func()()
+    ],
+    structs: [
+      { # 8. struct { value T }
+        fields: [ 4 ]
+      }
+    ],
+  }
 }

@@ -4,21 +4,40 @@ import (
 	"fmt"
 	"go/ast"
 	"go/types"
-	"strings"
 
 	"github.com/Snow-Gremlin/goToolbox/utils"
 	"golang.org/x/tools/go/packages"
 
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs"
+	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/metrics"
 )
 
-func (ab *abstractor) determineReceiver(m constructs.Method, src *packages.Package, decl *ast.FuncDecl) {
+func (ab *abstractor) setTypeParamOverrides(args *types.TypeList, params *types.TypeParamList, src *packages.Package, decl *ast.FuncDecl) {
+	count := args.Len()
+	if count != params.Len() {
+		panic(fmt.Errorf(`function declaration has unexpected receiver fields: %s`, pos(src, decl.Pos())))
+	}
+
+	ab.typeParamReplacer = map[*types.TypeParam]*types.TypeParam{}
+	for i := range count {
+		ab.typeParamReplacer[args.At(i).(*types.TypeParam)] = params.At(i)
+	}
+}
+
+func (ab *abstractor) clearTypeParamOverrides() {
+	ab.typeParamReplacer = nil
+}
+
+func (ab *abstractor) abstractFuncDecl(pkg constructs.Package, src *packages.Package, decl *ast.FuncDecl) {
+	obj := src.TypesInfo.Defs[decl.Name]
+
+	noCopyRecv := false
+	recvName := ``
 	if decl.Recv != nil && decl.Recv.NumFields() > 0 {
 		if decl.Recv.NumFields() != 1 {
 			panic(fmt.Errorf(`function declaration has unexpected receiver fields: %s`, pos(src, decl.Pos())))
 		}
 		recv := src.TypesInfo.Types[decl.Recv.List[0].Type].Type
-		noCopyRecv := false
 		if p, ok := recv.(*types.Pointer); ok {
 			noCopyRecv = true
 			recv = p.Elem()
@@ -27,17 +46,16 @@ func (ab *abstractor) determineReceiver(m constructs.Method, src *packages.Packa
 		if !ok {
 			panic(fmt.Errorf(`function declaration has unexpected receiver type: %T: %s`, recv, pos(src, decl.Pos())))
 		}
-
-		fmt.Printf(">> %v\n", n.Origin())
-		name := n.String()
-		if index := strings.Index(name, `[`); index >= 0 {
-			name = name[:index]
-		}
-		if index := strings.LastIndexAny(name, `/.`); index >= 0 {
-			name = name[index+1:]
-		}
-		m.SetReceiver(n, noCopyRecv, name)
+		recvName = n.Origin().Obj().Id()
+		ab.setTypeParamOverrides(n.TypeArgs(), n.TypeParams(), src, decl)
 	}
+
+	sig := ab.convertSignature(obj.Type().(*types.Signature))
+	ab.clearTypeParamOverrides()
+
+	m := constructs.NewMethod(decl.Name.Name, sig, noCopyRecv, recvName)
+	m.SetMetrics(metrics.New(src.Fset, decl))
+	pkg.AppendMethods(m)
 }
 
 func (ab *abstractor) resolveReceivers() {
@@ -66,6 +84,4 @@ func resolveReceiversInPackage(pkg constructs.Package) {
 	if pkgChanged {
 		pkg.SetMethods(utils.RemoveZeros(methods))
 	}
-	// TODO: Need to rework so that receivers are created when methods
-	// are read so that the types can be relabelled
 }
