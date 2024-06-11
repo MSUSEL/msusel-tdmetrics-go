@@ -220,6 +220,10 @@ func (ab *abstractor) convertUnion(t *types.Union) constructs.Union {
 }
 
 func (ab *abstractor) convertTypeParam(t *types.TypeParam) constructs.Named {
+	if tr, ok := ab.typeParamReplacer[t]; ok {
+		t = tr
+	}
+
 	t2 := t.Obj().Type().Underlying()
 	return constructs.NewNamed(ab.proj.Types(), t.Obj().Name(), ab.convertType(t2))
 }
