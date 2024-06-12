@@ -7,6 +7,14 @@ import (
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/jsonify"
 )
 
+// TODO: Add analytics:
+//   - The set of variables with locations that are read from and written
+//     to in each method. Used in Tight Class Cohesion (TCC) and
+//     Design Recovery (DR).
+//   - The set of all methods called in each method. Used for
+//     Access to Foreign Data (ATFD) and Design Recovery (DR)
+//   - Indicate if a method is an accessor getter or setter (single expression).
+
 type Metrics struct {
 	Complexity int
 	LineCount  int

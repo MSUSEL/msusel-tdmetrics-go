@@ -108,12 +108,13 @@ func (ab *abstractor) convertPointer(t *types.Pointer) constructs.TypeDesc {
 
 func (ab *abstractor) convertSignature(t *types.Signature) constructs.Signature {
 	// Don't output receiver or receiver type here.
+	tp := ab.convertTypeParamList(t.TypeParams())
 	return constructs.NewSignature(ab.proj.Types(), constructs.SignatureArgs{
 		RealType:   t,
 		Variadic:   t.Variadic(),
-		TypeParams: ab.convertTypeParamList(t.TypeParams()),
+		TypeParams: tp,
 		Params:     ab.convertTuple(t.Params()),
-		Return:     ab.createReturn(ab.convertTuple(t.Results())),
+		Return:     ab.createReturn(tp, ab.convertTuple(t.Results())),
 	})
 }
 
@@ -137,9 +138,7 @@ func (ab *abstractor) convertStruct(t *types.Struct) constructs.Struct {
 	})
 }
 
-func (ab *abstractor) createReturn(returns []constructs.Named) constructs.TypeDesc {
-	// TODO: Need to handle adding type parameters in struct
-	//       or returning a solid type if single return has type parameters.
+func (ab *abstractor) createReturn(tp, returns []constructs.Named) constructs.TypeDesc {
 	switch len(returns) {
 	case 0:
 		return nil
@@ -147,7 +146,8 @@ func (ab *abstractor) createReturn(returns []constructs.Named) constructs.TypeDe
 		return returns[0].Type()
 	default:
 		return constructs.NewStruct(ab.proj.Types(), constructs.StructArgs{
-			Fields: returns,
+			TypeParams: tp,
+			Fields:     returns,
 		})
 	}
 }
