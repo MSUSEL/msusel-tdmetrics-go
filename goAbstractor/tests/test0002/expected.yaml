@@ -6,19 +6,19 @@
       name: main,
       methods: [
         { # func sum(values ...int) int
-          name: sum, signature: 12,
+          name: sum, signature: 11,
           metrics: { codeCount: 7, complexity: 2, indents: 6, lineCount: 7 }
         },
         { # func first(values ...int) int
-          name: first, signature: 12,
+          name: first, signature: 11,
           metrics: { codeCount: 3, complexity: 1, indents: 1, lineCount: 3 }
         },
         { # func last(values ...int) int
-          name: last, signature: 12,
+          name: last, signature: 11,
           metrics: { codeCount: 3, complexity: 1, indents: 1, lineCount: 3 }
         },
         { # func main()
-          name: main, signature: 13,
+          name: main, signature: 12,
           metrics: { codeCount: 6, complexity: 1, indents: 4, lineCount: 6 }
         }
       ]
@@ -34,42 +34,41 @@
         inherits: [ 2 ],
         typeParams: [ 4 ],
         methods: {
-          $cap: 9,
-          $get: 10,
-          $len: 9,
-          $set: 11
+          $cap: 8,
+          $get: 9,
+          $len: 8,
+          $set: 10
         }
       }
     ],
     named: [
-      { name: T,       type:  2 }, # 4. T any
-      { name: index,   type:  1 }, # 5. index int
-      { name: value,   type:  4 }, # 6. value T
-      { name: values,  type: 14 }, # 7. values []int
-      { name: $value1, type:  1 }  # 8. $value1 int
+      { name: T,      type:  2 }, # 4. T any
+      { name: index,  type:  1 }, # 5. index int
+      { name: value,  type:  4 }, # 6. value T
+      { name: values, type: 13 }, # 7. values []int
     ],
     signatures: [
-      { # 9. func() int
+      { # 8. func() int
         return: 1
       },
-      { # 10. func[T](index int) T
+      { # 9. func[T](index int) T
         typeParams: [ 4 ],
         params: [ 5 ],
         return: 4
       },
-      { # 11. func[T](index int, value T)
+      { # 10. func[T](index int, value T)
         typeParams: [ 4 ],
         params: [ 5, 6 ]
       },
-      { # 12. func(values ...int) int
+      { # 11. func(values ...int) int
         params: [ 7 ],
         variadic: true,
         return: 1
       },
-      {} # 13. func()()
+      {} # 12. func()()
     ],
     solids: [
-      { # 14. []int
+      { # 13. []int
         typeParams: [ 1 ],
         target: 3
       }

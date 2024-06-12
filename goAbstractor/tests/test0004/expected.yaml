@@ -6,7 +6,7 @@
       name: main,
       methods: [
         { # func main()
-          name: main, signature: 12,
+          name: main, signature: 10,
           metrics: { codeCount: 3, complexity: 1, indents: 1, lineCount: 3 }
         }
       ],
@@ -29,46 +29,42 @@
       { # 4. interface { Age() int }
         inherits: [ 3 ],
         methods: {
-          Age: 11
+          Age: 9
         }
       },
       { # 5. interface { Age() int; Fly() }
         inherits: [ 4 ],
         methods: {
-          Age: 11,
-          Fly: 12
+          Age: 9,
+          Fly: 10
         }
       },
       { # 6. interface { Age() int; Temp() float64 }
         inherits: [ 4 ],
         methods: {
-            Age:  11,
-            Temp: 13
+            Age:  9,
+            Temp: 11
           }
       },
       { # 7. interface { Age() int; Fly(); Temp() float64 }
         inherits: [ 5, 6 ],
         methods: {
-          Age:  11,
-          Fly:  12,
-          Temp: 13
+          Age:  9,
+          Fly:  10,
+          Temp: 11
         }
       },
       { # 8. interface { Fly() }
         inherits: [ 3 ],
         methods: {
-          Fly: 12
+          Fly: 10
         }
       }
     ],
-    named: [
-      { name: $value1, type: 1 }, #  9. $value1 int
-      { name: $value1, type: 2 }  # 10. $value1 string
-    ],
     signatures: [
-      { return: 1 }, # 11. func() int
-      {},            # 12. func()()
-      { return: 2 }  # 13. func() float64
+      { return: 1 }, # 9. func() int
+      {},            # 10. func()()
+      { return: 2 }  # 11. func() float64
     ],
   }
 }

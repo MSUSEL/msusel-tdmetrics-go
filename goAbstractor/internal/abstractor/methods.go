@@ -53,8 +53,14 @@ func (ab *abstractor) abstractFuncDecl(pkg constructs.Package, src *packages.Pac
 	sig := ab.convertSignature(obj.Type().(*types.Signature))
 	ab.clearTypeParamOverrides()
 
-	m := constructs.NewMethod(decl.Name.Name, sig, noCopyRecv, recvName)
-	m.SetMetrics(metrics.New(src.Fset, decl))
+	mets := metrics.New(src.Fset, decl)
+	m := constructs.NewMethod(constructs.MethodArgs{
+		Name:       decl.Name.Name,
+		Signature:  sig,
+		Metrics:    mets,
+		NoCopyRecv: noCopyRecv,
+		Receiver:   recvName,
+	})
 	pkg.AppendMethods(m)
 }
 

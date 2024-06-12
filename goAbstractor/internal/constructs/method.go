@@ -5,15 +5,19 @@ import (
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/metrics"
 )
 
-// TODO: Need to handle when the type parameters are named differently
-// in the receiver from the ones defined on the receiver's type def.
-
 type Method interface {
 	Visitable
 	Name() string
 	Signature() TypeDesc
 	Receiver() string
-	SetMetrics(met metrics.Metrics)
+}
+
+type MethodArgs struct {
+	Name       string
+	Signature  TypeDesc
+	Metrics    metrics.Metrics
+	NoCopyRecv bool
+	Receiver   string
 }
 
 type methodImp struct {
@@ -24,12 +28,13 @@ type methodImp struct {
 	receiver   string
 }
 
-func NewMethod(name string, sig TypeDesc, noCopyRecv bool, receiver string) Method {
+func NewMethod(args MethodArgs) Method {
 	return &methodImp{
-		name:       name,
-		signature:  sig,
-		noCopyRecv: noCopyRecv,
-		receiver:   receiver,
+		name:       args.Name,
+		signature:  args.Signature,
+		metrics:    args.Metrics,
+		noCopyRecv: args.NoCopyRecv,
+		receiver:   args.Receiver,
 	}
 }
 
@@ -66,8 +71,4 @@ func (m *methodImp) Signature() TypeDesc {
 
 func (m *methodImp) Receiver() string {
 	return m.receiver
-}
-
-func (m *methodImp) SetMetrics(met metrics.Metrics) {
-	m.metrics = met
 }
