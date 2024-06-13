@@ -12,32 +12,26 @@ type Struct interface {
 }
 
 type StructArgs struct {
-	RealType   *types.Struct
-	TypeParams []Named
-	Fields     []Named
+	RealType *types.Struct
+	Fields   []Named
 }
 
 func NewStruct(reg Register, args StructArgs) Struct {
 	return reg.RegisterStruct(&structImp{
-		realType:   args.RealType,
-		typeParams: args.TypeParams,
-		fields:     args.Fields,
+		realType: args.RealType,
+		fields:   args.Fields,
 	})
 }
 
 type structImp struct {
 	realType *types.Struct
-
-	typeParams []Named
-	fields     []Named
-
-	index int
+	fields   []Named
+	index    int
 }
 
 func (ts *structImp) _struct() {}
 
 func (ts *structImp) Visit(v Visitor) {
-	visitList(v, ts.typeParams)
 	visitList(v, ts.fields)
 }
 
@@ -51,8 +45,7 @@ func (ts *structImp) GoType() types.Type {
 
 func (ts *structImp) Equal(other TypeDesc) bool {
 	return equalTest(ts, other, func(a, b *structImp) bool {
-		return equalList(a.fields, b.fields) &&
-			equalList(a.typeParams, b.typeParams)
+		return equalList(a.fields, b.fields)
 	})
 }
 
@@ -64,8 +57,7 @@ func (ts *structImp) ToJson(ctx *jsonify.Context) jsonify.Datum {
 	ctx2 := ctx.HideKind().Short()
 	return jsonify.NewMap().
 		AddIf(ctx, ctx.IsKindShown(), `kind`, `struct`).
-		Add(ctx2, `fields`, ts.fields).
-		AddNonZero(ctx2, `typeParams`, ts.typeParams)
+		AddNonZero(ctx2, `fields`, ts.fields)
 }
 
 func (ts *structImp) String() string {

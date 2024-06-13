@@ -114,7 +114,7 @@ func (ab *abstractor) convertSignature(t *types.Signature) constructs.Signature 
 		Variadic:   t.Variadic(),
 		TypeParams: tp,
 		Params:     ab.convertTuple(t.Params()),
-		Return:     ab.createReturn(tp, ab.convertTuple(t.Results())),
+		Return:     ab.createReturn(ab.convertTuple(t.Results())),
 	})
 }
 
@@ -131,14 +131,14 @@ func (ab *abstractor) convertStruct(t *types.Struct) constructs.Struct {
 		fields = append(fields, field)
 		// Nothing needs to be done with f.Embedded() here.
 	}
+
 	return constructs.NewStruct(ab.proj.Types(), constructs.StructArgs{
 		RealType: t,
-		//TypeParams: , // TODO: Handle type params
-		Fields: fields,
+		Fields:   fields,
 	})
 }
 
-func (ab *abstractor) createReturn(tp, returns []constructs.Named) constructs.TypeDesc {
+func (ab *abstractor) createReturn(returns []constructs.Named) constructs.TypeDesc {
 	switch len(returns) {
 	case 0:
 		return nil
@@ -146,8 +146,7 @@ func (ab *abstractor) createReturn(tp, returns []constructs.Named) constructs.Ty
 		return returns[0].Type()
 	default:
 		return constructs.NewStruct(ab.proj.Types(), constructs.StructArgs{
-			TypeParams: tp,
-			Fields:     returns,
+			Fields: returns,
 		})
 	}
 }

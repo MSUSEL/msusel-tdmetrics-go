@@ -53,20 +53,18 @@ func (ab *abstractor) bakeIntFunc() constructs.Signature {
 // bakeReturnTuple bakes in a structure used for a return value
 // tuple with a variable type value and a boolean.
 //
-//	struct[T any] {
+//	struct {
 //		value T
 //		ok    bool
 //	}
-func (ab *abstractor) bakeReturnTuple() constructs.Struct {
+func (ab *abstractor) bakeReturnTuple(tp constructs.Named) constructs.Struct {
 	return bakeOnce(ab, `struct[T] { value T; ok bool }`, func() constructs.Struct {
-		tp := constructs.NewNamed(ab.proj.Types(), `T`, ab.bakeAny())
 		fieldValue := constructs.NewNamed(ab.proj.Types(), `value`, tp)
 		fieldOk := constructs.NewNamed(ab.proj.Types(), `ok`, constructs.BasicFor[bool](ab.proj.Types()))
 
-		// struct[T any]s
+		// struct
 		return constructs.NewStruct(ab.proj.Types(), constructs.StructArgs{
-			TypeParams: []constructs.Named{tp},
-			Fields:     []constructs.Named{fieldValue, fieldOk},
+			Fields: []constructs.Named{fieldValue, fieldOk},
 		})
 	})
 }
@@ -136,7 +134,7 @@ func (ab *abstractor) bakeChan() constructs.Interface {
 		// $recv() (T, bool)
 		methods[`$recv`] = constructs.NewSignature(ab.proj.Types(), constructs.SignatureArgs{
 			TypeParams: []constructs.Named{tp},
-			Return:     constructs.NewSolid(ab.proj.Types(), nil, ab.bakeReturnTuple(), tp),
+			Return:     ab.bakeReturnTuple(tp),
 		})
 
 		// $send(value T)
@@ -177,7 +175,7 @@ func (ab *abstractor) bakeMap() constructs.Interface {
 		methods[`$get`] = constructs.NewSignature(ab.proj.Types(), constructs.SignatureArgs{
 			TypeParams: tp,
 			Params:     []constructs.Named{constructs.NewNamed(ab.proj.Types(), `key`, tpKey)},
-			Return:     constructs.NewSolid(ab.proj.Types(), nil, ab.bakeReturnTuple(), tpValue),
+			Return:     ab.bakeReturnTuple(tpValue),
 		})
 
 		// $set(key TKey, value TValue)
