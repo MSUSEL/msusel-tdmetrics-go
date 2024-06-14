@@ -7,6 +7,7 @@ import (
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs"
 	"github.com/Snow-Gremlin/goToolbox/collections"
 	"github.com/Snow-Gremlin/goToolbox/collections/set"
+	"github.com/Snow-Gremlin/goToolbox/utils"
 )
 
 func (ab *abstractor) convertType(t types.Type) constructs.TypeDesc {
@@ -96,7 +97,10 @@ func (ab *abstractor) convertMap(t *types.Map) constructs.TypeDesc {
 }
 
 func (ab *abstractor) convertNamed(t *types.Named) constructs.TypeDefRef {
-	pkgPath := t.Obj().Pkg().Path()
+	pkgPath := ``
+	if !utils.IsNil(t.Obj().Pkg()) {
+		pkgPath = t.Obj().Pkg().Path()
+	}
 	name := t.Obj().Name()
 	return constructs.NewTypeDefRef(ab.proj.Types(), t, pkgPath, name)
 }

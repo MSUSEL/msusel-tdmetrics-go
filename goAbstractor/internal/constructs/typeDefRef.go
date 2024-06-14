@@ -55,9 +55,9 @@ func (t *typeDefRefImp) ToJson(ctx *jsonify.Context) jsonify.Datum {
 	if ctx.IsReferenceShown() {
 		return jsonify.NewMap().
 			AddIf(ctx, ctx.IsKindShown(), `kind`, `ref`).
-			Add(ctx2, `packagePath`, t.pkgPath).
+			AddNonZero(ctx2, `packagePath`, t.pkgPath).
 			Add(ctx2, `name`, t.name).
-			Add(ctx2, `package`, t.pkg).
+			AddNonZero(ctx2, `package`, t.pkg).
 			Add(ctx2, `type`, t.typ)
 	}
 

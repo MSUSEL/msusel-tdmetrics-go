@@ -1,12 +1,17 @@
 package constructs
 
-import "github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/jsonify"
+import (
+	"slices"
+
+	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/jsonify"
+)
 
 type Project interface {
 	Types() Register
 	ToJson(ctx *jsonify.Context) jsonify.Datum
 	Packages() []Package
 	AppendPackage(pkg ...Package)
+	FilterPackage(predicate func(pkg Package) bool)
 
 	// UpdateIndices should be called after all types have been registered
 	// and all packages have been processed. This will update all the index
@@ -53,6 +58,10 @@ func (p *projectImp) Packages() []Package {
 
 func (p *projectImp) AppendPackage(pkg ...Package) {
 	p.allPackages = append(p.allPackages, pkg...)
+}
+
+func (p *projectImp) FilterPackage(predicate func(pkg Package) bool) {
+	p.allPackages = slices.DeleteFunc(p.allPackages, predicate)
 }
 
 func (p *projectImp) UpdateIndices() {

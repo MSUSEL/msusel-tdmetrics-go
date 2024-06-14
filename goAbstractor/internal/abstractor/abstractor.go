@@ -222,6 +222,8 @@ func (ab *abstractor) resolveInheritance() {
 func (ab *abstractor) resolveReferences() {
 	for _, ref := range ab.proj.Types().AllReferences() {
 		pkg := ab.findPackageByPath(ref.PackagePath())
+
+		// TODO: Handle build-in package types like error
 		if pkg == nil {
 			panic(fmt.Errorf(`failed to find package for type def reference for %q in %q`, ref.Name(), ref.PackagePath()))
 		}

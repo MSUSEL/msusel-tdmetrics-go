@@ -12,6 +12,7 @@ type Package interface {
 	FindTypeDef(name string) TypeDef
 	SetIndices(pkgIndex, typeDefIndex int) int
 	Path() string
+	Name() string
 	ImportPaths() []string
 	SetImports(imports []Package)
 	Types() []TypeDef
@@ -96,6 +97,10 @@ func (p *packageImp) SetIndices(pkgIndex, typeDefIndex int) int {
 
 func (p *packageImp) Path() string {
 	return p.path
+}
+
+func (p *packageImp) Name() string {
+	return p.name
 }
 
 func (p *packageImp) ImportPaths() []string {
