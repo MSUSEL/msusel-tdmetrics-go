@@ -17,7 +17,7 @@ func Abstract(ps []*packages.Package, verbose bool) constructs.Project {
 	ab := &abstractor{
 		verbose: verbose,
 		proj:    constructs.NewProject(),
-		baked:   map[string]constructs.TypeDesc{},
+		baked:   map[string]any{},
 	}
 	ab.initialize()
 	ab.abstractProject(ps)
@@ -34,7 +34,7 @@ func Abstract(ps []*packages.Package, verbose bool) constructs.Project {
 type abstractor struct {
 	verbose bool
 	proj    constructs.Project
-	baked   map[string]constructs.TypeDesc
+	baked   map[string]any
 
 	typeParamReplacer map[*types.TypeParam]*types.TypeParam
 }
@@ -47,7 +47,8 @@ func (ab *abstractor) log(format string, args ...any) {
 
 func (ab *abstractor) initialize() {
 	ab.log(`initialize`)
-	ab.bakeAny() // Prebake the "any" (i.e. object) into the interfaces.
+	ab.bakeAny()     // Prebake the "any" (i.e. object) into the interfaces.
+	ab.bakeBuiltin() // Prebake the build-in types.
 }
 
 func (ab *abstractor) abstractProject(ps []*packages.Package) {
@@ -209,7 +210,7 @@ func (ab *abstractor) resolveInheritance() {
 	}
 	obj := inters[0]
 	if !obj.Equal(ab.bakeAny()) {
-		panic(fmt.Errorf(`expected the first interface to be the "any" interface`))
+		panic(errors.New(`expected the first interface to be the "any" interface`))
 	}
 	for _, inter := range inters[1:] {
 		obj.AddInheritors(inter)
@@ -221,16 +222,21 @@ func (ab *abstractor) resolveInheritance() {
 
 func (ab *abstractor) resolveReferences() {
 	for _, ref := range ab.proj.Types().AllReferences() {
-		pkg := ab.findPackageByPath(ref.PackagePath())
+		pkgPath := ref.PackagePath()
+		if len(pkgPath) <= 0 {
+			pkgPath = `$builtin`
+		}
 
-		// TODO: Handle build-in package types like error
+		pkg := ab.findPackageByPath(ref.PackagePath())
 		if pkg == nil {
 			panic(fmt.Errorf(`failed to find package for type def reference for %q in %q`, ref.Name(), ref.PackagePath()))
 		}
+
 		def := pkg.FindTypeDef(ref.Name())
 		if def == nil {
 			panic(fmt.Errorf(`failed to find type for type def reference for %q in %q`, ref.Name(), ref.PackagePath()))
 		}
+
 		ref.SetType(pkg, def)
 	}
 }

@@ -14,7 +14,7 @@ import (
 	"github.com/Snow-Gremlin/goToolbox/utils"
 )
 
-func bakeOnce[T constructs.TypeDesc](ab *abstractor, key string, create func() T) T {
+func bakeOnce[T any](ab *abstractor, key string, create func() T) T {
 	if baked, has := ab.baked[key]; has {
 		t, ok := baked.(T)
 		if !ok {
@@ -260,5 +260,61 @@ func (ab *abstractor) bakeComplex128() constructs.Interface {
 			Methods:      methods,
 			InitInherits: []constructs.Interface{ab.bakeAny()},
 		})
+	})
+}
+
+// bakeError bakes in an interface to represent a Go error.
+func (ab *abstractor) bakeError() constructs.Interface {
+	return bakeOnce(ab, `error`, func() constructs.Interface {
+
+		// func() string
+		getStr := constructs.NewSignature(ab.proj.Types(), constructs.SignatureArgs{
+			Return: constructs.BasicFor[string](ab.proj.Types()),
+		})
+
+		methods := map[string]constructs.TypeDesc{}
+		methods[`Error`] = getStr // Error() string
+
+		// interface { Error() string }
+		return constructs.NewInterface(ab.proj.Types(), constructs.InterfaceArgs{
+			Methods:      methods,
+			InitInherits: []constructs.Interface{ab.bakeAny()},
+		})
+	})
+}
+
+// bakeComparable bakes in an interface to represent a Go comparable.
+func (ab *abstractor) bakeComparable() constructs.Interface {
+	return bakeOnce(ab, `comparable`, func() constructs.Interface {
+		tp := constructs.NewNamed(ab.proj.Types(), `T`, ab.bakeAny())
+
+		// func(other T) int
+		getStr := constructs.NewSignature(ab.proj.Types(), constructs.SignatureArgs{
+			Params: []constructs.Named{
+				constructs.NewNamed(ab.proj.Types(), `other`, tp),
+			},
+			Return: constructs.BasicFor[int](ab.proj.Types()),
+		})
+
+		methods := map[string]constructs.TypeDesc{}
+		methods[`$compare`] = getStr // $compare(other T) int
+
+		// interface { $compare(other T) int }
+		return constructs.NewInterface(ab.proj.Types(), constructs.InterfaceArgs{
+			Methods:      methods,
+			InitInherits: []constructs.Interface{ab.bakeAny()},
+		})
+	})
+}
+
+// bakeBuiltin bakes in a package to represent the builtin package.
+func (ab *abstractor) bakeBuiltin() constructs.Package {
+	return bakeOnce(ab, `$builtin`, func() constructs.Package {
+		errTyp := constructs.NewTypeDef(`error`, ab.bakeError())
+		cmpTyp := constructs.NewTypeDef(`comparable`, ab.bakeComparable())
+
+		pkg := constructs.NewPackage(nil, `$builtin`, `$builtin`, []string{})
+		pkg.AppendTypes(errTyp, cmpTyp)
+		return pkg
 	})
 }
