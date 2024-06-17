@@ -14,25 +14,37 @@ import (
 )
 
 func Abstract(ps []*packages.Package, verbose bool) constructs.Project {
+	buildinName := `$buildin`
+	buildinPkg := &packages.Package{
+		Name:  buildinName,
+		Fset:  ps[0].Fset,
+		Types: types.NewPackage(buildinName, buildinName),
+	}
+
 	ab := &abstractor{
 		verbose: verbose,
+		ps:      append([]*packages.Package{buildinPkg}, ps...),
 		proj:    constructs.NewProject(),
 		baked:   map[string]any{},
 	}
 	ab.initialize()
-	ab.abstractProject(ps)
+
+	ab.abstractProject()
 	ab.resolveImports()
 	ab.resolveReceivers()
 	ab.resolveClasses()
 	ab.resolveInheritance()
 	ab.resolveReferences()
-	ab.prune()
+
+	// Finish and clean-up
+	ab.proj.Prune(ab.bakeAny())
 	ab.proj.UpdateIndices()
 	return ab.proj
 }
 
 type abstractor struct {
 	verbose bool
+	ps      []*packages.Package
 	proj    constructs.Project
 	baked   map[string]any
 
@@ -51,9 +63,9 @@ func (ab *abstractor) initialize() {
 	ab.bakeBuiltin() // Prebake the build-in types.
 }
 
-func (ab *abstractor) abstractProject(ps []*packages.Package) {
+func (ab *abstractor) abstractProject() {
 	ab.log(`abstract project`)
-	packages.Visit(ps, func(src *packages.Package) bool {
+	packages.Visit(ab.ps, func(src *packages.Package) bool {
 		if ap := ab.abstractPackage(src); ap != nil {
 			ab.proj.AppendPackage(ap)
 		}
@@ -176,28 +188,18 @@ func (ab *abstractor) resolveClass(pkg constructs.Package, td constructs.TypeDef
 		return
 	}
 
-	mTyp := []*types.Func{}
 	methods := map[string]constructs.TypeDesc{}
 	for _, m := range td.Methods() {
-		s := m.Signature().GoType().(*types.Signature)
-		f := types.NewFunc(token.NoPos, pkg.Source().Types, m.Name(), s)
-		mTyp = append(mTyp, f)
 		methods[m.Name()] = m.Signature()
 	}
 
-	tEmb := []types.Type{}
 	typeParams := []constructs.Named{}
 	// TODO: Fill parameter types for interface.
 
-	iTyp := types.NewInterfaceType(mTyp, tEmb)
-	if iTyp == nil {
-		panic(fmt.Errorf(`failed to create an interface for %s.%s`, pkg.Source().PkgPath, td.Name()))
-	}
-
 	tInt := constructs.NewInterface(ab.proj.Types(), constructs.InterfaceArgs{
-		RealType:   iTyp,
 		Methods:    methods,
 		TypeParams: typeParams,
+		Package:    pkg.Source(),
 	})
 	td.SetInterface(tInt)
 }
@@ -208,6 +210,9 @@ func (ab *abstractor) resolveInheritance() {
 	if len(inters) <= 0 {
 		panic(errors.New(`expected the object interface at minimum but found no interfaces`))
 	}
+
+	fmt.Println(inters)
+
 	obj := inters[0]
 	if !obj.Equal(ab.bakeAny()) {
 		panic(errors.New(`expected the first interface to be the "any" interface`))
@@ -239,21 +244,4 @@ func (ab *abstractor) resolveReferences() {
 
 		ref.SetType(pkg, def)
 	}
-}
-
-func (ab *abstractor) prune() {
-	touched := map[constructs.Visitable]bool{
-		ab.bakeAny(): true,
-	}
-	ab.proj.Visit(func(value constructs.Visitable) bool {
-		if touched[value] {
-			return false
-		}
-		touched[value] = true
-		return true
-	})
-
-	ab.proj.Types().Remove(func(td constructs.TypeDesc) bool {
-		return !touched[td]
-	})
 }

@@ -1,9 +1,12 @@
 package constructs
 
 import (
+	"fmt"
+
 	"golang.org/x/tools/go/packages"
 
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/jsonify"
+	"github.com/Snow-Gremlin/goToolbox/utils"
 )
 
 type Package interface {
@@ -11,9 +14,11 @@ type Package interface {
 	Source() *packages.Package
 	FindTypeDef(name string) TypeDef
 	SetIndices(pkgIndex, typeDefIndex int) int
+	Empty() bool
 	Path() string
 	Name() string
 	ImportPaths() []string
+	Imports() []Package
 	SetImports(imports []Package)
 	Types() []TypeDef
 	AppendTypes(typeDef ...TypeDef)
@@ -38,6 +43,9 @@ type packageImp struct {
 }
 
 func NewPackage(pkg *packages.Package, path, name string, importPaths []string) Package {
+	if utils.IsNil(pkg) {
+		panic(fmt.Errorf(`must provide a real package for %s`, name))
+	}
 	return &packageImp{
 		pkg:         pkg,
 		path:        path,
@@ -95,6 +103,12 @@ func (p *packageImp) SetIndices(pkgIndex, typeDefIndex int) int {
 	return typeDefIndex
 }
 
+func (p *packageImp) Empty() bool {
+	return len(p.types) <= 0 &&
+		len(p.values) <= 0 &&
+		len(p.methods) <= 0
+}
+
 func (p *packageImp) Path() string {
 	return p.path
 }
@@ -105,6 +119,10 @@ func (p *packageImp) Name() string {
 
 func (p *packageImp) ImportPaths() []string {
 	return p.importPaths
+}
+
+func (p *packageImp) Imports() []Package {
+	return p.imports
 }
 
 func (p *packageImp) SetImports(imports []Package) {

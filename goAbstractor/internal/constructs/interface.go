@@ -1,11 +1,14 @@
 package constructs
 
 import (
+	"errors"
 	"fmt"
+	"go/token"
 	"go/types"
 	"maps"
 
 	"github.com/Snow-Gremlin/goToolbox/utils"
+	"golang.org/x/tools/go/packages"
 
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/jsonify"
 )
@@ -25,13 +28,46 @@ type InterfaceArgs struct {
 	Methods      map[string]TypeDesc
 	TypeParams   []Named
 	InitInherits []Interface
+
+	// Package is only needed if the real type is nil
+	// so that a Go interface type has to be created.
+	Package *packages.Package
 }
 
 func NewInterface(reg Register, args InterfaceArgs) Interface {
+	methods := maps.Clone(args.Methods)
+
+	if utils.IsNil(args.RealType) {
+		if utils.IsNil(args.Package) {
+			panic(errors.New(`must provide a package if the real type for an interface is nil`))
+		}
+
+		mTyp := []*types.Func{}
+		pkg := args.Package.Types
+		names := utils.SortedKeys(methods)
+		for _, name := range names {
+			sig := methods[name].GoType().(*types.Signature)
+			if utils.IsNil(sig) {
+				panic(fmt.Errorf(`nil signature for %s`, name))
+			}
+			f := types.NewFunc(token.NoPos, pkg, name, sig)
+			mTyp = append(mTyp, f)
+		}
+
+		tEmb := []types.Type{}
+		// TODO: Fill parameter types for interface.
+
+		realType := types.NewInterfaceType(mTyp, tEmb)
+		if realType == nil {
+			panic(fmt.Errorf(`failed to create an interface`))
+		}
+		args.RealType = realType
+	}
+
 	return reg.RegisterInterface(&interfaceImp{
 		realType:   args.RealType,
 		typeParams: args.TypeParams,
-		methods:    maps.Clone(args.Methods),
+		methods:    methods,
 		union:      args.Union,
 		inherits:   args.InitInherits,
 	})

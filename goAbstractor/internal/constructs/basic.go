@@ -1,9 +1,13 @@
 package constructs
 
 import (
+	"errors"
+	"fmt"
+	"go/token"
 	"go/types"
 
 	"github.com/Snow-Gremlin/goToolbox/utils"
+	"golang.org/x/tools/go/packages"
 
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/jsonify"
 )
@@ -14,17 +18,22 @@ type Basic interface {
 }
 
 func NewBasic(reg Register, typ *types.Basic) Basic {
+	if utils.IsNil(typ) {
+		panic(errors.New(`may not create a new basic with a nil type`))
+	}
 	return reg.RegisterBasic(&basicImp{
 		typ:  typ,
 		name: typ.Name(),
 	})
 }
 
-func BasicFor[T comparable](reg Register) Basic {
-	return reg.RegisterBasic(&basicImp{
-		typ:  nil,
-		name: utils.TypeOf[T]().Name(),
-	})
+func BasicFromName(reg Register, pkg *packages.Package, typeName string) Basic {
+	tv, err := types.Eval(pkg.Fset, pkg.Types, token.NoPos, `(*`+typeName+`)(nil)`)
+	if err != nil {
+		panic(fmt.Errorf(`unable to create basic type of %s: %w`, typeName, err))
+	}
+	typ := tv.Type.(*types.Pointer).Elem().(*types.Basic)
+	return NewBasic(reg, typ)
 }
 
 type basicImp struct {

@@ -2,9 +2,11 @@ package constructs
 
 import (
 	"errors"
+	"fmt"
 	"go/types"
 
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/jsonify"
+	"github.com/Snow-Gremlin/goToolbox/utils"
 )
 
 type TypeDefRef interface {
@@ -17,6 +19,10 @@ type TypeDefRef interface {
 }
 
 func NewTypeDefRef(reg Register, realType *types.Named, pkgPath, name string) TypeDefRef {
+	if utils.IsNil(realType) {
+		panic(fmt.Errorf(`must provide a real type for %s.%s`, pkgPath, name))
+	}
+
 	return reg.RegisterTypeDefRef(&typeDefRefImp{
 		realType: realType,
 		pkgPath:  pkgPath,

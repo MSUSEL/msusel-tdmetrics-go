@@ -1,7 +1,12 @@
 package constructs
 
 import (
+	"errors"
+	"go/token"
 	"go/types"
+
+	"github.com/Snow-Gremlin/goToolbox/utils"
+	"golang.org/x/tools/go/packages"
 
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/jsonify"
 )
@@ -17,9 +22,40 @@ type SignatureArgs struct {
 	Params     []Named
 	TypeParams []Named
 	Return     TypeDesc
+
+	// Package is only needed if the real type is nil
+	// so that a Go signature type has to be created.
+	Package *packages.Package
 }
 
 func NewSignature(reg Register, args SignatureArgs) Signature {
+	if utils.IsNil(args.RealType) {
+		if utils.IsNil(args.Package) {
+			panic(errors.New(`must provide a package if the real type for a signature is nil`))
+		}
+
+		pkg := args.Package.Types
+		tp := make([]*types.TypeParam, len(args.TypeParams))
+		for i, t := range args.TypeParams {
+			tName := types.NewTypeName(token.NoPos, pkg, ``, t.GoType())
+			tp[i] = types.NewTypeParam(tName, t.GoType())
+		}
+
+		params := make([]*types.Var, len(args.Params))
+		for i, p := range args.Params {
+			params[i] = types.NewVar(token.NoPos, pkg, p.Name(), p.GoType())
+		}
+
+		var ret *types.Tuple
+		if !utils.IsNil(args.Return) {
+			v := types.NewVar(token.NoPos, pkg, ``, args.Return.GoType())
+			ret = types.NewTuple(v)
+		}
+
+		args.RealType = types.NewSignatureType(nil, nil,
+			tp, types.NewTuple(params...), ret, args.Variadic)
+	}
+
 	return reg.RegisterSignature(&signatureImp{
 		realType:   args.RealType,
 		variadic:   args.Variadic,

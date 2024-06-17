@@ -1,9 +1,11 @@
 package constructs
 
 import (
+	"errors"
 	"go/types"
 
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/jsonify"
+	"github.com/Snow-Gremlin/goToolbox/utils"
 )
 
 // Exact types are like `string|int|bool` where the type must match exactly.
@@ -21,6 +23,9 @@ type UnionArgs struct {
 }
 
 func NewUnion(reg Register, args UnionArgs) Union {
+	if utils.IsNil(args.RealType) {
+		panic(errors.New(`must provide a real type for a union`))
+	}
 	return reg.RegisterUnion(&unionImp{
 		realType: args.RealType,
 		exact:    args.Exact,

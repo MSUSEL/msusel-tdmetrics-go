@@ -1,8 +1,11 @@
 package constructs
 
 import (
+	"errors"
 	"fmt"
 	"go/types"
+
+	"github.com/Snow-Gremlin/goToolbox/utils"
 
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/jsonify"
 )
@@ -19,6 +22,9 @@ type Solid interface {
 func NewSolid(reg Register, typ types.Type, target TypeDesc, tp ...TypeDesc) Solid {
 	if len(tp) <= 0 {
 		panic(fmt.Sprintf(`a solid type requires at least one type parameter %v`, target))
+	}
+	if utils.IsNil(typ) {
+		panic(errors.New(`must provide a real type for a solid`))
 	}
 	return reg.RegisterSolid(&solidImp{
 		typ:        typ,
