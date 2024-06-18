@@ -122,10 +122,9 @@ func (ab *abstractor) bakeList() constructs.Interface {
 
 		// list[T any] interface
 		return constructs.NewInterface(ab.proj.Types(), constructs.InterfaceArgs{
-			TypeParams:   []constructs.Named{tp},
-			Methods:      methods,
-			InitInherits: []constructs.Interface{ab.bakeAny()},
-			Package:      ab.ps[0],
+			TypeParams: []constructs.Named{tp},
+			Methods:    methods,
+			Package:    ab.ps[0],
 		})
 	})
 }
@@ -163,10 +162,9 @@ func (ab *abstractor) bakeChan() constructs.Interface {
 
 		// chan[T any] interface
 		return constructs.NewInterface(ab.proj.Types(), constructs.InterfaceArgs{
-			TypeParams:   []constructs.Named{tp},
-			Methods:      methods,
-			InitInherits: []constructs.Interface{ab.bakeAny()},
-			Package:      ab.ps[0],
+			TypeParams: []constructs.Named{tp},
+			Methods:    methods,
+			Package:    ab.ps[0],
 		})
 	})
 }
@@ -210,10 +208,9 @@ func (ab *abstractor) bakeMap() constructs.Interface {
 
 		// map[TKey, TValue any] interface
 		return constructs.NewInterface(ab.proj.Types(), constructs.InterfaceArgs{
-			TypeParams:   tp,
-			Methods:      methods,
-			InitInherits: []constructs.Interface{ab.bakeAny()},
-			Package:      ab.ps[0],
+			TypeParams: tp,
+			Methods:    methods,
+			Package:    ab.ps[0],
 		})
 	})
 }
@@ -237,10 +234,9 @@ func (ab *abstractor) bakePointer() constructs.Interface {
 
 		// pointer[T any] interface
 		return constructs.NewInterface(ab.proj.Types(), constructs.InterfaceArgs{
-			TypeParams:   []constructs.Named{tp},
-			Methods:      methods,
-			InitInherits: []constructs.Interface{ab.bakeAny()},
-			Package:      ab.ps[0],
+			TypeParams: []constructs.Named{tp},
+			Methods:    methods,
+			Package:    ab.ps[0],
 		})
 	})
 }
@@ -267,9 +263,8 @@ func (ab *abstractor) bakeComplex64() constructs.Interface {
 
 		// complex64
 		return constructs.NewInterface(ab.proj.Types(), constructs.InterfaceArgs{
-			Methods:      methods,
-			InitInherits: []constructs.Interface{ab.bakeAny()},
-			Package:      ab.ps[0],
+			Methods: methods,
+			Package: ab.ps[0],
 		})
 	})
 }
@@ -296,9 +291,8 @@ func (ab *abstractor) bakeComplex128() constructs.Interface {
 
 		// complex128
 		return constructs.NewInterface(ab.proj.Types(), constructs.InterfaceArgs{
-			Methods:      methods,
-			InitInherits: []constructs.Interface{ab.bakeAny()},
-			Package:      ab.ps[0],
+			Methods: methods,
+			Package: ab.ps[0],
 		})
 	})
 }
@@ -323,9 +317,8 @@ func (ab *abstractor) bakeError() constructs.Interface {
 
 		// interface { Error() string }
 		return constructs.NewInterface(ab.proj.Types(), constructs.InterfaceArgs{
-			Methods:      methods,
-			InitInherits: []constructs.Interface{ab.bakeAny()},
-			Package:      ab.ps[0],
+			Methods: methods,
+			Package: ab.ps[0],
 		})
 	})
 }
@@ -353,10 +346,9 @@ func (ab *abstractor) bakeComparable() constructs.Interface {
 
 		// interface { $compare(other T) int }
 		return constructs.NewInterface(ab.proj.Types(), constructs.InterfaceArgs{
-			TypeParams:   []constructs.Named{tp},
-			Methods:      methods,
-			InitInherits: []constructs.Interface{ab.bakeAny()},
-			Package:      ab.ps[0],
+			TypeParams: []constructs.Named{tp},
+			Methods:    methods,
+			Package:    ab.ps[0],
 		})
 	})
 }

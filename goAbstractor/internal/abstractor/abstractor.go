@@ -211,8 +211,6 @@ func (ab *abstractor) resolveInheritance() {
 		panic(errors.New(`expected the object interface at minimum but found no interfaces`))
 	}
 
-	fmt.Println(inters)
-
 	obj := inters[0]
 	if !obj.Equal(ab.bakeAny()) {
 		panic(errors.New(`expected the first interface to be the "any" interface`))

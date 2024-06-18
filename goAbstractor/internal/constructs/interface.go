@@ -23,11 +23,10 @@ type Interface interface {
 }
 
 type InterfaceArgs struct {
-	RealType     *types.Interface
-	Union        Union
-	Methods      map[string]TypeDesc
-	TypeParams   []Named
-	InitInherits []Interface
+	RealType   *types.Interface
+	Union      Union
+	Methods    map[string]TypeDesc
+	TypeParams []Named
 
 	// Package is only needed if the real type is nil
 	// so that a Go interface type has to be created.
@@ -69,7 +68,6 @@ func NewInterface(reg Register, args InterfaceArgs) Interface {
 		typeParams: args.TypeParams,
 		methods:    methods,
 		union:      args.Union,
-		inherits:   args.InitInherits,
 	})
 }
 
