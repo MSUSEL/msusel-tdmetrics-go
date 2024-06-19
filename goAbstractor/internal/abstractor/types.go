@@ -150,7 +150,8 @@ func (ab *abstractor) createReturn(returns []constructs.Named) constructs.TypeDe
 		return returns[0].Type()
 	default:
 		return constructs.NewStruct(ab.proj.Types(), constructs.StructArgs{
-			Fields: returns,
+			Fields:  returns,
+			Package: ab.builtin,
 		})
 	}
 }

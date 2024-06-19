@@ -1,6 +1,9 @@
 package jsonify
 
-import "encoding/json"
+import (
+	"encoding/json"
+	"fmt"
+)
 
 type List struct {
 	data []Datum
@@ -14,6 +17,17 @@ func (l *List) _jsonData() {}
 
 func (l *List) isZero() bool {
 	return l == nil || len(l.data) <= 0
+}
+
+func (l *List) Seek(path []any) Datum {
+	if len(path) <= 0 {
+		return l
+	}
+	index, ok := path[0].(int)
+	if !ok || index < 0 || index >= len(l.data) {
+		panic(fmt.Errorf(`must have an index in [0 .. %d): %v`, len(l.data), path[0]))
+	}
+	return l.data[index].Seek(path[1:])
 }
 
 func (l *List) Append(ctx *Context, values ...any) *List {

@@ -28,6 +28,25 @@ type Package interface {
 	AppendMethods(methods ...Method)
 }
 
+type PackageArgs struct {
+	RealPkg     *packages.Package
+	Path        string
+	Name        string
+	ImportPaths []string
+}
+
+func NewPackage(args PackageArgs) Package {
+	if utils.IsNil(args.RealPkg) {
+		panic(fmt.Errorf(`must provide a real package for %s`, args.Name))
+	}
+	return &packageImp{
+		pkg:         args.RealPkg,
+		path:        args.Path,
+		name:        args.Name,
+		importPaths: args.ImportPaths,
+	}
+}
+
 type packageImp struct {
 	pkg *packages.Package
 
@@ -40,18 +59,6 @@ type packageImp struct {
 
 	index       int
 	importPaths []string
-}
-
-func NewPackage(pkg *packages.Package, path, name string, importPaths []string) Package {
-	if utils.IsNil(pkg) {
-		panic(fmt.Errorf(`must provide a real package for %s`, name))
-	}
-	return &packageImp{
-		pkg:         pkg,
-		path:        path,
-		name:        name,
-		importPaths: importPaths,
-	}
 }
 
 func (p *packageImp) Source() *packages.Package {

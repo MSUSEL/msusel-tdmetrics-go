@@ -2,6 +2,7 @@ package jsonify
 
 import (
 	"encoding/json"
+	"fmt"
 
 	"github.com/Snow-Gremlin/goToolbox/utils"
 )
@@ -25,6 +26,13 @@ func (v *value[T]) _jsonData() {}
 
 func (v *value[T]) isZero() bool {
 	return utils.IsZero(v.data)
+}
+
+func (v *value[T]) Seek(path []any) Datum {
+	if len(path) > 0 {
+		panic(fmt.Errorf(`path continues from the value %v: %v`, v.data, path))
+	}
+	return v
 }
 
 func (v *value[T]) MarshalJSON() ([]byte, error) {

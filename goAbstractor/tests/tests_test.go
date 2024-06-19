@@ -7,7 +7,6 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/Snow-Gremlin/goToolbox/collections/set"
 	"github.com/Snow-Gremlin/goToolbox/differs/diff"
 	"github.com/Snow-Gremlin/goToolbox/testers/check"
 	"gopkg.in/yaml.v3"
@@ -23,30 +22,21 @@ func Test_T0002(t *testing.T) { newTest(t, `test0002`).abstract().equals() }
 func Test_T0003(t *testing.T) { newTest(t, `test0003`).abstract().equals() }
 func Test_T0004(t *testing.T) { newTest(t, `test0004`).abstract().equals() }
 func Test_T0005(t *testing.T) { newTest(t, `test0005`).abstract(`cats.go`).equals() }
-func Test_T0006(t *testing.T) { newTest(t, `test0006`).abstract(`cats.go`).partial(`Cat`) }
+func Test_T0006(t *testing.T) { newTest(t, `test0006`).abstract(`cats.go`).partial() }
 func Test_T0007(t *testing.T) { newTest(t, `test0007`).abstract().equals() }
 func Test_T0008(t *testing.T) { newTest(t, `test0008`).abstract().equals() }
 
 func newTest(t *testing.T, dir string) *testTool {
-	expFile, err := os.ReadFile(`./` + dir + `/expected.yaml`)
-	check.NoError(t).Name(`Read expected json`).With(`Dir`, dir).Require(err)
-
-	var expData any
-	err = yaml.Unmarshal(expFile, &expData)
-	check.NoError(t).Name(`Unmarshal expected json`).With(`Dir`, dir).Require(err)
-
 	return &testTool{
-		t:       t,
-		dir:     dir,
-		expData: expData,
+		t:   t,
+		dir: dir,
 	}
 }
 
 type testTool struct {
-	t       *testing.T
-	dir     string
-	proj    constructs.Project
-	expData any
+	t    *testing.T
+	dir  string
+	proj constructs.Project
 }
 
 func (tt *testTool) abstract(patterns ...string) *testTool {
@@ -65,8 +55,20 @@ func (tt *testTool) abstract(patterns ...string) *testTool {
 	return tt
 }
 
+func (tt *testTool) readExp(expData any) *testTool {
+	expFile, err := os.ReadFile(`./` + tt.dir + `/expected.yaml`)
+	check.NoError(tt.t).Name(`Read expected json`).With(`Dir`, tt.dir).Require(err)
+
+	err = yaml.Unmarshal(expFile, expData)
+	check.NoError(tt.t).Name(`Unmarshal expected json`).With(`Dir`, tt.dir).Require(err)
+	return tt
+}
+
 func (tt *testTool) equals() *testTool {
-	exp, err := json.MarshalIndent(tt.expData, ``, `  `)
+	var expData any
+	tt.readExp(&expData)
+
+	exp, err := json.MarshalIndent(expData, ``, `  `)
 	check.NoError(tt.t).Name(`Marshal expected json`).With(`Dir`, tt.dir).Require(err)
 
 	gotten, err := jsonify.Marshal(jsonify.NewContext(), tt.proj)
@@ -81,10 +83,30 @@ func (tt *testTool) equals() *testTool {
 	return tt
 }
 
-func (tt *testTool) partial(packages ...string) *testTool {
-	keep := set.With(packages...)
-	tt.proj.FilterPackage(func(p constructs.Package) bool {
-		return !keep.Contains(p.Name())
-	})
-	return tt.equals()
+func (tt *testTool) partial() *testTool {
+	var expParts []struct {
+		Path []any `yaml:"path"`
+		Data any   `yaml:"data"`
+	}
+	tt.readExp(&expParts)
+
+	for _, part := range expParts {
+		ctx := jsonify.NewContext()
+		subData := tt.proj.ToJson(ctx).Seek(part.Path)
+
+		exp, err := json.MarshalIndent(part.Data, ``, `  `)
+		check.NoError(tt.t).Name(`Marshal expected json`).With(`Dir`, tt.dir).With(`Path`, part.Path).Require(err)
+
+		gotten, err := json.MarshalIndent(subData, ``, `  `)
+		check.NoError(tt.t).Name(`Marshal project`).With(`Dir`, tt.dir).With(`Path`, part.Path).Require(err)
+
+		if !slices.Equal(exp, gotten) {
+			expLines := strings.Split(string(exp), "\n")
+			gotLines := strings.Split(string(gotten), "\n")
+			diffLines := diff.Default().PlusMinus(expLines, gotLines)
+			tt.t.Error(strings.Join(diffLines, "\n"))
+		}
+	}
+
+	return tt
 }

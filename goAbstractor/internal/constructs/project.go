@@ -1,7 +1,10 @@
 package constructs
 
 import (
+	"fmt"
 	"slices"
+	"strconv"
+	"strings"
 
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/jsonify"
 )
@@ -9,6 +12,9 @@ import (
 type Project interface {
 	Types() Register
 	ToJson(ctx *jsonify.Context) jsonify.Datum
+	FindPackageByPath(path string) Package
+	FindTypeDef(pkgName, tdName string) (Package, TypeDef)
+	Prune(keep ...TypeDesc)
 	Packages() []Package
 	AppendPackage(pkg ...Package)
 	FilterPackage(predicate func(pkg Package) bool)
@@ -17,7 +23,6 @@ type Project interface {
 	// and all packages have been processed. This will update all the index
 	// fields that will be used as references in the output models.
 	UpdateIndices()
-	Prune(keep ...TypeDesc)
 }
 
 type projectImp struct {
@@ -41,6 +46,43 @@ func (p *projectImp) ToJson(ctx *jsonify.Context) jsonify.Datum {
 		Add(ctx2, `language`, `go`).
 		AddNonZero(ctx2, `types`, p.allTypes).
 		AddNonZero(ctx2, `packages`, p.allPackages)
+}
+
+func (p *projectImp) FindPackageByPath(path string) Package {
+	for _, other := range p.allPackages {
+		if other.Path() == path {
+			return other
+		}
+	}
+	return nil
+}
+
+func (p *projectImp) FindTypeDef(pkgPath, tdName string) (Package, TypeDef) {
+	if len(pkgPath) <= 0 {
+		pkgPath = `$builtin`
+	}
+
+	pkg := p.FindPackageByPath(pkgPath)
+	if pkg == nil {
+		names := make([]string, len(p.Packages()))
+		for i, pkg := range p.Packages() {
+			names[i] = strconv.Quote(pkg.Path())
+		}
+		fmt.Println(`Package Paths: [` + strings.Join(names, `, `) + `]`)
+		panic(fmt.Errorf(`failed to find package for type def reference for %q in %q`, tdName, pkgPath))
+	}
+
+	def := pkg.FindTypeDef(tdName)
+	if def == nil {
+		names := make([]string, len(pkg.Types()))
+		for i, td := range pkg.Types() {
+			names[i] = td.Name()
+		}
+		fmt.Println(pkgPath + `.TypeDefs: [` + strings.Join(names, `, `) + `]`)
+		panic(fmt.Errorf(`failed to find type for type def reference for %q in %q`, tdName, pkgPath))
+	}
+
+	return pkg, def
 }
 
 func (p *projectImp) Prune(keep ...TypeDesc) {
@@ -81,13 +123,11 @@ func (p *projectImp) prunePackages() {
 		return empty[pkg]
 	})
 
-	/*
-		for _, p := range p.allPackages {
-			p.SetImports(slices.DeleteFunc(p.Imports(), func(pkg Package) bool {
-				return empty[pkg]
-			}))
-		}
-	*/
+	for _, p := range p.allPackages {
+		p.SetImports(slices.DeleteFunc(p.Imports(), func(pkg Package) bool {
+			return empty[pkg]
+		}))
+	}
 }
 
 func (p *projectImp) String() string {

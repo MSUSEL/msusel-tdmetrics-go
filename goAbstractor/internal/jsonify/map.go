@@ -1,6 +1,9 @@
 package jsonify
 
-import "encoding/json"
+import (
+	"encoding/json"
+	"fmt"
+)
 
 type Map struct {
 	data map[string]Datum
@@ -16,6 +19,21 @@ func (m *Map) _jsonData() {}
 
 func (m *Map) isZero() bool {
 	return m == nil || len(m.data) <= 0
+}
+
+func (m *Map) Seek(path []any) Datum {
+	if len(path) <= 0 {
+		return m
+	}
+	key, ok := path[0].(string)
+	if !ok {
+		panic(fmt.Errorf(`must have a key: %v`, path[0]))
+	}
+	value, ok := m.data[key]
+	if !ok {
+		panic(fmt.Errorf(`key not found in map: %s`, key))
+	}
+	return value.Seek(path[1:])
 }
 
 func (m *Map) Add(ctx *Context, key string, value any) *Map {

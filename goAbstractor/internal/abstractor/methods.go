@@ -46,7 +46,7 @@ func (ab *abstractor) abstractFuncDecl(pkg constructs.Package, src *packages.Pac
 		if !ok {
 			panic(fmt.Errorf(`function declaration has unexpected receiver type: %T: %s`, recv, pos(src, decl.Pos())))
 		}
-		recvName = n.Origin().Obj().Id()
+		recvName = n.Origin().Obj().Name()
 		ab.setTypeParamOverrides(n.TypeArgs(), n.TypeParams(), src, decl)
 	}
 

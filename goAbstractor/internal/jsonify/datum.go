@@ -10,6 +10,7 @@ import (
 type Datum interface {
 	_jsonData()
 	isZero() bool
+	Seek(path []any) Datum
 }
 
 func New(ctx *Context, value any) Datum {

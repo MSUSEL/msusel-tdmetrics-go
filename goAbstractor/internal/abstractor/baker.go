@@ -34,7 +34,7 @@ func bakeOnce[T any](ab *abstractor, key string, create func() T) T {
 // but may not be complex numbers or interfaces like any.
 func (ab *abstractor) bakeBasic(typeName string) constructs.Basic {
 	return bakeOnce(ab, `basic `+typeName, func() constructs.Basic {
-		return constructs.BasicFromName(ab.proj.Types(), ab.ps[0], typeName)
+		return constructs.BasicFromName(ab.proj.Types(), ab.builtin, typeName)
 	})
 }
 
@@ -45,7 +45,7 @@ func (ab *abstractor) bakeAny() constructs.Interface {
 		// any
 		return constructs.NewInterface(ab.proj.Types(), constructs.InterfaceArgs{
 			RealType: types.NewInterfaceType(nil, nil),
-			Package:  ab.ps[0],
+			Package:  ab.builtin,
 		})
 	})
 }
@@ -57,7 +57,7 @@ func (ab *abstractor) bakeIntFunc() constructs.Signature {
 		// func() int
 		return constructs.NewSignature(ab.proj.Types(), constructs.SignatureArgs{
 			Return:  ab.bakeBasic(`int`),
-			Package: ab.ps[0],
+			Package: ab.builtin,
 		})
 	})
 }
@@ -77,7 +77,7 @@ func (ab *abstractor) bakeReturnTuple(tp constructs.Named) constructs.Struct {
 		// struct
 		return constructs.NewStruct(ab.proj.Types(), constructs.StructArgs{
 			Fields:  []constructs.Named{fieldValue, fieldOk},
-			Package: ab.ps[0],
+			Package: ab.builtin,
 		})
 	})
 }
@@ -110,21 +110,21 @@ func (ab *abstractor) bakeList() constructs.Interface {
 			TypeParams: []constructs.Named{tp},
 			Params:     []constructs.Named{indexParam},
 			Return:     tp,
-			Package:    ab.ps[0],
+			Package:    ab.builtin,
 		})
 
 		// $set(index int, value T)
 		methods[`$set`] = constructs.NewSignature(ab.proj.Types(), constructs.SignatureArgs{
 			TypeParams: []constructs.Named{tp},
 			Params:     []constructs.Named{indexParam, valueParam},
-			Package:    ab.ps[0],
+			Package:    ab.builtin,
 		})
 
 		// list[T any] interface
 		return constructs.NewInterface(ab.proj.Types(), constructs.InterfaceArgs{
 			TypeParams: []constructs.Named{tp},
 			Methods:    methods,
-			Package:    ab.ps[0],
+			Package:    ab.builtin,
 		})
 	})
 }
@@ -150,21 +150,21 @@ func (ab *abstractor) bakeChan() constructs.Interface {
 		methods[`$recv`] = constructs.NewSignature(ab.proj.Types(), constructs.SignatureArgs{
 			TypeParams: []constructs.Named{tp},
 			Return:     ab.bakeReturnTuple(tp),
-			Package:    ab.ps[0],
+			Package:    ab.builtin,
 		})
 
 		// $send(value T)
 		methods[`$send`] = constructs.NewSignature(ab.proj.Types(), constructs.SignatureArgs{
 			TypeParams: []constructs.Named{tp},
 			Params:     []constructs.Named{constructs.NewNamed(ab.proj.Types(), `value`, tp)},
-			Package:    ab.ps[0],
+			Package:    ab.builtin,
 		})
 
 		// chan[T any] interface
 		return constructs.NewInterface(ab.proj.Types(), constructs.InterfaceArgs{
 			TypeParams: []constructs.Named{tp},
 			Methods:    methods,
-			Package:    ab.ps[0],
+			Package:    ab.builtin,
 		})
 	})
 }
@@ -193,7 +193,7 @@ func (ab *abstractor) bakeMap() constructs.Interface {
 			TypeParams: tp,
 			Params:     []constructs.Named{constructs.NewNamed(ab.proj.Types(), `key`, tpKey)},
 			Return:     ab.bakeReturnTuple(tpValue),
-			Package:    ab.ps[0],
+			Package:    ab.builtin,
 		})
 
 		// $set(key TKey, value TValue)
@@ -203,14 +203,14 @@ func (ab *abstractor) bakeMap() constructs.Interface {
 				constructs.NewNamed(ab.proj.Types(), `key`, tpKey),
 				constructs.NewNamed(ab.proj.Types(), `value`, tpValue),
 			},
-			Package: ab.ps[0],
+			Package: ab.builtin,
 		})
 
 		// map[TKey, TValue any] interface
 		return constructs.NewInterface(ab.proj.Types(), constructs.InterfaceArgs{
 			TypeParams: tp,
 			Methods:    methods,
-			Package:    ab.ps[0],
+			Package:    ab.builtin,
 		})
 	})
 }
@@ -229,14 +229,14 @@ func (ab *abstractor) bakePointer() constructs.Interface {
 		methods[`$deref`] = constructs.NewSignature(ab.proj.Types(), constructs.SignatureArgs{
 			TypeParams: []constructs.Named{tp},
 			Return:     tp,
-			Package:    ab.ps[0],
+			Package:    ab.builtin,
 		})
 
 		// pointer[T any] interface
 		return constructs.NewInterface(ab.proj.Types(), constructs.InterfaceArgs{
 			TypeParams: []constructs.Named{tp},
 			Methods:    methods,
-			Package:    ab.ps[0],
+			Package:    ab.builtin,
 		})
 	})
 }
@@ -253,7 +253,7 @@ func (ab *abstractor) bakeComplex64() constructs.Interface {
 		// func() float32
 		getF := constructs.NewSignature(ab.proj.Types(), constructs.SignatureArgs{
 			Return:  ab.bakeBasic(`float32`),
-			Package: ab.ps[0],
+			Package: ab.builtin,
 		})
 
 		methods := map[string]constructs.TypeDesc{
@@ -264,7 +264,7 @@ func (ab *abstractor) bakeComplex64() constructs.Interface {
 		// complex64
 		return constructs.NewInterface(ab.proj.Types(), constructs.InterfaceArgs{
 			Methods: methods,
-			Package: ab.ps[0],
+			Package: ab.builtin,
 		})
 	})
 }
@@ -281,7 +281,7 @@ func (ab *abstractor) bakeComplex128() constructs.Interface {
 		// func() float64
 		getF := constructs.NewSignature(ab.proj.Types(), constructs.SignatureArgs{
 			Return:  ab.bakeBasic(`float64`),
-			Package: ab.ps[0],
+			Package: ab.builtin,
 		})
 
 		methods := map[string]constructs.TypeDesc{
@@ -292,7 +292,7 @@ func (ab *abstractor) bakeComplex128() constructs.Interface {
 		// complex128
 		return constructs.NewInterface(ab.proj.Types(), constructs.InterfaceArgs{
 			Methods: methods,
-			Package: ab.ps[0],
+			Package: ab.builtin,
 		})
 	})
 }
@@ -308,7 +308,7 @@ func (ab *abstractor) bakeError() constructs.Interface {
 		// func() string
 		getStr := constructs.NewSignature(ab.proj.Types(), constructs.SignatureArgs{
 			Return:  ab.bakeBasic(`string`),
-			Package: ab.ps[0],
+			Package: ab.builtin,
 		})
 
 		methods := map[string]constructs.TypeDesc{
@@ -318,7 +318,7 @@ func (ab *abstractor) bakeError() constructs.Interface {
 		// interface { Error() string }
 		return constructs.NewInterface(ab.proj.Types(), constructs.InterfaceArgs{
 			Methods: methods,
-			Package: ab.ps[0],
+			Package: ab.builtin,
 		})
 	})
 }
@@ -338,7 +338,7 @@ func (ab *abstractor) bakeComparable() constructs.Interface {
 				constructs.NewNamed(ab.proj.Types(), `other`, tp),
 			},
 			Return:  ab.bakeBasic(`int`),
-			Package: ab.ps[0],
+			Package: ab.builtin,
 		})
 
 		methods := map[string]constructs.TypeDesc{}
@@ -348,7 +348,7 @@ func (ab *abstractor) bakeComparable() constructs.Interface {
 		return constructs.NewInterface(ab.proj.Types(), constructs.InterfaceArgs{
 			TypeParams: []constructs.Named{tp},
 			Methods:    methods,
-			Package:    ab.ps[0],
+			Package:    ab.builtin,
 		})
 	})
 }
@@ -356,12 +356,17 @@ func (ab *abstractor) bakeComparable() constructs.Interface {
 // bakeBuiltin bakes in a package to represent the builtin package.
 func (ab *abstractor) bakeBuiltin() constructs.Package {
 	return bakeOnce(ab, `$builtin`, func() constructs.Package {
-		pkg := constructs.NewPackage(ab.ps[0], `$builtin`, `$builtin`, []string{})
+		pkg := constructs.NewPackage(constructs.PackageArgs{
+			RealPkg: ab.builtin,
+			Path:    `$builtin`,
+			Name:    `$builtin`,
+		})
 
 		errTyp := constructs.NewTypeDef(`error`, ab.bakeError())
 		cmpTyp := constructs.NewTypeDef(`comparable`, ab.bakeComparable())
-
 		pkg.AppendTypes(errTyp, cmpTyp)
+
+		ab.proj.AppendPackage(pkg)
 		return pkg
 	})
 }

@@ -16,16 +16,18 @@ import (
 func Abstract(ps []*packages.Package, verbose bool) constructs.Project {
 	buildinName := `$buildin`
 	buildinPkg := &packages.Package{
-		Name:  buildinName,
-		Fset:  ps[0].Fset,
-		Types: types.NewPackage(buildinName, buildinName),
+		PkgPath: buildinName,
+		Name:    buildinName,
+		Fset:    ps[0].Fset,
+		Types:   types.NewPackage(buildinName, buildinName),
 	}
 
 	ab := &abstractor{
-		verbose: verbose,
-		ps:      append([]*packages.Package{buildinPkg}, ps...),
-		proj:    constructs.NewProject(),
-		baked:   map[string]any{},
+		verbose:  verbose,
+		builtin:  buildinPkg,
+		packages: ps,
+		proj:     constructs.NewProject(),
+		baked:    map[string]any{},
 	}
 	ab.initialize()
 
@@ -43,10 +45,11 @@ func Abstract(ps []*packages.Package, verbose bool) constructs.Project {
 }
 
 type abstractor struct {
-	verbose bool
-	ps      []*packages.Package
-	proj    constructs.Project
-	baked   map[string]any
+	verbose  bool
+	builtin  *packages.Package
+	packages []*packages.Package
+	proj     constructs.Project
+	baked    map[string]any
 
 	typeParamReplacer map[*types.TypeParam]*types.TypeParam
 }
@@ -65,7 +68,7 @@ func (ab *abstractor) initialize() {
 
 func (ab *abstractor) abstractProject() {
 	ab.log(`abstract project`)
-	packages.Visit(ab.ps, func(src *packages.Package) bool {
+	packages.Visit(ab.packages, func(src *packages.Package) bool {
 		if ap := ab.abstractPackage(src); ap != nil {
 			ab.proj.AppendPackage(ap)
 		}
@@ -75,7 +78,12 @@ func (ab *abstractor) abstractProject() {
 
 func (ab *abstractor) abstractPackage(src *packages.Package) constructs.Package {
 	ab.log(`|  abstract package: %s`, src.PkgPath)
-	pkg := constructs.NewPackage(src, src.PkgPath, src.Name, utils.SortedKeys(src.Imports))
+	pkg := constructs.NewPackage(constructs.PackageArgs{
+		RealPkg:     src,
+		Path:        src.PkgPath,
+		Name:        src.Name,
+		ImportPaths: utils.SortedKeys(src.Imports),
+	})
 	for _, f := range src.Syntax {
 		ab.addFile(pkg, src, f)
 	}
@@ -150,9 +158,9 @@ func pos(src *packages.Package, pos token.Pos) string {
 func (ab *abstractor) resolveImports() {
 	ab.log(`resolve imports`)
 	for _, p := range ab.proj.Packages() {
-		imports := make([]constructs.Package, 0, len(p.ImportPaths()))
+		imports := make([]constructs.Package, len(p.ImportPaths()))
 		for i, importPath := range p.ImportPaths() {
-			impPackage := ab.findPackageByPath(importPath)
+			impPackage := ab.proj.FindPackageByPath(importPath)
 			if impPackage == nil {
 				panic(fmt.Errorf(`import package not found for %s: %s`, p.Path(), importPath))
 			}
@@ -160,15 +168,6 @@ func (ab *abstractor) resolveImports() {
 		}
 		p.SetImports(imports)
 	}
-}
-
-func (ab *abstractor) findPackageByPath(path string) constructs.Package {
-	for _, other := range ab.proj.Packages() {
-		if other.Path() == path {
-			return other
-		}
-	}
-	return nil
 }
 
 func (ab *abstractor) resolveClasses() {
@@ -225,21 +224,6 @@ func (ab *abstractor) resolveInheritance() {
 
 func (ab *abstractor) resolveReferences() {
 	for _, ref := range ab.proj.Types().AllReferences() {
-		pkgPath := ref.PackagePath()
-		if len(pkgPath) <= 0 {
-			pkgPath = `$builtin`
-		}
-
-		pkg := ab.findPackageByPath(ref.PackagePath())
-		if pkg == nil {
-			panic(fmt.Errorf(`failed to find package for type def reference for %q in %q`, ref.Name(), ref.PackagePath()))
-		}
-
-		def := pkg.FindTypeDef(ref.Name())
-		if def == nil {
-			panic(fmt.Errorf(`failed to find type for type def reference for %q in %q`, ref.Name(), ref.PackagePath()))
-		}
-
-		ref.SetType(pkg, def)
+		ref.SetType(ab.proj.FindTypeDef(ref.PackagePath(), ref.Name()))
 	}
 }
