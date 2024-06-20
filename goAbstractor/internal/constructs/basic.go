@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"go/token"
 	"go/types"
+	"strings"
 
 	"github.com/Snow-Gremlin/goToolbox/utils"
 	"golang.org/x/tools/go/packages"
@@ -17,17 +18,36 @@ type Basic interface {
 	_basic()
 }
 
+func normalizeName(name string) string {
+	name, _ = strings.CutPrefix(name, `untyped `)
+	switch name {
+	case `byte`:
+		return `uint8`
+	case `rune`:
+		return `int32`
+	case `float`:
+		return `float64`
+	case `int`, `uint`, `int8`, `uint8`, `int16`, `uint16`, `int32`, `uint32`,
+		`int64`, `uint64`, `float32`, `float64`, `string`, `bool`,
+		`uintptr`, `Pointer`:
+		return name
+	default:
+		panic(fmt.Errorf(`unexpected basic type: %q`, name))
+	}
+}
+
 func NewBasic(reg Register, typ *types.Basic) Basic {
 	if utils.IsNil(typ) {
 		panic(errors.New(`may not create a new basic with a nil type`))
 	}
 	return reg.RegisterBasic(&basicImp{
 		typ:  typ,
-		name: typ.Name(),
+		name: normalizeName(typ.Name()),
 	})
 }
 
 func BasicFromName(reg Register, pkg *packages.Package, typeName string) Basic {
+	typeName = normalizeName(typeName)
 	tv, err := types.Eval(pkg.Fset, pkg.Types, token.NoPos, `(*`+typeName+`)(nil)`)
 	if err != nil {
 		panic(fmt.Errorf(`unable to create basic type of %s: %w`, typeName, err))

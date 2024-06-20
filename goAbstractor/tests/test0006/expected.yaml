@@ -1,8 +1,142 @@
 [
   {
     path: [ types, basics ],
+    data: [ string, int, bool, uint8, uint64, int32,
+      float64, uint16, int64, uintptr, Pointer, uint32,
+      uint, int8, int16, float32 ]
+  },
+  {
+    path: [ packages, 1 ],
     data: {
-      
+      name: cats,
+      path: command-line-arguments,
+      imports: [ 3, 31, 25, 49 ],
+      methods: [
+        {
+          name: NewID, signature: 4579,
+          metrics: { codeCount: 5, complexity: 1, indents: 3, lineCount: 5 }
+        }
+      ],
+      types: [
+        {
+          name: CatBreed, type: 2, interface: 25,
+          methods: [
+            {
+              name: String, signature: 4571,
+              metrics: { codeCount: 53, complexity: 25, indents: 75, lineCount: 53 }
+            }
+          ],
+        },
+        {
+          name: ID, type: 1, interface: 17
+        },
+        {
+          name: IDSlice, type: 7256, interface: 81,
+          methods: [
+            {
+              name: Len, signature: 4573,
+              metrics: { codeCount: 3, complexity: 1, indents: 1, lineCount: 3 }
+            },
+            {
+              name: Less, signature: 4580,
+              metrics: { codeCount: 3, complexity: 1, indents: 1, lineCount: 3 }
+            },
+            {
+              name: Swap, signature: 4581,
+              metrics: { codeCount: 3, complexity: 1, indents: 1, lineCount: 3 }
+            },
+            {
+              name: String, signature: 4571,
+              metrics: { codeCount: 14, complexity: 5, indents: 25, lineCount: 14 }
+            }
+          ]
+        },
+        {
+          name: Cat, type: 7724, interface: 17
+        },
+        {
+          name: CatTable, type: 7258, interface: 82,
+          methods: [
+            {
+              name: Has, signature: 4582,
+              metrics: { codeCount: 4, complexity: 1, indents: 2, lineCount: 4 }
+            },
+            {
+              name: Add, signature: 4583,
+              metrics: { codeCount: 10, complexity: 2, indents: 12, lineCount: 10 }
+            },
+            {
+              name: AddNew, signature: 4584,
+              metrics: { codeCount: 5, complexity: 1, indents: 3, lineCount: 5 }
+            },
+            {
+              name: Name, signature: 4585,
+              metrics: { codeCount: 6, complexity: 2, indents: 5, lineCount: 6 }
+            },
+            {
+              name: Breed, signature: 4586,
+              metrics: { codeCount: 6, complexity: 2, indents: 5, lineCount: 6 }
+            },
+            {
+              name: Age, signature: 4587,
+              metrics: { codeCount: 6, complexity: 2, indents: 5, lineCount: 6 }
+            },
+            {
+              name: AllIDs, signature: 4588,
+              metrics: { codeCount: 8, complexity: 2, indents: 7, lineCount: 8 }
+            },
+            {
+              name: AgeRange, signature: 4589,
+              metrics: { codeCount: 16, complexity: 5, indents: 33, lineCount: 16 }
+            },
+            {
+              name: AllBreeds, signature: 4590,
+              metrics: { codeCount: 17, complexity: 4, indents: 19, lineCount: 19 }
+            },
+            {
+              name: CatsWithBreed, signature: 4591,
+              metrics: { codeCount: 10, complexity: 3, indents: 12, lineCount: 10 }
+            },
+            {
+              name: CatsWithName, signature: 4592,
+              metrics: { codeCount: 10, complexity: 3, indents: 12, lineCount: 10 }
+            },
+            {
+              name: String, signature: 4571,
+              metrics: { codeCount: 34, complexity: 7, indents: 59, lineCount: 35 }
+            }
+          ]
+        }
+      ],
+      values: [
+        { name: alreadyExistsInTable, type:    1, const: true },
+        { name: doesNotExistInTable,  type:    1, const: true },
+        { name: BritishShorthair,     type: 8648, const: true },
+        { name: Persian,              type: 8648, const: true },
+        { name: MaineCoon,            type: 8648, const: true },
+        { name: Siamese,              type: 8648, const: true },
+        { name: Bengal,               type: 8648, const: true },
+        { name: AmericanShorthair,    type: 8648, const: true },
+        { name: Ragdoll,              type: 8648, const: true },
+        { name: Abyssinian,           type: 8648, const: true },
+        { name: ExoticShorthair,      type: 8648, const: true },
+        { name: NorwegianForest,      type: 8648, const: true },
+        { name: ScottishFold,         type: 8648, const: true },
+        { name: Burmese,              type: 8648, const: true },
+        { name: Siberian,             type: 8648, const: true },
+        { name: Savannah,             type: 8648, const: true },
+        { name: RussianBlue,          type: 8648, const: true },
+        { name: JapaneseBobtail,      type: 8648, const: true },
+        { name: Manx,                 type: 8648, const: true },
+        { name: DevonRex,             type: 8648, const: true },
+        { name: Himalayan,            type: 8648, const: true },
+        { name: Bombay,               type: 8648, const: true },
+        { name: CornishRex,           type: 8648, const: true },
+        { name: EgyptianMau,          type: 8648, const: true },
+        { name: Munchkin,             type: 8648, const: true },
+        { name: Balinese,             type: 8648, const: true },
+        { name: nextIDValue,          type:    2 }
+      ]
     }
   }
 ]
