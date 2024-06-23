@@ -6,7 +6,7 @@
       uint, int8, int16, float32 ]
   },
   {
-    path: [ packages, 1 ],
+    path: [ packages, name=cats ],
     data: {
       name: cats,
       path: command-line-arguments,

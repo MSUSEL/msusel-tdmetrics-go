@@ -2,6 +2,7 @@ package constructs
 
 import (
 	"fmt"
+	"slices"
 
 	"golang.org/x/tools/go/packages"
 
@@ -12,6 +13,7 @@ import (
 type Package interface {
 	Visitable
 	Source() *packages.Package
+	Prune(predicate func(f any) bool)
 	FindTypeDef(name string) TypeDef
 	SetIndices(pkgIndex, typeDefIndex int) int
 	Empty() bool
@@ -86,6 +88,16 @@ func (p *packageImp) Visit(v Visitor) {
 	visitList(v, p.types)
 	visitList(v, p.values)
 	visitList(v, p.methods)
+}
+
+func castPred[T any](predicate func(f any) bool) func(f T) bool {
+	return func(f T) bool { return predicate(f) }
+}
+
+func (p *packageImp) Prune(predicate func(f any) bool) {
+	p.types = slices.DeleteFunc(p.types, castPred[TypeDef](predicate))
+	p.values = slices.DeleteFunc(p.values, castPred[ValueDef](predicate))
+	p.methods = slices.DeleteFunc(p.methods, castPred[Method](predicate))
 }
 
 func (p *packageImp) String() string {

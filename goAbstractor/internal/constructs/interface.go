@@ -6,6 +6,7 @@ import (
 	"go/token"
 	"go/types"
 	"maps"
+	"slices"
 
 	"github.com/Snow-Gremlin/goToolbox/utils"
 	"golang.org/x/tools/go/packages"
@@ -35,6 +36,7 @@ type InterfaceArgs struct {
 
 func NewInterface(reg Register, args InterfaceArgs) Interface {
 	methods := maps.Clone(args.Methods)
+	tp := slices.Clone(args.TypeParams)
 
 	if utils.IsNil(args.RealType) {
 		if utils.IsNil(args.Package) {
@@ -53,8 +55,13 @@ func NewInterface(reg Register, args InterfaceArgs) Interface {
 			mTyp = append(mTyp, f)
 		}
 
-		tEmb := []types.Type{}
-		// TODO: Fill parameter types for interface.
+		tEmb := make([]types.Type, len(args.TypeParams))
+		for i, n := range args.TypeParams {
+			tEmb[i] = n.GoType()
+		}
+		if !utils.IsNil(args.Union) {
+			tEmb = append(tEmb, args.Union.GoType())
+		}
 
 		realType := types.NewInterfaceType(mTyp, tEmb)
 		if realType == nil {
@@ -65,7 +72,7 @@ func NewInterface(reg Register, args InterfaceArgs) Interface {
 
 	return reg.RegisterInterface(&interfaceImp{
 		realType:   args.RealType,
-		typeParams: args.TypeParams,
+		typeParams: tp,
 		methods:    methods,
 		union:      args.Union,
 	})

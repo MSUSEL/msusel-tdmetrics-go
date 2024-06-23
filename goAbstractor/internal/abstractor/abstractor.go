@@ -6,6 +6,7 @@ import (
 	"go/ast"
 	"go/token"
 	"go/types"
+	"slices"
 
 	"github.com/Snow-Gremlin/goToolbox/utils"
 	"golang.org/x/tools/go/packages"
@@ -14,17 +15,17 @@ import (
 )
 
 func Abstract(ps []*packages.Package, verbose bool) constructs.Project {
-	buildinName := `$buildin`
-	buildinPkg := &packages.Package{
-		PkgPath: buildinName,
-		Name:    buildinName,
+	builtinName := `$builtin`
+	builtinPkg := &packages.Package{
+		PkgPath: builtinName,
+		Name:    builtinName,
 		Fset:    ps[0].Fset,
-		Types:   types.NewPackage(buildinName, buildinName),
+		Types:   types.NewPackage(builtinName, builtinName),
 	}
 
 	ab := &abstractor{
 		verbose:  verbose,
-		builtin:  buildinPkg,
+		builtin:  builtinPkg,
 		packages: ps,
 		proj:     constructs.NewProject(),
 		baked:    map[string]any{},
@@ -39,7 +40,7 @@ func Abstract(ps []*packages.Package, verbose bool) constructs.Project {
 	ab.resolveReferences()
 
 	// Finish and clean-up
-	ab.proj.Prune(ab.bakeAny())
+	ab.prune()
 	ab.proj.UpdateIndices()
 	return ab.proj
 }
@@ -192,8 +193,7 @@ func (ab *abstractor) resolveClass(pkg constructs.Package, td constructs.TypeDef
 		methods[m.Name()] = m.Signature()
 	}
 
-	typeParams := []constructs.Named{}
-	// TODO: Fill parameter types for interface.
+	typeParams := slices.Clone(td.TypeParams())
 
 	tInt := constructs.NewInterface(ab.proj.Types(), constructs.InterfaceArgs{
 		Methods:    methods,

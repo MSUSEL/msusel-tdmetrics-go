@@ -21,6 +21,10 @@ func (m *Map) isZero() bool {
 	return m == nil || len(m.data) <= 0
 }
 
+func (m *Map) Get(key string) Datum {
+	return m.data[key]
+}
+
 func (m *Map) Seek(path []any) Datum {
 	if len(path) <= 0 {
 		return m
@@ -59,6 +63,10 @@ func (m *Map) AddNonZero(ctx *Context, key string, value any) *Map {
 		m.data[key] = d
 	}
 	return m
+}
+
+func (m *Map) RawValue() any {
+	return m.data
 }
 
 func (m *Map) MarshalJSON() ([]byte, error) {

@@ -10,6 +10,7 @@ type TypeDef interface {
 	Name() string
 	Type() TypeDesc
 	Methods() []Method
+	TypeParams() []Named
 	AppendMethod(met ...Method)
 	SetInterface(inter Interface)
 }
@@ -71,6 +72,10 @@ func (td *typeDefImp) Type() TypeDesc {
 
 func (td *typeDefImp) Methods() []Method {
 	return td.methods
+}
+
+func (td *typeDefImp) TypeParams() []Named {
+	return td.typeParams
 }
 
 func (td *typeDefImp) AppendMethod(met ...Method) {

@@ -24,6 +24,10 @@ func (n *null) Seek(path []any) Datum {
 	return n
 }
 
+func (n *null) RawValue() any {
+	return nil
+}
+
 func (n *null) MarshalJSON() ([]byte, error) {
 	return json.Marshal(nil)
 }

@@ -11,6 +11,7 @@ type Datum interface {
 	_jsonData()
 	isZero() bool
 	Seek(path []any) Datum
+	RawValue() any
 }
 
 func New(ctx *Context, value any) Datum {

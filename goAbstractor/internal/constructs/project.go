@@ -14,7 +14,6 @@ type Project interface {
 	ToJson(ctx *jsonify.Context) jsonify.Datum
 	FindPackageByPath(path string) Package
 	FindTypeDef(pkgName, tdName string) (Package, TypeDef)
-	Prune(keep ...TypeDesc)
 	Packages() []Package
 	AppendPackage(pkg ...Package)
 	FilterPackage(predicate func(pkg Package) bool)
@@ -83,51 +82,6 @@ func (p *projectImp) FindTypeDef(pkgPath, tdName string) (Package, TypeDef) {
 	}
 
 	return pkg, def
-}
-
-func (p *projectImp) Prune(keep ...TypeDesc) {
-	p.pruneTypes(keep)
-	p.prunePackages()
-}
-
-func (p *projectImp) pruneTypes(keep []TypeDesc) {
-	touched := map[Visitable]bool{}
-	for _, k := range keep {
-		touched[k] = true
-	}
-
-	// Visit everything reachable from the packages.
-	// Do not visit the registered types since they are being pruned.
-	visitList(func(value Visitable) bool {
-		if touched[value] {
-			return false
-		}
-		touched[value] = true
-		return true
-	}, p.allPackages)
-
-	p.Types().Remove(func(td TypeDesc) bool {
-		return !touched[td]
-	})
-}
-
-func (p *projectImp) prunePackages() {
-	empty := map[Package]bool{}
-	for _, p := range p.allPackages {
-		if p.Empty() {
-			empty[p] = true
-		}
-	}
-
-	p.allPackages = slices.DeleteFunc(p.allPackages, func(pkg Package) bool {
-		return empty[pkg]
-	})
-
-	for _, p := range p.allPackages {
-		p.SetImports(slices.DeleteFunc(p.Imports(), func(pkg Package) bool {
-			return empty[pkg]
-		}))
-	}
 }
 
 func (p *projectImp) String() string {

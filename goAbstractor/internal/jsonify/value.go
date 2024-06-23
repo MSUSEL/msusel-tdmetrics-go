@@ -35,6 +35,10 @@ func (v *value[T]) Seek(path []any) Datum {
 	return v
 }
 
+func (v *value[T]) RawValue() any {
+	return v.data
+}
+
 func (v *value[T]) MarshalJSON() ([]byte, error) {
 	return json.Marshal(v.data)
 }
