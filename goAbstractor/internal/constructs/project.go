@@ -58,7 +58,7 @@ func (p *projectImp) FindPackageByPath(path string) Package {
 
 func (p *projectImp) FindTypeDef(pkgPath, tdName string) (Package, TypeDef) {
 	if len(pkgPath) <= 0 {
-		pkgPath = `$builtin`
+		panic(fmt.Errorf(`must provide a non-empty package path for %q`, tdName))
 	}
 
 	pkg := p.FindPackageByPath(pkgPath)

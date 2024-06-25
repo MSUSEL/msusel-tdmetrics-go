@@ -27,8 +27,7 @@ func (ab *abstractor) pruneTypes() {
 
 	// Visit everything reachable from the packages.
 	// Do not visit the registered types since they are being pruned.
-	// Skip the first package since that's the builtin package.
-	for _, pkg := range ab.proj.Packages()[1:] {
+	for _, pkg := range ab.proj.Packages() {
 		if !utils.IsNil(pkg) && visitor(pkg) {
 			pkg.Visit(visitor)
 		}

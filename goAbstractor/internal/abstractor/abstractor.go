@@ -23,8 +23,13 @@ func Abstract(ps []*packages.Package, verbose bool) constructs.Project {
 		Types:   types.NewPackage(builtinName, builtinName),
 	}
 
+	logDepth := 0
+	if verbose {
+		logDepth = 2
+	}
+
 	ab := &abstractor{
-		verbose:  verbose,
+		logDepth: logDepth,
 		builtin:  builtinPkg,
 		packages: ps,
 		proj:     constructs.NewProject(),
@@ -46,7 +51,7 @@ func Abstract(ps []*packages.Package, verbose bool) constructs.Project {
 }
 
 type abstractor struct {
-	verbose  bool
+	logDepth int
 	builtin  *packages.Package
 	packages []*packages.Package
 	proj     constructs.Project
@@ -55,20 +60,19 @@ type abstractor struct {
 	typeParamReplacer map[*types.TypeParam]*types.TypeParam
 }
 
-func (ab *abstractor) log(format string, args ...any) {
-	if ab.verbose {
+func (ab *abstractor) log(depth int, format string, args ...any) {
+	if ab.logDepth >= depth {
 		fmt.Printf(format+"\n", args...)
 	}
 }
 
 func (ab *abstractor) initialize() {
-	ab.log(`initialize`)
-	ab.bakeAny()     // Prebake the "any" (i.e. object) into the interfaces.
-	ab.bakeBuiltin() // Prebake the build-in types.
+	ab.log(1, `initialize`)
+	ab.bakeAny() // Prebake the "any" (i.e. object) into the interfaces.
 }
 
 func (ab *abstractor) abstractProject() {
-	ab.log(`abstract project`)
+	ab.log(1, `abstract project`)
 	packages.Visit(ab.packages, func(src *packages.Package) bool {
 		if ap := ab.abstractPackage(src); ap != nil {
 			ab.proj.AppendPackage(ap)
@@ -78,7 +82,7 @@ func (ab *abstractor) abstractProject() {
 }
 
 func (ab *abstractor) abstractPackage(src *packages.Package) constructs.Package {
-	ab.log(`|  abstract package: %s`, src.PkgPath)
+	ab.log(2, `|  abstract package: %s`, src.PkgPath)
 	pkg := constructs.NewPackage(constructs.PackageArgs{
 		RealPkg:     src,
 		Path:        src.PkgPath,
@@ -92,7 +96,7 @@ func (ab *abstractor) abstractPackage(src *packages.Package) constructs.Package 
 }
 
 func (ab *abstractor) addFile(pkg constructs.Package, src *packages.Package, f *ast.File) {
-	ab.log(`|  |  add file to package: %s`, src.Fset.Position(f.Name.NamePos).Filename)
+	ab.log(3, `|  |  add file to package: %s`, src.Fset.Position(f.Name.NamePos).Filename)
 	for _, decl := range f.Decls {
 		switch d := decl.(type) {
 		case *ast.GenDecl:
@@ -157,7 +161,7 @@ func pos(src *packages.Package, pos token.Pos) string {
 }
 
 func (ab *abstractor) resolveImports() {
-	ab.log(`resolve imports`)
+	ab.log(1, `resolve imports`)
 	for _, p := range ab.proj.Packages() {
 		imports := make([]constructs.Package, len(p.ImportPaths()))
 		for i, importPath := range p.ImportPaths() {
@@ -172,11 +176,11 @@ func (ab *abstractor) resolveImports() {
 }
 
 func (ab *abstractor) resolveClasses() {
-	ab.log(`resolve classes`)
+	ab.log(1, `resolve classes`)
 	for _, pkg := range ab.proj.Packages() {
-		ab.log(`|  resolve package: %s`, pkg.Source().PkgPath)
+		ab.log(2, `|  resolve package: %s`, pkg.Source().PkgPath)
 		for _, td := range pkg.Types() {
-			ab.log(`|  |  resolve typeDef: %s`, td.Name())
+			ab.log(3, `|  |  resolve typeDef: %s`, td.Name())
 			ab.resolveClass(pkg, td)
 		}
 	}
@@ -204,7 +208,7 @@ func (ab *abstractor) resolveClass(pkg constructs.Package, td constructs.TypeDef
 }
 
 func (ab *abstractor) resolveInheritance() {
-	ab.log(`resolve inheritance`)
+	ab.log(1, `resolve inheritance`)
 	inters := ab.proj.Types().AllInterfaces()
 	if len(inters) <= 0 {
 		panic(errors.New(`expected the object interface at minimum but found no interfaces`))
@@ -223,7 +227,25 @@ func (ab *abstractor) resolveInheritance() {
 }
 
 func (ab *abstractor) resolveReferences() {
+	ab.log(1, `resolve references`)
 	for _, ref := range ab.proj.Types().AllReferences() {
+		ab.resolveReference(ref)
+	}
+}
+
+func (ab *abstractor) resolveReference(ref constructs.TypeDefRef) {
+	ab.log(2, `|  resolve %s%s`, ref.PackagePath(), ref.Name())
+	if len(ref.PackagePath()) > 0 {
 		ref.SetType(ab.proj.FindTypeDef(ref.PackagePath(), ref.Name()))
+		return
+	}
+
+	switch ref.Name() {
+	case `error`:
+		ref.SetType(ab.bakeError())
+	case `comparable`:
+		ref.SetType(ab.bakeComparable())
+	default:
+		panic(fmt.Errorf(`unknown reference: package=%q, name=%q`, ref.PackagePath(), ref.Name()))
 	}
 }

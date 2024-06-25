@@ -302,8 +302,9 @@ func (ab *abstractor) bakeComplex128() constructs.Interface {
 //	type error interface {
 //		Error() string
 //	}
-func (ab *abstractor) bakeError() constructs.Interface {
-	return bakeOnce(ab, `error`, func() constructs.Interface {
+func (ab *abstractor) bakeError() (constructs.Package, constructs.TypeDef) {
+	pkg := ab.bakeBuiltin()
+	return pkg, bakeOnce(ab, `error`, func() constructs.TypeDef {
 
 		// func() string
 		getStr := constructs.NewSignature(ab.proj.Types(), constructs.SignatureArgs{
@@ -316,10 +317,14 @@ func (ab *abstractor) bakeError() constructs.Interface {
 		}
 
 		// interface { Error() string }
-		return constructs.NewInterface(ab.proj.Types(), constructs.InterfaceArgs{
+		it := constructs.NewInterface(ab.proj.Types(), constructs.InterfaceArgs{
 			Methods: methods,
 			Package: ab.builtin,
 		})
+
+		errTyp := constructs.NewTypeDef(`error`, it)
+		pkg.AppendTypes(errTyp)
+		return errTyp
 	})
 }
 
@@ -328,8 +333,9 @@ func (ab *abstractor) bakeError() constructs.Interface {
 //	type comparable interface {
 //		$compare(other T) int
 //	}
-func (ab *abstractor) bakeComparable() constructs.Interface {
-	return bakeOnce(ab, `comparable`, func() constructs.Interface {
+func (ab *abstractor) bakeComparable() (constructs.Package, constructs.TypeDef) {
+	pkg := ab.bakeBuiltin()
+	return pkg, bakeOnce(ab, `comparable`, func() constructs.TypeDef {
 		tp := constructs.NewNamed(ab.proj.Types(), `T`, ab.bakeAny())
 
 		// func(other T) int
@@ -345,11 +351,15 @@ func (ab *abstractor) bakeComparable() constructs.Interface {
 		methods[`$compare`] = getStr // $compare(other T) int
 
 		// interface { $compare(other T) int }
-		return constructs.NewInterface(ab.proj.Types(), constructs.InterfaceArgs{
+		it := constructs.NewInterface(ab.proj.Types(), constructs.InterfaceArgs{
 			TypeParams: []constructs.Named{tp},
 			Methods:    methods,
 			Package:    ab.builtin,
 		})
+
+		cmpTyp := constructs.NewTypeDef(`comparable`, it)
+		pkg.AppendTypes(cmpTyp)
+		return cmpTyp
 	})
 }
 
@@ -361,10 +371,6 @@ func (ab *abstractor) bakeBuiltin() constructs.Package {
 			Path:    `$builtin`,
 			Name:    `$builtin`,
 		})
-
-		errTyp := constructs.NewTypeDef(`error`, ab.bakeError())
-		cmpTyp := constructs.NewTypeDef(`comparable`, ab.bakeComparable())
-		pkg.AppendTypes(errTyp, cmpTyp)
 
 		ab.proj.AppendPackage(pkg)
 		return pkg

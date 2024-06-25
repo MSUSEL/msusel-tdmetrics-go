@@ -1,6 +1,11 @@
 package constructs
 
-import "github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/jsonify"
+import (
+	"fmt"
+
+	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/jsonify"
+	"github.com/Snow-Gremlin/goToolbox/utils"
+)
 
 type ValueDef interface {
 	Visitable
@@ -13,6 +18,15 @@ type valueDefImp struct {
 }
 
 func NewValueDef(name string, isConst bool, typ TypeDesc) ValueDef {
+	if len(name) <= 0 || utils.IsNil(typ) {
+		constStr := ``
+		if isConst {
+			constStr = `const `
+		}
+		panic(fmt.Errorf(`must have a name and type for a value definition: %s%q %v`,
+			constStr, name, typ))
+	}
+
 	return &valueDefImp{
 		name:    name,
 		isConst: isConst,

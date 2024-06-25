@@ -65,7 +65,7 @@ func (ab *abstractor) abstractFuncDecl(pkg constructs.Package, src *packages.Pac
 }
 
 func (ab *abstractor) resolveReceivers() {
-	ab.log(`resolve receivers`)
+	ab.log(1, `resolve receivers`)
 	for _, pkg := range ab.proj.Packages() {
 		resolveReceiversInPackage(pkg)
 	}

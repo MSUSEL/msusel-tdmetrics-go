@@ -8,20 +8,22 @@ jobs:
     strategy:
       matrix:
         go-version: [ '1.22.x', 'stable' ]
+
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-      - name: Setup Go
-        uses: actions/setup-go@v4
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v4
         with:
           go-version: ${{ matrix.go-version }}
+
       - name: Add Cover Tool
+        working-directory: ./goAbstractor
         run: go get golang.org/x/tools/cmd/cover
-        working-directory: ./goAbstractor
+
       - name: Install dependencies
-        run: go get ./...
         working-directory: ./goAbstractor
+        run: go get ./...
+
       - name: Run Tests
+        working-directory: ./goAbstractor
         timeout-minutes: 1
         run: go test -cover ./...
-        working-directory: ./goAbstractor

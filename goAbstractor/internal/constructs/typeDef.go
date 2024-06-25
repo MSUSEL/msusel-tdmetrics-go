@@ -1,6 +1,11 @@
 package constructs
 
-import "github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/jsonify"
+import (
+	"fmt"
+
+	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/jsonify"
+	"github.com/Snow-Gremlin/goToolbox/utils"
+)
 
 type TypeDef interface {
 	Visitable
@@ -24,10 +29,15 @@ type typeDefImp struct {
 	index      int
 }
 
-func NewTypeDef(name string, t TypeDesc) TypeDef {
+func NewTypeDef(name string, typ TypeDesc) TypeDef {
+	if len(name) <= 0 || utils.IsNil(typ) {
+		panic(fmt.Errorf(`must have a name and type for a type definition: %q %v`,
+			name, typ))
+	}
+
 	return &typeDefImp{
 		name: name,
-		typ:  t,
+		typ:  typ,
 	}
 }
 

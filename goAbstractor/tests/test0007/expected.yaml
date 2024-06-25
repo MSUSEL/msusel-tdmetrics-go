@@ -45,7 +45,7 @@
       },
       { # 7. interface[T] { $deref() T }
         inherits: [ 4 ],
-        typeParams: [ 9 ],
+        typeParams: [ 14 ],
         methods: {
           $deref: 16
         }
@@ -58,25 +58,25 @@
       }
     ],
     named: [
-      { name: T,     type:  4 }, #  9. T any
-      { name: T,     type:  5 }, # 10. T string|int|uint
-      { name: value, type: 10 }, # 11. value T
-      { name: v,     type: 10 }, # 12. v T
-      { name: T,     type:  6 }, # 13. T string|int
-      { name: v,     type: 13 }  # 14. v T
+      { name: T,     type:  5 }, #  9. T string|int|uint
+      { name: value, type:  9 }, # 10. value T
+      { name: v,     type:  9 }, # 11. v T
+      { name: T,     type:  6 }, # 12. T any
+      { name: v,     type: 12 }, # 13. v T
+      { name: T,     type:  4 }  # 14. T string|int
     ],
     signatures: [
       { # 15. func[T](v T) T
-        params: [ 12 ],
-        return: 10
-      },
-      { # 16. func[T any]() T
-        typeParams: [ 9 ],
+        params: [ 11 ],
         return: 9
       },
+      { # 16. func[T any]() T
+        typeParams: [ 14 ],
+        return: 14
+      },
       { # 17. func[T string|int](v T) *Foo[T]
-        typeParams: [ 13 ],
-        params: [ 14 ],
+        typeParams: [ 12 ],
+        params: [ 13 ],
         return: 19
       },
       {} # 18. func()()
@@ -88,7 +88,7 @@
       }
     ],
     structs: [
-      { fields: [ 11 ] } # 20. struct { value T }
+      { fields: [ 10 ] } # 20. struct { value T }
     ],
     unions: [
       { exact: [ 1, 2, 3 ] }, # 21. string | int | uint
