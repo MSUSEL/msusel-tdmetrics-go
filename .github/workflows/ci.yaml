@@ -30,17 +30,14 @@ jobs:
 
   test_designRecovery:
     name: test designRecovery
-    runs-on: ubuntu-latest
+    runs-on: windows-latest
     steps:
       - uses: actions/checkout@v4
-      
-      - name: Install mono
-        run: sudo apt install mono-complete
-      
-      - name: Build Exe
+
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8'
+
+      - name: Run Program
         working-directory: ./designRecovery
-        run: mcs -out:Program.exe Program.cs
-      
-      - name: Run Exe
-        working-directory: ./designRecovery
-        run: mono Program.exe
+        run: dotnet run
