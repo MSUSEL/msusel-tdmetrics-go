@@ -38,7 +38,9 @@ jobs:
         run: sudo apt install mono-complete
       
       - name: Build Exe
+        working-directory: ./designRecovery
         run: mcs -out:Program.exe Program.cs
       
       - name: Run Exe
+        working-directory: ./designRecovery
         run: mono Program.exe
