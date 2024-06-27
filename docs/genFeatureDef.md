@@ -9,116 +9,130 @@ but the definition requires a list of specific implementation so the Go
 abstractor must perform steps to predetermine which types would duck-type
 and define that via implementations.
 
-The JSON file contains a top level object with the following fields:
-[`language`](#language),
-[`interfaces`](#interfaces),
-[`signatures`](#signatures),
-[`structs`](#structs),
-[`typeParams`](#typeparams),
-and [`packages`](#packages)
+```mermaid
+classDiagram
+  direction LR
 
-## language
+  class Abstraction {
+    language: string
+    packages: []Package
+    types:    Types
+  }
+  Abstraction --> "*" Package
+  Abstraction --> "1" Types
 
-The language field's value is a string defining the language that was abstracted,
-e.g. `"language": "go"`.
+  class Package {
+    path:    string
+    name:    string
+    imports: []Package
+    types:   []TypeDef
+    values:  []ValueDef
+    methods: []Method
+  }
+  Package --> "*" Package
+  Package --> "*" TypeDef
+  Package --> "*" ValueDef
+  Package --> "*" Method
 
-## interfaces
+  class Types {
+    basics:     []Basic
+    interfaces: []Interface
+    named:      []Named
+    signatures: []Signature
+    solids:     []Solid
+    structs:    []Struct
+    unions:     []Union
+  }
+  Types --> "*" Basic
+  Types --> "*" Interface
+  Types --> "*" Named
+  Types --> "*" Signature
+  Types --> "*" Solid
+  Types --> "*" Struct
+  Types --> "*" Union
 
-The interfaces field's value is an array of [interface objects](#interface-object).
-The interfaces are unnamed and reduced to have no repeats.
+  class TypeDef {
+    name:       string
+    type:       TypeDesc
+    methods:    []Method
+    typeParams: []Named
+    interface:  Interface
+  }
+  TypeDef --> "1" TypeDesc
+  TypeDef --> "*" Method
+  TypeDef --> "*" Named
+  TypeDef --> "1" Interface
 
-When referencing a type by index these indices are between
-$[\;0\;..\;|\text{interfaces}|\;)$
-where type index of $x$ is the interface object $\text{interfaces}[\;x\;]$.
+  class ValueDef {
+    name:  string
+    const: bool
+    type:  TypeDesc
+  }
+  ValueDef --> "1" TypeDesc
 
-Typically the first interface is an empty interface, `{}`, that represents
-the base object, i.e. `any` in Go, `Object` in Java.
+  class Method {
+    name:      string
+    signature: TypeDesc
+    metrics:   Metrics
+  }
+  Method --> "1" TypeDesc
+  Method --> "1" Metrics
 
-### interface object
+  class TypeDesc {
+    <<interface>>
+  }
 
-Each interface object has two arrays:
+  class Basic {
+    string
+  }
+  Basic ..o TypeDesc
 
-- `inherits`: This is an array of indices of types. Each type should be
-    another interface in the top level `interfaces`.
-- `methods`: This is an array of method objects. Each method
-    object has a `name` and `signature`.
-  - `name` is a string for the identifier of the method defined in the interface.
-  - `signature` is an index of a signature type.
+  class Interface {
+    typeParams: []Named
+    inherits:   []Interface
+    union:      Union
+    methods:    map[string, TypeDesc]
+  }
+  Interface ..o TypeDesc
+  Interface --> "*" Named
+  Interface --> "*" Interface
+  Interface --> "1" Union
+  Interface --> "*" TypeDesc
 
-Example:
-
-```json
-{
-    "inherits": [ 1, 4 ],
-    "methods": [
-        { "name": "String", "signature": 612 },
-        { "name": "Count",  "signature": 755 }
-    ]
-}
+  class Named {
+    name: string
+    type: TypeDesc
+  }
+  Named ..o TypeDesc
+  Named --> "1" TypeDesc
+  
+  class Signature {
+    variadic:   bool
+    params:     []Named
+    typeParams: []Named
+    return:     TypeDesc
+  }
+  Signature ..o TypeDesc
+  Signature --> TypeDesc
+  Signature --> Named
+  
+  class Solid {
+    target:     TypeDesc
+    typeParams: []TypeDesc
+  }
+  Solid ..o TypeDesc
+  Solid --> TypeDesc
+  
+  class Struct {
+    fields: []Named
+  }
+  Struct ..o TypeDesc
+  Struct --> Named
+  
+  class Union {
+    exact:  []TypeDesc
+    approx: []TypeDesc
+  }
+  Union ..o TypeDesc
+  Union --> TypeDesc
 ```
-
-```go
-interface {
-    String() string
-    Count() int
-}
-```
-
-## signatures
-
-The signatures field's value is an array of [signature objects](#signature-object).
-When referencing a type by index these indices are between
-$[\;\text{offset}\;..\;\text{offset}+|\text{signatures}|\;)$
-where $\text{offset} = |\text{interfaces}|$ and
-type index of $x$ is the interface object $\text{signatures}[\;x-\text{offset}\;]$.
-
-### signature object
-
-The signature objects represents a function signature without a name or body.
-The signature has the following fields:
-
-- `variadic`: Is boolean where true indicates the last parameter will be a
-  list and is a variadic parameter.
-- `params`: This is a list of names and types for each parameter in the order
-   the parameters appear in the signature.
-  - `name`: Each name should be unique for a parameter.
-  - `type`: The [type](#type) of the parameter.
-- `return`: The [type](#type) to return. Must be one type only, meaning for Go
-  when multiple types are returned the return value needs to be converted
-  to a struct type.
-- `typeParam`: The type parameters for the signature.
-
-Example:
-
-```json
- {
-    "params": [
-        { "name": "name", "type": "string" },
-        { "name": "age",  "type": "int" }
-    ],
-    "return": {
-        "elem": "Person",
-        "kind": "pointer"
-    }
-},
-```
-
-```go
-func(name string, age int) *Person
-```
-
-## structs
-
-TODO: Finish
-
-## typeParams
-
-TBD
-
-## packages
-
-TODO: Finish
-
-## type
-
-TODO: Finish
