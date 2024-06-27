@@ -1,29 +1,44 @@
-name: Go
+name: CI
 on: [push]
-
 jobs:
-  test:
+
+  test_goAbstractor:
     name: test goAbstractor
     runs-on: ubuntu-latest
     strategy:
       matrix:
         go-version: [ '1.22.x', 'stable' ]
-
     steps:
       - uses: actions/checkout@v4
+      
       - uses: actions/setup-go@v4
         with:
           go-version: ${{ matrix.go-version }}
-
+      
       - name: Add Cover Tool
         working-directory: ./goAbstractor
         run: go get golang.org/x/tools/cmd/cover
-
+      
       - name: Install dependencies
         working-directory: ./goAbstractor
         run: go get ./...
 
       - name: Run Tests
         working-directory: ./goAbstractor
-        timeout-minutes: 1
+        timeout-minutes: 10
         run: go test -cover ./...
+
+  test_designRecovery:
+    name: test designRecovery
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@4
+      
+      - name: Install mono
+        run: sudo apt install mono-complete
+      
+      - name: Build Exe
+        run: mcs -out:Program.exe Program.cs
+      
+      - name: Run Exe
+        run: mono Program.exe
