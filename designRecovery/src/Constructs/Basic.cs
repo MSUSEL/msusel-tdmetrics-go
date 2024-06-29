@@ -6,7 +6,7 @@ internal class Basic : ITypeDesc {
     public string Name { get; private set; } = "";
 
     public void Initialize(ITypeGetter getter, JsonNode node) =>
-        this.Name = node.AsValue().GetValue<string>();
+        this.Name = node.GetValue<string>();
 
     public override string ToString() => this.Name;
 }
