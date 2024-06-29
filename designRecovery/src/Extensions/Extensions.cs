@@ -10,23 +10,27 @@ internal static class Extensions {
     public static IEnumerable<string> ToStrings<T>(this IEnumerable<T> source, string prefix = "", string suffix = "", string onNull = "<null>") =>
         source.Select(x => prefix+(x?.ToString() ?? onNull)+suffix);
 
-    static public T ReadValue<T>(this JsonObject obj, string name)
-        where T: class => obj[name]?.GetValue<T>() ?? throw new MissingDataException(name);
+    static public T ReadValue<T>(this JsonObject obj, string name) {
+        JsonNode n = obj[name] ?? throw new MissingDataException(name);
+        return n.GetValue<T>();
+    }
 
     static public T ReadIndexType<T>(this JsonObject obj, string name, ITypeGetter getter)
         where T: ITypeDesc {
-        uint typeIndex = obj[name]?.GetValue<uint>() ?? throw new MissingDataException(name);
+        uint typeIndex = obj[name]?.GetValue<uint>() ??
+            throw new MissingDataException(name);
         return getter.Get<T>(typeIndex);
     }
     
     static public void ReadIndexTypeList<T>(this JsonObject obj, string name, ITypeGetter getter, List<T> list)
         where T: ITypeDesc {
-        JsonArray exactArr = (obj[name]?.AsArray()) ??
-            throw new MissingDataException(name);
-
-        for (int i = 0; i < exactArr.Count; i++) {
-            uint typeIndex = exactArr[i]?.GetValue<uint>() ?? throw new MissingDataException(name+"["+i+"]");
-            list.Add(getter.Get<T>(typeIndex));
+        JsonArray? exactArr = obj[name]?.AsArray();
+        if (exactArr is not null) {
+            for (int i = 0; i < exactArr.Count; i++) {
+                uint typeIndex = exactArr[i]?.GetValue<uint>() ??
+                    throw new MissingDataException(name+"["+i+"]");
+                list.Add(getter.Get<T>(typeIndex));
+            }
         }
     }
 }
