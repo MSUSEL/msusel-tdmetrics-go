@@ -3,7 +3,7 @@ using System.Text.Json.Nodes;
 
 namespace designRecovery.src.Constructs;
 
-internal class Union: ITypeDesc {
+internal class Union : ITypeDesc {
     private readonly List<ITypeDesc> inExact = [];
     public IReadOnlyList<ITypeDesc> Exact => this.inExact.AsReadOnly();
 

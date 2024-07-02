@@ -15,21 +15,21 @@ internal static class Extensions {
         return n.GetValue<T>();
     }
 
-    static public T ReadIndexType<T>(this JsonObject obj, string name, ITypeGetter getter)
+    static public T ReadIndexType<T>(this JsonObject obj, string name, TypeGetter getter)
         where T: ITypeDesc {
         uint typeIndex = obj[name]?.GetValue<uint>() ??
             throw new MissingDataException(name);
-        return getter.Get<T>(typeIndex);
+        return getter.GetTypeAtIndex<T>(typeIndex);
     }
     
-    static public void ReadIndexTypeList<T>(this JsonObject obj, string name, ITypeGetter getter, List<T> list)
+    static public void ReadIndexTypeList<T>(this JsonObject obj, string name, TypeGetter getter, List<T> list)
         where T: ITypeDesc {
         JsonArray? exactArr = obj[name]?.AsArray();
         if (exactArr is not null) {
             for (int i = 0; i < exactArr.Count; i++) {
                 uint typeIndex = exactArr[i]?.GetValue<uint>() ??
                     throw new MissingDataException(name+"["+i+"]");
-                list.Add(getter.Get<T>(typeIndex));
+                list.Add(getter.GetTypeAtIndex<T>(typeIndex));
             }
         }
     }

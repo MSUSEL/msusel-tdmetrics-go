@@ -3,7 +3,7 @@ using System.Text.Json.Nodes;
 
 namespace designRecovery.src.Constructs;
 
-internal class Interface: ITypeDesc {
+internal class Interface : ITypeDesc {
     private readonly List<Named> inTypeParams = [];
     public IReadOnlyList<Named> TypeParams => this.inTypeParams.AsReadOnly();
 
