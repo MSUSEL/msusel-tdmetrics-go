@@ -39,7 +39,7 @@ jobs:
         working-directory: ./techDebtMetrics
         run: dotnet test
 
-  test_designRecovery:
+  test_techDebtMetrics_linux:
     name: Run Tests for TechDebt Metrics on Linux
     runs-on: ubuntu-latest
     steps:
