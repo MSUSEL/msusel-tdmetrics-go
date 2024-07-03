@@ -64,7 +64,12 @@ func main() {
 		os.Exit(1)
 	}
 
-	proj := abstractor.Abstract(ps, ao.Verbose)
+	logDepth := 0
+	if ao.Verbose {
+		logDepth = 2
+	}
+
+	proj := abstractor.Abstract(ps, logDepth)
 	if err = writeJson(ao.OutPath, ao.Minimize, proj); err != nil {
 		fmt.Println(`Error abstracting project:`, err)
 		os.Exit(1)
