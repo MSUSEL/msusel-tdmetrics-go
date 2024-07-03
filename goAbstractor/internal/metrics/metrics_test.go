@@ -38,18 +38,31 @@ func Test_Simple(t *testing.T) {
 	})
 }
 
-func Test_SimpleParams(t *testing.T) {
+func Test_SimpleWithExtraIndent(t *testing.T) {
 	m := parseExpr(t,
-		`func(a int,
-			  b int,
-			  c int) int {`,
-		`	return max(a, b, c)`,
-		`}`)
+		`		func() int {`,
+		`			return max(1, 3, 5)`,
+		`		}`)
 	checkMetrics(t, m, Metrics{
-		CodeCount:  1,
+		CodeCount:  3,
 		Complexity: 1,
 		Indents:    1,
 		LineCount:  3,
+	})
+}
+
+func Test_SimpleParams(t *testing.T) {
+	m := parseExpr(t,
+		`func(a int,`,
+		`	  b int,`,
+		`	  c int) int {`,
+		`	return max(a, b, c)`,
+		`}`)
+	checkMetrics(t, m, Metrics{
+		CodeCount:  5,
+		Complexity: 1,
+		Indents:    7,
+		LineCount:  5,
 	})
 }
 
@@ -60,7 +73,7 @@ func Test_SimpleWithReturn(t *testing.T) {
 		`	return x`,
 		`}`)
 	checkMetrics(t, m, Metrics{
-		CodeCount:  2,
+		CodeCount:  4,
 		Complexity: 1,
 		Indents:    2,
 		LineCount:  4,
@@ -78,7 +91,7 @@ func Test_SimpleWithSpace(t *testing.T) {
 		`   `,
 		`}`)
 	checkMetrics(t, m, Metrics{
-		CodeCount:  1,
+		CodeCount:  3,
 		Complexity: 1,
 		Indents:    1,
 		LineCount:  8,
@@ -93,7 +106,7 @@ func Test_SimpleWithDefer(t *testing.T) {
 		`	x.doStuff()`,
 		`}`)
 	checkMetrics(t, m, Metrics{
-		CodeCount:  3,
+		CodeCount:  5,
 		Complexity: 1,
 		Indents:    3,
 		LineCount:  5,
@@ -110,7 +123,7 @@ func Test_SimpleIf(t *testing.T) {
 		`	println(x)`,
 		`}`)
 	checkMetrics(t, m, Metrics{
-		CodeCount:  5,
+		CodeCount:  7,
 		Complexity: 2,
 		Indents:    6,
 		LineCount:  7,
@@ -130,7 +143,7 @@ func Test_SimpleIfElse(t *testing.T) {
 		`	println(x)`,
 		`}`)
 	checkMetrics(t, m, Metrics{
-		CodeCount:  4,
+		CodeCount:  10,
 		Complexity: 2,
 		Indents:    11,
 		LineCount:  10,
@@ -149,7 +162,7 @@ func Test_SimpleIfElseIf(t *testing.T) {
 		`	println(x)`,
 		`}`)
 	checkMetrics(t, m, Metrics{
-		CodeCount:  6,
+		CodeCount:  9,
 		Complexity: 3,
 		Indents:    9,
 		LineCount:  9,
@@ -169,7 +182,34 @@ func Test_SimpleIfElseIfElse(t *testing.T) {
 		`	}`,
 		`	println(x)`,
 		`}`)
-	checkMetrics(t, m, Metrics{})
+	checkMetrics(t, m, Metrics{
+		CodeCount:  11,
+		Complexity: 3,
+		Indents:    12,
+		LineCount:  11,
+	})
+}
+
+func Test_SimpleSwitch(t *testing.T) {
+	m := parseExpr(t,
+		`func() {`,
+		`	x := 9`,
+		`   switch {`,
+		`	case x > 7:`,
+		`		x = 4`,
+		`	case x > 4:`,
+		`		x = 3`,
+		`	default:`,
+		`		x = 2`,
+		`	}`,
+		`	println(x)`,
+		`}`)
+	checkMetrics(t, m, Metrics{
+		CodeCount:  12,
+		Complexity: 3,
+		Indents:    15,
+		LineCount:  12,
+	})
 }
 
 func Test_DeferInBlock(t *testing.T) {
@@ -188,7 +228,12 @@ func Test_DeferInBlock(t *testing.T) {
 		`	}`,
 		`	print("F ")`,
 		`}`)
-	checkMetrics(t, m, Metrics{})
+	checkMetrics(t, m, Metrics{
+		CodeCount:  14,
+		Complexity: 1,
+		Indents:    19,
+		LineCount:  14,
+	})
 }
 
 func Test_DeferInFuncLiteral(t *testing.T) {
@@ -207,7 +252,12 @@ func Test_DeferInFuncLiteral(t *testing.T) {
 		`	}()`,
 		`	print("F ")`,
 		`}`)
-	checkMetrics(t, m, Metrics{})
+	checkMetrics(t, m, Metrics{
+		CodeCount:  14,
+		Complexity: 1,
+		Indents:    19,
+		LineCount:  14,
+	})
 }
 
 func Test_DeferWithComplexity(t *testing.T) {
@@ -215,15 +265,20 @@ func Test_DeferWithComplexity(t *testing.T) {
 		`func() {`,
 		`	print("A ")`,
 		`	defer func() {`,
-		`		 if r := recover(); r != nil {`,
+		`		if r := recover(); r != nil {`,
 		`			print("B ")`,
 		`			return`,
-		`		 }`,
+		`		}`,
 		`		print("C ")`,
 		`	}()`,
 		`	print("D ")`,
 		`}`)
-	checkMetrics(t, m, Metrics{})
+	checkMetrics(t, m, Metrics{
+		CodeCount:  11,
+		Complexity: 2,
+		Indents:    16,
+		LineCount:  11,
+	})
 }
 
 func Test_ForRangeWithDefer(t *testing.T) {
@@ -239,7 +294,28 @@ func Test_ForRangeWithDefer(t *testing.T) {
 		`	}`,
 		`	print("E ")`,
 		`}`)
-	checkMetrics(t, m, Metrics{})
+	checkMetrics(t, m, Metrics{
+		CodeCount:  11,
+		Complexity: 2,
+		Indents:    15,
+		LineCount:  11,
+	})
+}
+
+func Test_GoStatement(t *testing.T) {
+	m := parseExpr(t,
+		`func() {`,
+		`	go func() {`,
+		`		print("A ")`,
+		`	}()`,
+		`	print("B ")`,
+		`}`)
+	checkMetrics(t, m, Metrics{
+		CodeCount:  6,
+		Complexity: 2,
+		Indents:    5,
+		LineCount:  6,
+	})
 }
 
 func parseExpr(t *testing.T, lines ...string) Metrics {

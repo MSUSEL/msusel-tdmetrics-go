@@ -34,7 +34,7 @@ func (m *metricsCalc) calculateMetrics() {
 }
 
 func (m *metricsCalc) finishIndents() {
-	leftMostColumn := 10_000 //random large number
+	leftMostColumn := 10_000 // random large number
 	indentSum := 0
 	for _, ind := range m.minColumn {
 		leftMostColumn = min(ind, leftMostColumn)
@@ -76,7 +76,7 @@ func (m *metricsCalc) addCodePosForNode(n ast.Node) bool {
 	switch t := n.(type) {
 	case nil, *ast.Comment, *ast.CommentGroup:
 		return true
-	case *ast.IfStmt, *ast.ForStmt, *ast.RangeStmt:
+	case *ast.IfStmt, *ast.ForStmt, *ast.RangeStmt, *ast.GoStmt:
 		m.incComplexity(true)
 	case *ast.CaseClause:
 		m.incComplexity(t.List != nil)
