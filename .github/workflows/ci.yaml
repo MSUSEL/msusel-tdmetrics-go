@@ -3,17 +3,14 @@ on: [push]
 jobs:
 
   test_goAbstractor:
-    name: test goAbstractor
+    name: Test Go Abstractor
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        go-version: [ '1.22.x', 'stable' ]
     steps:
       - uses: actions/checkout@v4
       
       - uses: actions/setup-go@v4
         with:
-          go-version: ${{ matrix.go-version }}
+          go-version: "^1.22"
       
       - name: Add Cover Tool
         working-directory: ./goAbstractor
@@ -29,7 +26,7 @@ jobs:
         run: go test -cover ./...
 
   test_techDebtMetrics:
-    name: test designRecovery
+    name: Test Tech Debt Metrics
     runs-on: windows-latest
     steps:
       - uses: actions/checkout@v4
@@ -54,4 +51,4 @@ jobs:
 
       - name: Run Program
         working-directory: ./techDebtMetrics
-        run: dotnet test -v --os linux
+        run: dotnet test --verbosity detailed --os linux
