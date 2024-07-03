@@ -3,7 +3,7 @@ on: [push]
 jobs:
 
   test_goAbstractor:
-    name: Test Go Abstractor
+    name: Run Tests for Go Abstractor
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -25,8 +25,8 @@ jobs:
         timeout-minutes: 10
         run: go test -cover ./...
 
-  test_techDebtMetrics:
-    name: Test Tech Debt Metrics
+  test_techDebtMetrics_windows:
+    name: Run Tests for TechDebt Metrics on Windows
     runs-on: windows-latest
     steps:
       - uses: actions/checkout@v4
@@ -40,7 +40,7 @@ jobs:
         run: dotnet test
 
   test_designRecovery:
-    name: test designRecovery
+    name: Run Tests for TechDebt Metrics on Linux
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -51,4 +51,4 @@ jobs:
 
       - name: Run Program
         working-directory: ./techDebtMetrics
-        run: dotnet test --verbosity detailed --os linux
+        run: dotnet test --os linux
