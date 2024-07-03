@@ -17,6 +17,11 @@ import (
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/reader"
 )
 
+const (
+	verbose  = true
+	logDepth = 1
+)
+
 func Test_T0001(t *testing.T) { newTest(t, `test0001`).abstract().equals() }
 func Test_T0002(t *testing.T) { newTest(t, `test0002`).abstract().equals() }
 func Test_T0003(t *testing.T) { newTest(t, `test0003`).abstract().equals() }
@@ -43,7 +48,7 @@ func (tt *testTool) abstract(patterns ...string) *testTool {
 	if len(patterns) <= 0 {
 		patterns = []string{`main.go`}
 	}
-	const verbose = true
+
 	ps, err := reader.Read(&reader.Config{
 		Verbose:    verbose,
 		Dir:        `./` + tt.dir,
@@ -51,7 +56,12 @@ func (tt *testTool) abstract(patterns ...string) *testTool {
 		BuildFlags: []string{`-tags=test`},
 	})
 	check.NoError(tt.t).Name(`Read project`).With(`Dir`, tt.dir).Require(err)
-	tt.proj = abstractor.Abstract(ps, verbose)
+
+	ld := 0
+	if verbose {
+		ld = logDepth
+	}
+	tt.proj = abstractor.Abstract(ps, ld)
 	return tt
 }
 

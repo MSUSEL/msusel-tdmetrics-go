@@ -30,9 +30,17 @@ func newMetricsCalc(fSet *token.FileSet, node ast.Node) *metricsCalc {
 
 func (m *metricsCalc) calculateMetrics() {
 	ast.Inspect(m.node, m.addCodePosForNode)
+	m.finishIndents()
+}
+
+func (m *metricsCalc) finishIndents() {
+	leftMostColumn := 10_000 //random large number
+	indentSum := 0
 	for _, ind := range m.minColumn {
-		m.indents += ind - 1
+		leftMostColumn = min(ind, leftMostColumn)
+		indentSum += ind
 	}
+	m.indents = indentSum - len(m.minColumn)*leftMostColumn
 }
 
 func (m *metricsCalc) getMetrics() Metrics {

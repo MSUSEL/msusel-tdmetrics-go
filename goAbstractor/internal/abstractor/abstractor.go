@@ -14,18 +14,13 @@ import (
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs"
 )
 
-func Abstract(ps []*packages.Package, verbose bool) constructs.Project {
+func Abstract(ps []*packages.Package, logDepth int) constructs.Project {
 	builtinName := `$builtin`
 	builtinPkg := &packages.Package{
 		PkgPath: builtinName,
 		Name:    builtinName,
 		Fset:    ps[0].Fset,
 		Types:   types.NewPackage(builtinName, builtinName),
-	}
-
-	logDepth := 0
-	if verbose {
-		logDepth = 2
 	}
 
 	ab := &abstractor{
