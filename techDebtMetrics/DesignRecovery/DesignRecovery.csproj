@@ -5,7 +5,7 @@
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{471996A4-298A-4BF8-A6E8-2001702670E1}</ProjectGuid>
-    <OutputType>Exe</OutputType>
+    <OutputType>Library</OutputType>
     <RootNamespace>DesignRecovery</RootNamespace>
     <AssemblyName>DesignRecovery</AssemblyName>
     <TargetFramework>net8.0</TargetFramework>

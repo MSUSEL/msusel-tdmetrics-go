@@ -28,7 +28,7 @@ jobs:
         timeout-minutes: 10
         run: go test -cover ./...
 
-  test_designRecovery:
+  test_techDebtMetrics:
     name: test designRecovery
     runs-on: windows-latest
     steps:
@@ -39,5 +39,19 @@ jobs:
           dotnet-version: '8'
 
       - name: Run Program
-        working-directory: ./designRecovery
-        run: dotnet run
+        working-directory: ./techDebtMetrics
+        run: dotnet test
+
+  test_designRecovery:
+    name: test designRecovery
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8'
+
+      - name: Run Program
+        working-directory: ./techDebtMetrics
+        run: dotnet test -v --os linux
