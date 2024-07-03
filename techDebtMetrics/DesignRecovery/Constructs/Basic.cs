@@ -1,8 +1,8 @@
 using System.Text.Json.Nodes;
 
-namespace designRecovery.src.Constructs;
+namespace DesignRecovery.Constructs;
 
-internal class Basic : ITypeDesc {
+public class Basic : ITypeDesc, IInitializable {
     public string Name { get; private set; } = "";
 
     public void Initialize(TypeGetter getter, JsonNode node) =>

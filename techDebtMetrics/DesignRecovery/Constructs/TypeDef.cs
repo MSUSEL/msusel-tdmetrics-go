@@ -1,10 +1,11 @@
-﻿using designRecovery.src.Extensions;
+﻿using DesignRecovery.Extensions;
+using System.Collections.Generic;
 using System.Text.Json.Nodes;
 
-namespace designRecovery.src.Constructs;
+namespace DesignRecovery.Constructs;
 
-internal class TypeDef : ITypeDesc {
-    public string Name { get; private set; }
+public class TypeDef : ITypeDesc {
+    public string Name { get; private set; } = "";
 
     private ITypeDesc? inType;
     public ITypeDesc Type => this.inType ??
@@ -12,10 +13,10 @@ internal class TypeDef : ITypeDesc {
 
     private readonly List<Named> inTypeParams = [];
     public IReadOnlyList<Named> TypeParams => this.inTypeParams.AsReadOnly();
-    
+
     private readonly List<Method> inMethods = [];
     public IReadOnlyList<Method> Methods => this.inMethods.AsReadOnly();
-    
+
     private Interface? inInterface;
     public Interface Interface => this.inInterface ??
         throw new UninitializedException("interface");
@@ -23,18 +24,19 @@ internal class TypeDef : ITypeDesc {
     public void Initialize(TypeGetter getter, JsonNode node) {
         JsonObject obj = node.AsObject();
         this.Name = obj.ReadValue<string>("name");
-        this.inType = obj.ReadIndexType<ITypeDesc>("type", getter);        
+        this.inType = obj.ReadIndexType<ITypeDesc>("type", getter);
+        this.inInterface = obj.ReadIndexType<Interface>("interface", getter);
         obj.ReadIndexTypeList("typeParams", getter, this.inTypeParams);
 
         JsonArray? methodsArr = obj["methods"]?.AsArray();
         if (methodsArr is not null) {
             for (int i = 0; i < methodsArr.Count; i++) {
                 JsonNode methodNode = methodsArr[i] ??
-                    throw new MissingDataException("methods["+i+"]");
+                    throw new MissingDataException("methods[" + i + "]");
 
                 Method m = new();
                 m.Initialize(getter, methodNode);
-                inMethods.Add(m);
+                this.inMethods.Add(m);
             }
         }
     }

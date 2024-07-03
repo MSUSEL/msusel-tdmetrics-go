@@ -1,8 +1,10 @@
 ﻿// Ignore Spelling: proj
 
-namespace designRecovery.src.Constructs;
+using System.Collections.Generic;
 
-internal class TypeGetter {
+namespace DesignRecovery.Constructs;
+
+public class TypeGetter {
     public TypeGetter(Project proj) {
         List<ITypeDesc> types = [
             .. proj.Types.Basics,
@@ -25,7 +27,8 @@ internal class TypeGetter {
     public T GetTypeAtIndex<T>(uint index) where T : ITypeDesc {
         ITypeDesc type = this.types[(int)index];
         return type is T t ? t :
-            throw new InvalidCastException("type at index "+index+" was expected to be "+typeof(T).FullName+" but got "+type.GetType().FullName);
+            throw new System.InvalidCastException("type at index " + index +
+                " was expected to be " + typeof(T).FullName + " but got " + type.GetType().FullName);
     }
 
     public Package GetPackageAtIndex(uint index) => this.packages[(int)index];

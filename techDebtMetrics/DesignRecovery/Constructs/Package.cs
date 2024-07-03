@@ -1,9 +1,10 @@
-﻿using designRecovery.src.Extensions;
+﻿using DesignRecovery.Extensions;
+using System.Collections.Generic;
 using System.Text.Json.Nodes;
 
-namespace designRecovery.src.Constructs;
+namespace DesignRecovery.Constructs;
 
-internal class Package : IInitializer {
+public class Package : IInitializable {
     public string Path { get; private set; } = "";
     public string Name { get; private set; } = "";
 
@@ -19,9 +20,10 @@ internal class Package : IInitializer {
     private readonly List<Method> inMethods = [];
     public IReadOnlyList<Method> Methods => this.inMethods.AsReadOnly();
 
-    static private void preallocate<T>(JsonObject obj, string name, List<T> list) where T: new() {
+    static private void preallocate<T>(JsonObject obj, string name, List<T> list) where T : new() {
         int count = obj[name]?.AsArray()?.Count ?? 0;
-        for (int i = 0; i<count; i++) list[i] = new T();
+        for (int i = 0; i < count; i++)
+            list[i] = new T();
     }
 
     public Package(JsonNode node) {
@@ -32,12 +34,12 @@ internal class Package : IInitializer {
     }
 
     static private void initializeList<T>(JsonObject obj, TypeGetter getter, string name, List<T> list)
-        where T : IInitializer {
+        where T : IInitializable {
         JsonArray? listArr = obj[name]?.AsArray();
         if (listArr is not null) {
             for (int i = 0; i < listArr.Count; i++) {
                 JsonNode item = listArr[i] ??
-                    throw new MissingDataException(name+"["+i+"]");
+                    throw new MissingDataException(name + "[" + i + "]");
                 list[i].Initialize(getter, item);
             }
         }
@@ -53,8 +55,8 @@ internal class Package : IInitializer {
         if (importArr is not null) {
             for (int i = 0; i < importArr.Count; i++) {
                 uint pkgIndex = importArr[i]?.GetValue<uint>() ??
-                    throw new MissingDataException("import["+i+"]");
-                inImport.Add(getter.GetPackageAtIndex(pkgIndex));
+                    throw new MissingDataException("import[" + i + "]");
+                this.inImport.Add(getter.GetPackageAtIndex(pkgIndex));
             }
         }
 

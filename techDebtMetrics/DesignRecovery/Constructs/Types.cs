@@ -1,10 +1,11 @@
 ﻿// Ignore Spelling: Structs
 
+using System.Collections.Generic;
 using System.Text.Json.Nodes;
 
-namespace designRecovery.src.Constructs;
+namespace DesignRecovery.Constructs;
 
-internal class Types {
+public class Types {
     private readonly List<Basic> inBasics = [];
     public IReadOnlyList<Basic> Basics => this.inBasics.AsReadOnly<Basic>();
 
@@ -26,11 +27,12 @@ internal class Types {
     private readonly List<Union> inUnions = [];
     public IReadOnlyList<Union> Unions => this.inUnions.AsReadOnly<Union>();
 
-    static private void preallocate<T>(JsonObject obj, string name, List<T> list) where T: new() {
+    static private void preallocate<T>(JsonObject obj, string name, List<T> list) where T : new() {
         int count = obj[name]?.AsArray()?.Count ?? 0;
-        for (int i = 0; i<count; i++) list[i] = new T();
+        for (int i = 0; i < count; i++)
+            list[i] = new T();
     }
-    
+
     public Types(JsonNode node) {
         JsonObject obj = node.AsObject();
         preallocate(obj, "basics", this.inBasics);
@@ -42,11 +44,11 @@ internal class Types {
         preallocate(obj, "unions", this.inUnions);
     }
 
-    static private void initType<T>(JsonObject obj, TypeGetter getter, string name, List<T> list) where T: ITypeDesc {
+    static private void initType<T>(JsonObject obj, TypeGetter getter, string name, List<T> list) where T : ITypeDesc {
         JsonArray? array = obj[name]?.AsArray();
         if (array is null) return;
         int count = array.Count;
-        for (int i = 0; i<count; i++) {
+        for (int i = 0; i < count; i++) {
             JsonNode? node = array[i];
             if (node is null) continue;
             list[i].Initialize(getter, node);

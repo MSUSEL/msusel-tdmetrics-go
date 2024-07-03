@@ -1,9 +1,10 @@
-﻿using designRecovery.src.Extensions;
+﻿using DesignRecovery.Extensions;
+using System.Collections.Generic;
 using System.Text.Json.Nodes;
 
-namespace designRecovery.src.Constructs;
+namespace DesignRecovery.Constructs;
 
-internal class Solid : ITypeDesc {
+public class Solid : ITypeDesc {
     private ITypeDesc? inTarget;
     public ITypeDesc Target => this.inTarget ??
         throw new UninitializedException("target");
@@ -11,7 +12,7 @@ internal class Solid : ITypeDesc {
     private readonly List<ITypeDesc> inTypeParams = [];
     public IReadOnlyList<ITypeDesc> TypeParams => this.inTypeParams.AsReadOnly();
 
-    public void Initialize(ITypeGetter getter, JsonNode node) {
+    public void Initialize(TypeGetter getter, JsonNode node) {
         JsonObject obj = node.AsObject();
         this.inTarget = obj.ReadIndexType<ITypeDesc>("target", getter);
         obj.ReadIndexTypeList("typeParams", getter, this.inTypeParams);

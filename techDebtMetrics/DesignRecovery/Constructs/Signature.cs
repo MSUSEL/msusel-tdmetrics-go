@@ -1,9 +1,10 @@
-﻿using designRecovery.src.Extensions;
+﻿using DesignRecovery.Extensions;
+using System.Collections.Generic;
 using System.Text.Json.Nodes;
 
-namespace designRecovery.src.Constructs;
+namespace DesignRecovery.Constructs;
 
-internal class Signature : ITypeDesc {
+public class Signature : ITypeDesc {
     public bool Variadic { get; private set; }
 
     private readonly List<Named> inParams = [];
@@ -16,7 +17,7 @@ internal class Signature : ITypeDesc {
     public ITypeDesc ReturnType => this.inReturnType ??
         throw new UninitializedException("returnType");
 
-    public void Initialize(ITypeGetter getter, JsonNode node) {
+    public void Initialize(TypeGetter getter, JsonNode node) {
         JsonObject obj = node.AsObject();
 
         if (obj.ContainsKey("variadic"))

@@ -1,16 +1,18 @@
-﻿using designRecovery.src.Extensions;
+﻿using DesignRecovery.Extensions;
+using System.Collections.Generic;
+using System.Linq;
 using System.Text.Json.Nodes;
 
-namespace designRecovery.src.Constructs;
+namespace DesignRecovery.Constructs;
 
-internal class Union : ITypeDesc {
+public class Union : ITypeDesc {
     private readonly List<ITypeDesc> inExact = [];
     public IReadOnlyList<ITypeDesc> Exact => this.inExact.AsReadOnly();
 
     private readonly List<ITypeDesc> inApprox = [];
     public IReadOnlyList<ITypeDesc> Approx => this.inApprox.AsReadOnly();
 
-    public void Initialize(ITypeGetter getter, JsonNode node) {
+    public void Initialize(TypeGetter getter, JsonNode node) {
         JsonObject obj = node.AsObject();
         obj.ReadIndexTypeList("extern", getter, this.inExact);
         obj.ReadIndexTypeList("approx", getter, this.inApprox);

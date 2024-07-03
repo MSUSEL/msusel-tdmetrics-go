@@ -1,4 +1,4 @@
 .DS_Store
-designRecovery/bin
-designRecovery/obj
-designRecovery/.vs
+bin
+obj
+.vs

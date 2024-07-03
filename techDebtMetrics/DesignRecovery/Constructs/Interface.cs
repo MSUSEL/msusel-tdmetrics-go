@@ -1,9 +1,10 @@
-﻿using designRecovery.src.Extensions;
+﻿using DesignRecovery.Extensions;
+using System.Collections.Generic;
 using System.Text.Json.Nodes;
 
-namespace designRecovery.src.Constructs;
+namespace DesignRecovery.Constructs;
 
-internal class Interface : ITypeDesc {
+public class Interface : ITypeDesc {
     private readonly List<Named> inTypeParams = [];
     public IReadOnlyList<Named> TypeParams => this.inTypeParams.AsReadOnly();
 
@@ -15,7 +16,7 @@ internal class Interface : ITypeDesc {
 
     public Union? Union { get; private set; }
 
-    public void Initialize(ITypeGetter getter, JsonNode node) {
+    public void Initialize(TypeGetter getter, JsonNode node) {
         JsonObject obj = node.AsObject();
 
         obj.ReadIndexTypeList("typeParams", getter, this.inTypeParams);
@@ -26,8 +27,8 @@ internal class Interface : ITypeDesc {
             foreach (KeyValuePair<string, JsonNode?> pair in methodObj) {
                 string key = pair.Key;
                 uint typeIndex = pair.Value?.GetValue<uint>() ??
-                    throw new MissingDataException("methods."+key+".value");
-                ITypeDesc value = getter.Get<ITypeDesc>(typeIndex);
+                    throw new MissingDataException("methods." + key + ".value");
+                ITypeDesc value = getter.GetTypeAtIndex<ITypeDesc>(typeIndex);
                 this.inMethods[key] = value;
             }
         }
