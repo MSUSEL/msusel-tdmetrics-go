@@ -4,7 +4,7 @@ using System.Text.Json.Nodes;
 
 namespace DesignRecovery.Constructs;
 
-public class Solid : ITypeDesc {
+public class Solid : ITypeDesc, IInitializable {
     private ITypeDesc? inTarget;
     public ITypeDesc Target => this.inTarget ??
         throw new UninitializedException("target");

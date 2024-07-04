@@ -4,6 +4,10 @@ using System.Text.Json.Nodes;
 
 namespace DesignRecovery.Constructs;
 
+/// <summary>
+/// A package is typically a folder of code containing zero or more classes (types).
+/// A package may have imports, static methods, and global variables too.
+/// </summary>
 public class Package : IInitializable {
     public string Path { get; private set; } = "";
     public string Name { get; private set; } = "";

@@ -4,7 +4,7 @@ using System.Text.Json.Nodes;
 
 namespace DesignRecovery.Constructs;
 
-public class Interface : ITypeDesc {
+public class Interface : ITypeDesc, IInitializable {
     private readonly List<Named> inTypeParams = [];
     public IReadOnlyList<Named> TypeParams => this.inTypeParams.AsReadOnly();
 

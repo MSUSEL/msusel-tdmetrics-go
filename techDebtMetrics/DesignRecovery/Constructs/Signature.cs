@@ -4,7 +4,7 @@ using System.Text.Json.Nodes;
 
 namespace DesignRecovery.Constructs;
 
-public class Signature : ITypeDesc {
+public class Signature : ITypeDesc, IInitializable {
     public bool Variadic { get; private set; }
 
     private readonly List<Named> inParams = [];

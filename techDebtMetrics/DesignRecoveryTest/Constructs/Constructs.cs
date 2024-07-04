@@ -1,6 +1,7 @@
-namespace DesignRecoveryTest;
+namespace DesignRecoveryTest.Constructs;
 
-public class UnitTests {
+public class Constructs {
+
     [Test]
     public void Test1() {
         Assert.Pass();

@@ -5,7 +5,7 @@ using System.Text.Json.Nodes;
 
 namespace DesignRecovery.Constructs;
 
-public class Union : ITypeDesc {
+public class Union : ITypeDesc, IInitializable {
     private readonly List<ITypeDesc> inExact = [];
     public IReadOnlyList<ITypeDesc> Exact => this.inExact.AsReadOnly();
 

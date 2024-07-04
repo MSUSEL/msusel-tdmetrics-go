@@ -4,7 +4,7 @@ using System.Text.Json.Nodes;
 
 namespace DesignRecovery.Constructs;
 
-public class TypeDef : ITypeDesc {
+public class TypeDef : ITypeDesc, IInitializable {
     public string Name { get; private set; } = "";
 
     private ITypeDesc? inType;

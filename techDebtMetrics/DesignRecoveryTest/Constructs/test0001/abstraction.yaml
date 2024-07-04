@@ -1,0 +1,23 @@
+{
+  language: go,
+  packages: [
+    {
+      path: command-line-arguments,
+      name: main,
+      methods: [
+        { # func main()
+          name: main, signature: 2,
+          metrics: { codeCount: 3, complexity: 1, indents: 1, lineCount: 3 }
+        }
+      ]
+    }
+  ],
+  types: {
+    interfaces: [
+      {} # 1. any
+    ],
+    signatures: [
+      {} # 2. func()()
+    ],
+  }
+}
