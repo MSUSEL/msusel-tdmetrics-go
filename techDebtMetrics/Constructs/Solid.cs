@@ -1,20 +1,24 @@
-﻿using DesignRecovery.Extensions;
+﻿using Constructs.Exceptions;
+using Constructs.Extensions;
+using Constructs.Tooling;
 using System.Collections.Generic;
 using System.Text.Json.Nodes;
 
-namespace DesignRecovery.Constructs;
+namespace Constructs;
 
 public class Solid : ITypeDesc, IInitializable {
-    private ITypeDesc? inTarget;
     public ITypeDesc Target => this.inTarget ??
         throw new UninitializedException("target");
+    private ITypeDesc? inTarget;
 
-    private readonly List<ITypeDesc> inTypeParams = [];
     public IReadOnlyList<ITypeDesc> TypeParams => this.inTypeParams.AsReadOnly();
+    private readonly List<ITypeDesc> inTypeParams = [];
 
-    public void Initialize(TypeGetter getter, JsonNode node) {
+    void IInitializable.Initialize(TypeGetter getter, JsonNode node) {
         JsonObject obj = node.AsObject();
         this.inTarget = obj.ReadIndexType<ITypeDesc>("target", getter);
         obj.ReadIndexTypeList("typeParams", getter, this.inTypeParams);
     }
+
+    public string ToStub() => throw new System.NotImplementedException(); // TODO: Implement
 }

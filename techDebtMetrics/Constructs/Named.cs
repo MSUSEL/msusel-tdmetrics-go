@@ -1,20 +1,24 @@
-﻿using DesignRecovery.Extensions;
+﻿using Constructs.Exceptions;
+using Constructs.Extensions;
+using Constructs.Tooling;
 using System.Text.Json.Nodes;
 
-namespace DesignRecovery.Constructs;
+namespace Constructs;
 
 public class Named : ITypeDesc, IInitializable {
     public string Name { get; private set; } = "";
 
-    private ITypeDesc? inType;
     public ITypeDesc Type => this.inType ??
         throw new UninitializedException("type");
+    private ITypeDesc? inType;
 
-    public void Initialize(TypeGetter getter, JsonNode node) {
+    void IInitializable.Initialize(TypeGetter getter, JsonNode node) {
         JsonObject obj = node.AsObject();
         this.Name = obj.ReadValue<string>("name");
         this.inType = obj.ReadIndexType<ITypeDesc>("type", getter);
     }
 
-    public override string ToString() => this.Name + ": " + this.Type ?? "<null>";
+    public override string ToString() => this.ToStub();
+
+    public string ToStub() => this.Name + ": " + this.Type ?? "<null>";
 }

@@ -10,9 +10,9 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Constructs\test1\**" />
-    <EmbeddedResource Remove="Constructs\test1\**" />
-    <None Remove="Constructs\test1\**" />
+    <Compile Remove="ConstructTests\test1\**" />
+    <EmbeddedResource Remove="ConstructTests\test1\**" />
+    <None Remove="ConstructTests\test1\**" />
   </ItemGroup>
 
   <ItemGroup>
@@ -21,6 +21,10 @@
     <PackageReference Include="NUnit" Version="3.14.0" />
     <PackageReference Include="NUnit.Analyzers" Version="3.9.0" />
     <PackageReference Include="NUnit3TestAdapter" Version="4.5.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\DesignRecovery\DesignRecovery.csproj" />
   </ItemGroup>
 
   <ItemGroup>

@@ -1,23 +1,26 @@
-﻿using DesignRecovery.Extensions;
+﻿using Constructs.Extensions;
+using Constructs.Tooling;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.Json.Nodes;
 
-namespace DesignRecovery.Constructs;
+namespace Constructs;
 
 public class Union : ITypeDesc, IInitializable {
-    private readonly List<ITypeDesc> inExact = [];
     public IReadOnlyList<ITypeDesc> Exact => this.inExact.AsReadOnly();
+    private readonly List<ITypeDesc> inExact = [];
 
-    private readonly List<ITypeDesc> inApprox = [];
     public IReadOnlyList<ITypeDesc> Approx => this.inApprox.AsReadOnly();
+    private readonly List<ITypeDesc> inApprox = [];
 
-    public void Initialize(TypeGetter getter, JsonNode node) {
+    void IInitializable.Initialize(TypeGetter getter, JsonNode node) {
         JsonObject obj = node.AsObject();
         obj.ReadIndexTypeList("extern", getter, this.inExact);
         obj.ReadIndexTypeList("approx", getter, this.inApprox);
     }
 
-    public override string ToString() =>
+    public override string ToString() => this.ToStub();
+ 
+    public string ToStub() =>
         this.Exact.ToStrings().Concat(this.Approx.ToStrings(prefix: "~")).Join("|");
 }

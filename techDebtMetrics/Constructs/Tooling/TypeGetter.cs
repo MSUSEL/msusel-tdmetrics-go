@@ -2,9 +2,9 @@
 
 using System.Collections.Generic;
 
-namespace DesignRecovery.Constructs;
+namespace Constructs.Tooling;
 
-public class TypeGetter {
+internal class TypeGetter {
     public TypeGetter(Project proj) {
         List<ITypeDesc> types = [
             .. proj.Types.Basics,

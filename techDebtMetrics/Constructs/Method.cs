@@ -1,20 +1,24 @@
-﻿using DesignRecovery.Extensions;
+﻿using Constructs.Exceptions;
+using Constructs.Extensions;
+using Constructs.Tooling;
 using System.Text.Json.Nodes;
 
-namespace DesignRecovery.Constructs;
+namespace Constructs;
 
-public class Method : IInitializable {
+public class Method : IConstruct, IInitializable {
     public string Name { get; private set; } = "";
 
-    private ITypeDesc? inSignature;
     public ITypeDesc Signature => this.inSignature ??
         throw new UninitializedException("signature");
+    private ITypeDesc? inSignature;
 
-    public void Initialize(TypeGetter getter, JsonNode node) {
+    void IInitializable.Initialize(TypeGetter getter, JsonNode node) {
         JsonObject obj = node.AsObject();
         this.Name = obj.ReadValue<string>("name");
         this.inSignature = obj.ReadIndexType<ITypeDesc>("signature", getter);
 
         // TODO: Add "metrics"
     }
+
+    public string ToStub() => throw new System.NotImplementedException(); // TODO: Implement
 }

@@ -1,15 +1,18 @@
-﻿using DesignRecovery.Extensions;
+﻿using Constructs.Extensions;
+using Constructs.Tooling;
 using System.Collections.Generic;
 using System.Text.Json.Nodes;
 
-namespace DesignRecovery.Constructs;
+namespace Constructs;
 
 public class Struct : ITypeDesc, IInitializable {
-    private readonly List<Named> inFields = [];
     public IReadOnlyList<Named> Fields => this.inFields.AsReadOnly();
+    private readonly List<Named> inFields = [];
 
-    public void Initialize(TypeGetter getter, JsonNode node) {
+    void IInitializable.Initialize(TypeGetter getter, JsonNode node) {
         JsonObject obj = node.AsObject();
         obj.ReadIndexTypeList("fields", getter, this.inFields);
     }
+
+    public string ToStub() => throw new System.NotImplementedException(); // TODO: Implement
 }

@@ -1,16 +1,30 @@
-﻿using DesignRecovery.Constructs;
+﻿using Constructs.Exceptions;
+using Constructs.Tooling;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text.Json.Nodes;
 
-namespace DesignRecovery.Extensions;
+namespace Constructs.Extensions;
 
-public static class Extensions {
-    public static string Join(this IEnumerable<string> source, string separator = ", ") =>
-        string.Join(separator, source);
+internal static class JsonExt {
 
-    public static IEnumerable<string> ToStrings<T>(this IEnumerable<T> source, string prefix = "", string suffix = "", string onNull = "<null>") =>
-        source.Select(x => prefix + (x?.ToString() ?? onNull) + suffix);
+    static public void PreallocateList<T>(this JsonObject obj, string name, List<T> list)
+        where T : new() {
+        int count = obj[name]?.AsArray()?.Count ?? 0;
+        for (int i = 0; i < count; i++)
+            list[i] = new T();
+    }
+
+    static public void InitializeList<T>(this JsonObject obj, TypeGetter getter, string name, List<T> list)
+        where T : IInitializable {
+        JsonArray? listArr = obj[name]?.AsArray();
+        if (listArr is not null) {
+            for (int i = 0; i < listArr.Count; i++) {
+                JsonNode item = listArr[i] ??
+                    throw new MissingDataException(name + "[" + i + "]");
+                list[i].Initialize(getter, item);
+            }
+        }
+    }
 
     static public T ReadValue<T>(this JsonObject obj, string name) {
         JsonNode n = obj[name] ??

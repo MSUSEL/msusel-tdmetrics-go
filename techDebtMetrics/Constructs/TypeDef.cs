@@ -1,8 +1,10 @@
-﻿using DesignRecovery.Extensions;
+﻿using Constructs.Exceptions;
+using Constructs.Extensions;
+using Constructs.Tooling;
 using System.Collections.Generic;
 using System.Text.Json.Nodes;
 
-namespace DesignRecovery.Constructs;
+namespace Constructs;
 
 public class TypeDef : ITypeDesc, IInitializable {
     public string Name { get; private set; } = "";
@@ -21,7 +23,7 @@ public class TypeDef : ITypeDesc, IInitializable {
     public Interface Interface => this.inInterface ??
         throw new UninitializedException("interface");
 
-    public void Initialize(TypeGetter getter, JsonNode node) {
+    void IInitializable.Initialize(TypeGetter getter, JsonNode node) {
         JsonObject obj = node.AsObject();
         this.Name = obj.ReadValue<string>("name");
         this.inType = obj.ReadIndexType<ITypeDesc>("type", getter);
@@ -35,9 +37,11 @@ public class TypeDef : ITypeDesc, IInitializable {
                     throw new MissingDataException("methods[" + i + "]");
 
                 Method m = new();
-                m.Initialize(getter, methodNode);
+                (m as IInitializable).Initialize(getter, methodNode);
                 this.inMethods.Add(m);
             }
         }
     }
+
+    public string ToStub() => throw new System.NotImplementedException(); // TODO: Implement
 }

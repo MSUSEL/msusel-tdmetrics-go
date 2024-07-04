@@ -1,15 +1,18 @@
-﻿using System.Collections.Generic;
+﻿using Constructs.Exceptions;
+using Constructs.Tooling;
+using System.Collections.Generic;
 using System.IO;
+using System.Text;
 using System.Text.Json.Nodes;
 using System.Text.RegularExpressions;
 
-namespace DesignRecovery.Constructs;
+namespace Constructs;
 
 /// <summary>
 /// A project represents all the packages to completely describe
 /// a program or a library with all of it's import types also described.
 /// </summary>
-public partial class Project {
+public partial class Project : IConstruct {
     [GeneratedRegex(@"#.*$", RegexOptions.Compiled)]
     private static partial Regex JsonCommentMatch();
 
@@ -69,7 +72,15 @@ public partial class Project {
         for (int i = 0; i < packageCount; i++) {
             JsonNode packageNode = packagesArr[i] ??
                 throw new MissingDataException("packages[" + i + "]");
-            this.inPackages[i].Initialize(getter, packageNode);
+            (this.inPackages[i] as IInitializable).Initialize(getter, packageNode);
         }
+    }
+
+    public string ToStub() {
+        StringBuilder sb = new();
+
+        // TODO: Finish
+
+        return sb.ToString();
     }
 }

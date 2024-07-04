@@ -1,23 +1,25 @@
-﻿using DesignRecovery.Extensions;
+﻿using Constructs.Exceptions;
+using Constructs.Extensions;
+using Constructs.Tooling;
 using System.Collections.Generic;
 using System.Text.Json.Nodes;
 
-namespace DesignRecovery.Constructs;
+namespace Constructs;
 
 public class Signature : ITypeDesc, IInitializable {
     public bool Variadic { get; private set; }
 
-    private readonly List<Named> inParams = [];
     public IReadOnlyList<Named> Params => this.inParams.AsReadOnly();
+    private readonly List<Named> inParams = [];
 
-    private readonly List<Named> inTypeParams = [];
     public IReadOnlyList<Named> TypeParams => this.inTypeParams.AsReadOnly();
+    private readonly List<Named> inTypeParams = [];
 
-    private ITypeDesc? inReturnType;
     public ITypeDesc ReturnType => this.inReturnType ??
         throw new UninitializedException("returnType");
+    private ITypeDesc? inReturnType;
 
-    public void Initialize(TypeGetter getter, JsonNode node) {
+    void IInitializable.Initialize(TypeGetter getter, JsonNode node) {
         JsonObject obj = node.AsObject();
 
         if (obj.ContainsKey("variadic"))
@@ -29,4 +31,6 @@ public class Signature : ITypeDesc, IInitializable {
         if (obj.ContainsKey("return"))
             this.inReturnType = obj.ReadIndexType<ITypeDesc>("return", getter);
     }
+
+    public string ToStub() => throw new System.NotImplementedException(); // TODO: Implement
 }
