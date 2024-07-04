@@ -3,6 +3,7 @@ package tests
 import (
 	"encoding/json"
 	"os"
+	"runtime"
 	"slices"
 	"strings"
 	"testing"
@@ -27,7 +28,12 @@ func Test_T0002(t *testing.T) { newTest(t, `test0002`).abstract().equals() }
 func Test_T0003(t *testing.T) { newTest(t, `test0003`).abstract().equals() }
 func Test_T0004(t *testing.T) { newTest(t, `test0004`).abstract().equals() }
 func Test_T0005(t *testing.T) { newTest(t, `test0005`).abstract(`cats.go`).equals() }
-func Test_T0006(t *testing.T) { newTest(t, `test0006`).abstract(`cats.go`).partial().save() }
+func Test_T0006(t *testing.T) {
+	if runtime.GOOS != `windows` {
+		t.Skip(`The OS changes the specific type indices, this test is for Windows.`)
+	}
+	newTest(t, `test0006`).abstract(`cats.go`).partial().save()
+}
 func Test_T0007(t *testing.T) { newTest(t, `test0007`).abstract().equals() }
 func Test_T0008(t *testing.T) { newTest(t, `test0008`).abstract().equals() }
 

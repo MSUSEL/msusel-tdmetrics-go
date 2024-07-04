@@ -318,6 +318,42 @@ func Test_GoStatement(t *testing.T) {
 	})
 }
 
+func Test_SelectStatement(t *testing.T) {
+	m := parseExpr(t,
+		`func() {`,
+		`	var A, B chan bool`,
+		`	go func() {`,
+		`		A <- true`,
+		`	}()`,
+		`	go func() {`,
+		`		B <- true`,
+		`	}()`,
+		`	select {`,
+		`	case <- A:`,
+		`		print("A ")`,
+		`	case b := <- B:`,
+		`		print("B ", b)`,
+		`	}`,
+		`}`)
+	checkMetrics(t, m, Metrics{
+		CodeCount:  15,
+		Complexity: 5,
+		Indents:    17,
+		LineCount:  15,
+	})
+}
+
+func Test_MetricsString(t *testing.T) {
+	m := Metrics{
+		CodeCount:  11,
+		Complexity: 5,
+		Indents:    17,
+		LineCount:  15,
+	}
+	check.Equal(t, `{"codeCount":11,"complexity":5,"indents":17,"lineCount":15}`).
+		Require(m.String())
+}
+
 func parseExpr(t *testing.T, lines ...string) Metrics {
 	code := strings.Join(lines, "\n")
 	fSet := token.NewFileSet()
