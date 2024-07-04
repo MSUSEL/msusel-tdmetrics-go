@@ -2,6 +2,7 @@
 using Constructs.Extensions;
 using Constructs.Tooling;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text.Json.Nodes;
 
 namespace Constructs;
@@ -20,5 +21,6 @@ public class Solid : ITypeDesc, IInitializable {
         obj.ReadIndexTypeList("typeParams", getter, this.inTypeParams);
     }
 
-    public string ToStub() => throw new System.NotImplementedException(); // TODO: Implement
+    public string ToStub() => this.Target.ToStub() +
+        "<" + this.TypeParams.Select(tp => tp.ToStub()).Join() + ">";
 }

@@ -68,7 +68,7 @@ public partial class Project : IConstruct {
         }
 
         TypeGetter getter = new(this);
-        this.Types.Initialize(getter, types);
+        (this.Types as IInitializable).Initialize(getter, types);
         for (int i = 0; i < packageCount; i++) {
             JsonNode packageNode = packagesArr[i] ??
                 throw new MissingDataException("packages[" + i + "]");
@@ -78,9 +78,15 @@ public partial class Project : IConstruct {
 
     public string ToStub() {
         StringBuilder sb = new();
-
-        // TODO: Finish
-
+        bool first = true;
+        foreach (Package package in this.Packages) {
+            if (first) first = false;
+            else {
+                sb.AppendLine();
+                sb.AppendLine();
+            }
+            sb.Append(package.ToStub());
+        }
         return sb.ToString();
     }
 }

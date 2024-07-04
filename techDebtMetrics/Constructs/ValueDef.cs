@@ -9,9 +9,9 @@ public class ValueDef : IConstruct, IInitializable {
     public string Name { get; private set; } = "";
     public bool IsConst { get; private set; } = false;
 
-    private ITypeDesc? inType;
     public ITypeDesc Type => this.inType ??
         throw new UninitializedException("type");
+    private ITypeDesc? inType;
 
     void IInitializable.Initialize(TypeGetter getter, JsonNode node) {
         JsonObject obj = node.AsObject();
@@ -19,6 +19,6 @@ public class ValueDef : IConstruct, IInitializable {
         this.IsConst = obj.ReadValue<bool>("isConst");
         this.inType = obj.ReadIndexType<ITypeDesc>("type", getter);
     }
-
-    public string ToStub() => throw new System.NotImplementedException(); // TODO: Implement
+    
+    public string ToStub() => (this.IsConst?"const ":"") + this.Name + " "+ this.Type.ToStub();
 }

@@ -20,5 +20,5 @@ public class Method : IConstruct, IInitializable {
         // TODO: Add "metrics"
     }
 
-    public string ToStub() => throw new System.NotImplementedException(); // TODO: Implement
+    public string ToStub() => this.Name + " " + this.Signature.ToStub();
 }

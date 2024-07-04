@@ -1,6 +1,6 @@
-using DesignRecovery.Constructs;
+using Constructs;
 
-namespace DesignRecoveryTest.Constructs;
+namespace UnitTests.Constructs;
 
 public class ConstructTests {
 
@@ -10,9 +10,9 @@ public class ConstructTests {
     #region Test Tools...
 
     static private string getTestPath(int testNum, string fileName) =>
-        string.Format("../TestData/Test{0:D6}/{1}", testNum, fileName);
+        string.Format("../../../TestData/Test{0:D4}/{1}", testNum, fileName);
 
-    static private Project readTestPackage(int testNum, string fileName = "absraction.yaml") =>
+    static private Project readTestPackage(int testNum, string fileName = "abstraction.yaml") =>
         Project.FromJsonFile(getTestPath(testNum, fileName));
 
     static private string readExpectedStub(int testNum, string fileName = "expStub.txt") =>

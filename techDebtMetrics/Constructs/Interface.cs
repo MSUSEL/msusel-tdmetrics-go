@@ -2,6 +2,8 @@
 using Constructs.Extensions;
 using Constructs.Tooling;
 using System.Collections.Generic;
+using System.Linq;
+using System.Text;
 using System.Text.Json.Nodes;
 
 namespace Constructs;
@@ -39,5 +41,33 @@ public class Interface : ITypeDesc, IInitializable {
             this.Union = obj.ReadIndexType<Union>("union", getter);
     }
 
-    public string ToStub() => throw new System.NotImplementedException(); // TODO: Implement
+    public string ToStub() {
+        StringBuilder sb = new();
+        sb.Append("interface");
+        
+        if (this.TypeParams.Count > 0) {
+            sb.Append('<');
+            sb.Append(this.TypeParams.Select(tp => tp.ToStub()).Join());
+            sb.Append('>');
+        }
+        
+        if (this.Interfaces.Count > 0) {
+            sb.Append(':');
+            sb.Append(this.Interfaces.Select(tp => tp.ToStub()).Join(", "));
+        }
+
+        sb.Append(" {");
+        if (this.Methods.Count > 0) {
+            sb.AppendLine();
+            foreach (KeyValuePair<string, ITypeDesc> pair in this.Methods) {
+                sb.Append("   ");
+                sb.Append(pair.Key);
+                sb.Append(' ');
+                sb.Append(pair.Value.ToStub());
+                sb.AppendLine();
+            }
+        }
+        sb.Append('}');
+        return sb.ToString();
+    }
 }

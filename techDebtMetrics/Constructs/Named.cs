@@ -18,7 +18,7 @@ public class Named : ITypeDesc, IInitializable {
         this.inType = obj.ReadIndexType<ITypeDesc>("type", getter);
     }
 
-    public override string ToString() => this.ToStub();
+    public override string ToString() => this.Name + ":" + this.Type;
 
-    public string ToStub() => this.Name + ": " + this.Type ?? "<null>";
+    public string ToStub() => this.Name + " " + this.Type.ToStub();
 }

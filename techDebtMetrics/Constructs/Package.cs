@@ -2,6 +2,7 @@
 using Constructs.Extensions;
 using Constructs.Tooling;
 using System.Collections.Generic;
+using System.Text;
 using System.Text.Json.Nodes;
 
 namespace Constructs;
@@ -14,8 +15,8 @@ public class Package : IConstruct, IInitializable {
     public string Path { get; private set; } = "";
     public string Name { get; private set; } = "";
 
-    public IReadOnlyList<Package> Imports => this.inImport.AsReadOnly();
-    private readonly List<Package> inImport = [];
+    public IReadOnlyList<Package> Imports => this.inImports.AsReadOnly();
+    private readonly List<Package> inImports = [];
 
     public IReadOnlyList<TypeDef> Types => this.inTypes.AsReadOnly();
     private readonly List<TypeDef> inTypes = [];
@@ -44,7 +45,7 @@ public class Package : IConstruct, IInitializable {
             for (int i = 0; i < importArr.Count; i++) {
                 uint pkgIndex = importArr[i]?.GetValue<uint>() ??
                     throw new MissingDataException("import[" + i + "]");
-                this.inImport.Add(getter.GetPackageAtIndex(pkgIndex));
+                this.inImports.Add(getter.GetPackageAtIndex(pkgIndex));
             }
         }
 
@@ -53,5 +54,43 @@ public class Package : IConstruct, IInitializable {
         obj.InitializeList(getter, "methods", this.inMethods);
     }
 
-    public string ToStub() => throw new System.NotImplementedException(); // TODO: Implement
+    public string ToStub() {
+        StringBuilder sb = new();
+        sb.Append("package ");
+        sb.Append(this.Name);
+        sb.AppendLine(" {");
+
+        sb.Append("   path: ");
+        sb.Append(this.Path);
+        sb.AppendLine(";");
+
+        foreach (Package import in this.Imports) {
+            sb.Append("   import: ");
+            sb.Append(import.Name);
+            sb.Append(" => ");
+            sb.Append(import.Path);
+            sb.AppendLine(";");
+        }
+
+        foreach (TypeDef td in this.Types) {
+            sb.Append("   ");
+            sb.Append(td.ToStub().Replace("\n", "\n   "));
+            sb.AppendLine(";");
+        }
+
+        foreach (ValueDef vd in this.Values) {
+            sb.Append("   ");
+            sb.Append(vd.ToStub().Replace("\n", "\n   "));
+            sb.AppendLine(";");
+        }
+
+        foreach (Method m in this.Methods) {
+            sb.Append("   ");
+            sb.Append(m.ToStub().Replace("\n", "\n   "));
+            sb.AppendLine(";");
+        }
+
+        sb.Append('}');
+        return sb.ToString();
+    }
 }
