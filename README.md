@@ -17,8 +17,3 @@ analysis for procedural and object oriented languages.
    2. [Participation Matrix](./docs/participationMatrix.md)
    3. Technical Debt Analysis
    4. [Results](./docs/tdResults.md)
-
-## Java Experiments
-
-1. [Participation Measurement with Checkstyle](./javaexps/exp001)
-2. [Participation Measurement with Spoon](./javaexps/exp002)
