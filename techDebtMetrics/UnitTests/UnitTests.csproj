@@ -24,7 +24,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Constructs\Constructs.csproj" />
     <ProjectReference Include="..\DesignRecovery\DesignRecovery.csproj" />
+    <ProjectReference Include="..\Yamlite\Yamlite.csproj" />
   </ItemGroup>
 
   <ItemGroup>
