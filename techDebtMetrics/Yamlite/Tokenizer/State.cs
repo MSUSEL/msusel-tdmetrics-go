@@ -1,19 +1,23 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using Yamlite.Tokenizer.Transition;
 
 namespace Yamlite.Tokenizer;
 
-internal class State(string tokenName = "") {
-
+internal class State(string tokenName = "", bool consume = false) {
     public string TokenName { get; init; } = tokenName;
+    public bool IsConsume { get; init; } = consume;
+    public bool IsAccept { get; init; } = consume || !string.IsNullOrEmpty(tokenName);
+    
+    private readonly List<State> children = [];
+    private readonly List<ITransition> trans = [];
 
-    public bool IsAccept => string.IsNullOrEmpty(this.TokenName);
+    public void Add(State child, ITransition transition) {
+        this.children.Add(child);
+        this.trans.Add(transition);
+    }
 
-    public IReadOnlyDictionary<ITransition, State> Children => this.inChildren.AsReadOnly();
-    private readonly Dictionary<ITransition, State> inChildren = [];
-
-    public void Add(ITransition transition, State child) => this.inChildren[transition] = child;
-
-    public State? Next(char c) => this.inChildren.FirstOrDefault(p => p.Key.Accept(c)).Value;
+    public State? Next(char c) {
+        int index = this.trans.FindIndex(t => t.Accept(c));
+        return index < 0 ? null : this.children[index];
+    }
 }

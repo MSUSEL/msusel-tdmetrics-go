@@ -8,7 +8,7 @@ namespace Yamlite.Tokenizer;
 internal class Scanner : IEnumerator<char> {
     private readonly List<char> pending = [];
     private readonly List<char> buffer  = [];
-    private IEnumerator<char> source;
+    private readonly IEnumerator<char> source;
 
     public Scanner(IEnumerator<char> source) {
         this.source = source;

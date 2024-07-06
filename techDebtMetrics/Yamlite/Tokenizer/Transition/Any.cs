@@ -1,7 +1,5 @@
-﻿using System.Linq;
+﻿namespace Yamlite.Tokenizer.Transition;
 
-namespace Yamlite.Tokenizer.Transition;
-
-internal record Any(params char[] Inner) : ITransition {
+internal record Any(string Inner) : ITransition {
     public bool Accept(char c) => this.Inner.Contains(c);
 }
