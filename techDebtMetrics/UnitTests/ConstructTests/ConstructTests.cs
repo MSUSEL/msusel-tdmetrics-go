@@ -16,12 +16,12 @@ public class ConstructTests {
         Project.FromFile(getTestPath(testNum, fileName));
 
     static private string readExpectedStub(int testNum, string fileName = "expStub.txt") =>
-        File.ReadAllText(getTestPath(testNum, fileName));
+        File.ReadAllText(getTestPath(testNum, fileName)).Trim();
 
     static private void runStubTest(int testNum) {
         Project proj = readTestPackage(testNum);
-        string got = proj.ToStub();
-        string exp = readExpectedStub(testNum);
+        string got = proj.ToStub().Replace("\r\n", "\n");
+        string exp = readExpectedStub(testNum).Replace("\r\n", "\n");
         Assert.That(got, Is.EqualTo(exp));
     }
 
