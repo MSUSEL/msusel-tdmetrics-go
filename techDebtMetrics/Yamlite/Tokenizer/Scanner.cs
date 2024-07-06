@@ -10,6 +10,8 @@ internal class Scanner : IEnumerator<char> {
     private readonly List<char> buffer  = [];
     private readonly IEnumerator<char> source;
 
+    public Scanner(string source): this(source.GetEnumerator()) { }
+
     public Scanner(IEnumerator<char> source) {
         this.source = source;
         this.inReset();

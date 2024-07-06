@@ -6,7 +6,7 @@ public class ScannerTests {
     
     [Test]
     public void StringWithOneNewline() {
-        Scanner s = new("Hello\nWorld".GetEnumerator());
+        Scanner s = new("Hello\nWorld");
         checkCurrent(s, 0, 0, 1, '\0', "");
         checkStart(s, 0, 0, 1);
 
@@ -62,7 +62,7 @@ public class ScannerTests {
 
     [Test]
     public void ResetAndTakeNone() {
-        Scanner s = new("Hello".GetEnumerator());
+        Scanner s = new("Hello");
         checkNext(s, 0, 0, 1, 'H', "H");
         checkNext(s, 1, 1, 1, 'e', "He");
         checkNext(s, 2, 2, 1, 'l', "Hel");
@@ -98,7 +98,7 @@ public class ScannerTests {
 
     [Test]
     public void AllNewlines() {
-        Scanner s = new("\n\n\n".GetEnumerator());
+        Scanner s = new("\n\n\n");
 
         checkNext(s, 0, 0, 1, '\n', "\n");
         checkNext(s, 1, 0, 2, '\n', "\n\n");
@@ -113,7 +113,7 @@ public class ScannerTests {
 
     [Test]
     public void TakeFullBuffer() {
-        Scanner s = new("Hello".GetEnumerator());
+        Scanner s = new("Hello");
         checkNext(s, 0, 0, 1, 'H', "H");
         checkNext(s, 1, 1, 1, 'e', "He");
         checkNext(s, 2, 2, 1, 'l', "Hel");
@@ -128,6 +128,38 @@ public class ScannerTests {
 
         Assert.That(s.Take(0), Is.EqualTo(""));
         checkCurrent(s, 4, 4, 1, '\0', "");
+    }
+
+    [Test]
+    public void OffsetsAndLines() {
+        Scanner s = new("hello\nsmall blue\nplanet");
+        checkNext(s, 0, 0, 1, 'h', "h");
+        checkNext(s, 1, 1, 1, 'e', "he");
+        checkNext(s, 2, 2, 1, 'l', "hel");
+        checkNext(s, 3, 3, 1, 'l', "hell");
+        checkNext(s, 4, 4, 1, 'o', "hello");
+        checkNext(s, 5, 5, 1, '\n', "hello\n");
+        Assert.That(s.Take(5), Is.EqualTo("hello"));
+        checkCurrent(s, 4, 4, 1, 'o', "");
+
+        checkNext(s, 5, 5, 1, '\n', "\n");
+        checkNext(s, 6, 0, 2, 's', "\ns");
+        Assert.That(s.Take(1), Is.EqualTo("\n"));
+        checkCurrent(s, 5, 5, 1, '\n', "");
+        
+        checkNext(s, 6, 0, 2, 's', "s");
+        checkNext(s, 7, 1, 2, 'm', "sm");
+        checkNext(s, 8, 2, 2, 'a', "sma");
+        checkNext(s, 9, 3, 2, 'l', "smal");
+        checkNext(s, 10, 4, 2, 'l', "small");
+        checkNext(s, 11, 5, 2, ' ', "small ");
+        Assert.That(s.Take(5), Is.EqualTo("small"));
+        checkCurrent(s, 10, 4, 2, 'l', "");
+
+        checkNext(s, 11, 5, 2, ' ', " ");
+
+
+
     }
     
     static private void checkNext(Scanner s, int offset, int column, int line, char c, string str) =>

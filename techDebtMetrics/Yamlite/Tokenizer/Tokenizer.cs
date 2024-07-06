@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿// Ignore Spelling: Yamlite
+
+using System.Collections.Generic;
 using Yamlite.Tokenizer.Transition;
 
 namespace Yamlite.Tokenizer;
@@ -12,16 +14,16 @@ internal class Tokenizer(State start) {
         private State current = start;
         private int acceptIndex = 0;
         private State? accept = null;
-        
+
         public bool Running = true;
 
         private Token? createToken() {
             if (this.accept is null)
                 throw new UnexpectedCharException(source);
 
-            string value = source.Take(this.acceptIndex);
+            string value = this.source.Take(this.acceptIndex);
             Token? token = this.accept.IsConsume ? null :
-                new Token(this.accept.TokenName, value);
+                new Token(this.accept.TokenName, value, this.source.CurrentOffset, this.source.CurrentColumn, this.source.CurrentLine);
 
             this.current = this.start;
             this.acceptIndex = 0;
@@ -49,6 +51,7 @@ internal class Tokenizer(State start) {
         }
     }
 
+
     public IEnumerable<Token> Tokenize(IEnumerable<char> text) {
         RunnerState r = new(this.start, new(text.GetEnumerator()));
         while (r.Running) {
@@ -57,48 +60,49 @@ internal class Tokenizer(State start) {
         }
     }
 
-    static public Tokenizer Yamlite() {
-        ITransition notEOL = new Not("\n\r");
-        
-        State start = new();
-        start.Add(new("OpenObject"), new Any("{"));
-        start.Add(new("CloseObject"), new Any("}"));
-        start.Add(new("OpenArray"), new Any("["));
-        start.Add(new("CloseArray"), new Any("]"));
-        start.Add(new("Colon"), new Any(":"));
-        start.Add(new("Comma"), new Any(","));
+    static public Tokenizer Yamlite {
+        get {
+            State start = new();
+            start.Add(new("OpenObject"), new Any("{"));
+            start.Add(new("CloseObject"), new Any("}"));
+            start.Add(new("OpenArray"), new Any("["));
+            start.Add(new("CloseArray"), new Any("]"));
+            start.Add(new("Colon"), new Any(":"));
+            start.Add(new("Comma"), new Any(","));
 
-        ITransition spaceTran = new Any(" \n\r\t");
-        State whitespace = new(consume: true);
-        start.Add(whitespace, spaceTran);
-        whitespace.Add(whitespace, spaceTran);
+            State whitespace = new(consume: true);
+            start.Add(whitespace, new Any(" \n\r\t"));
+            whitespace.Add(whitespace, new Any(" \n\r\t"));
 
-        State commment = new(consume: true);
-        start.Add(commment, new Any("#"));
-        commment.Add(commment, notEOL);
+            State commment = new(consume: true);
+            start.Add(commment, new Any("#"));
+            commment.Add(commment, new Not("\n\r"));
 
-        ITransition singleQuote = new Any("'");
-        State innerSingle = new();
-        State endSingle = new("SingleValue");
-        start.Add(innerSingle, singleQuote);
-        innerSingle.Add(endSingle, singleQuote);
-        innerSingle.Add(innerSingle, notEOL);
-        endSingle.Add(innerSingle, singleQuote);
+            State innerSingle = new();
+            State endSingle = new("SingleValue");
+            start.Add(innerSingle, new Any("'"));
+            innerSingle.Add(endSingle, new Any("'"));
+            innerSingle.Add(innerSingle, new Not("\n\r"));
+            endSingle.Add(innerSingle, new Any("'"));
 
-        ITransition doubleQuote = new Any("\"");
-        State innerDouble = new();
-        State escapeDouble = new();
-        State endDouble = new("DoubleValue");
-        start.Add(innerDouble, doubleQuote);
-        innerDouble.Add(escapeDouble, new Any("\\"));
-        innerDouble.Add(endDouble, doubleQuote);
-        innerDouble.Add(innerDouble, notEOL);
-        escapeDouble.Add(innerDouble, notEOL);
+            State innerDouble = new();
+            State escapeDouble = new();
+            State endDouble = new("DoubleValue");
+            start.Add(innerDouble, new Any("\""));
+            innerDouble.Add(escapeDouble, new Any("\\"));
+            innerDouble.Add(endDouble, new Any("\""));
+            innerDouble.Add(innerDouble, new Not("\n\r"));
+            escapeDouble.Add(innerDouble, new Not("\n\r"));
 
-        State valState = new("Value");
-        start.Add(valState, new Not(" \n\r\t{}[]:,\"\'#&*?|<>=!@\\"));
-        valState.Add(valState, new Not("\n\r}]:,#"));
+            State valState = new("Value");
+            State valTail = new();
+            start.Add(valState, new Not(" \n\r\t{}[]:,\"\'#&*?|<>=!@\\"));
+            valState.Add(valTail, new Any(" \t"));
+            valTail.Add(valTail, new Any(" \t"));
+            valTail.Add(valState, new Not("\n\r}]:,#"));
+            valState.Add(valState, new Not("\n\r}]:,#"));
 
-        return new Tokenizer(start);
+            return new Tokenizer(start);
+        }
     }
 }
