@@ -2,6 +2,6 @@
 
 internal class UnexpectedCharException(Scanner s) :
     System.Exception("Unexpected character '" + s.Current + "' (" + (int)s.Current + ") at " +
-        "offset: " + s.CurrentOffset + ", " +
-        "column: " + s.CurrentColumn + ", " +
-        "line: " + s.CurrentLine + ".") { }
+        "offset: " + s.CurrentPos.Offset + ", " +
+        "column: " + s.CurrentPos.Column + ", " +
+        "line: " + s.CurrentPos.Line + ".") { }

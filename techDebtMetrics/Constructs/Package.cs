@@ -1,9 +1,6 @@
-﻿using Constructs.Exceptions;
-using Constructs.Extensions;
-using Constructs.Tooling;
+﻿using Constructs.Tooling;
 using System.Collections.Generic;
 using System.Text;
-using System.Text.Json.Nodes;
 
 namespace Constructs;
 
@@ -27,24 +24,23 @@ public class Package : IConstruct, IInitializable {
     public IReadOnlyList<Method> Methods => this.inMethods.AsReadOnly();
     private readonly List<Method> inMethods = [];
 
-    public Package(JsonNode node) {
-        JsonObject obj = node.AsObject();
+    internal Package(Data.Node node) {
+        Data.Object obj = node.AsObject();
         obj.PreallocateList("types", this.inTypes);
         obj.PreallocateList("values", this.inValues);
         obj.PreallocateList("methods", this.inMethods);
     }
 
-    void IInitializable.Initialize(TypeGetter getter, JsonNode node) {
-        JsonObject obj = node.AsObject();
+    void IInitializable.Initialize(TypeGetter getter, Data.Node node) {
+        Data.Object obj = node.AsObject();
 
-        this.Path = obj.ReadValue<string>("path");
-        this.Name = obj.ReadValue<string>("name");
+        this.Path = obj.ReadString("path");
+        this.Name = obj.ReadString("name");
 
-        JsonArray? importArr = obj["imports"]?.AsArray();
-        if (importArr is not null) {
+        if (obj.Contains("imports")) {        
+            Data.Array importArr = obj["imports"].AsArray();
             for (int i = 0; i < importArr.Count; i++) {
-                uint pkgIndex = importArr[i]?.GetValue<uint>() ??
-                    throw new MissingDataException("import[" + i + "]");
+                uint pkgIndex = importArr[i].AsUint();
                 this.inImports.Add(getter.GetPackageAtIndex(pkgIndex));
             }
         }

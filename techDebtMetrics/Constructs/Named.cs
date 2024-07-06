@@ -1,7 +1,5 @@
 ﻿using Constructs.Exceptions;
-using Constructs.Extensions;
 using Constructs.Tooling;
-using System.Text.Json.Nodes;
 
 namespace Constructs;
 
@@ -12,9 +10,9 @@ public class Named : ITypeDesc, IInitializable {
         throw new UninitializedException("type");
     private ITypeDesc? inType;
 
-    void IInitializable.Initialize(TypeGetter getter, JsonNode node) {
-        JsonObject obj = node.AsObject();
-        this.Name = obj.ReadValue<string>("name");
+    void IInitializable.Initialize(TypeGetter getter, Data.Node node) {
+        Data.Object obj = node.AsObject();
+        this.Name = obj.ReadString("name");
         this.inType = obj.ReadIndexType<ITypeDesc>("type", getter);
     }
 

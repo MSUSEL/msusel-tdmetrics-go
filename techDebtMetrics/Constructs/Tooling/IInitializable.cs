@@ -1,8 +1,6 @@
-﻿using System.Text.Json.Nodes;
-
-namespace Constructs.Tooling;
+﻿namespace Constructs.Tooling;
 
 internal interface IInitializable {
 
-    void Initialize(TypeGetter getter, JsonNode node);
+    void Initialize(TypeGetter getter, Data.Node node);
 }

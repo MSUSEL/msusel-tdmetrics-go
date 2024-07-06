@@ -1,14 +1,17 @@
 ﻿// Ignore Spelling: Yamlite
 
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Yamlite;
 
 public class Yamlite {
     static public INode? Parse(string text) {
-        IEnumerable<Tokenizer.Token> tokens = Tokenizer.Tokenizer.Yamlite.Tokenize(text);
+        IEnumerable<Tokenizer.Token> tokens = Tokenizer.Tokenizer.Yamlite.
+            Tokenize(text).Select(cleanToken);
+
         Yamlite ym = new();
-        foreach (Tokenizer.Token token in tokens) ym.addToken(token);
+        //foreach (Tokenizer.Token token in tokens) ym.addToken(token);
         return ym.finish();
     }
 
@@ -16,33 +19,24 @@ public class Yamlite {
 
     private Yamlite() { }
 
-    private void addToken(Tokenizer.Token token) {
-        switch (token.Name) {
-            case "OpenObject": this.openObject(); break;
-            case "CloseObject": this.closeObject(); break;
-            case "OpenArray": this.openArray(); break;
-            case "CloseArray": this.closeArray(); break;
-            case "Colon": this.colon(); break;
-            case "Comma": this.comma(); break;
-            case "SingleValue": this.singleValue(token.Value); break;
-            case "DoubleValue": this.doubleValue(token.Value); break;
-            case "Value": this.basicvalue(token.Value); break;
-            default: throw new System.ArgumentException("Unexpected token " + token + ".");
-        }
+    static private Tokenizer.Token cleanToken(Tokenizer.Token token) {
+        return token.Name switch {
+            "SingleValue" => cleanSingleValue(token),
+            "DoubleValue" => cleanDoubleValue(token)
+            _             => token,
+        };
     }
 
-    private void openObject() { }
-    private void closeObject() { }
-    private void openArray() { }
-    private void closeArray() { }
-    private void colon() { }
-    private void comma() { }
+    static private Tokenizer.Token cleanSingleValue(Tokenizer.Token token) {
+        string value = token.Value.Trim()[1..-2].Replace("''", "'");
+        return new Tokenizer.Token("Value", value, token.Pos);
+    }
 
-    private void singleValue(string value) { }
-    private void doubleValue(string value) { }
-    private void basicvalue(string value) { }
-
-    private void value(string value) { }
+    static private Tokenizer.Token cleanDoubleValue(Tokenizer.Token token) {
+        string value = token.Value.Trim()[1..-2];
+        // TODO: Remove escapes
+        return new Tokenizer.Token("Value", value, token.Pos);
+    }
 
     private INode finish() {
 

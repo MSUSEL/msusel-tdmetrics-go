@@ -23,7 +23,7 @@ internal class Tokenizer(State start) {
 
             string value = this.source.Take(this.acceptIndex);
             Token? token = this.accept.IsConsume ? null :
-                new Token(this.accept.TokenName, value, this.source.CurrentOffset, this.source.CurrentColumn, this.source.CurrentLine);
+                new Token(this.accept.TokenName, value, this.source.CurrentPos);
 
             this.current = this.start;
             this.acceptIndex = 0;

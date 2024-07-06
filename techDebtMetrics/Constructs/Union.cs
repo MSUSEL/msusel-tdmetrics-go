@@ -13,8 +13,8 @@ public class Union : ITypeDesc, IInitializable {
     public IReadOnlyList<ITypeDesc> Approx => this.inApprox.AsReadOnly();
     private readonly List<ITypeDesc> inApprox = [];
 
-    void IInitializable.Initialize(TypeGetter getter, JsonNode node) {
-        JsonObject obj = node.AsObject();
+    void IInitializable.Initialize(TypeGetter getter, Data.Node node) {
+        Data.Object obj = node.AsObject();
         obj.ReadIndexTypeList("extern", getter, this.inExact);
         obj.ReadIndexTypeList("approx", getter, this.inApprox);
     }

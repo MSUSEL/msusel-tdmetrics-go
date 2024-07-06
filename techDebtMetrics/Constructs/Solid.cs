@@ -3,7 +3,6 @@ using Constructs.Extensions;
 using Constructs.Tooling;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text.Json.Nodes;
 
 namespace Constructs;
 
@@ -15,8 +14,8 @@ public class Solid : ITypeDesc, IInitializable {
     public IReadOnlyList<ITypeDesc> TypeParams => this.inTypeParams.AsReadOnly();
     private readonly List<ITypeDesc> inTypeParams = [];
 
-    void IInitializable.Initialize(TypeGetter getter, JsonNode node) {
-        JsonObject obj = node.AsObject();
+    void IInitializable.Initialize(TypeGetter getter, Data.Node node) {
+        Data.Object obj = node.AsObject();
         this.inTarget = obj.ReadIndexType<ITypeDesc>("target", getter);
         obj.ReadIndexTypeList("typeParams", getter, this.inTypeParams);
     }

@@ -1,31 +1,33 @@
-﻿// Ignore Spelling: proj
-
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace Constructs.Tooling;
 
 internal class TypeGetter {
-    public TypeGetter(Project proj) {
+    public TypeGetter(Project p) {
         List<ITypeDesc> types = [
-            .. proj.Types.Basics,
-            .. proj.Types.Interfaces,
-            .. proj.Types.Named,
-            .. proj.Types.Signatures,
-            .. proj.Types.Solids,
-            .. proj.Types.Structs,
-            .. proj.Types.Unions];
-        foreach (Package pkg in proj.Packages)
+            .. p.Types.Basics,
+            .. p.Types.Interfaces,
+            .. p.Types.Named,
+            .. p.Types.Signatures,
+            .. p.Types.Solids,
+            .. p.Types.Structs,
+            .. p.Types.Unions];
+        foreach (Package pkg in p.Packages)
             types.AddRange(pkg.Types);
 
         this.types = types;
-        this.packages = proj.Packages;
+        this.packages = p.Packages;
     }
 
     private readonly IReadOnlyList<ITypeDesc> types;
     private readonly IReadOnlyList<Package> packages;
 
     public T GetTypeAtIndex<T>(uint index) where T : ITypeDesc {
-        ITypeDesc type = this.types[(int)index];
+        if (index <= 0 || index > this.types.Count)
+            throw new System.ArgumentOutOfRangeException("index",
+                "Read type [1.." + this.types.Count + "] at " + index + ".");
+
+        ITypeDesc type = this.types[(int)index-1];
         return type is T t ? t :
             throw new System.InvalidCastException("type at index " + index +
                 " was expected to be " + typeof(T).FullName + " but got " + type.GetType().FullName);

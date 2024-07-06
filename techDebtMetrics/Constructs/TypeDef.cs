@@ -25,21 +25,18 @@ public class TypeDef : ITypeDesc, IInitializable {
         throw new UninitializedException("interface");
     private Interface? inInterface;
 
-    void IInitializable.Initialize(TypeGetter getter, JsonNode node) {
-        JsonObject obj = node.AsObject();
-        this.Name = obj.ReadValue<string>("name");
+    void IInitializable.Initialize(TypeGetter getter, Data.Node node) {
+        Data.Object obj = node.AsObject();
+        this.Name = obj.ReadString("name");
         this.inType = obj.ReadIndexType<ITypeDesc>("type", getter);
         this.inInterface = obj.ReadIndexType<Interface>("interface", getter);
         obj.ReadIndexTypeList("typeParams", getter, this.inTypeParams);
 
-        JsonArray? methodsArr = obj["methods"]?.AsArray();
-        if (methodsArr is not null) {
+        if (obj.Contains("methods")) {
+            Data.Array methodsArr = obj["methods"].AsArray();
             for (int i = 0; i < methodsArr.Count; i++) {
-                JsonNode methodNode = methodsArr[i] ??
-                    throw new MissingDataException("methods[" + i + "]");
-
                 Method m = new();
-                (m as IInitializable).Initialize(getter, methodNode);
+                (m as IInitializable).Initialize(getter, methodsArr[i]);
                 this.inMethods.Add(m);
             }
         }

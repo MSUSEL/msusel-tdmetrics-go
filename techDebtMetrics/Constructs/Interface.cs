@@ -20,24 +20,23 @@ public class Interface : ITypeDesc, IInitializable {
 
     public Union? Union { get; private set; }
 
-    void IInitializable.Initialize(TypeGetter getter, JsonNode node) {
-        JsonObject obj = node.AsObject();
+    void IInitializable.Initialize(TypeGetter getter, Data.Node node) {
+        Data.Object obj = node.AsObject();
 
         obj.ReadIndexTypeList("typeParams", getter, this.inTypeParams);
         obj.ReadIndexTypeList("interfaces", getter, this.inInterfaces);
 
-        JsonObject? methodObj = obj["methods"]?.AsObject();
-        if (methodObj is not null) {
-            foreach (KeyValuePair<string, JsonNode?> pair in methodObj) {
+        if (obj.Contains("methods")) {
+            Data.Object methodObj = obj["methods"].AsObject();
+            foreach (KeyValuePair<string, Data.Node> pair in methodObj.Children) {
                 string key = pair.Key;
-                uint typeIndex = pair.Value?.GetValue<uint>() ??
-                    throw new MissingDataException("methods." + key + ".value");
+                uint typeIndex = pair.Value.AsUint();
                 ITypeDesc value = getter.GetTypeAtIndex<ITypeDesc>(typeIndex);
                 this.inMethods[key] = value;
             }
         }
 
-        if (obj.ContainsKey("union"))
+        if (obj.Contains("union"))
             this.Union = obj.ReadIndexType<Union>("union", getter);
     }
 

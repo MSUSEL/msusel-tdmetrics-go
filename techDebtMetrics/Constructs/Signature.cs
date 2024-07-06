@@ -1,10 +1,8 @@
-﻿using Constructs.Exceptions;
-using Constructs.Extensions;
+﻿using Constructs.Extensions;
 using Constructs.Tooling;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Text.Json.Nodes;
 
 namespace Constructs;
 
@@ -19,16 +17,16 @@ public class Signature : ITypeDesc, IInitializable {
 
     public ITypeDesc? ReturnType { get; private set; }
 
-    void IInitializable.Initialize(TypeGetter getter, JsonNode node) {
-        JsonObject obj = node.AsObject();
+    void IInitializable.Initialize(TypeGetter getter, Data.Node node) {
+        Data.Object obj = node.AsObject();
 
-        if (obj.ContainsKey("variadic"))
-            this.Variadic = obj.ReadValue<bool>("variadic");
+        if (obj.Contains("variadic"))
+            this.Variadic = obj.ReadBool("variadic");
 
         obj.ReadIndexTypeList("params", getter, this.inParams);
         obj.ReadIndexTypeList("typeParams", getter, this.inTypeParams);
 
-        if (obj.ContainsKey("return"))
+        if (obj.Contains("return"))
             this.ReturnType = obj.ReadIndexType<ITypeDesc>("return", getter);
     }
 

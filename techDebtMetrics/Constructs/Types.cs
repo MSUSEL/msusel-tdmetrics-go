@@ -1,9 +1,7 @@
 ﻿// Ignore Spelling: Structs
 
-using Constructs.Extensions;
 using Constructs.Tooling;
 using System.Collections.Generic;
-using System.Text.Json.Nodes;
 
 namespace Constructs;
 
@@ -29,8 +27,8 @@ public class Types : IInitializable {
     public IReadOnlyList<Union> Unions => this.inUnions.AsReadOnly<Union>();
     private readonly List<Union> inUnions = [];
 
-    public Types(JsonNode node) {
-        JsonObject obj = node.AsObject();
+    internal Types(Data.Node node) {
+        Data.Object obj = node.AsObject();
         obj.PreallocateList("basics", this.inBasics);
         obj.PreallocateList("interfaces", this.inInterfaces);
         obj.PreallocateList("named", this.inNamed);
@@ -40,8 +38,8 @@ public class Types : IInitializable {
         obj.PreallocateList("unions", this.inUnions);
     }
 
-    void IInitializable.Initialize(TypeGetter getter, JsonNode node) {
-        JsonObject obj = node.AsObject();
+    void IInitializable.Initialize(TypeGetter getter, Data.Node node) {
+        Data.Object obj = node.AsObject();
         obj.InitializeList(getter, "basic", this.inBasics);
         obj.InitializeList(getter, "interfaces", this.inInterfaces);
         obj.InitializeList(getter, "named", this.inNamed);
