@@ -7,7 +7,7 @@ internal class Node(YamlNode source) {
     private readonly YamlNode source = source;
 
     static public Node Parse(string text) {
-        YamlStream yaml = new();
+        YamlStream yaml = [];
         yaml.Load(new StringReader(text));
         return new Node(yaml.Documents[0].RootNode);
     }

@@ -1,6 +1,5 @@
 ﻿using Constructs.Tooling;
 using System.Collections.Generic;
-using System.Text;
 
 namespace Constructs;
 
@@ -15,7 +14,7 @@ public class Struct : ITypeDesc, IInitializable {
 
     public void ToStub(Journal j) {
         j.Write("struct {");
-        j.Indent.Write(this.Fields, "\n", "", ";\n");
+        j.Indent.AsLong.Write(this.Fields, "\n", ";\n", ";\n");
         j.Write("}");
     }
 }

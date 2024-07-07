@@ -30,7 +30,7 @@ public class Signature : ITypeDesc, IInitializable {
     }
 
     public void ToStub(Journal j) {
-        j.Write(this.TypeParams, "<", ">");
+        j.AsLong.Write(this.TypeParams, "<", ">");
 
         j.Write("(");
         j.AsLong.Write(this.Params);

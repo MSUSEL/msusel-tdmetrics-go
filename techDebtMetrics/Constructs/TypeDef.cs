@@ -1,9 +1,6 @@
 ﻿using Constructs.Exceptions;
-using Constructs.Extensions;
 using Constructs.Tooling;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 namespace Constructs;
 
@@ -42,15 +39,17 @@ public class TypeDef : ITypeDesc, IInitializable {
     }
 
     public void ToStub(Journal j) {
+        j.Write(this.Name);
+        j.AsLong.Write(this.TypeParams, "<", ">");
+
         if (this.Type == this.Interface) {
-            j.Write("interface ").Write(this.Name).Write(this.TypeParams, "<", ">").Write(": ").Write(this.Type);
+            j.Write(": ").Write(this.Type);
             return;
         }
 
-        j.Write("class ").Write(this.Name);
-        j.Write(this.TypeParams, "<", ">");
-        j.WriteLine("{").Write("   Data ").Indent.AsShort.Write(this.Type);
-        j.Indent.Write(this.Methods, "\n", "", ";\n");
+        j.WriteLine(": class {");
+        j.Indent.AsShort.Write("Data ").WriteLine(this.Type);
+        j.Indent.Write(this.Methods, "", ";\n", ";\n");
         j.Write("}");
     }
 }

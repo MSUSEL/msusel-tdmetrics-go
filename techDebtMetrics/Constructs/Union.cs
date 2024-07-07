@@ -20,7 +20,10 @@ public class Union : ITypeDesc, IInitializable {
 
     public override string ToString() =>
         this.Exact.ToStrings().Concat(this.Approx.ToStrings(prefix: "~")).Join("|");
- 
-    public void ToStub(Journal j) =>
-        j.Write(this.Exact, separator: "|").Write(this.Approx, "|~", "", "|~");
+
+    public void ToStub(Journal j) {
+        j.Write(this.Exact, separator: "|");
+        string prefix = this.Exact.Count > 0 ? "|~" : "~";
+        j.Write(this.Approx, prefix, "", "|~");
+    }
 }

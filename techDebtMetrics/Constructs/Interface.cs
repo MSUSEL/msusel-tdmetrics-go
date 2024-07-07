@@ -7,21 +7,21 @@ public class Interface : ITypeDesc, IInitializable {
     public IReadOnlyList<Named> TypeParams => this.inTypeParams.AsReadOnly();
     private readonly List<Named> inTypeParams = [];
 
-    public IReadOnlyList<Interface> Interfaces => this.inInterfaces.AsReadOnly();
-    private readonly List<Interface> inInterfaces = [];
+    public IReadOnlyList<Interface> Inherits => this.inInherits.AsReadOnly();
+    private readonly List<Interface> inInherits = [];
 
     public IReadOnlyDictionary<string, ITypeDesc> Methods => this.inMethods.AsReadOnly();
     private readonly Dictionary<string, ITypeDesc> inMethods = [];
 
     public Union? Union { get; private set; }
 
-    public bool IsAny => this.TypeParams.Count <= 0 && this.Methods.Count <= 0 && this.Interfaces.Count <= 0;
+    public bool IsAny => this.TypeParams.Count <= 0 && this.Methods.Count <= 0 && this.Inherits.Count <= 0;
 
     void IInitializable.Initialize(TypeGetter getter, Data.Node node) {
         Data.Object obj = node.AsObject();
 
         obj.ReadIndexTypeList("typeParams", getter, this.inTypeParams);
-        obj.ReadIndexTypeList("interfaces", getter, this.inInterfaces);
+        obj.ReadIndexTypeList("inherits", getter, this.inInherits);
 
         if (obj.Contains("methods")) {
             Data.Object methodObj = obj["methods"].AsObject();
@@ -46,7 +46,7 @@ public class Interface : ITypeDesc, IInitializable {
         j.Write("interface");
         Journal j2 = j.Indent;
         j2.AsLong.Write(this.TypeParams, "<", ">");
-        j2.AsShort.Write(this.Interfaces, ":");
+        j2.AsShort.Write(this.Inherits, ":");
         j.Write(" {");
         if (this.Methods.Count > 0) {
             j2.WriteLine();

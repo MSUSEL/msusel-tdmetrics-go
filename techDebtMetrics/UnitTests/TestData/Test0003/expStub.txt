@@ -1,11 +1,11 @@
 package main {
    path: command-line-arguments;
 
-   interface Animal: interface{
+   Animal: interface {
       Pet();
    };
 
-   class Cat{
+   Cat: class {
       Data struct {
          Name string;
       }
