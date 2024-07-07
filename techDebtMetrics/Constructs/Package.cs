@@ -1,4 +1,5 @@
-﻿using Constructs.Tooling;
+﻿using Constructs.Extensions;
+using Constructs.Tooling;
 using System.Collections.Generic;
 using System.Text;
 
@@ -60,30 +61,41 @@ public class Package : IConstruct, IInitializable {
         sb.Append(this.Path);
         sb.AppendLine(";");
 
-        foreach (Package import in this.Imports) {
-            sb.Append("   import: ");
-            sb.Append(import.Name);
-            sb.Append(" => ");
-            sb.Append(import.Path);
-            sb.AppendLine(";");
+        if (this.Imports.Count > 0) {
+            sb.AppendLine();
+            foreach (Package import in this.Imports) {
+                sb.AppendLine();
+                sb.Append("   import: ");
+                sb.Append(import.Name);
+                sb.Append(" => ");
+                sb.Append(import.Path);
+                sb.AppendLine(";");
+            }
         }
 
         foreach (TypeDef td in this.Types) {
+            sb.AppendLine();
             sb.Append("   ");
-            sb.Append(td.ToStub().Replace("\n", "\n   "));
+            sb.Append(td.ToStub().Indent());
             sb.AppendLine(";");
         }
 
-        foreach (ValueDef vd in this.Values) {
-            sb.Append("   ");
-            sb.Append(vd.ToStub().Replace("\n", "\n   "));
-            sb.AppendLine(";");
+        if (this.Values.Count > 0) {
+            sb.AppendLine();
+            foreach (ValueDef vd in this.Values) {
+                sb.Append("   ");
+                sb.Append(vd.ToStub().Indent());
+                sb.AppendLine(";");
+            }
         }
 
-        foreach (Method m in this.Methods) {
-            sb.Append("   ");
-            sb.Append(m.ToStub().Replace("\n", "\n   "));
-            sb.AppendLine(";");
+        if (this.Methods.Count > 0) {
+            sb.AppendLine();
+            foreach (Method m in this.Methods) {
+                sb.Append("   ");
+                sb.Append(m.ToStub().Indent());
+                sb.AppendLine(";");
+            }
         }
 
         sb.Append('}');

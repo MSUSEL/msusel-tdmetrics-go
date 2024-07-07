@@ -1,0 +1,16 @@
+package main {
+   path: command-line-arguments;
+
+   interface Animal: interface{
+      Pet();
+   };
+
+   class Cat{
+      Data struct {
+         Name string;
+      }
+      Pet();
+   };
+
+   main();
+}

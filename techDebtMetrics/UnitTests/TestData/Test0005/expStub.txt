@@ -1,0 +1,91 @@
+package cats {
+   path: command-line-arguments;
+
+   class Cat{
+      Data struct {
+         Name string;
+         Age int;
+      }
+      Meow();
+      String() => string;
+   };
+
+   interface Toy: interface{
+      Play(c interface<T interface{}>{
+         $deref<T interface{}>() => T interface{};
+      }<class Cat{
+         Data struct {
+            Name string;
+            Age int;
+         }
+         Meow();
+         String() => string;
+      }>);
+   };
+
+   class Cats{
+      Data interface<T interface{}>{
+         $cap() => int;
+         $get<T interface{}>(index int) => T interface{};
+         $len() => int;
+         $set<T interface{}>(index int, value T interface{});
+      }<interface<T interface{}>{
+         $deref<T interface{}>() => T interface{};
+      }<class Cat{
+         Data struct {
+            Name string;
+            Age int;
+         }
+         Meow();
+         String() => string;
+      }>>
+      Youngest() => interface<T interface{}>{
+         $deref<T interface{}>() => T interface{};
+      }<class Cat{
+         Data struct {
+            Name string;
+            Age int;
+         }
+         Meow();
+         String() => string;
+      }>;
+   };
+
+   log (value string);
+
+   NewCat(name string, age int) => interface<T interface{}>{
+      $deref<T interface{}>() => T interface{};
+   }<class Cat{
+      Data struct {
+         Name string;
+         Age int;
+      }
+      Meow();
+      String() => string;
+   }>;
+   NextYear(cats interface<T interface{}>{
+      $cap() => int;
+      $get<T interface{}>(index int) => T interface{};
+      $len() => int;
+      $set<T interface{}>(index int, value T interface{});
+   }<interface<T interface{}>{
+      $deref<T interface{}>() => T interface{};
+   }<class Cat{
+      Data struct {
+         Name string;
+         Age int;
+      }
+      Meow();
+      String() => string;
+   }>> ...);
+   Pet(c interface<T interface{}>{
+      $deref<T interface{}>() => T interface{};
+   }<class Cat{
+      Data struct {
+         Name string;
+         Age int;
+      }
+      Meow();
+      String() => string;
+   }>);
+}

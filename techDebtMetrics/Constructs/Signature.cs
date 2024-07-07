@@ -43,7 +43,7 @@ public class Signature : ITypeDesc, IInitializable {
         if (this.Variadic) sb.Append(" ...");
         sb.Append(')');
 
-        if (this.ReturnType != null) {
+        if (this.ReturnType is not null) {
             sb.Append(" => ");
             sb.Append(this.ReturnType.ToStub());
         }

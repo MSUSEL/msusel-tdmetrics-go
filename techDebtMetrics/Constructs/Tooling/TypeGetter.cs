@@ -24,7 +24,7 @@ internal class TypeGetter {
 
     public T GetTypeAtIndex<T>(uint index) where T : ITypeDesc {
         if (index <= 0 || index > this.types.Count)
-            throw new System.ArgumentOutOfRangeException("index",
+            throw new System.ArgumentOutOfRangeException(nameof(index),
                 "Read type [1.." + this.types.Count + "] at " + index + ".");
 
         ITypeDesc type = this.types[(int)index-1];

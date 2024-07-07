@@ -1,0 +1,26 @@
+package main {
+   path: command-line-arguments;
+
+   sum(values interface<T any>{
+      $cap() => int;
+      $get<T any>(index int) => T;
+      $len() => int;
+      $set<T any>(index int, value T);
+   }<int> ...) => int;
+
+   first(values interface<T any>{
+      $cap() => int;
+      $get<T any>(index int) => T;
+      $len() => int;
+      $set<T any>(index int, value T);
+   }<int> ...) => int;
+
+   last(values interface<T any>{
+      $cap() => int;
+      $get<T any>(index int) => T;
+      $len() => int;
+      $set<T any>(index int, value T);
+   }<int> ...) => int;
+
+   main();
+}

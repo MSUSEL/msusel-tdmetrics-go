@@ -1,0 +1,58 @@
+# This abstraction is the same as goAbstractor/tests/test0003/expected.yaml
+{
+  language: go,
+  packages: [
+    {
+      path: command-line-arguments,
+      name: main,
+      methods: [
+        { # func main()
+          name: main, signature: 5,
+          metrics: { codeCount: 6, complexity: 1, indents: 5, lineCount: 6 }
+        }
+      ],
+      types: [
+        { # type Animal interface { Pet() }
+          name: Animal,
+          interface: 3,
+          type: 3
+        },
+        { # type Cat struct { Name string; Pet() }
+          interface: 3,
+          name: Cat, type: 6,
+          methods: [
+            { # Cat.Pet()
+              name: Pet, signature: 5,
+              metrics: { codeCount: 3, complexity: 1, indents: 1, lineCount: 3 }
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  types: {
+    basics: [
+      string # 1. string
+    ],
+    interfaces: [
+      {}, # 2. any
+      { # 3. interface { Pet() }
+        inherits: [ 2 ],
+        methods: {
+          Pet: 5
+        }
+      }
+    ],
+    named: [
+      { name: Name, type: 1 } # 4. Name string
+    ],
+    signatures: [
+      {} # 5. func()()
+    ],
+    structs: [
+      { # 6. struct { Name string }
+        fields: [ 4 ]
+      }
+    ],
+  }
+}

@@ -40,7 +40,7 @@ public class Types : IInitializable {
 
     void IInitializable.Initialize(TypeGetter getter, Data.Node node) {
         Data.Object obj = node.AsObject();
-        obj.InitializeList(getter, "basic", this.inBasics);
+        obj.InitializeList(getter, "basics", this.inBasics);
         obj.InitializeList(getter, "interfaces", this.inInterfaces);
         obj.InitializeList(getter, "named", this.inNamed);
         obj.InitializeList(getter, "signatures", this.inSignatures);

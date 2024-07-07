@@ -1,4 +1,5 @@
-﻿using Constructs.Tooling;
+﻿using Constructs.Extensions;
+using Constructs.Tooling;
 using System.Collections.Generic;
 using System.Text;
 
@@ -20,8 +21,8 @@ public class Struct : ITypeDesc, IInitializable {
             sb.AppendLine();
             foreach (Named field in this.inFields) {
                 sb.Append("   ");
-                sb.Append(field.ToStub());
-                sb.AppendLine();
+                sb.Append(field.ToStub().Indent());
+                sb.AppendLine(";");
             }
         }
         sb.Append('}');

@@ -14,7 +14,8 @@ public class ValueDef : IConstruct, IInitializable {
     void IInitializable.Initialize(TypeGetter getter, Data.Node node) {
         Data.Object obj = node.AsObject();
         this.Name = obj.ReadString("name");
-        this.IsConst = obj.ReadBool("isConst");
+        if (obj.Contains("isConst"))
+            this.IsConst = obj.ReadBool("isConst");
         this.inType = obj.ReadIndexType<ITypeDesc>("type", getter);
     }
     

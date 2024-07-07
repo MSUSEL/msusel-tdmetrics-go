@@ -21,7 +21,8 @@ internal class Node(YamlNode source) {
     private YamlScalarNode asValue() => this.source as YamlScalarNode ??
         throw new System.InvalidCastException("Not a value node at " + this.source.End);
 
-    public string AsString() => this.asValue().Value ?? "";
+    public string AsString() => this.asValue().Value ??
+        throw new System.Exception("Null string from node value.");
 
     public bool AsBool() => bool.Parse(this.AsString());
 

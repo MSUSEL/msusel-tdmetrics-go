@@ -4,7 +4,6 @@ using Constructs.Tooling;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Text.Json.Nodes;
 
 namespace Constructs;
 
@@ -44,24 +43,41 @@ public class TypeDef : ITypeDesc, IInitializable {
 
     public string ToStub() {
         StringBuilder sb = new();
+        if (this.Type == this.Interface) {
+            sb.Append("interface ");
+            sb.Append(this.Name);
+
+            if (this.TypeParams.Count > 0) {
+                sb.Append('<');
+                sb.Append(this.TypeParams.Select(tp => tp.ToStub().Indent()).Join());
+                sb.Append('>');
+            }
+
+            sb.Append(": ");
+            sb.Append(this.Type.ToStub());
+            return sb.ToString();
+        }
+
         sb.Append("class ");
         sb.Append(this.Name);
-        
+
         if (this.TypeParams.Count > 0) {
             sb.Append('<');
-            sb.Append(this.TypeParams.Select(tp => tp.ToStub()).Join());
+            sb.Append(this.TypeParams.Select(tp => tp.ToStub().Indent()).Join());
             sb.Append('>');
         }
 
-        sb.Append(": ");
-        sb.Append(this.Interface.ToStub());
-        sb.Append(" {");
-        sb.AppendLine();
-        sb.AppendLine("   Data "+this.Type.ToStub());
-        foreach(Method m in this.Methods) {
-            sb.Append("   ");
-            sb.Append(m.ToStub());
+        sb.AppendLine("{");
+        sb.Append("   Data ");
+        sb.Append(this.Type.ToStub().Indent());
+        
+        if (this.Methods.Count > 0) {
             sb.AppendLine();
+            foreach (Method m in this.Methods) {
+                sb.Append("   ");
+                sb.Append(m.ToStub().Indent());
+                sb.AppendLine(";");
+            }
         }
         sb.Append('}');
         return sb.ToString();

@@ -18,5 +18,5 @@ public class Method : IConstruct, IInitializable {
         // TODO: Add "metrics"
     }
 
-    public string ToStub() => this.Name + " " + this.Signature.ToStub();
+    public string ToStub() => this.Name + this.Signature.ToStub();
 }

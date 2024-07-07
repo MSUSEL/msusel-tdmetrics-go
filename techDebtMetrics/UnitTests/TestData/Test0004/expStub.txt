@@ -1,0 +1,29 @@
+package main {
+   path: command-line-arguments;
+
+   interface Animal: interface{
+      Age() => int;
+   };
+
+   interface Bird: interface{
+      Age() => int;
+      Fly();
+   };
+
+   interface Mammal: interface{
+      Age() => int;
+      Temp() => float64;
+   };
+
+   interface Bat: interface{
+      Age() => int;
+      Fly();
+      Temp() => float64;
+   };
+
+   interface Flier: interface{
+      Fly();
+   };
+
+   main();
+}

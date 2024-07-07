@@ -1,3 +1,4 @@
+# This abstraction is the same as goAbstractor/tests/test0001/expected.yaml
 {
   language: go,
   packages: [

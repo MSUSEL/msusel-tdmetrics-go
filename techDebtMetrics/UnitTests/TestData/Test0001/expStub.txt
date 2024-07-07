@@ -1,4 +1,5 @@
 package main {
    path: command-line-arguments;
-   main ();
+
+   main();
 }
