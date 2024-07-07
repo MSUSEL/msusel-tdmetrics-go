@@ -1,27 +1,41 @@
 package main {
    path: command-line-arguments;
 
-   Animal: interface {
+   Animal: interface: any {
       Age() => int;
    };
 
-   Bird: interface {
+   Bird: interface: interface: any {
+         Age() => int;
+      } {
       Age() => int;
       Fly();
    };
 
-   Mammal: interface {
+   Mammal: interface: interface: any {
+         Age() => int;
+      } {
       Age() => int;
       Temp() => float64;
    };
 
-   Bat: interface {
+   Bat: interface: interface: interface: any {
+            Age() => int;
+         } {
+         Age() => int;
+         Fly();
+      }, interface: interface: any {
+            Age() => int;
+         } {
+         Age() => int;
+         Temp() => float64;
+      } {
       Age() => int;
       Fly();
       Temp() => float64;
    };
 
-   Flier: interface {
+   Flier: interface: any {
       Fly();
    };
 

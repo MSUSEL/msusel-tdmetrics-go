@@ -46,7 +46,7 @@ public class Interface : ITypeDesc, IInitializable {
         j.Write("interface");
         Journal j2 = j.Indent;
         j2.AsLong.Write(this.TypeParams, "<", ">");
-        j2.AsShort.Write(this.Inherits, ":");
+        j2.AsShort.Write(this.Inherits, ": ");
         j.Write(" {");
         if (this.Methods.Count > 0) {
             j2.WriteLine();

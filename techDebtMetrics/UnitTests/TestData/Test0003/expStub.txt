@@ -1,7 +1,7 @@
 package main {
    path: command-line-arguments;
 
-   Animal: interface {
+   Animal: interface: any {
       Pet();
    };
 

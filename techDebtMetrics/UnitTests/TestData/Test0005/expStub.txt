@@ -1,7 +1,7 @@
-package cats {
+ package cats {
    path: command-line-arguments;
 
-   class Cat{
+   Cat: class {
       Data struct {
          Name string;
          Age int;
@@ -10,10 +10,10 @@ package cats {
       String() => string;
    };
 
-   interface Toy: interface{
-      Play(c interface<T interface{}>{
-         $deref<T interface{}>() => T interface{};
-      }<class Cat{
+   Toy: interface: any {
+      Play(c interface<T any>: any {
+         $deref<T any>() => T;
+      }<Cat: class {
          Data struct {
             Name string;
             Age int;
@@ -23,15 +23,15 @@ package cats {
       }>);
    };
 
-   class Cats{
-      Data interface<T interface{}>{
+   Cats: class {
+      Data interface<T any>: any {
          $cap() => int;
-         $get<T interface{}>(index int) => T interface{};
+         $get<T any>(index int) => T;
          $len() => int;
-         $set<T interface{}>(index int, value T interface{});
-      }<interface<T interface{}>{
-         $deref<T interface{}>() => T interface{};
-      }<class Cat{
+         $set<T any>(index int, value T);
+      }<interface<T any>: any {
+         $deref<T any>() => T;
+      }<Cat: class {
          Data struct {
             Name string;
             Age int;
@@ -39,9 +39,9 @@ package cats {
          Meow();
          String() => string;
       }>>
-      Youngest() => interface<T interface{}>{
-         $deref<T interface{}>() => T interface{};
-      }<class Cat{
+      Youngest() => interface<T any>: any {
+         $deref<T any>() => T;
+      }<Cat: class {
          Data struct {
             Name string;
             Age int;
@@ -53,9 +53,9 @@ package cats {
 
    log (value string);
 
-   NewCat(name string, age int) => interface<T interface{}>{
-      $deref<T interface{}>() => T interface{};
-   }<class Cat{
+   NewCat(name string, age int) => interface<T any>: any {
+      $deref<T any>() => T;
+   }<Cat: class {
       Data struct {
          Name string;
          Age int;
@@ -63,14 +63,15 @@ package cats {
       Meow();
       String() => string;
    }>;
-   NextYear(cats interface<T interface{}>{
+
+   NextYear(cats interface<T any>: any {
       $cap() => int;
-      $get<T interface{}>(index int) => T interface{};
+      $get<T any>(index int) => T;
       $len() => int;
-      $set<T interface{}>(index int, value T interface{});
-   }<interface<T interface{}>{
-      $deref<T interface{}>() => T interface{};
-   }<class Cat{
+      $set<T any>(index int, value T);
+   }<interface<T any>: any {
+      $deref<T any>() => T;
+   }<Cat: class {
       Data struct {
          Name string;
          Age int;
@@ -78,9 +79,10 @@ package cats {
       Meow();
       String() => string;
    }>> ...);
-   Pet(c interface<T interface{}>{
-      $deref<T interface{}>() => T interface{};
-   }<class Cat{
+
+   Pet(c interface<T any>: any {
+      $deref<T any>() => T;
+   }<Cat: class {
       Data struct {
          Name string;
          Age int;
