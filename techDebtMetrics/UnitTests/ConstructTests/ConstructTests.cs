@@ -1,6 +1,7 @@
 using System;
 using System.IO;
 using Constructs;
+using Constructs.Tooling;
 
 namespace UnitTests.Constructs;
 
@@ -34,7 +35,7 @@ public class ConstructTests {
 
     static private void runStubTest(int testNum) {
         Project proj = readTestPackage(testNum);
-        string got = proj.ToStub().ReplaceLineEndings("\n");
+        string got = proj.ToStub();
         string exp = readExpectedStub(testNum).ReplaceLineEndings("\n");
         if (got != exp) {
             Console.WriteLine(got);

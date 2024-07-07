@@ -1,8 +1,5 @@
-﻿using Constructs.Extensions;
-using Constructs.Tooling;
+﻿using Constructs.Tooling;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 namespace Constructs;
 
@@ -17,6 +14,8 @@ public class Interface : ITypeDesc, IInitializable {
     private readonly Dictionary<string, ITypeDesc> inMethods = [];
 
     public Union? Union { get; private set; }
+
+    public bool IsAny => this.TypeParams.Count <= 0 && this.Methods.Count <= 0 && this.Interfaces.Count <= 0;
 
     void IInitializable.Initialize(TypeGetter getter, Data.Node node) {
         Data.Object obj = node.AsObject();
@@ -38,38 +37,27 @@ public class Interface : ITypeDesc, IInitializable {
             this.Union = obj.ReadIndexType<Union>("union", getter);
     }
 
-    public string ToStub() {
-        if (this.TypeParams.Count <= 0 && this.Methods.Count <= 0 && this.Interfaces.Count <= 0) {
-            return "any";
+    public void ToStub(Journal j) {
+        if (this.IsAny) {
+            j.Write("any");
+            return;
         }
 
-        StringBuilder sb = new();
-        sb.Append("interface");
-        
-        if (this.TypeParams.Count > 0) {
-            sb.Append('<');
-            sb.Append(this.TypeParams.Select(tp => tp.ToStub().Indent()).Join());
-            sb.Append('>');
-        }
-        
-        if (this.Interfaces.Count > 0) {
-            sb.Append(':');
-            sb.Append(this.Interfaces.Select(tp => tp.ToStub().Indent()).Join());
-        }
-
-        sb.Append('{');
+        j.Write("interface");
+        Journal j2 = j.Indent;
+        j2.AsLong.Write(this.TypeParams, "<", ">");
+        j2.AsShort.Write(this.Interfaces, ":");
+        j.Write(" {");
         if (this.Methods.Count > 0) {
-            sb.AppendLine();
+            j2.WriteLine();
             foreach (KeyValuePair<string, ITypeDesc> pair in this.Methods) {
-                sb.Append("   ");
-                sb.Append(pair.Key);
+                j2.Write(pair.Key);
                 if (pair.Value is not Signature)
-                    sb.Append(' ');
-                sb.Append(pair.Value.ToStub().Indent());
-                sb.AppendLine(";");
+                    j2.Write(" ");
+                j2.AsShort.Write(pair.Value);
+                j2.WriteLine(";");
             }
         }
-        sb.Append('}');
-        return sb.ToString();
+        j.Write("}");
     }
 }

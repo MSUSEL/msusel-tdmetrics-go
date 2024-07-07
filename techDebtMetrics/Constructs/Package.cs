@@ -1,7 +1,5 @@
-﻿using Constructs.Extensions;
-using Constructs.Tooling;
+﻿using Constructs.Tooling;
 using System.Collections.Generic;
-using System.Text;
 
 namespace Constructs;
 
@@ -51,54 +49,24 @@ public class Package : IConstruct, IInitializable {
         obj.InitializeList(getter, "methods", this.inMethods);
     }
 
-    public string ToStub() {
-        StringBuilder sb = new();
-        sb.Append("package ");
-        sb.Append(this.Name);
-        sb.AppendLine(" {");
+    public void ToStub(Journal j) {
+        j.Write("package ").Write(this.Name).WriteLine(" {");
 
-        sb.Append("   path: ");
-        sb.Append(this.Path);
-        sb.AppendLine(";");
+        Journal j2 = j.Indent;
+        j2.Write("path: ").Write(this.Path).WriteLine(";");
 
-        if (this.Imports.Count > 0) {
-            sb.AppendLine();
-            foreach (Package import in this.Imports) {
-                sb.AppendLine();
-                sb.Append("   import: ");
-                sb.Append(import.Name);
-                sb.Append(" => ");
-                sb.Append(import.Path);
-                sb.AppendLine(";");
-            }
-        }
+        foreach (Package import in this.Imports)
+            j2.WriteLine().Write("import ").Write(import.Name).Write(" => ").Write(import.Path).WriteLine(";");
 
-        foreach (TypeDef td in this.Types) {
-            sb.AppendLine();
-            sb.Append("   ");
-            sb.Append(td.ToStub().Indent());
-            sb.AppendLine(";");
-        }
+        foreach (TypeDef td in this.Types)
+            j2.WriteLine().Write(td).WriteLine(";");
 
-        if (this.Values.Count > 0) {
-            sb.AppendLine();
-            foreach (ValueDef vd in this.Values) {
-                sb.Append("   ");
-                sb.Append(vd.ToStub().Indent());
-                sb.AppendLine(";");
-            }
-        }
+        foreach (ValueDef vd in this.Values)
+            j2.WriteLine().Write(vd).WriteLine(";");
+        
+        foreach (Method m in this.Methods)
+            j2.WriteLine().Write(m).WriteLine(";");
 
-        if (this.Methods.Count > 0) {
-            sb.AppendLine();
-            foreach (Method m in this.Methods) {
-                sb.Append("   ");
-                sb.Append(m.ToStub().Indent());
-                sb.AppendLine(";");
-            }
-        }
-
-        sb.Append('}');
-        return sb.ToString();
+        j.Write("}");
     }
 }

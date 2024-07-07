@@ -2,7 +2,6 @@
 using Constructs.Tooling;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 namespace Constructs;
 
@@ -30,23 +29,15 @@ public class Signature : ITypeDesc, IInitializable {
             this.ReturnType = obj.ReadIndexType<ITypeDesc>("return", getter);
     }
 
-    public string ToStub() {
-        StringBuilder sb = new();
-        if (this.TypeParams.Count > 0) {
-            sb.Append('<');
-            sb.Append(this.TypeParams.Select(tp => tp.ToStub()).Join());
-            sb.Append('>');
-        }
+    public void ToStub(Journal j) {
+        j.Write(this.TypeParams, "<", ">");
 
-        sb.Append('(');
-        sb.Append(this.Params.Select(p => p.ToStub()).Join());
-        if (this.Variadic) sb.Append(" ...");
-        sb.Append(')');
+        j.Write("(");
+        j.AsLong.Write(this.Params);
+        if (this.Variadic) j.Write(" ...");
+        j.Write(")");
 
-        if (this.ReturnType is not null) {
-            sb.Append(" => ");
-            sb.Append(this.ReturnType.ToStub());
-        }
-        return sb.ToString();
+        if (this.ReturnType is not null)
+            j.Write(" => ").Write(this.ReturnType);
     }
 }

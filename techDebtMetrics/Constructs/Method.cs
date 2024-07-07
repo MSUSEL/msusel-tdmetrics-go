@@ -18,5 +18,6 @@ public class Method : IConstruct, IInitializable {
         // TODO: Add "metrics"
     }
 
-    public string ToStub() => this.Name + this.Signature.ToStub();
+    public void ToStub(Journal j) =>
+        j.Write(this.Name).AsShort.Write(this.Signature);
 }

@@ -18,5 +18,9 @@ public class Named : ITypeDesc, IInitializable {
 
     public override string ToString() => this.Name + ":" + this.Type;
 
-    public string ToStub() => this.Name + " " + this.Type.ToStub();
+    public void ToStub(Journal j) {
+        j.Write(this.Name);
+        if (!j.Short)
+            j.Write(" ").AsShort.Write(this.Type);
+    }
 }

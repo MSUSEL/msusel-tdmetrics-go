@@ -18,8 +18,9 @@ public class Union : ITypeDesc, IInitializable {
         obj.ReadIndexTypeList("approx", getter, this.inApprox);
     }
 
-    public override string ToString() => this.ToStub();
- 
-    public string ToStub() =>
+    public override string ToString() =>
         this.Exact.ToStrings().Concat(this.Approx.ToStrings(prefix: "~")).Join("|");
+ 
+    public void ToStub(Journal j) =>
+        j.Write(this.Exact, separator: "|").Write(this.Approx, "|~", "", "|~");
 }

@@ -18,6 +18,9 @@ public class ValueDef : IConstruct, IInitializable {
             this.IsConst = obj.ReadBool("isConst");
         this.inType = obj.ReadIndexType<ITypeDesc>("type", getter);
     }
-    
-    public string ToStub() => (this.IsConst?"const ":"") + this.Name + " "+ this.Type.ToStub();
+
+    public void ToStub(Journal j) {
+        if (this.IsConst) j.Write("const ");
+        j.Write(this.Name).Write(" ").Write(this.Type);
+    }
 }

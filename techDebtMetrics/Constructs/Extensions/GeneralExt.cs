@@ -10,6 +10,4 @@ internal static class GeneralExt {
 
     public static IEnumerable<string> ToStrings<T>(this IEnumerable<T> source, string prefix = "", string suffix = "", string onNull = "<null>") =>
         source.Select(x => prefix + (x?.ToString() ?? onNull) + suffix);
-
-    public static string Indent(this string text) => text.Replace("\n", "\n   ");
 }

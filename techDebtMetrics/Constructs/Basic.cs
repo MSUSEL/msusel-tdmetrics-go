@@ -10,5 +10,5 @@ public class Basic : ITypeDesc, IInitializable {
 
     public override string ToString() => this.Name;
 
-    public string ToStub() => this.Name;
+    public void ToStub(Journal j) => j.Write(this.Name);
 }

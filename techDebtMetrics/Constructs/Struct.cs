@@ -1,5 +1,4 @@
-﻿using Constructs.Extensions;
-using Constructs.Tooling;
+﻿using Constructs.Tooling;
 using System.Collections.Generic;
 using System.Text;
 
@@ -14,18 +13,9 @@ public class Struct : ITypeDesc, IInitializable {
         obj.ReadIndexTypeList("fields", getter, this.inFields);
     }
 
-    public string ToStub() {
-        StringBuilder sb = new();
-        sb.Append("struct {");
-        if (this.inFields.Count > 0) {
-            sb.AppendLine();
-            foreach (Named field in this.inFields) {
-                sb.Append("   ");
-                sb.Append(field.ToStub().Indent());
-                sb.AppendLine(";");
-            }
-        }
-        sb.Append('}');
-        return sb.ToString();
+    public void ToStub(Journal j) {
+        j.Write("struct {");
+        j.Indent.Write(this.Fields, "\n", "", ";\n");
+        j.Write("}");
     }
 }

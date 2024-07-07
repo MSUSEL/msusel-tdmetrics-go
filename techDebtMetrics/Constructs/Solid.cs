@@ -1,8 +1,6 @@
 ﻿using Constructs.Exceptions;
-using Constructs.Extensions;
 using Constructs.Tooling;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace Constructs;
 
@@ -20,6 +18,6 @@ public class Solid : ITypeDesc, IInitializable {
         obj.ReadIndexTypeList("typeParams", getter, this.inTypeParams);
     }
 
-    public string ToStub() => this.Target.ToStub() +
-        "<" + this.TypeParams.Select(tp => tp.ToStub()).Join() + ">";
+    public void ToStub(Journal j) =>
+        j.Write(this.Target).Write(this.TypeParams, "<", ">");
 }

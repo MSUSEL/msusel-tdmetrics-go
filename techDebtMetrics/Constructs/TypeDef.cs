@@ -41,45 +41,16 @@ public class TypeDef : ITypeDesc, IInitializable {
         }
     }
 
-    public string ToStub() {
-        StringBuilder sb = new();
+    public void ToStub(Journal j) {
         if (this.Type == this.Interface) {
-            sb.Append("interface ");
-            sb.Append(this.Name);
-
-            if (this.TypeParams.Count > 0) {
-                sb.Append('<');
-                sb.Append(this.TypeParams.Select(tp => tp.ToStub().Indent()).Join());
-                sb.Append('>');
-            }
-
-            sb.Append(": ");
-            sb.Append(this.Type.ToStub());
-            return sb.ToString();
+            j.Write("interface ").Write(this.Name).Write(this.TypeParams, "<", ">").Write(": ").Write(this.Type);
+            return;
         }
 
-        sb.Append("class ");
-        sb.Append(this.Name);
-
-        if (this.TypeParams.Count > 0) {
-            sb.Append('<');
-            sb.Append(this.TypeParams.Select(tp => tp.ToStub().Indent()).Join());
-            sb.Append('>');
-        }
-
-        sb.AppendLine("{");
-        sb.Append("   Data ");
-        sb.Append(this.Type.ToStub().Indent());
-        
-        if (this.Methods.Count > 0) {
-            sb.AppendLine();
-            foreach (Method m in this.Methods) {
-                sb.Append("   ");
-                sb.Append(m.ToStub().Indent());
-                sb.AppendLine(";");
-            }
-        }
-        sb.Append('}');
-        return sb.ToString();
+        j.Write("class ").Write(this.Name);
+        j.Write(this.TypeParams, "<", ">");
+        j.WriteLine("{").Write("   Data ").Indent.AsShort.Write(this.Type);
+        j.Indent.Write(this.Methods, "\n", "", ";\n");
+        j.Write("}");
     }
 }

@@ -1,5 +1,7 @@
-﻿namespace Constructs;
+﻿using Constructs.Tooling;
+
+namespace Constructs;
 
 public interface IConstruct {
-    string ToStub();
+    void ToStub(Journal j);
 }

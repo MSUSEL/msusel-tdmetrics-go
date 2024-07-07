@@ -53,17 +53,9 @@ public class Project : IConstruct {
             (this.inPackages[i] as IInitializable).Initialize(getter, packagesArr[i]);
     }
 
-    public string ToStub() {
-        StringBuilder sb = new();
-        bool first = true;
-        foreach (Package package in this.Packages) {
-            if (first) first = false;
-            else {
-                sb.AppendLine();
-                sb.AppendLine();
-            }
-            sb.Append(package.ToStub());
-        }
-        return sb.ToString();
-    }
+    public void ToStub(Journal j) =>
+        j.Write(this.Packages, separator: "\n\n");
+
+    public string ToStub() =>
+        new Journal().Write(this).ToString();
 }
