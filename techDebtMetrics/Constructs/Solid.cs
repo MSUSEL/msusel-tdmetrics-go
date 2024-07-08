@@ -19,5 +19,5 @@ public class Solid : ITypeDesc, IInitializable {
     }
 
     public void ToStub(Journal j) =>
-        j.Write(this.Target).Write(this.TypeParams, "<", ">");
+        j.Write(this.Target).AsShort.Write(this.TypeParams, "<", ">");
 }

@@ -40,6 +40,8 @@ public class TypeDef : ITypeDesc, IInitializable {
 
     public void ToStub(Journal j) {
         j.Write(this.Name);
+        if (j.Short) return;
+
         j.AsLong.Write(this.TypeParams, "<", ">");
 
         if (this.Type == this.Interface) {
