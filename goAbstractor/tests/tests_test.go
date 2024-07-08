@@ -19,8 +19,11 @@ import (
 )
 
 const (
-	verbose  = true
-	logDepth = 1
+	verbose        = true
+	logDepth       = 1
+	pathToTestData = `../../testData/go/`
+	expAbstraction = `/abstraction.yaml`
+	writeOutFile   = `/out.json`
 )
 
 func Test_T0001(t *testing.T) { newTest(t, `test0001`).abstract().equals() }
@@ -57,7 +60,7 @@ func (tt *testTool) abstract(patterns ...string) *testTool {
 
 	ps, err := reader.Read(&reader.Config{
 		Verbose:    verbose,
-		Dir:        `./` + tt.dir,
+		Dir:        pathToTestData + tt.dir,
 		Patterns:   patterns,
 		BuildFlags: []string{`-tags=test`},
 	})
@@ -72,7 +75,7 @@ func (tt *testTool) abstract(patterns ...string) *testTool {
 }
 
 func (tt *testTool) readExp(expData any) *testTool {
-	expFile, err := os.ReadFile(`./` + tt.dir + `/expected.yaml`)
+	expFile, err := os.ReadFile(pathToTestData + tt.dir + expAbstraction)
 	check.NoError(tt.t).Name(`Read expected json`).With(`Dir`, tt.dir).Require(err)
 
 	err = yaml.Unmarshal(expFile, expData)
@@ -131,7 +134,7 @@ func (tt *testTool) save() *testTool {
 	gotten, err := jsonify.Marshal(jsonify.NewContext(), tt.proj)
 	check.NoError(tt.t).Name(`Marshal project`).With(`Dir`, tt.dir).Require(err)
 
-	err = os.WriteFile(`./`+tt.dir+`/out.json`, gotten, 0o644)
+	err = os.WriteFile(pathToTestData+tt.dir+writeOutFile, gotten, 0o644)
 	check.NoError(tt.t).Name(`Save project`).With(`Dir`, tt.dir).Require(err)
 	return tt
 }
