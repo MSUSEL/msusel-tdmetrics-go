@@ -27,9 +27,10 @@ func normalizeName(name string) string {
 		return `int32`
 	case `float`:
 		return `float64`
+	case `Pointer`:
+		return `uintptr`
 	case `int`, `uint`, `int8`, `uint8`, `int16`, `uint16`, `int32`, `uint32`,
-		`int64`, `uint64`, `float32`, `float64`, `string`, `bool`,
-		`uintptr`, `Pointer`:
+		`int64`, `uint64`, `float32`, `float64`, `string`, `bool`, `uintptr`:
 		return name
 	default:
 		panic(fmt.Errorf(`unexpected basic type: %q`, name))
