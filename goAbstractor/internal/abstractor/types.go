@@ -4,10 +4,11 @@ import (
 	"fmt"
 	"go/types"
 
-	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs"
 	"github.com/Snow-Gremlin/goToolbox/collections"
 	"github.com/Snow-Gremlin/goToolbox/collections/set"
 	"github.com/Snow-Gremlin/goToolbox/utils"
+
+	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs"
 )
 
 func (ab *abstractor) convertType(t types.Type) constructs.TypeDesc {
@@ -65,11 +66,12 @@ func (ab *abstractor) convertChan(t *types.Chan) constructs.TypeDesc {
 func (ab *abstractor) convertInterface(t *types.Interface) constructs.Interface {
 	t = t.Complete()
 
-	methods := map[string]constructs.TypeDesc{}
+	methods := []constructs.Named{}
 	for i := range t.NumMethods() {
 		f := t.Method(i)
 		sig := ab.convertSignature(f.Type().(*types.Signature))
-		methods[f.Name()] = sig
+		method := constructs.NewNamed(ab.proj.Types(), f.Name(), sig)
+		methods = append(methods, method)
 	}
 
 	var union constructs.Union
@@ -96,13 +98,13 @@ func (ab *abstractor) convertMap(t *types.Map) constructs.TypeDesc {
 	return constructs.NewSolid(ab.proj.Types(), t, ab.bakeMap(), key, value)
 }
 
-func (ab *abstractor) convertNamed(t *types.Named) constructs.TypeDefRef {
+func (ab *abstractor) convertNamed(t *types.Named) constructs.Reference {
 	pkgPath := ``
 	if !utils.IsNil(t.Obj().Pkg()) {
 		pkgPath = t.Obj().Pkg().Path()
 	}
 	name := t.Obj().Name()
-	return constructs.NewTypeDefRef(ab.proj.Types(), t, pkgPath, name)
+	return constructs.NewReference(ab.proj.Types(), t, pkgPath, name)
 }
 
 func (ab *abstractor) convertPointer(t *types.Pointer) constructs.TypeDesc {

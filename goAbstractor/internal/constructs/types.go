@@ -1,13 +1,14 @@
 package constructs
 
 import (
-	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/jsonify"
 	"github.com/Snow-Gremlin/goToolbox/utils"
+
+	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/jsonify"
 )
 
-type Register interface {
+type Types interface {
 	AllInterfaces() []Interface
-	AllReferences() []TypeDefRef
+	AllReferences() []Reference
 	UpdateIndices(index int) int
 	Remove(predict func(TypeDesc) bool)
 
@@ -17,26 +18,26 @@ type Register interface {
 	RegisterSignature(t Signature) Signature
 	RegisterSolid(t Solid) Solid
 	RegisterStruct(t Struct) Struct
-	RegisterTypeDefRef(t TypeDefRef) TypeDefRef
+	RegisterTypeDefRef(t Reference) Reference
 	RegisterUnion(t Union) Union
 }
 
-func NewRegister() Register {
-	return &registerImp{}
+func NewTypes() Types {
+	return &typesImp{}
 }
 
-type registerImp struct {
-	allBasics      []Basic
-	allInterfaces  []Interface
-	allNamed       []Named
-	allSignatures  []Signature
-	allSolids      []Solid
-	allStructs     []Struct
-	allTypeDefRefs []TypeDefRef
-	allUnions      []Union
+type typesImp struct {
+	allBasics     []Basic
+	allInterfaces []Interface
+	allNamed      []Named
+	allSignatures []Signature
+	allSolids     []Solid
+	allStructs    []Struct
+	allReferences []Reference
+	allUnions     []Union
 }
 
-func (r *registerImp) ToJson(ctx *jsonify.Context) jsonify.Datum {
+func (r *typesImp) ToJson(ctx *jsonify.Context) jsonify.Datum {
 	ctx2 := ctx.HideKind()
 	return jsonify.NewMap().
 		AddNonZero(ctx2, `basics`, r.allBasics).
@@ -45,19 +46,19 @@ func (r *registerImp) ToJson(ctx *jsonify.Context) jsonify.Datum {
 		AddNonZero(ctx2, `signatures`, r.allSignatures).
 		AddNonZero(ctx2, `solids`, r.allSolids).
 		AddNonZero(ctx2, `structs`, r.allStructs).
-		// Don't output r.allTypeDefRefs
+		// Don't output r.allReferences
 		AddNonZero(ctx2, `unions`, r.allUnions)
 }
 
-func (r *registerImp) AllInterfaces() []Interface {
+func (r *typesImp) AllInterfaces() []Interface {
 	return r.allInterfaces
 }
 
-func (r *registerImp) AllReferences() []TypeDefRef {
-	return r.allTypeDefRefs
+func (r *typesImp) AllReferences() []Reference {
+	return r.allReferences
 }
 
-func (r *registerImp) UpdateIndices(index int) int {
+func (r *typesImp) UpdateIndices(index int) int {
 	// Type indices compound so that each has a unique offset.
 	// The typeDefs in each package are also uniquely offset.
 	index = setIndices(index, r.allBasics)
@@ -79,14 +80,14 @@ func setIndices[T TypeDesc](index int, s []T) int {
 	return index
 }
 
-func (r *registerImp) Remove(predict func(TypeDesc) bool) {
+func (r *typesImp) Remove(predict func(TypeDesc) bool) {
 	removeType(predict, &r.allBasics)
 	removeType(predict, &r.allInterfaces)
 	removeType(predict, &r.allNamed)
 	removeType(predict, &r.allSignatures)
 	removeType(predict, &r.allSolids)
 	removeType(predict, &r.allStructs)
-	removeType(predict, &r.allTypeDefRefs)
+	removeType(predict, &r.allReferences)
 	removeType(predict, &r.allUnions)
 }
 
@@ -101,35 +102,35 @@ func removeType[T TypeDesc](predict func(TypeDesc) bool, s *[]T) {
 	*s = utils.RemoveZeros(rs)
 }
 
-func (r *registerImp) RegisterBasic(t Basic) Basic {
+func (r *typesImp) RegisterBasic(t Basic) Basic {
 	return registerType(t, &r.allBasics)
 }
 
-func (r *registerImp) RegisterInterface(t Interface) Interface {
+func (r *typesImp) RegisterInterface(t Interface) Interface {
 	return registerType(t, &r.allInterfaces)
 }
 
-func (r *registerImp) RegisterNamed(t Named) Named {
+func (r *typesImp) RegisterNamed(t Named) Named {
 	return registerType(t, &r.allNamed)
 }
 
-func (r *registerImp) RegisterSignature(t Signature) Signature {
+func (r *typesImp) RegisterSignature(t Signature) Signature {
 	return registerType(t, &r.allSignatures)
 }
 
-func (r *registerImp) RegisterSolid(t Solid) Solid {
+func (r *typesImp) RegisterSolid(t Solid) Solid {
 	return registerType(t, &r.allSolids)
 }
 
-func (r *registerImp) RegisterStruct(t Struct) Struct {
+func (r *typesImp) RegisterStruct(t Struct) Struct {
 	return registerType(t, &r.allStructs)
 }
 
-func (r *registerImp) RegisterTypeDefRef(t TypeDefRef) TypeDefRef {
-	return registerType(t, &r.allTypeDefRefs)
+func (r *typesImp) RegisterTypeDefRef(t Reference) Reference {
+	return registerType(t, &r.allReferences)
 }
 
-func (r *registerImp) RegisterUnion(t Union) Union {
+func (r *typesImp) RegisterUnion(t Union) Union {
 	return registerType(t, &r.allUnions)
 }
 

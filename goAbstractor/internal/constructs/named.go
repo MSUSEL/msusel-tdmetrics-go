@@ -17,7 +17,7 @@ type Named interface {
 	Type() TypeDesc
 }
 
-func NewNamed(reg Register, name string, typ TypeDesc) Named {
+func NewNamed(reg Types, name string, typ TypeDesc) Named {
 	if utils.IsNil(typ) {
 		panic(fmt.Errorf(`must have a non-nil type for named, %q`, name))
 	}

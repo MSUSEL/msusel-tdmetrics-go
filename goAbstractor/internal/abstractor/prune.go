@@ -3,8 +3,9 @@ package abstractor
 import (
 	"slices"
 
-	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs"
 	"github.com/Snow-Gremlin/goToolbox/utils"
+
+	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs"
 )
 
 func (ab *abstractor) prune() {

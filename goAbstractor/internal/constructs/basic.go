@@ -36,7 +36,7 @@ func normalizeName(name string) string {
 	}
 }
 
-func NewBasic(reg Register, typ *types.Basic) Basic {
+func NewBasic(reg Types, typ *types.Basic) Basic {
 	if utils.IsNil(typ) {
 		panic(errors.New(`may not create a new basic with a nil type`))
 	}
@@ -46,7 +46,7 @@ func NewBasic(reg Register, typ *types.Basic) Basic {
 	})
 }
 
-func BasicFromName(reg Register, pkg *packages.Package, typeName string) Basic {
+func BasicFromName(reg Types, pkg *packages.Package, typeName string) Basic {
 	typeName = normalizeName(typeName)
 	tv, err := types.Eval(pkg.Fset, pkg.Types, token.NoPos, `(*`+typeName+`)(nil)`)
 	if err != nil {

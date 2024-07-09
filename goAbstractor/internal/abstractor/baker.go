@@ -11,8 +11,9 @@ import (
 	"fmt"
 	"go/types"
 
-	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs"
 	"github.com/Snow-Gremlin/goToolbox/utils"
+
+	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs"
 )
 
 func bakeOnce[T any](ab *abstractor, key string, create func() T) T {
@@ -27,6 +28,15 @@ func bakeOnce[T any](ab *abstractor, key string, create func() T) T {
 	t := create()
 	ab.baked[key] = t
 	return t
+}
+
+func (ab *abstractor) toNamedList(m map[string]constructs.TypeDesc) []constructs.Named {
+	n := make([]constructs.Named, len(m))
+	names := utils.SortedKeys(m)
+	for i, name := range names {
+		n[i] = constructs.NewNamed(ab.proj.Types(), name, m[name])
+	}
+	return n
 }
 
 // bakeBasic bakes in a basic type by name. The name must
@@ -123,7 +133,7 @@ func (ab *abstractor) bakeList() constructs.Interface {
 		// list[T any] interface
 		return constructs.NewInterface(ab.proj.Types(), constructs.InterfaceArgs{
 			TypeParams: []constructs.Named{tp},
-			Methods:    methods,
+			Methods:    ab.toNamedList(methods),
 			Package:    ab.builtin,
 		})
 	})
@@ -163,7 +173,7 @@ func (ab *abstractor) bakeChan() constructs.Interface {
 		// chan[T any] interface
 		return constructs.NewInterface(ab.proj.Types(), constructs.InterfaceArgs{
 			TypeParams: []constructs.Named{tp},
-			Methods:    methods,
+			Methods:    ab.toNamedList(methods),
 			Package:    ab.builtin,
 		})
 	})
@@ -209,7 +219,7 @@ func (ab *abstractor) bakeMap() constructs.Interface {
 		// map[TKey, TValue any] interface
 		return constructs.NewInterface(ab.proj.Types(), constructs.InterfaceArgs{
 			TypeParams: tp,
-			Methods:    methods,
+			Methods:    ab.toNamedList(methods),
 			Package:    ab.builtin,
 		})
 	})
@@ -235,7 +245,7 @@ func (ab *abstractor) bakePointer() constructs.Interface {
 		// pointer[T any] interface
 		return constructs.NewInterface(ab.proj.Types(), constructs.InterfaceArgs{
 			TypeParams: []constructs.Named{tp},
-			Methods:    methods,
+			Methods:    ab.toNamedList(methods),
 			Package:    ab.builtin,
 		})
 	})
@@ -263,7 +273,7 @@ func (ab *abstractor) bakeComplex64() constructs.Interface {
 
 		// complex64
 		return constructs.NewInterface(ab.proj.Types(), constructs.InterfaceArgs{
-			Methods: methods,
+			Methods: ab.toNamedList(methods),
 			Package: ab.builtin,
 		})
 	})
@@ -291,7 +301,7 @@ func (ab *abstractor) bakeComplex128() constructs.Interface {
 
 		// complex128
 		return constructs.NewInterface(ab.proj.Types(), constructs.InterfaceArgs{
-			Methods: methods,
+			Methods: ab.toNamedList(methods),
 			Package: ab.builtin,
 		})
 	})
@@ -318,7 +328,7 @@ func (ab *abstractor) bakeError() (constructs.Package, constructs.TypeDef) {
 
 		// interface { Error() string }
 		it := constructs.NewInterface(ab.proj.Types(), constructs.InterfaceArgs{
-			Methods: methods,
+			Methods: ab.toNamedList(methods),
 			Package: ab.builtin,
 		})
 
@@ -353,7 +363,7 @@ func (ab *abstractor) bakeComparable() (constructs.Package, constructs.TypeDef) 
 		// interface { $compare(other T) int }
 		it := constructs.NewInterface(ab.proj.Types(), constructs.InterfaceArgs{
 			TypeParams: []constructs.Named{tp},
-			Methods:    methods,
+			Methods:    ab.toNamedList(methods),
 			Package:    ab.builtin,
 		})
 

@@ -187,9 +187,10 @@ func (ab *abstractor) resolveClass(pkg constructs.Package, td constructs.TypeDef
 		return
 	}
 
-	methods := map[string]constructs.TypeDesc{}
+	methods := []constructs.Named{}
 	for _, m := range td.Methods() {
-		methods[m.Name()] = m.Signature()
+		method := constructs.NewNamed(ab.proj.Types(), m.Name(), m.Signature())
+		methods = append(methods, method)
 	}
 
 	typeParams := slices.Clone(td.TypeParams())
@@ -228,7 +229,7 @@ func (ab *abstractor) resolveReferences() {
 	}
 }
 
-func (ab *abstractor) resolveReference(ref constructs.TypeDefRef) {
+func (ab *abstractor) resolveReference(ref constructs.Reference) {
 	ab.log(2, `|  resolve %s%s`, ref.PackagePath(), ref.Name())
 	if len(ref.PackagePath()) > 0 {
 		ref.SetType(ab.proj.FindTypeDef(ref.PackagePath(), ref.Name()))

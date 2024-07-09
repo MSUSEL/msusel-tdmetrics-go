@@ -47,16 +47,3 @@ func equalList[T TypeDesc, S ~[]T](a, b S) bool {
 	}
 	return true
 }
-
-func equalMap[T TypeDesc, M ~map[string]T](a, b M) bool {
-	count := len(a)
-	if count != len(b) {
-		return false
-	}
-	for k, v := range a {
-		if !v.Equal(b[k]) {
-			return false
-		}
-	}
-	return true
-}

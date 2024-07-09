@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"go/token"
 	"go/types"
-	"maps"
 	"slices"
 
 	"github.com/Snow-Gremlin/goToolbox/utils"
@@ -26,7 +25,7 @@ type Interface interface {
 type InterfaceArgs struct {
 	RealType   *types.Interface
 	Union      Union
-	Methods    map[string]TypeDesc
+	Methods    []Named
 	TypeParams []Named
 
 	// Package is only needed if the real type is nil
@@ -34,8 +33,8 @@ type InterfaceArgs struct {
 	Package *packages.Package
 }
 
-func NewInterface(reg Register, args InterfaceArgs) Interface {
-	methods := maps.Clone(args.Methods)
+func NewInterface(reg Types, args InterfaceArgs) Interface {
+	methods := slices.Clone(args.Methods)
 	tp := slices.Clone(args.TypeParams)
 
 	if utils.IsNil(args.RealType) {
@@ -45,9 +44,9 @@ func NewInterface(reg Register, args InterfaceArgs) Interface {
 
 		mTyp := []*types.Func{}
 		pkg := args.Package.Types
-		names := utils.SortedKeys(methods)
-		for _, name := range names {
-			sig := methods[name].GoType().(*types.Signature)
+		for _, named := range methods {
+			name := named.Name()
+			sig := named.Type().GoType().(*types.Signature)
 			if utils.IsNil(sig) {
 				panic(fmt.Errorf(`nil signature for %s`, name))
 			}
@@ -82,7 +81,7 @@ type interfaceImp struct {
 	realType *types.Interface
 
 	typeParams []Named
-	methods    map[string]TypeDesc
+	methods    []Named
 	union      Union
 
 	index      int
@@ -94,7 +93,7 @@ func (ti *interfaceImp) _interface() {}
 
 func (ti *interfaceImp) Visit(v Visitor) {
 	visitList(v, ti.typeParams)
-	visitMap(v, ti.methods)
+	visitList(v, ti.methods)
 	visitTest(v, ti.union)
 	visitList(v, ti.inherits)
 	visitList(v, ti.inheritors)
@@ -112,7 +111,7 @@ func (ti *interfaceImp) Equal(other TypeDesc) bool {
 	return equalTest(ti, other, func(a, b *interfaceImp) bool {
 		return equal(a.union, b.union) &&
 			equalList(a.typeParams, b.typeParams) &&
-			equalMap(a.methods, b.methods)
+			equalList(a.methods, b.methods)
 	})
 }
 

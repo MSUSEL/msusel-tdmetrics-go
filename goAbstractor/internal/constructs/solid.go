@@ -19,7 +19,7 @@ type Solid interface {
 	_solid()
 }
 
-func NewSolid(reg Register, typ types.Type, target TypeDesc, tp ...TypeDesc) Solid {
+func NewSolid(reg Types, typ types.Type, target TypeDesc, tp ...TypeDesc) Solid {
 	if len(tp) <= 0 {
 		panic(fmt.Sprintf(`a solid type requires at least one type parameter %v`, target))
 	}

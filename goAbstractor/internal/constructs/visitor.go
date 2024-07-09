@@ -19,9 +19,3 @@ func visitList[T Visitable, S ~[]T](v Visitor, values S) {
 		visitTest(v, val)
 	}
 }
-
-func visitMap[T Visitable, M ~map[string]T](v Visitor, values M) {
-	for _, val := range values {
-		visitTest(v, val)
-	}
-}

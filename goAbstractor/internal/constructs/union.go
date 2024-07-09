@@ -22,7 +22,7 @@ type UnionArgs struct {
 	Approx   []TypeDesc
 }
 
-func NewUnion(reg Register, args UnionArgs) Union {
+func NewUnion(reg Types, args UnionArgs) Union {
 	if utils.IsNil(args.RealType) {
 		panic(errors.New(`must provide a real type for a union`))
 	}

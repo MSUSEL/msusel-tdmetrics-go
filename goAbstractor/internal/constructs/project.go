@@ -10,7 +10,7 @@ import (
 )
 
 type Project interface {
-	Types() Register
+	Types() Types
 	ToJson(ctx *jsonify.Context) jsonify.Datum
 	FindPackageByPath(path string) Package
 	FindTypeDef(pkgName, tdName string) (Package, TypeDef)
@@ -26,16 +26,16 @@ type Project interface {
 
 type projectImp struct {
 	allPackages []Package
-	allTypes    Register
+	allTypes    Types
 }
 
 func NewProject() Project {
 	return &projectImp{
-		allTypes: NewRegister(),
+		allTypes: NewTypes(),
 	}
 }
 
-func (p *projectImp) Types() Register {
+func (p *projectImp) Types() Types {
 	return p.allTypes
 }
 

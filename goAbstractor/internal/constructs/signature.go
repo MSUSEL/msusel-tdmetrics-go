@@ -28,7 +28,7 @@ type SignatureArgs struct {
 	Package *packages.Package
 }
 
-func NewSignature(reg Register, args SignatureArgs) Signature {
+func NewSignature(reg Types, args SignatureArgs) Signature {
 	if utils.IsNil(args.RealType) {
 		if utils.IsNil(args.Package) {
 			panic(errors.New(`must provide a package if the real type for a signature is nil`))

@@ -9,28 +9,28 @@ import (
 	"github.com/Snow-Gremlin/goToolbox/utils"
 )
 
-type TypeDefRef interface {
+type Reference interface {
 	TypeDesc
-	_typeDefRef()
+	_reference()
 
 	PackagePath() string
 	Name() string
 	SetType(pkg Package, typ TypeDef)
 }
 
-func NewTypeDefRef(reg Register, realType *types.Named, pkgPath, name string) TypeDefRef {
+func NewReference(reg Types, realType *types.Named, pkgPath, name string) Reference {
 	if utils.IsNil(realType) {
 		panic(fmt.Errorf(`must provide a real type for %s.%s`, pkgPath, name))
 	}
 
-	return reg.RegisterTypeDefRef(&typeDefRefImp{
+	return reg.RegisterTypeDefRef(&referenceImp{
 		realType: realType,
 		pkgPath:  pkgPath,
 		name:     name,
 	})
 }
 
-type typeDefRefImp struct {
+type referenceImp struct {
 	realType *types.Named
 	pkgPath  string
 	name     string
@@ -38,25 +38,25 @@ type typeDefRefImp struct {
 	typ      TypeDef
 }
 
-func (t *typeDefRefImp) _typeDefRef() {}
+func (t *referenceImp) _reference() {}
 
-func (t *typeDefRefImp) Visit(v Visitor) {}
+func (t *referenceImp) Visit(v Visitor) {}
 
-func (t *typeDefRefImp) SetIndex(index int) {
+func (t *referenceImp) SetIndex(index int) {
 	panic(errors.New(`do not call SetIndex on TypeDefRef`))
 }
 
-func (t *typeDefRefImp) GoType() types.Type {
+func (t *referenceImp) GoType() types.Type {
 	return t.realType
 }
 
-func (t *typeDefRefImp) Equal(other TypeDesc) bool {
-	return equalTest(t, other, func(a, b *typeDefRefImp) bool {
+func (t *referenceImp) Equal(other TypeDesc) bool {
+	return equalTest(t, other, func(a, b *referenceImp) bool {
 		return a.pkgPath == b.pkgPath && a.name == b.name
 	})
 }
 
-func (t *typeDefRefImp) ToJson(ctx *jsonify.Context) jsonify.Datum {
+func (t *referenceImp) ToJson(ctx *jsonify.Context) jsonify.Datum {
 	ctx2 := ctx.HideKind().Short()
 	if ctx.IsReferenceShown() {
 		return jsonify.NewMap().
@@ -70,19 +70,19 @@ func (t *typeDefRefImp) ToJson(ctx *jsonify.Context) jsonify.Datum {
 	return jsonify.New(ctx2, t.typ)
 }
 
-func (t *typeDefRefImp) String() string {
+func (t *referenceImp) String() string {
 	return jsonify.ToString(t)
 }
 
-func (t *typeDefRefImp) PackagePath() string {
+func (t *referenceImp) PackagePath() string {
 	return t.pkgPath
 }
 
-func (t *typeDefRefImp) Name() string {
+func (t *referenceImp) Name() string {
 	return t.name
 }
 
-func (t *typeDefRefImp) SetType(pkg Package, typ TypeDef) {
+func (t *referenceImp) SetType(pkg Package, typ TypeDef) {
 	t.pkg = pkg
 	t.typ = typ
 }

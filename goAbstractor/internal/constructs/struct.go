@@ -24,7 +24,7 @@ type StructArgs struct {
 	Package *packages.Package
 }
 
-func NewStruct(reg Register, args StructArgs) Struct {
+func NewStruct(reg Types, args StructArgs) Struct {
 	if utils.IsNil(args.RealType) {
 		if utils.IsNil(args.Package) {
 			panic(errors.New(`must provide a package if the real type for a struct is nil`))
