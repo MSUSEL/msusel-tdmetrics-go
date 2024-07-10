@@ -18,7 +18,7 @@ type Basic interface {
 	_basic()
 }
 
-func normalizeName(name string) string {
+func normalizeBasicName(name string) string {
 	name, _ = strings.CutPrefix(name, `untyped `)
 	switch name {
 	case `byte`:
@@ -37,24 +37,24 @@ func normalizeName(name string) string {
 	}
 }
 
-func NewBasic(reg Types, typ *types.Basic) Basic {
+func newBasic(typ *types.Basic) Basic {
 	if utils.IsNil(typ) {
 		panic(errors.New(`may not create a new basic with a nil type`))
 	}
-	return reg.RegisterBasic(&basicImp{
+	return &basicImp{
 		typ:  typ,
-		name: normalizeName(typ.Name()),
-	})
+		name: normalizeBasicName(typ.Name()),
+	}
 }
 
-func BasicFromName(reg Types, pkg *packages.Package, typeName string) Basic {
-	typeName = normalizeName(typeName)
+func newBasicFromName(pkg *packages.Package, typeName string) Basic {
+	typeName = normalizeBasicName(typeName)
 	tv, err := types.Eval(pkg.Fset, pkg.Types, token.NoPos, `(*`+typeName+`)(nil)`)
 	if err != nil {
 		panic(fmt.Errorf(`unable to create basic type of %s: %w`, typeName, err))
 	}
 	typ := tv.Type.(*types.Pointer).Elem().(*types.Basic)
-	return NewBasic(reg, typ)
+	return newBasic(typ)
 }
 
 type basicImp struct {

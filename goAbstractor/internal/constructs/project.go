@@ -31,7 +31,7 @@ type projectImp struct {
 
 func NewProject() Project {
 	return &projectImp{
-		allTypes: NewTypes(),
+		allTypes: newTypes(),
 	}
 }
 

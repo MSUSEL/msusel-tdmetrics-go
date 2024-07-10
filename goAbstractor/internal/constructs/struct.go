@@ -24,7 +24,7 @@ type StructArgs struct {
 	Package *packages.Package
 }
 
-func NewStruct(reg Types, args StructArgs) Struct {
+func newStruct(args StructArgs) Struct {
 	if utils.IsNil(args.RealType) {
 		if utils.IsNil(args.Package) {
 			panic(errors.New(`must provide a package if the real type for a struct is nil`))
@@ -39,10 +39,10 @@ func NewStruct(reg Types, args StructArgs) Struct {
 		args.RealType = types.NewStruct(fields, nil)
 	}
 
-	return reg.RegisterStruct(&structImp{
+	return &structImp{
 		realType: args.RealType,
 		fields:   args.Fields,
-	})
+	}
 }
 
 type structImp struct {

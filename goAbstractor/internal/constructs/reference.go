@@ -18,16 +18,16 @@ type Reference interface {
 	SetType(pkg Package, typ TypeDef)
 }
 
-func NewReference(reg Types, realType *types.Named, pkgPath, name string) Reference {
+func newReference(realType *types.Named, pkgPath, name string) Reference {
 	if utils.IsNil(realType) {
 		panic(fmt.Errorf(`must provide a real type for %s.%s`, pkgPath, name))
 	}
 
-	return reg.RegisterTypeDefRef(&referenceImp{
+	return &referenceImp{
 		realType: realType,
 		pkgPath:  pkgPath,
 		name:     name,
-	})
+	}
 }
 
 type referenceImp struct {

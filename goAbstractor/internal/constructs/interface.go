@@ -33,7 +33,7 @@ type InterfaceArgs struct {
 	Package *packages.Package
 }
 
-func NewInterface(reg Types, args InterfaceArgs) Interface {
+func newInterface(args InterfaceArgs) Interface {
 	methods := slices.Clone(args.Methods)
 	tp := slices.Clone(args.TypeParams)
 
@@ -69,12 +69,12 @@ func NewInterface(reg Types, args InterfaceArgs) Interface {
 		args.RealType = realType
 	}
 
-	return reg.RegisterInterface(&interfaceImp{
+	return &interfaceImp{
 		realType:   args.RealType,
 		typeParams: tp,
 		methods:    methods,
 		union:      args.Union,
-	})
+	}
 }
 
 type interfaceImp struct {

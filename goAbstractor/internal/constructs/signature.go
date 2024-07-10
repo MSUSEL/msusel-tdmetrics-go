@@ -28,7 +28,7 @@ type SignatureArgs struct {
 	Package *packages.Package
 }
 
-func NewSignature(reg Types, args SignatureArgs) Signature {
+func newSignature(args SignatureArgs) Signature {
 	if utils.IsNil(args.RealType) {
 		if utils.IsNil(args.Package) {
 			panic(errors.New(`must provide a package if the real type for a signature is nil`))
@@ -56,13 +56,13 @@ func NewSignature(reg Types, args SignatureArgs) Signature {
 			tp, types.NewTuple(params...), ret, args.Variadic)
 	}
 
-	return reg.RegisterSignature(&signatureImp{
+	return &signatureImp{
 		realType:   args.RealType,
 		variadic:   args.Variadic,
 		params:     args.Params,
 		typeParams: args.TypeParams,
 		returnType: args.Return,
-	})
+	}
 }
 
 type signatureImp struct {

@@ -189,13 +189,13 @@ func (ab *abstractor) resolveClass(pkg constructs.Package, td constructs.TypeDef
 
 	methods := []constructs.Named{}
 	for _, m := range td.Methods() {
-		method := constructs.NewNamed(ab.proj.Types(), m.Name(), m.Signature())
+		method := ab.proj.Types().NewNamed(m.Name(), m.Signature())
 		methods = append(methods, method)
 	}
 
 	typeParams := slices.Clone(td.TypeParams())
 
-	tInt := constructs.NewInterface(ab.proj.Types(), constructs.InterfaceArgs{
+	tInt := ab.proj.Types().NewInterface(constructs.InterfaceArgs{
 		Methods:    methods,
 		TypeParams: typeParams,
 		Package:    pkg.Source(),

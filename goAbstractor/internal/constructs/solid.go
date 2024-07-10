@@ -19,22 +19,22 @@ type Solid interface {
 	_solid()
 }
 
-func NewSolid(reg Types, typ types.Type, target TypeDesc, tp ...TypeDesc) Solid {
+func newSolid(realType types.Type, target TypeDesc, tp ...TypeDesc) Solid {
 	if len(tp) <= 0 {
 		panic(fmt.Sprintf(`a solid type requires at least one type parameter %v`, target))
 	}
-	if utils.IsNil(typ) {
+	if utils.IsNil(realType) {
 		panic(errors.New(`must provide a real type for a solid`))
 	}
-	return reg.RegisterSolid(&solidImp{
-		typ:        typ,
+	return &solidImp{
+		realType:   realType,
 		target:     target,
 		typeParams: tp,
-	})
+	}
 }
 
 type solidImp struct {
-	typ types.Type
+	realType types.Type
 
 	index      int
 	target     TypeDesc
@@ -53,7 +53,7 @@ func (ts *solidImp) SetIndex(index int) {
 }
 
 func (ts *solidImp) GoType() types.Type {
-	return ts.typ
+	return ts.realType
 }
 
 func (ts *solidImp) Equal(other TypeDesc) bool {
