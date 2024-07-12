@@ -11,22 +11,35 @@ import (
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/jsonify"
 )
 
-type Signature interface {
-	TypeDesc
-	_signature()
-}
+type (
+	Signature interface {
+		TypeDesc
+		_signature()
+	}
 
-type SignatureArgs struct {
-	RealType   *types.Signature
-	Variadic   bool
-	Params     []Named
-	TypeParams []Named
-	Return     TypeDesc
+	SignatureArgs struct {
+		RealType   *types.Signature
+		Variadic   bool
+		Params     []Named
+		TypeParams []Named
+		Return     TypeDesc
 
-	// Package is only needed if the real type is nil
-	// so that a Go signature type has to be created.
-	Package *packages.Package
-}
+		// Package is only needed if the real type is nil
+		// so that a Go signature type has to be created.
+		Package *packages.Package
+	}
+
+	signatureImp struct {
+		realType *types.Signature
+
+		variadic   bool
+		params     []Named
+		typeParams []Named
+		returnType TypeDesc
+
+		index int
+	}
+)
 
 func newSignature(args SignatureArgs) Signature {
 	if utils.IsNil(args.RealType) {
@@ -65,17 +78,6 @@ func newSignature(args SignatureArgs) Signature {
 	}
 }
 
-type signatureImp struct {
-	realType *types.Signature
-
-	variadic   bool
-	params     []Named
-	typeParams []Named
-	returnType TypeDesc
-
-	index int
-}
-
 func (sig *signatureImp) _signature() {}
 
 func (sig *signatureImp) Visit(v Visitor) {
@@ -92,7 +94,7 @@ func (sig *signatureImp) GoType() types.Type {
 	return sig.realType
 }
 
-func (sig *signatureImp) Equal(other TypeDesc) bool {
+func (sig *signatureImp) Equal(other Construct) bool {
 	return equalTest(sig, other, func(a, b *signatureImp) bool {
 		return a.variadic == b.variadic &&
 			equal(a.returnType, b.returnType) &&

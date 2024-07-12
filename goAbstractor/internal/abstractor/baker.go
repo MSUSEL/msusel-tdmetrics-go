@@ -39,24 +39,46 @@ func (ab *abstractor) toNamedList(m map[string]constructs.TypeDesc) []constructs
 	return n
 }
 
+// bakeBuiltin bakes in a package to represent the builtin package.
+func (ab *abstractor) bakeBuiltin() constructs.Package {
+	return bakeOnce(ab, `$builtin`, func() constructs.Package {
+		pkg := constructs.NewPackage(constructs.PackageArgs{
+			RealPkg: ab.builtin,
+			Path:    `$builtin`,
+			Name:    `$builtin`,
+		})
+
+		ab.proj.AppendPackage(pkg)
+		return pkg
+	})
+}
+
 // bakeBasic bakes in a basic type by name. The name must
 // be a valid basic type (e.g. int, int32, float64)
 // but may not be complex numbers or interfaces like any.
-func (ab *abstractor) bakeBasic(typeName string) constructs.Basic {
-	return bakeOnce(ab, `basic `+typeName, func() constructs.Basic {
-		return ab.proj.Types().NewBasicFromName(ab.builtin, typeName)
+func (ab *abstractor) bakeBasic(typeName string) constructs.Named {
+	return bakeOnce(ab, `basic `+typeName, func() constructs.Named {
+		basic := ab.proj.Types().NewBasicFromName(ab.builtin, typeName)
+
+		named := ab.proj.Types().NewNamed(typeName, basic)
+		ab.bakeBuiltin().AppendValues(named)
+		return named
 	})
 }
 
 // bakeAny bakes in an interface to represent "any"
 // the base object that (almost) all other types inherit from.
-func (ab *abstractor) bakeAny() constructs.Interface {
-	return bakeOnce(ab, `any`, func() constructs.Interface {
+func (ab *abstractor) bakeAny() constructs.Named {
+	return bakeOnce(ab, `any`, func() constructs.Named {
 		// any
-		return ab.proj.Types().NewInterface(constructs.InterfaceArgs{
+		in := ab.proj.Types().NewInterface(constructs.InterfaceArgs{
 			RealType: types.NewInterfaceType(nil, nil),
 			Package:  ab.builtin,
 		})
+
+		named := ab.proj.Types().NewNamed(`any`, in)
+		ab.bakeBuiltin().AppendValues(named)
+		return named
 	})
 }
 
@@ -103,8 +125,8 @@ func (ab *abstractor) bakeReturnTuple(tp constructs.Named) constructs.Struct {
 //
 // Note: The difference between an array and slice aren't
 // important for the abstractor, so they are combined into one.
-func (ab *abstractor) bakeList() constructs.Interface {
-	return bakeOnce(ab, `list[T any]`, func() constructs.Interface {
+func (ab *abstractor) bakeList() constructs.Named {
+	return bakeOnce(ab, `list[T any]`, func() constructs.Named {
 		tp := ab.proj.Types().NewNamed(`T`, ab.bakeAny())
 
 		intFunc := ab.bakeIntFunc()
@@ -131,11 +153,15 @@ func (ab *abstractor) bakeList() constructs.Interface {
 		})
 
 		// list[T any] interface
-		return ab.proj.Types().NewInterface(constructs.InterfaceArgs{
+		in := ab.proj.Types().NewInterface(constructs.InterfaceArgs{
 			TypeParams: []constructs.Named{tp},
 			Methods:    ab.toNamedList(methods),
 			Package:    ab.builtin,
 		})
+
+		named := ab.proj.Types().NewNamed(`List`, in)
+		ab.bakeBuiltin().AppendValues(named)
+		return named
 	})
 }
 
@@ -148,8 +174,8 @@ func (ab *abstractor) bakeList() constructs.Interface {
 //	}
 //
 // Note: Doesn't currently have cap, trySend, or tryRecv as defined in reflect.
-func (ab *abstractor) bakeChan() constructs.Interface {
-	return bakeOnce(ab, `chan[T any]`, func() constructs.Interface {
+func (ab *abstractor) bakeChan() constructs.Named {
+	return bakeOnce(ab, `chan[T any]`, func() constructs.Named {
 		tp := ab.proj.Types().NewNamed(`T`, ab.bakeAny())
 		methods := map[string]constructs.TypeDesc{}
 
@@ -171,11 +197,15 @@ func (ab *abstractor) bakeChan() constructs.Interface {
 		})
 
 		// chan[T any] interface
-		return ab.proj.Types().NewInterface(constructs.InterfaceArgs{
+		in := ab.proj.Types().NewInterface(constructs.InterfaceArgs{
 			TypeParams: []constructs.Named{tp},
 			Methods:    ab.toNamedList(methods),
 			Package:    ab.builtin,
 		})
+
+		named := ab.proj.Types().NewNamed(`Chan`, in)
+		ab.bakeBuiltin().AppendValues(named)
+		return named
 	})
 }
 
@@ -188,8 +218,8 @@ func (ab *abstractor) bakeChan() constructs.Interface {
 //	}
 //
 // Note: Doesn't currently require Key to be comparable as defined in reflect.
-func (ab *abstractor) bakeMap() constructs.Interface {
-	return bakeOnce(ab, `map[TKey, TValue any]`, func() constructs.Interface {
+func (ab *abstractor) bakeMap() constructs.Named {
+	return bakeOnce(ab, `map[TKey, TValue any]`, func() constructs.Named {
 		tpKey := ab.proj.Types().NewNamed(`TKey`, ab.bakeAny())
 		tpValue := ab.proj.Types().NewNamed(`TValue`, ab.bakeAny())
 		tp := []constructs.Named{tpKey, tpValue}
@@ -217,11 +247,15 @@ func (ab *abstractor) bakeMap() constructs.Interface {
 		})
 
 		// map[TKey, TValue any] interface
-		return ab.proj.Types().NewInterface(constructs.InterfaceArgs{
+		in := ab.proj.Types().NewInterface(constructs.InterfaceArgs{
 			TypeParams: tp,
 			Methods:    ab.toNamedList(methods),
 			Package:    ab.builtin,
 		})
+
+		named := ab.proj.Types().NewNamed(`Map`, in)
+		ab.bakeBuiltin().AppendValues(named)
+		return named
 	})
 }
 
@@ -230,8 +264,8 @@ func (ab *abstractor) bakeMap() constructs.Interface {
 //	type pointer[T any] interface {
 //		$deref() T
 //	}
-func (ab *abstractor) bakePointer() constructs.Interface {
-	return bakeOnce(ab, `pointer[T any]`, func() constructs.Interface {
+func (ab *abstractor) bakePointer() constructs.Named {
+	return bakeOnce(ab, `pointer[T any]`, func() constructs.Named {
 		tp := ab.proj.Types().NewNamed(`T`, ab.bakeAny())
 		methods := map[string]constructs.TypeDesc{}
 
@@ -243,11 +277,15 @@ func (ab *abstractor) bakePointer() constructs.Interface {
 		})
 
 		// pointer[T any] interface
-		return ab.proj.Types().NewInterface(constructs.InterfaceArgs{
+		in := ab.proj.Types().NewInterface(constructs.InterfaceArgs{
 			TypeParams: []constructs.Named{tp},
 			Methods:    ab.toNamedList(methods),
 			Package:    ab.builtin,
 		})
+
+		named := ab.proj.Types().NewNamed(`Pointer`, in)
+		ab.bakeBuiltin().AppendValues(named)
+		return named
 	})
 }
 
@@ -257,8 +295,8 @@ func (ab *abstractor) bakePointer() constructs.Interface {
 //		$real() float32
 //		$imag() float32
 //	}
-func (ab *abstractor) bakeComplex64() constructs.Interface {
-	return bakeOnce(ab, `complex64`, func() constructs.Interface {
+func (ab *abstractor) bakeComplex64() constructs.Named {
+	return bakeOnce(ab, `complex64`, func() constructs.Named {
 
 		// func() float32
 		getF := ab.proj.Types().NewSignature(constructs.SignatureArgs{
@@ -272,10 +310,14 @@ func (ab *abstractor) bakeComplex64() constructs.Interface {
 		}
 
 		// complex64
-		return ab.proj.Types().NewInterface(constructs.InterfaceArgs{
+		in := ab.proj.Types().NewInterface(constructs.InterfaceArgs{
 			Methods: ab.toNamedList(methods),
 			Package: ab.builtin,
 		})
+
+		named := ab.proj.Types().NewNamed(`complex64`, in)
+		ab.bakeBuiltin().AppendValues(named)
+		return named
 	})
 }
 
@@ -285,8 +327,8 @@ func (ab *abstractor) bakeComplex64() constructs.Interface {
 //		$real() float64
 //		$imag() float64
 //	}
-func (ab *abstractor) bakeComplex128() constructs.Interface {
-	return bakeOnce(ab, `complex128`, func() constructs.Interface {
+func (ab *abstractor) bakeComplex128() constructs.Named {
+	return bakeOnce(ab, `complex128`, func() constructs.Named {
 
 		// func() float64
 		getF := ab.proj.Types().NewSignature(constructs.SignatureArgs{
@@ -300,10 +342,14 @@ func (ab *abstractor) bakeComplex128() constructs.Interface {
 		}
 
 		// complex128
-		return ab.proj.Types().NewInterface(constructs.InterfaceArgs{
+		in := ab.proj.Types().NewInterface(constructs.InterfaceArgs{
 			Methods: ab.toNamedList(methods),
 			Package: ab.builtin,
 		})
+
+		named := ab.proj.Types().NewNamed(`complex128`, in)
+		ab.bakeBuiltin().AppendValues(named)
+		return named
 	})
 }
 
@@ -312,9 +358,8 @@ func (ab *abstractor) bakeComplex128() constructs.Interface {
 //	type error interface {
 //		Error() string
 //	}
-func (ab *abstractor) bakeError() (constructs.Package, constructs.TypeDef) {
-	pkg := ab.bakeBuiltin()
-	return pkg, bakeOnce(ab, `error`, func() constructs.TypeDef {
+func (ab *abstractor) bakeError() constructs.Named {
+	return bakeOnce(ab, `error`, func() constructs.Named {
 
 		// func() string
 		getStr := ab.proj.Types().NewSignature(constructs.SignatureArgs{
@@ -327,14 +372,14 @@ func (ab *abstractor) bakeError() (constructs.Package, constructs.TypeDef) {
 		}
 
 		// interface { Error() string }
-		it := ab.proj.Types().NewInterface(constructs.InterfaceArgs{
+		in := ab.proj.Types().NewInterface(constructs.InterfaceArgs{
 			Methods: ab.toNamedList(methods),
 			Package: ab.builtin,
 		})
 
-		errTyp := constructs.NewTypeDef(`error`, it)
-		pkg.AppendTypes(errTyp)
-		return errTyp
+		named := ab.proj.Types().NewNamed(`error`, in)
+		ab.bakeBuiltin().AppendValues(named)
+		return named
 	})
 }
 
@@ -343,9 +388,8 @@ func (ab *abstractor) bakeError() (constructs.Package, constructs.TypeDef) {
 //	type comparable interface {
 //		$compare(other T) int
 //	}
-func (ab *abstractor) bakeComparable() (constructs.Package, constructs.TypeDef) {
-	pkg := ab.bakeBuiltin()
-	return pkg, bakeOnce(ab, `comparable`, func() constructs.TypeDef {
+func (ab *abstractor) bakeComparable() constructs.Named {
+	return bakeOnce(ab, `comparable`, func() constructs.Named {
 		tp := ab.proj.Types().NewNamed(`T`, ab.bakeAny())
 
 		// func(other T) int
@@ -361,28 +405,14 @@ func (ab *abstractor) bakeComparable() (constructs.Package, constructs.TypeDef) 
 		methods[`$compare`] = getStr // $compare(other T) int
 
 		// interface { $compare(other T) int }
-		it := ab.proj.Types().NewInterface(constructs.InterfaceArgs{
+		in := ab.proj.Types().NewInterface(constructs.InterfaceArgs{
 			TypeParams: []constructs.Named{tp},
 			Methods:    ab.toNamedList(methods),
 			Package:    ab.builtin,
 		})
 
-		cmpTyp := constructs.NewTypeDef(`comparable`, it)
-		pkg.AppendTypes(cmpTyp)
-		return cmpTyp
-	})
-}
-
-// bakeBuiltin bakes in a package to represent the builtin package.
-func (ab *abstractor) bakeBuiltin() constructs.Package {
-	return bakeOnce(ab, `$builtin`, func() constructs.Package {
-		pkg := constructs.NewPackage(constructs.PackageArgs{
-			RealPkg: ab.builtin,
-			Path:    `$builtin`,
-			Name:    `$builtin`,
-		})
-
-		ab.proj.AppendPackage(pkg)
-		return pkg
+		named := ab.proj.Types().NewNamed(`comparable`, in)
+		ab.bakeBuiltin().AppendValues(named)
+		return named
 	})
 }

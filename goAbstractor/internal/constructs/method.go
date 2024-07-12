@@ -5,30 +5,34 @@ import (
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/metrics"
 )
 
-type Method interface {
-	Visitable
-	Name() string
-	Signature() TypeDesc
-	Receiver() string
-}
+type (
+	Method interface {
+		Construct
+		_method()
 
-type MethodArgs struct {
-	Name       string
-	Signature  TypeDesc
-	Metrics    metrics.Metrics
-	NoCopyRecv bool
-	Receiver   string
-}
+		Name() string
+		Signature() TypeDesc
+		Receiver() string
+	}
 
-type methodImp struct {
-	name       string
-	signature  TypeDesc
-	metrics    metrics.Metrics
-	noCopyRecv bool
-	receiver   string
-}
+	MethodArgs struct {
+		Name       string
+		Signature  TypeDesc
+		Metrics    metrics.Metrics
+		NoCopyRecv bool
+		Receiver   string
+	}
 
-func NewMethod(args MethodArgs) Method {
+	methodImp struct {
+		name       string
+		signature  TypeDesc
+		metrics    metrics.Metrics
+		noCopyRecv bool
+		receiver   string
+	}
+)
+
+func newMethod(args MethodArgs) Method {
 	return &methodImp{
 		name:       args.Name,
 		signature:  args.Signature,
@@ -37,6 +41,8 @@ func NewMethod(args MethodArgs) Method {
 		receiver:   args.Receiver,
 	}
 }
+
+func (m *methodImp) _method() {}
 
 func (m *methodImp) ToJson(ctx *jsonify.Context) jsonify.Datum {
 	ctx2 := ctx.HideKind().Short()

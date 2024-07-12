@@ -4,40 +4,62 @@ import (
 	"fmt"
 	"slices"
 
+	"github.com/Snow-Gremlin/goToolbox/utils"
 	"golang.org/x/tools/go/packages"
 
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/jsonify"
-	"github.com/Snow-Gremlin/goToolbox/utils"
 )
 
-type Package interface {
-	Visitable
-	Source() *packages.Package
-	Prune(predicate func(f any) bool)
-	FindTypeDef(name string) TypeDef
-	SetIndices(pkgIndex, typeDefIndex int) int
-	Empty() bool
-	Path() string
-	Name() string
-	ImportPaths() []string
-	Imports() []Package
-	SetImports(imports []Package)
-	Types() []TypeDef
-	AppendTypes(typeDef ...TypeDef)
-	AppendValues(value ...ValueDef)
-	Methods() []Method
-	SetMethods(methods []Method)
-	AppendMethods(methods ...Method)
-}
+type (
+	Package interface {
+		Construct
+		Source() *packages.Package
+		Path() string
+		Name() string
+		ImportPaths() []string
+		Imports() []Package
 
-type PackageArgs struct {
-	RealPkg     *packages.Package
-	Path        string
-	Name        string
-	ImportPaths []string
-}
+		Empty() bool
+		Types() []TypeDef
+		Methods() []Method
 
-func NewPackage(args PackageArgs) Package {
+		Prune(predicate func(f any) bool)
+		FindTypeDef(name string) TypeDef
+		SetImports(imports []Package)
+		AppendTypes(typeDef ...TypeDef)
+		AppendValues(value ...ValueDef)
+		SetMethods(methods []Method)
+		AppendMethods(methods ...Method)
+
+		setIndices(pkgIndex, typeDefIndex int) int
+	}
+
+	PackageArgs struct {
+		RealPkg     *packages.Package
+		Path        string
+		Name        string
+		ImportPaths []string
+	}
+
+	packageImp struct {
+		pkg *packages.Package
+
+		path    string
+		name    string
+		imports []Package
+
+		interfaces []Named
+		variables  []Named
+		constants  []Named
+		classes    []Class
+		methods    []Method
+
+		index       int
+		importPaths []string
+	}
+)
+
+func newPackage(args PackageArgs) Package {
 	if utils.IsNil(args.RealPkg) {
 		panic(fmt.Errorf(`must provide a real package for %s`, args.Name))
 	}
@@ -47,20 +69,6 @@ func NewPackage(args PackageArgs) Package {
 		name:        args.Name,
 		importPaths: args.ImportPaths,
 	}
-}
-
-type packageImp struct {
-	pkg *packages.Package
-
-	path    string
-	name    string
-	imports []Package
-	types   []TypeDef
-	values  []ValueDef
-	methods []Method
-
-	index       int
-	importPaths []string
 }
 
 func (p *packageImp) Source() *packages.Package {
@@ -78,14 +86,14 @@ func (p *packageImp) ToJson(ctx *jsonify.Context) jsonify.Datum {
 		AddNonZero(ctx2, `path`, p.path).
 		AddNonZero(ctx2, `name`, p.name).
 		AddNonZero(ctx2.Short(), `imports`, p.imports).
-		AddNonZero(ctx2.Long(), `types`, p.types).
+		AddNonZero(ctx2.Long(), `types`, p.structs).
 		AddNonZero(ctx2.Long(), `values`, p.values).
 		AddNonZero(ctx2.Long(), `methods`, p.methods)
 }
 
 func (p *packageImp) Visit(v Visitor) {
 	visitList(v, p.imports)
-	visitList(v, p.types)
+	visitList(v, p.structs)
 	visitList(v, p.values)
 	visitList(v, p.methods)
 }
@@ -95,7 +103,7 @@ func castPred[T any](predicate func(f any) bool) func(f T) bool {
 }
 
 func (p *packageImp) Prune(predicate func(f any) bool) {
-	p.types = slices.DeleteFunc(p.types, castPred[TypeDef](predicate))
+	p.structs = slices.DeleteFunc(p.structs, castPred[TypeDef](predicate))
 	p.values = slices.DeleteFunc(p.values, castPred[ValueDef](predicate))
 	p.methods = slices.DeleteFunc(p.methods, castPred[Method](predicate))
 }
@@ -105,7 +113,7 @@ func (p *packageImp) String() string {
 }
 
 func (p *packageImp) FindTypeDef(name string) TypeDef {
-	for _, t := range p.types {
+	for _, t := range p.structs {
 		if name == t.Name() {
 			return t
 		}
@@ -113,9 +121,9 @@ func (p *packageImp) FindTypeDef(name string) TypeDef {
 	return nil
 }
 
-func (p *packageImp) SetIndices(pkgIndex, typeDefIndex int) int {
+func (p *packageImp) setIndices(pkgIndex, typeDefIndex int) int {
 	p.index = pkgIndex
-	for _, td := range p.types {
+	for _, td := range p.structs {
 		td.SetIndex(typeDefIndex)
 		typeDefIndex++
 	}
@@ -123,7 +131,7 @@ func (p *packageImp) SetIndices(pkgIndex, typeDefIndex int) int {
 }
 
 func (p *packageImp) Empty() bool {
-	return len(p.types) <= 0 &&
+	return len(p.structs) <= 0 &&
 		len(p.values) <= 0 &&
 		len(p.methods) <= 0
 }
@@ -149,11 +157,15 @@ func (p *packageImp) SetImports(imports []Package) {
 }
 
 func (p *packageImp) Types() []TypeDef {
-	return p.types
+	return p.structs
+}
+
+func (p *packageImp) AddInterface(it ...Interface) {
+	p.interfaces = append(p.interfaces, it...)
 }
 
 func (p *packageImp) AppendTypes(typeDef ...TypeDef) {
-	p.types = append(p.types, typeDef...)
+	p.structs = append(p.structs, typeDef...)
 }
 
 func (p *packageImp) AppendValues(value ...ValueDef) {

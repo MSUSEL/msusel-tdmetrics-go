@@ -10,14 +10,24 @@ import (
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/jsonify"
 )
 
-// Solid represents a generic type that has been resolved to a specific type
-// with specific type parameters, e.g. List<T> might be resolved to List<int>.
-// The type parameter resolution may be referencing another type parameter,
-// e.g. a method signature inside a generic interface.
-type Solid interface {
-	TypeDesc
-	_solid()
-}
+type (
+	// Solid represents a generic type that has been resolved to a specific type
+	// with specific type parameters, e.g. List<T> might be resolved to List<int>.
+	// The type parameter resolution may be referencing another type parameter,
+	// e.g. a method signature inside a generic interface.
+	Solid interface {
+		TypeDesc
+		_solid()
+	}
+
+	solidImp struct {
+		realType types.Type
+
+		index      int
+		target     TypeDesc
+		typeParams []TypeDesc
+	}
+)
 
 func newSolid(realType types.Type, target TypeDesc, tp ...TypeDesc) Solid {
 	if len(tp) <= 0 {
@@ -31,14 +41,6 @@ func newSolid(realType types.Type, target TypeDesc, tp ...TypeDesc) Solid {
 		target:     target,
 		typeParams: tp,
 	}
-}
-
-type solidImp struct {
-	realType types.Type
-
-	index      int
-	target     TypeDesc
-	typeParams []TypeDesc
 }
 
 func (ts *solidImp) _solid() {}
@@ -56,7 +58,7 @@ func (ts *solidImp) GoType() types.Type {
 	return ts.realType
 }
 
-func (ts *solidImp) Equal(other TypeDesc) bool {
+func (ts *solidImp) Equal(other Construct) bool {
 	return equalTest(ts, other, func(a, b *solidImp) bool {
 		return equal(a.target, b.target) &&
 			equalList(a.typeParams, b.typeParams)

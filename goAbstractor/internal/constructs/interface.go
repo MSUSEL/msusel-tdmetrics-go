@@ -13,25 +13,39 @@ import (
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/jsonify"
 )
 
-type Interface interface {
-	TypeDesc
-	_interface()
+type (
+	Interface interface {
+		TypeDesc
+		_interface()
 
-	IsSupertypeOf(other Interface) bool
-	AddInheritors(inter Interface) bool
-	SetInheritance()
-}
+		IsSupertypeOf(other Interface) bool
+		AddInheritors(inter Interface) bool
+		SetInheritance()
+	}
 
-type InterfaceArgs struct {
-	RealType   *types.Interface
-	Union      Union
-	Methods    []Named
-	TypeParams []Named
+	InterfaceArgs struct {
+		RealType   *types.Interface
+		Union      Union
+		Methods    []Named
+		TypeParams []Named
 
-	// Package is only needed if the real type is nil
-	// so that a Go interface type has to be created.
-	Package *packages.Package
-}
+		// Package is only needed if the real type is nil
+		// so that a Go interface type has to be created.
+		Package *packages.Package
+	}
+
+	interfaceImp struct {
+		realType *types.Interface
+
+		typeParams []Named
+		methods    []Named
+		union      Union
+
+		index      int
+		inherits   []Interface
+		inheritors []Interface
+	}
+)
 
 func newInterface(args InterfaceArgs) Interface {
 	methods := slices.Clone(args.Methods)
@@ -77,18 +91,6 @@ func newInterface(args InterfaceArgs) Interface {
 	}
 }
 
-type interfaceImp struct {
-	realType *types.Interface
-
-	typeParams []Named
-	methods    []Named
-	union      Union
-
-	index      int
-	inherits   []Interface
-	inheritors []Interface
-}
-
 func (ti *interfaceImp) _interface() {}
 
 func (ti *interfaceImp) Visit(v Visitor) {
@@ -107,7 +109,7 @@ func (ti *interfaceImp) GoType() types.Type {
 	return ti.realType
 }
 
-func (ti *interfaceImp) Equal(other TypeDesc) bool {
+func (ti *interfaceImp) Equal(other Construct) bool {
 	return equalTest(ti, other, func(a, b *interfaceImp) bool {
 		return equal(a.union, b.union) &&
 			equalList(a.typeParams, b.typeParams) &&

@@ -9,13 +9,21 @@ import (
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/jsonify"
 )
 
-type Named interface {
-	TypeDesc
-	_named()
+type (
+	Named interface {
+		TypeDesc
+		_named()
 
-	Name() string
-	Type() TypeDesc
-}
+		Name() string
+		Type() TypeDesc
+	}
+
+	namedImp struct {
+		name  string
+		typ   TypeDesc
+		index int
+	}
+)
 
 func newNamed(name string, typ TypeDesc) Named {
 	if utils.IsNil(typ) {
@@ -25,12 +33,6 @@ func newNamed(name string, typ TypeDesc) Named {
 		name: name,
 		typ:  typ,
 	}
-}
-
-type namedImp struct {
-	name  string
-	typ   TypeDesc
-	index int
 }
 
 func (t *namedImp) _named() {}
@@ -47,7 +49,7 @@ func (t *namedImp) GoType() types.Type {
 	return t.typ.GoType()
 }
 
-func (t *namedImp) Equal(other TypeDesc) bool {
+func (t *namedImp) Equal(other Construct) bool {
 	return equalTest(t, other, func(a, b *namedImp) bool {
 		return a.name == b.name &&
 			equal(a.typ, b.typ)

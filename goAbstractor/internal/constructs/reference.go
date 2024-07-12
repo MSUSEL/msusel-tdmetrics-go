@@ -5,18 +5,29 @@ import (
 	"fmt"
 	"go/types"
 
-	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/jsonify"
 	"github.com/Snow-Gremlin/goToolbox/utils"
+
+	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/jsonify"
 )
 
-type Reference interface {
-	TypeDesc
-	_reference()
+type (
+	Reference interface {
+		TypeDesc
+		_reference()
 
-	PackagePath() string
-	Name() string
-	SetType(pkg Package, typ TypeDef)
-}
+		PackagePath() string
+		Name() string
+		SetType(pkg Package, typ TypeDesc)
+	}
+
+	referenceImp struct {
+		realType *types.Named
+		pkgPath  string
+		name     string
+		pkg      Package
+		typ      TypeDesc
+	}
+)
 
 func newReference(realType *types.Named, pkgPath, name string) Reference {
 	if utils.IsNil(realType) {
@@ -30,27 +41,19 @@ func newReference(realType *types.Named, pkgPath, name string) Reference {
 	}
 }
 
-type referenceImp struct {
-	realType *types.Named
-	pkgPath  string
-	name     string
-	pkg      Package
-	typ      TypeDef
-}
-
 func (t *referenceImp) _reference() {}
 
 func (t *referenceImp) Visit(v Visitor) {}
 
 func (t *referenceImp) SetIndex(index int) {
-	panic(errors.New(`do not call SetIndex on TypeDefRef`))
+	panic(errors.New(`do not call SetIndex on Reference`))
 }
 
 func (t *referenceImp) GoType() types.Type {
 	return t.realType
 }
 
-func (t *referenceImp) Equal(other TypeDesc) bool {
+func (t *referenceImp) Equal(other Construct) bool {
 	return equalTest(t, other, func(a, b *referenceImp) bool {
 		return a.pkgPath == b.pkgPath && a.name == b.name
 	})
@@ -82,7 +85,7 @@ func (t *referenceImp) Name() string {
 	return t.name
 }
 
-func (t *referenceImp) SetType(pkg Package, typ TypeDef) {
+func (t *referenceImp) SetType(pkg Package, typ TypeDesc) {
 	t.pkg = pkg
 	t.typ = typ
 }

@@ -2,15 +2,15 @@ package constructs
 
 import "github.com/Snow-Gremlin/goToolbox/utils"
 
-type typeSet[T TypeDesc] struct {
+type constructSet[T Construct] struct {
 	values []T
 }
 
-func newTypeSet[T TypeDesc]() *typeSet[T] {
-	return &typeSet[T]{}
+func newTypeSet[T Construct]() *constructSet[T] {
+	return &constructSet[T]{}
 }
 
-func (s *typeSet[T]) Insert(t T) T {
+func (s *constructSet[T]) Insert(t T) T {
 	for _, t2 := range s.values {
 		if t.Equal(t2) {
 			return t2
@@ -20,7 +20,7 @@ func (s *typeSet[T]) Insert(t T) T {
 	return t
 }
 
-func (s *typeSet[T]) SetIndices(index int) int {
+func (s *constructSet[T]) SetIndices(index int) int {
 	for _, td := range s.values {
 		td.SetIndex(index)
 		index++
@@ -28,7 +28,7 @@ func (s *typeSet[T]) SetIndices(index int) int {
 	return index
 }
 
-func (s *typeSet[T]) Remove(predict func(TypeDesc) bool) bool {
+func (s *constructSet[T]) Remove(predict func(Construct) bool) bool {
 	changed := false
 	zero := utils.Zero[T]()
 	for i, td := range s.values {

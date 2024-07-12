@@ -13,10 +13,18 @@ import (
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/jsonify"
 )
 
-type Basic interface {
-	TypeDesc
-	_basic()
-}
+type (
+	Basic interface {
+		TypeDesc
+		_basic()
+	}
+
+	basicImp struct {
+		typ   *types.Basic
+		name  string
+		index int
+	}
+)
 
 func normalizeBasicName(name string) string {
 	name, _ = strings.CutPrefix(name, `untyped `)
@@ -57,12 +65,6 @@ func newBasicFromName(pkg *packages.Package, typeName string) Basic {
 	return newBasic(typ)
 }
 
-type basicImp struct {
-	typ   *types.Basic
-	name  string
-	index int
-}
-
 func (t *basicImp) _basic() {}
 
 func (t *basicImp) Visit(v Visitor) {}
@@ -75,7 +77,7 @@ func (t *basicImp) GoType() types.Type {
 	return t.typ
 }
 
-func (t *basicImp) Equal(other TypeDesc) bool {
+func (t *basicImp) Equal(other Construct) bool {
 	return equalTest(t, other, func(a, b *basicImp) bool {
 		return a.name == b.name
 	})

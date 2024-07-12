@@ -10,19 +10,27 @@ import (
 	"golang.org/x/tools/go/packages"
 )
 
-type Struct interface {
-	TypeDesc
-	_struct()
-}
+type (
+	Struct interface {
+		TypeDesc
+		_struct()
+	}
 
-type StructArgs struct {
-	RealType *types.Struct
-	Fields   []Named
+	StructArgs struct {
+		RealType *types.Struct
+		Fields   []Named
 
-	// Package is only needed if the real type is nil
-	// so that a Go interface type has to be created.
-	Package *packages.Package
-}
+		// Package is only needed if the real type is nil
+		// so that a Go interface type has to be created.
+		Package *packages.Package
+	}
+
+	structImp struct {
+		realType *types.Struct
+		fields   []Named
+		index    int
+	}
+)
 
 func newStruct(args StructArgs) Struct {
 	if utils.IsNil(args.RealType) {
@@ -45,12 +53,6 @@ func newStruct(args StructArgs) Struct {
 	}
 }
 
-type structImp struct {
-	realType *types.Struct
-	fields   []Named
-	index    int
-}
-
 func (ts *structImp) _struct() {}
 
 func (ts *structImp) Visit(v Visitor) {
@@ -65,7 +67,7 @@ func (ts *structImp) GoType() types.Type {
 	return ts.realType
 }
 
-func (ts *structImp) Equal(other TypeDesc) bool {
+func (ts *structImp) Equal(other Construct) bool {
 	return equalTest(ts, other, func(a, b *structImp) bool {
 		return equalList(a.fields, b.fields)
 	})

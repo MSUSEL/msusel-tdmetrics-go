@@ -55,7 +55,7 @@ func (t *unionImp) GoType() types.Type {
 	return t.realType
 }
 
-func (t *unionImp) Equal(other TypeDesc) bool {
+func (t *unionImp) Equal(other Construct) bool {
 	return equalTest(t, other, func(a, b *unionImp) bool {
 		return equalList(a.exact, b.exact) &&
 			equalList(a.approx, b.approx)
