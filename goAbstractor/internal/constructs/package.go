@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"slices"
 
+	"github.com/Snow-Gremlin/goToolbox/collections"
 	"github.com/Snow-Gremlin/goToolbox/utils"
 	"golang.org/x/tools/go/packages"
 
@@ -20,11 +21,11 @@ type (
 		Imports() []Package
 
 		Empty() bool
-		Types() []TypeDef
+		AllTypes() collections.Enumerator[Definition]
 		Methods() []Method
 
 		Prune(predicate func(f any) bool)
-		FindTypeDef(name string) TypeDef
+		FindType(name string) TypeDesc
 		SetImports(imports []Package)
 		AppendTypes(typeDef ...TypeDef)
 		AppendValues(value ...ValueDef)

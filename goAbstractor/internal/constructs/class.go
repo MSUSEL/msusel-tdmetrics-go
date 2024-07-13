@@ -1,51 +1,92 @@
 package constructs
 
 import (
-	"fmt"
+	"go/types"
+	"strings"
 
+	"github.com/Snow-Gremlin/goToolbox/collections"
+
+	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/assert"
+	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs/kind"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/jsonify"
-	"github.com/Snow-Gremlin/goToolbox/utils"
+	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/visitor"
 )
 
 type (
 	Class interface {
-		TypeDesc
+		Definition
 		_class()
 
-		Name() string
-		Type() TypeDesc
-		Methods() []Method
 		TypeParams() []Named
-		AppendMethod(met ...Method)
+		Methods() collections.ReadonlyList[Method]
+		AddMethod(met Method) Method
 		SetInterface(inter Interface)
 	}
 
+	ClassArgs struct {
+		Package    Package
+		Name       string
+		Data       TypeDesc
+		TypeParams []Named
+	}
+
 	classImp struct {
+		pkg        Package
 		name       string
-		typ        TypeDesc
-		methods    []Method
+		data       TypeDesc
 		typeParams []Named
-		inter      Interface
-		index      int
+
+		methods Set[Method]
+		inter   Interface
+		index   int
 	}
 )
 
-func newClass(name string, typ TypeDesc) Class {
-	if len(name) <= 0 || utils.IsNil(typ) {
-		panic(fmt.Errorf(`must have a name and type for a class definition: %q %v`,
-			name, typ))
-	}
+func newClass(args ClassArgs) Class {
+	assert.ArgValidId(`name`, args.Name)
+	assert.ArgNotNil(`package`, args.Package)
+	assert.ArgNotNil(`data`, args.Data)
 
 	return &classImp{
-		name: name,
-		typ:  typ,
+		pkg:     args.Package,
+		name:    args.Name,
+		data:    args.Data,
+		methods: NewSet[Method](),
 	}
 }
 
-func (td *classImp) _class() {}
+func (c *classImp) _class()             {}
+func (c *classImp) Kind() kind.Kind     { return kind.Class }
+func (c *classImp) SetIndex(index int)  { c.index = index }
+func (c *classImp) GoType() types.Type  { return c.data.GoType() }
+func (c *classImp) Name() string        { return c.name }
+func (c *classImp) Package() Package    { return c.pkg }
+func (c *classImp) TypeParams() []Named { return c.typeParams }
 
-func (td *classImp) SetIndex(index int) {
-	td.index = index
+func (c *classImp) Methods() collections.ReadonlyList[Method] {
+	return c.methods.Values()
+}
+
+func (c *classImp) AddMethod(met Method) Method {
+	return c.methods.Insert(met)
+}
+
+func (c *classImp) SetInterface(inter Interface) {
+	c.inter = inter
+}
+
+func (c *classImp) CompareTo(other Construct) int {
+	b := other.(*classImp)
+	if cmp := c.pkg.CompareTo(b.pkg); cmp != 0 {
+		return cmp
+	}
+	if cmp := strings.Compare(c.name, b.name); cmp != 0 {
+		return cmp
+	}
+	if cmp := c.data.CompareTo(b.data); cmp != 0 {
+		return cmp
+	}
+	return 0
 }
 
 func (td *classImp) ToJson(ctx *jsonify.Context) jsonify.Datum {
@@ -56,43 +97,15 @@ func (td *classImp) ToJson(ctx *jsonify.Context) jsonify.Datum {
 	ctx2 := ctx.HideKind().Short()
 	return jsonify.NewMap().
 		Add(ctx2, `name`, td.name).
-		Add(ctx2, `type`, td.typ).
-		AddNonZero(ctx2, `methods`, td.methods).
+		Add(ctx2, `data`, td.data).
 		AddNonZero(ctx2, `typeParams`, td.typeParams).
+		AddNonZero(ctx2, `methods`, td.methods).
 		AddNonZero(ctx2, `interface`, td.inter)
 }
 
-func (td *classImp) Visit(v Visitor) {
-	visitTest(v, td.typ)
-	visitList(v, td.methods)
-	visitList(v, td.typeParams)
-	visitTest(v, td.inter)
-}
-
-func (td *classImp) String() string {
-	return jsonify.ToString(td)
-}
-
-func (td *classImp) Name() string {
-	return td.name
-}
-
-func (td *classImp) Type() TypeDesc {
-	return td.typ
-}
-
-func (td *classImp) Methods() []Method {
-	return td.methods
-}
-
-func (td *classImp) TypeParams() []Named {
-	return td.typeParams
-}
-
-func (td *classImp) AppendMethod(met ...Method) {
-	td.methods = append(td.methods, met...)
-}
-
-func (td *classImp) SetInterface(inter Interface) {
-	td.inter = inter
+func (td *classImp) Visit(v visitor.Visitor) bool {
+	return visitor.Visit(v, td.data) &&
+		visitor.Visit(v, td.typeParams...) &&
+		visitor.VisitList(v, td.methods.Values()) &&
+		visitor.Visit(v, td.inter)
 }

@@ -1,15 +1,15 @@
 package constructs
 
 import (
-	"errors"
-	"fmt"
 	"go/token"
 	"go/types"
 	"strings"
 
+	"github.com/Snow-Gremlin/goToolbox/terrors/terror"
 	"github.com/Snow-Gremlin/goToolbox/utils"
-	"golang.org/x/tools/go/packages"
 
+	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/assert"
+	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs/kind"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/jsonify"
 )
 
@@ -19,10 +19,20 @@ type (
 		_basic()
 	}
 
+	BasicArgs struct {
+		RealType *types.Basic
+
+		// TypeName is only used if RealType is nil.
+		TypeName string
+
+		// Package must not be nil when RealType is nil.
+		Package Package
+	}
+
 	basicImp struct {
-		typ   *types.Basic
-		name  string
-		index int
+		realType *types.Basic
+		typeName string
+		index    int
 	}
 )
 
@@ -41,46 +51,43 @@ func normalizeBasicName(name string) string {
 		`int64`, `uint64`, `float32`, `float64`, `string`, `bool`, `uintptr`:
 		return name
 	default:
-		panic(fmt.Errorf(`unexpected basic type: %q`, name))
+		panic(terror.New(`unknown basic type name`).With(`name`, name))
 	}
 }
 
-func newBasic(typ *types.Basic) Basic {
-	if utils.IsNil(typ) {
-		panic(errors.New(`may not create a new basic with a nil type`))
+func newBasic(args BasicArgs) Basic {
+	if !utils.IsNil(args.RealType) {
+		return &basicImp{
+			realType: args.RealType,
+			typeName: normalizeBasicName(args.RealType.Name()),
+		}
 	}
-	return &basicImp{
-		typ:  typ,
-		name: normalizeBasicName(typ.Name()),
-	}
-}
 
-func newBasicFromName(pkg *packages.Package, typeName string) Basic {
-	typeName = normalizeBasicName(typeName)
+	assert.ArgNotEmpty(`type name`, args.TypeName)
+	assert.ArgNotNil(`package`, args.Package)
+
+	typeName := normalizeBasicName(args.TypeName)
+	pkg := args.Package.Source()
 	tv, err := types.Eval(pkg.Fset, pkg.Types, token.NoPos, `(*`+typeName+`)(nil)`)
 	if err != nil {
-		panic(fmt.Errorf(`unable to create basic type of %s: %w`, typeName, err))
+		panic(terror.New(`unable to create basic type from name`, err).
+			With(`type name`, typeName))
 	}
-	typ := tv.Type.(*types.Pointer).Elem().(*types.Basic)
-	return newBasic(typ)
+	realType := tv.Type.(*types.Pointer).Elem().(*types.Basic)
+
+	return &basicImp{
+		realType: realType,
+		typeName: typeName,
+	}
 }
 
-func (t *basicImp) _basic() {}
+func (t *basicImp) _basic()            {}
+func (t *basicImp) Kind() kind.Kind    { return kind.Basic }
+func (t *basicImp) SetIndex(index int) { t.index = index }
+func (t *basicImp) GoType() types.Type { return t.realType }
 
-func (t *basicImp) Visit(v Visitor) {}
-
-func (t *basicImp) SetIndex(index int) {
-	t.index = index
-}
-
-func (t *basicImp) GoType() types.Type {
-	return t.typ
-}
-
-func (t *basicImp) Equal(other Construct) bool {
-	return equalTest(t, other, func(a, b *basicImp) bool {
-		return a.name == b.name
-	})
+func (t *basicImp) CompareTo(other Construct) int {
+	return strings.Compare(t.typeName, other.(*basicImp).typeName)
 }
 
 func (t *basicImp) ToJson(ctx *jsonify.Context) jsonify.Datum {
@@ -91,12 +98,8 @@ func (t *basicImp) ToJson(ctx *jsonify.Context) jsonify.Datum {
 	if ctx.IsKindShown() {
 		return jsonify.NewMap().
 			AddIf(ctx, ctx.IsKindShown(), `kind`, `basic`).
-			Add(ctx, `name`, t.name)
+			Add(ctx, `name`, t.typeName)
 	}
 
-	return jsonify.New(ctx, t.name)
-}
-
-func (t *basicImp) String() string {
-	return jsonify.ToString(t)
+	return jsonify.New(ctx, t.typeName)
 }

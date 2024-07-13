@@ -1,55 +1,39 @@
 package constructs
 
-import "github.com/Snow-Gremlin/goToolbox/utils"
+import (
+	"github.com/Snow-Gremlin/goToolbox/utils"
 
-type Visitor func(value Construct) bool
+	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs/kind"
+)
 
+// Construct is a single unit of a software design or type.
 type Construct interface {
-	Visit(v Visitor)
+	utils.Comparable[Construct]
 
-	// SetIndex sets the type index.
+	// Kind gets the kind of the construct.
+	Kind() kind.Kind
+
+	// SetIndex sets the unique index of construct.
+	// Indices will be 1 based so that 0 is unset.
 	SetIndex(index int)
-
-	// Equal indicates if the types are equivalent.
-	Equal(other Construct) bool
 }
 
-func visitTest[T Construct](v Visitor, value T) {
-	if !utils.IsNil(value) && v(value) {
-		value.Visit(v)
+// Compare two constructs together.
+func Compare[T Construct](a, b T) int {
+	m, n := utils.IsNil(a), utils.IsNil(b)
+	if m && n {
+		return 0
 	}
-}
+	if m {
+		return -1
+	}
+	if n {
+		return 1
+	}
 
-func visitList[T Construct, S ~[]T](v Visitor, values S) {
-	for _, val := range values {
-		visitTest(v, val)
+	if cmp := a.Kind().CompareTo(b.Kind()); cmp != 0 {
+		return cmp
 	}
-}
 
-func equal[T Construct](a, b T) bool {
-	if m, n := utils.IsNil(a), utils.IsNil(b); m || n {
-		return m && n
-	}
-	return a.Equal(b)
-}
-
-func equalTest[T Construct](a T, b Construct, h func(a, b T) bool) bool {
-	if m, n := utils.IsNil(a), utils.IsNil(b); m || n {
-		return m && n
-	}
-	b2, ok := b.(T)
-	return ok && h(a, b2)
-}
-
-func equalList[T Construct, S ~[]T](a, b S) bool {
-	count := len(a)
-	if count != len(b) {
-		return false
-	}
-	for i, v := range a {
-		if !v.Equal(b[i]) {
-			return false
-		}
-	}
-	return true
+	return a.CompareTo(b)
 }
