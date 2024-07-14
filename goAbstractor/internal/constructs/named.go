@@ -1,12 +1,13 @@
 package constructs
 
 import (
-	"fmt"
 	"go/types"
+	"strings"
 
-	"github.com/Snow-Gremlin/goToolbox/utils"
-
+	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/assert"
+	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs/kind"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/jsonify"
+	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/visitor"
 )
 
 type (
@@ -18,6 +19,11 @@ type (
 		Type() TypeDesc
 	}
 
+	NamedArgs struct {
+		Name string
+		Type TypeDesc
+	}
+
 	namedImp struct {
 		name  string
 		typ   TypeDesc
@@ -25,35 +31,35 @@ type (
 	}
 )
 
-func newNamed(name string, typ TypeDesc) Named {
-	if utils.IsNil(typ) {
-		panic(fmt.Errorf(`must have a non-nil type for named, %q`, name))
-	}
+func newNamed(args NamedArgs) Named {
+	assert.ArgValidId(`name`, args.Name)
+	assert.ArgNotNil(`type`, args.Type)
 	return &namedImp{
-		name: name,
-		typ:  typ,
+		name: args.Name,
+		typ:  args.Type,
 	}
 }
 
-func (t *namedImp) _named() {}
+func (t *namedImp) _named()            {}
+func (t *namedImp) Kind() kind.Kind    { return kind.Named }
+func (t *namedImp) SetIndex(index int) { t.index = index }
+func (t *namedImp) GoType() types.Type { return t.typ.GoType() }
+func (t *namedImp) Name() string       { return t.name }
+func (t *namedImp) Type() TypeDesc     { return t.typ }
 
-func (t *namedImp) Visit(v Visitor) {
-	visitTest(v, t.typ)
+func (t *namedImp) CompareTo(other Construct) int {
+	b := other.(*namedImp)
+	if cmp := strings.Compare(t.name, b.name); cmp != 0 {
+		return cmp
+	}
+	if cmp := Compare(t.typ, b.typ); cmp != 0 {
+		return cmp
+	}
+	return 0
 }
 
-func (t *namedImp) SetIndex(index int) {
-	t.index = index
-}
-
-func (t *namedImp) GoType() types.Type {
-	return t.typ.GoType()
-}
-
-func (t *namedImp) Equal(other Construct) bool {
-	return equalTest(t, other, func(a, b *namedImp) bool {
-		return a.name == b.name &&
-			equal(a.typ, b.typ)
-	})
+func (t *namedImp) Visit(v visitor.Visitor) bool {
+	return visitor.Visit(v, t.typ)
 }
 
 func (t *namedImp) ToJson(ctx *jsonify.Context) jsonify.Datum {
@@ -66,16 +72,4 @@ func (t *namedImp) ToJson(ctx *jsonify.Context) jsonify.Datum {
 		AddIf(ctx, ctx.IsKindShown(), `kind`, `named`).
 		Add(ctx2, `name`, t.name).
 		Add(ctx2, `type`, t.typ)
-}
-
-func (t *namedImp) String() string {
-	return jsonify.ToString(t)
-}
-
-func (t *namedImp) Name() string {
-	return t.name
-}
-
-func (t *namedImp) Type() TypeDesc {
-	return t.typ
 }

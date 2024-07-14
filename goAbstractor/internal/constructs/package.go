@@ -2,37 +2,28 @@ package constructs
 
 import (
 	"fmt"
-	"slices"
 
 	"github.com/Snow-Gremlin/goToolbox/collections"
 	"github.com/Snow-Gremlin/goToolbox/utils"
 	"golang.org/x/tools/go/packages"
 
+	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs/kind"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/jsonify"
 )
 
 type (
 	Package interface {
 		Construct
+		_package()
+
 		Source() *packages.Package
 		Path() string
 		Name() string
 		ImportPaths() []string
-		Imports() []Package
+		Imports() collections.ReadonlyList[Package]
 
-		Empty() bool
+		FindType(name string) Definition
 		AllTypes() collections.Enumerator[Definition]
-		Methods() []Method
-
-		Prune(predicate func(f any) bool)
-		FindType(name string) TypeDesc
-		SetImports(imports []Package)
-		AppendTypes(typeDef ...TypeDef)
-		AppendValues(value ...ValueDef)
-		SetMethods(methods []Method)
-		AppendMethods(methods ...Method)
-
-		setIndices(pkgIndex, typeDefIndex int) int
 	}
 
 	PackageArgs struct {
@@ -47,13 +38,12 @@ type (
 
 		path    string
 		name    string
-		imports []Package
+		imports Set[Package]
 
-		interfaces []Named
-		variables  []Named
-		constants  []Named
-		classes    []Class
-		methods    []Method
+		interfaces Set[InterDef]
+		values     Set[Value]
+		classes    Set[Class]
+		methods    Set[Method]
 
 		index       int
 		importPaths []string
@@ -72,8 +62,28 @@ func newPackage(args PackageArgs) Package {
 	}
 }
 
-func (p *packageImp) Source() *packages.Package {
-	return p.pkg
+func (p *packageImp) _package()                 {}
+func (p *packageImp) Kind() kind.Kind           { return kind.Package }
+func (p *packageImp) SetIndex(index int)        { p.index = index }
+func (p *packageImp) Source() *packages.Package { return p.pkg }
+func (p *packageImp) Path() string              { return p.path }
+func (p *packageImp) Name() string              { return p.name }
+func (p *packageImp) ImportPaths() []string     { return p.importPaths }
+
+func (p *packageImp) Imports() collections.ReadonlyList[Package] {
+	return p.imports.Values()
+}
+
+func (p *packageImp) FindType(name string) Definition {
+
+}
+
+func (p *packageImp) AllTypes() collections.Enumerator[Definition] {
+
+}
+
+func (p *packageImp) CompareTo(other Construct) int {
+
 }
 
 func (p *packageImp) ToJson(ctx *jsonify.Context) jsonify.Datum {
@@ -97,90 +107,4 @@ func (p *packageImp) Visit(v Visitor) {
 	visitList(v, p.structs)
 	visitList(v, p.values)
 	visitList(v, p.methods)
-}
-
-func castPred[T any](predicate func(f any) bool) func(f T) bool {
-	return func(f T) bool { return predicate(f) }
-}
-
-func (p *packageImp) Prune(predicate func(f any) bool) {
-	p.structs = slices.DeleteFunc(p.structs, castPred[TypeDef](predicate))
-	p.values = slices.DeleteFunc(p.values, castPred[ValueDef](predicate))
-	p.methods = slices.DeleteFunc(p.methods, castPred[Method](predicate))
-}
-
-func (p *packageImp) String() string {
-	return jsonify.ToString(p)
-}
-
-func (p *packageImp) FindTypeDef(name string) TypeDef {
-	for _, t := range p.structs {
-		if name == t.Name() {
-			return t
-		}
-	}
-	return nil
-}
-
-func (p *packageImp) setIndices(pkgIndex, typeDefIndex int) int {
-	p.index = pkgIndex
-	for _, td := range p.structs {
-		td.SetIndex(typeDefIndex)
-		typeDefIndex++
-	}
-	return typeDefIndex
-}
-
-func (p *packageImp) Empty() bool {
-	return len(p.structs) <= 0 &&
-		len(p.values) <= 0 &&
-		len(p.methods) <= 0
-}
-
-func (p *packageImp) Path() string {
-	return p.path
-}
-
-func (p *packageImp) Name() string {
-	return p.name
-}
-
-func (p *packageImp) ImportPaths() []string {
-	return p.importPaths
-}
-
-func (p *packageImp) Imports() []Package {
-	return p.imports
-}
-
-func (p *packageImp) SetImports(imports []Package) {
-	p.imports = imports
-}
-
-func (p *packageImp) Types() []TypeDef {
-	return p.structs
-}
-
-func (p *packageImp) AddInterface(it ...Interface) {
-	p.interfaces = append(p.interfaces, it...)
-}
-
-func (p *packageImp) AppendTypes(typeDef ...TypeDef) {
-	p.structs = append(p.structs, typeDef...)
-}
-
-func (p *packageImp) AppendValues(value ...ValueDef) {
-	p.values = append(p.values, value...)
-}
-
-func (p *packageImp) Methods() []Method {
-	return p.methods
-}
-
-func (p *packageImp) SetMethods(methods []Method) {
-	p.methods = methods
-}
-
-func (p *packageImp) AppendMethods(methods ...Method) {
-	p.methods = append(p.methods, methods...)
 }

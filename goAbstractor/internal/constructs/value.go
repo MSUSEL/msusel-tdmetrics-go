@@ -1,98 +1,85 @@
 package constructs
 
 import (
-	"fmt"
+	"go/types"
+	"strings"
 
+	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/assert"
+	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs/kind"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/jsonify"
-	"github.com/Snow-Gremlin/goToolbox/utils"
+	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/visitor"
 )
 
 type (
 	Value interface {
-		Construct
+		Definition
 		_value()
+	}
 
-		Name() string
-		Type() TypeDesc
-		Methods() []Method
-		TypeParams() []Named
-		AppendMethod(met ...Method)
-		SetInterface(inter Interface)
+	ValueArgs struct {
+		Package Package
+		Name    string
+		Type    TypeDesc
+		Const   bool
 	}
 
 	valueImp struct {
-		name       string
-		typ        TypeDesc
-		methods    []Method
-		typeParams []Named
-		inter      Interface
-		index      int
+		pkg     Package
+		name    string
+		typ     TypeDesc
+		isConst bool
+		index   int
 	}
 )
 
-func newValue(name string, typ TypeDesc) Value {
-	if len(name) <= 0 || utils.IsNil(typ) {
-		panic(fmt.Errorf(`must have a name and type for a class definition: %q %v`,
-			name, typ))
-	}
+func newValue(args ValueArgs) Value {
+	assert.ArgNotNil(`package`, args.Package)
+	assert.ArgValidId(`name`, args.Name)
+	assert.ArgNotNil(`type`, args.Type)
 
 	return &valueImp{
-		name: name,
-		typ:  typ,
+		pkg:     args.Package,
+		name:    args.Name,
+		typ:     args.Type,
+		isConst: args.Const,
 	}
 }
 
-func (td *valueImp) _value() {}
+func (v *valueImp) _value()            {}
+func (v *valueImp) Kind() kind.Kind    { return kind.Value }
+func (v *valueImp) GoType() types.Type { return v.typ.GoType() }
+func (v *valueImp) SetIndex(index int) { v.index = index }
+func (v *valueImp) Name() string       { return v.name }
+func (v *valueImp) Package() Package   { return v.pkg }
 
-func (td *valueImp) SetIndex(index int) {
-	td.index = index
+func (v *valueImp) CompareTo(other Construct) int {
+	b := other.(*valueImp)
+	if cmp := Compare(v.pkg, b.pkg); cmp != 0 {
+		return cmp
+	}
+	if cmp := strings.Compare(v.name, b.name); cmp != 0 {
+		return cmp
+	}
+	if cmp := Compare(v.typ, b.typ); cmp != 0 {
+		return cmp
+	}
+	return 0
 }
 
-func (td *valueImp) ToJson(ctx *jsonify.Context) jsonify.Datum {
+func (v *valueImp) ToJson(ctx *jsonify.Context) jsonify.Datum {
 	if ctx.IsShort() {
-		return jsonify.New(ctx, td.index)
+		return jsonify.New(ctx, v.index)
 	}
 
 	ctx2 := ctx.HideKind().Short()
 	return jsonify.NewMap().
-		Add(ctx2, `name`, td.name).
-		Add(ctx2, `type`, td.typ).
-		AddNonZero(ctx2, `methods`, td.methods).
-		AddNonZero(ctx2, `typeParams`, td.typeParams).
-		AddNonZero(ctx2, `interface`, td.inter)
+		AddIf(ctx, ctx.IsKindShown(), `kind`, v.Kind()).
+		Add(ctx2, `package`, v.pkg).
+		Add(ctx2, `name`, v.name).
+		Add(ctx2, `type`, v.typ).
+		AddNonZero(ctx2, `const`, v.isConst)
 }
 
-func (td *valueImp) Visit(v Visitor) {
-	visitTest(v, td.typ)
-	visitList(v, td.methods)
-	visitList(v, td.typeParams)
-	visitTest(v, td.inter)
-}
-
-func (td *valueImp) String() string {
-	return jsonify.ToString(td)
-}
-
-func (td *valueImp) Name() string {
-	return td.name
-}
-
-func (td *valueImp) Type() TypeDesc {
-	return td.typ
-}
-
-func (td *valueImp) Methods() []Method {
-	return td.methods
-}
-
-func (td *valueImp) TypeParams() []Named {
-	return td.typeParams
-}
-
-func (td *valueImp) AppendMethod(met ...Method) {
-	td.methods = append(td.methods, met...)
-}
-
-func (td *valueImp) SetInterface(inter Interface) {
-	td.inter = inter
+func (v *valueImp) Visit(vi visitor.Visitor) bool {
+	return visitor.Visit(vi, v.typ)
 }

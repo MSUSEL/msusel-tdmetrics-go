@@ -16,14 +16,17 @@ type (
 	Project interface {
 		NewBasic(args BasicArgs) Basic
 		NewClass(args ClassArgs) Class
+		NewInterDef(args InterDefArgs) InterDef
 		NewInterface(args InterfaceArgs) Interface
-		NewNamed(name string, typ TypeDesc) Named
+		NewMethod(args MethodArgs) Method
+		NewNamed(args NamedArgs) Named
 		NewPackage(args PackageArgs) Package
 		NewReference(realType *types.Named, pkgPath, name string) Reference
 		NewSignature(args SignatureArgs) Signature
 		NewSolid(typ types.Type, target TypeDesc, tp ...TypeDesc) Solid
 		NewStruct(args StructArgs) Struct
 		NewUnion(args UnionArgs) Union
+		NewValue(args ValueArgs) Value
 
 		//==========================
 
@@ -46,6 +49,7 @@ type (
 	projectImp struct {
 		allBasics     Set[Basic]
 		allClasses    Set[Class]
+		allInterDef   Set[InterDef]
 		allInterfaces Set[Interface]
 		allMethods    Set[Method]
 		allNamed      Set[Named]
@@ -55,6 +59,7 @@ type (
 		allSolids     Set[Solid]
 		allStructs    Set[Struct]
 		allUnions     Set[Union]
+		allValues     Set[Value]
 	}
 )
 
@@ -62,6 +67,7 @@ func NewProject() Project {
 	return &projectImp{
 		allBasics:     NewSet[Basic](),
 		allClasses:    NewSet[Class](),
+		allInterDef:   NewSet[InterDef](),
 		allInterfaces: NewSet[Interface](),
 		allMethods:    NewSet[Method](),
 		allNamed:      NewSet[Named](),
@@ -71,6 +77,7 @@ func NewProject() Project {
 		allSolids:     NewSet[Solid](),
 		allStructs:    NewSet[Struct](),
 		allUnions:     NewSet[Union](),
+		allValues:     NewSet[Value](),
 	}
 }
 
@@ -84,12 +91,20 @@ func (p *projectImp) NewClass(args ClassArgs) Class {
 	return p.allClasses.Insert(newClass(args))
 }
 
+func (p *projectImp) NewInterDef(args InterDefArgs) InterDef {
+	return p.allInterDef.Insert(newInterDef(args))
+}
+
 func (p *projectImp) NewInterface(args InterfaceArgs) Interface {
 	return p.allInterfaces.Insert(newInterface(args))
 }
 
-func (p *projectImp) NewNamed(name string, typ TypeDesc) Named {
-	return p.allNamed.Insert(newNamed(name, typ))
+func (p *projectImp) NewMethod(args MethodArgs) Method {
+	return p.allMethods.Insert(newMethod(args))
+}
+
+func (p *projectImp) NewNamed(args NamedArgs) Named {
+	return p.allNamed.Insert(newNamed(args))
 }
 
 func (p *projectImp) NewPackage(args PackageArgs) Package {
@@ -114,6 +129,10 @@ func (p *projectImp) NewStruct(args StructArgs) Struct {
 
 func (p *projectImp) NewUnion(args UnionArgs) Union {
 	return p.allUnions.Insert(newUnion(args))
+}
+
+func (p *projectImp) NewValue(args ValueArgs) Value {
+	return p.allValues.Insert(newValue(args))
 }
 
 //==================================================================
@@ -187,7 +206,7 @@ func (p *projectImp) UpdateIndices() {
 	index = p.allInterfaces.SetIndices(index)
 	index = p.allNamed.SetIndices(index)
 	index = p.allPackages.SetIndices(index)
-	index = p.allReferences.SetIndices(index)
+	// Don't index the p.allReferences
 	index = p.allSignatures.SetIndices(index)
 	index = p.allSolids.SetIndices(index)
 	index = p.allStructs.SetIndices(index)
@@ -207,7 +226,7 @@ func (p *projectImp) ToJson(ctx *jsonify.Context) jsonify.Datum {
 		AddNonZero(ctx2, `interfaces`, p.allInterfaces).
 		AddNonZero(ctx2, `named`, p.allNamed).
 		AddNonZero(ctx2, `packages`, p.allPackages).
-		AddNonZero(ctx2, `references`, p.allReferences).
+		// Don't output the p.allReferences
 		AddNonZero(ctx2, `signatures`, p.allSignatures).
 		AddNonZero(ctx2, `solids`, p.allSolids).
 		AddNonZero(ctx2, `structs`, p.allStructs).

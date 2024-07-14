@@ -7,6 +7,7 @@ type Kind string
 const (
 	Basic     Kind = `basic`
 	Class     Kind = `class`
+	InterDef  Kind = `interDef`
 	Interface Kind = `interface`
 	Method    Kind = `method`
 	Named     Kind = `named`

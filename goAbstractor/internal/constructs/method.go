@@ -87,6 +87,7 @@ func (m *methodImp) ToJson(ctx *jsonify.Context) jsonify.Datum {
 	ctx2 := ctx.HideKind().Short()
 	data := jsonify.NewMap().
 		AddIf(ctx, ctx.IsKindShown(), `kind`, m.Kind()).
+		Add(ctx2, `package`, m.pkg).
 		Add(ctx2, `name`, m.name).
 		Add(ctx2, `signature`, m.signature).
 		AddNonZero(ctx2, `metrics`, m.metrics).
