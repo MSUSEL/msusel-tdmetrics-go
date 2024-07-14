@@ -8,7 +8,6 @@ import (
 	"slices"
 
 	"github.com/Snow-Gremlin/goToolbox/utils"
-	"golang.org/x/tools/go/packages"
 
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs/kind"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/jsonify"
@@ -33,7 +32,7 @@ type (
 
 		// Package is only needed if the real type is nil
 		// so that a Go interface type has to be created.
-		Package *packages.Package
+		Package Package
 	}
 
 	interfaceImp struct {
@@ -59,7 +58,7 @@ func newInterface(args InterfaceArgs) Interface {
 		}
 
 		mTyp := []*types.Func{}
-		pkg := args.Package.Types
+		pkg := args.Package.Source().Types
 		for _, named := range methods {
 			name := named.Name()
 			sig := named.Type().GoType().(*types.Signature)

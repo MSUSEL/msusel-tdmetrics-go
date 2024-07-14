@@ -11,24 +11,17 @@ import (
 	"github.com/Snow-Gremlin/goToolbox/utils"
 	"golang.org/x/tools/go/packages"
 
+	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/baker"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs"
 )
 
 func Abstract(ps []*packages.Package, logDepth int) constructs.Project {
-	builtinName := `$builtin`
-	builtinPkg := &packages.Package{
-		PkgPath: builtinName,
-		Name:    builtinName,
-		Fset:    ps[0].Fset,
-		Types:   types.NewPackage(builtinName, builtinName),
-	}
-
+	proj := constructs.NewProject()
 	ab := &abstractor{
 		logDepth: logDepth,
-		builtin:  builtinPkg,
 		packages: ps,
-		proj:     constructs.NewProject(),
-		baked:    map[string]any{},
+		baker:    baker.New(ps[0].Fset, proj),
+		proj:     proj,
 	}
 	ab.initialize()
 
@@ -41,16 +34,15 @@ func Abstract(ps []*packages.Package, logDepth int) constructs.Project {
 
 	// Finish and clean-up
 	ab.prune()
-	ab.proj.UpdateIndices()
-	return ab.proj
+	proj.UpdateIndices()
+	return proj
 }
 
 type abstractor struct {
 	logDepth int
-	builtin  *packages.Package
 	packages []*packages.Package
+	baker    baker.Baker
 	proj     constructs.Project
-	baked    map[string]any
 
 	typeParamReplacer map[*types.TypeParam]*types.TypeParam
 }
