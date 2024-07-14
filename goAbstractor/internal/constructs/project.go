@@ -91,11 +91,11 @@ func (p *projectImp) NewBasic(args BasicArgs) Basic {
 }
 
 func (p *projectImp) NewClass(args ClassArgs) Class {
-	return p.allClasses.Insert(newClass(args))
+	return args.Package.addClasses(p.allClasses.Insert(newClass(args)))
 }
 
 func (p *projectImp) NewInterDef(args InterDefArgs) InterDef {
-	return p.allInterDefs.Insert(newInterDef(args))
+	return args.Package.addInterDefs(p.allInterDefs.Insert(newInterDef(args)))
 }
 
 func (p *projectImp) NewInterface(args InterfaceArgs) Interface {
@@ -103,7 +103,7 @@ func (p *projectImp) NewInterface(args InterfaceArgs) Interface {
 }
 
 func (p *projectImp) NewMethod(args MethodArgs) Method {
-	return p.allMethods.Insert(newMethod(args))
+	return args.Package.addMethods(p.allMethods.Insert(newMethod(args)))
 }
 
 func (p *projectImp) NewNamed(args NamedArgs) Named {
@@ -135,7 +135,7 @@ func (p *projectImp) NewUnion(args UnionArgs) Union {
 }
 
 func (p *projectImp) NewValue(args ValueArgs) Value {
-	return p.allValues.Insert(newValue(args))
+	return args.Package.addValues(p.allValues.Insert(newValue(args)))
 }
 
 //==================================================================

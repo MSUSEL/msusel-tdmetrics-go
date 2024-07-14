@@ -25,6 +25,12 @@ type (
 		ImportPaths() []string
 		Imports() collections.ReadonlyList[Package]
 
+		addClasses(c Class) Class
+		addImports(p Package) Package
+		addInterDefs(id InterDef) InterDef
+		addMethods(m Method) Method
+		addValues(v Value) Value
+
 		FindType(name string) Definition
 		AllTypes() collections.Enumerator[Definition]
 	}
@@ -41,11 +47,11 @@ type (
 
 		path      string
 		name      string
+		classes   Set[Class]
 		imports   Set[Package]
 		interDefs Set[InterDef]
-		classes   Set[Class]
-		values    Set[Value]
 		methods   Set[Method]
+		values    Set[Value]
 
 		index       int
 		importPaths []string
@@ -62,11 +68,11 @@ func newPackage(args PackageArgs) Package {
 		pkg:         args.RealPkg,
 		path:        args.Path,
 		name:        args.Name,
+		classes:     NewSet[Class](),
 		imports:     NewSet[Package](),
 		interDefs:   NewSet[InterDef](),
-		classes:     NewSet[Class](),
-		values:      NewSet[Value](),
 		methods:     NewSet[Method](),
+		values:      NewSet[Value](),
 		importPaths: args.ImportPaths,
 	}
 }
@@ -81,6 +87,26 @@ func (p *packageImp) ImportPaths() []string     { return p.importPaths }
 
 func (p *packageImp) Imports() collections.ReadonlyList[Package] {
 	return p.imports.Values()
+}
+
+func (p *packageImp) addClasses(c Class) Class {
+	return p.classes.Insert(c)
+}
+
+func (p *packageImp) addImports(i Package) Package {
+	return p.imports.Insert(i)
+}
+
+func (p *packageImp) addInterDefs(id InterDef) InterDef {
+	return p.interDefs.Insert(id)
+}
+
+func (p *packageImp) addMethods(m Method) Method {
+	return p.methods.Insert(m)
+}
+
+func (p *packageImp) addValues(v Value) Value {
+	return p.values.Insert(v)
 }
 
 func (p *packageImp) FindType(name string) Definition {
@@ -114,17 +140,17 @@ func (p *packageImp) ToJson(ctx *jsonify.Context) jsonify.Datum {
 		AddIf(ctx, ctx.IsKindShown(), `kind`, p.Kind()).
 		AddNonZero(ctx2, `path`, p.path).
 		AddNonZero(ctx2, `name`, p.name).
+		AddNonZero(ctx2.Long(), `classes`, p.classes).
 		AddNonZero(ctx2.Short(), `imports`, p.imports).
 		AddNonZero(ctx2.Long(), `interDefs`, p.interDefs).
-		AddNonZero(ctx2.Long(), `classes`, p.classes).
-		AddNonZero(ctx2.Long(), `values`, p.values).
-		AddNonZero(ctx2.Long(), `methods`, p.methods)
+		AddNonZero(ctx2.Long(), `methods`, p.methods).
+		AddNonZero(ctx2.Long(), `values`, p.values)
 }
 
 func (p *packageImp) Visit(v visitor.Visitor) bool {
-	return visitor.VisitList(v, p.imports.Values()) &&
+	return visitor.VisitList(v, p.classes.Values()) &&
+		visitor.VisitList(v, p.imports.Values()) &&
 		visitor.VisitList(v, p.interDefs.Values()) &&
-		visitor.VisitList(v, p.classes.Values()) &&
-		visitor.VisitList(v, p.values.Values()) &&
-		visitor.VisitList(v, p.methods.Values())
+		visitor.VisitList(v, p.methods.Values()) &&
+		visitor.VisitList(v, p.values.Values())
 }
