@@ -1,6 +1,8 @@
 package constructs
 
 import (
+	"cmp"
+
 	"github.com/Snow-Gremlin/goToolbox/utils"
 
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs/kind"
@@ -36,4 +38,16 @@ func Compare[T Construct](a, b T) int {
 	}
 
 	return a.CompareTo(b)
+}
+
+// CompareSlice two slices of constructs together.
+func CompareSlice[T Construct, S ~[]T](a, b S) int {
+	ca, cb := len(a), len(b)
+	cMin := min(ca, cb)
+	for i := 0; i < cMin; i++ {
+		if cmp := Compare(a[i], b[i]); cmp != 0 {
+			return cmp
+		}
+	}
+	return cmp.Compare[int](ca, cb)
 }

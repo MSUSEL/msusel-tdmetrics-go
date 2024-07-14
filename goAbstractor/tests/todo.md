@@ -8,3 +8,6 @@
 
 - Test when a struct has a type param that is only used for another type param:
     `type A[T any, S []T] { list S }; func (a A[T, S]) Foo() string`
+
+- Test when a type parameter has an approximate type:
+     `type A[T any, S ~[]T] { list S }; func (a A[T, S]) Foo() T`

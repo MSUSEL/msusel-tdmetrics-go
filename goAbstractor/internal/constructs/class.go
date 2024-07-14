@@ -77,35 +77,39 @@ func (c *classImp) SetInterface(inter Interface) {
 
 func (c *classImp) CompareTo(other Construct) int {
 	b := other.(*classImp)
-	if cmp := c.pkg.CompareTo(b.pkg); cmp != 0 {
+	if cmp := Compare(c.pkg, b.pkg); cmp != 0 {
 		return cmp
 	}
 	if cmp := strings.Compare(c.name, b.name); cmp != 0 {
 		return cmp
 	}
-	if cmp := c.data.CompareTo(b.data); cmp != 0 {
+	if cmp := CompareSlice(c.typeParams, b.typeParams); cmp != 0 {
+		return cmp
+	}
+	if cmp := Compare(c.data, b.data); cmp != 0 {
 		return cmp
 	}
 	return 0
 }
 
-func (td *classImp) ToJson(ctx *jsonify.Context) jsonify.Datum {
+func (c *classImp) ToJson(ctx *jsonify.Context) jsonify.Datum {
 	if ctx.IsShort() {
-		return jsonify.New(ctx, td.index)
+		return jsonify.New(ctx, c.index)
 	}
 
 	ctx2 := ctx.HideKind().Short()
 	return jsonify.NewMap().
-		Add(ctx2, `name`, td.name).
-		Add(ctx2, `data`, td.data).
-		AddNonZero(ctx2, `typeParams`, td.typeParams).
-		AddNonZero(ctx2, `methods`, td.methods).
-		AddNonZero(ctx2, `interface`, td.inter)
+		AddIf(ctx, ctx.IsKindShown(), `kind`, c.Kind()).
+		Add(ctx2, `name`, c.name).
+		Add(ctx2, `data`, c.data).
+		AddNonZero(ctx2, `typeParams`, c.typeParams).
+		AddNonZero(ctx2, `methods`, c.methods).
+		AddNonZero(ctx2, `interface`, c.inter)
 }
 
-func (td *classImp) Visit(v visitor.Visitor) bool {
-	return visitor.Visit(v, td.data) &&
-		visitor.Visit(v, td.typeParams...) &&
-		visitor.VisitList(v, td.methods.Values()) &&
-		visitor.Visit(v, td.inter)
+func (c *classImp) Visit(v visitor.Visitor) bool {
+	return visitor.Visit(v, c.data) &&
+		visitor.Visit(v, c.typeParams...) &&
+		visitor.VisitList(v, c.methods.Values()) &&
+		visitor.Visit(v, c.inter)
 }

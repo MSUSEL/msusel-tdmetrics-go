@@ -10,7 +10,9 @@ import (
 	"github.com/Snow-Gremlin/goToolbox/utils"
 	"golang.org/x/tools/go/packages"
 
+	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs/kind"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/jsonify"
+	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/visitor"
 )
 
 type (
@@ -91,74 +93,70 @@ func newInterface(args InterfaceArgs) Interface {
 	}
 }
 
-func (ti *interfaceImp) _interface() {}
+func (it *interfaceImp) _interface()        {}
+func (it *interfaceImp) Kind() kind.Kind    { return kind.Interface }
+func (it *interfaceImp) SetIndex(index int) { it.index = index }
+func (it *interfaceImp) GoType() types.Type { return it.realType }
 
-func (ti *interfaceImp) Visit(v Visitor) {
-	visitList(v, ti.typeParams)
-	visitList(v, ti.methods)
-	visitTest(v, ti.union)
-	visitList(v, ti.inherits)
-	visitList(v, ti.inheritors)
+func (it *interfaceImp) Visit(v visitor.Visitor) bool {
+	return visitor.Visit(v, it.typeParams...) &&
+		visitor.Visit(v, it.methods...) &&
+		visitor.Visit(v, it.union) &&
+		visitor.Visit(v, it.inherits...)
 }
 
-func (ti *interfaceImp) SetIndex(index int) {
-	ti.index = index
+func (it *interfaceImp) CompareTo(other Construct) int {
+	b := other.(*interfaceImp)
+	if cmp := Compare(it.union, b.union); cmp != 0 {
+		return cmp
+	}
+	if cmp := CompareSlice(it.typeParams, b.typeParams); cmp != 0 {
+		return cmp
+	}
+	if cmp := CompareSlice(it.methods, b.methods); cmp != 0 {
+		return cmp
+	}
+	return 0
 }
 
-func (ti *interfaceImp) GoType() types.Type {
-	return ti.realType
-}
-
-func (ti *interfaceImp) Equal(other Construct) bool {
-	return equalTest(ti, other, func(a, b *interfaceImp) bool {
-		return equal(a.union, b.union) &&
-			equalList(a.typeParams, b.typeParams) &&
-			equalList(a.methods, b.methods)
-	})
-}
-
-func (ti *interfaceImp) ToJson(ctx *jsonify.Context) jsonify.Datum {
+func (it *interfaceImp) ToJson(ctx *jsonify.Context) jsonify.Datum {
 	if ctx.IsShort() {
-		return jsonify.New(ctx, ti.index)
+		return jsonify.New(ctx, it.index)
 	}
 
 	ctx2 := ctx.HideKind().Short()
 	return jsonify.NewMap().
-		AddIf(ctx, ctx.IsKindShown(), `kind`, `interface`).
-		AddNonZero(ctx2, `typeParams`, ti.typeParams).
-		AddNonZero(ctx2, `inherits`, ti.inherits).
-		AddNonZero(ctx2, `union`, ti.union).
-		AddNonZero(ctx2, `methods`, ti.methods)
+		AddIf(ctx, ctx.IsKindShown(), `kind`, it.Kind()).
+		AddNonZero(ctx2, `typeParams`, it.typeParams).
+		AddNonZero(ctx2, `inherits`, it.inherits).
+		AddNonZero(ctx2, `union`, it.union).
+		AddNonZero(ctx2, `methods`, it.methods)
 }
 
-func (ti *interfaceImp) String() string {
-	return jsonify.ToString(ti)
-}
-
-func (ti *interfaceImp) IsSupertypeOf(other Interface) bool {
-	otherTyp, ok := other.GoType().(*types.Interface)
-	if !ok || utils.IsNil(ti.realType) || utils.IsNil(otherTyp) {
+func (it *interfaceImp) IsSupertypeOf(other Interface) bool {
+	otherIt, ok := other.GoType().(*types.Interface)
+	if !ok || utils.IsNil(it.realType) || utils.IsNil(otherIt) {
 		// Baked in types don't have underlying interfaces
 		// but also shouldn't be needed for any inheritance.
 		return false
 	}
-	return types.Implements(ti.realType, otherTyp)
+	return types.Implements(it.realType, otherIt)
 }
 
-func (ti *interfaceImp) AddInheritors(other Interface) bool {
+func (it *interfaceImp) AddInheritors(other Interface) bool {
 	inter, ok := other.(*interfaceImp)
 	if !ok {
 		return false
 	}
-	if ti == inter {
+	if it == inter {
 		return true
 	}
-	if !inter.IsSupertypeOf(ti) {
+	if !inter.IsSupertypeOf(it) {
 		return false
 	}
 
 	homed := false
-	for _, other := range ti.inheritors {
+	for _, other := range it.inheritors {
 		if other.AddInheritors(inter) {
 			homed = true
 		}
@@ -168,27 +166,27 @@ func (ti *interfaceImp) AddInheritors(other Interface) bool {
 	}
 
 	changed := false
-	for i, other := range ti.inheritors {
+	for i, other := range it.inheritors {
 		if other.IsSupertypeOf(inter) {
 			inter.inheritors = append(inter.inheritors, other)
-			ti.inheritors[i] = nil
+			it.inheritors[i] = nil
 			changed = true
 		}
 	}
 	if changed {
-		ti.inheritors = utils.RemoveZeros(ti.inheritors)
+		it.inheritors = utils.RemoveZeros(it.inheritors)
 	}
 
-	ti.inheritors = append(ti.inheritors, inter)
+	it.inheritors = append(it.inheritors, inter)
 	return true
 }
 
-func (ti *interfaceImp) SetInheritance() {
-	for _, other := range ti.inheritors {
+func (it *interfaceImp) SetInheritance() {
+	for _, other := range it.inheritors {
 		otherInter, ok := other.(*interfaceImp)
 		if !ok {
 			panic(fmt.Sprintf(`interfaces in inheritors must be interfaceImps but got (%[1]T) %[1]v`, other))
 		}
-		otherInter.inherits = append(otherInter.inherits, ti)
+		otherInter.inherits = append(otherInter.inherits, it)
 	}
 }
