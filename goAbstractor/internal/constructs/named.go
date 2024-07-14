@@ -52,10 +52,7 @@ func (t *namedImp) CompareTo(other Construct) int {
 	if cmp := strings.Compare(t.name, b.name); cmp != 0 {
 		return cmp
 	}
-	if cmp := Compare(t.typ, b.typ); cmp != 0 {
-		return cmp
-	}
-	return 0
+	return Compare(t.typ, b.typ)
 }
 
 func (t *namedImp) Visit(v visitor.Visitor) bool {

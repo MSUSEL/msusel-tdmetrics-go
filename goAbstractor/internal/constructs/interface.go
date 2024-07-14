@@ -113,10 +113,7 @@ func (it *interfaceImp) CompareTo(other Construct) int {
 	if cmp := CompareSlice(it.typeParams, b.typeParams); cmp != 0 {
 		return cmp
 	}
-	if cmp := CompareSlice(it.methods, b.methods); cmp != 0 {
-		return cmp
-	}
-	return 0
+	return CompareSlice(it.methods, b.methods)
 }
 
 func (it *interfaceImp) ToJson(ctx *jsonify.Context) jsonify.Datum {

@@ -60,10 +60,7 @@ func (v *valueImp) CompareTo(other Construct) int {
 	if cmp := strings.Compare(v.name, b.name); cmp != 0 {
 		return cmp
 	}
-	if cmp := Compare(v.typ, b.typ); cmp != 0 {
-		return cmp
-	}
-	return 0
+	return Compare(v.typ, b.typ)
 }
 
 func (v *valueImp) ToJson(ctx *jsonify.Context) jsonify.Datum {

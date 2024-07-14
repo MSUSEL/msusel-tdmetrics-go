@@ -57,10 +57,7 @@ func (id *interDefImp) CompareTo(other Construct) int {
 	if cmp := strings.Compare(id.name, b.name); cmp != 0 {
 		return cmp
 	}
-	if cmp := Compare(id.typ, b.typ); cmp != 0 {
-		return cmp
-	}
-	return 0
+	return Compare(id.typ, b.typ)
 }
 
 func (id *interDefImp) ToJson(ctx *jsonify.Context) jsonify.Datum {

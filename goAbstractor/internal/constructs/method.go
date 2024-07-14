@@ -73,10 +73,7 @@ func (m *methodImp) CompareTo(other Construct) int {
 	if cmp := strings.Compare(m.name, b.name); cmp != 0 {
 		return cmp
 	}
-	if cmp := Compare(m.signature, b.signature); cmp != 0 {
-		return cmp
-	}
-	return 0
+	return Compare(m.signature, b.signature)
 }
 
 func (m *methodImp) ToJson(ctx *jsonify.Context) jsonify.Datum {

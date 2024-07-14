@@ -1,14 +1,15 @@
 package constructs
 
 import (
-	"errors"
 	"go/token"
 	"go/types"
 
 	"github.com/Snow-Gremlin/goToolbox/utils"
-	"golang.org/x/tools/go/packages"
 
+	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/assert"
+	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs/kind"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/jsonify"
+	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/visitor"
 )
 
 type (
@@ -26,7 +27,7 @@ type (
 
 		// Package is only needed if the real type is nil
 		// so that a Go signature type has to be created.
-		Package *packages.Package
+		Package Package
 	}
 
 	signatureImp struct {
@@ -43,11 +44,9 @@ type (
 
 func newSignature(args SignatureArgs) Signature {
 	if utils.IsNil(args.RealType) {
-		if utils.IsNil(args.Package) {
-			panic(errors.New(`must provide a package if the real type for a signature is nil`))
-		}
+		assert.ArgNotNil(`package`, args.Package)
 
-		pkg := args.Package.Types
+		pkg := args.Package.Source().Types
 		tp := make([]*types.TypeParam, len(args.TypeParams))
 		for i, t := range args.TypeParams {
 			tName := types.NewTypeName(token.NoPos, pkg, ``, t.GoType())
@@ -78,45 +77,44 @@ func newSignature(args SignatureArgs) Signature {
 	}
 }
 
-func (sig *signatureImp) _signature() {}
+func (s *signatureImp) _signature()        {}
+func (s *signatureImp) Kind() kind.Kind    { return kind.Signature }
+func (s *signatureImp) SetIndex(index int) { s.index = index }
+func (s *signatureImp) GoType() types.Type { return s.realType }
 
-func (sig *signatureImp) Visit(v Visitor) {
-	visitList(v, sig.params)
-	visitList(v, sig.typeParams)
-	visitTest(v, sig.returnType)
+func (s *signatureImp) Visit(v visitor.Visitor) bool {
+	return visitor.Visit(v, s.params...) &&
+		visitor.Visit(v, s.typeParams...) &&
+		visitor.Visit(v, s.returnType)
 }
 
-func (sig *signatureImp) SetIndex(index int) {
-	sig.index = index
+func (s *signatureImp) CompareTo(other Construct) int {
+	b := other.(*signatureImp)
+	if !s.variadic && b.variadic {
+		return -1
+	}
+	if s.variadic && !b.variadic {
+		return 1
+	}
+	if cmp := CompareSlice(s.typeParams, b.typeParams); cmp != 0 {
+		return cmp
+	}
+	if cmp := CompareSlice(s.params, b.params); cmp != 0 {
+		return cmp
+	}
+	return Compare(s.returnType, b.returnType)
 }
 
-func (sig *signatureImp) GoType() types.Type {
-	return sig.realType
-}
-
-func (sig *signatureImp) Equal(other Construct) bool {
-	return equalTest(sig, other, func(a, b *signatureImp) bool {
-		return a.variadic == b.variadic &&
-			equal(a.returnType, b.returnType) &&
-			equalList(a.params, b.params) &&
-			equalList(a.typeParams, b.typeParams)
-	})
-}
-
-func (sig *signatureImp) ToJson(ctx *jsonify.Context) jsonify.Datum {
+func (s *signatureImp) ToJson(ctx *jsonify.Context) jsonify.Datum {
 	if ctx.IsShort() {
-		return jsonify.New(ctx, sig.index)
+		return jsonify.New(ctx, s.index)
 	}
 
 	ctx2 := ctx.HideKind().Short()
 	return jsonify.NewMap().
-		AddIf(ctx, ctx.IsKindShown(), `kind`, `signature`).
-		AddNonZero(ctx2, `variadic`, sig.variadic).
-		AddNonZero(ctx2, `params`, sig.params).
-		AddNonZero(ctx2, `typeParams`, sig.typeParams).
-		AddNonZero(ctx2, `return`, sig.returnType)
-}
-
-func (sig *signatureImp) String() string {
-	return jsonify.ToString(sig)
+		AddIf(ctx, ctx.IsKindShown(), `kind`, s.Kind()).
+		AddNonZero(ctx2, `variadic`, s.variadic).
+		AddNonZero(ctx2, `params`, s.params).
+		AddNonZero(ctx2, `typeParams`, s.typeParams).
+		AddNonZero(ctx2, `return`, s.returnType)
 }

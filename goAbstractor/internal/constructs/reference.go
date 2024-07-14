@@ -69,17 +69,14 @@ func (r *referenceImp) CompareTo(other Construct) int {
 	if cmp := strings.Compare(r.pkgPath, b.pkgPath); cmp != 0 {
 		return cmp
 	}
-	if cmp := strings.Compare(r.name, b.name); cmp != 0 {
-		return cmp
-	}
-	return 0
+	return strings.Compare(r.name, b.name)
 }
 
 func (r *referenceImp) ToJson(ctx *jsonify.Context) jsonify.Datum {
 	ctx2 := ctx.HideKind().Short()
 	if ctx.IsReferenceShown() {
 		return jsonify.NewMap().
-			AddIf(ctx, ctx.IsKindShown(), `kind`, `ref`).
+			AddIf(ctx, ctx.IsKindShown(), `kind`, r.Kind()).
 			AddNonZero(ctx2, `packagePath`, r.pkgPath).
 			Add(ctx2, `name`, r.name).
 			AddNonZero(ctx2, `package`, r.pkg).

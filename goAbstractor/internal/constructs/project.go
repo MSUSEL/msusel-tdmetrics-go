@@ -2,7 +2,6 @@ package constructs
 
 import (
 	"fmt"
-	"go/types"
 	"strconv"
 
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/assert"
@@ -14,6 +13,10 @@ import (
 
 type (
 	Project interface {
+		jsonify.Jsonable
+
+		//==========================
+
 		NewBasic(args BasicArgs) Basic
 		NewClass(args ClassArgs) Class
 		NewInterDef(args InterDefArgs) InterDef
@@ -21,9 +24,9 @@ type (
 		NewMethod(args MethodArgs) Method
 		NewNamed(args NamedArgs) Named
 		NewPackage(args PackageArgs) Package
-		NewReference(realType *types.Named, pkgPath, name string) Reference
+		NewReference(args ReferenceArgs) Reference
 		NewSignature(args SignatureArgs) Signature
-		NewSolid(typ types.Type, target TypeDesc, tp ...TypeDesc) Solid
+		NewSolid(args SolidArgs) Solid
 		NewStruct(args StructArgs) Struct
 		NewUnion(args UnionArgs) Union
 		NewValue(args ValueArgs) Value
@@ -49,7 +52,7 @@ type (
 	projectImp struct {
 		allBasics     Set[Basic]
 		allClasses    Set[Class]
-		allInterDef   Set[InterDef]
+		allInterDefs  Set[InterDef]
 		allInterfaces Set[Interface]
 		allMethods    Set[Method]
 		allNamed      Set[Named]
@@ -67,7 +70,7 @@ func NewProject() Project {
 	return &projectImp{
 		allBasics:     NewSet[Basic](),
 		allClasses:    NewSet[Class](),
-		allInterDef:   NewSet[InterDef](),
+		allInterDefs:  NewSet[InterDef](),
 		allInterfaces: NewSet[Interface](),
 		allMethods:    NewSet[Method](),
 		allNamed:      NewSet[Named](),
@@ -92,7 +95,7 @@ func (p *projectImp) NewClass(args ClassArgs) Class {
 }
 
 func (p *projectImp) NewInterDef(args InterDefArgs) InterDef {
-	return p.allInterDef.Insert(newInterDef(args))
+	return p.allInterDefs.Insert(newInterDef(args))
 }
 
 func (p *projectImp) NewInterface(args InterfaceArgs) Interface {
@@ -111,16 +114,16 @@ func (p *projectImp) NewPackage(args PackageArgs) Package {
 	return p.allPackages.Insert(newPackage(args))
 }
 
-func (p *projectImp) NewReference(realType *types.Named, pkgPath, name string) Reference {
-	return p.allReferences.Insert(newReference(realType, pkgPath, name))
+func (p *projectImp) NewReference(args ReferenceArgs) Reference {
+	return p.allReferences.Insert(newReference(args))
 }
 
 func (p *projectImp) NewSignature(args SignatureArgs) Signature {
 	return p.allSignatures.Insert(newSignature(args))
 }
 
-func (p *projectImp) NewSolid(realType types.Type, target TypeDesc, tp ...TypeDesc) Solid {
-	return p.allSolids.Insert(newSolid(realType, target, tp...))
+func (p *projectImp) NewSolid(args SolidArgs) Solid {
+	return p.allSolids.Insert(newSolid(args))
 }
 
 func (p *projectImp) NewStruct(args StructArgs) Struct {
@@ -187,7 +190,9 @@ func (p *projectImp) FindType(pkgPath, typeName string) (Package, TypeDesc) {
 func (p *projectImp) Remove(predict func(Construct) bool) {
 	p.allBasics.Remove(predict)
 	p.allClasses.Remove(predict)
+	p.allInterDefs.Remove(predict)
 	p.allInterfaces.Remove(predict)
+	p.allMethods.Remove(predict)
 	p.allNamed.Remove(predict)
 	p.allPackages.Remove(predict)
 	p.allReferences.Remove(predict)
@@ -195,6 +200,7 @@ func (p *projectImp) Remove(predict func(Construct) bool) {
 	p.allSolids.Remove(predict)
 	p.allStructs.Remove(predict)
 	p.allUnions.Remove(predict)
+	p.allValues.Remove(predict)
 }
 
 func (p *projectImp) UpdateIndices() {
@@ -203,7 +209,9 @@ func (p *projectImp) UpdateIndices() {
 	index := 1
 	index = p.allBasics.SetIndices(index)
 	index = p.allClasses.SetIndices(index)
+	index = p.allInterDefs.SetIndices(index)
 	index = p.allInterfaces.SetIndices(index)
+	index = p.allMethods.SetIndices(index)
 	index = p.allNamed.SetIndices(index)
 	index = p.allPackages.SetIndices(index)
 	// Don't index the p.allReferences
@@ -211,6 +219,7 @@ func (p *projectImp) UpdateIndices() {
 	index = p.allSolids.SetIndices(index)
 	index = p.allStructs.SetIndices(index)
 	index = p.allUnions.SetIndices(index)
+	p.allValues.SetIndices(index)
 }
 
 func (p *projectImp) String() string {
@@ -223,12 +232,15 @@ func (p *projectImp) ToJson(ctx *jsonify.Context) jsonify.Datum {
 		Add(ctx2, `language`, `go`).
 		AddNonZero(ctx2, `basics`, p.allBasics).
 		AddNonZero(ctx2, `classes`, p.allClasses).
+		AddNonZero(ctx2, `interDefs`, p.allInterDefs).
 		AddNonZero(ctx2, `interfaces`, p.allInterfaces).
+		AddNonZero(ctx2, `methods`, p.allMethods).
 		AddNonZero(ctx2, `named`, p.allNamed).
 		AddNonZero(ctx2, `packages`, p.allPackages).
 		// Don't output the p.allReferences
 		AddNonZero(ctx2, `signatures`, p.allSignatures).
 		AddNonZero(ctx2, `solids`, p.allSolids).
 		AddNonZero(ctx2, `structs`, p.allStructs).
-		AddNonZero(ctx2, `unions`, p.allUnions)
+		AddNonZero(ctx2, `unions`, p.allUnions).
+		AddNonZero(ctx2, `values`, p.allValues)
 }

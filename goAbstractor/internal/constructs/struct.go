@@ -1,13 +1,15 @@
 package constructs
 
 import (
-	"errors"
 	"go/token"
 	"go/types"
 
-	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/jsonify"
 	"github.com/Snow-Gremlin/goToolbox/utils"
-	"golang.org/x/tools/go/packages"
+
+	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/assert"
+	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs/kind"
+	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/jsonify"
+	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/visitor"
 )
 
 type (
@@ -22,7 +24,7 @@ type (
 
 		// Package is only needed if the real type is nil
 		// so that a Go interface type has to be created.
-		Package *packages.Package
+		Package Package
 	}
 
 	structImp struct {
@@ -34,12 +36,10 @@ type (
 
 func newStruct(args StructArgs) Struct {
 	if utils.IsNil(args.RealType) {
-		if utils.IsNil(args.Package) {
-			panic(errors.New(`must provide a package if the real type for a struct is nil`))
-		}
+		assert.ArgNotNil(`package`, args.Package)
 
 		fields := make([]*types.Var, len(args.Fields))
-		pkg := args.Package.Types
+		pkg := args.Package.Source().Types
 		for i, f := range args.Fields {
 			fields[i] = types.NewVar(token.NoPos, pkg, f.Name(), f.GoType())
 		}
@@ -53,37 +53,26 @@ func newStruct(args StructArgs) Struct {
 	}
 }
 
-func (ts *structImp) _struct() {}
+func (s *structImp) _struct()           {}
+func (s *structImp) Kind() kind.Kind    { return kind.Struct }
+func (s *structImp) SetIndex(index int) { s.index = index }
+func (s *structImp) GoType() types.Type { return s.realType }
 
-func (ts *structImp) Visit(v Visitor) {
-	visitList(v, ts.fields)
+func (s *structImp) CompareTo(other Construct) int {
+	return CompareSlice(s.fields, other.(*structImp).fields)
 }
 
-func (ts *structImp) SetIndex(index int) {
-	ts.index = index
+func (s *structImp) Visit(v visitor.Visitor) bool {
+	return visitor.Visit(v, s.fields...)
 }
 
-func (ts *structImp) GoType() types.Type {
-	return ts.realType
-}
-
-func (ts *structImp) Equal(other Construct) bool {
-	return equalTest(ts, other, func(a, b *structImp) bool {
-		return equalList(a.fields, b.fields)
-	})
-}
-
-func (ts *structImp) ToJson(ctx *jsonify.Context) jsonify.Datum {
+func (s *structImp) ToJson(ctx *jsonify.Context) jsonify.Datum {
 	if ctx.IsShort() {
-		return jsonify.New(ctx, ts.index)
+		return jsonify.New(ctx, s.index)
 	}
 
 	ctx2 := ctx.HideKind().Short()
 	return jsonify.NewMap().
-		AddIf(ctx, ctx.IsKindShown(), `kind`, `struct`).
-		AddNonZero(ctx2, `fields`, ts.fields)
-}
-
-func (ts *structImp) String() string {
-	return jsonify.ToString(ts)
+		AddIf(ctx, ctx.IsKindShown(), `kind`, s.Kind()).
+		AddNonZero(ctx2, `fields`, s.fields)
 }

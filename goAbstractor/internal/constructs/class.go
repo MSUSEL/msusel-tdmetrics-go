@@ -86,10 +86,7 @@ func (c *classImp) CompareTo(other Construct) int {
 	if cmp := CompareSlice(c.typeParams, b.typeParams); cmp != 0 {
 		return cmp
 	}
-	if cmp := Compare(c.data, b.data); cmp != 0 {
-		return cmp
-	}
-	return 0
+	return Compare(c.data, b.data)
 }
 
 func (c *classImp) ToJson(ctx *jsonify.Context) jsonify.Datum {

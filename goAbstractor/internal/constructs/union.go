@@ -1,11 +1,12 @@
 package constructs
 
 import (
-	"errors"
 	"go/types"
 
+	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/assert"
+	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs/kind"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/jsonify"
-	"github.com/Snow-Gremlin/goToolbox/utils"
+	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/visitor"
 )
 
 // Exact types are like `string|int|bool` where the type must match exactly.
@@ -23,9 +24,8 @@ type UnionArgs struct {
 }
 
 func newUnion(args UnionArgs) Union {
-	if utils.IsNil(args.RealType) {
-		panic(errors.New(`must provide a real type for a union`))
-	}
+	assert.ArgNotNil(`real type`, args.RealType)
+
 	return &unionImp{
 		realType: args.RealType,
 		exact:    args.Exact,
@@ -40,26 +40,22 @@ type unionImp struct {
 	index    int
 }
 
-func (t *unionImp) _union() {}
+func (t *unionImp) _union()            {}
+func (t *unionImp) Kind() kind.Kind    { return kind.Union }
+func (t *unionImp) SetIndex(index int) { t.index = index }
+func (t *unionImp) GoType() types.Type { return t.realType }
 
-func (t *unionImp) Visit(v Visitor) {
-	visitList(v, t.exact)
-	visitList(v, t.approx)
+func (t *unionImp) CompareTo(other Construct) int {
+	b := other.(*unionImp)
+	if cmp := CompareSlice(t.exact, b.exact); cmp != 0 {
+		return cmp
+	}
+	return CompareSlice(t.approx, b.approx)
 }
 
-func (t *unionImp) SetIndex(index int) {
-	t.index = index
-}
-
-func (t *unionImp) GoType() types.Type {
-	return t.realType
-}
-
-func (t *unionImp) Equal(other Construct) bool {
-	return equalTest(t, other, func(a, b *unionImp) bool {
-		return equalList(a.exact, b.exact) &&
-			equalList(a.approx, b.approx)
-	})
+func (t *unionImp) Visit(v visitor.Visitor) bool {
+	return visitor.Visit(v, t.exact...) &&
+		visitor.Visit(v, t.approx...)
 }
 
 func (t *unionImp) ToJson(ctx *jsonify.Context) jsonify.Datum {
@@ -69,11 +65,7 @@ func (t *unionImp) ToJson(ctx *jsonify.Context) jsonify.Datum {
 
 	ctx2 := ctx.HideKind().Short()
 	return jsonify.NewMap().
-		AddIf(ctx, ctx.IsKindShown(), `kind`, `union`).
+		AddIf(ctx, ctx.IsKindShown(), `kind`, t.Kind()).
 		AddNonZero(ctx2, `exact`, t.exact).
 		AddNonZero(ctx2, `approx`, t.approx)
-}
-
-func (t *unionImp) String() string {
-	return jsonify.ToString(t)
 }
