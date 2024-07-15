@@ -21,8 +21,8 @@ func Abstract(ps []*packages.Package, logDepth int) constructs.Project {
 		baker:    baker.New(ps[0].Fset, proj),
 		proj:     proj,
 	}
-	ab.initialize()
 
+	ab.initialize()
 	ab.abstractProject()
 
 	ab.log(1, `resolve imports`)
@@ -175,36 +175,27 @@ func pos(src *packages.Package, pos token.Pos) string {
 func (ab *abstractor) resolveInheritance() {
 	ab.log(1, `resolve inheritance`)
 
-	obj := ab.baker.BakeAny()
-	inters := ab.proj.AllInterfaces()
-	for _, inter := range inters {
-		obj.AddInheritors(inter)
+	obj := ab.baker.BakeAny().Interface()
+	inters := ab.proj.Interfaces()
+
+	for i := range inters.Count() {
+		obj.AddInheritors(inters.Get(i))
 	}
-	for _, inter := range inters {
-		inter.SetInheritance()
+
+	for i := range inters.Count() {
+		inters.Get(i).SetInheritance()
 	}
 }
 
 func (ab *abstractor) resolveReferences() {
 	ab.log(1, `resolve references`)
-	for _, ref := range ab.proj.AllReferences() {
-		ab.resolveReference(ref)
-	}
-}
-
-func (ab *abstractor) resolveReference(ref constructs.Reference) {
-	ab.log(2, `|  resolve %s%s`, ref.PackagePath(), ref.Name())
-	if len(ref.PackagePath()) > 0 {
-		ref.SetType(ab.proj.FindTypeDef(ref.PackagePath(), ref.Name()))
-		return
-	}
-
-	switch ref.Name() {
-	case `error`:
-		ref.SetType(ab.bakeError())
-	case `comparable`:
-		ref.SetType(ab.bakeComparable())
-	default:
-		panic(fmt.Errorf(`unknown reference: package=%q, name=%q`, ref.PackagePath(), ref.Name()))
+	refs := ab.proj.References()
+	for i := range refs.Count() {
+		ref := refs.Get(i)
+		path := ref.PackagePath()
+		if len(path) <= 0 {
+			path = `$builtin`
+		}
+		ref.SetType(ab.proj.FindType(path, ref.Name()))
 	}
 }

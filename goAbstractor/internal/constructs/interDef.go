@@ -14,18 +14,19 @@ type (
 	InterDef interface {
 		Definition
 		_interDef()
+		Interface() Interface
 	}
 
 	InterDefArgs struct {
 		Package Package
 		Name    string
-		Type    TypeDesc
+		Type    Interface
 	}
 
 	interDefImp struct {
 		pkg   Package
 		name  string
-		typ   TypeDesc
+		typ   Interface
 		index int
 	}
 )
@@ -42,12 +43,13 @@ func newInterDef(args InterDefArgs) InterDef {
 	}
 }
 
-func (id *interDefImp) _interDef()         {}
-func (id *interDefImp) Kind() kind.Kind    { return kind.InterDef }
-func (id *interDefImp) GoType() types.Type { return id.typ.GoType() }
-func (id *interDefImp) SetIndex(index int) { id.index = index }
-func (id *interDefImp) Name() string       { return id.name }
-func (id *interDefImp) Package() Package   { return id.pkg }
+func (id *interDefImp) _interDef()           {}
+func (id *interDefImp) Kind() kind.Kind      { return kind.InterDef }
+func (id *interDefImp) GoType() types.Type   { return id.typ.GoType() }
+func (id *interDefImp) SetIndex(index int)   { id.index = index }
+func (id *interDefImp) Name() string         { return id.name }
+func (id *interDefImp) Package() Package     { return id.pkg }
+func (id *interDefImp) Interface() Interface { return id.typ }
 
 func (id *interDefImp) CompareTo(other Construct) int {
 	b := other.(*interDefImp)

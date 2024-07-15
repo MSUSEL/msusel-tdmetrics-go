@@ -34,14 +34,14 @@ type (
 
 		//==========================
 
-		//Interfaces() collections.ReadonlyList[Interface]
+		Interfaces() collections.ReadonlyList[Interface]
 		//Packages() collections.ReadonlyList[Package]
-		//References() collections.ReadonlyList[Reference]
+		References() collections.ReadonlyList[Reference]
 
 		//==========================
 
 		FindPackageByPath(path string) Package
-		FindType(pkgPath, typeName string) (Package, TypeDesc)
+		FindType(pkgPath, typeName string) (Package, Definition)
 		Remove(predict func(Construct) bool)
 
 		// UpdateIndices should be called after all types have been registered
@@ -168,7 +168,7 @@ func (p *projectImp) FindPackageByPath(path string) Package {
 	return pkg
 }
 
-func (p *projectImp) FindType(pkgPath, typeName string) (Package, TypeDesc) {
+func (p *projectImp) FindType(pkgPath, typeName string) (Package, Definition) {
 	assert.ArgNotEmpty(`pkgPath`, pkgPath)
 
 	pkg := p.FindPackageByPath(pkgPath)
