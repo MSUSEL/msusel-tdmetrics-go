@@ -25,14 +25,17 @@ type (
 		ImportPaths() []string
 		Imports() collections.ReadonlyList[Package]
 
-		addClasses(c Class) Class
-		addImports(p Package) Package
-		addInterDefs(id InterDef) InterDef
-		addMethods(m Method) Method
-		addValues(v Value) Value
+		addImport(p Package) Package
+		addClass(c Class) Class
+		addInterDef(id InterDef) InterDef
+		addMethod(m Method) Method
+		addValue(v Value) Value
 
-		FindType(name string) Definition
-		AllTypes() collections.Enumerator[Definition]
+		findType(name string) Definition
+		allTypes() collections.Enumerator[Definition]
+
+		resolveReceivers()
+		resolveClassInterfaces(proj Project)
 	}
 
 	PackageArgs struct {
@@ -89,32 +92,32 @@ func (p *packageImp) Imports() collections.ReadonlyList[Package] {
 	return p.imports.Values()
 }
 
-func (p *packageImp) addClasses(c Class) Class {
-	return p.classes.Insert(c)
-}
-
-func (p *packageImp) addImports(i Package) Package {
+func (p *packageImp) addImport(i Package) Package {
 	return p.imports.Insert(i)
 }
 
-func (p *packageImp) addInterDefs(id InterDef) InterDef {
+func (p *packageImp) addClass(c Class) Class {
+	return p.classes.Insert(c)
+}
+
+func (p *packageImp) addInterDef(id InterDef) InterDef {
 	return p.interDefs.Insert(id)
 }
 
-func (p *packageImp) addMethods(m Method) Method {
+func (p *packageImp) addMethod(m Method) Method {
 	return p.methods.Insert(m)
 }
 
-func (p *packageImp) addValues(v Value) Value {
+func (p *packageImp) addValue(v Value) Value {
 	return p.values.Insert(v)
 }
 
-func (p *packageImp) FindType(name string) Definition {
-	def, _ := p.AllTypes().Where(func(t Definition) bool { return t.Name() == name }).First()
+func (p *packageImp) findType(name string) Definition {
+	def, _ := p.allTypes().Where(func(t Definition) bool { return t.Name() == name }).First()
 	return def
 }
 
-func (p *packageImp) AllTypes() collections.Enumerator[Definition] {
+func (p *packageImp) allTypes() collections.Enumerator[Definition] {
 	i := enumerator.Cast[Definition](p.interDefs.Values().Enumerate())
 	c := enumerator.Cast[Definition](p.classes.Values().Enumerate())
 	v := enumerator.Cast[Definition](p.values.Values().Enumerate())
@@ -153,4 +156,29 @@ func (p *packageImp) Visit(v visitor.Visitor) bool {
 		visitor.VisitList(v, p.interDefs.Values()) &&
 		visitor.VisitList(v, p.methods.Values()) &&
 		visitor.VisitList(v, p.values.Values())
+}
+
+func (p *packageImp) resolveReceivers() {
+	methods := p.methods.Values()
+	for i := range methods.Count() {
+		m := methods.Get(i)
+		if rec := m.ReceiverName(); len(rec) > 0 {
+			t := p.findType(rec)
+			if t == nil {
+				panic(fmt.Errorf(`failed to find receiver for %s`, rec))
+			}
+			c, ok := t.(Class)
+			if !ok {
+				panic(fmt.Errorf(`receiver was not a class for %[1]s: (%[2]T) %[2]v`, rec, t))
+			}
+			c.addMethod(m)
+		}
+	}
+}
+
+func (p *packageImp) resolveClassInterfaces(proj Project) {
+	classes := p.classes.Values()
+	for i := range classes.Count() {
+		classes.Get(i).resolveInterface(proj, p)
+	}
 }

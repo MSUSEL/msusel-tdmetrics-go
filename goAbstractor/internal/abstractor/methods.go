@@ -5,12 +5,13 @@ import (
 	"go/ast"
 	"go/types"
 
-	"github.com/Snow-Gremlin/goToolbox/utils"
 	"golang.org/x/tools/go/packages"
 
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/metrics"
 )
+
+// TODO: Handle multiple init's per package.
 
 func (ab *abstractor) setTypeParamOverrides(args *types.TypeList, params *types.TypeParamList, src *packages.Package, decl *ast.FuncDecl) {
 	count := args.Len()
@@ -62,32 +63,4 @@ func (ab *abstractor) abstractFuncDecl(pkg constructs.Package, src *packages.Pac
 		Receiver:   recvName,
 	})
 	pkg.AppendMethods(m)
-}
-
-func (ab *abstractor) resolveReceivers() {
-	ab.log(1, `resolve receivers`)
-	for _, pkg := range ab.proj.Packages() {
-		resolveReceiversInPackage(pkg)
-	}
-}
-
-func resolveReceiversInPackage(pkg constructs.Package) {
-	pkgChanged := false
-	methods := pkg.Methods()
-	for i, m := range methods {
-		if len(m.Receiver()) > 0 {
-
-			t := pkg.FindTypeDef(m.Receiver())
-			if t == nil {
-				panic(fmt.Errorf(`failed to find receiver for %s`, m.Receiver()))
-			}
-
-			pkgChanged = true
-			t.AppendMethod(m)
-			methods[i] = nil
-		}
-	}
-	if pkgChanged {
-		pkg.SetMethods(utils.RemoveZeros(methods))
-	}
 }

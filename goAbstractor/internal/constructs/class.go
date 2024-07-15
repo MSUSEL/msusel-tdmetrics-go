@@ -2,9 +2,11 @@ package constructs
 
 import (
 	"go/types"
+	"slices"
 	"strings"
 
 	"github.com/Snow-Gremlin/goToolbox/collections"
+	"github.com/Snow-Gremlin/goToolbox/terrors/terror"
 
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/assert"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs/kind"
@@ -17,10 +19,11 @@ type (
 		Definition
 		_class()
 
-		TypeParams() []Named
-		Methods() collections.ReadonlyList[Method]
-		AddMethod(met Method) Method
-		SetInterface(inter Interface)
+		//TypeParams() []Named
+		//Methods() collections.ReadonlyList[Method]
+
+		addMethod(met Method) Method
+		resolveInterface(proj Project, pkg Package)
 	}
 
 	ClassArgs struct {
@@ -47,6 +50,13 @@ func newClass(args ClassArgs) Class {
 	assert.ArgNotNil(`package`, args.Package)
 	assert.ArgNotNil(`data`, args.Data)
 
+	if _, ok := args.Data.(Interface); ok {
+		panic(terror.New(`may not use an interface as data in a class`).
+			With(`package`, args.Package.Name()).
+			With(`name`, args.Name).
+			With(`data`, args.Data))
+	}
+
 	return &classImp{
 		pkg:     args.Package,
 		name:    args.Name,
@@ -67,7 +77,7 @@ func (c *classImp) Methods() collections.ReadonlyList[Method] {
 	return c.methods.Values()
 }
 
-func (c *classImp) AddMethod(met Method) Method {
+func (c *classImp) addMethod(met Method) Method {
 	return c.methods.Insert(met)
 }
 
@@ -110,4 +120,22 @@ func (c *classImp) Visit(v visitor.Visitor) bool {
 		visitor.Visit(v, c.typeParams...) &&
 		visitor.VisitList(v, c.methods.Values()) &&
 		visitor.Visit(v, c.inter)
+}
+
+func (c *classImp) resolveInterface(proj Project, pkg Package) {
+	methods := c.methods.Values()
+	itMethods := make([]Named, methods.Count())
+	for i := range methods.Count() {
+		m := methods.Get(i)
+		itMethods[i] = proj.NewNamed(NamedArgs{
+			Name: m.Name(),
+			Type: m.Signature(),
+		})
+	}
+
+	c.inter = proj.NewInterface(InterfaceArgs{
+		Methods:    itMethods,
+		TypeParams: slices.Clone(c.typeParams),
+		Package:    pkg,
+	})
 }

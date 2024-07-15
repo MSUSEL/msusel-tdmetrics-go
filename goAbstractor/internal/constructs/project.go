@@ -4,11 +4,12 @@ import (
 	"fmt"
 	"strconv"
 
-	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/assert"
-	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/jsonify"
 	"github.com/Snow-Gremlin/goToolbox/collections"
 	"github.com/Snow-Gremlin/goToolbox/collections/enumerator"
 	"github.com/Snow-Gremlin/goToolbox/terrors/terror"
+
+	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/assert"
+	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/jsonify"
 )
 
 type (
@@ -33,9 +34,9 @@ type (
 
 		//==========================
 
-		Interfaces() collections.ReadonlyList[Interface]
-		Packages() collections.ReadonlyList[Package]
-		References() collections.ReadonlyList[Reference]
+		//Interfaces() collections.ReadonlyList[Interface]
+		//Packages() collections.ReadonlyList[Package]
+		//References() collections.ReadonlyList[Reference]
 
 		//==========================
 
@@ -47,6 +48,12 @@ type (
 		// and all packages have been processed. This will update all the index
 		// fields that will be used as references in the output models.
 		UpdateIndices()
+
+		//==========================
+
+		ResolveImports()
+		ResolveReceivers()
+		ResolveClassInterfaces()
 	}
 
 	projectImp struct {
@@ -91,11 +98,11 @@ func (p *projectImp) NewBasic(args BasicArgs) Basic {
 }
 
 func (p *projectImp) NewClass(args ClassArgs) Class {
-	return args.Package.addClasses(p.allClasses.Insert(newClass(args)))
+	return args.Package.addClass(p.allClasses.Insert(newClass(args)))
 }
 
 func (p *projectImp) NewInterDef(args InterDefArgs) InterDef {
-	return args.Package.addInterDefs(p.allInterDefs.Insert(newInterDef(args)))
+	return args.Package.addInterDef(p.allInterDefs.Insert(newInterDef(args)))
 }
 
 func (p *projectImp) NewInterface(args InterfaceArgs) Interface {
@@ -103,7 +110,7 @@ func (p *projectImp) NewInterface(args InterfaceArgs) Interface {
 }
 
 func (p *projectImp) NewMethod(args MethodArgs) Method {
-	return args.Package.addMethods(p.allMethods.Insert(newMethod(args)))
+	return args.Package.addMethod(p.allMethods.Insert(newMethod(args)))
 }
 
 func (p *projectImp) NewNamed(args NamedArgs) Named {
@@ -135,7 +142,7 @@ func (p *projectImp) NewUnion(args UnionArgs) Union {
 }
 
 func (p *projectImp) NewValue(args ValueArgs) Value {
-	return args.Package.addValues(p.allValues.Insert(newValue(args)))
+	return args.Package.addValue(p.allValues.Insert(newValue(args)))
 }
 
 //==================================================================
@@ -175,9 +182,9 @@ func (p *projectImp) FindType(pkgPath, typeName string) (Package, TypeDesc) {
 			With(`package path`, pkgPath))
 	}
 
-	def := pkg.FindType(typeName)
+	def := pkg.findType(typeName)
 	if def == nil {
-		names := enumerator.Select(pkg.AllTypes(),
+		names := enumerator.Select(pkg.allTypes(),
 			func(td Definition) string { return td.Name() }).
 			Join(`, `)
 		fmt.Println(pkgPath + `.TypeDefs: [` + names + `]`)
@@ -243,4 +250,36 @@ func (p *projectImp) ToJson(ctx *jsonify.Context) jsonify.Datum {
 		AddNonZero(ctx2, `structs`, p.allStructs).
 		AddNonZero(ctx2, `unions`, p.allUnions).
 		AddNonZero(ctx2, `values`, p.allValues)
+}
+
+//==================================================================
+
+func (p *projectImp) ResolveImports() {
+	packages := p.allPackages.Values()
+	for i := range packages.Count() {
+		pkg := packages.Get(i)
+		for _, importPath := range pkg.ImportPaths() {
+			impPackage := p.FindPackageByPath(importPath)
+			if impPackage == nil {
+				panic(terror.New(`import package not found`).
+					With(`package path`, pkg.Path).
+					With(`import path`, importPath))
+			}
+			pkg.addImport(impPackage)
+		}
+	}
+}
+
+func (p *projectImp) ResolveReceivers() {
+	packages := p.allPackages.Values()
+	for i := range packages.Count() {
+		packages.Get(i).resolveReceivers()
+	}
+}
+
+func (p *projectImp) ResolveClassInterfaces() {
+	packages := p.allPackages.Values()
+	for i := range packages.Count() {
+		packages.Get(i).resolveClassInterfaces(p)
+	}
 }

@@ -1,12 +1,10 @@
 package abstractor
 
 import (
-	"errors"
 	"fmt"
 	"go/ast"
 	"go/token"
 	"go/types"
-	"slices"
 
 	"github.com/Snow-Gremlin/goToolbox/utils"
 	"golang.org/x/tools/go/packages"
@@ -26,14 +24,23 @@ func Abstract(ps []*packages.Package, logDepth int) constructs.Project {
 	ab.initialize()
 
 	ab.abstractProject()
-	ab.resolveImports()
-	ab.resolveReceivers()
-	ab.resolveClasses()
+
+	ab.log(1, `resolve imports`)
+	proj.ResolveImports()
+
+	ab.log(1, `resolve receivers`)
+	proj.ResolveReceivers()
+
+	ab.log(1, `resolve class interfaces`)
+	proj.ResolveClassInterfaces()
+
 	ab.resolveInheritance()
 	ab.resolveReferences()
 
 	// Finish and clean-up
 	ab.prune()
+
+	ab.log(1, `update indices`)
 	proj.UpdateIndices()
 	return proj
 }
@@ -54,23 +61,21 @@ func (ab *abstractor) log(depth int, format string, args ...any) {
 }
 
 func (ab *abstractor) initialize() {
-	ab.log(1, `initialize`)
-	ab.bakeAny() // Prebake the "any" (i.e. object) into the interfaces.
+	ab.baker.BakeBuiltin() // Prebake the builtin package.
+	ab.baker.BakeAny()     // Prebake the "any" (i.e. object) into the interfaces.
 }
 
 func (ab *abstractor) abstractProject() {
 	ab.log(1, `abstract project`)
 	packages.Visit(ab.packages, func(src *packages.Package) bool {
-		if ap := ab.abstractPackage(src); ap != nil {
-			ab.proj.AppendPackage(ap)
-		}
+		ab.abstractPackage(src)
 		return true
 	}, nil)
 }
 
 func (ab *abstractor) abstractPackage(src *packages.Package) constructs.Package {
 	ab.log(2, `|  abstract package: %s`, src.PkgPath)
-	pkg := constructs.NewPackage(constructs.PackageArgs{
+	pkg := ab.proj.NewPackage(constructs.PackageArgs{
 		RealPkg:     src,
 		Path:        src.PkgPath,
 		Name:        src.Name,
@@ -119,8 +124,24 @@ func (ab *abstractor) abstractTypeSpec(pkg constructs.Package, src *packages.Pac
 	}
 
 	typ := ab.convertType(tv.Type)
-	def := constructs.NewTypeDef(spec.Name.Name, typ)
-	pkg.AppendTypes(def)
+	if it, ok := typ.(constructs.Interface); ok {
+		ab.proj.NewInterDef(constructs.InterDefArgs{
+			Package: pkg,
+			Name:    spec.Name.Name,
+			Type:    it,
+		})
+		return
+	}
+
+	// TODO: Get type params for classes
+	tp := []constructs.Named{}
+
+	ab.proj.NewClass(constructs.ClassArgs{
+		Package:    pkg,
+		Name:       spec.Name.Name,
+		Data:       typ,
+		TypeParams: tp,
+	})
 }
 
 func (ab *abstractor) abstractValueSpec(pkg constructs.Package, src *packages.Package, spec *ast.ValueSpec, isConst bool) {
@@ -138,8 +159,12 @@ func (ab *abstractor) abstractValueSpec(pkg constructs.Package, src *packages.Pa
 		}
 
 		typ := ab.convertType(tv.Type())
-		def := constructs.NewValueDef(name.Name, isConst, typ)
-		pkg.AppendValues(def)
+		ab.proj.NewValue(constructs.ValueArgs{
+			Package: pkg,
+			Name:    name.Name,
+			Const:   isConst,
+			Type:    typ,
+		})
 	}
 }
 
@@ -147,66 +172,12 @@ func pos(src *packages.Package, pos token.Pos) string {
 	return src.Fset.Position(pos).String()
 }
 
-func (ab *abstractor) resolveImports() {
-	ab.log(1, `resolve imports`)
-	for _, p := range ab.proj.Packages() {
-		imports := make([]constructs.Package, len(p.ImportPaths()))
-		for i, importPath := range p.ImportPaths() {
-			impPackage := ab.proj.FindPackageByPath(importPath)
-			if impPackage == nil {
-				panic(fmt.Errorf(`import package not found for %s: %s`, p.Path(), importPath))
-			}
-			imports[i] = impPackage
-		}
-		p.SetImports(imports)
-	}
-}
-
-func (ab *abstractor) resolveClasses() {
-	ab.log(1, `resolve classes`)
-	for _, pkg := range ab.proj.Packages() {
-		ab.log(2, `|  resolve package: %s`, pkg.Source().PkgPath)
-		for _, td := range pkg.Types() {
-			ab.log(3, `|  |  resolve typeDef: %s`, td.Name())
-			ab.resolveClass(pkg, td)
-		}
-	}
-}
-
-func (ab *abstractor) resolveClass(pkg constructs.Package, td constructs.TypeDef) {
-	if tTyp, ok := td.Type().(constructs.Interface); ok {
-		td.SetInterface(tTyp)
-		return
-	}
-
-	methods := []constructs.Named{}
-	for _, m := range td.Methods() {
-		method := ab.proj.Types().NewNamed(m.Name(), m.Signature())
-		methods = append(methods, method)
-	}
-
-	typeParams := slices.Clone(td.TypeParams())
-
-	tInt := ab.proj.Types().NewInterface(constructs.InterfaceArgs{
-		Methods:    methods,
-		TypeParams: typeParams,
-		Package:    pkg.Source(),
-	})
-	td.SetInterface(tInt)
-}
-
 func (ab *abstractor) resolveInheritance() {
 	ab.log(1, `resolve inheritance`)
-	inters := ab.proj.Types().AllInterfaces()
-	if len(inters) <= 0 {
-		panic(errors.New(`expected the object interface at minimum but found no interfaces`))
-	}
 
-	obj := inters[0]
-	if !obj.Equal(ab.bakeAny()) {
-		panic(errors.New(`expected the first interface to be the "any" interface`))
-	}
-	for _, inter := range inters[1:] {
+	obj := ab.baker.BakeAny()
+	inters := ab.proj.AllInterfaces()
+	for _, inter := range inters {
 		obj.AddInheritors(inter)
 	}
 	for _, inter := range inters {
@@ -216,7 +187,7 @@ func (ab *abstractor) resolveInheritance() {
 
 func (ab *abstractor) resolveReferences() {
 	ab.log(1, `resolve references`)
-	for _, ref := range ab.proj.Types().AllReferences() {
+	for _, ref := range ab.proj.AllReferences() {
 		ab.resolveReference(ref)
 	}
 }
