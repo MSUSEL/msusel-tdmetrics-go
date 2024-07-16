@@ -10,6 +10,7 @@ const (
 	keyKindShown
 	keyReceiverShown
 	keyReferenceShown
+	keyFullLoc
 )
 
 type Context struct {
@@ -96,4 +97,16 @@ func (c *Context) ShowReference(show bool) *Context {
 // reference name in the object model. This is for debugging purposes.
 func (c *Context) IsReferenceShown() bool {
 	return c.state[keyReferenceShown]
+}
+
+// ShowFullLocation sets if the full location information should
+// be included in the object model. This is for debugging purposes.
+func (c *Context) ShowFullLocation(show bool) *Context {
+	return c.copyAndSet(keyFullLoc, show)
+}
+
+// IsFullLocationShown indicates that the full location information should
+// be included in the object model. This is for debugging purposes.
+func (c *Context) IsFullLocationShown() bool {
+	return c.state[keyFullLoc]
 }

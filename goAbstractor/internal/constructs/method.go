@@ -48,7 +48,6 @@ func newMethod(args MethodArgs) Method {
 	assert.ArgValidId(`name`, args.Name)
 	assert.ArgNotNil(`package`, args.Package)
 	assert.ArgNotNil(`signature`, args.Signature)
-	assert.ArgNotNil(`loc`, args.Location)
 
 	return &methodImp{
 		pkg:        args.Package,

@@ -39,7 +39,6 @@ func newValue(args ValueArgs) Value {
 	assert.ArgNotNil(`package`, args.Package)
 	assert.ArgValidId(`name`, args.Name)
 	assert.ArgNotNil(`type`, args.Type)
-	assert.ArgNotNil(`loc`, args.Location)
 
 	return &valueImp{
 		pkg:     args.Package,

@@ -38,7 +38,6 @@ func newInterDef(args InterDefArgs) InterDef {
 	assert.ArgNotNil(`package`, args.Package)
 	assert.ArgValidId(`name`, args.Name)
 	assert.ArgNotNil(`type`, args.Type)
-	assert.ArgNotNil(`loc`, args.Location)
 
 	return &interDefImp{
 		pkg:  args.Package,
