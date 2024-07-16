@@ -5,12 +5,12 @@ import (
 	"slices"
 	"strings"
 
-	"github.com/Snow-Gremlin/goToolbox/collections"
 	"github.com/Snow-Gremlin/goToolbox/terrors/terror"
 
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/assert"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs/kind"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/jsonify"
+	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/locs"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/visitor"
 )
 
@@ -19,9 +19,6 @@ type (
 		Definition
 		_class()
 
-		//TypeParams() []Named
-		//Methods() collections.ReadonlyList[Method]
-
 		addMethod(met Method) Method
 		resolveInterface(proj Project, pkg Package)
 	}
@@ -29,6 +26,7 @@ type (
 	ClassArgs struct {
 		Package    Package
 		Name       string
+		Location   locs.Loc
 		Data       TypeDesc
 		TypeParams []Named
 	}
@@ -36,6 +34,7 @@ type (
 	classImp struct {
 		pkg        Package
 		name       string
+		loc        locs.Loc
 		data       TypeDesc
 		typeParams []Named
 
@@ -49,6 +48,7 @@ func newClass(args ClassArgs) Class {
 	assert.ArgValidId(`name`, args.Name)
 	assert.ArgNotNil(`package`, args.Package)
 	assert.ArgNotNil(`data`, args.Data)
+	assert.ArgNotNil(`loc`, args.Location)
 
 	if _, ok := args.Data.(Interface); ok {
 		panic(terror.New(`may not use an interface as data in a class`).
@@ -60,22 +60,19 @@ func newClass(args ClassArgs) Class {
 	return &classImp{
 		pkg:     args.Package,
 		name:    args.Name,
+		loc:     args.Location,
 		data:    args.Data,
 		methods: NewSet[Method](),
 	}
 }
 
-func (c *classImp) _class()             {}
-func (c *classImp) Kind() kind.Kind     { return kind.Class }
-func (c *classImp) SetIndex(index int)  { c.index = index }
-func (c *classImp) GoType() types.Type  { return c.data.GoType() }
-func (c *classImp) Name() string        { return c.name }
-func (c *classImp) Package() Package    { return c.pkg }
-func (c *classImp) TypeParams() []Named { return c.typeParams }
-
-func (c *classImp) Methods() collections.ReadonlyList[Method] {
-	return c.methods.Values()
-}
+func (c *classImp) _class()            {}
+func (c *classImp) Kind() kind.Kind    { return kind.Class }
+func (c *classImp) SetIndex(index int) { c.index = index }
+func (c *classImp) GoType() types.Type { return c.data.GoType() }
+func (c *classImp) Location() locs.Loc { return c.loc }
+func (c *classImp) Name() string       { return c.name }
+func (c *classImp) Package() Package   { return c.pkg }
 
 func (c *classImp) addMethod(met Method) Method {
 	return c.methods.Insert(met)
@@ -110,6 +107,7 @@ func (c *classImp) ToJson(ctx *jsonify.Context) jsonify.Datum {
 		Add(ctx2, `package`, c.pkg).
 		Add(ctx2, `name`, c.name).
 		Add(ctx2, `data`, c.data).
+		AddNonZero(ctx2, `loc`, c.loc).
 		AddNonZero(ctx2, `typeParams`, c.typeParams).
 		AddNonZero(ctx2, `methods`, c.methods).
 		AddNonZero(ctx2, `interface`, c.inter)

@@ -55,12 +55,11 @@ func (ab *abstractor) abstractFuncDecl(pkg constructs.Package, src *packages.Pac
 	ab.clearTypeParamOverrides()
 
 	mets := metrics.New(src.Fset, decl)
-	m := constructs.NewMethod(constructs.MethodArgs{
+	ab.proj.NewMethod(constructs.MethodArgs{
 		Name:       decl.Name.Name,
 		Signature:  sig,
 		Metrics:    mets,
 		NoCopyRecv: noCopyRecv,
 		Receiver:   recvName,
 	})
-	pkg.AppendMethods(m)
 }

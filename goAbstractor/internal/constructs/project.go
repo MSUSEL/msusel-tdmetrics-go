@@ -2,6 +2,7 @@ package constructs
 
 import (
 	"fmt"
+	"go/token"
 	"strconv"
 
 	"github.com/Snow-Gremlin/goToolbox/collections"
@@ -10,6 +11,8 @@ import (
 
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/assert"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/jsonify"
+	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/locs"
+	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/visitor"
 )
 
 type (
@@ -31,18 +34,18 @@ type (
 		NewStruct(args StructArgs) Struct
 		NewUnion(args UnionArgs) Union
 		NewValue(args ValueArgs) Value
+		NewLoc(pos token.Pos) locs.Loc
 
 		//==========================
 
 		Interfaces() collections.ReadonlyList[Interface]
-		//Packages() collections.ReadonlyList[Package]
+		Packages() collections.ReadonlyList[Package]
 		References() collections.ReadonlyList[Reference]
 
 		//==========================
 
 		FindPackageByPath(path string) Package
 		FindType(pkgPath, typeName string) (Package, Definition)
-		Remove(predict func(Construct) bool)
 
 		// UpdateIndices should be called after all types have been registered
 		// and all packages have been processed. This will update all the index
@@ -54,6 +57,7 @@ type (
 		ResolveImports()
 		ResolveReceivers()
 		ResolveClassInterfaces()
+		Prune(packages []Package)
 	}
 
 	projectImp struct {
@@ -70,10 +74,11 @@ type (
 		allStructs    Set[Struct]
 		allUnions     Set[Union]
 		allValues     Set[Value]
+		locations     locs.Set
 	}
 )
 
-func NewProject() Project {
+func NewProject(locs locs.Set) Project {
 	return &projectImp{
 		allBasics:     NewSet[Basic](),
 		allClasses:    NewSet[Class](),
@@ -88,6 +93,7 @@ func NewProject() Project {
 		allStructs:    NewSet[Struct](),
 		allUnions:     NewSet[Union](),
 		allValues:     NewSet[Value](),
+		locations:     locs,
 	}
 }
 
@@ -145,6 +151,10 @@ func (p *projectImp) NewValue(args ValueArgs) Value {
 	return args.Package.addValue(p.allValues.Insert(newValue(args)))
 }
 
+func (p *projectImp) NewLoc(pos token.Pos) locs.Loc {
+	return p.locations.NewLoc(pos)
+}
+
 //==================================================================
 
 func (p *projectImp) Interfaces() collections.ReadonlyList[Interface] {
@@ -173,7 +183,7 @@ func (p *projectImp) FindType(pkgPath, typeName string) (Package, Definition) {
 
 	pkg := p.FindPackageByPath(pkgPath)
 	if pkg == nil {
-		names := enumerator.Select(p.Packages().Enumerate(),
+		names := enumerator.Select(p.allPackages.Values().Enumerate(),
 			func(pkg Package) string { return strconv.Quote(pkg.Path()) }).
 			Join(`, `)
 		fmt.Println(`Package Paths: [` + names + `]`)
@@ -192,22 +202,6 @@ func (p *projectImp) FindType(pkgPath, typeName string) (Package, Definition) {
 	}
 
 	return pkg, def
-}
-
-func (p *projectImp) Remove(predict func(Construct) bool) {
-	p.allBasics.Remove(predict)
-	p.allClasses.Remove(predict)
-	p.allInterDefs.Remove(predict)
-	p.allInterfaces.Remove(predict)
-	p.allMethods.Remove(predict)
-	p.allNamed.Remove(predict)
-	p.allPackages.Remove(predict)
-	p.allReferences.Remove(predict)
-	p.allSignatures.Remove(predict)
-	p.allSolids.Remove(predict)
-	p.allStructs.Remove(predict)
-	p.allUnions.Remove(predict)
-	p.allValues.Remove(predict)
 }
 
 func (p *projectImp) UpdateIndices() {
@@ -249,7 +243,8 @@ func (p *projectImp) ToJson(ctx *jsonify.Context) jsonify.Datum {
 		AddNonZero(ctx2, `solids`, p.allSolids).
 		AddNonZero(ctx2, `structs`, p.allStructs).
 		AddNonZero(ctx2, `unions`, p.allUnions).
-		AddNonZero(ctx2, `values`, p.allValues)
+		AddNonZero(ctx2, `values`, p.allValues).
+		AddNonZero(ctx2, `locs`, p.locations)
 }
 
 //==================================================================
@@ -281,5 +276,64 @@ func (p *projectImp) ResolveClassInterfaces() {
 	packages := p.allPackages.Values()
 	for i := range packages.Count() {
 		packages.Get(i).resolveClassInterfaces(p)
+	}
+}
+
+func (p *projectImp) Prune(packages []Package) {
+	p.pruneTypes(packages)
+	p.prunePackages(packages)
+}
+
+func (p *projectImp) removeTypes(predict func(Construct) bool) {
+	p.allBasics.Remove(predict)
+	p.allClasses.Remove(predict)
+	p.allInterDefs.Remove(predict)
+	p.allInterfaces.Remove(predict)
+	p.allMethods.Remove(predict)
+	p.allNamed.Remove(predict)
+	p.allReferences.Remove(predict)
+	p.allSignatures.Remove(predict)
+	p.allSolids.Remove(predict)
+	p.allStructs.Remove(predict)
+	p.allUnions.Remove(predict)
+	p.allValues.Remove(predict)
+}
+
+func (p *projectImp) pruneTypes(packages []Package) {
+	touched := map[Construct]bool{}
+
+	v := visitor.New(func(value any) bool {
+		c, ok := value.(Construct)
+		if !ok || touched[c] {
+			return false
+		}
+		touched[c] = true
+		return true
+	})
+
+	// Visit everything reachable from the packages.
+	// Do not visit all the registered types since they are being pruned.
+	visitor.Visit(v, packages...)
+	p.removeTypes(func(td Construct) bool {
+		return !touched[td]
+	})
+}
+
+func (p *projectImp) prunePackages(packages []Package) {
+	empty := map[Construct]bool{}
+	for _, pkg := range packages {
+		if pkg.empty() {
+			empty[pkg] = true
+		}
+	}
+
+	handle := func(pkg Construct) bool {
+		return empty[pkg]
+	}
+
+	p.allPackages.Remove(handle)
+	allPackages := p.allPackages.Values()
+	for i := range allPackages.Count() {
+		allPackages.Get(i).removeImports(handle)
 	}
 }

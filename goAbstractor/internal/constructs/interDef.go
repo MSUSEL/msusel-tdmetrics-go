@@ -7,6 +7,7 @@ import (
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/assert"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs/kind"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/jsonify"
+	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/locs"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/visitor"
 )
 
@@ -18,14 +19,16 @@ type (
 	}
 
 	InterDefArgs struct {
-		Package Package
-		Name    string
-		Type    Interface
+		Package  Package
+		Name     string
+		Location locs.Loc
+		Type     Interface
 	}
 
 	interDefImp struct {
 		pkg   Package
 		name  string
+		loc   locs.Loc
 		typ   Interface
 		index int
 	}
@@ -35,10 +38,12 @@ func newInterDef(args InterDefArgs) InterDef {
 	assert.ArgNotNil(`package`, args.Package)
 	assert.ArgValidId(`name`, args.Name)
 	assert.ArgNotNil(`type`, args.Type)
+	assert.ArgNotNil(`loc`, args.Location)
 
 	return &interDefImp{
 		pkg:  args.Package,
 		name: args.Name,
+		loc:  args.Location,
 		typ:  args.Type,
 	}
 }
@@ -48,6 +53,7 @@ func (id *interDefImp) Kind() kind.Kind      { return kind.InterDef }
 func (id *interDefImp) GoType() types.Type   { return id.typ.GoType() }
 func (id *interDefImp) SetIndex(index int)   { id.index = index }
 func (id *interDefImp) Name() string         { return id.name }
+func (id *interDefImp) Location() locs.Loc   { return id.loc }
 func (id *interDefImp) Package() Package     { return id.pkg }
 func (id *interDefImp) Interface() Interface { return id.typ }
 
@@ -72,7 +78,8 @@ func (id *interDefImp) ToJson(ctx *jsonify.Context) jsonify.Datum {
 		AddIf(ctx, ctx.IsKindShown(), `kind`, id.Kind()).
 		Add(ctx2, `package`, id.pkg).
 		Add(ctx2, `name`, id.name).
-		Add(ctx2, `type`, id.typ)
+		Add(ctx2, `type`, id.typ).
+		AddNonZero(ctx2, `loc`, id.loc)
 }
 
 func (id *interDefImp) Visit(v visitor.Visitor) bool {

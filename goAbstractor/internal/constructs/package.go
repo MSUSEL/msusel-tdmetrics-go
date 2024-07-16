@@ -6,9 +6,9 @@ import (
 
 	"github.com/Snow-Gremlin/goToolbox/collections"
 	"github.com/Snow-Gremlin/goToolbox/collections/enumerator"
-	"github.com/Snow-Gremlin/goToolbox/utils"
 	"golang.org/x/tools/go/packages"
 
+	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/assert"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs/kind"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/jsonify"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/visitor"
@@ -31,11 +31,13 @@ type (
 		addMethod(m Method) Method
 		addValue(v Value) Value
 
+		empty() bool
 		findType(name string) Definition
 		allTypes() collections.Enumerator[Definition]
 
 		resolveReceivers()
 		resolveClassInterfaces(proj Project)
+		removeImports(predicate func(Construct) bool)
 	}
 
 	PackageArgs struct {
@@ -48,25 +50,24 @@ type (
 	packageImp struct {
 		pkg *packages.Package
 
-		path      string
-		name      string
+		path        string
+		name        string
+		index       int
+		importPaths []string
+		imports     Set[Package]
+
 		classes   Set[Class]
-		imports   Set[Package]
 		interDefs Set[InterDef]
 		methods   Set[Method]
 		values    Set[Value]
-
-		index       int
-		importPaths []string
 	}
 )
 
 func newPackage(args PackageArgs) Package {
+	assert.ArgNotNil(`real type`, args.RealPkg)
+	assert.ArgNotEmpty(`path`, args.Path)
+	assert.ArgValidId(`name`, args.Name)
 
-	// TODO: FIX
-	if utils.IsNil(args.RealPkg) {
-		panic(fmt.Errorf(`must provide a real package for %s`, args.Name))
-	}
 	return &packageImp{
 		pkg:         args.RealPkg,
 		path:        args.Path,
@@ -112,6 +113,10 @@ func (p *packageImp) addValue(v Value) Value {
 	return p.values.Insert(v)
 }
 
+func (p *packageImp) empty() bool {
+	return p.allTypes().Empty()
+}
+
 func (p *packageImp) findType(name string) Definition {
 	def, _ := p.allTypes().Where(func(t Definition) bool { return t.Name() == name }).First()
 	return def
@@ -151,8 +156,8 @@ func (p *packageImp) ToJson(ctx *jsonify.Context) jsonify.Datum {
 }
 
 func (p *packageImp) Visit(v visitor.Visitor) bool {
-	return visitor.VisitList(v, p.classes.Values()) &&
-		visitor.VisitList(v, p.imports.Values()) &&
+	return visitor.VisitList(v, p.imports.Values()) &&
+		visitor.VisitList(v, p.classes.Values()) &&
 		visitor.VisitList(v, p.interDefs.Values()) &&
 		visitor.VisitList(v, p.methods.Values()) &&
 		visitor.VisitList(v, p.values.Values())
@@ -181,4 +186,8 @@ func (p *packageImp) resolveClassInterfaces(proj Project) {
 	for i := range classes.Count() {
 		classes.Get(i).resolveInterface(proj, p)
 	}
+}
+
+func (p *packageImp) removeImports(predicate func(Construct) bool) {
+	p.imports.Remove(predicate)
 }

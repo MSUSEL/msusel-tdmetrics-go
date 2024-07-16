@@ -7,6 +7,7 @@ import (
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/assert"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs/kind"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/jsonify"
+	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/locs"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/visitor"
 )
 
@@ -17,15 +18,17 @@ type (
 	}
 
 	ValueArgs struct {
-		Package Package
-		Name    string
-		Type    TypeDesc
-		Const   bool
+		Package  Package
+		Name     string
+		Location locs.Loc
+		Type     TypeDesc
+		Const    bool
 	}
 
 	valueImp struct {
 		pkg     Package
 		name    string
+		loc     locs.Loc
 		typ     TypeDesc
 		isConst bool
 		index   int
@@ -36,10 +39,12 @@ func newValue(args ValueArgs) Value {
 	assert.ArgNotNil(`package`, args.Package)
 	assert.ArgValidId(`name`, args.Name)
 	assert.ArgNotNil(`type`, args.Type)
+	assert.ArgNotNil(`loc`, args.Location)
 
 	return &valueImp{
 		pkg:     args.Package,
 		name:    args.Name,
+		loc:     args.Location,
 		typ:     args.Type,
 		isConst: args.Const,
 	}
@@ -50,6 +55,7 @@ func (v *valueImp) Kind() kind.Kind    { return kind.Value }
 func (v *valueImp) GoType() types.Type { return v.typ.GoType() }
 func (v *valueImp) SetIndex(index int) { v.index = index }
 func (v *valueImp) Name() string       { return v.name }
+func (v *valueImp) Location() locs.Loc { return v.loc }
 func (v *valueImp) Package() Package   { return v.pkg }
 
 func (v *valueImp) CompareTo(other Construct) int {

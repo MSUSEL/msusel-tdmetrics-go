@@ -44,23 +44,33 @@ func (ab *abstractor) convertType(t types.Type) constructs.TypeDesc {
 
 func (ab *abstractor) convertArray(t *types.Array) constructs.TypeDesc {
 	elem := ab.convertType(t.Elem())
-	return ab.proj.Types().NewSolid(t, ab.bakeList(), elem)
+	return ab.proj.NewSolid(constructs.SolidArgs{
+		RealType:   t,
+		Target:     ab.baker.BakeList(),
+		TypeParams: []constructs.TypeDesc{elem},
+	})
 }
 
 func (ab *abstractor) convertBasic(t *types.Basic) constructs.TypeDesc {
 	switch t.Kind() {
 	case types.Complex64:
-		return ab.bakeComplex64()
+		return ab.baker.BakeComplex64()
 	case types.Complex128:
-		return ab.bakeComplex128()
+		return ab.baker.BakeComplex128()
 	default:
-		return ab.proj.Types().NewBasic(t)
+		return ab.proj.NewBasic(constructs.BasicArgs{
+			RealType: t,
+		})
 	}
 }
 
 func (ab *abstractor) convertChan(t *types.Chan) constructs.TypeDesc {
 	elem := ab.convertType(t.Elem())
-	return ab.proj.Types().NewSolid(t, ab.bakeChan(), elem)
+	return ab.proj.NewSolid(constructs.SolidArgs{
+		RealType:   t,
+		Target:     ab.baker.BakeChan(),
+		TypeParams: []constructs.TypeDesc{elem},
+	})
 }
 
 func (ab *abstractor) convertInterface(t *types.Interface) constructs.Interface {
@@ -70,7 +80,7 @@ func (ab *abstractor) convertInterface(t *types.Interface) constructs.Interface 
 	for i := range t.NumMethods() {
 		f := t.Method(i)
 		sig := ab.convertSignature(f.Type().(*types.Signature))
-		method := ab.proj.Types().NewNamed(f.Name(), sig)
+		method := ab.proj.NewNamed(f.Name(), sig)
 		methods = append(methods, method)
 	}
 
@@ -85,7 +95,7 @@ func (ab *abstractor) convertInterface(t *types.Interface) constructs.Interface 
 		}
 	}
 
-	return ab.proj.Types().NewInterface(constructs.InterfaceArgs{
+	return ab.proj.NewInterface(constructs.InterfaceArgs{
 		RealType: t,
 		Union:    union,
 		Methods:  methods,
@@ -95,7 +105,7 @@ func (ab *abstractor) convertInterface(t *types.Interface) constructs.Interface 
 func (ab *abstractor) convertMap(t *types.Map) constructs.TypeDesc {
 	key := ab.convertType(t.Key())
 	value := ab.convertType(t.Elem())
-	return ab.proj.Types().NewSolid(t, ab.bakeMap(), key, value)
+	return ab.proj.NewSolid(t, ab.bakeMap(), key, value)
 }
 
 func (ab *abstractor) convertNamed(t *types.Named) constructs.Reference {
@@ -104,18 +114,18 @@ func (ab *abstractor) convertNamed(t *types.Named) constructs.Reference {
 		pkgPath = t.Obj().Pkg().Path()
 	}
 	name := t.Obj().Name()
-	return ab.proj.Types().NewReference(t, pkgPath, name)
+	return ab.proj.NewReference(t, pkgPath, name)
 }
 
 func (ab *abstractor) convertPointer(t *types.Pointer) constructs.TypeDesc {
 	elem := ab.convertType(t.Elem())
-	return ab.proj.Types().NewSolid(t, ab.bakePointer(), elem)
+	return ab.proj.NewSolid(t, ab.bakePointer(), elem)
 }
 
 func (ab *abstractor) convertSignature(t *types.Signature) constructs.Signature {
 	// Don't output receiver or receiver type here.
 	tp := ab.convertTypeParamList(t.TypeParams())
-	return ab.proj.Types().NewSignature(constructs.SignatureArgs{
+	return ab.proj.NewSignature(constructs.SignatureArgs{
 		RealType:   t,
 		Variadic:   t.Variadic(),
 		TypeParams: tp,
@@ -126,19 +136,19 @@ func (ab *abstractor) convertSignature(t *types.Signature) constructs.Signature 
 
 func (ab *abstractor) convertSlice(t *types.Slice) constructs.TypeDesc {
 	elem := ab.convertType(t.Elem())
-	return ab.proj.Types().NewSolid(t, ab.bakeList(), elem)
+	return ab.proj.NewSolid(t, ab.bakeList(), elem)
 }
 
 func (ab *abstractor) convertStruct(t *types.Struct) constructs.Struct {
 	fields := []constructs.Named{}
 	for i := range t.NumFields() {
 		f := t.Field(i)
-		field := ab.proj.Types().NewNamed(f.Name(), ab.convertType(f.Type()))
+		field := ab.proj.NewNamed(f.Name(), ab.convertType(f.Type()))
 		fields = append(fields, field)
 		// Nothing needs to be done with f.Embedded() here.
 	}
 
-	return ab.proj.Types().NewStruct(constructs.StructArgs{
+	return ab.proj.NewStruct(constructs.StructArgs{
 		RealType: t,
 		Fields:   fields,
 	})
@@ -151,7 +161,7 @@ func (ab *abstractor) createReturn(returns []constructs.Named) constructs.TypeDe
 	case 1:
 		return returns[0].Type()
 	default:
-		return ab.proj.Types().NewStruct(constructs.StructArgs{
+		return ab.proj.NewStruct(constructs.StructArgs{
 			Fields:  returns,
 			Package: ab.builtin,
 		})
@@ -201,7 +211,7 @@ func (ab *abstractor) convertTuple(t *types.Tuple) []constructs.Named {
 		if blankName(name) {
 			name = uniqueName(filledNames)
 		}
-		list[i] = ab.proj.Types().NewNamed(name, types[i])
+		list[i] = ab.proj.NewNamed(name, types[i])
 	}
 	return list
 }
@@ -218,7 +228,7 @@ func (ab *abstractor) convertUnion(t *types.Union) constructs.Union {
 			exact = append(exact, it)
 		}
 	}
-	return ab.proj.Types().NewUnion(constructs.UnionArgs{
+	return ab.proj.NewUnion(constructs.UnionArgs{
 		RealType: t,
 		Exact:    exact,
 		Approx:   approx,
@@ -231,7 +241,7 @@ func (ab *abstractor) convertTypeParam(t *types.TypeParam) constructs.Named {
 	}
 
 	t2 := t.Obj().Type().Underlying()
-	return ab.proj.Types().NewNamed(t.Obj().Name(), ab.convertType(t2))
+	return ab.proj.NewNamed(t.Obj().Name(), ab.convertType(t2))
 }
 
 func (ab *abstractor) convertTypeParamList(t *types.TypeParamList) []constructs.Named {

@@ -11,14 +11,17 @@ import (
 
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/baker"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs"
+	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/location"
 )
 
 func Abstract(ps []*packages.Package, logDepth int) constructs.Project {
-	proj := constructs.NewProject()
+	fs := ps[0].Fset
+	locs := location.NewSet(fs)
+	proj := constructs.NewProject(locs)
 	ab := &abstractor{
 		logDepth: logDepth,
 		packages: ps,
-		baker:    baker.New(ps[0].Fset, proj),
+		baker:    baker.New(fs, proj),
 		proj:     proj,
 	}
 
@@ -37,8 +40,9 @@ func Abstract(ps []*packages.Package, logDepth int) constructs.Project {
 	ab.resolveInheritance()
 	ab.resolveReferences()
 
-	// Finish and clean-up
-	ab.prune()
+	// TODO: Run prune only on root packages.
+	ab.log(1, `prune`)
+	proj.Prune(proj.Packages().ToSlice())
 
 	ab.log(1, `update indices`)
 	proj.UpdateIndices()

@@ -7,6 +7,7 @@ import (
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/assert"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs/kind"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/jsonify"
+	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/locs"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/metrics"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/visitor"
 )
@@ -23,6 +24,7 @@ type (
 	MethodArgs struct {
 		Package    Package
 		Name       string
+		Location   locs.Loc
 		Signature  TypeDesc
 		Metrics    metrics.Metrics
 		NoCopyRecv bool
@@ -32,6 +34,7 @@ type (
 	methodImp struct {
 		pkg        Package
 		name       string
+		loc        locs.Loc
 		signature  TypeDesc
 		metrics    metrics.Metrics
 		noCopyRecv bool
@@ -45,10 +48,12 @@ func newMethod(args MethodArgs) Method {
 	assert.ArgValidId(`name`, args.Name)
 	assert.ArgNotNil(`package`, args.Package)
 	assert.ArgNotNil(`signature`, args.Signature)
+	assert.ArgNotNil(`loc`, args.Location)
 
 	return &methodImp{
 		pkg:        args.Package,
 		name:       args.Name,
+		loc:        args.Location,
 		signature:  args.Signature,
 		metrics:    args.Metrics,
 		noCopyRecv: args.NoCopyRecv,
@@ -61,6 +66,7 @@ func (m *methodImp) Kind() kind.Kind      { return kind.Method }
 func (m *methodImp) GoType() types.Type   { return m.signature.GoType() }
 func (m *methodImp) SetIndex(index int)   { m.index = index }
 func (m *methodImp) Name() string         { return m.name }
+func (m *methodImp) Location() locs.Loc   { return m.loc }
 func (m *methodImp) Package() Package     { return m.pkg }
 func (m *methodImp) Signature() TypeDesc  { return m.signature }
 func (m *methodImp) ReceiverName() string { return m.recvName }

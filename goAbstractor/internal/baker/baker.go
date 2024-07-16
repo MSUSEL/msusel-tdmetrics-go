@@ -25,6 +25,14 @@ type (
 		BakeBuiltin() constructs.Package
 		BakeBasic(typeName string) constructs.Basic
 		BakeAny() constructs.InterDef
+		BakeList() constructs.InterDef
+		BakeChan() constructs.InterDef
+		BakeMap() constructs.InterDef
+		BakePointer() constructs.InterDef
+		BakeComplex64() constructs.InterDef
+		BakeComplex128() constructs.InterDef
+		BakeError() constructs.InterDef
+		BakeComparable() constructs.InterDef
 	}
 
 	bakerImp struct {
