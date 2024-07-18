@@ -57,6 +57,8 @@ type (
 		ResolveImports()
 		ResolveReceivers()
 		ResolveClassInterfaces()
+		ResolveInheritance()
+		ResolveReferences()
 		Prune(packages []Package)
 		FlagLocations()
 	}
@@ -277,6 +279,33 @@ func (p *projectImp) ResolveClassInterfaces() {
 	packages := p.allPackages.Values()
 	for i := range packages.Count() {
 		packages.Get(i).resolveClassInterfaces(p)
+	}
+}
+
+func (p *projectImp) ResolveInheritance() {
+	inters := p.Interfaces()
+
+	roots := []Interface{}
+	for i := range inters.Count() {
+		roots = addInheritors(roots, inters.Get(i))
+	}
+
+	for i := range inters.Count() {
+		inters.Get(i).SetInheritance()
+	}
+}
+
+func (p *projectImp) ResolveReferences() {
+	refs := p.References()
+	for i := range refs.Count() {
+		ref := refs.Get(i)
+		if ref.Resolved() {
+			path := ref.PackagePath()
+			if len(path) <= 0 {
+				path = `$builtin`
+			}
+			ref.SetType(p.FindType(path, ref.Name()))
+		}
 	}
 }
 

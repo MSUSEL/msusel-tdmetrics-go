@@ -140,41 +140,47 @@ func (it *interfaceImp) IsSupertypeOf(other Interface) bool {
 }
 
 func (it *interfaceImp) AddInheritors(other Interface) bool {
-	inter, ok := other.(*interfaceImp)
-	if !ok {
-		return false
-	}
-	if it == inter {
+	otherImp := other.(*interfaceImp)
+	if it == otherImp {
 		return true
 	}
-	if !inter.IsSupertypeOf(it) {
+	if !otherImp.IsSupertypeOf(it) {
 		return false
 	}
 
+	it.inheritors = addInheritors(it.inheritors, other)
+	return true
+}
+
+func addInheritors(inheritors []Interface, other Interface) []Interface {
+	otherImp := other.(*interfaceImp)
+
+	// Tries to home the given other interface into all siblings.
 	homed := false
-	for _, other := range it.inheritors {
-		if other.AddInheritors(inter) {
+	for _, inheritor := range inheritors {
+		if inheritor.AddInheritors(otherImp) {
 			homed = true
 		}
 	}
 	if homed {
-		return true
+		return inheritors
 	}
 
+	// Move super type siblings into the given other interface.
 	changed := false
-	for i, other := range it.inheritors {
-		if other.IsSupertypeOf(inter) {
-			inter.inheritors = append(inter.inheritors, other)
-			it.inheritors[i] = nil
+	for i, inheritor := range inheritors {
+		if inheritor.IsSupertypeOf(otherImp) {
+			otherImp.inheritors = append(otherImp.inheritors, inheritor)
+			inheritors[i] = nil
 			changed = true
 		}
 	}
 	if changed {
-		it.inheritors = utils.RemoveZeros(it.inheritors)
+		inheritors = utils.RemoveZeros(inheritors)
 	}
 
-	it.inheritors = append(it.inheritors, inter)
-	return true
+	// Add the given other interface to this interface.
+	return append(inheritors, otherImp)
 }
 
 func (it *interfaceImp) SetInheritance() {

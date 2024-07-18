@@ -5,6 +5,7 @@ import (
 	"strings"
 
 	"github.com/Snow-Gremlin/goToolbox/terrors/terror"
+	"github.com/Snow-Gremlin/goToolbox/utils"
 
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/assert"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs/kind"
@@ -18,6 +19,7 @@ type (
 
 		PackagePath() string
 		Name() string
+		Resolved() bool
 		SetType(pkg Package, typ Definition)
 	}
 
@@ -54,6 +56,10 @@ func (r *referenceImp) Kind() kind.Kind     { return kind.Reference }
 func (r *referenceImp) GoType() types.Type  { return r.realType }
 func (r *referenceImp) PackagePath() string { return r.pkgPath }
 func (r *referenceImp) Name() string        { return r.name }
+
+func (r *referenceImp) Resolved() bool {
+	return !utils.IsNil(r.typ)
+}
 
 func (r *referenceImp) SetIndex(index int) {
 	panic(terror.New(`do not call SetIndex on Reference`))

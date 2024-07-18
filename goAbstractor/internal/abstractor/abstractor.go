@@ -28,6 +28,7 @@ func Abstract(ps []*packages.Package, verbose bool) constructs.Project {
 	ab.initialize()
 	ab.abstractProject()
 
+	// TODO: Determine root packages.
 	ab.log(`resolve imports`)
 	proj.ResolveImports()
 
@@ -37,8 +38,11 @@ func Abstract(ps []*packages.Package, verbose bool) constructs.Project {
 	ab.log(`resolve class interfaces`)
 	proj.ResolveClassInterfaces()
 
-	ab.resolveInheritance()
-	ab.resolveReferences()
+	ab.log(`resolve inheritance`)
+	proj.ResolveInheritance()
+
+	ab.log(`resolve references`)
+	proj.ResolveReferences()
 
 	// TODO: Run prune only on root packages.
 	ab.log(`prune`)
@@ -49,6 +53,8 @@ func Abstract(ps []*packages.Package, verbose bool) constructs.Project {
 
 	ab.log(`update indices`)
 	proj.UpdateIndices()
+
+	ab.log(`done`)
 	return proj
 }
 
@@ -178,32 +184,4 @@ func (ab *abstractor) abstractValueSpec(pkg constructs.Package, src *packages.Pa
 
 func pos(src *packages.Package, pos token.Pos) string {
 	return src.Fset.Position(pos).String()
-}
-
-func (ab *abstractor) resolveInheritance() {
-	ab.log(`resolve inheritance`)
-
-	obj := ab.baker.BakeAny().Interface()
-	inters := ab.proj.Interfaces()
-
-	for i := range inters.Count() {
-		obj.AddInheritors(inters.Get(i))
-	}
-
-	for i := range inters.Count() {
-		inters.Get(i).SetInheritance()
-	}
-}
-
-func (ab *abstractor) resolveReferences() {
-	ab.log(`resolve references`)
-	refs := ab.proj.References()
-	for i := range refs.Count() {
-		ref := refs.Get(i)
-		path := ref.PackagePath()
-		if len(path) <= 0 {
-			path = `$builtin`
-		}
-		ref.SetType(ab.proj.FindType(path, ref.Name()))
-	}
 }
