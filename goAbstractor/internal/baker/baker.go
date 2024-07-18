@@ -16,6 +16,7 @@ import (
 	"golang.org/x/tools/go/packages"
 
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs"
+	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/locs"
 )
 
 const builtinName = `$builtin`
@@ -157,9 +158,10 @@ func (b *bakerImp) BakeAny() constructs.InterDef {
 		})
 
 		return b.proj.NewInterDef(constructs.InterDefArgs{
-			Package: pkg,
-			Name:    `any`,
-			Type:    in,
+			Package:  pkg,
+			Name:     `any`,
+			Type:     in,
+			Location: locs.NoLoc(),
 		})
 	})
 }
@@ -221,9 +223,10 @@ func (b *bakerImp) BakeList() constructs.InterDef {
 		})
 
 		return b.proj.NewInterDef(constructs.InterDefArgs{
-			Package: pkg,
-			Name:    `List`,
-			Type:    in,
+			Package:  pkg,
+			Name:     `List`,
+			Type:     in,
+			Location: locs.NoLoc(),
 		})
 	})
 }
@@ -277,9 +280,10 @@ func (b *bakerImp) BakeChan() constructs.InterDef {
 		})
 
 		return b.proj.NewInterDef(constructs.InterDefArgs{
-			Package: pkg,
-			Name:    `Chan`,
-			Type:    in,
+			Package:  pkg,
+			Name:     `Chan`,
+			Type:     in,
+			Location: locs.NoLoc(),
 		})
 	})
 }
@@ -345,9 +349,10 @@ func (b *bakerImp) BakeMap() constructs.InterDef {
 		})
 
 		return b.proj.NewInterDef(constructs.InterDefArgs{
-			Package: pkg,
-			Name:    `Map`,
-			Type:    in,
+			Package:  pkg,
+			Name:     `Map`,
+			Type:     in,
+			Location: locs.NoLoc(),
 		})
 	})
 }
@@ -381,9 +386,10 @@ func (b *bakerImp) BakePointer() constructs.InterDef {
 		})
 
 		return b.proj.NewInterDef(constructs.InterDefArgs{
-			Package: pkg,
-			Name:    `Pointer`,
-			Type:    in,
+			Package:  pkg,
+			Name:     `Pointer`,
+			Type:     in,
+			Location: locs.NoLoc(),
 		})
 	})
 }
@@ -416,9 +422,10 @@ func (b *bakerImp) BakeComplex64() constructs.InterDef {
 		})
 
 		return b.proj.NewInterDef(constructs.InterDefArgs{
-			Package: pkg,
-			Name:    `complex64`,
-			Type:    in,
+			Package:  pkg,
+			Name:     `complex64`,
+			Type:     in,
+			Location: locs.NoLoc(),
 		})
 	})
 }
@@ -451,9 +458,10 @@ func (b *bakerImp) BakeComplex128() constructs.InterDef {
 		})
 
 		return b.proj.NewInterDef(constructs.InterDefArgs{
-			Package: pkg,
-			Name:    `complex128`,
-			Type:    in,
+			Package:  pkg,
+			Name:     `complex128`,
+			Type:     in,
+			Location: locs.NoLoc(),
 		})
 	})
 }
@@ -484,9 +492,10 @@ func (b *bakerImp) BakeError() constructs.InterDef {
 		})
 
 		return b.proj.NewInterDef(constructs.InterDefArgs{
-			Package: pkg,
-			Name:    `error`,
-			Type:    in,
+			Package:  pkg,
+			Name:     `error`,
+			Type:     in,
+			Location: locs.NoLoc(),
 		})
 	})
 }
@@ -529,9 +538,10 @@ func (b *bakerImp) BakeComparable() constructs.InterDef {
 		})
 
 		return b.proj.NewInterDef(constructs.InterDefArgs{
-			Package: pkg,
-			Name:    `comparable`,
-			Type:    in,
+			Package:  pkg,
+			Name:     `comparable`,
+			Type:     in,
+			Location: locs.NoLoc(),
 		})
 	})
 }

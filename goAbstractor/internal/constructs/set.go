@@ -5,6 +5,8 @@ import (
 
 	"github.com/Snow-Gremlin/goToolbox/collections"
 	"github.com/Snow-Gremlin/goToolbox/collections/list"
+	"github.com/Snow-Gremlin/goToolbox/terrors/terror"
+	"github.com/Snow-Gremlin/goToolbox/utils"
 
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/jsonify"
 )
@@ -37,12 +39,17 @@ func (s *setImp[T]) Values() collections.ReadonlyList[T] {
 }
 
 func (s *setImp[T]) Insert(t T) T {
+	if utils.IsNil(t) {
+		panic(terror.New(`may not insert a nil value`))
+	}
+
 	index, found := sort.Find(s.values.Count(), func(i int) int {
 		return t.CompareTo(s.values.Get(i))
 	})
 	if found {
 		return s.values.Get(index)
 	}
+
 	s.values.Insert(index, t)
 	return t
 }
@@ -56,9 +63,10 @@ func (s *setImp[T]) SetIndices(index int) int {
 }
 
 func (s *setImp[T]) Remove(p func(Construct) bool) bool {
-	return s.values.RemoveIf(func(value T) bool {
+	removed := s.values.RemoveIf(func(value T) bool {
 		return p(value)
 	})
+	return removed
 }
 
 func (s *setImp[T]) ToJson(ctx *jsonify.Context) jsonify.Datum {

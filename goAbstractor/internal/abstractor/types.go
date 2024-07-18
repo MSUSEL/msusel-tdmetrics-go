@@ -80,7 +80,10 @@ func (ab *abstractor) convertInterface(t *types.Interface) constructs.Interface 
 	for i := range t.NumMethods() {
 		f := t.Method(i)
 		sig := ab.convertSignature(f.Type().(*types.Signature))
-		method := ab.proj.NewNamed(f.Name(), sig)
+		method := ab.proj.NewNamed(constructs.NamedArgs{
+			Name: f.Name(),
+			Type: sig,
+		})
 		methods = append(methods, method)
 	}
 
@@ -105,7 +108,11 @@ func (ab *abstractor) convertInterface(t *types.Interface) constructs.Interface 
 func (ab *abstractor) convertMap(t *types.Map) constructs.TypeDesc {
 	key := ab.convertType(t.Key())
 	value := ab.convertType(t.Elem())
-	return ab.proj.NewSolid(t, ab.bakeMap(), key, value)
+	return ab.proj.NewSolid(constructs.SolidArgs{
+		RealType:   t,
+		Target:     ab.baker.BakeMap(),
+		TypeParams: []constructs.TypeDesc{key, value},
+	})
 }
 
 func (ab *abstractor) convertNamed(t *types.Named) constructs.Reference {
@@ -114,12 +121,20 @@ func (ab *abstractor) convertNamed(t *types.Named) constructs.Reference {
 		pkgPath = t.Obj().Pkg().Path()
 	}
 	name := t.Obj().Name()
-	return ab.proj.NewReference(t, pkgPath, name)
+	return ab.proj.NewReference(constructs.ReferenceArgs{
+		RealType:    t,
+		PackagePath: pkgPath,
+		Name:        name,
+	})
 }
 
 func (ab *abstractor) convertPointer(t *types.Pointer) constructs.TypeDesc {
 	elem := ab.convertType(t.Elem())
-	return ab.proj.NewSolid(t, ab.bakePointer(), elem)
+	return ab.proj.NewSolid(constructs.SolidArgs{
+		RealType:   t,
+		Target:     ab.baker.BakePointer(),
+		TypeParams: []constructs.TypeDesc{elem},
+	})
 }
 
 func (ab *abstractor) convertSignature(t *types.Signature) constructs.Signature {
@@ -136,14 +151,21 @@ func (ab *abstractor) convertSignature(t *types.Signature) constructs.Signature 
 
 func (ab *abstractor) convertSlice(t *types.Slice) constructs.TypeDesc {
 	elem := ab.convertType(t.Elem())
-	return ab.proj.NewSolid(t, ab.bakeList(), elem)
+	return ab.proj.NewSolid(constructs.SolidArgs{
+		RealType:   t,
+		Target:     ab.baker.BakeList(),
+		TypeParams: []constructs.TypeDesc{elem},
+	})
 }
 
 func (ab *abstractor) convertStruct(t *types.Struct) constructs.Struct {
 	fields := []constructs.Named{}
 	for i := range t.NumFields() {
 		f := t.Field(i)
-		field := ab.proj.NewNamed(f.Name(), ab.convertType(f.Type()))
+		field := ab.proj.NewNamed(constructs.NamedArgs{
+			Name: f.Name(),
+			Type: ab.convertType(f.Type()),
+		})
 		fields = append(fields, field)
 		// Nothing needs to be done with f.Embedded() here.
 	}
@@ -163,7 +185,7 @@ func (ab *abstractor) createReturn(returns []constructs.Named) constructs.TypeDe
 	default:
 		return ab.proj.NewStruct(constructs.StructArgs{
 			Fields:  returns,
-			Package: ab.builtin,
+			Package: ab.baker.BakeBuiltin(),
 		})
 	}
 }
@@ -211,7 +233,10 @@ func (ab *abstractor) convertTuple(t *types.Tuple) []constructs.Named {
 		if blankName(name) {
 			name = uniqueName(filledNames)
 		}
-		list[i] = ab.proj.NewNamed(name, types[i])
+		list[i] = ab.proj.NewNamed(constructs.NamedArgs{
+			Name: name,
+			Type: types[i],
+		})
 	}
 	return list
 }
@@ -241,7 +266,10 @@ func (ab *abstractor) convertTypeParam(t *types.TypeParam) constructs.Named {
 	}
 
 	t2 := t.Obj().Type().Underlying()
-	return ab.proj.NewNamed(t.Obj().Name(), ab.convertType(t2))
+	return ab.proj.NewNamed(constructs.NamedArgs{
+		Name: t.Obj().Name(),
+		Type: ab.convertType(t2),
+	})
 }
 
 func (ab *abstractor) convertTypeParamList(t *types.TypeParamList) []constructs.Named {

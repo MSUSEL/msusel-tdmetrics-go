@@ -11,15 +11,15 @@ import (
 
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/baker"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs"
-	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/location"
+	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/locs"
 )
 
-func Abstract(ps []*packages.Package, logDepth int) constructs.Project {
+func Abstract(ps []*packages.Package, verbose bool) constructs.Project {
 	fs := ps[0].Fset
-	locs := location.NewSet(fs)
+	locs := locs.NewSet(fs)
 	proj := constructs.NewProject(locs)
 	ab := &abstractor{
-		logDepth: logDepth,
+		verbose:  verbose,
 		packages: ps,
 		baker:    baker.New(fs, proj),
 		proj:     proj,
@@ -28,29 +28,32 @@ func Abstract(ps []*packages.Package, logDepth int) constructs.Project {
 	ab.initialize()
 	ab.abstractProject()
 
-	ab.log(1, `resolve imports`)
+	ab.log(`resolve imports`)
 	proj.ResolveImports()
 
-	ab.log(1, `resolve receivers`)
+	ab.log(`resolve receivers`)
 	proj.ResolveReceivers()
 
-	ab.log(1, `resolve class interfaces`)
+	ab.log(`resolve class interfaces`)
 	proj.ResolveClassInterfaces()
 
 	ab.resolveInheritance()
 	ab.resolveReferences()
 
 	// TODO: Run prune only on root packages.
-	ab.log(1, `prune`)
+	ab.log(`prune`)
 	proj.Prune(proj.Packages().ToSlice())
 
-	ab.log(1, `update indices`)
+	ab.log(`flag locations`)
+	proj.FlagLocations()
+
+	ab.log(`update indices`)
 	proj.UpdateIndices()
 	return proj
 }
 
 type abstractor struct {
-	logDepth int
+	verbose  bool
 	packages []*packages.Package
 	baker    baker.Baker
 	proj     constructs.Project
@@ -58,8 +61,8 @@ type abstractor struct {
 	typeParamReplacer map[*types.TypeParam]*types.TypeParam
 }
 
-func (ab *abstractor) log(depth int, format string, args ...any) {
-	if ab.logDepth >= depth {
+func (ab *abstractor) log(format string, args ...any) {
+	if ab.verbose {
 		fmt.Printf(format+"\n", args...)
 	}
 }
@@ -70,7 +73,7 @@ func (ab *abstractor) initialize() {
 }
 
 func (ab *abstractor) abstractProject() {
-	ab.log(1, `abstract project`)
+	ab.log(`abstract project`)
 	packages.Visit(ab.packages, func(src *packages.Package) bool {
 		ab.abstractPackage(src)
 		return true
@@ -78,7 +81,7 @@ func (ab *abstractor) abstractProject() {
 }
 
 func (ab *abstractor) abstractPackage(src *packages.Package) constructs.Package {
-	ab.log(2, `|  abstract package: %s`, src.PkgPath)
+	ab.log(`|  abstract package: %s`, src.PkgPath)
 	pkg := ab.proj.NewPackage(constructs.PackageArgs{
 		RealPkg:     src,
 		Path:        src.PkgPath,
@@ -92,7 +95,7 @@ func (ab *abstractor) abstractPackage(src *packages.Package) constructs.Package 
 }
 
 func (ab *abstractor) addFile(pkg constructs.Package, src *packages.Package, f *ast.File) {
-	ab.log(3, `|  |  add file to package: %s`, src.Fset.Position(f.Name.NamePos).Filename)
+	ab.log(`|  |  add file to package: %s`, src.Fset.File(f.Name.NamePos).Name())
 	for _, decl := range f.Decls {
 		switch d := decl.(type) {
 		case *ast.GenDecl:
@@ -130,9 +133,10 @@ func (ab *abstractor) abstractTypeSpec(pkg constructs.Package, src *packages.Pac
 	typ := ab.convertType(tv.Type)
 	if it, ok := typ.(constructs.Interface); ok {
 		ab.proj.NewInterDef(constructs.InterDefArgs{
-			Package: pkg,
-			Name:    spec.Name.Name,
-			Type:    it,
+			Package:  pkg,
+			Name:     spec.Name.Name,
+			Type:     it,
+			Location: ab.proj.NewLoc(spec.Type.Pos()),
 		})
 		return
 	}
@@ -177,7 +181,7 @@ func pos(src *packages.Package, pos token.Pos) string {
 }
 
 func (ab *abstractor) resolveInheritance() {
-	ab.log(1, `resolve inheritance`)
+	ab.log(`resolve inheritance`)
 
 	obj := ab.baker.BakeAny().Interface()
 	inters := ab.proj.Interfaces()
@@ -192,7 +196,7 @@ func (ab *abstractor) resolveInheritance() {
 }
 
 func (ab *abstractor) resolveReferences() {
-	ab.log(1, `resolve references`)
+	ab.log(`resolve references`)
 	refs := ab.proj.References()
 	for i := range refs.Count() {
 		ref := refs.Get(i)

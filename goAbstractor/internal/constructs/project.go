@@ -58,6 +58,7 @@ type (
 		ResolveReceivers()
 		ResolveClassInterfaces()
 		Prune(packages []Package)
+		FlagLocations()
 	}
 
 	projectImp struct {
@@ -336,4 +337,20 @@ func (p *projectImp) prunePackages(packages []Package) {
 	for i := range allPackages.Count() {
 		allPackages.Get(i).removeImports(handle)
 	}
+}
+
+func (p *projectImp) FlagLocations() {
+	p.locations.Reset()
+
+	p.allClasses.Values().Enumerate().
+		Foreach(func(c Class) { c.Location().Flag() })
+
+	p.allInterDefs.Values().Enumerate().
+		Foreach(func(it InterDef) { it.Location().Flag() })
+
+	p.allMethods.Values().Enumerate().
+		Foreach(func(m Method) { m.Location().Flag() })
+
+	p.allValues.Values().Enumerate().
+		Foreach(func(v Value) { v.Location().Flag() })
 }

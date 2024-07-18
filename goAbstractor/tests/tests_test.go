@@ -20,7 +20,6 @@ import (
 
 const (
 	verbose        = true
-	logDepth       = 1
 	pathToTestData = `../../testData/go/`
 	expAbstraction = `/abstraction.yaml`
 	writeOutFile   = `/out.json`
@@ -66,11 +65,7 @@ func (tt *testTool) abstract(patterns ...string) *testTool {
 	})
 	check.NoError(tt.t).Name(`Read project`).With(`Dir`, tt.dir).Require(err)
 
-	ld := 0
-	if verbose {
-		ld = logDepth
-	}
-	tt.proj = abstractor.Abstract(ps, ld)
+	tt.proj = abstractor.Abstract(ps, verbose)
 	return tt
 }
 

@@ -56,6 +56,7 @@ func (ab *abstractor) abstractFuncDecl(pkg constructs.Package, src *packages.Pac
 
 	mets := metrics.New(src.Fset, decl)
 	ab.proj.NewMethod(constructs.MethodArgs{
+		Package:    pkg,
 		Name:       decl.Name.Name,
 		Signature:  sig,
 		Metrics:    mets,

@@ -5,6 +5,7 @@ import (
 	"strconv"
 
 	"github.com/Snow-Gremlin/goToolbox/terrors/terror"
+	"github.com/Snow-Gremlin/goToolbox/utils"
 
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/jsonify"
 )
@@ -14,42 +15,29 @@ type (
 		NewLoc(p token.Pos) Loc
 		Reset()
 		flag(p token.Pos)
-		indexFor(p token.Pos) int
 		infoFor(p token.Pos) (int, string, int)
 	}
 
 	setImp struct {
 		fs       *token.FileSet
-		locs     map[token.Pos]Loc
 		flagged  map[token.Pos]bool
-		indices  map[token.Pos]int
-		files    []string
-		lines    []int
+		offsets  map[string]int
 		finished bool
 	}
 )
 
 func NewSet(fs *token.FileSet) Set {
-	return &setImp{
-		fs:   fs,
-		locs: map[token.Pos]Loc{},
-	}
+	s := &setImp{fs: fs}
+	s.Reset()
+	return s
 }
 
 func (s *setImp) NewLoc(p token.Pos) Loc {
-	if c, ok := s.locs[p]; ok {
-		return c
-	}
-	c := newLoc(s, p)
-	s.locs[p] = c
-	return c
+	return newLoc(s, p)
 }
 
 func (s *setImp) Reset() {
 	s.flagged = map[token.Pos]bool{}
-	s.indices = map[token.Pos]int{}
-	s.files = []string{}
-	s.lines = []int{}
 	s.finished = false
 }
 
@@ -65,41 +53,43 @@ func (s *setImp) finish() {
 	if s.finished {
 		return
 	}
+	s.finished = true
 
-	files := map[string]int{}
+	lineCounts := map[string]int{}
 	for p := range s.flagged {
 		f := s.fs.File(p)
-		files[f.Name()] = f.LineCount()
+		lineCounts[f.Name()] = f.LineCount()
 	}
+	files := utils.SortedKeys(lineCounts)
 
-	// TODO: Implement
-
-	s.finished = true
-}
-
-func (s *setImp) indexFor(p token.Pos) int {
-	s.finish()
-	return s.indices[p]
+	s.offsets = map[string]int{}
+	offset := 1
+	for _, file := range files {
+		s.offsets[file] = offset
+		offset += lineCounts[file]
+	}
 }
 
 func (s *setImp) infoFor(p token.Pos) (int, string, int) {
 	s.finish()
-	index := s.indices[p]
-	name, line := ``, 0
-	if index > 0 {
-		fsp := s.fs.Position(p)
-		name, line = fsp.Filename, fsp.Line
+
+	if p <= token.NoPos {
+		return 0, ``, 0
 	}
-	return index, name, line
+
+	fsp := s.fs.Position(p)
+	file, line := fsp.Filename, fsp.Line
+	offset := s.offsets[file] + line - 1
+	return offset, file, line
 }
 
 func (s *setImp) ToJson(ctx *jsonify.Context) jsonify.Datum {
 	s.finish()
 	m := jsonify.NewMap()
-	line := 1
-	for i, file := range s.files {
-		m.Add(ctx, strconv.Itoa(line), file)
-		line += s.lines[i]
+	files := utils.SortedKeys(s.offsets)
+	for _, file := range files {
+		offset := s.offsets[file]
+		m.Add(ctx, strconv.Itoa(offset), file)
 	}
 	return m
 }
