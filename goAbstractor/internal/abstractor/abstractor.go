@@ -28,7 +28,6 @@ func Abstract(ps []*packages.Package, verbose bool) constructs.Project {
 	ab.initialize()
 	ab.abstractProject()
 
-	// TODO: Determine root packages.
 	ab.log(`resolve imports`)
 	proj.ResolveImports()
 
@@ -44,9 +43,11 @@ func Abstract(ps []*packages.Package, verbose bool) constructs.Project {
 	ab.log(`resolve references`)
 	proj.ResolveReferences()
 
-	// TODO: Run prune only on root packages.
-	ab.log(`prune`)
-	proj.Prune(proj.Packages().ToSlice())
+	ab.log(`prune types`)
+	proj.PruneTypes()
+
+	ab.log(`prune packages`)
+	proj.PrunePackages()
 
 	ab.log(`flag locations`)
 	proj.FlagLocations()

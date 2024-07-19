@@ -48,6 +48,7 @@ func newMethod(args MethodArgs) Method {
 	assert.ArgValidId(`name`, args.Name)
 	assert.ArgNotNil(`package`, args.Package)
 	assert.ArgNotNil(`signature`, args.Signature)
+	assert.ArgNotNil(`location`, args.Location)
 
 	return &methodImp{
 		pkg:        args.Package,
@@ -93,7 +94,8 @@ func (m *methodImp) ToJson(ctx *jsonify.Context) jsonify.Datum {
 		Add(ctx2, `name`, m.name).
 		Add(ctx2, `signature`, m.signature).
 		AddNonZero(ctx2, `metrics`, m.metrics).
-		AddNonZero(ctx2, `receiver`, m.receiver)
+		AddNonZero(ctx2, `receiver`, m.receiver).
+		AddNonZero(ctx2, `loc`, m.loc)
 
 	if ctx.IsReceiverShown() {
 		data.AddNonZero(ctx, `noCopyRecv`, m.noCopyRecv).

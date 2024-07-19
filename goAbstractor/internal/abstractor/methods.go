@@ -62,5 +62,6 @@ func (ab *abstractor) abstractFuncDecl(pkg constructs.Package, src *packages.Pac
 		Metrics:    mets,
 		NoCopyRecv: noCopyRecv,
 		Receiver:   recvName,
+		Location:   ab.proj.NewLoc(decl.Pos()),
 	})
 }

@@ -59,7 +59,8 @@ type (
 		ResolveClassInterfaces()
 		ResolveInheritance()
 		ResolveReferences()
-		Prune(packages []Package)
+		PruneTypes()
+		PrunePackages()
 		FlagLocations()
 	}
 
@@ -309,11 +310,6 @@ func (p *projectImp) ResolveReferences() {
 	}
 }
 
-func (p *projectImp) Prune(packages []Package) {
-	p.pruneTypes(packages)
-	p.prunePackages(packages)
-}
-
 func (p *projectImp) removeTypes(predict func(Construct) bool) {
 	p.allBasics.Remove(predict)
 	p.allClasses.Remove(predict)
@@ -329,7 +325,7 @@ func (p *projectImp) removeTypes(predict func(Construct) bool) {
 	p.allValues.Remove(predict)
 }
 
-func (p *projectImp) pruneTypes(packages []Package) {
+func (p *projectImp) PruneTypes() {
 	touched := map[Construct]bool{}
 
 	v := visitor.New(func(value any) bool {
@@ -343,16 +339,17 @@ func (p *projectImp) pruneTypes(packages []Package) {
 
 	// Visit everything reachable from the packages.
 	// Do not visit all the registered types since they are being pruned.
-	visitor.Visit(v, packages...)
+	visitor.VisitList(v, p.allPackages.Values())
 	p.removeTypes(func(td Construct) bool {
 		return !touched[td]
 	})
 }
 
-func (p *projectImp) prunePackages(packages []Package) {
+func (p *projectImp) PrunePackages() {
 	empty := map[Construct]bool{}
-	for _, pkg := range packages {
-		if pkg.empty() {
+	packages := p.allPackages.Values()
+	for i := range packages.Count() {
+		if pkg := packages.Get(i); pkg.empty() {
 			empty[pkg] = true
 		}
 	}
@@ -371,15 +368,23 @@ func (p *projectImp) prunePackages(packages []Package) {
 func (p *projectImp) FlagLocations() {
 	p.locations.Reset()
 
-	p.allClasses.Values().Enumerate().
-		Foreach(func(c Class) { c.Location().Flag() })
+	classes := p.allClasses.Values()
+	for i := range classes.Count() {
+		classes.Get(i).Location().Flag()
+	}
 
-	p.allInterDefs.Values().Enumerate().
-		Foreach(func(it InterDef) { it.Location().Flag() })
+	interDefs := p.allInterDefs.Values()
+	for i := range interDefs.Count() {
+		interDefs.Get(i).Location().Flag()
+	}
 
-	p.allMethods.Values().Enumerate().
-		Foreach(func(m Method) { m.Location().Flag() })
+	methods := p.allMethods.Values()
+	for i := range methods.Count() {
+		methods.Get(i).Location().Flag()
+	}
 
-	p.allValues.Values().Enumerate().
-		Foreach(func(v Value) { v.Location().Flag() })
+	values := p.allValues.Values()
+	for i := range values.Count() {
+		values.Get(i).Location().Flag()
+	}
 }

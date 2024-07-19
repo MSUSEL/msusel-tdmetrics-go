@@ -1,6 +1,7 @@
 package locs
 
 import (
+	"fmt"
 	"go/token"
 	"strconv"
 
@@ -68,11 +69,15 @@ func (s *setImp) finish() {
 		s.offsets[file] = offset
 		offset += lineCounts[file]
 	}
+
+	fmt.Printf(">> s.flagged:  %#v\n", s.flagged)
+	fmt.Printf(">> lineCounts: %#v\n", lineCounts)
+	fmt.Printf(">> s.offset:   %#v\n", s.offsets)
+
 }
 
 func (s *setImp) infoFor(p token.Pos) (int, string, int) {
 	s.finish()
-
 	if p <= token.NoPos {
 		return 0, ``, 0
 	}
