@@ -1,23 +1,33 @@
 {
   language: go,
-  packages: [
-    {
-      path: command-line-arguments,
-      name: main,
-      methods: [
-        { # func main()
-          name: main, signature: 2,
-          metrics: { codeCount: 3, complexity: 1, indents: 1, lineCount: 3 }
-        }
-      ]
+  interDefs: [
+    { name: any, package: 4, type: 2 } # 1. $builtin.any any
+  ],
+  interfaces: [
+    {} # 2. any
+  ],
+  methods: [
+    { # 3. main.main func()()
+      name: main, package: 5, signature: 6, loc: 5,
+      metrics: { codeCount: 3, complexity: 1, indents: 1, lineCount: 3 } 
     }
   ],
-  types: {
-    interfaces: [
-      {} # 1. any
-    ],
-    signatures: [
-      {} # 2. func()()
-    ],
-  }
+  packages: [
+    { # 4. $builtin
+      name: $builtin,
+      path: $builtin,
+      interDefs: [ 1 ] # any
+    },
+    { # 5. main
+      name: main,
+      path: command-line-arguments,
+      methods: [ 3 ] # main
+    }
+  ],
+  signatures: [
+    {} # 6. func()()
+  ],
+  locs: {
+    '1': main.go
+  },
 }
