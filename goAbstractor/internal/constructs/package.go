@@ -1,11 +1,11 @@
 package constructs
 
 import (
-	"fmt"
 	"strings"
 
 	"github.com/Snow-Gremlin/goToolbox/collections"
 	"github.com/Snow-Gremlin/goToolbox/collections/enumerator"
+	"github.com/Snow-Gremlin/goToolbox/terrors/terror"
 	"golang.org/x/tools/go/packages"
 
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/assert"
@@ -170,11 +170,15 @@ func (p *packageImp) resolveReceivers() {
 		if rec := m.ReceiverName(); len(rec) > 0 {
 			t := p.findType(rec)
 			if t == nil {
-				panic(fmt.Errorf(`failed to find receiver for %s`, rec))
+				panic(terror.New(`failed to find receiver`).
+					With(`name`, rec))
 			}
 			c, ok := t.(Class)
 			if !ok {
-				panic(fmt.Errorf(`receiver was not a class for %[1]s: (%[2]T) %[2]v`, rec, t))
+				panic(terror.New(`receiver was not a class`).
+					With(`name`, rec).
+					WithType(`gotten type`, t).
+					With(`gotten value`, t))
 			}
 			c.addMethod(m)
 		}

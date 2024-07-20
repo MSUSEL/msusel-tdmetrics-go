@@ -1,10 +1,10 @@
 package abstractor
 
 import (
-	"fmt"
 	"go/ast"
 	"go/types"
 
+	"github.com/Snow-Gremlin/goToolbox/terrors/terror"
 	"golang.org/x/tools/go/packages"
 
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs"
@@ -16,7 +16,8 @@ import (
 func (ab *abstractor) setTypeParamOverrides(args *types.TypeList, params *types.TypeParamList, src *packages.Package, decl *ast.FuncDecl) {
 	count := args.Len()
 	if count != params.Len() {
-		panic(fmt.Errorf(`function declaration has unexpected receiver fields: %s`, pos(src, decl.Pos())))
+		panic(terror.New(`function declaration has unexpected receiver fields`).
+			With(`pos`, pos(src, decl.Pos())))
 	}
 
 	ab.typeParamReplacer = map[*types.TypeParam]*types.TypeParam{}
@@ -36,7 +37,8 @@ func (ab *abstractor) abstractFuncDecl(pkg constructs.Package, src *packages.Pac
 	recvName := ``
 	if decl.Recv != nil && decl.Recv.NumFields() > 0 {
 		if decl.Recv.NumFields() != 1 {
-			panic(fmt.Errorf(`function declaration has unexpected receiver fields: %s`, pos(src, decl.Pos())))
+			panic(terror.New(`function declaration has unexpected receiver fields`).
+				With(`pos`, pos(src, decl.Pos())))
 		}
 		recv := src.TypesInfo.Types[decl.Recv.List[0].Type].Type
 		if p, ok := recv.(*types.Pointer); ok {
@@ -45,7 +47,9 @@ func (ab *abstractor) abstractFuncDecl(pkg constructs.Package, src *packages.Pac
 		}
 		n, ok := recv.(*types.Named)
 		if !ok {
-			panic(fmt.Errorf(`function declaration has unexpected receiver type: %T: %s`, recv, pos(src, decl.Pos())))
+			panic(terror.New(`function declaration has unexpected receiver type`).
+				WithType(`receiver`, recv).
+				With(`pos`, pos(src, decl.Pos())))
 		}
 		recvName = n.Origin().Obj().Name()
 		ab.setTypeParamOverrides(n.TypeArgs(), n.TypeParams(), src, decl)

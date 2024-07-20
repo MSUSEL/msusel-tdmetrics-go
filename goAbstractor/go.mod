@@ -3,7 +3,7 @@ module github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor
 go 1.22
 
 require (
-	github.com/Snow-Gremlin/goToolbox v0.0.0-20240211025709-41ddf2ce4a68
+	github.com/Snow-Gremlin/goToolbox v0.4.1
 	golang.org/x/tools v0.20.0
 	gopkg.in/yaml.v3 v3.0.1
 )

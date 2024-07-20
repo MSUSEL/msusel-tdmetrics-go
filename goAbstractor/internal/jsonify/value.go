@@ -2,8 +2,8 @@ package jsonify
 
 import (
 	"encoding/json"
-	"fmt"
 
+	"github.com/Snow-Gremlin/goToolbox/terrors/terror"
 	"github.com/Snow-Gremlin/goToolbox/utils"
 )
 
@@ -30,7 +30,9 @@ func (v *value[T]) isZero() bool {
 
 func (v *value[T]) Seek(path []any) Datum {
 	if len(path) > 0 {
-		panic(fmt.Errorf(`path continues from the value %v: %v`, v.data, path))
+		panic(terror.New(`path continues from the value`).
+			With(`data`, v.data).
+			With(`path`, path))
 	}
 	return v
 }

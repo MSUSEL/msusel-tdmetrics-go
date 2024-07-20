@@ -6,6 +6,7 @@ import (
 	"strconv"
 	"strings"
 
+	"github.com/Snow-Gremlin/goToolbox/terrors/terror"
 	"github.com/Snow-Gremlin/goToolbox/utils"
 )
 
@@ -32,7 +33,9 @@ func (l *List) Seek(path []any) Datum {
 
 	if index, ok := path[0].(int); ok {
 		if index < 0 || index >= len(l.data) {
-			panic(fmt.Errorf(`must have an index in [0 .. %d): %v`, len(l.data), path[0]))
+			panic(terror.New(`index is out of bounds`).
+				With(`count`, len(l.data)).
+				With(`path`, path))
 		}
 		return l.data[index].Seek(path[1:])
 	}
@@ -40,7 +43,10 @@ func (l *List) Seek(path []any) Datum {
 	if kv, ok := path[0].(string); ok {
 		parts := seekKVPattern().FindAllStringSubmatch(kv, -1)
 		if len(parts) != 1 || len(parts[0]) != 3 {
-			panic(fmt.Errorf(`must have key/value string match '^(\w+)=(.+)$' got %v: %v`, parts, path[0]))
+			panic(terror.New(`invalid key/value in path`).
+				With(`pattern`, `^(\w+)=(.+)$`).
+				With(`gotten`, parts).
+				With(`path`, path))
 		}
 
 		key := parts[0][1]
@@ -49,7 +55,8 @@ func (l *List) Seek(path []any) Datum {
 			var err error
 			value, err = strconv.Unquote(value)
 			if err != nil {
-				panic(fmt.Errorf(`must have a value in key/value that is unquotable, %q: %w`, value, err))
+				panic(terror.New(`must have a value in key/value that is unquotable`, err).
+					With(`value`, value))
 			}
 		}
 
@@ -66,12 +73,18 @@ func (l *List) Seek(path []any) Datum {
 		}
 
 		if foundKey {
-			panic(fmt.Errorf(`no value found for %q with the given key %q: %v`, value, key, path[0]))
+			panic(terror.New(`no value found with the given key`).
+				With(`value`, value).
+				With(`key`, key).
+				With(`path`, path))
 		}
-		panic(fmt.Errorf(`no key found for %q: %v`, key, path[0]))
+		panic(terror.New(`no key found`).
+			With(`key`, key).
+			With(`path`, path))
 	}
 
-	panic(fmt.Errorf(`must have an index (int) or key/value (string): %v`, path[0]))
+	panic(terror.New(`must have an index (int) or key/value (string)`).
+		With(`path`, path[0]))
 }
 
 func (l *List) Append(ctx *Context, values ...any) *List {

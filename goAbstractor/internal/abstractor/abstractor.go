@@ -1,7 +1,6 @@
 package abstractor
 
 import (
-	"fmt"
 	"go/ast"
 	"go/token"
 	"go/types"
@@ -124,7 +123,8 @@ func (ab *abstractor) addFile(pkg constructs.Package, src *packages.Package, f *
 		case *ast.FuncDecl:
 			ab.abstractFuncDecl(pkg, src, d)
 		default:
-			panic(fmt.Errorf(`unexpected declaration: %s`, pos(src, decl.Pos())))
+			panic(terror.New(`unexpected declaration`).
+				With(`pos`, pos(src, decl.Pos())))
 		}
 	}
 }
@@ -140,7 +140,8 @@ func (ab *abstractor) addGenDecl(pkg constructs.Package, src *packages.Package, 
 		case *ast.ValueSpec:
 			ab.abstractValueSpec(pkg, src, s, isConst)
 		default:
-			panic(fmt.Errorf(`unexpected specification: %s`, pos(src, spec.Pos())))
+			panic(terror.New(`unexpected specification`).
+				With(`pos`, pos(src, spec.Pos())))
 		}
 	}
 }
@@ -148,7 +149,8 @@ func (ab *abstractor) addGenDecl(pkg constructs.Package, src *packages.Package, 
 func (ab *abstractor) abstractTypeSpec(pkg constructs.Package, src *packages.Package, spec *ast.TypeSpec) {
 	tv, has := src.TypesInfo.Types[spec.Type]
 	if !has {
-		panic(fmt.Errorf(`type specification not found in types info: %s`, pos(src, spec.Type.Pos())))
+		panic(terror.New(`type specification not found in types info`).
+			With(`pos`, pos(src, spec.Type.Pos())))
 	}
 
 	typ := ab.convertType(tv.Type)
@@ -184,7 +186,8 @@ func (ab *abstractor) abstractValueSpec(pkg constructs.Package, src *packages.Pa
 
 		tv, has := src.TypesInfo.Defs[name]
 		if !has {
-			panic(fmt.Errorf(`value specification not found in types info: %s`, pos(src, spec.Type.Pos())))
+			panic(terror.New(`value specification not found in types info`).
+				With(`pos`, pos(src, spec.Type.Pos())))
 		}
 
 		typ := ab.convertType(tv.Type())

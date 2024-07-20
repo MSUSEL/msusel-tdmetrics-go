@@ -1,9 +1,9 @@
 package jsonify
 
 import (
-	"fmt"
 	"reflect"
 
+	"github.com/Snow-Gremlin/goToolbox/terrors/terror"
 	"github.com/Snow-Gremlin/goToolbox/utils"
 )
 
@@ -70,12 +70,14 @@ func New(ctx *Context, value any) Datum {
 			k := it.Key().Interface()
 			s, ok := k.(string)
 			if !ok {
-				panic(fmt.Errorf(`invalid key type: %T`, k))
+				panic(terror.New(`invalid key type`).
+					WithType(`type`, k))
 			}
 			m.Add(ctx, s, it.Value().Interface())
 		}
 		return m
 	}
 
-	panic(fmt.Errorf(`invalid json type: %T`, value))
+	panic(terror.New(`invalid json type`).
+		WithType(`type`, value))
 }

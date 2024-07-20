@@ -1,5 +1,5 @@
-github.com/Snow-Gremlin/goToolbox v0.0.0-20240211025709-41ddf2ce4a68 h1:T499Lo1SPsqtHvqzlGX87jKQ8uIqzBunWgCARKHxbK4=
-github.com/Snow-Gremlin/goToolbox v0.0.0-20240211025709-41ddf2ce4a68/go.mod h1:6WZ/tSdgOFJ2XY6NyosI1hCbqRvT6vioviq5XxSPka0=
+github.com/Snow-Gremlin/goToolbox v0.4.1 h1:dnChHssEulPM7zDZSJHs2XmVqzKHjsMV+D9d4lVDZBA=
+github.com/Snow-Gremlin/goToolbox v0.4.1/go.mod h1:6WZ/tSdgOFJ2XY6NyosI1hCbqRvT6vioviq5XxSPka0=
 golang.org/x/mod v0.17.0 h1:zY54UmvipHiNd+pm+m0x9KhZ9hl1/7QNMyxXbc6ICqA=
 golang.org/x/mod v0.17.0/go.mod h1:hTbmBsO62+eylJbnUtE2MGJUyE7QWk4xUqPFrRgJ+7c=
 golang.org/x/sync v0.7.0 h1:YsImfSBoP9QPYL0xyKJPq0gcaJdG3rInoqxTWbfQu9M=

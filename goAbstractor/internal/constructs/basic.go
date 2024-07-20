@@ -52,7 +52,8 @@ func normalizeBasicName(name string) string {
 		`int64`, `uint64`, `float32`, `float64`, `string`, `bool`, `uintptr`:
 		return name
 	default:
-		panic(terror.New(`unknown basic type name`).With(`name`, name))
+		panic(terror.New(`unknown basic type name`).
+			With(`name`, name))
 	}
 }
 

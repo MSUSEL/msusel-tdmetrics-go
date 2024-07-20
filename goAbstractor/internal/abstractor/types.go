@@ -6,6 +6,7 @@ import (
 
 	"github.com/Snow-Gremlin/goToolbox/collections"
 	"github.com/Snow-Gremlin/goToolbox/collections/set"
+	"github.com/Snow-Gremlin/goToolbox/terrors/terror"
 	"github.com/Snow-Gremlin/goToolbox/utils"
 
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs"
@@ -38,7 +39,9 @@ func (ab *abstractor) convertType(t types.Type) constructs.TypeDesc {
 	case *types.Union:
 		return ab.convertUnion(t2)
 	default:
-		panic(fmt.Errorf(`unhandled type, %[1]T: %[1]s`, t))
+		panic(terror.New(`unhandled type`).
+			WithType(`type`, t).
+			With(`value`, t))
 	}
 }
 
@@ -205,7 +208,8 @@ func uniqueName(names collections.Set[string]) string {
 			return name
 		}
 	}
-	panic(fmt.Errorf(`unable to find unique name in %d attempts`, attempts))
+	panic(terror.New(`unable to find unique name`).
+		With(`attempts`, attempts))
 }
 
 func blankName(name string) bool {

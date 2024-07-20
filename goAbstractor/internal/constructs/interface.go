@@ -1,12 +1,11 @@
 package constructs
 
 import (
-	"errors"
-	"fmt"
 	"go/token"
 	"go/types"
 	"slices"
 
+	"github.com/Snow-Gremlin/goToolbox/terrors/terror"
 	"github.com/Snow-Gremlin/goToolbox/utils"
 
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs/kind"
@@ -54,7 +53,7 @@ func newInterface(args InterfaceArgs) Interface {
 
 	if utils.IsNil(args.RealType) {
 		if utils.IsNil(args.Package) {
-			panic(errors.New(`must provide a package if the real type for an interface is nil`))
+			panic(terror.New(`must provide a package if the real type for an interface is nil`))
 		}
 
 		mTyp := []*types.Func{}
@@ -63,7 +62,8 @@ func newInterface(args InterfaceArgs) Interface {
 			name := named.Name()
 			sig := named.Type().GoType().(*types.Signature)
 			if utils.IsNil(sig) {
-				panic(fmt.Errorf(`nil signature for %s`, name))
+				panic(terror.New(`nil signature`).
+					With(`name`, name))
 			}
 			f := types.NewFunc(token.NoPos, pkg, name, sig)
 			mTyp = append(mTyp, f)
@@ -79,7 +79,7 @@ func newInterface(args InterfaceArgs) Interface {
 
 		realType := types.NewInterfaceType(mTyp, tEmb)
 		if realType == nil {
-			panic(fmt.Errorf(`failed to create an interface`))
+			panic(terror.New(`failed to create an interface`))
 		}
 		args.RealType = realType
 	}
@@ -187,7 +187,9 @@ func (it *interfaceImp) SetInheritance() {
 	for _, other := range it.inheritors {
 		otherInter, ok := other.(*interfaceImp)
 		if !ok {
-			panic(fmt.Sprintf(`interfaces in inheritors must be interfaceImps but got (%[1]T) %[1]v`, other))
+			panic(terror.New(`interfaces in inheritors must be interfaceImps`).
+				WithType(`gotten type`, other).
+				With(`gotten value`, other))
 		}
 		otherInter.inherits = append(otherInter.inherits, it)
 	}

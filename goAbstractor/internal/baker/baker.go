@@ -8,10 +8,10 @@
 package baker
 
 import (
-	"fmt"
 	"go/token"
 	"go/types"
 
+	"github.com/Snow-Gremlin/goToolbox/terrors/terror"
 	"github.com/Snow-Gremlin/goToolbox/utils"
 	"golang.org/x/tools/go/packages"
 
@@ -55,7 +55,11 @@ func bakeOnce[T any](b *bakerImp, key string, create func() T) T {
 	if baked, has := b.baked[key]; has {
 		t, ok := baked.(T)
 		if !ok {
-			panic(fmt.Errorf(`unexpected type for %[1]s: wanted %[2]T, got %[3]T: %[3]v`, key, utils.Zero[T](), baked))
+			panic(terror.New(`unexpected baked type`).
+				With(`key`, key).
+				WithType(`wanted`, utils.Zero[T]()).
+				WithType(`gotten type`, baked).
+				With(`gotten value`, baked))
 		}
 		return t
 	}

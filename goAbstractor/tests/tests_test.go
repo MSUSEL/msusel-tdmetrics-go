@@ -65,7 +65,10 @@ func (tt *testTool) abstract(patterns ...string) *testTool {
 		Patterns:   patterns,
 		BuildFlags: []string{`-tags=test`},
 	})
-	check.NoError(tt.t).Name(`Read project`).With(`Dir`, tt.dir).Require(err)
+	check.NoError(tt.t).
+		Name(`Read project`).
+		With(`Dir`, tt.dir).
+		Require(err)
 
 	tt.proj = abstractor.Abstract(abstractor.Config{
 		Packages: ps,
@@ -77,10 +80,16 @@ func (tt *testTool) abstract(patterns ...string) *testTool {
 
 func (tt *testTool) readExp(expData any) *testTool {
 	expFile, err := os.ReadFile(pathToTestData + tt.dir + expAbstraction)
-	check.NoError(tt.t).Name(`Read expected json`).With(`Dir`, tt.dir).Require(err)
+	check.NoError(tt.t).
+		Name(`Read expected json`).
+		With(`Dir`, tt.dir).
+		Require(err)
 
 	err = yaml.Unmarshal(expFile, expData)
-	check.NoError(tt.t).Name(`Unmarshal expected json`).With(`Dir`, tt.dir).Require(err)
+	check.NoError(tt.t).
+		Name(`Unmarshal expected json`).
+		With(`Dir`, tt.dir).
+		Require(err)
 	return tt
 }
 
@@ -89,10 +98,16 @@ func (tt *testTool) equals() *testTool {
 	tt.readExp(&expData)
 
 	exp, err := json.MarshalIndent(expData, ``, `  `)
-	check.NoError(tt.t).Name(`Marshal expected json`).With(`Dir`, tt.dir).Require(err)
+	check.NoError(tt.t).
+		Name(`Marshal expected json`).
+		With(`Dir`, tt.dir).
+		Require(err)
 
 	gotten, err := jsonify.Marshal(jsonify.NewContext(), tt.proj)
-	check.NoError(tt.t).Name(`Marshal project`).With(`Dir`, tt.dir).Require(err)
+	check.NoError(tt.t).
+		Name(`Marshal project`).
+		With(`Dir`, tt.dir).
+		Require(err)
 
 	if !slices.Equal(exp, gotten) {
 		expLines := strings.Split(string(exp), "\n")
@@ -115,13 +130,17 @@ func (tt *testTool) partial() *testTool {
 		subData := tt.proj.ToJson(ctx).Seek(part.Path)
 
 		exp, err := json.MarshalIndent(part.Data, ``, `  `)
-		check.NoError(tt.t).Name(`Marshal expected json`).
-			With(`Dir`, tt.dir).With(`Path`, part.Path).
+		check.NoError(tt.t).
+			Name(`Marshal expected json`).
+			With(`Dir`, tt.dir).
+			With(`Path`, part.Path).
 			Require(err)
 
 		gotten, err := json.MarshalIndent(subData, ``, `  `)
-		check.NoError(tt.t).Name(`Marshal project`).
-			With(`Dir`, tt.dir).With(`Path`, part.Path).
+		check.NoError(tt.t).
+			Name(`Marshal project`).
+			With(`Dir`, tt.dir).
+			With(`Path`, part.Path).
 			Require(err)
 
 		if !slices.Equal(exp, gotten) {
@@ -137,9 +156,15 @@ func (tt *testTool) partial() *testTool {
 
 func (tt *testTool) save() *testTool {
 	gotten, err := jsonify.Marshal(jsonify.NewContext(), tt.proj)
-	check.NoError(tt.t).Name(`Marshal project`).With(`Dir`, tt.dir).Require(err)
+	check.NoError(tt.t).
+		Name(`Marshal project`).
+		With(`Dir`, tt.dir).
+		Require(err)
 
 	err = os.WriteFile(pathToTestData+tt.dir+writeOutFile, gotten, 0o644)
-	check.NoError(tt.t).Name(`Save project`).With(`Dir`, tt.dir).Require(err)
+	check.NoError(tt.t).
+		Name(`Save project`).
+		With(`Dir`, tt.dir).
+		Require(err)
 	return tt
 }
