@@ -5,7 +5,9 @@ import (
 	"go/ast"
 	"go/token"
 	"go/types"
+	"path/filepath"
 
+	"github.com/Snow-Gremlin/goToolbox/terrors/terror"
 	"github.com/Snow-Gremlin/goToolbox/utils"
 	"golang.org/x/tools/go/packages"
 
@@ -25,8 +27,14 @@ type Config struct {
 func Abstract(cfg Config) constructs.Project {
 	assert.ArgNotNil(`log`, cfg.Log)
 
+	basePath, err := filepath.Abs(cfg.BasePath)
+	if err != nil {
+		panic(terror.New(`unable to get the absolute base path`, err).
+			With(`base path`, cfg.BasePath))
+	}
+
 	fs := cfg.Packages[0].Fset
-	locs := locs.NewSet(fs, cfg.BasePath)
+	locs := locs.NewSet(fs, basePath)
 	proj := constructs.NewProject(locs)
 	bk := baker.New(fs, proj)
 
