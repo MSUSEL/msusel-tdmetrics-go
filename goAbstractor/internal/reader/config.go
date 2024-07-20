@@ -49,8 +49,7 @@ func (c Config) toParseConfig() *packages.Config {
 
 	if c.Verbose {
 		cfg.Logf = func(format string, args ...any) {
-			fmt.Printf(format, args...)
-			fmt.Println()
+			fmt.Printf(format+"\n", args...)
 		}
 	}
 

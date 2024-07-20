@@ -53,9 +53,9 @@ func (t *unionImp) CompareTo(other Construct) int {
 	return CompareSlice(t.approx, b.approx)
 }
 
-func (t *unionImp) Visit(v visitor.Visitor) bool {
-	return visitor.Visit(v, t.exact...) &&
-		visitor.Visit(v, t.approx...)
+func (t *unionImp) Visit(v visitor.Visitor) {
+	visitor.Visit(v, t.exact...)
+	visitor.Visit(v, t.approx...)
 }
 
 func (t *unionImp) ToJson(ctx *jsonify.Context) jsonify.Datum {

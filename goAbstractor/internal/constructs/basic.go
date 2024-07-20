@@ -11,6 +11,7 @@ import (
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/assert"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs/kind"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/jsonify"
+	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/visitor"
 )
 
 type (
@@ -85,6 +86,8 @@ func (t *basicImp) _basic()            {}
 func (t *basicImp) Kind() kind.Kind    { return kind.Basic }
 func (t *basicImp) SetIndex(index int) { t.index = index }
 func (t *basicImp) GoType() types.Type { return t.realType }
+
+func (t *basicImp) Visit(v visitor.Visitor) {}
 
 func (t *basicImp) CompareTo(other Construct) int {
 	return strings.Compare(t.typeName, other.(*basicImp).typeName)

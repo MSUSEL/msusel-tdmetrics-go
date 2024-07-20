@@ -1,8 +1,8 @@
 package locs
 
 import (
-	"fmt"
 	"go/token"
+	"path/filepath"
 	"strconv"
 
 	"github.com/Snow-Gremlin/goToolbox/terrors/terror"
@@ -21,14 +21,18 @@ type (
 
 	setImp struct {
 		fs       *token.FileSet
+		basePath string
 		flagged  map[token.Pos]bool
 		offsets  map[string]int
 		finished bool
 	}
 )
 
-func NewSet(fs *token.FileSet) Set {
-	s := &setImp{fs: fs}
+func NewSet(fs *token.FileSet, basePath string) Set {
+	s := &setImp{
+		fs:       fs,
+		basePath: basePath,
+	}
 	s.Reset()
 	return s
 }
@@ -50,6 +54,16 @@ func (s *setImp) flag(p token.Pos) {
 	s.flagged[p] = true
 }
 
+func (s *setImp) relPath(file string) string {
+	target, err := filepath.Rel(s.basePath, file)
+	if err != nil {
+		panic(terror.New(`error creating a relative path for a location`, err).
+			With(`base path`, s.basePath).
+			With(`file`, file))
+	}
+	return target
+}
+
 func (s *setImp) finish() {
 	if s.finished {
 		return
@@ -59,7 +73,8 @@ func (s *setImp) finish() {
 	lineCounts := map[string]int{}
 	for p := range s.flagged {
 		f := s.fs.File(p)
-		lineCounts[f.Name()] = f.LineCount()
+		file, lines := s.relPath(f.Name()), f.LineCount()
+		lineCounts[file] = lines
 	}
 	files := utils.SortedKeys(lineCounts)
 
@@ -69,11 +84,6 @@ func (s *setImp) finish() {
 		s.offsets[file] = offset
 		offset += lineCounts[file]
 	}
-
-	fmt.Printf(">> s.flagged:  %#v\n", s.flagged)
-	fmt.Printf(">> lineCounts: %#v\n", lineCounts)
-	fmt.Printf(">> s.offset:   %#v\n", s.offsets)
-
 }
 
 func (s *setImp) infoFor(p token.Pos) (int, string, int) {
@@ -83,7 +93,7 @@ func (s *setImp) infoFor(p token.Pos) (int, string, int) {
 	}
 
 	fsp := s.fs.Position(p)
-	file, line := fsp.Filename, fsp.Line
+	file, line := s.relPath(fsp.Filename), fsp.Line
 	offset := s.offsets[file] + line - 1
 	return offset, file, line
 }

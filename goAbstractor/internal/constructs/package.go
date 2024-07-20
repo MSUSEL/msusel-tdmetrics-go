@@ -143,24 +143,24 @@ func (p *packageImp) ToJson(ctx *jsonify.Context) jsonify.Datum {
 		return jsonify.New(ctx, p.index)
 	}
 
-	ctx2 := ctx.HideKind()
+	ctx2 := ctx.HideKind().Short()
 	return jsonify.NewMap().
 		AddIf(ctx, ctx.IsKindShown(), `kind`, p.Kind()).
 		AddNonZero(ctx2, `path`, p.path).
 		AddNonZero(ctx2, `name`, p.name).
-		AddNonZero(ctx2.Long(), `classes`, p.classes).
-		AddNonZero(ctx2.Short(), `imports`, p.imports).
-		AddNonZero(ctx2.Long(), `interDefs`, p.interDefs).
-		AddNonZero(ctx2.Long(), `methods`, p.methods).
-		AddNonZero(ctx2.Long(), `values`, p.values)
+		AddNonZero(ctx2, `classes`, p.classes).
+		AddNonZero(ctx2, `imports`, p.imports).
+		AddNonZero(ctx2, `interDefs`, p.interDefs).
+		AddNonZero(ctx2, `methods`, p.methods).
+		AddNonZero(ctx2, `values`, p.values)
 }
 
-func (p *packageImp) Visit(v visitor.Visitor) bool {
-	return visitor.VisitList(v, p.imports.Values()) &&
-		visitor.VisitList(v, p.classes.Values()) &&
-		visitor.VisitList(v, p.interDefs.Values()) &&
-		visitor.VisitList(v, p.methods.Values()) &&
-		visitor.VisitList(v, p.values.Values())
+func (p *packageImp) Visit(v visitor.Visitor) {
+	visitor.VisitList(v, p.imports.Values())
+	visitor.VisitList(v, p.classes.Values())
+	visitor.VisitList(v, p.interDefs.Values())
+	visitor.VisitList(v, p.methods.Values())
+	visitor.VisitList(v, p.values.Values())
 }
 
 func (p *packageImp) resolveReceivers() {

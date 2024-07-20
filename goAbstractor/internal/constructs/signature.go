@@ -82,10 +82,10 @@ func (s *signatureImp) Kind() kind.Kind    { return kind.Signature }
 func (s *signatureImp) SetIndex(index int) { s.index = index }
 func (s *signatureImp) GoType() types.Type { return s.realType }
 
-func (s *signatureImp) Visit(v visitor.Visitor) bool {
-	return visitor.Visit(v, s.params...) &&
-		visitor.Visit(v, s.typeParams...) &&
-		visitor.Visit(v, s.returnType)
+func (s *signatureImp) Visit(v visitor.Visitor) {
+	visitor.Visit(v, s.params...)
+	visitor.Visit(v, s.typeParams...)
+	visitor.Visit(v, s.returnType)
 }
 
 func (s *signatureImp) CompareTo(other Construct) int {

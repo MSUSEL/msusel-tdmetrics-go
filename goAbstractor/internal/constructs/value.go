@@ -82,6 +82,6 @@ func (v *valueImp) ToJson(ctx *jsonify.Context) jsonify.Datum {
 		AddNonZero(ctx2, `const`, v.isConst)
 }
 
-func (v *valueImp) Visit(vi visitor.Visitor) bool {
-	return visitor.Visit(vi, v.typ)
+func (v *valueImp) Visit(vi visitor.Visitor) {
+	visitor.Visit(vi, v.typ)
 }

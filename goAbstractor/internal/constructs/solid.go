@@ -59,9 +59,9 @@ func (s *solidImp) CompareTo(other Construct) int {
 	return CompareSlice(s.typeParams, b.typeParams)
 }
 
-func (s *solidImp) Visit(v visitor.Visitor) bool {
-	return visitor.Visit(v, s.target) &&
-		visitor.Visit(v, s.typeParams...)
+func (s *solidImp) Visit(v visitor.Visitor) {
+	visitor.Visit(v, s.target)
+	visitor.Visit(v, s.typeParams...)
 }
 
 func (s *solidImp) ToJson(ctx *jsonify.Context) jsonify.Datum {

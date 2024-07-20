@@ -62,8 +62,8 @@ func (s *structImp) CompareTo(other Construct) int {
 	return CompareSlice(s.fields, other.(*structImp).fields)
 }
 
-func (s *structImp) Visit(v visitor.Visitor) bool {
-	return visitor.Visit(v, s.fields...)
+func (s *structImp) Visit(v visitor.Visitor) {
+	visitor.Visit(v, s.fields...)
 }
 
 func (s *structImp) ToJson(ctx *jsonify.Context) jsonify.Datum {

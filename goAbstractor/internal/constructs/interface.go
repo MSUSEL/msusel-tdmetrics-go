@@ -97,11 +97,11 @@ func (it *interfaceImp) Kind() kind.Kind    { return kind.Interface }
 func (it *interfaceImp) SetIndex(index int) { it.index = index }
 func (it *interfaceImp) GoType() types.Type { return it.realType }
 
-func (it *interfaceImp) Visit(v visitor.Visitor) bool {
-	return visitor.Visit(v, it.typeParams...) &&
-		visitor.Visit(v, it.methods...) &&
-		visitor.Visit(v, it.union) &&
-		visitor.Visit(v, it.inherits...)
+func (it *interfaceImp) Visit(v visitor.Visitor) {
+	visitor.Visit(v, it.typeParams...)
+	visitor.Visit(v, it.methods...)
+	visitor.Visit(v, it.union)
+	visitor.Visit(v, it.inherits...)
 }
 
 func (it *interfaceImp) CompareTo(other Construct) int {

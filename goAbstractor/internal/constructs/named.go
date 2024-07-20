@@ -55,8 +55,8 @@ func (t *namedImp) CompareTo(other Construct) int {
 	return Compare(t.typ, b.typ)
 }
 
-func (t *namedImp) Visit(v visitor.Visitor) bool {
-	return visitor.Visit(v, t.typ)
+func (t *namedImp) Visit(v visitor.Visitor) {
+	visitor.Visit(v, t.typ)
 }
 
 func (t *namedImp) ToJson(ctx *jsonify.Context) jsonify.Datum {

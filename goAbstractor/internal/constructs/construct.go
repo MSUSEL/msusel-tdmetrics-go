@@ -6,11 +6,13 @@ import (
 	"github.com/Snow-Gremlin/goToolbox/utils"
 
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs/kind"
+	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/visitor"
 )
 
 // Construct is a single unit of a software design or type.
 type Construct interface {
 	utils.Comparable[Construct]
+	visitor.Visitable
 
 	// Kind gets the kind of the construct.
 	Kind() kind.Kind

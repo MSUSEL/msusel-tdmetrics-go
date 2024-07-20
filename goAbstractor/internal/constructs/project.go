@@ -1,7 +1,6 @@
 package constructs
 
 import (
-	"fmt"
 	"go/token"
 	"strconv"
 
@@ -190,10 +189,10 @@ func (p *projectImp) FindType(pkgPath, typeName string) (Package, Definition) {
 		names := enumerator.Select(p.allPackages.Values().Enumerate(),
 			func(pkg Package) string { return strconv.Quote(pkg.Path()) }).
 			Join(`, `)
-		fmt.Println(`Package Paths: [` + names + `]`)
 		panic(terror.New(`failed to find package for type reference`).
 			With(`type name`, typeName).
-			With(`package path`, pkgPath))
+			With(`package path`, pkgPath).
+			With(`existing paths`, `[`+names+`]`))
 	}
 
 	def := pkg.findType(typeName)
@@ -201,8 +200,10 @@ func (p *projectImp) FindType(pkgPath, typeName string) (Package, Definition) {
 		names := enumerator.Select(pkg.allTypes(),
 			func(td Definition) string { return td.Name() }).
 			Join(`, `)
-		fmt.Println(pkgPath + `.TypeDefs: [` + names + `]`)
-		panic(fmt.Errorf(`failed to find type for type def reference for %q in %q`, typeName, pkgPath))
+		panic(terror.New(`failed to find type for type def reference`).
+			With(`type name`, typeName).
+			With(`package path`, pkgPath).
+			With(`type defs`, `[`+names+`]`))
 	}
 
 	return pkg, def
@@ -329,11 +330,9 @@ func (p *projectImp) PruneTypes() {
 	touched := map[Construct]bool{}
 
 	v := visitor.New(func(value any) bool {
-		c, ok := value.(Construct)
-		if !ok || touched[c] {
-			return false
+		if c, ok := value.(Construct); ok {
+			touched[c] = true
 		}
-		touched[c] = true
 		return true
 	})
 
@@ -367,24 +366,14 @@ func (p *projectImp) PrunePackages() {
 
 func (p *projectImp) FlagLocations() {
 	p.locations.Reset()
+	flagList(p.allClasses.Values())
+	flagList(p.allInterDefs.Values())
+	flagList(p.allMethods.Values())
+	flagList(p.allValues.Values())
+}
 
-	classes := p.allClasses.Values()
-	for i := range classes.Count() {
-		classes.Get(i).Location().Flag()
-	}
-
-	interDefs := p.allInterDefs.Values()
-	for i := range interDefs.Count() {
-		interDefs.Get(i).Location().Flag()
-	}
-
-	methods := p.allMethods.Values()
-	for i := range methods.Count() {
-		methods.Get(i).Location().Flag()
-	}
-
-	values := p.allValues.Values()
-	for i := range values.Count() {
-		values.Get(i).Location().Flag()
+func flagList[T Definition](c collections.ReadonlyList[T]) {
+	for i := range c.Count() {
+		c.Get(i).Location().Flag()
 	}
 }

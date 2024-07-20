@@ -82,6 +82,6 @@ func (id *interDefImp) ToJson(ctx *jsonify.Context) jsonify.Datum {
 		AddNonZero(ctx2, `loc`, id.loc)
 }
 
-func (id *interDefImp) Visit(v visitor.Visitor) bool {
-	return visitor.Visit(v, id.typ)
+func (id *interDefImp) Visit(v visitor.Visitor) {
+	visitor.Visit(v, id.typ)
 }

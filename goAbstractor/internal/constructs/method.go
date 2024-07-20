@@ -104,6 +104,6 @@ func (m *methodImp) ToJson(ctx *jsonify.Context) jsonify.Datum {
 	return data
 }
 
-func (m *methodImp) Visit(v visitor.Visitor) bool {
-	return visitor.Visit(v, m.signature)
+func (m *methodImp) Visit(v visitor.Visitor) {
+	visitor.Visit(v, m.signature)
 }

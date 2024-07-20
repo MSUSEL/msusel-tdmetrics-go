@@ -112,11 +112,11 @@ func (c *classImp) ToJson(ctx *jsonify.Context) jsonify.Datum {
 		AddNonZero(ctx2, `interface`, c.inter)
 }
 
-func (c *classImp) Visit(v visitor.Visitor) bool {
-	return visitor.Visit(v, c.data) &&
-		visitor.Visit(v, c.typeParams...) &&
-		visitor.VisitList(v, c.methods.Values()) &&
-		visitor.Visit(v, c.inter)
+func (c *classImp) Visit(v visitor.Visitor) {
+	visitor.Visit(v, c.data)
+	visitor.Visit(v, c.typeParams...)
+	visitor.VisitList(v, c.methods.Values())
+	visitor.Visit(v, c.inter)
 }
 
 func (c *classImp) resolveInterface(proj Project, pkg Package) {

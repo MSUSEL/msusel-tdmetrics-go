@@ -9,69 +9,75 @@ import (
 	"github.com/Snow-Gremlin/goToolbox/utils"
 	"golang.org/x/tools/go/packages"
 
+	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/assert"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/baker"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/locs"
+	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/logger"
 )
 
-func Abstract(ps []*packages.Package, verbose bool) constructs.Project {
-	fs := ps[0].Fset
-	locs := locs.NewSet(fs)
+type Config struct {
+	Packages []*packages.Package
+	Log      logger.Logger
+	BasePath string
+}
+
+func Abstract(cfg Config) constructs.Project {
+	assert.ArgNotNil(`log`, cfg.Log)
+
+	fs := cfg.Packages[0].Fset
+	locs := locs.NewSet(fs, cfg.BasePath)
 	proj := constructs.NewProject(locs)
+	bk := baker.New(fs, proj)
+
 	ab := &abstractor{
-		verbose:  verbose,
-		packages: ps,
-		baker:    baker.New(fs, proj),
+		log:      cfg.Log,
+		packages: cfg.Packages,
+		baker:    bk,
 		proj:     proj,
 	}
 
 	ab.initialize()
 	ab.abstractProject()
 
-	ab.log(`resolve imports`)
+	ab.log.Log(`resolve imports`)
 	proj.ResolveImports()
 
-	ab.log(`resolve receivers`)
+	ab.log.Log(`resolve receivers`)
 	proj.ResolveReceivers()
 
-	ab.log(`resolve class interfaces`)
+	ab.log.Log(`resolve class interfaces`)
 	proj.ResolveClassInterfaces()
 
-	ab.log(`resolve inheritance`)
+	ab.log.Log(`resolve inheritance`)
 	proj.ResolveInheritance()
 
-	ab.log(`resolve references`)
+	ab.log.Log(`resolve references`)
 	proj.ResolveReferences()
 
-	ab.log(`prune types`)
+	ab.log.Log(`prune types`)
 	proj.PruneTypes()
 
-	ab.log(`prune packages`)
+	ab.log.Log(`prune packages`)
 	proj.PrunePackages()
 
-	ab.log(`flag locations`)
+	ab.log.Log(`flag locations`)
 	proj.FlagLocations()
 
-	ab.log(`update indices`)
+	ab.log.Log(`update indices`)
 	proj.UpdateIndices()
 
-	ab.log(`done`)
+	ab.log.Log(`done`)
 	return proj
 }
 
 type abstractor struct {
-	verbose  bool
+	log      logger.Logger
 	packages []*packages.Package
 	baker    baker.Baker
 	proj     constructs.Project
 
 	typeParamReplacer map[*types.TypeParam]*types.TypeParam
-}
-
-func (ab *abstractor) log(format string, args ...any) {
-	if ab.verbose {
-		fmt.Printf(format+"\n", args...)
-	}
 }
 
 func (ab *abstractor) initialize() {
@@ -80,7 +86,7 @@ func (ab *abstractor) initialize() {
 }
 
 func (ab *abstractor) abstractProject() {
-	ab.log(`abstract project`)
+	ab.log.Log(`abstract project`)
 	packages.Visit(ab.packages, func(src *packages.Package) bool {
 		ab.abstractPackage(src)
 		return true
@@ -88,7 +94,7 @@ func (ab *abstractor) abstractProject() {
 }
 
 func (ab *abstractor) abstractPackage(src *packages.Package) constructs.Package {
-	ab.log(`|  abstract package: %s`, src.PkgPath)
+	ab.log.Log(`|  abstract package: %s`, src.PkgPath)
 	pkg := ab.proj.NewPackage(constructs.PackageArgs{
 		RealPkg:     src,
 		Path:        src.PkgPath,
@@ -102,7 +108,7 @@ func (ab *abstractor) abstractPackage(src *packages.Package) constructs.Package 
 }
 
 func (ab *abstractor) addFile(pkg constructs.Package, src *packages.Package, f *ast.File) {
-	ab.log(`|  |  add file to package: %s`, src.Fset.File(f.Name.NamePos).Name())
+	ab.log.Log(`|  |  add file to package: %s`, src.Fset.File(f.Name.NamePos).Name())
 	for _, decl := range f.Decls {
 		switch d := decl.(type) {
 		case *ast.GenDecl:

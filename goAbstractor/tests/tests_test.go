@@ -15,11 +15,11 @@ import (
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/abstractor"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/jsonify"
+	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/logger"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/reader"
 )
 
 const (
-	verbose        = true
 	pathToTestData = `../../testData/go/`
 	expAbstraction = `/abstraction.yaml`
 	writeOutFile   = `/out.json`
@@ -57,6 +57,8 @@ func (tt *testTool) abstract(patterns ...string) *testTool {
 		patterns = []string{`main.go`}
 	}
 
+	verbose := testing.Verbose()
+	basePath := pathToTestData + tt.dir
 	ps, err := reader.Read(&reader.Config{
 		Verbose:    verbose,
 		Dir:        pathToTestData + tt.dir,
@@ -65,7 +67,11 @@ func (tt *testTool) abstract(patterns ...string) *testTool {
 	})
 	check.NoError(tt.t).Name(`Read project`).With(`Dir`, tt.dir).Require(err)
 
-	tt.proj = abstractor.Abstract(ps, verbose)
+	tt.proj = abstractor.Abstract(abstractor.Config{
+		Packages: ps,
+		Log:      logger.New(verbose),
+		BasePath: basePath,
+	})
 	return tt
 }
 
@@ -109,10 +115,14 @@ func (tt *testTool) partial() *testTool {
 		subData := tt.proj.ToJson(ctx).Seek(part.Path)
 
 		exp, err := json.MarshalIndent(part.Data, ``, `  `)
-		check.NoError(tt.t).Name(`Marshal expected json`).With(`Dir`, tt.dir).With(`Path`, part.Path).Require(err)
+		check.NoError(tt.t).Name(`Marshal expected json`).
+			With(`Dir`, tt.dir).With(`Path`, part.Path).
+			Require(err)
 
 		gotten, err := json.MarshalIndent(subData, ``, `  `)
-		check.NoError(tt.t).Name(`Marshal project`).With(`Dir`, tt.dir).With(`Path`, part.Path).Require(err)
+		check.NoError(tt.t).Name(`Marshal project`).
+			With(`Dir`, tt.dir).With(`Path`, part.Path).
+			Require(err)
 
 		if !slices.Equal(exp, gotten) {
 			expLines := strings.Split(string(exp), "\n")

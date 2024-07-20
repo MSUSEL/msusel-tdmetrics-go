@@ -10,6 +10,7 @@ import (
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/assert"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs/kind"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/jsonify"
+	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/visitor"
 )
 
 type (
@@ -76,6 +77,10 @@ func (r *referenceImp) CompareTo(other Construct) int {
 		return cmp
 	}
 	return strings.Compare(r.name, b.name)
+}
+
+func (r *referenceImp) Visit(v visitor.Visitor) {
+	visitor.Visit(v, r.typ)
 }
 
 func (r *referenceImp) ToJson(ctx *jsonify.Context) jsonify.Datum {
