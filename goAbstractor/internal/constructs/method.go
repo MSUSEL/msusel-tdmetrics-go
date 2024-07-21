@@ -17,6 +17,7 @@ type (
 		Definition
 		_method()
 
+		Metrics() metrics.Metrics
 		Signature() Signature
 		ReceiverName() string
 		IsInit() bool
@@ -62,15 +63,16 @@ func newMethod(args MethodArgs) Method {
 	}
 }
 
-func (m *methodImp) _method()             {}
-func (m *methodImp) Kind() kind.Kind      { return kind.Method }
-func (m *methodImp) GoType() types.Type   { return m.signature.GoType() }
-func (m *methodImp) SetIndex(index int)   { m.index = index }
-func (m *methodImp) Name() string         { return m.name }
-func (m *methodImp) Location() locs.Loc   { return m.loc }
-func (m *methodImp) Package() Package     { return m.pkg }
-func (m *methodImp) Signature() Signature { return m.signature }
-func (m *methodImp) ReceiverName() string { return m.recvName }
+func (m *methodImp) _method()                 {}
+func (m *methodImp) Kind() kind.Kind          { return kind.Method }
+func (m *methodImp) GoType() types.Type       { return m.signature.GoType() }
+func (m *methodImp) SetIndex(index int)       { m.index = index }
+func (m *methodImp) Name() string             { return m.name }
+func (m *methodImp) Location() locs.Loc       { return m.loc }
+func (m *methodImp) Package() Package         { return m.pkg }
+func (m *methodImp) Metrics() metrics.Metrics { return m.metrics }
+func (m *methodImp) Signature() Signature     { return m.signature }
+func (m *methodImp) ReceiverName() string     { return m.recvName }
 
 func (m *methodImp) IsInit() bool {
 	if strings.HasPrefix(m.name, `init`) && m.signature.Vacant() && len(m.recvName) <= 0 {

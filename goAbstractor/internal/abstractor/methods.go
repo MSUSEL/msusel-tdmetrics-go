@@ -12,8 +12,6 @@ import (
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/metrics"
 )
 
-// TODO: Handle multiple init's per package.
-
 func (ab *abstractor) setTypeParamOverrides(args *types.TypeList, params *types.TypeParamList, src *packages.Package, decl *ast.FuncDecl) {
 	count := args.Len()
 	if count != params.Len() {
