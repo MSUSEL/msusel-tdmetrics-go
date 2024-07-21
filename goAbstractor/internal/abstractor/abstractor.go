@@ -157,7 +157,7 @@ func (ab *abstractor) abstractTypeSpec(pkg constructs.Package, src *packages.Pac
 		return
 	}
 
-	// TODO: Get type params for classes
+	// TODO: Get type params for classes, see new tests to add.
 	tp := []constructs.Named{}
 
 	ab.proj.NewClass(constructs.ClassArgs{
@@ -165,6 +165,7 @@ func (ab *abstractor) abstractTypeSpec(pkg constructs.Package, src *packages.Pac
 		Name:       spec.Name.Name,
 		Data:       typ,
 		TypeParams: tp,
+		Location:   ab.proj.NewLoc(spec.Type.Pos()),
 	})
 }
 

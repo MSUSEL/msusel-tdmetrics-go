@@ -48,6 +48,7 @@ func newClass(args ClassArgs) Class {
 	assert.ArgValidId(`name`, args.Name)
 	assert.ArgNotNil(`package`, args.Package)
 	assert.ArgNotNil(`data`, args.Data)
+	assert.ArgNotNil(`location`, args.Location)
 
 	if _, ok := args.Data.(Interface); ok {
 		panic(terror.New(`may not use an interface as data in a class`).

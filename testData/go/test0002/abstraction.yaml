@@ -1,77 +1,87 @@
 {
   language: go,
-  packages: [
-    {
-      path: command-line-arguments,
-      name: main,
-      methods: [
-        { # func sum(values ...int) int
-          name: sum, signature: 11,
-          metrics: { codeCount: 7, complexity: 2, indents: 6, lineCount: 7 }
-        },
-        { # func first(values ...int) int
-          name: first, signature: 11,
-          metrics: { codeCount: 3, complexity: 1, indents: 1, lineCount: 3 }
-        },
-        { # func last(values ...int) int
-          name: last, signature: 11,
-          metrics: { codeCount: 3, complexity: 1, indents: 1, lineCount: 3 }
-        },
-        { # func main()
-          name: main, signature: 12,
-          metrics: { codeCount: 6, complexity: 1, indents: 4, lineCount: 6 }
-        }
-      ]
+  basics: [
+    int # 1. int
+  ],
+  interDefs: [
+    { name: List, package: 18, type: 5 }, # 2. list[T]
+    { name: any,  package: 18, type: 4 }  # 3. any
+  ],
+  interfaces: [
+    {}, # 4. any
+    {   # 5. list[T]
+      inherits: [ 4 ],
+      methods: [ 10, 11, 12, 13],
+      typeParams: [ 14 ]
     }
   ],
-  types: {
-    basics: [
-      int # 1. int
-    ],
-    interfaces: [
-      {}, # 2. any
-      {   # 3. list[T]
-        inherits: [ 2 ],
-        typeParams: [ 4 ],
-        methods: {
-          $cap: 8,
-          $get: 9,
-          $len: 8,
-          $set: 10
-        }
-      }
-    ],
-    named: [
-      { name: T,      type:  2 }, # 4. T any
-      { name: index,  type:  1 }, # 5. index int
-      { name: value,  type:  4 }, # 6. value T
-      { name: values, type: 13 }, # 7. values []int
-    ],
-    signatures: [
-      { # 8. func() int
-        return: 1
-      },
-      { # 9. func[T](index int) T
-        typeParams: [ 4 ],
-        params: [ 5 ],
-        return: 4
-      },
-      { # 10. func[T](index int, value T)
-        typeParams: [ 4 ],
-        params: [ 5, 6 ]
-      },
-      { # 11. func(values ...int) int
-        params: [ 7 ],
-        variadic: true,
-        return: 1
-      },
-      {} # 12. func()()
-    ],
-    solids: [
-      { # 13. []int
-        typeParams: [ 1 ],
-        target: 3
-      }
-    ],
+  methods: [
+    { # 6. func first(values ...int) int @ main.go:13
+      name: first, package: 19, signature: 24, loc: 13,
+      metrics: { codeCount: 3, complexity: 1, indents: 1, lineCount: 3 }
+    },
+    { # 7. func last(values ...int) int @ main.go:17
+      name: last, package: 19, signature: 24, loc: 17,
+      metrics: { codeCount: 3, complexity: 1, indents: 1, lineCount: 3 }
+    },
+    { # 8. func main() @ main.go:21
+      name: main, package: 19, signature: 20, loc: 21,
+      metrics: { codeCount: 6, complexity: 1, indents: 4, lineCount: 6 }
+    },
+    { # 9. func sum(values ...int) int @ main.go:5
+      name: sum, package: 19, signature: 24, loc: 5,
+      metrics: { codeCount: 7, complexity: 2, indents: 6, lineCount: 7 }
+    }
+  ],
+  named: [
+    { name: $cap,   type: 21 }, # 10.
+    { name: $get,   type: 22 }, # 11.
+    { name: $len,   type: 21 }, # 12.
+    { name: $set,   type: 23 }, # 13.
+    { name: T,      type:  3 }, # 14. T any
+    { name: index,  type:  1 }, # 15. index int
+    { name: value,  type: 14 }, # 16. value T
+    { name: values, type: 25 }, # 17. values []int
+  ],
+  packages: [
+    { # 18. $builtin package
+      path: $builtin,
+      name: $builtin,
+      interDefs: [ 2, 3 ]
+    },
+    { # 19. main package
+      path: command-line-arguments,
+      name: main,
+      methods: [ 6, 7, 8, 9 ]
+    }
+  ],  
+  signatures: [
+    {}, # 20. func()()
+    {   # 21. func() int
+      return: 1
+    },
+    { # 22. func[T](index int) T
+      typeParams: [ 14 ],
+      params: [ 15 ],
+      return: 14
+    },
+    { # 23. func[T](index int, value T)
+      typeParams: [ 14 ],
+      params: [ 15, 16 ]
+    },
+    { # 24. func(values ...int) int
+      params: [ 17 ],
+      variadic: true,
+      return: 1
+    }
+  ],
+  solids: [
+    { # 25. []int
+      typeParams: [ 1 ],
+      target: 2
+    }
+  ],
+  locs: {
+    '1': main.go
   }
 }

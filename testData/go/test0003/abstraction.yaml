@@ -1,57 +1,56 @@
 {
   language: go,
-  packages: [
-    {
-      path: command-line-arguments,
-      name: main,
-      methods: [
-        { # func main()
-          name: main, signature: 5,
-          metrics: { codeCount: 6, complexity: 1, indents: 5, lineCount: 6 }
-        }
-      ],
-      types: [
-        { # type Animal interface { Pet() }
-          name: Animal,
-          interface: 3,
-          type: 3
-        },
-        { # type Cat struct { Name string; Pet() }
-          interface: 3,
-          name: Cat, type: 6,
-          methods: [
-            { # Cat.Pet()
-              name: Pet, signature: 5,
-              metrics: { codeCount: 3, complexity: 1, indents: 1, lineCount: 3 }
-            }
-          ]
-        }
-      ]
+  basics: [
+    string # 1. string
+  ],
+  classes: [
+    { # 2. main.Cat class @ main.go:9
+      name: Cat, package: 9, loc: 9,
+      data: 11,
+      interface: 4,
+      methods: [ 5 ]
     }
   ],
-  types: {
-    basics: [
-      string # 1. string
-    ],
-    interfaces: [
-      {}, # 2. any
-      { # 3. interface { Pet() }
-        inherits: [ 2 ],
-        methods: {
-          Pet: 5
-        }
-      }
-    ],
-    named: [
-      { name: Name, type: 1 } # 4. Name string
-    ],
-    signatures: [
-      {} # 5. func()()
-    ],
-    structs: [
-      { # 6. struct { Name string }
-        fields: [ 4 ]
-      }
-    ],
+  interDefs: [
+    { # 3. main.Animal interface @ main.go:5
+      name: Animal, package: 9, type: 4, loc: 5
+    }
+  ],
+  interfaces: [
+    { # 4. interface { Pet() }
+      methods: [ 8 ]
+    }
+  ],
+  methods: [
+    { # 5. main.Pet @ main.go:13
+      name: Pet, package: 9, signature: 10, loc: 13,
+      metrics: { codeCount: 3, complexity: 1, indents: 1, lineCount: 3 }
+    },
+    { # 6. main.main @ main.go:17
+      name: main, package: 9, signature: 10, loc: 17,
+      metrics: { codeCount: 6, complexity: 1, indents: 5, lineCount: 6 }
+    }
+  ],
+  named: [
+    { name: Name, type:  1 }, # 7. Name string
+    { name: Pet,  type: 10 }  # 8. Pet func()()
+  ],
+  packages: [
+    { # 9. main package
+      path: command-line-arguments,
+      name: main,
+      classes:   [ 2 ],
+      interDefs: [ 3 ],
+      methods:   [ 5, 6 ],
+    }
+  ],
+  signatures: [
+    {} # 10. func()()
+  ],
+  structs: [
+    { fields: [ 7 ] } # 11. struct { Name string }
+  ],
+  locs: {
+    '1': main.go
   }
 }
