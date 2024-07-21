@@ -17,15 +17,16 @@ type (
 		Definition
 		_method()
 
-		Signature() TypeDesc
+		Signature() Signature
 		ReceiverName() string
+		IsInit() bool
 	}
 
 	MethodArgs struct {
 		Package    Package
 		Name       string
 		Location   locs.Loc
-		Signature  TypeDesc
+		Signature  Signature
 		Metrics    metrics.Metrics
 		NoCopyRecv bool
 		Receiver   string
@@ -35,7 +36,7 @@ type (
 		pkg        Package
 		name       string
 		loc        locs.Loc
-		signature  TypeDesc
+		signature  Signature
 		metrics    metrics.Metrics
 		noCopyRecv bool
 		recvName   string
@@ -68,8 +69,17 @@ func (m *methodImp) SetIndex(index int)   { m.index = index }
 func (m *methodImp) Name() string         { return m.name }
 func (m *methodImp) Location() locs.Loc   { return m.loc }
 func (m *methodImp) Package() Package     { return m.pkg }
-func (m *methodImp) Signature() TypeDesc  { return m.signature }
+func (m *methodImp) Signature() Signature { return m.signature }
 func (m *methodImp) ReceiverName() string { return m.recvName }
+
+func (m *methodImp) IsInit() bool {
+	if strings.HasPrefix(m.name, `init`) && m.signature.Vacant() && len(m.recvName) <= 0 {
+		if name, _, found := strings.Cut(m.name, `#`); found && name == `init` {
+			return true
+		}
+	}
+	return false
+}
 
 func (m *methodImp) CompareTo(other Construct) int {
 	b := other.(*methodImp)

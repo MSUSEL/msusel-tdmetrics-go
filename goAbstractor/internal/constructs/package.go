@@ -24,6 +24,7 @@ type (
 		Name() string
 		ImportPaths() []string
 		Imports() collections.ReadonlyList[Package]
+		InitCount() int
 
 		addImport(p Package) Package
 		addClass(c Class) Class
@@ -91,6 +92,17 @@ func (p *packageImp) ImportPaths() []string     { return p.importPaths }
 
 func (p *packageImp) Imports() collections.ReadonlyList[Package] {
 	return p.imports.Values()
+}
+
+func (p *packageImp) InitCount() int {
+	count := 0
+	methods := p.methods.Values()
+	for i := range methods.Count() {
+		if methods.Get(i).IsInit() {
+			count++
+		}
+	}
+	return count
 }
 
 func (p *packageImp) addImport(i Package) Package {

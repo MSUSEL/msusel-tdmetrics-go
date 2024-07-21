@@ -10,4 +10,7 @@
     `type A[T any, S []T] { list S }; func (a A[T, S]) Foo() string`
 
 - Test when a type parameter has an approximate type:
-     `type A[T any, S ~[]T] { list S }; func (a A[T, S]) Foo() T`
+    `type A[T any, S ~[]T] { list S }; func (a A[T, S]) Foo() T`
+
+- Test multiple init functions in one package:
+    `func init() {}`

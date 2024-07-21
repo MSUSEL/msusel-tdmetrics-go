@@ -15,6 +15,7 @@ import (
 type (
 	Signature interface {
 		TypeDesc
+		Vacant() bool
 		_signature()
 	}
 
@@ -81,6 +82,12 @@ func (s *signatureImp) _signature()        {}
 func (s *signatureImp) Kind() kind.Kind    { return kind.Signature }
 func (s *signatureImp) SetIndex(index int) { s.index = index }
 func (s *signatureImp) GoType() types.Type { return s.realType }
+
+func (s *signatureImp) Vacant() bool {
+	return len(s.params) <= 0 &&
+		len(s.typeParams) <= 0 &&
+		utils.IsNil(s.returnType)
+}
 
 func (s *signatureImp) Visit(v visitor.Visitor) {
 	visitor.Visit(v, s.params...)

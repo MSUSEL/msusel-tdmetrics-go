@@ -43,8 +43,6 @@ func Abstract(cfg Config) constructs.Project {
 		baker:    bk,
 		proj:     proj,
 	}
-
-	ab.initialize()
 	ab.abstractProject()
 
 	ab.log.Log(`resolve imports`)
@@ -85,11 +83,6 @@ type abstractor struct {
 	proj     constructs.Project
 
 	typeParamReplacer map[*types.TypeParam]*types.TypeParam
-}
-
-func (ab *abstractor) initialize() {
-	ab.baker.BakeBuiltin() // Prebake the builtin package.
-	ab.baker.BakeAny()     // Prebake the "any" (i.e. object) into the interfaces.
 }
 
 func (ab *abstractor) abstractProject() {

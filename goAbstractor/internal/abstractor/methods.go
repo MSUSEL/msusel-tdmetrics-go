@@ -3,6 +3,7 @@ package abstractor
 import (
 	"go/ast"
 	"go/types"
+	"strconv"
 
 	"github.com/Snow-Gremlin/goToolbox/terrors/terror"
 	"golang.org/x/tools/go/packages"
@@ -59,13 +60,20 @@ func (ab *abstractor) abstractFuncDecl(pkg constructs.Package, src *packages.Pac
 	ab.clearTypeParamOverrides()
 
 	mets := metrics.New(src.Fset, decl)
+	loc := ab.proj.NewLoc(decl.Pos())
+
+	name := decl.Name.Name
+	if name == `init` && len(recvName) <= 0 && sig.Vacant() {
+		name = `init#` + strconv.Itoa(pkg.InitCount())
+	}
+
 	ab.proj.NewMethod(constructs.MethodArgs{
 		Package:    pkg,
-		Name:       decl.Name.Name,
+		Name:       name,
 		Signature:  sig,
 		Metrics:    mets,
 		NoCopyRecv: noCopyRecv,
 		Receiver:   recvName,
-		Location:   ab.proj.NewLoc(decl.Pos()),
+		Location:   loc,
 	})
 }
