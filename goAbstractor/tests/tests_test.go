@@ -113,7 +113,7 @@ func (tt *testTool) equals() *testTool {
 		expLines := strings.Split(string(exp), "\n")
 		gotLines := strings.Split(string(gotten), "\n")
 		diffLines := diff.Default().PlusMinus(expLines, gotLines)
-		tt.t.Error(strings.Join(diffLines, "\n"))
+		tt.t.Error("\n" + strings.Join(diffLines, "\n"))
 	}
 	return tt
 }

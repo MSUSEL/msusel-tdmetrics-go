@@ -143,7 +143,7 @@ func (ab *abstractor) abstractTypeSpec(pkg constructs.Package, src *packages.Pac
 	tv, has := src.TypesInfo.Types[spec.Type]
 	if !has {
 		panic(terror.New(`type specification not found in types info`).
-			With(`pos`, pos(src, spec.Type.Pos())))
+			With(`pos`, pos(src, spec.Pos())))
 	}
 
 	typ := ab.convertType(tv.Type)
@@ -152,7 +152,7 @@ func (ab *abstractor) abstractTypeSpec(pkg constructs.Package, src *packages.Pac
 			Package:  pkg,
 			Name:     spec.Name.Name,
 			Type:     it,
-			Location: ab.proj.NewLoc(spec.Type.Pos()),
+			Location: ab.proj.NewLoc(spec.Pos()),
 		})
 		return
 	}
@@ -165,7 +165,7 @@ func (ab *abstractor) abstractTypeSpec(pkg constructs.Package, src *packages.Pac
 		Name:       spec.Name.Name,
 		Data:       typ,
 		TypeParams: tp,
-		Location:   ab.proj.NewLoc(spec.Type.Pos()),
+		Location:   ab.proj.NewLoc(spec.Pos()),
 	})
 }
 
@@ -186,10 +186,11 @@ func (ab *abstractor) abstractValueSpec(pkg constructs.Package, src *packages.Pa
 
 		typ := ab.convertType(tv.Type())
 		ab.proj.NewValue(constructs.ValueArgs{
-			Package: pkg,
-			Name:    name.Name,
-			Const:   isConst,
-			Type:    typ,
+			Package:  pkg,
+			Name:     name.Name,
+			Const:    isConst,
+			Type:     typ,
+			Location: ab.proj.NewLoc(spec.Pos()),
 		})
 	}
 }
