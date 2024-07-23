@@ -301,7 +301,7 @@ func (p *projectImp) ResolveReferences() {
 	refs := p.References()
 	for i := range refs.Count() {
 		ref := refs.Get(i)
-		if ref.Resolved() {
+		if !ref.Resolved() {
 			path := ref.PackagePath()
 			if len(path) <= 0 {
 				path = `$builtin`

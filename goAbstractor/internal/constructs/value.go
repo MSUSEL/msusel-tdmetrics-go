@@ -80,6 +80,7 @@ func (v *valueImp) ToJson(ctx *jsonify.Context) jsonify.Datum {
 		Add(ctx2, `package`, v.pkg).
 		Add(ctx2, `name`, v.name).
 		Add(ctx2, `type`, v.typ).
+		AddNonZero(ctx2, `loc`, v.loc).
 		AddNonZero(ctx2, `const`, v.isConst)
 }
 

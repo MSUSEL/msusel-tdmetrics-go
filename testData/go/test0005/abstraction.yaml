@@ -156,7 +156,7 @@
     },
     { # 54. *Cat
       target: 6,
-      typeParams: [ "null TODO: WRONG!!" ]
+      typeParams: [ 3 ]
     }
   ],
   structs: [

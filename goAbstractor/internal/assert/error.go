@@ -28,3 +28,12 @@ func ArgNotEmpty(name string, value any) {
 			With(`name`, name))
 	}
 }
+
+func ArgNoNils[T any, S ~[]T](name string, values S) {
+	for _, v := range values {
+		if utils.IsNil(v) {
+			panic(terror.New(`slice may not contain a nil`).
+				With(`name`, name))
+		}
+	}
+}

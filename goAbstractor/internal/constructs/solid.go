@@ -38,6 +38,7 @@ func newSolid(args SolidArgs) Solid {
 	assert.ArgNotNil(`real type`, args.RealType)
 	assert.ArgNotNil(`target`, args.Target)
 	assert.ArgNotEmpty(`type params`, args.TypeParams)
+	assert.ArgNoNils(`type params`, args.TypeParams)
 
 	return &solidImp{
 		realType:   args.RealType,

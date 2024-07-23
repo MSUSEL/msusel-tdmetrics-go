@@ -67,6 +67,7 @@ func (r *referenceImp) SetIndex(index int) {
 }
 
 func (r *referenceImp) SetType(pkg Package, typ Definition) {
+	assert.ArgNotNil(`type`, typ)
 	r.pkg = pkg
 	r.typ = typ
 }
@@ -92,6 +93,10 @@ func (r *referenceImp) ToJson(ctx *jsonify.Context) jsonify.Datum {
 			Add(ctx2, `name`, r.name).
 			AddNonZero(ctx2, `package`, r.pkg).
 			Add(ctx2, `type`, r.typ)
+	}
+
+	if utils.IsNil(r.typ) {
+		return jsonify.New(ctx2, `failed to deref `+r.pkgPath+`.`+r.name)
 	}
 
 	return jsonify.New(ctx2, r.typ)
