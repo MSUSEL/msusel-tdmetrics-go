@@ -165,12 +165,14 @@ func (ab *abstractor) convertStruct(t *types.Struct) constructs.Struct {
 	fields := []constructs.Named{}
 	for i := range t.NumFields() {
 		f := t.Field(i)
-		field := ab.proj.NewNamed(constructs.NamedArgs{
-			Name: f.Name(),
-			Type: ab.convertType(f.Type()),
-		})
-		fields = append(fields, field)
-		// Nothing needs to be done with f.Embedded() here.
+		if !blankName(f.Name()) {
+			field := ab.proj.NewNamed(constructs.NamedArgs{
+				Name: f.Name(),
+				Type: ab.convertType(f.Type()),
+			})
+			fields = append(fields, field)
+			// Nothing needs to be done with f.Embedded() here.
+		}
 	}
 
 	return ab.proj.NewStruct(constructs.StructArgs{
@@ -191,29 +193,6 @@ func (ab *abstractor) createReturn(returns []constructs.Named) constructs.TypeDe
 			Package: ab.baker.BakeBuiltin(),
 		})
 	}
-}
-
-// uniqueName returns a unique name that isn't in the set.
-// The new unique name will be added to the set.
-// This is for naming anonymous fields and unnamed return values.
-func uniqueName(names collections.Set[string]) string {
-	const (
-		attempts = 10_000
-		pattern  = `$value%d`
-	)
-	for offset := 1; offset < attempts; offset++ {
-		name := fmt.Sprintf(pattern, offset)
-		if !names.Contains(name) {
-			names.Add(name)
-			return name
-		}
-	}
-	panic(terror.New(`unable to find unique name`).
-		With(`attempts`, attempts))
-}
-
-func blankName(name string) bool {
-	return len(name) <= 0 || name == `_` || name == `.`
 }
 
 func (ab *abstractor) convertTuple(t *types.Tuple) []constructs.Named {
@@ -282,4 +261,27 @@ func (ab *abstractor) convertTypeParamList(t *types.TypeParamList) []constructs.
 		list[i] = ab.convertTypeParam(t.At(i))
 	}
 	return list
+}
+
+// uniqueName returns a unique name that isn't in the set.
+// The new unique name will be added to the set.
+// This is for naming anonymous fields and unnamed return values.
+func uniqueName(names collections.Set[string]) string {
+	const (
+		attempts = 10_000
+		pattern  = `$value%d`
+	)
+	for offset := 1; offset < attempts; offset++ {
+		name := fmt.Sprintf(pattern, offset)
+		if !names.Contains(name) {
+			names.Add(name)
+			return name
+		}
+	}
+	panic(terror.New(`unable to find unique name`).
+		With(`attempts`, attempts))
+}
+
+func blankName(name string) bool {
+	return len(name) <= 0 || name == `_` || name == `.`
 }

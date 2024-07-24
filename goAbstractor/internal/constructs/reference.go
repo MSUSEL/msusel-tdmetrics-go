@@ -42,7 +42,6 @@ type (
 
 func newReference(args ReferenceArgs) Reference {
 	assert.ArgNotNil(`real type`, args.RealType)
-	assert.ArgNotEmpty(`package path`, args.PackagePath)
 	assert.ArgNotEmpty(`name`, args.Name)
 
 	return &referenceImp{

@@ -5,7 +5,7 @@ import (
 	"github.com/Snow-Gremlin/goToolbox/utils"
 )
 
-var idMatch = utils.LazyMatcher(`^\$?[a-zA-Z][_a-zA-Z0-9]*(#[0-9]+)?$`)
+var idMatch = utils.LazyMatcher(`^\$?[_a-zA-Z][_a-zA-Z0-9]*(#[0-9]+)?$`)
 
 func ArgValidId(name, value string) {
 	if !idMatch(value) {
