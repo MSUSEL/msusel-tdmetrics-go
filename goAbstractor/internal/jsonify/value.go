@@ -3,7 +3,6 @@ package jsonify
 import (
 	"encoding/json"
 
-	"github.com/Snow-Gremlin/goToolbox/terrors/terror"
 	"github.com/Snow-Gremlin/goToolbox/utils"
 )
 
@@ -29,12 +28,7 @@ func (v *value[T]) isZero() bool {
 }
 
 func (v *value[T]) Seek(path []any) Datum {
-	if len(path) > 0 {
-		panic(terror.New(`path continues from the value`).
-			With(`data`, v.data).
-			With(`path`, path))
-	}
-	return v
+	return newSeeker(path).StepValue(v)
 }
 
 func (v *value[T]) RawValue() any {

@@ -1,10 +1,6 @@
 package jsonify
 
-import (
-	"encoding/json"
-
-	"github.com/Snow-Gremlin/goToolbox/terrors/terror"
-)
+import "encoding/json"
 
 type Map struct {
 	data map[string]Datum
@@ -27,21 +23,7 @@ func (m *Map) Get(key string) Datum {
 }
 
 func (m *Map) Seek(path []any) Datum {
-	if len(path) <= 0 {
-		return m
-	}
-	key, ok := path[0].(string)
-	if !ok {
-		panic(terror.New(`must have a key for the map`).
-			With(`path`, path))
-	}
-	value, ok := m.data[key]
-	if !ok {
-		panic(terror.New(`key not found in map`).
-			With(`key`, key).
-			With(`path`, path))
-	}
-	return value.Seek(path[1:])
+	return newSeeker(path).StepMap(m)
 }
 
 func (m *Map) Add(ctx *Context, key string, value any) *Map {

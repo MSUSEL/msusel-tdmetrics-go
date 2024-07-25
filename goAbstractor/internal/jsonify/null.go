@@ -1,10 +1,6 @@
 package jsonify
 
-import (
-	"encoding/json"
-
-	"github.com/Snow-Gremlin/goToolbox/terrors/terror"
-)
+import "encoding/json"
 
 type null struct{}
 
@@ -19,11 +15,7 @@ func (n *null) isZero() bool {
 }
 
 func (n *null) Seek(path []any) Datum {
-	if len(path) > 0 {
-		panic(terror.New(`path continues from null`).
-			With(`path`, path))
-	}
-	return n
+	return newSeeker(path).StepNull(n)
 }
 
 func (n *null) RawValue() any {
