@@ -19,7 +19,7 @@ import (
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/locs"
 )
 
-const builtinName = `$builtin`
+const BuiltinName = `$builtin`
 
 type (
 	Baker interface {
@@ -121,18 +121,18 @@ func (b *bakerImp) bakeReturnTuple(tp constructs.Named) constructs.Struct {
 
 // BakeBuiltin bakes in a package to represent the builtin package.
 func (b *bakerImp) BakeBuiltin() constructs.Package {
-	return bakeOnce(b, `$builtin`, func() constructs.Package {
+	return bakeOnce(b, BuiltinName, func() constructs.Package {
 		builtinPkg := &packages.Package{
-			PkgPath: builtinName,
-			Name:    builtinName,
+			PkgPath: BuiltinName,
+			Name:    BuiltinName,
 			Fset:    b.fSet,
-			Types:   types.NewPackage(builtinName, builtinName),
+			Types:   types.NewPackage(BuiltinName, BuiltinName),
 		}
 
 		return b.proj.NewPackage(constructs.PackageArgs{
 			RealPkg: builtinPkg,
-			Path:    builtinName,
-			Name:    builtinName,
+			Path:    BuiltinName,
+			Name:    BuiltinName,
 		})
 	})
 }

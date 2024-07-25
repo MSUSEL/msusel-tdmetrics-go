@@ -9,6 +9,7 @@ import (
 	"github.com/Snow-Gremlin/goToolbox/terrors/terror"
 	"github.com/Snow-Gremlin/goToolbox/utils"
 
+	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/baker"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs"
 )
 
@@ -118,12 +119,30 @@ func (ab *abstractor) convertMap(t *types.Map) constructs.TypeDesc {
 	})
 }
 
-func (ab *abstractor) convertNamed(t *types.Named) constructs.Reference {
+func (ab *abstractor) convertNamed(t *types.Named) constructs.TypeDesc {
 	pkgPath := ``
 	if !utils.IsNil(t.Obj().Pkg()) {
 		pkgPath = t.Obj().Pkg().Path()
 	}
 	name := t.Obj().Name()
+
+	// Check for builtin types that need to be baked.
+	if len(pkgPath) <= 0 {
+		switch name {
+		case `error`:
+			return ab.baker.BakeError()
+		case `comparable`:
+			return ab.baker.BakeComparable()
+		}
+		pkgPath = baker.BuiltinName
+	}
+
+	// Check if the reference can already be found.
+	if _, typ, found := ab.proj.FindType(pkgPath, name, false); found {
+		return typ
+	}
+
+	// Otherwise, create a reference that will be filled later.
 	return ab.proj.NewReference(constructs.ReferenceArgs{
 		RealType:    t,
 		PackagePath: pkgPath,

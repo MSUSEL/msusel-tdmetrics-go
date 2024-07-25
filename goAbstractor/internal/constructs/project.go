@@ -44,7 +44,7 @@ type (
 		//==========================
 
 		FindPackageByPath(path string) Package
-		FindType(pkgPath, typeName string) (Package, Definition)
+		FindType(pkgPath, typeName string, panicOnNotFound bool) (Package, Definition, bool)
 
 		// UpdateIndices should be called after all types have been registered
 		// and all packages have been processed. This will update all the index
@@ -181,11 +181,14 @@ func (p *projectImp) FindPackageByPath(path string) Package {
 	return pkg
 }
 
-func (p *projectImp) FindType(pkgPath, typeName string) (Package, Definition) {
+func (p *projectImp) FindType(pkgPath, typeName string, panicOnNotFound bool) (Package, Definition, bool) {
 	assert.ArgNotEmpty(`pkgPath`, pkgPath)
 
 	pkg := p.FindPackageByPath(pkgPath)
 	if pkg == nil {
+		if !panicOnNotFound {
+			return nil, nil, false
+		}
 		names := enumerator.Select(p.allPackages.Values().Enumerate(),
 			func(pkg Package) string { return strconv.Quote(pkg.Path()) }).
 			Join(`, `)
@@ -197,6 +200,9 @@ func (p *projectImp) FindType(pkgPath, typeName string) (Package, Definition) {
 
 	def := pkg.findType(typeName)
 	if def == nil {
+		if !panicOnNotFound {
+			return pkg, nil, false
+		}
 		names := enumerator.Select(pkg.allTypes(),
 			func(td Definition) string { return td.Name() }).
 			Join(`, `)
@@ -206,7 +212,7 @@ func (p *projectImp) FindType(pkgPath, typeName string) (Package, Definition) {
 			With(`type defs`, `[`+names+`]`))
 	}
 
-	return pkg, def
+	return pkg, def, true
 }
 
 func (p *projectImp) UpdateIndices() {
@@ -300,13 +306,9 @@ func (p *projectImp) ResolveInheritance() {
 func (p *projectImp) ResolveReferences() {
 	refs := p.References()
 	for i := range refs.Count() {
-		ref := refs.Get(i)
-		if !ref.Resolved() {
-			path := ref.PackagePath()
-			if len(path) <= 0 {
-				path = `$builtin`
-			}
-			ref.SetType(p.FindType(path, ref.Name()))
+		if ref := refs.Get(i); !ref.Resolved() {
+			pkg, typ, _ := p.FindType(ref.PackagePath(), ref.Name(), true)
+			ref.SetType(pkg, typ)
 		}
 	}
 }
@@ -331,6 +333,9 @@ func (p *projectImp) PruneTypes() {
 
 	v := visitor.New(func(value any) bool {
 		if c, ok := value.(Construct); ok {
+			if _, has := touched[c]; has {
+				return false
+			}
 			touched[c] = true
 		}
 		return true

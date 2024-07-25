@@ -38,7 +38,8 @@ func (m *Map) Seek(path []any) Datum {
 	value, ok := m.data[key]
 	if !ok {
 		panic(terror.New(`key not found in map`).
-			With(`key`, key))
+			With(`key`, key).
+			With(`path`, path))
 	}
 	return value.Seek(path[1:])
 }

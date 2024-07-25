@@ -1,11 +1,14 @@
 [
   {
-    path: [ types, basics ],
+    name: basics,
+    path: [ basics ],
     data: [ string, int, bool, uint8, uint64, int32,
       float64, uint16, int64, uintptr, Pointer, uint32,
       uint, int8, int16, float32 ]
   },
   {
+    name: cats,
+    os: windows,
     path: [ packages, name=cats ],
     data: {
       name: cats,
