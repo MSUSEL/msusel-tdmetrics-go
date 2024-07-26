@@ -21,6 +21,7 @@ type (
 		IsSupertypeOf(other Interface) bool
 		AddInheritors(inter Interface) bool
 		SetInheritance()
+		SortInheritance()
 	}
 
 	InterfaceArgs struct {
@@ -193,4 +194,9 @@ func (it *interfaceImp) SetInheritance() {
 		}
 		otherInter.inherits = append(otherInter.inherits, it)
 	}
+}
+
+func (it *interfaceImp) SortInheritance() {
+	slices.SortFunc(it.inheritors, Compare)
+	slices.SortFunc(it.inherits, Compare)
 }

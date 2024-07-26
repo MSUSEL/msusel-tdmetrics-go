@@ -34,6 +34,8 @@ type (
 	}
 
 	methodImp struct {
+		// TODO: define type parameters
+
 		pkg        Package
 		name       string
 		loc        locs.Loc

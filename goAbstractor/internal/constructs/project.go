@@ -301,6 +301,10 @@ func (p *projectImp) ResolveInheritance() {
 	for i := range inters.Count() {
 		inters.Get(i).SetInheritance()
 	}
+
+	for i := range inters.Count() {
+		inters.Get(i).SortInheritance()
+	}
 }
 
 func (p *projectImp) ResolveReferences() {
