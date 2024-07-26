@@ -15,7 +15,19 @@ func (n *null) isZero() bool {
 }
 
 func (n *null) Seek(path []any) Datum {
-	return newSeeker(path).StepNull(n)
+	return n.subSeek(newSeeker(path))
+}
+
+func (n *null) subSeek(s *seeker) Datum {
+	if !s.done() {
+		return n
+	}
+
+	if s.asString() == `#` {
+		return newValue(1)
+	}
+
+	panic(s.fail(`path continues from a null`))
 }
 
 func (n *null) RawValue() any {

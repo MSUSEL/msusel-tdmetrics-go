@@ -6,6 +6,26 @@
             string, uint, uint16, uint32, uint64, uint8, uintptr]
   },
   {
+    name: counts,
+    path: [ '~^.*$', '#' ],
+    data: {
+      basics:     15,
+      classes:    719,
+      interDefs:  60,
+      interfaces: 336,
+      language:   1,
+      locs:       438,
+      methods:    4784,
+      named:      5676,
+      packages:   49,
+      signatures: 2725,
+      solids:     571,
+      structs:    916,
+      unions:     5,
+      values:     3740
+    }
+  },
+  {
     name: cats,
     os: windows,
     path: [ packages, name=cats ],

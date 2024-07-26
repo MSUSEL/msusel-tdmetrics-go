@@ -28,7 +28,20 @@ func (v *value[T]) isZero() bool {
 }
 
 func (v *value[T]) Seek(path []any) Datum {
-	return newSeeker(path).StepValue(v)
+	return v.subSeek(newSeeker(path))
+}
+
+func (v *value[T]) subSeek(s *seeker) Datum {
+	if s.done() {
+		return v
+	}
+
+	if s.asString() == `#` {
+		return newValue(1)
+	}
+
+	panic(s.fail(`path continues from a value`).
+		With(`value`, v.data))
 }
 
 func (v *value[T]) RawValue() any {

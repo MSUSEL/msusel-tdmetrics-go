@@ -11,6 +11,7 @@ type Datum interface {
 	_jsonData()
 	isZero() bool
 	Seek(path []any) Datum
+	subSeek(s *seeker) Datum
 	RawValue() any
 }
 

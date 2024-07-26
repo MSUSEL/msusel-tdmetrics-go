@@ -1,6 +1,10 @@
 package jsonify
 
-import "encoding/json"
+import (
+	"encoding/json"
+
+	"github.com/Snow-Gremlin/goToolbox/utils"
+)
 
 type Map struct {
 	data map[string]Datum
@@ -23,7 +27,32 @@ func (m *Map) Get(key string) Datum {
 }
 
 func (m *Map) Seek(path []any) Datum {
-	return newSeeker(path).StepMap(m)
+	return m.subSeek(newSeeker(path))
+}
+
+func (m *Map) subSeek(s *seeker) Datum {
+	if s.done() {
+		return m
+	}
+
+	if s.asString() == `#` {
+		return newValue(len(m.data))
+	}
+
+	single, selector := s.asSelector()
+
+	sub := NewMap()
+	keys := utils.SortedKeys(m.data)
+	for _, key := range keys {
+		if selector(key) {
+			e := m.data[key].subSeek(s.next())
+			if single {
+				return e
+			}
+			sub.data[key] = e
+		}
+	}
+	return sub
 }
 
 func (m *Map) Add(ctx *Context, key string, value any) *Map {

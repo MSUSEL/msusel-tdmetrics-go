@@ -133,14 +133,12 @@ func (tt *testTool) runPartialTest(pt partialTest) {
 		ctx := jsonify.NewContext()
 		subData := tt.proj.ToJson(ctx).Seek(pt.Path)
 
-		/*
-			exp, err := json.MarshalIndent(pt.Data, ``, `  `)
-			check.NoError(t).
-				Name(`Marshal expected json`).
-				With(`Dir`, tt.dir).
-				With(`Path`, pt.Path).
-				Require(err)
-		*/
+		exp, err := json.MarshalIndent(pt.Data, ``, `  `)
+		check.NoError(t).
+			Name(`Marshal expected json`).
+			With(`Dir`, tt.dir).
+			With(`Path`, pt.Path).
+			Require(err)
 
 		gotten, err := json.MarshalIndent(subData, ``, `  `)
 		check.NoError(t).
@@ -149,16 +147,12 @@ func (tt *testTool) runPartialTest(pt partialTest) {
 			With(`Path`, pt.Path).
 			Require(err)
 
-		t.Error(string(gotten))
-
-		/*
-			if !slices.Equal(exp, gotten) {
-				expLines := strings.Split(string(exp), "\n")
-				gotLines := strings.Split(string(gotten), "\n")
-				diffLines := diff.Default().PlusMinus(expLines, gotLines)
-				t.Error(strings.Join(diffLines, "\n"))
-			}
-		*/
+		if !slices.Equal(exp, gotten) {
+			expLines := strings.Split(string(exp), "\n")
+			gotLines := strings.Split(string(gotten), "\n")
+			diffLines := diff.Default().PlusMinus(expLines, gotLines)
+			t.Error(strings.Join(diffLines, "\n"))
+		}
 	})
 }
 
