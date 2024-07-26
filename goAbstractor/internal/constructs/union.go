@@ -2,6 +2,7 @@ package constructs
 
 import (
 	"go/types"
+	"slices"
 
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/assert"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs/kind"
@@ -25,6 +26,9 @@ type UnionArgs struct {
 
 func newUnion(args UnionArgs) Union {
 	assert.ArgNotNil(`real type`, args.RealType)
+
+	slices.SortFunc(args.Exact, Compare)
+	slices.SortFunc(args.Approx, Compare)
 
 	return &unionImp{
 		realType: args.RealType,

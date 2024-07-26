@@ -54,14 +54,16 @@ func (s *setImp) flag(p token.Pos) {
 	s.flagged[p] = true
 }
 
-func (s *setImp) relPath(file string) string {
+func (s *setImp) cleanPath(file string) string {
+	// TODO: Need to not use relative path but instead use the import paths
+
 	target, err := filepath.Rel(s.basePath, file)
 	if err != nil {
 		panic(terror.New(`error creating a relative path for a location`, err).
 			With(`base path`, s.basePath).
 			With(`file`, file))
 	}
-	return target
+	return filepath.ToSlash(target)
 }
 
 func (s *setImp) finish() {
@@ -73,7 +75,7 @@ func (s *setImp) finish() {
 	lineCounts := map[string]int{}
 	for p := range s.flagged {
 		f := s.fs.File(p)
-		file, lines := s.relPath(f.Name()), f.LineCount()
+		file, lines := s.cleanPath(f.Name()), f.LineCount()
 		lineCounts[file] = lines
 	}
 	files := utils.SortedKeys(lineCounts)
@@ -93,7 +95,7 @@ func (s *setImp) infoFor(p token.Pos) (int, string, int) {
 	}
 
 	fsp := s.fs.Position(p)
-	file, line := s.relPath(fsp.Filename), fsp.Line
+	file, line := s.cleanPath(fsp.Filename), fsp.Line
 	offset := s.offsets[file] + line - 1
 	return offset, file, line
 }

@@ -3,27 +3,40 @@
     name: basics,
     path: [ basics ],
     data: [ bool, float32, float64, int, int16, int32, int64, int8,
-            string, uint, uint16, uint32, uint64, uint8, uintptr]
+            string, uint, uint16, uint32, uint64, uint8, uintptr ]
   },
   {
     name: counts,
-    path: [ '~^.*$', '#' ],
+    os: windows,
+    path: [ '~.', '#' ],
     data: {
-      basics:     15,
-      classes:    719,
-      interDefs:  60,
-      interfaces: 336,
-      language:   1,
-      locs:       438,
-      methods:    4784,
-      named:      5676,
-      packages:   49,
-      signatures: 2725,
-      solids:     571,
-      structs:    916,
-      unions:     5,
-      values:     3740
+      language:      1,
+      locs:        438,
+      basics:       15, #     1
+      classes:     719, #    16
+      interDefs:    60, #   734
+      interfaces:  335, #   794
+      methods:    4784, #  1129
+      named:      5676, #  5913
+      packages:     49, # 11589
+      signatures: 2725, # 11638
+      solids:      571, # 14363
+      structs:     916, # 14934
+      unions:        4, # 15850
+      values:     3740  # 15854
     }
+  },
+  {
+    name: package names,
+    os: windows,
+    path: [ packages, '..', name ],
+    data: [ $builtin, cmp, cats, errors, fmt, abi, bytealg, chacha8rand,
+            rtcov, cpu, fmtsort, goarch, godebugs, goexperiment, goos,
+            itoa, oserror, poll, race, reflectlite, safefilepath, execenv,
+            windows, registry, sysdll, testlog, unsafeheader, io, fs, math,
+            bits, os, path, reflect, runtime, atomic, math, sys, slices,
+            sort, strconv, strings, sync, atomic, syscall, time, unicode,
+            utf16, utf8 ]
   },
   {
     name: cats,
@@ -33,13 +46,13 @@
       name: cats,
       path: command-line-arguments,
       classes: [ 16, 17, 18, 19, 20 ],
-      imports: [ 11595, 11630, 11631, 11632 ],
-      methods: [ 1135, 1136, 1137, 1138, 1139, 1140, 1141, 1142,
-                 1143, 1144, 1145, 1146, 1147, 1148, 1149, 1150 ],
-      values: [ 15857, 15858, 15859, 15860, 15861, 15862, 15863,
-                15864, 15865, 15866, 15867, 15868, 15869, 15870,
-                15871, 15872, 15873, 15874, 15875, 15876, 15877,
-                15878, 15879, 15880, 15881, 15882, 15883 ]
+      imports: [ 11594, 11629, 11630, 11631 ],
+      methods: [ 1134, 1135, 1136, 1137, 1138, 1139, 1140, 1141,
+                 1142, 1143, 1144, 1145, 1146, 1147, 1148, 1149 ],
+      values: [ 15855, 15856, 15857, 15858, 15859, 15860, 15861,
+                15862, 15863, 15864, 15865, 15866, 15867, 15868,
+                15869, 15870, 15871, 15872, 15873, 15874, 15875,
+                15876, 15877, 15878, 15879, 15880, 15881 ]
     }
   }
 ]

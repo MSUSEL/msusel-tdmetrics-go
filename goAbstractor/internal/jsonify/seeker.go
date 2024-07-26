@@ -13,7 +13,7 @@ import (
 
 var (
 	seekKeyValuePattern = utils.LazyRegex(`^\s*(\w+)\s*=(.+)\s*$`)
-	seekRangePattern    = utils.LazyRegex(`^\s*(\d+)\s*..\s*(\d+)\s*$`)
+	seekRangePattern    = utils.LazyRegex(`^\s*(\d*)\s*..\s*(\d*)\s*$`)
 )
 
 type seeker struct {
@@ -79,28 +79,36 @@ func (s *seeker) asRange(length int) (int, int, bool) {
 		return 0, 0, false
 	}
 
-	start, err := strconv.ParseInt(parts[0][1], 0, 0)
-	if err != nil {
-		return 0, 0, false
-	}
-	if start < 0 || int(start) >= length {
-		panic(s.fail(`start index of a range is out-of-bounds`).
-			With(`start`, start).
-			With(`length`, length))
-	}
-
-	end, err := strconv.ParseInt(parts[0][2], 0, 0)
-	if err != nil {
-		return 0, 0, false
-	}
-	if end < start || int(end) >= length {
-		panic(s.fail(`end index of a range is out-of-bounds`).
-			With(`start`, start).
-			With(`end`, end).
-			With(`length`, length))
+	start := 0
+	if len(parts[0][1]) > 0 {
+		start64, err := strconv.ParseInt(parts[0][1], 0, 0)
+		if err != nil {
+			return 0, 0, false
+		}
+		start = int(start64)
+		if start < 0 || start >= length {
+			panic(s.fail(`start index of a range is out-of-bounds`).
+				With(`start`, start).
+				With(`length`, length))
+		}
 	}
 
-	return int(start), int(end), true
+	end := length - 1
+	if len(parts[0][2]) > 0 {
+		end64, err := strconv.ParseInt(parts[0][2], 0, 0)
+		if err != nil {
+			return 0, 0, false
+		}
+		end = int(end64)
+		if end < start || end >= length {
+			panic(s.fail(`end index of a range is out-of-bounds`).
+				With(`start`, start).
+				With(`end`, end).
+				With(`length`, length))
+		}
+	}
+
+	return start, end, true
 }
 
 func (s *seeker) getSelector(value string) (bool, func(string) bool) {
