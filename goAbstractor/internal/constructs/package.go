@@ -1,6 +1,7 @@
 package constructs
 
 import (
+	"go/token"
 	"strings"
 
 	"github.com/Snow-Gremlin/goToolbox/collections"
@@ -20,6 +21,7 @@ type (
 		_package()
 
 		Source() *packages.Package
+		Pos(pos token.Pos) token.Position
 		Path() string
 		Name() string
 		ImportPaths() []string
@@ -89,6 +91,10 @@ func (p *packageImp) Source() *packages.Package { return p.pkg }
 func (p *packageImp) Path() string              { return p.path }
 func (p *packageImp) Name() string              { return p.name }
 func (p *packageImp) ImportPaths() []string     { return p.importPaths }
+
+func (p *packageImp) Pos(pos token.Pos) token.Position {
+	return p.pkg.Fset.Position(pos)
+}
 
 func (p *packageImp) Imports() collections.ReadonlyList[Package] {
 	return p.imports.Values()

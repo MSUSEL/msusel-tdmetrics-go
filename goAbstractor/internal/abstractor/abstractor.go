@@ -5,6 +5,7 @@ import (
 	"go/token"
 	"go/types"
 	"path/filepath"
+	"strconv"
 
 	"github.com/Snow-Gremlin/goToolbox/terrors/terror"
 	"github.com/Snow-Gremlin/goToolbox/utils"
@@ -15,6 +16,7 @@ import (
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/locs"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/logger"
+	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/metrics"
 )
 
 type Config struct {
@@ -102,88 +104,112 @@ func (ab *abstractor) abstractPackage(src *packages.Package) constructs.Package 
 		ImportPaths: utils.SortedKeys(src.Imports),
 	})
 	for _, f := range src.Syntax {
-		ab.addFile(pkg, src, f)
+		ab.addFile(pkg, f)
 	}
 	return pkg
 }
 
-func (ab *abstractor) addFile(pkg constructs.Package, src *packages.Package, f *ast.File) {
-	ab.log.Log(`|  |  add file to package: %s`, src.Fset.File(f.Name.NamePos).Name())
+func (ab *abstractor) addFile(pkg constructs.Package, f *ast.File) {
+	ab.log.Log(`|  |  add file to package: %s`, pkg.Pos(f.Name.NamePos).Filename)
 	for _, decl := range f.Decls {
 		switch d := decl.(type) {
 		case *ast.GenDecl:
-			ab.addGenDecl(pkg, src, d)
+			ab.addGenDecl(pkg, d)
 		case *ast.FuncDecl:
-			ab.abstractFuncDecl(pkg, src, d)
+			ab.abstractFuncDecl(pkg, d)
 		default:
 			panic(terror.New(`unexpected declaration`).
-				With(`pos`, pos(src, decl.Pos())))
+				With(`pos`, pkg.Pos(decl.Pos())))
 		}
 	}
 }
 
-func (ab *abstractor) addGenDecl(pkg constructs.Package, src *packages.Package, decl *ast.GenDecl) {
+func (ab *abstractor) addGenDecl(pkg constructs.Package, decl *ast.GenDecl) {
 	isConst := decl.Tok == token.CONST
 	for _, spec := range decl.Specs {
 		switch s := spec.(type) {
 		case *ast.ImportSpec:
 			// ignore
 		case *ast.TypeSpec:
-			ab.abstractTypeSpec(pkg, src, s)
+			ab.abstractTypeSpec(pkg, s)
 		case *ast.ValueSpec:
-			ab.abstractValueSpec(pkg, src, s, isConst)
+			ab.abstractValueSpec(pkg, s, isConst)
 		default:
 			panic(terror.New(`unexpected specification`).
-				With(`pos`, pos(src, spec.Pos())))
+				With(`pos`, pkg.Pos(spec.Pos())))
 		}
 	}
 }
 
-func (ab *abstractor) abstractTypeSpec(pkg constructs.Package, src *packages.Package, spec *ast.TypeSpec) {
-	tv, has := src.TypesInfo.Types[spec.Type]
+func (ab *abstractor) abstractTypeSpec(pkg constructs.Package, spec *ast.TypeSpec) {
+	tv, has := pkg.Source().TypesInfo.Types[spec.Type]
 	if !has {
 		panic(terror.New(`type specification not found in types info`).
-			With(`pos`, pos(src, spec.Pos())))
+			With(`pos`, pkg.Pos(spec.Pos())))
 	}
 
-	// TODO: Use spec.TypeParams
-
+	loc := ab.proj.NewLoc(spec.Pos())
+	tp := ab.abstractFieldList(pkg, spec.TypeParams)
 	typ := ab.convertType(tv.Type)
+
 	if it, ok := typ.(constructs.Interface); ok {
 		ab.proj.NewInterDef(constructs.InterDefArgs{
-			Package:  pkg,
-			Name:     spec.Name.Name,
-			Type:     it,
-			Location: ab.proj.NewLoc(spec.Pos()),
+			Package:    pkg,
+			Name:       spec.Name.Name,
+			Type:       it,
+			TypeParams: tp,
+			Location:   loc,
 		})
 		return
 	}
-
-	// TODO: Get type params for classes, see new tests to add.
-	tp := []constructs.Named{}
 
 	ab.proj.NewClass(constructs.ClassArgs{
 		Package:    pkg,
 		Name:       spec.Name.Name,
 		Data:       typ,
 		TypeParams: tp,
-		Location:   ab.proj.NewLoc(spec.Pos()),
+		Location:   loc,
 	})
 }
 
-func (ab *abstractor) abstractValueSpec(pkg constructs.Package, src *packages.Package, spec *ast.ValueSpec, isConst bool) {
+func (ab *abstractor) abstractFieldList(pkg constructs.Package, fields *ast.FieldList) []constructs.Named {
+	tp := []constructs.Named{}
+	if utils.IsNil(fields) {
+		for _, field := range fields.List {
+			tv, has := pkg.Source().TypesInfo.Types[field.Type]
+			if !has {
+				panic(terror.New(`field list not found in types info`).
+					With(`pos`, pkg.Pos(field.Pos())))
+			}
+
+			typ := ab.convertType(tv.Type)
+			for _, name := range field.Names {
+				tp = append(tp, ab.proj.NewNamed(constructs.NamedArgs{
+					Name: name.Name,
+					Type: typ,
+				}))
+			}
+		}
+	}
+	return tp
+}
+
+func (ab *abstractor) abstractValueSpec(pkg constructs.Package, spec *ast.ValueSpec, isConst bool) {
 	for _, name := range spec.Names {
 		// TODO: Need to evaluate the initial value in case
 		// it has connection to another var of calls a function.
 
-		if name.Name == `_` {
+		if blankName(name.Name) {
+			// TODO: Could a black name assignment have a side effect?
+			//       Maybe if metrics aren't nil, give it a non-blank name.
+			//		 var _ = func() bool { /*bad init*/ }()
 			continue
 		}
 
-		tv, has := src.TypesInfo.Defs[name]
+		tv, has := pkg.Source().TypesInfo.Defs[name]
 		if !has {
 			panic(terror.New(`value specification not found in types info`).
-				With(`pos`, pos(src, spec.Type.Pos())))
+				With(`pos`, pkg.Pos(spec.Pos())))
 		}
 
 		typ := ab.convertType(tv.Type())
@@ -197,6 +223,75 @@ func (ab *abstractor) abstractValueSpec(pkg constructs.Package, src *packages.Pa
 	}
 }
 
-func pos(src *packages.Package, pos token.Pos) string {
-	return src.Fset.Position(pos).String()
+func (ab *abstractor) setTypeParamOverrides(args *types.TypeList, params *types.TypeParamList, pkg constructs.Package, decl *ast.FuncDecl) {
+	count := args.Len()
+	if count != params.Len() {
+		panic(terror.New(`function declaration has unexpected receiver fields`).
+			With(`pos`, pkg.Pos(decl.Pos())))
+	}
+
+	ab.typeParamReplacer = map[*types.TypeParam]*types.TypeParam{}
+	for i := range count {
+		ab.typeParamReplacer[args.At(i).(*types.TypeParam)] = params.At(i)
+	}
+}
+
+func (ab *abstractor) clearTypeParamOverrides() {
+	ab.typeParamReplacer = nil
+}
+
+func (ab *abstractor) abstractReceiver(pkg constructs.Package, decl *ast.FuncDecl) (bool, string) {
+	if decl.Recv == nil || decl.Recv.NumFields() <= 0 {
+		return false, ``
+	}
+
+	if decl.Recv.NumFields() != 1 {
+		panic(terror.New(`function declaration has unexpected receiver fields`).
+			With(`pos`, pkg.Pos(decl.Pos())))
+	}
+
+	noCopyRecv := false
+	recv := pkg.Source().TypesInfo.Types[decl.Recv.List[0].Type].Type
+	if p, ok := recv.(*types.Pointer); ok {
+		noCopyRecv = true
+		recv = p.Elem()
+	}
+
+	n, ok := recv.(*types.Named)
+	if !ok {
+		panic(terror.New(`function declaration has unexpected receiver type`).
+			WithType(`receiver`, recv).
+			With(`pos`, pkg.Pos(decl.Pos())))
+	}
+	ab.setTypeParamOverrides(n.TypeArgs(), n.TypeParams(), pkg, decl)
+
+	recvName := n.Origin().Obj().Name()
+	return noCopyRecv, recvName
+}
+
+func (ab *abstractor) abstractFuncDecl(pkg constructs.Package, decl *ast.FuncDecl) {
+	info := pkg.Source().TypesInfo
+	obj := info.Defs[decl.Name]
+
+	noCopyRecv, recvName := ab.abstractReceiver(pkg, decl)
+	sig := ab.convertSignature(obj.Type().(*types.Signature))
+	ab.clearTypeParamOverrides()
+
+	mets := metrics.New(pkg.Source().Fset, decl)
+	loc := ab.proj.NewLoc(decl.Pos())
+
+	name := decl.Name.Name
+	if name == `init` && len(recvName) <= 0 && sig.Vacant() {
+		name = `init#` + strconv.Itoa(pkg.InitCount())
+	}
+
+	ab.proj.NewMethod(constructs.MethodArgs{
+		Package:    pkg,
+		Name:       name,
+		Signature:  sig,
+		Metrics:    mets,
+		NoCopyRecv: noCopyRecv,
+		Receiver:   recvName,
+		Location:   loc,
+	})
 }

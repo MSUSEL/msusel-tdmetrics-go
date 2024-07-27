@@ -102,6 +102,7 @@ func (t *basicImp) ToJson(ctx *jsonify.Context) jsonify.Datum {
 	if ctx.IsKindShown() {
 		return jsonify.NewMap().
 			AddIf(ctx, ctx.IsKindShown(), `kind`, t.Kind()).
+			AddIf(ctx, ctx.IsIndexShown(), `index`, t.index).
 			Add(ctx, `name`, t.typeName)
 	}
 

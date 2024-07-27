@@ -23,3 +23,6 @@
 
 - Test when there are identical identifiers for functions
   but all but one has unique receivers.
+
+- Check the abstraction of an array:
+    `var value [4]byte`
