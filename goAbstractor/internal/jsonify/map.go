@@ -35,7 +35,7 @@ func (m *Map) subSeek(s *seeker) Datum {
 		return m
 	}
 
-	if s.asString() == `#` {
+	if s.isCount() {
 		return newValue(len(m.data))
 	}
 

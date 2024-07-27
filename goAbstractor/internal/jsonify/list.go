@@ -31,7 +31,7 @@ func (l *List) subSeek(s *seeker) Datum {
 	}
 
 	length := len(l.data)
-	if s.asString() == `#` {
+	if s.isCount() {
 		return newValue(length)
 	}
 

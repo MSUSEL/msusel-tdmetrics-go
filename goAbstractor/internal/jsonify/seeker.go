@@ -59,6 +59,10 @@ func (s *seeker) asString() string {
 	return fmt.Sprint(s.raw())
 }
 
+func (s *seeker) isCount() bool {
+	return s.asString() == `#`
+}
+
 func (s *seeker) asIndex(length int) (int, bool) {
 	index, ok := s.asInt()
 	if !ok {

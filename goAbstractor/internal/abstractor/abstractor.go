@@ -146,6 +146,8 @@ func (ab *abstractor) abstractTypeSpec(pkg constructs.Package, src *packages.Pac
 			With(`pos`, pos(src, spec.Pos())))
 	}
 
+	// TODO: Use spec.TypeParams
+
 	typ := ab.convertType(tv.Type)
 	if it, ok := typ.(constructs.Interface); ok {
 		ab.proj.NewInterDef(constructs.InterDefArgs{

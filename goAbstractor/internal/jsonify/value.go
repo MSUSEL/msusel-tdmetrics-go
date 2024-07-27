@@ -36,7 +36,7 @@ func (v *value[T]) subSeek(s *seeker) Datum {
 		return v
 	}
 
-	if s.asString() == `#` {
+	if s.isCount() {
 		return newValue(1)
 	}
 

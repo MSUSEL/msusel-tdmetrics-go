@@ -8,6 +8,7 @@ const (
 	keyMinimized contextKey = iota
 	keyShort
 	keyKindShown
+	keyIndexShown
 	keyReceiverShown
 	keyReferenceShown
 	keyFullLoc
@@ -65,7 +66,7 @@ func (c *Context) ShowKind() *Context {
 	return c.copyAndSet(keyKindShown, true)
 }
 
-// HideKind indicates that the "kind" field can be skipped.
+// HideKind indicates that the kind field can be skipped.
 func (c *Context) HideKind() *Context {
 	return c.copyAndSet(keyKindShown, false)
 }
@@ -73,6 +74,23 @@ func (c *Context) HideKind() *Context {
 // IsKindShown indicates that the kind field should be added to the output model.
 func (c *Context) IsKindShown() bool {
 	return c.state[keyKindShown]
+}
+
+// ShowIndex indicates that the index field should be added to the output model.
+func (c *Context) ShowIndex() *Context {
+	return c.copyAndSet(keyIndexShown, true)
+}
+
+// HideIndex indicates that the index field can be skipped,
+// unless output is short and only the index is outputted.
+func (c *Context) HideIndex() *Context {
+	return c.copyAndSet(keyIndexShown, false)
+}
+
+// IsIndexShown indicates that the index field should be
+// added to the output model when not needed.
+func (c *Context) IsIndexShown() bool {
+	return c.state[keyIndexShown]
 }
 
 // ShowReceiver sets if the methods should include receiver information

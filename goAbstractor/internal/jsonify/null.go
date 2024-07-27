@@ -23,7 +23,7 @@ func (n *null) subSeek(s *seeker) Datum {
 		return n
 	}
 
-	if s.asString() == `#` {
+	if s.isCount() {
 		return newValue(1)
 	}
 
