@@ -1,35 +1,37 @@
 {
   language: go,
   classes: [
-    {
+    { # 1. Foo[T any] { value T }{ Get() T } @ main.go:5
       name: Foo, package: 9, data: 12, interface: 3, loc: 5,
+      typeParams: [ 7 ],
       methods: [ 4 ]
     }
   ],
   interfaces: [
-    {},
-    {
+    {}, # 2. any
+    {   # 3. interface { Get() T }
       inherits: [ 2 ],
+      typeParams: [ 7 ],
       methods: [ 6 ]
     }
   ],
   methods: [
-    {
-      name: Get, package: 9, signature: 11, loc: 9,
+    { # 4. func (f *Foo[T]) Get() T @ main.go
+      name: Get, package: 9, receiver: 1, signature: 11, loc: 9,
       metrics: { codeCount: 3, complexity: 1, indents: 1, lineCount: 3 }
     },
-    {
+    { # 5. func main() @ main.go:13
       name: main, package: 9, signature: 10, loc: 13,
       metrics: { codeCount: 4, complexity: 1, indents: 2, lineCount: 4 }
     }
   ],
   named: [
-    { name: Get,   type: 11 },
-    { name: T,     type:  2 },
-    { name: value, type:  7 }
+    { name: Get,   type: 11 }, # 6. func Get() T
+    { name: T,     type:  2 }, # 7. T any
+    { name: value, type:  7 }  # 8. value T
   ],
   packages: [
-    {
+    { # 9. main package
       name: main,
       path: command-line-arguments,
       classes: [ 1 ],
@@ -37,11 +39,11 @@
     }
   ],
   signatures: [
-    {},
-    { return: 7 }
+    {}, # 10. func()()
+    { return: 7 } # 11. func() T
   ],
   structs: [
-    { fields: [ 8 ] }
+    { fields: [ 8 ] } # 12. struct { value T }
   ],
   locs: {
     '1': main.go

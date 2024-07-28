@@ -506,7 +506,7 @@ func (b *bakerImp) BakeError() constructs.InterDef {
 
 // BakeComparable bakes in an interface to represent a Go comparable.
 //
-//	type comparable interface {
+//	type comparable[T any] interface {
 //		$compare(other T) int
 //	}
 func (b *bakerImp) BakeComparable() constructs.InterDef {
@@ -525,9 +525,10 @@ func (b *bakerImp) BakeComparable() constructs.InterDef {
 
 		// func(other T) int
 		getStr := b.proj.NewSignature(constructs.SignatureArgs{
-			Params:  []constructs.Named{otherParam},
-			Return:  b.BakeBasic(`int`),
-			Package: pkg,
+			TypeParams: []constructs.Named{tp},
+			Params:     []constructs.Named{otherParam},
+			Return:     b.BakeBasic(`int`),
+			Package:    pkg,
 		})
 
 		methods := map[string]constructs.TypeDesc{

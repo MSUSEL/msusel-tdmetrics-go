@@ -1,0 +1,64 @@
+{
+  language: go,
+  basics: [
+    float64, # 1. float64
+    int,     # 2. int
+    string   # 3. string
+  ],
+  classes: [
+    { # 4. class A[T float64|int|string] { value int }{ Mul(v T) T }
+      name: A, package: 13, data: 16, interface: 5, loc: 8,
+      typeParams: [ 10 ],
+      methods: [ 7 ]
+    }
+  ],
+  interfaces: [
+    { # 5. interface[T float64|int|string] { Mul(v T) T }
+      inherits: [ 6 ],
+      methods: [ 9 ],
+      typeParams: [ 10 ]
+    },
+    { # 6. interface { float64|int|string }
+      exact: [ 1, 2, 3 ]
+    }
+  ],
+  methods: [
+    { # 7. func (a A[T]) Mul(v T) T @ main.go:12
+      name: Mul, package: 13, receiver: 4, signature: 15, loc: 12,
+      metrics: { codeCount: 15, complexity: 5, indents: 21, lineCount: 15 }
+    },
+    { # 8. main() @ main.go:28
+      name: main, package: 13, signature: 14, loc: 28,
+      metrics: { codeCount: 5, complexity: 1, indents: 3, lineCount: 5 }
+    }
+  ],
+  named: [
+    { name: Mul,   type: 15 }, #  9. func Mul(v T) T
+    { name: T,     type:  6 }, # 10. T float64|int|string
+    { name: v,     type: 10 }, # 11. v T
+    { name: value, type:  2 }  # 12. value int
+  ],
+  packages: [
+    { # 13. main package
+      name: main,
+      path: command-line-arguments,
+      classes: [ 4 ],
+      methods: [ 7, 8 ]
+    }
+  ],
+  signatures: [
+    {}, # 14. func()()
+    {   # 15. func(v T) T
+      params: [ 11 ],
+      return: 10
+    }
+  ],
+  structs: [
+    { # 16. struct { value int }
+      fields: [ 12 ]
+    }
+  ],
+  locs: {
+    '1': main.go
+  }
+}

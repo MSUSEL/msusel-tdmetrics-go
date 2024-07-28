@@ -6,7 +6,7 @@ type Foo[T any] struct {
 	value T
 }
 
-func (f *Foo[X]) Get() X {
+func (f *Foo[X]) Get() X { // X should be replaced with T
 	return f.value
 }
 

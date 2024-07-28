@@ -50,6 +50,10 @@ type (
 		exact      []TypeDesc
 		approx     []TypeDesc
 
+		// FUTURE: Think about tracking all realizations of type parameters
+		//         and which exact and approx were actually used in code.
+		//         For example, maybe only `map[string]int` ever uses map.
+
 		index      int
 		inherits   []Interface
 		inheritors []Interface
