@@ -118,6 +118,9 @@ func (s *seeker) asRange(length int) (int, int, bool) {
 func (s *seeker) getSelector(value string) (bool, func(string) bool) {
 	value = strings.TrimSpace(value)
 
+	var negate bool
+	value, negate = strings.CutPrefix(value, `!`)
+
 	var regexMatch bool
 	value, regexMatch = strings.CutPrefix(value, `~`)
 
@@ -131,6 +134,9 @@ func (s *seeker) getSelector(value string) (bool, func(string) bool) {
 	}
 
 	if !regexMatch {
+		if negate {
+			return false, func(v string) bool { return value != v }
+		}
 		return true, func(v string) bool { return value == v }
 	}
 
@@ -138,6 +144,9 @@ func (s *seeker) getSelector(value string) (bool, func(string) bool) {
 	if err != nil {
 		panic(s.fail(`invalid regular expression following a '~'`, err).
 			With(`value`, value))
+	}
+	if negate {
+		return false, func(v string) bool { return !r.MatchString(v) }
 	}
 	return false, r.MatchString
 }

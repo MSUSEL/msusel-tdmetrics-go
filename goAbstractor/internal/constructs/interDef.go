@@ -82,6 +82,7 @@ func (id *interDefImp) ToJson(ctx *jsonify.Context) jsonify.Datum {
 	ctx2 := ctx.HideKind().Short()
 	return jsonify.NewMap().
 		AddIf(ctx, ctx.IsKindShown(), `kind`, id.Kind()).
+		AddIf(ctx, ctx.IsIndexShown(), `index`, id.index).
 		Add(ctx2, `package`, id.pkg).
 		Add(ctx2, `name`, id.name).
 		Add(ctx2, `type`, id.typ).

@@ -13,41 +13,45 @@ type valueConstraint interface {
 		~float32 | ~float64
 }
 
-type value[T valueConstraint] struct {
-	data T
+type Value struct {
+	data any
 }
 
-func newValue[T valueConstraint](data T) *value[T] {
-	return &value[T]{data: data}
+func NewValue[T valueConstraint](data T) *Value {
+	return &Value{data: data}
 }
 
-func (v *value[T]) _jsonData() {}
+func NewNull() *Value {
+	return &Value{data: nil}
+}
 
-func (v *value[T]) isZero() bool {
+func (v *Value) _jsonData() {}
+
+func (v *Value) isZero() bool {
 	return utils.IsZero(v.data)
 }
 
-func (v *value[T]) Seek(path []any) Datum {
+func (v *Value) Seek(path []any) Datum {
 	return v.subSeek(newSeeker(path))
 }
 
-func (v *value[T]) subSeek(s *seeker) Datum {
+func (v *Value) subSeek(s *seeker) Datum {
 	if s.done() {
 		return v
 	}
 
 	if s.isCount() {
-		return newValue(1)
+		return NewValue(1)
 	}
 
 	panic(s.fail(`path continues from a value`).
 		With(`value`, v.data))
 }
 
-func (v *value[T]) RawValue() any {
+func (v *Value) RawValue() any {
 	return v.data
 }
 
-func (v *value[T]) MarshalJSON() ([]byte, error) {
+func (v *Value) MarshalJSON() ([]byte, error) {
 	return json.Marshal(v.data)
 }

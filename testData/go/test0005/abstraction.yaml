@@ -55,8 +55,8 @@
     }
   ],
   methods: [
-    { # 15. cats.(c *Cat) Meow func()() @ cats.go:36
-      name: Meow, package: 41, signature: 42, loc: 36,
+    { # 15. cats.Cat.Meow func()() @ cats.go:36
+      name: Meow, receiver: 3, package: 41, signature: 42, loc: 36,
       metrics: { codeCount: 3, complexity: 1, indents: 1, lineCount: 3 }
     },
     { # 16. cats.NewCat func(name string, age int) *Cat @ cats.go:27
@@ -71,12 +71,12 @@
       name: Pet, package: 41, signature: 46, loc: 65,
       metrics: { codeCount: 3, complexity: 1, indents: 1, lineCount: 3 }
     },
-    { # 19. cats.(c *Cat) String func() string @ cats.go:41
-      name: String, package: 41, signature: 44, loc: 41,
+    { # 19. cats.Cat.String func() string @ cats.go:41
+      name: String, receiver: 3, package: 41, signature: 44, loc: 41,
       metrics: { codeCount: 3, complexity: 1, indents: 1, lineCount: 3 }
     },
-    { # 20. cats.(cats Cats) Youngest func() *Cat
-      name: Youngest, package: 41, signature: 45, loc: 53,
+    { # 20. cats.Cats.Youngest func() *Cat
+      name: Youngest, receiver: 4, package: 41, signature: 45, loc: 53,
       metrics: { codeCount: 9, complexity: 4, indents: 11, lineCount: 9 }
     }
   ],

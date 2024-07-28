@@ -58,11 +58,12 @@ func newClass(args ClassArgs) Class {
 	}
 
 	return &classImp{
-		pkg:     args.Package,
-		name:    args.Name,
-		loc:     args.Location,
-		data:    args.Data,
-		methods: NewSet[Method](),
+		pkg:        args.Package,
+		name:       args.Name,
+		loc:        args.Location,
+		data:       args.Data,
+		typeParams: args.TypeParams,
+		methods:    NewSet[Method](),
 	}
 }
 

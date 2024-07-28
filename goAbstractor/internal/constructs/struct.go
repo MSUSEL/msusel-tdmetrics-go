@@ -21,10 +21,7 @@ type (
 	StructArgs struct {
 		RealType *types.Struct
 		Fields   []Named
-
-		// Package is only needed if the real type is nil
-		// so that a Go interface type has to be created.
-		Package Package
+		Package  Package
 	}
 
 	structImp struct {
@@ -74,5 +71,6 @@ func (s *structImp) ToJson(ctx *jsonify.Context) jsonify.Datum {
 	ctx2 := ctx.HideKind().Short()
 	return jsonify.NewMap().
 		AddIf(ctx, ctx.IsKindShown(), `kind`, s.Kind()).
+		AddIf(ctx, ctx.IsIndexShown(), `index`, s.index).
 		AddNonZero(ctx2, `fields`, s.fields)
 }

@@ -19,7 +19,8 @@ type (
 
 		Metrics() metrics.Metrics
 		Signature() Signature
-		ReceiverName() string
+		RecvName() string
+		SetReceiver(recv Class)
 		IsInit() bool
 	}
 
@@ -30,12 +31,11 @@ type (
 		Signature  Signature
 		Metrics    metrics.Metrics
 		NoCopyRecv bool
-		Receiver   string
+		RecvName   string
+		TypeParams []Named
 	}
 
 	methodImp struct {
-		// TODO: define type parameters
-
 		pkg        Package
 		name       string
 		loc        locs.Loc
@@ -44,6 +44,7 @@ type (
 		noCopyRecv bool
 		recvName   string
 		receiver   Class
+		typeParams []Named
 		index      int
 	}
 )
@@ -61,7 +62,8 @@ func newMethod(args MethodArgs) Method {
 		signature:  args.Signature,
 		metrics:    args.Metrics,
 		noCopyRecv: args.NoCopyRecv,
-		recvName:   args.Receiver,
+		recvName:   args.RecvName,
+		typeParams: args.TypeParams,
 	}
 }
 
@@ -74,15 +76,11 @@ func (m *methodImp) Location() locs.Loc       { return m.loc }
 func (m *methodImp) Package() Package         { return m.pkg }
 func (m *methodImp) Metrics() metrics.Metrics { return m.metrics }
 func (m *methodImp) Signature() Signature     { return m.signature }
-func (m *methodImp) ReceiverName() string     { return m.recvName }
+func (m *methodImp) RecvName() string         { return m.recvName }
+func (m *methodImp) SetReceiver(recv Class)   { m.receiver = recv }
 
 func (m *methodImp) IsInit() bool {
-	if strings.HasPrefix(m.name, `init`) && m.signature.Vacant() && len(m.recvName) <= 0 {
-		if name, _, found := strings.Cut(m.name, `#`); found && name == `init` {
-			return true
-		}
-	}
-	return false
+	return strings.HasPrefix(m.name, `init#`) && m.signature.Vacant() && len(m.recvName) <= 0
 }
 
 func (m *methodImp) CompareTo(other Construct) int {
@@ -91,6 +89,12 @@ func (m *methodImp) CompareTo(other Construct) int {
 		return cmp
 	}
 	if cmp := strings.Compare(m.name, b.name); cmp != 0 {
+		return cmp
+	}
+	if cmp := strings.Compare(m.recvName, b.recvName); cmp != 0 {
+		return cmp
+	}
+	if cmp := CompareSlice(m.typeParams, b.typeParams); cmp != 0 {
 		return cmp
 	}
 	return Compare(m.signature, b.signature)
@@ -104,11 +108,13 @@ func (m *methodImp) ToJson(ctx *jsonify.Context) jsonify.Datum {
 	ctx2 := ctx.HideKind().Short()
 	data := jsonify.NewMap().
 		AddIf(ctx, ctx.IsKindShown(), `kind`, m.Kind()).
+		AddIf(ctx, ctx.IsIndexShown(), `index`, m.index).
 		Add(ctx2, `package`, m.pkg).
 		Add(ctx2, `name`, m.name).
 		Add(ctx2, `signature`, m.signature).
 		AddNonZero(ctx2, `metrics`, m.metrics).
 		AddNonZero(ctx2, `receiver`, m.receiver).
+		AddNonZero(ctx2, `typeParams`, m.typeParams).
 		AddNonZero(ctx2, `loc`, m.loc)
 
 	if ctx.IsReceiverShown() {

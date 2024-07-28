@@ -64,6 +64,7 @@ func (ab *abstractor) convertBasic(t *types.Basic) constructs.TypeDesc {
 	default:
 		return ab.proj.NewBasic(constructs.BasicArgs{
 			RealType: t,
+			Package:  ab.baker.BakeBuiltin(),
 		})
 	}
 }
@@ -91,21 +92,24 @@ func (ab *abstractor) convertInterface(t *types.Interface) constructs.Interface 
 		methods = append(methods, method)
 	}
 
-	var union constructs.Union
+	var exact, approx []constructs.TypeDesc
 	if t.IsImplicit() {
 		for i := range t.NumEmbeddeds() {
 			et := t.EmbeddedType(i)
-			switch et.(type) {
-			case *types.Union:
-				union = ab.convertType(et).(constructs.Union)
+			if union, ok := et.(*types.Union); ok {
+				exact2, approx2 := ab.readUnionTerms(union)
+				exact = append(exact, exact2...)
+				approx = append(approx, approx2...)
 			}
 		}
 	}
 
 	return ab.proj.NewInterface(constructs.InterfaceArgs{
 		RealType: t,
-		Union:    union,
+		Exact:    exact,
+		Approx:   approx,
 		Methods:  methods,
+		Package:  ab.curPkg,
 	})
 }
 
@@ -168,6 +172,7 @@ func (ab *abstractor) convertSignature(t *types.Signature) constructs.Signature 
 		TypeParams: tp,
 		Params:     ab.convertTuple(t.Params()),
 		Return:     ab.createReturn(ab.convertTuple(t.Results())),
+		Package:    ab.curPkg,
 	})
 }
 
@@ -197,6 +202,7 @@ func (ab *abstractor) convertStruct(t *types.Struct) constructs.Struct {
 	return ab.proj.NewStruct(constructs.StructArgs{
 		RealType: t,
 		Fields:   fields,
+		Package:  ab.curPkg,
 	})
 }
 
@@ -243,9 +249,16 @@ func (ab *abstractor) convertTuple(t *types.Tuple) []constructs.Named {
 	return list
 }
 
-func (ab *abstractor) convertUnion(t *types.Union) constructs.Union {
-	exact := []constructs.TypeDesc{}
-	approx := []constructs.TypeDesc{}
+func (ab *abstractor) convertUnion(t *types.Union) constructs.Interface {
+	exact, approx := ab.readUnionTerms(t)
+	return ab.proj.NewInterface(constructs.InterfaceArgs{
+		Exact:   exact,
+		Approx:  approx,
+		Package: ab.curPkg,
+	})
+}
+
+func (ab *abstractor) readUnionTerms(t *types.Union) (exact, approx []constructs.TypeDesc) {
 	for i := range t.Len() {
 		term := t.Term(i)
 		it := ab.convertType(term.Type())
@@ -255,11 +268,7 @@ func (ab *abstractor) convertUnion(t *types.Union) constructs.Union {
 			exact = append(exact, it)
 		}
 	}
-	return ab.proj.NewUnion(constructs.UnionArgs{
-		RealType: t,
-		Exact:    exact,
-		Approx:   approx,
-	})
+	return exact, approx
 }
 
 func (ab *abstractor) convertTypeParam(t *types.TypeParam) constructs.Named {

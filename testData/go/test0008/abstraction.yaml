@@ -3,7 +3,7 @@
   classes: [
     {
       name: Foo, package: 9, data: 12, interface: 3, loc: 5,
-      methods: [ 4 ],
+      methods: [ 4 ]
     }
   ],
   interfaces: [
@@ -44,6 +44,6 @@
     { fields: [ 8 ] }
   ],
   locs: {
-    1: main.go
-  },
+    '1': main.go
+  }
 }

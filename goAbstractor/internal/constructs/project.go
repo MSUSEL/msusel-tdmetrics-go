@@ -31,7 +31,6 @@ type (
 		NewSignature(args SignatureArgs) Signature
 		NewSolid(args SolidArgs) Solid
 		NewStruct(args StructArgs) Struct
-		NewUnion(args UnionArgs) Union
 		NewValue(args ValueArgs) Value
 		NewLoc(pos token.Pos) locs.Loc
 
@@ -75,7 +74,6 @@ type (
 		allSignatures Set[Signature]
 		allSolids     Set[Solid]
 		allStructs    Set[Struct]
-		allUnions     Set[Union]
 		allValues     Set[Value]
 		locations     locs.Set
 	}
@@ -94,7 +92,6 @@ func NewProject(locs locs.Set) Project {
 		allSignatures: NewSet[Signature](),
 		allSolids:     NewSet[Solid](),
 		allStructs:    NewSet[Struct](),
-		allUnions:     NewSet[Union](),
 		allValues:     NewSet[Value](),
 		locations:     locs,
 	}
@@ -144,10 +141,6 @@ func (p *projectImp) NewSolid(args SolidArgs) Solid {
 
 func (p *projectImp) NewStruct(args StructArgs) Struct {
 	return p.allStructs.Insert(newStruct(args))
-}
-
-func (p *projectImp) NewUnion(args UnionArgs) Union {
-	return p.allUnions.Insert(newUnion(args))
 }
 
 func (p *projectImp) NewValue(args ValueArgs) Value {
@@ -230,7 +223,6 @@ func (p *projectImp) UpdateIndices() {
 	index = p.allSignatures.SetIndices(index)
 	index = p.allSolids.SetIndices(index)
 	index = p.allStructs.SetIndices(index)
-	index = p.allUnions.SetIndices(index)
 	p.allValues.SetIndices(index)
 }
 
@@ -253,7 +245,6 @@ func (p *projectImp) ToJson(ctx *jsonify.Context) jsonify.Datum {
 		AddNonZero(ctx2, `signatures`, p.allSignatures).
 		AddNonZero(ctx2, `solids`, p.allSolids).
 		AddNonZero(ctx2, `structs`, p.allStructs).
-		AddNonZero(ctx2, `unions`, p.allUnions).
 		AddNonZero(ctx2, `values`, p.allValues).
 		AddNonZero(ctx2, `locs`, p.locations)
 }
@@ -328,7 +319,6 @@ func (p *projectImp) removeTypes(predict func(Construct) bool) {
 	p.allSignatures.Remove(predict)
 	p.allSolids.Remove(predict)
 	p.allStructs.Remove(predict)
-	p.allUnions.Remove(predict)
 	p.allValues.Remove(predict)
 }
 

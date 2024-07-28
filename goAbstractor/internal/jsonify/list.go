@@ -32,7 +32,7 @@ func (l *List) subSeek(s *seeker) Datum {
 
 	length := len(l.data)
 	if s.isCount() {
-		return newValue(length)
+		return NewValue(length)
 	}
 
 	if index, ok := s.asIndex(length); ok {
@@ -49,30 +49,26 @@ func (l *List) subSeek(s *seeker) Datum {
 	}
 
 	if key, single, selector, ok := s.asKeyValue(); ok {
-		foundKey := false
 		sub := NewList()
 		for _, item := range l.data {
 			if m, ok := item.(*Map); ok {
 				if v := m.Get(key); !utils.IsNil(v) {
-					foundKey = true
-					if selector(fmt.Sprint(v.RawValue())) {
-						e := item.subSeek(s.next())
-						if single {
-							return e
+					if v2, ok := v.(*Value); ok {
+						if selector(fmt.Sprint(v2.RawValue())) {
+							e := item.subSeek(s.next())
+							if single {
+								return e
+							}
+							sub.data = append(sub.data, e)
 						}
-						sub.data = append(sub.data, e)
 					}
 				}
 			}
 		}
-		if !foundKey {
-			panic(s.fail(`no key found`).
-				With(`key`, key))
-		}
 		return sub
 	}
 
-	panic(s.fail(`must have an index, range, or key/value`))
+	panic(s.fail(`invalid step for list`))
 }
 
 func (l *List) Append(ctx *Context, values ...any) *List {

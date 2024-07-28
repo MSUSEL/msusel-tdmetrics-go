@@ -26,9 +26,16 @@ type (
 
 	InterfaceArgs struct {
 		RealType   *types.Interface
-		Union      Union
 		Methods    []Named
 		TypeParams []Named
+
+		// Exact types are like `string|int|bool` where the
+		// data type must match exactly.
+		Exact []TypeDesc
+
+		// Approx types are like `~string|~int` where the data type
+		// may be exact or an extension of the base type.
+		Approx []TypeDesc
 
 		// Package is only needed if the real type is nil
 		// so that a Go interface type has to be created.
@@ -40,7 +47,8 @@ type (
 
 		typeParams []Named
 		methods    []Named
-		union      Union
+		exact      []TypeDesc
+		approx     []TypeDesc
 
 		index      int
 		inherits   []Interface
@@ -49,8 +57,9 @@ type (
 )
 
 func newInterface(args InterfaceArgs) Interface {
-	methods := slices.Clone(args.Methods)
-	tp := slices.Clone(args.TypeParams)
+	slices.SortFunc(args.Methods, Compare)
+	slices.SortFunc(args.Exact, Compare)
+	slices.SortFunc(args.Approx, Compare)
 
 	if utils.IsNil(args.RealType) {
 		if utils.IsNil(args.Package) {
@@ -59,7 +68,7 @@ func newInterface(args InterfaceArgs) Interface {
 
 		mTyp := []*types.Func{}
 		pkg := args.Package.Source().Types
-		for _, named := range methods {
+		for _, named := range args.Methods {
 			name := named.Name()
 			sig := named.Type().GoType().(*types.Signature)
 			if utils.IsNil(sig) {
@@ -74,8 +83,16 @@ func newInterface(args InterfaceArgs) Interface {
 		for i, n := range args.TypeParams {
 			tEmb[i] = n.GoType()
 		}
-		if !utils.IsNil(args.Union) {
-			tEmb = append(tEmb, args.Union.GoType())
+
+		if len(args.Exact) > 0 || len(args.Approx) > 0 {
+			terms := make([]*types.Term, 0, len(args.Exact)+len(args.Approx))
+			for _, ex := range args.Exact {
+				terms = append(terms, types.NewTerm(false, ex.GoType()))
+			}
+			for _, ap := range args.Approx {
+				terms = append(terms, types.NewTerm(true, ap.GoType()))
+			}
+			tEmb = append(tEmb, types.NewUnion(terms))
 		}
 
 		realType := types.NewInterfaceType(mTyp, tEmb)
@@ -87,9 +104,10 @@ func newInterface(args InterfaceArgs) Interface {
 
 	return &interfaceImp{
 		realType:   args.RealType,
-		typeParams: tp,
-		methods:    methods,
-		union:      args.Union,
+		typeParams: args.TypeParams,
+		methods:    args.Methods,
+		exact:      args.Exact,
+		approx:     args.Approx,
 	}
 }
 
@@ -101,13 +119,17 @@ func (it *interfaceImp) GoType() types.Type { return it.realType }
 func (it *interfaceImp) Visit(v visitor.Visitor) {
 	visitor.Visit(v, it.typeParams...)
 	visitor.Visit(v, it.methods...)
-	visitor.Visit(v, it.union)
+	visitor.Visit(v, it.exact...)
+	visitor.Visit(v, it.approx...)
 	visitor.Visit(v, it.inherits...)
 }
 
 func (it *interfaceImp) CompareTo(other Construct) int {
 	b := other.(*interfaceImp)
-	if cmp := Compare(it.union, b.union); cmp != 0 {
+	if cmp := CompareSlice(it.exact, b.exact); cmp != 0 {
+		return cmp
+	}
+	if cmp := CompareSlice(it.approx, b.approx); cmp != 0 {
 		return cmp
 	}
 	if cmp := CompareSlice(it.typeParams, b.typeParams); cmp != 0 {
@@ -124,20 +146,17 @@ func (it *interfaceImp) ToJson(ctx *jsonify.Context) jsonify.Datum {
 	ctx2 := ctx.HideKind().Short()
 	return jsonify.NewMap().
 		AddIf(ctx, ctx.IsKindShown(), `kind`, it.Kind()).
+		AddIf(ctx, ctx.IsIndexShown(), `index`, it.index).
 		AddNonZero(ctx2, `typeParams`, it.typeParams).
 		AddNonZero(ctx2, `inherits`, it.inherits).
-		AddNonZero(ctx2, `union`, it.union).
+		AddNonZero(ctx2, `approx`, it.approx).
+		AddNonZero(ctx2, `exact`, it.exact).
 		AddNonZero(ctx2, `methods`, it.methods)
 }
 
 func (it *interfaceImp) IsSupertypeOf(other Interface) bool {
 	otherIt, ok := other.GoType().(*types.Interface)
-	if !ok || utils.IsNil(it.realType) || utils.IsNil(otherIt) {
-		// Baked in types don't have underlying interfaces
-		// but also shouldn't be needed for any inheritance.
-		return false
-	}
-	return types.Implements(it.realType, otherIt)
+	return ok && types.Implements(it.realType, otherIt)
 }
 
 func (it *interfaceImp) AddInheritors(other Interface) bool {

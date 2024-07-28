@@ -2,6 +2,7 @@ package jsonify
 
 import (
 	"encoding/json"
+	"fmt"
 
 	"github.com/Snow-Gremlin/goToolbox/utils"
 )
@@ -35,14 +36,43 @@ func (m *Map) subSeek(s *seeker) Datum {
 		return m
 	}
 
+	length := len(m.data)
 	if s.isCount() {
-		return newValue(len(m.data))
+		return NewValue(length)
+	}
+
+	keys := utils.SortedKeys(m.data)
+	if start, end, ok := s.asRange(length); ok {
+		sub := NewMap()
+		for _, key := range keys[start : end+1] {
+			sub.data[key] = m.data[key].subSeek(s.next())
+		}
+		return sub
+	}
+
+	if key, single, selector, ok := s.asKeyValue(); ok {
+		sub := NewMap()
+		for _, pKey := range keys {
+			item := m.data[pKey]
+			if m, ok := item.(*Map); ok {
+				if v := m.Get(key); !utils.IsNil(v) {
+					if v2, ok := v.(*Value); ok {
+						if selector(fmt.Sprint(v2.RawValue())) {
+							e := item.subSeek(s.next())
+							if single {
+								return e
+							}
+							sub.data[pKey] = e
+						}
+					}
+				}
+			}
+		}
+		return sub
 	}
 
 	single, selector := s.asSelector()
-
 	sub := NewMap()
-	keys := utils.SortedKeys(m.data)
 	for _, key := range keys {
 		if selector(key) {
 			e := m.data[key].subSeek(s.next())

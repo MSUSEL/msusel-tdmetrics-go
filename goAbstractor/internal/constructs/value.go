@@ -77,6 +77,7 @@ func (v *valueImp) ToJson(ctx *jsonify.Context) jsonify.Datum {
 	ctx2 := ctx.HideKind().Short()
 	return jsonify.NewMap().
 		AddIf(ctx, ctx.IsKindShown(), `kind`, v.Kind()).
+		AddIf(ctx, ctx.IsIndexShown(), `index`, v.index).
 		Add(ctx2, `package`, v.pkg).
 		Add(ctx2, `name`, v.name).
 		Add(ctx2, `type`, v.typ).

@@ -120,6 +120,7 @@ func (s *signatureImp) ToJson(ctx *jsonify.Context) jsonify.Datum {
 	ctx2 := ctx.HideKind().Short()
 	return jsonify.NewMap().
 		AddIf(ctx, ctx.IsKindShown(), `kind`, s.Kind()).
+		AddIf(ctx, ctx.IsIndexShown(), `index`, s.index).
 		AddNonZero(ctx2, `variadic`, s.variadic).
 		AddNonZero(ctx2, `params`, s.params).
 		AddNonZero(ctx2, `typeParams`, s.typeParams).

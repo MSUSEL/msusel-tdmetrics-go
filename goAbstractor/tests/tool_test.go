@@ -2,6 +2,7 @@ package tests
 
 import (
 	"encoding/json"
+	"log"
 	"os"
 	"runtime"
 	"slices"
@@ -15,7 +16,6 @@ import (
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/abstractor"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/jsonify"
-	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/logger"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/reader"
 )
 
@@ -57,9 +57,14 @@ func (tt *testTool) abstract(patterns ...string) *testTool {
 		With(`Dir`, tt.dir).
 		Require(err)
 
+	var logger *log.Logger
+	if verbose {
+		logger = log.New(os.Stdout, ``, 0)
+	}
+
 	tt.proj = abstractor.Abstract(abstractor.Config{
 		Packages: ps,
-		Log:      logger.New(verbose),
+		Logger:   logger,
 		BasePath: basePath,
 	})
 	return tt
@@ -130,7 +135,7 @@ func (tt *testTool) runPartialTest(pt partialTest) {
 			tt.t.Skip(`The OS changes the specific type indices, this test is for ` + pt.OS + `.`)
 		}
 
-		ctx := jsonify.NewContext()
+		ctx := jsonify.NewContext().ShowIndex()
 		subData := tt.proj.ToJson(ctx).Seek(pt.Path)
 
 		exp, err := json.MarshalIndent(pt.Data, ``, `  `)

@@ -1,7 +1,6 @@
 package constructs
 
 import (
-	"go/token"
 	"strings"
 
 	"github.com/Snow-Gremlin/goToolbox/collections"
@@ -21,7 +20,6 @@ type (
 		_package()
 
 		Source() *packages.Package
-		Pos(pos token.Pos) token.Position
 		Path() string
 		Name() string
 		ImportPaths() []string
@@ -92,10 +90,6 @@ func (p *packageImp) Path() string              { return p.path }
 func (p *packageImp) Name() string              { return p.name }
 func (p *packageImp) ImportPaths() []string     { return p.importPaths }
 
-func (p *packageImp) Pos(pos token.Pos) token.Position {
-	return p.pkg.Fset.Position(pos)
-}
-
 func (p *packageImp) Imports() collections.ReadonlyList[Package] {
 	return p.imports.Values()
 }
@@ -164,6 +158,7 @@ func (p *packageImp) ToJson(ctx *jsonify.Context) jsonify.Datum {
 	ctx2 := ctx.HideKind().Short()
 	return jsonify.NewMap().
 		AddIf(ctx, ctx.IsKindShown(), `kind`, p.Kind()).
+		AddIf(ctx, ctx.IsIndexShown(), `index`, p.index).
 		AddNonZero(ctx2, `path`, p.path).
 		AddNonZero(ctx2, `name`, p.name).
 		AddNonZero(ctx2, `classes`, p.classes).
@@ -185,7 +180,7 @@ func (p *packageImp) resolveReceivers() {
 	methods := p.methods.Values()
 	for i := range methods.Count() {
 		m := methods.Get(i)
-		if rec := m.ReceiverName(); len(rec) > 0 {
+		if rec := m.RecvName(); len(rec) > 0 {
 			t := p.findType(rec)
 			if t == nil {
 				panic(terror.New(`failed to find receiver`).
@@ -198,6 +193,7 @@ func (p *packageImp) resolveReceivers() {
 					WithType(`gotten type`, t).
 					With(`gotten value`, t))
 			}
+			m.SetReceiver(c)
 			c.addMethod(m)
 		}
 	}

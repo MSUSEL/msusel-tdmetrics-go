@@ -7,69 +7,72 @@
   ],
   classes: [
     { # 4. main.Foo[T int|string|uint]{ value T } @ main.go:5
-      name: Foo, package: 24, data: 30, interface: 8, loc: 5,
+      name: Foo, package: 25, data: 31, interface: 9, loc: 5,
+      typeParams: [ 20 ],
       methods: [ 12 ]
     }
   ],
   interDefs: [
     { # 5. $builtin.Pointer[T any] { func $deref() T }
-      name: Pointer, package: 23, type: 9
+      name: Pointer, package: 24, type: 8
     },
     { # 6. $builtin.any any
-      name: any, package: 23, type: 7
+      name: any, package: 24, type: 7
     }
   ],
   interfaces: [
     {}, # 7. any
-    {   # 8. interface { func Add(v T) T } where T int|string|uint
-      inherits: [ 7 ],
-      methods: [ 16 ]
-    },
-    { # 9. interface[T any] { func $deref() T }
+    {   # 8. interface[T int|string|uint] { func Add(v T) T } 
       typeParams: [ 17 ],
       inherits: [ 7 ],
       methods: [ 15 ]
     },
+    { # 9. interface[T any] { func $deref() T }
+      typeParams: [ 20 ],
+      inherits: [ 11 ],
+      methods: [ 16 ]
+    },
     { # 10. interface { int | string }
       inherits: [ 11 ],
-      union: 31
+      union: 32
     },
     { # 11. interface { int | string | uint }
       inherits: [ 7 ],
-      union: 32
+      union: 33
     }
   ],
   methods: [
     { # 12. func (*Foo) Add(v T) T where T int|string|uint @ main.go:9
-      name: Add, package: 24, signature: 26, loc: 9,
+      name: Add, package: 25, receiver: 4, signature: 27, loc: 9,
       metrics: { codeCount: 4, complexity: 1, indents: 2, lineCount: 4 }
     },
     { # 13. func New(v T) $builtin.Pointer[main.Foo[T]] where T int|string @ main.go:14
-      name: New, package: 24, signature: 28, loc: 14,
+      name: New, package: 25, signature: 29, loc: 14,
       metrics: { codeCount: 3, complexity: 1, indents: 1, lineCount: 3 }
     },
     { # 14. func main() @ main.go:18
-      name: main, package: 24, signature: 25, loc: 18,
+      name: main, package: 25, signature: 26, loc: 18,
       metrics: { codeCount: 4, complexity: 1, indents: 2, lineCount: 4 }
     }
   ],
   named: [
-    { name: $deref, type: 27 }, # 15. func $deref[T any]() T
-    { name: Add,    type: 26 }, # 16. func Add(v T) T where T int|string|uint
+    { name: $deref, type: 28 }, # 15. func $deref[T any]() T
+    { name: Add,    type: 27 }, # 16. func Add(v T) T where T int|string|uint
     { name: T,      type:  6 }, # 17. T any
     { name: T,      type: 10 }, # 18. T int|string
     { name: T,      type: 11 }, # 19. T int|string|uint
-    { name: v,      type: 18 }, # 20. v T<int|string>
-    { name: v,      type: 19 }, # 21. v T<int|string|uint>
-    { name: value,  type: 19 }  # 22. value T<int|string|uint>
+    { name: T,      type: 33 }, # 20. T
+    { name: v,      type: 18 }, # 21. v T<int|string>
+    { name: v,      type: 19 }, # 22. v T<int|string|uint>
+    { name: value,  type: 19 }  # 23. value T<int|string|uint>
   ],
   packages: [
-    { # 23. $builtin package
+    { # 24. $builtin package
       name: $builtin,
       path: $builtin,
       interDefs: [ 5, 6 ]
     },
-    { # 24. main package
+    { # 25. main package
       name: main,
       path: command-line-arguments,
       classes: [ 4 ],
@@ -77,34 +80,34 @@
     }
   ],
   signatures: [
-    {}, # 25. func()()
-    {   # 26. func(v T) T where T int|string|uint
+    {}, # 26. func()()
+    {   # 27. func(v T) T where T int|string|uint
       params: [ 21 ],
       return: 19
     },
-    { # 27. func[T any]() T
+    { # 28. func[T any]() T
       typeParams: [ 17 ],
       return: 17
     },
-    { # 28. func[T int|string](v T) $builtin.Pointer[main.Foo[T]]
+    { # 29. func[T int|string](v T) $builtin.Pointer[main.Foo[T]]
       typeParams: [ 18 ],
       params: [ 20 ],
       return: 29
     }
   ],
   solids: [
-    { # 29. $builtin.Pointer[main.Foo[T]] where T int|string|uint
+    { # 30. $builtin.Pointer[main.Foo[T]] where T int|string|uint
       target: 5, typeParams: [ 4 ]
     }
   ],
   structs: [
-    { # 30. struct { value T } where T int|string|uint
+    { # 31. struct { value T } where T int|string|uint
       fields: [ 22 ]
     }
   ],
   unions: [
-    { exact: [ 1, 2 ]    }, # 31. int | string
-    { exact: [ 1, 2, 3 ] }  # 32. int | string | uint
+    { exact: [ 1, 2 ]    }, # 32. int | string
+    { exact: [ 1, 2, 3 ] }  # 33. int | string | uint
   ],
   locs: {
     '1': main.go

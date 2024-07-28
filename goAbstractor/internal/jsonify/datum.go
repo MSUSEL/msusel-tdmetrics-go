@@ -17,39 +17,39 @@ type Datum interface {
 
 func New(ctx *Context, value any) Datum {
 	if utils.IsNil(value) {
-		return newNull()
+		return NewNull()
 	}
 	switch v := value.(type) {
 	case nil:
-		return newNull()
+		return NewNull()
 	case bool:
-		return newValue(v)
+		return NewValue(v)
 	case string:
-		return newValue(v)
+		return NewValue(v)
 	case int:
-		return newValue(v)
+		return NewValue(v)
 	case int8:
-		return newValue(v)
+		return NewValue(v)
 	case int16:
-		return newValue(v)
+		return NewValue(v)
 	case int32:
-		return newValue(v)
+		return NewValue(v)
 	case int64:
-		return newValue(v)
+		return NewValue(v)
 	case uint:
-		return newValue(v)
+		return NewValue(v)
 	case uint8:
-		return newValue(v)
+		return NewValue(v)
 	case uint16:
-		return newValue(v)
+		return NewValue(v)
 	case uint32:
-		return newValue(v)
+		return NewValue(v)
 	case uint64:
-		return newValue(v)
+		return NewValue(v)
 	case float32:
-		return newValue(v)
+		return NewValue(v)
 	case float64:
-		return newValue(v)
+		return NewValue(v)
 	case Datum:
 		return v
 	case Jsonable:

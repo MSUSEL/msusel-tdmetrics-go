@@ -1,7 +1,7 @@
 [
   {
     name: basics,
-    path: [ basics ],
+    path: [ basics, '..', name ],
     data: [ bool, float32, float64, int, int16, int32, int64, int8,
             string, uint, uint16, uint32, uint64, uint8, uintptr ]
   },
@@ -12,18 +12,18 @@
     data: {
       language:      1,
       locs:        438,
-      basics:       15, #     1
-      classes:     719, #    16
-      interDefs:    60, #   734
-      interfaces:  335, #   794
-      methods:    4784, #  1129
-      named:      5676, #  5913
-      packages:     49, # 11589
-      signatures: 2725, # 11638
-      solids:      571, # 14363
-      structs:     916, # 14934
-      unions:        4, # 15850
-      values:     3740  # 15854
+      basics:       15,
+      classes:     719,
+      interDefs:    60,
+      interfaces:  347,
+      methods:    4940,
+      named:      5680,
+      packages:     49,
+      signatures: 2725,
+      solids:      571,
+      structs:     916,
+      unions:        4,
+      values:     3740 
     }
   },
   {
@@ -43,16 +43,161 @@
     os: windows,
     path: [ packages, name=cats ],
     data: {
+      index: 11764,
       name: cats,
       path: command-line-arguments,
       classes: [ 16, 17, 18, 19, 20 ],
-      imports: [ 11594, 11629, 11630, 11631 ],
-      methods: [ 1134, 1135, 1136, 1137, 1138, 1139, 1140, 1141,
-                 1142, 1143, 1144, 1145, 1146, 1147, 1148, 1149 ],
-      values: [ 15855, 15856, 15857, 15858, 15859, 15860, 15861,
-                15862, 15863, 15864, 15865, 15866, 15867, 15868,
-                15869, 15870, 15871, 15872, 15873, 15874, 15875,
-                15876, 15877, 15878, 15879, 15880, 15881 ]
+      imports: [ 11766, 11801, 11802, 11803 ],
+      methods: [ 1146, 1147, 1148, 1149, 1150, 1151, 1152, 1153, 1154,
+                 1155, 1156, 1157, 1158, 1159, 1160, 1161, 1162, 1163],
+      values: [ 16027, 16028, 16029, 16030, 16031, 16032, 16033, 16034,
+                16035, 16036, 16037, 16038, 16039, 16040, 16041, 16042,
+                16043, 16044, 16045, 16046, 16047, 16048, 16049, 16050,
+                16051, 16052, 16053 ]
     }
+  },
+  {
+    name: cats,
+    os: windows,
+    path: [ classes, package=~^11764$ ],
+    data: [
+      {
+        index: 16, loc: 135395,
+        name: Cat, package: 11764, data: 15303, interface: 795
+      },
+      {
+        index: 17, loc: 135386,
+        name: CatBreed, package: 11764, data: 4, interface: 955,
+        methods: [ 1160 ]
+      },
+      {
+        index: 18, loc: 135402,
+        name: CatTable, package: 11764, data: 14713, interface: 811,
+        methods: [ 1146, 1147, 1148, 1149, 1150, 1151, 1152,
+                   1153, 1154, 1155, 1158, 1161 ]
+      },
+      {
+        index: 19, loc: 135389,
+        name: ID, package: 11764, data: 9, interface: 795
+      },
+      {
+        index: 20, loc: 135392,
+        name: IDSlice, package: 11764, data: 14555, interface: 896,
+        methods: [ 1156, 1157, 1162, 1163 ]
+      }
+    ]
+  },
+  {
+    name: cats,
+    os: windows,
+    path: [ methods, package=~^11764$, '!metrics' ],
+    data: [
+      {
+        index: 1146, loc: 135536,
+        name: Add, package: 11764, receiver: 18, signature: 12969
+      },
+      {
+        index: 1147, loc: 135548,
+        name: AddNew, package: 11764, receiver: 18, signature: 13239  
+      },
+      {
+        index: 1148, loc: 135571,
+        name: Age, package: 11764, receiver: 18, signature: 12966
+      },
+      {
+        index: 1149, loc: 135589,
+        name: AgeRange, package: 11764, receiver: 18, signature: 11945  
+      },
+      {
+        index: 1150, loc: 135607,
+        name: AllBreeds, package: 11764, receiver: 18, signature: 11887
+      },
+      {
+        index: 1151, loc: 135579,
+        name: AllIDs, package: 11764, receiver: 18, signature: 11826
+      },
+      {
+        index: 1152, loc: 135563,
+        name: Breed, package: 11764, receiver: 18, signature: 12968
+      },
+      {
+        index: 1153, loc: 135628,
+        name: CatsWithBreed, package: 11764, receiver: 18, signature: 12293
+      },
+      {
+        index: 1154, loc: 135640,
+        name: CatsWithName, package: 11764, receiver: 18, signature: 13203
+      },
+      {
+        index: 1155, loc: 135530,
+        name: Has, package: 11764, receiver: 18, signature: 12965
+      },
+      {
+        index: 1156, loc: 135499,
+        name: Len, package: 11764, receiver: 20, signature: 11814
+      },
+      {
+        index: 1157, loc: 135504,
+        name: Less, package: 11764, receiver: 20, signature: 12926
+      },
+      {
+        index: 1158, loc: 135555,
+        name: Name, package: 11764, receiver: 18, signature: 12967
+      },
+      {
+        index: 1159, loc: 135492,
+        name: NewID, package: 11764, signature: 11825
+      },
+      {
+        index: 1160, loc: 135434,
+        name: String, package: 11764, receiver: 17, signature: 11818  
+      },
+      {
+        index: 1161, loc: 135652,
+        name: String, package: 11764, receiver: 18, signature: 11818
+      },
+      {
+        index: 1162, loc: 135514,
+        name: String, package: 11764, receiver: 20, signature: 11818
+      },
+      {
+        index: 1163, loc: 135509,
+        name: Swap, package: 11764, receiver: 20, signature: 12925
+      }
+    ]
+  },
+  {
+    name: cats,
+    os: windows,
+    path: [ values, package=~^11764$, ~^(name|type|const)$ ],
+    data: [
+      { const: true, name: Abyssinian,        type: 17 }, # 17 = CatBreed
+      { const: true, name: AmericanShorthair, type: 17 },
+      { const: true, name: Balinese,          type: 17 },
+      { const: true, name: Bengal,            type: 17 },
+      { const: true, name: Bombay,            type: 17 },
+      { const: true, name: BritishShorthair,  type: 17 },
+      { const: true, name: Burmese,           type: 17 },
+      { const: true, name: CornishRex,        type: 17 },
+      { const: true, name: DevonRex,          type: 17 },
+      { const: true, name: EgyptianMau,       type: 17 },
+      { const: true, name: ExoticShorthair,   type: 17 },
+      { const: true, name: Himalayan,         type: 17 },
+      { const: true, name: JapaneseBobtail,   type: 17 },
+      { const: true, name: MaineCoon,         type: 17 },
+      { const: true, name: Manx,              type: 17 },
+      { const: true, name: Munchkin,          type: 17 },
+      { const: true, name: NorwegianForest,   type: 17 },
+      { const: true, name: Persian,           type: 17 },
+      { const: true, name: Ragdoll,           type: 17 },
+      { const: true, name: RussianBlue,       type: 17 },
+      { const: true, name: Savannah,          type: 17 },
+      { const: true, name: ScottishFold,      type: 17 },
+      { const: true, name: Siamese,           type: 17 },
+      { const: true, name: Siberian,          type: 17 },
+      { const: true, name: alreadyExistsInTable, type: 9 }, # 9 = string
+      { const: true, name: doesNotExistInTable,  type: 9 },
+      { name: nextIDValue, type: 4 } # 4 = int
+    ]
   }
 ]

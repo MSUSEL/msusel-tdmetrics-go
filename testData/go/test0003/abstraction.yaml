@@ -22,8 +22,8 @@
     }
   ],
   methods: [
-    { # 5. main.Pet @ main.go:13
-      name: Pet, package: 9, signature: 10, loc: 13,
+    { # 5. main.Cat.Pet @ main.go:13
+      name: Pet, receiver: 2, package: 9, signature: 10, loc: 13,
       metrics: { codeCount: 3, complexity: 1, indents: 1, lineCount: 3 }
     },
     { # 6. main.main @ main.go:17

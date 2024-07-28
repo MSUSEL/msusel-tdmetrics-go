@@ -73,6 +73,7 @@ func (s *solidImp) ToJson(ctx *jsonify.Context) jsonify.Datum {
 	ctx2 := ctx.HideKind().Short()
 	return jsonify.NewMap().
 		AddIf(ctx, ctx.IsKindShown(), `kind`, s.Kind()).
+		AddIf(ctx, ctx.IsIndexShown(), `index`, s.index).
 		AddNonZero(ctx2, `target`, s.target).
 		AddNonZero(ctx2, `typeParams`, s.typeParams)
 }
