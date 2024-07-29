@@ -21,14 +21,15 @@ jobs:
   goAbstractor:
     strategy:
       matrix:
+        trials:
         - name: Linux
           os: ubuntu-latest
         - name: Windows
           os: windows-latest
         - name: MacOS
           os: macos-latest
-    name: Go Abstractor (${{ matrix.name }})
-    runs-on: ${{ matrix.os }}
+    name: Go Abstractor (${{ matrix.trials.name }})
+    runs-on: ${{ matrix.trials.os }}
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-go@v5
@@ -46,8 +47,9 @@ jobs:
         run: go test -v -cover ./...
 
   techDebtMetrics:
-  strategy:
+    strategy:
       matrix:
+        trials:
         - name: Linux
           os: ubuntu-latest
           flags: --os linux
@@ -57,8 +59,8 @@ jobs:
         - name: MacOS
           os: macos-latest
           flags: --os osx
-    name: TechDebt Metrics (${{ matrix.name }})
-    runs-on: ${{ matrix.os }}
+    name: TechDebt Metrics (${{ matrix.trials.name }})
+    runs-on: ${{ matrix.trials.os }}
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-dotnet@v4
@@ -67,4 +69,4 @@ jobs:
       - name: Run Program
         working-directory: ./techDebtMetrics
         timeout-minutes: 60
-        run: dotnet test -v detailed ${{ matrix.flags }}
+        run: dotnet test -v detailed ${{ matrix.trials.flags }}
