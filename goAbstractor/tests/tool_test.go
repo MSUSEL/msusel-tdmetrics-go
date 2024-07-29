@@ -132,7 +132,7 @@ func (tt *testTool) partial() *testTool {
 func (tt *testTool) runPartialTest(pt partialTest) {
 	tt.t.Run(pt.Name, func(t *testing.T) {
 		if len(pt.OS) > 0 && runtime.GOOS != pt.OS {
-			tt.t.Skip(`The OS changes the specific type indices, this test is for ` + pt.OS + `.`)
+			t.Skip(`The OS changes the specific type indices, this test is for ` + pt.OS + `.`)
 		}
 
 		ctx := jsonify.NewContext().ShowIndex()
