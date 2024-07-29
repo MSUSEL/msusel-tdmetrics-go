@@ -73,7 +73,6 @@ func main() {
 	proj := abstractor.Abstract(abstractor.Config{
 		Packages: ps,
 		Logger:   logger,
-		BasePath: ao.InPath,
 	})
 	if err = writeJson(ao.OutPath, ao.Minimize, proj); err != nil {
 		fmt.Println(`Error abstracting project:`, err)

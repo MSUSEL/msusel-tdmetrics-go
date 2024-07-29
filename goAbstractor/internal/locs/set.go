@@ -13,6 +13,7 @@ import (
 
 type (
 	Set interface {
+		Alias(file, alias string)
 		NewLoc(p token.Pos) Loc
 		Reset()
 		flag(p token.Pos)
@@ -21,20 +22,24 @@ type (
 
 	setImp struct {
 		fs       *token.FileSet
-		basePath string
+		aliases  map[string]string
 		flagged  map[token.Pos]bool
 		offsets  map[string]int
 		finished bool
 	}
 )
 
-func NewSet(fs *token.FileSet, basePath string) Set {
+func NewSet(fs *token.FileSet) Set {
 	s := &setImp{
-		fs:       fs,
-		basePath: basePath,
+		fs:      fs,
+		aliases: map[string]string{},
 	}
 	s.Reset()
 	return s
+}
+
+func (s *setImp) Alias(file, alias string) {
+	s.aliases[file] = filepath.ToSlash(alias)
 }
 
 func (s *setImp) NewLoc(p token.Pos) Loc {
@@ -55,15 +60,10 @@ func (s *setImp) flag(p token.Pos) {
 }
 
 func (s *setImp) cleanPath(file string) string {
-	// TODO: Need to not use relative path but instead use the import paths
-
-	target, err := filepath.Rel(s.basePath, file)
-	if err != nil {
-		panic(terror.New(`error creating a relative path for a location`, err).
-			With(`base path`, s.basePath).
-			With(`file`, file))
+	if alias, found := s.aliases[file]; found {
+		return alias
 	}
-	return filepath.ToSlash(target)
+	return filepath.ToSlash(file)
 }
 
 func (s *setImp) finish() {

@@ -21,24 +21,18 @@ import (
 type Config struct {
 	Packages []*packages.Package
 	Logger   *log.Logger
-	BasePath string
 }
 
 func Abstract(cfg Config) constructs.Project {
-	basePath, err := filepath.Abs(cfg.BasePath)
-	if err != nil {
-		panic(terror.New(`unable to get the absolute base path`, err).
-			With(`base path`, cfg.BasePath))
-	}
-
 	fs := cfg.Packages[0].Fset
-	locs := locs.NewSet(fs, basePath)
+	locs := locs.NewSet(fs)
 	proj := constructs.NewProject(locs)
 	bk := baker.New(fs, proj)
 
 	ab := &abstractor{
 		logger:   cfg.Logger,
 		packages: cfg.Packages,
+		locs:     locs,
 		baker:    bk,
 		proj:     proj,
 	}
@@ -78,6 +72,7 @@ type abstractor struct {
 	logger   *log.Logger
 	packages []*packages.Package
 	baker    baker.Baker
+	locs     locs.Set
 	proj     constructs.Project
 	curPkg   constructs.Package
 
@@ -116,7 +111,17 @@ func (ab *abstractor) abstractPackage(src *packages.Package) {
 }
 
 func (ab *abstractor) abstractFile(f *ast.File) {
-	ab.logf(`|  |  add file to package: %s`, ab.pos(f.Name.NamePos).Filename)
+	path := ab.pos(f.FileStart).Filename
+	basePath := filepath.Base(path)
+	pkgPath := ab.curPkg.Source().PkgPath
+	if pkgPath != `command-line-arguments` {
+		alias := filepath.ToSlash(filepath.Join(pkgPath, basePath))
+		ab.locs.Alias(path, alias)
+	} else {
+		ab.locs.Alias(path, basePath)
+	}
+
+	ab.logf(`|  |  add file to package: %s`, basePath)
 	for _, decl := range f.Decls {
 		switch d := decl.(type) {
 		case *ast.GenDecl:

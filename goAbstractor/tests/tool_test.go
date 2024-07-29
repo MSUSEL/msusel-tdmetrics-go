@@ -45,7 +45,6 @@ func (tt *testTool) abstract(patterns ...string) *testTool {
 	}
 
 	verbose := testing.Verbose()
-	basePath := pathToTestData + tt.dir
 	ps, err := reader.Read(&reader.Config{
 		Verbose:    verbose,
 		Dir:        pathToTestData + tt.dir,
@@ -65,7 +64,6 @@ func (tt *testTool) abstract(patterns ...string) *testTool {
 	tt.proj = abstractor.Abstract(abstractor.Config{
 		Packages: ps,
 		Logger:   logger,
-		BasePath: basePath,
 	})
 	return tt
 }
