@@ -34,10 +34,10 @@
     }
   ],
   named: [
-    { name: $cap,   type: 21 }, # 10.
-    { name: $get,   type: 22 }, # 11.
-    { name: $len,   type: 21 }, # 12.
-    { name: $set,   type: 23 }, # 13.
+    { name: $cap,   type: 21 }, # 10. func $cap() int
+    { name: $get,   type: 22 }, # 11. func $get[T](index int) T
+    { name: $len,   type: 21 }, # 12. func $len() int
+    { name: $set,   type: 23 }, # 13. func $set[T](index int, value T)
     { name: T,      type:  3 }, # 14. T any
     { name: index,  type:  1 }, # 15. index int
     { name: value,  type: 14 }, # 16. value T

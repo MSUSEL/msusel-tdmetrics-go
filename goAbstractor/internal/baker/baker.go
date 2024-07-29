@@ -506,40 +506,34 @@ func (b *bakerImp) BakeError() constructs.InterDef {
 
 // BakeComparable bakes in an interface to represent a Go comparable.
 //
-//	type comparable[T any] interface {
-//		$compare(other T) int
+//	type comparable interface {
+//		$compare(other any) int
 //	}
 func (b *bakerImp) BakeComparable() constructs.InterDef {
 	return bakeOnce(b, `comparable`, func() constructs.InterDef {
 		pkg := b.BakeBuiltin()
-		tp := b.proj.NewNamed(constructs.NamedArgs{
-			Name: `T`,
+
+		// other any
+		otherParam := b.proj.NewNamed(constructs.NamedArgs{
+			Name: `other`,
 			Type: b.BakeAny(),
 		})
 
-		// other T
-		otherParam := b.proj.NewNamed(constructs.NamedArgs{
-			Name: `other`,
-			Type: tp,
-		})
-
-		// func(other T) int
+		// func(other any) int
 		getStr := b.proj.NewSignature(constructs.SignatureArgs{
-			TypeParams: []constructs.Named{tp},
-			Params:     []constructs.Named{otherParam},
-			Return:     b.BakeBasic(`int`),
-			Package:    pkg,
+			Params:  []constructs.Named{otherParam},
+			Return:  b.BakeBasic(`int`),
+			Package: pkg,
 		})
 
 		methods := map[string]constructs.TypeDesc{
-			`$compare`: getStr, // $compare(other T) int
+			`$compare`: getStr, // $compare(other any) int
 		}
 
-		// interface { $compare(other T) int }
+		// interface { $compare(other any) int }
 		in := b.proj.NewInterface(constructs.InterfaceArgs{
-			TypeParams: []constructs.Named{tp},
-			Methods:    b.toNamedList(methods),
-			Package:    pkg,
+			Methods: b.toNamedList(methods),
+			Package: pkg,
 		})
 
 		return b.proj.NewInterDef(constructs.InterDefArgs{

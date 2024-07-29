@@ -20,7 +20,7 @@
       named:      5680,
       packages:     49,
       signatures: 2725,
-      solids:      571,
+      solids:      583,
       structs:     916,
       values:     3740 
     }
@@ -49,20 +49,20 @@
       imports: [ 11766, 11801, 11802, 11803 ],
       methods: [ 1146, 1147, 1148, 1149, 1150, 1151, 1152, 1153, 1154,
                  1155, 1156, 1157, 1158, 1159, 1160, 1161, 1162, 1163],
-      values: [ 16023, 16024, 16025, 16026, 16027, 16028, 16029, 16030,
-                16031, 16032, 16033, 16034, 16035, 16036, 16037, 16038,
-                16039, 16040, 16041, 16042, 16043, 16044, 16045, 16046,
-                16047, 16048, 16049 ]
+      values: [ 16035, 16036, 16037, 16038, 16039, 16040, 16041, 16042,
+                16043, 16044, 16045, 16046, 16047, 16048, 16049, 16050,
+                16051, 16052, 16053, 16054, 16055, 16056, 16057, 16058,
+                16059, 16060, 16061 ]
     }
   },
   {
-    name: cats,
+    name: classes,
     os: windows,
     path: [ classes, package=~^11764$ ],
     data: [
       {
         index: 16, loc: 135395,
-        name: Cat, package: 11764, data: 15303, interface: 795
+        name: Cat, package: 11764, data: 15315, interface: 795
       },
       {
         index: 17, loc: 135386,
@@ -87,7 +87,7 @@
     ]
   },
   {
-    name: cats,
+    name: methods,
     os: windows,
     path: [ methods, package=~^11764$, '!metrics' ],
     data: [
@@ -166,7 +166,7 @@
     ]
   },
   {
-    name: cats,
+    name: variables and constants,
     os: windows,
     path: [ values, package=~^11764$, ~^(name|type|const)$ ],
     data: [

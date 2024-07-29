@@ -142,16 +142,27 @@ func (ab *abstractor) convertNamed(t *types.Named) constructs.TypeDesc {
 	}
 
 	// Check if the reference can already be found.
-	if _, typ, found := ab.proj.FindType(pkgPath, name, false); found {
-		return typ
+	var typ constructs.TypeDesc
+	var found bool
+	_, typ, found = ab.proj.FindType(pkgPath, name, false)
+	if !found {
+		// Otherwise, create a reference that will be filled later.
+		typ = ab.proj.NewReference(constructs.ReferenceArgs{
+			RealType:    t,
+			PackagePath: pkgPath,
+			Name:        name,
+		})
 	}
 
-	// Otherwise, create a reference that will be filled later.
-	return ab.proj.NewReference(constructs.ReferenceArgs{
-		RealType:    t,
-		PackagePath: pkgPath,
-		Name:        name,
-	})
+	if tp := ab.convertTypeList(t.TypeArgs()); len(tp) > 0 {
+		typ = ab.proj.NewSolid(constructs.SolidArgs{
+			RealType:   t,
+			Target:     typ,
+			TypeParams: tp,
+		})
+	}
+
+	return typ
 }
 
 func (ab *abstractor) convertPointer(t *types.Pointer) constructs.TypeDesc {
@@ -190,12 +201,14 @@ func (ab *abstractor) convertStruct(t *types.Struct) constructs.Struct {
 	for i := range t.NumFields() {
 		f := t.Field(i)
 		if !blankName(f.Name()) {
+
+			// TODO: Why didn't some types get put in solids.
+
 			field := ab.proj.NewNamed(constructs.NamedArgs{
 				Name: f.Name(),
 				Type: ab.convertType(f.Type()),
 			})
 			fields = append(fields, field)
-			// Nothing needs to be done with f.Embedded() here.
 		}
 	}
 
@@ -287,6 +300,14 @@ func (ab *abstractor) convertTypeParamList(t *types.TypeParamList) []constructs.
 	list := make([]constructs.Named, t.Len())
 	for i := range t.Len() {
 		list[i] = ab.convertTypeParam(t.At(i))
+	}
+	return list
+}
+
+func (ab *abstractor) convertTypeList(t *types.TypeList) []constructs.TypeDesc {
+	list := make([]constructs.TypeDesc, t.Len())
+	for i := range t.Len() {
+		list[i] = ab.convertType(t.At(i))
 	}
 	return list
 }

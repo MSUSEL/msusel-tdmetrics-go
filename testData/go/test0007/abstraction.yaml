@@ -7,7 +7,7 @@
   ],
   classes: [
     { # 4. main.Foo[T int|string|uint]{ value T } @ main.go:5
-      name: Foo, package: 24, data: 30, interface: 9, loc: 5,
+      name: Foo, package: 24, data: 31, interface: 9, loc: 5,
       typeParams: [ 19 ],
       methods: [ 12 ]
     }
@@ -91,16 +91,19 @@
     { # 29. func[T int|string](v T) $builtin.Pointer[main.Foo[T]]
       typeParams: [ 18 ],
       params: [ 20 ],
-      return: 29
+      return: 30
     }
   ],
   solids: [
-    { # 30. $builtin.Pointer[main.Foo[T]] where T int|string|uint
-      target: 5, typeParams: [ 4 ]
+    { # 30.
+      target: 4, typeParams: [ 18 ]
+    },
+    { # 31. $builtin.Pointer[main.Foo[T]] where T int|string|uint
+      target: 5, typeParams: [ 29 ]
     }
   ],
   structs: [
-    { # 31. struct { value T } where T int|string|uint
+    { # 32. struct { value T } where T int|string|uint
       fields: [ 22 ]
     }
   ],

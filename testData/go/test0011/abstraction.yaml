@@ -1,182 +1,184 @@
 {
   language: go,
   basics: [
-    bool, # 1. bool
-    int   # 2. int
+    bool,  # 1. bool
+    int,   # 2. int
+    string # 3. string
   ],
   classes: [
-    { # 3. main.Bacon { Set Set[ ??? ] }{} @ main.go:36
-      name: Bacon, package: 51, data: 68, interface: 10, loc: 36
+    { # 4. main.Bacon { Set Set[ ??? ] }{} @ main.go:36
+      name: Bacon, package: 52, data: 72, interface: 11, loc: 36
     },
-    { # 4. main.Set[K any, V any, M ~Map[K,Pointer[V]]] { m M }{ AsSlices() struct { $value1 List[K]; $value2 List[Pointer[V]] } }
-      name: Set, package: 51, data: 69, interface: 11, loc: 9,
-      typeParams: [ 32, 41, 34 ],
-      methods: [ 18 ]
+    { # 5. main.Set[K any, V any, M ~Map[K,Pointer[V]]] { m M }{ AsSlices() struct { $value1 List[K]; $value2 List[Pointer[V]] } }
+      name: Set, package: 52, data: 73, interface: 13, loc: 9,
+      typeParams: [ 33, 42, 35 ],
+      methods: [ 19 ]
     }
   ],
   interDefs: [
-    { # 5. $builtin.List[T any] { $cap() int; $get(index int) T; $len() int; $set(index int, value T) }
-      name: List, package: 50, type: 12
+    { # 6. $builtin.List[T any] { $cap() int; $get(index int) T; $len() int; $set(index int, value T) }
+      name: List, package: 51, type: 14
     },
-    { # 6. $builtin.Map[TKey any, TValue any]{ $get(key TKey) struct { value TValue; ok bool }; $len() int; $set(key TKey, value TValue) }
-      name: Map, package: 50, type: 15
+    { # 7. $builtin.Map[TKey any, TValue any]{ $get(key TKey) struct { value TValue; ok bool }; $len() int; $set(key TKey, value TValue) }
+      name: Map, package: 51, type: 16
     },
-    { # 7. $builtin.Pointer[T any]{ $deref() T }
-      name: Pointer, package: 50, type: 14
+    { # 8. $builtin.Pointer[T any]{ $deref() T }
+      name: Pointer, package: 51, type: 15
     },
-    { # 8. $builtin.any any
-      name: any, package: 50, type: 10
+    { # 9. $builtin.any any
+      name: any, package: 51, type: 11
     },
-    { # 9. $builtin.comparable[T any] { $compare(other T) int }
-      name: comparable, package: 50, type: 13
+    { # 10. $builtin.comparable[T any] { $compare(other T) int }
+      name: comparable, package: 51, type: 12
     }
   ],
   interfaces: [
-    {}, # 10. any
-    {   # 11. interface[K any, V any, M ~Map[K,Pointer[V]]] { AsSlices() struct { $value1 List[K]; $value2 List[Pointer[V]] } }
-      inherits: [ 13 ],
-      typeParams: [ 32, 41, 34 ],
-      methods: [ 31 ]
-    },
-    { # 12. interface[T any] { $cap() int; $get(index int) T; $len() int; $set(index int, value T) }
-      inherits: [ 10 ],
-      typeParams: [ 37 ],
-      methods: [ 21, 24, 26, 27 ]
-    },
-    { # 13. interface[T any] { $compare(other T) int }
-      inherits: [ 10 ],
-      typeParams: [ 37 ],
-      methods: [ 22 ]
-    },
-    { # 14. interface[T any] { $deref() T }
-      inherits: [ 10 ],
-      typeParams: [ 37 ],
+    {}, # 11. any
+    {   # 12.
+      inherits: [ 11 ],
       methods: [ 23 ]
     },
-    { # 15. interface[TKey any, TValue any]{ $get(key TKey) struct { value TValue; ok bool }; $len() int; $set(key TKey, value TValue) }
-      inherits: [ 10 ],
-      typeParams: [ 39, 40 ],
-      methods: [ 25, 26, 28 ]
+    { # 13.
+      inherits: [ 12 ],
+      typeParams: [ 33, 42, 35 ],
+      methods: [ 32 ]
     },
-    { # 16. interface { ~List[ T<any> ] }
-      inherits: [ 10 ],
-      approx: [ 63 ]
+    { # 14.
+      inherits: [ 11 ],
+      typeParams: [ 38 ],
+      methods: [ 22, 25, 27, 28 ]
     },
-    { # 17. interface { ~Map[ K<any>, Pointer[ V<any> ] ] }
-      inherits: [ 10 ],
+    { # 15.
+      inherits: [ 11 ],
+      typeParams: [ 38 ],
+      methods: [ 24 ]
+    },
+    { # 16.
+      inherits: [ 11 ],
+      typeParams: [ 40, 41 ],
+      methods: [ 26, 27, 29 ]
+    },
+    { # 17. interface { ~List[ T<any> ] }
+      inherits: [ 11 ],
       approx: [ 65 ]
+    },
+    { # 18. interface { ~Map[ K<any>, Pointer[ V<any> ] ] }
+      inherits: [ 11 ],
+      approx: [ 68 ]
     }
   ],
   methods: [
-    { # 18. func main.Set.AsSlices() struct { $value1 List[K]; $value2 List[Pointer[V]] } @ main.go:13
-      name: AsSlices, package: 51, receiver: 4, signature: 54, loc: 13,
+    { # 19. func main.Set.AsSlices() struct { $value1 List[K]; $value2 List[Pointer[V]] } @ main.go:13
+      name: AsSlices, package: 52, receiver: 5, signature: 55, loc: 13,
       metrics: { codeCount: 11, complexity: 2, indents: 12, lineCount: 11 }
     },
-    { # 19. func main.PrintSlice[T any, S ~List[T]](s S) @ main.go:25
-      name: PrintSlice, package: 51, signature: 59, loc: 25,
+    { # 20. func main.PrintSlice[T any, S ~List[T]](s S) @ main.go:25
+      name: PrintSlice, package: 52, signature: 60, loc: 25,
       metrics: { codeCount: 10, complexity: 3, indents: 13, lineCount: 10 }
     },
-    { # 20. func main.main() @ main.go:40
-      name: main, package: 51, signature: 52, loc: 40,
+    { # 21. func main.main() @ main.go:40
+      name: main, package: 52, signature: 53, loc: 40,
       metrics: { codeCount: 16, complexity: 1, indents: 26, lineCount: 16 }
     }
   ],
   named: [
-    { name: $cap,     type: 53 }, # 21. func $cap() int
-    { name: $compare, type: 58 }, # 22. func $compare[T any](other T) int
-    { name: $deref,   type: 55 }, # 23. func $deref[T any]() T
-    { name: $get,     type: 56 }, # 24. func $get[T any](index int) T
-    { name: $get,     type: 60 }, # 25. func $get[TKey any, TValue any](key TKey<any>) struct { value TValue<any>; ok bool }
-    { name: $len,     type: 53 }, # 26. func $len() int
-    { name: $set,     type: 57 }, # 27. func $set[T any](index int, value T)
-    { name: $set,     type: 61 }, # 28. func $set[TKey any, TValue any](key TKey<any>, value TValue<any>)
-    { name: $value1,  type: 62 }, # 29. $value1 List[K<any>]
-    { name: $value2,  type: 64 }, # 30. $value2 List[Pointer[V<any>]]
-    { name: AsSlices, type: 54 }, # 31. func AsSlices() struct { $value1 List[K<any>]; $value2 List[Pointer[V<any>]] }
-    { name: K,        type:  9 }, # 32. K $builtin.comparable
-    { name: K,        type: 10 }, # 33. K any
-    { name: M,        type: 17 }, # 34. M ~Map[K<any>,Pointer[V<any>]]
-    { name: S,        type: 16 }, # 35. S ~List[T<any>]
-    { name: Set,      type:  4 }, # 36. Set Set[ ??? ]    <==== Shouldn't this be solid?
-    { name: T,        type:  8 }, # 37. T $builtin.any
-    { name: T,        type: 10 }, # 38. T any
-    { name: TKey,     type:  8 }, # 39. TKey $builtin.any
-    { name: TValue,   type:  8 }, # 40. TValue $builtin.any
-    { name: V,        type: 10 }, # 41. V any
-    { name: index,    type:  2 }, # 42. index int
-    { name: key,      type: 39 }, # 43. key TKey<any>
-    { name: m,        type: 34 }, # 44. m M<~Map[K<any>,Pointer[V<any>]]>
-    { name: ok,       type:  1 }, # 45. ok bool
-    { name: other,    type: 37 }, # 46. other T<any>
-    { name: s,        type: 35 }, # 47. s S<~List[T<any>]>
-    { name: value,    type: 37 }, # 48. value T<any>
-    { name: value,    type: 40 }  # 49. value TValue<any>
+    { name: $cap,     type: 54 }, # 22. func $cap() int
+    { name: $compare, type: 56 }, # 23. func $compare(other any) int
+    { name: $deref,   type: 57 }, # 24. func $deref[T any]() T
+    { name: $get,     type: 58 }, # 25. func $get[T any](index int) T
+    { name: $get,     type: 61 }, # 26. func $get[TKey any, TValue any](key TKey<any>) struct { value TValue<any>; ok bool }
+    { name: $len,     type: 54 }, # 27. func $len() int
+    { name: $set,     type: 59 }, # 28. func $set[T any](index int, value T)
+    { name: $set,     type: 62 }, # 29. func $set[TKey any, TValue any](key TKey<any>, value TValue<any>)
+    { name: $value1,  type: 64 }, # 30. $value1 List[K<any>]
+    { name: $value2,  type: 66 }, # 31. $value2 List[Pointer[V<any>]]
+    { name: AsSlices, type: 55 }, # 32. func AsSlices() struct { $value1 List[K<any>]; $value2 List[Pointer[V<any>]] }
+    { name: K,        type: 10 }, # 33. K $builtin.comparable
+    { name: K,        type: 11 }, # 34. K any
+    { name: M,        type: 18 }, # 35. M ~Map[K<any>,Pointer[V<any>]]
+    { name: S,        type: 17 }, # 36. S ~List[T<any>]
+    { name: Set,      type: 63 }, # 37. Set Set[ ??? ]    <==== Shouldn't this be solid?
+    { name: T,        type:  9 }, # 38. T $builtin.any
+    { name: T,        type: 11 }, # 39. T any
+    { name: TKey,     type:  9 }, # 40. TKey $builtin.any
+    { name: TValue,   type:  9 }, # 41. TValue $builtin.any
+    { name: V,        type: 11 }, # 42. V any
+    { name: index,    type:  2 }, # 43. index int
+    { name: key,      type: 40 }, # 44. key TKey<any>
+    { name: m,        type: 35 }, # 45. m M<~Map[K<any>,Pointer[V<any>]]>
+    { name: ok,       type:  1 }, # 46. ok bool
+    { name: other,    type:  9 }, # 47. other any
+    { name: s,        type: 36 }, # 48. s S<~List[T<any>]>
+    { name: value,    type: 38 }, # 49. value T<any>
+    { name: value,    type: 41 }  # 50. value TValue<any>
   ],
   packages: [
-    { # 50. $builtin package
+    { # 51. $builtin package
       name: $builtin,
       path: $builtin,
-      interDefs: [ 5, 6, 7, 8, 9 ]
+      interDefs: [ 6, 7, 8, 9, 10 ]
     },
-    { # 51. main package
+    { # 52. main package
       name: main,
       path: command-line-arguments,
-      classes: [ 3, 4 ],
-      methods: [ 18, 19, 20 ]
+      classes: [ 4, 5 ],
+      methods: [ 19, 20, 21 ]
     }
   ],
   signatures: [
-    {}, # 52. func()()
-    {   # 53. func() int
+    {}, # 53. func()()
+    {   # 54. func() int
       return: 2
     },
-    { # 54. func() struct { $value1 List[K<any>]; $value2 List[Pointer[V<any>]] }
-      return: 67
+    { # 55.
+      return: 71
     },
-    { # 55. func[T any]() T
-      typeParams: [ 37 ],
-      return: 37
-    },
-    { # 56. func[T any](index int) T
-      typeParams: [ 37 ],
-      params: [ 42 ],
-      return: 37
-    },
-    { # 57. func[T any](index int, value T)
-      typeParams: [ 37 ],
-      params: [ 42, 48 ]
-    },
-    { # 58. func[T any](other T) int
-      typeParams: [ 37 ],
-      params: [ 46 ],
+    { # 56.
+      params: [ 47 ],
       return: 2
     },
-    { # 59. func[T any, S ~List[T]](s S)
-      typeParams: [ 38, 35 ],
-      params: [ 47 ]
+    { # 57.
+      typeParams: [ 38 ],
+      return: 38
     },
-    { # 60. func[TKey any, TValue any](key TKey) struct { value TValue; ok bool }
-      typeParams: [ 39, 40 ],
+    { # 58.
+      typeParams: [ 38 ],
       params: [ 43 ],
-      return: 70
+      return: 38
     },
-    { # 61. func[TKey any, TValue any](key TKey, value TValue)
-      typeParams: [ 39, 40 ],
+    { # 59.
+      typeParams: [ 38 ],
       params: [ 43, 49 ]
+    },
+    { # 60.
+      typeParams: [ 39, 36 ],
+      params: [ 48 ]
+    },
+    { # 61.
+      typeParams: [ 40, 41 ],
+      params: [ 44 ],
+      return: 74
+    },
+    { # 62.
+      typeParams: [ 40, 41 ],
+      params: [ 44, 50 ]
     }
   ],
   solids: [
-    { target: 5, typeParams: [ 33 ] },     # 62. List[K<any>]
-    { target: 5, typeParams: [ 38 ] },     # 63. List[T<any>]
-    { target: 5, typeParams: [ 66 ] },     # 64. List[Pointer[V<any>]]
-    { target: 6, typeParams: [ 33, 66 ] }, # 65. Map[K<any>, Pointer[V<any>]]
-    { target: 7, typeParams: [ 41 ] }      # 66. Pointer[V<any>]
+    { target: 5, typeParams: [ 3, 2, 67 ] }, # 63.
+    { target: 6, typeParams: [ 34 ] },       # 64.
+    { target: 6, typeParams: [ 39 ] },       # 65.
+    { target: 6, typeParams: [ 70 ] },       # 66.
+    { target: 7, typeParams: [ 3, 69 ] },    # 67.
+    { target: 7, typeParams: [ 34, 70 ] },   # 68.
+    { target: 8, typeParams: [2] },          # 69.
+    { target: 8, typeParams: [ 42 ] }        # 70.
   ],
   structs: [
-    { fields: [ 29, 30 ] }, # 67. struct { $value1 List[K<any>]; $value2 List[Pointer[V<any>]] }
-    { fields: [ 36 ] },     # 68. struct { Set Set[ ??? ] }
-    { fields: [ 44 ] },     # 69. struct { m M<~Map[K<any>,Pointer[V<any>]]> }
-    { fields: [ 49, 45 ] }  # 70. struct { value TValue<any>; ok bool }
+    { fields: [ 30, 31 ] }, # 71. struct { $value1 List[K<any>]; $value2 List[Pointer[V<any>]] }
+    { fields: [ 37 ] },     # 72. struct { Set Set[ ??? ] }
+    { fields: [ 45 ] },     # 73. struct { m M<~Map[K<any>,Pointer[V<any>]]> }
+    { fields: [ 50, 46 ] }  # 74. struct { value TValue<any>; ok bool }
   ],
   locs: {
     '1': main.go
