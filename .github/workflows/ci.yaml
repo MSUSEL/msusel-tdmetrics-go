@@ -45,7 +45,7 @@ jobs:
       - name: Run Tests
         working-directory: ./goAbstractor
         timeout-minutes: 60
-        run: go test -v -cover ./...
+        run: go test -cover ./...
 
   techDebtMetrics:
     strategy:
