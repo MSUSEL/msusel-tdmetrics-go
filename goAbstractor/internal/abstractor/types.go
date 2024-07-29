@@ -201,9 +201,6 @@ func (ab *abstractor) convertStruct(t *types.Struct) constructs.Struct {
 	for i := range t.NumFields() {
 		f := t.Field(i)
 		if !blankName(f.Name()) {
-
-			// TODO: Why didn't some types get put in solids.
-
 			field := ab.proj.NewNamed(constructs.NamedArgs{
 				Name: f.Name(),
 				Type: ab.convertType(f.Type()),

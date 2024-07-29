@@ -9,17 +9,28 @@
     { # 4. main.Bacon { Set Set[ ??? ] }{} @ main.go:36
       name: Bacon, package: 52, data: 72, interface: 11, loc: 36
     },
-    { # 5. main.Set[K any, V any, M ~Map[K,Pointer[V]]] { m M }{ AsSlices() struct { $value1 List[K]; $value2 List[Pointer[V]] } }
+    { # 5. main.Set[K any, V any, M ~Map[K,Pointer[V]]] { m M }{
+      #      AsSlices() struct { $value1 List[K]; $value2 List[Pointer[V]] }
+      #    }
       name: Set, package: 52, data: 73, interface: 13, loc: 9,
       typeParams: [ 33, 42, 35 ],
       methods: [ 19 ]
     }
   ],
   interDefs: [
-    { # 6. $builtin.List[T any] { $cap() int; $get(index int) T; $len() int; $set(index int, value T) }
+    { # 6. $builtin.List[T any] {
+      #      $cap() int;
+      #      $get(index int) T;
+      #      $len() int;
+      #      $set(index int, value T)
+      #    }
       name: List, package: 51, type: 14
     },
-    { # 7. $builtin.Map[TKey any, TValue any]{ $get(key TKey) struct { value TValue; ok bool }; $len() int; $set(key TKey, value TValue) }
+    { # 7. $builtin.Map[TKey any, TValue any]{
+      #       $get(key TKey) struct { value TValue; ok bool }
+      #       $len() int
+      #       $set(key TKey, value TValue)
+      #     }
       name: Map, package: 51, type: 16
     },
     { # 8. $builtin.Pointer[T any]{ $deref() T }
@@ -34,26 +45,37 @@
   ],
   interfaces: [
     {}, # 11. any
-    {   # 12.
+    {   # 12. interface { $compare(other any) int }
       inherits: [ 11 ],
       methods: [ 23 ]
     },
-    { # 13.
+    { # 13. interface[K<comparable>, V<any>, M<~Map[K<any>,Pointer[V<any>]]>]{
+      #       AsSlices() struct { $value1 List[K<any>]; $value2 List[Pointer[V<any>]] }
+      #     }
       inherits: [ 12 ],
       typeParams: [ 33, 42, 35 ],
       methods: [ 32 ]
     },
-    { # 14.
+    { # 14. interface[T any] {
+      #       $cap() int
+      #       $get[T any](index int) T
+      #       $len() int
+      #       $set[T any](index int, value T)
+      #     } 
       inherits: [ 11 ],
       typeParams: [ 38 ],
       methods: [ 22, 25, 27, 28 ]
     },
-    { # 15.
+    { # 15. interface[T any] { $deref[T any]() T }
       inherits: [ 11 ],
       typeParams: [ 38 ],
       methods: [ 24 ]
     },
-    { # 16.
+    { # 16. interface[TKey any, TValue any]{
+      #       $get(key TKey) struct { value TValue; ok bool }
+      #       $len() int
+      #       $set(key TKey, value TValue)
+      #     }
       inherits: [ 11 ],
       typeParams: [ 40, 41 ],
       methods: [ 26, 27, 29 ]
@@ -97,7 +119,7 @@
     { name: K,        type: 11 }, # 34. K any
     { name: M,        type: 18 }, # 35. M ~Map[K<any>,Pointer[V<any>]]
     { name: S,        type: 17 }, # 36. S ~List[T<any>]
-    { name: Set,      type: 63 }, # 37. Set Set[ ??? ]    <==== Shouldn't this be solid?
+    { name: Set,      type: 63 }, # 37. Set Set[string, int, Map[string, Pointer[int]]]
     { name: T,        type:  9 }, # 38. T $builtin.any
     { name: T,        type: 11 }, # 39. T any
     { name: TKey,     type:  9 }, # 40. TKey $builtin.any
@@ -130,49 +152,49 @@
     {   # 54. func() int
       return: 2
     },
-    { # 55.
+    { # 55. func() struct { $value1 List[K<any>]; $value2 List[Pointer[V<any>]] }
       return: 71
     },
-    { # 56.
+    { # 56. func(other any) int
       params: [ 47 ],
       return: 2
     },
-    { # 57.
+    { # 57. func[T any]() T
       typeParams: [ 38 ],
       return: 38
     },
-    { # 58.
+    { # 58. func[T any](index int) T
       typeParams: [ 38 ],
       params: [ 43 ],
       return: 38
     },
-    { # 59.
+    { # 59. func[T any](index int, value T)
       typeParams: [ 38 ],
       params: [ 43, 49 ]
     },
-    { # 60.
+    { # 60. func[T any, S ~List[T]](s S)
       typeParams: [ 39, 36 ],
       params: [ 48 ]
     },
-    { # 61.
+    { # 61. func[TKey any, TValue any](key TKey) struct { value TValue; ok bool }
       typeParams: [ 40, 41 ],
       params: [ 44 ],
       return: 74
     },
-    { # 62.
+    { # 62. func[TKey any, TValue any](key TKey, value TValue)
       typeParams: [ 40, 41 ],
       params: [ 44, 50 ]
     }
   ],
   solids: [
-    { target: 5, typeParams: [ 3, 2, 67 ] }, # 63.
-    { target: 6, typeParams: [ 34 ] },       # 64.
-    { target: 6, typeParams: [ 39 ] },       # 65.
-    { target: 6, typeParams: [ 70 ] },       # 66.
-    { target: 7, typeParams: [ 3, 69 ] },    # 67.
-    { target: 7, typeParams: [ 34, 70 ] },   # 68.
-    { target: 8, typeParams: [2] },          # 69.
-    { target: 8, typeParams: [ 42 ] }        # 70.
+    { target: 5, typeParams: [ 3, 2, 67 ] }, # 63. Set[string, int, Map[string, Pointer[int]]]
+    { target: 6, typeParams: [ 34 ] },       # 64. List[K<any>]              <<====================== TODO: Why not 33: List[K<comparable>]?
+    { target: 6, typeParams: [ 39 ] },       # 65. List[T<any>]
+    { target: 6, typeParams: [ 70 ] },       # 66. List[Pointer[V<any>]]
+    { target: 7, typeParams: [ 3, 69 ] },    # 67. Map[string, Pointer[int]]
+    { target: 7, typeParams: [ 34, 70 ] },   # 68. Map[K<any>, Pointer[V<any>]]
+    { target: 8, typeParams: [ 2 ] },        # 69. Pointer[int]
+    { target: 8, typeParams: [ 42 ] }        # 70. Pointer[V<any>]
   ],
   structs: [
     { fields: [ 30, 31 ] }, # 71. struct { $value1 List[K<any>]; $value2 List[Pointer[V<any>]] }

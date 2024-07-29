@@ -95,7 +95,7 @@
     }
   ],
   solids: [
-    { # 30.
+    { # 30.  main.Foo[T] where T int|string
       target: 4, typeParams: [ 18 ]
     },
     { # 31. $builtin.Pointer[main.Foo[T]] where T int|string|uint
