@@ -20,6 +20,7 @@ env:
 jobs:
   goAbstractor:
     strategy:
+      fail-fast: false
       matrix:
         trials:
         - name: Linux
@@ -48,6 +49,7 @@ jobs:
 
   techDebtMetrics:
     strategy:
+      fail-fast: false
       matrix:
         trials:
         - name: Linux
