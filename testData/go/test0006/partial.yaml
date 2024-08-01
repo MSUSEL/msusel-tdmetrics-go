@@ -15,12 +15,12 @@
       basics:       15,
       classes:     719,
       interDefs:    60,
-      interfaces:  347,
+      interfaces:  350,
       methods:    4940,
-      named:      5680,
+      named:      5687,
       packages:     49,
       signatures: 2725,
-      solids:      583,
+      solids:      584,
       structs:     916,
       values:     3740 
     }
@@ -42,74 +42,74 @@
     os: windows,
     path: [ packages, name=cats ],
     data: {
-      index: 11764,
+      index: 11774,
       name: cats,
       path: command-line-arguments,
       classes: [ 16, 17, 18, 19, 20 ],
-      imports: [ 11766, 11801, 11802, 11803 ],
-      methods: [ 1146, 1147, 1148, 1149, 1150, 1151, 1152, 1153, 1154,
-                 1155, 1156, 1157, 1158, 1159, 1160, 1161, 1162, 1163],
-      values: [ 16035, 16036, 16037, 16038, 16039, 16040, 16041, 16042,
-                16043, 16044, 16045, 16046, 16047, 16048, 16049, 16050,
-                16051, 16052, 16053, 16054, 16055, 16056, 16057, 16058,
-                16059, 16060, 16061 ]
+      imports: [ 11776, 11811, 11812, 11813 ],
+      methods: [ 1149, 1150, 1151, 1152, 1153, 1154, 1155, 1156, 1157,
+                 1158, 1159, 1160, 1161, 1162, 1163, 1164, 1165, 1166 ],
+      values: [ 16046, 16047, 16048, 16049, 16050, 16051, 16052, 16053,
+                16054, 16055, 16056, 16057, 16058, 16059, 16060, 16061,
+                16062, 16063, 16064, 16065, 16066, 16067, 16068, 16069,
+                16070, 16071, 16072 ]
     }
   },
   {
     name: classes,
     os: windows,
-    path: [ classes, package=~^11764$, '!loc' ],
+    path: [ classes, package=~^11774$, '!loc' ],
     data: [
       {
-        index: 16, name: Cat, package: 11764, data: 15315, interface: 795
+        index: 16, name: Cat, package: 11774, data: 15326, interface: 795
       },
       {
-        index: 17, name: CatBreed, package: 11764, data: 4, interface: 955,
-        methods: [ 1160 ]
+        index: 17, name: CatBreed, package: 11774, data: 4, interface: 955,
+        methods: [ 1163 ]
       },
       {
-        index: 18, name: CatTable, package: 11764, data: 14713, interface: 811,
-        methods: [ 1146, 1147, 1148, 1149, 1150, 1151, 1152,
-                   1153, 1154, 1155, 1158, 1161 ]
+        index: 18, name: CatTable, package: 11774, data: 14724, interface: 811,
+        methods: [ 1149, 1150, 1151, 1152, 1153, 1154,
+                   1155, 1156, 1157, 1158, 1161, 1164 ]
       },
       {
-        index: 19, name: ID, package: 11764, data: 9, interface: 795
+        index: 19, name: ID, package: 11774, data: 9, interface: 795
       },
       {
-        index: 20, name: IDSlice, package: 11764, data: 14555, interface: 896,
-        methods: [ 1156, 1157, 1162, 1163 ]
+        index: 20, name: IDSlice, package: 11774, data: 14565, interface: 896,
+        methods: [ 1159, 1160, 1165, 1166 ]
       }
     ]
   },
   {
     name: methods,
     os: windows,
-    path: [ methods, package=~^11764$, '!~^(metrics|loc)$' ],
+    path: [ methods, package=~^11774$, '!~^(metrics|loc)$' ],
     data: [
-      { index: 1146, name: Add,           package: 11764, receiver: 18, signature: 12969 },
-      { index: 1147, name: AddNew,        package: 11764, receiver: 18, signature: 13239 },
-      { index: 1148, name: Age,           package: 11764, receiver: 18, signature: 12966 },
-      { index: 1149, name: AgeRange,      package: 11764, receiver: 18, signature: 11945 },
-      { index: 1150, name: AllBreeds,     package: 11764, receiver: 18, signature: 11887 },
-      { index: 1151, name: AllIDs,        package: 11764, receiver: 18, signature: 11826 },
-      { index: 1152, name: Breed,         package: 11764, receiver: 18, signature: 12968 },
-      { index: 1153, name: CatsWithBreed, package: 11764, receiver: 18, signature: 12293 },
-      { index: 1154, name: CatsWithName,  package: 11764, receiver: 18, signature: 13203 },
-      { index: 1155, name: Has,           package: 11764, receiver: 18, signature: 12965 },
-      { index: 1156, name: Len,           package: 11764, receiver: 20, signature: 11814 },
-      { index: 1157, name: Less,          package: 11764, receiver: 20, signature: 12926 },
-      { index: 1158, name: Name,          package: 11764, receiver: 18, signature: 12967 },
-      { index: 1159, name: NewID,         package: 11764,               signature: 11825 },
-      { index: 1160, name: String,        package: 11764, receiver: 17, signature: 11818 },
-      { index: 1161, name: String,        package: 11764, receiver: 18, signature: 11818 },
-      { index: 1162, name: String,        package: 11764, receiver: 20, signature: 11818 },
-      { index: 1163, name: Swap,          package: 11764, receiver: 20, signature: 12925 }
+      { index: 1149, name: Add,           package: 11774, receiver: 18, signature: 12979 },
+      { index: 1150, name: AddNew,        package: 11774, receiver: 18, signature: 13249 },
+      { index: 1151, name: Age,           package: 11774, receiver: 18, signature: 12976 },
+      { index: 1152, name: AgeRange,      package: 11774, receiver: 18, signature: 11955 },
+      { index: 1153, name: AllBreeds,     package: 11774, receiver: 18, signature: 11897 },
+      { index: 1154, name: AllIDs,        package: 11774, receiver: 18, signature: 11836 },
+      { index: 1155, name: Breed,         package: 11774, receiver: 18, signature: 12978 },
+      { index: 1156, name: CatsWithBreed, package: 11774, receiver: 18, signature: 12303 },
+      { index: 1157, name: CatsWithName,  package: 11774, receiver: 18, signature: 13213 },
+      { index: 1158, name: Has,           package: 11774, receiver: 18, signature: 12975 },
+      { index: 1159, name: Len,           package: 11774, receiver: 20, signature: 11824 },
+      { index: 1160, name: Less,          package: 11774, receiver: 20, signature: 12936 },
+      { index: 1161, name: Name,          package: 11774, receiver: 18, signature: 12977 },
+      { index: 1162, name: NewID,         package: 11774,               signature: 11835 },
+      { index: 1163, name: String,        package: 11774, receiver: 17, signature: 11828 },
+      { index: 1164, name: String,        package: 11774, receiver: 18, signature: 11828 },
+      { index: 1165, name: String,        package: 11774, receiver: 20, signature: 11828 },
+      { index: 1166, name: Swap,          package: 11774, receiver: 20, signature: 12935 }
     ]
   },
   {
     name: variables and constants,
     os: windows,
-    path: [ values, package=~^11764$, ~^(name|type|const)$ ],
+    path: [ values, package=~^11774$, ~^(name|type|const)$ ],
     data: [
       { const: true, name: Abyssinian,        type: 17 }, # 17 = CatBreed
       { const: true, name: AmericanShorthair, type: 17 },

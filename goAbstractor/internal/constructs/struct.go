@@ -4,6 +4,7 @@ import (
 	"go/token"
 	"go/types"
 
+	"github.com/Snow-Gremlin/goToolbox/terrors/terror"
 	"github.com/Snow-Gremlin/goToolbox/utils"
 
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/assert"
@@ -21,24 +22,32 @@ type (
 	StructArgs struct {
 		RealType *types.Struct
 		Fields   []Named
+		Embedded []bool
 		Package  Package
 	}
 
 	structImp struct {
 		realType *types.Struct
 		fields   []Named
+		embedded []bool
 		index    int
 	}
 )
 
 func newStruct(args StructArgs) Struct {
+	if len(args.Fields) != len(args.Embedded) {
+		panic(terror.New(`the field count must be the same as the embedded flags`).
+			With(`fields`, len(args.Fields)).
+			With(`embedded`, len(args.Embedded)))
+	}
+
 	if utils.IsNil(args.RealType) {
 		assert.ArgNotNil(`package`, args.Package)
 
-		fields := make([]*types.Var, len(args.Fields))
 		pkg := args.Package.Source().Types
+		fields := make([]*types.Var, len(args.Fields))
 		for i, f := range args.Fields {
-			fields[i] = types.NewVar(token.NoPos, pkg, f.Name(), f.GoType())
+			fields[i] = types.NewField(token.NoPos, pkg, f.Name(), f.GoType(), args.Embedded[i])
 		}
 
 		args.RealType = types.NewStruct(fields, nil)
@@ -47,6 +56,7 @@ func newStruct(args StructArgs) Struct {
 	return &structImp{
 		realType: args.RealType,
 		fields:   args.Fields,
+		embedded: args.Embedded,
 	}
 }
 

@@ -18,10 +18,11 @@ type (
 		TypeDesc
 		_interface()
 
-		IsSupertypeOf(other Interface) bool
-		AddInheritors(inter Interface) bool
-		SetInheritance()
-		SortInheritance()
+		isSupertypeOf(other Interface) bool
+		addInheritors(inter Interface) bool
+		findImplements(c Class) bool
+		setInheritance()
+		sortInheritance()
 	}
 
 	InterfaceArgs struct {
@@ -158,17 +159,17 @@ func (it *interfaceImp) ToJson(ctx *jsonify.Context) jsonify.Datum {
 		AddNonZero(ctx2, `methods`, it.methods)
 }
 
-func (it *interfaceImp) IsSupertypeOf(other Interface) bool {
+func (it *interfaceImp) isSupertypeOf(other Interface) bool {
 	otherIt, ok := other.GoType().(*types.Interface)
 	return ok && types.Implements(it.realType, otherIt)
 }
 
-func (it *interfaceImp) AddInheritors(other Interface) bool {
+func (it *interfaceImp) addInheritors(other Interface) bool {
 	otherImp := other.(*interfaceImp)
 	if it == otherImp {
 		return true
 	}
-	if !otherImp.IsSupertypeOf(it) {
+	if !otherImp.isSupertypeOf(it) {
 		return false
 	}
 
@@ -182,7 +183,7 @@ func addInheritors(inheritors []Interface, other Interface) []Interface {
 	// Tries to home the given other interface into all siblings.
 	homed := false
 	for _, inheritor := range inheritors {
-		if inheritor.AddInheritors(otherImp) {
+		if inheritor.addInheritors(otherImp) {
 			homed = true
 		}
 	}
@@ -193,7 +194,7 @@ func addInheritors(inheritors []Interface, other Interface) []Interface {
 	// Move super type siblings into the given other interface.
 	changed := false
 	for i, inheritor := range inheritors {
-		if inheritor.IsSupertypeOf(otherImp) {
+		if inheritor.isSupertypeOf(otherImp) {
 			otherImp.inheritors = append(otherImp.inheritors, inheritor)
 			inheritors[i] = nil
 			changed = true
@@ -207,7 +208,25 @@ func addInheritors(inheritors []Interface, other Interface) []Interface {
 	return append(inheritors, otherImp)
 }
 
-func (it *interfaceImp) SetInheritance() {
+func (it *interfaceImp) findImplements(c Class) bool {
+	if !types.Implements(c.GoType(), it.GoType().(*types.Interface)) {
+		return false
+	}
+	homed := false
+	for _, inner := range it.inheritors {
+		if inner.findImplements(c) {
+			homed = true
+		}
+	}
+	if homed {
+		return true
+	}
+
+	c.addImplement(it)
+	return true
+}
+
+func (it *interfaceImp) setInheritance() {
 	for _, other := range it.inheritors {
 		otherInter, ok := other.(*interfaceImp)
 		if !ok {
@@ -219,7 +238,7 @@ func (it *interfaceImp) SetInheritance() {
 	}
 }
 
-func (it *interfaceImp) SortInheritance() {
+func (it *interfaceImp) sortInheritance() {
 	slices.SortFunc(it.inheritors, Compare)
 	slices.SortFunc(it.inherits, Compare)
 }

@@ -2,7 +2,6 @@ package constructs
 
 import (
 	"go/types"
-	"slices"
 	"strings"
 
 	"github.com/Snow-Gremlin/goToolbox/terrors/terror"
@@ -20,7 +19,7 @@ type (
 		_class()
 
 		addMethod(met Method) Method
-		resolveInterface(proj Project, pkg Package)
+		addImplement(inter Interface)
 	}
 
 	ClassArgs struct {
@@ -38,9 +37,9 @@ type (
 		data       TypeDesc
 		typeParams []Named
 
-		methods Set[Method]
-		inter   Interface
-		index   int
+		methods    Set[Method]
+		index      int
+		implements Set[Interface]
 	}
 )
 
@@ -64,6 +63,7 @@ func newClass(args ClassArgs) Class {
 		data:       args.Data,
 		typeParams: args.TypeParams,
 		methods:    NewSet[Method](),
+		implements: NewSet[Interface](),
 	}
 }
 
@@ -79,8 +79,8 @@ func (c *classImp) addMethod(met Method) Method {
 	return c.methods.Insert(met)
 }
 
-func (c *classImp) SetInterface(inter Interface) {
-	c.inter = inter
+func (c *classImp) addImplement(inter Interface) {
+	c.implements.Insert(inter)
 }
 
 func (c *classImp) CompareTo(other Construct) int {
@@ -112,30 +112,12 @@ func (c *classImp) ToJson(ctx *jsonify.Context) jsonify.Datum {
 		AddNonZero(ctx2, `loc`, c.loc).
 		AddNonZero(ctx2, `typeParams`, c.typeParams).
 		AddNonZero(ctx2, `methods`, c.methods).
-		AddNonZero(ctx2, `interface`, c.inter)
+		AddNonZero(ctx2, `implements`, c.implements)
 }
 
 func (c *classImp) Visit(v visitor.Visitor) {
 	visitor.Visit(v, c.data)
 	visitor.Visit(v, c.typeParams...)
 	visitor.VisitList(v, c.methods.Values())
-	visitor.Visit(v, c.inter)
-}
-
-func (c *classImp) resolveInterface(proj Project, pkg Package) {
-	methods := c.methods.Values()
-	itMethods := make([]Named, methods.Count())
-	for i := range methods.Count() {
-		m := methods.Get(i)
-		itMethods[i] = proj.NewNamed(NamedArgs{
-			Name: m.Name(),
-			Type: m.Signature(),
-		})
-	}
-
-	c.inter = proj.NewInterface(InterfaceArgs{
-		Methods:    itMethods,
-		TypeParams: slices.Clone(c.typeParams),
-		Package:    pkg,
-	})
+	visitor.Visit(v, c.implements)
 }

@@ -2,16 +2,6 @@
 
 ## Go Tests
 
-- Test when a type parameter has an approximate with function,
-    see [generics spec](https://go.dev/ref/spec#General_interfaces):
-    `interface { ~int; String() string }`
-
-- Test nesting structs without naming:
-    `struct { struct { X int }; struct { Y int } }`
-
-- Test nesting interfaces without naming:
-    `interface { interface { Foo() }; interface { Bar() } }`
-
 - Test creating multiple return struct with type param:
     `func (s S[T,U]) func() ([]T, *U)`
 

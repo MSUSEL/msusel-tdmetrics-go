@@ -93,14 +93,12 @@ func (ab *abstractor) convertInterface(t *types.Interface) constructs.Interface 
 	}
 
 	var exact, approx []constructs.TypeDesc
-	if t.IsImplicit() {
-		for i := range t.NumEmbeddeds() {
-			et := t.EmbeddedType(i)
-			if union, ok := et.(*types.Union); ok {
-				exact2, approx2 := ab.readUnionTerms(union)
-				exact = append(exact, exact2...)
-				approx = append(approx, approx2...)
-			}
+	for i := range t.NumEmbeddeds() {
+		et := t.EmbeddedType(i)
+		if union, ok := et.(*types.Union); ok {
+			exact2, approx2 := ab.readUnionTerms(union)
+			exact = append(exact, exact2...)
+			approx = append(approx, approx2...)
 		}
 	}
 
@@ -197,7 +195,8 @@ func (ab *abstractor) convertSlice(t *types.Slice) constructs.TypeDesc {
 }
 
 func (ab *abstractor) convertStruct(t *types.Struct) constructs.Struct {
-	fields := []constructs.Named{}
+	fields := make([]constructs.Named, 0, t.NumFields())
+	embedded := make([]bool, 0, t.NumFields())
 	for i := range t.NumFields() {
 		f := t.Field(i)
 		if !blankName(f.Name()) {
@@ -206,12 +205,14 @@ func (ab *abstractor) convertStruct(t *types.Struct) constructs.Struct {
 				Type: ab.convertType(f.Type()),
 			})
 			fields = append(fields, field)
+			embedded = append(embedded, f.Embedded())
 		}
 	}
 
 	return ab.proj.NewStruct(constructs.StructArgs{
 		RealType: t,
 		Fields:   fields,
+		Embedded: embedded,
 		Package:  ab.curPkg,
 	})
 }

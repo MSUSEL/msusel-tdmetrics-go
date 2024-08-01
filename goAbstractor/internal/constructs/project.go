@@ -36,7 +36,6 @@ type (
 
 		//==========================
 
-		Interfaces() collections.ReadonlyList[Interface]
 		Packages() collections.ReadonlyList[Package]
 		References() collections.ReadonlyList[Reference]
 
@@ -54,7 +53,6 @@ type (
 
 		ResolveImports()
 		ResolveReceivers()
-		ResolveClassInterfaces()
 		ResolveInheritance()
 		ResolveReferences()
 		PruneTypes()
@@ -274,27 +272,27 @@ func (p *projectImp) ResolveReceivers() {
 	}
 }
 
-func (p *projectImp) ResolveClassInterfaces() {
-	packages := p.allPackages.Values()
-	for i := range packages.Count() {
-		packages.Get(i).resolveClassInterfaces(p)
-	}
-}
-
 func (p *projectImp) ResolveInheritance() {
-	inters := p.Interfaces()
-
+	inters := p.allInterfaces.Values()
 	roots := []Interface{}
 	for i := range inters.Count() {
 		roots = addInheritors(roots, inters.Get(i))
 	}
 
 	for i := range inters.Count() {
-		inters.Get(i).SetInheritance()
+		inters.Get(i).setInheritance()
 	}
 
 	for i := range inters.Count() {
-		inters.Get(i).SortInheritance()
+		inters.Get(i).sortInheritance()
+	}
+
+	classes := p.allClasses.Values()
+	for i := range classes.Count() {
+		c := classes.Get(i)
+		for _, root := range roots {
+			root.findImplements(c)
+		}
 	}
 }
 

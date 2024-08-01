@@ -37,7 +37,6 @@ type (
 		allTypes() collections.Enumerator[Definition]
 
 		resolveReceivers()
-		resolveClassInterfaces(proj Project)
 		removeImports(predicate func(Construct) bool)
 	}
 
@@ -196,13 +195,6 @@ func (p *packageImp) resolveReceivers() {
 			m.SetReceiver(c)
 			c.addMethod(m)
 		}
-	}
-}
-
-func (p *packageImp) resolveClassInterfaces(proj Project) {
-	classes := p.classes.Values()
-	for i := range classes.Count() {
-		classes.Get(i).resolveInterface(proj, p)
 	}
 }
 
