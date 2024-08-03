@@ -14,13 +14,13 @@ import (
 
 type (
 	Method interface {
-		Definition
+		Declaration
 		_method()
 
 		Metrics() metrics.Metrics
 		Signature() Signature
 		RecvName() string
-		SetReceiver(recv Class)
+		SetReceiver(recv ClassDecl)
 		IsInit() bool
 	}
 
@@ -43,7 +43,7 @@ type (
 		metrics    metrics.Metrics
 		noCopyRecv bool
 		recvName   string
-		receiver   Class
+		receiver   ClassDecl
 		typeParams []Named
 		index      int
 	}
@@ -67,17 +67,17 @@ func newMethod(args MethodArgs) Method {
 	}
 }
 
-func (m *methodImp) _method()                 {}
-func (m *methodImp) Kind() kind.Kind          { return kind.Method }
-func (m *methodImp) GoType() types.Type       { return m.signature.GoType() }
-func (m *methodImp) SetIndex(index int)       { m.index = index }
-func (m *methodImp) Name() string             { return m.name }
-func (m *methodImp) Location() locs.Loc       { return m.loc }
-func (m *methodImp) Package() Package         { return m.pkg }
-func (m *methodImp) Metrics() metrics.Metrics { return m.metrics }
-func (m *methodImp) Signature() Signature     { return m.signature }
-func (m *methodImp) RecvName() string         { return m.recvName }
-func (m *methodImp) SetReceiver(recv Class)   { m.receiver = recv }
+func (m *methodImp) _method()                   {}
+func (m *methodImp) Kind() kind.Kind            { return kind.Method }
+func (m *methodImp) GoType() types.Type         { return m.signature.GoType() }
+func (m *methodImp) SetIndex(index int)         { m.index = index }
+func (m *methodImp) Name() string               { return m.name }
+func (m *methodImp) Location() locs.Loc         { return m.loc }
+func (m *methodImp) Package() Package           { return m.pkg }
+func (m *methodImp) Metrics() metrics.Metrics   { return m.metrics }
+func (m *methodImp) Signature() Signature       { return m.signature }
+func (m *methodImp) RecvName() string           { return m.recvName }
+func (m *methodImp) SetReceiver(recv ClassDecl) { m.receiver = recv }
 
 func (m *methodImp) IsInit() bool {
 	return strings.HasPrefix(m.name, `init#`) && m.signature.Vacant() && len(m.recvName) <= 0

@@ -25,15 +25,15 @@ type (
 	Baker interface {
 		BakeBuiltin() constructs.Package
 		BakeBasic(typeName string) constructs.Basic
-		BakeAny() constructs.InterDef
-		BakeList() constructs.InterDef
-		BakeChan() constructs.InterDef
-		BakeMap() constructs.InterDef
-		BakePointer() constructs.InterDef
-		BakeComplex64() constructs.InterDef
-		BakeComplex128() constructs.InterDef
-		BakeError() constructs.InterDef
-		BakeComparable() constructs.InterDef
+		BakeAny() constructs.InterfaceDecl
+		BakeList() constructs.InterfaceDecl
+		BakeChan() constructs.InterfaceDecl
+		BakeMap() constructs.InterfaceDecl
+		BakePointer() constructs.InterfaceDecl
+		BakeComplex64() constructs.InterfaceDecl
+		BakeComplex128() constructs.InterfaceDecl
+		BakeError() constructs.InterfaceDecl
+		BakeComparable() constructs.InterfaceDecl
 	}
 
 	bakerImp struct {
@@ -151,8 +151,8 @@ func (b *bakerImp) BakeBasic(typeName string) constructs.Basic {
 
 // BakeAny bakes in an interface to represent "any"
 // the base object that (almost) all other types inherit from.
-func (b *bakerImp) BakeAny() constructs.InterDef {
-	return bakeOnce(b, `any`, func() constructs.InterDef {
+func (b *bakerImp) BakeAny() constructs.InterfaceDecl {
+	return bakeOnce(b, `any`, func() constructs.InterfaceDecl {
 		pkg := b.BakeBuiltin()
 
 		// any
@@ -161,7 +161,7 @@ func (b *bakerImp) BakeAny() constructs.InterDef {
 			Package:  pkg,
 		})
 
-		return b.proj.NewInterDef(constructs.InterDefArgs{
+		return b.proj.NewInterfaceDecl(constructs.InterfaceDeclArgs{
 			Package:  pkg,
 			Name:     `any`,
 			Type:     in,
@@ -181,8 +181,8 @@ func (b *bakerImp) BakeAny() constructs.InterDef {
 //
 // Note: The difference between an array and slice aren't
 // important for the abstractor, so they are combined into one.
-func (b *bakerImp) BakeList() constructs.InterDef {
-	return bakeOnce(b, `list[T any]`, func() constructs.InterDef {
+func (b *bakerImp) BakeList() constructs.InterfaceDecl {
+	return bakeOnce(b, `List[T any]`, func() constructs.InterfaceDecl {
 		pkg := b.BakeBuiltin()
 		tp := b.proj.NewNamed(constructs.NamedArgs{
 			Name: `T`,
@@ -226,7 +226,7 @@ func (b *bakerImp) BakeList() constructs.InterDef {
 			Package:    pkg,
 		})
 
-		return b.proj.NewInterDef(constructs.InterDefArgs{
+		return b.proj.NewInterfaceDecl(constructs.InterfaceDeclArgs{
 			Package:  pkg,
 			Name:     `List`,
 			Type:     in,
@@ -244,8 +244,8 @@ func (b *bakerImp) BakeList() constructs.InterDef {
 //	}
 //
 // Note: Doesn't currently have cap, trySend, or tryRecv as defined in reflect.
-func (b *bakerImp) BakeChan() constructs.InterDef {
-	return bakeOnce(b, `chan[T any]`, func() constructs.InterDef {
+func (b *bakerImp) BakeChan() constructs.InterfaceDecl {
+	return bakeOnce(b, `Chan[T any]`, func() constructs.InterfaceDecl {
 		pkg := b.BakeBuiltin()
 		tp := b.proj.NewNamed(constructs.NamedArgs{
 			Name: `T`,
@@ -283,7 +283,7 @@ func (b *bakerImp) BakeChan() constructs.InterDef {
 			Package:    pkg,
 		})
 
-		return b.proj.NewInterDef(constructs.InterDefArgs{
+		return b.proj.NewInterfaceDecl(constructs.InterfaceDeclArgs{
 			Package:  pkg,
 			Name:     `Chan`,
 			Type:     in,
@@ -301,12 +301,12 @@ func (b *bakerImp) BakeChan() constructs.InterDef {
 //	}
 //
 // Note: Doesn't currently require Key to be comparable as defined in reflect.
-func (b *bakerImp) BakeMap() constructs.InterDef {
-	return bakeOnce(b, `map[TKey, TValue any]`, func() constructs.InterDef {
+func (b *bakerImp) BakeMap() constructs.InterfaceDecl {
+	return bakeOnce(b, `Map[TKey comparable, TValue any]`, func() constructs.InterfaceDecl {
 		pkg := b.BakeBuiltin()
 		tpKey := b.proj.NewNamed(constructs.NamedArgs{
 			Name: `TKey`,
-			Type: b.BakeAny(),
+			Type: b.BakeComparable(),
 		})
 		tpValue := b.proj.NewNamed(constructs.NamedArgs{
 			Name: `TValue`,
@@ -352,7 +352,7 @@ func (b *bakerImp) BakeMap() constructs.InterDef {
 			Package:    pkg,
 		})
 
-		return b.proj.NewInterDef(constructs.InterDefArgs{
+		return b.proj.NewInterfaceDecl(constructs.InterfaceDeclArgs{
 			Package:  pkg,
 			Name:     `Map`,
 			Type:     in,
@@ -366,8 +366,8 @@ func (b *bakerImp) BakeMap() constructs.InterDef {
 //	type pointer[T any] interface {
 //		$deref() T
 //	}
-func (b *bakerImp) BakePointer() constructs.InterDef {
-	return bakeOnce(b, `pointer[T any]`, func() constructs.InterDef {
+func (b *bakerImp) BakePointer() constructs.InterfaceDecl {
+	return bakeOnce(b, `pointer[T any]`, func() constructs.InterfaceDecl {
 		pkg := b.BakeBuiltin()
 		tp := b.proj.NewNamed(constructs.NamedArgs{
 			Name: `T`,
@@ -389,7 +389,7 @@ func (b *bakerImp) BakePointer() constructs.InterDef {
 			Package:    pkg,
 		})
 
-		return b.proj.NewInterDef(constructs.InterDefArgs{
+		return b.proj.NewInterfaceDecl(constructs.InterfaceDeclArgs{
 			Package:  pkg,
 			Name:     `Pointer`,
 			Type:     in,
@@ -404,8 +404,8 @@ func (b *bakerImp) BakePointer() constructs.InterDef {
 //		$real() float32
 //		$imag() float32
 //	}
-func (b *bakerImp) BakeComplex64() constructs.InterDef {
-	return bakeOnce(b, `complex64`, func() constructs.InterDef {
+func (b *bakerImp) BakeComplex64() constructs.InterfaceDecl {
+	return bakeOnce(b, `complex64`, func() constructs.InterfaceDecl {
 		pkg := b.BakeBuiltin()
 
 		// func() float32
@@ -425,7 +425,7 @@ func (b *bakerImp) BakeComplex64() constructs.InterDef {
 			Package: pkg,
 		})
 
-		return b.proj.NewInterDef(constructs.InterDefArgs{
+		return b.proj.NewInterfaceDecl(constructs.InterfaceDeclArgs{
 			Package:  pkg,
 			Name:     `complex64`,
 			Type:     in,
@@ -440,8 +440,8 @@ func (b *bakerImp) BakeComplex64() constructs.InterDef {
 //		$real() float64
 //		$imag() float64
 //	}
-func (b *bakerImp) BakeComplex128() constructs.InterDef {
-	return bakeOnce(b, `complex128`, func() constructs.InterDef {
+func (b *bakerImp) BakeComplex128() constructs.InterfaceDecl {
+	return bakeOnce(b, `complex128`, func() constructs.InterfaceDecl {
 		pkg := b.BakeBuiltin()
 
 		// func() float64
@@ -461,7 +461,7 @@ func (b *bakerImp) BakeComplex128() constructs.InterDef {
 			Package: pkg,
 		})
 
-		return b.proj.NewInterDef(constructs.InterDefArgs{
+		return b.proj.NewInterfaceDecl(constructs.InterfaceDeclArgs{
 			Package:  pkg,
 			Name:     `complex128`,
 			Type:     in,
@@ -475,8 +475,8 @@ func (b *bakerImp) BakeComplex128() constructs.InterDef {
 //	type error interface {
 //		Error() string
 //	}
-func (b *bakerImp) BakeError() constructs.InterDef {
-	return bakeOnce(b, `error`, func() constructs.InterDef {
+func (b *bakerImp) BakeError() constructs.InterfaceDecl {
+	return bakeOnce(b, `error`, func() constructs.InterfaceDecl {
 		pkg := b.BakeBuiltin()
 
 		// func() string
@@ -495,7 +495,7 @@ func (b *bakerImp) BakeError() constructs.InterDef {
 			Package: pkg,
 		})
 
-		return b.proj.NewInterDef(constructs.InterDefArgs{
+		return b.proj.NewInterfaceDecl(constructs.InterfaceDeclArgs{
 			Package:  pkg,
 			Name:     `error`,
 			Type:     in,
@@ -509,8 +509,8 @@ func (b *bakerImp) BakeError() constructs.InterDef {
 //	type comparable interface {
 //		$compare(other any) int
 //	}
-func (b *bakerImp) BakeComparable() constructs.InterDef {
-	return bakeOnce(b, `comparable`, func() constructs.InterDef {
+func (b *bakerImp) BakeComparable() constructs.InterfaceDecl {
+	return bakeOnce(b, `comparable`, func() constructs.InterfaceDecl {
 		pkg := b.BakeBuiltin()
 
 		// other any
@@ -536,7 +536,7 @@ func (b *bakerImp) BakeComparable() constructs.InterDef {
 			Package: pkg,
 		})
 
-		return b.proj.NewInterDef(constructs.InterDefArgs{
+		return b.proj.NewInterfaceDecl(constructs.InterfaceDeclArgs{
 			Package:  pkg,
 			Name:     `comparable`,
 			Type:     in,

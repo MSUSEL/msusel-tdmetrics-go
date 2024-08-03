@@ -22,17 +22,17 @@ type (
 		//==========================
 
 		NewBasic(args BasicArgs) Basic
-		NewClass(args ClassArgs) Class
-		NewInterDef(args InterDefArgs) InterDef
+		NewClassDecl(args ClassDeclArgs) ClassDecl
+		NewInstance(args InstanceArgs) Instance
+		NewInterfaceDecl(args InterfaceDeclArgs) InterfaceDecl
 		NewInterface(args InterfaceArgs) Interface
 		NewMethod(args MethodArgs) Method
 		NewNamed(args NamedArgs) Named
 		NewPackage(args PackageArgs) Package
 		NewReference(args ReferenceArgs) Reference
 		NewSignature(args SignatureArgs) Signature
-		NewSolid(args SolidArgs) Solid
 		NewStruct(args StructArgs) Struct
-		NewValue(args ValueArgs) Value
+		NewValueDecl(args ValueDeclArgs) ValueDecl
 		NewLoc(pos token.Pos) locs.Loc
 
 		//==========================
@@ -43,7 +43,7 @@ type (
 		//==========================
 
 		FindPackageByPath(path string) Package
-		FindType(pkgPath, typeName string, panicOnNotFound bool) (Package, Definition, bool)
+		FindType(pkgPath, typeName string, panicOnNotFound bool) (Package, Declaration, bool)
 
 		// UpdateIndices should be called after all types have been registered
 		// and all packages have been processed. This will update all the index
@@ -63,17 +63,17 @@ type (
 
 	projectImp struct {
 		allBasics     Set[Basic]
-		allClasses    Set[Class]
-		allInterDefs  Set[InterDef]
+		allClassDecls Set[ClassDecl]
+		allInstances  Set[Instance]
+		allInterDecls Set[InterfaceDecl]
 		allInterfaces Set[Interface]
 		allMethods    Set[Method]
 		allNamed      Set[Named]
 		allPackages   Set[Package]
 		allReferences Set[Reference]
 		allSignatures Set[Signature]
-		allSolids     Set[Solid]
 		allStructs    Set[Struct]
-		allValues     Set[Value]
+		allValueDecls Set[ValueDecl]
 		locations     locs.Set
 	}
 )
@@ -81,17 +81,17 @@ type (
 func NewProject(locs locs.Set) Project {
 	return &projectImp{
 		allBasics:     NewSet[Basic](),
-		allClasses:    NewSet[Class](),
-		allInterDefs:  NewSet[InterDef](),
+		allClassDecls: NewSet[ClassDecl](),
+		allInstances:  NewSet[Instance](),
+		allInterDecls: NewSet[InterfaceDecl](),
 		allInterfaces: NewSet[Interface](),
 		allMethods:    NewSet[Method](),
 		allNamed:      NewSet[Named](),
 		allPackages:   NewSet[Package](),
 		allReferences: NewSet[Reference](),
 		allSignatures: NewSet[Signature](),
-		allSolids:     NewSet[Solid](),
 		allStructs:    NewSet[Struct](),
-		allValues:     NewSet[Value](),
+		allValueDecls: NewSet[ValueDecl](),
 		locations:     locs,
 	}
 }
@@ -102,12 +102,16 @@ func (p *projectImp) NewBasic(args BasicArgs) Basic {
 	return p.allBasics.Insert(newBasic(args))
 }
 
-func (p *projectImp) NewClass(args ClassArgs) Class {
-	return args.Package.addClass(p.allClasses.Insert(newClass(args)))
+func (p *projectImp) NewClassDecl(args ClassDeclArgs) ClassDecl {
+	return args.Package.addClassDecl(p.allClassDecls.Insert(newClassDecl(args)))
 }
 
-func (p *projectImp) NewInterDef(args InterDefArgs) InterDef {
-	return args.Package.addInterDef(p.allInterDefs.Insert(newInterDef(args)))
+func (p *projectImp) NewInstance(args InstanceArgs) Instance {
+	return p.allInstances.Insert(newInstance(args))
+}
+
+func (p *projectImp) NewInterfaceDecl(args InterfaceDeclArgs) InterfaceDecl {
+	return args.Package.addInterfaceDecl(p.allInterDecls.Insert(newInterfaceDecl(args)))
 }
 
 func (p *projectImp) NewInterface(args InterfaceArgs) Interface {
@@ -134,16 +138,12 @@ func (p *projectImp) NewSignature(args SignatureArgs) Signature {
 	return p.allSignatures.Insert(newSignature(args))
 }
 
-func (p *projectImp) NewSolid(args SolidArgs) Solid {
-	return p.allSolids.Insert(newSolid(args))
-}
-
 func (p *projectImp) NewStruct(args StructArgs) Struct {
 	return p.allStructs.Insert(newStruct(args))
 }
 
-func (p *projectImp) NewValue(args ValueArgs) Value {
-	return args.Package.addValue(p.allValues.Insert(newValue(args)))
+func (p *projectImp) NewValueDecl(args ValueDeclArgs) ValueDecl {
+	return args.Package.addValueDecl(p.allValueDecls.Insert(newValueDecl(args)))
 }
 
 func (p *projectImp) NewLoc(pos token.Pos) locs.Loc {
@@ -173,7 +173,7 @@ func (p *projectImp) FindPackageByPath(path string) Package {
 	return pkg
 }
 
-func (p *projectImp) FindType(pkgPath, typeName string, panicOnNotFound bool) (Package, Definition, bool) {
+func (p *projectImp) FindType(pkgPath, typeName string, panicOnNotFound bool) (Package, Declaration, bool) {
 	assert.ArgNotEmpty(`pkgPath`, pkgPath)
 
 	pkg := p.FindPackageByPath(pkgPath)
@@ -196,7 +196,7 @@ func (p *projectImp) FindType(pkgPath, typeName string, panicOnNotFound bool) (P
 			return pkg, nil, false
 		}
 		names := enumerator.Select(pkg.allTypes(),
-			func(td Definition) string { return td.Name() }).
+			func(td Declaration) string { return td.Name() }).
 			Join(`, `)
 		panic(terror.New(`failed to find type for type def reference`).
 			With(`type name`, typeName).
@@ -212,17 +212,17 @@ func (p *projectImp) UpdateIndices() {
 	// The typeDefs in each package are also uniquely offset.
 	index := 1
 	index = p.allBasics.SetIndices(index)
-	index = p.allClasses.SetIndices(index)
-	index = p.allInterDefs.SetIndices(index)
+	index = p.allClassDecls.SetIndices(index)
+	index = p.allInstances.SetIndices(index)
+	index = p.allInterDecls.SetIndices(index)
 	index = p.allInterfaces.SetIndices(index)
 	index = p.allMethods.SetIndices(index)
 	index = p.allNamed.SetIndices(index)
 	index = p.allPackages.SetIndices(index)
 	// Don't index the p.allReferences
 	index = p.allSignatures.SetIndices(index)
-	index = p.allSolids.SetIndices(index)
 	index = p.allStructs.SetIndices(index)
-	p.allValues.SetIndices(index)
+	p.allValueDecls.SetIndices(index)
 }
 
 func (p *projectImp) String() string {
@@ -234,17 +234,17 @@ func (p *projectImp) ToJson(ctx *jsonify.Context) jsonify.Datum {
 	return jsonify.NewMap().
 		Add(ctx2, `language`, `go`).
 		AddNonZero(ctx2, `basics`, p.allBasics).
-		AddNonZero(ctx2, `classes`, p.allClasses).
-		AddNonZero(ctx2, `interDefs`, p.allInterDefs).
+		AddNonZero(ctx2, `classDecls`, p.allClassDecls).
+		AddNonZero(ctx2, `instances`, p.allInstances).
+		AddNonZero(ctx2, `interfaceDecls`, p.allInterDecls).
 		AddNonZero(ctx2, `interfaces`, p.allInterfaces).
 		AddNonZero(ctx2, `methods`, p.allMethods).
 		AddNonZero(ctx2, `named`, p.allNamed).
 		AddNonZero(ctx2, `packages`, p.allPackages).
 		// Don't output the p.allReferences
 		AddNonZero(ctx2, `signatures`, p.allSignatures).
-		AddNonZero(ctx2, `solids`, p.allSolids).
 		AddNonZero(ctx2, `structs`, p.allStructs).
-		AddNonZero(ctx2, `values`, p.allValues).
+		AddNonZero(ctx2, `valueDecls`, p.allValueDecls).
 		AddNonZero(ctx2, `locs`, p.locations)
 }
 
@@ -298,7 +298,7 @@ func (p *projectImp) ResolveInheritance() {
 		inters.Get(i).sortInheritance()
 	}
 
-	classes := p.allClasses.Values()
+	classes := p.allClassDecls.Values()
 	for i := range classes.Count() {
 		c := classes.Get(i)
 		for _, root := range roots {
@@ -319,16 +319,16 @@ func (p *projectImp) ResolveReferences() {
 
 func (p *projectImp) removeTypes(predict func(Construct) bool) {
 	p.allBasics.Remove(predict)
-	p.allClasses.Remove(predict)
-	p.allInterDefs.Remove(predict)
+	p.allClassDecls.Remove(predict)
+	p.allInstances.Remove(predict)
+	p.allInterDecls.Remove(predict)
 	p.allInterfaces.Remove(predict)
 	p.allMethods.Remove(predict)
 	p.allNamed.Remove(predict)
 	p.allReferences.Remove(predict)
 	p.allSignatures.Remove(predict)
-	p.allSolids.Remove(predict)
 	p.allStructs.Remove(predict)
-	p.allValues.Remove(predict)
+	p.allValueDecls.Remove(predict)
 }
 
 func (p *projectImp) PruneTypes() {
@@ -374,13 +374,13 @@ func (p *projectImp) PrunePackages() {
 
 func (p *projectImp) FlagLocations() {
 	p.locations.Reset()
-	flagList(p.allClasses.Values())
-	flagList(p.allInterDefs.Values())
+	flagList(p.allClassDecls.Values())
+	flagList(p.allInterDecls.Values())
 	flagList(p.allMethods.Values())
-	flagList(p.allValues.Values())
+	flagList(p.allValueDecls.Values())
 }
 
-func flagList[T Definition](c collections.ReadonlyList[T]) {
+func flagList[T Declaration](c collections.ReadonlyList[T]) {
 	for i := range c.Count() {
 		c.Get(i).Location().Flag()
 	}

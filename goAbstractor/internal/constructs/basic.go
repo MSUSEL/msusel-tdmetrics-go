@@ -15,6 +15,9 @@ import (
 )
 
 type (
+	// Basic is a base type (e.g. bool, int, string, float64).
+	//
+	// This does not contain complex types, those are treated as an interface.
 	Basic interface {
 		TypeDesc
 		_basic()

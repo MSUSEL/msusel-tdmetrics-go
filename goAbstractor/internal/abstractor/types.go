@@ -48,7 +48,7 @@ func (ab *abstractor) convertType(t types.Type) constructs.TypeDesc {
 
 func (ab *abstractor) convertArray(t *types.Array) constructs.TypeDesc {
 	elem := ab.convertType(t.Elem())
-	return ab.proj.NewSolid(constructs.SolidArgs{
+	return ab.proj.NewInstance(constructs.InstanceArgs{
 		RealType:   t,
 		Target:     ab.baker.BakeList(),
 		TypeParams: []constructs.TypeDesc{elem},
@@ -71,7 +71,7 @@ func (ab *abstractor) convertBasic(t *types.Basic) constructs.TypeDesc {
 
 func (ab *abstractor) convertChan(t *types.Chan) constructs.TypeDesc {
 	elem := ab.convertType(t.Elem())
-	return ab.proj.NewSolid(constructs.SolidArgs{
+	return ab.proj.NewInstance(constructs.InstanceArgs{
 		RealType:   t,
 		Target:     ab.baker.BakeChan(),
 		TypeParams: []constructs.TypeDesc{elem},
@@ -114,7 +114,7 @@ func (ab *abstractor) convertInterface(t *types.Interface) constructs.Interface 
 func (ab *abstractor) convertMap(t *types.Map) constructs.TypeDesc {
 	key := ab.convertType(t.Key())
 	value := ab.convertType(t.Elem())
-	return ab.proj.NewSolid(constructs.SolidArgs{
+	return ab.proj.NewInstance(constructs.InstanceArgs{
 		RealType:   t,
 		Target:     ab.baker.BakeMap(),
 		TypeParams: []constructs.TypeDesc{key, value},
@@ -153,7 +153,7 @@ func (ab *abstractor) convertNamed(t *types.Named) constructs.TypeDesc {
 	}
 
 	if tp := ab.convertTypeList(t.TypeArgs()); len(tp) > 0 {
-		typ = ab.proj.NewSolid(constructs.SolidArgs{
+		typ = ab.proj.NewInstance(constructs.InstanceArgs{
 			RealType:   t,
 			Target:     typ,
 			TypeParams: tp,
@@ -165,7 +165,7 @@ func (ab *abstractor) convertNamed(t *types.Named) constructs.TypeDesc {
 
 func (ab *abstractor) convertPointer(t *types.Pointer) constructs.TypeDesc {
 	elem := ab.convertType(t.Elem())
-	return ab.proj.NewSolid(constructs.SolidArgs{
+	return ab.proj.NewInstance(constructs.InstanceArgs{
 		RealType:   t,
 		Target:     ab.baker.BakePointer(),
 		TypeParams: []constructs.TypeDesc{elem},
@@ -187,7 +187,7 @@ func (ab *abstractor) convertSignature(t *types.Signature) constructs.Signature 
 
 func (ab *abstractor) convertSlice(t *types.Slice) constructs.TypeDesc {
 	elem := ab.convertType(t.Elem())
-	return ab.proj.NewSolid(constructs.SolidArgs{
+	return ab.proj.NewInstance(constructs.InstanceArgs{
 		RealType:   t,
 		Target:     ab.baker.BakeList(),
 		TypeParams: []constructs.TypeDesc{elem},

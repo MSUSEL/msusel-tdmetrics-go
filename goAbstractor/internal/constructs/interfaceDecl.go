@@ -12,13 +12,13 @@ import (
 )
 
 type (
-	InterDef interface {
-		Definition
-		_interDef()
+	InterfaceDecl interface {
+		Declaration
+		_interfaceDecl()
 		Interface() Interface
 	}
 
-	InterDefArgs struct {
+	InterfaceDeclArgs struct {
 		Package    Package
 		Name       string
 		Location   locs.Loc
@@ -26,7 +26,7 @@ type (
 		TypeParams []Named
 	}
 
-	interDefImp struct {
+	interfaceDeclImp struct {
 		pkg        Package
 		name       string
 		loc        locs.Loc
@@ -36,13 +36,13 @@ type (
 	}
 )
 
-func newInterDef(args InterDefArgs) InterDef {
+func newInterfaceDecl(args InterfaceDeclArgs) InterfaceDecl {
 	assert.ArgNotNil(`package`, args.Package)
 	assert.ArgValidId(`name`, args.Name)
 	assert.ArgNotNil(`type`, args.Type)
 	assert.ArgNotNil(`location`, args.Location)
 
-	return &interDefImp{
+	return &interfaceDeclImp{
 		pkg:        args.Package,
 		name:       args.Name,
 		loc:        args.Location,
@@ -51,17 +51,17 @@ func newInterDef(args InterDefArgs) InterDef {
 	}
 }
 
-func (id *interDefImp) _interDef()           {}
-func (id *interDefImp) Kind() kind.Kind      { return kind.InterDef }
-func (id *interDefImp) GoType() types.Type   { return id.typ.GoType() }
-func (id *interDefImp) SetIndex(index int)   { id.index = index }
-func (id *interDefImp) Name() string         { return id.name }
-func (id *interDefImp) Location() locs.Loc   { return id.loc }
-func (id *interDefImp) Package() Package     { return id.pkg }
-func (id *interDefImp) Interface() Interface { return id.typ }
+func (id *interfaceDeclImp) _interfaceDecl()      {}
+func (id *interfaceDeclImp) Kind() kind.Kind      { return kind.InterfaceDecl }
+func (id *interfaceDeclImp) GoType() types.Type   { return id.typ.GoType() }
+func (id *interfaceDeclImp) SetIndex(index int)   { id.index = index }
+func (id *interfaceDeclImp) Name() string         { return id.name }
+func (id *interfaceDeclImp) Location() locs.Loc   { return id.loc }
+func (id *interfaceDeclImp) Package() Package     { return id.pkg }
+func (id *interfaceDeclImp) Interface() Interface { return id.typ }
 
-func (id *interDefImp) CompareTo(other Construct) int {
-	b := other.(*interDefImp)
+func (id *interfaceDeclImp) CompareTo(other Construct) int {
+	b := other.(*interfaceDeclImp)
 	if cmp := Compare(id.pkg, b.pkg); cmp != 0 {
 		return cmp
 	}
@@ -74,7 +74,7 @@ func (id *interDefImp) CompareTo(other Construct) int {
 	return Compare(id.typ, b.typ)
 }
 
-func (id *interDefImp) ToJson(ctx *jsonify.Context) jsonify.Datum {
+func (id *interfaceDeclImp) ToJson(ctx *jsonify.Context) jsonify.Datum {
 	if ctx.IsShort() {
 		return jsonify.New(ctx, id.index)
 	}
@@ -90,6 +90,6 @@ func (id *interDefImp) ToJson(ctx *jsonify.Context) jsonify.Datum {
 		AddNonZero(ctx2, `typeParams`, id.typeParams)
 }
 
-func (id *interDefImp) Visit(v visitor.Visitor) {
+func (id *interfaceDeclImp) Visit(v visitor.Visitor) {
 	visitor.Visit(v, id.typ)
 }

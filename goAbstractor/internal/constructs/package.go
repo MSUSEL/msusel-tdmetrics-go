@@ -27,14 +27,14 @@ type (
 		InitCount() int
 
 		addImport(p Package) Package
-		addClass(c Class) Class
-		addInterDef(id InterDef) InterDef
+		addClassDecl(c ClassDecl) ClassDecl
+		addInterfaceDecl(id InterfaceDecl) InterfaceDecl
 		addMethod(m Method) Method
-		addValue(v Value) Value
+		addValueDecl(v ValueDecl) ValueDecl
 
 		empty() bool
-		findType(name string) Definition
-		allTypes() collections.Enumerator[Definition]
+		findType(name string) Declaration
+		allTypes() collections.Enumerator[Declaration]
 
 		resolveReceivers()
 		removeImports(predicate func(Construct) bool)
@@ -56,10 +56,10 @@ type (
 		importPaths []string
 		imports     Set[Package]
 
-		classes   Set[Class]
-		interDefs Set[InterDef]
-		methods   Set[Method]
-		values    Set[Value]
+		classDecls Set[ClassDecl]
+		interDecls Set[InterfaceDecl]
+		methods    Set[Method]
+		valueDecls Set[ValueDecl]
 	}
 )
 
@@ -72,11 +72,11 @@ func newPackage(args PackageArgs) Package {
 		pkg:         args.RealPkg,
 		path:        args.Path,
 		name:        args.Name,
-		classes:     NewSet[Class](),
+		classDecls:  NewSet[ClassDecl](),
 		imports:     NewSet[Package](),
-		interDefs:   NewSet[InterDef](),
+		interDecls:  NewSet[InterfaceDecl](),
 		methods:     NewSet[Method](),
-		values:      NewSet[Value](),
+		valueDecls:  NewSet[ValueDecl](),
 		importPaths: args.ImportPaths,
 	}
 }
@@ -108,36 +108,36 @@ func (p *packageImp) addImport(i Package) Package {
 	return p.imports.Insert(i)
 }
 
-func (p *packageImp) addClass(c Class) Class {
-	return p.classes.Insert(c)
+func (p *packageImp) addClassDecl(c ClassDecl) ClassDecl {
+	return p.classDecls.Insert(c)
 }
 
-func (p *packageImp) addInterDef(id InterDef) InterDef {
-	return p.interDefs.Insert(id)
+func (p *packageImp) addInterfaceDecl(id InterfaceDecl) InterfaceDecl {
+	return p.interDecls.Insert(id)
 }
 
 func (p *packageImp) addMethod(m Method) Method {
 	return p.methods.Insert(m)
 }
 
-func (p *packageImp) addValue(v Value) Value {
-	return p.values.Insert(v)
+func (p *packageImp) addValueDecl(v ValueDecl) ValueDecl {
+	return p.valueDecls.Insert(v)
 }
 
 func (p *packageImp) empty() bool {
 	return p.allTypes().Empty()
 }
 
-func (p *packageImp) findType(name string) Definition {
-	def, _ := p.allTypes().Where(func(t Definition) bool { return t.Name() == name }).First()
+func (p *packageImp) findType(name string) Declaration {
+	def, _ := p.allTypes().Where(func(t Declaration) bool { return t.Name() == name }).First()
 	return def
 }
 
-func (p *packageImp) allTypes() collections.Enumerator[Definition] {
-	i := enumerator.Cast[Definition](p.interDefs.Values().Enumerate())
-	c := enumerator.Cast[Definition](p.classes.Values().Enumerate())
-	v := enumerator.Cast[Definition](p.values.Values().Enumerate())
-	m := enumerator.Cast[Definition](p.methods.Values().Enumerate())
+func (p *packageImp) allTypes() collections.Enumerator[Declaration] {
+	i := enumerator.Cast[Declaration](p.interDecls.Values().Enumerate())
+	c := enumerator.Cast[Declaration](p.classDecls.Values().Enumerate())
+	v := enumerator.Cast[Declaration](p.valueDecls.Values().Enumerate())
+	m := enumerator.Cast[Declaration](p.methods.Values().Enumerate())
 	return i.Concat(c).Concat(v).Concat(m)
 }
 
@@ -160,19 +160,19 @@ func (p *packageImp) ToJson(ctx *jsonify.Context) jsonify.Datum {
 		AddIf(ctx, ctx.IsIndexShown(), `index`, p.index).
 		AddNonZero(ctx2, `path`, p.path).
 		AddNonZero(ctx2, `name`, p.name).
-		AddNonZero(ctx2, `classes`, p.classes).
+		AddNonZero(ctx2, `classDecls`, p.classDecls).
 		AddNonZero(ctx2, `imports`, p.imports).
-		AddNonZero(ctx2, `interDefs`, p.interDefs).
+		AddNonZero(ctx2, `interfaceDecls`, p.interDecls).
 		AddNonZero(ctx2, `methods`, p.methods).
-		AddNonZero(ctx2, `values`, p.values)
+		AddNonZero(ctx2, `valueDecls`, p.valueDecls)
 }
 
 func (p *packageImp) Visit(v visitor.Visitor) {
 	visitor.VisitList(v, p.imports.Values())
-	visitor.VisitList(v, p.classes.Values())
-	visitor.VisitList(v, p.interDefs.Values())
+	visitor.VisitList(v, p.classDecls.Values())
+	visitor.VisitList(v, p.interDecls.Values())
 	visitor.VisitList(v, p.methods.Values())
-	visitor.VisitList(v, p.values.Values())
+	visitor.VisitList(v, p.valueDecls.Values())
 }
 
 func (p *packageImp) resolveReceivers() {
@@ -185,7 +185,7 @@ func (p *packageImp) resolveReceivers() {
 				panic(terror.New(`failed to find receiver`).
 					With(`name`, rec))
 			}
-			c, ok := t.(Class)
+			c, ok := t.(ClassDecl)
 			if !ok {
 				panic(terror.New(`receiver was not a class`).
 					With(`name`, rec).

@@ -14,15 +14,18 @@ import (
 )
 
 type (
-	Class interface {
-		Definition
-		_class()
+	// ClassDecl is a type declaration that consists of some data and
+	// a collection of functions. The data may be any type of data
+	// except for an interface.
+	ClassDecl interface {
+		Declaration
+		_classDecl()
 
 		addMethod(met Method) Method
 		addImplement(inter Interface)
 	}
 
-	ClassArgs struct {
+	ClassDeclArgs struct {
 		Package    Package
 		Name       string
 		Location   locs.Loc
@@ -30,7 +33,7 @@ type (
 		TypeParams []Named
 	}
 
-	classImp struct {
+	classDeclImp struct {
 		pkg        Package
 		name       string
 		loc        locs.Loc
@@ -43,7 +46,7 @@ type (
 	}
 )
 
-func newClass(args ClassArgs) Class {
+func newClassDecl(args ClassDeclArgs) ClassDecl {
 	assert.ArgValidId(`name`, args.Name)
 	assert.ArgNotNil(`package`, args.Package)
 	assert.ArgNotNil(`data`, args.Data)
@@ -56,7 +59,7 @@ func newClass(args ClassArgs) Class {
 			With(`data`, args.Data))
 	}
 
-	return &classImp{
+	return &classDeclImp{
 		pkg:        args.Package,
 		name:       args.Name,
 		loc:        args.Location,
@@ -67,24 +70,24 @@ func newClass(args ClassArgs) Class {
 	}
 }
 
-func (c *classImp) _class()            {}
-func (c *classImp) Kind() kind.Kind    { return kind.Class }
-func (c *classImp) SetIndex(index int) { c.index = index }
-func (c *classImp) GoType() types.Type { return c.data.GoType() }
-func (c *classImp) Location() locs.Loc { return c.loc }
-func (c *classImp) Name() string       { return c.name }
-func (c *classImp) Package() Package   { return c.pkg }
+func (c *classDeclImp) _classDecl()        {}
+func (c *classDeclImp) Kind() kind.Kind    { return kind.ClassDecl }
+func (c *classDeclImp) SetIndex(index int) { c.index = index }
+func (c *classDeclImp) GoType() types.Type { return c.data.GoType() }
+func (c *classDeclImp) Location() locs.Loc { return c.loc }
+func (c *classDeclImp) Name() string       { return c.name }
+func (c *classDeclImp) Package() Package   { return c.pkg }
 
-func (c *classImp) addMethod(met Method) Method {
+func (c *classDeclImp) addMethod(met Method) Method {
 	return c.methods.Insert(met)
 }
 
-func (c *classImp) addImplement(inter Interface) {
+func (c *classDeclImp) addImplement(inter Interface) {
 	c.implements.Insert(inter)
 }
 
-func (c *classImp) CompareTo(other Construct) int {
-	b := other.(*classImp)
+func (c *classDeclImp) CompareTo(other Construct) int {
+	b := other.(*classDeclImp)
 	if cmp := Compare(c.pkg, b.pkg); cmp != 0 {
 		return cmp
 	}
@@ -97,7 +100,7 @@ func (c *classImp) CompareTo(other Construct) int {
 	return Compare(c.data, b.data)
 }
 
-func (c *classImp) ToJson(ctx *jsonify.Context) jsonify.Datum {
+func (c *classDeclImp) ToJson(ctx *jsonify.Context) jsonify.Datum {
 	if ctx.IsShort() {
 		return jsonify.New(ctx, c.index)
 	}
@@ -115,7 +118,7 @@ func (c *classImp) ToJson(ctx *jsonify.Context) jsonify.Datum {
 		AddNonZero(ctx2, `implements`, c.implements)
 }
 
-func (c *classImp) Visit(v visitor.Visitor) {
+func (c *classDeclImp) Visit(v visitor.Visitor) {
 	visitor.Visit(v, c.data)
 	visitor.Visit(v, c.typeParams...)
 	visitor.VisitList(v, c.methods.Values())

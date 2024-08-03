@@ -20,7 +20,7 @@ type (
 
 		isSupertypeOf(other Interface) bool
 		addInheritors(inter Interface) bool
-		findImplements(c Class) bool
+		findImplements(c ClassDecl) bool
 		setInheritance()
 		sortInheritance()
 	}
@@ -209,7 +209,7 @@ func addInheritors(inheritors []Interface, other Interface) []Interface {
 	return append(inheritors, otherImp)
 }
 
-func (it *interfaceImp) findImplements(c Class) bool {
+func (it *interfaceImp) findImplements(c ClassDecl) bool {
 	if !types.Implements(c.GoType(), it.GoType().(*types.Interface)) {
 		return false
 	}

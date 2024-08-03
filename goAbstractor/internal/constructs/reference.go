@@ -21,7 +21,7 @@ type (
 		PackagePath() string
 		Name() string
 		Resolved() bool
-		SetType(pkg Package, typ Definition)
+		SetType(pkg Package, typ Declaration)
 	}
 
 	ReferenceArgs struct {
@@ -36,7 +36,7 @@ type (
 		name     string
 
 		pkg Package
-		typ Definition
+		typ Declaration
 	}
 )
 
@@ -65,7 +65,7 @@ func (r *referenceImp) SetIndex(index int) {
 	panic(terror.New(`do not call SetIndex on Reference`))
 }
 
-func (r *referenceImp) SetType(pkg Package, typ Definition) {
+func (r *referenceImp) SetType(pkg Package, typ Declaration) {
 	assert.ArgNotNil(`type`, typ)
 	r.pkg = pkg
 	r.typ = typ

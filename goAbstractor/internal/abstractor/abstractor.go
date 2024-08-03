@@ -161,7 +161,7 @@ func (ab *abstractor) abstractTypeSpec(spec *ast.TypeSpec) {
 	typ := ab.convertType(tv.Type)
 
 	if it, ok := typ.(constructs.Interface); ok {
-		ab.proj.NewInterDef(constructs.InterDefArgs{
+		ab.proj.NewInterfaceDecl(constructs.InterfaceDeclArgs{
 			Package:    ab.curPkg,
 			Name:       spec.Name.Name,
 			Type:       it,
@@ -171,7 +171,7 @@ func (ab *abstractor) abstractTypeSpec(spec *ast.TypeSpec) {
 		return
 	}
 
-	ab.proj.NewClass(constructs.ClassArgs{
+	ab.proj.NewClassDecl(constructs.ClassDeclArgs{
 		Package:    ab.curPkg,
 		Name:       spec.Name.Name,
 		Data:       typ,
@@ -232,7 +232,7 @@ func (ab *abstractor) abstractValueSpec(spec *ast.ValueSpec, isConst bool) {
 		}
 
 		typ := ab.convertType(tv.Type())
-		ab.proj.NewValue(constructs.ValueArgs{
+		ab.proj.NewValueDecl(constructs.ValueDeclArgs{
 			Package:  ab.curPkg,
 			Name:     name.Name,
 			Const:    isConst,
