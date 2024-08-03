@@ -154,6 +154,7 @@ func (it *interfaceImp) ToJson(ctx *jsonify.Context) jsonify.Datum {
 		AddIf(ctx, ctx.IsIndexShown(), `index`, it.index).
 		AddNonZero(ctx2, `typeParams`, it.typeParams).
 		AddNonZero(ctx2, `inherits`, it.inherits).
+		AddNonZeroIf(ctx2, ctx.IsInheritorsShown(), `inheritors`, it.inheritors).
 		AddNonZero(ctx2, `approx`, it.approx).
 		AddNonZero(ctx2, `exact`, it.exact).
 		AddNonZero(ctx2, `methods`, it.methods)

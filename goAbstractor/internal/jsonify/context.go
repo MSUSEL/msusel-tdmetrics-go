@@ -11,6 +11,7 @@ const (
 	keyIndexShown
 	keyReceiverShown
 	keyReferenceShown
+	keyInheritorsShown
 	keyFullLoc
 )
 
@@ -115,6 +116,18 @@ func (c *Context) ShowReference(show bool) *Context {
 // reference name in the object model. This is for debugging purposes.
 func (c *Context) IsReferenceShown() bool {
 	return c.state[keyReferenceShown]
+}
+
+// ShowInheritors sets if the interfaces inheritors should
+// be included in the object model. This is for debugging purposes.
+func (c *Context) ShowInheritors(show bool) *Context {
+	return c.copyAndSet(keyInheritorsShown, show)
+}
+
+// IsInheritorsShown indicates that interfaces inheritors should be
+// included in the object model. This is for debugging purposes.
+func (c *Context) IsInheritorsShown() bool {
+	return c.state[keyInheritorsShown]
 }
 
 // ShowFullLocation sets if the full location information should

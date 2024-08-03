@@ -1,6 +1,7 @@
 package constructs
 
 import (
+	"fmt"
 	"go/token"
 	"strconv"
 
@@ -272,11 +273,21 @@ func (p *projectImp) ResolveReceivers() {
 	}
 }
 
+func printInterfaces(its []Interface, indent string) {
+	for _, it := range its {
+		fmt.Println(indent + it.GoType().String())
+		printInterfaces(it.(*interfaceImp).inheritors, indent+`  `)
+	}
+}
+
 func (p *projectImp) ResolveInheritance() {
 	inters := p.allInterfaces.Values()
 	roots := []Interface{}
+
 	for i := range inters.Count() {
 		roots = addInheritors(roots, inters.Get(i))
+		fmt.Println(`=====================`)
+		printInterfaces(roots, ``)
 	}
 
 	for i := range inters.Count() {

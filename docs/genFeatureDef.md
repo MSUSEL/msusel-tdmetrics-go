@@ -9,6 +9,8 @@ but the definition requires a list of specific implementation so the Go
 abstractor must perform steps to predetermine which types would duck-type
 and define that via implementations.
 
+:notice: Out-of-date
+
 ```mermaid
 classDiagram
   direction LR

@@ -95,7 +95,8 @@ func (tt *testTool) full() *testTool {
 		With(`Dir`, tt.dir).
 		Require(err)
 
-	gotten, err := jsonify.Marshal(jsonify.NewContext(), tt.proj)
+	ctx := jsonify.NewContext().ShowInheritors(true)
+	gotten, err := jsonify.Marshal(ctx, tt.proj)
 	check.NoError(tt.t).
 		Name(`Marshal project`).
 		With(`Dir`, tt.dir).

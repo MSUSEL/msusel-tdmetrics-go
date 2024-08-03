@@ -110,6 +110,13 @@ func (m *Map) AddNonZero(ctx *Context, key string, value any) *Map {
 	return m
 }
 
+func (m *Map) AddNonZeroIf(ctx *Context, test bool, key string, value any) *Map {
+	if test {
+		return m.AddNonZero(ctx, key, value)
+	}
+	return m
+}
+
 func (m *Map) RawValue() any {
 	return m.data
 }
