@@ -13,32 +13,30 @@ import (
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/visitor"
 )
 
-type (
-	Reference interface {
-		TypeDesc
-		_reference()
+type Reference interface {
+	TypeDesc
+	_reference()
 
-		PackagePath() string
-		Name() string
-		Resolved() bool
-		SetType(pkg Package, typ Declaration)
-	}
+	PackagePath() string
+	Name() string
+	Resolved() bool
+	SetType(pkg Package, typ Declaration)
+}
 
-	ReferenceArgs struct {
-		RealType    *types.Named
-		PackagePath string
-		Name        string
-	}
+type ReferenceArgs struct {
+	RealType    *types.Named
+	PackagePath string
+	Name        string
+}
 
-	referenceImp struct {
-		realType *types.Named
-		pkgPath  string
-		name     string
+type referenceImp struct {
+	realType *types.Named
+	pkgPath  string
+	name     string
 
-		pkg Package
-		typ Declaration
-	}
-)
+	pkg Package
+	typ Declaration
+}
 
 func newReference(args ReferenceArgs) Reference {
 	assert.ArgNotNil(`real type`, args.RealType)
@@ -61,7 +59,7 @@ func (r *referenceImp) Resolved() bool {
 	return !utils.IsNil(r.typ)
 }
 
-func (r *referenceImp) SetIndex(index int) {
+func (r *referenceImp) setIndex(index int) {
 	panic(terror.New(`do not call SetIndex on Reference`))
 }
 
@@ -71,7 +69,7 @@ func (r *referenceImp) SetType(pkg Package, typ Declaration) {
 	r.typ = typ
 }
 
-func (r *referenceImp) CompareTo(other Construct) int {
+func (r *referenceImp) compareTo(other Construct) int {
 	b := other.(*referenceImp)
 	if cmp := strings.Compare(r.pkgPath, b.pkgPath); cmp != 0 {
 		return cmp

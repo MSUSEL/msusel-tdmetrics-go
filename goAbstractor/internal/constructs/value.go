@@ -1,7 +1,6 @@
 package constructs
 
 import (
-	"go/types"
 	"strings"
 
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/assert"
@@ -13,7 +12,7 @@ import (
 
 type (
 	Value interface {
-		TypeDesc
+		Declaration
 		_value()
 	}
 
@@ -35,7 +34,7 @@ type (
 	}
 )
 
-func newValueDecl(args ValueArgs) Value {
+func newValue(args ValueArgs) Value {
 	assert.ArgNotNil(`package`, args.Package)
 	assert.ArgValidId(`name`, args.Name)
 	assert.ArgNotNil(`type`, args.Type)
@@ -52,21 +51,19 @@ func newValueDecl(args ValueArgs) Value {
 
 func (v *valueImp) _value()            {}
 func (v *valueImp) Kind() kind.Kind    { return kind.Value }
-func (v *valueImp) GoType() types.Type { return v.typ.GoType() }
-func (v *valueImp) SetIndex(index int) { v.index = index }
+func (v *valueImp) setIndex(index int) { v.index = index }
+
 func (v *valueImp) Name() string       { return v.name }
 func (v *valueImp) Location() locs.Loc { return v.loc }
 func (v *valueImp) Package() Package   { return v.pkg }
 
-func (v *valueImp) CompareTo(other Construct) int {
+func (v *valueImp) compareTo(other Construct) int {
 	b := other.(*valueImp)
-	if cmp := Compare(v.pkg, b.pkg); cmp != 0 {
-		return cmp
-	}
-	if cmp := strings.Compare(v.name, b.name); cmp != 0 {
-		return cmp
-	}
-	return Compare(v.typ, b.typ)
+	return or(
+		func() int { return Compare(v.pkg, b.pkg) },
+		func() int { return strings.Compare(v.name, b.name) },
+		func() int { return Compare(v.typ, b.typ) },
+	)
 }
 
 func (v *valueImp) ToJson(ctx *jsonify.Context) jsonify.Datum {

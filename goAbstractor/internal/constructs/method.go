@@ -11,12 +11,8 @@ import (
 )
 
 type Method interface {
-	Construct
+	Declaration
 	_method()
-
-	Package() Package
-	Name() string
-	Location() locs.Loc
 
 	Signature() Signature
 	Metrics() metrics.Metrics
@@ -101,8 +97,9 @@ func (m *methodImp) setReceiver(recv Declaration) { m.receiver = recv }
 
 func (m *methodImp) IsInit() bool {
 	return strings.HasPrefix(m.name, `init#`) &&
-		m.signature.Vacant() &&
-		len(m.recvName) <= 0
+		len(m.recvName) <= 0 &&
+		len(m.typeParams) <= 0 &&
+		m.signature.Vacant()
 }
 
 func (m *methodImp) IsNamed() bool {

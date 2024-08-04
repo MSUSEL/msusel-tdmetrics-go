@@ -11,22 +11,20 @@ import (
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/jsonify"
 )
 
-type (
-	UntypedSet interface {
-		SetIndices(index int) int
-		Remove(predicate func(Construct) bool) bool
-	}
+type UntypedSet interface {
+	setIndices(index int) int
+	Remove(predicate func(Construct) bool) bool
+}
 
-	Set[T Construct] interface {
-		UntypedSet
-		Values() collections.ReadonlyList[T]
-		Insert(t T) T
-	}
+type Set[T Construct] interface {
+	UntypedSet
+	Values() collections.ReadonlyList[T]
+	Insert(t T) T
+}
 
-	setImp[T Construct] struct {
-		values collections.List[T]
-	}
-)
+type setImp[T Construct] struct {
+	values collections.List[T]
+}
 
 func NewSet[T Construct]() Set[T] {
 	return &setImp[T]{
@@ -44,7 +42,7 @@ func (s *setImp[T]) Insert(t T) T {
 	}
 
 	index, found := sort.Find(s.values.Count(), func(i int) int {
-		return t.CompareTo(s.values.Get(i))
+		return t.compareTo(s.values.Get(i))
 	})
 	if found {
 		return s.values.Get(index)
@@ -54,9 +52,9 @@ func (s *setImp[T]) Insert(t T) T {
 	return t
 }
 
-func (s *setImp[T]) SetIndices(index int) int {
+func (s *setImp[T]) setIndices(index int) int {
 	for i := range s.values.Count() {
-		s.values.Get(i).SetIndex(index)
+		s.values.Get(i).setIndex(index)
 		index++
 	}
 	return index

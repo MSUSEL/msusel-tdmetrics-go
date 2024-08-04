@@ -1,7 +1,6 @@
 package constructs
 
 import (
-	"fmt"
 	"go/token"
 	"strconv"
 
@@ -12,84 +11,76 @@ import (
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/assert"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/jsonify"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/locs"
-	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/visitor"
 )
 
-type (
-	Project interface {
-		jsonify.Jsonable
+type Project interface {
+	jsonify.Jsonable
 
-		//==========================
+	//==========================
 
-		NewBasic(args BasicArgs) Basic
-		NewDeclaration(args DeclarationArgs) Declaration
-		NewField(args FieldArgs) Field
-		NewInstance(args InstanceArgs) Instance
-		NewMethod(args MethodArgs) Method
-		NewPackage(args PackageArgs) Package
-		NewReference(args ReferenceArgs) Reference
-		NewSignature(args SignatureArgs) Signature
-		NewTypeParam(args TypeParamArgs) TypeParam
-		NewValue(args ValueArgs) Value
-		NewLoc(pos token.Pos) locs.Loc
+	NewBasic(args BasicArgs) Basic
+	NewField(args FieldArgs) Field
+	NewInstance(args InstanceArgs) Instance
+	NewMethod(args MethodArgs) Method
+	NewObject(args ObjectArgs) Object
+	NewPackage(args PackageArgs) Package
+	NewReference(args ReferenceArgs) Reference
+	NewSignature(args SignatureArgs) Signature
+	NewTypeParam(args TypeParamArgs) TypeParam
+	NewValue(args ValueArgs) Value
+	NewLoc(pos token.Pos) locs.Loc
 
-		//==========================
+	//==========================
 
-		Packages() collections.ReadonlyList[Package]
-		References() collections.ReadonlyList[Reference]
+	Objects() collections.ReadonlyList[Object]
+	Packages() collections.ReadonlyList[Package]
+	References() collections.ReadonlyList[Reference]
 
-		//==========================
+	//==========================
 
-		FindPackageByPath(path string) Package
-		FindType(pkgPath, typeName string, panicOnNotFound bool) (Package, Declaration, bool)
+	FindPackageByPath(path string) Package
+	FindType(pkgPath, typeName string, panicOnNotFound bool) (Package, Declaration, bool)
 
-		// UpdateIndices should be called after all types have been registered
-		// and all packages have been processed. This will update all the index
-		// fields that will be used as references in the output models.
-		UpdateIndices()
+	// UpdateIndices should be called after all types have been registered
+	// and all packages have been processed. This will update all the index
+	// fields that will be used as references in the output models.
+	UpdateIndices()
 
-		//==========================
+	//==========================
 
-		ResolveImports()
-		ResolveReceivers()
-		ResolveInheritance()
-		ResolveReferences()
-		PruneTypes()
-		PrunePackages()
-		FlagLocations()
-	}
+	ResolveImports()
+	ResolveReceivers()
+	ResolveInheritance()
+	ResolveReferences()
+	FlagLocations()
+}
 
-	projectImp struct {
-		allBasics     Set[Basic]
-		allClassDecls Set[ClassDecl]
-		allInstances  Set[Instance]
-		allInterDecls Set[InterfaceDecl]
-		allInterfaces Set[Interface]
-		allMethods    Set[Method]
-		allNamed      Set[Named]
-		allPackages   Set[Package]
-		allReferences Set[Reference]
-		allSignatures Set[Signature]
-		allStructs    Set[Struct]
-		allValueDecls Set[ValueDecl]
-		locations     locs.Set
-	}
-)
+type projectImp struct {
+	allBasics     Set[Basic]
+	allFields     Set[Field]
+	allInstances  Set[Instance]
+	allMethods    Set[Method]
+	allObjects    Set[Object]
+	allPackages   Set[Package]
+	allReferences Set[Reference]
+	allSignatures Set[Signature]
+	allTypeParams Set[TypeParam]
+	allValues     Set[Value]
+	locations     locs.Set
+}
 
 func NewProject(locs locs.Set) Project {
 	return &projectImp{
 		allBasics:     NewSet[Basic](),
-		allClassDecls: NewSet[ClassDecl](),
+		allFields:     NewSet[Field](),
 		allInstances:  NewSet[Instance](),
-		allInterDecls: NewSet[InterfaceDecl](),
-		allInterfaces: NewSet[Interface](),
 		allMethods:    NewSet[Method](),
-		allNamed:      NewSet[Named](),
+		allObjects:    NewSet[Object](),
 		allPackages:   NewSet[Package](),
 		allReferences: NewSet[Reference](),
 		allSignatures: NewSet[Signature](),
-		allStructs:    NewSet[Struct](),
-		allValueDecls: NewSet[ValueDecl](),
+		allTypeParams: NewSet[TypeParam](),
+		allValues:     NewSet[Value](),
 		locations:     locs,
 	}
 }
@@ -100,28 +91,20 @@ func (p *projectImp) NewBasic(args BasicArgs) Basic {
 	return p.allBasics.Insert(newBasic(args))
 }
 
-func (p *projectImp) NewClassDecl(args ClassDeclArgs) ClassDecl {
-	return args.Package.addClassDecl(p.allClassDecls.Insert(newClassDecl(args)))
+func (p *projectImp) NewField(args FieldArgs) Field {
+	return p.allFields.Insert(newField(args))
 }
 
 func (p *projectImp) NewInstance(args InstanceArgs) Instance {
 	return p.allInstances.Insert(newInstance(args))
 }
 
-func (p *projectImp) NewInterfaceDecl(args InterfaceDeclArgs) InterfaceDecl {
-	return args.Package.addInterfaceDecl(p.allInterDecls.Insert(newInterfaceDecl(args)))
-}
-
-func (p *projectImp) NewInterface(args InterfaceArgs) Interface {
-	return p.allInterfaces.Insert(newInterface(args))
-}
-
 func (p *projectImp) NewMethod(args MethodArgs) Method {
 	return args.Package.addMethod(p.allMethods.Insert(newMethod(args)))
 }
 
-func (p *projectImp) NewNamed(args NamedArgs) Named {
-	return p.allNamed.Insert(newNamed(args))
+func (p *projectImp) NewObject(args ObjectArgs) Object {
+	return args.Package.addObject(p.allObjects.Insert(newObject(args)))
 }
 
 func (p *projectImp) NewPackage(args PackageArgs) Package {
@@ -136,12 +119,12 @@ func (p *projectImp) NewSignature(args SignatureArgs) Signature {
 	return p.allSignatures.Insert(newSignature(args))
 }
 
-func (p *projectImp) NewStruct(args StructArgs) Struct {
-	return p.allStructs.Insert(newStruct(args))
+func (p *projectImp) NewTypeParam(args TypeParamArgs) TypeParam {
+	return p.allTypeParams.Insert(newTypeParam(args))
 }
 
-func (p *projectImp) NewValueDecl(args ValueDeclArgs) ValueDecl {
-	return args.Package.addValueDecl(p.allValueDecls.Insert(newValueDecl(args)))
+func (p *projectImp) NewValue(args ValueArgs) Value {
+	return args.Package.addValue(p.allValues.Insert(newValue(args)))
 }
 
 func (p *projectImp) NewLoc(pos token.Pos) locs.Loc {
@@ -150,8 +133,8 @@ func (p *projectImp) NewLoc(pos token.Pos) locs.Loc {
 
 //==================================================================
 
-func (p *projectImp) Interfaces() collections.ReadonlyList[Interface] {
-	return p.allInterfaces.Values()
+func (p *projectImp) Objects() collections.ReadonlyList[Object] {
+	return p.allObjects.Values()
 }
 
 func (p *projectImp) Packages() collections.ReadonlyList[Package] {
@@ -188,7 +171,7 @@ func (p *projectImp) FindType(pkgPath, typeName string, panicOnNotFound bool) (P
 			With(`existing paths`, `[`+names+`]`))
 	}
 
-	def := pkg.findType(typeName)
+	def := pkg.findDeclaration(typeName)
 	if def == nil {
 		if !panicOnNotFound {
 			return pkg, nil, false
@@ -205,18 +188,16 @@ func (p *projectImp) UpdateIndices() {
 	// Type indices compound so that each has a unique offset.
 	// The typeDefs in each package are also uniquely offset.
 	index := 1
-	index = p.allBasics.SetIndices(index)
-	index = p.allClassDecls.SetIndices(index)
-	index = p.allInstances.SetIndices(index)
-	index = p.allInterDecls.SetIndices(index)
-	index = p.allInterfaces.SetIndices(index)
-	index = p.allMethods.SetIndices(index)
-	index = p.allNamed.SetIndices(index)
-	index = p.allPackages.SetIndices(index)
+	index = p.allBasics.setIndices(index)
+	index = p.allFields.setIndices(index)
+	index = p.allInstances.setIndices(index)
+	index = p.allMethods.setIndices(index)
+	index = p.allObjects.setIndices(index)
+	index = p.allPackages.setIndices(index)
 	// Don't index the p.allReferences
-	index = p.allSignatures.SetIndices(index)
-	index = p.allStructs.SetIndices(index)
-	p.allValueDecls.SetIndices(index)
+	index = p.allSignatures.setIndices(index)
+	index = p.allTypeParams.setIndices(index)
+	p.allValues.setIndices(index)
 }
 
 func (p *projectImp) String() string {
@@ -228,17 +209,15 @@ func (p *projectImp) ToJson(ctx *jsonify.Context) jsonify.Datum {
 	return jsonify.NewMap().
 		Add(ctx2, `language`, `go`).
 		AddNonZero(ctx2, `basics`, p.allBasics).
-		AddNonZero(ctx2, `classDecls`, p.allClassDecls).
+		AddNonZero(ctx2, `fields`, p.allFields).
 		AddNonZero(ctx2, `instances`, p.allInstances).
-		AddNonZero(ctx2, `interfaceDecls`, p.allInterDecls).
-		AddNonZero(ctx2, `interfaces`, p.allInterfaces).
 		AddNonZero(ctx2, `methods`, p.allMethods).
-		AddNonZero(ctx2, `named`, p.allNamed).
+		AddNonZero(ctx2, `objects`, p.allObjects).
 		AddNonZero(ctx2, `packages`, p.allPackages).
 		// Don't output the p.allReferences
 		AddNonZero(ctx2, `signatures`, p.allSignatures).
-		AddNonZero(ctx2, `structs`, p.allStructs).
-		AddNonZero(ctx2, `valueDecls`, p.allValueDecls).
+		AddNonZero(ctx2, `typeParams`, p.allTypeParams).
+		AddNonZero(ctx2, `values`, p.allValues).
 		AddNonZero(ctx2, `locs`, p.locations)
 }
 
@@ -267,37 +246,11 @@ func (p *projectImp) ResolveReceivers() {
 	}
 }
 
-func printInterfaces(its []Interface, indent string) {
-	for _, it := range its {
-		fmt.Println(indent + it.GoType().String())
-		printInterfaces(it.(*interfaceImp).inheritors, indent+`  `)
-	}
-}
-
 func (p *projectImp) ResolveInheritance() {
-	inters := p.allInterfaces.Values()
-	roots := []Interface{}
-
-	for i := range inters.Count() {
-		roots = addInheritors(roots, inters.Get(i))
-		fmt.Println(`=====================`)
-		printInterfaces(roots, ``)
-	}
-
-	for i := range inters.Count() {
-		inters.Get(i).setInheritance()
-	}
-
-	for i := range inters.Count() {
-		inters.Get(i).sortInheritance()
-	}
-
-	classes := p.allClassDecls.Values()
-	for i := range classes.Count() {
-		c := classes.Get(i)
-		for _, root := range roots {
-			root.findImplements(c)
-		}
+	decls := p.allObjects.Values()
+	roots := []Object{}
+	for i := range decls.Count() {
+		roots = addInheritance(roots, decls.Get(i))
 	}
 }
 
@@ -311,67 +264,11 @@ func (p *projectImp) ResolveReferences() {
 	}
 }
 
-func (p *projectImp) removeTypes(predict func(Construct) bool) {
-	p.allBasics.Remove(predict)
-	p.allClassDecls.Remove(predict)
-	p.allInstances.Remove(predict)
-	p.allInterDecls.Remove(predict)
-	p.allInterfaces.Remove(predict)
-	p.allMethods.Remove(predict)
-	p.allNamed.Remove(predict)
-	p.allReferences.Remove(predict)
-	p.allSignatures.Remove(predict)
-	p.allStructs.Remove(predict)
-	p.allValueDecls.Remove(predict)
-}
-
-func (p *projectImp) PruneTypes() {
-	touched := map[Construct]bool{}
-
-	v := visitor.New(func(value any) bool {
-		if c, ok := value.(Construct); ok {
-			if _, has := touched[c]; has {
-				return false
-			}
-			touched[c] = true
-		}
-		return true
-	})
-
-	// Visit everything reachable from the packages.
-	// Do not visit all the registered types since they are being pruned.
-	visitor.VisitList(v, p.allPackages.Values())
-	p.removeTypes(func(td Construct) bool {
-		return !touched[td]
-	})
-}
-
-func (p *projectImp) PrunePackages() {
-	empty := map[Construct]bool{}
-	packages := p.allPackages.Values()
-	for i := range packages.Count() {
-		if pkg := packages.Get(i); pkg.empty() {
-			empty[pkg] = true
-		}
-	}
-
-	handle := func(pkg Construct) bool {
-		return empty[pkg]
-	}
-
-	p.allPackages.Remove(handle)
-	allPackages := p.allPackages.Values()
-	for i := range allPackages.Count() {
-		allPackages.Get(i).removeImports(handle)
-	}
-}
-
 func (p *projectImp) FlagLocations() {
 	p.locations.Reset()
-	flagList(p.allClassDecls.Values())
-	flagList(p.allInterDecls.Values())
 	flagList(p.allMethods.Values())
-	flagList(p.allValueDecls.Values())
+	flagList(p.allObjects.Values())
+	flagList(p.allValues.Values())
 }
 
 func flagList[T Declaration](c collections.ReadonlyList[T]) {
