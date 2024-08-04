@@ -11,34 +11,31 @@ import (
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/assert"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs/kind"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/jsonify"
-	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/visitor"
 )
 
-type (
-	// Basic is a base type (e.g. bool, int, string, float64).
-	//
-	// This does not contain complex types, those are treated as an interface.
-	Basic interface {
-		TypeDesc
-		_basic()
-	}
+// Basic is a base type (e.g. bool, int, string, float64).
+//
+// This does not contain complex types, those are treated as an interface.
+type Basic interface {
+	TypeDesc
+	_basic()
+}
 
-	BasicArgs struct {
-		RealType *types.Basic
+type BasicArgs struct {
+	RealType *types.Basic
 
-		// TypeName is only used if RealType is nil.
-		TypeName string
+	// TypeName is only used if RealType is nil.
+	TypeName string
 
-		// Package must not be nil when RealType is nil.
-		Package Package
-	}
+	// Package must not be nil when RealType is nil.
+	Package Package
+}
 
-	basicImp struct {
-		realType *types.Basic
-		typeName string
-		index    int
-	}
-)
+type basicImp struct {
+	realType *types.Basic
+	typeName string
+	index    int
+}
 
 func normalizeBasicName(name string) string {
 	name, _ = strings.CutPrefix(name, `untyped `)
@@ -88,12 +85,11 @@ func newBasic(args BasicArgs) Basic {
 
 func (t *basicImp) _basic()            {}
 func (t *basicImp) Kind() kind.Kind    { return kind.Basic }
-func (t *basicImp) SetIndex(index int) { t.index = index }
+func (t *basicImp) setIndex(index int) { t.index = index }
 func (t *basicImp) GoType() types.Type { return t.realType }
+func (t *basicImp) String() string     { return t.typeName }
 
-func (t *basicImp) Visit(v visitor.Visitor) {}
-
-func (t *basicImp) CompareTo(other Construct) int {
+func (t *basicImp) compareTo(other Construct) int {
 	return strings.Compare(t.typeName, other.(*basicImp).typeName)
 }
 

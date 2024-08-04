@@ -22,17 +22,15 @@ type (
 		//==========================
 
 		NewBasic(args BasicArgs) Basic
-		NewClassDecl(args ClassDeclArgs) ClassDecl
+		NewDeclaration(args DeclarationArgs) Declaration
+		NewField(args FieldArgs) Field
 		NewInstance(args InstanceArgs) Instance
-		NewInterfaceDecl(args InterfaceDeclArgs) InterfaceDecl
-		NewInterface(args InterfaceArgs) Interface
 		NewMethod(args MethodArgs) Method
-		NewNamed(args NamedArgs) Named
 		NewPackage(args PackageArgs) Package
 		NewReference(args ReferenceArgs) Reference
 		NewSignature(args SignatureArgs) Signature
-		NewStruct(args StructArgs) Struct
-		NewValueDecl(args ValueDeclArgs) ValueDecl
+		NewTypeParam(args TypeParamArgs) TypeParam
+		NewValue(args ValueArgs) Value
 		NewLoc(pos token.Pos) locs.Loc
 
 		//==========================
@@ -195,13 +193,9 @@ func (p *projectImp) FindType(pkgPath, typeName string, panicOnNotFound bool) (P
 		if !panicOnNotFound {
 			return pkg, nil, false
 		}
-		names := enumerator.Select(pkg.allTypes(),
-			func(td Declaration) string { return td.Name() }).
-			Join(`, `)
 		panic(terror.New(`failed to find type for type def reference`).
 			With(`type name`, typeName).
-			With(`package path`, pkgPath).
-			With(`type defs`, `[`+names+`]`))
+			With(`package path`, pkgPath))
 	}
 
 	return pkg, def, true

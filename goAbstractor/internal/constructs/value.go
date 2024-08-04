@@ -12,12 +12,12 @@ import (
 )
 
 type (
-	ValueDecl interface {
-		Declaration
-		_valueDecl()
+	Value interface {
+		TypeDesc
+		_value()
 	}
 
-	ValueDeclArgs struct {
+	ValueArgs struct {
 		Package  Package
 		Name     string
 		Location locs.Loc
@@ -25,7 +25,7 @@ type (
 		Const    bool
 	}
 
-	valueDeclImp struct {
+	valueImp struct {
 		pkg     Package
 		name    string
 		loc     locs.Loc
@@ -35,13 +35,13 @@ type (
 	}
 )
 
-func newValueDecl(args ValueDeclArgs) ValueDecl {
+func newValueDecl(args ValueArgs) Value {
 	assert.ArgNotNil(`package`, args.Package)
 	assert.ArgValidId(`name`, args.Name)
 	assert.ArgNotNil(`type`, args.Type)
 	assert.ArgNotNil(`location`, args.Location)
 
-	return &valueDeclImp{
+	return &valueImp{
 		pkg:     args.Package,
 		name:    args.Name,
 		loc:     args.Location,
@@ -50,16 +50,16 @@ func newValueDecl(args ValueDeclArgs) ValueDecl {
 	}
 }
 
-func (v *valueDeclImp) _valueDecl()        {}
-func (v *valueDeclImp) Kind() kind.Kind    { return kind.ValueDecl }
-func (v *valueDeclImp) GoType() types.Type { return v.typ.GoType() }
-func (v *valueDeclImp) SetIndex(index int) { v.index = index }
-func (v *valueDeclImp) Name() string       { return v.name }
-func (v *valueDeclImp) Location() locs.Loc { return v.loc }
-func (v *valueDeclImp) Package() Package   { return v.pkg }
+func (v *valueImp) _value()            {}
+func (v *valueImp) Kind() kind.Kind    { return kind.Value }
+func (v *valueImp) GoType() types.Type { return v.typ.GoType() }
+func (v *valueImp) SetIndex(index int) { v.index = index }
+func (v *valueImp) Name() string       { return v.name }
+func (v *valueImp) Location() locs.Loc { return v.loc }
+func (v *valueImp) Package() Package   { return v.pkg }
 
-func (v *valueDeclImp) CompareTo(other Construct) int {
-	b := other.(*valueDeclImp)
+func (v *valueImp) CompareTo(other Construct) int {
+	b := other.(*valueImp)
 	if cmp := Compare(v.pkg, b.pkg); cmp != 0 {
 		return cmp
 	}
@@ -69,7 +69,7 @@ func (v *valueDeclImp) CompareTo(other Construct) int {
 	return Compare(v.typ, b.typ)
 }
 
-func (v *valueDeclImp) ToJson(ctx *jsonify.Context) jsonify.Datum {
+func (v *valueImp) ToJson(ctx *jsonify.Context) jsonify.Datum {
 	if ctx.IsShort() {
 		return jsonify.New(ctx, v.index)
 	}
@@ -85,6 +85,6 @@ func (v *valueDeclImp) ToJson(ctx *jsonify.Context) jsonify.Datum {
 		AddNonZero(ctx2, `const`, v.isConst)
 }
 
-func (v *valueDeclImp) Visit(vi visitor.Visitor) {
+func (v *valueImp) Visit(vi visitor.Visitor) {
 	visitor.Visit(vi, v.typ)
 }

@@ -1,7 +1,6 @@
 package constructs
 
 import (
-	"go/types"
 	"strings"
 
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/assert"
@@ -9,51 +8,64 @@ import (
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/jsonify"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/locs"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/metrics"
-	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/visitor"
 )
 
-type (
-	Method interface {
-		Declaration
-		_method()
+type Method interface {
+	Construct
+	_method()
 
-		Metrics() metrics.Metrics
-		Signature() Signature
-		RecvName() string
-		SetReceiver(recv ClassDecl)
-		IsInit() bool
-	}
+	Package() Package
+	Name() string
+	Location() locs.Loc
 
-	MethodArgs struct {
-		Package    Package
-		Name       string
-		Location   locs.Loc
-		Signature  Signature
-		Metrics    metrics.Metrics
-		NoCopyRecv bool
-		RecvName   string
-		TypeParams []Named
-	}
+	Signature() Signature
+	Metrics() metrics.Metrics
 
-	methodImp struct {
-		pkg        Package
-		name       string
-		loc        locs.Loc
-		signature  Signature
-		metrics    metrics.Metrics
-		noCopyRecv bool
-		recvName   string
-		receiver   ClassDecl
-		typeParams []Named
-		index      int
-	}
-)
+	addInstance(inst Instance) Instance
+	receiverName() string
+	setReceiver(recv Declaration)
+
+	IsInit() bool
+	IsNamed() bool
+	IsGeneric() bool
+}
+
+type MethodArgs struct {
+	Package  Package
+	Name     string
+	Location locs.Loc
+
+	Signature  Signature
+	TypeParams []TypeParam
+
+	Metrics metrics.Metrics
+
+	NoCopyRecv bool
+	RecvName   string
+}
+
+type methodImp struct {
+	pkg  Package
+	name string
+	loc  locs.Loc
+
+	signature  Signature
+	typeParams []TypeParam
+	instances  Set[Instance]
+
+	metrics metrics.Metrics
+
+	noCopyRecv bool
+	recvName   string
+	receiver   Declaration
+
+	index int
+}
 
 func newMethod(args MethodArgs) Method {
-	assert.ArgValidId(`name`, args.Name)
 	assert.ArgNotNil(`package`, args.Package)
 	assert.ArgNotNil(`signature`, args.Signature)
-	assert.ArgNotNil(`location`, args.Location)
+	assert.ArgNotNil(`type params`, args.TypeParams)
 
 	return &methodImp{
 		pkg:        args.Package,
@@ -64,40 +76,52 @@ func newMethod(args MethodArgs) Method {
 		noCopyRecv: args.NoCopyRecv,
 		recvName:   args.RecvName,
 		typeParams: args.TypeParams,
+
+		instances: NewSet[Instance](),
 	}
 }
 
-func (m *methodImp) _method()                   {}
-func (m *methodImp) Kind() kind.Kind            { return kind.Method }
-func (m *methodImp) GoType() types.Type         { return m.signature.GoType() }
-func (m *methodImp) SetIndex(index int)         { m.index = index }
-func (m *methodImp) Name() string               { return m.name }
-func (m *methodImp) Location() locs.Loc         { return m.loc }
-func (m *methodImp) Package() Package           { return m.pkg }
-func (m *methodImp) Metrics() metrics.Metrics   { return m.metrics }
-func (m *methodImp) Signature() Signature       { return m.signature }
-func (m *methodImp) RecvName() string           { return m.recvName }
-func (m *methodImp) SetReceiver(recv ClassDecl) { m.receiver = recv }
+func (m *methodImp) _method()           {}
+func (m *methodImp) Kind() kind.Kind    { return kind.Method }
+func (m *methodImp) setIndex(index int) { m.index = index }
+
+func (m *methodImp) Package() Package   { return m.pkg }
+func (m *methodImp) Name() string       { return m.name }
+func (m *methodImp) Location() locs.Loc { return m.loc }
+
+func (m *methodImp) Metrics() metrics.Metrics { return m.metrics }
+func (m *methodImp) Signature() Signature     { return m.signature }
+
+func (m *methodImp) addInstance(inst Instance) Instance {
+	return m.instances.Insert(inst)
+}
+
+func (m *methodImp) receiverName() string         { return m.recvName }
+func (m *methodImp) setReceiver(recv Declaration) { m.receiver = recv }
 
 func (m *methodImp) IsInit() bool {
-	return strings.HasPrefix(m.name, `init#`) && m.signature.Vacant() && len(m.recvName) <= 0
+	return strings.HasPrefix(m.name, `init#`) &&
+		m.signature.Vacant() &&
+		len(m.recvName) <= 0
 }
 
-func (m *methodImp) CompareTo(other Construct) int {
+func (m *methodImp) IsNamed() bool {
+	return len(m.name) > 0
+}
+
+func (m *methodImp) IsGeneric() bool {
+	return len(m.typeParams) > 0
+}
+
+func (m *methodImp) compareTo(other Construct) int {
 	b := other.(*methodImp)
-	if cmp := Compare(m.pkg, b.pkg); cmp != 0 {
-		return cmp
-	}
-	if cmp := strings.Compare(m.name, b.name); cmp != 0 {
-		return cmp
-	}
-	if cmp := strings.Compare(m.recvName, b.recvName); cmp != 0 {
-		return cmp
-	}
-	if cmp := CompareSlice(m.typeParams, b.typeParams); cmp != 0 {
-		return cmp
-	}
-	return Compare(m.signature, b.signature)
+	return or(
+		func() int { return Compare(m.pkg, b.pkg) },
+		func() int { return strings.Compare(m.name, b.name) },
+		func() int { return strings.Compare(m.recvName, b.recvName) },
+		func() int { return compareSlice(m.typeParams, b.typeParams) },
+		func() int { return Compare(m.signature, b.signature) },
+	)
 }
 
 func (m *methodImp) ToJson(ctx *jsonify.Context) jsonify.Datum {
@@ -106,24 +130,17 @@ func (m *methodImp) ToJson(ctx *jsonify.Context) jsonify.Datum {
 	}
 
 	ctx2 := ctx.HideKind().Short()
-	data := jsonify.NewMap().
+	return jsonify.NewMap().
 		AddIf(ctx, ctx.IsKindShown(), `kind`, m.Kind()).
 		AddIf(ctx, ctx.IsIndexShown(), `index`, m.index).
-		Add(ctx2, `package`, m.pkg).
-		Add(ctx2, `name`, m.name).
-		Add(ctx2, `signature`, m.signature).
+		AddNonZero(ctx2, `package`, m.pkg).
+		AddNonZero(ctx2, `name`, m.name).
+		AddNonZero(ctx2, `loc`, m.loc).
+		AddNonZero(ctx2, `signature`, m.signature).
 		AddNonZero(ctx2, `metrics`, m.metrics).
-		AddNonZero(ctx2, `receiver`, m.receiver).
 		AddNonZero(ctx2, `typeParams`, m.typeParams).
-		AddNonZero(ctx2, `loc`, m.loc)
-
-	if ctx.IsReceiverShown() {
-		data.AddNonZero(ctx, `noCopyRecv`, m.noCopyRecv).
-			AddNonZero(ctx, `recvName`, m.recvName)
-	}
-	return data
-}
-
-func (m *methodImp) Visit(v visitor.Visitor) {
-	visitor.Visit(v, m.signature)
+		AddNonZero(ctx2, `instances`, m.instances).
+		AddNonZero(ctx2, `receiver`, m.receiver).
+		AddNonZeroIf(ctx2, ctx.IsReceiverShown(), `noCopyRecv`, m.noCopyRecv).
+		AddNonZeroIf(ctx2, ctx.IsReceiverShown(), `recvName`, m.recvName)
 }

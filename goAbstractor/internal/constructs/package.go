@@ -4,14 +4,12 @@ import (
 	"strings"
 
 	"github.com/Snow-Gremlin/goToolbox/collections"
-	"github.com/Snow-Gremlin/goToolbox/collections/enumerator"
 	"github.com/Snow-Gremlin/goToolbox/terrors/terror"
 	"golang.org/x/tools/go/packages"
 
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/assert"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs/kind"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/jsonify"
-	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/visitor"
 )
 
 type (
@@ -27,14 +25,13 @@ type (
 		InitCount() int
 
 		addImport(p Package) Package
-		addClassDecl(c ClassDecl) ClassDecl
-		addInterfaceDecl(id InterfaceDecl) InterfaceDecl
+
+		addDeclaration(id Declaration) Declaration
 		addMethod(m Method) Method
-		addValueDecl(v ValueDecl) ValueDecl
+		addValue(v Value) Value
 
 		empty() bool
 		findType(name string) Declaration
-		allTypes() collections.Enumerator[Declaration]
 
 		resolveReceivers()
 		removeImports(predicate func(Construct) bool)
@@ -56,10 +53,9 @@ type (
 		importPaths []string
 		imports     Set[Package]
 
-		classDecls Set[ClassDecl]
-		interDecls Set[InterfaceDecl]
-		methods    Set[Method]
-		valueDecls Set[ValueDecl]
+		declarations Set[Declaration]
+		methods      Set[Method]
+		values       Set[Value]
 	}
 )
 
@@ -69,21 +65,21 @@ func newPackage(args PackageArgs) Package {
 	assert.ArgValidId(`name`, args.Name)
 
 	return &packageImp{
-		pkg:         args.RealPkg,
-		path:        args.Path,
-		name:        args.Name,
-		classDecls:  NewSet[ClassDecl](),
-		imports:     NewSet[Package](),
-		interDecls:  NewSet[InterfaceDecl](),
-		methods:     NewSet[Method](),
-		valueDecls:  NewSet[ValueDecl](),
-		importPaths: args.ImportPaths,
+		pkg:          args.RealPkg,
+		path:         args.Path,
+		name:         args.Name,
+		importPaths:  args.ImportPaths,
+		imports:      NewSet[Package](),
+		declarations: NewSet[Declaration](),
+		methods:      NewSet[Method](),
+		values:       NewSet[Value](),
 	}
 }
 
-func (p *packageImp) _package()                 {}
-func (p *packageImp) Kind() kind.Kind           { return kind.Package }
-func (p *packageImp) SetIndex(index int)        { p.index = index }
+func (p *packageImp) _package()          {}
+func (p *packageImp) Kind() kind.Kind    { return kind.Package }
+func (p *packageImp) setIndex(index int) { p.index = index }
+
 func (p *packageImp) Source() *packages.Package { return p.pkg }
 func (p *packageImp) Path() string              { return p.path }
 func (p *packageImp) Name() string              { return p.name }
@@ -108,45 +104,36 @@ func (p *packageImp) addImport(i Package) Package {
 	return p.imports.Insert(i)
 }
 
-func (p *packageImp) addClassDecl(c ClassDecl) ClassDecl {
-	return p.classDecls.Insert(c)
-}
-
-func (p *packageImp) addInterfaceDecl(id InterfaceDecl) InterfaceDecl {
-	return p.interDecls.Insert(id)
+func (p *packageImp) addDeclaration(d Declaration) Declaration {
+	return p.declarations.Insert(d)
 }
 
 func (p *packageImp) addMethod(m Method) Method {
 	return p.methods.Insert(m)
 }
 
-func (p *packageImp) addValueDecl(v ValueDecl) ValueDecl {
-	return p.valueDecls.Insert(v)
+func (p *packageImp) addValue(v Value) Value {
+	return p.values.Insert(v)
 }
 
 func (p *packageImp) empty() bool {
-	return p.allTypes().Empty()
+	return p.declarations.Values().Empty() &&
+		p.methods.Values().Empty() &&
+		p.values.Values().Empty()
 }
 
 func (p *packageImp) findType(name string) Declaration {
-	def, _ := p.allTypes().Where(func(t Declaration) bool { return t.Name() == name }).First()
+	def, _ := p.declarations.Values().Enumerate().
+		Where(func(t Declaration) bool { return t.Name() == name }).First()
 	return def
 }
 
-func (p *packageImp) allTypes() collections.Enumerator[Declaration] {
-	i := enumerator.Cast[Declaration](p.interDecls.Values().Enumerate())
-	c := enumerator.Cast[Declaration](p.classDecls.Values().Enumerate())
-	v := enumerator.Cast[Declaration](p.valueDecls.Values().Enumerate())
-	m := enumerator.Cast[Declaration](p.methods.Values().Enumerate())
-	return i.Concat(c).Concat(v).Concat(m)
-}
-
-func (p *packageImp) CompareTo(other Construct) int {
+func (p *packageImp) compareTo(other Construct) int {
 	b := other.(*packageImp)
-	if cmp := strings.Compare(p.path, b.path); cmp != 0 {
-		return cmp
-	}
-	return strings.Compare(p.name, b.name)
+	return or(
+		func() int { return strings.Compare(p.path, b.path) },
+		func() int { return strings.Compare(p.name, b.name) },
+	)
 }
 
 func (p *packageImp) ToJson(ctx *jsonify.Context) jsonify.Datum {
@@ -160,40 +147,24 @@ func (p *packageImp) ToJson(ctx *jsonify.Context) jsonify.Datum {
 		AddIf(ctx, ctx.IsIndexShown(), `index`, p.index).
 		AddNonZero(ctx2, `path`, p.path).
 		AddNonZero(ctx2, `name`, p.name).
-		AddNonZero(ctx2, `classDecls`, p.classDecls).
 		AddNonZero(ctx2, `imports`, p.imports).
-		AddNonZero(ctx2, `interfaceDecls`, p.interDecls).
+		AddNonZero(ctx2, `declarations`, p.declarations).
 		AddNonZero(ctx2, `methods`, p.methods).
-		AddNonZero(ctx2, `valueDecls`, p.valueDecls)
-}
-
-func (p *packageImp) Visit(v visitor.Visitor) {
-	visitor.VisitList(v, p.imports.Values())
-	visitor.VisitList(v, p.classDecls.Values())
-	visitor.VisitList(v, p.interDecls.Values())
-	visitor.VisitList(v, p.methods.Values())
-	visitor.VisitList(v, p.valueDecls.Values())
+		AddNonZero(ctx2, `values`, p.values)
 }
 
 func (p *packageImp) resolveReceivers() {
 	methods := p.methods.Values()
 	for i := range methods.Count() {
 		m := methods.Get(i)
-		if rec := m.RecvName(); len(rec) > 0 {
+		if rec := m.receiverName(); len(rec) > 0 {
 			t := p.findType(rec)
 			if t == nil {
 				panic(terror.New(`failed to find receiver`).
 					With(`name`, rec))
 			}
-			c, ok := t.(ClassDecl)
-			if !ok {
-				panic(terror.New(`receiver was not a class`).
-					With(`name`, rec).
-					WithType(`gotten type`, t).
-					With(`gotten value`, t))
-			}
-			m.SetReceiver(c)
-			c.addMethod(m)
+			t.addMethod(m)
+			m.setReceiver(t)
 		}
 	}
 }
