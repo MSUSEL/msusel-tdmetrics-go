@@ -25,15 +25,15 @@ type (
 	Baker interface {
 		BakeBuiltin() constructs.Package
 		BakeBasic(typeName string) constructs.Basic
-		BakeAny() constructs.Object
-		BakeList() constructs.Object
-		BakeChan() constructs.Object
-		BakeMap() constructs.Object
-		BakePointer() constructs.Object
-		BakeComplex64() constructs.Object
-		BakeComplex128() constructs.Object
-		BakeError() constructs.Object
-		BakeComparable() constructs.Object
+		BakeAny() constructs.Interface
+		BakeList() constructs.Interface
+		BakeChan() constructs.Interface
+		BakeMap() constructs.Interface
+		BakePointer() constructs.Interface
+		BakeComplex64() constructs.Interface
+		BakeComplex128() constructs.Interface
+		BakeError() constructs.Interface
+		BakeComparable() constructs.Interface
 	}
 
 	bakerImp struct {
@@ -69,23 +69,6 @@ func bakeOnce[T any](b *bakerImp, key string, create func() T) T {
 	return t
 }
 
-// bakeIntFunc bakes in a signature for `func() int`.
-// This is useful for things like `cap() int` and `len() int`.
-func (b *bakerImp) bakeIntFunc() constructs.Signature {
-	return bakeOnce(b, `func() int`, func() constructs.Signature {
-		// <unnamed> int
-		result := b.proj.NewArgument(constructs.ArgumentArgs{
-			Type: b.BakeBasic(`int`),
-		})
-
-		// func() int
-		return b.proj.NewSignature(constructs.SignatureArgs{
-			Package: b.BakeBuiltin(),
-			Results: []constructs.Argument{result},
-		})
-	})
-}
-
 // BakeBuiltin bakes in a package to represent the builtin package.
 func (b *bakerImp) BakeBuiltin() constructs.Package {
 	return bakeOnce(b, BuiltinName, func() constructs.Package {
@@ -118,14 +101,12 @@ func (b *bakerImp) BakeBasic(typeName string) constructs.Basic {
 
 // BakeAny bakes in an interface to represent "any"
 // the base object that (almost) all other types inherit from.
-func (b *bakerImp) BakeAny() constructs.Object {
-	return bakeOnce(b, `any`, func() constructs.Object {
-		pkg := b.BakeBuiltin()
-
+func (b *bakerImp) BakeAny() constructs.Interface {
+	return bakeOnce(b, `any`, func() constructs.Interface {
 		// any
-		return b.proj.NewObject(constructs.ObjectArgs{
+		return b.proj.NewInterface(constructs.InterfaceArgs{
 			RealType: types.NewInterfaceType(nil, nil),
-			Package:  pkg,
+			Package:  b.BakeBuiltin(),
 			Name:     `any`,
 			Location: locs.NoLoc(),
 		})
@@ -136,93 +117,85 @@ func (b *bakerImp) BakeAny() constructs.Object {
 //
 //	type list[T any] interface {
 //		$len() int
-//		$cap() int
 //		$get(index int) T
 //		$set(index int, value T)
 //	}
 //
+// If the given elements is nil, then the generic form is returned.
+// Otherwise, the instance realization on the given element is returned.
+//
 // Note: The difference between an array and slice aren't
-// important for the abstractor, so they are combined into one.
-func (b *bakerImp) BakeList() constructs.Object {
-	return bakeOnce(b, `List[T any]`, func() constructs.Object {
+// important for abstraction, so they are combined into one.
+// Also `cap` and `offset` aren't important, so ignored.
+func (b *bakerImp) BakeList(elem constructs.TypeDesc) constructs.Interface {
+	generic := utils.IsNil(elem)
+	bakeKey := `List[T any]`
+	if !generic {
+		bakeKey = `List@` + elem.GoType().String()
+	}
+	return bakeOnce(b, bakeKey, func() constructs.Interface {
 		pkg := b.BakeBuiltin()
+		var tps []constructs.TypeParam
 
-		tp := b.proj.NewTypeParam(constructs.TypeParamArgs{
-			Name: `T`,
-			Type: b.BakeAny(),
+		if generic {
+			tp := b.proj.NewTypeParam(constructs.TypeParamArgs{
+				Name: `T`,
+				Type: b.BakeAny(),
+			})
+			tps = []constructs.TypeParam{tp}
+			elem = tp
+		}
+
+		// <unnamed> int
+		resultInt := b.proj.NewArgument(constructs.ArgumentArgs{
+			Type: b.BakeBasic(`int`),
 		})
-		tps := []constructs.TypeParam{tp}
 
-		lenCapFunc := b.bakeIntFunc()
+		// index int
 		indexParam := b.proj.NewArgument(constructs.ArgumentArgs{
 			Name: `index`,
 			Type: b.BakeBasic(`int`),
 		})
+
+		// value T
 		valueParam := b.proj.NewArgument(constructs.ArgumentArgs{
 			Name: `value`,
-			Type: tp,
-		})
-		valueResult := b.proj.NewArgument(constructs.ArgumentArgs{
-			Type: tp,
+			Type: elem,
 		})
 
-		getFunc := b.proj.NewSignature(constructs.SignatureArgs{
-			Params:  []constructs.Argument{indexParam},
-			Results: []constructs.Argument{valueResult},
+		// $len() int
+		lenFunc := b.proj.NewMethod(constructs.MethodArgs{
+			Package:  pkg,
+			Name:     `$len`,
+			Location: locs.NoLoc(),
+			Results:  []constructs.Argument{resultInt},
 		})
-		setFunc := b.proj.NewSignature(constructs.SignatureArgs{
-			Params: []constructs.Argument{indexParam, valueParam},
+
+		// $get(index int) T
+		getFunc := b.proj.NewMethod(constructs.MethodArgs{
+			Package:  pkg,
+			Name:     `$get`,
+			Location: locs.NoLoc(),
+			Params:   []constructs.Argument{indexParam},
+			Results:  []constructs.Argument{valueParam},
+		})
+
+		// $set(index int, value T)
+		setFunc := b.proj.NewMethod(constructs.MethodArgs{
+			Package:  pkg,
+			Name:     `$get`,
+			Location: locs.NoLoc(),
+			Params:   []constructs.Argument{indexParam, valueParam},
 		})
 
 		// List[T]
-		obj := b.proj.NewObject(constructs.ObjectArgs{
+		return b.proj.NewInterface(constructs.InterfaceArgs{
 			Package:    pkg,
 			Name:       `List`,
 			Location:   locs.NoLoc(),
 			TypeParams: tps,
+			Methods:    []constructs.Method{lenFunc, getFunc, setFunc},
 		})
-
-		// $len() int
-		b.proj.NewMethod(constructs.MethodArgs{
-			Package:    pkg,
-			Name:       `$len`,
-			Location:   locs.NoLoc(),
-			TypeParams: tps,
-			Signature:  lenCapFunc,
-			Receiver:   obj,
-		})
-
-		// $cap() int
-		b.proj.NewMethod(constructs.MethodArgs{
-			Package:    pkg,
-			Name:       `$cap`,
-			Location:   locs.NoLoc(),
-			TypeParams: tps,
-			Signature:  lenCapFunc,
-			Receiver:   obj,
-		})
-
-		// $get(index int) T
-		b.proj.NewMethod(constructs.MethodArgs{
-			Package:    pkg,
-			Name:       `$get`,
-			Location:   locs.NoLoc(),
-			TypeParams: tps,
-			Signature:  getFunc,
-			Receiver:   obj,
-		})
-
-		// $set(index int, value T)
-		b.proj.NewMethod(constructs.MethodArgs{
-			Package:    pkg,
-			Name:       `$set`,
-			Location:   locs.NoLoc(),
-			TypeParams: tps,
-			Signature:  setFunc,
-			Receiver:   obj,
-		})
-
-		return obj
 	})
 }
 
@@ -237,51 +210,75 @@ func (b *bakerImp) BakeList() constructs.Object {
 // If the given elements is nil, then the generic form is returned.
 // Otherwise, the instance realization on the given element is returned.
 //
-// Note: Doesn't currently have cap, trySend, or tryRecv as defined in reflect.
-func (b *bakerImp) BakeChan() constructs.Object {
-	return bakeOnce(b, `Chan[T any]`, func() constructs.Object {
+// Note: Doesn't have `cap`, `trySend`, or `tryRecv` as defined in reflect
+// because those aren't important for abstraction
+func (b *bakerImp) BakeChan(elem constructs.TypeDesc) constructs.Interface {
+	generic := utils.IsNil(elem)
+	bakeKey := `Chan[T any]`
+	if !generic {
+		bakeKey = `Chan@` + elem.GoType().String()
+	}
+	return bakeOnce(b, bakeKey, func() constructs.Interface {
 		pkg := b.BakeBuiltin()
-		tp := b.proj.NewNamed(constructs.NamedArgs{
-			Name: `T`,
-			Type: b.BakeAny(),
-		})
-		methods := map[string]constructs.TypeDesc{}
+		var tps []constructs.TypeParam
 
-		// $len() int
-		methods[`$len`] = b.bakeIntFunc()
+		if generic {
+			tp := b.proj.NewTypeParam(constructs.TypeParamArgs{
+				Name: `T`,
+				Type: b.BakeAny(),
+			})
+			tps = []constructs.TypeParam{tp}
+			elem = tp
+		}
 
-		// $recv() (T, bool)
-		methods[`$recv`] = b.proj.NewSignature(constructs.SignatureArgs{
-			TypeParams: []constructs.Named{tp},
-			Return:     b.bakeReturnTuple(tp),
-			Package:    pkg,
+		// <unnamed> int
+		resultInt := b.proj.NewArgument(constructs.ArgumentArgs{
+			Type: b.BakeBasic(`int`),
 		})
 
 		// value T
-		valueParam := b.proj.NewNamed(constructs.NamedArgs{
+		valueParam := b.proj.NewArgument(constructs.ArgumentArgs{
 			Name: `value`,
-			Type: tp,
+			Type: elem,
+		})
+
+		// okay bool
+		okayParam := b.proj.NewArgument(constructs.ArgumentArgs{
+			Name: `okay`,
+			Type: b.BakeBasic(`bool`),
+		})
+
+		// $len() int
+		lenFunc := b.proj.NewMethod(constructs.MethodArgs{
+			Package:  pkg,
+			Name:     `$len`,
+			Location: locs.NoLoc(),
+			Results:  []constructs.Argument{resultInt},
+		})
+
+		// $recv() (T, bool)
+		recvFunc := b.proj.NewMethod(constructs.MethodArgs{
+			Package:  pkg,
+			Name:     `$recv`,
+			Location: locs.NoLoc(),
+			Results:  []constructs.Argument{valueParam, okayParam},
 		})
 
 		// $send(value T)
-		methods[`$send`] = b.proj.NewSignature(constructs.SignatureArgs{
-			TypeParams: []constructs.Named{tp},
-			Params:     []constructs.Named{valueParam},
-			Package:    pkg,
-		})
-
-		// chan[T any] interface
-		in := b.proj.NewInterface(constructs.InterfaceArgs{
-			TypeParams: []constructs.Named{tp},
-			Methods:    b.toNamedList(methods),
-			Package:    pkg,
-		})
-
-		return b.proj.NewInterfaceDecl(constructs.InterfaceDeclArgs{
+		sendFunc := b.proj.NewMethod(constructs.MethodArgs{
 			Package:  pkg,
-			Name:     `Chan`,
-			Type:     in,
+			Name:     `$send`,
 			Location: locs.NoLoc(),
+			Params:   []constructs.Argument{valueParam},
+		})
+
+		// Chan[T]
+		return b.proj.NewInterface(constructs.InterfaceArgs{
+			Package:    pkg,
+			Name:       `Chan`,
+			TypeParams: tps,
+			Methods:    []constructs.Method{lenFunc, recvFunc, sendFunc},
+			Location:   locs.NoLoc(),
 		})
 	})
 }
@@ -295,8 +292,8 @@ func (b *bakerImp) BakeChan() constructs.Object {
 //	}
 //
 // Note: Doesn't currently require Key to be comparable as defined in reflect.
-func (b *bakerImp) BakeMap() constructs.Object {
-	return bakeOnce(b, `Map[TKey comparable, TValue any]`, func() constructs.Object {
+func (b *bakerImp) BakeMap() constructs.Interface {
+	return bakeOnce(b, `Map[TKey comparable, TValue any]`, func() constructs.Interface {
 		pkg := b.BakeBuiltin()
 		tpKey := b.proj.NewNamed(constructs.NamedArgs{
 			Name: `TKey`,
@@ -360,8 +357,8 @@ func (b *bakerImp) BakeMap() constructs.Object {
 //	type pointer[T any] interface {
 //		$deref() T
 //	}
-func (b *bakerImp) BakePointer() constructs.Object {
-	return bakeOnce(b, `pointer[T any]`, func() constructs.Object {
+func (b *bakerImp) BakePointer() constructs.Interface {
+	return bakeOnce(b, `pointer[T any]`, func() constructs.Interface {
 		pkg := b.BakeBuiltin()
 		tp := b.proj.NewNamed(constructs.NamedArgs{
 			Name: `T`,
@@ -398,8 +395,8 @@ func (b *bakerImp) BakePointer() constructs.Object {
 //		$real() float32
 //		$imag() float32
 //	}
-func (b *bakerImp) BakeComplex64() constructs.Object {
-	return bakeOnce(b, `complex64`, func() constructs.Object {
+func (b *bakerImp) BakeComplex64() constructs.Interface {
+	return bakeOnce(b, `complex64`, func() constructs.Interface {
 		pkg := b.BakeBuiltin()
 
 		// func() float32
@@ -434,8 +431,8 @@ func (b *bakerImp) BakeComplex64() constructs.Object {
 //		$real() float64
 //		$imag() float64
 //	}
-func (b *bakerImp) BakeComplex128() constructs.Object {
-	return bakeOnce(b, `complex128`, func() constructs.Object {
+func (b *bakerImp) BakeComplex128() constructs.Interface {
+	return bakeOnce(b, `complex128`, func() constructs.Interface {
 		pkg := b.BakeBuiltin()
 
 		// func() float64
@@ -469,8 +466,8 @@ func (b *bakerImp) BakeComplex128() constructs.Object {
 //	type error interface {
 //		Error() string
 //	}
-func (b *bakerImp) BakeError() constructs.Object {
-	return bakeOnce(b, `error`, func() constructs.Object {
+func (b *bakerImp) BakeError() constructs.Interface {
+	return bakeOnce(b, `error`, func() constructs.Interface {
 		pkg := b.BakeBuiltin()
 
 		// func() string
@@ -503,8 +500,8 @@ func (b *bakerImp) BakeError() constructs.Object {
 //	type comparable interface {
 //		$compare(other any) int
 //	}
-func (b *bakerImp) BakeComparable() constructs.Object {
-	return bakeOnce(b, `comparable`, func() constructs.Object {
+func (b *bakerImp) BakeComparable() constructs.Interface {
+	return bakeOnce(b, `comparable`, func() constructs.Interface {
 		pkg := b.BakeBuiltin()
 
 		// other any

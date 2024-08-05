@@ -14,17 +14,17 @@ type TypeParam interface {
 	_typeParam()
 
 	Name() string
-	Type() TypeDesc
+	Type() Interface
 }
 
 type TypeParamArgs struct {
 	Name string
-	Type TypeDesc
+	Type Interface
 }
 
 type typeParamImp struct {
 	name  string
-	typ   TypeDesc
+	typ   Interface
 	index int
 }
 
@@ -42,7 +42,7 @@ func (t *typeParamImp) Kind() kind.Kind    { return kind.TypeParam }
 func (t *typeParamImp) setIndex(index int) { t.index = index }
 func (t *typeParamImp) GoType() types.Type { return t.typ.GoType() }
 func (t *typeParamImp) Name() string       { return t.name }
-func (t *typeParamImp) Type() TypeDesc     { return t.typ }
+func (t *typeParamImp) Type() Interface    { return t.typ }
 
 func (t *typeParamImp) compareTo(other Construct) int {
 	b := other.(*typeParamImp)

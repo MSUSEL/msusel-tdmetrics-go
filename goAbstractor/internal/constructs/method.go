@@ -1,7 +1,6 @@
 package constructs
 
 import (
-	"go/token"
 	"go/types"
 	"strings"
 
@@ -69,37 +68,52 @@ type methodImp struct {
 	index int
 }
 
-func createTuple(pkg *types.Package, args []Argument) *types.Tuple {
-	vars := make([]*types.Var, len(args))
-	for i, p := range args {
-		vars[i] = types.NewVar(token.NoPos, pkg, p.Name(), p.Type().GoType())
-	}
-	return types.NewTuple(vars...)
-}
-
 func newMethod(args MethodArgs) Method {
-	if utils.IsNil(args.RealType) {
-		assert.ArgNotNil(`package`, args.Package)
-
-		pkg := args.Package.Source().Types
-		args.RealType = types.NewSignatureType(nil, nil,
-			typeParams,
-			createTuple(pkg, args.Params), createTuple(pkg, args.Results), args.Variadic)
-	}
-
 	assert.ArgNotNil(`package`, args.Package)
 	assert.ArgNoNils(`params`, args.Params)
 	assert.ArgNoNils(`results`, args.Results)
 	assert.ArgNotNil(`type params`, args.TypeParams)
+	assert.ArgNotNil(`location`, args.Location)
 
 	if !utils.IsNil(args.Receiver) {
 		rName := args.Receiver.Name()
 		if len(args.RecvName) > 0 && args.RecvName != rName {
-			panic(terror.New(`name of receiver and a receiver was both given but the name didn't match the receiver`).
+			panic(terror.New(`name of receiver and a receiver were both given but the name didn't match the receiver`).
 				With(`receiver name`, args.RecvName).
 				With(`receiver`, rName))
 		}
 		args.RecvName = rName
+	}
+
+	if len(args.RecvName) > 0 && len(args.TypeParams) > 0 {
+		panic(terror.New(`don't provide type params on a method with a receiver`))
+	}
+
+	if utils.IsNil(args.RealType) {
+		if len(args.TypeParams) > 0 {
+			panic(terror.New(`unsupported: cannot create a real type using type parameters`))
+		}
+
+		pkg := args.Package.Source().Types
+		pos := args.Location.Pos()
+		createTuple := func(args []Argument) *types.Tuple {
+			vars := make([]*types.Var, len(args))
+			for i, p := range args {
+				vars[i] = types.NewVar(pos, pkg, p.Name(), p.Type().GoType())
+			}
+			return types.NewTuple(vars...)
+		}
+		par := createTuple(args.Params)
+		ret := createTuple(args.Results)
+
+		var recv *types.Var
+		if !utils.IsNil(args.Receiver) {
+			recv = types.NewVar(pos, pkg, args.Receiver.Name(), args.Receiver.GoType())
+		} else if len(args.RecvName) > 0 {
+			panic(terror.New(`cannot create a real type using only a receiver name`))
+		}
+
+		args.RealType = types.NewSignatureType(recv, nil, nil, par, ret, args.Variadic)
 	}
 
 	met := &methodImp{

@@ -8,7 +8,7 @@ import (
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/jsonify"
 )
 
-// Argument is a parameter or result in a signature.
+// Argument is a parameter or result in a method signature.
 //
 // The order of the arguments matters.
 type Argument interface {

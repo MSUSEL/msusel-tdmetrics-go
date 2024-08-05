@@ -63,7 +63,7 @@ type objectImp struct {
 }
 
 func newObject(args ObjectArgs) Object {
-	assert.ArgNotNil(`realType`, args.RealType)
+	assert.ArgNotNil(`real type`, args.RealType)
 	assert.ArgNotNil(`package`, args.Package)
 	assert.ArgNoNils(`fields`, args.Fields)
 	assert.ArgNoNils(`type params`, args.TypeParams)

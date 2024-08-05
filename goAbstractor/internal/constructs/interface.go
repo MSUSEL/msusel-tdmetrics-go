@@ -72,10 +72,12 @@ type interfaceImp struct {
 }
 
 func newInterface(args InterfaceArgs) Interface {
-	assert.ArgNotNil(`realType`, args.RealType)
+	assert.ArgNotNil(`real type`, args.RealType)
 	assert.ArgNotNil(`package`, args.Package)
 	assert.ArgNoNils(`methods`, args.Methods)
 	assert.ArgNoNils(`type params`, args.TypeParams)
+
+	// TODO: Check that none of the methods have receivers.
 
 	return &interfaceImp{
 		realType: args.RealType,
