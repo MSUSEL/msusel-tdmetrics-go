@@ -6,6 +6,7 @@ const (
 	Basic     Kind = `basic`
 	Field     Kind = `field`
 	Instance  Kind = `instance`
+	Interface Kind = `interface`
 	Method    Kind = `method`
 	Object    Kind = `object`
 	Package   Kind = `package`

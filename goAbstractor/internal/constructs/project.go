@@ -18,14 +18,15 @@ type Project interface {
 
 	//==========================
 
+	NewArgument(args ArgumentArgs) Argument
 	NewBasic(args BasicArgs) Basic
 	NewField(args FieldArgs) Field
 	NewInstance(args InstanceArgs) Instance
+	NewInterface(args InterfaceArgs) Interface
 	NewMethod(args MethodArgs) Method
 	NewObject(args ObjectArgs) Object
 	NewPackage(args PackageArgs) Package
 	NewReference(args ReferenceArgs) Reference
-	NewSignature(args SignatureArgs) Signature
 	NewTypeParam(args TypeParamArgs) TypeParam
 	NewValue(args ValueArgs) Value
 	NewLoc(pos token.Pos) locs.Loc
@@ -56,14 +57,15 @@ type Project interface {
 }
 
 type projectImp struct {
+	allArguments  Set[Argument]
 	allBasics     Set[Basic]
 	allFields     Set[Field]
 	allInstances  Set[Instance]
+	allInterfaces Set[Interface]
 	allMethods    Set[Method]
 	allObjects    Set[Object]
 	allPackages   Set[Package]
 	allReferences Set[Reference]
-	allSignatures Set[Signature]
 	allTypeParams Set[TypeParam]
 	allValues     Set[Value]
 	locations     locs.Set
@@ -71,14 +73,15 @@ type projectImp struct {
 
 func NewProject(locs locs.Set) Project {
 	return &projectImp{
+		allArguments:  NewSet[Argument](),
 		allBasics:     NewSet[Basic](),
 		allFields:     NewSet[Field](),
 		allInstances:  NewSet[Instance](),
+		allInterfaces: NewSet[Interface](),
 		allMethods:    NewSet[Method](),
 		allObjects:    NewSet[Object](),
 		allPackages:   NewSet[Package](),
 		allReferences: NewSet[Reference](),
-		allSignatures: NewSet[Signature](),
 		allTypeParams: NewSet[TypeParam](),
 		allValues:     NewSet[Value](),
 		locations:     locs,
@@ -86,6 +89,10 @@ func NewProject(locs locs.Set) Project {
 }
 
 //==================================================================
+
+func (p *projectImp) NewArgument(args ArgumentArgs) Argument {
+	return p.allArguments.Insert(newArgument(args))
+}
 
 func (p *projectImp) NewBasic(args BasicArgs) Basic {
 	return p.allBasics.Insert(newBasic(args))
@@ -97,6 +104,10 @@ func (p *projectImp) NewField(args FieldArgs) Field {
 
 func (p *projectImp) NewInstance(args InstanceArgs) Instance {
 	return p.allInstances.Insert(newInstance(args))
+}
+
+func (p *projectImp) NewInterface(args InterfaceArgs) Interface {
+	return args.Package.addInterface(p.allInterfaces.Insert(newInterface(args)))
 }
 
 func (p *projectImp) NewMethod(args MethodArgs) Method {
@@ -113,10 +124,6 @@ func (p *projectImp) NewPackage(args PackageArgs) Package {
 
 func (p *projectImp) NewReference(args ReferenceArgs) Reference {
 	return p.allReferences.Insert(newReference(args))
-}
-
-func (p *projectImp) NewSignature(args SignatureArgs) Signature {
-	return p.allSignatures.Insert(newSignature(args))
 }
 
 func (p *projectImp) NewTypeParam(args TypeParamArgs) TypeParam {
@@ -188,6 +195,7 @@ func (p *projectImp) UpdateIndices() {
 	// Type indices compound so that each has a unique offset.
 	// The typeDefs in each package are also uniquely offset.
 	index := 1
+	index = p.allArguments.setIndices(index)
 	index = p.allBasics.setIndices(index)
 	index = p.allFields.setIndices(index)
 	index = p.allInstances.setIndices(index)
@@ -195,7 +203,6 @@ func (p *projectImp) UpdateIndices() {
 	index = p.allObjects.setIndices(index)
 	index = p.allPackages.setIndices(index)
 	// Don't index the p.allReferences
-	index = p.allSignatures.setIndices(index)
 	index = p.allTypeParams.setIndices(index)
 	p.allValues.setIndices(index)
 }
@@ -208,6 +215,7 @@ func (p *projectImp) ToJson(ctx *jsonify.Context) jsonify.Datum {
 	ctx2 := ctx.HideKind()
 	return jsonify.NewMap().
 		Add(ctx2, `language`, `go`).
+		AddNonZero(ctx2, `arguments`, p.allArguments).
 		AddNonZero(ctx2, `basics`, p.allBasics).
 		AddNonZero(ctx2, `fields`, p.allFields).
 		AddNonZero(ctx2, `instances`, p.allInstances).
@@ -215,7 +223,6 @@ func (p *projectImp) ToJson(ctx *jsonify.Context) jsonify.Datum {
 		AddNonZero(ctx2, `objects`, p.allObjects).
 		AddNonZero(ctx2, `packages`, p.allPackages).
 		// Don't output the p.allReferences
-		AddNonZero(ctx2, `signatures`, p.allSignatures).
 		AddNonZero(ctx2, `typeParams`, p.allTypeParams).
 		AddNonZero(ctx2, `values`, p.allValues).
 		AddNonZero(ctx2, `locs`, p.locations)

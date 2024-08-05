@@ -8,21 +8,17 @@ import (
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs/kind"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/jsonify"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/locs"
-	"github.com/Snow-Gremlin/goToolbox/terrors/terror"
 )
 
-// Object is a named type explicitly defined at the given
-// location in the source code. The underlying type description
-// can be a class or interface with optional parameter types.
+// Object is a named type typically explicitly defined at the given location
+// in the source code. An object typically handles structs with optional
+// parameter types. An object can handle any type that methods can use
+// as a receiver.
 //
 // If type parameters are given then the object is generic.
-// Instances with realized versions of the class or interface,
-// are added for each used instance in the source code. If there
-// are no instances then this generic object isn't used.
-//
-// If the type description is an interface, then no methods will
-// be added. Any method added to a class indicates that the
-// class is the receiver for that method.
+// Instances with realized versions of the object,
+// are added for each used instance in the source code.
+// If there are no instances then the generic object isn't used.
 type Object interface {
 	Declaration
 	TypeDesc
@@ -34,10 +30,10 @@ type Object interface {
 
 	addMethod(met Method) Method
 	addInstance(inst Instance) Instance
+	addImplements(it Interface) Interface
 
 	IsNamed() bool
 	IsGeneric() bool
-	IsInterface() bool
 }
 
 type ObjectArgs struct {
@@ -46,16 +42,8 @@ type ObjectArgs struct {
 	Name     string
 	Location locs.Loc
 
-	Fields     []Field
 	TypeParams []TypeParam
-
-	// Exact types are like `string|int|bool` where the
-	// data type must match exactly.
-	Exact []TypeDesc
-
-	// Approx types are like `~string|~int` where the data type
-	// may be exact or an extension of the base type.
-	Approx []TypeDesc
+	Fields     []Field
 }
 
 type objectImp struct {
@@ -64,13 +52,12 @@ type objectImp struct {
 	name     string
 	loc      locs.Loc
 
-	fields     []Field
 	typeParams []TypeParam
-	exact      []TypeDesc
-	approx     []TypeDesc
+	fields     []Field
 
-	instances Set[Instance]
-	methods   Set[Method]
+	instances  Set[Instance]
+	methods    Set[Method]
+	implements Set[Interface]
 
 	index int
 }
@@ -81,26 +68,18 @@ func newObject(args ObjectArgs) Object {
 	assert.ArgNoNils(`fields`, args.Fields)
 	assert.ArgNoNils(`type params`, args.TypeParams)
 
-	if len(args.Fields) > 0 && (len(args.Exact) > 0 || len(args.Approx) > 0) {
-		panic(terror.New(`may not have fields and exact/approx interface values`).
-			With(`fields`, len(args.Fields)).
-			With(`exact`, len(args.Exact)).
-			With(`approx`, len(args.Approx)))
-	}
-
 	return &objectImp{
 		realType: args.RealType,
 		pkg:      args.Package,
 		name:     args.Name,
 		loc:      args.Location,
 
-		fields:     args.Fields,
 		typeParams: args.TypeParams,
-		exact:      args.Exact,
-		approx:     args.Approx,
+		fields:     args.Fields,
 
-		instances: NewSet[Instance](),
-		methods:   NewSet[Method](),
+		instances:  NewSet[Instance](),
+		methods:    NewSet[Method](),
+		implements: NewSet[Interface](),
 	}
 }
 
@@ -121,6 +100,10 @@ func (d *objectImp) addInstance(inst Instance) Instance {
 	return d.instances.Insert(inst)
 }
 
+func (d *objectImp) addImplements(it Interface) Interface {
+	return d.implements.Insert(it)
+}
+
 func addInheritance(roots []Object, decl Object) []Object {
 
 	print(decl)
@@ -135,10 +118,6 @@ func (d *objectImp) IsNamed() bool {
 
 func (d *objectImp) IsGeneric() bool {
 	return len(d.typeParams) > 0
-}
-
-func (d *objectImp) IsInterface() bool {
-	return len(d.fields) <= 0
 }
 
 func (d *objectImp) compareTo(other Construct) int {
@@ -163,10 +142,9 @@ func (d *objectImp) ToJson(ctx *jsonify.Context) jsonify.Datum {
 		AddNonZero(ctx2, `package`, d.pkg).
 		AddNonZero(ctx2, `name`, d.name).
 		AddNonZero(ctx2, `loc`, d.loc).
-		AddNonZero(ctx2, `fields`, d.fields).
 		AddNonZero(ctx2, `typeParams`, d.typeParams).
-		AddNonZero(ctx2, `approx`, d.approx).
-		AddNonZero(ctx2, `exact`, d.exact).
+		AddNonZero(ctx2, `fields`, d.fields).
 		AddNonZero(ctx2, `instances`, d.instances).
-		AddNonZero(ctx2, `methods`, d.methods)
+		AddNonZero(ctx2, `methods`, d.methods).
+		AddNonZero(ctx2, `implements`, d.implements)
 }

@@ -25,7 +25,7 @@ type Package interface {
 	InitCount() int
 
 	addImport(p Package) Package
-
+	addInterface(it Interface) Interface
 	addMethod(m Method) Method
 	addObject(id Object) Object
 	addValue(v Value) Value
@@ -52,11 +52,12 @@ type packageImp struct {
 	name        string
 	index       int
 	importPaths []string
-	imports     Set[Package]
 
-	methods Set[Method]
-	objects Set[Object]
-	values  Set[Value]
+	imports    Set[Package]
+	interfaces Set[Interface]
+	methods    Set[Method]
+	objects    Set[Object]
+	values     Set[Value]
 }
 
 func newPackage(args PackageArgs) Package {
@@ -70,6 +71,7 @@ func newPackage(args PackageArgs) Package {
 		name:        args.Name,
 		importPaths: args.ImportPaths,
 		imports:     NewSet[Package](),
+		interfaces:  NewSet[Interface](),
 		methods:     NewSet[Method](),
 		objects:     NewSet[Object](),
 		values:      NewSet[Value](),
@@ -104,6 +106,10 @@ func (p *packageImp) addImport(i Package) Package {
 	return p.imports.Insert(i)
 }
 
+func (p *packageImp) addInterface(it Interface) Interface {
+	return p.interfaces.Insert(it)
+}
+
 func (p *packageImp) addMethod(m Method) Method {
 	return p.methods.Insert(m)
 }
@@ -117,9 +123,7 @@ func (p *packageImp) addValue(v Value) Value {
 }
 
 func (p *packageImp) empty() bool {
-	return p.methods.Values().Empty() &&
-		p.objects.Values().Empty() &&
-		p.values.Values().Empty()
+	return p.allDeclarations().Empty()
 }
 
 func (p *packageImp) findDeclaration(name string) Declaration {
@@ -130,10 +134,11 @@ func (p *packageImp) findDeclaration(name string) Declaration {
 }
 
 func (p *packageImp) allDeclarations() collections.Enumerator[Declaration] {
+	i := enumerator.Cast[Declaration](p.interfaces.Values().Enumerate())
 	m := enumerator.Cast[Declaration](p.methods.Values().Enumerate())
 	o := enumerator.Cast[Declaration](p.objects.Values().Enumerate())
 	v := enumerator.Cast[Declaration](p.values.Values().Enumerate())
-	return m.Concat(o).Concat(v)
+	return i.Concat(m).Concat(o).Concat(v)
 }
 
 func (p *packageImp) compareTo(other Construct) int {
@@ -156,6 +161,7 @@ func (p *packageImp) ToJson(ctx *jsonify.Context) jsonify.Datum {
 		AddNonZero(ctx2, `path`, p.path).
 		AddNonZero(ctx2, `name`, p.name).
 		AddNonZero(ctx2, `imports`, p.imports).
+		AddNonZero(ctx2, `interfaces`, p.interfaces).
 		AddNonZero(ctx2, `methods`, p.methods).
 		AddNonZero(ctx2, `objects`, p.objects).
 		AddNonZero(ctx2, `values`, p.values)
@@ -165,6 +171,10 @@ func (p *packageImp) resolveReceivers() {
 	methods := p.methods.Values()
 	for i := range methods.Count() {
 		m := methods.Get(i)
+		if !m.needsReceiver() {
+			continue
+		}
+
 		if rec := m.receiverName(); len(rec) > 0 {
 			d := p.findDeclaration(rec)
 			if d == nil {
