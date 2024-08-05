@@ -51,9 +51,9 @@ func Abstract(cfg Config) constructs.Project {
 	proj.ResolveReferences()
 
 	// TODO: Improve prune to use metrics to create a dead code elimination prune.
-	ab.logf(`prune`)
-	proj.PruneTypes()
-	proj.PrunePackages()
+	//ab.logf(`prune`)
+	//proj.PruneTypes()
+	//proj.PrunePackages()
 
 	ab.logf(`flag locations`)
 	proj.FlagLocations()
