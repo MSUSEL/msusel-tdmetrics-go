@@ -1,29 +1,34 @@
-package constructs
+package reference
 
 import (
 	"go/types"
-	"strings"
 
+	"github.com/Snow-Gremlin/goToolbox/comp"
 	"github.com/Snow-Gremlin/goToolbox/terrors/terror"
 	"github.com/Snow-Gremlin/goToolbox/utils"
 
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/assert"
-	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs/kind"
+	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs"
+	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs/declaration"
+	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs/typeDesc"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/jsonify"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/visitor"
 )
 
+const Kind = `reference`
+
 type Reference interface {
-	TypeDesc
+	typeDesc.TypeDesc
 	_reference()
 
 	PackagePath() string
 	Name() string
 	Resolved() bool
-	SetType(pkg Package, typ Declaration)
+
+	SetType(typ declaration.Declaration)
 }
 
-type ReferenceArgs struct {
+type Args struct {
 	RealType    *types.Named
 	PackagePath string
 	Name        string
@@ -34,14 +39,12 @@ type referenceImp struct {
 	pkgPath  string
 	name     string
 
-	pkg Package
-	typ Declaration
+	typ declaration.Declaration
 }
 
-func newReference(args ReferenceArgs) Reference {
+func newReference(args Args) Reference {
 	assert.ArgNotNil(`real type`, args.RealType)
 	assert.ArgNotEmpty(`name`, args.Name)
-
 	return &referenceImp{
 		realType: args.RealType,
 		pkgPath:  args.PackagePath,
@@ -50,7 +53,7 @@ func newReference(args ReferenceArgs) Reference {
 }
 
 func (r *referenceImp) _reference()         {}
-func (r *referenceImp) Kind() kind.Kind     { return kind.Reference }
+func (r *referenceImp) Kind() string        { return Kind }
 func (r *referenceImp) GoType() types.Type  { return r.realType }
 func (r *referenceImp) PackagePath() string { return r.pkgPath }
 func (r *referenceImp) Name() string        { return r.name }
@@ -59,22 +62,30 @@ func (r *referenceImp) Resolved() bool {
 	return !utils.IsNil(r.typ)
 }
 
-func (r *referenceImp) setIndex(index int) {
+func (r *referenceImp) SetIndex(index int) {
 	panic(terror.New(`do not call SetIndex on Reference`))
 }
 
-func (r *referenceImp) SetType(pkg Package, typ Declaration) {
+func (r *referenceImp) SetType(typ declaration.Declaration) {
 	assert.ArgNotNil(`type`, typ)
-	r.pkg = pkg
 	r.typ = typ
 }
 
-func (r *referenceImp) compareTo(other Construct) int {
-	b := other.(*referenceImp)
-	if cmp := strings.Compare(r.pkgPath, b.pkgPath); cmp != 0 {
-		return cmp
+func (r *referenceImp) CompareTo(other constructs.Construct) int {
+	return comp.Or(
+		comp.Ordered[string]().Pend(r.Kind(), other.Kind()),
+		Comparer().Pend(r, other.(Reference)),
+	)
+}
+
+func Comparer() comp.Comparer[Reference] {
+	return func(a, b Reference) int {
+		aImp, bImp := a.(*referenceImp), b.(*referenceImp)
+		return comp.Or(
+			comp.Default[string]().Pend(aImp.pkgPath, bImp.pkgPath),
+			comp.Default[string]().Pend(aImp.name, bImp.name),
+		)
 	}
-	return strings.Compare(r.name, b.name)
 }
 
 func (r *referenceImp) Visit(v visitor.Visitor) {
@@ -85,10 +96,9 @@ func (r *referenceImp) ToJson(ctx *jsonify.Context) jsonify.Datum {
 	ctx2 := ctx.HideKind().Short()
 	if ctx.IsReferenceShown() {
 		return jsonify.NewMap().
-			AddIf(ctx, ctx.IsKindShown(), `kind`, r.Kind()).
+			AddIf(ctx, ctx.IsKindShown(), `kind`, Kind).
 			AddNonZero(ctx2, `packagePath`, r.pkgPath).
 			Add(ctx2, `name`, r.name).
-			AddNonZero(ctx2, `package`, r.pkg).
 			Add(ctx2, `type`, r.typ)
 	}
 

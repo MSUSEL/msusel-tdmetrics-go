@@ -1,4 +1,4 @@
-package constructs
+package packageCon
 
 import (
 	"strings"
@@ -9,12 +9,14 @@ import (
 	"golang.org/x/tools/go/packages"
 
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/assert"
-	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs/kind"
+	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/jsonify"
 )
 
+const Kind = `package`
+
 type Package interface {
-	Construct
+	constructs.Construct
 	_package()
 
 	Source() *packages.Package
@@ -38,7 +40,7 @@ type Package interface {
 	removeImports(predicate func(Construct) bool)
 }
 
-type PackageArgs struct {
+type Args struct {
 	RealPkg     *packages.Package
 	Path        string
 	Name        string
@@ -79,7 +81,7 @@ func newPackage(args PackageArgs) Package {
 }
 
 func (p *packageImp) _package()          {}
-func (p *packageImp) Kind() kind.Kind    { return kind.Package }
+func (p *packageImp) Kind() string       { return Kind }
 func (p *packageImp) setIndex(index int) { p.index = index }
 
 func (p *packageImp) Source() *packages.Package { return p.pkg }
@@ -156,7 +158,7 @@ func (p *packageImp) ToJson(ctx *jsonify.Context) jsonify.Datum {
 
 	ctx2 := ctx.HideKind().Short()
 	return jsonify.NewMap().
-		AddIf(ctx, ctx.IsKindShown(), `kind`, p.Kind()).
+		AddIf(ctx, ctx.IsKindShown(), `kind`, Kind).
 		AddIf(ctx, ctx.IsIndexShown(), `index`, p.index).
 		AddNonZero(ctx2, `path`, p.path).
 		AddNonZero(ctx2, `name`, p.name).
