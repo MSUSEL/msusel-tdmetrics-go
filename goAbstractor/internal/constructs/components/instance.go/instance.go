@@ -56,9 +56,8 @@ func Comparer() comp.Comparer[Instance] {
 	return func(a, b Instance) int {
 		aImp, bImp := a.(*instanceImp), b.(*instanceImp)
 		return comp.Or(
-			func() int { return aImp.resolved.CompareTo(bImp.resolved) },
-			comp.Slice[[]typeDesc.TypeDesc](comp.Default[typeDesc.TypeDesc]()).
-				Pend(bImp.typeParams, bImp.typeParams),
+			constructs.Comparer[typeDesc.TypeDesc]().Pend(aImp.resolved, bImp.resolved),
+			constructs.SliceComparer[typeDesc.TypeDesc]().Pend(bImp.typeParams, bImp.typeParams),
 		)
 	}
 }

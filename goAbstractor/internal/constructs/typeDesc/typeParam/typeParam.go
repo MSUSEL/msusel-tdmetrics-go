@@ -59,8 +59,8 @@ func Comparer() comp.Comparer[TypeParam] {
 	return func(a, b TypeParam) int {
 		aImp, bImp := a.(*typeParamImp), b.(*typeParamImp)
 		return comp.Or(
-			comp.Default[string]().Pend(aImp.name, bImp.name),
-			func() int { return aImp.typ.CompareTo(bImp.typ) },
+			comp.Ordered[string]().Pend(aImp.name, bImp.name),
+			constructs.ComparerPend(aImp.typ, bImp.typ),
 		)
 	}
 }

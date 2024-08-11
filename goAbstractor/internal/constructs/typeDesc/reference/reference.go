@@ -82,8 +82,8 @@ func Comparer() comp.Comparer[Reference] {
 	return func(a, b Reference) int {
 		aImp, bImp := a.(*referenceImp), b.(*referenceImp)
 		return comp.Or(
-			comp.Default[string]().Pend(aImp.pkgPath, bImp.pkgPath),
-			comp.Default[string]().Pend(aImp.name, bImp.name),
+			comp.Ordered[string]().Pend(aImp.pkgPath, bImp.pkgPath),
+			comp.Ordered[string]().Pend(aImp.name, bImp.name),
 		)
 	}
 }

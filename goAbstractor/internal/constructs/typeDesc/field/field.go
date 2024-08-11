@@ -65,7 +65,7 @@ func Comparer() comp.Comparer[Field] {
 		aImp, bImp := a.(*fieldImp), b.(*fieldImp)
 		return comp.Or(
 			comp.Ordered[string]().Pend(aImp.Kind(), bImp.Kind()),
-			func() int { return aImp.typ.CompareTo(bImp.typ) },
+			constructs.Comparer[typeDesc.TypeDesc]().Pend(aImp.typ, bImp.typ),
 			comp.Bool().Pend(aImp.embedded, bImp.embedded),
 		)
 	}
