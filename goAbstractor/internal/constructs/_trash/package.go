@@ -1,5 +1,6 @@
-package packageCon
+package _trash
 
+/*
 import (
 	"strings"
 
@@ -198,3 +199,4 @@ func (p *packageImp) resolveReceivers() {
 func (p *packageImp) removeImports(predicate func(Construct) bool) {
 	p.imports.Remove(predicate)
 }
+*/

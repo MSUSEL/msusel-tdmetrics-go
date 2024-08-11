@@ -72,18 +72,15 @@ func (r *referenceImp) SetType(typ declaration.Declaration) {
 }
 
 func (r *referenceImp) CompareTo(other constructs.Construct) int {
-	return comp.Or(
-		comp.Ordered[string]().Pend(r.Kind(), other.Kind()),
-		Comparer().Pend(r, other.(Reference)),
-	)
+	return constructs.CompareTo[Reference](r, other)
 }
 
 func Comparer() comp.Comparer[Reference] {
 	return func(a, b Reference) int {
 		aImp, bImp := a.(*referenceImp), b.(*referenceImp)
 		return comp.Or(
-			comp.Ordered[string]().Pend(aImp.pkgPath, bImp.pkgPath),
-			comp.Ordered[string]().Pend(aImp.name, bImp.name),
+			comp.DefaultPend(aImp.pkgPath, bImp.pkgPath),
+			comp.DefaultPend(aImp.name, bImp.name),
 		)
 	}
 }

@@ -1,5 +1,6 @@
-package constructs
+package _trash
 
+/*
 import (
 	"go/token"
 	"strconv"
@@ -283,3 +284,4 @@ func flagList[T Declaration](c collections.ReadonlyList[T]) {
 		c.Get(i).Location().Flag()
 	}
 }
+*/

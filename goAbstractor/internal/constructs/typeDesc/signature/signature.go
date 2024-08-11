@@ -83,19 +83,16 @@ func (m *signatureImp) IsVacant() bool {
 }
 
 func (s *signatureImp) CompareTo(other constructs.Construct) int {
-	return comp.Or(
-		comp.Ordered[string]().Pend(s.Kind(), other.Kind()),
-		Comparer().Pend(s, other.(Signature)),
-	)
+	return constructs.CompareTo[Signature](s, other)
 }
 
 func Comparer() comp.Comparer[Signature] {
 	return func(a, b Signature) int {
 		aImp, bImp := a.(*signatureImp), b.(*signatureImp)
 		return comp.Or(
-			constructs.SliceComparer[argument.Argument]().Pend(aImp.params, bImp.params),
-			constructs.SliceComparer[argument.Argument]().Pend(aImp.results, bImp.results),
-			comp.Bool().Pend(aImp.variadic, bImp.variadic),
+			constructs.SliceComparerPend(aImp.params, bImp.params),
+			constructs.SliceComparerPend(aImp.results, bImp.results),
+			comp.DefaultPend(aImp.variadic, bImp.variadic),
 		)
 	}
 }

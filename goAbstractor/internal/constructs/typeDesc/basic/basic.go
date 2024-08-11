@@ -42,10 +42,7 @@ func (t *basicImp) GoType() types.Type { return t.realType }
 func (t *basicImp) String() string     { return t.realType.Name() }
 
 func (t *basicImp) CompareTo(other constructs.Construct) int {
-	return comp.Or(
-		comp.Ordered[string]().Pend(t.Kind(), other.Kind()),
-		Comparer().Pend(t, other.(Basic)),
-	)
+	return constructs.CompareTo[Basic](t, other)
 }
 
 func Comparer() comp.Comparer[Basic] {

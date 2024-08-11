@@ -54,19 +54,16 @@ func (f *fieldImp) Type() typeDesc.TypeDesc { return f.typ }
 func (f *fieldImp) Embedded() bool          { return f.embedded }
 
 func (f *fieldImp) CompareTo(other constructs.Construct) int {
-	return comp.Or(
-		comp.Ordered[string]().Pend(f.Kind(), other.Kind()),
-		Comparer().Pend(f, other.(Field)),
-	)
+	return constructs.CompareTo[Field](f, other)
 }
 
 func Comparer() comp.Comparer[Field] {
 	return func(a, b Field) int {
 		aImp, bImp := a.(*fieldImp), b.(*fieldImp)
 		return comp.Or(
-			comp.Ordered[string]().Pend(aImp.Kind(), bImp.Kind()),
-			constructs.Comparer[typeDesc.TypeDesc]().Pend(aImp.typ, bImp.typ),
-			comp.Bool().Pend(aImp.embedded, bImp.embedded),
+			comp.DefaultPend(aImp.Kind(), bImp.Kind()),
+			constructs.ComparerPend(aImp.typ, bImp.typ),
+			comp.DefaultPend(aImp.embedded, bImp.embedded),
 		)
 	}
 }

@@ -49,17 +49,14 @@ func (t *typeParamImp) Name() string            { return t.name }
 func (t *typeParamImp) Type() typeDesc.TypeDesc { return t.typ }
 
 func (t *typeParamImp) CompareTo(other constructs.Construct) int {
-	return comp.Or(
-		comp.Ordered[string]().Pend(t.Kind(), other.Kind()),
-		Comparer().Pend(t, other.(TypeParam)),
-	)
+	return constructs.CompareTo[TypeParam](t, other)
 }
 
 func Comparer() comp.Comparer[TypeParam] {
 	return func(a, b TypeParam) int {
 		aImp, bImp := a.(*typeParamImp), b.(*typeParamImp)
 		return comp.Or(
-			comp.Ordered[string]().Pend(aImp.name, bImp.name),
+			comp.DefaultPend(aImp.name, bImp.name),
 			constructs.ComparerPend(aImp.typ, bImp.typ),
 		)
 	}

@@ -94,19 +94,16 @@ func (id *interfaceDescImp) Inherits() collections.ReadonlySortedSet[InterfaceDe
 }
 
 func (id *interfaceDescImp) CompareTo(other constructs.Construct) int {
-	return comp.Or(
-		comp.Ordered[string]().Pend(id.Kind(), other.Kind()),
-		Comparer().Pend(id, other.(InterfaceDesc)),
-	)
+	return constructs.CompareTo[InterfaceDesc](id, other)
 }
 
 func Comparer() comp.Comparer[InterfaceDesc] {
 	return func(a, b InterfaceDesc) int {
 		aImp, bImp := a.(*interfaceDescImp), b.(*interfaceDescImp)
 		return comp.Or(
-			constructs.SliceComparer[signature.Signature]().Pend(aImp.signatures, bImp.signatures),
-			constructs.SliceComparer[typeDesc.TypeDesc]().Pend(aImp.exact, bImp.exact),
-			constructs.SliceComparer[typeDesc.TypeDesc]().Pend(aImp.approx, bImp.approx),
+			constructs.SliceComparerPend(aImp.signatures, bImp.signatures),
+			constructs.SliceComparerPend(aImp.exact, bImp.exact),
+			constructs.SliceComparerPend(aImp.approx, bImp.approx),
 		)
 	}
 }

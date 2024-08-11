@@ -10,6 +10,7 @@ import (
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs/typeDesc/interfaceDesc"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs/typeDesc/reference"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs/typeDesc/signature"
+	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs/typeDesc/structDesc"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs/typeDesc/typeParam"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/jsonify"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/locs"
@@ -24,6 +25,7 @@ type Project interface {
 	interfaceDesc.InterfaceDescFactory
 	reference.ReferenceFactory
 	signature.SignatureFactory
+	structDesc.StructDescFactory
 	typeParam.TypeParamFactory
 
 	jsonify.Jsonable
@@ -40,6 +42,7 @@ type projectImp struct {
 	interfaceDesc.InterfaceDescFactory
 	reference.ReferenceFactory
 	signature.SignatureFactory
+	structDesc.StructDescFactory
 	typeParam.TypeParamFactory
 
 	locations locs.Set
@@ -55,6 +58,7 @@ func NewProject(locs locs.Set) Project {
 		InterfaceDescFactory: interfaceDesc.New(),
 		ReferenceFactory:     reference.New(),
 		SignatureFactory:     signature.New(),
+		StructDescFactory:    structDesc.New(),
 		TypeParamFactory:     typeParam.New(),
 
 		locations: locs,

@@ -1,8 +1,6 @@
 package constructs
 
-import (
-	"github.com/Snow-Gremlin/goToolbox/comp"
-)
+import "github.com/Snow-Gremlin/goToolbox/comp"
 
 // Construct is a description of a type.
 type Construct interface {
@@ -31,4 +29,11 @@ func SliceComparer[T Construct]() comp.Comparer[[]T] {
 
 func SliceComparerPend[T Construct](a, b []T) func() int {
 	return SliceComparer[T]().Pend(a, b)
+}
+
+func CompareTo[T Construct](a T, b Construct) int {
+	return comp.Or(
+		comp.DefaultPend(a.Kind(), b.Kind()),
+		ComparerPend(a, b.(T)),
+	)
 }
