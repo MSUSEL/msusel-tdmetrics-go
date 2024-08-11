@@ -1,13 +1,16 @@
 package constructs
 
-import "github.com/Snow-Gremlin/goToolbox/comp"
+import (
+	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs/kind"
+	"github.com/Snow-Gremlin/goToolbox/comp"
+)
 
 // Construct is a description of a type.
 type Construct interface {
 	comp.Comparable[Construct]
 
 	// Kind gets a string unique to each construct type.
-	Kind() string
+	Kind() kind.Kind
 
 	// setIndex sets the unique index of construct.
 	// Indices will be 1 based so that 0 is unset.

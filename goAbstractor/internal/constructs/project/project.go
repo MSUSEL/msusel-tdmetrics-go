@@ -6,6 +6,8 @@ import (
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs/components/argument"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs/components/field"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs/components/instance"
+	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs/declarations/interfaceDecl"
+	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs/declarations/method"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs/declarations/object"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs/declarations/value"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs/typeDescs/basic"
@@ -23,6 +25,8 @@ type Project interface {
 	field.FieldFactory
 	instance.InstanceFactory
 
+	interfaceDecl.InterfaceDeclFactory
+	method.MethodFactory
 	object.ObjectFactory
 	value.ValueFactory
 
@@ -43,6 +47,8 @@ type projectImp struct {
 	field.FieldFactory
 	instance.InstanceFactory
 
+	interfaceDecl.InterfaceDeclFactory
+	method.MethodFactory
 	object.ObjectFactory
 	value.ValueFactory
 
@@ -62,15 +68,17 @@ func NewProject(locs locs.Set) Project {
 		FieldFactory:    field.New(),
 		InstanceFactory: instance.New(),
 
-		ObjectFactory: object.New(),
-		ValueFactory:  value.New(),
+		InterfaceDeclFactory: interfaceDecl.New(),
+		MethodFactory:        method.New(),
+		ObjectFactory:        object.New(),
+		ValueFactory:         value.New(),
 
-		BasicFactory:         basic.New(),
-		InterfaceDescFactory: interfaceDesc.New(),
-		ReferenceFactory:     reference.New(),
-		SignatureFactory:     signature.New(),
-		StructDescFactory:    structDesc.New(),
-		TypeParamFactory:     typeParam.New(),
+		BasicFactory:         basic.NewFactory(),
+		InterfaceDescFactory: interfaceDesc.NewFactory(),
+		ReferenceFactory:     reference.NewFactory(),
+		SignatureFactory:     signature.NewFactory(),
+		StructDescFactory:    structDesc.NewFactory(),
+		TypeParamFactory:     typeParam.NewFactory(),
 
 		locations: locs,
 	}
