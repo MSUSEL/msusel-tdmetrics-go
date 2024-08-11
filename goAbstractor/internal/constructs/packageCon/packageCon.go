@@ -10,12 +10,13 @@ import (
 
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/assert"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs"
+	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs/declaration"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/jsonify"
 )
 
 const Kind = `package`
 
-type Package interface {
+type PackageCon interface {
 	constructs.Construct
 	_package()
 
@@ -23,7 +24,7 @@ type Package interface {
 	Path() string
 	Name() string
 	ImportPaths() []string
-	Imports() collections.ReadonlyList[Package]
+	Imports() collections.ReadonlyList[PackageCon]
 	InitCount() int
 
 	addImport(p Package) Package
@@ -33,11 +34,11 @@ type Package interface {
 	addValue(v Value) Value
 
 	empty() bool
-	findDeclaration(name string) Declaration
-	allDeclarations() collections.Enumerator[Declaration]
+	findDeclaration(name string) declaration.Declaration
+	allDeclarations() collections.Enumerator[declaration.Declaration]
 
 	resolveReceivers()
-	removeImports(predicate func(Construct) bool)
+	removeImports(predicate func(constructs.Construct) bool)
 }
 
 type Args struct {
@@ -47,7 +48,7 @@ type Args struct {
 	ImportPaths []string
 }
 
-type packageImp struct {
+type packageConImp struct {
 	pkg *packages.Package
 
 	path        string
@@ -62,12 +63,12 @@ type packageImp struct {
 	values     Set[Value]
 }
 
-func newPackage(args PackageArgs) Package {
+func newPackage(args Args) PackageCon {
 	assert.ArgNotNil(`real type`, args.RealPkg)
 	assert.ArgNotEmpty(`path`, args.Path)
 	assert.ArgValidId(`name`, args.Name)
 
-	return &packageImp{
+	return &packageConImp{
 		pkg:         args.RealPkg,
 		path:        args.Path,
 		name:        args.Name,
@@ -80,20 +81,20 @@ func newPackage(args PackageArgs) Package {
 	}
 }
 
-func (p *packageImp) _package()          {}
-func (p *packageImp) Kind() string       { return Kind }
-func (p *packageImp) setIndex(index int) { p.index = index }
+func (p *packageConImp) _package()          {}
+func (p *packageConImp) Kind() string       { return Kind }
+func (p *packageConImp) SetIndex(index int) { p.index = index }
 
-func (p *packageImp) Source() *packages.Package { return p.pkg }
-func (p *packageImp) Path() string              { return p.path }
-func (p *packageImp) Name() string              { return p.name }
-func (p *packageImp) ImportPaths() []string     { return p.importPaths }
+func (p *packageConImp) Source() *packages.Package { return p.pkg }
+func (p *packageConImp) Path() string              { return p.path }
+func (p *packageConImp) Name() string              { return p.name }
+func (p *packageConImp) ImportPaths() []string     { return p.importPaths }
 
-func (p *packageImp) Imports() collections.ReadonlyList[Package] {
+func (p *packageConImp) Imports() collections.ReadonlyList[PackageCon] {
 	return p.imports.Values()
 }
 
-func (p *packageImp) InitCount() int {
+func (p *packageConImp) InitCount() int {
 	count := 0
 	methods := p.methods.Values()
 	for i := range methods.Count() {
@@ -104,54 +105,54 @@ func (p *packageImp) InitCount() int {
 	return count
 }
 
-func (p *packageImp) addImport(i Package) Package {
+func (p *packageConImp) addImport(i Package) Package {
 	return p.imports.Insert(i)
 }
 
-func (p *packageImp) addInterface(it Interface) Interface {
+func (p *packageConImp) addInterface(it Interface) Interface {
 	return p.interfaces.Insert(it)
 }
 
-func (p *packageImp) addMethod(m Method) Method {
+func (p *packageConImp) addMethod(m Method) Method {
 	return p.methods.Insert(m)
 }
 
-func (p *packageImp) addObject(d Object) Object {
+func (p *packageConImp) addObject(d Object) Object {
 	return p.objects.Insert(d)
 }
 
-func (p *packageImp) addValue(v Value) Value {
+func (p *packageConImp) addValue(v Value) Value {
 	return p.values.Insert(v)
 }
 
-func (p *packageImp) empty() bool {
+func (p *packageConImp) empty() bool {
 	return p.allDeclarations().Empty()
 }
 
-func (p *packageImp) findDeclaration(name string) Declaration {
+func (p *packageConImp) findDeclaration(name string) declaration.Declaration {
 	def, _ := p.allDeclarations().
-		Where(func(t Declaration) bool { return t.Name() == name }).
+		Where(func(t declaration.Declaration) bool { return t.Name() == name }).
 		First()
 	return def
 }
 
-func (p *packageImp) allDeclarations() collections.Enumerator[Declaration] {
-	i := enumerator.Cast[Declaration](p.interfaces.Values().Enumerate())
-	m := enumerator.Cast[Declaration](p.methods.Values().Enumerate())
-	o := enumerator.Cast[Declaration](p.objects.Values().Enumerate())
-	v := enumerator.Cast[Declaration](p.values.Values().Enumerate())
+func (p *packageConImp) allDeclarations() collections.Enumerator[declaration.Declaration] {
+	i := enumerator.Cast[declaration.Declaration](p.interfaces.Values().Enumerate())
+	m := enumerator.Cast[declaration.Declaration](p.methods.Values().Enumerate())
+	o := enumerator.Cast[declaration.Declaration](p.objects.Values().Enumerate())
+	v := enumerator.Cast[declaration.Declaration](p.values.Values().Enumerate())
 	return i.Concat(m).Concat(o).Concat(v)
 }
 
-func (p *packageImp) compareTo(other Construct) int {
-	b := other.(*packageImp)
+func (p *packageConImp) compareTo(other constructs.Construct) int {
+	b := other.(*packageConImp)
 	return or(
 		func() int { return strings.Compare(p.path, b.path) },
 		func() int { return strings.Compare(p.name, b.name) },
 	)
 }
 
-func (p *packageImp) ToJson(ctx *jsonify.Context) jsonify.Datum {
+func (p *packageConImp) ToJson(ctx *jsonify.Context) jsonify.Datum {
 	if ctx.IsShort() {
 		return jsonify.New(ctx, p.index)
 	}
@@ -169,7 +170,7 @@ func (p *packageImp) ToJson(ctx *jsonify.Context) jsonify.Datum {
 		AddNonZero(ctx2, `values`, p.values)
 }
 
-func (p *packageImp) resolveReceivers() {
+func (p *packageConImp) resolveReceivers() {
 	methods := p.methods.Values()
 	for i := range methods.Count() {
 		m := methods.Get(i)
@@ -196,6 +197,6 @@ func (p *packageImp) resolveReceivers() {
 	}
 }
 
-func (p *packageImp) removeImports(predicate func(Construct) bool) {
+func (p *packageConImp) removeImports(predicate func(constructs.Construct) bool) {
 	p.imports.Remove(predicate)
 }

@@ -21,27 +21,25 @@ import (
 
 const BuiltinName = `$builtin`
 
-type (
-	Baker interface {
-		BakeBuiltin() constructs.Package
-		BakeBasic(typeName string) constructs.Basic
-		BakeAny() constructs.Interface
-		BakeList(elem constructs.TypeDesc) constructs.Interface
-		BakeChan(elem constructs.TypeDesc) constructs.Interface
-		BakeMap(key, value constructs.TypeDesc) constructs.Interface
-		BakePointer(elem constructs.TypeDesc) constructs.Interface
-		BakeComplex64() constructs.Interface
-		BakeComplex128() constructs.Interface
-		BakeError() constructs.Interface
-		BakeComparable() constructs.Interface
-	}
+type Baker interface {
+	BakeBuiltin() constructs.Package
+	BakeBasic(typeName string) constructs.Basic
+	BakeAny() constructs.Interface
+	BakeList(elem constructs.TypeDesc) constructs.Interface
+	BakeChan(elem constructs.TypeDesc) constructs.Interface
+	BakeMap(key, value constructs.TypeDesc) constructs.Interface
+	BakePointer(elem constructs.TypeDesc) constructs.Interface
+	BakeComplex64() constructs.Interface
+	BakeComplex128() constructs.Interface
+	BakeError() constructs.Interface
+	BakeComparable() constructs.Interface
+}
 
-	bakerImp struct {
-		fSet  *token.FileSet
-		proj  constructs.Project
-		baked map[string]any
-	}
-)
+type bakerImp struct {
+	fSet  *token.FileSet
+	proj  constructs.Project
+	baked map[string]any
+}
 
 func New(fSet *token.FileSet, proj constructs.Project) Baker {
 	return &bakerImp{

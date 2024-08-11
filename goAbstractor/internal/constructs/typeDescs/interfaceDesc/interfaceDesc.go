@@ -3,14 +3,15 @@ package interfaceDesc
 import (
 	"go/types"
 
-	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/assert"
-	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs"
-	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs/typeDesc"
-	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs/typeDesc/signature"
-	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/jsonify"
 	"github.com/Snow-Gremlin/goToolbox/collections"
 	"github.com/Snow-Gremlin/goToolbox/collections/sortedSet"
 	"github.com/Snow-Gremlin/goToolbox/comp"
+
+	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/assert"
+	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs"
+	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs/typeDescs"
+	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs/typeDescs/signature"
+	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/jsonify"
 )
 
 const Kind = `interfaceDesc`
@@ -24,7 +25,7 @@ const Kind = `interfaceDesc`
 // are added for each used instance in the source code. If there
 // are no instances then the generic interface isn't used.
 type InterfaceDesc interface {
-	typeDesc.TypeDesc
+	typeDescs.TypeDesc
 	_interfaceDesc()
 
 	// IsUnion indicates if there is two or more exact or approximate types.
@@ -43,19 +44,19 @@ type Args struct {
 
 	// Exact types are like `string|int|bool` where the
 	// data type must match exactly.
-	Exact []typeDesc.TypeDesc
+	Exact []typeDescs.TypeDesc
 
 	// Approx types are like `~string|~int` where the data type
 	// may be exact or an extension of the base type.
-	Approx []typeDesc.TypeDesc
+	Approx []typeDescs.TypeDesc
 }
 
 type interfaceDescImp struct {
 	realType *types.Interface
 
 	signatures []signature.Signature
-	exact      []typeDesc.TypeDesc
-	approx     []typeDesc.TypeDesc
+	exact      []typeDescs.TypeDesc
+	approx     []typeDescs.TypeDesc
 
 	inherits collections.SortedSet[InterfaceDesc]
 
@@ -94,7 +95,7 @@ func (id *interfaceDescImp) Inherits() collections.ReadonlySortedSet[InterfaceDe
 }
 
 func (id *interfaceDescImp) CompareTo(other constructs.Construct) int {
-	return constructs.CompareTo[InterfaceDesc](id, other)
+	return constructs.CompareTo[InterfaceDesc](id, other, Comparer())
 }
 
 func Comparer() comp.Comparer[InterfaceDesc] {

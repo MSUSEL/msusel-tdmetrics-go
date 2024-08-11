@@ -5,22 +5,20 @@ import (
 	"github.com/Snow-Gremlin/goToolbox/utils"
 )
 
-type (
-	// Visitor is a handler for visiting a set of objects.
-	Visitor struct {
-		handle func(value any) bool
-	}
+// Visitor is a handler for visiting a set of objects.
+type Visitor struct {
+	handle func(value any) bool
+}
 
-	// Visitable is an object which has visitable children.
-	Visitable interface {
+// Visitable is an object which has visitable children.
+type Visitable interface {
 
-		// VisitChildren will visit all off this object's children.
-		//
-		// This object will have already been visited and the visitor
-		// will have already returned true for it.
-		Visit(v Visitor)
-	}
-)
+	// VisitChildren will visit all off this object's children.
+	//
+	// This object will have already been visited and the visitor
+	// will have already returned true for it.
+	Visit(v Visitor)
+}
 
 // New creates a new visitor for the given function handler.
 func New(handle func(value any) bool) Visitor {

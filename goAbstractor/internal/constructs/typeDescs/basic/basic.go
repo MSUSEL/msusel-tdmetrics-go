@@ -7,7 +7,7 @@ import (
 	"github.com/Snow-Gremlin/goToolbox/comp"
 
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs"
-	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs/typeDesc"
+	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs/typeDescs"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/jsonify"
 )
 
@@ -17,7 +17,7 @@ const Kind = `basic`
 //
 // This does not contain complex types, those are treated as an interface.
 type Basic interface {
-	typeDesc.TypeDesc
+	typeDescs.TypeDesc
 	_basic()
 }
 
@@ -42,7 +42,7 @@ func (t *basicImp) GoType() types.Type { return t.realType }
 func (t *basicImp) String() string     { return t.realType.Name() }
 
 func (t *basicImp) CompareTo(other constructs.Construct) int {
-	return constructs.CompareTo[Basic](t, other)
+	return constructs.CompareTo[Basic](t, other, Comparer())
 }
 
 func Comparer() comp.Comparer[Basic] {

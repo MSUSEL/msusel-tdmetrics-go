@@ -10,14 +10,14 @@ import (
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/assert"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs/components/argument"
-	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs/typeDesc"
+	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs/typeDescs"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/jsonify"
 )
 
 const Kind = `signature`
 
 type Signature interface {
-	typeDesc.TypeDesc
+	typeDescs.TypeDesc
 	_signature()
 
 	// IsVacant indicates there are no parameters and no results,
@@ -83,7 +83,7 @@ func (m *signatureImp) IsVacant() bool {
 }
 
 func (s *signatureImp) CompareTo(other constructs.Construct) int {
-	return constructs.CompareTo[Signature](s, other)
+	return constructs.CompareTo[Signature](s, other, Comparer())
 }
 
 func Comparer() comp.Comparer[Signature] {

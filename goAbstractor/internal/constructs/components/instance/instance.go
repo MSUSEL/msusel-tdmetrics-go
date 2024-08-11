@@ -1,11 +1,12 @@
 package instance
 
 import (
+	"github.com/Snow-Gremlin/goToolbox/comp"
+
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/assert"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs"
-	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs/typeDesc"
+	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs/typeDescs"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/jsonify"
-	"github.com/Snow-Gremlin/goToolbox/comp"
 )
 
 const Kind = `instance`
@@ -20,13 +21,13 @@ type Instance interface {
 }
 
 type Args struct {
-	Resolved   typeDesc.TypeDesc
-	TypeParams []typeDesc.TypeDesc
+	Resolved   typeDescs.TypeDesc
+	TypeParams []typeDescs.TypeDesc
 }
 
 type instanceImp struct {
-	resolved   typeDesc.TypeDesc
-	typeParams []typeDesc.TypeDesc
+	resolved   typeDescs.TypeDesc
+	typeParams []typeDescs.TypeDesc
 
 	index int
 }
@@ -46,18 +47,15 @@ func (i *instanceImp) Kind() string       { return Kind }
 func (i *instanceImp) SetIndex(index int) { i.index = index }
 
 func (i *instanceImp) CompareTo(other constructs.Construct) int {
-	return comp.Or(
-		comp.Ordered[string]().Pend(i.Kind(), other.Kind()),
-		Comparer().Pend(i, other.(Instance)),
-	)
+	return constructs.CompareTo[Instance](i, other, Comparer())
 }
 
 func Comparer() comp.Comparer[Instance] {
 	return func(a, b Instance) int {
 		aImp, bImp := a.(*instanceImp), b.(*instanceImp)
 		return comp.Or(
-			constructs.Comparer[typeDesc.TypeDesc]().Pend(aImp.resolved, bImp.resolved),
-			constructs.SliceComparer[typeDesc.TypeDesc]().Pend(bImp.typeParams, bImp.typeParams),
+			constructs.ComparerPend(aImp.resolved, bImp.resolved),
+			constructs.SliceComparerPend(bImp.typeParams, bImp.typeParams),
 		)
 	}
 }

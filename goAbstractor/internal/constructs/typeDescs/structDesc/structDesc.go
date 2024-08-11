@@ -3,18 +3,19 @@ package structDesc
 import (
 	"go/types"
 
+	"github.com/Snow-Gremlin/goToolbox/comp"
+
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/assert"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs"
-	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs/typeDesc"
-	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs/typeDesc/field"
+	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs/components/field"
+	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs/typeDescs"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/jsonify"
-	"github.com/Snow-Gremlin/goToolbox/comp"
 )
 
 const Kind = `structDesc`
 
 type StructDesc interface {
-	typeDesc.TypeDesc
+	typeDescs.TypeDesc
 	_structDesc()
 }
 
@@ -48,7 +49,7 @@ func (d *structDescImp) SetIndex(index int) { d.index = index }
 func (d *structDescImp) GoType() types.Type { return d.realType }
 
 func (d *structDescImp) CompareTo(other constructs.Construct) int {
-	return constructs.CompareTo[StructDesc](d, other)
+	return constructs.CompareTo[StructDesc](d, other, Comparer())
 }
 
 func Comparer() comp.Comparer[StructDesc] {

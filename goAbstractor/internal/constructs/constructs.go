@@ -31,9 +31,9 @@ func SliceComparerPend[T Construct](a, b []T) func() int {
 	return SliceComparer[T]().Pend(a, b)
 }
 
-func CompareTo[T Construct](a T, b Construct) int {
+func CompareTo[T Construct](a T, b Construct, cmp comp.Comparer[T]) int {
 	return comp.Or(
 		comp.DefaultPend(a.Kind(), b.Kind()),
-		ComparerPend(a, b.(T)),
+		cmp.Pend(a, b.(T)),
 	)
 }

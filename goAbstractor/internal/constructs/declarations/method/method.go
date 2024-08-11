@@ -1,20 +1,21 @@
-package constructs
+package method
 
 import (
 	"go/types"
 	"strings"
 
+	"github.com/Snow-Gremlin/goToolbox/terrors/terror"
+	"github.com/Snow-Gremlin/goToolbox/utils"
+
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/assert"
+	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs/declarations"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/jsonify"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/locs"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/metrics"
-	"github.com/Snow-Gremlin/goToolbox/terrors/terror"
-	"github.com/Snow-Gremlin/goToolbox/utils"
 )
 
 type Method interface {
-	Declaration
-	TypeDesc
+	declarations.Declaration
 	_method()
 
 	addInstance(inst Instance) Instance

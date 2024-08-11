@@ -11,23 +11,21 @@ import (
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/jsonify"
 )
 
-type (
-	Set interface {
-		Alias(file, alias string)
-		NewLoc(p token.Pos) Loc
-		Reset()
-		flag(p token.Pos)
-		infoFor(p token.Pos) (int, string, int)
-	}
+type Set interface {
+	Alias(file, alias string)
+	NewLoc(p token.Pos) Loc
+	Reset()
+	flag(p token.Pos)
+	infoFor(p token.Pos) (int, string, int)
+}
 
-	setImp struct {
-		fs       *token.FileSet
-		aliases  map[string]string
-		flagged  map[token.Pos]bool
-		offsets  map[string]int
-		finished bool
-	}
-)
+type setImp struct {
+	fs       *token.FileSet
+	aliases  map[string]string
+	flagged  map[token.Pos]bool
+	offsets  map[string]int
+	finished bool
+}
 
 func NewSet(fs *token.FileSet) Set {
 	s := &setImp{

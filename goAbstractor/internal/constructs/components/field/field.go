@@ -5,7 +5,7 @@ import (
 
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/assert"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs"
-	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs/typeDesc"
+	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs/typeDescs"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/jsonify"
 )
 
@@ -20,19 +20,19 @@ type Field interface {
 	_field()
 
 	Name() string
-	Type() typeDesc.TypeDesc
+	Type() typeDescs.TypeDesc
 	Embedded() bool
 }
 
 type Args struct {
 	Name     string
-	Type     typeDesc.TypeDesc
+	Type     typeDescs.TypeDesc
 	Embedded bool
 }
 
 type fieldImp struct {
 	name     string
-	typ      typeDesc.TypeDesc
+	typ      typeDescs.TypeDesc
 	embedded bool
 	index    int
 }
@@ -46,15 +46,15 @@ func newField(args Args) Field {
 	}
 }
 
-func (f *fieldImp) _field()                 {}
-func (f *fieldImp) Kind() string            { return Kind }
-func (f *fieldImp) SetIndex(index int)      { f.index = index }
-func (f *fieldImp) Name() string            { return f.name }
-func (f *fieldImp) Type() typeDesc.TypeDesc { return f.typ }
-func (f *fieldImp) Embedded() bool          { return f.embedded }
+func (f *fieldImp) _field()                  {}
+func (f *fieldImp) Kind() string             { return Kind }
+func (f *fieldImp) SetIndex(index int)       { f.index = index }
+func (f *fieldImp) Name() string             { return f.name }
+func (f *fieldImp) Type() typeDescs.TypeDesc { return f.typ }
+func (f *fieldImp) Embedded() bool           { return f.embedded }
 
 func (f *fieldImp) CompareTo(other constructs.Construct) int {
-	return constructs.CompareTo[Field](f, other)
+	return constructs.CompareTo[Field](f, other, Comparer())
 }
 
 func Comparer() comp.Comparer[Field] {

@@ -9,23 +9,23 @@ import (
 
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/assert"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs"
-	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs/declaration"
-	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs/typeDesc"
+	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs/declarations"
+	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs/declarations/value"
+	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs/typeDescs"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/jsonify"
-	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/visitor"
 )
 
 const Kind = `reference`
 
 type Reference interface {
-	typeDesc.TypeDesc
+	typeDescs.TypeDesc
 	_reference()
 
 	PackagePath() string
 	Name() string
 	Resolved() bool
 
-	SetType(typ declaration.Declaration)
+	SetType(typ declarations.Declaration)
 }
 
 type Args struct {
@@ -39,7 +39,7 @@ type referenceImp struct {
 	pkgPath  string
 	name     string
 
-	typ declaration.Declaration
+	typ declarations.Declaration
 }
 
 func newReference(args Args) Reference {
@@ -66,13 +66,17 @@ func (r *referenceImp) SetIndex(index int) {
 	panic(terror.New(`do not call SetIndex on Reference`))
 }
 
-func (r *referenceImp) SetType(typ declaration.Declaration) {
+func (r *referenceImp) SetType(typ declarations.Declaration) {
 	assert.ArgNotNil(`type`, typ)
+	if _, ok := typ.(value.Value); ok {
+		panic(terror.New(`may not use a value declaration as a reference target`).
+			With(`declaration`, typ))
+	}
 	r.typ = typ
 }
 
 func (r *referenceImp) CompareTo(other constructs.Construct) int {
-	return constructs.CompareTo[Reference](r, other)
+	return constructs.CompareTo[Reference](r, other, Comparer())
 }
 
 func Comparer() comp.Comparer[Reference] {
@@ -83,10 +87,6 @@ func Comparer() comp.Comparer[Reference] {
 			comp.DefaultPend(aImp.name, bImp.name),
 		)
 	}
-}
-
-func (r *referenceImp) Visit(v visitor.Visitor) {
-	visitor.Visit(v, r.typ)
 }
 
 func (r *referenceImp) ToJson(ctx *jsonify.Context) jsonify.Datum {

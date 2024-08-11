@@ -5,7 +5,7 @@ import (
 
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/assert"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs"
-	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs/typeDesc"
+	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs/typeDescs"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/jsonify"
 )
 
@@ -19,17 +19,17 @@ type Argument interface {
 	_argument()
 
 	Name() string
-	Type() typeDesc.TypeDesc
+	Type() typeDescs.TypeDesc
 }
 
 type Args struct {
 	Name string
-	Type typeDesc.TypeDesc
+	Type typeDescs.TypeDesc
 }
 
 type argumentImp struct {
 	name  string
-	typ   typeDesc.TypeDesc
+	typ   typeDescs.TypeDesc
 	index int
 }
 
@@ -42,25 +42,23 @@ func newArgument(args Args) Argument {
 	}
 }
 
-func (a *argumentImp) _argument()              {}
-func (a *argumentImp) Kind() string            { return Kind }
-func (a *argumentImp) SetIndex(index int)      { a.index = index }
-func (a *argumentImp) Name() string            { return a.name }
-func (a *argumentImp) Type() typeDesc.TypeDesc { return a.typ }
+func (a *argumentImp) _argument()         {}
+func (a *argumentImp) Kind() string       { return Kind }
+func (a *argumentImp) SetIndex(index int) { a.index = index }
+
+func (a *argumentImp) Name() string             { return a.name }
+func (a *argumentImp) Type() typeDescs.TypeDesc { return a.typ }
 
 func (a *argumentImp) CompareTo(other constructs.Construct) int {
-	return comp.Or(
-		comp.Ordered[string]().Pend(a.Kind(), other.Kind()),
-		Comparer().Pend(a, other.(Argument)),
-	)
+	return constructs.CompareTo[Argument](a, other, Comparer())
 }
 
 func Comparer() comp.Comparer[Argument] {
 	return func(a, b Argument) int {
 		aImp, bImp := a.(*argumentImp), b.(*argumentImp)
 		return comp.Or(
-			comp.Ordered[string]().Pend(aImp.name, bImp.name),
-			func() int { return aImp.typ.CompareTo(bImp.typ) },
+			comp.DefaultPend(aImp.name, bImp.name),
+			constructs.ComparerPend(aImp.typ, bImp.typ),
 		)
 	}
 }
