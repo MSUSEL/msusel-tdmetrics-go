@@ -156,14 +156,19 @@ func (p *projectImp) ResolveReceivers() {
 }
 
 func (p *projectImp) ResolveInheritance() {
-	// TODO: Fix
-	/*
-		decls := p.Objects()
-		roots := []constructs.Object{}
-		for i := range decls.Count() {
-			roots = addInheritance(roots, decls.Get(i))
-		}
-	*/
+	its := p.InterfaceDescs()
+	roots := []constructs.InterfaceDesc{}
+	for i := range its.Count() {
+		roots = addInheritance(roots, its.Get(i))
+	}
+}
+
+func addInheritance(siblings []constructs.InterfaceDesc, it constructs.InterfaceDesc) []constructs.InterfaceDesc {
+
+	// TODO: Finish implementing
+	print(it)
+
+	return siblings
 }
 
 func (p *projectImp) ResolveReferences() {
