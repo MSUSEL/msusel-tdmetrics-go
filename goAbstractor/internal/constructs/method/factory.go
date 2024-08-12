@@ -11,15 +11,15 @@ type factoryImp struct {
 	methods collections.SortedSet[constructs.Method]
 }
 
-func NewFactory() constructs.MethodFactory {
+func New() constructs.MethodFactory {
 	return &factoryImp{methods: sortedSet.New(Comparer())}
 }
 
 func (f *factoryImp) NewMethod(args constructs.MethodArgs) constructs.Method {
 	v, _ := f.methods.TryAdd(newMethod(args))
-	return v
+	return args.Package.AddMethod(v)
 }
 
-func (f *factoryImp) Methods() collections.ReadonlySet[constructs.Method] {
+func (f *factoryImp) Methods() collections.ReadonlySortedSet[constructs.Method] {
 	return f.methods.Readonly()
 }

@@ -43,5 +43,5 @@ type InterfaceDescArgs struct {
 
 type InterfaceDescFactory interface {
 	NewInterfaceDesc(args InterfaceDescArgs) InterfaceDesc
-	InterfaceDescs() collections.ReadonlySet[InterfaceDesc]
+	InterfaceDescs() collections.ReadonlySortedSet[InterfaceDesc]
 }

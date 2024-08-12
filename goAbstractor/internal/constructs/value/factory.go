@@ -4,27 +4,22 @@ import (
 	"github.com/Snow-Gremlin/goToolbox/collections"
 	"github.com/Snow-Gremlin/goToolbox/collections/sortedSet"
 
-	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs/declarations"
+	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs"
 )
 
-type ValueFactory interface {
-	NewValue(args Args) declarations.Value
-	Values() collections.ReadonlySet[declarations.Value]
-}
-
 type factoryImp struct {
-	values collections.SortedSet[declarations.Value]
+	values collections.SortedSet[constructs.Value]
 }
 
-func NewFactory() ValueFactory {
+func New() constructs.ValueFactory {
 	return &factoryImp{values: sortedSet.New(Comparer())}
 }
 
-func (f *factoryImp) NewValue(args Args) declarations.Value {
-	v, _ := f.values.TryAdd(New(args))
-	return v
+func (f *factoryImp) NewValue(args constructs.ValueArgs) constructs.Value {
+	v, _ := f.values.TryAdd(newValue(args))
+	return args.Package.AddValue(v)
 }
 
-func (f *factoryImp) Values() collections.ReadonlySet[declarations.Value] {
+func (f *factoryImp) Values() collections.ReadonlySortedSet[constructs.Value] {
 	return f.values.Readonly()
 }

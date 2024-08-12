@@ -10,3 +10,8 @@ type Declaration interface {
 	Name() string
 	Location() locs.Loc
 }
+
+type TypeDecl interface {
+	Declaration
+	TypeDesc
+}

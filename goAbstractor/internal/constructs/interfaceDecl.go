@@ -17,8 +17,7 @@ import (
 // are added for each used instance in the source code. If there
 // are no instances then the generic interface isn't used.
 type InterfaceDecl interface {
-	Declaration
-	TypeDesc
+	TypeDecl
 	IsInterface()
 
 	AddInstance(inst Instance) Instance
@@ -39,5 +38,5 @@ type InterfaceDeclArgs struct {
 
 type InterfaceDeclFactory interface {
 	NewInterfaceDecl(args InterfaceDeclArgs) InterfaceDecl
-	InterfaceDecls() collections.ReadonlySet[InterfaceDecl]
+	InterfaceDecls() collections.ReadonlySortedSet[InterfaceDecl]
 }

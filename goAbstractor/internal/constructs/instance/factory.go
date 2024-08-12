@@ -20,6 +20,6 @@ func (f *factoryImp) NewInstance(args constructs.InstanceArgs) constructs.Instan
 	return v
 }
 
-func (f *factoryImp) Instances() collections.ReadonlySet[constructs.Instance] {
+func (f *factoryImp) Instances() collections.ReadonlySortedSet[constructs.Instance] {
 	return f.instances.Readonly()
 }

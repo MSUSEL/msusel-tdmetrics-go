@@ -20,5 +20,5 @@ type ArgumentArgs struct {
 
 type ArgumentFactory interface {
 	NewArgument(args ArgumentArgs) Argument
-	Arguments() collections.ReadonlySet[Argument]
+	Arguments() collections.ReadonlySortedSet[Argument]
 }

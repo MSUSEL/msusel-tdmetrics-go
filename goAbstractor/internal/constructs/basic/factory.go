@@ -20,6 +20,6 @@ func (f *factoryImp) NewBasic(args constructs.BasicArgs) constructs.Basic {
 	return v
 }
 
-func (f *factoryImp) Basics() collections.ReadonlySet[constructs.Basic] {
+func (f *factoryImp) Basics() collections.ReadonlySortedSet[constructs.Basic] {
 	return f.basics.Readonly()
 }

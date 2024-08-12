@@ -20,6 +20,6 @@ func (f *factoryImp) NewField(args constructs.FieldArgs) constructs.Field {
 	return v
 }
 
-func (f *factoryImp) Fields() collections.ReadonlySet[constructs.Field] {
+func (f *factoryImp) Fields() collections.ReadonlySortedSet[constructs.Field] {
 	return f.fields.Readonly()
 }

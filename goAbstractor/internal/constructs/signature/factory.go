@@ -4,27 +4,22 @@ import (
 	"github.com/Snow-Gremlin/goToolbox/collections"
 	"github.com/Snow-Gremlin/goToolbox/collections/sortedSet"
 
-	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs/typeDescs"
+	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs"
 )
 
-type SignatureFactory interface {
-	NewSignature(args Args) typeDescs.Signature
-	Signatures() collections.ReadonlySet[typeDescs.Signature]
-}
-
 type factoryImp struct {
-	signatures collections.SortedSet[typeDescs.Signature]
+	signatures collections.SortedSet[constructs.Signature]
 }
 
-func NewFactory() SignatureFactory {
+func New() constructs.SignatureFactory {
 	return &factoryImp{signatures: sortedSet.New(Comparer())}
 }
 
-func (f *factoryImp) NewSignature(args Args) typeDescs.Signature {
-	v, _ := f.signatures.TryAdd(New(args))
+func (f *factoryImp) NewSignature(args constructs.SignatureArgs) constructs.Signature {
+	v, _ := f.signatures.TryAdd(newSignature(args))
 	return v
 }
 
-func (f *factoryImp) Signatures() collections.ReadonlySet[typeDescs.Signature] {
+func (f *factoryImp) Signatures() collections.ReadonlySortedSet[constructs.Signature] {
 	return f.signatures.Readonly()
 }

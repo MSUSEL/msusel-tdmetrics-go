@@ -9,34 +9,21 @@ import (
 
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/assert"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs"
-	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs/components"
-	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs/typeDescs"
+	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs/kind"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/jsonify"
 )
-
-const Kind = `signature`
-
-type Args struct {
-	RealType *types.Signature
-
-	Variadic bool
-	Params   []components.Argument
-	Results  []components.Argument
-
-	Package *types.Package
-}
 
 type signatureImp struct {
 	realType *types.Signature
 
 	variadic bool
-	params   []components.Argument
-	results  []components.Argument
+	params   []constructs.Argument
+	results  []constructs.Argument
 
 	index int
 }
 
-func createTuple(pkg *types.Package, args []components.Argument) *types.Tuple {
+func createTuple(pkg *types.Package, args []constructs.Argument) *types.Tuple {
 	vars := make([]*types.Var, len(args))
 	for i, p := range args {
 		vars[i] = types.NewVar(token.NoPos, pkg, p.Name(), p.Type().GoType())
@@ -44,7 +31,7 @@ func createTuple(pkg *types.Package, args []components.Argument) *types.Tuple {
 	return types.NewTuple(vars...)
 }
 
-func New(args Args) typeDescs.Signature {
+func newSignature(args constructs.SignatureArgs) constructs.Signature {
 	assert.ArgNoNils(`params`, args.Params)
 	assert.ArgNoNils(`results`, args.Results)
 
@@ -66,7 +53,7 @@ func New(args Args) typeDescs.Signature {
 
 func (m *signatureImp) IsTypeDesc()        {}
 func (m *signatureImp) IsSignature()       {}
-func (m *signatureImp) Kind() string       { return Kind }
+func (m *signatureImp) Kind() kind.Kind    { return kind.Signature }
 func (m *signatureImp) SetIndex(index int) { m.index = index }
 func (m *signatureImp) GoType() types.Type { return m.realType }
 
@@ -75,11 +62,11 @@ func (m *signatureImp) IsVacant() bool {
 }
 
 func (s *signatureImp) CompareTo(other constructs.Construct) int {
-	return constructs.CompareTo[typeDescs.Signature](s, other, Comparer())
+	return constructs.CompareTo[constructs.Signature](s, other, Comparer())
 }
 
-func Comparer() comp.Comparer[typeDescs.Signature] {
-	return func(a, b typeDescs.Signature) int {
+func Comparer() comp.Comparer[constructs.Signature] {
+	return func(a, b constructs.Signature) int {
 		aImp, bImp := a.(*signatureImp), b.(*signatureImp)
 		return comp.Or(
 			constructs.SliceComparerPend(aImp.params, bImp.params),
@@ -96,7 +83,7 @@ func (m *signatureImp) ToJson(ctx *jsonify.Context) jsonify.Datum {
 
 	ctx2 := ctx.HideKind().Short()
 	return jsonify.NewMap().
-		AddIf(ctx, ctx.IsKindShown(), `kind`, Kind).
+		AddIf(ctx, ctx.IsKindShown(), `kind`, m.Kind()).
 		AddIf(ctx, ctx.IsIndexShown(), `index`, m.index).
 		AddNonZero(ctx2, `variadic`, m.variadic).
 		AddNonZero(ctx2, `params`, m.params).

@@ -11,7 +11,7 @@ type factoryImp struct {
 	interfaceDescs collections.SortedSet[constructs.InterfaceDesc]
 }
 
-func NewFactory() constructs.InterfaceDescFactory {
+func New() constructs.InterfaceDescFactory {
 	return &factoryImp{interfaceDescs: sortedSet.New(Comparer())}
 }
 
@@ -20,6 +20,6 @@ func (f *factoryImp) NewInterfaceDesc(args constructs.InterfaceDescArgs) constru
 	return v
 }
 
-func (f *factoryImp) InterfaceDescs() collections.ReadonlySet[constructs.InterfaceDesc] {
+func (f *factoryImp) InterfaceDescs() collections.ReadonlySortedSet[constructs.InterfaceDesc] {
 	return f.interfaceDescs.Readonly()
 }

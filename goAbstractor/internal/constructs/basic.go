@@ -20,5 +20,5 @@ type BasicArgs struct {
 
 type BasicFactory interface {
 	NewBasic(args BasicArgs) Basic
-	Basics() collections.ReadonlySet[Basic]
+	Basics() collections.ReadonlySortedSet[Basic]
 }

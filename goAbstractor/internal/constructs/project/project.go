@@ -1,84 +1,72 @@
-package constructs
+package project
 
 import (
 	"go/token"
+	"strconv"
 
-	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs/components/argument"
-	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs/components/field"
-	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs/components/instance"
-	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs/declarations/interfaceDecl"
-	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs/declarations/method"
-	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs/declarations/object"
-	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs/declarations/value"
-	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs/typeDescs/basic"
-	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs/typeDescs/interfaceDesc"
-	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs/typeDescs/reference"
-	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs/typeDescs/signature"
-	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs/typeDescs/structDesc"
-	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs/typeDescs/typeParam"
+	"github.com/Snow-Gremlin/goToolbox/collections"
+	"github.com/Snow-Gremlin/goToolbox/collections/enumerator"
+	"github.com/Snow-Gremlin/goToolbox/terrors/terror"
+
+	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/assert"
+	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs"
+	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs/argument"
+	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs/basic"
+	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs/field"
+	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs/instance"
+	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs/interfaceDecl"
+	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs/interfaceDesc"
+	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs/method"
+	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs/object"
+	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs/packageCon"
+	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs/reference"
+	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs/signature"
+	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs/structDesc"
+	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs/typeParam"
+	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs/value"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/jsonify"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/locs"
 )
 
-type Project interface {
-	argument.ArgumentFactory
-	field.FieldFactory
-	instance.InstanceFactory
-
-	interfaceDecl.InterfaceDeclFactory
-	method.MethodFactory
-	object.ObjectFactory
-	value.ValueFactory
-
-	basic.BasicFactory
-	interfaceDesc.InterfaceDescFactory
-	reference.ReferenceFactory
-	signature.SignatureFactory
-	structDesc.StructDescFactory
-	typeParam.TypeParamFactory
-
-	jsonify.Jsonable
-
-	NewLoc(pos token.Pos) locs.Loc
-}
-
 type projectImp struct {
-	argument.ArgumentFactory
-	field.FieldFactory
-	instance.InstanceFactory
+	constructs.ArgumentFactory
+	constructs.FieldFactory
+	constructs.InstanceFactory
+	constructs.PackageFactory
 
-	interfaceDecl.InterfaceDeclFactory
-	method.MethodFactory
-	object.ObjectFactory
-	value.ValueFactory
+	constructs.InterfaceDeclFactory
+	constructs.MethodFactory
+	constructs.ObjectFactory
+	constructs.ValueFactory
 
-	basic.BasicFactory
-	interfaceDesc.InterfaceDescFactory
-	reference.ReferenceFactory
-	signature.SignatureFactory
-	structDesc.StructDescFactory
-	typeParam.TypeParamFactory
+	constructs.BasicFactory
+	constructs.InterfaceDescFactory
+	constructs.ReferenceFactory
+	constructs.SignatureFactory
+	constructs.StructDescFactory
+	constructs.TypeParamFactory
 
 	locations locs.Set
 }
 
-func NewProject(locs locs.Set) Project {
+func New(locs locs.Set) constructs.Project {
 	return &projectImp{
 		ArgumentFactory: argument.New(),
 		FieldFactory:    field.New(),
 		InstanceFactory: instance.New(),
+		PackageFactory:  packageCon.New(),
 
 		InterfaceDeclFactory: interfaceDecl.New(),
 		MethodFactory:        method.New(),
 		ObjectFactory:        object.New(),
 		ValueFactory:         value.New(),
 
-		BasicFactory:         basic.NewFactory(),
-		InterfaceDescFactory: interfaceDesc.NewFactory(),
-		ReferenceFactory:     reference.NewFactory(),
-		SignatureFactory:     signature.NewFactory(),
-		StructDescFactory:    structDesc.NewFactory(),
-		TypeParamFactory:     typeParam.NewFactory(),
+		BasicFactory:         basic.New(),
+		InterfaceDescFactory: interfaceDesc.New(),
+		ReferenceFactory:     reference.New(),
+		SignatureFactory:     signature.New(),
+		StructDescFactory:    structDesc.New(),
+		TypeParamFactory:     typeParam.New(),
 
 		locations: locs,
 	}
@@ -88,21 +76,146 @@ func (p *projectImp) NewLoc(pos token.Pos) locs.Loc {
 	return p.locations.NewLoc(pos)
 }
 
+func (p *projectImp) FindType(pkgPath, typeName string, panicOnNotFound bool) (constructs.Package, constructs.TypeDecl, bool) {
+	assert.ArgNotEmpty(`pkgPath`, pkgPath)
+
+	pkg := p.FindPackageByPath(pkgPath)
+	if pkg == nil {
+		if !panicOnNotFound {
+			return nil, nil, false
+		}
+		names := enumerator.Select(p.Packages().Enumerate(),
+			func(pkg constructs.Package) string { return strconv.Quote(pkg.Path()) }).
+			Join(`, `)
+		panic(terror.New(`failed to find package for type reference`).
+			With(`type name`, typeName).
+			With(`package path`, pkgPath).
+			With(`existing paths`, `[`+names+`]`))
+	}
+
+	decl := pkg.FindTypeDecl(typeName)
+	if decl == nil {
+		if !panicOnNotFound {
+			return pkg, nil, false
+		}
+		panic(terror.New(`failed to find type declaration for type reference`).
+			With(`type name`, typeName).
+			With(`package path`, pkgPath))
+	}
+
+	return pkg, decl, true
+}
+
+func (p *projectImp) UpdateIndices() {
+	// Type indices compound so that each has a unique offset.
+	index := 1
+	index = updateIndices(p.Arguments(), index)
+	index = updateIndices(p.Basics(), index)
+	index = updateIndices(p.Fields(), index)
+	index = updateIndices(p.Instances(), index)
+	index = updateIndices(p.InterfaceDecls(), index)
+	index = updateIndices(p.InterfaceDescs(), index)
+	index = updateIndices(p.Methods(), index)
+	index = updateIndices(p.Objects(), index)
+	index = updateIndices(p.Packages(), index)
+	// Don't index the p.References()
+	index = updateIndices(p.StructDescs(), index)
+	index = updateIndices(p.TypeParams(), index)
+	updateIndices(p.Values(), index)
+}
+
+func updateIndices[T constructs.Construct](col collections.ReadonlySortedSet[T], index int) int {
+	for i, count := 0, col.Count(); i < count; i++ {
+		col.Get(i).SetIndex(index)
+		index++
+	}
+	return index
+}
+
+func (p *projectImp) ResolveImports() {
+	packages := p.Packages()
+	for i := range packages.Count() {
+		pkg := packages.Get(i)
+		for _, importPath := range pkg.ImportPaths() {
+			impPackage := p.FindPackageByPath(importPath)
+			if impPackage == nil {
+				panic(terror.New(`import package not found`).
+					With(`package path`, pkg.Path).
+					With(`import path`, importPath))
+			}
+			pkg.AddImport(impPackage)
+		}
+	}
+}
+
+func (p *projectImp) ResolveReceivers() {
+	packages := p.Packages()
+	for i := range packages.Count() {
+		packages.Get(i).ResolveReceivers()
+	}
+}
+
+func (p *projectImp) ResolveInheritance() {
+	// TODO: Fix
+	/*
+		decls := p.Objects()
+		roots := []constructs.Object{}
+		for i := range decls.Count() {
+			roots = addInheritance(roots, decls.Get(i))
+		}
+	*/
+}
+
+func (p *projectImp) ResolveReferences() {
+	refs := p.References()
+	for i := range refs.Count() {
+		if ref := refs.Get(i); !ref.Resolved() {
+			if _, typ, ok := p.FindType(ref.PackagePath(), ref.Name(), true); ok {
+				ref.SetType(typ)
+			}
+		}
+	}
+}
+
+func (p *projectImp) FlagLocations() {
+	p.locations.Reset()
+	flagList(p.InterfaceDecls())
+	flagList(p.Methods())
+	flagList(p.Objects())
+	flagList(p.Values())
+}
+
+func flagList[T constructs.Declaration](c collections.ReadonlySortedSet[T]) {
+	for i := range c.Count() {
+		c.Get(i).Location().Flag()
+	}
+}
+
+func (p *projectImp) String() string {
+	return jsonify.ToString(p)
+}
+
 func (p *projectImp) ToJson(ctx *jsonify.Context) jsonify.Datum {
 	ctx2 := ctx.HideKind()
 	m := jsonify.NewMap().
-		Add(ctx2, `language`, `go`)
+		Add(ctx2, `language`, `go`).
+		AddNonZero(ctx2, `locs`, p.locations)
 
-	m.AddNonZero(ctx2, argument.Kind, p.Arguments()).
-		AddNonZero(ctx2, field.Kind, p.Fields()).
-		AddNonZero(ctx2, instance.Kind, p.Instances())
+	m.AddNonZero(ctx2, `argument`, p.Arguments()).
+		AddNonZero(ctx2, `field`, p.Fields()).
+		AddNonZero(ctx2, `instance`, p.Instances())
 
-	m.AddNonZero(ctx2, basic.Kind, p.Basics()).
-		AddNonZero(ctx2, reference.Kind, p.References()).
-		AddNonZero(ctx2, signature.Kind, p.Signatures()).
-		AddNonZero(ctx2, typeParam.Kind, p.TypeParams())
+	m.AddNonZero(ctx2, `interfaceDecls`, p.InterfaceDecls()).
+		AddNonZero(ctx2, `methods`, p.Methods()).
+		AddNonZero(ctx2, `objects`, p.Objects()).
+		AddNonZero(ctx2, `values`, p.Values())
 
-	m.AddNonZero(ctx2, `locs`, p.locations)
+	m.AddNonZero(ctx2, `basic`, p.Basics()).
+		AddNonZero(ctx2, `interfaceDesc`, p.InterfaceDescs()).
+		// // Don't output the p.References()
+		AddNonZero(ctx2, `signature`, p.Signatures()).
+		AddNonZero(ctx2, `structDescs`, p.StructDescs()).
+		AddNonZero(ctx2, `typeParam`, p.TypeParams())
 
 	return m
 }

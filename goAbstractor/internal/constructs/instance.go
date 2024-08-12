@@ -18,5 +18,5 @@ type InstanceArgs struct {
 
 type InstanceFactory interface {
 	NewInstance(args InstanceArgs) Instance
-	Instances() collections.ReadonlySet[Instance]
+	Instances() collections.ReadonlySortedSet[Instance]
 }

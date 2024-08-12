@@ -20,6 +20,6 @@ func (f *factoryImp) NewArgument(args constructs.ArgumentArgs) constructs.Argume
 	return v
 }
 
-func (f *factoryImp) Arguments() collections.ReadonlySet[constructs.Argument] {
+func (f *factoryImp) Arguments() collections.ReadonlySortedSet[constructs.Argument] {
 	return f.args.Readonly()
 }

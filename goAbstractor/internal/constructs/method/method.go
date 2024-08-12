@@ -66,10 +66,9 @@ func newMethod(args constructs.MethodArgs) constructs.Method {
 		instances: sortedSet.New[constructs.Instance](),
 	}
 
-	// TODO: Fix or remove
-	//if !utils.IsNil(met.receiver) {
-	//	return met.receiver.addMethod(met)
-	//}
+	if !utils.IsNil(met.receiver) {
+		return met.receiver.AddMethod(met)
+	}
 	return met
 }
 

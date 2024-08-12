@@ -9,28 +9,21 @@ import (
 
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/assert"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs"
-	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs/typeDescs"
+	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs/kind"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/jsonify"
 )
-
-const Kind = `reference`
-
-type Args struct {
-	RealType    *types.Named
-	PackagePath string
-	Name        string
-}
 
 type referenceImp struct {
 	realType *types.Named
 	pkgPath  string
 	name     string
 
-	typ typeDescs.TypeDesc
+	typ constructs.TypeDesc
 }
 
-func New(args Args) typeDescs.Reference {
+func newReference(args constructs.ReferenceArgs) constructs.Reference {
 	assert.ArgNotNil(`real type`, args.RealType)
+	// pkgPath may be empty for $builtin
 	assert.ArgNotEmpty(`name`, args.Name)
 	return &referenceImp{
 		realType: args.RealType,
@@ -41,7 +34,7 @@ func New(args Args) typeDescs.Reference {
 
 func (r *referenceImp) IsTypeDesc()         {}
 func (r *referenceImp) IsReference()        {}
-func (r *referenceImp) Kind() string        { return Kind }
+func (r *referenceImp) Kind() kind.Kind     { return kind.Reference }
 func (r *referenceImp) GoType() types.Type  { return r.realType }
 func (r *referenceImp) PackagePath() string { return r.pkgPath }
 func (r *referenceImp) Name() string        { return r.name }
@@ -54,17 +47,17 @@ func (r *referenceImp) SetIndex(index int) {
 	panic(terror.New(`do not call SetIndex on Reference`))
 }
 
-func (r *referenceImp) SetType(typ typeDescs.TypeDesc) {
+func (r *referenceImp) SetType(typ constructs.TypeDecl) {
 	assert.ArgNotNil(`type`, typ)
 	r.typ = typ
 }
 
 func (r *referenceImp) CompareTo(other constructs.Construct) int {
-	return constructs.CompareTo[typeDescs.Reference](r, other, Comparer())
+	return constructs.CompareTo[constructs.Reference](r, other, Comparer())
 }
 
-func Comparer() comp.Comparer[typeDescs.Reference] {
-	return func(a, b typeDescs.Reference) int {
+func Comparer() comp.Comparer[constructs.Reference] {
+	return func(a, b constructs.Reference) int {
 		aImp, bImp := a.(*referenceImp), b.(*referenceImp)
 		return comp.Or(
 			comp.DefaultPend(aImp.pkgPath, bImp.pkgPath),
@@ -77,7 +70,7 @@ func (r *referenceImp) ToJson(ctx *jsonify.Context) jsonify.Datum {
 	ctx2 := ctx.HideKind().Short()
 	if ctx.IsReferenceShown() {
 		return jsonify.NewMap().
-			AddIf(ctx, ctx.IsKindShown(), `kind`, Kind).
+			AddIf(ctx, ctx.IsKindShown(), `kind`, r.Kind()).
 			AddNonZero(ctx2, `packagePath`, r.pkgPath).
 			Add(ctx2, `name`, r.name).
 			Add(ctx2, `type`, r.typ)

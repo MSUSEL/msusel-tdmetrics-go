@@ -4,27 +4,22 @@ import (
 	"github.com/Snow-Gremlin/goToolbox/collections"
 	"github.com/Snow-Gremlin/goToolbox/collections/sortedSet"
 
-	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs/typeDescs"
+	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs"
 )
 
-type StructDescFactory interface {
-	NewStructDesc(args Args) typeDescs.StructDesc
-	StructDescs() collections.ReadonlySet[typeDescs.StructDesc]
-}
-
 type factoryImp struct {
-	references collections.SortedSet[typeDescs.StructDesc]
+	references collections.SortedSet[constructs.StructDesc]
 }
 
-func NewFactory() StructDescFactory {
+func New() constructs.StructDescFactory {
 	return &factoryImp{references: sortedSet.New(Comparer())}
 }
 
-func (f *factoryImp) NewStructDesc(args Args) typeDescs.StructDesc {
-	v, _ := f.references.TryAdd(New(args))
+func (f *factoryImp) NewStructDesc(args constructs.StructDescArgs) constructs.StructDesc {
+	v, _ := f.references.TryAdd(newStructDesc(args))
 	return v
 }
 
-func (f *factoryImp) StructDescs() collections.ReadonlySet[typeDescs.StructDesc] {
+func (f *factoryImp) StructDescs() collections.ReadonlySortedSet[constructs.StructDesc] {
 	return f.references.Readonly()
 }

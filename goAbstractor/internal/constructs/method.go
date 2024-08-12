@@ -38,5 +38,5 @@ type MethodArgs struct {
 
 type MethodFactory interface {
 	NewMethod(args MethodArgs) Method
-	Methods() collections.ReadonlySet[Method]
+	Methods() collections.ReadonlySortedSet[Method]
 }
