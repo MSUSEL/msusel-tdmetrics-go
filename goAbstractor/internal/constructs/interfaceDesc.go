@@ -21,6 +21,9 @@ type InterfaceDesc interface {
 	// IsUnion indicates if there is two or more exact or approximate types.
 	IsUnion() bool
 
+	// Implements determines if this interface implements the other interface.
+	Implements(other InterfaceDesc) bool
+
 	AddInherits(it InterfaceDesc) InterfaceDesc
 
 	Inherits() collections.ReadonlySortedSet[InterfaceDesc]

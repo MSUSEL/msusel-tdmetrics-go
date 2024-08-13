@@ -77,11 +77,11 @@ flowchart LR
 
 3. Inserting a node, $X$, into a node, $Y$:
     1. Initial state: $|Xp| = 0$ and $Y \supset X$.
-    2. Assign $A = \left\{ Y_i \mid Y_i \supset X \right\}$.
+    2. Assign $A = \left\{ Y_i \mid X \supset Y_i \right\}$.
        If $|A| > 0$, then remove $A$ from $Yp$, add $A$ to $Xp$, and
        add $X$ as a parent of $Y$.
     3. For all $Y_i \supset X$, insert $X$ into $Y_i$.
-    4. For all $\left( Y_i \cap X \right) \ne \emptyset$ but not used in
-       prior steps, check the subtree for any node that is a supertype.
-       Only follow branches that there is still an overlap and that overlap
+    4. For all $\left( Y_i \cap X \right) \ne \emptyset$ (but not used in
+       prior steps), check the subtree for any node that is a supertype.
+       Follow branches when there is still an overlap and that overlap
        isn't already supertype of a parent already in $X$.

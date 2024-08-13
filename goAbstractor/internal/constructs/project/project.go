@@ -164,6 +164,7 @@ func (p *projectImp) ResolveInheritance() {
 }
 
 func addInheritance(siblings []constructs.InterfaceDesc, it constructs.InterfaceDesc) []constructs.InterfaceDesc {
+	// Do the slow n^2
 
 	// TODO: Finish implementing
 	print(it)

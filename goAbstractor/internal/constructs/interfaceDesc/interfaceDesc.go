@@ -48,6 +48,12 @@ func (id *interfaceDescImp) IsUnion() bool {
 	return len(id.approx)+len(id.exact) >= 2
 }
 
+func (id *interfaceDescImp) Implements(other constructs.InterfaceDesc) bool {
+
+	// TODO: Work
+	return types.Implements(id.realType, other.(*interfaceDescImp).realType)
+}
+
 func (id *interfaceDescImp) AddInherits(it constructs.InterfaceDesc) constructs.InterfaceDesc {
 	v, _ := id.inherits.TryAdd(it)
 	return v

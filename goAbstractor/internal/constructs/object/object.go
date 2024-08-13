@@ -22,10 +22,10 @@ type objectImp struct {
 
 	typeParams []constructs.TypeParam
 	data       constructs.StructDesc
+	inter      constructs.InterfaceDesc
 
 	methods   collections.SortedSet[constructs.Method]
 	instances collections.SortedSet[constructs.Instance]
-	inter     constructs.InterfaceDesc
 
 	index int
 }
