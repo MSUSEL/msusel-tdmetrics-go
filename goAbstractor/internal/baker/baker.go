@@ -23,16 +23,15 @@ const BuiltinName = `$builtin`
 
 type Baker interface {
 	BakeBuiltin() constructs.Package
-	BakeBasic(typeName string) constructs.Basic
-	BakeAny() constructs.Interface
-	BakeList(elem constructs.TypeDesc) constructs.Interface
-	BakeChan(elem constructs.TypeDesc) constructs.Interface
-	BakeMap(key, value constructs.TypeDesc) constructs.Interface
-	BakePointer(elem constructs.TypeDesc) constructs.Interface
-	BakeComplex64() constructs.Interface
-	BakeComplex128() constructs.Interface
-	BakeError() constructs.Interface
-	BakeComparable() constructs.Interface
+	BakeAny() constructs.InterfaceDecl
+	BakeList(elem constructs.TypeDesc) constructs.InterfaceDecl
+	BakeChan(elem constructs.TypeDesc) constructs.InterfaceDecl
+	BakeMap(key, value constructs.TypeDesc) constructs.InterfaceDecl
+	BakePointer(elem constructs.TypeDesc) constructs.InterfaceDecl
+	BakeComplex64() constructs.InterfaceDecl
+	BakeComplex128() constructs.InterfaceDecl
+	BakeError() constructs.InterfaceDecl
+	BakeComparable() constructs.InterfaceDecl
 }
 
 type bakerImp struct {
@@ -77,6 +76,7 @@ func (b *bakerImp) BakeBuiltin() constructs.Package {
 			Types:   types.NewPackage(BuiltinName, BuiltinName),
 		}
 
+		// package $builtin
 		return b.proj.NewPackage(constructs.PackageArgs{
 			RealPkg: builtinPkg,
 			Path:    BuiltinName,
@@ -85,24 +85,24 @@ func (b *bakerImp) BakeBuiltin() constructs.Package {
 	})
 }
 
-// BakeBasic bakes in a basic type by name. The name must
+// bakeBasic bakes in a basic type by name. The name must
 // be a valid basic type (e.g. int, int32, float64)
 // but may not be complex numbers or interfaces like any.
-func (b *bakerImp) BakeBasic(typeName string) constructs.Basic {
-	return bakeOnce(b, `basic `+typeName, func() constructs.Basic {
+func (b *bakerImp) bakeBasic(kind types.BasicKind) constructs.Basic {
+	bk := types.Typ[kind]
+	return bakeOnce(b, `basic `+bk.Name(), func() constructs.Basic {
 		return b.proj.NewBasic(constructs.BasicArgs{
-			Package:  b.BakeBuiltin(),
-			TypeName: typeName,
+			RealType: bk,
 		})
 	})
 }
 
 // BakeAny bakes in an interface to represent "any"
 // the base object that (almost) all other types inherit from.
-func (b *bakerImp) BakeAny() constructs.Interface {
-	return bakeOnce(b, `any`, func() constructs.Interface {
+func (b *bakerImp) BakeAny() constructs.InterfaceDecl {
+	return bakeOnce(b, `any`, func() constructs.InterfaceDecl {
 		// any
-		return b.proj.NewInterface(constructs.InterfaceArgs{
+		return b.proj.NewInterfaceDecl(constructs.InterfaceDeclArgs{
 			RealType: types.NewInterfaceType(nil, nil),
 			Package:  b.BakeBuiltin(),
 			Name:     `any`,
@@ -119,47 +119,36 @@ func (b *bakerImp) BakeAny() constructs.Interface {
 //		$set(index int, value T)
 //	}
 //
-// If the given elements is nil, then the generic form is returned.
-// Otherwise, the instance realization on the given element is returned.
-//
 // Note: The difference between an array and slice aren't
 // important for abstraction, so they are combined into one.
 // Also `cap` and `offset` aren't important, so ignored.
-func (b *bakerImp) BakeList(elem constructs.TypeDesc) constructs.Interface {
-	generic := utils.IsNil(elem)
-	bakeKey := `List[T any]`
-	if !generic {
-		bakeKey = `List@` + elem.GoType().String()
-	}
-	return bakeOnce(b, bakeKey, func() constructs.Interface {
+func (b *bakerImp) BakeList() constructs.InterfaceDecl {
+	return bakeOnce(b, `List`, func() constructs.InterfaceDecl {
 		pkg := b.BakeBuiltin()
 		var tps []constructs.TypeParam
 
-		if generic {
-			// T any
-			tp := b.proj.NewTypeParam(constructs.TypeParamArgs{
-				Name: `T`,
-				Type: b.BakeAny(),
-			})
-			tps = []constructs.TypeParam{tp}
-			elem = tp
-		}
+		// T any
+		tp := b.proj.NewTypeParam(constructs.TypeParamArgs{
+			Name: `T`,
+			Type: b.BakeAny(),
+		})
+		tps = []constructs.TypeParam{tp}
 
 		// <unnamed> int
 		intArg := b.proj.NewArgument(constructs.ArgumentArgs{
-			Type: b.BakeBasic(`int`),
+			Type: b.bakeBasic(types.Int),
 		})
 
 		// index int
 		indexArg := b.proj.NewArgument(constructs.ArgumentArgs{
 			Name: `index`,
-			Type: b.BakeBasic(`int`),
+			Type: b.bakeBasic(types.Int),
 		})
 
 		// value T
 		valueArg := b.proj.NewArgument(constructs.ArgumentArgs{
 			Name: `value`,
-			Type: elem,
+			Type: tp,
 		})
 
 		// $len() int
@@ -167,7 +156,9 @@ func (b *bakerImp) BakeList(elem constructs.TypeDesc) constructs.Interface {
 			Package:  pkg,
 			Name:     `$len`,
 			Location: locs.NoLoc(),
-			Results:  []constructs.Argument{intArg},
+			Signature: b.proj.NewSignature(constructs.SignatureArgs{
+				Results: []constructs.Argument{intArg},
+			}),
 		})
 
 		// $get(index int) T
@@ -175,8 +166,10 @@ func (b *bakerImp) BakeList(elem constructs.TypeDesc) constructs.Interface {
 			Package:  pkg,
 			Name:     `$get`,
 			Location: locs.NoLoc(),
-			Params:   []constructs.Argument{indexArg},
-			Results:  []constructs.Argument{valueArg},
+			Signature: b.proj.NewSignature(constructs.SignatureArgs{
+				Params:  []constructs.Argument{indexArg},
+				Results: []constructs.Argument{valueArg},
+			}),
 		})
 
 		// $set(index int, value T)
@@ -184,16 +177,21 @@ func (b *bakerImp) BakeList(elem constructs.TypeDesc) constructs.Interface {
 			Package:  pkg,
 			Name:     `$get`,
 			Location: locs.NoLoc(),
-			Params:   []constructs.Argument{indexArg, valueArg},
+			Signature: b.proj.NewSignature(constructs.SignatureArgs{
+				Params: []constructs.Argument{indexArg, valueArg},
+			}),
 		})
 
 		// List[T]
-		return b.proj.NewInterface(constructs.InterfaceArgs{
+		return b.proj.NewInterfaceDecl(constructs.InterfaceDeclArgs{
 			Package:    pkg,
 			Name:       `List`,
 			Location:   locs.NoLoc(),
 			TypeParams: tps,
-			Methods:    []constructs.Method{lenFunc, getFunc, setFunc},
+			Interface: b.proj.NewInterfaceDesc(constructs.InterfaceDescArgs{
+
+				Methods: []constructs.Method{lenFunc, getFunc, setFunc},
+			}),
 		})
 	})
 }
@@ -211,13 +209,13 @@ func (b *bakerImp) BakeList(elem constructs.TypeDesc) constructs.Interface {
 //
 // Note: Doesn't have `cap`, `trySend`, or `tryRecv` as defined in reflect
 // because those aren't important for abstraction
-func (b *bakerImp) BakeChan(elem constructs.TypeDesc) constructs.Interface {
+func (b *bakerImp) BakeChan(elem constructs.TypeDesc) constructs.InterfaceDecl {
 	generic := utils.IsNil(elem)
 	bakeKey := `Chan[T any]`
 	if !generic {
 		bakeKey = `Chan@[` + elem.GoType().String() + `]`
 	}
-	return bakeOnce(b, bakeKey, func() constructs.Interface {
+	return bakeOnce(b, bakeKey, func() constructs.InterfaceDecl {
 		pkg := b.BakeBuiltin()
 		var tps []constructs.TypeParam
 
@@ -295,7 +293,7 @@ func (b *bakerImp) BakeChan(elem constructs.TypeDesc) constructs.Interface {
 // Otherwise, the instance realization on the given key and value is returned.
 //
 // Note: Doesn't currently require Key to be comparable as defined in reflect.
-func (b *bakerImp) BakeMap(key, value constructs.TypeDesc) constructs.Interface {
+func (b *bakerImp) BakeMap(key, value constructs.TypeDesc) constructs.InterfaceDecl {
 	generic := utils.IsNil(key)
 	if utils.IsNil(value) != generic {
 		panic(terror.New(`instance of map must have both key and value not nil, otherwise both nil`).
@@ -306,7 +304,7 @@ func (b *bakerImp) BakeMap(key, value constructs.TypeDesc) constructs.Interface 
 	if !generic {
 		bakeKey = `Chan@[` + key.GoType().String() + `, ` + value.GoType().String() + `]`
 	}
-	return bakeOnce(b, bakeKey, func() constructs.Interface {
+	return bakeOnce(b, bakeKey, func() constructs.InterfaceDecl {
 		pkg := b.BakeBuiltin()
 		var tps []constructs.TypeParam
 
@@ -394,13 +392,13 @@ func (b *bakerImp) BakeMap(key, value constructs.TypeDesc) constructs.Interface 
 //
 // If the given elements is nil, then the generic form is returned.
 // Otherwise, the instance realization on the given element is returned.
-func (b *bakerImp) BakePointer(elem constructs.TypeDesc) constructs.Interface {
+func (b *bakerImp) BakePointer(elem constructs.TypeDesc) constructs.InterfaceDecl {
 	generic := utils.IsNil(elem)
 	bakeKey := `Pointer[T any]`
 	if !generic {
 		bakeKey = `Pointer@[` + elem.GoType().String() + `]`
 	}
-	return bakeOnce(b, bakeKey, func() constructs.Interface {
+	return bakeOnce(b, bakeKey, func() constructs.InterfaceDecl {
 		pkg := b.BakeBuiltin()
 		var tps []constructs.TypeParam
 
@@ -445,8 +443,8 @@ func (b *bakerImp) BakePointer(elem constructs.TypeDesc) constructs.Interface {
 //		$real() float32
 //		$imag() float32
 //	}
-func (b *bakerImp) BakeComplex64() constructs.Interface {
-	return bakeOnce(b, `complex64`, func() constructs.Interface {
+func (b *bakerImp) BakeComplex64() constructs.InterfaceDecl {
+	return bakeOnce(b, `complex64`, func() constructs.InterfaceDecl {
 		pkg := b.BakeBuiltin()
 
 		// <unnamed> float32
@@ -486,8 +484,8 @@ func (b *bakerImp) BakeComplex64() constructs.Interface {
 //		$real() float64
 //		$imag() float64
 //	}
-func (b *bakerImp) BakeComplex128() constructs.Interface {
-	return bakeOnce(b, `complex128`, func() constructs.Interface {
+func (b *bakerImp) BakeComplex128() constructs.InterfaceDecl {
+	return bakeOnce(b, `complex128`, func() constructs.InterfaceDecl {
 		pkg := b.BakeBuiltin()
 
 		// <unnamed> float64
@@ -526,8 +524,8 @@ func (b *bakerImp) BakeComplex128() constructs.Interface {
 //	type error interface {
 //		Error() string
 //	}
-func (b *bakerImp) BakeError() constructs.Interface {
-	return bakeOnce(b, `error`, func() constructs.Interface {
+func (b *bakerImp) BakeError() constructs.InterfaceDecl {
+	return bakeOnce(b, `error`, func() constructs.InterfaceDecl {
 		pkg := b.BakeBuiltin()
 
 		// <unnamed> string
@@ -558,13 +556,13 @@ func (b *bakerImp) BakeError() constructs.Interface {
 //	type comparable interface {
 //		$compare(other any) int
 //	}
-func (b *bakerImp) BakeComparable() constructs.Interface {
-	return bakeOnce(b, `comparable`, func() constructs.Interface {
+func (b *bakerImp) BakeComparable() constructs.InterfaceDecl {
+	return bakeOnce(b, `comparable`, func() constructs.InterfaceDecl {
 		pkg := b.BakeBuiltin()
 
 		// <unnamed> int
 		intArg := b.proj.NewArgument(constructs.ArgumentArgs{
-			Type: b.BakeBasic(`int`),
+			Type: b.bakeBasic(`int`),
 		})
 
 		// other any

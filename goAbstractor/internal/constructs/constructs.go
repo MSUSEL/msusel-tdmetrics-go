@@ -1,11 +1,12 @@
 package constructs
 
 import (
-	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs/kind"
 	"github.com/Snow-Gremlin/goToolbox/comp"
+
+	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs/kind"
 )
 
-// Construct is a description of a type.
+// Construct is part of the source code.
 type Construct interface {
 	comp.Comparable[Construct]
 
@@ -16,6 +17,31 @@ type Construct interface {
 	// Indices will be 1 based so that 0 is unset.
 	SetIndex(index int)
 }
+
+var (
+	// These are the implementations of type descriptions.
+	// None of these have generics defined on them but may carry
+	// type parameters for the generic declaration that they are part of.
+	_ TypeDesc = Basic(nil)
+	_ TypeDesc = InterfaceDesc(nil)
+	_ TypeDesc = Reference(nil)
+	_ TypeDesc = Signature(nil)
+	_ TypeDesc = StructDesc(nil)
+	_ TypeDesc = TypeParam(nil)
+
+	// A TypeDecl is both a TypeDesc and a Declaration.
+	_ TypeDesc    = TypeDecl(nil)
+	_ Declaration = TypeDecl(nil)
+
+	// These are TypeDecls. They are declarations and also type descriptions
+	// because they can be used by name, i.e. `var X ObjectFoo`.
+	_ TypeDecl = Object(nil)
+	_ TypeDecl = InterfaceDecl(nil)
+
+	// These are type declarations only. They can not be used at TypeDesc.
+	_ Declaration = Method(nil)
+	_ Declaration = Value(nil)
+)
 
 func Comparer[T Construct]() comp.Comparer[T] {
 	cmp := comp.ComparableComparer[Construct]()

@@ -26,11 +26,13 @@ type InterfaceDesc interface {
 
 	AddInherits(it InterfaceDesc) InterfaceDesc
 
-	Inherits() collections.ReadonlySortedSet[InterfaceDesc]
+	Inherits() collections.SortedSet[InterfaceDesc]
 }
 
 type InterfaceDescArgs struct {
 	RealType *types.Interface
+
+	//TODO: NEED TO HAVE SIGNATURE NAMES!!
 
 	// Methods is the set of signatures for this interface.
 	Signatures []Signature

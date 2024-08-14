@@ -49,8 +49,6 @@ func (id *interfaceDescImp) IsUnion() bool {
 }
 
 func (id *interfaceDescImp) Implements(other constructs.InterfaceDesc) bool {
-
-	// TODO: Work
 	return types.Implements(id.realType, other.(*interfaceDescImp).realType)
 }
 
@@ -59,8 +57,8 @@ func (id *interfaceDescImp) AddInherits(it constructs.InterfaceDesc) constructs.
 	return v
 }
 
-func (id *interfaceDescImp) Inherits() collections.ReadonlySortedSet[constructs.InterfaceDesc] {
-	return id.inherits.Readonly()
+func (id *interfaceDescImp) Inherits() collections.SortedSet[constructs.InterfaceDesc] {
+	return id.inherits
 }
 
 func (id *interfaceDescImp) CompareTo(other constructs.Construct) int {
