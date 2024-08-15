@@ -19,10 +19,16 @@ type Construct interface {
 }
 
 var (
+	_ Construct = Abstract(nil)
+	_ Construct = Argument(nil)
+	_ Construct = Field(nil)
+	_ Construct = Package(nil)
+
 	// These are the implementations of type descriptions.
 	// None of these have generics defined on them but may carry
 	// type parameters for the generic declaration that they are part of.
 	_ TypeDesc = Basic(nil)
+	_ TypeDesc = Instance(nil)
 	_ TypeDesc = InterfaceDesc(nil)
 	_ TypeDesc = Reference(nil)
 	_ TypeDesc = Signature(nil)

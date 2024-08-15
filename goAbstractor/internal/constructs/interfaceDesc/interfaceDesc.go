@@ -16,9 +16,9 @@ import (
 type interfaceDescImp struct {
 	realType *types.Interface
 
-	signatures []constructs.Signature
-	exact      []constructs.TypeDesc
-	approx     []constructs.TypeDesc
+	abstracts []constructs.Abstract
+	exact     []constructs.TypeDesc
+	approx    []constructs.TypeDesc
 
 	inherits collections.SortedSet[constructs.InterfaceDesc]
 
@@ -30,9 +30,9 @@ func newInterfaceDesc(args constructs.InterfaceDescArgs) constructs.InterfaceDes
 	return &interfaceDescImp{
 		realType: args.RealType,
 
-		signatures: args.Signatures,
-		exact:      args.Exact,
-		approx:     args.Approx,
+		abstracts: args.Abstracts,
+		exact:     args.Exact,
+		approx:    args.Approx,
 
 		inherits: sortedSet.New[constructs.InterfaceDesc](),
 	}
@@ -69,7 +69,7 @@ func Comparer() comp.Comparer[constructs.InterfaceDesc] {
 	return func(a, b constructs.InterfaceDesc) int {
 		aImp, bImp := a.(*interfaceDescImp), b.(*interfaceDescImp)
 		return comp.Or(
-			constructs.SliceComparerPend(aImp.signatures, bImp.signatures),
+			constructs.SliceComparerPend(aImp.abstracts, bImp.abstracts),
 			constructs.SliceComparerPend(aImp.exact, bImp.exact),
 			constructs.SliceComparerPend(aImp.approx, bImp.approx),
 		)
@@ -85,7 +85,7 @@ func (id *interfaceDescImp) ToJson(ctx *jsonify.Context) jsonify.Datum {
 	return jsonify.NewMap().
 		AddIf(ctx, ctx.IsKindShown(), `kind`, id.Kind()).
 		AddIf(ctx, ctx.IsIndexShown(), `index`, id.index).
-		AddNonZero(ctx2, `signatures`, id.signatures).
+		AddNonZero(ctx2, `abstracts`, id.abstracts).
 		AddNonZero(ctx2, `approx`, id.approx).
 		AddNonZero(ctx2, `exact`, id.exact).
 		AddNonZero(ctx2, `inherits`, id.inherits)

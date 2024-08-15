@@ -11,9 +11,9 @@ type Project interface {
 	jsonify.Jsonable
 
 	// Components
+	AbstractFactory
 	ArgumentFactory
 	FieldFactory
-	InstanceFactory
 	PackageFactory
 
 	// Declarations
@@ -24,6 +24,7 @@ type Project interface {
 
 	// Type Descriptions
 	BasicFactory
+	InstanceFactory
 	InterfaceDescFactory
 	ReferenceFactory
 	SignatureFactory

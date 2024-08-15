@@ -1,6 +1,8 @@
 package instance
 
 import (
+	"go/types"
+
 	"github.com/Snow-Gremlin/goToolbox/comp"
 
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/assert"
@@ -10,6 +12,7 @@ import (
 )
 
 type instanceImp struct {
+	realType   types.Type
 	resolved   constructs.TypeDesc
 	typeParams []constructs.TypeDesc
 
@@ -21,14 +24,17 @@ func newInstance(args constructs.InstanceArgs) constructs.Instance {
 	assert.ArgNotEmpty(`type params`, args.TypeParams)
 	assert.ArgNoNils(`type params`, args.TypeParams)
 	return &instanceImp{
+		realType:   args.RealType,
 		resolved:   args.Resolved,
 		typeParams: args.TypeParams,
 	}
 }
 
 func (i *instanceImp) IsInstance()        {}
+func (i *instanceImp) IsTypeDesc()        {}
 func (i *instanceImp) Kind() kind.Kind    { return kind.Instance }
 func (i *instanceImp) SetIndex(index int) { i.index = index }
+func (m *instanceImp) GoType() types.Type { return m.realType }
 
 func (i *instanceImp) CompareTo(other constructs.Construct) int {
 	return constructs.CompareTo[constructs.Instance](i, other, Comparer())

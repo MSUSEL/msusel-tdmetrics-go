@@ -3,6 +3,7 @@ package kind
 type Kind string
 
 const (
+	Abstract      Kind = `abstract`
 	Argument      Kind = `argument`
 	Basic         Kind = `basic`
 	Field         Kind = `field`

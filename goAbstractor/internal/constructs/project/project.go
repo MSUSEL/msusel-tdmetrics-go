@@ -11,6 +11,7 @@ import (
 
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/assert"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs"
+	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs/abstract"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs/argument"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs/basic"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs/field"
@@ -30,9 +31,9 @@ import (
 )
 
 type projectImp struct {
+	constructs.AbstractFactory
 	constructs.ArgumentFactory
 	constructs.FieldFactory
-	constructs.InstanceFactory
 	constructs.PackageFactory
 
 	constructs.InterfaceDeclFactory
@@ -41,6 +42,7 @@ type projectImp struct {
 	constructs.ValueFactory
 
 	constructs.BasicFactory
+	constructs.InstanceFactory
 	constructs.InterfaceDescFactory
 	constructs.ReferenceFactory
 	constructs.SignatureFactory
@@ -52,9 +54,9 @@ type projectImp struct {
 
 func New(locs locs.Set) constructs.Project {
 	return &projectImp{
+		AbstractFactory: abstract.New(),
 		ArgumentFactory: argument.New(),
 		FieldFactory:    field.New(),
-		InstanceFactory: instance.New(),
 		PackageFactory:  packageCon.New(),
 
 		InterfaceDeclFactory: interfaceDecl.New(),
@@ -63,6 +65,7 @@ func New(locs locs.Set) constructs.Project {
 		ValueFactory:         value.New(),
 
 		BasicFactory:         basic.New(),
+		InstanceFactory:      instance.New(),
 		InterfaceDescFactory: interfaceDesc.New(),
 		ReferenceFactory:     reference.New(),
 		SignatureFactory:     signature.New(),
@@ -110,6 +113,7 @@ func (p *projectImp) FindType(pkgPath, typeName string, panicOnNotFound bool) (c
 func (p *projectImp) UpdateIndices() {
 	// Type indices compound so that each has a unique offset.
 	index := 1
+	index = updateIndices(p.Abstracts(), index)
 	index = updateIndices(p.Arguments(), index)
 	index = updateIndices(p.Basics(), index)
 	index = updateIndices(p.Fields(), index)
@@ -227,21 +231,23 @@ func (p *projectImp) ToJson(ctx *jsonify.Context) jsonify.Datum {
 		Add(ctx2, `language`, `go`).
 		AddNonZero(ctx2, `locs`, p.locations)
 
-	m.AddNonZero(ctx2, `argument`, p.Arguments()).
-		AddNonZero(ctx2, `field`, p.Fields()).
-		AddNonZero(ctx2, `instance`, p.Instances())
+	m.AddNonZero(ctx2, `abstracts`, p.Abstracts()).
+		AddNonZero(ctx2, `arguments`, p.Arguments()).
+		AddNonZero(ctx2, `fields`, p.Fields()).
+		AddNonZero(ctx2, `packages`, p.Packages())
 
 	m.AddNonZero(ctx2, `interfaceDecls`, p.InterfaceDecls()).
 		AddNonZero(ctx2, `methods`, p.Methods()).
 		AddNonZero(ctx2, `objects`, p.Objects()).
 		AddNonZero(ctx2, `values`, p.Values())
 
-	m.AddNonZero(ctx2, `basic`, p.Basics()).
-		AddNonZero(ctx2, `interfaceDesc`, p.InterfaceDescs()).
+	m.AddNonZero(ctx2, `basics`, p.Basics()).
+		AddNonZero(ctx2, `instances`, p.Instances()).
+		AddNonZero(ctx2, `interfaceDescs`, p.InterfaceDescs()).
 		// // Don't output the p.References()
-		AddNonZero(ctx2, `signature`, p.Signatures()).
+		AddNonZero(ctx2, `signatures`, p.Signatures()).
 		AddNonZero(ctx2, `structDescs`, p.StructDescs()).
-		AddNonZero(ctx2, `typeParam`, p.TypeParams())
+		AddNonZero(ctx2, `typeParams`, p.TypeParams())
 
 	return m
 }

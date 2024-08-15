@@ -32,10 +32,8 @@ type InterfaceDesc interface {
 type InterfaceDescArgs struct {
 	RealType *types.Interface
 
-	//TODO: NEED TO HAVE SIGNATURE NAMES!!
-
-	// Methods is the set of signatures for this interface.
-	Signatures []Signature
+	// Abstracts is the set of named signatures for this interface.
+	Abstracts []Abstract
 
 	// Exact types are like `string|int|bool` where the
 	// data type must match exactly.
