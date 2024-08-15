@@ -16,7 +16,8 @@ type Instance interface {
 }
 
 type InstanceArgs struct {
-	RealType   *types.Signature
+	RealType   types.Type
+	Generic    TypeDecl
 	Resolved   TypeDesc
 	TypeParams []TypeDesc
 }

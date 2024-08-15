@@ -1,6 +1,7 @@
 package abstractor
 
 import (
+	"fmt"
 	"go/ast"
 	"go/token"
 	"go/types"
@@ -14,6 +15,7 @@ import (
 
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/baker"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs"
+	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs/project"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/locs"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/metrics"
 )
@@ -26,7 +28,7 @@ type Config struct {
 func Abstract(cfg Config) constructs.Project {
 	fs := cfg.Packages[0].Fset
 	locs := locs.NewSet(fs)
-	proj := constructs.NewProject(locs)
+	proj := project.New(locs)
 	bk := baker.New(fs, proj)
 
 	ab := &abstractor{
@@ -84,6 +86,10 @@ func (ab *abstractor) logf(format string, args ...any) {
 
 func (ab *abstractor) pos(pos token.Pos) token.Position {
 	return ab.curPkg.Source().Fset.Position(pos)
+}
+
+func (ab *abstractor) info() *types.Info {
+	return ab.curPkg.Source().TypesInfo
 }
 
 func (ab *abstractor) abstractProject() {
@@ -150,53 +156,73 @@ func (ab *abstractor) abstractGenDecl(decl *ast.GenDecl) {
 }
 
 func (ab *abstractor) abstractTypeSpec(spec *ast.TypeSpec) {
-	tv, has := ab.curPkg.Source().TypesInfo.Types[spec.Type]
+	tv, has := ab.info().Types[spec.Type]
 	if !has {
 		panic(terror.New(`type specification not found in types info`).
 			With(`pos`, ab.pos(spec.Pos())))
 	}
 
 	loc := ab.proj.NewLoc(spec.Pos())
-	tp := ab.abstractFieldList(spec.TypeParams)
+	tp := ab.abstractTypeParams(spec.TypeParams)
 	typ := ab.convertType(tv.Type)
 
-	if it, ok := typ.(constructs.Interface); ok {
-		ab.proj.NewInterface(constructs.InterfaceArgs{
+	// TODO: Need to generate instances too.
+	instances, has := ab.info().Instances[spec.Name]
+	fmt.Printf("=== %v\n", instances.Type)
+	for i := range instances.TypeArgs.Len() {
+		fmt.Printf("%d. %v\n", i, instances.TypeArgs.At(i))
+	}
+
+	if it, ok := typ.(constructs.InterfaceDesc); ok {
+		ab.proj.NewInterfaceDecl(constructs.InterfaceDeclArgs{
 			Package:    ab.curPkg,
 			Name:       spec.Name.Name,
-			Type:       it,
+			Interface:  it,
 			TypeParams: tp,
 			Location:   loc,
 		})
 		return
 	}
 
+	st, ok := typ.(constructs.StructDesc)
+	if !ok {
+		st = ab.proj.NewStructDesc(constructs.StructDescArgs{
+			Fields: []constructs.Field{
+				ab.proj.NewField(constructs.FieldArgs{
+					Name:     `$data`,
+					Embedded: true,
+					Type:     typ,
+				}),
+			},
+		})
+	}
+
 	ab.proj.NewObject(constructs.ObjectArgs{
 		Package:    ab.curPkg,
 		Name:       spec.Name.Name,
-		Data:       typ,
+		Data:       st,
 		TypeParams: tp,
 		Location:   loc,
 	})
 }
 
-func (ab *abstractor) abstractFieldList(fields *ast.FieldList) []constructs.Named {
-	ns := []constructs.Named{}
+func (ab *abstractor) abstractTypeParams(fields *ast.FieldList) []constructs.TypeParam {
+	ns := []constructs.TypeParam{}
 	if !utils.IsNil(fields) {
 		for _, field := range fields.List {
-			ns = append(ns, ab.abstractField(field)...)
+			ns = append(ns, ab.abstractTypeParam(field)...)
 		}
 	}
 	return ns
 }
 
-func (ab *abstractor) abstractField(field *ast.Field) []constructs.Named {
-	ns := []constructs.Named{}
+func (ab *abstractor) abstractTypeParam(field *ast.Field) []constructs.TypeParam {
+	ns := []constructs.TypeParam{}
 	if utils.IsNil(field) {
 		return ns
 	}
 
-	tv, has := ab.curPkg.Source().TypesInfo.Types[field.Type]
+	tv, has := ab.info().Types[field.Type]
 	if !has {
 		panic(terror.New(`field not found in types info`).
 			With(`pos`, ab.pos(field.Pos())))
@@ -204,7 +230,7 @@ func (ab *abstractor) abstractField(field *ast.Field) []constructs.Named {
 
 	typ := ab.convertType(tv.Type)
 	for _, name := range field.Names {
-		named := ab.proj.NewNamed(constructs.NamedArgs{
+		named := ab.proj.NewTypeParam(constructs.TypeParamArgs{
 			Name: name.Name,
 			Type: typ,
 		})
@@ -221,18 +247,18 @@ func (ab *abstractor) abstractValueSpec(spec *ast.ValueSpec, isConst bool) {
 		if blankName(name.Name) {
 			// TODO: Could a black name assignment have a side effect?
 			//       Maybe if metrics aren't nil, give it a non-blank name.
-			//		 var _ = func() bool { /*bad init*/ }()
+			//		 var _ = func() bool { /*pseudo init*/ }()
 			continue
 		}
 
-		tv, has := ab.curPkg.Source().TypesInfo.Defs[name]
+		tv, has := ab.info().Defs[name]
 		if !has {
 			panic(terror.New(`value specification not found in types info`).
 				With(`pos`, ab.pos(spec.Pos())))
 		}
 
 		typ := ab.convertType(tv.Type())
-		ab.proj.NewValueDecl(constructs.ValueDeclArgs{
+		ab.proj.NewValue(constructs.ValueArgs{
 			Package:  ab.curPkg,
 			Name:     name.Name,
 			Const:    isConst,
@@ -270,7 +296,7 @@ func (ab *abstractor) abstractReceiver(decl *ast.FuncDecl) (bool, string) {
 	}
 
 	noCopyRecv := false
-	tv, has := ab.curPkg.Source().TypesInfo.Types[decl.Recv.List[0].Type]
+	tv, has := ab.info().Types[decl.Recv.List[0].Type]
 	if !has {
 		panic(terror.New(`function receiver not found in types info`).
 			With(`pos`, ab.pos(decl.Pos())))
@@ -295,7 +321,7 @@ func (ab *abstractor) abstractReceiver(decl *ast.FuncDecl) (bool, string) {
 }
 
 func (ab *abstractor) abstractFuncDecl(decl *ast.FuncDecl) {
-	info := ab.curPkg.Source().TypesInfo
+	info := ab.info()
 	obj := info.Defs[decl.Name]
 
 	noCopyRecv, recvName := ab.abstractReceiver(decl)
@@ -306,7 +332,7 @@ func (ab *abstractor) abstractFuncDecl(decl *ast.FuncDecl) {
 	loc := ab.proj.NewLoc(decl.Pos())
 
 	name := decl.Name.Name
-	if name == `init` && len(recvName) <= 0 && sig.Vacant() {
+	if name == `init` && len(recvName) <= 0 && sig.IsVacant() {
 		name = `init#` + strconv.Itoa(ab.curPkg.InitCount())
 	}
 

@@ -21,7 +21,6 @@ type Object interface {
 	IsObject()
 
 	AddMethod(met Method) Method
-	AddInstance(inst Instance) Instance
 	SetInterface(it InterfaceDesc)
 
 	IsNamed() bool

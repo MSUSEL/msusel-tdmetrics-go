@@ -20,8 +20,6 @@ type InterfaceDecl interface {
 	TypeDecl
 	IsInterface()
 
-	AddInstance(inst Instance) Instance
-
 	IsNamed() bool
 	IsGeneric() bool
 }

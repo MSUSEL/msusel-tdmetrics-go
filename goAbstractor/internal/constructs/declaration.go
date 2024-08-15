@@ -10,6 +10,8 @@ type Declaration interface {
 	// This prevents anything else from duck-typing into a Declaration.
 	IsDeclaration()
 
+	AddInstance(inst Instance) Instance
+
 	Package() Package
 	Name() string
 	Location() locs.Loc

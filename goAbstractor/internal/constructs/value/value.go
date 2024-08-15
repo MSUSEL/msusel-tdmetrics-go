@@ -2,6 +2,7 @@ package value
 
 import (
 	"github.com/Snow-Gremlin/goToolbox/comp"
+	"github.com/Snow-Gremlin/goToolbox/terrors/terror"
 
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/assert"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs"
@@ -42,6 +43,11 @@ func (v *valueImp) SetIndex(index int) { v.index = index }
 func (v *valueImp) Name() string                { return v.name }
 func (v *valueImp) Location() locs.Loc          { return v.loc }
 func (v *valueImp) Package() constructs.Package { return v.pkg }
+
+func (v *valueImp) AddInstance(inst constructs.Instance) constructs.Instance {
+	panic(terror.New(`may not add an instance to a value declaration`).
+		With(`name`, v.name))
+}
 
 func (v *valueImp) CompareTo(other constructs.Construct) int {
 	return constructs.CompareTo[constructs.Value](v, other, Comparer())

@@ -13,6 +13,7 @@ import (
 
 type instanceImp struct {
 	realType   types.Type
+	generic    constructs.TypeDecl
 	resolved   constructs.TypeDesc
 	typeParams []constructs.TypeDesc
 
@@ -20,14 +21,18 @@ type instanceImp struct {
 }
 
 func newInstance(args constructs.InstanceArgs) constructs.Instance {
+	assert.ArgNotNil(`generic`, args.Generic)
 	assert.ArgNotNil(`resolved`, args.Resolved)
 	assert.ArgNotEmpty(`type params`, args.TypeParams)
 	assert.ArgNoNils(`type params`, args.TypeParams)
-	return &instanceImp{
+
+	inst := &instanceImp{
 		realType:   args.RealType,
+		generic:    args.Generic,
 		resolved:   args.Resolved,
 		typeParams: args.TypeParams,
 	}
+	return args.Generic.AddInstance(inst)
 }
 
 func (i *instanceImp) IsInstance()        {}

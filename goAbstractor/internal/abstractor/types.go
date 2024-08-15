@@ -48,9 +48,11 @@ func (ab *abstractor) convertType(t types.Type) constructs.TypeDesc {
 
 func (ab *abstractor) convertArray(t *types.Array) constructs.TypeDesc {
 	elem := ab.convertType(t.Elem())
+	generic := ab.baker.BakeList()
 	return ab.proj.NewInstance(constructs.InstanceArgs{
-		RealType:   t,
-		Target:     ab.baker.BakeList(),
+		RealType: t,
+		Generic:  generic,
+		//Resolved:  // TODO: Fill out
 		TypeParams: []constructs.TypeDesc{elem},
 	})
 }
@@ -64,32 +66,33 @@ func (ab *abstractor) convertBasic(t *types.Basic) constructs.TypeDesc {
 	default:
 		return ab.proj.NewBasic(constructs.BasicArgs{
 			RealType: t,
-			Package:  ab.baker.BakeBuiltin(),
 		})
 	}
 }
 
 func (ab *abstractor) convertChan(t *types.Chan) constructs.TypeDesc {
 	elem := ab.convertType(t.Elem())
+	generic := ab.baker.BakeChan()
 	return ab.proj.NewInstance(constructs.InstanceArgs{
-		RealType:   t,
-		Target:     ab.baker.BakeChan(),
+		RealType: t,
+		Generic:  generic,
+		//Resolved:  // TODO: Fill out
 		TypeParams: []constructs.TypeDesc{elem},
 	})
 }
 
-func (ab *abstractor) convertInterface(t *types.Interface) constructs.Interface {
+func (ab *abstractor) convertInterface(t *types.Interface) constructs.InterfaceDesc {
 	t = t.Complete()
 
-	methods := []constructs.Named{}
+	abstracts := []constructs.Abstract{}
 	for i := range t.NumMethods() {
 		f := t.Method(i)
 		sig := ab.convertSignature(f.Type().(*types.Signature))
-		method := ab.proj.NewNamed(constructs.NamedArgs{
-			Name: f.Name(),
-			Type: sig,
+		abstract := ab.proj.NewAbstract(constructs.AbstractArgs{
+			Name:      f.Name(),
+			Signature: sig,
 		})
-		methods = append(methods, method)
+		abstracts = append(abstracts, abstract)
 	}
 
 	var exact, approx []constructs.TypeDesc
@@ -102,21 +105,22 @@ func (ab *abstractor) convertInterface(t *types.Interface) constructs.Interface 
 		}
 	}
 
-	return ab.proj.NewInterface(constructs.InterfaceArgs{
-		RealType: t,
-		Exact:    exact,
-		Approx:   approx,
-		Methods:  methods,
-		Package:  ab.curPkg,
+	return ab.proj.NewInterfaceDesc(constructs.InterfaceDescArgs{
+		RealType:  t,
+		Exact:     exact,
+		Approx:    approx,
+		Abstracts: abstracts,
 	})
 }
 
 func (ab *abstractor) convertMap(t *types.Map) constructs.TypeDesc {
 	key := ab.convertType(t.Key())
 	value := ab.convertType(t.Elem())
+	generic := ab.baker.BakeMap()
 	return ab.proj.NewInstance(constructs.InstanceArgs{
-		RealType:   t,
-		Target:     ab.baker.BakeMap(),
+		RealType: t,
+		Generic:  generic,
+		//Resolved:  // TODO: Fill out
 		TypeParams: []constructs.TypeDesc{key, value},
 	})
 }
@@ -140,7 +144,7 @@ func (ab *abstractor) convertNamed(t *types.Named) constructs.TypeDesc {
 	}
 
 	// Check if the reference can already be found.
-	var typ constructs.TypeDesc
+	var typ constructs.TypeDecl
 	var found bool
 	_, typ, found = ab.proj.FindType(pkgPath, name, false)
 	if !found {
@@ -154,8 +158,9 @@ func (ab *abstractor) convertNamed(t *types.Named) constructs.TypeDesc {
 
 	if tp := ab.convertTypeList(t.TypeArgs()); len(tp) > 0 {
 		typ = ab.proj.NewInstance(constructs.InstanceArgs{
-			RealType:   t,
-			Target:     typ,
+			RealType: t,
+			Generic:  typ,
+			//Resolved:  // TODO: Fill out
 			TypeParams: tp,
 		})
 	}
@@ -165,36 +170,38 @@ func (ab *abstractor) convertNamed(t *types.Named) constructs.TypeDesc {
 
 func (ab *abstractor) convertPointer(t *types.Pointer) constructs.TypeDesc {
 	elem := ab.convertType(t.Elem())
+	generic := ab.baker.BakePointer()
 	return ab.proj.NewInstance(constructs.InstanceArgs{
-		RealType:   t,
-		Target:     ab.baker.BakePointer(),
+		RealType: t,
+		Generic:  generic,
+		//Resolved:  // TODO: Fill out
 		TypeParams: []constructs.TypeDesc{elem},
 	})
 }
 
 func (ab *abstractor) convertSignature(t *types.Signature) constructs.Signature {
 	// Don't output receiver or receiver type here.
-	tp := ab.convertTypeParamList(t.TypeParams())
+	// Don't convert type parameters here.
 	return ab.proj.NewSignature(constructs.SignatureArgs{
-		RealType:   t,
-		Variadic:   t.Variadic(),
-		TypeParams: tp,
-		Params:     ab.convertTuple(t.Params()),
-		Return:     ab.createReturn(ab.convertTuple(t.Results())),
-		Package:    ab.curPkg,
+		RealType: t,
+		Variadic: t.Variadic(),
+		Params:   ab.convertTuple(t.Params()),
+		Results:  ab.convertTuple(t.Results()),
 	})
 }
 
 func (ab *abstractor) convertSlice(t *types.Slice) constructs.TypeDesc {
 	elem := ab.convertType(t.Elem())
+	generic := ab.baker.BakeList()
 	return ab.proj.NewInstance(constructs.InstanceArgs{
-		RealType:   t,
-		Target:     ab.baker.BakeList(),
+		RealType: t,
+		Generic:  generic,
+		//Resolved:  // TODO: Fill out
 		TypeParams: []constructs.TypeDesc{elem},
 	})
 }
 
-func (ab *abstractor) convertStruct(t *types.Struct) constructs.Struct {
+func (ab *abstractor) convertStruct(t *types.Struct) constructs.StructDesc {
 	fields := make([]constructs.Named, 0, t.NumFields())
 	embedded := make([]bool, 0, t.NumFields())
 	for i := range t.NumFields() {
@@ -209,26 +216,12 @@ func (ab *abstractor) convertStruct(t *types.Struct) constructs.Struct {
 		}
 	}
 
-	return ab.proj.NewStruct(constructs.StructArgs{
+	return ab.proj.NewStructDesc(constructs.StructDescArgs{
 		RealType: t,
 		Fields:   fields,
 		Embedded: embedded,
 		Package:  ab.curPkg,
 	})
-}
-
-func (ab *abstractor) createReturn(returns []constructs.Named) constructs.TypeDesc {
-	switch len(returns) {
-	case 0:
-		return nil
-	case 1:
-		return returns[0].Type()
-	default:
-		return ab.proj.NewStruct(constructs.StructArgs{
-			Fields:  returns,
-			Package: ab.baker.BakeBuiltin(),
-		})
-	}
 }
 
 func (ab *abstractor) convertTuple(t *types.Tuple) []constructs.Named {
