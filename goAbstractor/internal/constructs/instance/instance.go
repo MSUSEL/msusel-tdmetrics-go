@@ -12,10 +12,10 @@ import (
 )
 
 type instanceImp struct {
-	realType   types.Type
-	generic    constructs.TypeDecl
-	resolved   constructs.TypeDesc
-	typeParams []constructs.TypeDesc
+	realType      types.Type
+	generic       constructs.TypeDecl
+	resolved      constructs.TypeDesc
+	instanceTypes []constructs.TypeDesc
 
 	index int
 }
@@ -23,14 +23,14 @@ type instanceImp struct {
 func newInstance(args constructs.InstanceArgs) constructs.Instance {
 	assert.ArgNotNil(`generic`, args.Generic)
 	assert.ArgNotNil(`resolved`, args.Resolved)
-	assert.ArgNotEmpty(`type params`, args.TypeParams)
-	assert.ArgNoNils(`type params`, args.TypeParams)
+	assert.ArgNotEmpty(`instance types`, args.InstanceTypes)
+	assert.ArgNoNils(`instance types`, args.InstanceTypes)
 
 	inst := &instanceImp{
-		realType:   args.RealType,
-		generic:    args.Generic,
-		resolved:   args.Resolved,
-		typeParams: args.TypeParams,
+		realType:      args.RealType,
+		generic:       args.Generic,
+		resolved:      args.Resolved,
+		instanceTypes: args.InstanceTypes,
 	}
 	return args.Generic.AddInstance(inst)
 }
@@ -41,6 +41,10 @@ func (i *instanceImp) Kind() kind.Kind    { return kind.Instance }
 func (i *instanceImp) SetIndex(index int) { i.index = index }
 func (m *instanceImp) GoType() types.Type { return m.realType }
 
+func (m *instanceImp) InstanceTypes() []constructs.TypeDesc {
+	return m.instanceTypes
+}
+
 func (i *instanceImp) CompareTo(other constructs.Construct) int {
 	return constructs.CompareTo[constructs.Instance](i, other, Comparer())
 }
@@ -50,7 +54,7 @@ func Comparer() comp.Comparer[constructs.Instance] {
 		aImp, bImp := a.(*instanceImp), b.(*instanceImp)
 		return comp.Or(
 			constructs.ComparerPend(aImp.resolved, bImp.resolved),
-			constructs.SliceComparerPend(bImp.typeParams, bImp.typeParams),
+			constructs.SliceComparerPend(bImp.instanceTypes, bImp.instanceTypes),
 		)
 	}
 }
@@ -65,5 +69,5 @@ func (i *instanceImp) ToJson(ctx *jsonify.Context) jsonify.Datum {
 		AddIf(ctx, ctx.IsKindShown(), `kind`, i.Kind()).
 		AddIf(ctx, ctx.IsIndexShown(), `index`, i.index).
 		AddNonZero(ctx2, `resolved`, i.resolved).
-		AddNonZero(ctx2, `typeParams`, i.typeParams)
+		AddNonZero(ctx2, `instanceTypes`, i.instanceTypes)
 }

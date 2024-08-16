@@ -1,11 +1,8 @@
 package abstractor
 
 import (
-	"fmt"
 	"go/types"
 
-	"github.com/Snow-Gremlin/goToolbox/collections"
-	"github.com/Snow-Gremlin/goToolbox/collections/set"
 	"github.com/Snow-Gremlin/goToolbox/terrors/terror"
 	"github.com/Snow-Gremlin/goToolbox/utils"
 
@@ -53,7 +50,7 @@ func (ab *abstractor) convertArray(t *types.Array) constructs.TypeDesc {
 		RealType: t,
 		Generic:  generic,
 		//Resolved:  // TODO: Fill out
-		TypeParams: []constructs.TypeDesc{elem},
+		InstanceTypes: []constructs.TypeDesc{elem},
 	})
 }
 
@@ -77,7 +74,7 @@ func (ab *abstractor) convertChan(t *types.Chan) constructs.TypeDesc {
 		RealType: t,
 		Generic:  generic,
 		//Resolved:  // TODO: Fill out
-		TypeParams: []constructs.TypeDesc{elem},
+		InstanceTypes: []constructs.TypeDesc{elem},
 	})
 }
 
@@ -121,7 +118,7 @@ func (ab *abstractor) convertMap(t *types.Map) constructs.TypeDesc {
 		RealType: t,
 		Generic:  generic,
 		//Resolved:  // TODO: Fill out
-		TypeParams: []constructs.TypeDesc{key, value},
+		InstanceTypes: []constructs.TypeDesc{key, value},
 	})
 }
 
@@ -143,29 +140,38 @@ func (ab *abstractor) convertNamed(t *types.Named) constructs.TypeDesc {
 		pkgPath = baker.BuiltinName
 	}
 
+	// Get any type parameters.
+	instanceTp := ab.convertInstanceTypes(t.TypeArgs())
+
 	// Check if the reference can already be found.
-	var typ constructs.TypeDecl
-	var found bool
-	_, typ, found = ab.proj.FindType(pkgPath, name, false)
+	_, typ, found := ab.proj.FindType(pkgPath, name, false)
 	if !found {
 		// Otherwise, create a reference that will be filled later.
-		typ = ab.proj.NewReference(constructs.ReferenceArgs{
-			RealType:    t,
-			PackagePath: pkgPath,
-			Name:        name,
+		return ab.proj.NewReference(constructs.ReferenceArgs{
+			RealType:      t,
+			PackagePath:   pkgPath,
+			Name:          name,
+			InstanceTypes: instanceTp,
 		})
 	}
 
-	if tp := ab.convertTypeList(t.TypeArgs()); len(tp) > 0 {
-		typ = ab.proj.NewInstance(constructs.InstanceArgs{
+	if ab.needsInstance(typ, instanceTp) {
+		return ab.proj.NewInstance(constructs.InstanceArgs{
 			RealType: t,
 			Generic:  typ,
-			//Resolved:  // TODO: Fill out
-			TypeParams: tp,
+			//Resolved:  // TODO: Fill out?
+			InstanceTypes: instanceTp,
 		})
 	}
 
 	return typ
+}
+
+func (ab *abstractor) needsInstance(_ constructs.TypeDecl, tp []constructs.TypeDesc) bool {
+	// TODO: When creating an instance, the instance they types need
+	//       to be checked to be different from the initial generic types.
+	//       Example: If `func Foo[T any]() { ... Func[T]() ... }`
+	return len(tp) > 0
 }
 
 func (ab *abstractor) convertPointer(t *types.Pointer) constructs.TypeDesc {
@@ -175,7 +181,7 @@ func (ab *abstractor) convertPointer(t *types.Pointer) constructs.TypeDesc {
 		RealType: t,
 		Generic:  generic,
 		//Resolved:  // TODO: Fill out
-		TypeParams: []constructs.TypeDesc{elem},
+		InstanceTypes: []constructs.TypeDesc{elem},
 	})
 }
 
@@ -185,8 +191,8 @@ func (ab *abstractor) convertSignature(t *types.Signature) constructs.Signature 
 	return ab.proj.NewSignature(constructs.SignatureArgs{
 		RealType: t,
 		Variadic: t.Variadic(),
-		Params:   ab.convertTuple(t.Params()),
-		Results:  ab.convertTuple(t.Results()),
+		Params:   ab.convertArguments(t.Params()),
+		Results:  ab.convertArguments(t.Results()),
 	})
 }
 
@@ -197,68 +203,48 @@ func (ab *abstractor) convertSlice(t *types.Slice) constructs.TypeDesc {
 		RealType: t,
 		Generic:  generic,
 		//Resolved:  // TODO: Fill out
-		TypeParams: []constructs.TypeDesc{elem},
+		InstanceTypes: []constructs.TypeDesc{elem},
 	})
 }
 
 func (ab *abstractor) convertStruct(t *types.Struct) constructs.StructDesc {
-	fields := make([]constructs.Named, 0, t.NumFields())
-	embedded := make([]bool, 0, t.NumFields())
+	fields := make([]constructs.Field, 0, t.NumFields())
 	for i := range t.NumFields() {
 		f := t.Field(i)
 		if !blankName(f.Name()) {
-			field := ab.proj.NewNamed(constructs.NamedArgs{
-				Name: f.Name(),
-				Type: ab.convertType(f.Type()),
+			field := ab.proj.NewField(constructs.FieldArgs{
+				Name:     f.Name(),
+				Type:     ab.convertType(f.Type()),
+				Embedded: f.Embedded(),
 			})
 			fields = append(fields, field)
-			embedded = append(embedded, f.Embedded())
 		}
 	}
 
 	return ab.proj.NewStructDesc(constructs.StructDescArgs{
 		RealType: t,
 		Fields:   fields,
-		Embedded: embedded,
-		Package:  ab.curPkg,
 	})
 }
 
-func (ab *abstractor) convertTuple(t *types.Tuple) []constructs.Named {
+func (ab *abstractor) convertArguments(t *types.Tuple) []constructs.Argument {
 	count := t.Len()
-	names := make([]string, count)
-	types := make([]constructs.TypeDesc, count)
-	filledNames := set.New[string](count)
+	list := make([]constructs.Argument, count)
 	for i := range count {
 		t2 := t.At(i)
-		name := t2.Name()
-		names[i] = name
-		types[i] = ab.convertType(t2.Type())
-		if !blankName(name) {
-			filledNames.Add(name)
-		}
-	}
-
-	list := make([]constructs.Named, count)
-	for i := range count {
-		name := names[i]
-		if blankName(name) {
-			name = uniqueName(filledNames)
-		}
-		list[i] = ab.proj.NewNamed(constructs.NamedArgs{
-			Name: name,
-			Type: types[i],
+		list[i] = ab.proj.NewArgument(constructs.ArgumentArgs{
+			Name: t2.Name(),
+			Type: ab.convertType(t2.Type()),
 		})
 	}
 	return list
 }
 
-func (ab *abstractor) convertUnion(t *types.Union) constructs.Interface {
+func (ab *abstractor) convertUnion(t *types.Union) constructs.InterfaceDesc {
 	exact, approx := ab.readUnionTerms(t)
-	return ab.proj.NewInterface(constructs.InterfaceArgs{
-		Exact:   exact,
-		Approx:  approx,
-		Package: ab.curPkg,
+	return ab.proj.NewInterfaceDesc(constructs.InterfaceDescArgs{
+		Exact:  exact,
+		Approx: approx,
 	})
 }
 
@@ -275,51 +261,24 @@ func (ab *abstractor) readUnionTerms(t *types.Union) (exact, approx []constructs
 	return exact, approx
 }
 
-func (ab *abstractor) convertTypeParam(t *types.TypeParam) constructs.Named {
+func (ab *abstractor) convertTypeParam(t *types.TypeParam) constructs.TypeParam {
 	if tr, ok := ab.typeParamReplacer[t]; ok {
 		t = tr
 	}
 
 	t2 := t.Obj().Type().Underlying()
-	return ab.proj.NewNamed(constructs.NamedArgs{
+	return ab.proj.NewTypeParam(constructs.TypeParamArgs{
 		Name: t.Obj().Name(),
 		Type: ab.convertType(t2),
 	})
 }
 
-func (ab *abstractor) convertTypeParamList(t *types.TypeParamList) []constructs.Named {
-	list := make([]constructs.Named, t.Len())
-	for i := range t.Len() {
-		list[i] = ab.convertTypeParam(t.At(i))
-	}
-	return list
-}
-
-func (ab *abstractor) convertTypeList(t *types.TypeList) []constructs.TypeDesc {
+func (ab *abstractor) convertInstanceTypes(t *types.TypeList) []constructs.TypeDesc {
 	list := make([]constructs.TypeDesc, t.Len())
 	for i := range t.Len() {
 		list[i] = ab.convertType(t.At(i))
 	}
 	return list
-}
-
-// uniqueName returns a unique name that isn't in the set.
-// The new unique name will be added to the set.
-// This is for naming anonymous fields and unnamed return values.
-func uniqueName(names collections.Set[string]) string {
-	const (
-		attempts = 10_000
-		pattern  = `$value%d`
-	)
-	for offset := 1; offset < attempts; offset++ {
-		name := fmt.Sprintf(pattern, offset)
-		if !names.Contains(name) {
-			names.Add(name)
-			return name
-		}
-	}
-	panic(terror.New(`unable to find unique name`).
-		With(`attempts`, attempts))
 }
 
 func blankName(name string) bool {

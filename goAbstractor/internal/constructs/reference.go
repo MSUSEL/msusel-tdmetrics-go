@@ -12,14 +12,17 @@ type Reference interface {
 
 	PackagePath() string
 	Name() string
+	InstanceTypes() []TypeDesc
+
 	Resolved() bool
-	SetType(typ TypeDecl)
+	SetType(typ TypeDesc)
 }
 
 type ReferenceArgs struct {
-	RealType    *types.Named
-	PackagePath string
-	Name        string
+	RealType      *types.Named
+	PackagePath   string
+	Name          string
+	InstanceTypes []TypeDesc
 }
 
 type ReferenceFactory interface {

@@ -82,6 +82,10 @@ func (m *methodImp) Package() constructs.Package { return m.pkg }
 func (m *methodImp) Name() string                { return m.name }
 func (m *methodImp) Location() locs.Loc          { return m.loc }
 
+func (m *methodImp) TypeParams() []constructs.TypeParam {
+	return m.typeParams
+}
+
 func (m *methodImp) AddInstance(inst constructs.Instance) constructs.Instance {
 	v, _ := m.instances.TryAdd(inst)
 	return v

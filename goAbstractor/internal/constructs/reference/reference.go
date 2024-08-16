@@ -14,9 +14,10 @@ import (
 )
 
 type referenceImp struct {
-	realType *types.Named
-	pkgPath  string
-	name     string
+	realType      *types.Named
+	pkgPath       string
+	name          string
+	instanceTypes []constructs.TypeDesc
 
 	typ constructs.TypeDesc
 }
@@ -25,19 +26,24 @@ func newReference(args constructs.ReferenceArgs) constructs.Reference {
 	assert.ArgNotNil(`real type`, args.RealType)
 	// pkgPath may be empty for $builtin
 	assert.ArgNotEmpty(`name`, args.Name)
+	assert.ArgNoNils(`instance types`, args.InstanceTypes)
+
 	return &referenceImp{
-		realType: args.RealType,
-		pkgPath:  args.PackagePath,
-		name:     args.Name,
+		realType:      args.RealType,
+		pkgPath:       args.PackagePath,
+		instanceTypes: args.InstanceTypes,
+		name:          args.Name,
 	}
 }
 
-func (r *referenceImp) IsTypeDesc()         {}
-func (r *referenceImp) IsReference()        {}
-func (r *referenceImp) Kind() kind.Kind     { return kind.Reference }
-func (r *referenceImp) GoType() types.Type  { return r.realType }
-func (r *referenceImp) PackagePath() string { return r.pkgPath }
-func (r *referenceImp) Name() string        { return r.name }
+func (r *referenceImp) IsTypeDesc()        {}
+func (r *referenceImp) IsReference()       {}
+func (r *referenceImp) Kind() kind.Kind    { return kind.Reference }
+func (r *referenceImp) GoType() types.Type { return r.realType }
+
+func (r *referenceImp) PackagePath() string                  { return r.pkgPath }
+func (r *referenceImp) Name() string                         { return r.name }
+func (r *referenceImp) InstanceTypes() []constructs.TypeDesc { return r.instanceTypes }
 
 func (r *referenceImp) Resolved() bool {
 	return !utils.IsNil(r.typ)
@@ -47,7 +53,7 @@ func (r *referenceImp) SetIndex(index int) {
 	panic(terror.New(`do not call SetIndex on Reference`))
 }
 
-func (r *referenceImp) SetType(typ constructs.TypeDecl) {
+func (r *referenceImp) SetType(typ constructs.TypeDesc) {
 	assert.ArgNotNil(`type`, typ)
 	r.typ = typ
 }
@@ -73,7 +79,8 @@ func (r *referenceImp) ToJson(ctx *jsonify.Context) jsonify.Datum {
 			AddIf(ctx, ctx.IsKindShown(), `kind`, r.Kind()).
 			AddNonZero(ctx2, `packagePath`, r.pkgPath).
 			Add(ctx2, `name`, r.name).
-			Add(ctx2, `type`, r.typ)
+			Add(ctx2, `type`, r.typ).
+			AddNonZero(ctx2, `instanceTypes`, r.instanceTypes)
 	}
 
 	if utils.IsNil(r.typ) {

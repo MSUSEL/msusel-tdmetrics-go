@@ -13,13 +13,15 @@ import (
 type Instance interface {
 	TypeDesc
 	IsInstance()
+
+	InstanceTypes() []TypeDesc
 }
 
 type InstanceArgs struct {
-	RealType   types.Type
-	Generic    TypeDecl
-	Resolved   TypeDesc
-	TypeParams []TypeDesc
+	RealType      types.Type
+	Generic       TypeDecl
+	Resolved      TypeDesc
+	InstanceTypes []TypeDesc
 }
 
 type InstanceFactory interface {

@@ -58,6 +58,10 @@ func (d *interfaceDeclImp) Package() constructs.Package { return d.pkg }
 func (d *interfaceDeclImp) Name() string                { return d.name }
 func (d *interfaceDeclImp) Location() locs.Loc          { return d.loc }
 
+func (d *interfaceDeclImp) TypeParams() []constructs.TypeParam {
+	return d.typeParams
+}
+
 func (d *interfaceDeclImp) AddInstance(inst constructs.Instance) constructs.Instance {
 	v, _ := d.instances.TryAdd(inst)
 	return v

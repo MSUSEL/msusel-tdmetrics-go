@@ -168,7 +168,7 @@ func (ab *abstractor) abstractTypeSpec(spec *ast.TypeSpec) {
 
 	// TODO: Need to generate instances too.
 	instances, has := ab.info().Instances[spec.Name]
-	fmt.Printf("=== %v\n", instances.Type)
+	fmt.Printf("=== (%t) %v\n", has, instances.Type)
 	for i := range instances.TypeArgs.Len() {
 		fmt.Printf("%d. %v\n", i, instances.TypeArgs.At(i))
 	}
@@ -331,6 +331,8 @@ func (ab *abstractor) abstractFuncDecl(decl *ast.FuncDecl) {
 	mets := metrics.New(ab.curPkg.Source().Fset, decl)
 	loc := ab.proj.NewLoc(decl.Pos())
 
+	tp := ab.abstractTypeParams(decl.Type.TypeParams)
+
 	name := decl.Name.Name
 	if name == `init` && len(recvName) <= 0 && sig.IsVacant() {
 		name = `init#` + strconv.Itoa(ab.curPkg.InitCount())
@@ -339,10 +341,11 @@ func (ab *abstractor) abstractFuncDecl(decl *ast.FuncDecl) {
 	ab.proj.NewMethod(constructs.MethodArgs{
 		Package:    ab.curPkg,
 		Name:       name,
+		Location:   loc,
+		TypeParams: tp,
 		Signature:  sig,
 		Metrics:    mets,
-		NoCopyRecv: noCopyRecv,
 		RecvName:   recvName,
-		Location:   loc,
+		NoCopyRecv: noCopyRecv,
 	})
 }

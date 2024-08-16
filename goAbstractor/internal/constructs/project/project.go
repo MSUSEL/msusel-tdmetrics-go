@@ -199,11 +199,20 @@ func seekInherits(siblings collections.SortedSet[constructs.InterfaceDesc], it c
 func (p *projectImp) ResolveReferences() {
 	refs := p.References()
 	for i := range refs.Count() {
-		if ref := refs.Get(i); !ref.Resolved() {
-			if _, typ, ok := p.FindType(ref.PackagePath(), ref.Name(), true); ok {
-				ref.SetType(typ)
-			}
-		}
+		p.resolveReference(refs.Get(i))
+	}
+}
+
+func (p *projectImp) resolveReference(ref constructs.Reference) {
+	if ref.Resolved() {
+		return
+	}
+
+	if _, typ, ok := p.FindType(ref.PackagePath(), ref.Name(), true); ok {
+
+		// TODO: Handle type parameters to find instance
+
+		ref.SetType(typ)
 	}
 }
 

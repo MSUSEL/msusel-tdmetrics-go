@@ -44,7 +44,12 @@ func (v *valueImp) Name() string                { return v.name }
 func (v *valueImp) Location() locs.Loc          { return v.loc }
 func (v *valueImp) Package() constructs.Package { return v.pkg }
 
+func (v *valueImp) TypeParams() []constructs.TypeParam {
+	return nil
+}
+
 func (v *valueImp) AddInstance(inst constructs.Instance) constructs.Instance {
+	// TODO: Consider making a Value not a Declaration, just a Construct.
 	panic(terror.New(`may not add an instance to a value declaration`).
 		With(`name`, v.name))
 }
