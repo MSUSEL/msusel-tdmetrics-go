@@ -6,6 +6,7 @@ import (
 	"github.com/Snow-Gremlin/goToolbox/collections"
 	"github.com/Snow-Gremlin/goToolbox/collections/sortedSet"
 	"github.com/Snow-Gremlin/goToolbox/comp"
+	"github.com/Snow-Gremlin/goToolbox/utils"
 
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/assert"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs"
@@ -26,7 +27,17 @@ type interfaceDescImp struct {
 }
 
 func newInterfaceDesc(args constructs.InterfaceDescArgs) constructs.InterfaceDesc {
+	assert.ArgHasNoNils(`abstracts`, args.Abstracts)
+	assert.ArgHasNoNils(`exact`, args.Exact)
+	assert.ArgHasNoNils(`approx`, args.Approx)
+
+	if utils.IsNil(args.RealType) {
+		assert.ArgNotNil(`package`, args.Package)
+
+		// TODO: Implement
+	}
 	assert.ArgNotNil(`real type`, args.RealType)
+
 	return &interfaceDescImp{
 		realType: args.RealType,
 
@@ -34,7 +45,7 @@ func newInterfaceDesc(args constructs.InterfaceDescArgs) constructs.InterfaceDes
 		exact:     args.Exact,
 		approx:    args.Approx,
 
-		inherits: sortedSet.New[constructs.InterfaceDesc](),
+		inherits: sortedSet.New(Comparer()),
 	}
 }
 
@@ -88,5 +99,5 @@ func (id *interfaceDescImp) ToJson(ctx *jsonify.Context) jsonify.Datum {
 		AddNonZero(ctx2, `abstracts`, id.abstracts).
 		AddNonZero(ctx2, `approx`, id.approx).
 		AddNonZero(ctx2, `exact`, id.exact).
-		AddNonZero(ctx2, `inherits`, id.inherits)
+		AddNonZero(ctx2, `inherits`, id.inherits.ToSlice())
 }

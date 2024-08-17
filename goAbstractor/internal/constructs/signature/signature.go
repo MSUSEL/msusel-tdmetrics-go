@@ -6,6 +6,7 @@ import (
 
 	"github.com/Snow-Gremlin/goToolbox/comp"
 	"github.com/Snow-Gremlin/goToolbox/utils"
+	"golang.org/x/tools/go/packages"
 
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/assert"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs"
@@ -23,25 +24,25 @@ type signatureImp struct {
 	index int
 }
 
-func createTuple(pkg *types.Package, args []constructs.Argument) *types.Tuple {
+func createTuple(pkg *packages.Package, args []constructs.Argument) *types.Tuple {
 	vars := make([]*types.Var, len(args))
 	for i, p := range args {
-		vars[i] = types.NewVar(token.NoPos, pkg, p.Name(), p.Type().GoType())
+		vars[i] = types.NewVar(token.NoPos, pkg.Types, p.Name(), p.Type().GoType())
 	}
 	return types.NewTuple(vars...)
 }
 
 func newSignature(args constructs.SignatureArgs) constructs.Signature {
-	assert.ArgNoNils(`params`, args.Params)
-	assert.ArgNoNils(`results`, args.Results)
+	assert.ArgHasNoNils(`params`, args.Params)
+	assert.ArgHasNoNils(`results`, args.Results)
 
 	if utils.IsNil(args.RealType) {
 		assert.ArgNotNil(`package`, args.Package)
-		pkg := args.Package
-		params := createTuple(pkg, args.Params)
-		results := createTuple(pkg, args.Results)
+		params := createTuple(args.Package, args.Params)
+		results := createTuple(args.Package, args.Results)
 		args.RealType = types.NewSignatureType(nil, nil, nil, params, results, args.Variadic)
 	}
+	assert.ArgNotNil(`real type`, args.RealType)
 
 	return &signatureImp{
 		realType: args.RealType,

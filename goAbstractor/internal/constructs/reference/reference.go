@@ -23,10 +23,16 @@ type referenceImp struct {
 }
 
 func newReference(args constructs.ReferenceArgs) constructs.Reference {
-	assert.ArgNotNil(`real type`, args.RealType)
 	// pkgPath may be empty for $builtin
 	assert.ArgNotEmpty(`name`, args.Name)
-	assert.ArgNoNils(`instance types`, args.InstanceTypes)
+	assert.ArgHasNoNils(`instance types`, args.InstanceTypes)
+
+	if utils.IsNil(args.RealType) {
+		assert.ArgNotNil(`package`, args.Package)
+
+		// TODO: Implement
+	}
+	assert.ArgNotNil(`real type`, args.RealType)
 
 	return &referenceImp{
 		realType:      args.RealType,

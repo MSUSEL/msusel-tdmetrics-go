@@ -9,7 +9,9 @@ import (
 
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/assert"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs"
+	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs/instance"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs/kind"
+	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs/method"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/jsonify"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/locs"
 )
@@ -34,7 +36,7 @@ func newObject(args constructs.ObjectArgs) constructs.Object {
 	assert.ArgNotNil(`real type`, args.RealType)
 	assert.ArgNotNil(`package`, args.Package)
 	assert.ArgNotEmpty(`name`, args.Name)
-	assert.ArgNoNils(`type params`, args.TypeParams)
+	assert.ArgHasNoNils(`type params`, args.TypeParams)
 	assert.ArgNotNil(`data`, args.Data)
 
 	return &objectImp{
@@ -46,8 +48,8 @@ func newObject(args constructs.ObjectArgs) constructs.Object {
 		typeParams: args.TypeParams,
 		data:       args.Data,
 
-		methods:   sortedSet.New[constructs.Method](),
-		instances: sortedSet.New[constructs.Instance](),
+		methods:   sortedSet.New(method.Comparer()),
+		instances: sortedSet.New(instance.Comparer()),
 	}
 }
 
@@ -118,7 +120,7 @@ func (d *objectImp) ToJson(ctx *jsonify.Context) jsonify.Datum {
 		AddNonZero(ctx2, `loc`, d.loc).
 		AddNonZero(ctx2, `typeParams`, d.typeParams).
 		AddNonZero(ctx2, `data`, d.data).
-		AddNonZero(ctx2, `instances`, d.instances).
-		AddNonZero(ctx2, `methods`, d.methods).
+		AddNonZero(ctx2, `instances`, d.instances.ToSlice()).
+		AddNonZero(ctx2, `methods`, d.methods.ToSlice()).
 		AddNonZero(ctx2, `interface`, d.inter)
 }

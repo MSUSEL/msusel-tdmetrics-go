@@ -16,8 +16,12 @@ type argumentImp struct {
 }
 
 func newArgument(args constructs.ArgumentArgs) constructs.Argument {
-	assert.ArgValidId(`name`, args.Name)
+	if len(args.Name) > 0 && args.Name != `_` {
+		// Arguments may be blank (unnamed or named with underscore).
+		assert.ArgValidId(`name`, args.Name)
+	}
 	assert.ArgNotNil(`type`, args.Type)
+
 	return &argumentImp{
 		name: args.Name,
 		typ:  args.Type,

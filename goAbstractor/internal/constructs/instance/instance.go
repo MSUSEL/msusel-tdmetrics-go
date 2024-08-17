@@ -4,6 +4,7 @@ import (
 	"go/types"
 
 	"github.com/Snow-Gremlin/goToolbox/comp"
+	"github.com/Snow-Gremlin/goToolbox/utils"
 
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/assert"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs"
@@ -24,7 +25,14 @@ func newInstance(args constructs.InstanceArgs) constructs.Instance {
 	assert.ArgNotNil(`generic`, args.Generic)
 	assert.ArgNotNil(`resolved`, args.Resolved)
 	assert.ArgNotEmpty(`instance types`, args.InstanceTypes)
-	assert.ArgNoNils(`instance types`, args.InstanceTypes)
+	assert.ArgHasNoNils(`instance types`, args.InstanceTypes)
+
+	if utils.IsNil(args.RealType) {
+		assert.ArgNotNil(`package`, args.Package)
+
+		// TODO: Implement
+	}
+	assert.ArgNotNil(`real type`, args.RealType)
 
 	inst := &instanceImp{
 		realType:      args.RealType,

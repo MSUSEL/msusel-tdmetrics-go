@@ -9,6 +9,7 @@ import (
 
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/assert"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs"
+	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs/instance"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs/kind"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/jsonify"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/locs"
@@ -32,7 +33,7 @@ func newInterfaceDecl(args constructs.InterfaceDeclArgs) constructs.InterfaceDec
 	assert.ArgNotNil(`real type`, args.RealType)
 	assert.ArgNotNil(`package`, args.Package)
 	assert.ArgNotNil(`interface`, args.Interface)
-	assert.ArgNoNils(`type params`, args.TypeParams)
+	assert.ArgHasNoNils(`type params`, args.TypeParams)
 
 	return &interfaceDeclImp{
 		realType: args.RealType,
@@ -43,7 +44,7 @@ func newInterfaceDecl(args constructs.InterfaceDeclArgs) constructs.InterfaceDec
 		typeParams: args.TypeParams,
 		inter:      args.Interface,
 
-		instances: sortedSet.New[constructs.Instance](),
+		instances: sortedSet.New(instance.Comparer()),
 	}
 }
 
@@ -105,5 +106,5 @@ func (d *interfaceDeclImp) ToJson(ctx *jsonify.Context) jsonify.Datum {
 		AddNonZero(ctx2, `loc`, d.loc).
 		AddNonZero(ctx2, `typeParams`, d.typeParams).
 		AddNonZero(ctx2, `interface`, d.inter).
-		AddNonZero(ctx2, `instances`, d.instances)
+		AddNonZero(ctx2, `instances`, d.instances.ToSlice())
 }

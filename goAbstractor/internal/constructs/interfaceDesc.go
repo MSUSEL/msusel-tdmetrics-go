@@ -3,6 +3,8 @@ package constructs
 import (
 	"go/types"
 
+	"golang.org/x/tools/go/packages"
+
 	"github.com/Snow-Gremlin/goToolbox/collections"
 )
 
@@ -42,6 +44,10 @@ type InterfaceDescArgs struct {
 	// Approx types are like `~string|~int` where the data type
 	// may be exact or an extension of the base type.
 	Approx []TypeDesc
+
+	// Package is needed when the real type isn't given.
+	// The package is used to help create the real type.
+	Package *packages.Package
 }
 
 type InterfaceDescFactory interface {

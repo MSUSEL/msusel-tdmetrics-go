@@ -9,7 +9,11 @@ import (
 
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/assert"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs"
+	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs/interfaceDecl"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs/kind"
+	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs/method"
+	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs/object"
+	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs/value"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/jsonify"
 )
 
@@ -38,11 +42,11 @@ func newPackage(args constructs.PackageArgs) constructs.Package {
 		path:        args.Path,
 		name:        args.Name,
 		importPaths: args.ImportPaths,
-		imports:     sortedSet.New[constructs.Package](),
-		interfaces:  sortedSet.New[constructs.InterfaceDecl](),
-		methods:     sortedSet.New[constructs.Method](),
-		objects:     sortedSet.New[constructs.Object](),
-		values:      sortedSet.New[constructs.Value](),
+		imports:     sortedSet.New(Comparer()),
+		interfaces:  sortedSet.New(interfaceDecl.Comparer()),
+		methods:     sortedSet.New(method.Comparer()),
+		objects:     sortedSet.New(object.Comparer()),
+		values:      sortedSet.New(value.Comparer()),
 	}
 }
 
@@ -144,11 +148,11 @@ func (p *packageImp) ToJson(ctx *jsonify.Context) jsonify.Datum {
 		AddIf(ctx, ctx.IsIndexShown(), `index`, p.index).
 		AddNonZero(ctx2, `path`, p.path).
 		AddNonZero(ctx2, `name`, p.name).
-		AddNonZero(ctx2, `imports`, p.imports).
-		AddNonZero(ctx2, `interfaces`, p.interfaces).
-		AddNonZero(ctx2, `methods`, p.methods).
-		AddNonZero(ctx2, `objects`, p.objects).
-		AddNonZero(ctx2, `values`, p.values)
+		AddNonZero(ctx2, `imports`, p.imports.ToSlice()).
+		AddNonZero(ctx2, `interfaces`, p.interfaces.ToSlice()).
+		AddNonZero(ctx2, `methods`, p.methods.ToSlice()).
+		AddNonZero(ctx2, `objects`, p.objects.ToSlice()).
+		AddNonZero(ctx2, `values`, p.values.ToSlice())
 }
 
 func (p *packageImp) ResolveReceivers() {

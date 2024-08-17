@@ -15,6 +15,8 @@ type Basic interface {
 }
 
 type BasicArgs struct {
+
+	// RealType is the basic type underlying this type.
 	RealType *types.Basic
 }
 

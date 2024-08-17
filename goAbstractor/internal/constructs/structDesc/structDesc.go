@@ -4,6 +4,7 @@ import (
 	"go/types"
 
 	"github.com/Snow-Gremlin/goToolbox/comp"
+	"github.com/Snow-Gremlin/goToolbox/utils"
 
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/assert"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs"
@@ -20,8 +21,14 @@ type structDescImp struct {
 }
 
 func newStructDesc(args constructs.StructDescArgs) constructs.StructDesc {
+	assert.ArgHasNoNils(`fields`, args.Fields)
+
+	if utils.IsNil(args.RealType) {
+		assert.ArgNotNil(`package`, args.Package)
+
+		// TODO: Implement
+	}
 	assert.ArgNotNil(`real type`, args.RealType)
-	assert.ArgNoNils(`fields`, args.Fields)
 
 	return &structDescImp{
 		realType: args.RealType,

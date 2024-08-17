@@ -101,11 +101,18 @@ func (b *bakerImp) bakeBasic(kind types.BasicKind) constructs.Basic {
 // the base object that (almost) all other types inherit from.
 func (b *bakerImp) BakeAny() constructs.InterfaceDecl {
 	return bakeOnce(b, `any`, func() constructs.InterfaceDecl {
-		// any
+		pkg := b.BakeBuiltin()
+		real := types.NewInterfaceType(nil, nil)
+
+		// any interface{}
 		return b.proj.NewInterfaceDecl(constructs.InterfaceDeclArgs{
-			RealType: types.NewInterfaceType(nil, nil),
-			Package:  b.BakeBuiltin(),
+			RealType: real,
+			Package:  pkg,
 			Name:     `any`,
+			Interface: b.proj.NewInterfaceDesc(constructs.InterfaceDescArgs{
+				RealType: real,
+				Package:  pkg.Source(),
+			}),
 			Location: locs.NoLoc(),
 		})
 	})
@@ -155,6 +162,7 @@ func (b *bakerImp) BakeList() constructs.InterfaceDecl {
 			Name: `$len`,
 			Signature: b.proj.NewSignature(constructs.SignatureArgs{
 				Results: []constructs.Argument{intArg},
+				Package: pkg.Source(),
 			}),
 		})
 
@@ -164,6 +172,7 @@ func (b *bakerImp) BakeList() constructs.InterfaceDecl {
 			Signature: b.proj.NewSignature(constructs.SignatureArgs{
 				Params:  []constructs.Argument{indexArg},
 				Results: []constructs.Argument{valueArg},
+				Package: pkg.Source(),
 			}),
 		})
 
@@ -171,7 +180,8 @@ func (b *bakerImp) BakeList() constructs.InterfaceDecl {
 		setFunc := b.proj.NewAbstract(constructs.AbstractArgs{
 			Name: `$get`,
 			Signature: b.proj.NewSignature(constructs.SignatureArgs{
-				Params: []constructs.Argument{indexArg, valueArg},
+				Params:  []constructs.Argument{indexArg, valueArg},
+				Package: pkg.Source(),
 			}),
 		})
 
@@ -183,6 +193,7 @@ func (b *bakerImp) BakeList() constructs.InterfaceDecl {
 			TypeParams: tps,
 			Interface: b.proj.NewInterfaceDesc(constructs.InterfaceDescArgs{
 				Abstracts: []constructs.Abstract{lenFunc, getFunc, setFunc},
+				Package:   pkg.Source(),
 			}),
 		})
 	})
@@ -231,6 +242,7 @@ func (b *bakerImp) BakeChan() constructs.InterfaceDecl {
 			Name: `$len`,
 			Signature: b.proj.NewSignature(constructs.SignatureArgs{
 				Results: []constructs.Argument{intArg},
+				Package: pkg.Source(),
 			}),
 		})
 
@@ -239,6 +251,7 @@ func (b *bakerImp) BakeChan() constructs.InterfaceDecl {
 			Name: `$recv`,
 			Signature: b.proj.NewSignature(constructs.SignatureArgs{
 				Results: []constructs.Argument{valueArg, okayArg},
+				Package: pkg.Source(),
 			}),
 		})
 
@@ -246,7 +259,8 @@ func (b *bakerImp) BakeChan() constructs.InterfaceDecl {
 		sendFunc := b.proj.NewAbstract(constructs.AbstractArgs{
 			Name: `$send`,
 			Signature: b.proj.NewSignature(constructs.SignatureArgs{
-				Params: []constructs.Argument{valueArg},
+				Params:  []constructs.Argument{valueArg},
+				Package: pkg.Source(),
 			}),
 		})
 
@@ -258,6 +272,7 @@ func (b *bakerImp) BakeChan() constructs.InterfaceDecl {
 			TypeParams: tps,
 			Interface: b.proj.NewInterfaceDesc(constructs.InterfaceDescArgs{
 				Abstracts: []constructs.Abstract{lenFunc, recvFunc, sendFunc},
+				Package:   pkg.Source(),
 			}),
 		})
 	})
@@ -318,6 +333,7 @@ func (b *bakerImp) BakeMap() constructs.InterfaceDecl {
 			Name: `$len`,
 			Signature: b.proj.NewSignature(constructs.SignatureArgs{
 				Results: []constructs.Argument{intArg},
+				Package: pkg.Source(),
 			}),
 		})
 
@@ -327,6 +343,7 @@ func (b *bakerImp) BakeMap() constructs.InterfaceDecl {
 			Signature: b.proj.NewSignature(constructs.SignatureArgs{
 				Params:  []constructs.Argument{keyArg},
 				Results: []constructs.Argument{valueArg, foundArg},
+				Package: pkg.Source(),
 			}),
 		})
 
@@ -334,7 +351,8 @@ func (b *bakerImp) BakeMap() constructs.InterfaceDecl {
 		setFunc := b.proj.NewAbstract(constructs.AbstractArgs{
 			Name: `$set`,
 			Signature: b.proj.NewSignature(constructs.SignatureArgs{
-				Params: []constructs.Argument{keyArg, valueArg},
+				Params:  []constructs.Argument{keyArg, valueArg},
+				Package: pkg.Source(),
 			}),
 		})
 
@@ -346,6 +364,7 @@ func (b *bakerImp) BakeMap() constructs.InterfaceDecl {
 			TypeParams: tps,
 			Interface: b.proj.NewInterfaceDesc(constructs.InterfaceDescArgs{
 				Abstracts: []constructs.Abstract{lenFunc, getFunc, setFunc},
+				Package:   pkg.Source(),
 			}),
 		})
 	})
@@ -377,6 +396,7 @@ func (b *bakerImp) BakePointer() constructs.InterfaceDecl {
 			Name: `$deref`,
 			Signature: b.proj.NewSignature(constructs.SignatureArgs{
 				Results: []constructs.Argument{resultArg},
+				Package: pkg.Source(),
 			}),
 		})
 
@@ -388,6 +408,7 @@ func (b *bakerImp) BakePointer() constructs.InterfaceDecl {
 			TypeParams: tps,
 			Interface: b.proj.NewInterfaceDesc(constructs.InterfaceDescArgs{
 				Abstracts: []constructs.Abstract{derefFunc},
+				Package:   pkg.Source(),
 			}),
 		})
 	})
@@ -413,6 +434,7 @@ func (b *bakerImp) BakeComplex64() constructs.InterfaceDecl {
 			Name: `$real`,
 			Signature: b.proj.NewSignature(constructs.SignatureArgs{
 				Results: []constructs.Argument{floatArg},
+				Package: pkg.Source(),
 			}),
 		})
 
@@ -421,6 +443,7 @@ func (b *bakerImp) BakeComplex64() constructs.InterfaceDecl {
 			Name: `$imag`,
 			Signature: b.proj.NewSignature(constructs.SignatureArgs{
 				Results: []constructs.Argument{floatArg},
+				Package: pkg.Source(),
 			}),
 		})
 
@@ -431,6 +454,7 @@ func (b *bakerImp) BakeComplex64() constructs.InterfaceDecl {
 			Location: locs.NoLoc(),
 			Interface: b.proj.NewInterfaceDesc(constructs.InterfaceDescArgs{
 				Abstracts: []constructs.Abstract{realFunc, imagFunc},
+				Package:   pkg.Source(),
 			}),
 		})
 	})
@@ -456,6 +480,7 @@ func (b *bakerImp) BakeComplex128() constructs.InterfaceDecl {
 			Name: `$real`,
 			Signature: b.proj.NewSignature(constructs.SignatureArgs{
 				Results: []constructs.Argument{floatArg},
+				Package: pkg.Source(),
 			}),
 		})
 
@@ -464,6 +489,7 @@ func (b *bakerImp) BakeComplex128() constructs.InterfaceDecl {
 			Name: `$imag`,
 			Signature: b.proj.NewSignature(constructs.SignatureArgs{
 				Results: []constructs.Argument{floatArg},
+				Package: pkg.Source(),
 			}),
 		})
 
@@ -474,6 +500,7 @@ func (b *bakerImp) BakeComplex128() constructs.InterfaceDecl {
 			Location: locs.NoLoc(),
 			Interface: b.proj.NewInterfaceDesc(constructs.InterfaceDescArgs{
 				Abstracts: []constructs.Abstract{realFunc, imagFunc},
+				Package:   pkg.Source(),
 			}),
 		})
 	})
@@ -498,6 +525,7 @@ func (b *bakerImp) BakeError() constructs.InterfaceDecl {
 			Name: `Error`,
 			Signature: b.proj.NewSignature(constructs.SignatureArgs{
 				Results: []constructs.Argument{stringArg},
+				Package: pkg.Source(),
 			}),
 		})
 
@@ -508,6 +536,7 @@ func (b *bakerImp) BakeError() constructs.InterfaceDecl {
 			Location: locs.NoLoc(),
 			Interface: b.proj.NewInterfaceDesc(constructs.InterfaceDescArgs{
 				Abstracts: []constructs.Abstract{errFunc},
+				Package:   pkg.Source(),
 			}),
 		})
 	})
@@ -539,6 +568,7 @@ func (b *bakerImp) BakeComparable() constructs.InterfaceDecl {
 			Signature: b.proj.NewSignature(constructs.SignatureArgs{
 				Params:  []constructs.Argument{otherArg},
 				Results: []constructs.Argument{intArg},
+				Package: pkg.Source(),
 			}),
 		})
 
@@ -549,6 +579,7 @@ func (b *bakerImp) BakeComparable() constructs.InterfaceDecl {
 			Location: locs.NoLoc(),
 			Interface: b.proj.NewInterfaceDesc(constructs.InterfaceDescArgs{
 				Abstracts: []constructs.Abstract{cmpFunc},
+				Package:   pkg.Source(),
 			}),
 		})
 	})

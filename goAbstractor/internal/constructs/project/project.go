@@ -124,6 +124,7 @@ func (p *projectImp) UpdateIndices() {
 	index = updateIndices(p.Objects(), index)
 	index = updateIndices(p.Packages(), index)
 	// Don't index the p.References()
+	index = updateIndices(p.Signatures(), index)
 	index = updateIndices(p.StructDescs(), index)
 	index = updateIndices(p.TypeParams(), index)
 	updateIndices(p.Values(), index)
@@ -162,10 +163,11 @@ func (p *projectImp) ResolveReceivers() {
 
 func (p *projectImp) ResolveInheritance() {
 	its := p.InterfaceDescs()
-	roots := sortedSet.New[constructs.InterfaceDesc]()
+	roots := sortedSet.New(interfaceDesc.Comparer())
 	for i := range its.Count() {
 		addInheritance(roots, its.Get(i))
 	}
+	// throw away roots, its no longer needed.
 }
 
 func addInheritance(siblings collections.SortedSet[constructs.InterfaceDesc], it constructs.InterfaceDesc) {
@@ -240,23 +242,23 @@ func (p *projectImp) ToJson(ctx *jsonify.Context) jsonify.Datum {
 		Add(ctx2, `language`, `go`).
 		AddNonZero(ctx2, `locs`, p.locations)
 
-	m.AddNonZero(ctx2, `abstracts`, p.Abstracts()).
-		AddNonZero(ctx2, `arguments`, p.Arguments()).
-		AddNonZero(ctx2, `fields`, p.Fields()).
-		AddNonZero(ctx2, `packages`, p.Packages())
+	m.AddNonZero(ctx2, `abstracts`, p.Abstracts().ToSlice()).
+		AddNonZero(ctx2, `arguments`, p.Arguments().ToSlice()).
+		AddNonZero(ctx2, `fields`, p.Fields().ToSlice()).
+		AddNonZero(ctx2, `packages`, p.Packages().ToSlice())
 
-	m.AddNonZero(ctx2, `interfaceDecls`, p.InterfaceDecls()).
-		AddNonZero(ctx2, `methods`, p.Methods()).
-		AddNonZero(ctx2, `objects`, p.Objects()).
-		AddNonZero(ctx2, `values`, p.Values())
+	m.AddNonZero(ctx2, `interfaceDecls`, p.InterfaceDecls().ToSlice()).
+		AddNonZero(ctx2, `methods`, p.Methods().ToSlice()).
+		AddNonZero(ctx2, `objects`, p.Objects().ToSlice()).
+		AddNonZero(ctx2, `values`, p.Values().ToSlice())
 
-	m.AddNonZero(ctx2, `basics`, p.Basics()).
-		AddNonZero(ctx2, `instances`, p.Instances()).
-		AddNonZero(ctx2, `interfaceDescs`, p.InterfaceDescs()).
-		// // Don't output the p.References()
-		AddNonZero(ctx2, `signatures`, p.Signatures()).
-		AddNonZero(ctx2, `structDescs`, p.StructDescs()).
-		AddNonZero(ctx2, `typeParams`, p.TypeParams())
+	m.AddNonZero(ctx2, `basics`, p.Basics().ToSlice()).
+		AddNonZero(ctx2, `instances`, p.Instances().ToSlice()).
+		AddNonZero(ctx2, `interfaceDescs`, p.InterfaceDescs().ToSlice()).
+		// Don't output the p.References()
+		AddNonZero(ctx2, `signatures`, p.Signatures().ToSlice()).
+		AddNonZero(ctx2, `structDescs`, p.StructDescs().ToSlice()).
+		AddNonZero(ctx2, `typeParams`, p.TypeParams().ToSlice())
 
 	return m
 }

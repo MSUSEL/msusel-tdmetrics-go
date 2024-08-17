@@ -12,6 +12,7 @@ import (
 
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/assert"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs"
+	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs/instance"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs/kind"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/jsonify"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/locs"
@@ -63,7 +64,7 @@ func newMethod(args constructs.MethodArgs) constructs.Method {
 		recvName:   args.RecvName,
 		receiver:   args.Receiver,
 
-		instances: sortedSet.New[constructs.Instance](),
+		instances: sortedSet.New(instance.Comparer()),
 	}
 
 	if !utils.IsNil(met.receiver) {
@@ -143,13 +144,13 @@ func (m *methodImp) ToJson(ctx *jsonify.Context) jsonify.Datum {
 	return jsonify.NewMap().
 		AddIf(ctx, ctx.IsKindShown(), `kind`, m.Kind()).
 		AddIf(ctx, ctx.IsIndexShown(), `index`, m.index).
-		AddNonZero(ctx2, `package`, m.pkg).
-		AddNonZero(ctx2, `name`, m.name).
+		Add(ctx2, `package`, m.pkg).
+		Add(ctx2, `name`, m.name).
 		AddNonZero(ctx2, `loc`, m.loc).
 		AddNonZero(ctx2, `typeParams`, m.typeParams).
-		AddNonZero(ctx2, `signature`, m.signature).
+		Add(ctx2, `signature`, m.signature).
 		AddNonZero(ctx2, `metrics`, m.metrics).
-		AddNonZero(ctx2, `instances`, m.instances).
+		AddNonZero(ctx2, `instances`, m.instances.ToSlice()).
 		AddNonZero(ctx2, `receiver`, m.receiver).
 		AddNonZeroIf(ctx2, ctx.IsReceiverShown(), `recvName`, m.recvName)
 }

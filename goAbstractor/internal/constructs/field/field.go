@@ -17,8 +17,11 @@ type fieldImp struct {
 }
 
 func newField(args constructs.FieldArgs) constructs.Field {
+	// Blank name fields may be dropped from structs since we don't
+	// need to pad out footprint or align fields.
 	assert.ArgValidId(`name`, args.Name)
 	assert.ArgNotNil(`type`, args.Type)
+
 	return &fieldImp{
 		name: args.Name,
 		typ:  args.Type,

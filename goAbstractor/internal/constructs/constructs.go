@@ -2,6 +2,7 @@ package constructs
 
 import (
 	"github.com/Snow-Gremlin/goToolbox/comp"
+	"github.com/Snow-Gremlin/goToolbox/utils"
 
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs/kind"
 )
@@ -67,8 +68,14 @@ func SliceComparerPend[T Construct](a, b []T) func() int {
 }
 
 func CompareTo[T Construct](a T, b Construct, cmp comp.Comparer[T]) int {
+	if utils.IsNil(a) {
+		return utils.Ternary(utils.IsNil(b), 0, -1)
+	}
+	if utils.IsNil(b) {
+		return 1
+	}
 	return comp.Or(
-		comp.DefaultPend(a.Kind(), b.Kind()),
+		comp.DefaultPend(string(a.Kind()), string(b.Kind())),
 		cmp.Pend(a, b.(T)),
 	)
 }
