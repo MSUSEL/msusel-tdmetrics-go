@@ -30,7 +30,7 @@ func newReference(args constructs.ReferenceArgs) constructs.Reference {
 	if utils.IsNil(args.RealType) {
 		assert.ArgNotNil(`package`, args.Package)
 
-		// TODO: Implement
+		// TODO: Implement if needed.
 	}
 	assert.ArgNotNil(`real type`, args.RealType)
 
@@ -42,8 +42,9 @@ func newReference(args constructs.ReferenceArgs) constructs.Reference {
 	}
 }
 
-func (r *referenceImp) IsTypeDesc()        {}
-func (r *referenceImp) IsReference()       {}
+func (r *referenceImp) IsTypeDesc()  {}
+func (r *referenceImp) IsReference() {}
+
 func (r *referenceImp) Kind() kind.Kind    { return kind.Reference }
 func (r *referenceImp) GoType() types.Type { return r.realType }
 

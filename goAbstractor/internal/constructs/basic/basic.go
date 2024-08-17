@@ -21,8 +21,9 @@ func newBasic(args constructs.BasicArgs) constructs.Basic {
 	return &basicImp{realType: rt}
 }
 
-func (t *basicImp) IsTypeDesc()        {}
-func (t *basicImp) IsBasic()           {}
+func (t *basicImp) IsTypeDesc() {}
+func (t *basicImp) IsBasic()    {}
+
 func (t *basicImp) Kind() kind.Kind    { return kind.Basic }
 func (t *basicImp) SetIndex(index int) { t.index = index }
 func (t *basicImp) GoType() types.Type { return t.realType }

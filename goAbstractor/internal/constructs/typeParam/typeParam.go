@@ -26,8 +26,9 @@ func newTypeParam(args constructs.TypeParamArgs) constructs.TypeParam {
 	}
 }
 
-func (t *typeParamImp) IsTypeDesc()        {}
-func (t *typeParamImp) IsTypeParam()       {}
+func (t *typeParamImp) IsTypeDesc()  {}
+func (t *typeParamImp) IsTypeParam() {}
+
 func (t *typeParamImp) Kind() kind.Kind    { return kind.TypeParam }
 func (t *typeParamImp) SetIndex(index int) { t.index = index }
 func (t *typeParamImp) GoType() types.Type { return t.typ.GoType() }

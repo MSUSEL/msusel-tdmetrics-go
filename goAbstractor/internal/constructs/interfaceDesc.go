@@ -20,6 +20,17 @@ type InterfaceDesc interface {
 	TypeDesc
 	IsInterfaceDesc()
 
+	// Abstracts is the set of named signatures for this interface.
+	Abstracts() []Abstract
+
+	// Exact types are like `string|int|bool` where the
+	// data type must match exactly.
+	Exact() []TypeDesc
+
+	// Approx types are like `~string|~int` where the data type
+	// may be exact or an extension of the base type.
+	Approx() []TypeDesc
+
 	// IsUnion indicates if there is two or more exact or approximate types.
 	IsUnion() bool
 

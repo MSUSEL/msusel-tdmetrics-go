@@ -1,6 +1,7 @@
 package structDesc
 
 import (
+	"go/token"
 	"go/types"
 
 	"github.com/Snow-Gremlin/goToolbox/comp"
@@ -26,7 +27,12 @@ func newStructDesc(args constructs.StructDescArgs) constructs.StructDesc {
 	if utils.IsNil(args.RealType) {
 		assert.ArgNotNil(`package`, args.Package)
 
-		// TODO: Implement
+		fields := make([]*types.Var, len(args.Fields))
+		for i, field := range args.Fields {
+			fields[i] = types.NewField(token.NoPos, args.Package.Types,
+				field.Name(), field.Type().GoType(), field.Embedded())
+		}
+		args.RealType = types.NewStruct(fields, nil)
 	}
 	assert.ArgNotNil(`real type`, args.RealType)
 
@@ -36,11 +42,14 @@ func newStructDesc(args constructs.StructDescArgs) constructs.StructDesc {
 	}
 }
 
-func (d *structDescImp) IsTypeDesc()        {}
-func (d *structDescImp) IsStructDesc()      {}
+func (d *structDescImp) IsTypeDesc()   {}
+func (d *structDescImp) IsStructDesc() {}
+
 func (d *structDescImp) Kind() kind.Kind    { return kind.StructDesc }
 func (d *structDescImp) SetIndex(index int) { d.index = index }
 func (d *structDescImp) GoType() types.Type { return d.realType }
+
+func (d *structDescImp) Fields() []constructs.Field { return d.fields }
 
 func (d *structDescImp) CompareTo(other constructs.Construct) int {
 	return constructs.CompareTo[constructs.StructDesc](d, other, Comparer())

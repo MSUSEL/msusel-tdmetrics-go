@@ -30,6 +30,7 @@ type methodImp struct {
 	metrics    metrics.Metrics
 	recvName   string
 	receiver   constructs.Object
+	noCopyRecv bool
 
 	instances collections.SortedSet[constructs.Instance]
 
@@ -63,6 +64,7 @@ func newMethod(args constructs.MethodArgs) constructs.Method {
 		metrics:    args.Metrics,
 		recvName:   args.RecvName,
 		receiver:   args.Receiver,
+		noCopyRecv: args.NoCopyRecv,
 
 		instances: sortedSet.New(instance.Comparer()),
 	}
@@ -73,8 +75,9 @@ func newMethod(args constructs.MethodArgs) constructs.Method {
 	return met
 }
 
-func (m *methodImp) IsDeclaration()     {}
-func (m *methodImp) IsMethod()          {}
+func (m *methodImp) IsDeclaration() {}
+func (m *methodImp) IsMethod()      {}
+
 func (m *methodImp) Kind() kind.Kind    { return kind.Method }
 func (m *methodImp) SetIndex(index int) { m.index = index }
 func (m *methodImp) GoType() types.Type { return m.realType }
@@ -82,6 +85,9 @@ func (m *methodImp) GoType() types.Type { return m.realType }
 func (m *methodImp) Package() constructs.Package { return m.pkg }
 func (m *methodImp) Name() string                { return m.name }
 func (m *methodImp) Location() locs.Loc          { return m.loc }
+
+func (m *methodImp) Signature() constructs.Signature { return m.signature }
+func (m *methodImp) Metrics() metrics.Metrics        { return m.metrics }
 
 func (m *methodImp) TypeParams() []constructs.TypeParam {
 	return m.typeParams
@@ -94,6 +100,8 @@ func (m *methodImp) AddInstance(inst constructs.Instance) constructs.Instance {
 
 func (m *methodImp) ReceiverName() string               { return m.recvName }
 func (m *methodImp) SetReceiver(recv constructs.Object) { m.receiver = recv }
+func (m *methodImp) Receiver() constructs.Object        { return m.receiver }
+func (m *methodImp) NoCopyRecv() bool                   { return m.noCopyRecv }
 
 func (m *methodImp) NeedsReceiver() bool {
 	return utils.IsNil(m.receiver) && len(m.recvName) > 0

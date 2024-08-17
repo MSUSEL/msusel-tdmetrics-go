@@ -50,7 +50,8 @@ func newPackage(args constructs.PackageArgs) constructs.Package {
 	}
 }
 
-func (p *packageImp) IsPackage()         {}
+func (p *packageImp) IsPackage() {}
+
 func (p *packageImp) Kind() kind.Kind    { return kind.Package }
 func (p *packageImp) SetIndex(index int) { p.index = index }
 

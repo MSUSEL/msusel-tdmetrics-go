@@ -28,7 +28,8 @@ func newArgument(args constructs.ArgumentArgs) constructs.Argument {
 	}
 }
 
-func (a *argumentImp) IsArgument()        {}
+func (a *argumentImp) IsArgument() {}
+
 func (a *argumentImp) Kind() kind.Kind    { return kind.Argument }
 func (a *argumentImp) SetIndex(index int) { a.index = index }
 

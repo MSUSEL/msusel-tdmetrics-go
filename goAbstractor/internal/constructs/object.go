@@ -20,6 +20,8 @@ type Object interface {
 	TypeDecl
 	IsObject()
 
+	Data() StructDesc
+
 	AddMethod(met Method) Method
 	SetInterface(it InterfaceDesc)
 

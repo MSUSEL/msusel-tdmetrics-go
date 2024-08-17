@@ -8,6 +8,9 @@ import (
 type Value interface {
 	Declaration
 	IsValue()
+
+	Type() TypeDesc
+	Const() bool
 }
 
 type ValueArgs struct {

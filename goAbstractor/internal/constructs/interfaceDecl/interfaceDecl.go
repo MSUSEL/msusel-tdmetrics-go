@@ -48,9 +48,10 @@ func newInterfaceDecl(args constructs.InterfaceDeclArgs) constructs.InterfaceDec
 	}
 }
 
-func (d *interfaceDeclImp) IsDeclaration()     {}
-func (d *interfaceDeclImp) IsTypeDesc()        {}
-func (d *interfaceDeclImp) IsInterface()       {}
+func (d *interfaceDeclImp) IsDeclaration() {}
+func (d *interfaceDeclImp) IsTypeDesc()    {}
+func (d *interfaceDeclImp) IsInterface()   {}
+
 func (d *interfaceDeclImp) Kind() kind.Kind    { return kind.InterfaceDecl }
 func (d *interfaceDeclImp) SetIndex(index int) { d.index = index }
 func (d *interfaceDeclImp) GoType() types.Type { return d.realType }
@@ -59,9 +60,8 @@ func (d *interfaceDeclImp) Package() constructs.Package { return d.pkg }
 func (d *interfaceDeclImp) Name() string                { return d.name }
 func (d *interfaceDeclImp) Location() locs.Loc          { return d.loc }
 
-func (d *interfaceDeclImp) TypeParams() []constructs.TypeParam {
-	return d.typeParams
-}
+func (d *interfaceDeclImp) Interface() constructs.InterfaceDesc { return d.inter }
+func (d *interfaceDeclImp) TypeParams() []constructs.TypeParam  { return d.typeParams }
 
 func (d *interfaceDeclImp) AddInstance(inst constructs.Instance) constructs.Instance {
 	v, _ := d.instances.TryAdd(inst)

@@ -28,9 +28,10 @@ func newInstance(args constructs.InstanceArgs) constructs.Instance {
 	assert.ArgHasNoNils(`instance types`, args.InstanceTypes)
 
 	if utils.IsNil(args.RealType) {
-		assert.ArgNotNil(`package`, args.Package)
+		pkg := args.Generic.Package()
+		assert.ArgNotNil(`package`, pkg)
 
-		// TODO: Implement
+		// TODO: Implement if needed.
 	}
 	assert.ArgNotNil(`real type`, args.RealType)
 
@@ -43,11 +44,15 @@ func newInstance(args constructs.InstanceArgs) constructs.Instance {
 	return args.Generic.AddInstance(inst)
 }
 
-func (i *instanceImp) IsInstance()        {}
-func (i *instanceImp) IsTypeDesc()        {}
+func (i *instanceImp) IsInstance() {}
+func (i *instanceImp) IsTypeDesc() {}
+
 func (i *instanceImp) Kind() kind.Kind    { return kind.Instance }
 func (i *instanceImp) SetIndex(index int) { i.index = index }
 func (m *instanceImp) GoType() types.Type { return m.realType }
+
+func (m *instanceImp) Generic() constructs.TypeDecl  { return m.generic }
+func (m *instanceImp) Resolved() constructs.TypeDesc { return m.resolved }
 
 func (m *instanceImp) InstanceTypes() []constructs.TypeDesc {
 	return m.instanceTypes

@@ -85,8 +85,6 @@ func (m *Map) subSeek(s *seeker) Datum {
 	return sub
 }
 
-// TODO: Check tht the given key follows the JSON requirements for keys.
-
 func (m *Map) Add(ctx *Context, key string, value any) *Map {
 	if m == nil {
 		m = NewMap()

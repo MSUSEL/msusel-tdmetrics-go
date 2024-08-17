@@ -12,6 +12,10 @@ type Signature interface {
 	TypeDesc
 	IsSignature()
 
+	Variadic() bool
+	Params() []Argument
+	Results() []Argument
+
 	// IsVacant indicates there are no parameters and no results,
 	// i.e. `func()()`.
 	IsVacant() bool

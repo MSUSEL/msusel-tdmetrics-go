@@ -12,9 +12,13 @@ import (
 type Method interface {
 	Declaration
 
+	Signature() Signature
+	Metrics() metrics.Metrics
 	ReceiverName() string
 	SetReceiver(recv Object)
 	NeedsReceiver() bool
+	Receiver() Object
+	NoCopyRecv() bool
 
 	IsInit() bool
 	IsNamed() bool
@@ -38,7 +42,6 @@ type MethodArgs struct {
 	// should not be copied. This currently is not used in abstraction
 	// because it doesn't matter if a copy is assigned to or not. If assigned
 	// to at all, the receiver type is a mutable according to the abstraction.
-	// (I just thought it was an interesting bit of information to collect.)
 	NoCopyRecv bool
 }
 

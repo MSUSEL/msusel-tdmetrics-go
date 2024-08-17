@@ -1,6 +1,7 @@
 package interfaceDesc
 
 import (
+	"go/token"
 	"go/types"
 
 	"github.com/Snow-Gremlin/goToolbox/collections"
@@ -34,7 +35,25 @@ func newInterfaceDesc(args constructs.InterfaceDescArgs) constructs.InterfaceDes
 	if utils.IsNil(args.RealType) {
 		assert.ArgNotNil(`package`, args.Package)
 
-		// TODO: Implement
+		methods := make([]*types.Func, len(args.Abstracts))
+		for i, abstract := range args.Abstracts {
+			methods[i] = types.NewFunc(token.NoPos, args.Package.Types,
+				abstract.Name(), abstract.Signature().GoType().(*types.Signature))
+		}
+
+		embedded := []types.Type{}
+		if count1, count2 := len(args.Exact), len(args.Approx); count1+count2 > 0 {
+			terms := make([]*types.Term, count1+count2)
+			for i, exact := range args.Exact {
+				terms[i] = types.NewTerm(false, exact.GoType())
+			}
+			for i, approx := range args.Approx {
+				terms[i+count1] = types.NewTerm(true, approx.GoType())
+			}
+			embedded = append(embedded, types.NewUnion(terms))
+		}
+
+		args.RealType = types.NewInterfaceType(methods, embedded).Complete()
 	}
 	assert.ArgNotNil(`real type`, args.RealType)
 
@@ -49,11 +68,16 @@ func newInterfaceDesc(args constructs.InterfaceDescArgs) constructs.InterfaceDes
 	}
 }
 
-func (id *interfaceDescImp) IsTypeDesc()        {}
-func (id *interfaceDescImp) IsInterfaceDesc()   {}
+func (id *interfaceDescImp) IsTypeDesc()      {}
+func (id *interfaceDescImp) IsInterfaceDesc() {}
+
 func (id *interfaceDescImp) Kind() kind.Kind    { return kind.InterfaceDesc }
 func (id *interfaceDescImp) SetIndex(index int) { id.index = index }
 func (id *interfaceDescImp) GoType() types.Type { return id.realType }
+
+func (id *interfaceDescImp) Abstracts() []constructs.Abstract { return id.abstracts }
+func (id *interfaceDescImp) Exact() []constructs.TypeDesc     { return id.exact }
+func (id *interfaceDescImp) Approx() []constructs.TypeDesc    { return id.approx }
 
 func (id *interfaceDescImp) IsUnion() bool {
 	return len(id.approx)+len(id.exact) >= 2

@@ -52,11 +52,16 @@ func newSignature(args constructs.SignatureArgs) constructs.Signature {
 	}
 }
 
-func (m *signatureImp) IsTypeDesc()        {}
-func (m *signatureImp) IsSignature()       {}
+func (m *signatureImp) IsTypeDesc()  {}
+func (m *signatureImp) IsSignature() {}
+
 func (m *signatureImp) Kind() kind.Kind    { return kind.Signature }
 func (m *signatureImp) SetIndex(index int) { m.index = index }
 func (m *signatureImp) GoType() types.Type { return m.realType }
+
+func (m *signatureImp) Variadic() bool                 { return m.variadic }
+func (m *signatureImp) Params() []constructs.Argument  { return m.params }
+func (m *signatureImp) Results() []constructs.Argument { return m.results }
 
 func (m *signatureImp) IsVacant() bool {
 	return len(m.params) <= 0 && len(m.results) <= 0

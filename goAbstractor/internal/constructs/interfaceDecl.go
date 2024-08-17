@@ -20,6 +20,7 @@ type InterfaceDecl interface {
 	TypeDecl
 	IsInterface()
 
+	Interface() InterfaceDesc
 	IsNamed() bool
 	IsGeneric() bool
 }

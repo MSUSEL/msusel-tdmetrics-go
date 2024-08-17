@@ -24,7 +24,8 @@ func newAbstract(args constructs.AbstractArgs) constructs.Abstract {
 	}
 }
 
-func (a *abstractImp) IsAbstract()        {}
+func (a *abstractImp) IsAbstract() {}
+
 func (a *abstractImp) Kind() kind.Kind    { return kind.Abstract }
 func (a *abstractImp) SetIndex(index int) { a.index = index }
 

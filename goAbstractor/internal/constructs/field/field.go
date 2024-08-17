@@ -28,7 +28,8 @@ func newField(args constructs.FieldArgs) constructs.Field {
 	}
 }
 
-func (f *fieldImp) IsField()           {}
+func (f *fieldImp) IsField() {}
+
 func (f *fieldImp) Kind() kind.Kind    { return kind.Field }
 func (f *fieldImp) SetIndex(index int) { f.index = index }
 

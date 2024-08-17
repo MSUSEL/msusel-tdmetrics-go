@@ -11,6 +11,8 @@ import (
 type StructDesc interface {
 	TypeDesc
 	IsStructDesc()
+
+	Fields() []Field
 }
 
 type StructDescArgs struct {

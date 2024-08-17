@@ -79,7 +79,7 @@ func (ab *abstractor) convertChan(t *types.Chan) constructs.TypeDesc {
 }
 
 func (ab *abstractor) convertInterface(t *types.Interface) constructs.InterfaceDesc {
-	t = t.Complete()
+	t.Complete()
 
 	abstracts := []constructs.Abstract{}
 	for i := range t.NumMethods() {

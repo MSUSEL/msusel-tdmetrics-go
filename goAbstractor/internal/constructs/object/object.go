@@ -53,9 +53,10 @@ func newObject(args constructs.ObjectArgs) constructs.Object {
 	}
 }
 
-func (d *objectImp) IsDeclaration()     {}
-func (d *objectImp) IsTypeDesc()        {}
-func (d *objectImp) IsObject()          {}
+func (d *objectImp) IsDeclaration() {}
+func (d *objectImp) IsTypeDesc()    {}
+func (d *objectImp) IsObject()      {}
+
 func (d *objectImp) Kind() kind.Kind    { return kind.Object }
 func (d *objectImp) SetIndex(index int) { d.index = index }
 func (d *objectImp) GoType() types.Type { return d.realType }
@@ -64,9 +65,8 @@ func (d *objectImp) Package() constructs.Package { return d.pkg }
 func (d *objectImp) Name() string                { return d.name }
 func (d *objectImp) Location() locs.Loc          { return d.loc }
 
-func (d *objectImp) TypeParams() []constructs.TypeParam {
-	return d.typeParams
-}
+func (d *objectImp) Data() constructs.StructDesc        { return d.data }
+func (d *objectImp) TypeParams() []constructs.TypeParam { return d.typeParams }
 
 func (d *objectImp) AddMethod(met constructs.Method) constructs.Method {
 	v, _ := d.methods.TryAdd(met)
