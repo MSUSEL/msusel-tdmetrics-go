@@ -9,7 +9,6 @@ type Value interface {
 	Declaration
 	IsValue()
 
-	Type() TypeDesc
 	Const() bool
 }
 

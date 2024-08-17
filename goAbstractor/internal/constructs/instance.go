@@ -14,14 +14,14 @@ type Instance interface {
 	TypeDesc
 	IsInstance()
 
-	Generic() TypeDecl
+	Generic() Declaration
 	Resolved() TypeDesc
 	InstanceTypes() []TypeDesc
 }
 
 type InstanceArgs struct {
 	RealType      types.Type
-	Generic       TypeDecl
+	Generic       Declaration
 	Resolved      TypeDesc
 	InstanceTypes []TypeDesc
 }

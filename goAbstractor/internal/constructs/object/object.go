@@ -65,6 +65,7 @@ func (d *objectImp) Package() constructs.Package { return d.pkg }
 func (d *objectImp) Name() string                { return d.name }
 func (d *objectImp) Location() locs.Loc          { return d.loc }
 
+func (d *objectImp) Type() constructs.TypeDesc          { return d.data }
 func (d *objectImp) Data() constructs.StructDesc        { return d.data }
 func (d *objectImp) TypeParams() []constructs.TypeParam { return d.typeParams }
 

@@ -6,6 +6,7 @@ import (
 	"github.com/Snow-Gremlin/goToolbox/collections"
 	"github.com/Snow-Gremlin/goToolbox/collections/sortedSet"
 	"github.com/Snow-Gremlin/goToolbox/comp"
+	"github.com/Snow-Gremlin/goToolbox/utils"
 
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/assert"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs"
@@ -30,10 +31,18 @@ type interfaceDeclImp struct {
 }
 
 func newInterfaceDecl(args constructs.InterfaceDeclArgs) constructs.InterfaceDecl {
-	assert.ArgNotNil(`real type`, args.RealType)
 	assert.ArgNotNil(`package`, args.Package)
 	assert.ArgNotNil(`interface`, args.Interface)
 	assert.ArgHasNoNils(`type params`, args.TypeParams)
+
+	if utils.IsNil(args.RealType) {
+		pkg := args.Package.Source().Types
+		assert.ArgNotNil(`package`, pkg)
+
+		tn := types.NewTypeName(args.Location.Pos(), pkg, args.Name, nil)
+		args.RealType = types.NewNamed(tn, args.Interface.GoType(), nil)
+	}
+	assert.ArgNotNil(`real type`, args.RealType)
 
 	return &interfaceDeclImp{
 		realType: args.RealType,
@@ -60,6 +69,7 @@ func (d *interfaceDeclImp) Package() constructs.Package { return d.pkg }
 func (d *interfaceDeclImp) Name() string                { return d.name }
 func (d *interfaceDeclImp) Location() locs.Loc          { return d.loc }
 
+func (d *interfaceDeclImp) Type() constructs.TypeDesc           { return d.inter }
 func (d *interfaceDeclImp) Interface() constructs.InterfaceDesc { return d.inter }
 func (d *interfaceDeclImp) TypeParams() []constructs.TypeParam  { return d.typeParams }
 

@@ -16,6 +16,7 @@ type Declaration interface {
 	Package() Package
 	Name() string
 	Location() locs.Loc
+	Type() TypeDesc
 }
 
 // TypeDecl is both a type description and a type declaration,

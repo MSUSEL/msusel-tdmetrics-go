@@ -175,6 +175,7 @@ func (ab *abstractor) abstractTypeSpec(spec *ast.TypeSpec) {
 
 	if it, ok := typ.(constructs.InterfaceDesc); ok {
 		ab.proj.NewInterfaceDecl(constructs.InterfaceDeclArgs{
+			RealType:   tv.Type,
 			Package:    ab.curPkg,
 			Name:       spec.Name.Name,
 			Interface:  it,
@@ -332,6 +333,13 @@ func (ab *abstractor) abstractFuncDecl(decl *ast.FuncDecl) {
 	loc := ab.proj.NewLoc(decl.Pos())
 
 	tp := ab.abstractTypeParams(decl.Type.TypeParams)
+
+	// TODO: Need to generate instances too.
+	instances, has := ab.info().Instances[decl.Name]
+	fmt.Printf("=== (%t) %v\n", has, instances.Type)
+	for i := range instances.TypeArgs.Len() {
+		fmt.Printf("%d. %v\n", i, instances.TypeArgs.At(i))
+	}
 
 	name := decl.Name.Name
 	if name == `init` && len(recvName) <= 0 && sig.IsVacant() {

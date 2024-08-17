@@ -7,8 +7,7 @@ import (
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/locs"
 )
 
-type Project interface {
-	jsonify.Jsonable
+type Factories interface {
 
 	// Components
 	AbstractFactory
@@ -32,6 +31,11 @@ type Project interface {
 	TypeParamFactory
 
 	NewLoc(pos token.Pos) locs.Loc
+}
+
+type Project interface {
+	jsonify.Jsonable
+	Factories
 
 	FindType(pkgPath, typeName string, panicOnNotFound bool) (Package, TypeDecl, bool)
 

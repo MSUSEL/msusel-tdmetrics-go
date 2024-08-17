@@ -46,12 +46,7 @@ func (ab *abstractor) convertType(t types.Type) constructs.TypeDesc {
 func (ab *abstractor) convertArray(t *types.Array) constructs.TypeDesc {
 	elem := ab.convertType(t.Elem())
 	generic := ab.baker.BakeList()
-	return ab.proj.NewInstance(constructs.InstanceArgs{
-		RealType: t,
-		Generic:  generic,
-		//Resolved:  // TODO: Fill out
-		InstanceTypes: []constructs.TypeDesc{elem},
-	})
+	return ab.instantiateTypeDecl(t.Underlying(), generic, elem)
 }
 
 func (ab *abstractor) convertBasic(t *types.Basic) constructs.TypeDesc {
@@ -70,12 +65,7 @@ func (ab *abstractor) convertBasic(t *types.Basic) constructs.TypeDesc {
 func (ab *abstractor) convertChan(t *types.Chan) constructs.TypeDesc {
 	elem := ab.convertType(t.Elem())
 	generic := ab.baker.BakeChan()
-	return ab.proj.NewInstance(constructs.InstanceArgs{
-		RealType: t,
-		Generic:  generic,
-		//Resolved:  // TODO: Fill out
-		InstanceTypes: []constructs.TypeDesc{elem},
-	})
+	return ab.instantiateTypeDecl(t.Underlying(), generic, elem)
 }
 
 func (ab *abstractor) convertInterface(t *types.Interface) constructs.InterfaceDesc {
@@ -114,12 +104,7 @@ func (ab *abstractor) convertMap(t *types.Map) constructs.TypeDesc {
 	key := ab.convertType(t.Key())
 	value := ab.convertType(t.Elem())
 	generic := ab.baker.BakeMap()
-	return ab.proj.NewInstance(constructs.InstanceArgs{
-		RealType: t,
-		Generic:  generic,
-		//Resolved:  // TODO: Fill out
-		InstanceTypes: []constructs.TypeDesc{key, value},
-	})
+	return ab.instantiateTypeDecl(t.Underlying(), generic, key, value)
 }
 
 func (ab *abstractor) convertNamed(t *types.Named) constructs.TypeDesc {
@@ -155,34 +140,13 @@ func (ab *abstractor) convertNamed(t *types.Named) constructs.TypeDesc {
 		})
 	}
 
-	if ab.needsInstance(typ, instanceTp) {
-		return ab.proj.NewInstance(constructs.InstanceArgs{
-			RealType: t,
-			Generic:  typ,
-			//Resolved:  // TODO: Fill out?
-			InstanceTypes: instanceTp,
-		})
-	}
-
-	return typ
-}
-
-func (ab *abstractor) needsInstance(_ constructs.TypeDecl, tp []constructs.TypeDesc) bool {
-	// TODO: When creating an instance, the instance they types need
-	//       to be checked to be different from the initial generic types.
-	//       Example: If `func Foo[T any]() { ... Func[T]() ... }`
-	return len(tp) > 0
+	return ab.instantiateTypeDecl(t.Underlying(), typ, instanceTp...)
 }
 
 func (ab *abstractor) convertPointer(t *types.Pointer) constructs.TypeDesc {
 	elem := ab.convertType(t.Elem())
 	generic := ab.baker.BakePointer()
-	return ab.proj.NewInstance(constructs.InstanceArgs{
-		RealType: t,
-		Generic:  generic,
-		//Resolved:  // TODO: Fill out
-		InstanceTypes: []constructs.TypeDesc{elem},
-	})
+	return ab.instantiateTypeDecl(t.Underlying(), generic, elem)
 }
 
 func (ab *abstractor) convertSignature(t *types.Signature) constructs.Signature {
@@ -199,12 +163,7 @@ func (ab *abstractor) convertSignature(t *types.Signature) constructs.Signature 
 func (ab *abstractor) convertSlice(t *types.Slice) constructs.TypeDesc {
 	elem := ab.convertType(t.Elem())
 	generic := ab.baker.BakeList()
-	return ab.proj.NewInstance(constructs.InstanceArgs{
-		RealType: t,
-		Generic:  generic,
-		//Resolved:  // TODO: Fill out
-		InstanceTypes: []constructs.TypeDesc{elem},
-	})
+	return ab.instantiateTypeDecl(t.Underlying(), generic, elem)
 }
 
 func (ab *abstractor) convertStruct(t *types.Struct) constructs.StructDesc {

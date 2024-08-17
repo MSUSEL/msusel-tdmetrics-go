@@ -86,6 +86,7 @@ func (m *methodImp) Package() constructs.Package { return m.pkg }
 func (m *methodImp) Name() string                { return m.name }
 func (m *methodImp) Location() locs.Loc          { return m.loc }
 
+func (m *methodImp) Type() constructs.TypeDesc       { return m.signature }
 func (m *methodImp) Signature() constructs.Signature { return m.signature }
 func (m *methodImp) Metrics() metrics.Metrics        { return m.metrics }
 
