@@ -1,6 +1,9 @@
 package constructs
 
-import "github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/locs"
+import (
+	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/locs"
+	"github.com/Snow-Gremlin/goToolbox/collections"
+)
 
 // Declaration is a type, value, or method declaration with a name.
 type Declaration interface {
@@ -12,6 +15,7 @@ type Declaration interface {
 
 	TypeParams() []TypeParam
 	AddInstance(inst Instance) Instance
+	Instances() collections.ReadonlySortedSet[Instance]
 
 	Package() Package
 	Name() string

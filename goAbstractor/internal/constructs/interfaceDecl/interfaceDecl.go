@@ -73,6 +73,10 @@ func (d *interfaceDeclImp) Type() constructs.TypeDesc           { return d.inter
 func (d *interfaceDeclImp) Interface() constructs.InterfaceDesc { return d.inter }
 func (d *interfaceDeclImp) TypeParams() []constructs.TypeParam  { return d.typeParams }
 
+func (d *interfaceDeclImp) Instances() collections.ReadonlySortedSet[constructs.Instance] {
+	return d.instances.Readonly()
+}
+
 func (d *interfaceDeclImp) AddInstance(inst constructs.Instance) constructs.Instance {
 	v, _ := d.instances.TryAdd(inst)
 	return v

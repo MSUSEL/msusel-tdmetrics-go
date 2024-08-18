@@ -1,6 +1,7 @@
 package value
 
 import (
+	"github.com/Snow-Gremlin/goToolbox/collections"
 	"github.com/Snow-Gremlin/goToolbox/comp"
 	"github.com/Snow-Gremlin/goToolbox/terrors/terror"
 
@@ -47,6 +48,10 @@ func (v *valueImp) Package() constructs.Package { return v.pkg }
 func (v *valueImp) Type() constructs.TypeDesc          { return v.typ }
 func (v *valueImp) Const() bool                        { return v.isConst }
 func (v *valueImp) TypeParams() []constructs.TypeParam { return nil }
+
+func (v *valueImp) Instances() collections.ReadonlySortedSet[constructs.Instance] {
+	return nil
+}
 
 func (v *valueImp) AddInstance(inst constructs.Instance) constructs.Instance {
 	panic(terror.New(`may not add an instance to a value declaration`).

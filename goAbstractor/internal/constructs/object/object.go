@@ -69,6 +69,10 @@ func (d *objectImp) Type() constructs.TypeDesc          { return d.data }
 func (d *objectImp) Data() constructs.StructDesc        { return d.data }
 func (d *objectImp) TypeParams() []constructs.TypeParam { return d.typeParams }
 
+func (d *objectImp) Instances() collections.ReadonlySortedSet[constructs.Instance] {
+	return d.instances.Readonly()
+}
+
 func (d *objectImp) AddMethod(met constructs.Method) constructs.Method {
 	v, _ := d.methods.TryAdd(met)
 	return v
