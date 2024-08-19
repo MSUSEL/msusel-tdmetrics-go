@@ -1,6 +1,8 @@
 package constructs
 
 import (
+	"strings"
+
 	"github.com/Snow-Gremlin/goToolbox/comp"
 	"github.com/Snow-Gremlin/goToolbox/utils"
 
@@ -74,8 +76,8 @@ func CompareTo[T Construct](a T, b Construct, cmp comp.Comparer[T]) int {
 	if utils.IsNil(b) {
 		return 1
 	}
-	return comp.Or(
-		comp.DefaultPend(string(a.Kind()), string(b.Kind())),
-		cmp.Pend(a, b.(T)),
-	)
+	if c := strings.Compare(string(a.Kind()), string(b.Kind())); c != 0 {
+		return c
+	}
+	return cmp(a, b.(T))
 }

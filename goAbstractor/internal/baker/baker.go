@@ -178,7 +178,7 @@ func (b *bakerImp) BakeList() constructs.InterfaceDecl {
 
 		// $set(index int, value T)
 		setFunc := b.proj.NewAbstract(constructs.AbstractArgs{
-			Name: `$get`,
+			Name: `$set`,
 			Signature: b.proj.NewSignature(constructs.SignatureArgs{
 				Params:  []constructs.Argument{indexArg, valueArg},
 				Package: pkg.Source(),

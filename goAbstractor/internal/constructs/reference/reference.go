@@ -45,12 +45,13 @@ func newReference(args constructs.ReferenceArgs) constructs.Reference {
 func (r *referenceImp) IsTypeDesc()  {}
 func (r *referenceImp) IsReference() {}
 
-func (r *referenceImp) Kind() kind.Kind    { return kind.Reference }
-func (r *referenceImp) GoType() types.Type { return r.realType }
+func (r *referenceImp) Kind() kind.Kind     { return kind.Reference }
+func (r *referenceImp) GoType() types.Type  { return r.realType }
+func (r *referenceImp) PackagePath() string { return r.pkgPath }
+func (r *referenceImp) Name() string        { return r.name }
 
-func (r *referenceImp) PackagePath() string                  { return r.pkgPath }
-func (r *referenceImp) Name() string                         { return r.name }
 func (r *referenceImp) InstanceTypes() []constructs.TypeDesc { return r.instanceTypes }
+func (r *referenceImp) ResolvedType() constructs.TypeDesc    { return r.typ }
 
 func (r *referenceImp) Resolved() bool {
 	return !utils.IsNil(r.typ)

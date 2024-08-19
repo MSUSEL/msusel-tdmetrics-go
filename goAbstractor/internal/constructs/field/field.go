@@ -45,7 +45,6 @@ func Comparer() comp.Comparer[constructs.Field] {
 	return func(a, b constructs.Field) int {
 		aImp, bImp := a.(*fieldImp), b.(*fieldImp)
 		return comp.Or(
-			comp.DefaultPend(aImp.Kind(), bImp.Kind()),
 			constructs.ComparerPend(aImp.typ, bImp.typ),
 			comp.DefaultPend(aImp.embedded, bImp.embedded),
 		)

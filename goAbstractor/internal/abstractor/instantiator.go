@@ -98,45 +98,120 @@ func (ab *abstractor) instantiateDeclaration(realType types.Type, decl construct
 func (i *instantiator) TypeDesc(td constructs.TypeDesc) constructs.TypeDesc {
 	switch td.Kind() {
 	case kind.Basic:
+		return td
 	case kind.Instance:
+		return i.Instance(td.(constructs.Instance))
 	case kind.InterfaceDesc:
+		return i.InterfaceDesc(td.(constructs.InterfaceDesc))
 	case kind.Reference:
+		return i.Reference(td.(constructs.Reference))
 	case kind.Signature:
+		return i.Signature(td.(constructs.Signature))
 	case kind.StructDesc:
+		return i.StructDesc(td.(constructs.StructDesc))
 	case kind.TypeParam:
+		return i.TypeParam(td.(constructs.TypeParam))
 	case kind.Object:
+		return i.Object(td.(constructs.Object))
 	case kind.InterfaceDecl:
+		return i.InterfaceDecl(td.(constructs.InterfaceDecl))
 	default:
 		panic(terror.New(`unexpected type description kind`).
-			With(`kind`, td.Kind()))
+			With(`kind`, td.Kind()).
+			With(`type desc`, td))
 	}
 }
 
-func (i *instantiator) Interface(it constructs.InterfaceDesc) constructs.InterfaceDesc {
-	abstracts := make([]constructs.Abstract, len(it.Abstracts()))
-	for j, a := range it.Abstracts() {
-		abstracts[j] = i.Abstract(a)
+func mapSlice[T any, S ~[]T](s S, handle func(T) T) S {
+	result := make(S, len(s))
+	for i, e := range s {
+		result[i] = handle(e)
 	}
+	return result
+}
 
-	exact := make([]constructs.TypeDesc, len(it.Exact()))
-	for j, e := range it.Exact() {
-		exact[j] = i.TypeDesc(e)
-	}
+func (i *instantiator) Abstract(a constructs.Abstract) constructs.Abstract {
+	return i.proj.NewAbstract(constructs.AbstractArgs{
+		Name:      a.Name(),
+		Signature: i.Signature(a.Signature()),
+	})
+}
 
-	approx := []constructs.TypeDesc{}
-	for j, a := range it.Exact() {
-		approx[j] = i.TypeDesc(a)
-	}
+func (i *instantiator) Argument(a constructs.Argument) constructs.Argument {
+	return i.proj.NewArgument(constructs.ArgumentArgs{
+		Name: a.Name(),
+		Type: i.TypeDesc(a.Type()),
+	})
+}
 
+func (i *instantiator) Field(f constructs.Field) constructs.Field {
+	return i.proj.NewField(constructs.FieldArgs{
+		Name:     f.Name(),
+		Type:     i.TypeDesc(f.Type()),
+		Embedded: f.Embedded(),
+	})
+}
+
+func (i *instantiator) Instance(in constructs.Instance) constructs.Instance {
+	// TODO: Check if instance is a match to the current instance types.
+	//       Otherwise, look up the declaration and create a new instantiator.
+	return nil
+}
+
+func (i *instantiator) InterfaceDecl(s constructs.InterfaceDecl) constructs.InterfaceDecl {
+	// TODO: Use the declaration to create a new instantiator.
+	return nil
+}
+
+func (i *instantiator) InterfaceDesc(it constructs.InterfaceDesc) constructs.InterfaceDesc {
 	return i.proj.NewInterfaceDesc(constructs.InterfaceDescArgs{
-		Abstracts: abstracts,
-		Exact:     exact,
-		Approx:    approx,
+		Abstracts: mapSlice(it.Abstracts(), i.Abstract),
+		Exact:     mapSlice(it.Exact(), i.TypeDesc),
+		Approx:    mapSlice(it.Approx(), i.TypeDesc),
 		Package:   i.decl.Package().Source(),
 	})
 }
 
-func (i *instantiator) Abstract(a constructs.Abstract) constructs.Abstract {
-	// TODO: Implement
+func (i *instantiator) Object(obj constructs.Object) constructs.Object {
+	// TODO: Use the declaration to create a new instantiator.
 	return nil
+}
+
+func (i *instantiator) Reference(r constructs.Reference) constructs.TypeDesc {
+	if r.Resolved() {
+		// The reference will probably not be resolved, but just in case
+		// it has been, just return the instantiated resolved type and
+		// skip the instantiated reference.
+		return i.TypeDesc(r.ResolvedType())
+	}
+
+	return i.proj.NewReference(constructs.ReferenceArgs{
+		PackagePath:   r.PackagePath(),
+		Name:          r.Name(),
+		InstanceTypes: mapSlice(r.InstanceTypes(), i.TypeDesc),
+		Package:       i.decl.Package().Source(),
+	})
+}
+
+func (i *instantiator) Signature(s constructs.Signature) constructs.Signature {
+	return i.proj.NewSignature(constructs.SignatureArgs{
+		Variadic: s.Variadic(),
+		Params:   mapSlice(s.Params(), i.Argument),
+		Results:  mapSlice(s.Results(), i.Argument),
+		Package:  i.decl.Package().Source(),
+	})
+}
+
+func (i *instantiator) StructDesc(s constructs.StructDesc) constructs.StructDesc {
+	return i.proj.NewStructDesc(constructs.StructDescArgs{
+		Fields:  mapSlice(s.Fields(), i.Field),
+		Package: i.decl.Package().Source(),
+	})
+}
+
+func (i *instantiator) TypeParam(tp constructs.TypeParam) constructs.TypeDesc {
+	if t, has := i.conversion[tp]; has {
+		return t
+	}
+	return tp
 }

@@ -81,6 +81,7 @@ func (i *instanceImp) ToJson(ctx *jsonify.Context) jsonify.Datum {
 	return jsonify.NewMap().
 		AddIf(ctx, ctx.IsKindShown(), `kind`, i.Kind()).
 		AddIf(ctx, ctx.IsIndexShown(), `index`, i.index).
+		AddNonZero(ctx2, `generic`, i.generic).
 		AddNonZero(ctx2, `resolved`, i.resolved).
 		AddNonZero(ctx2, `instanceTypes`, i.instanceTypes)
 }

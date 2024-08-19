@@ -1,105 +1,170 @@
 {
   language: go,
+  abstracts: [
+    { name: GetX, signature: 26 }, # 1.
+    { name: GetY, signature: 26 }, # 2.
+    { name: Sum,  signature: 26 }  # 3.
+  ],
+  arguments: [
+    {          type:  6 }, # 4. <unnamed> int
+    { name: p, type: 10 }  # 5.
+  ],
   basics: [
-    int # 1. int
+    int # 6. int
   ],
-  classes: [
-    { # 2. class Point { XCoord XCoord; YCoord YCoord }{ GetX() int; GetY() int; Sum() int }
-      name: Point, package: 24, data: 28, loc: 15,
-      implements: [ 9 ],
-      methods: [ 14 ]
-    },
-    { # 3. class XCoord { x int }{ GetX() int }
-      name: XCoord, package: 24, data: 29, interface: 8, loc: 7,
-      methods: [ 11 ]
-    },
-    { # 4. class YCoord { y int }{ GetY() int }
-      name: YCoord, package: 24, data: 30, interface: 10, loc: 11,
-      methods: [ 12 ]
-    }
+  fields: [
+    { name: x,      type:  6 }, # 7.
+    { name: XCoord, type: 22 }, # 8.
+    { name: YCoord, type: 23 }  # 9.
   ],
-  interDefs: [
-    { # 5. IPoint { GetX() int; GetY() int; Sum() int } 
-      name: IPoint, package: 24, type: 9, loc: 25
-    },
-    { # 6. IXCoord { GetX() int }
-      name: IXCoord, package: 24, type: 8, loc: 22
-    },
-    { # 7. IYCoord { GetY() int }
-      name: IYCoord, package: 24, type: 10, loc: 23
-    }
+  interfaceDecls: [
+    { name: IPoint,  package: 24, interface: 14, loc: 25 }, # 10.
+    { name: IXCoord, package: 24, interface: 13, loc: 22 }, # 11.
+    { name: IYCoord, package: 24, interface: 15, loc: 23 }  # 12.
   ],
-  interfaces: [
-    { # 8. interface { GetX() int }
-      methods: [ 16 ]
-    },
-    { # 9. interface { GetX() int; GetY() int; Sum() int }
-      inherits: [ 8, 10 ],
-      methods: [ 16, 17, 18 ]
-    },
-    { # 10. interface { GetY() int }
-      methods: [ 17 ]
-    },
+  interfaceDescs: [
+    { abstracts: [ 1 ]       }, # 13.
+    { abstracts: [ 1, 2, 3 ] }, # 14.
+    { abstracts: [ 2 ]       }  # 15.
   ],
   methods: [
-    { # 11.
-      name: GetX, package: 24, receiver: 3, signature: 26, loc: 9,
-      metrics: { codeCount: 1, complexity: 1, lineCount: 1 }
+    {
+      loc: 9,
+      metrics: {
+        codeCount: 1,
+        complexity: 1,
+        lineCount: 1
+      },
+      name: GetX,
+      package: 24,
+      receiver: 22,
+      signature: 26
     },
-    { # 12.
-      name: GetY, package: 24, receiver: 4, signature: 26, loc: 13,
-      metrics: { codeCount: 1, complexity: 1, lineCount: 1 }
+    {
+      loc: 13,
+      metrics: {
+        codeCount: 1,
+        complexity: 1,
+        lineCount: 1
+      },
+      name: GetY,
+      package: 24,
+      receiver: 23,
+      signature: 26
     },
-    { # 13.
-      name: PrintPoint, package: 24, signature: 27, loc: 33,
-      metrics: { codeCount: 3, complexity: 1, indents: 1, lineCount: 3 }
+    {
+      loc: 33,
+      metrics: {
+        codeCount: 3,
+        complexity: 1,
+        indents: 1,
+        lineCount: 3
+      },
+      name: PrintPoint,
+      package: 24,
+      signature: 27
     },
-    { # 14.
-      name: Sum, package: 24, receiver: 2, signature: 26, loc: 20,
-      metrics: { codeCount: 1, complexity: 1, lineCount: 1 }
+    {
+      loc: 20,
+      metrics: {
+        codeCount: 1,
+        complexity: 1,
+        lineCount: 1
+      },
+      name: Sum,
+      package: 24,
+      receiver: 21,
+      signature: 26
     },
-    { # 15.
-      name: main, package: 24, signature: 25, loc: 37,
-      metrics: { codeCount: 4, complexity: 1, indents: 2, lineCount: 4 }
+    {
+      loc: 37,
+      metrics: {
+        codeCount: 4,
+        complexity: 1,
+        indents: 2,
+        lineCount: 4
+      },
+      name: main,
+      package: 24,
+      signature: 25
     }
   ],
-  named: [
-    { name: GetX,   type: 26 }, # 16. func GetX() int
-    { name: GetY,   type: 26 }, # 17. func GetY() int
-    { name: Sum,    type: 26 }, # 18. func Sum() int
-    { name: XCoord, type:  3 }, # 19. XCoord XCoord
-    { name: YCoord, type:  4 }, # 20. YCoord YCoord
-    { name: p,      type:  5 }, # 21. p IPoint
-    { name: x,      type:  1 }, # 22. x int
-    { name: y,      type:  1 }  # 23. y int
+  objects: [
+    {
+      data: 29,
+      loc: 15,
+      methods: [
+        19
+      ],
+      name: Point,
+      package: 24
+    },
+    {
+      data: 28,
+      loc: 7,
+      methods: [
+        16
+      ],
+      name: XCoord,
+      package: 24
+    },
+    {
+      data: 28,
+      loc: 11,
+      methods: [
+        17
+      ],
+      name: YCoord,
+      package: 24
+    }
   ],
   packages: [
-    { # 24. main package
+    {
+      interfaces: [
+        10,
+        11,
+        12
+      ],
+      methods: [
+        16,
+        17,
+        18,
+        19,
+        20
+      ],
       name: main,
-      path: command-line-arguments,
-      classes: [ 2, 3, 4 ],
-      interDefs: [ 5, 6, 7 ],
-      methods: [ 11, 12, 13, 14, 15 ]
+      objects: [
+        21,
+        22,
+        23
+      ],
+      path: command-line-arguments
     }
   ],
   signatures: [
-    {}, # 25. func()()
-    {   # 26. func() int
-      return: 1
+    {},
+    {
+      results: [
+        4
+      ]
     },
-    { # 27. func(p IPoint)
-      params: [ 21 ]
+    {
+      params: [
+        5
+      ]
     }
   ],
-  structs: [
-    { # 28. struct { XCoord XCoord; YCoord YCoord }
-      fields: [ 19, 20 ]
+  structDescs: [
+    {
+      fields: [
+        7
+      ]
     },
-    { # 29. strut { x int }
-      fields: [ 22 ]
-    },
-    { # 30. struct { y int }
-      fields: [ 23 ]
+    {
+      fields: [
+        8,
+        9
+      ]
     }
   ],
   locs: {

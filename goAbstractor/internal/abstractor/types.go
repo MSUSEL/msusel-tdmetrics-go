@@ -97,6 +97,7 @@ func (ab *abstractor) convertInterface(t *types.Interface) constructs.InterfaceD
 		Exact:     exact,
 		Approx:    approx,
 		Abstracts: abstracts,
+		Package:   ab.curPkg.Source(),
 	})
 }
 
@@ -137,6 +138,7 @@ func (ab *abstractor) convertNamed(t *types.Named) constructs.TypeDesc {
 			PackagePath:   pkgPath,
 			Name:          name,
 			InstanceTypes: instanceTp,
+			Package:       ab.curPkg.Source(),
 		})
 	}
 
@@ -157,6 +159,7 @@ func (ab *abstractor) convertSignature(t *types.Signature) constructs.Signature 
 		Variadic: t.Variadic(),
 		Params:   ab.convertArguments(t.Params()),
 		Results:  ab.convertArguments(t.Results()),
+		Package:  ab.curPkg.Source(),
 	})
 }
 
@@ -183,6 +186,7 @@ func (ab *abstractor) convertStruct(t *types.Struct) constructs.StructDesc {
 	return ab.proj.NewStructDesc(constructs.StructDescArgs{
 		RealType: t,
 		Fields:   fields,
+		Package:  ab.curPkg.Source(),
 	})
 }
 
@@ -202,8 +206,9 @@ func (ab *abstractor) convertArguments(t *types.Tuple) []constructs.Argument {
 func (ab *abstractor) convertUnion(t *types.Union) constructs.InterfaceDesc {
 	exact, approx := ab.readUnionTerms(t)
 	return ab.proj.NewInterfaceDesc(constructs.InterfaceDescArgs{
-		Exact:  exact,
-		Approx: approx,
+		Exact:   exact,
+		Approx:  approx,
+		Package: ab.curPkg.Source(),
 	})
 }
 

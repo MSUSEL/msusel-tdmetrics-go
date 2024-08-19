@@ -59,6 +59,6 @@ func (a *argumentImp) ToJson(ctx *jsonify.Context) jsonify.Datum {
 	return jsonify.NewMap().
 		AddIf(ctx, ctx.IsKindShown(), `kind`, a.Kind()).
 		AddIf(ctx, ctx.IsIndexShown(), `index`, a.index).
-		Add(ctx2, `name`, a.name).
+		AddNonZero(ctx2, `name`, a.name).
 		Add(ctx2, `type`, a.typ)
 }

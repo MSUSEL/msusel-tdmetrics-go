@@ -16,6 +16,7 @@ type Reference interface {
 	Name() string
 	InstanceTypes() []TypeDesc
 
+	ResolvedType() TypeDesc
 	Resolved() bool
 	SetType(typ TypeDesc)
 }

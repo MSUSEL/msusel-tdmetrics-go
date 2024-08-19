@@ -1,85 +1,101 @@
 {
   language: go,
+  abstracts: [
+    { name: $get, signature: 26 }, # 1. func $get(index int)(value int)
+    { name: $get, signature: 27 }, # 2. func $get(index int)(value T<any>)
+    { name: $len, signature: 25 }, # 3. func $len() int
+    { name: $set, signature: 28 }, # 4. func $set(index int, value int)
+    { name: $set, signature: 29 }  # 5. func $set(index int, value T<any>)
+  ],
+  arguments: [
+    {               type: 11 }, #  6. <unnamed> int
+    { name: index,  type: 11 }, #  7. index int
+    { name: value,  type: 11 }, #  8. value int
+    { name: value,  type: 31 }, #  9. value T<any>
+    { name: values, type: 12 }  # 10. value List[int]
+  ],
   basics: [
-    int # 1. int
+    int # 11. int
   ],
-  interDefs: [
-    { name: List, package: 18, type: 5 }, # 2. list[T]
-    { name: any,  package: 18, type: 4 }  # 3. any
-  ],
-  interfaces: [
-    {}, # 4. any
-    {   # 5. list[T]
-      inherits: [ 4 ],
-      methods: [ 10, 11, 12, 13],
-      typeParams: [ 14 ]
+  instances: [
+    { # 12. List[int]
+      generic: 13,
+      instanceTypes: [ 11 ],
+      resolved: 16
     }
   ],
+  interfaceDecls: [
+    { # 13. $builtin.List[T any]
+      name: List,
+      package: 22,
+      typeParams: [ 31 ],
+      interface: 17,
+      instances: [ 12 ]
+    },
+    { # 14. $builtin.any interface{}
+      name: any,
+      package: 22,
+      interface: 15
+    }
+  ],
+  interfaceDescs: [
+    {}, # 15. interface{}
+    { abstracts: [ 3, 1, 4 ] }, # 16. interface{ $len()int; $get(int)int; $set(int,int) }
+    { abstracts: [ 3, 2, 5 ] }  # 17. interface{ $len()int; $get(int)T; $set(int,T) }
+  ],
   methods: [
-    { # 6. func first(values ...int) int @ main.go:13
-      name: first, package: 19, signature: 24, loc: 13,
+    { # 18. func first(values ...int) int @ main.go:13
+      name: first, package: 23, signature: 30, loc: 13,
       metrics: { codeCount: 3, complexity: 1, indents: 1, lineCount: 3 }
     },
-    { # 7. func last(values ...int) int @ main.go:17
-      name: last, package: 19, signature: 24, loc: 17,
+    { # 19. func last(values ...int) int @ main.go:17
+      name: last, package: 23, signature: 30, loc: 17,
       metrics: { codeCount: 3, complexity: 1, indents: 1, lineCount: 3 }
     },
-    { # 8. func main() @ main.go:21
-      name: main, package: 19, signature: 20, loc: 21,
+    { # 20. func main() @ main.go:21
+      name: main, package: 23, signature: 24, loc: 21,
       metrics: { codeCount: 6, complexity: 1, indents: 4, lineCount: 6 }
     },
-    { # 9. func sum(values ...int) int @ main.go:5
-      name: sum, package: 19, signature: 24, loc: 5,
+    { # 21. func sum(values ...int) int @ main.go:5
+      name: sum, package: 23, signature: 30, loc: 5,
       metrics: { codeCount: 7, complexity: 2, indents: 6, lineCount: 7 }
     }
   ],
-  named: [
-    { name: $cap,   type: 21 }, # 10. func $cap() int
-    { name: $get,   type: 22 }, # 11. func $get[T](index int) T
-    { name: $len,   type: 21 }, # 12. func $len() int
-    { name: $set,   type: 23 }, # 13. func $set[T](index int, value T)
-    { name: T,      type:  3 }, # 14. T any
-    { name: index,  type:  1 }, # 15. index int
-    { name: value,  type: 14 }, # 16. value T
-    { name: values, type: 25 }, # 17. values []int
-  ],
   packages: [
-    { # 18. $builtin package
+    { # 22. $builtin package
       path: $builtin,
       name: $builtin,
-      interDefs: [ 2, 3 ]
+      interfaces: [ 13, 14 ]
     },
-    { # 19. main package
+    { # 23. main package
       path: command-line-arguments,
       name: main,
-      methods: [ 6, 7, 8, 9 ]
+      methods: [ 18, 19, 20, 21 ]
     }
   ],  
   signatures: [
-    {}, # 20. func()()
-    {   # 21. func() int
-      return: 1
+    {}, # 24. func()()
+    {   # 25. func() int
+      results: [ 6 ]
     },
-    { # 22. func[T](index int) T
-      typeParams: [ 14 ],
-      params: [ 15 ],
-      return: 14
+    { # 26. func(index int)(value int)
+      params: [ 7 ], results: [ 8 ]
     },
-    { # 23. func[T](index int, value T)
-      typeParams: [ 14 ],
-      params: [ 15, 16 ]
+    { # 27. func(index int)(value T<any>)
+      params: [ 7 ], results: [ 9 ]
     },
-    { # 24. func(values ...int) int
-      params: [ 17 ],
-      variadic: true,
-      return: 1
+    { # 28. func(index int, value int)
+      params: [ 7, 8 ]
+    },
+    { # 29. func(index int, value T<any>)
+      params: [ 7, 9 ]
+    },
+    { # 30. func(value ...int<List[int]>) int
+      params: [ 10 ], variadic: true, results: [ 6 ]
     }
   ],
-  solids: [
-    { # 25. []int
-      typeParams: [ 1 ],
-      target: 2
-    }
+  typeParams: [
+    { name: T, type: 14 } # 31. T any
   ],
   locs: {
     '1': main.go

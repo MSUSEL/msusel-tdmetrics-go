@@ -168,9 +168,11 @@ func (ab *abstractor) abstractTypeSpec(spec *ast.TypeSpec) {
 
 	// TODO: Need to generate instances too.
 	instances, has := ab.info().Instances[spec.Name]
-	fmt.Printf("=== (%t) %v\n", has, instances.Type)
-	for i := range instances.TypeArgs.Len() {
-		fmt.Printf("%d. %v\n", i, instances.TypeArgs.At(i))
+	if !utils.IsNil(instances.Type) {
+		fmt.Printf("=== (%t) %v\n", has, instances.Type)
+		for i := range instances.TypeArgs.Len() {
+			fmt.Printf("%d. %v\n", i, instances.TypeArgs.At(i))
+		}
 	}
 
 	if it, ok := typ.(constructs.InterfaceDesc); ok {
@@ -195,10 +197,12 @@ func (ab *abstractor) abstractTypeSpec(spec *ast.TypeSpec) {
 					Type:     typ,
 				}),
 			},
+			Package: ab.curPkg.Source(),
 		})
 	}
 
 	ab.proj.NewObject(constructs.ObjectArgs{
+		RealType:   tv.Type,
 		Package:    ab.curPkg,
 		Name:       spec.Name.Name,
 		Data:       st,
@@ -336,9 +340,11 @@ func (ab *abstractor) abstractFuncDecl(decl *ast.FuncDecl) {
 
 	// TODO: Need to generate instances too.
 	instances, has := ab.info().Instances[decl.Name]
-	fmt.Printf("=== (%t) %v\n", has, instances.Type)
-	for i := range instances.TypeArgs.Len() {
-		fmt.Printf("%d. %v\n", i, instances.TypeArgs.At(i))
+	if !utils.IsNil(instances.Type) {
+		fmt.Printf("=== (%t) %v\n", has, instances.Type)
+		for i := range instances.TypeArgs.Len() {
+			fmt.Printf("%d. %v\n", i, instances.TypeArgs.At(i))
+		}
 	}
 
 	name := decl.Name.Name
