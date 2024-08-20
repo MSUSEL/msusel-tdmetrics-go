@@ -161,7 +161,8 @@ func (tt *testTool) runPartialTest(pt partialTest) {
 }
 
 func (tt *testTool) save() *testTool {
-	gotten, err := jsonify.Marshal(jsonify.NewContext(), tt.proj)
+	ctx := jsonify.NewContext().ShowIndex()
+	gotten, err := jsonify.Marshal(ctx, tt.proj)
 	check.NoError(tt.t).
 		Name(`Marshal project`).
 		With(`Dir`, tt.dir).

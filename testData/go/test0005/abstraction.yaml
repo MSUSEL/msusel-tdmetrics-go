@@ -30,9 +30,9 @@
     string # 23. string
   ],
   fields: [
-    { name: Age,   type: 22 }, # 24. Age int
-    { name: Name,  type: 23 }, # 25. Name string
-    { name: $data, type: 28 }  # 26. $data List[Pointer[Cat]]
+    { name: $data, type: 28 }, # 24. $data List[Pointer[Cat]]
+    { name: Age,   type: 22 }, # 25. Age int
+    { name: Name,  type: 23 }  # 26. Name string
   ],
   instances: [
     { # 27. Pointer[Cat]{ $deref() Cat }
@@ -110,11 +110,11 @@
   ],
   objects: [
     { # 45. Cat struct{ Name string; Age int } { Meow; String; } @ main.go:7
-      name: Cat, package: 48, data: 63, loc: 7,
+      name: Cat, package: 48, data: 64, loc: 7,
       methods: [ 39, 43 ]
     },
     { # 46. Cats struct{ $data List[Pointer[Cat]] } { Youngest() Cat } @ main.go:20
-      name: Cats, package: 48, data: 64, loc: 20,
+      name: Cats, package: 48, data: 63, loc: 20,
       methods: [ 44 ]
     }
   ],
@@ -150,8 +150,8 @@
     { params: [ 19 ] } # 62. func(value string)
   ],
   structDescs: [
-    { fields: [ 25, 24 ] }, # 63. struct{ Name string; Age int }
-    { fields: [ 26 ] }      # 64. struct{ $data List[Pointer[Cat]] }
+    { fields: [ 24 ] },    # 63. struct{ $data List[Pointer[Cat]] }
+    { fields: [ 26, 25 ] } # 64. struct{ Name string; Age int }
   ],
   typeParams: [
     { name: T, type: 31 } # 65. T any

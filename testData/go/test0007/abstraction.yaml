@@ -1,17 +1,15 @@
 {
   language: go,
+  abstracts: [
+    { name: $deref, signature: 30 }, # 1.
+    { name: $deref, signature: 31 }  # 2.
+  ],
   basics: [
     int,    # 1. int
     string, # 2. string
     uint    # 3. uint
   ],
-  classes: [
-    { # 4. main.Foo[T int|string|uint]{ value T } @ main.go:5
-      name: Foo, package: 24, data: 31, interface: 9, loc: 5,
-      typeParams: [ 19 ],
-      methods: [ 12 ]
-    }
-  ],
+
   interDefs: [
     { # 5. $builtin.Pointer[T any] { func $deref() T }
       name: Pointer, package: 23, type: 8
@@ -20,7 +18,7 @@
       name: any, package: 23, type: 7
     }
   ],
-  interfaces: [
+  interfaceDescs: [
     {}, # 7. any
     {   # 8. interface[T int|string|uint] { func Add(v T) T } 
       typeParams: [ 17 ],
