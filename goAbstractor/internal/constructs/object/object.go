@@ -2,8 +2,10 @@ package object
 
 import (
 	"go/types"
+	"strings"
 
 	"github.com/Snow-Gremlin/goToolbox/collections"
+	"github.com/Snow-Gremlin/goToolbox/collections/enumerator"
 	"github.com/Snow-Gremlin/goToolbox/collections/sortedSet"
 	"github.com/Snow-Gremlin/goToolbox/comp"
 
@@ -73,15 +75,21 @@ func (d *objectImp) Instances() collections.ReadonlySortedSet[constructs.Instanc
 	return d.instances.Readonly()
 }
 
+func (d *objectImp) AddInstance(inst constructs.Instance) constructs.Instance {
+	v, _ := d.instances.TryAdd(inst)
+	return v
+}
+
+func (d *objectImp) Methods() collections.ReadonlySortedSet[constructs.Method] {
+	return d.methods.Readonly()
+}
+
 func (d *objectImp) AddMethod(met constructs.Method) constructs.Method {
 	v, _ := d.methods.TryAdd(met)
 	return v
 }
 
-func (d *objectImp) AddInstance(inst constructs.Instance) constructs.Instance {
-	v, _ := d.instances.TryAdd(inst)
-	return v
-}
+func (d *objectImp) Interface() constructs.InterfaceDesc { return d.inter }
 
 func (d *objectImp) SetInterface(it constructs.InterfaceDesc) {
 	d.inter = it
@@ -128,4 +136,14 @@ func (d *objectImp) ToJson(ctx *jsonify.Context) jsonify.Datum {
 		AddNonZero(ctx2, `instances`, d.instances.ToSlice()).
 		AddNonZero(ctx2, `methods`, d.methods.ToSlice()).
 		AddNonZero(ctx2, `interface`, d.inter)
+}
+
+func (d *objectImp) String() string {
+	buf := &strings.Builder{}
+	buf.WriteString(d.name + ` `)
+	if len(d.typeParams) > 0 {
+		buf.WriteString(`[` + enumerator.Enumerate(d.typeParams).Join(`, `) + `]`)
+	}
+	buf.WriteString(d.data.String())
+	return buf.String()
 }

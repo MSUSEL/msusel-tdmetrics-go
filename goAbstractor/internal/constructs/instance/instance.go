@@ -3,6 +3,7 @@ package instance
 import (
 	"go/types"
 
+	"github.com/Snow-Gremlin/goToolbox/collections/enumerator"
 	"github.com/Snow-Gremlin/goToolbox/comp"
 	"github.com/Snow-Gremlin/goToolbox/utils"
 
@@ -84,4 +85,10 @@ func (i *instanceImp) ToJson(ctx *jsonify.Context) jsonify.Datum {
 		AddNonZero(ctx2, `generic`, i.generic).
 		AddNonZero(ctx2, `resolved`, i.resolved).
 		AddNonZero(ctx2, `instanceTypes`, i.instanceTypes)
+}
+
+func (i *instanceImp) String() string {
+	return i.generic.Name() +
+		`[` + enumerator.Enumerate(i.instanceTypes).Join(`, `) + `]` +
+		i.resolved.String()
 }

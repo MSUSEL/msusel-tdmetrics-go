@@ -46,6 +46,7 @@ type Project interface {
 
 	ResolveImports()
 	ResolveReceivers()
+	ResolveObjectInterfaces()
 	ResolveInheritance()
 	ResolveReferences()
 	FlagLocations()

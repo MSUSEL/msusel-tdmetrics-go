@@ -58,3 +58,7 @@ func (a *abstractImp) ToJson(ctx *jsonify.Context) jsonify.Datum {
 		Add(ctx2, `name`, a.name).
 		Add(ctx2, `signature`, a.signature)
 }
+
+func (a *abstractImp) String() string {
+	return a.name + ` ` + a.signature.String()
+}

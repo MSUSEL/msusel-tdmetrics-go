@@ -65,3 +65,7 @@ func (f *fieldImp) ToJson(ctx *jsonify.Context) jsonify.Datum {
 		Add(ctx2, `type`, f.typ).
 		AddNonZero(ctx2, `embedded`, f.embedded)
 }
+
+func (f *fieldImp) String() string {
+	return f.name + ` ` + f.typ.String()
+}

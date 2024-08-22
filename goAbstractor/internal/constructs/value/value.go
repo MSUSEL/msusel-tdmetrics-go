@@ -88,3 +88,7 @@ func (v *valueImp) ToJson(ctx *jsonify.Context) jsonify.Datum {
 		AddNonZero(ctx2, `loc`, v.loc).
 		AddNonZero(ctx2, `const`, v.isConst)
 }
+
+func (v *valueImp) String() string {
+	return `var ` + v.name + ` ` + v.typ.String()
+}

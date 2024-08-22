@@ -62,3 +62,7 @@ func (t *typeParamImp) ToJson(ctx *jsonify.Context) jsonify.Datum {
 		Add(ctx2, `name`, t.name).
 		Add(ctx2, `type`, t.typ)
 }
+
+func (t *typeParamImp) String() string {
+	return t.name + ` ` + t.typ.String()
+}

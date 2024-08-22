@@ -3,8 +3,10 @@ package interfaceDesc
 import (
 	"go/token"
 	"go/types"
+	"strings"
 
 	"github.com/Snow-Gremlin/goToolbox/collections"
+	"github.com/Snow-Gremlin/goToolbox/collections/enumerator"
 	"github.com/Snow-Gremlin/goToolbox/collections/sortedSet"
 	"github.com/Snow-Gremlin/goToolbox/comp"
 	"github.com/Snow-Gremlin/goToolbox/utils"
@@ -124,4 +126,20 @@ func (id *interfaceDescImp) ToJson(ctx *jsonify.Context) jsonify.Datum {
 		AddNonZero(ctx2, `approx`, id.approx).
 		AddNonZero(ctx2, `exact`, id.exact).
 		AddNonZero(ctx2, `inherits`, id.inherits.ToSlice())
+}
+
+func (id *interfaceDescImp) String() string {
+	buf := &strings.Builder{}
+	buf.WriteString(`interface{ `)
+	if len(id.abstracts) > 0 {
+		buf.WriteString(enumerator.Enumerate(id.abstracts).Join(`; `) + `; `)
+	}
+	if len(id.exact) > 0 {
+		buf.WriteString(enumerator.Enumerate(id.exact).Join(`|`) + `; `)
+	}
+	if len(id.approx) > 0 {
+		buf.WriteString(`~` + enumerator.Enumerate(id.approx).Join(`|~`) + `; `)
+	}
+	buf.WriteString(`}`)
+	return buf.String()
 }

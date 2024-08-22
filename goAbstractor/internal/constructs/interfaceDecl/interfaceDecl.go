@@ -2,8 +2,10 @@ package interfaceDecl
 
 import (
 	"go/types"
+	"strings"
 
 	"github.com/Snow-Gremlin/goToolbox/collections"
+	"github.com/Snow-Gremlin/goToolbox/collections/enumerator"
 	"github.com/Snow-Gremlin/goToolbox/collections/sortedSet"
 	"github.com/Snow-Gremlin/goToolbox/comp"
 	"github.com/Snow-Gremlin/goToolbox/utils"
@@ -121,4 +123,14 @@ func (d *interfaceDeclImp) ToJson(ctx *jsonify.Context) jsonify.Datum {
 		AddNonZero(ctx2, `typeParams`, d.typeParams).
 		AddNonZero(ctx2, `interface`, d.inter).
 		AddNonZero(ctx2, `instances`, d.instances.ToSlice())
+}
+
+func (d *interfaceDeclImp) String() string {
+	buf := &strings.Builder{}
+	buf.WriteString(d.name + ` `)
+	if len(d.typeParams) > 0 {
+		buf.WriteString(`[` + enumerator.Enumerate(d.typeParams).Join(`, `) + `]`)
+	}
+	buf.WriteString(d.inter.String())
+	return buf.String()
 }

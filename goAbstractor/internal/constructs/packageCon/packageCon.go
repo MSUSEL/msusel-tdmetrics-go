@@ -59,6 +59,7 @@ func (p *packageImp) Source() *packages.Package { return p.pkg }
 func (p *packageImp) Path() string              { return p.path }
 func (p *packageImp) Name() string              { return p.name }
 func (p *packageImp) ImportPaths() []string     { return p.importPaths }
+func (p *packageImp) String() string            { return p.name }
 
 func (p *packageImp) Imports() collections.ReadonlySortedSet[constructs.Package] {
 	return p.imports.Readonly()

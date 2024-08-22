@@ -4,6 +4,7 @@ import (
 	"go/token"
 	"go/types"
 
+	"github.com/Snow-Gremlin/goToolbox/collections/enumerator"
 	"github.com/Snow-Gremlin/goToolbox/comp"
 	"github.com/Snow-Gremlin/goToolbox/utils"
 
@@ -72,4 +73,8 @@ func (d *structDescImp) ToJson(ctx *jsonify.Context) jsonify.Datum {
 		AddIf(ctx, ctx.IsKindShown(), `kind`, d.Kind()).
 		AddIf(ctx, ctx.IsIndexShown(), `index`, d.index).
 		AddNonZero(ctx2, `fields`, d.fields)
+}
+
+func (d *structDescImp) String() string {
+	return `struct{ ` + enumerator.Enumerate(d.fields).Join(`; `) + `}`
 }

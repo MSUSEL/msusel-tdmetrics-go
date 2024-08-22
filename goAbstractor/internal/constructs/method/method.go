@@ -164,3 +164,13 @@ func (m *methodImp) ToJson(ctx *jsonify.Context) jsonify.Datum {
 		AddNonZero(ctx2, `receiver`, m.receiver).
 		AddNonZeroIf(ctx2, ctx.IsReceiverShown(), `recvName`, m.recvName)
 }
+
+func (m *methodImp) String() string {
+	buf := &strings.Builder{}
+	buf.WriteString(m.name + ` `)
+	if len(m.typeParams) > 0 {
+		buf.WriteString(`[` + m.instances.Enumerate().Join(`, `) + `]`)
+	}
+	buf.WriteString(m.signature.String())
+	return buf.String()
+}

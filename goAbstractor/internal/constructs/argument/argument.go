@@ -62,3 +62,10 @@ func (a *argumentImp) ToJson(ctx *jsonify.Context) jsonify.Datum {
 		AddNonZero(ctx2, `name`, a.name).
 		Add(ctx2, `type`, a.typ)
 }
+
+func (a *argumentImp) String() string {
+	if len(a.name) > 0 {
+		return a.name + ` ` + a.typ.String()
+	}
+	return a.typ.String()
+}

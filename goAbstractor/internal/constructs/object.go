@@ -21,6 +21,8 @@ type Object interface {
 	IsObject()
 
 	Data() StructDesc
+	Methods() collections.ReadonlySortedSet[Method]
+	Interface() InterfaceDesc
 
 	AddMethod(met Method) Method
 	SetInterface(it InterfaceDesc)

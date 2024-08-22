@@ -38,6 +38,7 @@
       package: 9,
       loc: 9,
       data: 11,
+      interface: 5,
       methods: [ 6 ]
     }
   ],

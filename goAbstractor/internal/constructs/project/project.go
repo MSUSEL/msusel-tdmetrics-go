@@ -78,7 +78,7 @@ func (p *projectImp) UpdateIndices() {
 }
 
 func updateIndices[T constructs.Construct](col collections.ReadonlySortedSet[T], index int) int {
-	for i, count := 0, col.Count(); i < count; i++ {
+	for i := range col.Count() {
 		col.Get(i).SetIndex(index)
 		index++
 	}
@@ -106,6 +106,30 @@ func (p *projectImp) ResolveReceivers() {
 	for i := range packages.Count() {
 		packages.Get(i).ResolveReceivers()
 	}
+}
+
+func (p *projectImp) ResolveObjectInterfaces() {
+	objects := p.Objects()
+	for i := range objects.Count() {
+		p.resolveObjectInter(objects.Get(i))
+	}
+}
+
+func (p *projectImp) resolveObjectInter(obj constructs.Object) {
+	methods := obj.Methods()
+	abstracts := make([]constructs.Abstract, methods.Count())
+	for i := range methods.Count() {
+		method := methods.Get(i)
+		abstracts[i] = p.NewAbstract(constructs.AbstractArgs{
+			Name:      method.Name(),
+			Signature: method.Signature(),
+		})
+	}
+	it := p.NewInterfaceDesc(constructs.InterfaceDescArgs{
+		Abstracts: abstracts,
+		Package:   obj.Package().Source(),
+	})
+	obj.SetInterface(it)
 }
 
 func (p *projectImp) ResolveInheritance() {

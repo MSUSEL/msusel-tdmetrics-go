@@ -3,7 +3,9 @@ package signature
 import (
 	"go/token"
 	"go/types"
+	"strings"
 
+	"github.com/Snow-Gremlin/goToolbox/collections/enumerator"
 	"github.com/Snow-Gremlin/goToolbox/comp"
 	"github.com/Snow-Gremlin/goToolbox/utils"
 	"golang.org/x/tools/go/packages"
@@ -94,4 +96,20 @@ func (m *signatureImp) ToJson(ctx *jsonify.Context) jsonify.Datum {
 		AddNonZero(ctx2, `variadic`, m.variadic).
 		AddNonZero(ctx2, `params`, m.params).
 		AddNonZero(ctx2, `results`, m.results)
+}
+
+func (m *signatureImp) String() string {
+	buf := &strings.Builder{}
+	buf.WriteString(`func(`)
+	buf.WriteString(enumerator.Enumerate(m.params).Join(`, `))
+	buf.WriteString(`)`)
+	switch len(m.results) {
+	case 0:
+		break
+	case 1:
+		buf.WriteString(` ` + m.results[0].String())
+	default:
+		buf.WriteString(`(` + enumerator.Enumerate(m.results).Join(`, `) + `)`)
+	}
+	return buf.String()
 }

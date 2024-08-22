@@ -46,6 +46,9 @@ func Abstract(cfg Config) constructs.Project {
 	ab.logf(`resolve receivers`)
 	proj.ResolveReceivers()
 
+	ab.logf(`resolve object interfaces`)
+	proj.ResolveObjectInterfaces()
+
 	ab.logf(`resolve inheritance`)
 	proj.ResolveInheritance()
 

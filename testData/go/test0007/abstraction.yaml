@@ -1,109 +1,107 @@
 {
   language: go,
   abstracts: [
-    { name: $deref, signature: 30 }, # 1.
-    { name: $deref, signature: 31 }  # 2.
+    { name: $deref, signature: 30 }, # 1. func $deref() Foo[T<string|int>]
+    { name: $deref, signature: 31 }  # 2. func $deref() T<any>
+  ],
+  arguments: [
+    { type: 14 }, # 3. <unnamed> Pointer[Foo[T<string|int>]]
+    { type: 15 }, # 4. <unnamed> Foo[T<string|int>]
+    { type: 36 }, # 5. <unnamed> T<any>
+    { type: 38 }, # 6. <unnamed> T<string|int|uint>
+    { name: v, type: 37 }, # 7. v T<string|int>
+    { name: v, type: 38 }  # 8. v T<string|int|uint>
   ],
   basics: [
-    int,    # 1. int
-    string, # 2. string
-    uint    # 3. uint
+    int,   #  9. int
+    uint,  # 10. uint
+    string, # 11. string
+    bool
   ],
-
-  interDefs: [
-    { # 5. $builtin.Pointer[T any] { func $deref() T }
-      name: Pointer, package: 23, type: 8
+  fields: [
+    { name: value, type: 37 }, # 12. value T<string|int>
+    { name: value, type: 38 }  # 13. value T<string|int|uint>
+  ],
+  instances: [
+    { # 14. Pointer[Foo[T<string|int>]]
+      generic: 16,
+      instanceTypes: [ 15 ],
+      resolved: 21
     },
-    { # 6. $builtin.any any
-      name: any, package: 23, type: 7
+    { # 15. main.Foo[T string|int]
+      generic: 26,
+      instanceTypes: [ 37 ],
+      resolved: 34
+    } # TODO: Need to add instance of Foo[string]
+  ],
+  interfaceDecls: [
+    { # 16. $builtin.Pointer[T any]
+      name: Pointer, package: 27, interface: 22,
+      typeParams: [ 36 ],
+      instances: [ 14 ]
+    },
+    { # 17. $builtin.any interface{}
+      name: any, package: 27, interface: 18
     }
   ],
   interfaceDescs: [
-    {}, # 7. any
-    {   # 8. interface[T int|string|uint] { func Add(v T) T } 
-      typeParams: [ 17 ],
-      inherits: [ 7 ],
-      methods: [ 15 ]
-    },
-    { # 9. interface[T any] { func $deref() T }
-      typeParams: [ 19 ],
-      inherits: [ 11 ],
-      methods: [ 16 ]
-    },
-    { # 10. interface { int | string }
-      inherits: [ 11 ],
-      exact: [ 1, 2 ]
-    },
-    { # 11. interface { int | string | uint }
-      inherits: [ 7 ],
-      exact: [ 1, 2, 3 ]
-    }
+    {},                       # 18. interface {}
+    { exact: [ 11, 9 ] },     # 19. interface { string | int }
+    { exact: [ 11, 9, 10 ] }, # 20. interface { string | int | uint }
+    { abstracts: [ 1 ] },     # 21. interface { $deref() Foo[T<string|int>] }
+    { abstracts: [ 2 ] }      # 22. interface { $deref() T<any> }
   ],
   methods: [
-    { # 12. func (*Foo) Add(v T) T where T int|string|uint @ main.go:9
-      name: Add, package: 24, receiver: 4, signature: 26, loc: 9,
+    { # 23. func (*Foo) Add(v T) T where T string|int|uint @ main.go:9
+      name: Add, package: 28, receiver: 26, signature: 33, loc: 9,
       metrics: { codeCount: 4, complexity: 1, indents: 2, lineCount: 4 }
     },
-    { # 13. func New(v T) $builtin.Pointer[main.Foo[T]] where T int|string @ main.go:14
-      name: New, package: 24, signature: 28, loc: 14,
+    { # 24. func New[T string|int](v T) $builtin.Pointer[main.Foo[T]] @ main.go:14
+      name: New, package: 28, signature: 32, loc: 14,
+      typeParams: [ 37 ],
       metrics: { codeCount: 3, complexity: 1, indents: 1, lineCount: 3 }
     },
-    { # 14. func main() @ main.go:18
-      name: main, package: 24, signature: 25, loc: 18,
+    { # 25. func main() @ main.go:18
+      name: main, package: 28, signature: 29, loc: 18,
       metrics: { codeCount: 4, complexity: 1, indents: 2, lineCount: 4 }
     }
   ],
-  named: [
-    { name: $deref, type: 27 }, # 15. func $deref[T any]() T
-    { name: Add,    type: 26 }, # 16. func Add(v T) T where T int|string|uint
-    { name: T,      type:  6 }, # 17. T any
-    { name: T,      type: 10 }, # 18. T int|string
-    { name: T,      type: 11 }, # 19. T int|string|uint
-    { name: v,      type: 18 }, # 21. v T<int|string>
-    { name: v,      type: 19 }, # 22. v T<int|string|uint>
-    { name: value,  type: 19 }  # 23. value T<int|string|uint>
+  objects: [
+    { # 26. main.Foo[T string|int|uint]{ value T }{ Add(v T) T }
+      name: Foo, package: 28, data: 35, loc: 5,
+      instances: [ 15 ],
+      methods: [ 23 ],
+      typeParams: [ 38 ]
+    }
   ],
   packages: [
-    { # 24. $builtin package
+    { # 27. $builtin package
       name: $builtin,
       path: $builtin,
-      interDefs: [ 5, 6 ]
+      interfaces: [ 16, 17 ]
     },
-    { # 25. main package
+    { # 28. main package
       name: main,
       path: command-line-arguments,
-      classes: [ 4 ],
-      methods: [ 12, 13, 14 ]
+      objects: [ 26 ],
+      methods: [ 23, 24, 25 ]
     }
   ],
   signatures: [
-    {}, # 26. func()()
-    {   # 27. func(v T) T where T int|string|uint
-      params: [ 21 ],
-      return: 19
-    },
-    { # 28. func[T any]() T
-      typeParams: [ 17 ],
-      return: 17
-    },
-    { # 29. func[T int|string](v T) $builtin.Pointer[main.Foo[T]]
-      typeParams: [ 18 ],
-      params: [ 20 ],
-      return: 30
-    }
+    {}, # 29. func()
+    { results: [ 4 ] }, # 30. func() Foo[T<string|int>]
+    { results: [ 5 ] }, # 31. func() T<any>
+    { params: [ 7 ], results: [ 3 ] }, # 32. func(v T<string|int>) Pointer[Foo[T]]
+    { params: [ 8 ], results: [ 6 ] }  # 33. func(v T<string|int|uint>) T
   ],
-  solids: [
-    { # 30.  main.Foo[T] where T int|string
-      target: 4, typeParams: [ 18 ]
-    },
-    { # 31. $builtin.Pointer[main.Foo[T]] where T int|string|uint
-      target: 5, typeParams: [ 29 ]
-    }
+  structDescs: [
+    { fields: [ 12 ] }, # 34. struct{ value T<string|int> }
+    { fields: [ 13 ] }  # 35. struct{ value T<string|int|uint> }
   ],
-  structs: [
-    { # 32. struct { value T } where T int|string|uint
-      fields: [ 22 ]
-    }
+  typeParams: [
+    { name: T, type: 17 }, # 36. T any
+    { name: T, type: 19 }, # 37. T string|int
+    { name: T, type: 20 }  # 38. T string|int|uint
   ],
   locs: {
     '1': main.go

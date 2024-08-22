@@ -97,3 +97,7 @@ func (r *referenceImp) ToJson(ctx *jsonify.Context) jsonify.Datum {
 
 	return jsonify.New(ctx2, r.typ)
 }
+
+func (r *referenceImp) String() string {
+	return r.pkgPath + `:` + r.name
+}

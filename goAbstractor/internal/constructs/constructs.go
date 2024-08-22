@@ -13,6 +13,9 @@ import (
 type Construct interface {
 	comp.Comparable[Construct]
 
+	// String gets a human readable string for this debugging this construct.
+	String() string
+
 	// Kind gets a string unique to each construct type.
 	Kind() kind.Kind
 
