@@ -5,12 +5,10 @@ import (
 
 	"github.com/Snow-Gremlin/goToolbox/collections"
 	"github.com/Snow-Gremlin/goToolbox/collections/enumerator"
-	"github.com/Snow-Gremlin/goToolbox/collections/sortedSet"
 	"github.com/Snow-Gremlin/goToolbox/terrors/terror"
 
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/assert"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs"
-	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs/interfaceDesc"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/jsonify"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/locs"
 )
@@ -130,43 +128,6 @@ func (p *projectImp) resolveObjectInter(obj constructs.Object) {
 		Package:   obj.Package().Source(),
 	})
 	obj.SetInterface(it)
-}
-
-func (p *projectImp) ResolveInheritance() {
-	its := p.InterfaceDescs()
-	roots := sortedSet.New(interfaceDesc.Comparer())
-	for i := range its.Count() {
-		addInheritance(roots, its.Get(i))
-	}
-	// throw away roots, its no longer needed.
-}
-
-func addInheritance(siblings collections.SortedSet[constructs.InterfaceDesc], it constructs.InterfaceDesc) {
-	for i := siblings.Count() - 1; i >= 0; i-- {
-		a := siblings.Get(i)
-		if a.Implements(it) {
-			// Yi <: X
-			addInheritance(a.Inherits(), it)
-		} else if it.Implements(a) {
-			// X <: Yi
-			it.AddInherits(a)
-			siblings.RemoveRange(i, 1)
-		} else {
-			// Possible overlap, check for super-types in subtree.
-			seekInherits(a.Inherits(), it)
-		}
-	}
-}
-
-func seekInherits(siblings collections.SortedSet[constructs.InterfaceDesc], it constructs.InterfaceDesc) {
-	for i := siblings.Count() - 1; i >= 0; i-- {
-		a := siblings.Get(i)
-		if it.Implements(a) {
-			it.AddInherits(a)
-		} else {
-			seekInherits(a.Inherits(), it)
-		}
-	}
 }
 
 func (p *projectImp) ResolveReferences() {

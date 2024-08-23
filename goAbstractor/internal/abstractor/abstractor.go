@@ -5,7 +5,6 @@ import (
 	"go/ast"
 	"go/token"
 	"go/types"
-	"log"
 	"path/filepath"
 	"strconv"
 
@@ -17,12 +16,13 @@ import (
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs/project"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/locs"
+	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/logger"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/metrics"
 )
 
 type Config struct {
 	Packages []*packages.Package
-	Logger   *log.Logger
+	Log      *logger.Logger
 }
 
 func Abstract(cfg Config) constructs.Project {
@@ -32,7 +32,7 @@ func Abstract(cfg Config) constructs.Project {
 	bk := baker.New(fs, proj)
 
 	ab := &abstractor{
-		logger:   cfg.Logger,
+		log:      cfg.Log.Show(`inheritance`),
 		packages: cfg.Packages,
 		locs:     locs,
 		baker:    bk,
@@ -40,38 +40,37 @@ func Abstract(cfg Config) constructs.Project {
 	}
 	ab.abstractProject()
 
-	ab.logf(`resolve imports`)
+	ab.log.Log(`resolve imports`)
 	proj.ResolveImports()
 
-	ab.logf(`resolve receivers`)
+	ab.log.Log(`resolve receivers`)
 	proj.ResolveReceivers()
 
-	ab.logf(`resolve object interfaces`)
+	ab.log.Log(`resolve object interfaces`)
 	proj.ResolveObjectInterfaces()
 
-	ab.logf(`resolve inheritance`)
-	proj.ResolveInheritance()
+	ab.resolveInheritance()
 
-	ab.logf(`resolve references`)
+	ab.log.Log(`resolve references`)
 	proj.ResolveReferences()
 
 	// TODO: Improve prune to use metrics to create a dead code elimination prune.
-	//ab.logf(`prune`)
+	//ab.log.Logln(`prune`)
 	//proj.PruneTypes()
 	//proj.PrunePackages()
 
-	ab.logf(`flag locations`)
+	ab.log.Log(`flag locations`)
 	proj.FlagLocations()
 
-	ab.logf(`update indices`)
+	ab.log.Log(`update indices`)
 	proj.UpdateIndices()
 
-	ab.logf(`done`)
+	ab.log.Log(`done`)
 	return proj
 }
 
 type abstractor struct {
-	logger   *log.Logger
+	log      *logger.Logger
 	packages []*packages.Package
 	baker    baker.Baker
 	locs     locs.Set
@@ -79,12 +78,6 @@ type abstractor struct {
 	curPkg   constructs.Package
 
 	typeParamReplacer map[*types.TypeParam]*types.TypeParam
-}
-
-func (ab *abstractor) logf(format string, args ...any) {
-	if !utils.IsNil(ab.logger) {
-		ab.logger.Printf(format, args...)
-	}
 }
 
 func (ab *abstractor) pos(pos token.Pos) token.Position {
@@ -96,27 +89,29 @@ func (ab *abstractor) info() *types.Info {
 }
 
 func (ab *abstractor) abstractProject() {
-	ab.logf(`abstract project`)
+	ab.log.Log(`abstract project`)
+	log2 := ab.log.Group(`packages`).Prefix(`|  `)
 	packages.Visit(ab.packages, func(src *packages.Package) bool {
-		ab.abstractPackage(src)
+		ab.abstractPackage(src, log2)
 		return true
 	}, nil)
 }
 
-func (ab *abstractor) abstractPackage(src *packages.Package) {
-	ab.logf(`|  abstract package: %s`, src.PkgPath)
+func (ab *abstractor) abstractPackage(src *packages.Package, log *logger.Logger) {
+	log.Logf(`abstract package: %s`, src.PkgPath)
 	ab.curPkg = ab.proj.NewPackage(constructs.PackageArgs{
 		RealPkg:     src,
 		Path:        src.PkgPath,
 		Name:        src.Name,
 		ImportPaths: utils.SortedKeys(src.Imports),
 	})
+	log2 := log.Group(`files`).Prefix(`|  `)
 	for _, f := range src.Syntax {
-		ab.abstractFile(f)
+		ab.abstractFile(f, log2)
 	}
 }
 
-func (ab *abstractor) abstractFile(f *ast.File) {
+func (ab *abstractor) abstractFile(f *ast.File, log *logger.Logger) {
 	path := ab.pos(f.FileStart).Filename
 	basePath := filepath.Base(path)
 	pkgPath := ab.curPkg.Source().PkgPath
@@ -127,7 +122,7 @@ func (ab *abstractor) abstractFile(f *ast.File) {
 		ab.locs.Alias(path, basePath)
 	}
 
-	ab.logf(`|  |  add file to package: %s`, basePath)
+	log.Logf(`add file to package: %s`, basePath)
 	for _, decl := range f.Decls {
 		switch d := decl.(type) {
 		case *ast.GenDecl:

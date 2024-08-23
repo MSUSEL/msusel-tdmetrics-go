@@ -76,5 +76,5 @@ func (d *structDescImp) ToJson(ctx *jsonify.Context) jsonify.Datum {
 }
 
 func (d *structDescImp) String() string {
-	return `struct{ ` + enumerator.Enumerate(d.fields).Join(`; `) + `}`
+	return `struct{ ` + enumerator.Enumerate(d.fields...).Join(`; `) + `}`
 }

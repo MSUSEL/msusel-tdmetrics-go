@@ -129,7 +129,7 @@ func (d *interfaceDeclImp) String() string {
 	buf := &strings.Builder{}
 	buf.WriteString(d.name + ` `)
 	if len(d.typeParams) > 0 {
-		buf.WriteString(`[` + enumerator.Enumerate(d.typeParams).Join(`, `) + `]`)
+		buf.WriteString(`[` + enumerator.Enumerate(d.typeParams...).Join(`, `) + `]`)
 	}
 	buf.WriteString(d.inter.String())
 	return buf.String()

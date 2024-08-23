@@ -101,7 +101,7 @@ func (m *signatureImp) ToJson(ctx *jsonify.Context) jsonify.Datum {
 func (m *signatureImp) String() string {
 	buf := &strings.Builder{}
 	buf.WriteString(`func(`)
-	buf.WriteString(enumerator.Enumerate(m.params).Join(`, `))
+	buf.WriteString(enumerator.Enumerate(m.params...).Join(`, `))
 	buf.WriteString(`)`)
 	switch len(m.results) {
 	case 0:
@@ -109,7 +109,7 @@ func (m *signatureImp) String() string {
 	case 1:
 		buf.WriteString(` ` + m.results[0].String())
 	default:
-		buf.WriteString(`(` + enumerator.Enumerate(m.results).Join(`, `) + `)`)
+		buf.WriteString(`(` + enumerator.Enumerate(m.results...).Join(`, `) + `)`)
 	}
 	return buf.String()
 }

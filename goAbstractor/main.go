@@ -2,7 +2,6 @@ package main
 
 import (
 	"fmt"
-	"log"
 	"os"
 	"runtime/debug"
 
@@ -11,6 +10,7 @@ import (
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/abstractor"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/jsonify"
+	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/logger"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/reader"
 )
 
@@ -65,14 +65,14 @@ func main() {
 		os.Exit(1)
 	}
 
-	var logger *log.Logger
+	var log *logger.Logger
 	if ao.Verbose {
-		logger = log.New(os.Stdout, ``, 0)
+		log = logger.New()
 	}
 
 	proj := abstractor.Abstract(abstractor.Config{
 		Packages: ps,
-		Logger:   logger,
+		Log:      log,
 	})
 	if err = writeJson(ao.OutPath, ao.Minimize, proj); err != nil {
 		fmt.Println(`Error abstracting project:`, err)

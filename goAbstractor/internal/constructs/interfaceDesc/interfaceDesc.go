@@ -132,13 +132,13 @@ func (id *interfaceDescImp) String() string {
 	buf := &strings.Builder{}
 	buf.WriteString(`interface{ `)
 	if len(id.abstracts) > 0 {
-		buf.WriteString(enumerator.Enumerate(id.abstracts).Join(`; `) + `; `)
+		buf.WriteString(enumerator.Enumerate(id.abstracts...).Join(`; `) + `; `)
 	}
 	if len(id.exact) > 0 {
-		buf.WriteString(enumerator.Enumerate(id.exact).Join(`|`) + `; `)
+		buf.WriteString(enumerator.Enumerate(id.exact...).Join(`|`) + `; `)
 	}
 	if len(id.approx) > 0 {
-		buf.WriteString(`~` + enumerator.Enumerate(id.approx).Join(`|~`) + `; `)
+		buf.WriteString(`~` + enumerator.Enumerate(id.approx...).Join(`|~`) + `; `)
 	}
 	buf.WriteString(`}`)
 	return buf.String()

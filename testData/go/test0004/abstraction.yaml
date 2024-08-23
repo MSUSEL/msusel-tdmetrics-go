@@ -30,20 +30,31 @@
       name: Mammal, package: 19, interface: 16, loc: 15
     }
   ],
-  interfaceDescs: [ # TODO: Fix inheritance
+  interfaceDescs: [
     { # 13. interface { Age() float64 }
       abstracts: [ 1 ]
     },
     { # 14. interface { Age() float64; Fly() }
-      abstracts: [ 1, 2 ]
+      abstracts: [ 1, 2 ],
+      inherits: [
+        13, # interface { Age() float64 }
+        17  # interface { Fly(); }
+      ]
     },
     { # 15. interface { Age() float64; Fly(); Temp() int }
-      abstracts: [ 1, 2, 3 ]
+      abstracts: [ 1, 2, 3 ],
+      inherits: [
+        14, # interface { Age() float64; Fly() }
+        16  # interface { Age() float64; Temp() int }
+      ]
     },
     { # 16. interface { Age() float64; Temp() int }
-      abstracts: [ 1, 3 ]
+      abstracts: [ 1, 3 ],
+      inherits: [
+        13 # interface { Age() float64 }
+      ]
     },
-    { # 17.  interface { Fly(); }
+    { # 17. interface { Fly(); }
       abstracts: [ 2 ]
     }
   ],

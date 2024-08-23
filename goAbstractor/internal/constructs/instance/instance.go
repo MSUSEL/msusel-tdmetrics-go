@@ -89,6 +89,6 @@ func (i *instanceImp) ToJson(ctx *jsonify.Context) jsonify.Datum {
 
 func (i *instanceImp) String() string {
 	return i.generic.Name() +
-		`[` + enumerator.Enumerate(i.instanceTypes).Join(`, `) + `]` +
+		`[` + enumerator.Enumerate(i.instanceTypes...).Join(`, `) + `]` +
 		i.resolved.String()
 }

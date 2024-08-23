@@ -2,7 +2,6 @@ package tests
 
 import (
 	"encoding/json"
-	"log"
 	"os"
 	"runtime"
 	"slices"
@@ -16,6 +15,7 @@ import (
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/abstractor"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/jsonify"
+	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/logger"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/reader"
 )
 
@@ -44,7 +44,7 @@ func (tt *testTool) abstract(patterns ...string) *testTool {
 		patterns = []string{`main.go`}
 	}
 
-	verbose := testing.Verbose()
+	verbose := true //testing.Verbose()
 	ps, err := reader.Read(&reader.Config{
 		Verbose:    verbose,
 		Dir:        pathToTestData + tt.dir,
@@ -56,14 +56,14 @@ func (tt *testTool) abstract(patterns ...string) *testTool {
 		With(`Dir`, tt.dir).
 		Require(err)
 
-	var logger *log.Logger
+	var log *logger.Logger
 	if verbose {
-		logger = log.New(os.Stdout, ``, 0)
+		log = logger.New()
 	}
 
 	tt.proj = abstractor.Abstract(abstractor.Config{
 		Packages: ps,
-		Logger:   logger,
+		Log:      log,
 	})
 	return tt
 }
