@@ -38,32 +38,16 @@ func Abstract(cfg Config) constructs.Project {
 		baker:    bk,
 		proj:     proj,
 	}
+
 	ab.abstractProject()
-
-	ab.log.Log(`resolve imports`)
-	proj.ResolveImports()
-
-	ab.log.Log(`resolve receivers`)
-	proj.ResolveReceivers()
-
-	ab.log.Log(`resolve object interfaces`)
-	proj.ResolveObjectInterfaces()
-
+	ab.resolveImports()
+	ab.resolveReceivers()
+	ab.resolveObjectInterfaces()
 	ab.resolveInheritance()
-
-	ab.log.Log(`resolve references`)
-	proj.ResolveReferences()
-
-	// TODO: Improve prune to use metrics to create a dead code elimination prune.
-	//ab.log.Logln(`prune`)
-	//proj.PruneTypes()
-	//proj.PrunePackages()
-
-	ab.log.Log(`flag locations`)
-	proj.FlagLocations()
-
-	ab.log.Log(`update indices`)
-	proj.UpdateIndices()
+	ab.resolveReferences()
+	ab.eliminateDeadCode()
+	ab.resolveLocations()
+	ab.updateIndices()
 
 	ab.log.Log(`done`)
 	return proj
