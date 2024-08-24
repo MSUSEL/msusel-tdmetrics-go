@@ -12,6 +12,7 @@ import (
 	"github.com/Snow-Gremlin/goToolbox/utils"
 	"golang.org/x/tools/go/packages"
 
+	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/abstractor/analyzer"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/abstractor/baker"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/abstractor/converter"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/abstractor/resolver"
@@ -19,7 +20,6 @@ import (
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs/project"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/locs"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/logger"
-	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/metrics"
 )
 
 type Config struct {
@@ -314,9 +314,9 @@ func (ab *abstractor) abstractFuncDecl(decl *ast.FuncDecl) {
 	sig := ab.converter().ConvertSignature(obj.Type().(*types.Signature))
 	ab.clearTypeParamOverrides()
 
-	mets := metrics.New(ab.curPkg.Source().Fset, decl)
+	an := analyzer.New(ab.proj.Locs()).Analyze(decl)
+	metrics := ab.proj.NewMetrics(an.GetMetrics())
 	loc := ab.proj.NewLoc(decl.Pos())
-
 	tp := ab.abstractTypeParams(decl.Type.TypeParams)
 
 	// TODO: Need to generate instances too.
@@ -339,7 +339,7 @@ func (ab *abstractor) abstractFuncDecl(decl *ast.FuncDecl) {
 		Location:   loc,
 		TypeParams: tp,
 		Signature:  sig,
-		Metrics:    mets,
+		Metrics:    metrics,
 		RecvName:   recvName,
 		NoCopyRecv: noCopyRecv,
 	})

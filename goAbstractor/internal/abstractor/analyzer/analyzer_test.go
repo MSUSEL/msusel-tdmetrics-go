@@ -1,7 +1,6 @@
-package metrics
+package analyzer
 
 import (
-	"encoding/json"
 	"fmt"
 	"go/parser"
 	"go/token"
@@ -9,15 +8,19 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/jsonify"
 	"github.com/Snow-Gremlin/goToolbox/differs/diff"
 	"github.com/Snow-Gremlin/goToolbox/testers/check"
+
+	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs"
+	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs/metrics"
+	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/jsonify"
+	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/locs"
 )
 
 func Test_Empty(t *testing.T) {
 	m := parseExpr(t,
 		`func() {}`)
-	checkMetrics(t, m, Metrics{
+	checkMetrics(t, m, constructs.MetricsArgs{
 		CodeCount:  1,
 		Complexity: 1,
 		Indents:    0,
@@ -30,7 +33,7 @@ func Test_Simple(t *testing.T) {
 		`func() int {`,
 		`	return max(1, 3, 5)`,
 		`}`)
-	checkMetrics(t, m, Metrics{
+	checkMetrics(t, m, constructs.MetricsArgs{
 		CodeCount:  3,
 		Complexity: 1,
 		Indents:    1,
@@ -43,7 +46,7 @@ func Test_SimpleWithExtraIndent(t *testing.T) {
 		`		func() int {`,
 		`			return max(1, 3, 5)`,
 		`		}`)
-	checkMetrics(t, m, Metrics{
+	checkMetrics(t, m, constructs.MetricsArgs{
 		CodeCount:  3,
 		Complexity: 1,
 		Indents:    1,
@@ -58,7 +61,7 @@ func Test_SimpleParams(t *testing.T) {
 		`	  c int) int {`,
 		`	return max(a, b, c)`,
 		`}`)
-	checkMetrics(t, m, Metrics{
+	checkMetrics(t, m, constructs.MetricsArgs{
 		CodeCount:  5,
 		Complexity: 1,
 		Indents:    7,
@@ -72,7 +75,7 @@ func Test_SimpleWithReturn(t *testing.T) {
 		`	x := max(1, 3, 5)`,
 		`	return x`,
 		`}`)
-	checkMetrics(t, m, Metrics{
+	checkMetrics(t, m, constructs.MetricsArgs{
 		CodeCount:  4,
 		Complexity: 1,
 		Indents:    2,
@@ -90,7 +93,7 @@ func Test_SimpleWithSpace(t *testing.T) {
 		`	   it is a sandwich */`,
 		`   `,
 		`}`)
-	checkMetrics(t, m, Metrics{
+	checkMetrics(t, m, constructs.MetricsArgs{
 		CodeCount:  3,
 		Complexity: 1,
 		Indents:    1,
@@ -105,7 +108,7 @@ func Test_SimpleWithDefer(t *testing.T) {
 		`	defer x.close()`,
 		`	x.doStuff()`,
 		`}`)
-	checkMetrics(t, m, Metrics{
+	checkMetrics(t, m, constructs.MetricsArgs{
 		CodeCount:  5,
 		Complexity: 1,
 		Indents:    3,
@@ -122,7 +125,7 @@ func Test_SimpleIf(t *testing.T) {
 		`	}`,
 		`	println(x)`,
 		`}`)
-	checkMetrics(t, m, Metrics{
+	checkMetrics(t, m, constructs.MetricsArgs{
 		CodeCount:  7,
 		Complexity: 2,
 		Indents:    6,
@@ -142,7 +145,7 @@ func Test_SimpleIfElse(t *testing.T) {
 		`	}`,
 		`	println(x)`,
 		`}`)
-	checkMetrics(t, m, Metrics{
+	checkMetrics(t, m, constructs.MetricsArgs{
 		CodeCount:  10,
 		Complexity: 2,
 		Indents:    11,
@@ -161,7 +164,7 @@ func Test_SimpleIfElseIf(t *testing.T) {
 		`	}`,
 		`	println(x)`,
 		`}`)
-	checkMetrics(t, m, Metrics{
+	checkMetrics(t, m, constructs.MetricsArgs{
 		CodeCount:  9,
 		Complexity: 3,
 		Indents:    9,
@@ -182,7 +185,7 @@ func Test_SimpleIfElseIfElse(t *testing.T) {
 		`	}`,
 		`	println(x)`,
 		`}`)
-	checkMetrics(t, m, Metrics{
+	checkMetrics(t, m, constructs.MetricsArgs{
 		CodeCount:  11,
 		Complexity: 3,
 		Indents:    12,
@@ -204,7 +207,7 @@ func Test_SimpleSwitch(t *testing.T) {
 		`	}`,
 		`	println(x)`,
 		`}`)
-	checkMetrics(t, m, Metrics{
+	checkMetrics(t, m, constructs.MetricsArgs{
 		CodeCount:  12,
 		Complexity: 3,
 		Indents:    15,
@@ -228,7 +231,7 @@ func Test_DeferInBlock(t *testing.T) {
 		`	}`,
 		`	print("F ")`,
 		`}`)
-	checkMetrics(t, m, Metrics{
+	checkMetrics(t, m, constructs.MetricsArgs{
 		CodeCount:  14,
 		Complexity: 1,
 		Indents:    19,
@@ -252,7 +255,7 @@ func Test_DeferInFuncLiteral(t *testing.T) {
 		`	}()`,
 		`	print("F ")`,
 		`}`)
-	checkMetrics(t, m, Metrics{
+	checkMetrics(t, m, constructs.MetricsArgs{
 		CodeCount:  14,
 		Complexity: 1,
 		Indents:    19,
@@ -273,7 +276,7 @@ func Test_DeferWithComplexity(t *testing.T) {
 		`	}()`,
 		`	print("D ")`,
 		`}`)
-	checkMetrics(t, m, Metrics{
+	checkMetrics(t, m, constructs.MetricsArgs{
 		CodeCount:  11,
 		Complexity: 2,
 		Indents:    16,
@@ -294,7 +297,7 @@ func Test_ForRangeWithDefer(t *testing.T) {
 		`	}`,
 		`	print("E ")`,
 		`}`)
-	checkMetrics(t, m, Metrics{
+	checkMetrics(t, m, constructs.MetricsArgs{
 		CodeCount:  11,
 		Complexity: 2,
 		Indents:    15,
@@ -310,7 +313,7 @@ func Test_GoStatement(t *testing.T) {
 		`	}()`,
 		`	print("B ")`,
 		`}`)
-	checkMetrics(t, m, Metrics{
+	checkMetrics(t, m, constructs.MetricsArgs{
 		CodeCount:  6,
 		Complexity: 2,
 		Indents:    5,
@@ -335,7 +338,7 @@ func Test_SelectStatement(t *testing.T) {
 		`		print("B ", b)`,
 		`	}`,
 		`}`)
-	checkMetrics(t, m, Metrics{
+	checkMetrics(t, m, constructs.MetricsArgs{
 		CodeCount:  15,
 		Complexity: 5,
 		Indents:    17,
@@ -343,31 +346,42 @@ func Test_SelectStatement(t *testing.T) {
 	})
 }
 
-func Test_MetricsString(t *testing.T) {
-	m := Metrics{
-		CodeCount:  11,
-		Complexity: 5,
-		Indents:    17,
-		LineCount:  15,
-	}
-	check.Equal(t, `{"codeCount":11,"complexity":5,"indents":17,"lineCount":15}`).
-		Require(m.String())
-}
+// TODO: Test joining metrics:
+// var val = []int{
+//   func() int { ** }(),
+//   func() int { ** }(),
+// }
 
-func parseExpr(t *testing.T, lines ...string) Metrics {
+// TODO: Test reading metrics with only read reference:
+// var val = singleton.f()
+
+// TODO: Test reading metrics with only read reference but without a function:
+// var val = singleton.value
+
+func parseExpr(t *testing.T, lines ...string) constructs.MetricsArgs {
 	code := strings.Join(lines, "\n")
 	fSet := token.NewFileSet()
 	expr, err := parser.ParseExprFrom(fSet, ``, []byte(code), parser.ParseComments)
 	check.NoError(t).Require(err)
-	return New(fSet, expr)
+
+	an := New(locs.NewSet(fSet))
+	an.Analyze(expr)
+	metrics := an.GetMetrics()
+	metrics.Location = nil // ignore locations
+	return metrics
 }
 
-func checkMetrics(t *testing.T, m, exp Metrics) {
+func checkMetrics(t *testing.T, m, exp constructs.MetricsArgs) {
 	ctx := jsonify.NewContext()
-	gotData, err := json.MarshalIndent(m.ToJson(ctx), ``, `  `)
+
+	mMet := metrics.New().NewMetrics(m)
+	gotData, err := jsonify.Marshal(ctx, mMet)
 	check.NoError(t).Assert(err)
-	expData, err := json.MarshalIndent(exp.ToJson(ctx), ``, `  `)
+
+	expMet := metrics.New().NewMetrics(exp)
+	expData, err := jsonify.Marshal(ctx, expMet)
 	check.NoError(t).Assert(err)
+
 	if !slices.Equal(gotData, expData) {
 		gotLines := strings.Split(string(gotData), "\n")
 		expLines := strings.Split(string(expData), "\n")

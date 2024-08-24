@@ -31,7 +31,10 @@ type Project interface {
 	StructDescFactory
 	TypeParamFactory
 
+	// Other Parts
+	MetricsFactory
 	NewLoc(pos token.Pos) locs.Loc
 	Locs() locs.Set
+
 	FindType(pkgPath, typeName string, panicOnNotFound bool) (Package, TypeDecl, bool)
 }

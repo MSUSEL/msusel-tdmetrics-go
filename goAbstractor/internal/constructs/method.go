@@ -6,14 +6,14 @@ import (
 	"github.com/Snow-Gremlin/goToolbox/collections"
 
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/locs"
-	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/metrics"
 )
 
 type Method interface {
 	Declaration
+	IsMethod()
 
 	Signature() Signature
-	Metrics() metrics.Metrics
+	Metrics() Metrics
 	ReceiverName() string
 	SetReceiver(recv Object)
 	NeedsReceiver() bool
@@ -34,7 +34,7 @@ type MethodArgs struct {
 
 	TypeParams []TypeParam
 	Signature  Signature
-	Metrics    metrics.Metrics
+	Metrics    Metrics
 	RecvName   string
 	Receiver   Object
 

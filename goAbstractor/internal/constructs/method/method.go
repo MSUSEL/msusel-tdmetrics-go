@@ -16,7 +16,6 @@ import (
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs/kind"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/jsonify"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/locs"
-	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/metrics"
 )
 
 type methodImp struct {
@@ -27,7 +26,7 @@ type methodImp struct {
 
 	typeParams []constructs.TypeParam
 	signature  constructs.Signature
-	metrics    metrics.Metrics
+	metrics    constructs.Metrics
 	recvName   string
 	receiver   constructs.Object
 	noCopyRecv bool
@@ -88,7 +87,7 @@ func (m *methodImp) Location() locs.Loc          { return m.loc }
 
 func (m *methodImp) Type() constructs.TypeDesc          { return m.signature }
 func (m *methodImp) Signature() constructs.Signature    { return m.signature }
-func (m *methodImp) Metrics() metrics.Metrics           { return m.metrics }
+func (m *methodImp) Metrics() constructs.Metrics        { return m.metrics }
 func (m *methodImp) TypeParams() []constructs.TypeParam { return m.typeParams }
 
 func (m *methodImp) Instances() collections.ReadonlySortedSet[constructs.Instance] {

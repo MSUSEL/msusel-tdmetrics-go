@@ -10,6 +10,7 @@ type Value interface {
 	IsValue()
 
 	Const() bool
+	Metrics() Metrics
 }
 
 type ValueArgs struct {
@@ -18,6 +19,11 @@ type ValueArgs struct {
 	Location locs.Loc
 	Type     TypeDesc
 	Const    bool
+
+	// Metrics are optional and may be nil. These metrics are for
+	// a variable initialized with an anonymous function.
+	// (e.g. `var x = func() int { ** }()`)
+	Metrics Metrics
 }
 
 type ValueFactory interface {

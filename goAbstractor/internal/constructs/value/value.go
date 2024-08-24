@@ -18,6 +18,7 @@ type valueImp struct {
 	loc     locs.Loc
 	typ     constructs.TypeDesc
 	isConst bool
+	metrics constructs.Metrics
 	index   int
 }
 
@@ -33,6 +34,7 @@ func newValue(args constructs.ValueArgs) constructs.Value {
 		loc:     args.Location,
 		typ:     args.Type,
 		isConst: args.Const,
+		metrics: args.Metrics,
 	}
 }
 
@@ -47,6 +49,7 @@ func (v *valueImp) Package() constructs.Package { return v.pkg }
 
 func (v *valueImp) Type() constructs.TypeDesc          { return v.typ }
 func (v *valueImp) Const() bool                        { return v.isConst }
+func (v *valueImp) Metrics() constructs.Metrics        { return v.metrics }
 func (v *valueImp) TypeParams() []constructs.TypeParam { return nil }
 
 func (v *valueImp) Instances() collections.ReadonlySortedSet[constructs.Instance] {
@@ -86,7 +89,8 @@ func (v *valueImp) ToJson(ctx *jsonify.Context) jsonify.Datum {
 		Add(ctx2, `name`, v.name).
 		Add(ctx2, `type`, v.typ).
 		AddNonZero(ctx2, `loc`, v.loc).
-		AddNonZero(ctx2, `const`, v.isConst)
+		AddNonZero(ctx2, `const`, v.isConst).
+		AddNonZero(ctx2, `metrics`, v.metrics)
 }
 
 func (v *valueImp) String() string {

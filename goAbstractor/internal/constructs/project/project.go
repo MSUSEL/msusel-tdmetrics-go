@@ -17,6 +17,7 @@ import (
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs/interfaceDecl"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs/interfaceDesc"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs/method"
+	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs/metrics"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs/object"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs/packageCon"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs/reference"
@@ -47,6 +48,7 @@ type projectImp struct {
 	constructs.StructDescFactory
 	constructs.TypeParamFactory
 
+	constructs.MetricsFactory
 	locations locs.Set
 }
 
@@ -70,7 +72,8 @@ func New(locs locs.Set) constructs.Project {
 		StructDescFactory:    structDesc.New(),
 		TypeParamFactory:     typeParam.New(),
 
-		locations: locs,
+		MetricsFactory: metrics.New(),
+		locations:      locs,
 	}
 }
 
