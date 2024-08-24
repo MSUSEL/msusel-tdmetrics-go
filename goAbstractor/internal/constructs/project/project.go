@@ -78,6 +78,8 @@ func (p *projectImp) NewLoc(pos token.Pos) locs.Loc {
 	return p.locations.NewLoc(pos)
 }
 
+func (p *projectImp) Locs() locs.Set { return p.locations }
+
 func (p *projectImp) FindType(pkgPath, typeName string, panicOnNotFound bool) (constructs.Package, constructs.TypeDecl, bool) {
 	assert.ArgNotEmpty(`pkgPath`, pkgPath)
 

@@ -12,7 +12,9 @@ import (
 	"github.com/Snow-Gremlin/goToolbox/utils"
 	"golang.org/x/tools/go/packages"
 
-	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/baker"
+	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/abstractor/baker"
+	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/abstractor/converter"
+	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/abstractor/resolver"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs/project"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/locs"
@@ -26,42 +28,35 @@ type Config struct {
 }
 
 func Abstract(cfg Config) constructs.Project {
-	fs := cfg.Packages[0].Fset
-	locs := locs.NewSet(fs)
-	proj := project.New(locs)
-	bk := baker.New(fs, proj)
+	var (
+		log  = cfg.Log.Show(`inheritance`)
+		fSet = cfg.Packages[0].Fset
+		locs = locs.NewSet(fSet)
+		proj = project.New(locs)
+		bk   = baker.New(proj)
+	)
 
 	ab := &abstractor{
-		log:      cfg.Log.Show(`inheritance`),
 		packages: cfg.Packages,
-		locs:     locs,
+		log:      log,
 		baker:    bk,
 		proj:     proj,
 	}
-
 	ab.abstractProject()
-	ab.resolveImports()
-	ab.resolveReceivers()
-	ab.resolveObjectInterfaces()
-	ab.resolveInheritance()
-	ab.resolveReferences()
-	ab.eliminateDeadCode()
-	ab.resolveLocations()
-	ab.updateIndices()
 
-	ab.log.Log(`done`)
+	resolver.Resolve(log, proj)
+
+	log.Log(`done`)
 	return proj
 }
 
 type abstractor struct {
-	log      *logger.Logger
-	packages []*packages.Package
-	baker    baker.Baker
-	locs     locs.Set
-	proj     constructs.Project
-	curPkg   constructs.Package
-
-	typeParamReplacer map[*types.TypeParam]*types.TypeParam
+	packages   []*packages.Package
+	log        *logger.Logger
+	baker      baker.Baker
+	proj       constructs.Project
+	curPkg     constructs.Package
+	tpReplacer map[*types.TypeParam]*types.TypeParam
 }
 
 func (ab *abstractor) pos(pos token.Pos) token.Position {
@@ -70,6 +65,10 @@ func (ab *abstractor) pos(pos token.Pos) token.Position {
 
 func (ab *abstractor) info() *types.Info {
 	return ab.curPkg.Source().TypesInfo
+}
+
+func (ab *abstractor) converter() converter.Converter {
+	return converter.New(ab.baker, ab.proj, ab.curPkg, ab.tpReplacer)
 }
 
 func (ab *abstractor) abstractProject() {
@@ -101,9 +100,9 @@ func (ab *abstractor) abstractFile(f *ast.File, log *logger.Logger) {
 	pkgPath := ab.curPkg.Source().PkgPath
 	if pkgPath != `command-line-arguments` {
 		alias := filepath.ToSlash(filepath.Join(pkgPath, basePath))
-		ab.locs.Alias(path, alias)
+		ab.proj.Locs().Alias(path, alias)
 	} else {
-		ab.locs.Alias(path, basePath)
+		ab.proj.Locs().Alias(path, basePath)
 	}
 
 	log.Logf(`add file to package: %s`, basePath)
@@ -146,7 +145,7 @@ func (ab *abstractor) abstractTypeSpec(spec *ast.TypeSpec) {
 
 	loc := ab.proj.NewLoc(spec.Pos())
 	tp := ab.abstractTypeParams(spec.TypeParams)
-	typ := ab.convertType(tv.Type)
+	typ := ab.converter().ConvertType(tv.Type)
 
 	// TODO: Need to generate instances too.
 	instances, has := ab.info().Instances[spec.Name]
@@ -215,7 +214,7 @@ func (ab *abstractor) abstractTypeParam(field *ast.Field) []constructs.TypeParam
 			With(`pos`, ab.pos(field.Pos())))
 	}
 
-	typ := ab.convertType(tv.Type)
+	typ := ab.converter().ConvertType(tv.Type)
 	for _, name := range field.Names {
 		named := ab.proj.NewTypeParam(constructs.TypeParamArgs{
 			Name: name.Name,
@@ -231,7 +230,7 @@ func (ab *abstractor) abstractValueSpec(spec *ast.ValueSpec, isConst bool) {
 		// TODO: Need to evaluate the initial value in case
 		// it has connection to another var of calls a function.
 
-		if blankName(name.Name) {
+		if converter.BlankName(name.Name) {
 			// TODO: Could a black name assignment have a side effect?
 			//       Maybe if metrics aren't nil, give it a non-blank name.
 			//		 var _ = func() bool { /*pseudo init*/ }()
@@ -244,7 +243,7 @@ func (ab *abstractor) abstractValueSpec(spec *ast.ValueSpec, isConst bool) {
 				With(`pos`, ab.pos(spec.Pos())))
 		}
 
-		typ := ab.convertType(tv.Type())
+		typ := ab.converter().ConvertType(tv.Type())
 		ab.proj.NewValue(constructs.ValueArgs{
 			Package:  ab.curPkg,
 			Name:     name.Name,
@@ -262,14 +261,14 @@ func (ab *abstractor) setTypeParamOverrides(args *types.TypeList, params *types.
 			With(`pos`, ab.pos(decl.Pos())))
 	}
 
-	ab.typeParamReplacer = map[*types.TypeParam]*types.TypeParam{}
+	ab.tpReplacer = map[*types.TypeParam]*types.TypeParam{}
 	for i := range count {
-		ab.typeParamReplacer[args.At(i).(*types.TypeParam)] = params.At(i)
+		ab.tpReplacer[args.At(i).(*types.TypeParam)] = params.At(i)
 	}
 }
 
 func (ab *abstractor) clearTypeParamOverrides() {
-	ab.typeParamReplacer = nil
+	ab.tpReplacer = nil
 }
 
 func (ab *abstractor) abstractReceiver(decl *ast.FuncDecl) (bool, string) {
@@ -312,7 +311,7 @@ func (ab *abstractor) abstractFuncDecl(decl *ast.FuncDecl) {
 	obj := info.Defs[decl.Name]
 
 	noCopyRecv, recvName := ab.abstractReceiver(decl)
-	sig := ab.convertSignature(obj.Type().(*types.Signature))
+	sig := ab.converter().ConvertSignature(obj.Type().(*types.Signature))
 	ab.clearTypeParamOverrides()
 
 	mets := metrics.New(ab.curPkg.Source().Fset, decl)

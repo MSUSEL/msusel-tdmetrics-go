@@ -8,7 +8,6 @@
 package baker
 
 import (
-	"go/token"
 	"go/types"
 
 	"github.com/Snow-Gremlin/goToolbox/terrors/terror"
@@ -35,14 +34,12 @@ type Baker interface {
 }
 
 type bakerImp struct {
-	fSet  *token.FileSet
 	proj  constructs.Project
 	baked map[string]any
 }
 
-func New(fSet *token.FileSet, proj constructs.Project) Baker {
+func New(proj constructs.Project) Baker {
 	return &bakerImp{
-		fSet:  fSet,
 		proj:  proj,
 		baked: map[string]any{},
 	}
@@ -72,7 +69,7 @@ func (b *bakerImp) BakeBuiltin() constructs.Package {
 		builtinPkg := &packages.Package{
 			PkgPath: BuiltinName,
 			Name:    BuiltinName,
-			Fset:    b.fSet,
+			Fset:    b.proj.Locs().FileSet(),
 			Types:   types.NewPackage(BuiltinName, BuiltinName),
 		}
 

@@ -12,6 +12,7 @@ import (
 )
 
 type Set interface {
+	FileSet() *token.FileSet
 	Alias(file, alias string)
 	NewLoc(p token.Pos) Loc
 	Reset()
@@ -34,6 +35,10 @@ func NewSet(fs *token.FileSet) Set {
 	}
 	s.Reset()
 	return s
+}
+
+func (s *setImp) FileSet() *token.FileSet {
+	return s.fs
 }
 
 func (s *setImp) Alias(file, alias string) {

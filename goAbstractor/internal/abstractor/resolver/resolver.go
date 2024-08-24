@@ -1,4 +1,4 @@
-package abstractor
+package resolver
 
 import (
 	"github.com/Snow-Gremlin/goToolbox/collections"
@@ -10,13 +10,30 @@ import (
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/logger"
 )
 
-func (ab *abstractor) resolveImports() {
-	ab.log.Log(`resolve imports`)
-	packages := ab.proj.Packages()
+type resolverImp struct {
+	log  *logger.Logger
+	proj constructs.Project
+}
+
+func Resolve(log *logger.Logger, proj constructs.Project) {
+	resolve := &resolverImp{log: log, proj: proj}
+	resolve.Imports()
+	resolve.Receivers()
+	resolve.ObjectInterfaces()
+	resolve.Inheritance()
+	resolve.References()
+	resolve.EliminateDeadCode()
+	resolve.Locations()
+	resolve.UpdateIndices()
+}
+
+func (r *resolverImp) Imports() {
+	r.log.Log(`resolve imports`)
+	packages := r.proj.Packages()
 	for i := range packages.Count() {
 		pkg := packages.Get(i)
 		for _, importPath := range pkg.ImportPaths() {
-			impPackage := ab.proj.FindPackageByPath(importPath)
+			impPackage := r.proj.FindPackageByPath(importPath)
 			if impPackage == nil {
 				panic(terror.New(`import package not found`).
 					With(`package path`, pkg.Path).
@@ -27,44 +44,44 @@ func (ab *abstractor) resolveImports() {
 	}
 }
 
-func (ab *abstractor) resolveReceivers() {
-	ab.log.Log(`resolve receivers`)
-	packages := ab.proj.Packages()
+func (r *resolverImp) Receivers() {
+	r.log.Log(`resolve receivers`)
+	packages := r.proj.Packages()
 	for i := range packages.Count() {
 		packages.Get(i).ResolveReceivers()
 	}
 }
 
-func (ab *abstractor) resolveObjectInterfaces() {
-	ab.log.Log(`resolve object interfaces`)
-	objects := ab.proj.Objects()
+func (r *resolverImp) ObjectInterfaces() {
+	r.log.Log(`resolve object interfaces`)
+	objects := r.proj.Objects()
 	for i := range objects.Count() {
-		ab.resolveObjectInter(objects.Get(i))
+		r.objectInter(objects.Get(i))
 	}
 }
 
-func (ab *abstractor) resolveObjectInter(obj constructs.Object) {
+func (r *resolverImp) objectInter(obj constructs.Object) {
 	methods := obj.Methods()
 	abstracts := make([]constructs.Abstract, methods.Count())
 	for i := range methods.Count() {
 		method := methods.Get(i)
-		abstracts[i] = ab.proj.NewAbstract(constructs.AbstractArgs{
+		abstracts[i] = r.proj.NewAbstract(constructs.AbstractArgs{
 			Name:      method.Name(),
 			Signature: method.Signature(),
 		})
 	}
-	it := ab.proj.NewInterfaceDesc(constructs.InterfaceDescArgs{
+	it := r.proj.NewInterfaceDesc(constructs.InterfaceDescArgs{
 		Abstracts: abstracts,
 		Package:   obj.Package().Source(),
 	})
 	obj.SetInterface(it)
 }
 
-func (ab *abstractor) resolveInheritance() {
-	ab.log.Log(`resolve inheritance`)
-	its := ab.proj.InterfaceDescs()
+func (r *resolverImp) Inheritance() {
+	r.log.Log(`resolve inheritance`)
+	its := r.proj.InterfaceDescs()
 	roots := sortedSet.New(interfaceDesc.Comparer())
-	log2 := ab.log.Group(`inheritance`)
+	log2 := r.log.Group(`inheritance`)
 	log3 := log2.Prefix(`  `)
 	for i := range its.Count() {
 		log2.Logf(`--(%d): %s`, i, its.Get(i))
@@ -116,20 +133,20 @@ func seekInherits(siblings collections.SortedSet[constructs.InterfaceDesc], it c
 	}
 }
 
-func (ab *abstractor) resolveReferences() {
-	ab.log.Log(`resolve references`)
-	refs := ab.proj.References()
+func (r *resolverImp) References() {
+	r.log.Log(`resolve references`)
+	refs := r.proj.References()
 	for i := range refs.Count() {
-		ab.resolveReference(refs.Get(i))
+		r.resolveRef(refs.Get(i))
 	}
 }
 
-func (ab *abstractor) resolveReference(ref constructs.Reference) {
+func (r *resolverImp) resolveRef(ref constructs.Reference) {
 	if ref.Resolved() {
 		return
 	}
 
-	if _, typ, ok := ab.proj.FindType(ref.PackagePath(), ref.Name(), true); ok {
+	if _, typ, ok := r.proj.FindType(ref.PackagePath(), ref.Name(), true); ok {
 
 		// TODO: Handle type parameters to find instance
 
@@ -137,20 +154,20 @@ func (ab *abstractor) resolveReference(ref constructs.Reference) {
 	}
 }
 
-func (ab *abstractor) eliminateDeadCode() {
+func (r *resolverImp) EliminateDeadCode() {
 	// TODO: Improve prune to use metrics to create a dead code elimination prune.
 	//ab.log.Logln(`prune`)
 	//proj.PruneTypes()
 	//proj.PrunePackages()
 }
 
-func (ab *abstractor) resolveLocations() {
-	ab.log.Log(`resolve locations`)
-	ab.locs.Reset()
-	flagList(ab.proj.InterfaceDecls())
-	flagList(ab.proj.Methods())
-	flagList(ab.proj.Objects())
-	flagList(ab.proj.Values())
+func (r *resolverImp) Locations() {
+	r.log.Log(`resolve locations`)
+	r.proj.Locs().Reset()
+	flagList(r.proj.InterfaceDecls())
+	flagList(r.proj.Methods())
+	flagList(r.proj.Objects())
+	flagList(r.proj.Values())
 }
 
 func flagList[T constructs.Declaration](c collections.ReadonlySortedSet[T]) {
@@ -162,25 +179,25 @@ func flagList[T constructs.Declaration](c collections.ReadonlySortedSet[T]) {
 // UpdateIndices should be called after all types have been registered
 // and all packages have been processed. This will update all the index
 // fields that will be used as references in the output models.
-func (ab *abstractor) updateIndices() {
-	ab.log.Log(`update indices`)
+func (r *resolverImp) UpdateIndices() {
+	r.log.Log(`update indices`)
 	// Type indices compound so that each has a unique offset.
 	index := 1
-	index = updateIndices(ab.proj.Abstracts(), index)
-	index = updateIndices(ab.proj.Arguments(), index)
-	index = updateIndices(ab.proj.Basics(), index)
-	index = updateIndices(ab.proj.Fields(), index)
-	index = updateIndices(ab.proj.Instances(), index)
-	index = updateIndices(ab.proj.InterfaceDecls(), index)
-	index = updateIndices(ab.proj.InterfaceDescs(), index)
-	index = updateIndices(ab.proj.Methods(), index)
-	index = updateIndices(ab.proj.Objects(), index)
-	index = updateIndices(ab.proj.Packages(), index)
+	index = updateIndices(r.proj.Abstracts(), index)
+	index = updateIndices(r.proj.Arguments(), index)
+	index = updateIndices(r.proj.Basics(), index)
+	index = updateIndices(r.proj.Fields(), index)
+	index = updateIndices(r.proj.Instances(), index)
+	index = updateIndices(r.proj.InterfaceDecls(), index)
+	index = updateIndices(r.proj.InterfaceDescs(), index)
+	index = updateIndices(r.proj.Methods(), index)
+	index = updateIndices(r.proj.Objects(), index)
+	index = updateIndices(r.proj.Packages(), index)
 	// Don't index the p.References()
-	index = updateIndices(ab.proj.Signatures(), index)
-	index = updateIndices(ab.proj.StructDescs(), index)
-	index = updateIndices(ab.proj.TypeParams(), index)
-	updateIndices(ab.proj.Values(), index)
+	index = updateIndices(r.proj.Signatures(), index)
+	index = updateIndices(r.proj.StructDescs(), index)
+	index = updateIndices(r.proj.TypeParams(), index)
+	updateIndices(r.proj.Values(), index)
 }
 
 func updateIndices[T constructs.Construct](col collections.ReadonlySortedSet[T], index int) int {

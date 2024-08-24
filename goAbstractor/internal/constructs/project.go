@@ -32,5 +32,6 @@ type Project interface {
 	TypeParamFactory
 
 	NewLoc(pos token.Pos) locs.Loc
+	Locs() locs.Set
 	FindType(pkgPath, typeName string, panicOnNotFound bool) (Package, TypeDecl, bool)
 }

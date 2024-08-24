@@ -1,4 +1,4 @@
-package abstractor
+package instantiator
 
 import (
 	"go/types"
@@ -9,6 +9,29 @@ import (
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs/kind"
 )
+
+func TypeDecl(proj constructs.Project, realType types.Type, decl constructs.TypeDecl, instanceTypes ...constructs.TypeDesc) constructs.TypeDesc {
+	if instance := Declaration(proj, realType, decl, instanceTypes...); !utils.IsNil(instance) {
+		return instance
+	}
+	return decl
+}
+
+func Declaration(proj constructs.Project, realType types.Type, decl constructs.Declaration, instanceTypes ...constructs.TypeDesc) constructs.TypeDesc {
+	i, existing, needsInstance := newInstantiator(proj, decl, instanceTypes)
+	if !needsInstance {
+		return nil
+	}
+	if !utils.IsNil(existing) {
+		return existing
+	}
+	return proj.NewInstance(constructs.InstanceArgs{
+		RealType:      realType,
+		Generic:       decl,
+		Resolved:      i.TypeDesc(decl.Type()),
+		InstanceTypes: instanceTypes,
+	})
+}
 
 type instantiator struct {
 	proj          constructs.Project
@@ -70,29 +93,6 @@ func newInstantiator(proj constructs.Project, decl constructs.Declaration, insta
 		instanceTypes: instanceTypes,
 		conversion:    conversion,
 	}, nil, true
-}
-
-func (ab *abstractor) instantiateTypeDecl(realType types.Type, decl constructs.TypeDecl, instanceTypes ...constructs.TypeDesc) constructs.TypeDesc {
-	if instance := ab.instantiateDeclaration(realType, decl, instanceTypes...); !utils.IsNil(instance) {
-		return instance
-	}
-	return decl
-}
-
-func (ab *abstractor) instantiateDeclaration(realType types.Type, decl constructs.Declaration, instanceTypes ...constructs.TypeDesc) constructs.TypeDesc {
-	i, existing, needsInstance := newInstantiator(ab.proj, decl, instanceTypes)
-	if !needsInstance {
-		return nil
-	}
-	if !utils.IsNil(existing) {
-		return existing
-	}
-	return ab.proj.NewInstance(constructs.InstanceArgs{
-		RealType:      realType,
-		Generic:       decl,
-		Resolved:      i.TypeDesc(decl.Type()),
-		InstanceTypes: instanceTypes,
-	})
 }
 
 func (i *instantiator) TypeDesc(td constructs.TypeDesc) constructs.TypeDesc {
