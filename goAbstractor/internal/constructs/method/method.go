@@ -33,7 +33,7 @@ type methodImp struct {
 
 	instances collections.SortedSet[constructs.Instance]
 
-	index int
+	id any
 }
 
 func newMethod(args constructs.MethodArgs) constructs.Method {
@@ -78,7 +78,8 @@ func (m *methodImp) IsDeclaration() {}
 func (m *methodImp) IsMethod()      {}
 
 func (m *methodImp) Kind() kind.Kind    { return kind.Method }
-func (m *methodImp) SetIndex(index int) { m.index = index }
+func (m *methodImp) Id() any            { return m.id }
+func (m *methodImp) SetId(id any)       { m.id = id }
 func (m *methodImp) GoType() types.Type { return m.realType }
 
 func (m *methodImp) Package() constructs.Package { return m.pkg }
@@ -146,13 +147,13 @@ func Comparer() comp.Comparer[constructs.Method] {
 
 func (m *methodImp) ToJson(ctx *jsonify.Context) jsonify.Datum {
 	if ctx.IsShort() {
-		return jsonify.New(ctx, m.index)
+		return jsonify.New(ctx, m.id)
 	}
 
 	ctx2 := ctx.HideKind().Short()
 	return jsonify.NewMap().
 		AddIf(ctx, ctx.IsKindShown(), `kind`, m.Kind()).
-		AddIf(ctx, ctx.IsIndexShown(), `index`, m.index).
+		AddIf(ctx, ctx.IsIdShown(), `id`, m.id).
 		Add(ctx2, `package`, m.pkg).
 		Add(ctx2, `name`, m.name).
 		AddNonZero(ctx2, `loc`, m.loc).

@@ -1,7 +1,6 @@
 package abstractor
 
 import (
-	"fmt"
 	"go/ast"
 	"go/token"
 	"go/types"
@@ -143,18 +142,9 @@ func (ab *abstractor) abstractTypeSpec(spec *ast.TypeSpec) {
 			With(`pos`, ab.pos(spec.Pos())))
 	}
 
-	loc := ab.proj.NewLoc(spec.Pos())
+	loc := ab.proj.Locs().NewLoc(spec.Pos())
 	tp := ab.abstractTypeParams(spec.TypeParams)
 	typ := ab.converter().ConvertType(tv.Type)
-
-	// TODO: Need to generate instances too.
-	instances, has := ab.info().Instances[spec.Name]
-	if !utils.IsNil(instances.Type) {
-		fmt.Printf("=== (%t) %v\n", has, instances.Type)
-		for i := range instances.TypeArgs.Len() {
-			fmt.Printf("%d. %v\n", i, instances.TypeArgs.At(i))
-		}
-	}
 
 	if it, ok := typ.(constructs.InterfaceDesc); ok {
 		ab.proj.NewInterfaceDecl(constructs.InterfaceDeclArgs{
@@ -249,7 +239,7 @@ func (ab *abstractor) abstractValueSpec(spec *ast.ValueSpec, isConst bool) {
 			Name:     name.Name,
 			Const:    isConst,
 			Type:     typ,
-			Location: ab.proj.NewLoc(spec.Pos()),
+			Location: ab.proj.Locs().NewLoc(spec.Pos()),
 		})
 	}
 }
@@ -316,17 +306,8 @@ func (ab *abstractor) abstractFuncDecl(decl *ast.FuncDecl) {
 
 	an := analyzer.New(ab.proj.Locs()).Analyze(decl)
 	metrics := ab.proj.NewMetrics(an.GetMetrics())
-	loc := ab.proj.NewLoc(decl.Pos())
+	loc := ab.proj.Locs().NewLoc(decl.Pos())
 	tp := ab.abstractTypeParams(decl.Type.TypeParams)
-
-	// TODO: Need to generate instances too.
-	instances, has := ab.info().Instances[decl.Name]
-	if !utils.IsNil(instances.Type) {
-		fmt.Printf("=== (%t) %v\n", has, instances.Type)
-		for i := range instances.TypeArgs.Len() {
-			fmt.Printf("%d. %v\n", i, instances.TypeArgs.At(i))
-		}
-	}
 
 	name := decl.Name.Name
 	if name == `init` && len(recvName) <= 0 && sig.IsVacant() {

@@ -18,8 +18,7 @@ type instanceImp struct {
 	generic       constructs.Declaration
 	resolved      constructs.TypeDesc
 	instanceTypes []constructs.TypeDesc
-
-	index int
+	id            any
 }
 
 func newInstance(args constructs.InstanceArgs) constructs.Instance {
@@ -49,7 +48,8 @@ func (i *instanceImp) IsInstance() {}
 func (i *instanceImp) IsTypeDesc() {}
 
 func (i *instanceImp) Kind() kind.Kind    { return kind.Instance }
-func (i *instanceImp) SetIndex(index int) { i.index = index }
+func (i *instanceImp) Id() any            { return i.id }
+func (i *instanceImp) SetId(id any)       { i.id = id }
 func (m *instanceImp) GoType() types.Type { return m.realType }
 
 func (m *instanceImp) Generic() constructs.Declaration { return m.generic }
@@ -75,13 +75,13 @@ func Comparer() comp.Comparer[constructs.Instance] {
 
 func (i *instanceImp) ToJson(ctx *jsonify.Context) jsonify.Datum {
 	if ctx.IsShort() {
-		return jsonify.New(ctx, i.index)
+		return jsonify.New(ctx, i.id)
 	}
 
 	ctx2 := ctx.HideKind().Short()
 	return jsonify.NewMap().
 		AddIf(ctx, ctx.IsKindShown(), `kind`, i.Kind()).
-		AddIf(ctx, ctx.IsIndexShown(), `index`, i.index).
+		AddIf(ctx, ctx.IsIdShown(), `id`, i.id).
 		AddNonZero(ctx2, `generic`, i.generic).
 		AddNonZero(ctx2, `resolved`, i.resolved).
 		AddNonZero(ctx2, `instanceTypes`, i.instanceTypes)

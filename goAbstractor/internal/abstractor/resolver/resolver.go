@@ -21,10 +21,10 @@ func Resolve(log *logger.Logger, proj constructs.Project) {
 	resolve.Receivers()
 	resolve.ObjectInterfaces()
 	resolve.Inheritance()
-	resolve.References()
+	resolve.TempReferences()
 	resolve.EliminateDeadCode()
 	resolve.Locations()
-	resolve.UpdateIndices()
+	resolve.Identifiers()
 }
 
 func (r *resolverImp) Imports() {
@@ -133,15 +133,19 @@ func seekInherits(siblings collections.SortedSet[constructs.InterfaceDesc], it c
 	}
 }
 
-func (r *resolverImp) References() {
+func (r *resolverImp) TempReferences() {
 	r.log.Log(`resolve references`)
-	refs := r.proj.References()
+	refs := r.proj.TempReferences()
 	for i := range refs.Count() {
-		r.resolveRef(refs.Get(i))
+		r.resolveTempRef(refs.Get(i))
 	}
+
+	// TODO: Replace all references
+
+	r.proj.ClearAllTempReferences()
 }
 
-func (r *resolverImp) resolveRef(ref constructs.Reference) {
+func (r *resolverImp) resolveTempRef(ref constructs.TempReference) {
 	if ref.Resolved() {
 		return
 	}
@@ -176,34 +180,16 @@ func flagList[T constructs.Declaration](c collections.ReadonlySortedSet[T]) {
 	}
 }
 
-// UpdateIndices should be called after all types have been registered
-// and all packages have been processed. This will update all the index
-// fields that will be used as references in the output models.
-func (r *resolverImp) UpdateIndices() {
-	r.log.Log(`update indices`)
-	// Type indices compound so that each has a unique offset.
+// Identifiers should be called after all types have been registered
+// and all packages have been processed. This will update all the identifiers
+// that will be used as references in the output models.
+func (r *resolverImp) Identifiers() {
+	r.log.Log(`resolve identifiers`)
 	index := 1
-	index = updateIndices(r.proj.Abstracts(), index)
-	index = updateIndices(r.proj.Arguments(), index)
-	index = updateIndices(r.proj.Basics(), index)
-	index = updateIndices(r.proj.Fields(), index)
-	index = updateIndices(r.proj.Instances(), index)
-	index = updateIndices(r.proj.InterfaceDecls(), index)
-	index = updateIndices(r.proj.InterfaceDescs(), index)
-	index = updateIndices(r.proj.Methods(), index)
-	index = updateIndices(r.proj.Objects(), index)
-	index = updateIndices(r.proj.Packages(), index)
-	// Don't index the p.References()
-	index = updateIndices(r.proj.Signatures(), index)
-	index = updateIndices(r.proj.StructDescs(), index)
-	index = updateIndices(r.proj.TypeParams(), index)
-	updateIndices(r.proj.Values(), index)
-}
-
-func updateIndices[T constructs.Construct](col collections.ReadonlySortedSet[T], index int) int {
-	for i := range col.Count() {
-		col.Get(i).SetIndex(index)
-		index++
-	}
-	return index
+	r.proj.AllConstructs().Foreach(func(c constructs.Construct) {
+		if i, has := c.(constructs.Identifiable); has {
+			i.SetId(index)
+			index++
+		}
+	})
 }

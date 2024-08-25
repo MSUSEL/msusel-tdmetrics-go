@@ -134,7 +134,7 @@ func (tt *testTool) runPartialTest(pt partialTest) {
 			t.Skip(`The OS changes the specific type indices, this test is for ` + pt.OS + `.`)
 		}
 
-		ctx := jsonify.NewContext().ShowIndex()
+		ctx := jsonify.NewContext().ShowId()
 		subData := tt.proj.ToJson(ctx).Seek(pt.Path)
 
 		exp, err := json.MarshalIndent(pt.Data, ``, `  `)
@@ -161,7 +161,7 @@ func (tt *testTool) runPartialTest(pt partialTest) {
 }
 
 func (tt *testTool) save() *testTool {
-	ctx := jsonify.NewContext().ShowIndex()
+	ctx := jsonify.NewContext().ShowId()
 	gotten, err := jsonify.Marshal(ctx, tt.proj)
 	check.NoError(tt.t).
 		Name(`Marshal project`).

@@ -11,6 +11,7 @@ import (
 // This does not contain complex types, those are treated as an interface.
 type Basic interface {
 	TypeDesc
+	Identifiable
 	IsBasic()
 }
 

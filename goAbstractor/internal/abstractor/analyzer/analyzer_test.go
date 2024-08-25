@@ -352,11 +352,20 @@ func Test_SelectStatement(t *testing.T) {
 //   func() int { ** }(),
 // }
 
+// TODO: Test nothing variable:
+// var val = 10
+
 // TODO: Test reading metrics with only read reference:
 // var val = singleton.f()
 
 // TODO: Test reading metrics with only read reference but without a function:
 // var val = singleton.value
+
+// TODO: Test reading metrics with read reference as parameter:
+// var val = func(f Foo) int { ** }(singleton.f)
+
+// TODO: Test reading metrics with read reference in typed call:
+// var val = Foo[int](singleton)
 
 func parseExpr(t *testing.T, lines ...string) constructs.MetricsArgs {
 	code := strings.Join(lines, "\n")

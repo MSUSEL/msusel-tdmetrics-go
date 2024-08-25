@@ -9,7 +9,8 @@ import (
 )
 
 type Loc interface {
-	_loc()
+	isLoc()
+
 	Flag()
 	Pos() token.Pos
 	Info() (int, string, int)
@@ -28,7 +29,7 @@ func NoLoc() Loc {
 	return newLoc(nil, token.NoPos)
 }
 
-func (c *locImp) _loc() {}
+func (c *locImp) isLoc() {}
 
 func (c *locImp) Flag() {
 	if !utils.IsNil(c.s) {

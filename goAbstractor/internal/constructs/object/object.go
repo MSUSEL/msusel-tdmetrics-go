@@ -31,7 +31,7 @@ type objectImp struct {
 	methods   collections.SortedSet[constructs.Method]
 	instances collections.SortedSet[constructs.Instance]
 
-	index int
+	id any
 }
 
 func newObject(args constructs.ObjectArgs) constructs.Object {
@@ -60,7 +60,8 @@ func (d *objectImp) IsTypeDesc()    {}
 func (d *objectImp) IsObject()      {}
 
 func (d *objectImp) Kind() kind.Kind    { return kind.Object }
-func (d *objectImp) SetIndex(index int) { d.index = index }
+func (d *objectImp) Id() any            { return d.id }
+func (d *objectImp) SetId(id any)       { d.id = id }
 func (d *objectImp) GoType() types.Type { return d.realType }
 
 func (d *objectImp) Package() constructs.Package { return d.pkg }
@@ -121,13 +122,13 @@ func Comparer() comp.Comparer[constructs.Object] {
 
 func (d *objectImp) ToJson(ctx *jsonify.Context) jsonify.Datum {
 	if ctx.IsShort() {
-		return jsonify.New(ctx, d.index)
+		return jsonify.New(ctx, d.id)
 	}
 
 	ctx2 := ctx.HideKind().Short()
 	return jsonify.NewMap().
 		AddIf(ctx, ctx.IsKindShown(), `kind`, d.Kind()).
-		AddIf(ctx, ctx.IsIndexShown(), `index`, d.index).
+		AddIf(ctx, ctx.IsIdShown(), `id`, d.id).
 		AddNonZero(ctx2, `package`, d.pkg).
 		AddNonZero(ctx2, `name`, d.name).
 		AddNonZero(ctx2, `loc`, d.loc).

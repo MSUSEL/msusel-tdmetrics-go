@@ -1,10 +1,9 @@
-package reference
+package tempReference
 
 import (
 	"go/types"
 
 	"github.com/Snow-Gremlin/goToolbox/comp"
-	"github.com/Snow-Gremlin/goToolbox/terrors/terror"
 	"github.com/Snow-Gremlin/goToolbox/utils"
 
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/assert"
@@ -13,7 +12,7 @@ import (
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/jsonify"
 )
 
-type referenceImp struct {
+type tempReferenceImp struct {
 	realType      *types.Named
 	pkgPath       string
 	name          string
@@ -22,7 +21,7 @@ type referenceImp struct {
 	typ constructs.TypeDesc
 }
 
-func newReference(args constructs.ReferenceArgs) constructs.Reference {
+func newTempReference(args constructs.TempReferenceArgs) constructs.TempReference {
 	// pkgPath may be empty for $builtin
 	assert.ArgNotEmpty(`name`, args.Name)
 	assert.ArgHasNoNils(`instance types`, args.InstanceTypes)
@@ -34,7 +33,7 @@ func newReference(args constructs.ReferenceArgs) constructs.Reference {
 	}
 	assert.ArgNotNil(`real type`, args.RealType)
 
-	return &referenceImp{
+	return &tempReferenceImp{
 		realType:      args.RealType,
 		pkgPath:       args.PackagePath,
 		instanceTypes: args.InstanceTypes,
@@ -42,37 +41,33 @@ func newReference(args constructs.ReferenceArgs) constructs.Reference {
 	}
 }
 
-func (r *referenceImp) IsTypeDesc()  {}
-func (r *referenceImp) IsReference() {}
+func (r *tempReferenceImp) IsTypeDesc()  {}
+func (r *tempReferenceImp) IsReference() {}
 
-func (r *referenceImp) Kind() kind.Kind     { return kind.Reference }
-func (r *referenceImp) GoType() types.Type  { return r.realType }
-func (r *referenceImp) PackagePath() string { return r.pkgPath }
-func (r *referenceImp) Name() string        { return r.name }
+func (r *tempReferenceImp) Kind() kind.Kind     { return kind.TempReference }
+func (r *tempReferenceImp) GoType() types.Type  { return r.realType }
+func (r *tempReferenceImp) PackagePath() string { return r.pkgPath }
+func (r *tempReferenceImp) Name() string        { return r.name }
 
-func (r *referenceImp) InstanceTypes() []constructs.TypeDesc { return r.instanceTypes }
-func (r *referenceImp) ResolvedType() constructs.TypeDesc    { return r.typ }
+func (r *tempReferenceImp) InstanceTypes() []constructs.TypeDesc { return r.instanceTypes }
+func (r *tempReferenceImp) ResolvedType() constructs.TypeDesc    { return r.typ }
 
-func (r *referenceImp) Resolved() bool {
+func (r *tempReferenceImp) Resolved() bool {
 	return !utils.IsNil(r.typ)
 }
 
-func (r *referenceImp) SetIndex(index int) {
-	panic(terror.New(`do not call SetIndex on Reference`))
-}
-
-func (r *referenceImp) SetType(typ constructs.TypeDesc) {
+func (r *tempReferenceImp) SetType(typ constructs.TypeDesc) {
 	assert.ArgNotNil(`type`, typ)
 	r.typ = typ
 }
 
-func (r *referenceImp) CompareTo(other constructs.Construct) int {
-	return constructs.CompareTo[constructs.Reference](r, other, Comparer())
+func (r *tempReferenceImp) CompareTo(other constructs.Construct) int {
+	return constructs.CompareTo[constructs.TempReference](r, other, Comparer())
 }
 
-func Comparer() comp.Comparer[constructs.Reference] {
-	return func(a, b constructs.Reference) int {
-		aImp, bImp := a.(*referenceImp), b.(*referenceImp)
+func Comparer() comp.Comparer[constructs.TempReference] {
+	return func(a, b constructs.TempReference) int {
+		aImp, bImp := a.(*tempReferenceImp), b.(*tempReferenceImp)
 		return comp.Or(
 			comp.DefaultPend(aImp.pkgPath, bImp.pkgPath),
 			comp.DefaultPend(aImp.name, bImp.name),
@@ -80,7 +75,7 @@ func Comparer() comp.Comparer[constructs.Reference] {
 	}
 }
 
-func (r *referenceImp) ToJson(ctx *jsonify.Context) jsonify.Datum {
+func (r *tempReferenceImp) ToJson(ctx *jsonify.Context) jsonify.Datum {
 	ctx2 := ctx.HideKind().Short()
 	if ctx.IsReferenceShown() {
 		return jsonify.NewMap().
@@ -98,6 +93,6 @@ func (r *referenceImp) ToJson(ctx *jsonify.Context) jsonify.Datum {
 	return jsonify.New(ctx2, r.typ)
 }
 
-func (r *referenceImp) String() string {
+func (r *tempReferenceImp) String() string {
 	return r.pkgPath + `:` + r.name
 }

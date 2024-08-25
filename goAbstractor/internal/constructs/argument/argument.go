@@ -10,9 +10,9 @@ import (
 )
 
 type argumentImp struct {
-	name  string
-	typ   constructs.TypeDesc
-	index int
+	name string
+	typ  constructs.TypeDesc
+	id   any
 }
 
 func newArgument(args constructs.ArgumentArgs) constructs.Argument {
@@ -30,8 +30,9 @@ func newArgument(args constructs.ArgumentArgs) constructs.Argument {
 
 func (a *argumentImp) IsArgument() {}
 
-func (a *argumentImp) Kind() kind.Kind    { return kind.Argument }
-func (a *argumentImp) SetIndex(index int) { a.index = index }
+func (a *argumentImp) Kind() kind.Kind { return kind.Argument }
+func (a *argumentImp) Id() any         { return a.id }
+func (a *argumentImp) SetId(id any)    { a.id = id }
 
 func (a *argumentImp) Name() string              { return a.name }
 func (a *argumentImp) Type() constructs.TypeDesc { return a.typ }
@@ -52,13 +53,13 @@ func Comparer() comp.Comparer[constructs.Argument] {
 
 func (a *argumentImp) ToJson(ctx *jsonify.Context) jsonify.Datum {
 	if ctx.IsShort() {
-		return jsonify.New(ctx, a.index)
+		return jsonify.New(ctx, a.id)
 	}
 
 	ctx2 := ctx.HideKind().Short()
 	return jsonify.NewMap().
 		AddIf(ctx, ctx.IsKindShown(), `kind`, a.Kind()).
-		AddIf(ctx, ctx.IsIndexShown(), `index`, a.index).
+		AddIf(ctx, ctx.IsIdShown(), `id`, a.id).
 		AddNonZero(ctx2, `name`, a.name).
 		Add(ctx2, `type`, a.typ)
 }

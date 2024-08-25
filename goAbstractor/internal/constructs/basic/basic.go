@@ -15,7 +15,7 @@ import (
 
 type basicImp struct {
 	realType *types.Basic
-	index    int
+	id       any
 }
 
 func newBasic(args constructs.BasicArgs) constructs.Basic {
@@ -42,7 +42,8 @@ func (t *basicImp) IsTypeDesc() {}
 func (t *basicImp) IsBasic()    {}
 
 func (t *basicImp) Kind() kind.Kind    { return kind.Basic }
-func (t *basicImp) SetIndex(index int) { t.index = index }
+func (t *basicImp) Id() any            { return t.id }
+func (t *basicImp) SetId(id any)       { t.id = id }
 func (t *basicImp) GoType() types.Type { return t.realType }
 func (t *basicImp) String() string     { return t.realType.Name() }
 
@@ -63,13 +64,13 @@ func Comparer() comp.Comparer[constructs.Basic] {
 
 func (t *basicImp) ToJson(ctx *jsonify.Context) jsonify.Datum {
 	if ctx.IsShort() {
-		return jsonify.New(ctx, t.index)
+		return jsonify.New(ctx, t.id)
 	}
 
-	if ctx.IsKindShown() || ctx.IsIndexShown() {
+	if ctx.IsKindShown() || ctx.IsIdShown() {
 		return jsonify.NewMap().
 			AddIf(ctx, ctx.IsKindShown(), `kind`, t.Kind()).
-			AddIf(ctx, ctx.IsIndexShown(), `index`, t.index).
+			AddIf(ctx, ctx.IsIdShown(), `id`, t.id).
 			Add(ctx, `name`, t.realType.Name())
 	}
 

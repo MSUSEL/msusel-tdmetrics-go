@@ -103,12 +103,12 @@ func (i *instantiator) TypeDesc(td constructs.TypeDesc) constructs.TypeDesc {
 		return i.Instance(td.(constructs.Instance))
 	case kind.InterfaceDesc:
 		return i.InterfaceDesc(td.(constructs.InterfaceDesc))
-	case kind.Reference:
-		return i.Reference(td.(constructs.Reference))
 	case kind.Signature:
 		return i.Signature(td.(constructs.Signature))
 	case kind.StructDesc:
 		return i.StructDesc(td.(constructs.StructDesc))
+	case kind.TempReference:
+		return i.TempReference(td.(constructs.TempReference))
 	case kind.TypeParam:
 		return i.TypeParam(td.(constructs.TypeParam))
 	case kind.Object:
@@ -177,7 +177,7 @@ func (i *instantiator) Object(obj constructs.Object) constructs.Object {
 	return nil
 }
 
-func (i *instantiator) Reference(r constructs.Reference) constructs.TypeDesc {
+func (i *instantiator) TempReference(r constructs.TempReference) constructs.TypeDesc {
 	if r.Resolved() {
 		// The reference will probably not be resolved, but just in case
 		// it has been, just return the instantiated resolved type and
@@ -185,7 +185,7 @@ func (i *instantiator) Reference(r constructs.Reference) constructs.TypeDesc {
 		return i.TypeDesc(r.ResolvedType())
 	}
 
-	return i.proj.NewReference(constructs.ReferenceArgs{
+	return i.proj.NewTempReference(constructs.TempReferenceArgs{
 		PackagePath:   r.PackagePath(),
 		Name:          r.Name(),
 		InstanceTypes: mapSlice(r.InstanceTypes(), i.TypeDesc),

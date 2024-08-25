@@ -16,6 +16,7 @@ type Set interface {
 	Alias(file, alias string)
 	NewLoc(p token.Pos) Loc
 	Reset()
+
 	flag(p token.Pos)
 	infoFor(p token.Pos) (int, string, int)
 }

@@ -12,9 +12,9 @@ import (
 )
 
 type typeParamImp struct {
-	name  string
-	typ   constructs.TypeDesc
-	index int
+	name string
+	typ  constructs.TypeDesc
+	id   any
 }
 
 func newTypeParam(args constructs.TypeParamArgs) constructs.TypeParam {
@@ -30,7 +30,8 @@ func (t *typeParamImp) IsTypeDesc()  {}
 func (t *typeParamImp) IsTypeParam() {}
 
 func (t *typeParamImp) Kind() kind.Kind    { return kind.TypeParam }
-func (t *typeParamImp) SetIndex(index int) { t.index = index }
+func (t *typeParamImp) Id() any            { return t.id }
+func (t *typeParamImp) SetId(id any)       { t.id = id }
 func (t *typeParamImp) GoType() types.Type { return t.typ.GoType() }
 
 func (t *typeParamImp) Name() string              { return t.name }
@@ -52,13 +53,13 @@ func Comparer() comp.Comparer[constructs.TypeParam] {
 
 func (t *typeParamImp) ToJson(ctx *jsonify.Context) jsonify.Datum {
 	if ctx.IsShort() {
-		return jsonify.New(ctx, t.index)
+		return jsonify.New(ctx, t.id)
 	}
 
 	ctx2 := ctx.HideKind().Short()
 	return jsonify.NewMap().
 		AddIf(ctx, ctx.IsKindShown(), `kind`, t.Kind()).
-		AddIf(ctx, ctx.IsIndexShown(), `index`, t.index).
+		AddIf(ctx, ctx.IsIdShown(), `id`, t.id).
 		Add(ctx2, `name`, t.name).
 		Add(ctx2, `type`, t.typ)
 }

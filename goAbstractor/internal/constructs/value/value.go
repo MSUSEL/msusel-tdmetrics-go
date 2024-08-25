@@ -19,7 +19,7 @@ type valueImp struct {
 	typ     constructs.TypeDesc
 	isConst bool
 	metrics constructs.Metrics
-	index   int
+	id      any
 }
 
 func newValue(args constructs.ValueArgs) constructs.Value {
@@ -38,10 +38,12 @@ func newValue(args constructs.ValueArgs) constructs.Value {
 	}
 }
 
-func (v *valueImp) IsDeclaration()     {}
-func (v *valueImp) IsValue()           {}
-func (v *valueImp) Kind() kind.Kind    { return kind.Value }
-func (v *valueImp) SetIndex(index int) { v.index = index }
+func (v *valueImp) IsDeclaration() {}
+func (v *valueImp) IsValue()       {}
+
+func (v *valueImp) Kind() kind.Kind { return kind.Value }
+func (v *valueImp) Id() any         { return v.id }
+func (v *valueImp) SetId(id any)    { v.id = id }
 
 func (v *valueImp) Name() string                { return v.name }
 func (v *valueImp) Location() locs.Loc          { return v.loc }
@@ -78,13 +80,13 @@ func Comparer() comp.Comparer[constructs.Value] {
 
 func (v *valueImp) ToJson(ctx *jsonify.Context) jsonify.Datum {
 	if ctx.IsShort() {
-		return jsonify.New(ctx, v.index)
+		return jsonify.New(ctx, v.id)
 	}
 
 	ctx2 := ctx.HideKind().Short()
 	return jsonify.NewMap().
 		AddIf(ctx, ctx.IsKindShown(), `kind`, v.Kind()).
-		AddIf(ctx, ctx.IsIndexShown(), `index`, v.index).
+		AddIf(ctx, ctx.IsIdShown(), `id`, v.id).
 		Add(ctx2, `package`, v.pkg).
 		Add(ctx2, `name`, v.name).
 		Add(ctx2, `type`, v.typ).

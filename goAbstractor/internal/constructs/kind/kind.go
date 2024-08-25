@@ -11,11 +11,12 @@ const (
 	InterfaceDecl Kind = `interfaceDecl`
 	InterfaceDesc Kind = `interfaceDesc`
 	Method        Kind = `method`
+	Metrics       Kind = `metrics`
 	Object        Kind = `object`
 	Package       Kind = `package`
-	Reference     Kind = `reference`
 	Signature     Kind = `signature`
 	StructDesc    Kind = `structDesc`
+	TempReference Kind = `tempReference`
 	TypeParam     Kind = `typeParam`
 	Value         Kind = `value`
 )

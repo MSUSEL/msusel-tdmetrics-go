@@ -12,6 +12,7 @@ import (
 // e.g. a method signature inside a generic interface.
 type Instance interface {
 	TypeDesc
+	Identifiable
 	IsInstance()
 
 	Generic() Declaration

@@ -18,10 +18,27 @@ type Construct interface {
 
 	// Kind gets a string unique to each construct type.
 	Kind() kind.Kind
+}
 
-	// setIndex sets the unique index of construct.
-	// Indices will be 1 based so that 0 is unset.
-	SetIndex(index int)
+// Identifiable is a construct that can be given an identifier.
+// The identifier value should be an integer or string.
+type Identifiable interface {
+	Construct
+
+	// Id gets the unique identifier of the construct, empty if unset.
+	Id() any
+
+	// SetId sets the unique identifier of construct.
+	SetId(id any)
+}
+
+// TempReferenceContainer is any construct that can contain a temporary reference.
+type TempReferenceContainer interface {
+	Construct
+
+	// RemoveTempReferences should replace any found reference with the type
+	// description that was referenced. References will already be looked up.
+	RemoveTempReferences()
 }
 
 var (
@@ -29,6 +46,7 @@ var (
 	_ Construct = Argument(nil)
 	_ Construct = Field(nil)
 	_ Construct = Package(nil)
+	_ Construct = Metrics(nil)
 
 	// These are the implementations of type descriptions.
 	// None of these have generics defined on them but may carry
@@ -36,10 +54,10 @@ var (
 	_ TypeDesc = Basic(nil)
 	_ TypeDesc = Instance(nil)
 	_ TypeDesc = InterfaceDesc(nil)
-	_ TypeDesc = Reference(nil)
 	_ TypeDesc = Signature(nil)
 	_ TypeDesc = StructDesc(nil)
 	_ TypeDesc = TypeParam(nil)
+	_ TypeDesc = TempReference(nil)
 
 	// A TypeDecl is both a TypeDesc and a Declaration.
 	_ TypeDesc    = TypeDecl(nil)

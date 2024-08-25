@@ -29,7 +29,7 @@ type interfaceDeclImp struct {
 
 	instances collections.SortedSet[constructs.Instance]
 
-	index int
+	id any
 }
 
 func newInterfaceDecl(args constructs.InterfaceDeclArgs) constructs.InterfaceDecl {
@@ -64,7 +64,8 @@ func (d *interfaceDeclImp) IsTypeDesc()    {}
 func (d *interfaceDeclImp) IsInterface()   {}
 
 func (d *interfaceDeclImp) Kind() kind.Kind    { return kind.InterfaceDecl }
-func (d *interfaceDeclImp) SetIndex(index int) { d.index = index }
+func (d *interfaceDeclImp) Id() any            { return d.id }
+func (d *interfaceDeclImp) SetId(id any)       { d.id = id }
 func (d *interfaceDeclImp) GoType() types.Type { return d.realType }
 
 func (d *interfaceDeclImp) Package() constructs.Package { return d.pkg }
@@ -110,13 +111,13 @@ func Comparer() comp.Comparer[constructs.InterfaceDecl] {
 
 func (d *interfaceDeclImp) ToJson(ctx *jsonify.Context) jsonify.Datum {
 	if ctx.IsShort() {
-		return jsonify.New(ctx, d.index)
+		return jsonify.New(ctx, d.id)
 	}
 
 	ctx2 := ctx.HideKind().Short()
 	return jsonify.NewMap().
 		AddIf(ctx, ctx.IsKindShown(), `kind`, d.Kind()).
-		AddIf(ctx, ctx.IsIndexShown(), `index`, d.index).
+		AddIf(ctx, ctx.IsIdShown(), `id`, d.id).
 		AddNonZero(ctx2, `package`, d.pkg).
 		AddNonZero(ctx2, `name`, d.name).
 		AddNonZero(ctx2, `loc`, d.loc).

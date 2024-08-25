@@ -8,6 +8,7 @@ import (
 
 type Package interface {
 	Construct
+	Identifiable
 	IsPackage()
 
 	Source() *packages.Package

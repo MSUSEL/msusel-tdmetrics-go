@@ -8,7 +8,7 @@ const (
 	keyMinimized contextKey = iota
 	keyShort
 	keyKindShown
-	keyIndexShown
+	keyIdShown
 	keyReceiverShown
 	keyReferenceShown
 	keyInheritorsShown
@@ -44,7 +44,7 @@ func (c *Context) IsMinimized() bool {
 	return c.state[keyMinimized]
 }
 
-// Short indicates that objects should output only an index or name
+// Short indicates that objects should output only an identifier
 // as a reference to the rest of the object defined elsewhere.
 func (c *Context) Short() *Context {
 	return c.copyAndSet(keyShort, true)
@@ -56,7 +56,7 @@ func (c *Context) Long() *Context {
 	return c.copyAndSet(keyShort, false)
 }
 
-// IsShort indicates that objects should output only an index or name
+// IsShort indicates that objects should output only an identifier
 // as a reference to the rest of the object defined elsewhere.
 func (c *Context) IsShort() bool {
 	return c.state[keyShort]
@@ -77,21 +77,21 @@ func (c *Context) IsKindShown() bool {
 	return c.state[keyKindShown]
 }
 
-// ShowIndex indicates that the index field should be added to the output model.
-func (c *Context) ShowIndex() *Context {
-	return c.copyAndSet(keyIndexShown, true)
+// ShowId indicates that the identifier should be added to the output model.
+func (c *Context) ShowId() *Context {
+	return c.copyAndSet(keyIdShown, true)
 }
 
-// HideIndex indicates that the index field can be skipped,
+// HideId indicates that the identifier can be skipped,
 // unless output is short and only the index is outputted.
-func (c *Context) HideIndex() *Context {
-	return c.copyAndSet(keyIndexShown, false)
+func (c *Context) HideId() *Context {
+	return c.copyAndSet(keyIdShown, false)
 }
 
-// IsIndexShown indicates that the index field should be
+// IsIdShown indicates that the identifier should be
 // added to the output model when not needed.
-func (c *Context) IsIndexShown() bool {
-	return c.state[keyIndexShown]
+func (c *Context) IsIdShown() bool {
+	return c.state[keyIdShown]
 }
 
 // ShowReceiver sets if the methods should include receiver information

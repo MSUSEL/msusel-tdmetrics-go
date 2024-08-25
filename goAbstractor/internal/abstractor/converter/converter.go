@@ -163,8 +163,8 @@ func (c *convImp) convertNamed(t *types.Named) constructs.TypeDesc {
 	// Check if the reference can already be found.
 	_, typ, found := c.proj.FindType(pkgPath, name, false)
 	if !found {
-		// Otherwise, create a reference that will be filled later.
-		return c.proj.NewReference(constructs.ReferenceArgs{
+		// Otherwise, create a temporary reference that will be filled later.
+		return c.proj.NewTempReference(constructs.TempReferenceArgs{
 			RealType:      t,
 			PackagePath:   pkgPath,
 			Name:          name,

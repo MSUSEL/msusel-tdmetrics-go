@@ -26,7 +26,7 @@ type interfaceDescImp struct {
 
 	inherits collections.SortedSet[constructs.InterfaceDesc]
 
-	index int
+	id any
 }
 
 func newInterfaceDesc(args constructs.InterfaceDescArgs) constructs.InterfaceDesc {
@@ -74,7 +74,8 @@ func (id *interfaceDescImp) IsTypeDesc()      {}
 func (id *interfaceDescImp) IsInterfaceDesc() {}
 
 func (id *interfaceDescImp) Kind() kind.Kind    { return kind.InterfaceDesc }
-func (id *interfaceDescImp) SetIndex(index int) { id.index = index }
+func (id *interfaceDescImp) Id() any            { return id.id }
+func (id *interfaceDescImp) SetId(ident any)    { id.id = ident }
 func (id *interfaceDescImp) GoType() types.Type { return id.realType }
 
 func (id *interfaceDescImp) Abstracts() []constructs.Abstract { return id.abstracts }
@@ -115,13 +116,13 @@ func Comparer() comp.Comparer[constructs.InterfaceDesc] {
 
 func (id *interfaceDescImp) ToJson(ctx *jsonify.Context) jsonify.Datum {
 	if ctx.IsShort() {
-		return jsonify.New(ctx, id.index)
+		return jsonify.New(ctx, id.id)
 	}
 
 	ctx2 := ctx.HideKind().Short()
 	return jsonify.NewMap().
 		AddIf(ctx, ctx.IsKindShown(), `kind`, id.Kind()).
-		AddIf(ctx, ctx.IsIndexShown(), `index`, id.index).
+		AddIf(ctx, ctx.IsIdShown(), `id`, id.id).
 		AddNonZero(ctx2, `abstracts`, id.abstracts).
 		AddNonZero(ctx2, `approx`, id.approx).
 		AddNonZero(ctx2, `exact`, id.exact).

@@ -2,13 +2,13 @@ package constructs
 
 import (
 	"github.com/Snow-Gremlin/goToolbox/collections"
-	"github.com/Snow-Gremlin/goToolbox/comp"
 
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/locs"
 )
 
 type Metrics interface {
-	comp.Comparable[Metrics]
+	Construct
+	Identifiable
 	IsMetrics()
 
 	Location() locs.Loc

@@ -22,7 +22,7 @@ type packageImp struct {
 
 	path        string
 	name        string
-	index       int
+	id          any
 	importPaths []string
 
 	imports    collections.SortedSet[constructs.Package]
@@ -52,8 +52,9 @@ func newPackage(args constructs.PackageArgs) constructs.Package {
 
 func (p *packageImp) IsPackage() {}
 
-func (p *packageImp) Kind() kind.Kind    { return kind.Package }
-func (p *packageImp) SetIndex(index int) { p.index = index }
+func (p *packageImp) Kind() kind.Kind { return kind.Package }
+func (p *packageImp) Id() any         { return p.id }
+func (p *packageImp) SetId(id any)    { p.id = id }
 
 func (p *packageImp) Source() *packages.Package { return p.pkg }
 func (p *packageImp) Path() string              { return p.path }
@@ -141,13 +142,13 @@ func Comparer() comp.Comparer[constructs.Package] {
 
 func (p *packageImp) ToJson(ctx *jsonify.Context) jsonify.Datum {
 	if ctx.IsShort() {
-		return jsonify.New(ctx, p.index)
+		return jsonify.New(ctx, p.id)
 	}
 
 	ctx2 := ctx.HideKind().Short()
 	return jsonify.NewMap().
 		AddIf(ctx, ctx.IsKindShown(), `kind`, p.Kind()).
-		AddIf(ctx, ctx.IsIndexShown(), `index`, p.index).
+		AddIf(ctx, ctx.IsIdShown(), `id`, p.id).
 		AddNonZero(ctx2, `path`, p.path).
 		AddNonZero(ctx2, `name`, p.name).
 		AddNonZero(ctx2, `imports`, p.imports.ToSlice()).

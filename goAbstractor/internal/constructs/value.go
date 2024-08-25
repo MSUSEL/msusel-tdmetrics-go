@@ -7,6 +7,7 @@ import (
 
 type Value interface {
 	Declaration
+	Identifiable
 	IsValue()
 
 	Const() bool

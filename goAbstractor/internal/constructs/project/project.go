@@ -1,9 +1,9 @@
 package project
 
 import (
-	"go/token"
 	"strconv"
 
+	"github.com/Snow-Gremlin/goToolbox/collections"
 	"github.com/Snow-Gremlin/goToolbox/collections/enumerator"
 	"github.com/Snow-Gremlin/goToolbox/terrors/terror"
 
@@ -20,9 +20,9 @@ import (
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs/metrics"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs/object"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs/packageCon"
-	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs/reference"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs/signature"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs/structDesc"
+	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs/tempReference"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs/typeParam"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs/value"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/jsonify"
@@ -34,6 +34,7 @@ type projectImp struct {
 	constructs.ArgumentFactory
 	constructs.FieldFactory
 	constructs.PackageFactory
+	constructs.MetricsFactory
 
 	constructs.InterfaceDeclFactory
 	constructs.MethodFactory
@@ -43,12 +44,11 @@ type projectImp struct {
 	constructs.BasicFactory
 	constructs.InstanceFactory
 	constructs.InterfaceDescFactory
-	constructs.ReferenceFactory
 	constructs.SignatureFactory
 	constructs.StructDescFactory
+	constructs.TempReferenceFactory
 	constructs.TypeParamFactory
 
-	constructs.MetricsFactory
 	locations locs.Set
 }
 
@@ -58,6 +58,7 @@ func New(locs locs.Set) constructs.Project {
 		ArgumentFactory: argument.New(),
 		FieldFactory:    field.New(),
 		PackageFactory:  packageCon.New(),
+		MetricsFactory:  metrics.New(),
 
 		InterfaceDeclFactory: interfaceDecl.New(),
 		MethodFactory:        method.New(),
@@ -67,21 +68,37 @@ func New(locs locs.Set) constructs.Project {
 		BasicFactory:         basic.New(),
 		InstanceFactory:      instance.New(),
 		InterfaceDescFactory: interfaceDesc.New(),
-		ReferenceFactory:     reference.New(),
 		SignatureFactory:     signature.New(),
 		StructDescFactory:    structDesc.New(),
+		TempReferenceFactory: tempReference.New(),
 		TypeParamFactory:     typeParam.New(),
 
-		MetricsFactory: metrics.New(),
-		locations:      locs,
+		locations: locs,
 	}
 }
 
-func (p *projectImp) NewLoc(pos token.Pos) locs.Loc {
-	return p.locations.NewLoc(pos)
-}
-
 func (p *projectImp) Locs() locs.Set { return p.locations }
+
+func (p *projectImp) AllConstructs() collections.Enumerator[constructs.Construct] {
+	return enumerator.Enumerate[constructs.Construct]().Concat(
+		enumerator.Cast[constructs.Construct](p.Abstracts().Enumerate()),
+		enumerator.Cast[constructs.Construct](p.Arguments().Enumerate()),
+		enumerator.Cast[constructs.Construct](p.Basics().Enumerate()),
+		enumerator.Cast[constructs.Construct](p.Fields().Enumerate()),
+		enumerator.Cast[constructs.Construct](p.Instances().Enumerate()),
+		enumerator.Cast[constructs.Construct](p.InterfaceDecls().Enumerate()),
+		enumerator.Cast[constructs.Construct](p.InterfaceDescs().Enumerate()),
+		enumerator.Cast[constructs.Construct](p.Methods().Enumerate()),
+		enumerator.Cast[constructs.Construct](p.Metrics().Enumerate()),
+		enumerator.Cast[constructs.Construct](p.Objects().Enumerate()),
+		enumerator.Cast[constructs.Construct](p.Packages().Enumerate()),
+		enumerator.Cast[constructs.Construct](p.Signatures().Enumerate()),
+		enumerator.Cast[constructs.Construct](p.StructDescs().Enumerate()),
+		enumerator.Cast[constructs.Construct](p.TypeParams().Enumerate()),
+		enumerator.Cast[constructs.Construct](p.TempReferences().Enumerate()),
+		enumerator.Cast[constructs.Construct](p.Values().Enumerate()),
+	)
+}
 
 func (p *projectImp) FindType(pkgPath, typeName string, panicOnNotFound bool) (constructs.Package, constructs.TypeDecl, bool) {
 	assert.ArgNotEmpty(`pkgPath`, pkgPath)
@@ -126,7 +143,8 @@ func (p *projectImp) ToJson(ctx *jsonify.Context) jsonify.Datum {
 	m.AddNonZero(ctx2, `abstracts`, p.Abstracts().ToSlice()).
 		AddNonZero(ctx2, `arguments`, p.Arguments().ToSlice()).
 		AddNonZero(ctx2, `fields`, p.Fields().ToSlice()).
-		AddNonZero(ctx2, `packages`, p.Packages().ToSlice())
+		AddNonZero(ctx2, `packages`, p.Packages().ToSlice()).
+		AddNonZero(ctx2, `metrics`, p.Metrics().ToSlice())
 
 	m.AddNonZero(ctx2, `interfaceDecls`, p.InterfaceDecls().ToSlice()).
 		AddNonZero(ctx2, `methods`, p.Methods().ToSlice()).
@@ -136,7 +154,7 @@ func (p *projectImp) ToJson(ctx *jsonify.Context) jsonify.Datum {
 	m.AddNonZero(ctx2, `basics`, p.Basics().ToSlice()).
 		AddNonZero(ctx2, `instances`, p.Instances().ToSlice()).
 		AddNonZero(ctx2, `interfaceDescs`, p.InterfaceDescs().ToSlice()).
-		// Don't output the p.References()
+		AddNonZero(ctx2, `tempReferences`, p.TempReferences().ToSlice()).
 		AddNonZero(ctx2, `signatures`, p.Signatures().ToSlice()).
 		AddNonZero(ctx2, `structDescs`, p.StructDescs().ToSlice()).
 		AddNonZero(ctx2, `typeParams`, p.TypeParams().ToSlice())

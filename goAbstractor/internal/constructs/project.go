@@ -1,7 +1,7 @@
 package constructs
 
 import (
-	"go/token"
+	"github.com/Snow-Gremlin/goToolbox/collections"
 
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/jsonify"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/locs"
@@ -15,6 +15,7 @@ type Project interface {
 	ArgumentFactory
 	FieldFactory
 	PackageFactory
+	MetricsFactory
 
 	// Declarations
 	InterfaceDeclFactory
@@ -26,15 +27,12 @@ type Project interface {
 	BasicFactory
 	InstanceFactory
 	InterfaceDescFactory
-	ReferenceFactory
 	SignatureFactory
 	StructDescFactory
+	TempReferenceFactory
 	TypeParamFactory
 
-	// Other Parts
-	MetricsFactory
-	NewLoc(pos token.Pos) locs.Loc
 	Locs() locs.Set
-
+	AllConstructs() collections.Enumerator[Construct]
 	FindType(pkgPath, typeName string, panicOnNotFound bool) (Package, TypeDecl, bool)
 }
