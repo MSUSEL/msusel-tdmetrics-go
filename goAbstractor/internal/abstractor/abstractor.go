@@ -24,6 +24,8 @@ import (
 type Config struct {
 	Packages []*packages.Package
 	Log      *logger.Logger
+
+	UseGlobalIndices bool
 }
 
 func Abstract(cfg Config) constructs.Project {
@@ -43,7 +45,11 @@ func Abstract(cfg Config) constructs.Project {
 	}
 	ab.abstractProject()
 
-	resolver.Resolve(log, proj)
+	resolver.Resolve(resolver.Args{
+		Log:              log,
+		Project:          proj,
+		UseGlobalIndices: cfg.UseGlobalIndices,
+	})
 
 	log.Log(`done`)
 	return proj

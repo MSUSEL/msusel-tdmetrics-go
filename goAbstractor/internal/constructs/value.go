@@ -8,6 +8,7 @@ import (
 type Value interface {
 	Declaration
 	Identifiable
+	TempReferenceContainer
 	IsValue()
 
 	Const() bool

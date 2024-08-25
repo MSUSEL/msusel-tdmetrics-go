@@ -41,8 +41,8 @@ func newTempReference(args constructs.TempReferenceArgs) constructs.TempReferenc
 	}
 }
 
-func (r *tempReferenceImp) IsTypeDesc()  {}
-func (r *tempReferenceImp) IsReference() {}
+func (r *tempReferenceImp) IsTypeDesc()      {}
+func (r *tempReferenceImp) IsTypeReference() {}
 
 func (r *tempReferenceImp) Kind() kind.Kind     { return kind.TempReference }
 func (r *tempReferenceImp) GoType() types.Type  { return r.realType }
@@ -77,20 +77,12 @@ func Comparer() comp.Comparer[constructs.TempReference] {
 
 func (r *tempReferenceImp) ToJson(ctx *jsonify.Context) jsonify.Datum {
 	ctx2 := ctx.HideKind().Short()
-	if ctx.IsReferenceShown() {
-		return jsonify.NewMap().
-			AddIf(ctx, ctx.IsKindShown(), `kind`, r.Kind()).
-			AddNonZero(ctx2, `packagePath`, r.pkgPath).
-			Add(ctx2, `name`, r.name).
-			Add(ctx2, `type`, r.typ).
-			AddNonZero(ctx2, `instanceTypes`, r.instanceTypes)
-	}
-
-	if utils.IsNil(r.typ) {
-		return jsonify.New(ctx2, `failed to deref `+r.pkgPath+`.`+r.name)
-	}
-
-	return jsonify.New(ctx2, r.typ)
+	return jsonify.NewMap().
+		AddIf(ctx2, ctx.IsKindShown(), `kind`, r.Kind()).
+		AddNonZero(ctx2, `packagePath`, r.pkgPath).
+		Add(ctx2, `name`, r.name).
+		Add(ctx2, `type`, r.typ).
+		AddNonZero(ctx2, `instanceTypes`, r.instanceTypes)
 }
 
 func (r *tempReferenceImp) String() string {

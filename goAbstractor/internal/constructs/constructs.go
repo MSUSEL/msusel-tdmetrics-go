@@ -102,3 +102,10 @@ func CompareTo[T Construct](a T, b Construct, cmp comp.Comparer[T]) int {
 	}
 	return cmp(a, b.(T))
 }
+
+func ResolvedTempReference(td TypeDesc) TypeDesc {
+	for td.Kind() == kind.TempReference {
+		td = td.(TempReference).ResolvedType()
+	}
+	return td
+}

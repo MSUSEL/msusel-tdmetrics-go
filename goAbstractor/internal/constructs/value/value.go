@@ -78,6 +78,10 @@ func Comparer() comp.Comparer[constructs.Value] {
 	}
 }
 
+func (v *valueImp) RemoveTempReferences() {
+	v.typ = constructs.ResolvedTempReference(v.typ)
+}
+
 func (v *valueImp) ToJson(ctx *jsonify.Context) jsonify.Datum {
 	if ctx.IsShort() {
 		return jsonify.New(ctx, v.id)

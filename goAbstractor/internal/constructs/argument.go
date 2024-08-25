@@ -8,6 +8,7 @@ import "github.com/Snow-Gremlin/goToolbox/collections"
 type Argument interface {
 	Construct
 	Identifiable
+	TempReferenceContainer
 	IsArgument()
 
 	Name() string

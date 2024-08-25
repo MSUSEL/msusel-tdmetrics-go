@@ -15,7 +15,7 @@ import (
 type TempReference interface {
 	TypeDesc
 	// Not identifiable
-	IsReference()
+	IsTypeReference()
 
 	PackagePath() string
 	Name() string

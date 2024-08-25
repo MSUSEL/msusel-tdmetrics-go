@@ -1,22 +1,39 @@
 package resolver
 
 import (
+	"fmt"
+
 	"github.com/Snow-Gremlin/goToolbox/collections"
 	"github.com/Snow-Gremlin/goToolbox/collections/sortedSet"
 	"github.com/Snow-Gremlin/goToolbox/terrors/terror"
 
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs/interfaceDesc"
+	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs/kind"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/logger"
 )
+
+type Args struct {
+	Log     *logger.Logger
+	Project constructs.Project
+
+	UseGlobalIndices bool
+}
 
 type resolverImp struct {
 	log  *logger.Logger
 	proj constructs.Project
+
+	useGlobalIndices bool
 }
 
-func Resolve(log *logger.Logger, proj constructs.Project) {
-	resolve := &resolverImp{log: log, proj: proj}
+func Resolve(args Args) {
+	resolve := &resolverImp{
+		log:  args.Log,
+		proj: args.Project,
+
+		useGlobalIndices: args.UseGlobalIndices,
+	}
 	resolve.Imports()
 	resolve.Receivers()
 	resolve.ObjectInterfaces()
@@ -140,8 +157,11 @@ func (r *resolverImp) TempReferences() {
 		r.resolveTempRef(refs.Get(i))
 	}
 
-	// TODO: Replace all references
-
+	r.proj.AllConstructs().Foreach(func(c constructs.Construct) {
+		if trc, has := c.(constructs.TempReferenceContainer); has {
+			trc.RemoveTempReferences()
+		}
+	})
 	r.proj.ClearAllTempReferences()
 }
 
@@ -184,12 +204,37 @@ func flagList[T constructs.Declaration](c collections.ReadonlySortedSet[T]) {
 // and all packages have been processed. This will update all the identifiers
 // that will be used as references in the output models.
 func (r *resolverImp) Identifiers() {
-	r.log.Log(`resolve identifiers`)
-	index := 1
+	if r.useGlobalIndices {
+		r.globalIndices()
+	} else {
+		r.kindLocalIndices()
+	}
+}
+
+func (r *resolverImp) globalIndices() {
+	r.log.Log(`resolve identifiers - global indices`)
+	index := 0
 	r.proj.AllConstructs().Foreach(func(c constructs.Construct) {
 		if i, has := c.(constructs.Identifiable); has {
-			i.SetId(index)
 			index++
+			i.SetId(index)
+		}
+	})
+}
+
+func (r *resolverImp) kindLocalIndices() {
+	r.log.Log(`resolve identifiers - kind local indices`)
+	const kindLocalFormat = `%s%d`
+	var index int
+	var kind kind.Kind
+	r.proj.AllConstructs().Foreach(func(c constructs.Construct) {
+		if i, has := c.(constructs.Identifiable); has {
+			if cKind := c.Kind(); kind != cKind {
+				kind = cKind
+				index = 0
+			}
+			index++
+			i.SetId(fmt.Sprintf(kindLocalFormat, kind, index))
 		}
 	})
 }

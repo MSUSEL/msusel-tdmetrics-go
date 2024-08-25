@@ -9,6 +9,7 @@ import "github.com/Snow-Gremlin/goToolbox/collections"
 type Field interface {
 	Construct
 	Identifiable
+	TempReferenceContainer
 	IsField()
 
 	Name() string

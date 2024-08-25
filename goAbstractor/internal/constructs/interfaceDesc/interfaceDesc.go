@@ -114,6 +114,15 @@ func Comparer() comp.Comparer[constructs.InterfaceDesc] {
 	}
 }
 
+func (id *interfaceDescImp) RemoveTempReferences() {
+	for i, ap := range id.approx {
+		id.approx[i] = constructs.ResolvedTempReference(ap)
+	}
+	for i, ex := range id.exact {
+		id.exact[i] = constructs.ResolvedTempReference(ex)
+	}
+}
+
 func (id *interfaceDescImp) ToJson(ctx *jsonify.Context) jsonify.Datum {
 	if ctx.IsShort() {
 		return jsonify.New(ctx, id.id)

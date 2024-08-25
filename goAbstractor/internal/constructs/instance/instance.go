@@ -73,6 +73,13 @@ func Comparer() comp.Comparer[constructs.Instance] {
 	}
 }
 
+func (i *instanceImp) RemoveTempReferences() {
+	i.resolved = constructs.ResolvedTempReference(i.resolved)
+	for j, it := range i.instanceTypes {
+		i.instanceTypes[j] = constructs.ResolvedTempReference(it)
+	}
+}
+
 func (i *instanceImp) ToJson(ctx *jsonify.Context) jsonify.Datum {
 	if ctx.IsShort() {
 		return jsonify.New(ctx, i.id)

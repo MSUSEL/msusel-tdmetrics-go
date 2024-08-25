@@ -13,6 +13,7 @@ import (
 type Instance interface {
 	TypeDesc
 	Identifiable
+	TempReferenceContainer
 	IsInstance()
 
 	Generic() Declaration

@@ -19,6 +19,7 @@ import (
 type InterfaceDesc interface {
 	TypeDesc
 	Identifiable
+	TempReferenceContainer
 	IsInterfaceDesc()
 
 	// Abstracts is the set of named signatures for this interface.
