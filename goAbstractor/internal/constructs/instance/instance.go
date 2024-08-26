@@ -31,7 +31,8 @@ func newInstance(args constructs.InstanceArgs) constructs.Instance {
 		pkg := args.Generic.Package()
 		assert.ArgNotNil(`package`, pkg)
 
-		// TODO: Implement if needed.
+		// Implement if needed.
+		assert.NotImplemented()
 	}
 	assert.ArgNotNil(`real type`, args.RealType)
 

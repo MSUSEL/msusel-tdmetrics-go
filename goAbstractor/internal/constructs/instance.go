@@ -6,10 +6,14 @@ import (
 	"github.com/Snow-Gremlin/goToolbox/collections"
 )
 
-// Instance represents a generic type that has been resolved to a specific type
-// with specific type parameters, e.g. List<T> might be resolved to List<int>.
-// The type parameter resolution may be referencing another type parameter,
-// e.g. a method signature inside a generic interface.
+// Instance represents an instantiation of generic type
+// has been resolved to a specific type with specific type parameters,
+// e.g. List[T any] might be resolved to List<int>.
+//
+// The instance parameter may be referencing a type parameter,
+// e.g. List[T any] might be resolved to List<S int|string>, thus the instance
+// is also generic. The type may be a non-type parameter on a generic type,
+// e.g. List[List[T any]] where List[T any] is the instance type.
 type Instance interface {
 	TypeDesc
 	Identifiable

@@ -29,7 +29,8 @@ func newTempReference(args constructs.TempReferenceArgs) constructs.TempReferenc
 	if utils.IsNil(args.RealType) {
 		assert.ArgNotNil(`package`, args.Package)
 
-		// TODO: Implement if needed.
+		// Implement if needed.
+		assert.NotImplemented()
 	}
 	assert.ArgNotNil(`real type`, args.RealType)
 

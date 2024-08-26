@@ -36,6 +36,12 @@ func Resolve(args Args) {
 	}
 	resolve.Imports()
 	resolve.Receivers()
+	// TODO: Add propagation of instances so that if an object has a method added
+	//       after the instance, the method also gets instances created.
+	//       Also split instances to object/method/interface instances,
+	//       So that the object instances have the instance methods and
+	//       the unique interface for the instance. And the method instance
+	//       has an optional receiver instance.
 	resolve.ObjectInterfaces()
 	resolve.Inheritance()
 	resolve.TempReferences()
@@ -171,10 +177,13 @@ func (r *resolverImp) resolveTempRef(ref constructs.TempReference) {
 	}
 
 	if _, typ, ok := r.proj.FindType(ref.PackagePath(), ref.Name(), true); ok {
-
-		// TODO: Handle type parameters to find instance
-
-		ref.SetType(typ)
+		if len(ref.InstanceTypes()) > 0 {
+			if inst, found := constructs.FindInstance(typ, ref.InstanceTypes()); found {
+				ref.SetType(inst)
+			}
+		} else {
+			ref.SetType(typ)
+		}
 	}
 }
 

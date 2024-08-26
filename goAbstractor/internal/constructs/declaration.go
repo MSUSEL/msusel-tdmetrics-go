@@ -1,8 +1,9 @@
 package constructs
 
 import (
-	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/locs"
 	"github.com/Snow-Gremlin/goToolbox/collections"
+
+	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/locs"
 )
 
 // Declaration is a type, value, or method declaration with a name.
@@ -28,4 +29,11 @@ type Declaration interface {
 type TypeDecl interface {
 	Declaration
 	TypeDesc
+}
+
+func FindInstance(decl Declaration, instanceTypes []TypeDesc) (Instance, bool) {
+	cmp := SliceComparer[TypeDesc]()
+	return decl.Instances().Enumerate().Where(func(i Instance) bool {
+		return cmp(instanceTypes, i.InstanceTypes()) == 0
+	}).First()
 }

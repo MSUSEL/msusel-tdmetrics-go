@@ -2,6 +2,7 @@ package instantiator
 
 import (
 	"go/types"
+	"slices"
 
 	"github.com/Snow-Gremlin/goToolbox/terrors/terror"
 	"github.com/Snow-Gremlin/goToolbox/utils"
@@ -34,6 +35,7 @@ func Declaration(proj constructs.Project, realType types.Type, decl constructs.D
 }
 
 type instantiator struct {
+	prior         *instantiator
 	proj          constructs.Project
 	decl          constructs.Declaration
 	instanceTypes []constructs.TypeDesc
@@ -111,10 +113,8 @@ func (i *instantiator) TypeDesc(td constructs.TypeDesc) constructs.TypeDesc {
 		return i.TempReference(td.(constructs.TempReference))
 	case kind.TypeParam:
 		return i.TypeParam(td.(constructs.TypeParam))
-	case kind.Object:
-		return i.Object(td.(constructs.Object))
-	case kind.InterfaceDecl:
-		return i.InterfaceDecl(td.(constructs.InterfaceDecl))
+	case kind.Object, kind.InterfaceDecl:
+		return i.TypeDecl(td.(constructs.TypeDecl))
 	default:
 		panic(terror.New(`unexpected type description kind`).
 			With(`kind`, td.Kind()).
@@ -152,15 +152,73 @@ func (i *instantiator) Field(f constructs.Field) constructs.Field {
 	})
 }
 
-func (i *instantiator) Instance(in constructs.Instance) constructs.Instance {
-	// TODO: Check if instance is a match to the current instance types.
-	//       Otherwise, look up the declaration and create a new instantiator.
-	return nil
+func (i *instantiator) Instance(in constructs.Instance) constructs.TypeDesc {
+	return i.declInstance(in.Generic().(constructs.TypeDecl), in.InstanceTypes())
 }
 
-func (i *instantiator) InterfaceDecl(s constructs.InterfaceDecl) constructs.InterfaceDecl {
-	// TODO: Use the declaration to create a new instantiator.
-	return nil
+func (i *instantiator) TypeDecl(decl constructs.TypeDecl) constructs.TypeDesc {
+	tps := make([]constructs.TypeDesc, len(decl.TypeParams()))
+	for i, tp := range decl.TypeParams() {
+		tps[i] = tp
+	}
+	return i.declInstance(decl, tps)
+}
+
+func (i *instantiator) getInstanceTypeChange(tps []constructs.TypeDesc) ([]constructs.TypeDesc, bool) {
+	anyReplaced := false
+	its := make([]constructs.TypeDesc, len(tps))
+	for j, td := range tps {
+		its[j] = td
+		if tp, ok := td.(constructs.TypeParam); ok {
+			if t, has := i.conversion[tp]; has {
+				its[j] = t
+				anyReplaced = true
+			}
+		}
+	}
+	return its, anyReplaced
+}
+
+func (i *instantiator) inProgress(decl constructs.TypeDecl, its []constructs.TypeDesc) bool {
+	for !utils.IsNil(i) {
+		if i.decl == decl && slices.Equal(i.instanceTypes, its) {
+			return true
+		}
+		i = i.prior
+	}
+	return false
+}
+
+func (i *instantiator) declInstance(decl constructs.TypeDecl, its []constructs.TypeDesc) constructs.TypeDesc {
+	its, anyReplaced := i.getInstanceTypeChange(its)
+	if !anyReplaced {
+		return decl
+	}
+
+	// If the declaration is the same as a declaration being instantiated,
+	// create a reference to avoid the cycle. Cycles are caused by the type
+	// being instantiated being used as part of the type definition
+	// directly, e.g. `type Foo[T any] interface { Get() Foo[T]  }` or
+	// indirectly. e.g. `type Foo[T any] interface { Children() List[Foo[T]] }`
+	if i.inProgress(decl, its) {
+		return i.proj.NewTempReference(constructs.TempReferenceArgs{
+			PackagePath:   decl.Package().Path(),
+			Name:          decl.Name(),
+			InstanceTypes: its,
+			Package:       decl.Package().Source(),
+		})
+	}
+
+	i2, existing, _ := newInstantiator(i.proj, decl, its)
+	if !utils.IsNil(existing) {
+		return existing
+	}
+	i2.prior = i
+	return i2.proj.NewInstance(constructs.InstanceArgs{
+		Generic:       decl,
+		Resolved:      i.TypeDesc(decl.Type()),
+		InstanceTypes: its,
+	})
 }
 
 func (i *instantiator) InterfaceDesc(it constructs.InterfaceDesc) constructs.InterfaceDesc {
@@ -170,11 +228,6 @@ func (i *instantiator) InterfaceDesc(it constructs.InterfaceDesc) constructs.Int
 		Approx:    mapSlice(it.Approx(), i.TypeDesc),
 		Package:   i.decl.Package().Source(),
 	})
-}
-
-func (i *instantiator) Object(obj constructs.Object) constructs.Object {
-	// TODO: Use the declaration to create a new instantiator.
-	return nil
 }
 
 func (i *instantiator) TempReference(r constructs.TempReference) constructs.TypeDesc {
