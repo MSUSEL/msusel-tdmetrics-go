@@ -47,13 +47,15 @@ var (
 	_ Construct = Field(nil)
 	_ Construct = Package(nil)
 	_ Construct = Metrics(nil)
+	_ Construct = MethodInst(nil)
 
 	// These are the implementations of type descriptions.
 	// None of these have generics defined on them but may carry
 	// type parameters for the generic declaration that they are part of.
 	_ TypeDesc = Basic(nil)
-	_ TypeDesc = Instance(nil)
 	_ TypeDesc = InterfaceDesc(nil)
+	_ TypeDesc = InterfaceInst(nil)
+	_ TypeDesc = ObjectInst(nil)
 	_ TypeDesc = Signature(nil)
 	_ TypeDesc = StructDesc(nil)
 	_ TypeDesc = TypeParam(nil)

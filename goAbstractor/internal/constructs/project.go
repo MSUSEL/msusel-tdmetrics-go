@@ -25,8 +25,10 @@ type Project interface {
 
 	// Type Descriptions
 	BasicFactory
-	InstanceFactory
 	InterfaceDescFactory
+	InterfaceInstFactory
+	MethodInstFactory
+	ObjectInstFactory
 	SignatureFactory
 	StructDescFactory
 	TempReferenceFactory

@@ -1,9 +1,7 @@
 package value
 
 import (
-	"github.com/Snow-Gremlin/goToolbox/collections"
 	"github.com/Snow-Gremlin/goToolbox/comp"
-	"github.com/Snow-Gremlin/goToolbox/terrors/terror"
 
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/assert"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs"
@@ -53,15 +51,6 @@ func (v *valueImp) Type() constructs.TypeDesc          { return v.typ }
 func (v *valueImp) Const() bool                        { return v.isConst }
 func (v *valueImp) Metrics() constructs.Metrics        { return v.metrics }
 func (v *valueImp) TypeParams() []constructs.TypeParam { return nil }
-
-func (v *valueImp) Instances() collections.ReadonlySortedSet[constructs.Instance] {
-	return nil
-}
-
-func (v *valueImp) AddInstance(inst constructs.Instance) constructs.Instance {
-	panic(terror.New(`may not add an instance to a value declaration`).
-		With(`name`, v.name))
-}
 
 func (v *valueImp) CompareTo(other constructs.Construct) int {
 	return constructs.CompareTo[constructs.Value](v, other, Comparer())

@@ -30,6 +30,10 @@ type Object interface {
 
 	IsNamed() bool
 	IsGeneric() bool
+	TypeParams() []TypeParam
+	AddInstance(inst ObjectInst) ObjectInst
+	Instances() collections.ReadonlySortedSet[ObjectInst]
+	FindInstance(instanceTypes []TypeDesc) (ObjectInst, bool)
 }
 
 type ObjectArgs struct {

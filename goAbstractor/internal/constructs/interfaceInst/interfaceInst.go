@@ -1,4 +1,4 @@
-package instance
+package interfaceInst
 
 import (
 	"go/types"
@@ -15,13 +15,13 @@ import (
 
 type instanceImp struct {
 	realType      types.Type
-	generic       constructs.Declaration
-	resolved      constructs.TypeDesc
+	generic       constructs.InterfaceDecl
+	resolved      constructs.InterfaceDesc
 	instanceTypes []constructs.TypeDesc
 	id            any
 }
 
-func newInstance(args constructs.InstanceArgs) constructs.Instance {
+func newInstance(args constructs.InterfaceInstArgs) constructs.InterfaceInst {
 	assert.ArgNotNil(`generic`, args.Generic)
 	assert.ArgNotNil(`resolved`, args.Resolved)
 	assert.ArgNotEmpty(`instance types`, args.InstanceTypes)
@@ -45,27 +45,27 @@ func newInstance(args constructs.InstanceArgs) constructs.Instance {
 	return args.Generic.AddInstance(inst)
 }
 
-func (i *instanceImp) IsInstance() {}
-func (i *instanceImp) IsTypeDesc() {}
+func (i *instanceImp) IsInterfaceInst() {}
+func (i *instanceImp) IsTypeDesc()      {}
 
-func (i *instanceImp) Kind() kind.Kind    { return kind.Instance }
+func (i *instanceImp) Kind() kind.Kind    { return kind.InterfaceInst }
 func (i *instanceImp) Id() any            { return i.id }
 func (i *instanceImp) SetId(id any)       { i.id = id }
 func (m *instanceImp) GoType() types.Type { return m.realType }
 
-func (m *instanceImp) Generic() constructs.Declaration { return m.generic }
-func (m *instanceImp) Resolved() constructs.TypeDesc   { return m.resolved }
+func (m *instanceImp) Generic() constructs.InterfaceDecl  { return m.generic }
+func (m *instanceImp) Resolved() constructs.InterfaceDesc { return m.resolved }
 
 func (m *instanceImp) InstanceTypes() []constructs.TypeDesc {
 	return m.instanceTypes
 }
 
 func (i *instanceImp) CompareTo(other constructs.Construct) int {
-	return constructs.CompareTo[constructs.Instance](i, other, Comparer())
+	return constructs.CompareTo[constructs.InterfaceInst](i, other, Comparer())
 }
 
-func Comparer() comp.Comparer[constructs.Instance] {
-	return func(a, b constructs.Instance) int {
+func Comparer() comp.Comparer[constructs.InterfaceInst] {
+	return func(a, b constructs.InterfaceInst) int {
 		aImp, bImp := a.(*instanceImp), b.(*instanceImp)
 		return comp.Or(
 			constructs.ComparerPend(aImp.resolved, bImp.resolved),
@@ -75,7 +75,6 @@ func Comparer() comp.Comparer[constructs.Instance] {
 }
 
 func (i *instanceImp) RemoveTempReferences() {
-	i.resolved = constructs.ResolvedTempReference(i.resolved)
 	for j, it := range i.instanceTypes {
 		i.instanceTypes[j] = constructs.ResolvedTempReference(it)
 	}

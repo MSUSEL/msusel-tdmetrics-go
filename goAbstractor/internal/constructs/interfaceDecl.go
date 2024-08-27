@@ -24,6 +24,10 @@ type InterfaceDecl interface {
 	Interface() InterfaceDesc
 	IsNamed() bool
 	IsGeneric() bool
+	TypeParams() []TypeParam
+	AddInstance(inst InterfaceInst) InterfaceInst
+	Instances() collections.ReadonlySortedSet[InterfaceInst]
+	FindInstance(instanceTypes []TypeDesc) (InterfaceInst, bool)
 }
 
 type InterfaceDeclArgs struct {

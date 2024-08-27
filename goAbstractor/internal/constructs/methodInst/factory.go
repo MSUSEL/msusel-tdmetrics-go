@@ -1,4 +1,4 @@
-package instance
+package methodInst
 
 import (
 	"github.com/Snow-Gremlin/goToolbox/collections"
@@ -8,18 +8,18 @@ import (
 )
 
 type factoryImp struct {
-	instances collections.SortedSet[constructs.Instance]
+	instances collections.SortedSet[constructs.MethodInst]
 }
 
-func New() constructs.InstanceFactory {
+func New() constructs.MethodInstFactory {
 	return &factoryImp{instances: sortedSet.New(Comparer())}
 }
 
-func (f *factoryImp) NewInstance(args constructs.InstanceArgs) constructs.Instance {
+func (f *factoryImp) NewMethodInst(args constructs.MethodInstArgs) constructs.MethodInst {
 	v, _ := f.instances.TryAdd(newInstance(args))
 	return v
 }
 
-func (f *factoryImp) Instances() collections.ReadonlySortedSet[constructs.Instance] {
+func (f *factoryImp) MethodInsts() collections.ReadonlySortedSet[constructs.MethodInst] {
 	return f.instances.Readonly()
 }

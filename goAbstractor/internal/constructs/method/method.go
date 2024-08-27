@@ -12,8 +12,8 @@ import (
 
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/assert"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs"
-	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs/instance"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs/kind"
+	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs/methodInst"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/jsonify"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/locs"
 )
@@ -31,7 +31,7 @@ type methodImp struct {
 	receiver   constructs.Object
 	noCopyRecv bool
 
-	instances collections.SortedSet[constructs.Instance]
+	instances collections.SortedSet[constructs.MethodInst]
 
 	id any
 }
@@ -65,7 +65,7 @@ func newMethod(args constructs.MethodArgs) constructs.Method {
 		receiver:   args.Receiver,
 		noCopyRecv: args.NoCopyRecv,
 
-		instances: sortedSet.New(instance.Comparer()),
+		instances: sortedSet.New(methodInst.Comparer()),
 	}
 
 	if !utils.IsNil(met.receiver) {
@@ -91,13 +91,20 @@ func (m *methodImp) Signature() constructs.Signature    { return m.signature }
 func (m *methodImp) Metrics() constructs.Metrics        { return m.metrics }
 func (m *methodImp) TypeParams() []constructs.TypeParam { return m.typeParams }
 
-func (m *methodImp) Instances() collections.ReadonlySortedSet[constructs.Instance] {
+func (m *methodImp) Instances() collections.ReadonlySortedSet[constructs.MethodInst] {
 	return m.instances.Readonly()
 }
 
-func (m *methodImp) AddInstance(inst constructs.Instance) constructs.Instance {
+func (m *methodImp) AddInstance(inst constructs.MethodInst) constructs.MethodInst {
 	v, _ := m.instances.TryAdd(inst)
 	return v
+}
+
+func (m *methodImp) FindInstance(instanceTypes []constructs.TypeDesc) (constructs.MethodInst, bool) {
+	cmp := constructs.SliceComparer[constructs.TypeDesc]()
+	return m.instances.Enumerate().Where(func(i constructs.MethodInst) bool {
+		return cmp(instanceTypes, i.InstanceTypes()) == 0
+	}).First()
 }
 
 func (m *methodImp) ReceiverName() string               { return m.recvName }

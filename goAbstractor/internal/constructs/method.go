@@ -23,8 +23,12 @@ type Method interface {
 
 	IsInit() bool
 	IsNamed() bool
-	IsGeneric() bool
 	HasReceiver() bool
+	IsGeneric() bool
+	TypeParams() []TypeParam
+	AddInstance(inst MethodInst) MethodInst
+	Instances() collections.ReadonlySortedSet[MethodInst]
+	FindInstance(instanceTypes []TypeDesc) (MethodInst, bool)
 }
 
 type MethodArgs struct {

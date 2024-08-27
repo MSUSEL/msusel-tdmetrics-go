@@ -11,9 +11,9 @@ import (
 
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/assert"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs"
-	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs/instance"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs/kind"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs/method"
+	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs/objectInst"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/jsonify"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/locs"
 )
@@ -29,7 +29,7 @@ type objectImp struct {
 	inter      constructs.InterfaceDesc
 
 	methods   collections.SortedSet[constructs.Method]
-	instances collections.SortedSet[constructs.Instance]
+	instances collections.SortedSet[constructs.ObjectInst]
 
 	id any
 }
@@ -51,7 +51,7 @@ func newObject(args constructs.ObjectArgs) constructs.Object {
 		data:       args.Data,
 
 		methods:   sortedSet.New(method.Comparer()),
-		instances: sortedSet.New(instance.Comparer()),
+		instances: sortedSet.New(objectInst.Comparer()),
 	}
 }
 
@@ -72,13 +72,20 @@ func (d *objectImp) Type() constructs.TypeDesc          { return d.data }
 func (d *objectImp) Data() constructs.StructDesc        { return d.data }
 func (d *objectImp) TypeParams() []constructs.TypeParam { return d.typeParams }
 
-func (d *objectImp) Instances() collections.ReadonlySortedSet[constructs.Instance] {
+func (d *objectImp) Instances() collections.ReadonlySortedSet[constructs.ObjectInst] {
 	return d.instances.Readonly()
 }
 
-func (d *objectImp) AddInstance(inst constructs.Instance) constructs.Instance {
+func (d *objectImp) AddInstance(inst constructs.ObjectInst) constructs.ObjectInst {
 	v, _ := d.instances.TryAdd(inst)
 	return v
+}
+
+func (d *objectImp) FindInstance(instanceTypes []constructs.TypeDesc) (constructs.ObjectInst, bool) {
+	cmp := constructs.SliceComparer[constructs.TypeDesc]()
+	return d.instances.Enumerate().Where(func(i constructs.ObjectInst) bool {
+		return cmp(instanceTypes, i.InstanceTypes()) == 0
+	}).First()
 }
 
 func (d *objectImp) Methods() collections.ReadonlySortedSet[constructs.Method] {

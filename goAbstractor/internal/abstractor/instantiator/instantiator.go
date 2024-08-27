@@ -11,27 +11,37 @@ import (
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs/kind"
 )
 
-func TypeDecl(proj constructs.Project, realType types.Type, decl constructs.TypeDecl, instanceTypes ...constructs.TypeDesc) constructs.TypeDesc {
-	if instance := Declaration(proj, realType, decl, instanceTypes...); !utils.IsNil(instance) {
-		return instance
+func InterfaceDecl(proj constructs.Project, realType types.Type, decl constructs.InterfaceDecl, instanceTypes ...constructs.TypeDesc) constructs.TypeDesc {
+	i, existing, needsInstance := newInstantiator(proj, decl, instanceTypes)
+	if !needsInstance {
+		return decl
 	}
-	return decl
+	if !utils.IsNil(existing) {
+		return existing.(constructs.InterfaceInst)
+	}
+	return i.createInstance(realType).(constructs.InterfaceInst)
 }
 
-func Declaration(proj constructs.Project, realType types.Type, decl constructs.Declaration, instanceTypes ...constructs.TypeDesc) constructs.TypeDesc {
+func Object(proj constructs.Project, realType types.Type, decl constructs.Object, instanceTypes ...constructs.TypeDesc) constructs.TypeDesc {
+	i, existing, needsInstance := newInstantiator(proj, decl, instanceTypes)
+	if !needsInstance {
+		return decl
+	}
+	if !utils.IsNil(existing) {
+		return existing.(constructs.ObjectInst)
+	}
+	return i.createInstance(realType).(constructs.ObjectInst)
+}
+
+func Method(proj constructs.Project, decl constructs.Method, instanceTypes ...constructs.TypeDesc) constructs.Construct {
 	i, existing, needsInstance := newInstantiator(proj, decl, instanceTypes)
 	if !needsInstance {
 		return nil
 	}
 	if !utils.IsNil(existing) {
-		return existing
+		return existing.(constructs.MethodInst)
 	}
-	return proj.NewInstance(constructs.InstanceArgs{
-		RealType:      realType,
-		Generic:       decl,
-		Resolved:      i.TypeDesc(decl.Type()),
-		InstanceTypes: instanceTypes,
-	})
+	return i.createInstance(nil).(constructs.MethodInst)
 }
 
 type instantiator struct {
@@ -42,8 +52,8 @@ type instantiator struct {
 	conversion    map[constructs.TypeParam]constructs.TypeDesc
 }
 
-func newInstantiator(proj constructs.Project, decl constructs.Declaration, instanceTypes []constructs.TypeDesc) (*instantiator, constructs.Instance, bool) {
-	typeParams := decl.TypeParams()
+func newInstantiator(proj constructs.Project, decl constructs.Declaration, instanceTypes []constructs.TypeDesc) (*instantiator, constructs.Construct, bool) {
+	typeParams := decl.(interface{ TypeParams() []constructs.TypeParam }).TypeParams()
 	count := len(typeParams)
 	if count != len(instanceTypes) {
 		panic(terror.New(`the amount of type params must match the instance types`).
@@ -71,15 +81,16 @@ func newInstantiator(proj constructs.Project, decl constructs.Declaration, insta
 	}
 
 	// Check that a matching instance doesn't already exist.
-	instance, found := decl.Instances().Enumerate().
-		Where(func(in constructs.Instance) bool {
-			for i, it := range in.InstanceTypes() {
-				if it != instanceTypes[i] {
-					return false
-				}
-			}
-			return true
-		}).First()
+	var instance constructs.Construct
+	found := false
+	switch decl.Kind() {
+	case kind.InterfaceDecl:
+		instance, found = decl.(constructs.InterfaceDecl).FindInstance(instanceTypes)
+	case kind.Object:
+		instance, found = decl.(constructs.Object).FindInstance(instanceTypes)
+	case kind.Method:
+		instance, found = decl.(constructs.Method).FindInstance(instanceTypes)
+	}
 	if found {
 		return nil, instance, true
 	}
@@ -101,10 +112,12 @@ func (i *instantiator) TypeDesc(td constructs.TypeDesc) constructs.TypeDesc {
 	switch td.Kind() {
 	case kind.Basic:
 		return td
-	case kind.Instance:
-		return i.Instance(td.(constructs.Instance))
 	case kind.InterfaceDesc:
 		return i.InterfaceDesc(td.(constructs.InterfaceDesc))
+	case kind.InterfaceInst:
+		return i.InterfaceInst(td.(constructs.InterfaceInst))
+	case kind.ObjectInst:
+		return i.ObjectInst(td.(constructs.ObjectInst))
 	case kind.Signature:
 		return i.Signature(td.(constructs.Signature))
 	case kind.StructDesc:
@@ -113,8 +126,10 @@ func (i *instantiator) TypeDesc(td constructs.TypeDesc) constructs.TypeDesc {
 		return i.TempReference(td.(constructs.TempReference))
 	case kind.TypeParam:
 		return i.TypeParam(td.(constructs.TypeParam))
-	case kind.Object, kind.InterfaceDecl:
-		return i.TypeDecl(td.(constructs.TypeDecl))
+	case kind.InterfaceDecl:
+		return i.InterfaceDecl(td.(constructs.InterfaceDecl))
+	case kind.Object:
+		return i.Object(td.(constructs.Object))
 	default:
 		panic(terror.New(`unexpected type description kind`).
 			With(`kind`, td.Kind()).
@@ -122,7 +137,7 @@ func (i *instantiator) TypeDesc(td constructs.TypeDesc) constructs.TypeDesc {
 	}
 }
 
-func mapSlice[T any, S ~[]T](s S, handle func(T) T) S {
+func applyToSlice[T any, S ~[]T](s S, handle func(T) T) S {
 	result := make(S, len(s))
 	for i, e := range s {
 		result[i] = handle(e)
@@ -152,16 +167,28 @@ func (i *instantiator) Field(f constructs.Field) constructs.Field {
 	})
 }
 
-func (i *instantiator) Instance(in constructs.Instance) constructs.TypeDesc {
-	return i.declInstance(in.Generic().(constructs.TypeDecl), in.InstanceTypes())
+func (i *instantiator) InterfaceInst(in constructs.InterfaceInst) constructs.TypeDesc {
+	return i.typeDecl(in.Generic().(constructs.TypeDecl), in.InstanceTypes())
 }
 
-func (i *instantiator) TypeDecl(decl constructs.TypeDecl) constructs.TypeDesc {
+func (i *instantiator) ObjectInst(in constructs.ObjectInst) constructs.TypeDesc {
+	return i.typeDecl(in.Generic().(constructs.TypeDecl), in.InstanceTypes())
+}
+
+func (i *instantiator) InterfaceDecl(decl constructs.InterfaceDecl) constructs.TypeDesc {
 	tps := make([]constructs.TypeDesc, len(decl.TypeParams()))
 	for i, tp := range decl.TypeParams() {
 		tps[i] = tp
 	}
-	return i.declInstance(decl, tps)
+	return i.typeDecl(decl, tps)
+}
+
+func (i *instantiator) Object(decl constructs.Object) constructs.TypeDesc {
+	tps := make([]constructs.TypeDesc, len(decl.TypeParams()))
+	for i, tp := range decl.TypeParams() {
+		tps[i] = tp
+	}
+	return i.typeDecl(decl, tps)
 }
 
 func (i *instantiator) getInstanceTypeChange(tps []constructs.TypeDesc) ([]constructs.TypeDesc, bool) {
@@ -189,7 +216,7 @@ func (i *instantiator) inProgress(decl constructs.TypeDecl, its []constructs.Typ
 	return false
 }
 
-func (i *instantiator) declInstance(decl constructs.TypeDecl, its []constructs.TypeDesc) constructs.TypeDesc {
+func (i *instantiator) typeDecl(decl constructs.TypeDecl, its []constructs.TypeDesc) constructs.TypeDesc {
 	its, anyReplaced := i.getInstanceTypeChange(its)
 	if !anyReplaced {
 		return decl
@@ -211,21 +238,49 @@ func (i *instantiator) declInstance(decl constructs.TypeDecl, its []constructs.T
 
 	i2, existing, _ := newInstantiator(i.proj, decl, its)
 	if !utils.IsNil(existing) {
-		return existing
+		return existing.(constructs.TypeDesc)
 	}
 	i2.prior = i
-	return i2.proj.NewInstance(constructs.InstanceArgs{
-		Generic:       decl,
-		Resolved:      i.TypeDesc(decl.Type()),
-		InstanceTypes: its,
-	})
+	return i2.createInstance(nil).(constructs.TypeDesc)
+}
+
+func (i *instantiator) createInstance(realType types.Type) constructs.Construct {
+	switch i.decl.Kind() {
+	case kind.InterfaceDecl:
+		d := i.decl.(constructs.InterfaceDecl)
+		return i.proj.NewInterfaceInst(constructs.InterfaceInstArgs{
+			RealType:      realType,
+			Generic:       d,
+			Resolved:      i.InterfaceDesc(d.Interface()),
+			InstanceTypes: i.instanceTypes,
+		})
+	case kind.Object:
+		d := i.decl.(constructs.Object)
+		return i.proj.NewObjectInst(constructs.ObjectInstArgs{
+			RealType:      realType,
+			Generic:       d,
+			Resolved:      i.StructDesc(d.Data()),
+			InstanceTypes: i.instanceTypes,
+		})
+	case kind.Method:
+		d := i.decl.(constructs.Method)
+		return i.proj.NewMethodInst(constructs.MethodInstArgs{
+			Generic:       d,
+			Resolved:      i.Signature(d.Signature()),
+			InstanceTypes: i.instanceTypes,
+		})
+	default:
+		panic(terror.New(`unexpected declaration type`).
+			With(`kind`, i.decl.Kind()).
+			With(`decl`, i.decl))
+	}
 }
 
 func (i *instantiator) InterfaceDesc(it constructs.InterfaceDesc) constructs.InterfaceDesc {
 	return i.proj.NewInterfaceDesc(constructs.InterfaceDescArgs{
-		Abstracts: mapSlice(it.Abstracts(), i.Abstract),
-		Exact:     mapSlice(it.Exact(), i.TypeDesc),
-		Approx:    mapSlice(it.Approx(), i.TypeDesc),
+		Abstracts: applyToSlice(it.Abstracts(), i.Abstract),
+		Exact:     applyToSlice(it.Exact(), i.TypeDesc),
+		Approx:    applyToSlice(it.Approx(), i.TypeDesc),
 		Package:   i.decl.Package().Source(),
 	})
 }
@@ -241,7 +296,7 @@ func (i *instantiator) TempReference(r constructs.TempReference) constructs.Type
 	return i.proj.NewTempReference(constructs.TempReferenceArgs{
 		PackagePath:   r.PackagePath(),
 		Name:          r.Name(),
-		InstanceTypes: mapSlice(r.InstanceTypes(), i.TypeDesc),
+		InstanceTypes: applyToSlice(r.InstanceTypes(), i.TypeDesc),
 		Package:       i.decl.Package().Source(),
 	})
 }
@@ -249,15 +304,15 @@ func (i *instantiator) TempReference(r constructs.TempReference) constructs.Type
 func (i *instantiator) Signature(s constructs.Signature) constructs.Signature {
 	return i.proj.NewSignature(constructs.SignatureArgs{
 		Variadic: s.Variadic(),
-		Params:   mapSlice(s.Params(), i.Argument),
-		Results:  mapSlice(s.Results(), i.Argument),
+		Params:   applyToSlice(s.Params(), i.Argument),
+		Results:  applyToSlice(s.Results(), i.Argument),
 		Package:  i.decl.Package().Source(),
 	})
 }
 
 func (i *instantiator) StructDesc(s constructs.StructDesc) constructs.StructDesc {
 	return i.proj.NewStructDesc(constructs.StructDescArgs{
-		Fields:  mapSlice(s.Fields(), i.Field),
+		Fields:  applyToSlice(s.Fields(), i.Field),
 		Package: i.decl.Package().Source(),
 	})
 }

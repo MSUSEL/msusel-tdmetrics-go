@@ -36,15 +36,10 @@ func Resolve(args Args) {
 	}
 	resolve.Imports()
 	resolve.Receivers()
-	// TODO: Add propagation of instances so that if an object has a method added
-	//       after the instance, the method also gets instances created.
-	//       Also split instances to object/method/interface instances,
-	//       So that the object instances have the instance methods and
-	//       the unique interface for the instance. And the method instance
-	//       has an optional receiver instance.
+	resolve.ExpandInstantiations()
+	resolve.TempReferences()
 	resolve.ObjectInterfaces()
 	resolve.Inheritance()
-	resolve.TempReferences()
 	resolve.EliminateDeadCode()
 	resolve.Locations()
 	resolve.Identifiers()
@@ -73,6 +68,14 @@ func (r *resolverImp) Receivers() {
 	for i := range packages.Count() {
 		packages.Get(i).ResolveReceivers()
 	}
+}
+
+// ExpandInstantiations adds propagation of instances so that if an object
+// has a method added after the instance, the method also gets instances created.
+func (r *resolverImp) ExpandInstantiations() {
+	r.log.Log(`expand instantiations`)
+
+	// TODO: Implement
 }
 
 func (r *resolverImp) ObjectInterfaces() {
@@ -178,12 +181,34 @@ func (r *resolverImp) resolveTempRef(ref constructs.TempReference) {
 
 	if _, typ, ok := r.proj.FindType(ref.PackagePath(), ref.Name(), true); ok {
 		if len(ref.InstanceTypes()) > 0 {
-			if inst, found := constructs.FindInstance(typ, ref.InstanceTypes()); found {
+			if inst, found := findInstance(typ, ref.InstanceTypes()); found {
 				ref.SetType(inst)
+				return
 			}
-		} else {
-			ref.SetType(typ)
+			panic(terror.New(`failed to find temp referenced instance`).
+				With(`package path`, ref.PackagePath()).
+				With(`name`, ref.Name()).
+				With(`instance types`, ref.InstanceTypes()))
 		}
+		ref.SetType(typ)
+		return
+	}
+	panic(terror.New(`failed to find temp referenced object`).
+		With(`package path`, ref.PackagePath()).
+		With(`name`, ref.Name()).
+		With(`instance types`, ref.InstanceTypes()))
+}
+
+func findInstance(decl constructs.TypeDecl, instanceTypes []constructs.TypeDesc) (constructs.TypeDesc, bool) {
+	switch decl.Kind() {
+	case kind.Object:
+		return decl.(constructs.Object).FindInstance(instanceTypes)
+	case kind.InterfaceDecl:
+		return decl.(constructs.InterfaceDecl).FindInstance(instanceTypes)
+	default:
+		panic(terror.New(`unexpected declaration type`).
+			With(`kind`, decl.Kind()).
+			With(`decl`, decl))
 	}
 }
 

@@ -12,7 +12,7 @@ import (
 
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/assert"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs"
-	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs/instance"
+	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs/interfaceInst"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs/kind"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/jsonify"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/locs"
@@ -26,8 +26,7 @@ type interfaceDeclImp struct {
 
 	typeParams []constructs.TypeParam
 	inter      constructs.InterfaceDesc
-
-	instances collections.SortedSet[constructs.Instance]
+	instances  collections.SortedSet[constructs.InterfaceInst]
 
 	id any
 }
@@ -55,7 +54,7 @@ func newInterfaceDecl(args constructs.InterfaceDeclArgs) constructs.InterfaceDec
 		typeParams: args.TypeParams,
 		inter:      args.Interface,
 
-		instances: sortedSet.New(instance.Comparer()),
+		instances: sortedSet.New(interfaceInst.Comparer()),
 	}
 }
 
@@ -76,13 +75,20 @@ func (d *interfaceDeclImp) Type() constructs.TypeDesc           { return d.inter
 func (d *interfaceDeclImp) Interface() constructs.InterfaceDesc { return d.inter }
 func (d *interfaceDeclImp) TypeParams() []constructs.TypeParam  { return d.typeParams }
 
-func (d *interfaceDeclImp) Instances() collections.ReadonlySortedSet[constructs.Instance] {
+func (d *interfaceDeclImp) Instances() collections.ReadonlySortedSet[constructs.InterfaceInst] {
 	return d.instances.Readonly()
 }
 
-func (d *interfaceDeclImp) AddInstance(inst constructs.Instance) constructs.Instance {
+func (d *interfaceDeclImp) AddInstance(inst constructs.InterfaceInst) constructs.InterfaceInst {
 	v, _ := d.instances.TryAdd(inst)
 	return v
+}
+
+func (d *interfaceDeclImp) FindInstance(instanceTypes []constructs.TypeDesc) (constructs.InterfaceInst, bool) {
+	cmp := constructs.SliceComparer[constructs.TypeDesc]()
+	return d.instances.Enumerate().Where(func(i constructs.InterfaceInst) bool {
+		return cmp(instanceTypes, i.InstanceTypes()) == 0
+	}).First()
 }
 
 func (d *interfaceDeclImp) IsNamed() bool {

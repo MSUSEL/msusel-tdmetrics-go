@@ -13,12 +13,14 @@ import (
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs/argument"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs/basic"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs/field"
-	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs/instance"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs/interfaceDecl"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs/interfaceDesc"
+	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs/interfaceInst"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs/method"
+	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs/methodInst"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs/metrics"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs/object"
+	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs/objectInst"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs/packageCon"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs/signature"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs/structDesc"
@@ -42,8 +44,10 @@ type projectImp struct {
 	constructs.ValueFactory
 
 	constructs.BasicFactory
-	constructs.InstanceFactory
 	constructs.InterfaceDescFactory
+	constructs.InterfaceInstFactory
+	constructs.MethodInstFactory
+	constructs.ObjectInstFactory
 	constructs.SignatureFactory
 	constructs.StructDescFactory
 	constructs.TempReferenceFactory
@@ -66,8 +70,10 @@ func New(locs locs.Set) constructs.Project {
 		ValueFactory:         value.New(),
 
 		BasicFactory:         basic.New(),
-		InstanceFactory:      instance.New(),
 		InterfaceDescFactory: interfaceDesc.New(),
+		InterfaceInstFactory: interfaceInst.New(),
+		MethodInstFactory:    methodInst.New(),
+		ObjectInstFactory:    objectInst.New(),
 		SignatureFactory:     signature.New(),
 		StructDescFactory:    structDesc.New(),
 		TempReferenceFactory: tempReference.New(),
@@ -85,12 +91,14 @@ func (p *projectImp) AllConstructs() collections.Enumerator[constructs.Construct
 		enumerator.Cast[constructs.Construct](p.Arguments().Enumerate()),
 		enumerator.Cast[constructs.Construct](p.Basics().Enumerate()),
 		enumerator.Cast[constructs.Construct](p.Fields().Enumerate()),
-		enumerator.Cast[constructs.Construct](p.Instances().Enumerate()),
 		enumerator.Cast[constructs.Construct](p.InterfaceDecls().Enumerate()),
 		enumerator.Cast[constructs.Construct](p.InterfaceDescs().Enumerate()),
+		enumerator.Cast[constructs.Construct](p.InterfaceInsts().Enumerate()),
 		enumerator.Cast[constructs.Construct](p.Methods().Enumerate()),
+		enumerator.Cast[constructs.Construct](p.MethodInsts().Enumerate()),
 		enumerator.Cast[constructs.Construct](p.Metrics().Enumerate()),
 		enumerator.Cast[constructs.Construct](p.Objects().Enumerate()),
+		enumerator.Cast[constructs.Construct](p.ObjectInsts().Enumerate()),
 		enumerator.Cast[constructs.Construct](p.Packages().Enumerate()),
 		enumerator.Cast[constructs.Construct](p.Signatures().Enumerate()),
 		enumerator.Cast[constructs.Construct](p.StructDescs().Enumerate()),
@@ -152,8 +160,10 @@ func (p *projectImp) ToJson(ctx *jsonify.Context) jsonify.Datum {
 		AddNonZero(ctx2, `values`, p.Values().ToSlice())
 
 	m.AddNonZero(ctx2, `basics`, p.Basics().ToSlice()).
-		AddNonZero(ctx2, `instances`, p.Instances().ToSlice()).
 		AddNonZero(ctx2, `interfaceDescs`, p.InterfaceDescs().ToSlice()).
+		AddNonZero(ctx2, `interfaceInst`, p.InterfaceInsts().ToSlice()).
+		AddNonZero(ctx2, `methodInst`, p.MethodInsts().ToSlice()).
+		AddNonZero(ctx2, `objectInst`, p.ObjectInsts().ToSlice()).
 		AddNonZero(ctx2, `tempReferences`, p.TempReferences().ToSlice()).
 		AddNonZero(ctx2, `signatures`, p.Signatures().ToSlice()).
 		AddNonZero(ctx2, `structDescs`, p.StructDescs().ToSlice()).

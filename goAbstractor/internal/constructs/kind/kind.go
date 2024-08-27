@@ -7,12 +7,14 @@ const (
 	Argument      Kind = `argument`
 	Basic         Kind = `basic`
 	Field         Kind = `field`
-	Instance      Kind = `instance`
 	InterfaceDecl Kind = `interfaceDecl`
 	InterfaceDesc Kind = `interfaceDesc`
+	InterfaceInst Kind = `interfaceInst`
 	Method        Kind = `method`
+	MethodInst    Kind = `methodInst`
 	Metrics       Kind = `metrics`
 	Object        Kind = `object`
+	ObjectInst    Kind = `objectInst`
 	Package       Kind = `package`
 	Signature     Kind = `signature`
 	StructDesc    Kind = `structDesc`

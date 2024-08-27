@@ -1,10 +1,6 @@
 package constructs
 
-import (
-	"github.com/Snow-Gremlin/goToolbox/collections"
-
-	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/locs"
-)
+import "github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/locs"
 
 // Declaration is a type, value, or method declaration with a name.
 type Declaration interface {
@@ -13,10 +9,6 @@ type Declaration interface {
 	// IsDeclaration indicates that the type is a Declaration at compile time.
 	// This prevents anything else from duck-typing into a Declaration.
 	IsDeclaration()
-
-	TypeParams() []TypeParam
-	AddInstance(inst Instance) Instance
-	Instances() collections.ReadonlySortedSet[Instance]
 
 	Package() Package
 	Name() string
@@ -31,9 +23,11 @@ type TypeDecl interface {
 	TypeDesc
 }
 
+/*
 func FindInstance(decl Declaration, instanceTypes []TypeDesc) (Instance, bool) {
 	cmp := SliceComparer[TypeDesc]()
 	return decl.Instances().Enumerate().Where(func(i Instance) bool {
 		return cmp(instanceTypes, i.InstanceTypes()) == 0
 	}).First()
 }
+*/

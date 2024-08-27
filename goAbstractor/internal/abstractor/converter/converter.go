@@ -9,6 +9,7 @@ import (
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/abstractor/baker"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/abstractor/instantiator"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs"
+	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs/kind"
 )
 
 type Converter interface {
@@ -77,7 +78,7 @@ func (c *convImp) ConvertType(t types.Type) constructs.TypeDesc {
 func (c *convImp) convertArray(t *types.Array) constructs.TypeDesc {
 	elem := c.ConvertType(t.Elem())
 	generic := c.baker.BakeList()
-	return instantiator.TypeDecl(c.proj, t.Underlying(), generic, elem)
+	return instantiator.InterfaceDecl(c.proj, t.Underlying(), generic, elem)
 }
 
 func (c *convImp) convertBasic(t *types.Basic) constructs.TypeDesc {
@@ -96,7 +97,7 @@ func (c *convImp) convertBasic(t *types.Basic) constructs.TypeDesc {
 func (c *convImp) convertChan(t *types.Chan) constructs.TypeDesc {
 	elem := c.ConvertType(t.Elem())
 	generic := c.baker.BakeChan()
-	return instantiator.TypeDecl(c.proj, t.Underlying(), generic, elem)
+	return instantiator.InterfaceDecl(c.proj, t.Underlying(), generic, elem)
 }
 
 func (c *convImp) convertInterface(t *types.Interface) constructs.InterfaceDesc {
@@ -136,7 +137,7 @@ func (c *convImp) convertMap(t *types.Map) constructs.TypeDesc {
 	key := c.ConvertType(t.Key())
 	value := c.ConvertType(t.Elem())
 	generic := c.baker.BakeMap()
-	return instantiator.TypeDecl(c.proj, t.Underlying(), generic, key, value)
+	return instantiator.InterfaceDecl(c.proj, t.Underlying(), generic, key, value)
 }
 
 func (c *convImp) convertNamed(t *types.Named) constructs.TypeDesc {
@@ -173,13 +174,22 @@ func (c *convImp) convertNamed(t *types.Named) constructs.TypeDesc {
 		})
 	}
 
-	return instantiator.TypeDecl(c.proj, t.Underlying(), typ, instanceTp...)
+	switch typ.Kind() {
+	case kind.InterfaceDecl:
+		return instantiator.InterfaceDecl(c.proj, t.Underlying(), typ.(constructs.InterfaceDecl), instanceTp...)
+	case kind.Object:
+		return instantiator.Object(c.proj, t.Underlying(), typ.(constructs.Object), instanceTp...)
+	default:
+		panic(terror.New(`unexpected declaration type`).
+			With(`kind`, typ.Kind()).
+			With(`decl`, typ))
+	}
 }
 
 func (c *convImp) convertPointer(t *types.Pointer) constructs.TypeDesc {
 	elem := c.ConvertType(t.Elem())
 	generic := c.baker.BakePointer()
-	return instantiator.TypeDecl(c.proj, t.Underlying(), generic, elem)
+	return instantiator.InterfaceDecl(c.proj, t.Underlying(), generic, elem)
 }
 
 func (c *convImp) ConvertSignature(t *types.Signature) constructs.Signature {
@@ -197,7 +207,7 @@ func (c *convImp) ConvertSignature(t *types.Signature) constructs.Signature {
 func (c *convImp) convertSlice(t *types.Slice) constructs.TypeDesc {
 	elem := c.ConvertType(t.Elem())
 	generic := c.baker.BakeList()
-	return instantiator.TypeDecl(c.proj, t.Underlying(), generic, elem)
+	return instantiator.InterfaceDecl(c.proj, t.Underlying(), generic, elem)
 }
 
 func (c *convImp) convertStruct(t *types.Struct) constructs.StructDesc {
