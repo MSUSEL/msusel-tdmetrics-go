@@ -23,6 +23,7 @@ type objectImp struct {
 	pkg      constructs.Package
 	name     string
 	loc      locs.Loc
+	index    int
 
 	typeParams []constructs.TypeParam
 	data       constructs.StructDesc
@@ -30,8 +31,6 @@ type objectImp struct {
 
 	methods   collections.SortedSet[constructs.Method]
 	instances collections.SortedSet[constructs.ObjectInst]
-
-	id any
 }
 
 func newObject(args constructs.ObjectArgs) constructs.Object {
@@ -60,8 +59,8 @@ func (d *objectImp) IsTypeDesc()    {}
 func (d *objectImp) IsObject()      {}
 
 func (d *objectImp) Kind() kind.Kind    { return kind.Object }
-func (d *objectImp) Id() any            { return d.id }
-func (d *objectImp) SetId(id any)       { d.id = id }
+func (d *objectImp) Index() int         { return d.index }
+func (d *objectImp) SetIndex(index int) { d.index = index }
 func (d *objectImp) GoType() types.Type { return d.realType }
 
 func (d *objectImp) Package() constructs.Package { return d.pkg }
@@ -97,19 +96,11 @@ func (d *objectImp) AddMethod(met constructs.Method) constructs.Method {
 	return v
 }
 
-func (d *objectImp) Interface() constructs.InterfaceDesc { return d.inter }
+func (d *objectImp) Interface() constructs.InterfaceDesc      { return d.inter }
+func (d *objectImp) SetInterface(it constructs.InterfaceDesc) { d.inter = it }
 
-func (d *objectImp) SetInterface(it constructs.InterfaceDesc) {
-	d.inter = it
-}
-
-func (d *objectImp) IsNamed() bool {
-	return len(d.name) > 0
-}
-
-func (d *objectImp) IsGeneric() bool {
-	return len(d.typeParams) > 0
-}
+func (d *objectImp) IsNamed() bool   { return len(d.name) > 0 }
+func (d *objectImp) IsGeneric() bool { return len(d.typeParams) > 0 }
 
 func (d *objectImp) CompareTo(other constructs.Construct) int {
 	return constructs.CompareTo[constructs.Object](d, other, Comparer())
@@ -128,22 +119,23 @@ func Comparer() comp.Comparer[constructs.Object] {
 }
 
 func (d *objectImp) ToJson(ctx *jsonify.Context) jsonify.Datum {
-	if ctx.IsShort() {
-		return jsonify.New(ctx, d.id)
+	if ctx.IsOnlyIndex() {
+		return jsonify.New(ctx, d.index)
 	}
-
-	ctx2 := ctx.HideKind().Short()
+	if ctx.IsShort() {
+		return jsonify.NewSprintf(`%s%d`, d.Kind(), d.index)
+	}
 	return jsonify.NewMap().
-		AddIf(ctx, ctx.IsKindShown(), `kind`, d.Kind()).
-		AddIf(ctx, ctx.IsIdShown(), `id`, d.id).
-		AddNonZero(ctx2, `package`, d.pkg).
-		AddNonZero(ctx2, `name`, d.name).
-		AddNonZero(ctx2, `loc`, d.loc).
-		AddNonZero(ctx2, `typeParams`, d.typeParams).
-		AddNonZero(ctx2, `data`, d.data).
-		AddNonZero(ctx2, `instances`, d.instances.ToSlice()).
-		AddNonZero(ctx2, `methods`, d.methods.ToSlice()).
-		AddNonZero(ctx2, `interface`, d.inter)
+		AddIf(ctx, ctx.IsDebugKindIncluded(), `kind`, d.Kind()).
+		AddIf(ctx, ctx.IsDebugIndexIncluded(), `index`, d.index).
+		AddNonZero(ctx.OnlyIndex(), `package`, d.pkg).
+		AddNonZero(ctx, `name`, d.name).
+		AddNonZero(ctx, `loc`, d.loc).
+		AddNonZero(ctx.OnlyIndex(), `typeParams`, d.typeParams).
+		AddNonZero(ctx.OnlyIndex(), `data`, d.data).
+		AddNonZero(ctx.OnlyIndex(), `instances`, d.instances.ToSlice()).
+		AddNonZero(ctx.OnlyIndex(), `methods`, d.methods.ToSlice()).
+		AddNonZero(ctx.OnlyIndex(), `interface`, d.inter)
 }
 
 func (d *objectImp) String() string {

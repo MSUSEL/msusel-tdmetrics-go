@@ -2,19 +2,24 @@
   language: go,
   methods: [
     { # 1. main.main func()() @ main.go:5
-      name: main, package: 2, signature: 3, loc: 5,
-      metrics: { codeCount: 3, complexity: 1, indents: 1, lineCount: 3 } 
+      name: main, package: package1, signature: signature1,
+      loc: 5, metrics: metrics1,
     }
   ],
+  metrics: [
+    { # 1. main method metrics
+      codeCount: 3, complexity: 1, indents: 1, lineCount: 3
+    },
+  ],
   packages: [
-    { # 2. main
+    { # 1. main
       name: main,
       path: command-line-arguments,
-      methods: [ 1 ] # main
+      methods: [ method1 ] # main
     }
   ],
   signatures: [
-    {} # 3. func()()
+    {} # 1. func()()
   ],
   locs: {
     '1': main.go

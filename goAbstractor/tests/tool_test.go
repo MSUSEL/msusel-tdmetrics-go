@@ -95,7 +95,7 @@ func (tt *testTool) full() *testTool {
 		With(`Dir`, tt.dir).
 		Require(err)
 
-	ctx := jsonify.NewContext().ShowInheritors(true)
+	ctx := jsonify.NewContext()
 	gotten, err := jsonify.Marshal(ctx, tt.proj)
 	check.NoError(tt.t).
 		Name(`Marshal project`).
@@ -134,7 +134,7 @@ func (tt *testTool) runPartialTest(pt partialTest) {
 			t.Skip(`The OS changes the specific type indices, this test is for ` + pt.OS + `.`)
 		}
 
-		ctx := jsonify.NewContext().ShowId()
+		ctx := jsonify.NewContext().IncludeDebugIndex(true)
 		subData := tt.proj.ToJson(ctx).Seek(pt.Path)
 
 		exp, err := json.MarshalIndent(pt.Data, ``, `  `)
@@ -161,7 +161,7 @@ func (tt *testTool) runPartialTest(pt partialTest) {
 }
 
 func (tt *testTool) save() *testTool {
-	ctx := jsonify.NewContext().ShowId()
+	ctx := jsonify.NewContext().IncludeDebugIndex(true)
 	gotten, err := jsonify.Marshal(ctx, tt.proj)
 	check.NoError(tt.t).
 		Name(`Marshal project`).

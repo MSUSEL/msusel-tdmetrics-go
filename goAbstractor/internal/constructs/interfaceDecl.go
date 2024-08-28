@@ -18,7 +18,6 @@ import (
 // are no instances then the generic interface isn't used.
 type InterfaceDecl interface {
 	TypeDecl
-	Identifiable
 	IsInterface()
 
 	Interface() InterfaceDesc

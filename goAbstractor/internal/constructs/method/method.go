@@ -23,6 +23,7 @@ type methodImp struct {
 	pkg      constructs.Package
 	name     string
 	loc      locs.Loc
+	index    int
 
 	typeParams []constructs.TypeParam
 	signature  constructs.Signature
@@ -32,8 +33,6 @@ type methodImp struct {
 	noCopyRecv bool
 
 	instances collections.SortedSet[constructs.MethodInst]
-
-	id any
 }
 
 func newMethod(args constructs.MethodArgs) constructs.Method {
@@ -78,8 +77,8 @@ func (m *methodImp) IsDeclaration() {}
 func (m *methodImp) IsMethod()      {}
 
 func (m *methodImp) Kind() kind.Kind    { return kind.Method }
-func (m *methodImp) Id() any            { return m.id }
-func (m *methodImp) SetId(id any)       { m.id = id }
+func (m *methodImp) Index() int         { return m.index }
+func (m *methodImp) SetIndex(index int) { m.index = index }
 func (m *methodImp) GoType() types.Type { return m.realType }
 
 func (m *methodImp) Package() constructs.Package { return m.pkg }
@@ -153,23 +152,24 @@ func Comparer() comp.Comparer[constructs.Method] {
 }
 
 func (m *methodImp) ToJson(ctx *jsonify.Context) jsonify.Datum {
-	if ctx.IsShort() {
-		return jsonify.New(ctx, m.id)
+	if ctx.IsOnlyIndex() {
+		return jsonify.New(ctx, m.index)
 	}
-
-	ctx2 := ctx.HideKind().Short()
+	if ctx.IsShort() {
+		return jsonify.NewSprintf(`%s%d`, m.Kind(), m.index)
+	}
 	return jsonify.NewMap().
-		AddIf(ctx, ctx.IsKindShown(), `kind`, m.Kind()).
-		AddIf(ctx, ctx.IsIdShown(), `id`, m.id).
-		Add(ctx2, `package`, m.pkg).
-		Add(ctx2, `name`, m.name).
-		AddNonZero(ctx2, `loc`, m.loc).
-		AddNonZero(ctx2, `typeParams`, m.typeParams).
-		Add(ctx2, `signature`, m.signature).
-		AddNonZero(ctx2, `metrics`, m.metrics).
-		AddNonZero(ctx2, `instances`, m.instances.ToSlice()).
-		AddNonZero(ctx2, `receiver`, m.receiver).
-		AddNonZeroIf(ctx2, ctx.IsReceiverShown(), `recvName`, m.recvName)
+		AddIf(ctx, ctx.IsDebugKindIncluded(), `kind`, m.Kind()).
+		AddIf(ctx, ctx.IsDebugIndexIncluded(), `index`, m.index).
+		Add(ctx.OnlyIndex(), `package`, m.pkg).
+		Add(ctx, `name`, m.name).
+		AddNonZero(ctx, `loc`, m.loc).
+		AddNonZero(ctx.OnlyIndex(), `typeParams`, m.typeParams).
+		Add(ctx.OnlyIndex(), `signature`, m.signature).
+		AddNonZero(ctx.OnlyIndex(), `metrics`, m.metrics).
+		AddNonZero(ctx.OnlyIndex(), `instances`, m.instances.ToSlice()).
+		AddNonZero(ctx.OnlyIndex(), `receiver`, m.receiver).
+		AddNonZeroIf(ctx, ctx.IsDebugReceiverIncluded(), `recvName`, m.recvName)
 }
 
 func (m *methodImp) String() string {

@@ -143,31 +143,30 @@ func (p *projectImp) String() string {
 }
 
 func (p *projectImp) ToJson(ctx *jsonify.Context) jsonify.Datum {
-	ctx2 := ctx.HideKind()
 	m := jsonify.NewMap().
-		Add(ctx2, `language`, `go`).
-		AddNonZero(ctx2, `locs`, p.locations)
+		Add(ctx, `language`, `go`).
+		AddNonZero(ctx, `locs`, p.locations)
 
-	m.AddNonZero(ctx2, `abstracts`, p.Abstracts().ToSlice()).
-		AddNonZero(ctx2, `arguments`, p.Arguments().ToSlice()).
-		AddNonZero(ctx2, `fields`, p.Fields().ToSlice()).
-		AddNonZero(ctx2, `packages`, p.Packages().ToSlice()).
-		AddNonZero(ctx2, `metrics`, p.Metrics().ToSlice())
+	m.AddNonZero(ctx, `abstracts`, p.Abstracts().ToSlice()).
+		AddNonZero(ctx, `arguments`, p.Arguments().ToSlice()).
+		AddNonZero(ctx, `fields`, p.Fields().ToSlice()).
+		AddNonZero(ctx, `packages`, p.Packages().ToSlice()).
+		AddNonZero(ctx, `metrics`, p.Metrics().ToSlice())
 
-	m.AddNonZero(ctx2, `interfaceDecls`, p.InterfaceDecls().ToSlice()).
-		AddNonZero(ctx2, `methods`, p.Methods().ToSlice()).
-		AddNonZero(ctx2, `objects`, p.Objects().ToSlice()).
-		AddNonZero(ctx2, `values`, p.Values().ToSlice())
+	m.AddNonZero(ctx, `interfaceDecls`, p.InterfaceDecls().ToSlice()).
+		AddNonZero(ctx, `methods`, p.Methods().ToSlice()).
+		AddNonZero(ctx, `objects`, p.Objects().ToSlice()).
+		AddNonZero(ctx, `values`, p.Values().ToSlice())
 
-	m.AddNonZero(ctx2, `basics`, p.Basics().ToSlice()).
-		AddNonZero(ctx2, `interfaceDescs`, p.InterfaceDescs().ToSlice()).
-		AddNonZero(ctx2, `interfaceInst`, p.InterfaceInsts().ToSlice()).
-		AddNonZero(ctx2, `methodInst`, p.MethodInsts().ToSlice()).
-		AddNonZero(ctx2, `objectInst`, p.ObjectInsts().ToSlice()).
-		AddNonZero(ctx2, `tempReferences`, p.TempReferences().ToSlice()).
-		AddNonZero(ctx2, `signatures`, p.Signatures().ToSlice()).
-		AddNonZero(ctx2, `structDescs`, p.StructDescs().ToSlice()).
-		AddNonZero(ctx2, `typeParams`, p.TypeParams().ToSlice())
+	m.AddNonZero(ctx, `basics`, p.Basics().ToSlice()).
+		AddNonZero(ctx, `interfaceDescs`, p.InterfaceDescs().ToSlice()).
+		AddNonZero(ctx, `interfaceInst`, p.InterfaceInsts().ToSlice()).
+		AddNonZero(ctx, `methodInst`, p.MethodInsts().ToSlice()).
+		AddNonZero(ctx, `objectInst`, p.ObjectInsts().ToSlice()).
+		AddNonZero(ctx, `tempReferences`, p.TempReferences().ToSlice()).
+		AddNonZero(ctx, `signatures`, p.Signatures().ToSlice()).
+		AddNonZero(ctx, `structDescs`, p.StructDescs().ToSlice()).
+		AddNonZero(ctx, `typeParams`, p.TypeParams().ToSlice())
 
 	return m
 }

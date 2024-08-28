@@ -1,8 +1,6 @@
 package resolver
 
 import (
-	"fmt"
-
 	"github.com/Snow-Gremlin/goToolbox/collections"
 	"github.com/Snow-Gremlin/goToolbox/collections/sortedSet"
 	"github.com/Snow-Gremlin/goToolbox/terrors/terror"
@@ -16,23 +14,17 @@ import (
 type Args struct {
 	Log     *logger.Logger
 	Project constructs.Project
-
-	UseGlobalIndices bool
 }
 
 type resolverImp struct {
 	log  *logger.Logger
 	proj constructs.Project
-
-	useGlobalIndices bool
 }
 
 func Resolve(args Args) {
 	resolve := &resolverImp{
 		log:  args.Log,
 		proj: args.Project,
-
-		useGlobalIndices: args.UseGlobalIndices,
 	}
 	resolve.Imports()
 	resolve.Receivers()
@@ -42,7 +34,7 @@ func Resolve(args Args) {
 	resolve.Inheritance()
 	resolve.EliminateDeadCode()
 	resolve.Locations()
-	resolve.Identifiers()
+	resolve.Indices()
 }
 
 func (r *resolverImp) Imports() {
@@ -234,41 +226,19 @@ func flagList[T constructs.Declaration](c collections.ReadonlySortedSet[T]) {
 	}
 }
 
-// Identifiers should be called after all types have been registered
-// and all packages have been processed. This will update all the identifiers
+// Indices should be called after all types have been registered
+// and all packages have been processed. This will update all the indices
 // that will be used as references in the output models.
-func (r *resolverImp) Identifiers() {
-	if r.useGlobalIndices {
-		r.globalIndices()
-	} else {
-		r.kindLocalIndices()
-	}
-}
-
-func (r *resolverImp) globalIndices() {
-	r.log.Log(`resolve identifiers - global indices`)
-	index := 0
-	r.proj.AllConstructs().Foreach(func(c constructs.Construct) {
-		if i, has := c.(constructs.Identifiable); has {
-			index++
-			i.SetId(index)
-		}
-	})
-}
-
-func (r *resolverImp) kindLocalIndices() {
-	r.log.Log(`resolve identifiers - kind local indices`)
-	const kindLocalFormat = `%s%d`
+func (r *resolverImp) Indices() {
+	r.log.Log(`resolve indices`)
 	var index int
 	var kind kind.Kind
 	r.proj.AllConstructs().Foreach(func(c constructs.Construct) {
-		if i, has := c.(constructs.Identifiable); has {
-			if cKind := c.Kind(); kind != cKind {
-				kind = cKind
-				index = 0
-			}
-			index++
-			i.SetId(fmt.Sprintf(kindLocalFormat, kind, index))
+		if cKind := c.Kind(); kind != cKind {
+			kind = cKind
+			index = 0
 		}
+		index++
+		c.SetIndex(index)
 	})
 }

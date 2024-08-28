@@ -18,7 +18,6 @@ import (
 // If there are no instances then the generic object isn't used.
 type Object interface {
 	TypeDecl
-	Identifiable
 	IsObject()
 
 	Data() StructDesc

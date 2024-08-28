@@ -1,8 +1,6 @@
 package methodInst
 
 import (
-	"go/types"
-
 	"github.com/Snow-Gremlin/goToolbox/collections/enumerator"
 	"github.com/Snow-Gremlin/goToolbox/comp"
 
@@ -13,12 +11,11 @@ import (
 )
 
 type instanceImp struct {
-	realType      types.Type
 	generic       constructs.Method
 	resolved      constructs.Signature
 	instanceTypes []constructs.TypeDesc
 	receiver      constructs.ObjectInst
-	id            any
+	index         int
 }
 
 func newInstance(args constructs.MethodInstArgs) constructs.MethodInst {
@@ -37,9 +34,9 @@ func newInstance(args constructs.MethodInstArgs) constructs.MethodInst {
 
 func (i *instanceImp) IsMethodInst() {}
 
-func (i *instanceImp) Kind() kind.Kind { return kind.MethodInst }
-func (i *instanceImp) Id() any         { return i.id }
-func (i *instanceImp) SetId(id any)    { i.id = id }
+func (i *instanceImp) Kind() kind.Kind    { return kind.MethodInst }
+func (i *instanceImp) Index() int         { return i.index }
+func (i *instanceImp) SetIndex(index int) { i.index = index }
 
 func (m *instanceImp) Generic() constructs.Method     { return m.generic }
 func (m *instanceImp) Resolved() constructs.Signature { return m.resolved }
@@ -69,18 +66,19 @@ func (i *instanceImp) RemoveTempReferences() {
 }
 
 func (i *instanceImp) ToJson(ctx *jsonify.Context) jsonify.Datum {
-	if ctx.IsShort() {
-		return jsonify.New(ctx, i.id)
+	if ctx.IsOnlyIndex() {
+		return jsonify.New(ctx, i.index)
 	}
-
-	ctx2 := ctx.HideKind().Short()
+	if ctx.IsShort() {
+		return jsonify.NewSprintf(`%s%d`, i.Kind(), i.index)
+	}
 	return jsonify.NewMap().
-		AddIf(ctx, ctx.IsKindShown(), `kind`, i.Kind()).
-		AddIf(ctx, ctx.IsIdShown(), `id`, i.id).
-		AddNonZero(ctx2, `generic`, i.generic).
-		AddNonZero(ctx2, `resolved`, i.resolved).
-		AddNonZero(ctx2, `instanceTypes`, i.instanceTypes).
-		AddNonZero(ctx2, `receiver`, i.receiver)
+		AddIf(ctx, ctx.IsDebugKindIncluded(), `kind`, i.Kind()).
+		AddIf(ctx, ctx.IsDebugIndexIncluded(), `index`, i.index).
+		AddNonZero(ctx.OnlyIndex(), `generic`, i.generic).
+		AddNonZero(ctx.OnlyIndex(), `resolved`, i.resolved).
+		AddNonZero(ctx.Short(), `instanceTypes`, i.instanceTypes).
+		AddNonZero(ctx.OnlyIndex(), `receiver`, i.receiver)
 }
 
 func (i *instanceImp) String() string {

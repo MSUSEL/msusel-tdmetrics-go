@@ -7,11 +7,11 @@ type contextKey int
 const (
 	keyMinimized contextKey = iota
 	keyShort
-	keyKindShown
-	keyIdShown
-	keyReceiverShown
-	keyInheritorsShown
-	keyFullLoc
+	keyOnlyIndex
+	keyDebugKind
+	keyDebugIndex
+	keyDebugReceiver
+	keyDebugFullLoc
 )
 
 type Context struct {
@@ -43,88 +43,81 @@ func (c *Context) IsMinimized() bool {
 	return c.state[keyMinimized]
 }
 
-// Short indicates that objects should output only an identifier
+// OnlyIndex indicates that objects should output only an index
 // as a reference to the rest of the object defined elsewhere.
-func (c *Context) Short() *Context {
-	return c.copyAndSet(keyShort, true)
+func (c *Context) OnlyIndex() *Context {
+	return c.copyAndSet(keyOnlyIndex, true).copyAndSet(keyShort, true)
 }
 
-// Long indicates that objects should output the whole object,
-// not the shortened version.
-func (c *Context) Long() *Context {
-	return c.copyAndSet(keyShort, false)
+// Short indicates that objects should output only an identifier
+// (i.e. kind and index) as a reference to the rest of the object
+// defined elsewhere.
+func (c *Context) Short() *Context {
+	return c.copyAndSet(keyOnlyIndex, false).copyAndSet(keyShort, true)
+}
+
+// Full indicates that objects should output the whole object,
+// not a shortened version.
+func (c *Context) Full() *Context {
+	return c.copyAndSet(keyOnlyIndex, false).copyAndSet(keyShort, false)
 }
 
 // IsShort indicates that objects should output only an identifier
-// as a reference to the rest of the object defined elsewhere.
+// or index as a reference to the whole object defined elsewhere.
 func (c *Context) IsShort() bool {
 	return c.state[keyShort]
 }
 
-// ShowKind indicates that the kind field should be added to the output model.
-func (c *Context) ShowKind() *Context {
-	return c.copyAndSet(keyKindShown, true)
+// IsOnlyIndex indicates that objects should output only index
+// as a reference to the whole object defined elsewhere.
+func (c *Context) IsOnlyIndex() bool {
+	return c.state[keyOnlyIndex]
 }
 
-// HideKind indicates that the kind field can be skipped.
-func (c *Context) HideKind() *Context {
-	return c.copyAndSet(keyKindShown, false)
+// IncludeDebugKind indicates that the kind field should be included
+// to the output model for debugging.
+func (c *Context) IncludeDebugKind(include bool) *Context {
+	return c.copyAndSet(keyDebugKind, include)
 }
 
-// IsKindShown indicates that the kind field should be added to the output model.
-func (c *Context) IsKindShown() bool {
-	return c.state[keyKindShown]
+// IsDebugKindIncluded indicates that the kind field should be included
+// to the output model for debugging.
+func (c *Context) IsDebugKindIncluded() bool {
+	return c.state[keyDebugKind]
 }
 
-// ShowId indicates that the identifier should be added to the output model.
-func (c *Context) ShowId() *Context {
-	return c.copyAndSet(keyIdShown, true)
+// IncludeDebugIndex indicates that the index should be included
+// to the output model for debugging.
+func (c *Context) IncludeDebugIndex(include bool) *Context {
+	return c.copyAndSet(keyDebugIndex, include)
 }
 
-// HideId indicates that the identifier can be skipped,
-// unless output is short and only the index is outputted.
-func (c *Context) HideId() *Context {
-	return c.copyAndSet(keyIdShown, false)
+// IsDebugIndexIncluded indicates that the index should be included
+// to the output model for debugging.
+func (c *Context) IsDebugIndexIncluded() bool {
+	return c.state[keyDebugIndex]
 }
 
-// IsIdShown indicates that the identifier should be
-// added to the output model when not needed.
-func (c *Context) IsIdShown() bool {
-	return c.state[keyIdShown]
+// IncludeDebugReceiver sets if the methods should include
+// receiver information in the object model for debugging.
+func (c *Context) IncludeDebugReceiver(include bool) *Context {
+	return c.copyAndSet(keyDebugReceiver, include)
 }
 
-// ShowReceiver sets if the methods should include receiver information
-// in the object model. This is for debugging purposes.
-func (c *Context) ShowReceiver(show bool) *Context {
-	return c.copyAndSet(keyReceiverShown, show)
+// IsDebugReceiverIncluded indicates that methods should include
+// receiver information in the object model for debugging.
+func (c *Context) IsDebugReceiverIncluded() bool {
+	return c.state[keyDebugReceiver]
 }
 
-// IsReceiverShown indicates that methods should include receiver information
-// in the object model. This is for debugging purposes.
-func (c *Context) IsReceiverShown() bool {
-	return c.state[keyReceiverShown]
+// IncludeDebugFullLoc sets if the full location information should
+// be included in the object model for debugging.
+func (c *Context) IncludeDebugFullLoc(include bool) *Context {
+	return c.copyAndSet(keyDebugFullLoc, include)
 }
 
-// ShowInheritors sets if the interfaces inheritors should
-// be included in the object model. This is for debugging purposes.
-func (c *Context) ShowInheritors(show bool) *Context {
-	return c.copyAndSet(keyInheritorsShown, show)
-}
-
-// IsInheritorsShown indicates that interfaces inheritors should be
-// included in the object model. This is for debugging purposes.
-func (c *Context) IsInheritorsShown() bool {
-	return c.state[keyInheritorsShown]
-}
-
-// ShowFullLocation sets if the full location information should
-// be included in the object model. This is for debugging purposes.
-func (c *Context) ShowFullLocation(show bool) *Context {
-	return c.copyAndSet(keyFullLoc, show)
-}
-
-// IsFullLocationShown indicates that the full location information should
-// be included in the object model. This is for debugging purposes.
-func (c *Context) IsFullLocationShown() bool {
-	return c.state[keyFullLoc]
+// IsDebugFullLocIncluded indicates that the full location information should
+// be included in the object model for debugging.
+func (c *Context) IsDebugFullLocIncluded() bool {
+	return c.state[keyDebugFullLoc]
 }

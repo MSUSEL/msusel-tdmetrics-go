@@ -23,7 +23,7 @@ type signatureImp struct {
 	params   []constructs.Argument
 	results  []constructs.Argument
 
-	id any
+	index int
 }
 
 func createTuple(pkg *packages.Package, args []constructs.Argument) *types.Tuple {
@@ -58,8 +58,8 @@ func (m *signatureImp) IsTypeDesc()  {}
 func (m *signatureImp) IsSignature() {}
 
 func (m *signatureImp) Kind() kind.Kind    { return kind.Signature }
-func (m *signatureImp) Id() any            { return m.id }
-func (m *signatureImp) SetId(id any)       { m.id = id }
+func (m *signatureImp) Index() int         { return m.index }
+func (m *signatureImp) SetIndex(index int) { m.index = index }
 func (m *signatureImp) GoType() types.Type { return m.realType }
 
 func (m *signatureImp) Variadic() bool                 { return m.variadic }
@@ -86,17 +86,18 @@ func Comparer() comp.Comparer[constructs.Signature] {
 }
 
 func (m *signatureImp) ToJson(ctx *jsonify.Context) jsonify.Datum {
-	if ctx.IsShort() {
-		return jsonify.New(ctx, m.id)
+	if ctx.IsOnlyIndex() {
+		return jsonify.New(ctx, m.index)
 	}
-
-	ctx2 := ctx.HideKind().Short()
+	if ctx.IsShort() {
+		return jsonify.NewSprintf(`%s%d`, m.Kind(), m.index)
+	}
 	return jsonify.NewMap().
-		AddIf(ctx, ctx.IsKindShown(), `kind`, m.Kind()).
-		AddIf(ctx, ctx.IsIdShown(), `id`, m.id).
-		AddNonZero(ctx2, `variadic`, m.variadic).
-		AddNonZero(ctx2, `params`, m.params).
-		AddNonZero(ctx2, `results`, m.results)
+		AddIf(ctx, ctx.IsDebugKindIncluded(), `kind`, m.Kind()).
+		AddIf(ctx, ctx.IsDebugIndexIncluded(), `index`, m.index).
+		AddNonZero(ctx, `variadic`, m.variadic).
+		AddNonZero(ctx.OnlyIndex(), `params`, m.params).
+		AddNonZero(ctx.OnlyIndex(), `results`, m.results)
 }
 
 func (m *signatureImp) String() string {

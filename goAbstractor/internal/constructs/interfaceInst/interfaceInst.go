@@ -18,7 +18,7 @@ type instanceImp struct {
 	generic       constructs.InterfaceDecl
 	resolved      constructs.InterfaceDesc
 	instanceTypes []constructs.TypeDesc
-	id            any
+	index         int
 }
 
 func newInstance(args constructs.InterfaceInstArgs) constructs.InterfaceInst {
@@ -49,8 +49,8 @@ func (i *instanceImp) IsInterfaceInst() {}
 func (i *instanceImp) IsTypeDesc()      {}
 
 func (i *instanceImp) Kind() kind.Kind    { return kind.InterfaceInst }
-func (i *instanceImp) Id() any            { return i.id }
-func (i *instanceImp) SetId(id any)       { i.id = id }
+func (i *instanceImp) Index() int         { return i.index }
+func (i *instanceImp) SetIndex(index int) { i.index = index }
 func (m *instanceImp) GoType() types.Type { return m.realType }
 
 func (m *instanceImp) Generic() constructs.InterfaceDecl  { return m.generic }
@@ -81,17 +81,18 @@ func (i *instanceImp) RemoveTempReferences() {
 }
 
 func (i *instanceImp) ToJson(ctx *jsonify.Context) jsonify.Datum {
-	if ctx.IsShort() {
-		return jsonify.New(ctx, i.id)
+	if ctx.IsOnlyIndex() {
+		return jsonify.New(ctx, i.index)
 	}
-
-	ctx2 := ctx.HideKind().Short()
+	if ctx.IsShort() {
+		return jsonify.NewSprintf(`%s%d`, i.Kind(), i.index)
+	}
 	return jsonify.NewMap().
-		AddIf(ctx, ctx.IsKindShown(), `kind`, i.Kind()).
-		AddIf(ctx, ctx.IsIdShown(), `id`, i.id).
-		AddNonZero(ctx2, `generic`, i.generic).
-		AddNonZero(ctx2, `resolved`, i.resolved).
-		AddNonZero(ctx2, `instanceTypes`, i.instanceTypes)
+		AddIf(ctx, ctx.IsDebugKindIncluded(), `kind`, i.Kind()).
+		AddIf(ctx, ctx.IsDebugIndexIncluded(), `index`, i.index).
+		AddNonZero(ctx.OnlyIndex(), `generic`, i.generic).
+		AddNonZero(ctx.OnlyIndex(), `resolved`, i.resolved).
+		AddNonZero(ctx.Short(), `instanceTypes`, i.instanceTypes)
 }
 
 func (i *instanceImp) String() string {

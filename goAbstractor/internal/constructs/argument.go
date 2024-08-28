@@ -7,7 +7,6 @@ import "github.com/Snow-Gremlin/goToolbox/collections"
 // The order of the arguments matters.
 type Argument interface {
 	Construct
-	Identifiable
 	TempReferenceContainer
 	IsArgument()
 

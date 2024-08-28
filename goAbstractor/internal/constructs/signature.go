@@ -10,7 +10,6 @@ import (
 
 type Signature interface {
 	TypeDesc
-	Identifiable
 	IsSignature()
 
 	Variadic() bool

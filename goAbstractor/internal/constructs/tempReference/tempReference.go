@@ -16,9 +16,9 @@ type tempReferenceImp struct {
 	realType      *types.Named
 	pkgPath       string
 	name          string
+	index         int
 	instanceTypes []constructs.TypeDesc
-
-	typ constructs.TypeDesc
+	typ           constructs.TypeDesc
 }
 
 func newTempReference(args constructs.TempReferenceArgs) constructs.TempReference {
@@ -46,6 +46,8 @@ func (r *tempReferenceImp) IsTypeDesc()      {}
 func (r *tempReferenceImp) IsTypeReference() {}
 
 func (r *tempReferenceImp) Kind() kind.Kind     { return kind.TempReference }
+func (r *tempReferenceImp) Index() int          { return r.index }
+func (r *tempReferenceImp) SetIndex(index int)  { r.index = index }
 func (r *tempReferenceImp) GoType() types.Type  { return r.realType }
 func (r *tempReferenceImp) PackagePath() string { return r.pkgPath }
 func (r *tempReferenceImp) Name() string        { return r.name }
@@ -77,13 +79,19 @@ func Comparer() comp.Comparer[constructs.TempReference] {
 }
 
 func (r *tempReferenceImp) ToJson(ctx *jsonify.Context) jsonify.Datum {
-	ctx2 := ctx.HideKind().Short()
+	if ctx.IsOnlyIndex() {
+		return jsonify.New(ctx, r.index)
+	}
+	if ctx.IsShort() {
+		return jsonify.NewSprintf(`%s%d`, r.Kind(), r.index)
+	}
 	return jsonify.NewMap().
-		AddIf(ctx2, ctx.IsKindShown(), `kind`, r.Kind()).
-		AddNonZero(ctx2, `packagePath`, r.pkgPath).
-		Add(ctx2, `name`, r.name).
-		Add(ctx2, `type`, r.typ).
-		AddNonZero(ctx2, `instanceTypes`, r.instanceTypes)
+		AddIf(ctx, ctx.IsDebugKindIncluded(), `kind`, r.Kind()).
+		AddIf(ctx, ctx.IsDebugIndexIncluded(), `index`, r.index).
+		AddNonZero(ctx, `packagePath`, r.pkgPath).
+		Add(ctx, `name`, r.name).
+		Add(ctx.Short(), `type`, r.typ).
+		AddNonZero(ctx.Short(), `instanceTypes`, r.instanceTypes)
 }
 
 func (r *tempReferenceImp) String() string {

@@ -51,7 +51,7 @@ func (c *locImp) Info() (int, string, int) {
 func (c *locImp) ToJson(ctx *jsonify.Context) jsonify.Datum {
 	offset, file, line := c.Info()
 
-	if ctx.IsFullLocationShown() {
+	if ctx.IsDebugFullLocIncluded() {
 		return jsonify.NewMap().
 			AddNonZero(ctx, `offset`, offset).
 			AddNonZero(ctx, `file`, file).

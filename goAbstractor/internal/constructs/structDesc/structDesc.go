@@ -19,7 +19,7 @@ type structDescImp struct {
 
 	fields []constructs.Field
 
-	id any
+	index int
 }
 
 func newStructDesc(args constructs.StructDescArgs) constructs.StructDesc {
@@ -47,8 +47,8 @@ func (d *structDescImp) IsTypeDesc()   {}
 func (d *structDescImp) IsStructDesc() {}
 
 func (d *structDescImp) Kind() kind.Kind    { return kind.StructDesc }
-func (d *structDescImp) Id() any            { return d.id }
-func (d *structDescImp) SetId(id any)       { d.id = id }
+func (d *structDescImp) Index() int         { return d.index }
+func (d *structDescImp) SetIndex(index int) { d.index = index }
 func (d *structDescImp) GoType() types.Type { return d.realType }
 
 func (d *structDescImp) Fields() []constructs.Field { return d.fields }
@@ -65,15 +65,16 @@ func Comparer() comp.Comparer[constructs.StructDesc] {
 }
 
 func (d *structDescImp) ToJson(ctx *jsonify.Context) jsonify.Datum {
-	if ctx.IsShort() {
-		return jsonify.New(ctx, d.id)
+	if ctx.IsOnlyIndex() {
+		return jsonify.New(ctx, d.index)
 	}
-
-	ctx2 := ctx.HideKind().Short()
+	if ctx.IsShort() {
+		return jsonify.NewSprintf(`%s%d`, d.Kind(), d.index)
+	}
 	return jsonify.NewMap().
-		AddIf(ctx, ctx.IsKindShown(), `kind`, d.Kind()).
-		AddIf(ctx, ctx.IsIdShown(), `id`, d.id).
-		AddNonZero(ctx2, `fields`, d.fields)
+		AddIf(ctx, ctx.IsDebugKindIncluded(), `kind`, d.Kind()).
+		AddIf(ctx, ctx.IsDebugIndexIncluded(), `index`, d.index).
+		AddNonZero(ctx.OnlyIndex(), `fields`, d.fields)
 }
 
 func (d *structDescImp) String() string {

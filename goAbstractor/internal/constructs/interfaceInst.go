@@ -16,7 +16,6 @@ import (
 // e.g. List[List[T any]] where List[T any] is the instance type.
 type InterfaceInst interface {
 	TypeDesc
-	Identifiable
 	TempReferenceContainer
 	IsInterfaceInst()
 

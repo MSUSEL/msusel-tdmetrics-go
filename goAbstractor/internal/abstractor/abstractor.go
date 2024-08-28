@@ -24,8 +24,6 @@ import (
 type Config struct {
 	Packages []*packages.Package
 	Log      *logger.Logger
-
-	UseGlobalIndices bool
 }
 
 func Abstract(cfg Config) constructs.Project {
@@ -46,9 +44,8 @@ func Abstract(cfg Config) constructs.Project {
 	ab.abstractProject()
 
 	resolver.Resolve(resolver.Args{
-		Log:              log,
-		Project:          proj,
-		UseGlobalIndices: cfg.UseGlobalIndices,
+		Log:     log,
+		Project: proj,
 	})
 
 	log.Log(`done`)
@@ -226,7 +223,7 @@ func (ab *abstractor) abstractValueSpec(spec *ast.ValueSpec, isConst bool) {
 		// TODO: Need to evaluate the initial value in case
 		// it has connection to another var of calls a function.
 
-		if converter.BlankName(name.Name) {
+		if constructs.BlankName(name.Name) {
 			// TODO: Could a black name assignment have a side effect?
 			//       Maybe if metrics aren't nil, give it a non-blank name.
 			//		 var _ = func() bool { /*pseudo init*/ }()

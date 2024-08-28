@@ -14,7 +14,6 @@ import (
 // resolving the since one thing that is resolved is all references.
 type TempReference interface {
 	TypeDesc
-	// Not identifiable
 	IsTypeReference()
 
 	PackagePath() string

@@ -5,10 +5,9 @@ import (
 	"go/token"
 	"math"
 
-	"github.com/Snow-Gremlin/goToolbox/utils"
-
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/locs"
+	"github.com/Snow-Gremlin/goToolbox/utils"
 )
 
 type Analyzer interface {
@@ -48,6 +47,7 @@ func (a *analyzerImp) Analyze(node ast.Node) Analyzer {
 
 func (a *analyzerImp) GetMetrics() constructs.MetricsArgs {
 	return constructs.MetricsArgs{
+		Location:   a.loc,
 		Complexity: a.complexity,
 		LineCount:  a.maxLine - a.minLine + 1,
 		CodeCount:  len(a.minColumn),

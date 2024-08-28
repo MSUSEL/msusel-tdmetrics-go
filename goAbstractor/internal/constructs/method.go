@@ -10,7 +10,6 @@ import (
 
 type Method interface {
 	Declaration
-	Identifiable
 	IsMethod()
 
 	Signature() Signature

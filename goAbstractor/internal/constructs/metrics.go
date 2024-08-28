@@ -8,7 +8,6 @@ import (
 
 type Metrics interface {
 	Construct
-	Identifiable
 	IsMetrics()
 
 	Location() locs.Loc

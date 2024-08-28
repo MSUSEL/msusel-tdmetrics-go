@@ -12,7 +12,7 @@ import (
 type abstractImp struct {
 	name      string
 	signature constructs.Signature
-	id        any
+	index     int
 }
 
 func newAbstract(args constructs.AbstractArgs) constructs.Abstract {
@@ -26,9 +26,9 @@ func newAbstract(args constructs.AbstractArgs) constructs.Abstract {
 
 func (a *abstractImp) IsAbstract() {}
 
-func (a *abstractImp) Kind() kind.Kind { return kind.Abstract }
-func (a *abstractImp) Id() any         { return a.id }
-func (a *abstractImp) SetId(id any)    { a.id = id }
+func (a *abstractImp) Kind() kind.Kind    { return kind.Abstract }
+func (a *abstractImp) Index() int         { return a.index }
+func (a *abstractImp) SetIndex(index int) { a.index = index }
 
 func (a *abstractImp) Name() string                    { return a.name }
 func (a *abstractImp) Signature() constructs.Signature { return a.signature }
@@ -48,16 +48,17 @@ func Comparer() comp.Comparer[constructs.Abstract] {
 }
 
 func (a *abstractImp) ToJson(ctx *jsonify.Context) jsonify.Datum {
-	if ctx.IsShort() {
-		return jsonify.New(ctx, a.id)
+	if ctx.IsOnlyIndex() {
+		return jsonify.New(ctx, a.index)
 	}
-
-	ctx2 := ctx.HideKind().Short()
+	if ctx.IsShort() {
+		return jsonify.NewSprintf(`%s%d`, a.Kind(), a.index)
+	}
 	return jsonify.NewMap().
-		AddIf(ctx, ctx.IsKindShown(), `kind`, a.Kind()).
-		AddIf(ctx, ctx.IsIdShown(), `id`, a.id).
-		Add(ctx2, `name`, a.name).
-		Add(ctx2, `signature`, a.signature)
+		AddIf(ctx, ctx.IsDebugKindIncluded(), `kind`, a.Kind()).
+		AddIf(ctx, ctx.IsDebugIndexIncluded(), `index`, a.index).
+		Add(ctx, `name`, a.name).
+		Add(ctx.OnlyIndex(), `signature`, a.signature)
 }
 
 func (a *abstractImp) String() string {

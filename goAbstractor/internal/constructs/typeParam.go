@@ -4,7 +4,6 @@ import "github.com/Snow-Gremlin/goToolbox/collections"
 
 type TypeParam interface {
 	TypeDesc
-	Identifiable
 	TempReferenceContainer
 	IsTypeParam()
 

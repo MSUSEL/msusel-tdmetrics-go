@@ -22,7 +22,7 @@ type packageImp struct {
 
 	path        string
 	name        string
-	id          any
+	index       int
 	importPaths []string
 
 	imports    collections.SortedSet[constructs.Package]
@@ -52,9 +52,9 @@ func newPackage(args constructs.PackageArgs) constructs.Package {
 
 func (p *packageImp) IsPackage() {}
 
-func (p *packageImp) Kind() kind.Kind { return kind.Package }
-func (p *packageImp) Id() any         { return p.id }
-func (p *packageImp) SetId(id any)    { p.id = id }
+func (p *packageImp) Kind() kind.Kind    { return kind.Package }
+func (p *packageImp) Index() int         { return p.index }
+func (p *packageImp) SetIndex(index int) { p.index = index }
 
 func (p *packageImp) Source() *packages.Package { return p.pkg }
 func (p *packageImp) Path() string              { return p.path }
@@ -141,21 +141,22 @@ func Comparer() comp.Comparer[constructs.Package] {
 }
 
 func (p *packageImp) ToJson(ctx *jsonify.Context) jsonify.Datum {
-	if ctx.IsShort() {
-		return jsonify.New(ctx, p.id)
+	if ctx.IsOnlyIndex() {
+		return jsonify.New(ctx, p.index)
 	}
-
-	ctx2 := ctx.HideKind().Short()
+	if ctx.IsShort() {
+		return jsonify.NewSprintf(`%s%d`, p.Kind(), p.index)
+	}
 	return jsonify.NewMap().
-		AddIf(ctx, ctx.IsKindShown(), `kind`, p.Kind()).
-		AddIf(ctx, ctx.IsIdShown(), `id`, p.id).
-		AddNonZero(ctx2, `path`, p.path).
-		AddNonZero(ctx2, `name`, p.name).
-		AddNonZero(ctx2, `imports`, p.imports.ToSlice()).
-		AddNonZero(ctx2, `interfaces`, p.interfaces.ToSlice()).
-		AddNonZero(ctx2, `methods`, p.methods.ToSlice()).
-		AddNonZero(ctx2, `objects`, p.objects.ToSlice()).
-		AddNonZero(ctx2, `values`, p.values.ToSlice())
+		AddIf(ctx, ctx.IsDebugKindIncluded(), `kind`, p.Kind()).
+		AddIf(ctx, ctx.IsDebugIndexIncluded(), `index`, p.index).
+		AddNonZero(ctx, `path`, p.path).
+		AddNonZero(ctx, `name`, p.name).
+		AddNonZero(ctx.OnlyIndex(), `imports`, p.imports.ToSlice()).
+		AddNonZero(ctx.OnlyIndex(), `interfaces`, p.interfaces.ToSlice()).
+		AddNonZero(ctx.OnlyIndex(), `methods`, p.methods.ToSlice()).
+		AddNonZero(ctx.OnlyIndex(), `objects`, p.objects.ToSlice()).
+		AddNonZero(ctx.OnlyIndex(), `values`, p.values.ToSlice())
 }
 
 func (p *packageImp) ResolveReceivers() {

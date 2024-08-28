@@ -6,6 +6,7 @@ import (
 
 	"github.com/Snow-Gremlin/goToolbox/comp"
 
+	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/assert"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs/kind"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/jsonify"
@@ -21,8 +22,8 @@ import (
 //   - Indicate if a method is an accessor getter or setter (single expression).
 
 type metricsImp struct {
-	loc locs.Loc
-	id  any
+	loc   locs.Loc
+	index int
 
 	complexity int
 	lineCount  int
@@ -31,6 +32,8 @@ type metricsImp struct {
 }
 
 func newMetrics(args constructs.MetricsArgs) constructs.Metrics {
+	assert.ArgNotNil(`location`, args.Location)
+
 	return &metricsImp{
 		loc:        args.Location,
 		complexity: args.Complexity,
@@ -43,8 +46,8 @@ func newMetrics(args constructs.MetricsArgs) constructs.Metrics {
 func (m *metricsImp) IsMetrics() {}
 
 func (m *metricsImp) Kind() kind.Kind    { return kind.Metrics }
-func (m *metricsImp) Id() any            { return m.id }
-func (m *metricsImp) SetId(id any)       { m.id = id }
+func (m *metricsImp) Index() int         { return m.index }
+func (m *metricsImp) SetIndex(index int) { m.index = index }
 func (m *metricsImp) Location() locs.Loc { return m.loc }
 
 func (m *metricsImp) CompareTo(other constructs.Construct) int {
@@ -60,18 +63,20 @@ func Comparer() comp.Comparer[constructs.Metrics] {
 }
 
 func (m *metricsImp) ToJson(ctx *jsonify.Context) jsonify.Datum {
-	if ctx.IsShort() {
-		return jsonify.New(ctx, m.id)
+	if ctx.IsOnlyIndex() {
+		return jsonify.New(ctx, m.index)
 	}
-
-	ctx2 := ctx.HideKind().Short()
+	if ctx.IsShort() {
+		return jsonify.NewSprintf(`%s%d`, m.Kind(), m.index)
+	}
 	return jsonify.NewMap().
-		AddIf(ctx2, ctx.IsKindShown(), `kind`, m.Kind()).
-		AddIf(ctx2, ctx.IsIdShown(), `id`, m.id).
-		AddNonZero(ctx2, `complexity`, m.complexity).
-		AddNonZero(ctx2, `lineCount`, m.lineCount).
-		AddNonZero(ctx2, `codeCount`, m.codeCount).
-		AddNonZero(ctx2, `indents`, m.indents)
+		AddIf(ctx, ctx.IsDebugKindIncluded(), `kind`, m.Kind()).
+		AddIf(ctx, ctx.IsDebugIndexIncluded(), `index`, m.index).
+		AddNonZero(ctx, `loc`, m.loc).
+		AddNonZero(ctx, `complexity`, m.complexity).
+		AddNonZero(ctx, `lineCount`, m.lineCount).
+		AddNonZero(ctx, `codeCount`, m.codeCount).
+		AddNonZero(ctx, `indents`, m.indents)
 }
 
 func (m *metricsImp) String() string {

@@ -18,7 +18,6 @@ import (
 // are no instances then the generic interface isn't used.
 type InterfaceDesc interface {
 	TypeDesc
-	Identifiable
 	TempReferenceContainer
 	IsInterfaceDesc()
 

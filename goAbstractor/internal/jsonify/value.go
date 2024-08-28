@@ -2,6 +2,7 @@ package jsonify
 
 import (
 	"encoding/json"
+	"fmt"
 
 	"github.com/Snow-Gremlin/goToolbox/utils"
 )
@@ -23,6 +24,10 @@ func NewValue[T valueConstraint](data T) *Value {
 
 func NewNull() *Value {
 	return &Value{data: nil}
+}
+
+func NewSprintf(format string, args ...any) *Value {
+	return NewValue(fmt.Sprintf(format, args...))
 }
 
 func (v *Value) _jsonData() {}

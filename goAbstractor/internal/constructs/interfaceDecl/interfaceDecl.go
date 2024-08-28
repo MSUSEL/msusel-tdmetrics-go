@@ -23,12 +23,11 @@ type interfaceDeclImp struct {
 	pkg      constructs.Package
 	name     string
 	loc      locs.Loc
+	index    int
 
 	typeParams []constructs.TypeParam
 	inter      constructs.InterfaceDesc
 	instances  collections.SortedSet[constructs.InterfaceInst]
-
-	id any
 }
 
 func newInterfaceDecl(args constructs.InterfaceDeclArgs) constructs.InterfaceDecl {
@@ -63,8 +62,8 @@ func (d *interfaceDeclImp) IsTypeDesc()    {}
 func (d *interfaceDeclImp) IsInterface()   {}
 
 func (d *interfaceDeclImp) Kind() kind.Kind    { return kind.InterfaceDecl }
-func (d *interfaceDeclImp) Id() any            { return d.id }
-func (d *interfaceDeclImp) SetId(id any)       { d.id = id }
+func (d *interfaceDeclImp) Index() int         { return d.index }
+func (d *interfaceDeclImp) SetIndex(index int) { d.index = index }
 func (d *interfaceDeclImp) GoType() types.Type { return d.realType }
 
 func (d *interfaceDeclImp) Package() constructs.Package { return d.pkg }
@@ -116,20 +115,21 @@ func Comparer() comp.Comparer[constructs.InterfaceDecl] {
 }
 
 func (d *interfaceDeclImp) ToJson(ctx *jsonify.Context) jsonify.Datum {
-	if ctx.IsShort() {
-		return jsonify.New(ctx, d.id)
+	if ctx.IsOnlyIndex() {
+		return jsonify.New(ctx, d.index)
 	}
-
-	ctx2 := ctx.HideKind().Short()
+	if ctx.IsShort() {
+		return jsonify.NewSprintf(`%s%d`, d.Kind(), d.index)
+	}
 	return jsonify.NewMap().
-		AddIf(ctx, ctx.IsKindShown(), `kind`, d.Kind()).
-		AddIf(ctx, ctx.IsIdShown(), `id`, d.id).
-		AddNonZero(ctx2, `package`, d.pkg).
-		AddNonZero(ctx2, `name`, d.name).
-		AddNonZero(ctx2, `loc`, d.loc).
-		AddNonZero(ctx2, `typeParams`, d.typeParams).
-		AddNonZero(ctx2, `interface`, d.inter).
-		AddNonZero(ctx2, `instances`, d.instances.ToSlice())
+		AddIf(ctx, ctx.IsDebugKindIncluded(), `kind`, d.Kind()).
+		AddIf(ctx, ctx.IsDebugIndexIncluded(), `index`, d.index).
+		AddNonZero(ctx.OnlyIndex(), `package`, d.pkg).
+		AddNonZero(ctx, `name`, d.name).
+		AddNonZero(ctx, `loc`, d.loc).
+		AddNonZero(ctx.OnlyIndex(), `typeParams`, d.typeParams).
+		AddNonZero(ctx.OnlyIndex(), `interface`, d.inter).
+		AddNonZero(ctx.OnlyIndex(), `instances`, d.instances.ToSlice())
 }
 
 func (d *interfaceDeclImp) String() string {

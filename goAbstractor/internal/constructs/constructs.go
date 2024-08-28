@@ -18,18 +18,13 @@ type Construct interface {
 
 	// Kind gets a string unique to each construct type.
 	Kind() kind.Kind
-}
 
-// Identifiable is a construct that can be given an identifier.
-// The identifier value should be an integer or string.
-type Identifiable interface {
-	Construct
+	// Index gets the index of the construct, zero if unset.
+	// The index will be set to the top level factory sorted set.
+	Index() int
 
-	// Id gets the unique identifier of the construct, empty if unset.
-	Id() any
-
-	// SetId sets the unique identifier of construct.
-	SetId(id any)
+	// SetIndex sets the index of construct.
+	SetIndex(index int)
 }
 
 // TempReferenceContainer is any construct that can contain a temporary reference.
@@ -110,4 +105,8 @@ func ResolvedTempReference(td TypeDesc) TypeDesc {
 		td = td.(TempReference).ResolvedType()
 	}
 	return td
+}
+
+func BlankName(name string) bool {
+	return len(name) <= 0 || name == `_` || name == `.`
 }

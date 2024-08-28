@@ -7,7 +7,6 @@ import "github.com/Snow-Gremlin/goToolbox/collections"
 // The order of the abstract doesn't matter.
 type Abstract interface {
 	Construct
-	Identifiable
 	IsAbstract()
 
 	Name() string

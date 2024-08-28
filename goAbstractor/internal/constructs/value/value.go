@@ -17,7 +17,7 @@ type valueImp struct {
 	typ     constructs.TypeDesc
 	isConst bool
 	metrics constructs.Metrics
-	id      any
+	index   int
 }
 
 func newValue(args constructs.ValueArgs) constructs.Value {
@@ -39,9 +39,9 @@ func newValue(args constructs.ValueArgs) constructs.Value {
 func (v *valueImp) IsDeclaration() {}
 func (v *valueImp) IsValue()       {}
 
-func (v *valueImp) Kind() kind.Kind { return kind.Value }
-func (v *valueImp) Id() any         { return v.id }
-func (v *valueImp) SetId(id any)    { v.id = id }
+func (v *valueImp) Kind() kind.Kind    { return kind.Value }
+func (v *valueImp) Index() int         { return v.index }
+func (v *valueImp) SetIndex(index int) { v.index = index }
 
 func (v *valueImp) Name() string                { return v.name }
 func (v *valueImp) Location() locs.Loc          { return v.loc }
@@ -72,20 +72,21 @@ func (v *valueImp) RemoveTempReferences() {
 }
 
 func (v *valueImp) ToJson(ctx *jsonify.Context) jsonify.Datum {
-	if ctx.IsShort() {
-		return jsonify.New(ctx, v.id)
+	if ctx.IsOnlyIndex() {
+		return jsonify.New(ctx, v.index)
 	}
-
-	ctx2 := ctx.HideKind().Short()
+	if ctx.IsShort() {
+		return jsonify.NewSprintf(`%s%d`, v.Kind(), v.index)
+	}
 	return jsonify.NewMap().
-		AddIf(ctx, ctx.IsKindShown(), `kind`, v.Kind()).
-		AddIf(ctx, ctx.IsIdShown(), `id`, v.id).
-		Add(ctx2, `package`, v.pkg).
-		Add(ctx2, `name`, v.name).
-		Add(ctx2, `type`, v.typ).
-		AddNonZero(ctx2, `loc`, v.loc).
-		AddNonZero(ctx2, `const`, v.isConst).
-		AddNonZero(ctx2, `metrics`, v.metrics)
+		AddIf(ctx, ctx.IsDebugKindIncluded(), `kind`, v.Kind()).
+		AddIf(ctx, ctx.IsDebugIndexIncluded(), `index`, v.index).
+		Add(ctx.OnlyIndex(), `package`, v.pkg).
+		Add(ctx, `name`, v.name).
+		Add(ctx.Short(), `type`, v.typ).
+		AddNonZero(ctx, `loc`, v.loc).
+		AddNonZero(ctx, `const`, v.isConst).
+		AddNonZero(ctx.OnlyIndex(), `metrics`, v.metrics)
 }
 
 func (v *valueImp) String() string {

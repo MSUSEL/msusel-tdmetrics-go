@@ -13,7 +13,7 @@ type fieldImp struct {
 	name     string
 	typ      constructs.TypeDesc
 	embedded bool
-	id       any
+	index    int
 }
 
 func newField(args constructs.FieldArgs) constructs.Field {
@@ -30,9 +30,9 @@ func newField(args constructs.FieldArgs) constructs.Field {
 
 func (f *fieldImp) IsField() {}
 
-func (f *fieldImp) Kind() kind.Kind { return kind.Field }
-func (f *fieldImp) Id() any         { return f.id }
-func (f *fieldImp) SetId(id any)    { f.id = id }
+func (f *fieldImp) Kind() kind.Kind    { return kind.Field }
+func (f *fieldImp) Index() int         { return f.index }
+func (f *fieldImp) SetIndex(index int) { f.index = index }
 
 func (f *fieldImp) Name() string              { return f.name }
 func (f *fieldImp) Type() constructs.TypeDesc { return f.typ }
@@ -58,17 +58,18 @@ func (f *fieldImp) RemoveTempReferences() {
 }
 
 func (f *fieldImp) ToJson(ctx *jsonify.Context) jsonify.Datum {
-	if ctx.IsShort() {
-		return jsonify.New(ctx, f.id)
+	if ctx.IsOnlyIndex() {
+		return jsonify.New(ctx, f.index)
 	}
-
-	ctx2 := ctx.HideKind().Short()
+	if ctx.IsShort() {
+		return jsonify.NewSprintf(`%s%d`, f.Kind(), f.index)
+	}
 	return jsonify.NewMap().
-		AddIf(ctx, ctx.IsKindShown(), `kind`, f.Kind()).
-		AddIf(ctx, ctx.IsIdShown(), `id`, f.id).
-		Add(ctx2, `name`, f.name).
-		Add(ctx2, `type`, f.typ).
-		AddNonZero(ctx2, `embedded`, f.embedded)
+		AddIf(ctx, ctx.IsDebugKindIncluded(), `kind`, f.Kind()).
+		AddIf(ctx, ctx.IsDebugIndexIncluded(), `index`, f.index).
+		Add(ctx, `name`, f.name).
+		Add(ctx.Short(), `type`, f.typ).
+		AddNonZero(ctx, `embedded`, f.embedded)
 }
 
 func (f *fieldImp) String() string {

@@ -26,7 +26,7 @@ type interfaceDescImp struct {
 
 	inherits collections.SortedSet[constructs.InterfaceDesc]
 
-	id any
+	index int
 }
 
 func newInterfaceDesc(args constructs.InterfaceDescArgs) constructs.InterfaceDesc {
@@ -74,8 +74,8 @@ func (id *interfaceDescImp) IsTypeDesc()      {}
 func (id *interfaceDescImp) IsInterfaceDesc() {}
 
 func (id *interfaceDescImp) Kind() kind.Kind    { return kind.InterfaceDesc }
-func (id *interfaceDescImp) Id() any            { return id.id }
-func (id *interfaceDescImp) SetId(ident any)    { id.id = ident }
+func (id *interfaceDescImp) Index() int         { return id.index }
+func (id *interfaceDescImp) SetIndex(index int) { id.index = index }
 func (id *interfaceDescImp) GoType() types.Type { return id.realType }
 
 func (id *interfaceDescImp) Abstracts() []constructs.Abstract { return id.abstracts }
@@ -124,18 +124,19 @@ func (id *interfaceDescImp) RemoveTempReferences() {
 }
 
 func (id *interfaceDescImp) ToJson(ctx *jsonify.Context) jsonify.Datum {
-	if ctx.IsShort() {
-		return jsonify.New(ctx, id.id)
+	if ctx.IsOnlyIndex() {
+		return jsonify.New(ctx, id.index)
 	}
-
-	ctx2 := ctx.HideKind().Short()
+	if ctx.IsShort() {
+		return jsonify.NewSprintf(`%s%d`, id.Kind(), id.index)
+	}
 	return jsonify.NewMap().
-		AddIf(ctx, ctx.IsKindShown(), `kind`, id.Kind()).
-		AddIf(ctx, ctx.IsIdShown(), `id`, id.id).
-		AddNonZero(ctx2, `abstracts`, id.abstracts).
-		AddNonZero(ctx2, `approx`, id.approx).
-		AddNonZero(ctx2, `exact`, id.exact).
-		AddNonZero(ctx2, `inherits`, id.inherits.ToSlice())
+		AddIf(ctx, ctx.IsDebugKindIncluded(), `kind`, id.Kind()).
+		AddIf(ctx, ctx.IsDebugIndexIncluded(), `index`, id.index).
+		AddNonZero(ctx.OnlyIndex(), `abstracts`, id.abstracts).
+		AddNonZero(ctx.Short(), `approx`, id.approx).
+		AddNonZero(ctx.Short(), `exact`, id.exact).
+		AddNonZero(ctx.OnlyIndex(), `inherits`, id.inherits.ToSlice())
 }
 
 func (id *interfaceDescImp) String() string {

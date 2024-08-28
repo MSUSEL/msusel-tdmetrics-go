@@ -10,7 +10,6 @@ import (
 
 type StructDesc interface {
 	TypeDesc
-	Identifiable
 	IsStructDesc()
 
 	Fields() []Field

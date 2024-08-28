@@ -15,7 +15,7 @@ import (
 
 type basicImp struct {
 	realType *types.Basic
-	id       any
+	index    int
 }
 
 func newBasic(args constructs.BasicArgs) constructs.Basic {
@@ -42,8 +42,8 @@ func (t *basicImp) IsTypeDesc() {}
 func (t *basicImp) IsBasic()    {}
 
 func (t *basicImp) Kind() kind.Kind    { return kind.Basic }
-func (t *basicImp) Id() any            { return t.id }
-func (t *basicImp) SetId(id any)       { t.id = id }
+func (t *basicImp) Index() int         { return t.index }
+func (t *basicImp) SetIndex(index int) { t.index = index }
 func (t *basicImp) GoType() types.Type { return t.realType }
 func (t *basicImp) String() string     { return t.realType.Name() }
 
@@ -63,16 +63,17 @@ func Comparer() comp.Comparer[constructs.Basic] {
 }
 
 func (t *basicImp) ToJson(ctx *jsonify.Context) jsonify.Datum {
-	if ctx.IsShort() {
-		return jsonify.New(ctx, t.id)
+	if ctx.IsOnlyIndex() {
+		return jsonify.New(ctx, t.index)
 	}
-
-	if ctx.IsKindShown() || ctx.IsIdShown() {
+	if ctx.IsShort() {
+		return jsonify.NewSprintf(`%s%d`, t.Kind(), t.index)
+	}
+	if ctx.IsDebugKindIncluded() || ctx.IsDebugIndexIncluded() {
 		return jsonify.NewMap().
-			AddIf(ctx, ctx.IsKindShown(), `kind`, t.Kind()).
-			AddIf(ctx, ctx.IsIdShown(), `id`, t.id).
+			AddIf(ctx, ctx.IsDebugKindIncluded(), `kind`, t.Kind()).
+			AddIf(ctx, ctx.IsDebugIndexIncluded(), `index`, t.index).
 			Add(ctx, `name`, t.realType.Name())
 	}
-
 	return jsonify.New(ctx, t.realType.Name())
 }

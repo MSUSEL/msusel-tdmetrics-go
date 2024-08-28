@@ -17,10 +17,6 @@ type Converter interface {
 	ConvertSignature(t *types.Signature) constructs.Signature
 }
 
-func BlankName(name string) bool {
-	return len(name) <= 0 || name == `_` || name == `.`
-}
-
 func New(
 	baker baker.Baker,
 	proj constructs.Project,
@@ -214,7 +210,7 @@ func (c *convImp) convertStruct(t *types.Struct) constructs.StructDesc {
 	fields := make([]constructs.Field, 0, t.NumFields())
 	for i := range t.NumFields() {
 		f := t.Field(i)
-		if !BlankName(f.Name()) {
+		if !constructs.BlankName(f.Name()) {
 			field := c.proj.NewField(constructs.FieldArgs{
 				Name:     f.Name(),
 				Type:     c.ConvertType(f.Type()),

@@ -8,7 +8,6 @@ import "github.com/Snow-Gremlin/goToolbox/collections"
 // the tags of the fields don't matter.
 type Field interface {
 	Construct
-	Identifiable
 	TempReferenceContainer
 	IsField()
 

@@ -10,9 +10,9 @@ import (
 )
 
 type argumentImp struct {
-	name string
-	typ  constructs.TypeDesc
-	id   any
+	name  string
+	typ   constructs.TypeDesc
+	index int
 }
 
 func newArgument(args constructs.ArgumentArgs) constructs.Argument {
@@ -30,9 +30,9 @@ func newArgument(args constructs.ArgumentArgs) constructs.Argument {
 
 func (a *argumentImp) IsArgument() {}
 
-func (a *argumentImp) Kind() kind.Kind { return kind.Argument }
-func (a *argumentImp) Id() any         { return a.id }
-func (a *argumentImp) SetId(id any)    { a.id = id }
+func (a *argumentImp) Kind() kind.Kind    { return kind.Argument }
+func (a *argumentImp) Index() int         { return a.index }
+func (a *argumentImp) SetIndex(index int) { a.index = index }
 
 func (a *argumentImp) Name() string              { return a.name }
 func (a *argumentImp) Type() constructs.TypeDesc { return a.typ }
@@ -56,16 +56,17 @@ func (a *argumentImp) RemoveTempReferences() {
 }
 
 func (a *argumentImp) ToJson(ctx *jsonify.Context) jsonify.Datum {
-	if ctx.IsShort() {
-		return jsonify.New(ctx, a.id)
+	if ctx.IsOnlyIndex() {
+		return jsonify.New(ctx, a.index)
 	}
-
-	ctx2 := ctx.HideKind().Short()
+	if ctx.IsShort() {
+		return jsonify.NewSprintf(`%s%d`, a.Kind(), a.index)
+	}
 	return jsonify.NewMap().
-		AddIf(ctx, ctx.IsKindShown(), `kind`, a.Kind()).
-		AddIf(ctx, ctx.IsIdShown(), `id`, a.id).
-		AddNonZero(ctx2, `name`, a.name).
-		Add(ctx2, `type`, a.typ)
+		AddIf(ctx, ctx.IsDebugKindIncluded(), `kind`, a.Kind()).
+		AddIf(ctx, ctx.IsDebugIndexIncluded(), `index`, a.index).
+		AddNonZero(ctx, `name`, a.name).
+		Add(ctx.Short(), `type`, a.typ)
 }
 
 func (a *argumentImp) String() string {
