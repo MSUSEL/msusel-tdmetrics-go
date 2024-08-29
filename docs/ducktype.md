@@ -15,12 +15,12 @@ to perform less comparisons.
 
 ## Tree of Inheritance
 
-Assuming a type can be represented by a set of numbers,
+Assuming a type can be represented by a set of members,
 the type $S$ is a sub-type of $T$ ( $S <: T$ ) iff the set of
-numbers in each $S \supset T$. In OO terms $S$ inherits $T$,
+members in each $S \supset T$. In OO terms $S$ inherits $T$,
 as in $S$ may be used in anywhere that $T$ maybe used.
 
-```Mermaid
+```mermaid
 flowchart LR
     S --> T
 ```
@@ -30,7 +30,7 @@ $U$ inherits $S$ too, in OO this could be defined by the developer,
 however with duck typing we assume it is only a transient inheritance
 through $T$.
 
-```Mermaid
+```mermaid
 flowchart LR
     S --> T --> U
 ```
@@ -38,7 +38,7 @@ flowchart LR
 If $S \supset T$, $S \supset V$, and $T \nsupseteq V$,
 then $S$ inherits both $T$ and $V$ directly.
 
-```Mermaid
+```mermaid
 flowchart LR
     S --> T
     S --> V
@@ -47,7 +47,7 @@ flowchart LR
 Since $T$ and $V$ may overlap, $U$ might be a super-type of both iff
 $(T \cap V) \supseteq U$.
 
-```Mermaid
+```mermaid
 flowchart LR
     S --> T --> U
     S --> V --> U
@@ -90,3 +90,56 @@ flowchart LR
        2. These subtrees can't contain sub-types, otherwise the root of the
           subtree would be a sub-type too. However, there may be super-types
           deeper in the subtree.
+
+## Implementation
+
+This algorithm is implemented in
+[abstractor/resolver/inheritance](../goAbstractor/internal/abstractor/resolver/inheritance/inheritance.go).
+
+Below is a simplified version in pseudo-code. This assumes that each
+set has unique nodes such that no two nodes are equal.
+
+```pseudo
+define Node:
+   Members used to determine sub-typing
+   Parents: Set of Nodes as known direct super-types of this Node
+
+function DetermineInheritance:
+   given:
+      AllNodes: Set of Nodes
+   let:
+      TopLevelSiblings: Set of Nodes be empty
+   foreach X in AllNodes:
+      call AddNode with TopLevelSiblings and X
+   discard TopLevelSiblings
+
+function AddNode:
+   given:
+      Siblings: Set of Nodes
+      X: Node
+   let:
+      AddedToSibling: bool be false
+      ParentedSiblings: bool be false
+   foreach Yi in Siblings:
+      if Yi <: X:
+         call AddNode with Yi.Parents and X
+         set AddedToSibling to true
+      else if Yi :> X:
+         add Yi to X.Parents
+         remove Yi from Siblings
+         set ParentedSiblings to true
+      else if Yi overlaps X:
+         call SeekParents with Yi.Parents and X
+   if ParentedSiblings or not AddedToSibling:
+      add X to Siblings
+
+function SeekParents:
+   given:
+      Siblings: Set of Nodes
+      X: Node
+   foreach Yi in Siblings:
+      if Yi :> X:
+         add Yi to X.Parents
+      else:
+         call SeekParents with Yi.Parents and X
+```

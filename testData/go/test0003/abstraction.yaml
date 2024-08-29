@@ -1,61 +1,60 @@
 {
   language: go,
   abstracts: [
-    { name: Pet, signature: 10 } # 1. func Pet()()
+    { name: Pet, signature: 1 } # 1. func Pet()()
   ],
   basics: [
-    string # 2. string
+    string # 1. string
   ],
   fields: [
-    { name: Name, type: 2 } # 3. Name string
+    { name: Name, type: basic1 } # 1. Name string
   ],
   interfaceDecls: [
-    { # 4. main.Animal interface { Pet() } @ main.go:5
-      name: Animal,
-      package: 9,
-      loc: 5,
-      interface: 5
+    { # 1. main.Animal interface { Pet() } @ main.go:5
+      name: Animal, package: 1, interface: 1, loc: 5
     }
   ],
   interfaceDescs: [
-    { # 5. interface { Pet() }
+    { # 1. interface { Pet() }
       abstracts: [ 1 ]
     }
   ],
   methods: [
-    { # 6. main.Cat.Pet @ main.go:13
-      name: Pet, receiver: 8, package: 9, signature: 10, loc: 13,
-      metrics: { codeCount: 3, complexity: 1, indents: 1, lineCount: 3 }
+    { # 1. main.Cat.Pet @ main.go:13
+      name: Pet, receiver: 1, package: 1, signature: 1, loc: 13, metrics: 1
     },
-    { # 7. main.main @ main.go:17
-      name: main, package: 9, signature: 10, loc: 17,
-      metrics: { codeCount: 6, complexity: 1, indents: 5, lineCount: 6 }
+    { # 2. main.main @ main.go:17
+      name: main, package: 1, signature: 1, loc: 17, metrics: 2
+    }
+  ],
+  metrics: [
+    { # 1.
+      codeCount: 3, complexity: 1, indents: 1, lineCount: 3, loc: 13
+    },
+    { # 2.
+      codeCount: 6, complexity: 1, indents: 5, lineCount: 6, loc: 17
     }
   ],
   objects: [
-    { # 8.
-      name: Cat,
-      package: 9,
-      loc: 9,
-      data: 11,
-      interface: 5,
-      methods: [ 6 ]
+    { # 1.
+      name: Cat, package: 1, data: 1, interface: 1, loc: 9,
+      methods: [ 1 ]
     }
   ],
   packages: [
-    { # 9. main package
+    { # 1. main package
       path: command-line-arguments,
       name: main,
-      interfaces: [ 4 ],
-      objects:    [ 8 ],
-      methods:    [ 6, 7 ],
+      interfaces: [ 1 ],
+      objects:    [ 1 ],
+      methods:    [ 1, 2 ],
     }
   ],
   signatures: [
-    {} # 10. func()()
+    {} # 1. func()()
   ],
   structDescs: [
-    { fields: [ 3 ] } # 11. struct { Name string }
+    { fields: [ 1 ] } # 1. struct { Name string }
   ],
   locs: {
     '1': main.go

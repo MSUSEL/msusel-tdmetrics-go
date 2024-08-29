@@ -5,9 +5,10 @@ import (
 	"go/token"
 	"math"
 
+	"github.com/Snow-Gremlin/goToolbox/utils"
+
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/locs"
-	"github.com/Snow-Gremlin/goToolbox/utils"
 )
 
 type Analyzer interface {

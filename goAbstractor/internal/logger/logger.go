@@ -12,11 +12,21 @@ import (
 )
 
 func New() *Logger {
-	return NewFor(os.Stdout)
+	return &Logger{out: writerToFunc(os.Stdout)}
 }
 
-func NewFor(out io.Writer) *Logger {
-	return &Logger{out: out}
+func NewWriter(out io.Writer) *Logger {
+	if utils.IsNil(out) {
+		return nil
+	}
+	return &Logger{out: writerToFunc(out)}
+}
+
+func NewFunc(handle func(args ...any)) *Logger {
+	if utils.IsNil(handle) {
+		return nil
+	}
+	return &Logger{out: func(text string) { handle(text) }}
 }
 
 func Null() *Logger {
@@ -24,9 +34,17 @@ func Null() *Logger {
 }
 
 type Logger struct {
-	out    io.Writer
+	out    func(string)
 	prefix string
 	show   map[string]struct{}
+}
+
+func writerToFunc(out io.Writer) func(string) {
+	return func(text string) {
+		if _, err := out.Write([]byte(text)); err != nil {
+			panic(terror.New(`failed to write to a log`, err))
+		}
+	}
 }
 
 func (log *Logger) copy() *Logger {
@@ -41,14 +59,9 @@ func (log *Logger) write(text string) *Logger {
 	if log == nil {
 		return nil
 	}
-	if utils.IsNil(log.out) {
-		log.out = os.Stdout
-	}
 	lines := strings.Split(text, "\n")
 	for _, line := range lines {
-		if _, err := log.out.Write([]byte("\n" + log.prefix + line)); err != nil {
-			panic(terror.New(`failed to write to a log`, err))
-		}
+		log.out("\n" + log.prefix + line)
 	}
 	return log
 }

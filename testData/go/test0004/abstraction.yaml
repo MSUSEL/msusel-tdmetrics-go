@@ -1,81 +1,85 @@
 {
   language: go,
   abstracts: [
-    { name: Age,  signature: 21 }, # 1. func Age() float64
-    { name: Fly,  signature: 20 }, # 2. func Fly()
-    { name: Temp, signature: 22 }  # 3. func Temp() int
+    { name: Age,  signature: 2 }, # 1. func Age() int
+    { name: Fly,  signature: 1 }, # 2. func Fly()
+    { name: Temp, signature: 3 }  # 3. func Temp() float
   ],
   arguments: [
-    { type: 6 }, # 4. <unnamed> int
-    { type: 7 }  # 5. <unnamed> float64
+    { type: basic1 }, # 1. <unnamed> int
+    { type: basic2 }  # 2. <unnamed> float64
   ],
   basics: [
-    int,    # 6. int
-    float64 # 7. float64
+    int,    # 1. int
+    float64 # 2. float64
   ],
   interfaceDecls: [
-    { # 8. main.Animal @ main.go:6
-      name: Animal, package: 19, interface: 13, loc: 6
+    { # 1. main.Animal @ main.go:6
+      name: Animal, package: 1, interface: 1, loc: 6
     },
-    { # 9. main.Bat @ main.go:20
-      name: Bat, package: 19, interface: 15, loc: 20
+    { # 2. main.Bat @ main.go:20
+      name: Bat, package: 1, interface: 3, loc: 20
     },
-    { # 10. main.Bird @ main.go:10
-      name: Bird, package: 19, interface: 14, loc: 10
+    { # 3. main.Bird @ main.go:10
+      name: Bird, package: 1, interface: 2, loc: 10
     },
-    { # 11. main.Filter @ main.go:25
-      name: Flier, package: 19, interface: 17, loc: 25
+    { # 4. main.Filter @ main.go:25
+      name: Flier, package: 1, interface: 5, loc: 25
     },
-    { # 12. main.Mammal @ main.go:15
-      name: Mammal, package: 19, interface: 16, loc: 15
+    { # 5. main.Mammal @ main.go:15
+      name: Mammal, package: 1, interface: 4, loc: 15
     }
   ],
   interfaceDescs: [
-    { # 13. interface { Age() float64 }
+    { # 1. interface { Age() int }
       abstracts: [ 1 ]
     },
-    { # 14. interface { Age() float64; Fly() }
+    { # 2. interface { Age() int; Fly() }
       abstracts: [ 1, 2 ],
       inherits: [
-        13, # interface { Age() float64 }
-        17  # interface { Fly(); }
+        1, # interface { Age() int }
+        5  # interface { Fly(); }
       ]
     },
-    { # 15. interface { Age() float64; Fly(); Temp() int }
+    { # 3. interface { Age() int; Fly(); Temp() float64 }
       abstracts: [ 1, 2, 3 ],
       inherits: [
-        14, # interface { Age() float64; Fly() }
-        16  # interface { Age() float64; Temp() int }
+        2, # interface { Age() int; Fly() }
+        4  # interface { Age() int; Temp() float64 }
       ]
     },
-    { # 16. interface { Age() float64; Temp() int }
+    { # 4. interface { Age() int; Temp() float64 }
       abstracts: [ 1, 3 ],
       inherits: [
-        13 # interface { Age() float64 }
+        1 # interface { Age() int }
       ]
     },
-    { # 17. interface { Fly(); }
+    { # 5. interface { Fly(); }
       abstracts: [ 2 ]
     }
   ],
   methods: [
-    { # 18. maim.main func()()
-      name: main, package: 19, signature: 20, loc: 33,
-      metrics: { codeCount: 3, complexity: 1, indents: 1, lineCount: 3 }
+    { # 1. maim.main func()()
+      name: main, package: 1, signature: 1, loc: 33, metrics: 1
+    }
+  ],
+  metrics: [
+    { # 1.
+      codeCount: 3, complexity: 1, indents: 1, lineCount: 3, loc: 33
     }
   ],
   packages: [
-    { # 19. main package
+    { # 1. main package
       path: command-line-arguments,
       name: main,
-      interfaces: [ 8, 9, 10, 11, 12 ],
-      methods: [ 18 ]
+      interfaces: [ 1, 2, 3, 4, 5 ],
+      methods: [ 1 ]
     }
   ],
   signatures: [
-    {},                 # 20. func()()
-    { results: [ 4 ] }, # 21. func() float64
-    { results: [ 5 ] }  # 22. func() int
+    {},                 # 1. func()()
+    { results: [ 1 ] }, # 2. func() float64
+    { results: [ 2 ] }  # 3. func() int
   ],
   locs: {
     '1': main.go

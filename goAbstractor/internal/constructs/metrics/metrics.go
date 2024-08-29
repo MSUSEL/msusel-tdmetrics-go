@@ -2,7 +2,6 @@ package metrics
 
 import (
 	"cmp"
-	"fmt"
 
 	"github.com/Snow-Gremlin/goToolbox/comp"
 
@@ -57,7 +56,6 @@ func (m *metricsImp) CompareTo(other constructs.Construct) int {
 func Comparer() comp.Comparer[constructs.Metrics] {
 	return func(a, b constructs.Metrics) int {
 		aImp, bImp := a.(*metricsImp), b.(*metricsImp)
-		fmt.Printf("%v => %v\n", aImp, bImp)
 		return cmp.Compare(int(aImp.loc.Pos()), int(bImp.loc.Pos()))
 	}
 }
