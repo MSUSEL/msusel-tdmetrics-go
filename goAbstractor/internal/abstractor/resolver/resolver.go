@@ -3,7 +3,9 @@ package resolver
 import (
 	"github.com/Snow-Gremlin/goToolbox/collections"
 	"github.com/Snow-Gremlin/goToolbox/terrors/terror"
+	"github.com/Snow-Gremlin/goToolbox/utils"
 
+	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/abstractor/instantiator"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/abstractor/resolver/inheritance"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs/interfaceDesc"
@@ -66,15 +68,58 @@ func (r *resolverImp) Receivers() {
 // has a method added after the instance, the method also gets instances created.
 func (r *resolverImp) ExpandInstantiations() {
 	r.log.Log(`expand instantiations`)
+	objects := r.proj.Objects()
+	for i := range objects.Count() {
+		r.expandInstantiations(objects.Get(i))
+	}
+}
 
-	// TODO: Implement
+func (r *resolverImp) expandInstantiations(obj constructs.Object) {
+	// Add the method instances to the object.
+	methods := obj.Methods()
+	for i := range methods.Count() {
+		mIts := methods.Get(i).Instances()
+		for j := range mIts.Count() {
+			it := mIts.Get(j).InstanceTypes()
+			instantiator.Object(r.proj, nil, obj, it...)
+		}
+	}
+
+	its := obj.Instances()
+	for i := range its.Count() {
+		r.expandObjectInst(obj, its.Get(i))
+	}
+}
+
+// expandObjectInst adds the given instance into each method if it doesn't
+// exist in that method. Then update methods and receivers for the instance.
+func (r *resolverImp) expandObjectInst(obj constructs.Object, instance constructs.ObjectInst) {
+	methods := obj.Methods()
+	for i := range methods.Count() {
+		method := methods.Get(i)
+		con := instantiator.Method(r.proj, method, instance.InstanceTypes()...)
+		if utils.IsNil(con) {
+			panic(terror.New(`unable to instantiate method while expanding object`).
+				With(`method`, method).
+				With(`object`, obj).
+				With(`instance`, instance))
+		}
+		methodInst := con.(constructs.MethodInst)
+		methodInst.SetReceiver(instance)
+		instance.AddMethod(methodInst)
+	}
 }
 
 func (r *resolverImp) ObjectInterfaces() {
 	r.log.Log(`resolve object interfaces`)
 	objects := r.proj.Objects()
 	for i := range objects.Count() {
-		r.objectInter(objects.Get(i))
+		obj := objects.Get(i)
+		r.objectInter(obj)
+		insts := obj.Instances()
+		for j := range insts.Count() {
+			r.objectInstanceInter(insts.Get(j))
+		}
 	}
 }
 
@@ -93,6 +138,23 @@ func (r *resolverImp) objectInter(obj constructs.Object) {
 		Package:   obj.Package().Source(),
 	})
 	obj.SetInterface(it)
+}
+
+func (r *resolverImp) objectInstanceInter(objInst constructs.ObjectInst) {
+	methodInsts := objInst.Methods()
+	abstracts := make([]constructs.Abstract, methodInsts.Count())
+	for i := range methodInsts.Count() {
+		mi := methodInsts.Get(i)
+		abstracts[i] = r.proj.NewAbstract(constructs.AbstractArgs{
+			Name:      mi.Generic().Name(),
+			Signature: mi.Resolved(),
+		})
+	}
+	it := r.proj.NewInterfaceDesc(constructs.InterfaceDescArgs{
+		Abstracts: abstracts,
+		Package:   objInst.Generic().Package().Source(),
+	})
+	objInst.SetInterface(it)
 }
 
 func (r *resolverImp) Inheritance() {
@@ -126,44 +188,34 @@ func (r *resolverImp) resolveTempRef(ref constructs.TempReference) {
 		return
 	}
 
-	if _, typ, ok := r.proj.FindType(ref.PackagePath(), ref.Name(), true); ok {
-		if len(ref.InstanceTypes()) > 0 {
-			if inst, found := findInstance(typ, ref.InstanceTypes()); found {
-				ref.SetType(inst)
-				return
-			}
-			panic(terror.New(`failed to find temp referenced instance`).
-				With(`package path`, ref.PackagePath()).
-				With(`name`, ref.Name()).
-				With(`instance types`, ref.InstanceTypes()))
-		}
+	_, typ, ok := r.proj.FindType(ref.PackagePath(), ref.Name(), true)
+	if !ok {
+		panic(terror.New(`failed to find temp referenced object`).
+			With(`package path`, ref.PackagePath()).
+			With(`name`, ref.Name()).
+			With(`instance types`, ref.InstanceTypes()))
+	}
+	if len(ref.InstanceTypes()) <= 0 {
 		ref.SetType(typ)
 		return
 	}
-	panic(terror.New(`failed to find temp referenced object`).
-		With(`package path`, ref.PackagePath()).
-		With(`name`, ref.Name()).
-		With(`instance types`, ref.InstanceTypes()))
-}
 
-func findInstance(decl constructs.TypeDecl, instanceTypes []constructs.TypeDesc) (constructs.TypeDesc, bool) {
-	switch decl.Kind() {
+	switch typ.Kind() {
 	case kind.Object:
-		return decl.(constructs.Object).FindInstance(instanceTypes)
+		ref.SetType(instantiator.Object(r.proj, nil, typ.(constructs.Object), ref.InstanceTypes()...))
 	case kind.InterfaceDecl:
-		return decl.(constructs.InterfaceDecl).FindInstance(instanceTypes)
+		ref.SetType(instantiator.InterfaceDecl(r.proj, nil, typ.(constructs.InterfaceDecl), ref.InstanceTypes()...))
 	default:
 		panic(terror.New(`unexpected declaration type`).
-			With(`kind`, decl.Kind()).
-			With(`decl`, decl))
+			With(`kind`, typ.Kind()).
+			With(`decl`, typ))
 	}
 }
 
 func (r *resolverImp) EliminateDeadCode() {
+	r.log.Log(`dead-code elimination`)
+
 	// TODO: Improve prune to use metrics to create a dead code elimination prune.
-	//ab.log.Logln(`prune`)
-	//proj.PruneTypes()
-	//proj.PrunePackages()
 }
 
 func (r *resolverImp) Locations() {

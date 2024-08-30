@@ -24,7 +24,7 @@ type ObjectInst interface {
 	InstanceTypes() []TypeDesc
 
 	Methods() collections.ReadonlySortedSet[MethodInst]
-	AddMethods(method MethodInst) MethodInst
+	AddMethod(method MethodInst) MethodInst
 	Interface() InterfaceDesc
 	SetInterface(it InterfaceDesc)
 }

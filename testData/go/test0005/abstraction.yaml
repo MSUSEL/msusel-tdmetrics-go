@@ -156,7 +156,7 @@
     { # 2. package cats
       name: cats,
       path: command-line-arguments,
-      interfaces: [ 4, 5555 ], # TODO: Shouldn't the interfaces created for the objects also get registered here?
+      interfaces: [ 4 ],
       methods: [ 1, 2, 3, 4, 5, 6 ],
       objects: [ 1, 2 ],
       values: [ 1 ]

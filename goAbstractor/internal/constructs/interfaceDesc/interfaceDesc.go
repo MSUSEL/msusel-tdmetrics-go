@@ -3,7 +3,6 @@ package interfaceDesc
 import (
 	"go/token"
 	"go/types"
-	"strings"
 
 	"github.com/Snow-Gremlin/goToolbox/collections"
 	"github.com/Snow-Gremlin/goToolbox/collections/enumerator"
@@ -140,17 +139,22 @@ func (id *interfaceDescImp) ToJson(ctx *jsonify.Context) jsonify.Datum {
 }
 
 func (id *interfaceDescImp) String() string {
-	buf := &strings.Builder{}
-	buf.WriteString(`interface{ `)
+	internals := ``
 	if len(id.abstracts) > 0 {
-		buf.WriteString(enumerator.Enumerate(id.abstracts...).Join(`; `) + `; `)
+		internals += enumerator.Enumerate(id.abstracts...).Join(`; `) + `; `
 	}
 	if len(id.exact) > 0 {
-		buf.WriteString(enumerator.Enumerate(id.exact...).Join(`|`) + `; `)
+		internals += enumerator.Enumerate(id.exact...).Join(`|`)
+		if len(id.approx) > 0 {
+			internals += `|~` + enumerator.Enumerate(id.approx...).Join(`|~`) + `; `
+		} else {
+			internals += `; `
+		}
+	} else if len(id.approx) > 0 {
+		internals += `~` + enumerator.Enumerate(id.approx...).Join(`|~`) + `; `
 	}
-	if len(id.approx) > 0 {
-		buf.WriteString(`~` + enumerator.Enumerate(id.approx...).Join(`|~`) + `; `)
+	if len(internals) <= 0 {
+		return `any`
 	}
-	buf.WriteString(`}`)
-	return buf.String()
+	return `interface{ ` + internals + `}`
 }

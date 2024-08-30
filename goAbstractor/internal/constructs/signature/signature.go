@@ -109,7 +109,11 @@ func (m *signatureImp) String() string {
 	case 0:
 		break
 	case 1:
-		buf.WriteString(` ` + m.results[0].String())
+		if len(m.results[0].Name()) > 0 {
+			buf.WriteString(`(` + m.results[0].String() + `)`)
+		} else {
+			buf.WriteString(` ` + m.results[0].String())
+		}
 	default:
 		buf.WriteString(`(` + enumerator.Enumerate(m.results...).Join(`, `) + `)`)
 	}

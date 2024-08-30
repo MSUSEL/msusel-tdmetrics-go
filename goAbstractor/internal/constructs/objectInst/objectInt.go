@@ -60,7 +60,7 @@ func (m *instanceImp) Generic() constructs.Object           { return m.generic }
 func (m *instanceImp) Resolved() constructs.StructDesc      { return m.resolved }
 func (m *instanceImp) InstanceTypes() []constructs.TypeDesc { return m.instanceTypes }
 
-func (m *instanceImp) AddMethods(method constructs.MethodInst) constructs.MethodInst {
+func (m *instanceImp) AddMethod(method constructs.MethodInst) constructs.MethodInst {
 	v, _ := m.methods.TryAdd(method)
 	return v
 }
