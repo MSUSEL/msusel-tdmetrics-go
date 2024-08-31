@@ -1,6 +1,8 @@
 package value
 
 import (
+	"strings"
+
 	"github.com/Snow-Gremlin/goToolbox/comp"
 
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/assert"
@@ -93,5 +95,12 @@ func (v *valueImp) ToJson(ctx *jsonify.Context) jsonify.Datum {
 }
 
 func (v *valueImp) String() string {
-	return `var ` + v.name + ` ` + v.typ.String()
+	buf := &strings.Builder{}
+	buf.WriteString(`var `)
+	buf.WriteString(v.pkg.Path())
+	buf.WriteString(`.`)
+	buf.WriteString(v.name)
+	buf.WriteString(` `)
+	buf.WriteString(v.typ.String())
+	return buf.String()
 }

@@ -3,6 +3,6 @@ bin
 obj
 .vs
 
-out.json
-out.yaml
-out.yml
+out*.json
+out*.yaml
+out*.yml

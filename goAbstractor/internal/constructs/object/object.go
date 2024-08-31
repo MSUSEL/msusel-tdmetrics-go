@@ -151,6 +151,6 @@ func (d *objectImp) String() string {
 		buf.WriteString(enumerator.Enumerate(d.typeParams...).Join(`, `))
 		buf.WriteString(`]`)
 	}
-	buf.WriteString(` struct`)
+	buf.WriteString(` struct{--}`)
 	return buf.String()
 }

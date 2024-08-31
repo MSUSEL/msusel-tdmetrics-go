@@ -145,5 +145,6 @@ func (d *interfaceDeclImp) String() string {
 		buf.WriteString(enumerator.Enumerate(d.typeParams...).Join(`, `))
 		buf.WriteString(`]`)
 	}
+	buf.WriteString(` interface{--}`)
 	return buf.String()
 }

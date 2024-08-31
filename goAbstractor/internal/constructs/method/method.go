@@ -5,6 +5,7 @@ import (
 	"strings"
 
 	"github.com/Snow-Gremlin/goToolbox/collections"
+	"github.com/Snow-Gremlin/goToolbox/collections/enumerator"
 	"github.com/Snow-Gremlin/goToolbox/collections/sortedSet"
 	"github.com/Snow-Gremlin/goToolbox/comp"
 	"github.com/Snow-Gremlin/goToolbox/terrors/terror"
@@ -177,6 +178,7 @@ func (m *methodImp) ToJson(ctx *jsonify.Context) jsonify.Datum {
 
 func (m *methodImp) String() string {
 	buf := &strings.Builder{}
+	buf.WriteString(`func `)
 	buf.WriteString(m.pkg.Path())
 	buf.WriteString(`.`)
 	if len(m.recvName) > 0 {
@@ -186,9 +188,9 @@ func (m *methodImp) String() string {
 	buf.WriteString(m.name)
 	if len(m.typeParams) > 0 {
 		buf.WriteString(`[`)
-		buf.WriteString(m.instances.Enumerate().Join(`, `))
+		buf.WriteString(enumerator.Enumerate(m.typeParams...).Join(`, `))
 		buf.WriteString(`]`)
 	}
-	buf.WriteString(m.signature.String())
+	buf.WriteString(`(--)`)
 	return buf.String()
 }

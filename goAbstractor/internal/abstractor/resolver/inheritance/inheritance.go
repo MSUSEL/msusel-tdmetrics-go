@@ -15,6 +15,8 @@ type Node[T any] interface {
 	AddInherits(parent T) T
 
 	Inherits() collections.SortedSet[T]
+
+	comparable
 }
 
 type Inheritance[T Node[T]] interface {
@@ -31,6 +33,7 @@ type Inheritance[T Node[T]] interface {
 
 type inheritanceImp[T Node[T]] struct {
 	roots collections.SortedSet[T]
+	comp  comp.Comparer[T]
 	log   *logger.Logger
 	count int
 }
@@ -38,22 +41,29 @@ type inheritanceImp[T Node[T]] struct {
 func New[T Node[T]](comp comp.Comparer[T], log *logger.Logger) Inheritance[T] {
 	return &inheritanceImp[T]{
 		roots: sortedSet.New(comp),
+		comp:  comp,
 		log:   log,
 	}
 }
 
 func (in *inheritanceImp[T]) Process(node T) {
 	in.log.Logf(`╶─(%d) insert %v`, in.count, node)
-	addParent[T](in.roots, node, in.log.Prefix(`  `))
+	touched := map[T]struct{}{node: {}}
+	in.addParent(in.roots, node, touched, in.log.Prefix(`  `))
 	in.count++
 }
 
-func addParent[T Node[T]](siblings collections.SortedSet[T], n T, log *logger.Logger) {
+func (in *inheritanceImp[T]) addParent(siblings collections.SortedSet[T], n T, touched map[T]struct{}, log *logger.Logger) {
 	log2 := log.Prefix(` │ `)
 	addedToSibling := false
 	parentedSiblings := false
 	for i := siblings.Count() - 1; i >= 0; i-- {
 		a := siblings.Get(i)
+		if _, has := touched[a]; has {
+			// Already checked so skip it.
+			continue
+		}
+		touched[a] = struct{}{}
 
 		switch {
 		case a.Implements(n):
@@ -64,7 +74,7 @@ func addParent[T Node[T]](siblings collections.SortedSet[T], n T, log *logger.Lo
 			// may already have the parent {A} in it, so we have to recursively
 			// call addParent to re-parent {A} as a parent of {A, B}.
 			log.Logf(` ├─(%d) parent %v`, i, a)
-			addParent(a.Inherits(), n, log2)
+			in.addParent(a.Inherits(), n, touched, log2)
 			addedToSibling = true
 
 		case n.Implements(a):
@@ -88,7 +98,7 @@ func addParent[T Node[T]](siblings collections.SortedSet[T], n T, log *logger.Lo
 			// have the parents {A} and {D} in it. We want to add {A} as
 			// a parent to {A, B, C}.
 			log.Logf(` ├─(%d) else %v`, i, a)
-			seekInherits(a.Inherits(), n, log2)
+			in.seekInherits(a.Inherits(), n, touched, log2)
 		}
 	}
 
@@ -103,14 +113,20 @@ func addParent[T Node[T]](siblings collections.SortedSet[T], n T, log *logger.Lo
 	}
 }
 
-func seekInherits[T Node[T]](siblings collections.SortedSet[T], n T, log *logger.Logger) {
+func (in *inheritanceImp[T]) seekInherits(siblings collections.SortedSet[T], n T, touched map[T]struct{}, log *logger.Logger) {
 	for i := siblings.Count() - 1; i >= 0; i-- {
 		a := siblings.Get(i)
+		if _, has := touched[a]; has {
+			// Already checked so skip it.
+			continue
+		}
+		touched[a] = struct{}{}
+
 		if n.Implements(a) {
 			log.Logf(` + %v`, a)
 			n.AddInherits(a)
 		} else {
-			seekInherits(a.Inherits(), n, log)
+			in.seekInherits(a.Inherits(), n, touched, log)
 		}
 	}
 }

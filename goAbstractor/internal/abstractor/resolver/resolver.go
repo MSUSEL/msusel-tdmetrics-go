@@ -14,20 +14,15 @@ import (
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/logger"
 )
 
-type Args struct {
-	Log     *logger.Logger
-	Project constructs.Project
-}
-
 type resolverImp struct {
 	log  *logger.Logger
 	proj constructs.Project
 }
 
-func Resolve(args Args) {
+func Resolve(proj constructs.Project, log *logger.Logger) {
 	resolve := &resolverImp{
-		log:  args.Log,
-		proj: args.Project,
+		log:  log,
+		proj: proj,
 	}
 	resolve.Imports()
 	resolve.Receivers()

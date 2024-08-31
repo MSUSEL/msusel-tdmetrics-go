@@ -36,8 +36,6 @@ func newInstance(args constructs.ObjectInstArgs) constructs.ObjectInst {
 		pkg := args.Generic.Package()
 		assert.ArgNotNil(`package`, pkg)
 
-		//types.Instantiate(nil, args.Generic.GoType())
-
 		// Implement if needed.
 		assert.NotImplemented()
 	}
@@ -110,7 +108,7 @@ func (i *instanceImp) ToJson(ctx *jsonify.Context) jsonify.Datum {
 		AddNonZero(ctx.OnlyIndex(), `generic`, i.generic).
 		AddNonZero(ctx.OnlyIndex(), `resolved`, i.resolved).
 		AddNonZero(ctx.Short(), `instanceTypes`, i.instanceTypes).
-		AddNonZero(ctx.OnlyIndex(), `methods`, i.methods.ToList())
+		AddNonZero(ctx.OnlyIndex(), `methods`, i.methods.ToSlice())
 }
 
 func (i *instanceImp) String() string {

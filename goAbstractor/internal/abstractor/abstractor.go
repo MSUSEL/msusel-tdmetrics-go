@@ -28,7 +28,7 @@ type Config struct {
 
 func Abstract(cfg Config) constructs.Project {
 	var (
-		log  = cfg.Log.Show(`objectInterfaces`)
+		log  = cfg.Log
 		fSet = cfg.Packages[0].Fset
 		locs = locs.NewSet(fSet)
 		proj = project.New(locs)
@@ -43,10 +43,7 @@ func Abstract(cfg Config) constructs.Project {
 	}
 	ab.abstractProject()
 
-	resolver.Resolve(resolver.Args{
-		Log:     log,
-		Project: proj,
-	})
+	resolver.Resolve(proj, log)
 
 	log.Log(`done`)
 	return proj
