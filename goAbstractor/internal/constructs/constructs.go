@@ -25,6 +25,13 @@ type Construct interface {
 
 	// SetIndex sets the index of construct.
 	SetIndex(index int)
+
+	// Alive indicates that this construct is reachable
+	// from any entry point in the compiled project.
+	Alive() bool
+
+	// SetAlive sets if the given construct is alive.
+	SetAlive(alive bool)
 }
 
 // TempReferenceContainer is any construct that can contain a temporary reference.

@@ -96,12 +96,12 @@ func (ab *abstractor) abstractPackage(src *packages.Package, log *logger.Logger)
 func (ab *abstractor) abstractFile(f *ast.File, log *logger.Logger) {
 	path := ab.pos(f.FileStart).Filename
 	basePath := filepath.Base(path)
-	pkgPath := ab.curPkg.Source().PkgPath
-	if pkgPath != `command-line-arguments` {
+	if ab.curPkg.EntryPoint() {
+		ab.proj.Locs().Alias(path, basePath)
+	} else {
+		pkgPath := ab.curPkg.Source().PkgPath
 		alias := filepath.ToSlash(filepath.Join(pkgPath, basePath))
 		ab.proj.Locs().Alias(path, alias)
-	} else {
-		ab.proj.Locs().Alias(path, basePath)
 	}
 
 	log.Logf(`add file to package: %s`, basePath)
@@ -151,6 +151,7 @@ func (ab *abstractor) abstractTypeSpec(spec *ast.TypeSpec) {
 			RealType:   tv.Type,
 			Package:    ab.curPkg,
 			Name:       spec.Name.Name,
+			Exported:   spec.Name.IsExported(),
 			Interface:  it,
 			TypeParams: tp,
 			Location:   loc,
@@ -164,6 +165,7 @@ func (ab *abstractor) abstractTypeSpec(spec *ast.TypeSpec) {
 			Fields: []constructs.Field{
 				ab.proj.NewField(constructs.FieldArgs{
 					Name:     `$data`,
+					Exported: true,
 					Embedded: true,
 					Type:     typ,
 				}),
@@ -176,6 +178,7 @@ func (ab *abstractor) abstractTypeSpec(spec *ast.TypeSpec) {
 		RealType:   tv.Type,
 		Package:    ab.curPkg,
 		Name:       spec.Name.Name,
+		Exported:   spec.Name.IsExported(),
 		Data:       st,
 		TypeParams: tp,
 		Location:   loc,
@@ -237,6 +240,7 @@ func (ab *abstractor) abstractValueSpec(spec *ast.ValueSpec, isConst bool) {
 		ab.proj.NewValue(constructs.ValueArgs{
 			Package:  ab.curPkg,
 			Name:     name.Name,
+			Exported: name.IsExported(),
 			Const:    isConst,
 			Type:     typ,
 			Location: ab.proj.Locs().NewLoc(spec.Pos()),
@@ -253,7 +257,8 @@ func (ab *abstractor) setTypeParamOverrides(args *types.TypeList, params *types.
 
 	ab.tpReplacer = map[*types.TypeParam]*types.TypeParam{}
 	for i := range count {
-		ab.tpReplacer[args.At(i).(*types.TypeParam)] = params.At(i)
+		tp := args.At(i).(*types.TypeParam)
+		ab.tpReplacer[tp] = params.At(i)
 	}
 }
 
@@ -317,6 +322,7 @@ func (ab *abstractor) abstractFuncDecl(decl *ast.FuncDecl) {
 	ab.proj.NewMethod(constructs.MethodArgs{
 		Package:    ab.curPkg,
 		Name:       name,
+		Exported:   decl.Name.IsExported(),
 		Location:   loc,
 		TypeParams: tp,
 		Signature:  sig,

@@ -23,6 +23,7 @@ type packageImp struct {
 	path        string
 	name        string
 	index       int
+	alive       bool
 	importPaths []string
 
 	imports    collections.SortedSet[constructs.Package]
@@ -52,15 +53,22 @@ func newPackage(args constructs.PackageArgs) constructs.Package {
 
 func (p *packageImp) IsPackage() {}
 
-func (p *packageImp) Kind() kind.Kind    { return kind.Package }
-func (p *packageImp) Index() int         { return p.index }
-func (p *packageImp) SetIndex(index int) { p.index = index }
+func (p *packageImp) Kind() kind.Kind     { return kind.Package }
+func (p *packageImp) Index() int          { return p.index }
+func (p *packageImp) SetIndex(index int)  { p.index = index }
+func (p *packageImp) Alive() bool         { return p.alive }
+func (p *packageImp) SetAlive(alive bool) { p.alive = alive }
+func (p *packageImp) Path() string        { return p.path }
+func (p *packageImp) Name() string        { return p.name }
+func (p *packageImp) String() string      { return p.name }
 
 func (p *packageImp) Source() *packages.Package { return p.pkg }
-func (p *packageImp) Path() string              { return p.path }
-func (p *packageImp) Name() string              { return p.name }
-func (p *packageImp) ImportPaths() []string     { return p.importPaths }
-func (p *packageImp) String() string            { return p.name }
+
+func (p *packageImp) EntryPoint() bool {
+	return p.pkg.PkgPath == `command-line-arguments`
+}
+
+func (p *packageImp) ImportPaths() []string { return p.importPaths }
 
 func (p *packageImp) Imports() collections.ReadonlySortedSet[constructs.Package] {
 	return p.imports.Readonly()

@@ -15,6 +15,7 @@ type typeParamImp struct {
 	name  string
 	typ   constructs.TypeDesc
 	index int
+	alive bool
 }
 
 func newTypeParam(args constructs.TypeParamArgs) constructs.TypeParam {
@@ -29,10 +30,12 @@ func newTypeParam(args constructs.TypeParamArgs) constructs.TypeParam {
 func (t *typeParamImp) IsTypeDesc()  {}
 func (t *typeParamImp) IsTypeParam() {}
 
-func (t *typeParamImp) Kind() kind.Kind    { return kind.TypeParam }
-func (t *typeParamImp) Index() int         { return t.index }
-func (t *typeParamImp) SetIndex(index int) { t.index = index }
-func (t *typeParamImp) GoType() types.Type { return t.typ.GoType() }
+func (t *typeParamImp) Kind() kind.Kind     { return kind.TypeParam }
+func (t *typeParamImp) Index() int          { return t.index }
+func (t *typeParamImp) SetIndex(index int)  { t.index = index }
+func (t *typeParamImp) Alive() bool         { return t.alive }
+func (t *typeParamImp) SetAlive(alive bool) { t.alive = alive }
+func (t *typeParamImp) GoType() types.Type  { return t.typ.GoType() }
 
 func (t *typeParamImp) Name() string              { return t.name }
 func (t *typeParamImp) Type() constructs.TypeDesc { return t.typ }

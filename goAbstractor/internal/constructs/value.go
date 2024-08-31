@@ -17,6 +17,7 @@ type Value interface {
 type ValueArgs struct {
 	Package  Package
 	Name     string
+	Exported bool
 	Location locs.Loc
 	Type     TypeDesc
 	Const    bool

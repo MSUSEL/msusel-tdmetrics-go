@@ -22,8 +22,10 @@ type interfaceDeclImp struct {
 	realType types.Type
 	pkg      constructs.Package
 	name     string
+	exported bool
 	loc      locs.Loc
 	index    int
+	alive    bool
 
 	typeParams []constructs.TypeParam
 	inter      constructs.InterfaceDesc
@@ -45,15 +47,14 @@ func newInterfaceDecl(args constructs.InterfaceDeclArgs) constructs.InterfaceDec
 	assert.ArgNotNil(`real type`, args.RealType)
 
 	return &interfaceDeclImp{
-		realType: args.RealType,
-		pkg:      args.Package,
-		name:     args.Name,
-		loc:      args.Location,
-
+		realType:   args.RealType,
+		pkg:        args.Package,
+		name:       args.Name,
+		exported:   args.Exported,
+		loc:        args.Location,
 		typeParams: args.TypeParams,
 		inter:      args.Interface,
-
-		instances: sortedSet.New(interfaceInst.Comparer()),
+		instances:  sortedSet.New(interfaceInst.Comparer()),
 	}
 }
 
@@ -61,15 +62,17 @@ func (d *interfaceDeclImp) IsDeclaration() {}
 func (d *interfaceDeclImp) IsTypeDesc()    {}
 func (d *interfaceDeclImp) IsInterface()   {}
 
-func (d *interfaceDeclImp) Kind() kind.Kind    { return kind.InterfaceDecl }
-func (d *interfaceDeclImp) Index() int         { return d.index }
-func (d *interfaceDeclImp) SetIndex(index int) { d.index = index }
-func (d *interfaceDeclImp) GoType() types.Type { return d.realType }
+func (d *interfaceDeclImp) Kind() kind.Kind     { return kind.InterfaceDecl }
+func (d *interfaceDeclImp) Index() int          { return d.index }
+func (d *interfaceDeclImp) SetIndex(index int)  { d.index = index }
+func (d *interfaceDeclImp) Alive() bool         { return d.alive }
+func (d *interfaceDeclImp) SetAlive(alive bool) { d.alive = alive }
+func (d *interfaceDeclImp) GoType() types.Type  { return d.realType }
+func (d *interfaceDeclImp) Name() string        { return d.name }
+func (d *interfaceDeclImp) Exported() bool      { return d.exported }
+func (d *interfaceDeclImp) Location() locs.Loc  { return d.loc }
 
-func (d *interfaceDeclImp) Package() constructs.Package { return d.pkg }
-func (d *interfaceDeclImp) Name() string                { return d.name }
-func (d *interfaceDeclImp) Location() locs.Loc          { return d.loc }
-
+func (d *interfaceDeclImp) Package() constructs.Package         { return d.pkg }
 func (d *interfaceDeclImp) Type() constructs.TypeDesc           { return d.inter }
 func (d *interfaceDeclImp) Interface() constructs.InterfaceDesc { return d.inter }
 func (d *interfaceDeclImp) TypeParams() []constructs.TypeParam  { return d.typeParams }
@@ -130,6 +133,7 @@ func (d *interfaceDeclImp) ToJson(ctx *jsonify.Context) jsonify.Datum {
 		AddNonZero(ctx.OnlyIndex(), `package`, d.pkg).
 		AddNonZero(ctx, `name`, d.name).
 		AddNonZero(ctx, `loc`, d.loc).
+		AddNonZero(ctx, `exported`, d.exported).
 		AddNonZero(ctx.OnlyIndex(), `typeParams`, d.typeParams).
 		AddNonZero(ctx.OnlyIndex(), `interface`, d.inter).
 		AddNonZero(ctx.OnlyIndex(), `instances`, d.instances.ToSlice())

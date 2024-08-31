@@ -12,6 +12,7 @@ type Declaration interface {
 
 	Package() Package
 	Name() string
+	Exported() bool
 	Location() locs.Loc
 	Type() TypeDesc
 }
@@ -22,12 +23,3 @@ type TypeDecl interface {
 	Declaration
 	TypeDesc
 }
-
-/*
-func FindInstance(decl Declaration, instanceTypes []TypeDesc) (Instance, bool) {
-	cmp := SliceComparer[TypeDesc]()
-	return decl.Instances().Enumerate().Where(func(i Instance) bool {
-		return cmp(instanceTypes, i.InstanceTypes()) == 0
-	}).First()
-}
-*/

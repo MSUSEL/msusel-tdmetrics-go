@@ -16,6 +16,7 @@ import (
 type basicImp struct {
 	realType *types.Basic
 	index    int
+	alive    bool
 }
 
 func newBasic(args constructs.BasicArgs) constructs.Basic {
@@ -41,11 +42,13 @@ func newBasic(args constructs.BasicArgs) constructs.Basic {
 func (t *basicImp) IsTypeDesc() {}
 func (t *basicImp) IsBasic()    {}
 
-func (t *basicImp) Kind() kind.Kind    { return kind.Basic }
-func (t *basicImp) Index() int         { return t.index }
-func (t *basicImp) SetIndex(index int) { t.index = index }
-func (t *basicImp) GoType() types.Type { return t.realType }
-func (t *basicImp) String() string     { return t.realType.Name() }
+func (t *basicImp) Kind() kind.Kind     { return kind.Basic }
+func (t *basicImp) Index() int          { return t.index }
+func (t *basicImp) SetIndex(index int)  { t.index = index }
+func (t *basicImp) Alive() bool         { return t.alive }
+func (t *basicImp) SetAlive(alive bool) { t.alive = alive }
+func (t *basicImp) GoType() types.Type  { return t.realType }
+func (t *basicImp) String() string      { return t.realType.Name() }
 
 func (t *basicImp) basicKind() int {
 	return int(t.realType.Kind())

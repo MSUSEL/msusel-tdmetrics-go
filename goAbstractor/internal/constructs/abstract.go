@@ -10,11 +10,13 @@ type Abstract interface {
 	IsAbstract()
 
 	Name() string
+	Exported() bool
 	Signature() Signature
 }
 
 type AbstractArgs struct {
 	Name      string
+	Exported  bool
 	Signature Signature
 }
 

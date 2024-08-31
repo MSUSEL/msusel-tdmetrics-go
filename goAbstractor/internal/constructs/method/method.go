@@ -23,8 +23,10 @@ type methodImp struct {
 	realType *types.Signature
 	pkg      constructs.Package
 	name     string
+	exported bool
 	loc      locs.Loc
 	index    int
+	alive    bool
 
 	typeParams []constructs.TypeParam
 	signature  constructs.Signature
@@ -54,18 +56,17 @@ func newMethod(args constructs.MethodArgs) constructs.Method {
 	}
 
 	met := &methodImp{
-		pkg:  args.Package,
-		name: args.Name,
-		loc:  args.Location,
-
+		pkg:        args.Package,
+		name:       args.Name,
+		exported:   args.Exported,
+		loc:        args.Location,
 		typeParams: args.TypeParams,
 		signature:  args.Signature,
 		metrics:    args.Metrics,
 		recvName:   args.RecvName,
 		receiver:   args.Receiver,
 		noCopyRecv: args.NoCopyRecv,
-
-		instances: sortedSet.New(methodInst.Comparer()),
+		instances:  sortedSet.New(methodInst.Comparer()),
 	}
 
 	if !utils.IsNil(met.receiver) {
@@ -77,15 +78,17 @@ func newMethod(args constructs.MethodArgs) constructs.Method {
 func (m *methodImp) IsDeclaration() {}
 func (m *methodImp) IsMethod()      {}
 
-func (m *methodImp) Kind() kind.Kind    { return kind.Method }
-func (m *methodImp) Index() int         { return m.index }
-func (m *methodImp) SetIndex(index int) { m.index = index }
-func (m *methodImp) GoType() types.Type { return m.realType }
+func (m *methodImp) Kind() kind.Kind     { return kind.Method }
+func (m *methodImp) Index() int          { return m.index }
+func (m *methodImp) SetIndex(index int)  { m.index = index }
+func (m *methodImp) Alive() bool         { return m.alive }
+func (m *methodImp) SetAlive(alive bool) { m.alive = alive }
+func (m *methodImp) GoType() types.Type  { return m.realType }
+func (m *methodImp) Name() string        { return m.name }
+func (m *methodImp) Exported() bool      { return m.exported }
+func (m *methodImp) Location() locs.Loc  { return m.loc }
 
-func (m *methodImp) Package() constructs.Package { return m.pkg }
-func (m *methodImp) Name() string                { return m.name }
-func (m *methodImp) Location() locs.Loc          { return m.loc }
-
+func (m *methodImp) Package() constructs.Package        { return m.pkg }
 func (m *methodImp) Type() constructs.TypeDesc          { return m.signature }
 func (m *methodImp) Signature() constructs.Signature    { return m.signature }
 func (m *methodImp) Metrics() constructs.Metrics        { return m.metrics }
@@ -168,6 +171,7 @@ func (m *methodImp) ToJson(ctx *jsonify.Context) jsonify.Datum {
 		Add(ctx.OnlyIndex(), `package`, m.pkg).
 		Add(ctx, `name`, m.name).
 		AddNonZero(ctx, `loc`, m.loc).
+		AddNonZero(ctx, `exported`, m.exported).
 		AddNonZero(ctx.OnlyIndex(), `typeParams`, m.typeParams).
 		Add(ctx.OnlyIndex(), `signature`, m.signature).
 		AddNonZero(ctx.OnlyIndex(), `metrics`, m.metrics).

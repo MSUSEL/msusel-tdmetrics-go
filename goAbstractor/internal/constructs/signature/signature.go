@@ -24,6 +24,7 @@ type signatureImp struct {
 	results  []constructs.Argument
 
 	index int
+	alive bool
 }
 
 func createTuple(pkg *packages.Package, args []constructs.Argument) *types.Tuple {
@@ -57,10 +58,12 @@ func newSignature(args constructs.SignatureArgs) constructs.Signature {
 func (m *signatureImp) IsTypeDesc()  {}
 func (m *signatureImp) IsSignature() {}
 
-func (m *signatureImp) Kind() kind.Kind    { return kind.Signature }
-func (m *signatureImp) Index() int         { return m.index }
-func (m *signatureImp) SetIndex(index int) { m.index = index }
-func (m *signatureImp) GoType() types.Type { return m.realType }
+func (m *signatureImp) Kind() kind.Kind     { return kind.Signature }
+func (m *signatureImp) Index() int          { return m.index }
+func (m *signatureImp) SetIndex(index int)  { m.index = index }
+func (m *signatureImp) Alive() bool         { return m.alive }
+func (m *signatureImp) SetAlive(alive bool) { m.alive = alive }
+func (m *signatureImp) GoType() types.Type  { return m.realType }
 
 func (m *signatureImp) Variadic() bool                 { return m.variadic }
 func (m *signatureImp) Params() []constructs.Argument  { return m.params }

@@ -23,6 +23,7 @@ import (
 type metricsImp struct {
 	loc   locs.Loc
 	index int
+	alive bool
 
 	complexity int
 	lineCount  int
@@ -44,10 +45,12 @@ func newMetrics(args constructs.MetricsArgs) constructs.Metrics {
 
 func (m *metricsImp) IsMetrics() {}
 
-func (m *metricsImp) Kind() kind.Kind    { return kind.Metrics }
-func (m *metricsImp) Index() int         { return m.index }
-func (m *metricsImp) SetIndex(index int) { m.index = index }
-func (m *metricsImp) Location() locs.Loc { return m.loc }
+func (m *metricsImp) Kind() kind.Kind     { return kind.Metrics }
+func (m *metricsImp) Index() int          { return m.index }
+func (m *metricsImp) SetIndex(index int)  { m.index = index }
+func (m *metricsImp) Alive() bool         { return m.alive }
+func (m *metricsImp) SetAlive(alive bool) { m.alive = alive }
+func (m *metricsImp) Location() locs.Loc  { return m.loc }
 
 func (m *metricsImp) CompareTo(other constructs.Construct) int {
 	return constructs.CompareTo[constructs.Metrics](m, other, Comparer())

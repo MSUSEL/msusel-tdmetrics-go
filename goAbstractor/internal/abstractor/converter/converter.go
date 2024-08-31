@@ -105,6 +105,7 @@ func (c *convImp) convertInterface(t *types.Interface) constructs.InterfaceDesc 
 		sig := c.ConvertSignature(f.Type().(*types.Signature))
 		abstract := c.proj.NewAbstract(constructs.AbstractArgs{
 			Name:      f.Name(),
+			Exported:  f.Exported(),
 			Signature: sig,
 		})
 		abstracts = append(abstracts, abstract)
@@ -213,6 +214,7 @@ func (c *convImp) convertStruct(t *types.Struct) constructs.StructDesc {
 		if !constructs.BlankName(f.Name()) {
 			field := c.proj.NewField(constructs.FieldArgs{
 				Name:     f.Name(),
+				Exported: f.Exported(),
 				Type:     c.ConvertType(f.Type()),
 				Embedded: f.Embedded(),
 			})

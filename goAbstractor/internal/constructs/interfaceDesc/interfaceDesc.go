@@ -26,6 +26,7 @@ type interfaceDescImp struct {
 	inherits collections.SortedSet[constructs.InterfaceDesc]
 
 	index int
+	alive bool
 }
 
 func newInterfaceDesc(args constructs.InterfaceDescArgs) constructs.InterfaceDesc {
@@ -72,10 +73,12 @@ func newInterfaceDesc(args constructs.InterfaceDescArgs) constructs.InterfaceDes
 func (id *interfaceDescImp) IsTypeDesc()      {}
 func (id *interfaceDescImp) IsInterfaceDesc() {}
 
-func (id *interfaceDescImp) Kind() kind.Kind    { return kind.InterfaceDesc }
-func (id *interfaceDescImp) Index() int         { return id.index }
-func (id *interfaceDescImp) SetIndex(index int) { id.index = index }
-func (id *interfaceDescImp) GoType() types.Type { return id.realType }
+func (id *interfaceDescImp) Kind() kind.Kind     { return kind.InterfaceDesc }
+func (id *interfaceDescImp) Index() int          { return id.index }
+func (id *interfaceDescImp) SetIndex(index int)  { id.index = index }
+func (id *interfaceDescImp) Alive() bool         { return id.alive }
+func (id *interfaceDescImp) SetAlive(alive bool) { id.alive = alive }
+func (id *interfaceDescImp) GoType() types.Type  { return id.realType }
 
 func (id *interfaceDescImp) Abstracts() []constructs.Abstract { return id.abstracts }
 func (id *interfaceDescImp) Exact() []constructs.TypeDesc     { return id.exact }

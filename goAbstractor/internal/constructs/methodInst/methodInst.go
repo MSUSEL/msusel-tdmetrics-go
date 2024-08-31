@@ -16,6 +16,7 @@ type instanceImp struct {
 	instanceTypes []constructs.TypeDesc
 	receiver      constructs.ObjectInst
 	index         int
+	alive         bool
 }
 
 func newInstance(args constructs.MethodInstArgs) constructs.MethodInst {
@@ -34,9 +35,11 @@ func newInstance(args constructs.MethodInstArgs) constructs.MethodInst {
 
 func (i *instanceImp) IsMethodInst() {}
 
-func (i *instanceImp) Kind() kind.Kind    { return kind.MethodInst }
-func (i *instanceImp) Index() int         { return i.index }
-func (i *instanceImp) SetIndex(index int) { i.index = index }
+func (i *instanceImp) Kind() kind.Kind     { return kind.MethodInst }
+func (i *instanceImp) Index() int          { return i.index }
+func (i *instanceImp) SetIndex(index int)  { i.index = index }
+func (i *instanceImp) Alive() bool         { return i.alive }
+func (i *instanceImp) SetAlive(alive bool) { i.alive = alive }
 
 func (m *instanceImp) Generic() constructs.Method     { return m.generic }
 func (m *instanceImp) Resolved() constructs.Signature { return m.resolved }

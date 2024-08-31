@@ -13,6 +13,7 @@ type Package interface {
 	Source() *packages.Package
 	Path() string
 	Name() string
+	EntryPoint() bool
 	ImportPaths() []string
 	Imports() collections.ReadonlySortedSet[Package]
 	InitCount() int

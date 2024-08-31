@@ -30,7 +30,7 @@ func Resolve(proj constructs.Project, log *logger.Logger) {
 	resolve.TempReferences()
 	resolve.ObjectInterfaces()
 	resolve.Inheritance()
-	resolve.EliminateDeadCode()
+	resolve.DeadCodeElimination()
 	resolve.Locations()
 	resolve.Indices()
 }
@@ -221,8 +221,17 @@ func (r *resolverImp) resolveTempRef(ref constructs.TempReference) {
 	}
 }
 
-func (r *resolverImp) EliminateDeadCode() {
+func (r *resolverImp) DeadCodeElimination() {
 	r.log.Log(`dead-code elimination`)
+	/*
+		needsUpdate := []constructs.Construct{}
+
+		itDecls := r.proj.InterfaceDecls()
+		for i := itDecls.Count() - 1; i >= 0; i-- {
+			it := itDecls.Get(i)
+
+		}
+	*/
 
 	// TODO: Improve prune to use metrics to create a dead code elimination prune.
 }

@@ -13,6 +13,7 @@ type argumentImp struct {
 	name  string
 	typ   constructs.TypeDesc
 	index int
+	alive bool
 }
 
 func newArgument(args constructs.ArgumentArgs) constructs.Argument {
@@ -30,9 +31,11 @@ func newArgument(args constructs.ArgumentArgs) constructs.Argument {
 
 func (a *argumentImp) IsArgument() {}
 
-func (a *argumentImp) Kind() kind.Kind    { return kind.Argument }
-func (a *argumentImp) Index() int         { return a.index }
-func (a *argumentImp) SetIndex(index int) { a.index = index }
+func (a *argumentImp) Kind() kind.Kind     { return kind.Argument }
+func (a *argumentImp) Index() int          { return a.index }
+func (a *argumentImp) SetIndex(index int)  { a.index = index }
+func (a *argumentImp) Alive() bool         { return a.alive }
+func (a *argumentImp) SetAlive(alive bool) { a.alive = alive }
 
 func (a *argumentImp) Name() string              { return a.name }
 func (a *argumentImp) Type() constructs.TypeDesc { return a.typ }

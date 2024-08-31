@@ -33,6 +33,7 @@ type InterfaceDeclArgs struct {
 	RealType types.Type
 	Package  Package
 	Name     string
+	Exported bool
 	Location locs.Loc
 
 	TypeParams []TypeParam

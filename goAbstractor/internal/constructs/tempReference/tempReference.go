@@ -17,6 +17,7 @@ type tempReferenceImp struct {
 	pkgPath       string
 	name          string
 	index         int
+	alive         bool
 	instanceTypes []constructs.TypeDesc
 	typ           constructs.TypeDesc
 }
@@ -48,6 +49,8 @@ func (r *tempReferenceImp) IsTypeReference() {}
 func (r *tempReferenceImp) Kind() kind.Kind     { return kind.TempReference }
 func (r *tempReferenceImp) Index() int          { return r.index }
 func (r *tempReferenceImp) SetIndex(index int)  { r.index = index }
+func (r *tempReferenceImp) Alive() bool         { return r.alive }
+func (r *tempReferenceImp) SetAlive(alive bool) { r.alive = alive }
 func (r *tempReferenceImp) GoType() types.Type  { return r.realType }
 func (r *tempReferenceImp) PackagePath() string { return r.pkgPath }
 func (r *tempReferenceImp) Name() string        { return r.name }

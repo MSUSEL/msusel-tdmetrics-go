@@ -19,6 +19,7 @@ type instanceImp struct {
 	resolved      constructs.InterfaceDesc
 	instanceTypes []constructs.TypeDesc
 	index         int
+	alive         bool
 }
 
 func newInstance(args constructs.InterfaceInstArgs) constructs.InterfaceInst {
@@ -48,10 +49,12 @@ func newInstance(args constructs.InterfaceInstArgs) constructs.InterfaceInst {
 func (i *instanceImp) IsInterfaceInst() {}
 func (i *instanceImp) IsTypeDesc()      {}
 
-func (i *instanceImp) Kind() kind.Kind    { return kind.InterfaceInst }
-func (i *instanceImp) Index() int         { return i.index }
-func (i *instanceImp) SetIndex(index int) { i.index = index }
-func (m *instanceImp) GoType() types.Type { return m.realType }
+func (i *instanceImp) Kind() kind.Kind     { return kind.InterfaceInst }
+func (i *instanceImp) Index() int          { return i.index }
+func (i *instanceImp) SetIndex(index int)  { i.index = index }
+func (i *instanceImp) Alive() bool         { return i.alive }
+func (i *instanceImp) SetAlive(alive bool) { i.alive = alive }
+func (m *instanceImp) GoType() types.Type  { return m.realType }
 
 func (m *instanceImp) Generic() constructs.InterfaceDecl  { return m.generic }
 func (m *instanceImp) Resolved() constructs.InterfaceDesc { return m.resolved }

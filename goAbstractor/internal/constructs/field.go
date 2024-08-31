@@ -12,12 +12,14 @@ type Field interface {
 	IsField()
 
 	Name() string
+	Exported() bool
 	Type() TypeDesc
 	Embedded() bool
 }
 
 type FieldArgs struct {
 	Name     string
+	Exported bool
 	Type     TypeDesc
 	Embedded bool
 }

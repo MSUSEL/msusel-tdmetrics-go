@@ -13,13 +13,15 @@ import (
 )
 
 type valueImp struct {
-	pkg     constructs.Package
-	name    string
-	loc     locs.Loc
-	typ     constructs.TypeDesc
-	isConst bool
-	metrics constructs.Metrics
-	index   int
+	pkg      constructs.Package
+	name     string
+	exported bool
+	loc      locs.Loc
+	typ      constructs.TypeDesc
+	isConst  bool
+	metrics  constructs.Metrics
+	index    int
+	alive    bool
 }
 
 func newValue(args constructs.ValueArgs) constructs.Value {
@@ -29,28 +31,31 @@ func newValue(args constructs.ValueArgs) constructs.Value {
 	assert.ArgNotNil(`location`, args.Location)
 
 	return &valueImp{
-		pkg:     args.Package,
-		name:    args.Name,
-		loc:     args.Location,
-		typ:     args.Type,
-		isConst: args.Const,
-		metrics: args.Metrics,
+		pkg:      args.Package,
+		name:     args.Name,
+		exported: args.Exported,
+		loc:      args.Location,
+		typ:      args.Type,
+		isConst:  args.Const,
+		metrics:  args.Metrics,
 	}
 }
 
 func (v *valueImp) IsDeclaration() {}
 func (v *valueImp) IsValue()       {}
 
-func (v *valueImp) Kind() kind.Kind    { return kind.Value }
-func (v *valueImp) Index() int         { return v.index }
-func (v *valueImp) SetIndex(index int) { v.index = index }
+func (v *valueImp) Kind() kind.Kind     { return kind.Value }
+func (v *valueImp) Index() int          { return v.index }
+func (v *valueImp) SetIndex(index int)  { v.index = index }
+func (v *valueImp) Alive() bool         { return v.alive }
+func (v *valueImp) SetAlive(alive bool) { v.alive = alive }
+func (v *valueImp) Const() bool         { return v.isConst }
+func (v *valueImp) Name() string        { return v.name }
+func (v *valueImp) Exported() bool      { return v.exported }
+func (v *valueImp) Location() locs.Loc  { return v.loc }
 
-func (v *valueImp) Name() string                { return v.name }
-func (v *valueImp) Location() locs.Loc          { return v.loc }
-func (v *valueImp) Package() constructs.Package { return v.pkg }
-
+func (v *valueImp) Package() constructs.Package        { return v.pkg }
 func (v *valueImp) Type() constructs.TypeDesc          { return v.typ }
-func (v *valueImp) Const() bool                        { return v.isConst }
 func (v *valueImp) Metrics() constructs.Metrics        { return v.metrics }
 func (v *valueImp) TypeParams() []constructs.TypeParam { return nil }
 
@@ -91,6 +96,7 @@ func (v *valueImp) ToJson(ctx *jsonify.Context) jsonify.Datum {
 		Add(ctx.Short(), `type`, v.typ).
 		AddNonZero(ctx, `loc`, v.loc).
 		AddNonZero(ctx, `const`, v.isConst).
+		AddNonZero(ctx, `exported`, v.exported).
 		AddNonZero(ctx.OnlyIndex(), `metrics`, v.metrics)
 }
 

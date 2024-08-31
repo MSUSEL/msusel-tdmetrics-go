@@ -16,10 +16,9 @@ import (
 
 type structDescImp struct {
 	realType types.Type
-
-	fields []constructs.Field
-
-	index int
+	fields   []constructs.Field
+	index    int
+	alive    bool
 }
 
 func newStructDesc(args constructs.StructDescArgs) constructs.StructDesc {
@@ -46,10 +45,12 @@ func newStructDesc(args constructs.StructDescArgs) constructs.StructDesc {
 func (d *structDescImp) IsTypeDesc()   {}
 func (d *structDescImp) IsStructDesc() {}
 
-func (d *structDescImp) Kind() kind.Kind    { return kind.StructDesc }
-func (d *structDescImp) Index() int         { return d.index }
-func (d *structDescImp) SetIndex(index int) { d.index = index }
-func (d *structDescImp) GoType() types.Type { return d.realType }
+func (d *structDescImp) Kind() kind.Kind     { return kind.StructDesc }
+func (d *structDescImp) Index() int          { return d.index }
+func (d *structDescImp) SetIndex(index int)  { d.index = index }
+func (d *structDescImp) Alive() bool         { return d.alive }
+func (d *structDescImp) SetAlive(alive bool) { d.alive = alive }
+func (d *structDescImp) GoType() types.Type  { return d.realType }
 
 func (d *structDescImp) Fields() []constructs.Field { return d.fields }
 

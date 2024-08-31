@@ -34,6 +34,7 @@ type MethodArgs struct {
 	RealType *types.Signature
 	Package  Package
 	Name     string
+	Exported bool
 	Location locs.Loc
 
 	TypeParams []TypeParam

@@ -11,8 +11,10 @@ import (
 
 type abstractImp struct {
 	name      string
+	exported  bool
 	signature constructs.Signature
 	index     int
+	alive     bool
 }
 
 func newAbstract(args constructs.AbstractArgs) constructs.Abstract {
@@ -20,17 +22,21 @@ func newAbstract(args constructs.AbstractArgs) constructs.Abstract {
 	assert.ArgNotNil(`signature`, args.Signature)
 	return &abstractImp{
 		name:      args.Name,
+		exported:  args.Exported,
 		signature: args.Signature,
 	}
 }
 
 func (a *abstractImp) IsAbstract() {}
 
-func (a *abstractImp) Kind() kind.Kind    { return kind.Abstract }
-func (a *abstractImp) Index() int         { return a.index }
-func (a *abstractImp) SetIndex(index int) { a.index = index }
+func (a *abstractImp) Kind() kind.Kind     { return kind.Abstract }
+func (a *abstractImp) Index() int          { return a.index }
+func (a *abstractImp) SetIndex(index int)  { a.index = index }
+func (a *abstractImp) Alive() bool         { return a.alive }
+func (a *abstractImp) SetAlive(alive bool) { a.alive = alive }
+func (a *abstractImp) Name() string        { return a.name }
+func (a *abstractImp) Exported() bool      { return a.exported }
 
-func (a *abstractImp) Name() string                    { return a.name }
 func (a *abstractImp) Signature() constructs.Signature { return a.signature }
 
 func (a *abstractImp) CompareTo(other constructs.Construct) int {
@@ -61,6 +67,7 @@ func (a *abstractImp) ToJson(ctx *jsonify.Context) jsonify.Datum {
 		AddIf(ctx, ctx.IsDebugKindIncluded(), `kind`, a.Kind()).
 		AddIf(ctx, ctx.IsDebugIndexIncluded(), `index`, a.index).
 		Add(ctx, `name`, a.name).
+		AddNonZero(ctx, `exported`, a.exported).
 		Add(ctx.OnlyIndex(), `signature`, a.signature)
 }
 

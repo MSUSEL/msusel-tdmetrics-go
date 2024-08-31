@@ -22,8 +22,10 @@ type objectImp struct {
 	realType types.Type
 	pkg      constructs.Package
 	name     string
+	exported bool
 	loc      locs.Loc
 	index    int
+	alive    bool
 
 	typeParams []constructs.TypeParam
 	data       constructs.StructDesc
@@ -41,16 +43,15 @@ func newObject(args constructs.ObjectArgs) constructs.Object {
 	assert.ArgNotNil(`data`, args.Data)
 
 	return &objectImp{
-		realType: args.RealType,
-		pkg:      args.Package,
-		name:     args.Name,
-		loc:      args.Location,
-
+		realType:   args.RealType,
+		pkg:        args.Package,
+		name:       args.Name,
+		exported:   args.Exported,
+		loc:        args.Location,
 		typeParams: args.TypeParams,
 		data:       args.Data,
-
-		methods:   sortedSet.New(method.Comparer()),
-		instances: sortedSet.New(objectInst.Comparer()),
+		methods:    sortedSet.New(method.Comparer()),
+		instances:  sortedSet.New(objectInst.Comparer()),
 	}
 }
 
@@ -58,15 +59,17 @@ func (d *objectImp) IsDeclaration() {}
 func (d *objectImp) IsTypeDesc()    {}
 func (d *objectImp) IsObject()      {}
 
-func (d *objectImp) Kind() kind.Kind    { return kind.Object }
-func (d *objectImp) Index() int         { return d.index }
-func (d *objectImp) SetIndex(index int) { d.index = index }
-func (d *objectImp) GoType() types.Type { return d.realType }
+func (d *objectImp) Kind() kind.Kind     { return kind.Object }
+func (d *objectImp) Index() int          { return d.index }
+func (d *objectImp) SetIndex(index int)  { d.index = index }
+func (d *objectImp) Alive() bool         { return d.alive }
+func (d *objectImp) SetAlive(alive bool) { d.alive = alive }
+func (d *objectImp) GoType() types.Type  { return d.realType }
+func (d *objectImp) Name() string        { return d.name }
+func (d *objectImp) Exported() bool      { return d.exported }
+func (d *objectImp) Location() locs.Loc  { return d.loc }
 
-func (d *objectImp) Package() constructs.Package { return d.pkg }
-func (d *objectImp) Name() string                { return d.name }
-func (d *objectImp) Location() locs.Loc          { return d.loc }
-
+func (d *objectImp) Package() constructs.Package        { return d.pkg }
 func (d *objectImp) Type() constructs.TypeDesc          { return d.data }
 func (d *objectImp) Data() constructs.StructDesc        { return d.data }
 func (d *objectImp) TypeParams() []constructs.TypeParam { return d.typeParams }
@@ -134,6 +137,7 @@ func (d *objectImp) ToJson(ctx *jsonify.Context) jsonify.Datum {
 		AddNonZero(ctx.OnlyIndex(), `package`, d.pkg).
 		AddNonZero(ctx, `name`, d.name).
 		AddNonZero(ctx, `loc`, d.loc).
+		AddNonZero(ctx, `exported`, d.exported).
 		AddNonZero(ctx.OnlyIndex(), `typeParams`, d.typeParams).
 		AddNonZero(ctx.OnlyIndex(), `data`, d.data).
 		AddNonZero(ctx.OnlyIndex(), `instances`, d.instances.ToSlice()).

@@ -24,6 +24,7 @@ type instanceImp struct {
 	methods       collections.SortedSet[constructs.MethodInst]
 	inter         constructs.InterfaceDesc
 	index         int
+	alive         bool
 }
 
 func newInstance(args constructs.ObjectInstArgs) constructs.ObjectInst {
@@ -54,10 +55,12 @@ func newInstance(args constructs.ObjectInstArgs) constructs.ObjectInst {
 func (i *instanceImp) IsObjectInst() {}
 func (i *instanceImp) IsTypeDesc()   {}
 
-func (i *instanceImp) Kind() kind.Kind    { return kind.ObjectInst }
-func (i *instanceImp) Index() int         { return i.index }
-func (i *instanceImp) SetIndex(index int) { i.index = index }
-func (m *instanceImp) GoType() types.Type { return m.realType }
+func (i *instanceImp) Kind() kind.Kind     { return kind.ObjectInst }
+func (i *instanceImp) Index() int          { return i.index }
+func (i *instanceImp) SetIndex(index int)  { i.index = index }
+func (i *instanceImp) Alive() bool         { return i.alive }
+func (i *instanceImp) SetAlive(alive bool) { i.alive = alive }
+func (m *instanceImp) GoType() types.Type  { return m.realType }
 
 func (m *instanceImp) Generic() constructs.Object           { return m.generic }
 func (m *instanceImp) Resolved() constructs.StructDesc      { return m.resolved }
