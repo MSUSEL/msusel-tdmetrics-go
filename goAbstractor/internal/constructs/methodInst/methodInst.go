@@ -52,6 +52,9 @@ func (i *instanceImp) CompareTo(other constructs.Construct) int {
 func Comparer() comp.Comparer[constructs.MethodInst] {
 	return func(a, b constructs.MethodInst) int {
 		aImp, bImp := a.(*instanceImp), b.(*instanceImp)
+		if aImp == bImp {
+			return 0
+		}
 		return comp.Or(
 			constructs.ComparerPend(aImp.resolved, bImp.resolved),
 			constructs.SliceComparerPend(bImp.instanceTypes, bImp.instanceTypes),

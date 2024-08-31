@@ -105,6 +105,9 @@ func (id *interfaceDescImp) CompareTo(other constructs.Construct) int {
 func Comparer() comp.Comparer[constructs.InterfaceDesc] {
 	return func(a, b constructs.InterfaceDesc) int {
 		aImp, bImp := a.(*interfaceDescImp), b.(*interfaceDescImp)
+		if aImp == bImp {
+			return 0
+		}
 		return comp.Or(
 			constructs.SliceComparerPend(aImp.abstracts, bImp.abstracts),
 			constructs.SliceComparerPend(aImp.exact, bImp.exact),

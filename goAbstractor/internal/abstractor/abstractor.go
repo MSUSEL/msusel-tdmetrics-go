@@ -28,7 +28,7 @@ type Config struct {
 
 func Abstract(cfg Config) constructs.Project {
 	var (
-		log  = cfg.Log
+		log  = cfg.Log.Show(`objectInterfaces`)
 		fSet = cfg.Packages[0].Fset
 		locs = locs.NewSet(fSet)
 		proj = project.New(locs)

@@ -44,6 +44,9 @@ func (t *typeParamImp) CompareTo(other constructs.Construct) int {
 func Comparer() comp.Comparer[constructs.TypeParam] {
 	return func(a, b constructs.TypeParam) int {
 		aImp, bImp := a.(*typeParamImp), b.(*typeParamImp)
+		if aImp == bImp {
+			return 0
+		}
 		return comp.Or(
 			comp.DefaultPend(aImp.name, bImp.name),
 			constructs.ComparerPend(aImp.typ, bImp.typ),

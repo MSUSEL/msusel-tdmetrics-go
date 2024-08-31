@@ -141,6 +141,9 @@ func (m *methodImp) CompareTo(other constructs.Construct) int {
 func Comparer() comp.Comparer[constructs.Method] {
 	return func(a, b constructs.Method) int {
 		aImp, bImp := a.(*methodImp), b.(*methodImp)
+		if aImp == bImp {
+			return 0
+		}
 		return comp.Or(
 			constructs.ComparerPend(aImp.pkg, bImp.pkg),
 			comp.DefaultPend(aImp.name, bImp.name),
@@ -174,9 +177,17 @@ func (m *methodImp) ToJson(ctx *jsonify.Context) jsonify.Datum {
 
 func (m *methodImp) String() string {
 	buf := &strings.Builder{}
-	buf.WriteString(m.name + ` `)
+	buf.WriteString(m.pkg.Path())
+	buf.WriteString(`.`)
+	if len(m.recvName) > 0 {
+		buf.WriteString(m.recvName)
+		buf.WriteString(`.`)
+	}
+	buf.WriteString(m.name)
 	if len(m.typeParams) > 0 {
-		buf.WriteString(`[` + m.instances.Enumerate().Join(`, `) + `]`)
+		buf.WriteString(`[`)
+		buf.WriteString(m.instances.Enumerate().Join(`, `))
+		buf.WriteString(`]`)
 	}
 	buf.WriteString(m.signature.String())
 	return buf.String()

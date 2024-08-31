@@ -7,11 +7,15 @@ import (
 	"github.com/Snow-Gremlin/goToolbox/terrors/terror"
 	"github.com/Snow-Gremlin/goToolbox/utils"
 
+	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/assert"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs/kind"
 )
 
 func InterfaceDecl(proj constructs.Project, realType types.Type, decl constructs.InterfaceDecl, instanceTypes ...constructs.TypeDesc) constructs.TypeDesc {
+	assert.ArgNotNil(`project`, proj)
+	assert.ArgNotNil(`interface decl`, decl)
+
 	i, existing, needsInstance := newInstantiator(proj, decl, instanceTypes)
 	if !needsInstance {
 		return decl
@@ -19,10 +23,17 @@ func InterfaceDecl(proj constructs.Project, realType types.Type, decl constructs
 	if !utils.IsNil(existing) {
 		return existing.(constructs.InterfaceInst)
 	}
+
+	assert.ArgNotNil(`real type`, realType)
+	assert.ArgNotEmpty(`instance types`, instanceTypes)
+	assert.ArgHasNoNils(`instance types`, instanceTypes)
 	return i.createInstance(realType).(constructs.InterfaceInst)
 }
 
 func Object(proj constructs.Project, realType types.Type, decl constructs.Object, instanceTypes ...constructs.TypeDesc) constructs.TypeDesc {
+	assert.ArgNotNil(`project`, proj)
+	assert.ArgNotNil(`object`, decl)
+
 	i, existing, needsInstance := newInstantiator(proj, decl, instanceTypes)
 	if !needsInstance {
 		return decl
@@ -30,10 +41,17 @@ func Object(proj constructs.Project, realType types.Type, decl constructs.Object
 	if !utils.IsNil(existing) {
 		return existing.(constructs.ObjectInst)
 	}
+
+	assert.ArgNotNil(`real type`, realType)
+	assert.ArgNotEmpty(`instance types`, instanceTypes)
+	assert.ArgHasNoNils(`instance types`, instanceTypes)
 	return i.createInstance(realType).(constructs.ObjectInst)
 }
 
 func Method(proj constructs.Project, decl constructs.Method, instanceTypes ...constructs.TypeDesc) constructs.Construct {
+	assert.ArgNotNil(`project`, proj)
+	assert.ArgNotNil(`method`, decl)
+
 	i, existing, needsInstance := newInstantiator(proj, decl, instanceTypes)
 	if !needsInstance {
 		return nil
@@ -41,6 +59,9 @@ func Method(proj constructs.Project, decl constructs.Method, instanceTypes ...co
 	if !utils.IsNil(existing) {
 		return existing.(constructs.MethodInst)
 	}
+
+	assert.ArgNotEmpty(`instance types`, instanceTypes)
+	assert.ArgHasNoNils(`instance types`, instanceTypes)
 	return i.createInstance(nil).(constructs.MethodInst)
 }
 

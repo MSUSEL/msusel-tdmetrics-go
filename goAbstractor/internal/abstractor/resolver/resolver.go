@@ -2,6 +2,7 @@ package resolver
 
 import (
 	"github.com/Snow-Gremlin/goToolbox/collections"
+	"github.com/Snow-Gremlin/goToolbox/collections/enumerator"
 	"github.com/Snow-Gremlin/goToolbox/terrors/terror"
 	"github.com/Snow-Gremlin/goToolbox/utils"
 
@@ -112,13 +113,24 @@ func (r *resolverImp) expandObjectInst(obj constructs.Object, instance construct
 
 func (r *resolverImp) ObjectInterfaces() {
 	r.log.Log(`resolve object interfaces`)
+	log2 := r.log.Group(`objectInterfaces`).Prefix(`  `)
+	log3 := log2.Prefix(`  `)
+
 	objects := r.proj.Objects()
 	for i := range objects.Count() {
 		obj := objects.Get(i)
-		r.objectInter(obj)
+		if utils.IsNil(obj.Interface()) {
+			log2.Logf(`%d) %s.%s`, i, obj.Package().Path(), obj.Name())
+			r.objectInter(obj)
+		}
+
 		insts := obj.Instances()
 		for j := range insts.Count() {
-			r.objectInstanceInter(insts.Get(j))
+			it := insts.Get(j)
+			if utils.IsNil(it.Interface()) {
+				log3.Logf(`%d.%d) [%s]`, i, j, enumerator.Enumerate(it.InstanceTypes()...).Join(`, `))
+				r.objectInstanceInter(it)
+			}
 		}
 	}
 }
@@ -133,6 +145,7 @@ func (r *resolverImp) objectInter(obj constructs.Object) {
 			Signature: method.Signature(),
 		})
 	}
+
 	it := r.proj.NewInterfaceDesc(constructs.InterfaceDescArgs{
 		Abstracts: abstracts,
 		Package:   obj.Package().Source(),
@@ -150,6 +163,7 @@ func (r *resolverImp) objectInstanceInter(objInst constructs.ObjectInst) {
 			Signature: mi.Resolved(),
 		})
 	}
+
 	it := r.proj.NewInterfaceDesc(constructs.InterfaceDescArgs{
 		Abstracts: abstracts,
 		Package:   objInst.Generic().Package().Source(),
@@ -202,9 +216,9 @@ func (r *resolverImp) resolveTempRef(ref constructs.TempReference) {
 
 	switch typ.Kind() {
 	case kind.Object:
-		ref.SetType(instantiator.Object(r.proj, nil, typ.(constructs.Object), ref.InstanceTypes()...))
+		ref.SetType(instantiator.Object(r.proj, ref.GoType(), typ.(constructs.Object), ref.InstanceTypes()...))
 	case kind.InterfaceDecl:
-		ref.SetType(instantiator.InterfaceDecl(r.proj, nil, typ.(constructs.InterfaceDecl), ref.InstanceTypes()...))
+		ref.SetType(instantiator.InterfaceDecl(r.proj, ref.GoType(), typ.(constructs.InterfaceDecl), ref.InstanceTypes()...))
 	default:
 		panic(terror.New(`unexpected declaration type`).
 			With(`kind`, typ.Kind()).

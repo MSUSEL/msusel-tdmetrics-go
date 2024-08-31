@@ -105,6 +105,9 @@ func (d *interfaceDeclImp) CompareTo(other constructs.Construct) int {
 func Comparer() comp.Comparer[constructs.InterfaceDecl] {
 	return func(a, b constructs.InterfaceDecl) int {
 		aImp, bImp := a.(*interfaceDeclImp), b.(*interfaceDeclImp)
+		if aImp == bImp {
+			return 0
+		}
 		return comp.Or(
 			constructs.ComparerPend(aImp.pkg, bImp.pkg),
 			comp.DefaultPend(aImp.name, bImp.name),
@@ -134,10 +137,13 @@ func (d *interfaceDeclImp) ToJson(ctx *jsonify.Context) jsonify.Datum {
 
 func (d *interfaceDeclImp) String() string {
 	buf := &strings.Builder{}
-	buf.WriteString(d.name + ` `)
+	buf.WriteString(d.pkg.Path())
+	buf.WriteString(`.`)
+	buf.WriteString(d.name)
 	if len(d.typeParams) > 0 {
-		buf.WriteString(`[` + enumerator.Enumerate(d.typeParams...).Join(`, `) + `]`)
+		buf.WriteString(`[`)
+		buf.WriteString(enumerator.Enumerate(d.typeParams...).Join(`, `))
+		buf.WriteString(`]`)
 	}
-	buf.WriteString(d.inter.String())
 	return buf.String()
 }

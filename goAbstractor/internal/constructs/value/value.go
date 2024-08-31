@@ -59,6 +59,9 @@ func (v *valueImp) CompareTo(other constructs.Construct) int {
 func Comparer() comp.Comparer[constructs.Value] {
 	return func(a, b constructs.Value) int {
 		aImp, bImp := a.(*valueImp), b.(*valueImp)
+		if aImp == bImp {
+			return 0
+		}
 		return comp.Or(
 			constructs.ComparerPend(aImp.pkg, bImp.pkg),
 			comp.DefaultPend(aImp.name, bImp.name),

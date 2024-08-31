@@ -77,6 +77,9 @@ func (s *signatureImp) CompareTo(other constructs.Construct) int {
 func Comparer() comp.Comparer[constructs.Signature] {
 	return func(a, b constructs.Signature) int {
 		aImp, bImp := a.(*signatureImp), b.(*signatureImp)
+		if aImp == bImp {
+			return 0
+		}
 		return comp.Or(
 			constructs.SliceComparerPend(aImp.params, bImp.params),
 			constructs.SliceComparerPend(aImp.results, bImp.results),

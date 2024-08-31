@@ -44,6 +44,9 @@ func (a *argumentImp) CompareTo(other constructs.Construct) int {
 func Comparer() comp.Comparer[constructs.Argument] {
 	return func(a, b constructs.Argument) int {
 		aImp, bImp := a.(*argumentImp), b.(*argumentImp)
+		if aImp == bImp {
+			return 0
+		}
 		return comp.Or(
 			comp.DefaultPend(aImp.name, bImp.name),
 			constructs.ComparerPend(aImp.typ, bImp.typ),

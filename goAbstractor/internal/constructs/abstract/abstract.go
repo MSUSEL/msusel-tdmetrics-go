@@ -40,6 +40,9 @@ func (a *abstractImp) CompareTo(other constructs.Construct) int {
 func Comparer() comp.Comparer[constructs.Abstract] {
 	return func(a, b constructs.Abstract) int {
 		aImp, bImp := a.(*abstractImp), b.(*abstractImp)
+		if aImp == bImp {
+			return 0
+		}
 		return comp.Or(
 			comp.DefaultPend(aImp.name, bImp.name),
 			constructs.ComparerPend(aImp.signature, bImp.signature),

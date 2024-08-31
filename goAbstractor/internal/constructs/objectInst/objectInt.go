@@ -5,12 +5,14 @@ import (
 
 	"github.com/Snow-Gremlin/goToolbox/collections"
 	"github.com/Snow-Gremlin/goToolbox/collections/enumerator"
+	"github.com/Snow-Gremlin/goToolbox/collections/sortedSet"
 	"github.com/Snow-Gremlin/goToolbox/comp"
 	"github.com/Snow-Gremlin/goToolbox/utils"
 
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/assert"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs/kind"
+	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs/methodInst"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/jsonify"
 )
 
@@ -34,6 +36,8 @@ func newInstance(args constructs.ObjectInstArgs) constructs.ObjectInst {
 		pkg := args.Generic.Package()
 		assert.ArgNotNil(`package`, pkg)
 
+		//types.Instantiate(nil, args.Generic.GoType())
+
 		// Implement if needed.
 		assert.NotImplemented()
 	}
@@ -44,6 +48,7 @@ func newInstance(args constructs.ObjectInstArgs) constructs.ObjectInst {
 		generic:       args.Generic,
 		resolved:      args.Resolved,
 		instanceTypes: args.InstanceTypes,
+		methods:       sortedSet.New(methodInst.Comparer()),
 	}
 	return args.Generic.AddInstance(inst)
 }

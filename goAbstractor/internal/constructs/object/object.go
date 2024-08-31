@@ -109,6 +109,9 @@ func (d *objectImp) CompareTo(other constructs.Construct) int {
 func Comparer() comp.Comparer[constructs.Object] {
 	return func(a, b constructs.Object) int {
 		aImp, bImp := a.(*objectImp), b.(*objectImp)
+		if aImp == bImp {
+			return 0
+		}
 		return comp.Or(
 			constructs.ComparerPend(aImp.pkg, bImp.pkg),
 			comp.DefaultPend(aImp.name, bImp.name),
@@ -140,10 +143,14 @@ func (d *objectImp) ToJson(ctx *jsonify.Context) jsonify.Datum {
 
 func (d *objectImp) String() string {
 	buf := &strings.Builder{}
-	buf.WriteString(d.name + ` `)
+	buf.WriteString(d.pkg.Path())
+	buf.WriteString(`.`)
+	buf.WriteString(d.name)
 	if len(d.typeParams) > 0 {
-		buf.WriteString(`[` + enumerator.Enumerate(d.typeParams...).Join(`, `) + `]`)
+		buf.WriteString(`[`)
+		buf.WriteString(enumerator.Enumerate(d.typeParams...).Join(`, `))
+		buf.WriteString(`]`)
 	}
-	buf.WriteString(d.data.String())
+	buf.WriteString(` struct`)
 	return buf.String()
 }

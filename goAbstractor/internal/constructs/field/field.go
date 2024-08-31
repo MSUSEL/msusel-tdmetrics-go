@@ -45,6 +45,9 @@ func (f *fieldImp) CompareTo(other constructs.Construct) int {
 func Comparer() comp.Comparer[constructs.Field] {
 	return func(a, b constructs.Field) int {
 		aImp, bImp := a.(*fieldImp), b.(*fieldImp)
+		if aImp == bImp {
+			return 0
+		}
 		return comp.Or(
 			comp.DefaultPend(aImp.name, bImp.name),
 			constructs.ComparerPend(aImp.typ, bImp.typ),

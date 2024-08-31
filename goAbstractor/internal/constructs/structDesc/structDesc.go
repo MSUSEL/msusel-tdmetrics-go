@@ -60,6 +60,9 @@ func (d *structDescImp) CompareTo(other constructs.Construct) int {
 func Comparer() comp.Comparer[constructs.StructDesc] {
 	return func(a, b constructs.StructDesc) int {
 		aImp, bImp := a.(*structDescImp), b.(*structDescImp)
+		if aImp == bImp {
+			return 0
+		}
 		return constructs.SliceComparer[constructs.Field]()(aImp.fields, bImp.fields)
 	}
 }
