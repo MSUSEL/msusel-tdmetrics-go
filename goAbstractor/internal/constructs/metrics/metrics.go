@@ -3,6 +3,7 @@ package metrics
 import (
 	"cmp"
 
+	"github.com/Snow-Gremlin/goToolbox/collections"
 	"github.com/Snow-Gremlin/goToolbox/comp"
 
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/assert"
@@ -29,17 +30,28 @@ type metricsImp struct {
 	lineCount  int
 	codeCount  int
 	indents    int
+
+	reads   collections.SortedSet[constructs.Usage]
+	writes  collections.SortedSet[constructs.Usage]
+	invokes collections.SortedSet[constructs.Usage]
+	defines collections.SortedSet[constructs.Usage]
 }
 
 func newMetrics(args constructs.MetricsArgs) constructs.Metrics {
 	assert.ArgNotNil(`location`, args.Location)
 
 	return &metricsImp{
-		loc:        args.Location,
+		loc: args.Location,
+
 		complexity: args.Complexity,
 		lineCount:  args.LineCount,
 		codeCount:  args.CodeCount,
 		indents:    args.Indents,
+
+		reads:   args.Reads.Clone(),
+		writes:  args.Writes.Clone(),
+		invokes: args.Invokes.Clone(),
+		defines: args.Defines.Clone(),
 	}
 }
 
@@ -51,6 +63,26 @@ func (m *metricsImp) SetIndex(index int)  { m.index = index }
 func (m *metricsImp) Alive() bool         { return m.alive }
 func (m *metricsImp) SetAlive(alive bool) { m.alive = alive }
 func (m *metricsImp) Location() locs.Loc  { return m.loc }
+func (m *metricsImp) Complexity() int     { return m.complexity }
+func (m *metricsImp) LineCount() int      { return m.lineCount }
+func (m *metricsImp) CodeCount() int      { return m.codeCount }
+func (m *metricsImp) Indents() int        { return m.indents }
+
+func (m *metricsImp) Reads() collections.ReadonlySortedSet[constructs.Usage] {
+	return m.reads.Readonly()
+}
+
+func (m *metricsImp) Writes() collections.ReadonlySortedSet[constructs.Usage] {
+	return m.writes.Readonly()
+}
+
+func (m *metricsImp) Invokes() collections.ReadonlySortedSet[constructs.Usage] {
+	return m.invokes.Readonly()
+}
+
+func (m *metricsImp) Defines() collections.ReadonlySortedSet[constructs.Usage] {
+	return m.defines.Readonly()
+}
 
 func (m *metricsImp) CompareTo(other constructs.Construct) int {
 	return constructs.CompareTo[constructs.Metrics](m, other, Comparer())
@@ -77,7 +109,11 @@ func (m *metricsImp) ToJson(ctx *jsonify.Context) jsonify.Datum {
 		AddNonZero(ctx, `complexity`, m.complexity).
 		AddNonZero(ctx, `lineCount`, m.lineCount).
 		AddNonZero(ctx, `codeCount`, m.codeCount).
-		AddNonZero(ctx, `indents`, m.indents)
+		AddNonZero(ctx, `indents`, m.indents).
+		AddNonZero(ctx, `reads`, m.reads.ToSlice()).
+		AddNonZero(ctx, `writes`, m.writes.ToSlice()).
+		AddNonZero(ctx, `invokes`, m.invokes.ToSlice()).
+		AddNonZero(ctx, `defines`, m.defines.ToSlice())
 }
 
 func (m *metricsImp) String() string {

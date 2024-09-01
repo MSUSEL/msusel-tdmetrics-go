@@ -5,9 +5,12 @@ import (
 	"go/token"
 	"math"
 
+	"github.com/Snow-Gremlin/goToolbox/collections"
+	"github.com/Snow-Gremlin/goToolbox/collections/sortedSet"
 	"github.com/Snow-Gremlin/goToolbox/utils"
 
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs"
+	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs/usage"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/locs"
 )
 
@@ -17,24 +20,36 @@ type Analyzer interface {
 }
 
 type analyzerImp struct {
-	locs       locs.Set
-	loc        locs.Loc
+	locs locs.Set
+	loc  locs.Loc
+
 	complexity int
 	minLine    int
 	maxLine    int
 	indents    int
 	minColumn  map[int]int
+
+	reads   collections.SortedSet[constructs.Usage]
+	writes  collections.SortedSet[constructs.Usage]
+	invokes collections.SortedSet[constructs.Usage]
+	defines collections.SortedSet[constructs.Usage]
 }
 
 func New(locs locs.Set) Analyzer {
 	return &analyzerImp{
-		locs:       locs,
-		loc:        nil,
+		locs: locs,
+		loc:  nil,
+
 		complexity: 1,
 		maxLine:    0,
 		minLine:    math.MaxInt,
 		indents:    0,
 		minColumn:  map[int]int{},
+
+		reads:   sortedSet.New(usage.Comparer()), // TODO: Finish and Populate
+		writes:  sortedSet.New(usage.Comparer()), // TODO: Finish and Populate
+		invokes: sortedSet.New(usage.Comparer()), // TODO: Finish and Populate
+		defines: sortedSet.New(usage.Comparer()), // TODO: Finish and Populate
 	}
 }
 
@@ -53,6 +68,10 @@ func (a *analyzerImp) GetMetrics() constructs.MetricsArgs {
 		LineCount:  a.maxLine - a.minLine + 1,
 		CodeCount:  len(a.minColumn),
 		Indents:    a.calcIndents(),
+		Reads:      a.reads,
+		Writes:     a.writes,
+		Invokes:    a.invokes,
+		Defines:    a.defines,
 	}
 }
 

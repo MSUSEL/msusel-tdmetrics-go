@@ -11,6 +11,15 @@ type Metrics interface {
 	IsMetrics()
 
 	Location() locs.Loc
+	Complexity() int
+	LineCount() int
+	CodeCount() int
+	Indents() int
+
+	Reads() collections.ReadonlySortedSet[Usage]
+	Writes() collections.ReadonlySortedSet[Usage]
+	Invokes() collections.ReadonlySortedSet[Usage]
+	Defines() collections.ReadonlySortedSet[Usage]
 }
 
 // MetricsArgs are measurements taken for a method.
@@ -33,6 +42,11 @@ type MetricsArgs struct {
 	// Indent is the indent complexity count using the amount of whitespace
 	// to the left of the any line with code on it.
 	Indents int
+
+	Reads   collections.SortedSet[Usage]
+	Writes  collections.SortedSet[Usage]
+	Invokes collections.SortedSet[Usage]
+	Defines collections.SortedSet[Usage]
 }
 
 type MetricsFactory interface {
