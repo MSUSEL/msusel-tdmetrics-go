@@ -108,6 +108,13 @@ func (p *projectImp) AllConstructs() collections.Enumerator[constructs.Construct
 	)
 }
 
+func (p *projectImp) EntryPoint() constructs.Package {
+	pkg, _ := p.Packages().Enumerate().Where(func(pkg constructs.Package) bool {
+		return pkg.EntryPoint()
+	}).First()
+	return pkg
+}
+
 func (p *projectImp) FindType(pkgPath, typeName string, panicOnNotFound bool) (constructs.Package, constructs.TypeDecl, bool) {
 	assert.ArgNotEmpty(`pkgPath`, pkgPath)
 

@@ -21,6 +21,7 @@ type Method interface {
 	NoCopyRecv() bool
 
 	IsInit() bool
+	IsMain() bool
 	IsNamed() bool
 	HasReceiver() bool
 	IsGeneric() bool

@@ -12,6 +12,7 @@ type Value interface {
 
 	Const() bool
 	Metrics() Metrics
+	HasSideEffect() bool
 }
 
 type ValueArgs struct {

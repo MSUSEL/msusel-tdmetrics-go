@@ -15,7 +15,6 @@ type Package interface {
 	Name() string
 	EntryPoint() bool
 	ImportPaths() []string
-	Imports() collections.ReadonlySortedSet[Package]
 	InitCount() int
 
 	AddImport(p Package) Package
@@ -23,6 +22,12 @@ type Package interface {
 	AddMethod(m Method) Method
 	AddObject(id Object) Object
 	AddValue(v Value) Value
+
+	Imports() collections.ReadonlySortedSet[Package]
+	InterfaceDecls() collections.ReadonlySortedSet[InterfaceDecl]
+	Methods() collections.ReadonlySortedSet[Method]
+	Objects() collections.ReadonlySortedSet[Object]
+	Values() collections.ReadonlySortedSet[Value]
 
 	Empty() bool
 	FindTypeDecl(name string) TypeDecl

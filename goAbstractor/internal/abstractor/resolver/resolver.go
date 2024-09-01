@@ -7,6 +7,7 @@ import (
 	"github.com/Snow-Gremlin/goToolbox/utils"
 
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/abstractor/instantiator"
+	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/abstractor/resolver/dce"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/abstractor/resolver/inheritance"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs/interfaceDesc"
@@ -223,17 +224,7 @@ func (r *resolverImp) resolveTempRef(ref constructs.TempReference) {
 
 func (r *resolverImp) DeadCodeElimination() {
 	r.log.Log(`dead-code elimination`)
-	/*
-		needsUpdate := []constructs.Construct{}
-
-		itDecls := r.proj.InterfaceDecls()
-		for i := itDecls.Count() - 1; i >= 0; i-- {
-			it := itDecls.Get(i)
-
-		}
-	*/
-
-	// TODO: Improve prune to use metrics to create a dead code elimination prune.
+	dce.DeadCodeElimination(r.proj)
 }
 
 func (r *resolverImp) Locations() {

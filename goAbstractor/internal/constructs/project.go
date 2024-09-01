@@ -36,5 +36,6 @@ type Project interface {
 
 	Locs() locs.Set
 	AllConstructs() collections.Enumerator[Construct]
+	EntryPoint() Package
 	FindType(pkgPath, typeName string, panicOnNotFound bool) (Package, TypeDecl, bool)
 }

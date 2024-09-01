@@ -74,6 +74,22 @@ func (p *packageImp) Imports() collections.ReadonlySortedSet[constructs.Package]
 	return p.imports.Readonly()
 }
 
+func (p *packageImp) InterfaceDecls() collections.ReadonlySortedSet[constructs.InterfaceDecl] {
+	return p.interfaces.Readonly()
+}
+
+func (p *packageImp) Methods() collections.ReadonlySortedSet[constructs.Method] {
+	return p.methods.Readonly()
+}
+
+func (p *packageImp) Objects() collections.ReadonlySortedSet[constructs.Object] {
+	return p.objects.Readonly()
+}
+
+func (p *packageImp) Values() collections.ReadonlySortedSet[constructs.Value] {
+	return p.values.Readonly()
+}
+
 func (p *packageImp) InitCount() int {
 	return p.methods.Enumerate().
 		Where(func(m constructs.Method) bool { return m.IsInit() }).

@@ -59,6 +59,14 @@ func (v *valueImp) Type() constructs.TypeDesc          { return v.typ }
 func (v *valueImp) Metrics() constructs.Metrics        { return v.metrics }
 func (v *valueImp) TypeParams() []constructs.TypeParam { return nil }
 
+func (v *valueImp) HasSideEffect() bool {
+	// TODO: Determine if the initialization of this value has any side effects
+	//       that essentially makes the value initialization an init().
+	//       If the method calls another method, make sure to check that
+	//       no reached method has a side effect.
+	return false
+}
+
 func (v *valueImp) CompareTo(other constructs.Construct) int {
 	return constructs.CompareTo[constructs.Value](v, other, Comparer())
 }

@@ -121,8 +121,16 @@ func (m *methodImp) NeedsReceiver() bool {
 
 func (m *methodImp) IsInit() bool {
 	return strings.HasPrefix(m.name, `init#`) &&
-		len(m.recvName) <= 0 &&
-		len(m.typeParams) <= 0 &&
+		m.HasReceiver() &&
+		m.IsGeneric() &&
+		m.signature.IsVacant()
+}
+
+func (m *methodImp) IsMain() bool {
+	return m.name == `main` &&
+		m.pkg.Name() == `main` &&
+		m.HasReceiver() &&
+		m.IsGeneric() &&
 		m.signature.IsVacant()
 }
 
