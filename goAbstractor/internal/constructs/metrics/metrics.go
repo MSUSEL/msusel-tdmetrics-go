@@ -13,14 +13,6 @@ import (
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/locs"
 )
 
-// TODO: Add analytics:
-//   - The set of variables with locations that are read from and written
-//     to in each method. Used in Tight Class Cohesion (TCC) and
-//     Design Recovery (DR).
-//   - The set of all methods called in each method. Used for
-//     Access to Foreign Data (ATFD) and Design Recovery (DR)
-//   - Indicate if a method is an accessor getter or setter (single expression).
-
 type metricsImp struct {
 	loc   locs.Loc
 	index int
@@ -30,6 +22,8 @@ type metricsImp struct {
 	lineCount  int
 	codeCount  int
 	indents    int
+	getter     bool
+	setter     bool
 
 	reads   collections.SortedSet[constructs.Usage]
 	writes  collections.SortedSet[constructs.Usage]
@@ -47,11 +41,13 @@ func newMetrics(args constructs.MetricsArgs) constructs.Metrics {
 		lineCount:  args.LineCount,
 		codeCount:  args.CodeCount,
 		indents:    args.Indents,
+		getter:     args.Getter,
+		setter:     args.Setter,
 
-		reads:   args.Reads.Clone(),
-		writes:  args.Writes.Clone(),
-		invokes: args.Invokes.Clone(),
-		defines: args.Defines.Clone(),
+		reads:   args.Reads,
+		writes:  args.Writes,
+		invokes: args.Invokes,
+		defines: args.Defines,
 	}
 }
 
@@ -67,6 +63,8 @@ func (m *metricsImp) Complexity() int     { return m.complexity }
 func (m *metricsImp) LineCount() int      { return m.lineCount }
 func (m *metricsImp) CodeCount() int      { return m.codeCount }
 func (m *metricsImp) Indents() int        { return m.indents }
+func (m *metricsImp) Getter() bool        { return m.getter }
+func (m *metricsImp) Setter() bool        { return m.setter }
 
 func (m *metricsImp) Reads() collections.ReadonlySortedSet[constructs.Usage] {
 	return m.reads.Readonly()
@@ -110,10 +108,12 @@ func (m *metricsImp) ToJson(ctx *jsonify.Context) jsonify.Datum {
 		AddNonZero(ctx, `lineCount`, m.lineCount).
 		AddNonZero(ctx, `codeCount`, m.codeCount).
 		AddNonZero(ctx, `indents`, m.indents).
-		AddNonZero(ctx, `reads`, m.reads.ToSlice()).
-		AddNonZero(ctx, `writes`, m.writes.ToSlice()).
-		AddNonZero(ctx, `invokes`, m.invokes.ToSlice()).
-		AddNonZero(ctx, `defines`, m.defines.ToSlice())
+		AddNonZero(ctx, `getter`, m.getter).
+		AddNonZero(ctx, `setter`, m.setter).
+		AddNonZero(ctx.OnlyIndex(), `reads`, m.reads.ToSlice()).
+		AddNonZero(ctx.OnlyIndex(), `writes`, m.writes.ToSlice()).
+		AddNonZero(ctx.OnlyIndex(), `invokes`, m.invokes.ToSlice()).
+		AddNonZero(ctx.OnlyIndex(), `defines`, m.defines.ToSlice())
 }
 
 func (m *metricsImp) String() string {

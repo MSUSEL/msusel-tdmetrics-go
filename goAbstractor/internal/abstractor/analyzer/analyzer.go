@@ -14,9 +14,16 @@ import (
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/locs"
 )
 
-type Analyzer interface {
-	Analyze(node ast.Node) Analyzer
-	GetMetrics() constructs.MetricsArgs
+// TODO: Add analytics:
+//   - The set of variables with locations that are read from and written
+//     to in each method. Used in Tight Class Cohesion (TCC) and
+//     Design Recovery (DR).
+//   - The set of all methods called in each method. Used for
+//     Access to Foreign Data (ATFD) and Design Recovery (DR)
+//   - Indicate if a method is an accessor getter or setter (single expression).
+
+func Analyze(locs locs.Set, factory constructs.MetricsFactory, node ast.Node) constructs.Metrics {
+	return factory.NewMetrics(newAnalyzer(locs).Analyze(node).GetMetricsArgs())
 }
 
 type analyzerImp struct {
@@ -28,6 +35,8 @@ type analyzerImp struct {
 	maxLine    int
 	indents    int
 	minColumn  map[int]int
+	getter     bool
+	setter     bool
 
 	reads   collections.SortedSet[constructs.Usage]
 	writes  collections.SortedSet[constructs.Usage]
@@ -35,7 +44,7 @@ type analyzerImp struct {
 	defines collections.SortedSet[constructs.Usage]
 }
 
-func New(locs locs.Set) Analyzer {
+func newAnalyzer(locs locs.Set) *analyzerImp {
 	return &analyzerImp{
 		locs: locs,
 		loc:  nil,
@@ -46,22 +55,25 @@ func New(locs locs.Set) Analyzer {
 		indents:    0,
 		minColumn:  map[int]int{},
 
-		reads:   sortedSet.New(usage.Comparer()), // TODO: Finish and Populate
-		writes:  sortedSet.New(usage.Comparer()), // TODO: Finish and Populate
-		invokes: sortedSet.New(usage.Comparer()), // TODO: Finish and Populate
-		defines: sortedSet.New(usage.Comparer()), // TODO: Finish and Populate
+		reads:   sortedSet.New(usage.Comparer()),
+		writes:  sortedSet.New(usage.Comparer()),
+		invokes: sortedSet.New(usage.Comparer()),
+		defines: sortedSet.New(usage.Comparer()),
 	}
 }
 
-func (a *analyzerImp) Analyze(node ast.Node) Analyzer {
+func (a *analyzerImp) Analyze(node ast.Node) *analyzerImp {
 	if utils.IsNil(a.loc) {
 		a.loc = a.locs.NewLoc(node.Pos())
 	}
+	// gather positional information for indents and cyclomatic complexity.
 	ast.Inspect(node, a.addCodePosForNode)
+	a.checkForGetter(node)
+	a.checkForSetter(node)
 	return a
 }
 
-func (a *analyzerImp) GetMetrics() constructs.MetricsArgs {
+func (a *analyzerImp) GetMetricsArgs() constructs.MetricsArgs {
 	return constructs.MetricsArgs{
 		Location:   a.loc,
 		Complexity: a.complexity,
@@ -76,7 +88,7 @@ func (a *analyzerImp) GetMetrics() constructs.MetricsArgs {
 }
 
 func (a *analyzerImp) calcIndents() int {
-	leftMostColumn := 10_000 // random large number
+	leftMostColumn := math.MaxInt
 	indentSum := 0
 	for _, ind := range a.minColumn {
 		leftMostColumn = min(ind, leftMostColumn)
@@ -124,4 +136,12 @@ func (a *analyzerImp) addCodePosForNode(n ast.Node) bool {
 		a.addCodePos(ended.End(), true)
 	}
 	return true
+}
+
+func (a *analyzerImp) checkForGetter(n ast.Node) {
+	ast.Print(a.locs.FileSet(), n)
+}
+
+func (a *analyzerImp) checkForSetter(n ast.Node) {
+
 }

@@ -14,9 +14,16 @@ import "github.com/Snow-Gremlin/goToolbox/collections"
 type Usage interface {
 	Construct
 	IsUsage()
+
+	Package() Package
+	Target() Construct
+	Select() Construct
 }
 
 type UsageArgs struct {
+	Package Package
+	Target  Construct
+	Select  Construct
 }
 
 type UsageFactory interface {
