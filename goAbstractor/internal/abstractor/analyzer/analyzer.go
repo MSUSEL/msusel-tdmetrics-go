@@ -68,8 +68,8 @@ func (a *analyzerImp) Analyze(node ast.Node) *analyzerImp {
 	}
 	// gather positional information for indents and cyclomatic complexity.
 	ast.Inspect(node, a.addCodePosForNode)
-	a.checkForGetter(node)
-	a.checkForSetter(node)
+	a.getter = checkForGetter(node)
+	a.setter = checkForSetter(node)
 	return a
 }
 
@@ -80,6 +80,8 @@ func (a *analyzerImp) GetMetricsArgs() constructs.MetricsArgs {
 		LineCount:  a.maxLine - a.minLine + 1,
 		CodeCount:  len(a.minColumn),
 		Indents:    a.calcIndents(),
+		Getter:     a.getter,
+		Setter:     a.setter,
 		Reads:      a.reads,
 		Writes:     a.writes,
 		Invokes:    a.invokes,
@@ -138,10 +140,80 @@ func (a *analyzerImp) addCodePosForNode(n ast.Node) bool {
 	return true
 }
 
-func (a *analyzerImp) checkForGetter(n ast.Node) {
-	ast.Print(a.locs.FileSet(), n)
+func getTypeAndBody(n ast.Node) (*ast.FuncType, *ast.BlockStmt, bool) {
+	switch t := n.(type) {
+	case *ast.FuncDecl:
+		return t.Type, t.Body, true
+	case *ast.FuncLit:
+		return t.Type, t.Body, true
+	default:
+		return nil, nil, false
+	}
 }
 
-func (a *analyzerImp) checkForSetter(n ast.Node) {
+func isSimpleFetch(n ast.Node) bool {
+	valid := true
+	ast.Inspect(n, func(n2 ast.Node) bool {
+		switch t := n2.(type) {
+		case nil, *ast.Ident, *ast.SelectorExpr, *ast.BasicLit, *ast.StarExpr, *ast.TypeAssertExpr:
+			return valid
+		// TODO: Implement explicit casts (type conversions)
+		//case *ast.CallExpr:
+		case *ast.UnaryExpr:
+			valid = valid && t.Op == token.AND
+		default:
+			valid = false
+		}
+		return valid
+	})
+	return valid
+}
 
+// checkForGetter determines if this is code for a getter.
+// See MetricsArgs.Getter in constructs/metrics.go for more info.
+func checkForGetter(n ast.Node) bool {
+	funcType, funcBody, ok := getTypeAndBody(n)
+	if !ok || len(funcType.Params.List) != 0 ||
+		len(funcType.Results.List) != 1 || len(funcBody.List) != 1 {
+		return false
+	}
+
+	ret, ok := funcBody.List[0].(*ast.ReturnStmt)
+	if !ok || len(ret.Results) != 1 || !isSimpleFetch(ret.Results[0]) {
+		return false
+	}
+
+	return true
+}
+
+func checkForSetter(n ast.Node) bool {
+	funcType, funcBody, ok := getTypeAndBody(n)
+	if !ok || len(funcType.Params.List) > 1 ||
+		len(funcType.Results.List) != 0 || len(funcBody.List) != 1 {
+		return false
+	}
+
+	assign, ok := funcBody.List[0].(*ast.AssignStmt)
+	if !ok || len(assign.Lhs) != 1 || len(assign.Rhs) != 1 ||
+		!isSimpleFetch(assign.Lhs[0]) || !isSimpleFetch(assign.Rhs[0]) {
+		return false
+	}
+
+	if len(funcType.Params.List) == 0 {
+		return true
+	}
+
+	if len(funcType.Params.List[0].Names) != 1 {
+		return false
+	}
+
+	paramName := funcType.Params.List[0].Names[0].Name
+	if constructs.BlankName(paramName) {
+		return true
+	}
+
+	// TODO: Finish checking if `paramName is in right side only and failing
+	//       with the left side (`func Foo(b* Bar) { b.x = b.y}`).
+
+	return true
 }

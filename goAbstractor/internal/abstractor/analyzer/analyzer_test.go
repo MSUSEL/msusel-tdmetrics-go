@@ -382,6 +382,56 @@ func Test_GetterWithSelect(t *testing.T) {
 		`}`)
 }
 
+func Test_GetterWithDereference(t *testing.T) {
+	tt := parseDecl(t, `Foo`,
+		`var bar *int`,
+		`func Foo() int {`,
+		`	return *bar`,
+		`}`)
+	tt.check(
+		`{`,
+		`	loc:        2,`,
+		`	codeCount:  3,`,
+		`	complexity: 1,`,
+		`	indents:    1,`,
+		`	lineCount:  3,`,
+		`   getter:  true,`,
+		`}`)
+}
+
+func Test_SetterWithSelect(t *testing.T) {
+	tt := parseDecl(t, `Foo`,
+		`func (b Bar) Foo(x int) {`,
+		`	b.x = x`,
+		`}`)
+	tt.check(
+		`{`,
+		`	loc:        1,`,
+		`	codeCount:  3,`,
+		`	complexity: 1,`,
+		`	indents:    1,`,
+		`	lineCount:  3,`,
+		`   setter:  true,`,
+		`}`)
+}
+
+func Test_SetterWithReference(t *testing.T) {
+	tt := parseDecl(t, `Foo`,
+		`var bar *int`,
+		`func Foo(x int) {`,
+		`	bar = &x`,
+		`}`)
+	tt.check(
+		`{`,
+		`	loc:        2,`,
+		`	codeCount:  3,`,
+		`	complexity: 1,`,
+		`	indents:    1,`,
+		`	lineCount:  3,`,
+		`   setter:  true,`,
+		`}`)
+}
+
 // TODO: Test joining metrics:
 // var val = []int{
 //   func() int { ** }(),

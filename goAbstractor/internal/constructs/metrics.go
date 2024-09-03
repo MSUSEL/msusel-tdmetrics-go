@@ -28,6 +28,10 @@ type Metrics interface {
 type MetricsArgs struct {
 
 	// Location is the unique location for the expression.
+	// This is used as a key to determine different metrics.
+	//
+	// Metrics for values can be attached to zero or more values,
+	// (`var _ = func() int { ** }`) or (`var x, y = func()(int, int) { ** }`).
 	Location locs.Loc
 
 	// Complexity is the McCabe's Cyclomatic Complexity value for the method.
@@ -49,22 +53,39 @@ type MetricsArgs struct {
 	// Getter indicates the expression only contains no parameters and a
 	// single result that is set in a single return of a value.
 	//
+	// The expression must be a single function with or without a receiver,
+	// have no parameter and a single result, and only a return with the
+	// right hand side only identifiers (`f`), selectors (`f.x.a`), literals,
+	// reference/dereference, or explicit/implicit casts.
+	//
 	// e.g. `func (f Foo) GetX() int { return f.x }`
 	//
-	// This will not return true for modified result getters,
-	// such as offsetting an index,
-	// e.g. `func (f Foo) GetX() int { return f.x + 1 }`,
-	// or reading a flag,
-	// e.g. `func (f Foo) GetX() int { return (f.x & 0xFF) >> 2 }`.
+	// e.g. `func (f Foo) Kind() string { return "literal" }`
+	//
+	// This will not return true for modified result getters, such as
+	// offsetting an index (`func (f Foo) GetX() int { return f.x + 1 }`),
+	// reading a flag (`func (f Foo) GetX() int { return (f.x & 0xFF) >> 2 }`),
+	// indexing (`func (f Foo) GetFirst() int { return f.list[0] }`),
+	// or creating an instance of a type.
 	Getter bool
 
-	// Setter indicates the expression only contains a single parameter
+	// Setter indicates the expression only contains an optional single parameter
 	// and no results that is used in a single assignment of an external value.
+	//
+	// The expression must be a single function with or without a receiver,
+	// with zero or one parameters, if the parameter is given it may only be
+	// used on the right hand side of the assignment, a single assignment,
+	// with only identifiers (`f`), selectors (`f.x.a`), literals,
+	// reference/dereference, or explicit/implicit casts.
 	//
 	// e.g. `func (f *Foo) SetX(x int) { f.x = x }`
 	//
-	// This will not return true for setters that modify the value
-	// in some way, such as setting an offset index.
+	// e.g. `func (f *Foo) SetAsHidden() { f.state = "hidden" }`
+	//
+	// This will not return true for setters that modify the value in some way,
+	// such as setting an offset index, setting an indexed value, etc.
+	// This will not return true for reverse setters
+	// (`func (f Foo) SetBar(b *Bar) { *b = f.x }`).
 	Setter bool
 
 	// Reads are the usages that reads a value or type.
