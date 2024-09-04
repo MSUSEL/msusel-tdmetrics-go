@@ -3,6 +3,7 @@ package analyzer
 import (
 	"go/ast"
 	"go/token"
+	"go/types"
 	"math"
 
 	"github.com/Snow-Gremlin/goToolbox/collections"
@@ -22,12 +23,13 @@ import (
 //     Access to Foreign Data (ATFD) and Design Recovery (DR)
 //   - Indicate if a method is an accessor getter or setter (single expression).
 
-func Analyze(locs locs.Set, factory constructs.MetricsFactory, node ast.Node) constructs.Metrics {
-	return factory.NewMetrics(newAnalyzer(locs).Analyze(node).GetMetricsArgs())
+func Analyze(locs locs.Set, info *types.Info, factory constructs.MetricsFactory, node ast.Node) constructs.Metrics {
+	return factory.NewMetrics(newAnalyzer(locs, info).Analyze(node).GetMetricsArgs())
 }
 
 type analyzerImp struct {
 	locs locs.Set
+	info *types.Info
 	loc  locs.Loc
 
 	complexity int
@@ -44,9 +46,10 @@ type analyzerImp struct {
 	defines collections.SortedSet[constructs.Usage]
 }
 
-func newAnalyzer(locs locs.Set) *analyzerImp {
+func newAnalyzer(locs locs.Set, info *types.Info) *analyzerImp {
 	return &analyzerImp{
 		locs: locs,
+		info: info,
 		loc:  nil,
 
 		complexity: 1,
@@ -68,8 +71,9 @@ func (a *analyzerImp) Analyze(node ast.Node) *analyzerImp {
 	}
 	// gather positional information for indents and cyclomatic complexity.
 	ast.Inspect(node, a.addCodePosForNode)
-	a.getter = checkForGetter(node)
-	a.setter = checkForSetter(node)
+	a.getUsages()
+	a.getter = a.checkForGetter(node)
+	a.setter = a.checkForSetter(node)
 	return a
 }
 
@@ -140,6 +144,11 @@ func (a *analyzerImp) addCodePosForNode(n ast.Node) bool {
 	return true
 }
 
+func (a *analyzerImp) getUsages() {
+
+	//TODO: implement
+}
+
 func getTypeAndBody(n ast.Node) (*ast.FuncType, *ast.BlockStmt, bool) {
 	switch t := n.(type) {
 	case *ast.FuncDecl:
@@ -151,17 +160,28 @@ func getTypeAndBody(n ast.Node) (*ast.FuncType, *ast.BlockStmt, bool) {
 	}
 }
 
-func isSimpleFetch(n ast.Node) bool {
+// isSimpleFetch determines if the given node is a simple access of data
+// without method calls and modification. The info must be populated
+// with `Types` so that explicit casts (conversions) can be distinctly
+// determined from method/function calls.
+func isSimpleFetch(info *types.Info, node ast.Node) bool {
 	valid := true
-	ast.Inspect(n, func(n2 ast.Node) bool {
-		switch t := n2.(type) {
+	ast.Inspect(node, func(n ast.Node) bool {
+		switch t := n.(type) {
 		case nil, *ast.Ident, *ast.SelectorExpr, *ast.BasicLit, *ast.StarExpr, *ast.TypeAssertExpr:
-			return valid
-		// TODO: Implement explicit casts (type conversions)
-		//case *ast.CallExpr:
+			// Check for identifiers (`foo`), selectors (`f.x`), literals (`3.24`),
+			// dereference (`*f`), type assert (`f.(int)`), and ignore nils.
+			break
+		case *ast.CallExpr:
+			// Check for explicit cast (conversion), e.g. `int(f.x)`
+			tx, ok := info.Types[t.Fun]
+			valid = valid && ok && tx.IsType()
 		case *ast.UnaryExpr:
+			// Check for reference, e.g. `&pointer`
 			valid = valid && t.Op == token.AND
 		default:
+			// Anything else (add, subtract, indexer, bitwise-Xor)
+			// means not a simple fetch.
 			valid = false
 		}
 		return valid
@@ -169,33 +189,56 @@ func isSimpleFetch(n ast.Node) bool {
 	return valid
 }
 
+// isObjectUsed determines if the given obj is used somewhere in the
+// branch of the AST starting at the given node. The info must be populated
+// with `Uses` so that any usage of an identifier can be compared to the object.
+func isObjectUsed(obj types.Object, info *types.Info, node ast.Node) bool {
+	found := false
+	ast.Inspect(node, func(n ast.Node) bool {
+		id, ok := n.(*ast.Ident)
+		found = found || (ok && info.Uses[id] == obj)
+		return !found
+	})
+	return found
+}
+
 // checkForGetter determines if this is code for a getter.
 // See MetricsArgs.Getter in constructs/metrics.go for more info.
-func checkForGetter(n ast.Node) bool {
+func (a *analyzerImp) checkForGetter(n ast.Node) bool {
 	funcType, funcBody, ok := getTypeAndBody(n)
-	if !ok || len(funcType.Params.List) != 0 ||
-		len(funcType.Results.List) != 1 || len(funcBody.List) != 1 {
+	if !ok ||
+		len(funcType.Params.List) != 0 ||
+		funcType.Results == nil ||
+		len(funcType.Results.List) != 1 ||
+		len(funcBody.List) != 1 {
 		return false
 	}
 
 	ret, ok := funcBody.List[0].(*ast.ReturnStmt)
-	if !ok || len(ret.Results) != 1 || !isSimpleFetch(ret.Results[0]) {
+	if !ok ||
+		len(ret.Results) != 1 ||
+		!isSimpleFetch(a.info, ret.Results[0]) {
 		return false
 	}
 
 	return true
 }
 
-func checkForSetter(n ast.Node) bool {
+func (a *analyzerImp) checkForSetter(n ast.Node) bool {
 	funcType, funcBody, ok := getTypeAndBody(n)
-	if !ok || len(funcType.Params.List) > 1 ||
-		len(funcType.Results.List) != 0 || len(funcBody.List) != 1 {
+	if !ok ||
+		len(funcType.Params.List) > 1 ||
+		funcType.Results != nil ||
+		len(funcBody.List) != 1 {
 		return false
 	}
 
 	assign, ok := funcBody.List[0].(*ast.AssignStmt)
-	if !ok || len(assign.Lhs) != 1 || len(assign.Rhs) != 1 ||
-		!isSimpleFetch(assign.Lhs[0]) || !isSimpleFetch(assign.Rhs[0]) {
+	if !ok ||
+		len(assign.Lhs) != 1 ||
+		len(assign.Rhs) != 1 ||
+		!isSimpleFetch(a.info, assign.Lhs[0]) ||
+		!isSimpleFetch(a.info, assign.Rhs[0]) {
 		return false
 	}
 
@@ -207,13 +250,15 @@ func checkForSetter(n ast.Node) bool {
 		return false
 	}
 
-	paramName := funcType.Params.List[0].Names[0].Name
-	if constructs.BlankName(paramName) {
+	paramId := funcType.Params.List[0].Names[0]
+	if constructs.BlankName(paramId.Name) {
 		return true
 	}
 
-	// TODO: Finish checking if `paramName is in right side only and failing
-	//       with the left side (`func Foo(b* Bar) { b.x = b.y}`).
-
-	return true
+	// Make sure the parameter isn't used on the left hand side as in a
+	// reversed setter, e.g. `func (b Bar) GetX(x *int) { x* = b.x }`,
+	// The parameter may be used on the right hand side or not at all.
+	// The parameter may not be used at all if the setter is part of an
+	// interface requirement but the value assigned is to a default value.
+	return !isObjectUsed(a.info.Defs[paramId], a.info, assign.Lhs[0])
 }

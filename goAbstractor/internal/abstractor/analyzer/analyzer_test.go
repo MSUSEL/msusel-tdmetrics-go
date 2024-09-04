@@ -5,6 +5,7 @@ import (
 	"go/ast"
 	"go/parser"
 	"go/token"
+	"go/types"
 	"slices"
 	"strings"
 	"testing"
@@ -368,12 +369,13 @@ func Test_SelectStatement(t *testing.T) {
 
 func Test_GetterWithSelect(t *testing.T) {
 	tt := parseDecl(t, `Foo`,
+		`type Bar struct { x int }`,
 		`func (b Bar) Foo() int {`,
 		`	return b.x`,
 		`}`)
 	tt.check(
 		`{`,
-		`	loc:        1,`,
+		`	loc:        2,`,
 		`	codeCount:  3,`,
 		`	complexity: 1,`,
 		`	indents:    1,`,
@@ -399,14 +401,32 @@ func Test_GetterWithDereference(t *testing.T) {
 		`}`)
 }
 
+func Test_GetterWithConvert(t *testing.T) {
+	tt := parseDecl(t, `Foo`,
+		`type Bar struct { x float64 }`,
+		`func (b Bar) Foo() int {`,
+		`	return int(b.x)`,
+		`}`)
+	tt.check(
+		`{`,
+		`	loc:        2,`,
+		`	codeCount:  3,`,
+		`	complexity: 1,`,
+		`	indents:    1,`,
+		`	lineCount:  3,`,
+		`   getter:  true,`,
+		`}`)
+}
+
 func Test_SetterWithSelect(t *testing.T) {
 	tt := parseDecl(t, `Foo`,
+		`type Bar struct { x int }`,
 		`func (b Bar) Foo(x int) {`,
 		`	b.x = x`,
 		`}`)
 	tt.check(
 		`{`,
-		`	loc:        1,`,
+		`	loc:        2,`,
 		`	codeCount:  3,`,
 		`	complexity: 1,`,
 		`	indents:    1,`,
@@ -432,6 +452,22 @@ func Test_SetterWithReference(t *testing.T) {
 		`}`)
 }
 
+func Test_NotReverseSetter(t *testing.T) {
+	tt := parseDecl(t, `Foo`,
+		`var bar *int`,
+		`func Foo(x *int) {`,
+		`	*x = *bar`,
+		`}`)
+	tt.check(
+		`{`,
+		`	loc:        2,`,
+		`	codeCount:  3,`,
+		`	complexity: 1,`,
+		`	indents:    1,`,
+		`	lineCount:  3,`,
+		`}`)
+}
+
 // TODO: Test joining metrics:
 // var val = []int{
 //   func() int { ** }(),
@@ -453,30 +489,25 @@ func Test_SetterWithReference(t *testing.T) {
 // TODO: Test reading metrics with read reference in typed call:
 // var val = Foo[int](singleton)
 
+// TODO: Test parentheses in getters and setters.
+
 type testTool struct {
 	t *testing.T
 	m constructs.Metrics
 }
 
-func parseExpr(t *testing.T, lines ...string) *testTool {
-	code := strings.Join(lines, "\n")
-	fSet := token.NewFileSet()
-	expr, err := parser.ParseExprFrom(fSet, ``, []byte(code), parser.ParseComments)
-	check.NoError(t).Require(err)
-
-	m := Analyze(locs.NewSet(fSet), metrics.New(), expr)
-	return &testTool{t: t, m: m}
+func createInfo() *types.Info {
+	return &types.Info{
+		Types: make(map[ast.Expr]types.TypeAndValue),
+		Defs:  make(map[*ast.Ident]types.Object),
+		Uses:  make(map[*ast.Ident]types.Object),
+	}
 }
 
-func parseDecl(t *testing.T, name string, lines ...string) *testTool {
-	code := "package test\n" + strings.Join(lines, "\n")
-	fSet := token.NewFileSet()
-	file, err := parser.ParseFile(fSet, ``, []byte(code), parser.ParseComments)
-	check.NoError(t).Require(err)
-
+func findNode(src ast.Node, name string) ast.Node {
 	found := false
 	var target ast.Node
-	ast.Inspect(file, func(n ast.Node) bool {
+	ast.Inspect(src, func(n ast.Node) bool {
 		if found {
 			return false
 		}
@@ -491,9 +522,38 @@ func parseDecl(t *testing.T, name string, lines ...string) *testTool {
 		}
 		return true
 	})
-	check.True(t).Name(`found name`).With(`name`, name).Assert(found)
+	return target
+}
 
-	m := Analyze(locs.NewSet(fSet), metrics.New(), target)
+func parseExpr(t *testing.T, lines ...string) *testTool {
+	code := strings.Join(lines, "\n")
+	fSet := token.NewFileSet()
+	expr, err := parser.ParseExprFrom(fSet, ``, []byte(code), parser.ParseComments)
+	check.NoError(t).Require(err)
+
+	info := createInfo()
+	err = types.CheckExpr(fSet, nil, token.NoPos, expr, info)
+	check.NoError(t).Require(err)
+
+	m := Analyze(locs.NewSet(fSet), info, metrics.New(), expr)
+	return &testTool{t: t, m: m}
+}
+
+func parseDecl(t *testing.T, name string, lines ...string) *testTool {
+	code := "package test\n" + strings.Join(lines, "\n")
+	fSet := token.NewFileSet()
+	file, err := parser.ParseFile(fSet, ``, []byte(code), parser.ParseComments)
+	check.NoError(t).Require(err)
+
+	info := createInfo()
+	var conf types.Config
+	_, err = conf.Check("test", fSet, []*ast.File{file}, info)
+	check.NoError(t).Require(err)
+
+	target := findNode(file, name)
+	check.NotNil(t).Name(`found name`).With(`name`, name).Assert(target)
+
+	m := Analyze(locs.NewSet(fSet), info, metrics.New(), target)
 	return &testTool{t: t, m: m}
 }
 

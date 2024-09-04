@@ -309,7 +309,7 @@ func (ab *abstractor) abstractFuncDecl(decl *ast.FuncDecl) {
 	sig := ab.converter().ConvertSignature(obj.Type().(*types.Signature))
 	ab.clearTypeParamOverrides()
 
-	metrics := analyzer.Analyze(ab.proj.Locs(), ab.proj, decl)
+	metrics := analyzer.Analyze(ab.proj.Locs(), ab.info(), ab.proj, decl)
 	loc := ab.proj.Locs().NewLoc(decl.Pos())
 	tp := ab.abstractTypeParams(decl.Type.TypeParams)
 
