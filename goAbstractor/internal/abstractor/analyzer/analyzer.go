@@ -1,6 +1,7 @@
 package analyzer
 
 import (
+	"fmt"
 	"go/ast"
 	"go/token"
 	"go/types"
@@ -71,7 +72,7 @@ func (a *analyzerImp) Analyze(node ast.Node) *analyzerImp {
 	}
 	// gather positional information for indents and cyclomatic complexity.
 	ast.Inspect(node, a.addCodePosForNode)
-	a.getUsages()
+	a.getUsages(node)
 	a.getter = a.checkForGetter(node)
 	a.setter = a.checkForSetter(node)
 	return a
@@ -144,9 +145,17 @@ func (a *analyzerImp) addCodePosForNode(n ast.Node) bool {
 	return true
 }
 
-func (a *analyzerImp) getUsages() {
+func (a *analyzerImp) getUsages(node ast.Node) {
+	ast.Inspect(node, func(n ast.Node) bool {
+		if id, ok := n.(*ast.Ident); ok {
 
-	//TODO: implement
+			//TODO: Finish implementing
+			fmt.Printf("%v\n", id)
+
+		}
+
+		return true
+	})
 }
 
 func getTypeAndBody(n ast.Node) (*ast.FuncType, *ast.BlockStmt, bool) {
@@ -204,54 +213,58 @@ func isObjectUsed(obj types.Object, info *types.Info, node ast.Node) bool {
 
 // checkForGetter determines if this is code for a getter.
 // See MetricsArgs.Getter in constructs/metrics.go for more info.
+//
+// Check that there is only one statement that is a return statement,
+// one result, no parameters, and is a simple fetch for the result.
 func (a *analyzerImp) checkForGetter(n ast.Node) bool {
 	funcType, funcBody, ok := getTypeAndBody(n)
-	if !ok ||
-		len(funcType.Params.List) != 0 ||
-		funcType.Results == nil ||
-		len(funcType.Results.List) != 1 ||
-		len(funcBody.List) != 1 {
-		return false
-	}
-
-	ret, ok := funcBody.List[0].(*ast.ReturnStmt)
-	if !ok ||
-		len(ret.Results) != 1 ||
-		!isSimpleFetch(a.info, ret.Results[0]) {
-		return false
-	}
-
-	return true
+	var ret *ast.ReturnStmt
+	return ok &&
+		len(funcType.Params.List) == 0 &&
+		funcType.Results != nil &&
+		len(funcType.Results.List) == 1 &&
+		len(funcBody.List) == 1 &&
+		utils.Is(funcBody.List[0], &ret) &&
+		len(ret.Results) == 1 &&
+		isSimpleFetch(a.info, ret.Results[0])
 }
 
+// checkForSetter determines if this is code for a setter.
+// See MetricsArgs.Setter in constructs/metrics.go for more info.
 func (a *analyzerImp) checkForSetter(n ast.Node) bool {
 	funcType, funcBody, ok := getTypeAndBody(n)
+	var assign *ast.AssignStmt
 	if !ok ||
 		len(funcType.Params.List) > 1 ||
 		funcType.Results != nil ||
-		len(funcBody.List) != 1 {
-		return false
-	}
-
-	assign, ok := funcBody.List[0].(*ast.AssignStmt)
-	if !ok ||
+		len(funcBody.List) != 1 ||
+		!utils.Is(funcBody.List[0], &assign) ||
 		len(assign.Lhs) != 1 ||
 		len(assign.Rhs) != 1 ||
 		!isSimpleFetch(a.info, assign.Lhs[0]) ||
 		!isSimpleFetch(a.info, assign.Rhs[0]) {
+		// Check that there is zero or one parameters, zero results,
+		// only statement in the body of the function, that there is
+		// only one assignment, and both the left and right hand sides
+		// must be simple fetches.
 		return false
 	}
 
 	if len(funcType.Params.List) == 0 {
+		// Setters may have no parameters for assigning a literal value.
+		// e.g. `func(b *Bar) Hide() { b.visible = false }`
 		return true
 	}
 
 	if len(funcType.Params.List[0].Names) != 1 {
+		// Check that the type group in the single parameter type is only
+		// for one parameter. e.g. not `func(x, y int)`.
 		return false
 	}
 
 	paramId := funcType.Params.List[0].Names[0]
 	if constructs.BlankName(paramId.Name) {
+		// Check if single parameter is blank and therefore not used.
 		return true
 	}
 

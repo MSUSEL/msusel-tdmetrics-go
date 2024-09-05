@@ -111,14 +111,19 @@ func Test_SimpleWithSpace(t *testing.T) {
 }
 
 func Test_SimpleWithDefer(t *testing.T) {
-	tt := parseExpr(t,
-		`func() {`,
+	tt := parseDecl(t, `Foo`,
+		`type Bar struct {}`,
+		`func (b Bar) close() { }`,
+		`func (b Bar) doStuff() { }`,
+		`func open() Bar { return Bar{} }`,
+		`func Foo() {`,
 		`	x := open()`,
 		`	defer x.close()`,
 		`	x.doStuff()`,
 		`}`)
 	tt.check(
 		`{`,
+		`   loc:        5,`,
 		`	codeCount:  5,`,
 		`	complexity: 1,`,
 		`	indents:    3,`,
@@ -561,14 +566,14 @@ func (tt *testTool) check(expLines ...string) {
 	ctx := jsonify.NewContext()
 
 	gotData, err := jsonify.Marshal(ctx, tt.m)
-	check.NoError(tt.t).Assert(err)
+	check.NoError(tt.t).Require(err)
 
 	exp := strings.Join(expLines, "\n")
 	var expObj any
 	err = yaml.Unmarshal([]byte(exp), &expObj)
-	check.NoError(tt.t).Assert(err)
+	check.NoError(tt.t).Require(err)
 	expData, err := jsonify.Marshal(ctx, expObj)
-	check.NoError(tt.t).Assert(err)
+	check.NoError(tt.t).Require(err)
 
 	if !slices.Equal(gotData, expData) {
 		gotLines := strings.Split(string(gotData), "\n")
