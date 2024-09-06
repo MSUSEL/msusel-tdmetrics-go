@@ -8,6 +8,7 @@ import (
 	"math"
 
 	"github.com/Snow-Gremlin/goToolbox/collections"
+	"github.com/Snow-Gremlin/goToolbox/collections/set"
 	"github.com/Snow-Gremlin/goToolbox/collections/sortedSet"
 	"github.com/Snow-Gremlin/goToolbox/utils"
 
@@ -47,6 +48,8 @@ type analyzerImp struct {
 	defines collections.SortedSet[constructs.Usage]
 }
 
+// newAnalyzer creates a new analyzer instance.
+// The info must be populated with `Uses`, `Defs`, and `Types`.
 func newAnalyzer(locs locs.Set, info *types.Info) *analyzerImp {
 	return &analyzerImp{
 		locs: locs,
@@ -145,15 +148,37 @@ func (a *analyzerImp) addCodePosForNode(n ast.Node) bool {
 	return true
 }
 
+func (a *analyzerImp) addDefine(def types.Object) {
+
+	//TODO: Finish implementing
+	fmt.Printf("define: %v\n", def)
+}
+
 func (a *analyzerImp) getUsages(node ast.Node) {
+	localDefs := set.New[types.Object]()
 	ast.Inspect(node, func(n ast.Node) bool {
-		if id, ok := n.(*ast.Ident); ok {
-
-			//TODO: Finish implementing
-			fmt.Printf("%v\n", id)
-
+		id, ok := n.(*ast.Ident)
+		if !ok {
+			return true
+		}
+		if def, ok := a.info.Defs[id]; ok {
+			localDefs.Add(def)
+			a.addDefine(def)
+			return true
+		}
+		if uses, ok := a.info.Uses[id]; ok {
+			if localDefs.Contains(uses) {
+				fmt.Printf("  local uses %v\n", uses)
+			} else {
+				fmt.Printf("  remote uses %v\n", uses)
+			}
 		}
 
+		//TODO: Finish implementing
+		fmt.Printf("Id %v:\n", id)
+		if inst, ok := a.info.Instances[id]; ok {
+			fmt.Printf("  inst %v\n", inst)
+		}
 		return true
 	})
 }
@@ -213,6 +238,7 @@ func isObjectUsed(obj types.Object, info *types.Info, node ast.Node) bool {
 
 // checkForGetter determines if this is code for a getter.
 // See MetricsArgs.Getter in constructs/metrics.go for more info.
+// The info must be populated with `Types`.
 //
 // Check that there is only one statement that is a return statement,
 // one result, no parameters, and is a simple fetch for the result.
@@ -231,6 +257,7 @@ func (a *analyzerImp) checkForGetter(n ast.Node) bool {
 
 // checkForSetter determines if this is code for a setter.
 // See MetricsArgs.Setter in constructs/metrics.go for more info.
+// The info must be populated with `Uses`, `Defs`, and `Types`.
 func (a *analyzerImp) checkForSetter(n ast.Node) bool {
 	funcType, funcBody, ok := getTypeAndBody(n)
 	var assign *ast.AssignStmt

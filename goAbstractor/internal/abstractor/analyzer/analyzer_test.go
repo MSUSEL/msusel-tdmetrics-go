@@ -496,6 +496,12 @@ func Test_NotReverseSetter(t *testing.T) {
 
 // TODO: Test parentheses in getters and setters.
 
+// TODO: Test assignment of returned pointer:
+// func() { *(getIntPointer()) = 10 }
+
+// TODO: Test assigning named result:
+// func() (x int) { x = 10; return }
+
 type testTool struct {
 	t *testing.T
 	m constructs.Metrics
