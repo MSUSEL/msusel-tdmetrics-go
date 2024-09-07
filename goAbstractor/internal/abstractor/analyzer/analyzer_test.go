@@ -15,7 +15,7 @@ import (
 	"gopkg.in/yaml.v3"
 
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs"
-	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs/metrics"
+	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs/project"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/jsonify"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/locs"
 )
@@ -471,6 +471,7 @@ func Test_NotReverseSetter(t *testing.T) {
 		`	indents:    1,`,
 		`	lineCount:  3,`,
 		`}`)
+	t.Fail() // TODO: remove
 }
 
 // TODO: Test joining metrics:
@@ -501,6 +502,12 @@ func Test_NotReverseSetter(t *testing.T) {
 
 // TODO: Test assigning named result:
 // func() (x int) { x = 10; return }
+
+// TODO: Test multiple assignments:
+// x, y := 1, 2  and  x, y := func()(int, int) { ** }
+
+// TODO: Test local encapsulation of type:
+// x := struct{y externalType}{y: ext}.y
 
 type testTool struct {
 	t *testing.T
@@ -546,7 +553,8 @@ func parseExpr(t *testing.T, lines ...string) *testTool {
 	err = types.CheckExpr(fSet, nil, token.NoPos, expr, info)
 	check.NoError(t).Require(err)
 
-	m := Analyze(locs.NewSet(fSet), info, metrics.New(), expr)
+	proj := project.New(locs.NewSet(fSet))
+	m := Analyze(info, proj, expr)
 	return &testTool{t: t, m: m}
 }
 
@@ -564,7 +572,8 @@ func parseDecl(t *testing.T, name string, lines ...string) *testTool {
 	target := findNode(file, name)
 	check.NotNil(t).Name(`found name`).With(`name`, name).Assert(target)
 
-	m := Analyze(locs.NewSet(fSet), info, metrics.New(), target)
+	proj := project.New(locs.NewSet(fSet))
+	m := Analyze(info, proj, target)
 	return &testTool{t: t, m: m}
 }
 

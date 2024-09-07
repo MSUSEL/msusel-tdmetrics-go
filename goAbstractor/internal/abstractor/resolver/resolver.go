@@ -206,15 +206,15 @@ func (r *resolverImp) resolveTempRef(ref constructs.TempReference) {
 			With(`instance types`, ref.InstanceTypes()))
 	}
 	if len(ref.InstanceTypes()) <= 0 {
-		ref.SetType(typ)
+		ref.SetResolution(typ)
 		return
 	}
 
 	switch typ.Kind() {
 	case kind.Object:
-		ref.SetType(instantiator.Object(r.proj, ref.GoType(), typ.(constructs.Object), ref.InstanceTypes()...))
+		ref.SetResolution(instantiator.Object(r.proj, ref.GoType(), typ.(constructs.Object), ref.InstanceTypes()...))
 	case kind.InterfaceDecl:
-		ref.SetType(instantiator.InterfaceDecl(r.proj, ref.GoType(), typ.(constructs.InterfaceDecl), ref.InstanceTypes()...))
+		ref.SetResolution(instantiator.InterfaceDecl(r.proj, ref.GoType(), typ.(constructs.InterfaceDecl), ref.InstanceTypes()...))
 	default:
 		panic(terror.New(`unexpected declaration type`).
 			With(`kind`, typ.Kind()).

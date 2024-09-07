@@ -3,27 +3,35 @@ package usage
 import (
 	"strings"
 
+	"github.com/Snow-Gremlin/goToolbox/collections/enumerator"
 	"github.com/Snow-Gremlin/goToolbox/comp"
 	"github.com/Snow-Gremlin/goToolbox/utils"
 
+	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/assert"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs/kind"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/jsonify"
 )
 
 type usageImp struct {
-	index  int
-	alive  bool
-	pkg    constructs.Package
-	target constructs.Construct
-	sel    constructs.Construct
+	pkgPath   string
+	target    string
+	instTypes []constructs.TypeDesc
+	selection string
+
+	index int
+	alive bool
+
+	resTarget    constructs.TypeDesc
+	resSelection constructs.TypeDesc
 }
 
 func newUsage(args constructs.UsageArgs) constructs.Usage {
 	return &usageImp{
-		pkg:    args.Package,
-		target: args.Target,
-		sel:    args.Select,
+		pkgPath:   args.PackagePath,
+		target:    args.Target,
+		instTypes: args.InstanceTypes,
+		selection: args.Selection,
 	}
 }
 
@@ -35,9 +43,24 @@ func (u *usageImp) SetIndex(index int)  { u.index = index }
 func (u *usageImp) Alive() bool         { return u.alive }
 func (u *usageImp) SetAlive(alive bool) { u.alive = alive }
 
-func (u *usageImp) Package() constructs.Package  { return u.pkg }
-func (u *usageImp) Target() constructs.Construct { return u.target }
-func (u *usageImp) Select() constructs.Construct { return u.sel }
+func (u *usageImp) PackagePath() string { return u.pkgPath }
+func (u *usageImp) Target() string      { return u.target }
+func (u *usageImp) Selection() string   { return u.selection }
+func (u *usageImp) HasSelection() bool  { return len(u.selection) > 0 }
+
+func (u *usageImp) InstanceTypes() []constructs.TypeDesc   { return u.instTypes }
+func (u *usageImp) ResolvedTarget() constructs.TypeDesc    { return u.resTarget }
+func (u *usageImp) ResolvedSelection() constructs.TypeDesc { return u.resSelection }
+func (u *usageImp) Resolved() bool                         { return utils.IsNil(u.resTarget) }
+
+func (u *usageImp) SetResolution(target, selection constructs.TypeDesc) {
+	assert.ArgNotNil(`target`, target)
+	if u.HasSelection() {
+		assert.ArgNotNil(`selection`, selection)
+	}
+	u.resTarget = target
+	u.resSelection = selection
+}
 
 func (u *usageImp) CompareTo(other constructs.Construct) int {
 	return constructs.CompareTo[constructs.Usage](u, other, Comparer())
@@ -50,9 +73,10 @@ func Comparer() comp.Comparer[constructs.Usage] {
 			return 0
 		}
 		return comp.Or(
-			constructs.ComparerPend(aImp.pkg, bImp.pkg),
-			constructs.ComparerPend(aImp.target, bImp.target),
-			constructs.ComparerPend(aImp.sel, bImp.sel),
+			comp.DefaultPend(aImp.pkgPath, bImp.pkgPath),
+			comp.DefaultPend(aImp.target, bImp.target),
+			comp.DefaultPend(aImp.selection, bImp.selection),
+			constructs.SliceComparerPend(aImp.instTypes, bImp.instTypes),
 		)
 	}
 }
@@ -64,24 +88,31 @@ func (u *usageImp) ToJson(ctx *jsonify.Context) jsonify.Datum {
 	if ctx.IsShort() {
 		return jsonify.NewSprintf(`%s%d`, u.Kind(), u.index)
 	}
-	return jsonify.NewMap().
+	m := jsonify.NewMap().
 		AddIf(ctx, ctx.IsDebugKindIncluded(), `kind`, u.Kind()).
-		AddIf(ctx, ctx.IsDebugIndexIncluded(), `index`, u.index).
-		AddNonZero(ctx.OnlyIndex(), `package`, u.pkg).
-		AddNonZero(ctx.Short(), `target`, u.target).
-		AddNonZero(ctx.Short(), `select`, u.sel)
+		AddIf(ctx, ctx.IsDebugIndexIncluded(), `index`, u.index)
+	if u.Resolved() {
+		return m.
+			Add(ctx.Short(), `target`, u.resTarget).
+			AddNonZero(ctx.Short(), `selection`, u.resSelection)
+	}
+	return m.
+		Add(ctx, `packagePath`, u.pkgPath).
+		Add(ctx, `target`, u.target).
+		AddNonZero(ctx.Short(), `instanceTypes`, u.instTypes).
+		AddNonZero(ctx, `selection`, u.selection)
 }
 
-func (f *usageImp) String() string {
-	parts := []string{}
-	if !utils.IsNil(f.pkg) {
-		parts = append(parts, f.pkg.Path())
+func (u *usageImp) String() string {
+	buf := &strings.Builder{}
+	buf.WriteString(`usage `)
+	buf.WriteString(u.pkgPath)
+	buf.WriteString(`.`)
+	buf.WriteString(u.target)
+	if len(u.instTypes) > 0 {
+		buf.WriteString(`[`)
+		buf.WriteString(enumerator.Enumerate(u.instTypes...).Join(`, `))
+		buf.WriteString(`]`)
 	}
-	if !utils.IsNil(f.target) {
-		parts = append(parts, f.target.String())
-	}
-	if !utils.IsNil(f.sel) {
-		parts = append(parts, f.sel.String())
-	}
-	return strings.Join(parts, `.`)
+	return buf.String()
 }

@@ -28,7 +28,6 @@ type metricsImp struct {
 	reads   collections.SortedSet[constructs.Usage]
 	writes  collections.SortedSet[constructs.Usage]
 	invokes collections.SortedSet[constructs.Usage]
-	defines collections.SortedSet[constructs.Usage]
 }
 
 func newMetrics(args constructs.MetricsArgs) constructs.Metrics {
@@ -47,7 +46,6 @@ func newMetrics(args constructs.MetricsArgs) constructs.Metrics {
 		reads:   args.Reads,
 		writes:  args.Writes,
 		invokes: args.Invokes,
-		defines: args.Defines,
 	}
 }
 
@@ -76,10 +74,6 @@ func (m *metricsImp) Writes() collections.ReadonlySortedSet[constructs.Usage] {
 
 func (m *metricsImp) Invokes() collections.ReadonlySortedSet[constructs.Usage] {
 	return m.invokes.Readonly()
-}
-
-func (m *metricsImp) Defines() collections.ReadonlySortedSet[constructs.Usage] {
-	return m.defines.Readonly()
 }
 
 func (m *metricsImp) CompareTo(other constructs.Construct) int {
@@ -112,8 +106,7 @@ func (m *metricsImp) ToJson(ctx *jsonify.Context) jsonify.Datum {
 		AddNonZero(ctx, `setter`, m.setter).
 		AddNonZero(ctx.OnlyIndex(), `reads`, m.reads.ToSlice()).
 		AddNonZero(ctx.OnlyIndex(), `writes`, m.writes.ToSlice()).
-		AddNonZero(ctx.OnlyIndex(), `invokes`, m.invokes.ToSlice()).
-		AddNonZero(ctx.OnlyIndex(), `defines`, m.defines.ToSlice())
+		AddNonZero(ctx.OnlyIndex(), `invokes`, m.invokes.ToSlice())
 }
 
 func (m *metricsImp) String() string {

@@ -15,15 +15,23 @@ type Usage interface {
 	Construct
 	IsUsage()
 
-	Package() Package
-	Target() Construct
-	Select() Construct
+	PackagePath() string
+	Target() string
+	InstanceTypes() []TypeDesc
+	Selection() string
+	HasSelection() bool
+
+	ResolvedTarget() TypeDesc
+	ResolvedSelection() TypeDesc
+	Resolved() bool
+	SetResolution(target, selection TypeDesc)
 }
 
 type UsageArgs struct {
-	Package Package
-	Target  Construct
-	Select  Construct
+	PackagePath   string
+	Target        string
+	InstanceTypes []TypeDesc
+	Selection     string
 }
 
 type UsageFactory interface {

@@ -25,13 +25,13 @@ import (
 //     Access to Foreign Data (ATFD) and Design Recovery (DR)
 //   - Indicate if a method is an accessor getter or setter (single expression).
 
-func Analyze(locs locs.Set, info *types.Info, factory constructs.MetricsFactory, node ast.Node) constructs.Metrics {
-	return factory.NewMetrics(newAnalyzer(locs, info).Analyze(node).GetMetricsArgs())
+func Analyze(info *types.Info, proj constructs.Project, node ast.Node) constructs.Metrics {
+	return newAnalyzer(info, proj).Analyze(node).GetMetrics()
 }
 
 type analyzerImp struct {
-	locs locs.Set
 	info *types.Info
+	proj constructs.Project
 	loc  locs.Loc
 
 	complexity int
@@ -45,15 +45,14 @@ type analyzerImp struct {
 	reads   collections.SortedSet[constructs.Usage]
 	writes  collections.SortedSet[constructs.Usage]
 	invokes collections.SortedSet[constructs.Usage]
-	defines collections.SortedSet[constructs.Usage]
 }
 
 // newAnalyzer creates a new analyzer instance.
 // The info must be populated with `Uses`, `Defs`, and `Types`.
-func newAnalyzer(locs locs.Set, info *types.Info) *analyzerImp {
+func newAnalyzer(info *types.Info, proj constructs.Project) *analyzerImp {
 	return &analyzerImp{
-		locs: locs,
 		info: info,
+		proj: proj,
 		loc:  nil,
 
 		complexity: 1,
@@ -65,13 +64,12 @@ func newAnalyzer(locs locs.Set, info *types.Info) *analyzerImp {
 		reads:   sortedSet.New(usage.Comparer()),
 		writes:  sortedSet.New(usage.Comparer()),
 		invokes: sortedSet.New(usage.Comparer()),
-		defines: sortedSet.New(usage.Comparer()),
 	}
 }
 
 func (a *analyzerImp) Analyze(node ast.Node) *analyzerImp {
 	if utils.IsNil(a.loc) {
-		a.loc = a.locs.NewLoc(node.Pos())
+		a.loc = a.proj.Locs().NewLoc(node.Pos())
 	}
 	// gather positional information for indents and cyclomatic complexity.
 	ast.Inspect(node, a.addCodePosForNode)
@@ -79,6 +77,10 @@ func (a *analyzerImp) Analyze(node ast.Node) *analyzerImp {
 	a.getter = a.checkForGetter(node)
 	a.setter = a.checkForSetter(node)
 	return a
+}
+
+func (a *analyzerImp) GetMetrics() constructs.Metrics {
+	return a.proj.NewMetrics(a.GetMetricsArgs())
 }
 
 func (a *analyzerImp) GetMetricsArgs() constructs.MetricsArgs {
@@ -93,7 +95,6 @@ func (a *analyzerImp) GetMetricsArgs() constructs.MetricsArgs {
 		Reads:      a.reads,
 		Writes:     a.writes,
 		Invokes:    a.invokes,
-		Defines:    a.defines,
 	}
 }
 
@@ -114,7 +115,7 @@ func (a *analyzerImp) incComplexity(check bool) {
 }
 
 func (a *analyzerImp) addCodePos(pos token.Pos, isEnd bool) {
-	p := a.locs.FileSet().PositionFor(pos, false)
+	p := a.proj.Locs().FileSet().PositionFor(pos, false)
 	lineNo, column := p.Line, p.Column
 	a.maxLine = max(a.maxLine, lineNo)
 	a.minLine = min(a.minLine, lineNo)
@@ -148,14 +149,17 @@ func (a *analyzerImp) addCodePosForNode(n ast.Node) bool {
 	return true
 }
 
-func (a *analyzerImp) addDefine(def types.Object) {
+func (a *analyzerImp) createUsage(id *ast.Ident, useObj types.Object) constructs.Usage {
+	inst := a.info.Instances[id]
 
-	//TODO: Finish implementing
-	fmt.Printf("define: %v\n", def)
+	// TODO: Finish implementing
+	fmt.Printf("%q: obj: %v, inst: %v\n", id.String(), useObj, inst)
+	return nil
 }
 
 func (a *analyzerImp) getUsages(node ast.Node) {
 	localDefs := set.New[types.Object]()
+	usages := map[*ast.Ident]constructs.Usage{}
 	ast.Inspect(node, func(n ast.Node) bool {
 		id, ok := n.(*ast.Ident)
 		if !ok {
@@ -163,21 +167,16 @@ func (a *analyzerImp) getUsages(node ast.Node) {
 		}
 		if def, ok := a.info.Defs[id]; ok {
 			localDefs.Add(def)
-			a.addDefine(def)
 			return true
 		}
-		if uses, ok := a.info.Uses[id]; ok {
-			if localDefs.Contains(uses) {
-				fmt.Printf("  local uses %v\n", uses)
-			} else {
-				fmt.Printf("  remote uses %v\n", uses)
-			}
-		}
 
-		//TODO: Finish implementing
-		fmt.Printf("Id %v:\n", id)
-		if inst, ok := a.info.Instances[id]; ok {
-			fmt.Printf("  inst %v\n", inst)
+		// TODO: Finish implementing
+		// TODO: Use local to change selection into normal target so that
+		//       if someone uses a struct locally to external types then the usage
+		//       of a selection on that struct are the same as just using that type.
+
+		if useObj, ok := a.info.Uses[id]; ok && !localDefs.Contains(useObj) {
+			usages[id] = a.createUsage(id, useObj)
 		}
 		return true
 	})

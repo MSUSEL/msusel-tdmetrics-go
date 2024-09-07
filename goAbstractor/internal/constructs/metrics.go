@@ -21,7 +21,6 @@ type Metrics interface {
 	Reads() collections.ReadonlySortedSet[Usage]
 	Writes() collections.ReadonlySortedSet[Usage]
 	Invokes() collections.ReadonlySortedSet[Usage]
-	Defines() collections.ReadonlySortedSet[Usage]
 }
 
 // MetricsArgs are measurements taken for a method body or expression.
@@ -112,18 +111,6 @@ type MetricsArgs struct {
 	//
 	// e.g. `point.getX()` has an invocation of `point.getX`.
 	Invokes collections.SortedSet[Usage]
-
-	// Defines are the usages that define a type internal to the expression.
-	// This usage will reference the defined type description.
-	//
-	// e.g. `var x = struct{x, y int}{x: 42, y: 21}` defines `struct{x, y int}`.
-	//
-	// e.g. `var doThing = func(x, y int) { ** }` defines `func(x, y int)`.
-	//      Note that the internal function will not have its own metrics,
-	//      instead it will be counted in this metrics. Meaning a type defined
-	//      (or read, write, etc) inside of an internal defined function
-	//      will be part of this metrics.
-	Defines collections.SortedSet[Usage]
 }
 
 type MetricsFactory interface {

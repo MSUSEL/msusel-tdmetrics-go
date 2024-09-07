@@ -22,7 +22,7 @@ type TempReference interface {
 
 	ResolvedType() TypeDesc
 	Resolved() bool
-	SetType(typ TypeDesc)
+	SetResolution(typ TypeDesc)
 }
 
 type TempReferenceArgs struct {
