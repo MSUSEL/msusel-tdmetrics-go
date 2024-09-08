@@ -97,7 +97,7 @@ func (r *tempReferenceImp) ToJson(ctx *jsonify.Context) jsonify.Datum {
 	return jsonify.NewMap().
 		AddIf(ctx, ctx.IsDebugKindIncluded(), `kind`, r.Kind()).
 		AddIf(ctx, ctx.IsDebugIndexIncluded(), `index`, r.index).
-		Add(ctx, `packagePath`, r.pkgPath).
+		AddNonZero(ctx, `packagePath`, r.pkgPath).
 		Add(ctx, `name`, r.name).
 		AddNonZero(ctx.Short(), `type`, r.typ).
 		AddNonZero(ctx.Short(), `instanceTypes`, r.instTypes)
@@ -106,8 +106,10 @@ func (r *tempReferenceImp) ToJson(ctx *jsonify.Context) jsonify.Datum {
 func (r *tempReferenceImp) String() string {
 	buf := &strings.Builder{}
 	buf.WriteString(`ref `)
-	buf.WriteString(r.pkgPath)
-	buf.WriteString(`.`)
+	if len(r.pkgPath) > 0 {
+		buf.WriteString(r.pkgPath)
+		buf.WriteString(`.`)
+	}
 	buf.WriteString(r.name)
 	if len(r.instTypes) > 0 {
 		buf.WriteString(`[`)

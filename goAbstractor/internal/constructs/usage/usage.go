@@ -97,7 +97,7 @@ func (u *usageImp) ToJson(ctx *jsonify.Context) jsonify.Datum {
 			AddNonZero(ctx.Short(), `selection`, u.resSelection)
 	}
 	return m.
-		Add(ctx, `packagePath`, u.pkgPath).
+		AddNonZero(ctx, `packagePath`, u.pkgPath).
 		Add(ctx, `target`, u.target).
 		AddNonZero(ctx.Short(), `instanceTypes`, u.instTypes).
 		AddNonZero(ctx, `selection`, u.selection)
@@ -106,13 +106,19 @@ func (u *usageImp) ToJson(ctx *jsonify.Context) jsonify.Datum {
 func (u *usageImp) String() string {
 	buf := &strings.Builder{}
 	buf.WriteString(`usage `)
-	buf.WriteString(u.pkgPath)
-	buf.WriteString(`.`)
+	if len(u.pkgPath) > 0 {
+		buf.WriteString(u.pkgPath)
+		buf.WriteString(`.`)
+	}
 	buf.WriteString(u.target)
 	if len(u.instTypes) > 0 {
 		buf.WriteString(`[`)
 		buf.WriteString(enumerator.Enumerate(u.instTypes...).Join(`, `))
 		buf.WriteString(`]`)
+	}
+	if len(u.selection) > 0 {
+		buf.WriteString(`.`)
+		buf.WriteString(u.selection)
 	}
 	return buf.String()
 }

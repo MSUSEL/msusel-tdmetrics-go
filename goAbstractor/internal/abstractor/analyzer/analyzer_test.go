@@ -12,8 +12,11 @@ import (
 
 	"github.com/Snow-Gremlin/goToolbox/differs/diff"
 	"github.com/Snow-Gremlin/goToolbox/testers/check"
+	"golang.org/x/tools/go/packages"
 	"gopkg.in/yaml.v3"
 
+	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/abstractor/baker"
+	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/abstractor/converter"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs/project"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/jsonify"
@@ -438,6 +441,7 @@ func Test_SetterWithSelect(t *testing.T) {
 		`	lineCount:  3,`,
 		`   setter:  true,`,
 		`}`)
+	t.Fail() // TODO: REMOVE
 }
 
 func Test_SetterWithReference(t *testing.T) {
@@ -471,7 +475,6 @@ func Test_NotReverseSetter(t *testing.T) {
 		`	indents:    1,`,
 		`	lineCount:  3,`,
 		`}`)
-	t.Fail() // TODO: remove
 }
 
 // TODO: Test joining metrics:
@@ -509,17 +512,38 @@ func Test_NotReverseSetter(t *testing.T) {
 // TODO: Test local encapsulation of type:
 // x := struct{y externalType}{y: ext}.y
 
+// TODO: Test selection from return value.
+// x := foo().y
+
 type testTool struct {
 	t *testing.T
 	m constructs.Metrics
 }
 
-func createInfo() *types.Info {
-	return &types.Info{
-		Types: make(map[ast.Expr]types.TypeAndValue),
-		Defs:  make(map[*ast.Ident]types.Object),
-		Uses:  make(map[*ast.Ident]types.Object),
+func createPackage() (constructs.Project, converter.Converter, *token.FileSet, *types.Info) {
+	pkgPath := `test`
+	pkgName := `test`
+	info := &types.Info{
+		Defs:       make(map[*ast.Ident]types.Object),
+		Instances:  make(map[*ast.Ident]types.Instance),
+		Selections: make(map[*ast.SelectorExpr]*types.Selection),
+		Types:      make(map[ast.Expr]types.TypeAndValue),
+		Uses:       make(map[*ast.Ident]types.Object),
 	}
+	fSet := token.NewFileSet()
+	proj := project.New(locs.NewSet(fSet))
+	curPkg := proj.NewPackage(constructs.PackageArgs{
+		RealPkg: &packages.Package{
+			PkgPath:   pkgPath,
+			Name:      pkgName,
+			Types:     types.NewPackage(pkgPath, pkgName),
+			TypesInfo: info,
+		},
+		Path: pkgPath,
+		Name: pkgName,
+	})
+	conv := converter.New(baker.New(proj), proj, curPkg, nil)
+	return proj, conv, fSet, info
 }
 
 func findNode(src ast.Node, name string) ast.Node {
@@ -544,27 +568,26 @@ func findNode(src ast.Node, name string) ast.Node {
 }
 
 func parseExpr(t *testing.T, lines ...string) *testTool {
+	proj, conv, fSet, info := createPackage()
+
 	code := strings.Join(lines, "\n")
-	fSet := token.NewFileSet()
 	expr, err := parser.ParseExprFrom(fSet, ``, []byte(code), parser.ParseComments)
 	check.NoError(t).Require(err)
 
-	info := createInfo()
 	err = types.CheckExpr(fSet, nil, token.NoPos, expr, info)
 	check.NoError(t).Require(err)
 
-	proj := project.New(locs.NewSet(fSet))
-	m := Analyze(info, proj, expr)
+	m := Analyze(info, proj, conv, expr)
 	return &testTool{t: t, m: m}
 }
 
 func parseDecl(t *testing.T, name string, lines ...string) *testTool {
+	proj, conv, fSet, info := createPackage()
+
 	code := "package test\n" + strings.Join(lines, "\n")
-	fSet := token.NewFileSet()
 	file, err := parser.ParseFile(fSet, ``, []byte(code), parser.ParseComments)
 	check.NoError(t).Require(err)
 
-	info := createInfo()
 	var conf types.Config
 	_, err = conf.Check("test", fSet, []*ast.File{file}, info)
 	check.NoError(t).Require(err)
@@ -572,8 +595,7 @@ func parseDecl(t *testing.T, name string, lines ...string) *testTool {
 	target := findNode(file, name)
 	check.NotNil(t).Name(`found name`).With(`name`, name).Assert(target)
 
-	proj := project.New(locs.NewSet(fSet))
-	m := Analyze(info, proj, target)
+	m := Analyze(info, proj, conv, target)
 	return &testTool{t: t, m: m}
 }
 

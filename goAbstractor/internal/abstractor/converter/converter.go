@@ -15,6 +15,7 @@ import (
 type Converter interface {
 	ConvertType(t types.Type) constructs.TypeDesc
 	ConvertSignature(t *types.Signature) constructs.Signature
+	ConvertInstanceTypes(t *types.TypeList) []constructs.TypeDesc
 }
 
 func New(
@@ -156,7 +157,7 @@ func (c *convImp) convertNamed(t *types.Named) constructs.TypeDesc {
 	}
 
 	// Get any type parameters.
-	instanceTp := c.convertInstanceTypes(t.TypeArgs())
+	instanceTp := c.ConvertInstanceTypes(t.TypeArgs())
 
 	// Check if the reference can already be found.
 	_, typ, found := c.proj.FindType(pkgPath, name, false)
@@ -276,7 +277,7 @@ func (c *convImp) convertTypeParam(t *types.TypeParam) constructs.TypeParam {
 	})
 }
 
-func (c *convImp) convertInstanceTypes(t *types.TypeList) []constructs.TypeDesc {
+func (c *convImp) ConvertInstanceTypes(t *types.TypeList) []constructs.TypeDesc {
 	list := make([]constructs.TypeDesc, t.Len())
 	for i := range t.Len() {
 		list[i] = c.ConvertType(t.At(i))
