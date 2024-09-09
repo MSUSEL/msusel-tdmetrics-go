@@ -1,14 +1,12 @@
 package usages
 
 import (
-	"fmt"
 	"go/ast"
 	"go/types"
 
 	"github.com/Snow-Gremlin/goToolbox/collections"
 	"github.com/Snow-Gremlin/goToolbox/collections/set"
 	"github.com/Snow-Gremlin/goToolbox/collections/sortedSet"
-	"github.com/Snow-Gremlin/goToolbox/terrors/terror"
 	"github.com/Snow-Gremlin/goToolbox/utils"
 
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/abstractor/converter"
@@ -28,8 +26,8 @@ type usagesImp struct {
 	proj constructs.Project
 	conv converter.Converter
 
-	localDefs    collections.Set[types.Object]
-	identHandled collections.Set[*ast.Ident]
+	localDefs   collections.Set[types.Object]
+	alreadyDefs map[types.Object]constructs.Usage
 
 	reads   collections.SortedSet[constructs.Usage]
 	writes  collections.SortedSet[constructs.Usage]
@@ -38,10 +36,10 @@ type usagesImp struct {
 
 func Calculate(info *types.Info, proj constructs.Project, conv converter.Converter, node ast.Node) Usages {
 	assert.ArgNotNil(`info`, info)
-	assert.ArgNotEmpty(`info.Defs`, info.Defs)
-	assert.ArgNotEmpty(`info.Instances`, info.Instances)
-	assert.ArgNotEmpty(`info.Selections`, info.Selections)
-	assert.ArgNotEmpty(`info.Uses`, info.Uses)
+	assert.ArgNotNil(`info.Defs`, info.Defs)
+	assert.ArgNotNil(`info.Instances`, info.Instances)
+	assert.ArgNotNil(`info.Selections`, info.Selections)
+	assert.ArgNotNil(`info.Uses`, info.Uses)
 	assert.ArgNotNil(`proj`, proj)
 	assert.ArgNotNil(`conv`, conv)
 	assert.ArgNotNil(`node`, node)
@@ -51,84 +49,111 @@ func Calculate(info *types.Info, proj constructs.Project, conv converter.Convert
 		proj: proj,
 		conv: conv,
 
-		localDefs:    set.New[types.Object](),
-		identHandled: set.New[*ast.Ident](),
+		localDefs:   set.New[types.Object](),
+		alreadyDefs: make(map[types.Object]constructs.Usage),
 
 		reads:   sortedSet.New(usage.Comparer()),
 		writes:  sortedSet.New(usage.Comparer()),
 		invokes: sortedSet.New(usage.Comparer()),
 	}
 
-	ui.getUsages(node)
+	ui.processNode(node)
 
 	return Usages{
-		Reads:   ui.reads,
-		Writes:  ui.writes,
-		Invokes: ui.invokes,
+		// TODO: Restore
+		//Reads:   ui.reads,
+		//Writes:  ui.writes,
+		//Invokes: ui.invokes,
+
+		// TODO: Remove
+		Reads:   sortedSet.New(usage.Comparer()),
+		Writes:  sortedSet.New(usage.Comparer()),
+		Invokes: sortedSet.New(usage.Comparer()),
 	}
 }
 
-func (ui *usagesImp) getUsages(node ast.Node) {
+func (ui *usagesImp) processNode(node ast.Node) constructs.Usage {
+	var last constructs.Usage
 	ast.Inspect(node, func(n ast.Node) bool {
 		switch t := n.(type) {
 		case *ast.AssignStmt:
 			ui.processAssign(t)
+			last = nil
 		case *ast.Ident:
-			ui.processIdent(t)
+			last = ui.processIdent(t)
 		case *ast.SelectorExpr:
-			ui.processSelector(t)
+			last = ui.processSelector(t)
+		default:
+			return true
 		}
-		return true
+		return false
 	})
+	return last
 }
 
 func (ui *usagesImp) processAssign(assign *ast.AssignStmt) {
+	// Process the left hand side (Lhs) of the assignment.
+	// Any usage returned will be the usage that is being assigned to or nil.
+	// The usage is nil if not resolvable (e.g. `*foo() = 10` where
+	// `func foo() *int`) or if assignment to a local type (e.g. `x := 10`).
+	for _, exp := range assign.Lhs {
+		if last := ui.processNode(exp); !utils.IsNil(last) {
+			ui.writes.Add(last)
+		}
+	}
 
-	fmt.Printf(">>> assign: %v\n", assign) // TODO: REMOVE
-
+	// Process the right hand side (Rhs) of the assignment.
+	for _, exp := range assign.Rhs {
+		ui.processNode(exp)
+	}
 }
 
-func (ui *usagesImp) processIdent(id *ast.Ident) {
-	if ui.identHandled.Contains(id) {
-		return
-	}
-	ui.identHandled.Add(id)
-
+func (ui *usagesImp) processIdent(id *ast.Ident) constructs.Usage {
+	// Check if this identifier is part of a local definition.
+	// Don't create a usage for the local definition, they should be skipped.
 	if def, ok := ui.info.Defs[id]; ok {
 		ui.localDefs.Add(def)
-		return
+		return nil
 	}
+
+	obj, ok := ui.info.Uses[id]
+	if !ok || ui.localDefs.Contains(obj) {
+		return nil
+	}
+
+	return ui.createUsage(id, obj, nil)
+}
+
+func (ui *usagesImp) processSelector(sel *ast.SelectorExpr) constructs.Usage {
+	ui.processNode(sel.X)
+
+	//last := ui.processNode(sel.X)
+	//fmt.Printf(">>> last: %v\n", last)
+	//fmt.Printf(">>> sel:  %v\n", sel.Sel)
 
 	// TODO: Finish implementing
-	// TODO: Use local to change selection into normal target so that
-	//       if someone uses a struct locally to external types then the usage
-	//       of a selection on that struct are the same as just using that type.
 
-	if useObj, ok := ui.info.Uses[id]; ok && !ui.localDefs.Contains(useObj) {
-		usage := ui.createUsage(id, useObj)
-
-		fmt.Printf(">>> (%T) %v\t\t%s\n", useObj, useObj, usage.String()) // TODO: REMOVE
-
-		//usages[id] = usage
-	}
+	/*
+		selection, ok := ui.info.Selections[sel]
+		if !ok {
+			panic(terror.New(`expected selection info but n found`).
+				With(`expr`, sel))
+		}
+		fmt.Printf(">>> sel: %v, %v\n", sel, selection) // TODO: REMOVE
+		fmt.Printf("  >>> %v\n", selection.Obj())
+		fmt.Printf("  >>> %v\n", selection.Recv())
+	*/
+	return nil
 }
 
-func (ui *usagesImp) processSelector(sel *ast.SelectorExpr) {
-	selection, ok := ui.info.Selections[sel]
-	if !ok {
-		panic(terror.New(`expected selection info but n found`).
-			With(`expr`, sel))
+func (ui *usagesImp) createUsage(id *ast.Ident, obj types.Object, origin constructs.Construct) constructs.Usage {
+	if usage, ok := ui.alreadyDefs[obj]; ok {
+		return usage
 	}
 
-	fmt.Printf(">>> sel: %v, %v\n", sel, selection) // TODO: REMOVE
-	fmt.Printf("  >>> %v\n", selection.Obj())
-	fmt.Printf("  >>> %v\n", selection.Recv())
-}
-
-func (ui *usagesImp) createUsage(id *ast.Ident, useObj types.Object) constructs.Usage {
 	pkgPath := ``
-	if !utils.IsNil(useObj.Pkg()) {
-		pkgPath = useObj.Pkg().Path()
+	if !utils.IsNil(obj.Pkg()) {
+		pkgPath = obj.Pkg().Path()
 	}
 
 	var instType []constructs.TypeDesc
@@ -136,24 +161,23 @@ func (ui *usagesImp) createUsage(id *ast.Ident, useObj types.Object) constructs.
 		instType = ui.conv.ConvertInstanceTypes(inst.TypeArgs)
 	}
 
-	target := useObj.Name()
-	selection := ``
-	if v, ok := useObj.(*types.Var); ok && v.IsField() {
-		fmt.Printf(">>>X %v\n", v)
+	//if utils.IsNil(origin) {
+	//	if v, ok := obj.(*types.Var); ok && v.IsField() {
+	// TODO: Finish implementing by looking up the origin type
+	//       if not given. Note `v.Origin` may equal `v`.
+	//origin = ui.conv.ConvertVar(v.Origin())
+	//	}
+	//}
 
-		if v == v.Origin() {
-			fmt.Println("SAME!!!")
-		}
-
-		target = v.Origin().Name()
-		selection = useObj.Name()
-		// TODO: Need to get instance information for origin, maybe, create tests.
-	}
-
-	return ui.proj.NewUsage(constructs.UsageArgs{
+	usage := ui.proj.NewUsage(constructs.UsageArgs{
 		PackagePath:   pkgPath,
-		Target:        target,
+		Name:          obj.Name(),
 		InstanceTypes: instType,
-		Selection:     selection,
+		Origin:        origin,
 	})
+	ui.alreadyDefs[obj] = usage
+
+	//fmt.Printf("Created: %s\n", usage.String())
+
+	return usage
 }

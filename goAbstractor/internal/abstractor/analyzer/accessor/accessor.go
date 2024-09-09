@@ -18,9 +18,9 @@ type Accessor struct {
 
 func Calculate(info *types.Info, node ast.Node) Accessor {
 	assert.ArgNotNil(`info`, info)
-	assert.ArgNotEmpty(`info.Defs`, info.Defs)
-	assert.ArgNotEmpty(`info.Types`, info.Types)
-	assert.ArgNotEmpty(`info.Uses`, info.Uses)
+	assert.ArgNotNil(`info.Defs`, info.Defs)
+	assert.ArgNotNil(`info.Types`, info.Types)
+	assert.ArgNotNil(`info.Uses`, info.Uses)
 	assert.ArgNotNil(`node`, node)
 
 	k := Accessor{}
@@ -53,6 +53,9 @@ func getTypeAndBody(node ast.Node) (*ast.FuncType, *ast.BlockStmt, bool) {
 func isSimpleFetch(info *types.Info, node ast.Node) bool {
 	valid := true
 	ast.Inspect(node, func(n ast.Node) bool {
+		if !valid {
+			return false
+		}
 		switch t := n.(type) {
 		case nil, *ast.Ident, *ast.SelectorExpr, *ast.BasicLit, *ast.StarExpr, *ast.TypeAssertExpr:
 			// Check for identifiers (`foo`), selectors (`f.x`), literals (`3.24`),
@@ -81,9 +84,15 @@ func isSimpleFetch(info *types.Info, node ast.Node) bool {
 func isObjectUsed(obj types.Object, info *types.Info, node ast.Node) bool {
 	found := false
 	ast.Inspect(node, func(n ast.Node) bool {
+		if found {
+			return false
+		}
 		id, ok := n.(*ast.Ident)
-		found = found || (ok && info.Uses[id] == obj)
-		return !found
+		if ok && info.Uses[id] == obj {
+			found = true
+			return false
+		}
+		return true
 	})
 	return found
 }

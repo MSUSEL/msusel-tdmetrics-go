@@ -441,7 +441,6 @@ func Test_SetterWithSelect(t *testing.T) {
 		`	lineCount:  3,`,
 		`   setter:  true,`,
 		`}`)
-	t.Fail() // TODO: REMOVE
 }
 
 func Test_SetterWithReference(t *testing.T) {
@@ -601,6 +600,8 @@ func parseDecl(t *testing.T, name string, lines ...string) *testTool {
 
 func (tt *testTool) check(expLines ...string) {
 	ctx := jsonify.NewContext()
+
+	// TODO: Update check to include checking Usage set
 
 	gotData, err := jsonify.Marshal(ctx, tt.m)
 	check.NoError(tt.t).Require(err)

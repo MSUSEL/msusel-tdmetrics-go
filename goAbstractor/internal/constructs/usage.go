@@ -1,37 +1,38 @@
 package constructs
 
-import "github.com/Snow-Gremlin/goToolbox/collections"
+import (
+	"github.com/Snow-Gremlin/goToolbox/collections"
+)
 
 // Usage is a reference of type usage inside of expressions.
 //
 // The usage describes:
-//  - the read or write of a field, variable, or parameter
-//  - the read or write of a function pointer
-//  - the invocation/call of a method, function, function pointer, or closure
-//  - the definition of an expression local type
-//  - the casting or type checking of one type to another
-//  - the creation of a type
+//   - the read or write of a field, variable, or parameter
+//   - the read or write of a function pointer
+//   - the invocation/call of a method, function, function pointer, or closure
+//   - the definition of an expression local type
+//   - the casting or type checking of one type to another
+//   - the creation of a type
 type Usage interface {
 	Construct
 	IsUsage()
 
 	PackagePath() string
-	Target() string
+	Name() string
 	InstanceTypes() []TypeDesc
-	Selection() string
-	HasSelection() bool
+	Origin() Construct
+	HasOrigin() bool
 
-	ResolvedTarget() TypeDesc
-	ResolvedSelection() TypeDesc
+	ResolvedType() TypeDesc
 	Resolved() bool
-	SetResolution(target, selection TypeDesc)
+	SetResolution(typ TypeDesc)
 }
 
 type UsageArgs struct {
 	PackagePath   string
-	Target        string
+	Name          string
 	InstanceTypes []TypeDesc
-	Selection     string
+	Origin        Construct
 }
 
 type UsageFactory interface {
