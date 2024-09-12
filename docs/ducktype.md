@@ -9,11 +9,26 @@ Go's type system will determine if
 Therefore, part of Go abstraction will require to determine
 type relationships for all types to remove duck-typing.
 
-This can either be $\frac{n(n-1)}{2}$ comparisons where $n$
-is the number of types, or a tree of inheritance can be used
-to perform less comparisons.
+Determining the type relationships brut force is $O(n^2)$ comparisons where $n$
+is the number of types. Each type needs to be checked against every other type
+(e.g. $\frac{n(n-1)}{2}$) to put all inheritance on each object. Additional
+work needs to be done to thin out any inheritance that could be indirect,
+i.e. any parent of a parent can be removed from the child since the parent
+already contains an indirect inheritance to the grandparent.
+
+Alternatively, a "tree of inheritance" can be used to perform less comparisons
+and to create the indirect inheritance at the same time. This is significantly
+faster in practice but in worst cases, i.e. no object inheritance another,
+is still $O(n^2)$.
 
 ## Tree of Inheritance
+
+A tree of inheritance is a directed acyclic graph (DAG) where
+the sub-types (see below) are closer to the root and have all super-types as
+children nodes. The children nodes in the graph are called "parents" here
+since they are inherited from. To simplify the algorithm, the forest of
+top most sub-types is put into a root that is considered to be a sub-type
+of every type in the tree.
 
 Assuming a type can be represented by a set of members,
 the type $S$ is a sub-type of $T$ ( $S <: T$ ) iff the set of
@@ -77,7 +92,7 @@ flowchart LR
 
 3. Inserting a node, $X$, into a node, $Y$:
     1. Initial state: $|Xp| = 0$ and $Y \supset X$.
-    2. Assign $A = \left\{ Y_i \mid X \supset Y_i \right\}$.
+    2. Assign $A = \{ Y_i \mid X \supset Y_i \}$.
        If $|A| > 0$, then remove $A$ from $Yp$, add $A$ to $Xp$, and
        add $X$ as a parent of $Y$.
     3. For all $Y_i \supset X$, insert $X$ into $Y_i$.

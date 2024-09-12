@@ -26,7 +26,7 @@ import (
 func Test_Empty(t *testing.T) {
 	tt := parseExpr(t,
 		`func() {}`)
-	tt.check(
+	tt.checkMetrics(
 		`{`,
 		`	codeCount:  1,`,
 		`	complexity: 1,`,
@@ -40,13 +40,14 @@ func Test_Simple(t *testing.T) {
 		`func() int {`,
 		`	return max(1, 3, 5)`,
 		`}`)
-	tt.check(
+	tt.checkMetrics(
 		`{`,
 		`	codeCount:  3,`,
 		`	complexity: 1,`,
 		`	indents:    1,`,
 		`	lineCount:  3,`,
 		`}`)
+	tt.checkUsages()
 }
 
 func Test_SimpleWithExtraIndent(t *testing.T) {
@@ -54,7 +55,7 @@ func Test_SimpleWithExtraIndent(t *testing.T) {
 		`		func() int {`,
 		`			return max(1, 3, 5)`,
 		`		}`)
-	tt.check(
+	tt.checkMetrics(
 		`{`,
 		`	codeCount:  3,`,
 		`	complexity: 1,`,
@@ -70,7 +71,7 @@ func Test_SimpleParams(t *testing.T) {
 		`	  c int) int {`,
 		`	return max(a, b, c)`,
 		`}`)
-	tt.check(
+	tt.checkMetrics(
 		`{`,
 		`	codeCount:  5,`,
 		`	complexity: 1,`,
@@ -85,7 +86,7 @@ func Test_SimpleWithReturn(t *testing.T) {
 		`	x := max(1, 3, 5)`,
 		`	return x`,
 		`}`)
-	tt.check(
+	tt.checkMetrics(
 		`{`,
 		`	codeCount:  4,`,
 		`	complexity: 1,`,
@@ -104,7 +105,7 @@ func Test_SimpleWithSpace(t *testing.T) {
 		`	   it is a sandwich */`,
 		`   `,
 		`}`)
-	tt.check(
+	tt.checkMetrics(
 		`{`,
 		`	codeCount:  3,`,
 		`	complexity: 1,`,
@@ -124,7 +125,7 @@ func Test_SimpleWithDefer(t *testing.T) {
 		`	defer x.close()`,
 		`	x.doStuff()`,
 		`}`)
-	tt.check(
+	tt.checkMetrics(
 		`{`,
 		`   loc:        5,`,
 		`	codeCount:  5,`,
@@ -143,7 +144,7 @@ func Test_SimpleIf(t *testing.T) {
 		`	}`,
 		`	println(x)`,
 		`}`)
-	tt.check(
+	tt.checkMetrics(
 		`{`,
 		`	codeCount:  7,`,
 		`	complexity: 2,`,
@@ -164,7 +165,7 @@ func Test_SimpleIfElse(t *testing.T) {
 		`	}`,
 		`	println(x)`,
 		`}`)
-	tt.check(
+	tt.checkMetrics(
 		`{`,
 		`	codeCount:  10,`,
 		`	complexity:  2,`,
@@ -184,7 +185,7 @@ func Test_SimpleIfElseIf(t *testing.T) {
 		`	}`,
 		`	println(x)`,
 		`}`)
-	tt.check(
+	tt.checkMetrics(
 		`{`,
 		`	codeCount:  9,`,
 		`	complexity: 3,`,
@@ -206,7 +207,7 @@ func Test_SimpleIfElseIfElse(t *testing.T) {
 		`	}`,
 		`	println(x)`,
 		`}`)
-	tt.check(
+	tt.checkMetrics(
 		`{`,
 		`	codeCount:  11,`,
 		`	complexity:  3,`,
@@ -229,7 +230,7 @@ func Test_SimpleSwitch(t *testing.T) {
 		`	}`,
 		`	println(x)`,
 		`}`)
-	tt.check(
+	tt.checkMetrics(
 		`{`,
 		`	codeCount:  12,`,
 		`	complexity:  3,`,
@@ -254,7 +255,7 @@ func Test_DeferInBlock(t *testing.T) {
 		`	}`,
 		`	print("F ")`,
 		`}`)
-	tt.check(
+	tt.checkMetrics(
 		`{`,
 		`	codeCount:  14,`,
 		`	complexity:  1,`,
@@ -279,7 +280,7 @@ func Test_DeferInFuncLiteral(t *testing.T) {
 		`	}()`,
 		`	print("F ")`,
 		`}`)
-	tt.check(
+	tt.checkMetrics(
 		`{`,
 		`	codeCount:  14,`,
 		`	complexity:  1,`,
@@ -301,7 +302,7 @@ func Test_DeferWithComplexity(t *testing.T) {
 		`	}()`,
 		`	print("D ")`,
 		`}`)
-	tt.check(
+	tt.checkMetrics(
 		`{`,
 		`	codeCount:  11,`,
 		`	complexity:  2,`,
@@ -323,7 +324,7 @@ func Test_ForRangeWithDefer(t *testing.T) {
 		`	}`,
 		`	print("E ")`,
 		`}`)
-	tt.check(
+	tt.checkMetrics(
 		`{`,
 		`	codeCount:  11,`,
 		`	complexity:  2,`,
@@ -340,7 +341,7 @@ func Test_GoStatement(t *testing.T) {
 		`	}()`,
 		`	print("B ")`,
 		`}`)
-	tt.check(
+	tt.checkMetrics(
 		`{`,
 		`	codeCount:  6,`,
 		`	complexity: 2,`,
@@ -366,7 +367,7 @@ func Test_SelectStatement(t *testing.T) {
 		`		print("B ", b)`,
 		`	}`,
 		`}`)
-	tt.check(
+	tt.checkMetrics(
 		`{`,
 		`	codeCount:  15,`,
 		`	complexity:  5,`,
@@ -381,7 +382,7 @@ func Test_GetterWithSelect(t *testing.T) {
 		`func (b Bar) Foo() int {`,
 		`	return b.x`,
 		`}`)
-	tt.check(
+	tt.checkMetrics(
 		`{`,
 		`	loc:        2,`,
 		`	codeCount:  3,`,
@@ -398,7 +399,7 @@ func Test_GetterWithDereference(t *testing.T) {
 		`func Foo() int {`,
 		`	return *bar`,
 		`}`)
-	tt.check(
+	tt.checkMetrics(
 		`{`,
 		`	loc:        2,`,
 		`	codeCount:  3,`,
@@ -415,7 +416,7 @@ func Test_GetterWithConvert(t *testing.T) {
 		`func (b Bar) Foo() int {`,
 		`	return int(b.x)`,
 		`}`)
-	tt.check(
+	tt.checkMetrics(
 		`{`,
 		`	loc:        2,`,
 		`	codeCount:  3,`,
@@ -432,7 +433,7 @@ func Test_SetterWithSelect(t *testing.T) {
 		`func (b Bar) Foo(x int) {`,
 		`	b.x = x`,
 		`}`)
-	tt.check(
+	tt.checkMetrics(
 		`{`,
 		`	loc:        2,`,
 		`	codeCount:  3,`,
@@ -449,7 +450,7 @@ func Test_SetterWithReference(t *testing.T) {
 		`func Foo(x int) {`,
 		`	bar = &x`,
 		`}`)
-	tt.check(
+	tt.checkMetrics(
 		`{`,
 		`	loc:        2,`,
 		`	codeCount:  3,`,
@@ -466,7 +467,7 @@ func Test_NotReverseSetter(t *testing.T) {
 		`func Foo(x *int) {`,
 		`	*x = *bar`,
 		`}`)
-	tt.check(
+	tt.checkMetrics(
 		`{`,
 		`	loc:        2,`,
 		`	codeCount:  3,`,
@@ -514,12 +515,19 @@ func Test_NotReverseSetter(t *testing.T) {
 // TODO: Test selection from return value.
 // x := foo().y
 
+// TODO: Test inc and dec also work as assignment.
+
 type testTool struct {
-	t *testing.T
-	m constructs.Metrics
+	t      *testing.T
+	proj   constructs.Project
+	curPkg constructs.Package
+	conv   converter.Converter
+	fSet   *token.FileSet
+	info   *types.Info
+	m      constructs.Metrics
 }
 
-func createPackage() (constructs.Project, converter.Converter, *token.FileSet, *types.Info) {
+func newTestTool(t *testing.T) *testTool {
 	pkgPath := `test`
 	pkgName := `test`
 	info := &types.Info{
@@ -542,7 +550,14 @@ func createPackage() (constructs.Project, converter.Converter, *token.FileSet, *
 		Name: pkgName,
 	})
 	conv := converter.New(baker.New(proj), proj, curPkg, nil)
-	return proj, conv, fSet, info
+	return &testTool{
+		t:      t,
+		proj:   proj,
+		curPkg: curPkg,
+		conv:   conv,
+		fSet:   fSet,
+		info:   info,
+	}
 }
 
 func findNode(src ast.Node, name string) ast.Node {
@@ -567,43 +582,48 @@ func findNode(src ast.Node, name string) ast.Node {
 }
 
 func parseExpr(t *testing.T, lines ...string) *testTool {
-	proj, conv, fSet, info := createPackage()
+	tt := newTestTool(t)
 
 	code := strings.Join(lines, "\n")
-	expr, err := parser.ParseExprFrom(fSet, ``, []byte(code), parser.ParseComments)
+	expr, err := parser.ParseExprFrom(tt.fSet, ``, []byte(code), parser.ParseComments)
 	check.NoError(t).Require(err)
 
-	err = types.CheckExpr(fSet, nil, token.NoPos, expr, info)
+	err = types.CheckExpr(tt.fSet, nil, token.NoPos, expr, tt.info)
 	check.NoError(t).Require(err)
 
-	m := Analyze(info, proj, conv, expr)
-	return &testTool{t: t, m: m}
+	tt.m = Analyze(tt.info, tt.proj, tt.conv, expr)
+	return tt
 }
 
 func parseDecl(t *testing.T, name string, lines ...string) *testTool {
-	proj, conv, fSet, info := createPackage()
+	tt := newTestTool(t)
 
 	code := "package test\n" + strings.Join(lines, "\n")
-	file, err := parser.ParseFile(fSet, ``, []byte(code), parser.ParseComments)
+	file, err := parser.ParseFile(tt.fSet, ``, []byte(code), parser.ParseComments)
 	check.NoError(t).Require(err)
 
 	var conf types.Config
-	_, err = conf.Check("test", fSet, []*ast.File{file}, info)
+	_, err = conf.Check("test", tt.fSet, []*ast.File{file}, tt.info)
 	check.NoError(t).Require(err)
 
 	target := findNode(file, name)
 	check.NotNil(t).Name(`found name`).With(`name`, name).Assert(target)
 
-	m := Analyze(info, proj, conv, target)
-	return &testTool{t: t, m: m}
+	tt.m = Analyze(tt.info, tt.proj, tt.conv, target)
+	return tt
 }
 
-func (tt *testTool) check(expLines ...string) {
-	ctx := jsonify.NewContext()
+func (tt *testTool) checkMetrics(expLines ...string) {
+	tt.check(tt.m, expLines...)
+}
 
-	// TODO: Update check to include checking Usage set
+func (tt *testTool) checkUsages(expLines ...string) {
+	tt.check(tt.proj.Usages().ToSlice(), expLines...)
+}
 
-	gotData, err := jsonify.Marshal(ctx, tt.m)
+func (tt *testTool) check(data any, expLines ...string) {
+	ctx := jsonify.NewContext().Full()
+	gotData, err := jsonify.Marshal(ctx, data)
 	check.NoError(tt.t).Require(err)
 
 	exp := strings.Join(expLines, "\n")

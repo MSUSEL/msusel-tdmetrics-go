@@ -1,6 +1,7 @@
 package usages
 
 import (
+	"fmt"
 	"go/ast"
 	"go/types"
 
@@ -21,6 +22,14 @@ type Usages struct {
 	Invokes collections.SortedSet[constructs.Usage]
 }
 
+func newUsage() Usages {
+	return Usages{
+		Reads:   sortedSet.New(usage.Comparer()),
+		Writes:  sortedSet.New(usage.Comparer()),
+		Invokes: sortedSet.New(usage.Comparer()),
+	}
+}
+
 type usagesImp struct {
 	info *types.Info
 	proj constructs.Project
@@ -28,10 +37,7 @@ type usagesImp struct {
 
 	localDefs   collections.Set[types.Object]
 	alreadyDefs map[types.Object]constructs.Usage
-
-	reads   collections.SortedSet[constructs.Usage]
-	writes  collections.SortedSet[constructs.Usage]
-	invokes collections.SortedSet[constructs.Usage]
+	usages      Usages
 }
 
 func Calculate(info *types.Info, proj constructs.Project, conv converter.Converter, node ast.Node) Usages {
@@ -51,25 +57,12 @@ func Calculate(info *types.Info, proj constructs.Project, conv converter.Convert
 
 		localDefs:   set.New[types.Object](),
 		alreadyDefs: make(map[types.Object]constructs.Usage),
-
-		reads:   sortedSet.New(usage.Comparer()),
-		writes:  sortedSet.New(usage.Comparer()),
-		invokes: sortedSet.New(usage.Comparer()),
+		usages:      newUsage(),
 	}
 
 	ui.processNode(node)
 
-	return Usages{
-		// TODO: Restore
-		//Reads:   ui.reads,
-		//Writes:  ui.writes,
-		//Invokes: ui.invokes,
-
-		// TODO: Remove
-		Reads:   sortedSet.New(usage.Comparer()),
-		Writes:  sortedSet.New(usage.Comparer()),
-		Invokes: sortedSet.New(usage.Comparer()),
-	}
+	return ui.usages
 }
 
 func (ui *usagesImp) processNode(node ast.Node) constructs.Usage {
@@ -79,6 +72,8 @@ func (ui *usagesImp) processNode(node ast.Node) constructs.Usage {
 		case *ast.AssignStmt:
 			ui.processAssign(t)
 			last = nil
+		case *ast.CallExpr:
+			ui.processCall(t)
 		case *ast.Ident:
 			last = ui.processIdent(t)
 		case *ast.SelectorExpr:
@@ -98,13 +93,24 @@ func (ui *usagesImp) processAssign(assign *ast.AssignStmt) {
 	// `func foo() *int`) or if assignment to a local type (e.g. `x := 10`).
 	for _, exp := range assign.Lhs {
 		if last := ui.processNode(exp); !utils.IsNil(last) {
-			ui.writes.Add(last)
+			ui.usages.Writes.Add(last)
 		}
 	}
 
 	// Process the right hand side (Rhs) of the assignment.
 	for _, exp := range assign.Rhs {
 		ui.processNode(exp)
+	}
+}
+
+func (ui *usagesImp) processCall(call *ast.CallExpr) {
+	if last := ui.processNode(call.Fun); !utils.IsNil(last) {
+		if tx, ok := ui.info.Types[call.Fun]; ok && tx.IsType() {
+			// Explicit cast (conversion), e.g. `int(f.x)`
+			ui.usages.Writes.Add(last)
+		} else {
+			ui.usages.Invokes.Add(last)
+		}
 	}
 }
 
@@ -125,11 +131,9 @@ func (ui *usagesImp) processIdent(id *ast.Ident) constructs.Usage {
 }
 
 func (ui *usagesImp) processSelector(sel *ast.SelectorExpr) constructs.Usage {
-	ui.processNode(sel.X)
-
-	//last := ui.processNode(sel.X)
-	//fmt.Printf(">>> last: %v\n", last)
-	//fmt.Printf(">>> sel:  %v\n", sel.Sel)
+	last := ui.processNode(sel.X)
+	fmt.Printf(">>> last: %v\n", last)
+	fmt.Printf(">>> sel:  %v\n", sel.Sel)
 
 	// TODO: Finish implementing
 
@@ -176,8 +180,9 @@ func (ui *usagesImp) createUsage(id *ast.Ident, obj types.Object, origin constru
 		Origin:        origin,
 	})
 	ui.alreadyDefs[obj] = usage
+	ui.usages.Reads.Add(usage)
 
-	//fmt.Printf("Created: %s\n", usage.String())
+	fmt.Printf("Created: %s\n", usage.String()) // TODO: remove
 
 	return usage
 }

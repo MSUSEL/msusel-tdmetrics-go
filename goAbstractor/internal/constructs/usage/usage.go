@@ -42,8 +42,8 @@ func (u *usageImp) SetAlive(alive bool) { u.alive = alive }
 
 func (u *usageImp) PackagePath() string { return u.pkgPath }
 func (u *usageImp) Name() string        { return u.name }
-func (u *usageImp) HasOrigin() bool     { return utils.IsNil(u.origin) }
-func (u *usageImp) Resolved() bool      { return utils.IsNil(u.resTyp) }
+func (u *usageImp) HasOrigin() bool     { return !utils.IsNil(u.origin) }
+func (u *usageImp) Resolved() bool      { return !utils.IsNil(u.resTyp) }
 
 func (u *usageImp) Origin() constructs.Construct         { return u.origin }
 func (u *usageImp) InstanceTypes() []constructs.TypeDesc { return u.instTypes }

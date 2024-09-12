@@ -3,6 +3,7 @@ package dce
 import (
 	"github.com/Snow-Gremlin/goToolbox/collections"
 	"github.com/Snow-Gremlin/goToolbox/collections/sortedSet"
+	"github.com/Snow-Gremlin/goToolbox/comp"
 
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/assert"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs"
@@ -13,7 +14,7 @@ import (
 func DeadCodeElimination(proj constructs.Project) {
 	d := &dce{
 		proj:    proj,
-		pending: sortedSet.New[constructs.Construct](),
+		pending: sortedSet.New(comp.ComparableComparer[constructs.Construct]()),
 	}
 
 	d.primeAlive()
