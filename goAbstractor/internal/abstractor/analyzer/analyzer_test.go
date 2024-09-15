@@ -33,6 +33,7 @@ func Test_Empty(t *testing.T) {
 		`	#indents:   0,`,
 		`	lineCount:  1`,
 		`}`)
+	tt.checkUsages()
 }
 
 func Test_Simple(t *testing.T) {
@@ -46,8 +47,14 @@ func Test_Simple(t *testing.T) {
 		`	complexity: 1,`,
 		`	indents:    1,`,
 		`	lineCount:  3,`,
+		`	invokes: [ 2 ],`,
+		`	reads:   [ 1 ]`,
 		`}`)
-	tt.checkUsages()
+	tt.checkUsages(
+		`[`,
+		`  { name: int },`,
+		`  { name: max }`,
+		`]`)
 }
 
 func Test_SimpleWithExtraIndent(t *testing.T) {
@@ -62,6 +69,7 @@ func Test_SimpleWithExtraIndent(t *testing.T) {
 		`	indents:    1,`,
 		`	lineCount:  3,`,
 		`}`)
+	tt.checkUsages()
 }
 
 func Test_SimpleParams(t *testing.T) {
@@ -78,6 +86,7 @@ func Test_SimpleParams(t *testing.T) {
 		`	indents:    7,`,
 		`	lineCount:  5,`,
 		`}`)
+	tt.checkUsages()
 }
 
 func Test_SimpleWithReturn(t *testing.T) {
@@ -93,6 +102,7 @@ func Test_SimpleWithReturn(t *testing.T) {
 		`	indents:    2,`,
 		`	lineCount:  4,`,
 		`}`)
+	tt.checkUsages()
 }
 
 func Test_SimpleWithSpace(t *testing.T) {
@@ -112,6 +122,7 @@ func Test_SimpleWithSpace(t *testing.T) {
 		`	indents:    1,`,
 		`	lineCount:  8,`,
 		`}`)
+	tt.checkUsages()
 }
 
 func Test_SimpleWithDefer(t *testing.T) {
@@ -133,6 +144,7 @@ func Test_SimpleWithDefer(t *testing.T) {
 		`	indents:    3,`,
 		`	lineCount:  5,`,
 		`}`)
+	tt.checkUsages()
 }
 
 func Test_SimpleIf(t *testing.T) {
@@ -151,6 +163,7 @@ func Test_SimpleIf(t *testing.T) {
 		`	indents:    6,`,
 		`	lineCount:  7,`,
 		`}`)
+	tt.checkUsages()
 }
 
 func Test_SimpleIfElse(t *testing.T) {
@@ -172,6 +185,7 @@ func Test_SimpleIfElse(t *testing.T) {
 		`	indents:    11,`,
 		`	lineCount:  10,`,
 		`}`)
+	tt.checkUsages()
 }
 
 func Test_SimpleIfElseIf(t *testing.T) {
@@ -192,6 +206,7 @@ func Test_SimpleIfElseIf(t *testing.T) {
 		`	indents:    9,`,
 		`	lineCount:  9,`,
 		`}`)
+	tt.checkUsages()
 }
 
 func Test_SimpleIfElseIfElse(t *testing.T) {
@@ -214,6 +229,7 @@ func Test_SimpleIfElseIfElse(t *testing.T) {
 		`	indents:    12,`,
 		`	lineCount:  11,`,
 		`}`)
+	tt.checkUsages()
 }
 
 func Test_SimpleSwitch(t *testing.T) {
@@ -237,6 +253,7 @@ func Test_SimpleSwitch(t *testing.T) {
 		`	indents:    15,`,
 		`	lineCount:  12,`,
 		`}`)
+	tt.checkUsages()
 }
 
 func Test_DeferInBlock(t *testing.T) {
@@ -262,6 +279,7 @@ func Test_DeferInBlock(t *testing.T) {
 		`	indents:    19,`,
 		`	lineCount:  14,`,
 		`}`)
+	tt.checkUsages()
 }
 
 func Test_DeferInFuncLiteral(t *testing.T) {
@@ -287,6 +305,7 @@ func Test_DeferInFuncLiteral(t *testing.T) {
 		`	indents:    19,`,
 		`	lineCount:  14,`,
 		`}`)
+	tt.checkUsages()
 }
 
 func Test_DeferWithComplexity(t *testing.T) {
@@ -309,6 +328,7 @@ func Test_DeferWithComplexity(t *testing.T) {
 		`	indents:    16,`,
 		`	lineCount:  11,`,
 		`}`)
+	tt.checkUsages()
 }
 
 func Test_ForRangeWithDefer(t *testing.T) {
@@ -331,6 +351,7 @@ func Test_ForRangeWithDefer(t *testing.T) {
 		`	indents:    15,`,
 		`	lineCount:  11,`,
 		`}`)
+	tt.checkUsages()
 }
 
 func Test_GoStatement(t *testing.T) {
@@ -348,6 +369,7 @@ func Test_GoStatement(t *testing.T) {
 		`	indents:    5,`,
 		`	lineCount:  6,`,
 		`}`)
+	tt.checkUsages()
 }
 
 func Test_SelectStatement(t *testing.T) {
@@ -374,6 +396,7 @@ func Test_SelectStatement(t *testing.T) {
 		`	indents:    17,`,
 		`	lineCount:  15,`,
 		`}`)
+	tt.checkUsages()
 }
 
 func Test_GetterWithSelect(t *testing.T) {
@@ -391,6 +414,7 @@ func Test_GetterWithSelect(t *testing.T) {
 		`	lineCount:  3,`,
 		`   getter:  true,`,
 		`}`)
+	tt.checkUsages()
 }
 
 func Test_GetterWithDereference(t *testing.T) {
@@ -408,6 +432,7 @@ func Test_GetterWithDereference(t *testing.T) {
 		`	lineCount:  3,`,
 		`   getter:  true,`,
 		`}`)
+	tt.checkUsages()
 }
 
 func Test_GetterWithConvert(t *testing.T) {
@@ -425,6 +450,7 @@ func Test_GetterWithConvert(t *testing.T) {
 		`	lineCount:  3,`,
 		`   getter:  true,`,
 		`}`)
+	tt.checkUsages()
 }
 
 func Test_SetterWithSelect(t *testing.T) {
@@ -442,6 +468,7 @@ func Test_SetterWithSelect(t *testing.T) {
 		`	lineCount:  3,`,
 		`   setter:  true,`,
 		`}`)
+	tt.checkUsages()
 }
 
 func Test_SetterWithReference(t *testing.T) {
@@ -459,6 +486,7 @@ func Test_SetterWithReference(t *testing.T) {
 		`	lineCount:  3,`,
 		`   setter:  true,`,
 		`}`)
+	tt.checkUsages()
 }
 
 func Test_NotReverseSetter(t *testing.T) {
@@ -475,6 +503,7 @@ func Test_NotReverseSetter(t *testing.T) {
 		`	indents:    1,`,
 		`	lineCount:  3,`,
 		`}`)
+	tt.checkUsages()
 }
 
 // TODO: Test joining metrics:
@@ -516,6 +545,9 @@ func Test_NotReverseSetter(t *testing.T) {
 // x := foo().y
 
 // TODO: Test inc and dec also work as assignment.
+
+// TODO: Test literal cast and call
+// type foo int; func(f foo) bar { ** }; foo(6).bar()
 
 type testTool struct {
 	t      *testing.T
@@ -592,6 +624,7 @@ func parseExpr(t *testing.T, lines ...string) *testTool {
 	check.NoError(t).Require(err)
 
 	tt.m = Analyze(tt.info, tt.proj, tt.conv, expr)
+	tt.finish()
 	return tt
 }
 
@@ -610,7 +643,15 @@ func parseDecl(t *testing.T, name string, lines ...string) *testTool {
 	check.NotNil(t).Name(`found name`).With(`name`, name).Assert(target)
 
 	tt.m = Analyze(tt.info, tt.proj, tt.conv, target)
+	tt.finish()
 	return tt
+}
+
+func (tt *testTool) finish() {
+	usages := tt.proj.Usages().ToSlice()
+	for i, usage := range usages {
+		usage.SetIndex(i + 1)
+	}
 }
 
 func (tt *testTool) checkMetrics(expLines ...string) {

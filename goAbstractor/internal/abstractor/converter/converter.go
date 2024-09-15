@@ -16,7 +16,6 @@ type Converter interface {
 	ConvertType(t types.Type) constructs.TypeDesc
 	ConvertSignature(t *types.Signature) constructs.Signature
 	ConvertInstanceTypes(t *types.TypeList) []constructs.TypeDesc
-	ConvertVar(t *types.Var) constructs.TypeDesc
 }
 
 func New(
@@ -284,19 +283,4 @@ func (c *convImp) ConvertInstanceTypes(t *types.TypeList) []constructs.TypeDesc 
 		list[i] = c.ConvertType(t.At(i))
 	}
 	return list
-}
-
-func (c *convImp) ConvertVar(t *types.Var) constructs.TypeDesc {
-
-	// TODO: Finish implementing *types.Var conversion
-
-	instTp := []constructs.TypeDesc{}
-
-	return c.proj.NewTempReference(constructs.TempReferenceArgs{
-		RealType:      t.Type().(*types.Named),
-		PackagePath:   t.Pkg().Path(),
-		Name:          t.Name(),
-		InstanceTypes: instTp,
-		Package:       c.curPkg.Source(),
-	})
 }

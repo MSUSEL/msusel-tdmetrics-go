@@ -7,13 +7,11 @@ type Jsonable interface {
 }
 
 func Marshal(ctx *Context, data any) ([]byte, error) {
-	if j, ok := data.(Jsonable); ok {
-		data = j.ToJson(ctx)
-	}
+	datum := New(ctx, data)
 	if ctx.IsMinimized() {
-		return json.Marshal(data)
+		return json.Marshal(datum)
 	}
-	return json.MarshalIndent(data, ``, `  `)
+	return json.MarshalIndent(datum, ``, `  `)
 }
 
 func ToString(data any) string {

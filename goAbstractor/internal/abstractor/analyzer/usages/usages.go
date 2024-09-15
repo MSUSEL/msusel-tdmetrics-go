@@ -1,13 +1,13 @@
 package usages
 
 import (
-	"fmt"
 	"go/ast"
 	"go/types"
 
 	"github.com/Snow-Gremlin/goToolbox/collections"
 	"github.com/Snow-Gremlin/goToolbox/collections/set"
 	"github.com/Snow-Gremlin/goToolbox/collections/sortedSet"
+	"github.com/Snow-Gremlin/goToolbox/terrors/terror"
 	"github.com/Snow-Gremlin/goToolbox/utils"
 
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/abstractor/converter"
@@ -35,6 +35,7 @@ type usagesImp struct {
 	proj constructs.Project
 	conv converter.Converter
 
+	pending     constructs.Usage
 	localDefs   collections.Set[types.Object]
 	alreadyDefs map[types.Object]constructs.Usage
 	usages      Usages
@@ -55,6 +56,7 @@ func Calculate(info *types.Info, proj constructs.Project, conv converter.Convert
 		proj: proj,
 		conv: conv,
 
+		pending:     nil,
 		localDefs:   set.New[types.Object](),
 		alreadyDefs: make(map[types.Object]constructs.Usage),
 		usages:      newUsage(),
@@ -65,113 +67,185 @@ func Calculate(info *types.Info, proj constructs.Project, conv converter.Convert
 	return ui.usages
 }
 
-func (ui *usagesImp) processNode(node ast.Node) constructs.Usage {
-	var last constructs.Usage
+func (ui *usagesImp) setPending(pending constructs.Usage) {
+	if !utils.IsNil(ui.pending) {
+		// If the usage hasn't been consumed it is assumed
+		// to have been read from, e.g. `a + b`.
+		ui.usages.Reads.Add(ui.pending)
+	}
+	ui.pending = pending
+}
+
+func (ui *usagesImp) consumePending() constructs.Usage {
+	pending := ui.pending
+	ui.pending = nil
+	return pending
+}
+
+func (ui *usagesImp) processNode(node ast.Node) {
 	ast.Inspect(node, func(n ast.Node) bool {
 		switch t := n.(type) {
+		case nil:
+			return true
 		case *ast.AssignStmt:
 			ui.processAssign(t)
-			last = nil
 		case *ast.CallExpr:
 			ui.processCall(t)
+		case *ast.ForStmt:
+			ui.processFor(t)
+		case *ast.FuncLit:
+			ui.processFuncLit(t)
+		case *ast.FuncType:
+			ui.processFunc(t)
+		case *ast.FuncDecl:
+			ui.processFunDecl(t)
 		case *ast.Ident:
-			last = ui.processIdent(t)
+			ui.processIdent(t)
+		case *ast.IncDecStmt:
+			ui.processIncDec(t)
+		case *ast.IndexExpr:
+			ui.processIndex(t)
+		case *ast.IndexListExpr:
+			ui.processIndexList(t)
 		case *ast.SelectorExpr:
-			last = ui.processSelector(t)
+			ui.processSelector(t)
 		default:
 			return true
 		}
 		return false
 	})
-	return last
 }
 
 func (ui *usagesImp) processAssign(assign *ast.AssignStmt) {
-	// Process the left hand side (Lhs) of the assignment.
+	// Process the right hand side (RHS) of the assignment.
+	for _, exp := range assign.Rhs {
+		ui.processNode(exp)
+	}
+	// Ensure all RHS are labelled as reads.
+	ui.setPending(nil)
+
+	// Process the left hand side (LHS) of the assignment.
 	// Any usage returned will be the usage that is being assigned to or nil.
 	// The usage is nil if not resolvable (e.g. `*foo() = 10` where
 	// `func foo() *int`) or if assignment to a local type (e.g. `x := 10`).
 	for _, exp := range assign.Lhs {
-		if last := ui.processNode(exp); !utils.IsNil(last) {
+		ui.processNode(exp)
+		if last := ui.consumePending(); !utils.IsNil(last) {
 			ui.usages.Writes.Add(last)
 		}
-	}
-
-	// Process the right hand side (Rhs) of the assignment.
-	for _, exp := range assign.Rhs {
-		ui.processNode(exp)
 	}
 }
 
 func (ui *usagesImp) processCall(call *ast.CallExpr) {
-	if last := ui.processNode(call.Fun); !utils.IsNil(last) {
+	// Process arguments for the call.
+	for _, arg := range call.Args {
+		ui.processNode(arg)
+	}
+	// Ensure all arguments are labelled as reads.
+	ui.setPending(nil)
+
+	// Process the invocation target,
+	// e.g. `Bar` in `(*foo.Bar)( ** )` or `foo.Bar( ** )`.
+	ui.processNode(call.Fun)
+	if last := ui.consumePending(); !utils.IsNil(last) {
 		if tx, ok := ui.info.Types[call.Fun]; ok && tx.IsType() {
 			// Explicit cast (conversion), e.g. `int(f.x)`
 			ui.usages.Writes.Add(last)
 		} else {
+			// Function invocation, e.g. `println(f.x)`, `fmt.Println(f.x)`
 			ui.usages.Invokes.Add(last)
 		}
 	}
 }
 
-func (ui *usagesImp) processIdent(id *ast.Ident) constructs.Usage {
+func (ui *usagesImp) processFor(stmt *ast.ForStmt) {
+	// TODO: Finish Implementing
+	// TODO: determine if `if-assignment`, `for`, and `for-range` need special handling.
+}
+
+func (ui *usagesImp) processFuncLit(fn *ast.FuncLit) {
+	// TODO: Finish Implementing
+}
+
+func (ui *usagesImp) processFunc(fn *ast.FuncType) {
+	// This is part of a `ast.FuncLit` or `ast.FuncDecl`.
+	// TODO: Finish Implementing
+	// TODO: Handle parameters and returns being read and assigned
+}
+
+func (ui *usagesImp) processFunDecl(fn *ast.FuncDecl) {
+	// TODO: Finish Implementing
+	// TODO: Handle parameters and returns being read and assigned
+}
+
+func (ui *usagesImp) processIdent(id *ast.Ident) {
 	// Check if this identifier is part of a local definition.
 	// Don't create a usage for the local definition, they should be skipped.
 	if def, ok := ui.info.Defs[id]; ok {
 		ui.localDefs.Add(def)
-		return nil
+		return
 	}
-
+	// TODO: Should local defs be handled differently?
 	obj, ok := ui.info.Uses[id]
 	if !ok || ui.localDefs.Contains(obj) {
-		return nil
+		return
 	}
 
-	return ui.createUsage(id, obj, nil)
+	ui.setPending(ui.createUsage(obj, nil))
 }
 
-func (ui *usagesImp) processSelector(sel *ast.SelectorExpr) constructs.Usage {
-	last := ui.processNode(sel.X)
-	fmt.Printf(">>> last: %v\n", last)
-	fmt.Printf(">>> sel:  %v\n", sel.Sel)
-
-	// TODO: Finish implementing
-
-	/*
-		selection, ok := ui.info.Selections[sel]
-		if !ok {
-			panic(terror.New(`expected selection info but n found`).
-				With(`expr`, sel))
-		}
-		fmt.Printf(">>> sel: %v, %v\n", sel, selection) // TODO: REMOVE
-		fmt.Printf("  >>> %v\n", selection.Obj())
-		fmt.Printf("  >>> %v\n", selection.Recv())
-	*/
-	return nil
+func (ui *usagesImp) processIncDec(stmt *ast.IncDecStmt) {
+	// TODO: Finish Implementing
+	// TODO: Handle Inc and Dec
 }
 
-func (ui *usagesImp) createUsage(id *ast.Ident, obj types.Object, origin constructs.Construct) constructs.Usage {
+func (ui *usagesImp) processIndex(expr *ast.IndexExpr) {
+	// TODO: Finish Implementing
+	// TODO: Handle slice indexer for converting indexer like `string[0] => rune`
+}
+
+func (ui *usagesImp) processIndexList(expr *ast.IndexListExpr) {
+	// TODO: Finish Implementing
+}
+
+func (ui *usagesImp) processSelector(sel *ast.SelectorExpr) {
+	ui.processNode(sel.X)
+
+	var lhs constructs.Construct = ui.consumePending()
+	selection, ok := ui.info.Selections[sel]
+	if !ok {
+		panic(terror.New(`expected selection info but n found`).
+			With(`expr`, sel))
+	}
+
+	if utils.IsNil(lhs) {
+		// The left hand side is empty so this wasn't like `foo.Bar`,
+		// it was instead like `foo().Bar` where some expression results
+		// in a selection on a type.
+		lhs = ui.conv.ConvertType(selection.Recv())
+	}
+
+	ui.setPending(ui.createUsage(selection.Obj(), lhs))
+}
+
+func (ui *usagesImp) createUsage(obj types.Object, origin constructs.Construct) constructs.Usage {
 	if usage, ok := ui.alreadyDefs[obj]; ok {
 		return usage
 	}
 
 	pkgPath := ``
-	if !utils.IsNil(obj.Pkg()) {
+	if obj.Pkg() != nil {
 		pkgPath = obj.Pkg().Path()
 	}
 
 	var instType []constructs.TypeDesc
-	if inst, ok := ui.info.Instances[id]; ok {
-		instType = ui.conv.ConvertInstanceTypes(inst.TypeArgs)
+	typ := obj.Type()
+	if pointer, ok := typ.(*types.Pointer); ok {
+		typ = pointer.Elem()
 	}
-
-	//if utils.IsNil(origin) {
-	//	if v, ok := obj.(*types.Var); ok && v.IsField() {
-	// TODO: Finish implementing by looking up the origin type
-	//       if not given. Note `v.Origin` may equal `v`.
-	//origin = ui.conv.ConvertVar(v.Origin())
-	//	}
-	//}
+	if named, ok := typ.(*types.Named); ok {
+		instType = ui.conv.ConvertInstanceTypes(named.TypeArgs())
+	}
 
 	usage := ui.proj.NewUsage(constructs.UsageArgs{
 		PackagePath:   pkgPath,
@@ -179,10 +253,7 @@ func (ui *usagesImp) createUsage(id *ast.Ident, obj types.Object, origin constru
 		InstanceTypes: instType,
 		Origin:        origin,
 	})
+
 	ui.alreadyDefs[obj] = usage
-	ui.usages.Reads.Add(usage)
-
-	fmt.Printf("Created: %s\n", usage.String()) // TODO: remove
-
 	return usage
 }
