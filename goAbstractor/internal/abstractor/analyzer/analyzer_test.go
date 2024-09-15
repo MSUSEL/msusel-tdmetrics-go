@@ -549,6 +549,9 @@ func Test_NotReverseSetter(t *testing.T) {
 // TODO: Test literal cast and call
 // type foo int; func(f foo) bar { ** }; foo(6).bar()
 
+// TODO: Test the assignment in a for-loop or if-statement
+// are picked up as writes, `for i := 0; ...`
+
 type testTool struct {
 	t      *testing.T
 	proj   constructs.Project

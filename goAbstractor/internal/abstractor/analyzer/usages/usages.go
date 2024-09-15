@@ -82,6 +82,36 @@ func (ui *usagesImp) consumePending() constructs.Usage {
 	return pending
 }
 
+func (ui *usagesImp) createUsageForObject(obj types.Object, origin constructs.Construct) constructs.Usage {
+	if usage, ok := ui.alreadyDefs[obj]; ok {
+		return usage
+	}
+
+	pkgPath := ``
+	if obj.Pkg() != nil {
+		pkgPath = obj.Pkg().Path()
+	}
+
+	var instType []constructs.TypeDesc
+	typ := obj.Type()
+	if pointer, ok := typ.(*types.Pointer); ok {
+		typ = pointer.Elem()
+	}
+	if named, ok := typ.(*types.Named); ok {
+		instType = ui.conv.ConvertInstanceTypes(named.TypeArgs())
+	}
+
+	usage := ui.proj.NewUsage(constructs.UsageArgs{
+		PackagePath:   pkgPath,
+		Name:          obj.Name(),
+		InstanceTypes: instType,
+		Origin:        origin,
+	})
+
+	ui.alreadyDefs[obj] = usage
+	return usage
+}
+
 func (ui *usagesImp) processNode(node ast.Node) {
 	ast.Inspect(node, func(n ast.Node) bool {
 		switch t := n.(type) {
@@ -91,10 +121,6 @@ func (ui *usagesImp) processNode(node ast.Node) {
 			ui.processAssign(t)
 		case *ast.CallExpr:
 			ui.processCall(t)
-		case *ast.ForStmt:
-			ui.processFor(t)
-		case *ast.FuncLit:
-			ui.processFuncLit(t)
 		case *ast.FuncType:
 			ui.processFunc(t)
 		case *ast.FuncDecl:
@@ -147,24 +173,15 @@ func (ui *usagesImp) processCall(call *ast.CallExpr) {
 	// Process the invocation target,
 	// e.g. `Bar` in `(*foo.Bar)( ** )` or `foo.Bar( ** )`.
 	ui.processNode(call.Fun)
-	if last := ui.consumePending(); !utils.IsNil(last) {
+	if target := ui.consumePending(); !utils.IsNil(target) {
 		if tx, ok := ui.info.Types[call.Fun]; ok && tx.IsType() {
 			// Explicit cast (conversion), e.g. `int(f.x)`
-			ui.usages.Writes.Add(last)
+			ui.usages.Writes.Add(target)
 		} else {
 			// Function invocation, e.g. `println(f.x)`, `fmt.Println(f.x)`
-			ui.usages.Invokes.Add(last)
+			ui.usages.Invokes.Add(target)
 		}
 	}
-}
-
-func (ui *usagesImp) processFor(stmt *ast.ForStmt) {
-	// TODO: Finish Implementing
-	// TODO: determine if `if-assignment`, `for`, and `for-range` need special handling.
-}
-
-func (ui *usagesImp) processFuncLit(fn *ast.FuncLit) {
-	// TODO: Finish Implementing
 }
 
 func (ui *usagesImp) processFunc(fn *ast.FuncType) {
@@ -191,21 +208,47 @@ func (ui *usagesImp) processIdent(id *ast.Ident) {
 		return
 	}
 
-	ui.setPending(ui.createUsage(obj, nil))
+	ui.setPending(ui.createUsageForObject(obj, nil))
 }
 
 func (ui *usagesImp) processIncDec(stmt *ast.IncDecStmt) {
+	ui.processNode(stmt.X)
+	if target := ui.consumePending(); !utils.IsNil(target) {
+		ui.usages.Writes.Add(target)
+	}
+	//else {
 	// TODO: Finish Implementing
-	// TODO: Handle Inc and Dec
+	// What about `*(func())++` where the increment is on the returned type,
+	// or `mapFoo["cat"]++`.
+	//typ := ui.info.Types[stmt.X]
+	//ui.usages.Writes.Add(target)
+	//}
 }
 
 func (ui *usagesImp) processIndex(expr *ast.IndexExpr) {
-	// TODO: Finish Implementing
+	ui.processNode(expr.X)
+	target := ui.consumePending()
+	// Process index.
+	ui.processNode(expr.Index)
+	// Ensure the index are labelled as a read and set the target pending.
+
+	// TODO: Need to get the Elem of the type `var X []*Cat; X[0] => *Cat`
 	// TODO: Handle slice indexer for converting indexer like `string[0] => rune`
+	ui.setPending(target)
+
 }
 
 func (ui *usagesImp) processIndexList(expr *ast.IndexListExpr) {
-	// TODO: Finish Implementing
+	// Process the object being indexed then
+	// take the pending to be set after the indices.
+	ui.processNode(expr.X)
+	target := ui.consumePending()
+	// Process indices.
+	for _, indices := range expr.Indices {
+		ui.processNode(indices)
+	}
+	// Ensure all indices are labelled as reads and set the target pending.
+	ui.setPending(target)
 }
 
 func (ui *usagesImp) processSelector(sel *ast.SelectorExpr) {
@@ -225,35 +268,5 @@ func (ui *usagesImp) processSelector(sel *ast.SelectorExpr) {
 		lhs = ui.conv.ConvertType(selection.Recv())
 	}
 
-	ui.setPending(ui.createUsage(selection.Obj(), lhs))
-}
-
-func (ui *usagesImp) createUsage(obj types.Object, origin constructs.Construct) constructs.Usage {
-	if usage, ok := ui.alreadyDefs[obj]; ok {
-		return usage
-	}
-
-	pkgPath := ``
-	if obj.Pkg() != nil {
-		pkgPath = obj.Pkg().Path()
-	}
-
-	var instType []constructs.TypeDesc
-	typ := obj.Type()
-	if pointer, ok := typ.(*types.Pointer); ok {
-		typ = pointer.Elem()
-	}
-	if named, ok := typ.(*types.Named); ok {
-		instType = ui.conv.ConvertInstanceTypes(named.TypeArgs())
-	}
-
-	usage := ui.proj.NewUsage(constructs.UsageArgs{
-		PackagePath:   pkgPath,
-		Name:          obj.Name(),
-		InstanceTypes: instType,
-		Origin:        origin,
-	})
-
-	ui.alreadyDefs[obj] = usage
-	return usage
+	ui.setPending(ui.createUsageForObject(selection.Obj(), lhs))
 }
