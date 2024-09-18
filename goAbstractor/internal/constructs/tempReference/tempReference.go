@@ -15,7 +15,7 @@ import (
 )
 
 type tempReferenceImp struct {
-	realType  *types.Named
+	realType  types.Type
 	pkgPath   string
 	name      string
 	index     int

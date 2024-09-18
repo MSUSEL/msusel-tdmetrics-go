@@ -26,14 +26,21 @@ import (
 func Test_Empty(t *testing.T) {
 	tt := parseExpr(t,
 		`func() {}`)
-	tt.checkMetrics(
+	tt.checkProj(
 		`{`,
-		`	codeCount:  1,`,
-		`	complexity: 1,`,
-		`	#indents:   0,`,
-		`	lineCount:  1`,
+		`  language: go,`,
+		`  metrics: [`,
+		`    {`,
+		`       codeCount:  1,`,
+		`       complexity: 1,`,
+		`       #indents:   0,`,
+		`       lineCount:  1`,
+		`    }`,
+		`  ],`,
+		`  packages: [`,
+		`    { name: test, path: test }`,
+		`  ],`,
 		`}`)
-	tt.checkUsages()
 }
 
 func Test_Simple(t *testing.T) {
@@ -41,20 +48,28 @@ func Test_Simple(t *testing.T) {
 		`func() int {`,
 		`	return max(1, 3, 5)`,
 		`}`)
-	tt.checkMetrics(
+	tt.checkProj(
 		`{`,
-		`	codeCount:  3,`,
-		`	complexity: 1,`,
-		`	indents:    1,`,
-		`	lineCount:  3,`,
-		`	invokes: [ 2 ],`,
-		`	reads:   [ 1 ]`,
+		`  language: go,`,
+		`  metrics: [`,
+		`    {`,
+		`      codeCount:  3,`,
+		`      complexity: 1,`,
+		`      indents:    1,`,
+		`      lineCount:  3,`,
+		`      invokes:  [ 1 ]`,
+		`    }`,
+		`  ],`,
+		`  packages: [`,
+		`    { name: test, path: test }`,
+		`  ],`,
+		`  tempReferences: [`,
+		`    { name: max }`,
+		`  ],`,
+		`  usages: [`,
+		`    { target: tempReference1 }`,
+		`  ]`,
 		`}`)
-	tt.checkUsages(
-		`[`,
-		`  { name: int },`,
-		`  { name: max }`,
-		`]`)
 }
 
 func Test_SimpleWithExtraIndent(t *testing.T) {
@@ -62,14 +77,28 @@ func Test_SimpleWithExtraIndent(t *testing.T) {
 		`		func() int {`,
 		`			return max(1, 3, 5)`,
 		`		}`)
-	tt.checkMetrics(
+	tt.checkProj(
 		`{`,
-		`	codeCount:  3,`,
-		`	complexity: 1,`,
-		`	indents:    1,`,
-		`	lineCount:  3,`,
+		`  language: go,`,
+		`  metrics: [`,
+		`    {`,
+		`      codeCount:  3,`,
+		`      complexity: 1,`,
+		`      indents:    1,`,
+		`      lineCount:  3,`,
+		`      invokes:  [ 1 ]`,
+		`    }`,
+		`  ],`,
+		`  packages: [`,
+		`    { name: test, path: test }`,
+		`  ],`,
+		`  tempReferences: [`,
+		`    { name: max }`,
+		`  ],`,
+		`  usages: [`,
+		`    { target: tempReference1 }`,
+		`  ]`,
 		`}`)
-	tt.checkUsages()
 }
 
 func Test_SimpleParams(t *testing.T) {
@@ -79,14 +108,35 @@ func Test_SimpleParams(t *testing.T) {
 		`	  c int) int {`,
 		`	return max(a, b, c)`,
 		`}`)
-	tt.checkMetrics(
+	tt.checkProj(
 		`{`,
-		`	codeCount:  5,`,
-		`	complexity: 1,`,
-		`	indents:    7,`,
-		`	lineCount:  5,`,
+		`  language: go,`,
+		`  metrics: [`,
+		`    {`,
+		`       codeCount:  5,`,
+		`       complexity: 1,`,
+		`       indents:    7,`,
+		`       lineCount:  5,`,
+		`       invokes:  [ 4 ],`,
+		`       reads:    [ 1, 2, 3 ]`,
+		`     }`,
+		`  ],`,
+		`  packages: [`,
+		`     { name: test, path: test }`,
+		`  ],`,
+		`  tempReferences: [`,
+		`    { name: a },`,
+		`    { name: b },`,
+		`    { name: c },`,
+		`    { name: max }`,
+		`  ],`,
+		`  usages: [`,
+		`    { target: tempReference1 },`,
+		`    { target: tempReference2 },`,
+		`    { target: tempReference3 },`,
+		`    { target: tempReference4 }`,
+		`  ]`,
 		`}`)
-	tt.checkUsages()
 }
 
 func Test_SimpleWithReturn(t *testing.T) {
@@ -95,14 +145,31 @@ func Test_SimpleWithReturn(t *testing.T) {
 		`	x := max(1, 3, 5)`,
 		`	return x`,
 		`}`)
-	tt.checkMetrics(
+	tt.checkProj(
 		`{`,
-		`	codeCount:  4,`,
-		`	complexity: 1,`,
-		`	indents:    2,`,
-		`	lineCount:  4,`,
+		`  language: go,`,
+		`  metrics: [`,
+		`    {`,
+		`       codeCount:  4,`,
+		`       complexity: 1,`,
+		`       indents:    2,`,
+		`       lineCount:  4,`,
+		`       invokes:  [ 1 ],`,
+		`       writes:   [ 2 ]`,
+		`     }`,
+		`  ],`,
+		`  packages: [`,
+		`     { name: test, path: test }`,
+		`  ],`,
+		`  tempReferences: [`,
+		`    { name: max },`,
+		`    { name: x }`,
+		`  ],`,
+		`  usages: [`,
+		`    { target: tempReference1 },`,
+		`    { target: tempReference2 }`,
+		`  ]`,
 		`}`)
-	tt.checkUsages()
 }
 
 func Test_SimpleWithSpace(t *testing.T) {
@@ -115,14 +182,28 @@ func Test_SimpleWithSpace(t *testing.T) {
 		`	   it is a sandwich */`,
 		`   `,
 		`}`)
-	tt.checkMetrics(
+	tt.checkProj(
 		`{`,
-		`	codeCount:  3,`,
-		`	complexity: 1,`,
-		`	indents:    1,`,
-		`	lineCount:  8,`,
+		`  language: go,`,
+		`  metrics: [`,
+		`    {`,
+		`       codeCount:  3,`,
+		`       complexity: 1,`,
+		`       indents:    1,`,
+		`       lineCount:  8,`,
+		`       invokes:  [ 1 ],`,
+		`     }`,
+		`  ],`,
+		`  packages: [`,
+		`     { name: test, path: test }`,
+		`  ],`,
+		`  tempReferences: [`,
+		`    { name: max }`,
+		`  ],`,
+		`  usages: [`,
+		`    { target: tempReference1 }`,
+		`  ]`,
 		`}`)
-	tt.checkUsages()
 }
 
 func Test_SimpleWithDefer(t *testing.T) {
@@ -136,15 +217,36 @@ func Test_SimpleWithDefer(t *testing.T) {
 		`	defer x.close()`,
 		`	x.doStuff()`,
 		`}`)
-	tt.checkMetrics(
+	tt.checkProj(
 		`{`,
-		`   loc:        5,`,
-		`	codeCount:  5,`,
-		`	complexity: 1,`,
-		`	indents:    3,`,
-		`	lineCount:  5,`,
+		`  language: go,`,
+		`  metrics: [`,
+		`    {`,
+		`       loc:        5,`,
+		`       codeCount:  5,`,
+		`       complexity: 1,`,
+		`       indents:    3,`,
+		`       lineCount:  5,`,
+		`       invokes:  [ 1, 2, 3 ],`,
+		`       writes:   [ 4 ]`,
+		`     }`,
+		`  ],`,
+		`  packages: [`,
+		`     { name: test, path: test }`,
+		`  ],`,
+		`  tempReferences: [`,
+		`    { packagePath: test, name: close   },`,
+		`    { packagePath: test, name: doStuff },`,
+		`    { packagePath: test, name: open    },`,
+		`    { packagePath: test, name: x       }`,
+		`  ],`,
+		`  usages: [`,
+		`    { target: tempReference1, origin: usage4 },`,
+		`    { target: tempReference2, origin: usage4 },`,
+		`    { target: tempReference3 },`,
+		`    { target: tempReference4 }`,
+		`  ]`,
 		`}`)
-	tt.checkUsages()
 }
 
 func Test_SimpleIf(t *testing.T) {
@@ -156,14 +258,32 @@ func Test_SimpleIf(t *testing.T) {
 		`	}`,
 		`	println(x)`,
 		`}`)
-	tt.checkMetrics(
+	tt.checkProj(
 		`{`,
-		`	codeCount:  7,`,
-		`	complexity: 2,`,
-		`	indents:    6,`,
-		`	lineCount:  7,`,
+		`  language: go,`,
+		`  metrics: [`,
+		`    {`,
+		`       codeCount:  7,`,
+		`       complexity: 2,`,
+		`       indents:    6,`,
+		`       lineCount:  7,`,
+		`       invokes:  [ 1 ],`,
+		`       reads:    [ 2 ],`,
+		`       writes:   [ 2 ]`,
+		`     }`,
+		`  ],`,
+		`  packages: [`,
+		`     { name: test, path: test }`,
+		`  ],`,
+		`  tempReferences: [`,
+		`    { name: println },`,
+		`    { name: x       }`,
+		`  ],`,
+		`  usages: [`,
+		`    { target: tempReference1 },`,
+		`    { target: tempReference2 }`,
+		`  ]`,
 		`}`)
-	tt.checkUsages()
 }
 
 func Test_SimpleIfElse(t *testing.T) {
@@ -626,8 +746,8 @@ func parseExpr(t *testing.T, lines ...string) *testTool {
 	err = types.CheckExpr(tt.fSet, nil, token.NoPos, expr, tt.info)
 	check.NoError(t).Require(err)
 
-	tt.m = Analyze(tt.info, tt.proj, tt.conv, expr)
-	tt.finish()
+	tt.m = Analyze(tt.info, tt.proj, tt.curPkg, tt.conv, expr)
+	tt.proj.UpdateIndices()
 	return tt
 }
 
@@ -645,16 +765,9 @@ func parseDecl(t *testing.T, name string, lines ...string) *testTool {
 	target := findNode(file, name)
 	check.NotNil(t).Name(`found name`).With(`name`, name).Assert(target)
 
-	tt.m = Analyze(tt.info, tt.proj, tt.conv, target)
-	tt.finish()
+	tt.m = Analyze(tt.info, tt.proj, tt.curPkg, tt.conv, target)
+	tt.proj.UpdateIndices()
 	return tt
-}
-
-func (tt *testTool) finish() {
-	usages := tt.proj.Usages().ToSlice()
-	for i, usage := range usages {
-		usage.SetIndex(i + 1)
-	}
 }
 
 func (tt *testTool) checkMetrics(expLines ...string) {
@@ -663,6 +776,10 @@ func (tt *testTool) checkMetrics(expLines ...string) {
 
 func (tt *testTool) checkUsages(expLines ...string) {
 	tt.check(tt.proj.Usages().ToSlice(), expLines...)
+}
+
+func (tt *testTool) checkProj(expLines ...string) {
+	tt.check(tt.proj, expLines...)
 }
 
 func (tt *testTool) check(data any, expLines ...string) {
@@ -680,7 +797,7 @@ func (tt *testTool) check(data any, expLines ...string) {
 	if !slices.Equal(gotData, expData) {
 		gotLines := strings.Split(string(gotData), "\n")
 		expLines := strings.Split(string(expData), "\n")
-		d := diff.Default().PlusMinus(gotLines, expLines)
+		d := diff.Default().PlusMinus(expLines, gotLines)
 		fmt.Println(strings.Join(d, "\n"))
 		tt.t.Fail()
 	}

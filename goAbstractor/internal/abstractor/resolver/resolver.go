@@ -247,14 +247,5 @@ func flagList[T constructs.Declaration](c collections.ReadonlySortedSet[T]) {
 // that will be used as references in the output models.
 func (r *resolverImp) Indices() {
 	r.log.Log(`resolve indices`)
-	var index int
-	var kind kind.Kind
-	r.proj.AllConstructs().Foreach(func(c constructs.Construct) {
-		if cKind := c.Kind(); kind != cKind {
-			kind = cKind
-			index = 0
-		}
-		index++
-		c.SetIndex(index)
-	})
+	r.proj.UpdateIndices()
 }

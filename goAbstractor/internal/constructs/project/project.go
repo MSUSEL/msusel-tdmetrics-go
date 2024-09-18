@@ -16,6 +16,7 @@ import (
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs/interfaceDecl"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs/interfaceDesc"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs/interfaceInst"
+	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs/kind"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs/method"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs/methodInst"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs/metrics"
@@ -147,6 +148,19 @@ func (p *projectImp) FindType(pkgPath, typeName string, panicOnNotFound bool) (c
 	}
 
 	return pkg, decl, true
+}
+
+func (p *projectImp) UpdateIndices() {
+	var index int
+	var kind kind.Kind
+	p.AllConstructs().Foreach(func(c constructs.Construct) {
+		if cKind := c.Kind(); kind != cKind {
+			kind = cKind
+			index = 0
+		}
+		index++
+		c.SetIndex(index)
+	})
 }
 
 func (p *projectImp) String() string {

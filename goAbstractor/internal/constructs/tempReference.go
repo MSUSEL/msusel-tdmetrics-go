@@ -26,7 +26,7 @@ type TempReference interface {
 }
 
 type TempReferenceArgs struct {
-	RealType      *types.Named
+	RealType      types.Type
 	PackagePath   string
 	Name          string
 	InstanceTypes []TypeDesc

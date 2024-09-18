@@ -5,7 +5,6 @@ import (
 	"go/types"
 
 	"github.com/Snow-Gremlin/goToolbox/collections"
-	"github.com/Snow-Gremlin/goToolbox/collections/set"
 	"github.com/Snow-Gremlin/goToolbox/collections/sortedSet"
 	"github.com/Snow-Gremlin/goToolbox/terrors/terror"
 	"github.com/Snow-Gremlin/goToolbox/utils"
@@ -31,17 +30,17 @@ func newUsage() Usages {
 }
 
 type usagesImp struct {
-	info *types.Info
-	proj constructs.Project
-	conv converter.Converter
+	info   *types.Info
+	proj   constructs.Project
+	curPkg constructs.Package
+	conv   converter.Converter
 
-	pending     constructs.Usage
-	localDefs   collections.Set[types.Object]
-	alreadyDefs map[types.Object]constructs.Usage
-	usages      Usages
+	pending   constructs.Usage
+	localDefs map[types.Object]constructs.Usage
+	usages    Usages
 }
 
-func Calculate(info *types.Info, proj constructs.Project, conv converter.Converter, node ast.Node) Usages {
+func Calculate(info *types.Info, proj constructs.Project, curPkg constructs.Package, conv converter.Converter, node ast.Node) Usages {
 	assert.ArgNotNil(`info`, info)
 	assert.ArgNotNil(`info.Defs`, info.Defs)
 	assert.ArgNotNil(`info.Instances`, info.Instances)
@@ -50,16 +49,17 @@ func Calculate(info *types.Info, proj constructs.Project, conv converter.Convert
 	assert.ArgNotNil(`proj`, proj)
 	assert.ArgNotNil(`conv`, conv)
 	assert.ArgNotNil(`node`, node)
+	assert.ArgNotNil(`curPkg`, curPkg)
 
 	ui := &usagesImp{
-		info: info,
-		proj: proj,
-		conv: conv,
+		info:   info,
+		proj:   proj,
+		curPkg: curPkg,
+		conv:   conv,
 
-		pending:     nil,
-		localDefs:   set.New[types.Object](),
-		alreadyDefs: make(map[types.Object]constructs.Usage),
-		usages:      newUsage(),
+		pending:   nil,
+		localDefs: map[types.Object]constructs.Usage{},
+		usages:    newUsage(),
 	}
 
 	ui.processNode(node)
@@ -67,25 +67,31 @@ func Calculate(info *types.Info, proj constructs.Project, conv converter.Convert
 	return ui.usages
 }
 
-func (ui *usagesImp) setPending(pending constructs.Usage) {
-	if !utils.IsNil(ui.pending) {
-		// If the usage hasn't been consumed it is assumed
-		// to have been read from, e.g. `a + b`.
-		ui.usages.Reads.Add(ui.pending)
-	}
-	ui.pending = pending
+func (ui *usagesImp) newPending(target, origin constructs.Construct) {
+	ui.flushPendingToRead()
+	ui.pending = ui.proj.NewUsage(constructs.UsageArgs{
+		Target: target,
+		Origin: origin,
+	})
 }
 
-func (ui *usagesImp) consumePending() constructs.Usage {
+func (ui *usagesImp) takePending() constructs.Usage {
 	pending := ui.pending
 	ui.pending = nil
 	return pending
 }
 
-func (ui *usagesImp) createUsageForObject(obj types.Object, origin constructs.Construct) constructs.Usage {
-	if usage, ok := ui.alreadyDefs[obj]; ok {
-		return usage
+func (ui *usagesImp) flushPendingToRead() {
+	if !utils.IsNil(ui.pending) {
+		// If the usage hasn't been consumed it is assumed
+		// to have been read from, e.g. `a + b`.
+		ui.usages.Reads.Add(ui.pending)
 	}
+	ui.pending = nil
+}
+
+func (ui *usagesImp) createTempRefForObj(obj types.Object) constructs.TempReference {
+	assert.ArgNotNil(`object`, obj)
 
 	pkgPath := ``
 	if obj.Pkg() != nil {
@@ -101,15 +107,13 @@ func (ui *usagesImp) createUsageForObject(obj types.Object, origin constructs.Co
 		instType = ui.conv.ConvertInstanceTypes(named.TypeArgs())
 	}
 
-	usage := ui.proj.NewUsage(constructs.UsageArgs{
+	return ui.proj.NewTempReference(constructs.TempReferenceArgs{
+		RealType:      obj.Type(),
 		PackagePath:   pkgPath,
 		Name:          obj.Name(),
 		InstanceTypes: instType,
-		Origin:        origin,
+		Package:       ui.curPkg.Source(),
 	})
-
-	ui.alreadyDefs[obj] = usage
-	return usage
 }
 
 func (ui *usagesImp) processNode(node ast.Node) {
@@ -147,8 +151,7 @@ func (ui *usagesImp) processAssign(assign *ast.AssignStmt) {
 	for _, exp := range assign.Rhs {
 		ui.processNode(exp)
 	}
-	// Ensure all RHS are labelled as reads.
-	ui.setPending(nil)
+	ui.flushPendingToRead()
 
 	// Process the left hand side (LHS) of the assignment.
 	// Any usage returned will be the usage that is being assigned to or nil.
@@ -156,7 +159,7 @@ func (ui *usagesImp) processAssign(assign *ast.AssignStmt) {
 	// `func foo() *int`) or if assignment to a local type (e.g. `x := 10`).
 	for _, exp := range assign.Lhs {
 		ui.processNode(exp)
-		if last := ui.consumePending(); !utils.IsNil(last) {
+		if last := ui.takePending(); !utils.IsNil(last) {
 			ui.usages.Writes.Add(last)
 		}
 	}
@@ -167,13 +170,12 @@ func (ui *usagesImp) processCall(call *ast.CallExpr) {
 	for _, arg := range call.Args {
 		ui.processNode(arg)
 	}
-	// Ensure all arguments are labelled as reads.
-	ui.setPending(nil)
+	ui.flushPendingToRead()
 
 	// Process the invocation target,
 	// e.g. `Bar` in `(*foo.Bar)( ** )` or `foo.Bar( ** )`.
 	ui.processNode(call.Fun)
-	if target := ui.consumePending(); !utils.IsNil(target) {
+	if target := ui.takePending(); !utils.IsNil(target) {
 		if tx, ok := ui.info.Types[call.Fun]; ok && tx.IsType() {
 			// Explicit cast (conversion), e.g. `int(f.x)`
 			ui.usages.Writes.Add(target)
@@ -186,75 +188,84 @@ func (ui *usagesImp) processCall(call *ast.CallExpr) {
 
 func (ui *usagesImp) processFunc(fn *ast.FuncType) {
 	// This is part of a `ast.FuncLit` or `ast.FuncDecl`.
-	// TODO: Finish Implementing
-	// TODO: Handle parameters and returns being read and assigned
+	// Skip parameters and returns
 }
 
 func (ui *usagesImp) processFunDecl(fn *ast.FuncDecl) {
-	// TODO: Finish Implementing
-	// TODO: Handle parameters and returns being read and assigned
+	ui.processNode(fn.Body)
 }
 
 func (ui *usagesImp) processIdent(id *ast.Ident) {
 	// Check if this identifier is part of a local definition.
-	// Don't create a usage for the local definition, they should be skipped.
 	if def, ok := ui.info.Defs[id]; ok {
-		ui.localDefs.Add(def)
-		return
-	}
-	// TODO: Should local defs be handled differently?
-	obj, ok := ui.info.Uses[id]
-	if !ok || ui.localDefs.Contains(obj) {
+		ref := ui.createTempRefForObj(def)
+		ui.newPending(ref, ui.takePending())
+		ui.usages.Writes.Add(ui.pending)
+		ui.localDefs[def] = ui.pending
 		return
 	}
 
-	ui.setPending(ui.createUsageForObject(obj, nil))
+	obj, ok := ui.info.Uses[id]
+	if !ok {
+		return
+	}
+	if usage, ok := ui.localDefs[obj]; ok {
+		ui.flushPendingToRead()
+		ui.pending = usage
+		return
+	}
+
+	ui.newPending(ui.createTempRefForObj(obj), nil)
 }
 
 func (ui *usagesImp) processIncDec(stmt *ast.IncDecStmt) {
 	ui.processNode(stmt.X)
-	if target := ui.consumePending(); !utils.IsNil(target) {
+	if target := ui.takePending(); !utils.IsNil(target) {
 		ui.usages.Writes.Add(target)
+	} else {
+		// What about `*(func())++` where the increment is on
+		// the returned type, or `mapFoo["cat"]++`.
+		if typ, ok := ui.info.Types[stmt.X]; ok {
+			desc := ui.conv.ConvertType(typ.Type)
+			ui.newPending(desc, nil)
+			ui.usages.Writes.Add(ui.takePending())
+		}
 	}
-	//else {
-	// TODO: Finish Implementing
-	// What about `*(func())++` where the increment is on the returned type,
-	// or `mapFoo["cat"]++`.
-	//typ := ui.info.Types[stmt.X]
-	//ui.usages.Writes.Add(target)
-	//}
 }
 
 func (ui *usagesImp) processIndex(expr *ast.IndexExpr) {
-	ui.processNode(expr.X)
-	target := ui.consumePending()
-	// Process index.
+	// Process index, e.g. `**[ i+3 ]`
 	ui.processNode(expr.Index)
-	// Ensure the index are labelled as a read and set the target pending.
+	ui.flushPendingToRead()
 
-	// TODO: Need to get the Elem of the type `var X []*Cat; X[0] => *Cat`
-	// TODO: Handle slice indexer for converting indexer like `string[0] => rune`
-	ui.setPending(target)
+	// Process target of indexing, e.g. `cats[ ** ]`
+	ui.processNode(expr.X)
+	ui.usages.Reads.Add(ui.pending)
+	target := ui.takePending()
 
+	// Prepare the result of the index.
+	if elem, ok := ui.info.Types[expr]; ok {
+		ui.newPending(ui.conv.ConvertType(elem.Type), target)
+	}
 }
 
 func (ui *usagesImp) processIndexList(expr *ast.IndexListExpr) {
-	// Process the object being indexed then
-	// take the pending to be set after the indices.
-	ui.processNode(expr.X)
-	target := ui.consumePending()
-	// Process indices.
+	// Process indices, e.g. `**[ i+4 : length+2 ]`
 	for _, indices := range expr.Indices {
 		ui.processNode(indices)
 	}
-	// Ensure all indices are labelled as reads and set the target pending.
-	ui.setPending(target)
+	ui.flushPendingToRead()
+
+	// Process the object being indexed then
+	// take the pending to be set after the indices.
+	ui.processNode(expr.X)
+	ui.usages.Reads.Add(ui.pending)
 }
 
 func (ui *usagesImp) processSelector(sel *ast.SelectorExpr) {
 	ui.processNode(sel.X)
 
-	var lhs constructs.Construct = ui.consumePending()
+	var lhs constructs.Construct = ui.takePending()
 	selection, ok := ui.info.Selections[sel]
 	if !ok {
 		panic(terror.New(`expected selection info but n found`).
@@ -268,5 +279,5 @@ func (ui *usagesImp) processSelector(sel *ast.SelectorExpr) {
 		lhs = ui.conv.ConvertType(selection.Recv())
 	}
 
-	ui.setPending(ui.createUsageForObject(selection.Obj(), lhs))
+	ui.newPending(ui.createTempRefForObj(selection.Obj()), lhs)
 }

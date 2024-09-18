@@ -17,22 +17,19 @@ type Usage interface {
 	Construct
 	IsUsage()
 
-	PackagePath() string
-	Name() string
-	InstanceTypes() []TypeDesc
+	Target() Construct
 	Origin() Construct
 	HasOrigin() bool
-
-	ResolvedType() TypeDesc
-	Resolved() bool
-	SetResolution(typ TypeDesc)
 }
 
 type UsageArgs struct {
-	PackagePath   string
-	Name          string
-	InstanceTypes []TypeDesc
-	Origin        Construct
+
+	// Target is the construct that is being used.
+	Target Construct
+
+	// Origin is the optional construct that this usage is part of.
+	// Origin may be a receiver, parent, or root type.
+	Origin Construct
 }
 
 type UsageFactory interface {

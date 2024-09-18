@@ -15,6 +15,13 @@ func ArgValidId(name, value string) {
 	}
 }
 
+func ArgIsNil(name string, value any) {
+	if !utils.IsNil(value) {
+		panic(terror.New(`argument must be nil`).
+			With(`name`, name))
+	}
+}
+
 func ArgNotNil(name string, value any) {
 	if utils.IsNil(value) {
 		panic(terror.New(`argument must not be nil`).
