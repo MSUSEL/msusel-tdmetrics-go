@@ -18,7 +18,7 @@ type Usage interface {
 	IsUsage()
 
 	Target() Construct
-	Origin() Construct
+	Origin() Usage
 	HasOrigin() bool
 }
 
@@ -29,7 +29,7 @@ type UsageArgs struct {
 
 	// Origin is the optional construct that this usage is part of.
 	// Origin may be a receiver, parent, or root type.
-	Origin Construct
+	Origin Usage
 }
 
 type UsageFactory interface {

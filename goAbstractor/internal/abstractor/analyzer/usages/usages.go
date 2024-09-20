@@ -67,7 +67,7 @@ func Calculate(info *types.Info, proj constructs.Project, curPkg constructs.Pack
 	return ui.usages
 }
 
-func (ui *usagesImp) newPending(target, origin constructs.Construct) {
+func (ui *usagesImp) newPending(target constructs.Construct, origin constructs.Usage) {
 	ui.flushPendingToRead()
 	ui.pending = ui.proj.NewUsage(constructs.UsageArgs{
 		Target: target,
@@ -86,6 +86,13 @@ func (ui *usagesImp) flushPendingToRead() {
 		// If the usage hasn't been consumed it is assumed
 		// to have been read from, e.g. `a + b`.
 		ui.usages.Reads.Add(ui.pending)
+	}
+	ui.pending = nil
+}
+
+func (ui *usagesImp) flushPendingToWrite() {
+	if !utils.IsNil(ui.pending) {
+		ui.usages.Writes.Add(ui.pending)
 	}
 	ui.pending = nil
 }
@@ -139,7 +146,10 @@ func (ui *usagesImp) processNode(node ast.Node) {
 			ui.processIndexList(t)
 		case *ast.SelectorExpr:
 			ui.processSelector(t)
+		case *ast.ValueSpec:
+			ui.processValueSpec(t)
 		default:
+			//fmt.Printf("usagesImp processNode unhandled (%[1]T) %[1]v\n", t)
 			return true
 		}
 		return false
@@ -150,8 +160,8 @@ func (ui *usagesImp) processAssign(assign *ast.AssignStmt) {
 	// Process the right hand side (RHS) of the assignment.
 	for _, exp := range assign.Rhs {
 		ui.processNode(exp)
+		ui.flushPendingToRead()
 	}
-	ui.flushPendingToRead()
 
 	// Process the left hand side (LHS) of the assignment.
 	// Any usage returned will be the usage that is being assigned to or nil.
@@ -159,9 +169,7 @@ func (ui *usagesImp) processAssign(assign *ast.AssignStmt) {
 	// `func foo() *int`) or if assignment to a local type (e.g. `x := 10`).
 	for _, exp := range assign.Lhs {
 		ui.processNode(exp)
-		if last := ui.takePending(); !utils.IsNil(last) {
-			ui.usages.Writes.Add(last)
-		}
+		ui.flushPendingToWrite()
 	}
 }
 
@@ -169,8 +177,8 @@ func (ui *usagesImp) processCall(call *ast.CallExpr) {
 	// Process arguments for the call.
 	for _, arg := range call.Args {
 		ui.processNode(arg)
+		ui.flushPendingToRead()
 	}
-	ui.flushPendingToRead()
 
 	// Process the invocation target,
 	// e.g. `Bar` in `(*foo.Bar)( ** )` or `foo.Bar( ** )`.
@@ -198,6 +206,10 @@ func (ui *usagesImp) processFunDecl(fn *ast.FuncDecl) {
 func (ui *usagesImp) processIdent(id *ast.Ident) {
 	// Check if this identifier is part of a local definition.
 	if def, ok := ui.info.Defs[id]; ok {
+		if def == nil {
+			return
+		}
+
 		ref := ui.createTempRefForObj(def)
 		ui.newPending(ref, ui.takePending())
 		ui.usages.Writes.Add(ui.pending)
@@ -205,13 +217,31 @@ func (ui *usagesImp) processIdent(id *ast.Ident) {
 		return
 	}
 
+	// Check for an identifier is being used.
 	obj, ok := ui.info.Uses[id]
 	if !ok {
 		return
 	}
+
+	// Check if defined earlier.
 	if usage, ok := ui.localDefs[obj]; ok {
 		ui.flushPendingToRead()
 		ui.pending = usage
+		return
+	}
+
+	// Skip over build-in constants:
+	// https://pkg.go.dev/builtin#pkg-constants
+	switch obj.Id() {
+	case `_.true`, `_.false`, `_.nil`, `_.iota`:
+		return
+	}
+
+	// Return basic types as usage.
+	if basic, ok := obj.Type().(*types.Basic); ok && basic.Kind() != types.Invalid {
+		ui.newPending(ui.proj.NewBasic(constructs.BasicArgs{
+			RealType: basic,
+		}), nil)
 		return
 	}
 
@@ -228,7 +258,7 @@ func (ui *usagesImp) processIncDec(stmt *ast.IncDecStmt) {
 		if typ, ok := ui.info.Types[stmt.X]; ok {
 			desc := ui.conv.ConvertType(typ.Type)
 			ui.newPending(desc, nil)
-			ui.usages.Writes.Add(ui.takePending())
+			ui.flushPendingToWrite()
 		}
 	}
 }
@@ -253,19 +283,21 @@ func (ui *usagesImp) processIndexList(expr *ast.IndexListExpr) {
 	// Process indices, e.g. `**[ i+4 : length+2 ]`
 	for _, indices := range expr.Indices {
 		ui.processNode(indices)
+		ui.flushPendingToRead()
 	}
-	ui.flushPendingToRead()
 
 	// Process the object being indexed then
 	// take the pending to be set after the indices.
 	ui.processNode(expr.X)
-	ui.usages.Reads.Add(ui.pending)
+	if !utils.IsNil(ui.pending) {
+		ui.usages.Reads.Add(ui.pending)
+	}
 }
 
 func (ui *usagesImp) processSelector(sel *ast.SelectorExpr) {
 	ui.processNode(sel.X)
 
-	var lhs constructs.Construct = ui.takePending()
+	lhs := ui.takePending()
 	selection, ok := ui.info.Selections[sel]
 	if !ok {
 		panic(terror.New(`expected selection info but n found`).
@@ -276,8 +308,25 @@ func (ui *usagesImp) processSelector(sel *ast.SelectorExpr) {
 		// The left hand side is empty so this wasn't like `foo.Bar`,
 		// it was instead like `foo().Bar` where some expression results
 		// in a selection on a type.
-		lhs = ui.conv.ConvertType(selection.Recv())
+		lhs = ui.proj.NewUsage(constructs.UsageArgs{
+			Target: ui.conv.ConvertType(selection.Recv()),
+		})
 	}
 
 	ui.newPending(ui.createTempRefForObj(selection.Obj()), lhs)
+}
+
+func (ui *usagesImp) processValueSpec(spec *ast.ValueSpec) {
+	for _, name := range spec.Names {
+		ui.processNode(name)
+		ui.flushPendingToWrite()
+	}
+
+	ui.processNode(spec.Type)
+	ui.flushPendingToRead()
+
+	for _, value := range spec.Values {
+		ui.processNode(value)
+		ui.flushPendingToRead()
+	}
 }

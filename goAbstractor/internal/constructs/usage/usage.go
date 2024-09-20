@@ -14,7 +14,7 @@ import (
 
 type usageImp struct {
 	target constructs.Construct
-	origin constructs.Construct
+	origin constructs.Usage
 	index  int
 	alive  bool
 }
@@ -37,7 +37,7 @@ func (u *usageImp) SetAlive(alive bool) { u.alive = alive }
 func (u *usageImp) HasOrigin() bool     { return !utils.IsNil(u.origin) }
 
 func (u *usageImp) Target() constructs.Construct { return u.target }
-func (u *usageImp) Origin() constructs.Construct { return u.origin }
+func (u *usageImp) Origin() constructs.Usage     { return u.origin }
 
 func (u *usageImp) CompareTo(other constructs.Construct) int {
 	return constructs.CompareTo[constructs.Usage](u, other, Comparer())
@@ -67,7 +67,7 @@ func (u *usageImp) ToJson(ctx *jsonify.Context) jsonify.Datum {
 		AddIf(ctx, ctx.IsDebugKindIncluded(), `kind`, u.Kind()).
 		AddIf(ctx, ctx.IsDebugIndexIncluded(), `index`, u.index).
 		Add(ctx.Short(), `target`, u.target).
-		AddNonZero(ctx.Short(), `origin`, u.origin)
+		AddNonZero(ctx.OnlyIndex(), `origin`, u.origin)
 }
 
 func (u *usageImp) String() string {
