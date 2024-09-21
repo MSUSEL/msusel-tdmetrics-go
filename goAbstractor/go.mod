@@ -1,6 +1,6 @@
 module github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor
 
-go 1.22
+go 1.23
 
 require (
 	github.com/Snow-Gremlin/goToolbox v0.5.4

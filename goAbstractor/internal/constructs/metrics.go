@@ -30,7 +30,7 @@ type MetricsArgs struct {
 	// This is used as a key to determine different metrics.
 	//
 	// Metrics for values can be attached to zero or more values,
-	// (`var _ = func() int { ** }`) or (`var x, y = func()(int, int) { ** }`).
+	// (`var _ = func() int { ⋯ }`) or (`var x, y = func()(int, int) { ⋯ }`).
 	Location locs.Loc
 
 	// Complexity is the McCabe's Cyclomatic Complexity value for the method.

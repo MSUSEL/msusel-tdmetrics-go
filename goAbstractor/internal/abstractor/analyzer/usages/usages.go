@@ -37,6 +37,7 @@ type usagesImp struct {
 
 	pending   constructs.Usage
 	localDefs map[types.Object]constructs.Usage
+	params    map[types.Object]struct{}
 	usages    Usages
 }
 
@@ -59,6 +60,7 @@ func Calculate(info *types.Info, proj constructs.Project, curPkg constructs.Pack
 
 		pending:   nil,
 		localDefs: map[types.Object]constructs.Usage{},
+		params:    map[types.Object]struct{}{},
 		usages:    newUsage(),
 	}
 
@@ -144,6 +146,8 @@ func (ui *usagesImp) processNode(node ast.Node) {
 			ui.processIndex(t)
 		case *ast.IndexListExpr:
 			ui.processIndexList(t)
+		case *ast.ReturnStmt:
+			ui.processReturn(t)
 		case *ast.SelectorExpr:
 			ui.processSelector(t)
 		case *ast.ValueSpec:
@@ -181,7 +185,7 @@ func (ui *usagesImp) processCall(call *ast.CallExpr) {
 	}
 
 	// Process the invocation target,
-	// e.g. `Bar` in `(*foo.Bar)( ** )` or `foo.Bar( ** )`.
+	// e.g. `Bar` in `(*foo.Bar)( ⋯ )` or `foo.Bar( ⋯ )`.
 	ui.processNode(call.Fun)
 	if target := ui.takePending(); !utils.IsNil(target) {
 		if tx, ok := ui.info.Types[call.Fun]; ok && tx.IsType() {
@@ -196,10 +200,36 @@ func (ui *usagesImp) processCall(call *ast.CallExpr) {
 
 func (ui *usagesImp) processFunc(fn *ast.FuncType) {
 	// This is part of a `ast.FuncLit` or `ast.FuncDecl`.
-	// Skip parameters and returns
+	if fn.Params != nil {
+		ui.addLocalParams(fn.Params.List)
+	}
+	if fn.Results != nil {
+		ui.addLocalParams(fn.Results.List)
+	}
+	if fn.TypeParams != nil {
+		ui.addLocalParams(fn.TypeParams.List)
+	}
+}
+
+func (ui *usagesImp) addLocalParams(params []*ast.Field) {
+	for _, p := range params {
+		ui.addLocalParam(p)
+	}
+}
+
+func (ui *usagesImp) addLocalParam(p *ast.Field) {
+	for _, id := range p.Names {
+		if obj := ui.info.Defs[id]; obj != nil {
+			ui.params[obj] = struct{}{}
+		}
+	}
 }
 
 func (ui *usagesImp) processFunDecl(fn *ast.FuncDecl) {
+	if fn.Recv != nil {
+		ui.addLocalParams(fn.Recv.List)
+	}
+	ui.processFunc(fn.Type)
 	ui.processNode(fn.Body)
 }
 
@@ -228,6 +258,17 @@ func (ui *usagesImp) processIdent(id *ast.Ident) {
 		ui.flushPendingToRead()
 		ui.pending = usage
 		return
+	}
+
+	// Check if parameter, result, or receiver that hasn't been used yet.
+	if _, ok := ui.params[obj]; ok {
+		ui.flushPendingToRead()
+		arg := ui.proj.NewArgument(constructs.ArgumentArgs{
+			Name: obj.Name(),
+			Type: ui.conv.ConvertType(obj.Type()),
+		})
+		ui.newPending(arg, nil)
+		ui.localDefs[obj] = ui.pending
 	}
 
 	// Skip over build-in constants:
@@ -264,11 +305,11 @@ func (ui *usagesImp) processIncDec(stmt *ast.IncDecStmt) {
 }
 
 func (ui *usagesImp) processIndex(expr *ast.IndexExpr) {
-	// Process index, e.g. `**[ i+3 ]`
+	// Process index, e.g. `⋯[ i+3 ]`
 	ui.processNode(expr.Index)
 	ui.flushPendingToRead()
 
-	// Process target of indexing, e.g. `cats[ ** ]`
+	// Process target of indexing, e.g. `cats[ ⋯ ]`
 	ui.processNode(expr.X)
 	ui.usages.Reads.Add(ui.pending)
 	target := ui.takePending()
@@ -280,7 +321,7 @@ func (ui *usagesImp) processIndex(expr *ast.IndexExpr) {
 }
 
 func (ui *usagesImp) processIndexList(expr *ast.IndexListExpr) {
-	// Process indices, e.g. `**[ i+4 : length+2 ]`
+	// Process indices, e.g. `⋯[ i+4 : length+2 ]`
 	for _, indices := range expr.Indices {
 		ui.processNode(indices)
 		ui.flushPendingToRead()
@@ -294,10 +335,17 @@ func (ui *usagesImp) processIndexList(expr *ast.IndexListExpr) {
 	}
 }
 
+func (ui *usagesImp) processReturn(ret *ast.ReturnStmt) {
+	for _, r := range ret.Results {
+		ui.processNode(r)
+		ui.flushPendingToRead()
+	}
+}
+
 func (ui *usagesImp) processSelector(sel *ast.SelectorExpr) {
 	ui.processNode(sel.X)
-
 	lhs := ui.takePending()
+
 	selection, ok := ui.info.Selections[sel]
 	if !ok {
 		panic(terror.New(`expected selection info but n found`).
@@ -313,6 +361,13 @@ func (ui *usagesImp) processSelector(sel *ast.SelectorExpr) {
 		})
 	}
 
+	if utils.IsNil(lhs) {
+		ui.newPending(ui.createTempRefForObj(selection.Obj()), nil)
+		return
+	}
+
+	ui.usages.Reads.Add(lhs)
+	// TODO: Handle better selection
 	ui.newPending(ui.createTempRefForObj(selection.Obj()), lhs)
 }
 

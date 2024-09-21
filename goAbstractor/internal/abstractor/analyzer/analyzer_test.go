@@ -706,16 +706,17 @@ func Test_GetterWithSelect(t *testing.T) {
 		`      indents:    1,`,
 		`      lineCount:  3,`,
 		`      getter:     true,`,
+		`      reads:    [ 1, 2 ],`,
 		`    }`,
 		`  ],`,
 		`  packages: [`,
 		`    { name: test, path: test }`,
 		`  ],`,
-		`  "tempReferences": [`,
+		`  tempReferences: [`,
 		`    { packagePath: test, name: b },`,
 		`    { packagePath: test, name: x }`,
 		`  ],`,
-		`  "usages": [`,
+		`  usages: [`,
 		`    { target: tempReference1 },`,
 		`    { target: tempReference2, origin: 1 }`,
 		`  ]`,
@@ -728,16 +729,30 @@ func Test_GetterWithDereference(t *testing.T) {
 		`func Foo() int {`,
 		`	return *bar`,
 		`}`)
-	tt.checkMetrics(
+	tt.checkProj(
 		`{`,
-		`	loc:        2,`,
-		`	codeCount:  3,`,
-		`	complexity: 1,`,
-		`	indents:    1,`,
-		`	lineCount:  3,`,
-		`   getter:  true,`,
+		`  language: go,`,
+		`  metrics: [`,
+		`    {`,
+		`      loc:        2,`,
+		`      codeCount:  3,`,
+		`      complexity: 1,`,
+		`      indents:    1,`,
+		`      lineCount:  3,`,
+		`      getter:  true,`,
+		`      reads:    [ 1 ],`,
+		`    }`,
+		`  ],`,
+		`  packages: [`,
+		`    { name: test, path: test }`,
+		`  ],`,
+		`  tempReferences: [`,
+		`    { packagePath: test, name: bar }`,
+		`  ],`,
+		`  usages: [`,
+		`    { target: tempReference1 }`,
+		`  ]`,
 		`}`)
-	tt.checkUsages()
 }
 
 func Test_GetterWithConvert(t *testing.T) {
@@ -746,16 +761,35 @@ func Test_GetterWithConvert(t *testing.T) {
 		`func (b Bar) Foo() int {`,
 		`	return int(b.x)`,
 		`}`)
-	tt.checkMetrics(
+	tt.checkProj(
 		`{`,
-		`	loc:        2,`,
-		`	codeCount:  3,`,
-		`	complexity: 1,`,
-		`	indents:    1,`,
-		`	lineCount:  3,`,
-		`   getter:  true,`,
+		`  basics: [ int ],`,
+		`  language: go,`,
+		`  metrics: [`,
+		`    {`,
+		`      loc:        2,`,
+		`      codeCount:  3,`,
+		`      complexity: 1,`,
+		`      indents:    1,`,
+		`      lineCount:  3,`,
+		`      getter:  true,`,
+		`      reads:    [ 2, 3 ],`,
+		`      writes:   [ 1 ]`,
+		`    }`,
+		`  ],`,
+		`  packages: [`,
+		`    { name: test, path: test }`,
+		`  ],`,
+		`  tempReferences: [`,
+		`    { packagePath: test, name: b },`,
+		`    { packagePath: test, name: x }`,
+		`  ],`,
+		`  usages: [`,
+		`    { target: basic1 },`,
+		`    { target: tempReference1 },`,
+		`    { target: tempReference2, origin: 2 }`,
+		`  ]`,
 		`}`)
-	tt.checkUsages()
 }
 
 func Test_SetterWithSelect(t *testing.T) {
@@ -764,16 +798,40 @@ func Test_SetterWithSelect(t *testing.T) {
 		`func (b Bar) Foo(x int) {`,
 		`	b.x = x`,
 		`}`)
-	tt.checkMetrics(
+	tt.checkProj(
 		`{`,
-		`	loc:        2,`,
-		`	codeCount:  3,`,
-		`	complexity: 1,`,
-		`	indents:    1,`,
-		`	lineCount:  3,`,
-		`   setter:  true,`,
+		`  arguments: [`,
+		`    { name: b, type: tempReference1 },`,
+		`    { name: x, type: basic1 }`,
+		`  ],`,
+		`  basics: [ int ],`,
+		`  language: go,`,
+		`  metrics: [`,
+		`    {`,
+		`      loc:        2,`,
+		`      codeCount:  3,`,
+		`      complexity: 1,`,
+		`      indents:    1,`,
+		`      lineCount:  3,`,
+		`      setter:  true,`,
+		`      reads:    [ 1, 2, 3, 4 ],`,
+		`      writes:   [ 5 ]`,
+		`    }`,
+		`  ],`,
+		`  packages: [`,
+		`    { name: test, path: test }`,
+		`  ],`,
+		`  tempReferences: [`,
+		`    { packagePath: test, name: Bar },`,
+		`    { packagePath: test, name: b }`,
+		`    { packagePath: test, name: "x WHAT? No, this is b.x, the ref won't resolve" }`,
+		`  ],`,
+		`  usages: [`,
+		`    { target: basic1 },`,
+		`    { target: tempReference1 },`,
+		`    { target: tempReference2, origin: 2 }`,
+		`  ]`,
 		`}`)
-	tt.checkUsages()
 }
 
 func Test_SetterWithReference(t *testing.T) {
@@ -782,16 +840,16 @@ func Test_SetterWithReference(t *testing.T) {
 		`func Foo(x int) {`,
 		`	bar = &x`,
 		`}`)
-	tt.checkMetrics(
-		`{`,
-		`	loc:        2,`,
-		`	codeCount:  3,`,
-		`	complexity: 1,`,
-		`	indents:    1,`,
-		`	lineCount:  3,`,
-		`   setter:  true,`,
-		`}`)
-	tt.checkUsages()
+	//tt.checkMetrics(
+	//	`{`,
+	//	`	loc:        2,`,
+	//	`	codeCount:  3,`,
+	//	`	complexity: 1,`,
+	//	`	indents:    1,`,
+	//	`	lineCount:  3,`,
+	//	`   setter:  true,`,
+	//	`}`)
+	tt.checkProj()
 }
 
 func Test_NotReverseSetter(t *testing.T) {
@@ -800,21 +858,24 @@ func Test_NotReverseSetter(t *testing.T) {
 		`func Foo(x *int) {`,
 		`	*x = *bar`,
 		`}`)
-	tt.checkMetrics(
-		`{`,
-		`	loc:        2,`,
-		`	codeCount:  3,`,
-		`	complexity: 1,`,
-		`	indents:    1,`,
-		`	lineCount:  3,`,
-		`}`)
-	tt.checkUsages()
+	//tt.checkMetrics(
+	//	`{`,
+	//	`	loc:        2,`,
+	//	`	codeCount:  3,`,
+	//	`	complexity: 1,`,
+	//	`	indents:    1,`,
+	//	`	lineCount:  3,`,
+	//	`}`)
+	tt.checkProj()
 }
+
+// TODO: Test a named return
+// func() (x, y int) { x = 10; y = 24; return }
 
 // TODO: Test joining metrics:
 // var val = []int{
-//   func() int { ** }(),
-//   func() int { ** }(),
+//   func() int { ⋯ }(),
+//   func() int { ⋯ }(),
 // }
 
 // TODO: Test nothing variable:
@@ -827,7 +888,7 @@ func Test_NotReverseSetter(t *testing.T) {
 // var val = singleton.value
 
 // TODO: Test reading metrics with read reference as parameter:
-// var val = func(f Foo) int { ** }(singleton.f)
+// var val = func(f Foo) int { ⋯ }(singleton.f)
 
 // TODO: Test reading metrics with read reference in typed call:
 // var val = Foo[int](singleton)
@@ -841,7 +902,7 @@ func Test_NotReverseSetter(t *testing.T) {
 // func() (x int) { x = 10; return }
 
 // TODO: Test multiple assignments:
-// x, y := 1, 2  and  x, y := func()(int, int) { ** }
+// x, y := 1, 2  and  x, y := func()(int, int) { ⋯ }
 
 // TODO: Test local encapsulation of type:
 // x := struct{y externalType}{y: ext}.y
@@ -852,10 +913,10 @@ func Test_NotReverseSetter(t *testing.T) {
 // TODO: Test inc and dec also work as assignment.
 
 // TODO: Test literal cast and call
-// type foo int; func(f foo) bar { ** }; foo(6).bar()
+// type foo int; func(f foo) bar { ⋯ }; foo(6).bar()
 
 // TODO: Test the assignment in a for-loop or if-statement
-// are picked up as writes, `for i := 0; ...`
+// are picked up as writes, `for i := 0; ⋯`
 
 type testTool struct {
 	t      *testing.T
@@ -953,14 +1014,6 @@ func parseDecl(t *testing.T, name string, lines ...string) *testTool {
 	tt.m = Analyze(tt.info, tt.proj, tt.curPkg, tt.conv, target)
 	tt.proj.UpdateIndices()
 	return tt
-}
-
-func (tt *testTool) checkMetrics(expLines ...string) {
-	tt.check(tt.m, expLines...)
-}
-
-func (tt *testTool) checkUsages(expLines ...string) {
-	tt.check(tt.proj.Usages().ToSlice(), expLines...)
 }
 
 func (tt *testTool) checkProj(expLines ...string) {

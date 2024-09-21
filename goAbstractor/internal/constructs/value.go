@@ -44,7 +44,7 @@ type ValueArgs struct {
 
 	// Metrics are optional and may be nil. These metrics are for
 	// a variable initialized with an anonymous function.
-	// (e.g. `var x = func() int { ** }()`)
+	// (e.g. `var x = func() int { ⋯ }()`)
 	Metrics Metrics
 }
 
