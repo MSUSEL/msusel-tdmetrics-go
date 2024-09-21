@@ -25,8 +25,11 @@ type valueImp struct {
 }
 
 func newValue(args constructs.ValueArgs) constructs.Value {
+	if args.Name != `_` {
+		// Arguments may be a blank with an underscore.
+		assert.ArgValidId(`name`, args.Name)
+	}
 	assert.ArgNotNil(`package`, args.Package)
-	assert.ArgValidId(`name`, args.Name)
 	assert.ArgNotNil(`type`, args.Type)
 	assert.ArgNotNil(`location`, args.Location)
 
@@ -81,6 +84,7 @@ func Comparer() comp.Comparer[constructs.Value] {
 			constructs.ComparerPend(aImp.pkg, bImp.pkg),
 			comp.DefaultPend(aImp.name, bImp.name),
 			constructs.ComparerPend(aImp.typ, bImp.typ),
+			constructs.ComparerPend(aImp.metrics, bImp.metrics),
 		)
 	}
 }

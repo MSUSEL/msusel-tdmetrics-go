@@ -101,6 +101,7 @@ func (c *convImp) convertInterface(t *types.Interface) constructs.InterfaceDesc 
 	t.Complete()
 
 	abstracts := []constructs.Abstract{}
+	pinned := false
 	for i := range t.NumMethods() {
 		f := t.Method(i)
 		sig := c.ConvertSignature(f.Type().(*types.Signature))
@@ -110,6 +111,7 @@ func (c *convImp) convertInterface(t *types.Interface) constructs.InterfaceDesc 
 			Signature: sig,
 		})
 		abstracts = append(abstracts, abstract)
+		pinned = pinned || !f.Exported()
 	}
 
 	var exact, approx []constructs.TypeDesc
@@ -122,8 +124,14 @@ func (c *convImp) convertInterface(t *types.Interface) constructs.InterfaceDesc 
 		}
 	}
 
+	var pinnedPkg constructs.Package
+	if pinned {
+		pinnedPkg = c.curPkg
+	}
+
 	return c.proj.NewInterfaceDesc(constructs.InterfaceDescArgs{
 		RealType:  t,
+		PinnedPkg: pinnedPkg,
 		Exact:     exact,
 		Approx:    approx,
 		Abstracts: abstracts,

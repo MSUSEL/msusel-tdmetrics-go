@@ -219,15 +219,10 @@ func (ab *abstractor) abstractTypeParam(field *ast.Field) []constructs.TypeParam
 }
 
 func (ab *abstractor) abstractValueSpec(spec *ast.ValueSpec, isConst bool) {
-	for _, name := range spec.Names {
-		// TODO: Need to evaluate the initial value in case
-		// it has connection to another var of calls a function.
-
-		if constructs.BlankName(name.Name) {
-			// TODO: Could a black name assignment have a side effect?
-			//       Maybe if metrics aren't nil, give it a non-blank name.
-			//		 var _ = func() bool { /*pseudo init*/ }()
-			continue
+	var metrics constructs.Metrics
+	for i, name := range spec.Names {
+		if i < len(spec.Values) {
+			metrics = analyzer.Analyze(ab.info(), ab.proj, ab.curPkg, ab.converter(), spec.Values[i])
 		}
 
 		tv, has := ab.info().Defs[name]
@@ -242,6 +237,7 @@ func (ab *abstractor) abstractValueSpec(spec *ast.ValueSpec, isConst bool) {
 			Name:     name.Name,
 			Exported: name.IsExported(),
 			Const:    isConst,
+			Metrics:  metrics,
 			Type:     typ,
 			Location: ab.proj.Locs().NewLoc(spec.Pos()),
 		})

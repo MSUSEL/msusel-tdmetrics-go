@@ -23,11 +23,11 @@ import (
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs/object"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs/objectInst"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs/packageCon"
+	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs/selection"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs/signature"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs/structDesc"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs/tempReference"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs/typeParam"
-	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs/usage"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs/value"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/jsonify"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/locs"
@@ -39,7 +39,7 @@ type projectImp struct {
 	constructs.FieldFactory
 	constructs.PackageFactory
 	constructs.MetricsFactory
-	constructs.UsageFactory
+	constructs.SelectionFactory
 
 	constructs.InterfaceDeclFactory
 	constructs.MethodFactory
@@ -61,12 +61,12 @@ type projectImp struct {
 
 func New(locs locs.Set) constructs.Project {
 	return &projectImp{
-		AbstractFactory: abstract.New(),
-		ArgumentFactory: argument.New(),
-		FieldFactory:    field.New(),
-		PackageFactory:  packageCon.New(),
-		MetricsFactory:  metrics.New(),
-		UsageFactory:    usage.New(),
+		AbstractFactory:  abstract.New(),
+		ArgumentFactory:  argument.New(),
+		FieldFactory:     field.New(),
+		PackageFactory:   packageCon.New(),
+		MetricsFactory:   metrics.New(),
+		SelectionFactory: selection.New(),
 
 		InterfaceDeclFactory: interfaceDecl.New(),
 		MethodFactory:        method.New(),
@@ -104,11 +104,11 @@ func (p *projectImp) AllConstructs() collections.Enumerator[constructs.Construct
 		enumerator.Cast[constructs.Construct](p.Objects().Enumerate()),
 		enumerator.Cast[constructs.Construct](p.ObjectInsts().Enumerate()),
 		enumerator.Cast[constructs.Construct](p.Packages().Enumerate()),
+		enumerator.Cast[constructs.Construct](p.Selections().Enumerate()),
 		enumerator.Cast[constructs.Construct](p.Signatures().Enumerate()),
 		enumerator.Cast[constructs.Construct](p.StructDescs().Enumerate()),
 		enumerator.Cast[constructs.Construct](p.TypeParams().Enumerate()),
 		enumerator.Cast[constructs.Construct](p.TempReferences().Enumerate()),
-		enumerator.Cast[constructs.Construct](p.Usages().Enumerate()),
 		enumerator.Cast[constructs.Construct](p.Values().Enumerate()),
 	)
 }
@@ -177,7 +177,7 @@ func (p *projectImp) ToJson(ctx *jsonify.Context) jsonify.Datum {
 		AddNonZero(ctx, `fields`, p.Fields().ToSlice()).
 		AddNonZero(ctx, `packages`, p.Packages().ToSlice()).
 		AddNonZero(ctx, `metrics`, p.Metrics().ToSlice()).
-		AddNonZero(ctx, `usages`, p.Usages().ToSlice())
+		AddNonZero(ctx, `selections`, p.Selections().ToSlice())
 
 	m.AddNonZero(ctx, `interfaceDecls`, p.InterfaceDecls().ToSlice()).
 		AddNonZero(ctx, `methods`, p.Methods().ToSlice()).

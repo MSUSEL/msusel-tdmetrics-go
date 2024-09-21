@@ -19,6 +19,7 @@ import (
 type interfaceDescImp struct {
 	realType *types.Interface
 
+	pinnedPkg constructs.Package
 	abstracts []constructs.Abstract
 	exact     []constructs.TypeDesc
 	approx    []constructs.TypeDesc
@@ -62,6 +63,7 @@ func newInterfaceDesc(args constructs.InterfaceDescArgs) constructs.InterfaceDes
 	return &interfaceDescImp{
 		realType: args.RealType,
 
+		pinnedPkg: args.PinnedPkg,
 		abstracts: args.Abstracts,
 		exact:     args.Exact,
 		approx:    args.Approx,
@@ -80,11 +82,16 @@ func (id *interfaceDescImp) Alive() bool         { return id.alive }
 func (id *interfaceDescImp) SetAlive(alive bool) { id.alive = alive }
 func (id *interfaceDescImp) GoType() types.Type  { return id.realType }
 
-func (id *interfaceDescImp) Abstracts() []constructs.Abstract { return id.abstracts }
-func (id *interfaceDescImp) Exact() []constructs.TypeDesc     { return id.exact }
-func (id *interfaceDescImp) Approx() []constructs.TypeDesc    { return id.approx }
+func (id *interfaceDescImp) Abstracts() []constructs.Abstract  { return id.abstracts }
+func (id *interfaceDescImp) Exact() []constructs.TypeDesc      { return id.exact }
+func (id *interfaceDescImp) Approx() []constructs.TypeDesc     { return id.approx }
+func (id *interfaceDescImp) PinnedPackage() constructs.Package { return id.pinnedPkg }
 
-func (id *interfaceDescImp) IsUnion() bool {
+func (id *interfaceDescImp) IsPinned() bool {
+	return utils.IsNil(id.pinnedPkg)
+}
+
+func (id *interfaceDescImp) IsGeneral() bool {
 	return len(id.approx)+len(id.exact) >= 2
 }
 
@@ -112,6 +119,7 @@ func Comparer() comp.Comparer[constructs.InterfaceDesc] {
 			return 0
 		}
 		return comp.Or(
+			constructs.ComparerPend(aImp.pinnedPkg, bImp.pinnedPkg),
 			constructs.SliceComparerPend(aImp.abstracts, bImp.abstracts),
 			constructs.SliceComparerPend(aImp.exact, bImp.exact),
 			constructs.SliceComparerPend(aImp.approx, bImp.approx),
@@ -138,6 +146,7 @@ func (id *interfaceDescImp) ToJson(ctx *jsonify.Context) jsonify.Datum {
 	return jsonify.NewMap().
 		AddIf(ctx, ctx.IsDebugKindIncluded(), `kind`, id.Kind()).
 		AddIf(ctx, ctx.IsDebugIndexIncluded(), `index`, id.index).
+		AddNonZero(ctx.OnlyIndex(), `package`, id.pinnedPkg).
 		AddNonZero(ctx.OnlyIndex(), `abstracts`, id.abstracts).
 		AddNonZero(ctx.Short(), `approx`, id.approx).
 		AddNonZero(ctx.Short(), `exact`, id.exact).
@@ -162,5 +171,9 @@ func (id *interfaceDescImp) String() string {
 	if len(internals) <= 0 {
 		return `any`
 	}
-	return `interface{ ` + internals + `}`
+	head := ``
+	if id.IsPinned() {
+		head = id.pinnedPkg.Path() + `:`
+	}
+	return head + `interface{ ` + internals + `}`
 }

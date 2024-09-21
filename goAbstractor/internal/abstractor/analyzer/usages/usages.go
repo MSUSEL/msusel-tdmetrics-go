@@ -12,20 +12,20 @@ import (
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/abstractor/converter"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/assert"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs"
-	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs/usage"
 )
 
 type Usages struct {
-	Reads   collections.SortedSet[constructs.Usage]
-	Writes  collections.SortedSet[constructs.Usage]
-	Invokes collections.SortedSet[constructs.Usage]
+	Reads   collections.SortedSet[constructs.Construct]
+	Writes  collections.SortedSet[constructs.Construct]
+	Invokes collections.SortedSet[constructs.Construct]
 }
 
 func newUsage() Usages {
+	cmp := constructs.Comparer[constructs.Construct]()
 	return Usages{
-		Reads:   sortedSet.New(usage.Comparer()),
-		Writes:  sortedSet.New(usage.Comparer()),
-		Invokes: sortedSet.New(usage.Comparer()),
+		Reads:   sortedSet.New(cmp),
+		Writes:  sortedSet.New(cmp),
+		Invokes: sortedSet.New(cmp),
 	}
 }
 
@@ -35,8 +35,8 @@ type usagesImp struct {
 	curPkg constructs.Package
 	conv   converter.Converter
 
-	pending   constructs.Usage
-	localDefs map[types.Object]constructs.Usage
+	pending   constructs.Construct
+	localDefs map[types.Object]constructs.TypeDesc
 	params    map[types.Object]struct{}
 	usages    Usages
 }
@@ -59,7 +59,7 @@ func Calculate(info *types.Info, proj constructs.Project, curPkg constructs.Pack
 		conv:   conv,
 
 		pending:   nil,
-		localDefs: map[types.Object]constructs.Usage{},
+		localDefs: map[types.Object]constructs.TypeDesc{},
 		params:    map[types.Object]struct{}{},
 		usages:    newUsage(),
 	}
@@ -69,15 +69,12 @@ func Calculate(info *types.Info, proj constructs.Project, curPkg constructs.Pack
 	return ui.usages
 }
 
-func (ui *usagesImp) newPending(target constructs.Construct, origin constructs.Usage) {
+func (ui *usagesImp) setPending(pending constructs.Construct) {
 	ui.flushPendingToRead()
-	ui.pending = ui.proj.NewUsage(constructs.UsageArgs{
-		Target: target,
-		Origin: origin,
-	})
+	ui.pending = pending
 }
 
-func (ui *usagesImp) takePending() constructs.Usage {
+func (ui *usagesImp) takePending() constructs.Construct {
 	pending := ui.pending
 	ui.pending = nil
 	return pending
@@ -240,8 +237,10 @@ func (ui *usagesImp) processIdent(id *ast.Ident) {
 			return
 		}
 
+		// TODO: Rework
 		ref := ui.createTempRefForObj(def)
-		ui.newPending(ref, ui.takePending())
+		ui.flushPendingToRead()
+		ui.newPending(ref)
 		ui.usages.Writes.Add(ui.pending)
 		ui.localDefs[def] = ui.pending
 		return

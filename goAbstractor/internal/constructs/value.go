@@ -1,8 +1,9 @@
 package constructs
 
 import (
-	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/locs"
 	"github.com/Snow-Gremlin/goToolbox/collections"
+
+	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/locs"
 )
 
 type Value interface {

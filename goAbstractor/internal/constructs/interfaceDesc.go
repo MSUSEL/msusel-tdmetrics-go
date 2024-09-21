@@ -23,6 +23,15 @@ type InterfaceDesc interface {
 	TempReferenceContainer
 	IsInterfaceDesc()
 
+	// PinnedPackage is non-nil if the interface is tied to a specific
+	// package. This only happens if any of the abstracts are unexported.
+	// Unexported methods can only be implemented by something in the same
+	// package as the interface is defined.
+	PinnedPackage() Package
+
+	// IsPinned indicates if this interface is pinned to a package.
+	IsPinned() bool
+
 	// Abstracts is the set of named signatures for this interface.
 	Abstracts() []Abstract
 
@@ -34,8 +43,8 @@ type InterfaceDesc interface {
 	// may be exact or an extension of the base type.
 	Approx() []TypeDesc
 
-	// IsUnion indicates if there is two or more exact or approximate types.
-	IsUnion() bool
+	// IsGeneral indicates if there is two or more exact or approximate types.
+	IsGeneral() bool
 
 	// Implements determines if this interface implements the other interface.
 	Implements(other InterfaceDesc) bool
@@ -47,6 +56,10 @@ type InterfaceDesc interface {
 
 type InterfaceDescArgs struct {
 	RealType *types.Interface
+
+	// PinnedPkg is non-nil when an abstract is unexported.
+	// This is the package the interface is pinned to.
+	PinnedPkg Package
 
 	// Abstracts is the set of named signatures for this interface.
 	Abstracts []Abstract

@@ -25,9 +25,9 @@ type metricsImp struct {
 	getter     bool
 	setter     bool
 
-	reads   collections.SortedSet[constructs.Usage]
-	writes  collections.SortedSet[constructs.Usage]
-	invokes collections.SortedSet[constructs.Usage]
+	reads   collections.SortedSet[constructs.Construct]
+	writes  collections.SortedSet[constructs.Construct]
+	invokes collections.SortedSet[constructs.Construct]
 }
 
 func newMetrics(args constructs.MetricsArgs) constructs.Metrics {
@@ -64,16 +64,31 @@ func (m *metricsImp) Indents() int        { return m.indents }
 func (m *metricsImp) Getter() bool        { return m.getter }
 func (m *metricsImp) Setter() bool        { return m.setter }
 
-func (m *metricsImp) Reads() collections.ReadonlySortedSet[constructs.Usage] {
+func (m *metricsImp) Reads() collections.ReadonlySortedSet[constructs.Construct] {
 	return m.reads.Readonly()
 }
 
-func (m *metricsImp) Writes() collections.ReadonlySortedSet[constructs.Usage] {
+func (m *metricsImp) Writes() collections.ReadonlySortedSet[constructs.Construct] {
 	return m.writes.Readonly()
 }
 
-func (m *metricsImp) Invokes() collections.ReadonlySortedSet[constructs.Usage] {
+func (m *metricsImp) Invokes() collections.ReadonlySortedSet[constructs.Construct] {
 	return m.invokes.Readonly()
+}
+
+func (m *metricsImp) RemoveTempReferences() {
+	resolveTempReferences(m.reads)
+	resolveTempReferences(m.writes)
+	resolveTempReferences(m.invokes)
+}
+
+func resolveTempReferences(set collections.SortedSet[constructs.Construct]) {
+	for _, s := range set.ToSlice() {
+		if s.Kind() == kind.TempReference {
+			set.Remove(s)
+			set.Add(constructs.ResolvedTempReference(s.(constructs.TempReference)))
+		}
+	}
 }
 
 func (m *metricsImp) CompareTo(other constructs.Construct) int {

@@ -8,6 +8,7 @@ import (
 
 type Metrics interface {
 	Construct
+	TempReferenceContainer
 	IsMetrics()
 
 	Location() locs.Loc
@@ -18,9 +19,9 @@ type Metrics interface {
 	Getter() bool
 	Setter() bool
 
-	Reads() collections.ReadonlySortedSet[Usage]
-	Writes() collections.ReadonlySortedSet[Usage]
-	Invokes() collections.ReadonlySortedSet[Usage]
+	Reads() collections.ReadonlySortedSet[Construct]
+	Writes() collections.ReadonlySortedSet[Construct]
+	Invokes() collections.ReadonlySortedSet[Construct]
 }
 
 // MetricsArgs are measurements taken for a method body or expression.
@@ -90,7 +91,7 @@ type MetricsArgs struct {
 	// Reads are the usages that reads a value or type.
 	//
 	// e.g. `return point.x + 4` has a read usage of `point.x`.
-	Reads collections.SortedSet[Usage]
+	Reads collections.SortedSet[Construct]
 
 	// Writes are the usages that writes a value or type.
 	// This includes creating a type internal to the function and
@@ -104,13 +105,13 @@ type MetricsArgs struct {
 	//
 	// e.g. `return point.(RealType)` has a write usage to `RealType`
 	//      just like the cast in the above example.
-	Writes collections.SortedSet[Usage]
+	Writes collections.SortedSet[Construct]
 
 	// Invokes are the usages that calls a method, function, or
 	// function pointer.
 	//
 	// e.g. `point.getX()` has an invocation of `point.getX`.
-	Invokes collections.SortedSet[Usage]
+	Invokes collections.SortedSet[Construct]
 }
 
 type MetricsFactory interface {

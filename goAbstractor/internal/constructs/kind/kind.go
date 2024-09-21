@@ -16,10 +16,10 @@ const (
 	Object        Kind = `object`
 	ObjectInst    Kind = `objectInst`
 	Package       Kind = `package`
+	Selection     Kind = `selection`
 	Signature     Kind = `signature`
 	StructDesc    Kind = `structDesc`
 	TempReference Kind = `tempReference`
 	TypeParam     Kind = `typeParam`
-	Usage         Kind = `usage`
 	Value         Kind = `value`
 )

@@ -16,7 +16,7 @@ type Project interface {
 	FieldFactory
 	PackageFactory
 	MetricsFactory
-	UsageFactory
+	SelectionFactory
 
 	// Declarations
 	InterfaceDeclFactory
