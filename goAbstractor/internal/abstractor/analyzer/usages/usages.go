@@ -105,6 +105,8 @@ func (ui *usagesImp) processNode(node ast.Node) {
 			return true
 		case *ast.AssignStmt:
 			ui.processAssign(t)
+		case *ast.BlockStmt:
+			ui.processBlock(t)
 		case *ast.CallExpr:
 			ui.processCall(t)
 		case *ast.FuncType:
@@ -121,6 +123,8 @@ func (ui *usagesImp) processNode(node ast.Node) {
 			ui.processIndexList(t)
 		case *ast.ReturnStmt:
 			ui.processReturn(t)
+		case *ast.SendStmt:
+			ui.processSend(t)
 		case *ast.SelectorExpr:
 			ui.processSelector(t)
 		case *ast.ValueSpec:
@@ -147,6 +151,13 @@ func (ui *usagesImp) processAssign(assign *ast.AssignStmt) {
 	for _, exp := range assign.Lhs {
 		ui.processNode(exp)
 		ui.flushPendingToWrite()
+	}
+}
+
+func (ui *usagesImp) processBlock(block *ast.BlockStmt) {
+	for _, statement := range block.List {
+		ui.processNode(statement)
+		ui.flushPendingToRead()
 	}
 }
 
@@ -342,6 +353,14 @@ func (ui *usagesImp) processReturn(ret *ast.ReturnStmt) {
 		ui.processNode(r)
 		ui.flushPendingToRead()
 	}
+}
+
+func (ui *usagesImp) processSend(send *ast.SendStmt) {
+	ui.processNode(send.Value)
+	ui.flushPendingToRead()
+
+	ui.processNode(send.Chan)
+	ui.flushPendingToWrite()
 }
 
 func (ui *usagesImp) processSelector(sel *ast.SelectorExpr) {
