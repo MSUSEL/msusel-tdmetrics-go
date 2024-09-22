@@ -169,6 +169,7 @@ func applyToSlice[T any, S ~[]T](s S, handle func(T) T) S {
 func (i *instantiator) Abstract(a constructs.Abstract) constructs.Abstract {
 	return i.proj.NewAbstract(constructs.AbstractArgs{
 		Name:      a.Name(),
+		Exported:  a.Exported(),
 		Signature: i.Signature(a.Signature()),
 	})
 }
@@ -183,6 +184,7 @@ func (i *instantiator) Argument(a constructs.Argument) constructs.Argument {
 func (i *instantiator) Field(f constructs.Field) constructs.Field {
 	return i.proj.NewField(constructs.FieldArgs{
 		Name:     f.Name(),
+		Exported: f.Exported(),
 		Type:     i.TypeDesc(f.Type()),
 		Embedded: f.Embedded(),
 	})

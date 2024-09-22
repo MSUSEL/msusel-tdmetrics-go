@@ -1,6 +1,7 @@
 package accessor
 
 import (
+	"fmt"
 	"go/ast"
 	"go/token"
 	"go/types"
@@ -57,9 +58,10 @@ func isSimpleFetch(info *types.Info, node ast.Node) bool {
 			return false
 		}
 		switch t := n.(type) {
-		case nil, *ast.Ident, *ast.SelectorExpr, *ast.BasicLit, *ast.StarExpr, *ast.TypeAssertExpr:
+		case nil, *ast.Ident, *ast.SelectorExpr, *ast.ParenExpr,
+			*ast.BasicLit, *ast.StarExpr, *ast.TypeAssertExpr:
 			// Check for identifiers (`foo`), selectors (`f.x`), literals (`3.24`),
-			// dereference (`*f`), type assert (`f.(int)`), and ignore nils.
+			// dereference (`*f`), type assert (`f.(int)`), parenthesis, and ignore nils.
 			break
 		case *ast.CallExpr:
 			// Check for explicit cast (conversion), e.g. `int(f.x)`
@@ -71,6 +73,7 @@ func isSimpleFetch(info *types.Info, node ast.Node) bool {
 		default:
 			// Anything else (add, subtract, indexer, bitwise-Xor)
 			// means not a simple fetch.
+			fmt.Printf("usagesImp processNode unhandled (%[1]T) %[1]v\n", t)
 			valid = false
 		}
 		return valid

@@ -24,3 +24,10 @@
 
 - Add circular type param test:
     `type Set[T utils.Comparable[T]] interface {}`
+
+- Test multiple assignments:
+    `x, y := 1, 2` and
+    `x, y := func()(int, int) { ⋯ }`
+
+- Test literal cast and call:
+    `type foo int; func(f foo) bar { ⋯ }; foo(6).bar()`

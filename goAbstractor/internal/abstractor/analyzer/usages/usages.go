@@ -2,6 +2,7 @@ package usages
 
 import (
 	"go/ast"
+	"go/token"
 	"go/types"
 
 	"github.com/Snow-Gremlin/goToolbox/collections"
@@ -99,6 +100,9 @@ func (ui *usagesImp) addWrite(c constructs.Construct) {
 }
 
 func (ui *usagesImp) processNode(node ast.Node) {
+	if utils.IsNil(node) {
+		return
+	}
 	ast.Inspect(node, func(n ast.Node) bool {
 		switch t := n.(type) {
 		case nil:
@@ -109,6 +113,8 @@ func (ui *usagesImp) processNode(node ast.Node) {
 			ui.processBlock(t)
 		case *ast.CallExpr:
 			ui.processCall(t)
+		case *ast.CompositeLit:
+			ui.processCompositeLit(t)
 		case *ast.FuncType:
 			ui.processFunc(t)
 		case *ast.FuncDecl:
@@ -121,6 +127,8 @@ func (ui *usagesImp) processNode(node ast.Node) {
 			ui.processIndex(t)
 		case *ast.IndexListExpr:
 			ui.processIndexList(t)
+		case *ast.RangeStmt:
+			ui.processRange(t)
 		case *ast.ReturnStmt:
 			ui.processReturn(t)
 		case *ast.SendStmt:
@@ -130,6 +138,10 @@ func (ui *usagesImp) processNode(node ast.Node) {
 		case *ast.ValueSpec:
 			ui.processValueSpec(t)
 		default:
+			// The following print is useful for debugging by showing
+			// which nodes do not have custom handling on them yet.
+			// Not all nodes need custom handling but a bug might indicate
+			// one that doesn't have custom handling probably should.
 			//fmt.Printf("usagesImp processNode unhandled (%[1]T) %[1]v\n", t)
 			return true
 		}
@@ -181,6 +193,15 @@ func (ui *usagesImp) processCall(call *ast.CallExpr) {
 		}
 		ui.pending = nil
 	}
+}
+
+func (ui *usagesImp) processCompositeLit(comp *ast.CompositeLit) {
+	for _, elem := range comp.Elts {
+		ui.processNode(elem)
+		ui.flushPendingToRead()
+	}
+	ui.processNode(comp.Type)
+	ui.pending = nil // flush the internally defined type
 }
 
 func (ui *usagesImp) processFunc(fn *ast.FuncType) {
@@ -348,6 +369,22 @@ func (ui *usagesImp) processIndexList(expr *ast.IndexListExpr) {
 	}
 }
 
+func (ui *usagesImp) processRange(r *ast.RangeStmt) {
+	if r.Key != nil {
+		if r.Tok == token.DEFINE {
+			ui.processNode(r.Key)
+			ui.processNode(r.Value)
+		} else { // r.Tok == token.ASSIGN
+			ui.processNode(r.Key)
+			ui.flushPendingToWrite()
+			ui.processNode(r.Value)
+			ui.flushPendingToWrite()
+		}
+	}
+	ui.processNode(r.X)
+	ui.processNode(r.Body)
+}
+
 func (ui *usagesImp) processReturn(ret *ast.ReturnStmt) {
 	for _, r := range ret.Results {
 		ui.processNode(r)
@@ -374,9 +411,15 @@ func (ui *usagesImp) processSelector(sel *ast.SelectorExpr) {
 	if utils.IsNil(ui.pending) {
 		// The left hand side is empty so this wasn't like `foo.Bar`,
 		// it was instead like `foo().Bar` where some expression results
-		// in a selection on a type.
+		// in a selection on a type. If a locally defined type then skip
+		// the select since it won't reference anything useful.
+		if _, ok := ui.localDefs[selObj.Obj()]; ok {
+			ui.pending = ui.conv.ConvertType(selObj.Type())
+			return
+		}
 		ui.pending = ui.conv.ConvertType(selObj.Recv())
 	}
+
 	ui.addRead(ui.pending)
 	ui.pending = ui.proj.NewSelection(constructs.SelectionArgs{
 		Name:   sel.Sel.Name,

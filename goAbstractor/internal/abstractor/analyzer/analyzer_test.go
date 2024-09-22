@@ -172,7 +172,7 @@ func Test_SimpleWithOutParam(t *testing.T) {
 	tt.checkProj(
 		`{`,
 		`  abstracts: [`,
-		`    { name: $deref, signature: 1 },`, // TODO: Shouldn't this be exported?
+		`    { name: $deref, signature: 1, exported: true },`,
 		`    { name: $deref, signature: 2, exported: true }`,
 		`  ],`,
 		`  "arguments": [`,
@@ -689,9 +689,9 @@ func Test_SelectStatement(t *testing.T) {
 		`{`,
 		`  abstracts: [`,
 		`    { name: $len,  signature: 1, exported: true },`,
-		`    { name: $recv, signature: 2 },`,
+		`    { name: $recv, signature: 2, exported: true },`,
 		`    { name: $recv, signature: 3, exported: true },`,
-		`    { name: $send, signature: 4 },`,
+		`    { name: $send, signature: 4, exported: true },`,
 		`    { name: $send, signature: 5, exported: true }`,
 		`  ],`,
 		`  arguments: [`,
@@ -818,6 +818,70 @@ func Test_GetterWithDereference(t *testing.T) {
 		`}`)
 }
 
+func Test_GetterWithParentheses(t *testing.T) {
+	tt := parseDecl(t, `Foo`,
+		`var bar *int`,
+		`func Foo() int {`,
+		`	return ((*(bar)))`,
+		`}`)
+	tt.checkProj(
+		`{`,
+		`  language: go,`,
+		`  metrics: [`,
+		`    {`,
+		`      loc:        2,`,
+		`      codeCount:  3,`,
+		`      complexity: 1,`,
+		`      indents:    1,`,
+		`      lineCount:  3,`,
+		`      getter:  true,`,
+		`      reads: [ tempReference1 ],`,
+		`    }`,
+		`  ],`,
+		`  packages: [`,
+		`    { name: test, path: test }`,
+		`  ],`,
+		`  tempReferences: [`,
+		`    { packagePath: test, name: bar }`,
+		`  ]`,
+		`}`)
+}
+
+func Test_GetterWithNamedReturn(t *testing.T) {
+	tt := parseDecl(t, `Foo`,
+		`var bar *int`,
+		`func Foo() (x int) {`,
+		`	x = *bar`,
+		`   return`,
+		`}`)
+	tt.checkProj(
+		`{`,
+		`  arguments: [`,
+		`    { name: x, type: basic1 }`,
+		`  ],`,
+		`  basics: [ int ],`,
+		`  language: go,`,
+		`  metrics: [`,
+		`    {`,
+		`      loc:        2,`,
+		`      codeCount:  4,`,
+		`      complexity: 1,`,
+		`      indents:    4,`,
+		`      lineCount:  4,`,
+		`      #getter: false,`, // Not recognized as a getter
+		`      reads:  [ tempReference1 ],`,
+		`      writes: [ argument1 ],`,
+		`    }`,
+		`  ],`,
+		`  packages: [`,
+		`    { name: test, path: test }`,
+		`  ],`,
+		`  tempReferences: [`,
+		`    { packagePath: test, name: bar }`,
+		`  ]`,
+		`}`)
+}
+
 func Test_GetterWithConvert(t *testing.T) {
 	tt := parseDecl(t, `Foo`,
 		`type Bar struct { x float64 }`,
@@ -895,16 +959,66 @@ func Test_SetterWithReference(t *testing.T) {
 		`func Foo(x int) {`,
 		`	bar = &x`,
 		`}`)
-	//tt.checkMetrics(
-	//	`{`,
-	//	`	loc:        2,`,
-	//	`	codeCount:  3,`,
-	//	`	complexity: 1,`,
-	//	`	indents:    1,`,
-	//	`	lineCount:  3,`,
-	//	`   setter:  true,`,
-	//	`}`)
-	tt.checkProj()
+	tt.checkProj(
+		`{`,
+		`  arguments: [`,
+		`    { name: x, type: basic1 }`,
+		`  ],`,
+		`  basics: [ int ],`,
+		`  language: go,`,
+		`  metrics: [`,
+		`    {`,
+		`      loc:        2,`,
+		`      codeCount:  3,`,
+		`      complexity: 1,`,
+		`      indents:    1,`,
+		`      lineCount:  3,`,
+		`      setter:  true,`,
+		`      reads:  [ argument1 ],`,
+		`      writes: [ tempReference1 ]`,
+		`    }`,
+		`  ],`,
+		`  packages: [`,
+		`    { name: test, path: test }`,
+		`  ],`,
+		`  "tempReferences": [`,
+		`    { name: bar, packagePath: test }`,
+		`  ]`,
+		`}`)
+}
+
+func Test_SetterWithParentheses(t *testing.T) {
+	tt := parseDecl(t, `Foo`,
+		`var bar *int`,
+		`func Foo(x int) {`,
+		`	(bar) = ((&(x)))`,
+		`}`)
+	tt.checkProj(
+		`{`,
+		`  arguments: [`,
+		`    { name: x, type: basic1 }`,
+		`  ],`,
+		`  basics: [ int ],`,
+		`  language: go,`,
+		`  metrics: [`,
+		`    {`,
+		`      loc:        2,`,
+		`      codeCount:  3,`,
+		`      complexity: 1,`,
+		`      indents:    1,`,
+		`      lineCount:  3,`,
+		`      setter:  true,`,
+		`      reads:  [ argument1 ],`,
+		`      writes: [ tempReference1 ]`,
+		`    }`,
+		`  ],`,
+		`  packages: [`,
+		`    { name: test, path: test }`,
+		`  ],`,
+		`  "tempReferences": [`,
+		`    { name: bar, packagePath: test }`,
+		`  ]`,
+		`}`)
 }
 
 func Test_NotReverseSetter(t *testing.T) {
@@ -913,65 +1027,533 @@ func Test_NotReverseSetter(t *testing.T) {
 		`func Foo(x *int) {`,
 		`	*x = *bar`,
 		`}`)
-	//tt.checkMetrics(
-	//	`{`,
-	//	`	loc:        2,`,
-	//	`	codeCount:  3,`,
-	//	`	complexity: 1,`,
-	//	`	indents:    1,`,
-	//	`	lineCount:  3,`,
-	//	`}`)
-	tt.checkProj()
+	tt.checkProj(
+		`{`,
+		`  abstracts: [`,
+		`    { name: $deref, signature: 1, exported: true },`,
+		`    { name: $deref, signature: 2, exported: true }`,
+		`  ],`,
+		`  arguments: [`,
+		`    {          type: basic1 },`,
+		`    {          type: typeParam1 },`,
+		`    { name: x, type: interfaceInst1 }`,
+		`  ],`,
+		`  basics: [ int ],`,
+		`  interfaceDecls: [`,
+		`    {`,
+		`      name: Pointer, package: 1, interface: 3, exported: true,`,
+		`      instances: [ 1 ], typeParams: [ 1 ]`,
+		`    },`,
+		`    { name: any, package: 1, interface: 1, exported: true }`,
+		`  ],`,
+		`  interfaceDescs: [`,
+		`    {},`,
+		`    { abstracts: [ 1 ] },`,
+		`    { abstracts: [ 2 ] }`,
+		`  ],`,
+		`  interfaceInst: [`,
+		`    {`,
+		`      generic: 1, resolved: 2,`,
+		`      instanceTypes: [ basic1 ]`,
+		`    }`,
+		`  ],`,
+		`  language: go,`,
+		`  metrics: [`,
+		`    {`,
+		`      loc:        2,`,
+		`      codeCount:  3,`,
+		`      complexity: 1,`,
+		`      indents:    1,`,
+		`      lineCount:  3,`,
+		`      reads:  [ tempReference1 ],`,
+		`      writes: [ argument3 ]`,
+		`    }`,
+		`  ],`,
+		`  packages: [`,
+		`    {`,
+		`      name: $builtin, path: $builtin,`,
+		`      interfaces: [ 1, 2 ]`,
+		`    },`,
+		`    { name: test, path: test }`,
+		`  ],`,
+		`  signatures: [`,
+		`    { results: [ 1 ] },`,
+		`    { results: [ 2 ] }`,
+		`  ],`,
+		`  tempReferences: [`,
+		`    { name: bar, packagePath: test }`,
+		`  ],`,
+		`  typeParams: [`,
+		`    { name: T, type: interfaceDecl2 }`,
+		`  ]`,
+		`}`)
 }
 
-// TODO: Test a named return
-// func() (x, y int) { x = 10; y = 24; return }
+func Test_NamedResults(t *testing.T) {
+	tt := parseDecl(t, `Foo`,
+		`var bar *int`,
+		`func Foo() (x, y int) {`,
+		`	x = 10`,
+		`	y = 24`,
+		`	return`,
+		`}`)
+	tt.checkProj(
+		`{`,
+		`  arguments: [`,
+		`    { name: x, type: basic1 },`,
+		`    { name: y, type: basic1 }`,
+		`  ],`,
+		`  basics: [ int ],`,
+		`  language: go,`,
+		`  metrics: [`,
+		`    {`,
+		`      loc:        2,`,
+		`      codeCount:  5,`,
+		`      complexity: 1,`,
+		`      indents:    3,`,
+		`      lineCount:  5,`,
+		`      writes: [ argument1, argument2 ]`,
+		`    }`,
+		`  ],`,
+		`  packages: [`,
+		`    { name: test, path: test }`,
+		`  ]`,
+		`}`)
+}
 
-// TODO: Test joining metrics:
-// var val = []int{
-//   func() int { ⋯ }(),
-//   func() int { ⋯ }(),
-// }
+func Test_TwoFuncLitInit(t *testing.T) {
+	tt := parseDecl(t, `val`,
+		`var val = []int{`,
+		`	func() int { return 12 }(),`,
+		`	func() int { return 24 }(),`,
+		` }`)
+	tt.checkProj(
+		`{`,
+		`  abstracts: [`,
+		`    { name: $get, signature: 2, exported: true },`,
+		`    { name: $get, signature: 3, exported: true },`,
+		`    { name: $len, signature: 1, exported: true },`,
+		`    { name: $set, signature: 4, exported: true },`,
+		`    { name: $set, signature: 5, exported: true }`,
+		`  ],`,
+		`  arguments: [`,
+		`    {              type: basic1 },`,
+		`    { name: index, type: basic1 },`,
+		`    { name: value, type: basic1 },`,
+		`    { name: value, type: typeParam1 }`,
+		`  ],`,
+		`  basics: [ int ],`,
+		`  interfaceDecls: [`,
+		`    {`,
+		`      name: List, package: 1, interface: 3, exported: true,`,
+		`      instances: [ 1 ], typeParams: [ 1 ]`,
+		`    },`,
+		`    { interface: 1, name: any, package: 1, exported: true }`,
+		`  ],`,
+		`  interfaceDescs: [`,
+		`    {},`,
+		`    { abstracts: [ 3, 1, 4 ] },`,
+		`    { abstracts: [ 3, 2, 5 ] }`,
+		`  ],`,
+		`  interfaceInst: [`,
+		`    {`,
+		`      generic: 1, resolved: 2, `,
+		`      instanceTypes: [ basic1 ]`,
+		`    }`,
+		`  ],`,
+		`  language: go,`,
+		`  metrics: [`,
+		`    {`,
+		`      loc:        1,`,
+		`      codeCount:  4,`,
+		`      complexity: 1,`,
+		`      indents:    3,`,
+		`      lineCount:  4,`,
+		`      writes: [ interfaceInst1 ]`,
+		`    }`,
+		`  ],`,
+		`  packages: [`,
+		`    {`,
+		`      name: $builtin, path: $builtin,`,
+		`      interfaces: [ 1, 2 ]`,
+		`    },`,
+		`    { name: test, path: test }`,
+		`  ],`,
+		`  signatures: [`,
+		`    { results: [ 1 ] },`,
+		`    { params: [ 2 ], results: [ 3 ] },`,
+		`    { params: [ 2 ], results: [ 4 ] },`,
+		`    { params: [ 2, 3 ] },`,
+		`    { params: [ 2, 4 ] }`,
+		`  ],`,
+		`  typeParams: [`,
+		`    { name: T, type: interfaceDecl2 }`,
+		`  ]`,
+		`}`)
+}
 
-// TODO: Test nothing variable:
-// var val = 10
+func Test_BasicLitInit(t *testing.T) {
+	tt := parseDecl(t, `val`,
+		`var val = 10`)
+	tt.checkProj(
+		`{`,
+		`  basics: [ int ],`,
+		`  language: go,`,
+		`  metrics: [`,
+		`    {`,
+		`      loc:        1,`,
+		`      codeCount:  1,`,
+		`      complexity: 1,`,
+		`      lineCount:  1,`,
+		`      writes: [ basic1 ]`,
+		`    }`,
+		`  ],`,
+		`  packages: [`,
+		`    { name: test, path: test }`,
+		`  ]`,
+		`}`)
+}
 
-// TODO: Test reading metrics with only read reference:
-// var val = singleton.f()
+func Test_ConstructInit(t *testing.T) {
+	tt := parseDecl(t, `val`,
+		`type Foo struct{ x, y int }`,
+		`var val = Foo{`,
+		`	x: 14,`,
+		`	y: 42,`,
+		`}`)
+	tt.checkProj(
+		`{`,
+		`  basics: [ int ],`,
+		`  language: go,`,
+		`  metrics: [`,
+		`    {`,
+		`      loc:        2,`,
+		`      codeCount:  4,`,
+		`      complexity: 1,`,
+		`      indents:    6,`,
+		`      lineCount:  4,`,
+		`      reads:   [ basic1 ],`,
+		`      writes:  [ tempReference1 ]`,
+		`    }`,
+		`  ],`,
+		`  packages: [`,
+		`    { name: test, path: test }`,
+		`  ],`,
+		`  "tempReferences": [`,
+		`    { name: Foo, packagePath: test }`,
+		`  ]`,
+		`}`)
+}
 
-// TODO: Test reading metrics with only read reference but without a function:
-// var val = singleton.value
+func Test_SingletonMethodCallInit(t *testing.T) {
+	tt := parseDecl(t, `val`,
+		`type Foo struct{}`,
+		`func (f Foo) f() float64 { return 3.14 }`,
+		`var singleton = Foo{}`,
+		`var val = singleton.f()`)
+	tt.checkProj(
+		`{`,
+		`  basics: [ float64 ],`,
+		`  language: go,`,
+		`  metrics: [`,
+		`    {`,
+		`      loc:        4,`,
+		`      codeCount:  1,`,
+		`      complexity: 1,`,
+		`      lineCount:  1,`,
+		`      invokes: [ selection1 ],`,
+		`      reads:   [ tempReference1 ],`,
+		`      writes:  [ basic1 ]`,
+		`    }`,
+		`  ],`,
+		`  packages: [`,
+		`    { name: test, path: test }`,
+		`  ],`,
+		`  selections: [`,
+		`    { name: f, origin: tempReference1 }`,
+		`  ],`,
+		`  "tempReferences": [`,
+		`    { name: singleton, packagePath: test }`,
+		`  ]`,
+		`}`)
+}
 
-// TODO: Test reading metrics with read reference as parameter:
-// var val = func(f Foo) int { ⋯ }(singleton.f)
+func Test_SingletonFieldInit(t *testing.T) {
+	tt := parseDecl(t, `val`,
+		`type Foo struct{ x, y int}`,
+		`var singleton = Foo{ x: 12, y: 24 }`,
+		`var val = singleton.y`)
+	tt.checkProj(
+		`{`,
+		`  basics: [ int ],`,
+		`  language: go,`,
+		`  metrics: [`,
+		`    {`,
+		`      loc:        3,`,
+		`      codeCount:  1,`,
+		`      complexity: 1,`,
+		`      lineCount:  1,`,
+		`      reads:   [ selection1, tempReference1 ],`,
+		`      writes:  [ basic1 ]`,
+		`    }`,
+		`  ],`,
+		`  packages: [`,
+		`    { name: test, path: test }`,
+		`  ],`,
+		`  selections: [`,
+		`    { name: y, origin: tempReference1 }`,
+		`  ],`,
+		`  "tempReferences": [`,
+		`    { name: singleton, packagePath: test }`,
+		`  ]`,
+		`}`)
+}
 
-// TODO: Test reading metrics with read reference in typed call:
-// var val = Foo[int](singleton)
+func Test_MultipleInitMultipleValues(t *testing.T) {
+	tt := parseDecl(t, `y`,
+		`var x, y, z = "hello", 3.14, false`)
+	tt.checkProj(
+		`{`,
+		`  basics: [ bool, float64, string ],`,
+		`  language: go,`,
+		`  metrics: [`,
+		`    {`,
+		`      loc:        1,`,
+		`      codeCount:  1,`,
+		`      complexity: 1,`,
+		`      lineCount:  1,`,
+		`      writes: [ basic1, basic2, basic3 ]`,
+		`    }`,
+		`  ],`,
+		`  packages: [`,
+		`    { name: test, path: test }`,
+		`  ]`,
+		`}`)
+}
 
-// TODO: Test parentheses in getters and setters.
+func Test_MultipleInitSingleValue(t *testing.T) {
+	tt := parseDecl(t, `y`,
+		`var x, y = func()(int, int) {`,
+		`  return 12, 24`,
+		`}()`)
+	tt.checkProj(
+		`{`,
+		`  basics: [ int ],`,
+		`  language: go,`,
+		`  metrics: [`,
+		`    {`,
+		`      loc:        1,`,
+		`      codeCount:  3,`,
+		`      complexity: 1,`,
+		`      indents:    6,`,
+		`      lineCount:  3,`,
+		`      writes: [ basic1 ]`,
+		`    }`,
+		`  ],`,
+		`  packages: [`,
+		`    { name: test, path: test }`,
+		`  ]`,
+		`}`)
+}
 
-// TODO: Test assignment of returned pointer:
-// func() { *(getIntPointer()) = 10 }
+func Test_EnUnCapsulate(t *testing.T) {
+	tt := parseDecl(t, `x`,
+		`var x = struct{ y int }{ y: 24 }.y`)
+	tt.checkProj(
+		`{`,
+		`  basics: [ int ],`,
+		`  language: go,`,
+		`  metrics: [`,
+		`    {`,
+		`      loc:        1,`,
+		`      codeCount:  1,`,
+		`      complexity: 1,`,
+		`      lineCount:  1,`,
+		`      reads:  [ basic1 ],`,
+		`      writes: [ basic1 ]`,
+		`    }`,
+		`  ],`,
+		`  packages: [`,
+		`    { name: test, path: test }`,
+		`  ]`,
+		`}`)
+}
 
-// TODO: Test assigning named result:
-// func() (x int) { x = 10; return }
+func Test_SelectOnUnnamedResultValue(t *testing.T) {
+	tt := parseDecl(t, `val`,
+		`func bar() struct{ y int }{`,
+		`	return struct{ y int }{ y: 24 }`,
+		`}`,
+		`var val = bar().y`)
+	tt.checkProj(
+		`{`,
+		`  basics: [ int ],`,
+		`  fields: [`,
+		`    { name: y, type: basic1 }`,
+		`  ],`,
+		`  language: go,`,
+		`  metrics: [`,
+		`    {`,
+		`      loc:        4,`,
+		`      codeCount:  1,`,
+		`      complexity: 1,`,
+		`      lineCount:  1,`,
+		`      invokes: [ tempReference1 ],`,
+		`      reads:   [ selection1, structDesc1 ],`,
+		`      writes:  [ basic1 ]`,
+		`    }`,
+		`  ],`,
+		`  packages: [`,
+		`    { name: test, path: test }`,
+		`  ],`,
+		`  selections: [`,
+		`    { name: y, origin: structDesc1 }`,
+		`  ],`,
+		`  structDescs: [`,
+		`    { fields: [ 1 ] }`,
+		`  ],`,
+		`  tempReferences: [`,
+		`    { name: bar, packagePath: test }`,
+		`  ]`,
+		`}`)
+}
 
-// TODO: Test multiple assignments:
-// x, y := 1, 2  and  x, y := func()(int, int) { ⋯ }
+func Test_IncDec(t *testing.T) {
+	tt := parseDecl(t, `foo`,
+		`func foo(x int) int {`,
+		`	x++`,
+		`	y := x`,
+		`	y--`,
+		`	return y`,
+		`}`)
+	tt.checkProj(
+		`{`,
+		`  arguments: [`,
+		`    { name: x, type: basic1 },`,
+		`  ],`,
+		`  basics: [ int ],`,
+		`  language: go,`,
+		`  metrics: [`,
+		`    {`,
+		`      loc:        1,`,
+		`      codeCount:  6,`,
+		`      complexity: 1,`,
+		`      indents:    4,`,
+		`      lineCount:  6,`,
+		`      reads:   [ argument1, basic1 ],`,
+		`      writes:  [ argument1, basic1 ]`,
+		`    }`,
+		`  ],`,
+		`  packages: [`,
+		`    { name: test, path: test }`,
+		`  ]`,
+		`}`)
+}
 
-// TODO: Test local encapsulation of type:
-// x := struct{y externalType}{y: ext}.y
+func Test_AssignInStatements(t *testing.T) {
+	tt := parseDecl(t, `foo`,
+		`func foo(x int) (y int, z int) {`,
+		`	for y = range x {`,
+		`		if z = y*x; z > 10 {`,
+		`			break`,
+		`		}`,
+		`	}`,
+		`	return`,
+		`}`)
+	tt.checkProj(
+		`{`,
+		`  arguments: [`,
+		`    { name: x, type: basic1 },`,
+		`    { name: y, type: basic1 },`,
+		`    { name: z, type: basic1 }`,
+		`  ],`,
+		`  basics: [ int ],`,
+		`  language: go,`,
+		`  metrics: [`,
+		`    {`,
+		`      loc:         1,`,
+		`      codeCount:   8,`,
+		`      complexity:  3,`,
+		`      indents:    10,`,
+		`      lineCount:   8,`,
+		`      reads:   [ argument1, argument2, argument3 ],`,
+		`      writes:  [ argument2, argument3 ]`,
+		`    }`,
+		`  ],`,
+		`  packages: [`,
+		`    { name: test, path: test }`,
+		`  ]`,
+		`}`)
+}
 
-// TODO: Test selection from return value.
-// x := foo().y
+func Test_DefineInForRange(t *testing.T) {
+	tt := parseDecl(t, `foo`,
+		`func foo(x int) (int, int) {`,
+		`	for y := range x {`,
+		`		if z := y*x; z > 10 {`,
+		`			return y, z`,
+		`		}`,
+		`	}`,
+		`	return -1, -1`,
+		`}`)
+	tt.checkProj(
+		`{`,
+		`  arguments: [`,
+		`    { name: x, type: basic1 },`,
+		`  ],`,
+		`  basics: [ int ],`,
+		`  language: go,`,
+		`  metrics: [`,
+		`    {`,
+		`      loc:         1,`,
+		`      codeCount:   8,`,
+		`      complexity:  3,`,
+		`      indents:    10,`,
+		`      lineCount:   8,`,
+		`      reads:   [ argument1, basic1 ],`,
+		`      writes:  [ basic1 ]`,
+		`    }`,
+		`  ],`,
+		`  packages: [`,
+		`    { name: test, path: test }`,
+		`  ]`,
+		`}`)
+}
 
-// TODO: Test inc and dec also work as assignment.
-
-// TODO: Test literal cast and call
-// type foo int; func(f foo) bar { ⋯ }; foo(6).bar()
-
-// TODO: Test the assignment in a for-loop or if-statement
-// are picked up as writes, `for i := 0; ⋯`
+func Test_AssignInForLoop(t *testing.T) {
+	tt := parseDecl(t, `foo`,
+		`func foo(x int) (y int) {`,
+		`	for y = 0; y < x; y++ {`,
+		`		if y*x > 10 {`,
+		`			return y`,
+		`		}`,
+		`	}`,
+		`	return -1`,
+		`}`)
+	tt.checkProj(
+		`{`,
+		`  arguments: [`,
+		`    { name: x, type: basic1 },`,
+		`    { name: y, type: basic1 }`,
+		`  ],`,
+		`  basics: [ int ],`,
+		`  language: go,`,
+		`  metrics: [`,
+		`    {`,
+		`      loc:         1,`,
+		`      codeCount:   8,`,
+		`      complexity:  3,`,
+		`      indents:    10,`,
+		`      lineCount:   8,`,
+		`      reads:   [ argument1, argument2 ],`,
+		`      writes:  [ argument2 ]`,
+		`    }`,
+		`  ],`,
+		`  packages: [`,
+		`    { name: test, path: test }`,
+		`  ]`,
+		`}`)
+}
 
 type testTool struct {
 	t      *testing.T
