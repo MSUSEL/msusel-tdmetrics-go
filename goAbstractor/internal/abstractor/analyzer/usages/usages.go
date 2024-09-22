@@ -36,8 +36,7 @@ type usagesImp struct {
 	conv   converter.Converter
 
 	pending   constructs.Construct
-	localDefs map[types.Object]constructs.TypeDesc
-	params    map[types.Object]struct{}
+	localDefs map[types.Object]constructs.Construct
 	usages    Usages
 }
 
@@ -59,8 +58,7 @@ func Calculate(info *types.Info, proj constructs.Project, curPkg constructs.Pack
 		conv:   conv,
 
 		pending:   nil,
-		localDefs: map[types.Object]constructs.TypeDesc{},
-		params:    map[types.Object]struct{}{},
+		localDefs: map[types.Object]constructs.Construct{},
 		usages:    newUsage(),
 	}
 
@@ -69,57 +67,35 @@ func Calculate(info *types.Info, proj constructs.Project, curPkg constructs.Pack
 	return ui.usages
 }
 
-func (ui *usagesImp) setPending(pending constructs.Construct) {
-	ui.flushPendingToRead()
-	ui.pending = pending
-}
-
-func (ui *usagesImp) takePending() constructs.Construct {
-	pending := ui.pending
-	ui.pending = nil
-	return pending
-}
-
+// flushPendingToRead writes any pending as a read usage
+// and clears the pending.
+//
+// If the usage hasn't been consumed it is assumed
+// to have been read from, e.g. `a + b`.
 func (ui *usagesImp) flushPendingToRead() {
-	if !utils.IsNil(ui.pending) {
-		// If the usage hasn't been consumed it is assumed
-		// to have been read from, e.g. `a + b`.
-		ui.usages.Reads.Add(ui.pending)
-	}
+	ui.addRead(ui.pending)
 	ui.pending = nil
 }
 
+// flushPendingToWrite writes any pending as a write usage
+// and clears the pending.
 func (ui *usagesImp) flushPendingToWrite() {
-	if !utils.IsNil(ui.pending) {
-		ui.usages.Writes.Add(ui.pending)
-	}
+	ui.addWrite(ui.pending)
 	ui.pending = nil
 }
 
-func (ui *usagesImp) createTempRefForObj(obj types.Object) constructs.TempReference {
-	assert.ArgNotNil(`object`, obj)
-
-	pkgPath := ``
-	if obj.Pkg() != nil {
-		pkgPath = obj.Pkg().Path()
+// addRead adds the given construct as a read usage.
+func (ui *usagesImp) addRead(c constructs.Construct) {
+	if !utils.IsNil(c) {
+		ui.usages.Reads.Add(c)
 	}
+}
 
-	var instType []constructs.TypeDesc
-	typ := obj.Type()
-	if pointer, ok := typ.(*types.Pointer); ok {
-		typ = pointer.Elem()
+// addWrite adds the given construct as a write usage.
+func (ui *usagesImp) addWrite(c constructs.Construct) {
+	if !utils.IsNil(c) {
+		ui.usages.Writes.Add(c)
 	}
-	if named, ok := typ.(*types.Named); ok {
-		instType = ui.conv.ConvertInstanceTypes(named.TypeArgs())
-	}
-
-	return ui.proj.NewTempReference(constructs.TempReferenceArgs{
-		RealType:      obj.Type(),
-		PackagePath:   pkgPath,
-		Name:          obj.Name(),
-		InstanceTypes: instType,
-		Package:       ui.curPkg.Source(),
-	})
 }
 
 func (ui *usagesImp) processNode(node ast.Node) {
@@ -184,48 +160,68 @@ func (ui *usagesImp) processCall(call *ast.CallExpr) {
 	// Process the invocation target,
 	// e.g. `Bar` in `(*foo.Bar)( ⋯ )` or `foo.Bar( ⋯ )`.
 	ui.processNode(call.Fun)
-	if target := ui.takePending(); !utils.IsNil(target) {
+	if !utils.IsNil(ui.pending) {
 		if tx, ok := ui.info.Types[call.Fun]; ok && tx.IsType() {
 			// Explicit cast (conversion), e.g. `int(f.x)`
-			ui.usages.Writes.Add(target)
+			ui.usages.Writes.Add(ui.pending)
 		} else {
 			// Function invocation, e.g. `println(f.x)`, `fmt.Println(f.x)`
-			ui.usages.Invokes.Add(target)
+			ui.usages.Invokes.Add(ui.pending)
 		}
+		ui.pending = nil
 	}
 }
 
 func (ui *usagesImp) processFunc(fn *ast.FuncType) {
 	// This is part of a `ast.FuncLit` or `ast.FuncDecl`.
 	if fn.Params != nil {
-		ui.addLocalParams(fn.Params.List)
+		ui.addArguments(fn.Params.List)
 	}
 	if fn.Results != nil {
-		ui.addLocalParams(fn.Results.List)
+		ui.addArguments(fn.Results.List)
 	}
 	if fn.TypeParams != nil {
-		ui.addLocalParams(fn.TypeParams.List)
+		ui.addTypeParam(fn.TypeParams.List)
 	}
 }
 
-func (ui *usagesImp) addLocalParams(params []*ast.Field) {
-	for _, p := range params {
-		ui.addLocalParam(p)
+func (ui *usagesImp) addArguments(args []*ast.Field) {
+	for _, arg := range args {
+		for _, id := range arg.Names {
+			if obj := ui.info.Defs[id]; obj != nil {
+				ui.localDefs[obj] = ui.proj.NewArgument(constructs.ArgumentArgs{
+					Name: obj.Name(),
+					Type: ui.conv.ConvertType(obj.Type()),
+				})
+			}
+		}
 	}
 }
 
-func (ui *usagesImp) addLocalParam(p *ast.Field) {
-	for _, id := range p.Names {
-		if obj := ui.info.Defs[id]; obj != nil {
-			ui.params[obj] = struct{}{}
+func (ui *usagesImp) addTypeParam(tps []*ast.Field) {
+	for _, tp := range tps {
+		for _, id := range tp.Names {
+			if obj := ui.info.Defs[id]; obj != nil {
+				ui.localDefs[obj] = ui.proj.NewTypeParam(constructs.TypeParamArgs{
+					Name: obj.Name(),
+					Type: ui.conv.ConvertType(obj.Type()),
+				})
+			}
 		}
 	}
 }
 
 func (ui *usagesImp) processFunDecl(fn *ast.FuncDecl) {
 	if fn.Recv != nil {
-		ui.addLocalParams(fn.Recv.List)
+		for _, recv := range fn.Recv.List {
+			for _, id := range recv.Names {
+				if obj := ui.info.Defs[id]; obj != nil {
+					ui.localDefs[obj] = ui.conv.ConvertType(obj.Type())
+				}
+			}
+		}
 	}
+
 	ui.processFunc(fn.Type)
 	ui.processNode(fn.Body)
 }
@@ -234,14 +230,13 @@ func (ui *usagesImp) processIdent(id *ast.Ident) {
 	// Check if this identifier is part of a local definition.
 	if def, ok := ui.info.Defs[id]; ok {
 		if def == nil {
+			// Skip over `t` in `select `t := x.(type)` type definitions.
 			return
 		}
 
-		// TODO: Rework
-		ref := ui.createTempRefForObj(def)
 		ui.flushPendingToRead()
-		ui.newPending(ref)
-		ui.usages.Writes.Add(ui.pending)
+		ui.pending = ui.conv.ConvertType(def.Type())
+		ui.addWrite(ui.pending)
 		ui.localDefs[def] = ui.pending
 		return
 	}
@@ -252,24 +247,6 @@ func (ui *usagesImp) processIdent(id *ast.Ident) {
 		return
 	}
 
-	// Check if defined earlier.
-	if usage, ok := ui.localDefs[obj]; ok {
-		ui.flushPendingToRead()
-		ui.pending = usage
-		return
-	}
-
-	// Check if parameter, result, or receiver that hasn't been used yet.
-	if _, ok := ui.params[obj]; ok {
-		ui.flushPendingToRead()
-		arg := ui.proj.NewArgument(constructs.ArgumentArgs{
-			Name: obj.Name(),
-			Type: ui.conv.ConvertType(obj.Type()),
-		})
-		ui.newPending(arg, nil)
-		ui.localDefs[obj] = ui.pending
-	}
-
 	// Skip over build-in constants:
 	// https://pkg.go.dev/builtin#pkg-constants
 	switch obj.Id() {
@@ -277,29 +254,54 @@ func (ui *usagesImp) processIdent(id *ast.Ident) {
 		return
 	}
 
-	// Return basic types as usage.
-	if basic, ok := obj.Type().(*types.Basic); ok && basic.Kind() != types.Invalid {
-		ui.newPending(ui.proj.NewBasic(constructs.BasicArgs{
-			RealType: basic,
-		}), nil)
+	// Check if defined earlier and reuse defined type.
+	if usage, ok := ui.localDefs[obj]; ok {
+		ui.flushPendingToRead()
+		ui.pending = usage
 		return
 	}
 
-	ui.newPending(ui.createTempRefForObj(obj), nil)
+	// Return basic types as usage.
+	if basic, ok := obj.Type().(*types.Basic); ok && basic.Kind() != types.Invalid {
+		ui.pending = ui.proj.NewBasic(constructs.BasicArgs{
+			RealType: basic,
+		})
+		return
+	}
+
+	// Create a temp reference for this object.
+	pkgPath := ``
+	if obj.Pkg() != nil {
+		pkgPath = obj.Pkg().Path()
+	}
+
+	var instType []constructs.TypeDesc
+	typ := obj.Type()
+	if pointer, ok := typ.(*types.Pointer); ok {
+		typ = pointer.Elem()
+	}
+	if named, ok := typ.(*types.Named); ok {
+		instType = ui.conv.ConvertInstanceTypes(named.TypeArgs())
+	}
+
+	ui.pending = ui.proj.NewTempReference(constructs.TempReferenceArgs{
+		RealType:      obj.Type(),
+		PackagePath:   pkgPath,
+		Name:          obj.Name(),
+		InstanceTypes: instType,
+		Package:       ui.curPkg.Source(),
+	})
 }
 
 func (ui *usagesImp) processIncDec(stmt *ast.IncDecStmt) {
 	ui.processNode(stmt.X)
-	if target := ui.takePending(); !utils.IsNil(target) {
-		ui.usages.Writes.Add(target)
-	} else {
-		// What about `*(func())++` where the increment is on
+	if !utils.IsNil(ui.pending) {
+		ui.usages.Writes.Add(ui.pending)
+		ui.pending = nil
+	} else if typ, ok := ui.info.Types[stmt.X]; ok {
+		// Handle `*(func())++` where the increment is on
 		// the returned type, or `mapFoo["cat"]++`.
-		if typ, ok := ui.info.Types[stmt.X]; ok {
-			desc := ui.conv.ConvertType(typ.Type)
-			ui.newPending(desc, nil)
-			ui.flushPendingToWrite()
-		}
+		ui.addWrite(ui.conv.ConvertType(typ.Type))
 	}
 }
 
@@ -309,13 +311,13 @@ func (ui *usagesImp) processIndex(expr *ast.IndexExpr) {
 	ui.flushPendingToRead()
 
 	// Process target of indexing, e.g. `cats[ ⋯ ]`
+	// Add to read but leave in pending.
 	ui.processNode(expr.X)
-	ui.usages.Reads.Add(ui.pending)
-	target := ui.takePending()
+	ui.flushPendingToRead()
 
-	// Prepare the result of the index.
+	// Prepare the pending after the indexing.
 	if elem, ok := ui.info.Types[expr]; ok {
-		ui.newPending(ui.conv.ConvertType(elem.Type), target)
+		ui.pending = ui.conv.ConvertType(elem.Type)
 	}
 }
 
@@ -327,7 +329,8 @@ func (ui *usagesImp) processIndexList(expr *ast.IndexListExpr) {
 	}
 
 	// Process the object being indexed then
-	// take the pending to be set after the indices.
+	// set the pending after the index to be read from but leave
+	// it in pending since the same type is going to be used.
 	ui.processNode(expr.X)
 	if !utils.IsNil(ui.pending) {
 		ui.usages.Reads.Add(ui.pending)
@@ -342,32 +345,24 @@ func (ui *usagesImp) processReturn(ret *ast.ReturnStmt) {
 }
 
 func (ui *usagesImp) processSelector(sel *ast.SelectorExpr) {
-	ui.processNode(sel.X)
-	lhs := ui.takePending()
-
-	selection, ok := ui.info.Selections[sel]
+	selObj, ok := ui.info.Selections[sel]
 	if !ok {
 		panic(terror.New(`expected selection info but n found`).
 			With(`expr`, sel))
 	}
 
-	if utils.IsNil(lhs) {
+	ui.processNode(sel.X)
+	if utils.IsNil(ui.pending) {
 		// The left hand side is empty so this wasn't like `foo.Bar`,
 		// it was instead like `foo().Bar` where some expression results
 		// in a selection on a type.
-		lhs = ui.proj.NewUsage(constructs.UsageArgs{
-			Target: ui.conv.ConvertType(selection.Recv()),
-		})
+		ui.pending = ui.conv.ConvertType(selObj.Recv())
 	}
-
-	if utils.IsNil(lhs) {
-		ui.newPending(ui.createTempRefForObj(selection.Obj()), nil)
-		return
-	}
-
-	ui.usages.Reads.Add(lhs)
-	// TODO: Handle better selection
-	ui.newPending(ui.createTempRefForObj(selection.Obj()), lhs)
+	ui.addRead(ui.pending)
+	ui.pending = ui.proj.NewSelection(constructs.SelectionArgs{
+		Name:   sel.Sel.Name,
+		Origin: ui.pending,
+	})
 }
 
 func (ui *usagesImp) processValueSpec(spec *ast.ValueSpec) {
