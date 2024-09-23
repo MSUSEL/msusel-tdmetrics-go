@@ -155,11 +155,13 @@ func (c *convImp) convertNamed(t *types.Named) constructs.TypeDesc {
 
 	// Check for builtin types that need to be baked.
 	if len(pkgPath) <= 0 {
-		switch name {
-		case `error`:
-			return c.baker.BakeError()
-		case `comparable`:
-			return c.baker.BakeComparable()
+		if typ := c.baker.ByName(name); !utils.IsNil(typ) {
+			if td, ok := typ.(constructs.TypeDesc); ok {
+				return td
+			}
+			panic(terror.New(`unexpected builtin that wasn't a type description`).
+				With(`name`, name).
+				WithType(`type`, typ))
 		}
 		pkgPath = baker.BuiltinName
 	}
