@@ -10,6 +10,7 @@ import (
 	"github.com/Snow-Gremlin/goToolbox/terrors/terror"
 	"github.com/Snow-Gremlin/goToolbox/utils"
 
+	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/abstractor/baker"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/abstractor/converter"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/assert"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs"
@@ -34,6 +35,7 @@ type usagesImp struct {
 	info   *types.Info
 	proj   constructs.Project
 	curPkg constructs.Package
+	baker  baker.Baker
 	conv   converter.Converter
 
 	pending   constructs.Construct
@@ -41,13 +43,15 @@ type usagesImp struct {
 	usages    Usages
 }
 
-func Calculate(info *types.Info, proj constructs.Project, curPkg constructs.Package, conv converter.Converter, node ast.Node) Usages {
+func Calculate(info *types.Info, proj constructs.Project, curPkg constructs.Package, baker baker.Baker, conv converter.Converter, node ast.Node) Usages {
 	assert.ArgNotNil(`info`, info)
 	assert.ArgNotNil(`info.Defs`, info.Defs)
 	assert.ArgNotNil(`info.Instances`, info.Instances)
 	assert.ArgNotNil(`info.Selections`, info.Selections)
 	assert.ArgNotNil(`info.Uses`, info.Uses)
+	assert.ArgNotNil(`info.Types`, info.Types)
 	assert.ArgNotNil(`proj`, proj)
+	assert.ArgNotNil(`baker`, baker)
 	assert.ArgNotNil(`conv`, conv)
 	assert.ArgNotNil(`node`, node)
 	assert.ArgNotNil(`curPkg`, curPkg)
@@ -56,6 +60,7 @@ func Calculate(info *types.Info, proj constructs.Project, curPkg constructs.Pack
 		info:   info,
 		proj:   proj,
 		curPkg: curPkg,
+		baker:  baker,
 		conv:   conv,
 
 		pending:   nil,
@@ -182,15 +187,44 @@ func (ui *usagesImp) processCall(call *ast.CallExpr) {
 
 	// Process the invocation target,
 	// e.g. `Bar` in `(*foo.Bar)( ⋯ )` or `foo.Bar( ⋯ )`.
+	typ, ok := ui.info.Types[call.Fun]
+	if !ok {
+		panic(terror.New(`failed to find type info`).
+			With(`function`, call.Fun))
+	}
+
+	// Check for explicit cast (conversion), e.g. `int(f.x)`
+	if typ.IsType() {
+		ui.processNode(call.Fun)
+		ui.flushPendingToWrite()
+		return
+	}
+
+	// Check for builtin method, e.g. `println(f.x)`
+	if typ.IsBuiltin() {
+		exp := call.Fun
+		if p, ok := exp.(*ast.ParenExpr); ok {
+			exp = p.X
+		}
+		if id, ok := exp.(*ast.Ident); ok {
+			args := make([]types.Type, len(call.Args))
+			for i, arg := range call.Args {
+				if typ, ok := ui.info.Types[arg]; ok {
+					args[i] = typ.Type
+				}
+			}
+			if method := ui.baker.MethodByName(id.Name, args); utils.IsNil(method) {
+				ui.usages.Invokes.Add(method)
+			}
+		}
+		panic(terror.New(`failed to get name of builtin function`).
+			With(`expression`, exp))
+	}
+
+	// Function invocation, e.g. `fmt.Println(f.x)`
 	ui.processNode(call.Fun)
 	if !utils.IsNil(ui.pending) {
-		if tx, ok := ui.info.Types[call.Fun]; ok && tx.IsType() {
-			// Explicit cast (conversion), e.g. `int(f.x)`
-			ui.usages.Writes.Add(ui.pending)
-		} else {
-			// Function invocation, e.g. `println(f.x)`, `fmt.Println(f.x)`
-			ui.usages.Invokes.Add(ui.pending)
-		}
+		ui.usages.Invokes.Add(ui.pending)
 		ui.pending = nil
 	}
 }
@@ -291,6 +325,14 @@ func (ui *usagesImp) processIdent(id *ast.Ident) {
 		ui.flushPendingToRead()
 		ui.pending = usage
 		return
+	}
+
+	// Return builtin type.
+	if obj.Pkg() == nil {
+		if typ := ui.baker.TypeByName(obj.Name()); !utils.IsNil(typ) {
+			ui.pending = typ
+			return
+		}
 	}
 
 	// Return basic types as usage.

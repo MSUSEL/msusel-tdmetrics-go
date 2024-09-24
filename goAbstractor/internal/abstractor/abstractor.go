@@ -222,7 +222,7 @@ func (ab *abstractor) abstractValueSpec(spec *ast.ValueSpec, isConst bool) {
 	var metrics constructs.Metrics
 	for i, name := range spec.Names {
 		if i < len(spec.Values) {
-			metrics = analyzer.Analyze(ab.info(), ab.proj, ab.curPkg, ab.converter(), spec.Values[i])
+			metrics = analyzer.Analyze(ab.info(), ab.proj, ab.curPkg, ab.baker, ab.converter(), spec.Values[i])
 		}
 
 		tv, has := ab.info().Defs[name]
@@ -305,7 +305,7 @@ func (ab *abstractor) abstractFuncDecl(decl *ast.FuncDecl) {
 	sig := ab.converter().ConvertSignature(obj.Type().(*types.Signature))
 	ab.clearTypeParamOverrides()
 
-	metrics := analyzer.Analyze(ab.info(), ab.proj, ab.curPkg, ab.converter(), decl)
+	metrics := analyzer.Analyze(ab.info(), ab.proj, ab.curPkg, ab.baker, ab.converter(), decl)
 	loc := ab.proj.Locs().NewLoc(decl.Pos())
 	tp := ab.abstractTypeParams(decl.Type.TypeParams)
 

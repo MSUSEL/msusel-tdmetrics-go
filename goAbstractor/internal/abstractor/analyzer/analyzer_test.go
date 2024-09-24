@@ -1555,10 +1555,13 @@ func Test_AssignInForLoop(t *testing.T) {
 		`}`)
 }
 
+// TODO: Test a builtin types `make` and `new`
+
 type testTool struct {
 	t      *testing.T
 	proj   constructs.Project
 	curPkg constructs.Package
+	baker  baker.Baker
 	conv   converter.Converter
 	fSet   *token.FileSet
 	info   *types.Info
@@ -1587,11 +1590,13 @@ func newTestTool(t *testing.T) *testTool {
 		Path: pkgPath,
 		Name: pkgName,
 	})
-	conv := converter.New(baker.New(proj), proj, curPkg, nil)
+	baker := baker.New(proj)
+	conv := converter.New(baker, proj, curPkg, nil)
 	return &testTool{
 		t:      t,
 		proj:   proj,
 		curPkg: curPkg,
+		baker:  baker,
 		conv:   conv,
 		fSet:   fSet,
 		info:   info,
@@ -1629,7 +1634,7 @@ func parseExpr(t *testing.T, lines ...string) *testTool {
 	err = types.CheckExpr(tt.fSet, nil, token.NoPos, expr, tt.info)
 	check.NoError(t).Require(err)
 
-	tt.m = Analyze(tt.info, tt.proj, tt.curPkg, tt.conv, expr)
+	tt.m = Analyze(tt.info, tt.proj, tt.curPkg, tt.baker, tt.conv, expr)
 	tt.proj.UpdateIndices()
 	return tt
 }
@@ -1648,7 +1653,7 @@ func parseDecl(t *testing.T, name string, lines ...string) *testTool {
 	target := findNode(file, name)
 	check.NotNil(t).Name(`found name`).With(`name`, name).Assert(target)
 
-	tt.m = Analyze(tt.info, tt.proj, tt.curPkg, tt.conv, target)
+	tt.m = Analyze(tt.info, tt.proj, tt.curPkg, tt.baker, tt.conv, target)
 	tt.proj.UpdateIndices()
 	return tt
 }
