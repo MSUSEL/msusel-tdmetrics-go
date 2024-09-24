@@ -207,10 +207,13 @@ func (ui *usagesImp) processCall(call *ast.CallExpr) {
 			exp = p.X
 		}
 		if id, ok := exp.(*ast.Ident); ok {
-			args := make([]types.Type, len(call.Args))
+			args := make([]types.Type, len(call.Args)+1)
+			if typ, ok := ui.info.Types[call]; ok {
+				args[0] = typ.Type
+			}
 			for i, arg := range call.Args {
 				if typ, ok := ui.info.Types[arg]; ok {
-					args[i] = typ.Type
+					args[i+1] = typ.Type
 				}
 			}
 			if method := ui.baker.MethodByName(id.Name, args); utils.IsNil(method) {

@@ -8,34 +8,38 @@ import (
 )
 
 // MethodByName gets a method by name or returns nil.
-func (b *bakerImp) MethodByName(name string, paramTypes []types.Type) constructs.Method {
+//
+// The given args are hints at what the types of the builtin
+// methods params are. The first argument is the return type
+// of the method. Any arg in the args may be nil.
+func (b *bakerImp) MethodByName(name string, args []types.Type) constructs.Method {
 	switch name {
 	case `append`:
-		return b.BakeAppend()
+		return b.BakeAppend(args)
 	case `cap`:
 		return b.BakeCap()
 	case `clear`:
-		return b.BakeClear()
+		return b.BakeClear(args)
 	case `close`:
-		return b.BakeClose()
+		return b.BakeClose(args)
 	case `complex`:
-		return b.BakeComplex()
+		return b.BakeComplex(args)
 	case `copy`:
-		return b.BakeCopy()
+		return b.BakeCopy(args)
 	case `delete`:
-		return b.BakeDelete()
+		return b.BakeDelete(args)
 	case `imag`:
-		return b.BakeImag()
+		return b.BakeImag(args)
 	case `len`:
 		return b.BakeLen()
 	case `make`:
-		return b.BakeMake()
+		return b.BakeMake(args)
 	case `max`:
-		return b.BakeMax()
+		return b.BakeMax(args)
 	case `min`:
-		return b.BakeMin()
+		return b.BakeMin(args)
 	case `new`:
-		return b.BakeNew()
+		return b.BakeNew(args)
 	case `panic`:
 		return b.BakePanic()
 	case `print`:
@@ -43,7 +47,7 @@ func (b *bakerImp) MethodByName(name string, paramTypes []types.Type) constructs
 	case `println`:
 		return b.BakePrintln()
 	case `real`:
-		return b.BakeReal()
+		return b.BakeReal(args)
 	case `recover`:
 		return b.BakeRecover()
 	default:
@@ -54,7 +58,7 @@ func (b *bakerImp) MethodByName(name string, paramTypes []types.Type) constructs
 // BakeAppend creates the builtin append function.
 //
 //	func append(slice []Type, elems ...Type) []Type
-func (b *bakerImp) BakeAppend() constructs.Method {
+func (b *bakerImp) BakeAppend(args []types.Type) constructs.Method {
 	assert.NotImplemented()
 	return nil // TODO: Implement
 }
@@ -90,7 +94,7 @@ func (b *bakerImp) BakeCap() constructs.Method {
 // BakeClear creates the builtin clear function.
 //
 //	func clear[T ~[]Type | ~map[Type]Type1](t T)
-func (b *bakerImp) BakeClear() constructs.Method {
+func (b *bakerImp) BakeClear(args []types.Type) constructs.Method {
 	assert.NotImplemented()
 	return nil // TODO: Implement
 }
@@ -98,7 +102,7 @@ func (b *bakerImp) BakeClear() constructs.Method {
 // BakeClose creates the builtin close function.
 //
 //	func close(c chan<- Type)
-func (b *bakerImp) BakeClose() constructs.Method {
+func (b *bakerImp) BakeClose(args []types.Type) constructs.Method {
 	assert.NotImplemented()
 	return nil // TODO: Implement
 }
@@ -106,7 +110,7 @@ func (b *bakerImp) BakeClose() constructs.Method {
 // BakeComplex creates the builtin complex function.
 //
 //	func complex(r, i FloatType) ComplexType
-func (b *bakerImp) BakeComplex() constructs.Method {
+func (b *bakerImp) BakeComplex(args []types.Type) constructs.Method {
 	assert.NotImplemented()
 	return nil // TODO: Implement
 }
@@ -114,7 +118,7 @@ func (b *bakerImp) BakeComplex() constructs.Method {
 // BakeCopy creates the builtin copy function.
 //
 //	func copy(dst, src []Type) int
-func (b *bakerImp) BakeCopy() constructs.Method {
+func (b *bakerImp) BakeCopy(args []types.Type) constructs.Method {
 	assert.NotImplemented()
 	return nil // TODO: Implement
 }
@@ -122,7 +126,7 @@ func (b *bakerImp) BakeCopy() constructs.Method {
 // BakeDelete creates the builtin delete function.
 //
 //	func delete(m map[Type]Type1, key Type)
-func (b *bakerImp) BakeDelete() constructs.Method {
+func (b *bakerImp) BakeDelete(args []types.Type) constructs.Method {
 	assert.NotImplemented()
 	return nil // TODO: Implement
 }
@@ -130,7 +134,7 @@ func (b *bakerImp) BakeDelete() constructs.Method {
 // BakeImag creates the builtin imag function.
 //
 //	func imag(c ComplexType) FloatType
-func (b *bakerImp) BakeImag() constructs.Method {
+func (b *bakerImp) BakeImag(args []types.Type) constructs.Method {
 	assert.NotImplemented()
 	return nil // TODO: Implement
 }
@@ -166,7 +170,7 @@ func (b *bakerImp) BakeLen() constructs.Method {
 // BakeMake creates the builtin make function.
 //
 //	func make(t Type, size ...IntegerType) Type
-func (b *bakerImp) BakeMake() constructs.Method {
+func (b *bakerImp) BakeMake(args []types.Type) constructs.Method {
 	assert.NotImplemented()
 	return nil // TODO: Implement
 }
@@ -174,7 +178,7 @@ func (b *bakerImp) BakeMake() constructs.Method {
 // BakeMax creates the builtin max function.
 //
 //	func max[T cmp.Ordered](x T, y ...T) T
-func (b *bakerImp) BakeMax() constructs.Method {
+func (b *bakerImp) BakeMax(args []types.Type) constructs.Method {
 	assert.NotImplemented()
 	return nil // TODO: Implement
 }
@@ -182,7 +186,7 @@ func (b *bakerImp) BakeMax() constructs.Method {
 // BakeMin creates the builtin min function.
 //
 //	func min[T cmp.Ordered](x T, y ...T) T
-func (b *bakerImp) BakeMin() constructs.Method {
+func (b *bakerImp) BakeMin(args []types.Type) constructs.Method {
 	assert.NotImplemented()
 	return nil // TODO: Implement
 }
@@ -190,7 +194,7 @@ func (b *bakerImp) BakeMin() constructs.Method {
 // BakeNew creates the builtin new function.
 //
 //	func new(Type) *Type
-func (b *bakerImp) BakeNew() constructs.Method {
+func (b *bakerImp) BakeNew(args []types.Type) constructs.Method {
 	assert.NotImplemented()
 	return nil // TODO: Implement
 }
@@ -277,7 +281,7 @@ func (b *bakerImp) BakePrintln() constructs.Method {
 // BakeReal creates the builtin real function.
 //
 //	func real(c ComplexType) FloatType
-func (b *bakerImp) BakeReal() constructs.Method {
+func (b *bakerImp) BakeReal(args []types.Type) constructs.Method {
 	assert.NotImplemented()
 	return nil // TODO: Implement
 }
