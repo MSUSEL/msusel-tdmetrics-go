@@ -202,26 +202,8 @@ func (ui *usagesImp) processCall(call *ast.CallExpr) {
 
 	// Check for builtin method, e.g. `println(f.x)`
 	if typ.IsBuiltin() {
-		exp := call.Fun
-		if p, ok := exp.(*ast.ParenExpr); ok {
-			exp = p.X
-		}
-		if id, ok := exp.(*ast.Ident); ok {
-			args := make([]types.Type, len(call.Args)+1)
-			if typ, ok := ui.info.Types[call]; ok {
-				args[0] = typ.Type
-			}
-			for i, arg := range call.Args {
-				if typ, ok := ui.info.Types[arg]; ok {
-					args[i+1] = typ.Type
-				}
-			}
-			if method := ui.baker.MethodByName(id.Name, args); utils.IsNil(method) {
-				ui.usages.Invokes.Add(method)
-			}
-		}
-		panic(terror.New(`failed to get name of builtin function`).
-			With(`expression`, exp))
+		ui.processBuiltinCall(call)
+		return
 	}
 
 	// Function invocation, e.g. `fmt.Println(f.x)`
@@ -230,6 +212,30 @@ func (ui *usagesImp) processCall(call *ast.CallExpr) {
 		ui.usages.Invokes.Add(ui.pending)
 		ui.pending = nil
 	}
+}
+
+func (ui *usagesImp) processBuiltinCall(call *ast.CallExpr) {
+	exp := call.Fun
+	if p, ok := exp.(*ast.ParenExpr); ok {
+		exp = p.X
+	}
+	if id, ok := exp.(*ast.Ident); ok {
+		args := make([]constructs.TypeDesc, len(call.Args)+1)
+		if typ, ok := ui.info.Types[call]; ok {
+			args[0] = ui.conv.ConvertType(typ.Type)
+		}
+		for i, arg := range call.Args {
+			if typ, ok := ui.info.Types[arg]; ok {
+				args[i+1] = ui.conv.ConvertType(typ.Type)
+			}
+		}
+		if method := ui.baker.MethodByName(id.Name, args); utils.IsNil(method) {
+			ui.usages.Invokes.Add(method)
+			return
+		}
+	}
+	panic(terror.New(`failed to get name of builtin function`).
+		With(`expression`, exp))
 }
 
 func (ui *usagesImp) processCompositeLit(comp *ast.CompositeLit) {

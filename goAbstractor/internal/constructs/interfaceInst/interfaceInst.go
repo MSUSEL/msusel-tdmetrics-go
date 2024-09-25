@@ -5,6 +5,7 @@ import (
 
 	"github.com/Snow-Gremlin/goToolbox/collections/enumerator"
 	"github.com/Snow-Gremlin/goToolbox/comp"
+	"github.com/Snow-Gremlin/goToolbox/terrors/terror"
 	"github.com/Snow-Gremlin/goToolbox/utils"
 
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/assert"
@@ -32,8 +33,15 @@ func newInstance(args constructs.InterfaceInstArgs) constructs.InterfaceInst {
 		pkg := args.Generic.Package()
 		assert.ArgNotNil(`package`, pkg)
 
-		// Implement if needed.
-		assert.NotImplemented()
+		tArgs := make([]types.Type, len(args.InstanceTypes))
+		for i, ip := range args.InstanceTypes {
+			tArgs[i] = ip.GoType()
+		}
+		rt, err := types.Instantiate(nil, args.Generic.GoType(), tArgs, true)
+		if err != nil {
+			panic(terror.New(`failed to instantiate an interface instance`, err))
+		}
+		args.RealType = rt
 	}
 	assert.ArgNotNil(`real type`, args.RealType)
 
