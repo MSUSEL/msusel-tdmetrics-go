@@ -3,9 +3,10 @@ package constructs
 import (
 	"go/types"
 
+	"github.com/Snow-Gremlin/goToolbox/collections"
 	"golang.org/x/tools/go/packages"
 
-	"github.com/Snow-Gremlin/goToolbox/collections"
+	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs/hint"
 )
 
 // TODO: If there are unexported abstracts the interface needs to be locked to a package.
@@ -22,6 +23,10 @@ type InterfaceDesc interface {
 	TypeDesc
 	TempReferenceContainer
 	IsInterfaceDesc()
+
+	// Hint indicates if the interface is a placeholder for something that
+	// isn't abstracted directly, such as maps and channels.
+	Hint() hint.Hint
 
 	// PinnedPackage is non-nil if the interface is tied to a specific
 	// package. This only happens if any of the abstracts are unexported.
@@ -55,7 +60,8 @@ type InterfaceDesc interface {
 }
 
 type InterfaceDescArgs struct {
-	RealType *types.Interface
+	Hint     hint.Hint
+	RealType types.Type
 
 	// PinnedPkg is non-nil when an abstract is unexported.
 	// This is the package the interface is pinned to.

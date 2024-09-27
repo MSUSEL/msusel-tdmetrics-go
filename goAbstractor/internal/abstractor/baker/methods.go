@@ -17,7 +17,7 @@ import (
 // The given args are hints at what the types of the builtin
 // methods params are. The first argument is the return type
 // of the method. Any arg in the args may be nil.
-func (b *bakerImp) MethodByName(name string, args []constructs.TypeDesc) constructs.Construct {
+func (b *bakerImp) MethodByName(name string, rtArgs []types.Type, args []constructs.TypeDesc) constructs.Construct {
 	switch name {
 	case `append`:
 		return b.BakeAppend(args)
@@ -40,9 +40,9 @@ func (b *bakerImp) MethodByName(name string, args []constructs.TypeDesc) constru
 	case `make`:
 		return b.BakeMake(args)
 	case `max`:
-		return b.BakeMax(args)
+		return b.BakeMax(rtArgs, args)
 	case `min`:
-		return b.BakeMin(args)
+		return b.BakeMin(rtArgs, args)
 	case `new`:
 		return b.BakeNew(args)
 	case `panic`:
@@ -205,27 +205,15 @@ func (b *bakerImp) BakeNew(args []constructs.TypeDesc) constructs.Method {
 // BakeMax creates the builtin max function.
 //
 //	func max[T cmp.Ordered](x T, y ...T) T
-func (b *bakerImp) BakeMax(args []constructs.TypeDesc) constructs.Construct {
-	return b.bakeMinMax(`max`, args)
+func (b *bakerImp) BakeMax(rtArgs []types.Type, args []constructs.TypeDesc) constructs.Construct {
+	return b.bakeMinMax(`max`, rtArgs, args)
 }
 
 // BakeMin creates the builtin min function.
 //
 //	func min[T cmp.Ordered](x T, y ...T) T
-func (b *bakerImp) BakeMin(args []constructs.TypeDesc) constructs.Construct {
-	return b.bakeMinMax(`min`, args)
-}
-
-func (b *bakerImp) bakeMinMax(name string, args []constructs.TypeDesc) constructs.Construct {
-	assert.ArgNotEmpty(`args`, args)
-	instTyp := args[0] // use the result type to determine the method
-	assert.ArgNotNil(`typ arg`, instTyp)
-
-	return bakeOnce(b, name+` `+instTyp.String(), func() constructs.Construct {
-		// func <name>[T any](v ...T) T
-		gen := b.bakeMinMaxGeneric(name)
-		return instantiator.Method(b.proj, gen, instTyp)
-	})
+func (b *bakerImp) BakeMin(rtArgs []types.Type, args []constructs.TypeDesc) constructs.Construct {
+	return b.bakeMinMax(`min`, rtArgs, args)
 }
 
 func (b *bakerImp) bakeMinMaxGeneric(name string) constructs.Method {
@@ -252,14 +240,8 @@ func (b *bakerImp) bakeMinMaxGeneric(name string) constructs.Method {
 			Type: tp,
 		})
 
-		tpRt := types.NewTypeParam(types.NewTypeName(token.NoPos, pkg.Source().Types, `T`, nil), types.NewInterfaceType(nil, nil))
-		rt := types.NewSignatureType(nil, nil, []*types.TypeParam{tpRt},
-			types.NewTuple(types.NewParam(token.NoPos, pkg.Source().Types, `x`, tpRt)),
-			types.NewTuple(types.NewParam(token.NoPos, pkg.Source().Types, ``, tpRt)), true)
-
 		// func(x ...T) T
 		sig := b.proj.NewSignature(constructs.SignatureArgs{
-			RealType: rt,
 			Params:   []constructs.Argument{param},
 			Variadic: true,
 			Results:  []constructs.Argument{ret},
@@ -274,6 +256,53 @@ func (b *bakerImp) bakeMinMaxGeneric(name string) constructs.Method {
 			TypeParams: []constructs.TypeParam{tp},
 			Signature:  sig,
 			Location:   locs.NoLoc(),
+		})
+	})
+}
+
+func (b *bakerImp) bakeMinMax(name string, rtArgs []types.Type, args []constructs.TypeDesc) constructs.Construct {
+	assert.ArgNotEmpty(`args`, args)
+	instTyp := args[0] // use the result type to determine the method
+	assert.ArgNotNil(`typ arg`, instTyp)
+
+	return bakeOnce(b, name+` `+instTyp.String(), func() constructs.Construct {
+		assert.ArgNotEmpty(`real type args`, rtArgs)
+		rtInstTyp := rtArgs[0]
+		assert.ArgNotNil(`real type arg`, rtInstTyp)
+
+		pkg := b.BakeBuiltin()
+		gen := b.bakeMinMaxGeneric(name)
+
+		// List[X]
+		listT := instantiator.InterfaceDecl(b.proj, rtInstTyp, b.BakeList(), instTyp)
+
+		// x []X
+		param := b.proj.NewArgument(constructs.ArgumentArgs{
+			Name: `x`,
+			Type: listT,
+		})
+		rtParam := types.NewParam(token.NoPos, pkg.Source().Types, `x`, types.NewSlice(rtInstTyp))
+
+		// <unnamed> X
+		ret := b.proj.NewArgument(constructs.ArgumentArgs{
+			Type: instTyp,
+		})
+		rtResult := types.NewParam(token.NoPos, pkg.Source().Types, ``, rtInstTyp)
+
+		// func(x ...X) X
+		sig := b.proj.NewSignature(constructs.SignatureArgs{
+			RealType: types.NewSignatureType(nil, nil, nil, types.NewTuple(rtParam), types.NewTuple(rtResult), true),
+			Params:   []constructs.Argument{param},
+			Variadic: true,
+			Results:  []constructs.Argument{ret},
+			Package:  pkg.Source(),
+		})
+
+		// func <name>(v ...X) X
+		return b.proj.NewMethodInst(constructs.MethodInstArgs{
+			Generic:       gen,
+			Resolved:      sig,
+			InstanceTypes: []constructs.TypeDesc{instTyp},
 		})
 	})
 }

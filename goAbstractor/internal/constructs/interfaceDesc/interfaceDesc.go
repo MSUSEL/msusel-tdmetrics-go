@@ -12,12 +12,14 @@ import (
 
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/assert"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs"
+	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs/hint"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs/kind"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/jsonify"
 )
 
 type interfaceDescImp struct {
-	realType *types.Interface
+	hint     hint.Hint
+	realType types.Type
 
 	pinnedPkg constructs.Package
 	abstracts []constructs.Abstract
@@ -38,29 +40,52 @@ func newInterfaceDesc(args constructs.InterfaceDescArgs) constructs.InterfaceDes
 	if utils.IsNil(args.RealType) {
 		assert.ArgNotNil(`package`, args.Package)
 
-		methods := make([]*types.Func, len(args.Abstracts))
-		for i, abstract := range args.Abstracts {
-			methods[i] = types.NewFunc(token.NoPos, args.Package.Types,
-				abstract.Name(), abstract.Signature().GoType().(*types.Signature))
-		}
+		switch args.Hint {
+		case hint.Pointer:
+			// TODO: Implement
 
-		embedded := []types.Type{}
-		if count1, count2 := len(args.Exact), len(args.Approx); count1+count2 > 0 {
-			terms := make([]*types.Term, count1+count2)
-			for i, exact := range args.Exact {
-				terms[i] = types.NewTerm(false, exact.GoType())
-			}
-			for i, approx := range args.Approx {
-				terms[i+count1] = types.NewTerm(true, approx.GoType())
-			}
-			embedded = append(embedded, types.NewUnion(terms))
-		}
+		case hint.List:
+			// TODO: Implement
 
-		args.RealType = types.NewInterfaceType(methods, embedded).Complete()
+		case hint.Map:
+			// TODO: Implement
+
+		case hint.Chan:
+			// TODO: Implement
+			//args.RealType =
+
+		case hint.Complex64:
+			args.RealType = types.Typ[types.Complex64]
+
+		case hint.Complex128:
+			args.RealType = types.Typ[types.Complex128]
+
+		default: // hint.None, hint.Comparable
+			methods := make([]*types.Func, len(args.Abstracts))
+			for i, abstract := range args.Abstracts {
+				methods[i] = types.NewFunc(token.NoPos, args.Package.Types,
+					abstract.Name(), abstract.Signature().GoType().(*types.Signature))
+			}
+
+			embedded := []types.Type{}
+			if count1, count2 := len(args.Exact), len(args.Approx); count1+count2 > 0 {
+				terms := make([]*types.Term, count1+count2)
+				for i, exact := range args.Exact {
+					terms[i] = types.NewTerm(false, exact.GoType())
+				}
+				for i, approx := range args.Approx {
+					terms[i+count1] = types.NewTerm(true, approx.GoType())
+				}
+				embedded = append(embedded, types.NewUnion(terms))
+			}
+
+			args.RealType = types.NewInterfaceType(methods, embedded).Complete()
+		}
 	}
 	assert.ArgNotNil(`real type`, args.RealType)
 
 	return &interfaceDescImp{
+		hint:     args.Hint,
 		realType: args.RealType,
 
 		pinnedPkg: args.PinnedPkg,
@@ -80,6 +105,7 @@ func (id *interfaceDescImp) Index() int          { return id.index }
 func (id *interfaceDescImp) SetIndex(index int)  { id.index = index }
 func (id *interfaceDescImp) Alive() bool         { return id.alive }
 func (id *interfaceDescImp) SetAlive(alive bool) { id.alive = alive }
+func (id *interfaceDescImp) Hint() hint.Hint     { return id.hint }
 func (id *interfaceDescImp) GoType() types.Type  { return id.realType }
 
 func (id *interfaceDescImp) Abstracts() []constructs.Abstract  { return id.abstracts }
@@ -96,7 +122,8 @@ func (id *interfaceDescImp) IsGeneral() bool {
 }
 
 func (id *interfaceDescImp) Implements(other constructs.InterfaceDesc) bool {
-	return types.Implements(id.realType, other.(*interfaceDescImp).realType)
+	rtIt, ok := other.(*interfaceDescImp).realType.(*types.Interface)
+	return ok && types.Implements(id.realType, rtIt)
 }
 
 func (id *interfaceDescImp) AddInherits(it constructs.InterfaceDesc) constructs.InterfaceDesc {

@@ -301,6 +301,7 @@ func (i *instantiator) createInstance(realType types.Type) constructs.Construct 
 
 func (i *instantiator) InterfaceDesc(it constructs.InterfaceDesc) constructs.InterfaceDesc {
 	return i.proj.NewInterfaceDesc(constructs.InterfaceDescArgs{
+		Hint:      it.Hint(),
 		Abstracts: applyToSlice(it.Abstracts(), i.Abstract),
 		Exact:     applyToSlice(it.Exact(), i.TypeDesc),
 		Approx:    applyToSlice(it.Approx(), i.TypeDesc),

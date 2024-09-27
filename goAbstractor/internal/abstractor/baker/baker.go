@@ -15,6 +15,7 @@ import (
 	"golang.org/x/tools/go/packages"
 
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs"
+	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs/hint"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/locs"
 )
 
@@ -22,7 +23,7 @@ const BuiltinName = `$builtin`
 
 type Baker interface {
 	TypeByName(name string) constructs.TypeDecl
-	MethodByName(name string, args []constructs.TypeDesc) constructs.Construct
+	MethodByName(name string, rtArgs []types.Type, args []constructs.TypeDesc) constructs.Construct
 
 	BakeBuiltin() constructs.Package
 	BakeAny() constructs.InterfaceDecl
@@ -213,6 +214,7 @@ func (b *bakerImp) BakeList() constructs.InterfaceDecl {
 			Location:   locs.NoLoc(),
 			TypeParams: tps,
 			Interface: b.proj.NewInterfaceDesc(constructs.InterfaceDescArgs{
+				Hint:      hint.List,
 				Abstracts: []constructs.Abstract{lenFunc, getFunc, setFunc},
 				Package:   pkg.Source(),
 			}),
@@ -296,6 +298,7 @@ func (b *bakerImp) BakeChan() constructs.InterfaceDecl {
 			Location:   locs.NoLoc(),
 			TypeParams: tps,
 			Interface: b.proj.NewInterfaceDesc(constructs.InterfaceDescArgs{
+				Hint:      hint.Chan,
 				Abstracts: []constructs.Abstract{lenFunc, recvFunc, sendFunc},
 				Package:   pkg.Source(),
 			}),
@@ -392,6 +395,7 @@ func (b *bakerImp) BakeMap() constructs.InterfaceDecl {
 			Location:   locs.NoLoc(),
 			TypeParams: tps,
 			Interface: b.proj.NewInterfaceDesc(constructs.InterfaceDescArgs{
+				Hint:      hint.Map,
 				Abstracts: []constructs.Abstract{lenFunc, getFunc, setFunc},
 				Package:   pkg.Source(),
 			}),
@@ -438,6 +442,7 @@ func (b *bakerImp) BakePointer() constructs.InterfaceDecl {
 			Location:   locs.NoLoc(),
 			TypeParams: tps,
 			Interface: b.proj.NewInterfaceDesc(constructs.InterfaceDescArgs{
+				Hint:      hint.Pointer,
 				Abstracts: []constructs.Abstract{derefFunc},
 				Package:   pkg.Source(),
 			}),
@@ -487,6 +492,8 @@ func (b *bakerImp) BakeComplex64() constructs.InterfaceDecl {
 			Exported: true,
 			Location: locs.NoLoc(),
 			Interface: b.proj.NewInterfaceDesc(constructs.InterfaceDescArgs{
+				Hint:      hint.Complex64,
+				RealType:  types.Typ[types.Complex64],
 				Abstracts: []constructs.Abstract{realFunc, imagFunc},
 				Package:   pkg.Source(),
 			}),
@@ -536,6 +543,8 @@ func (b *bakerImp) BakeComplex128() constructs.InterfaceDecl {
 			Exported: true,
 			Location: locs.NoLoc(),
 			Interface: b.proj.NewInterfaceDesc(constructs.InterfaceDescArgs{
+				Hint:      hint.Complex128,
+				RealType:  types.Typ[types.Complex128],
 				Abstracts: []constructs.Abstract{realFunc, imagFunc},
 				Package:   pkg.Source(),
 			}),
@@ -619,6 +628,7 @@ func (b *bakerImp) BakeComparable() constructs.InterfaceDecl {
 			Exported: true,
 			Location: locs.NoLoc(),
 			Interface: b.proj.NewInterfaceDesc(constructs.InterfaceDescArgs{
+				Hint:      hint.Comparable,
 				Abstracts: []constructs.Abstract{cmpFunc},
 				Package:   pkg.Source(),
 			}),
