@@ -17,9 +17,10 @@ import (
 )
 
 type Usages struct {
-	Reads      collections.SortedSet[constructs.Construct]
-	Writes     collections.SortedSet[constructs.Construct]
-	Invokes    collections.SortedSet[constructs.Construct]
+	Reads   collections.SortedSet[constructs.Construct]
+	Writes  collections.SortedSet[constructs.Construct]
+	Invokes collections.SortedSet[constructs.Construct]
+
 	SideEffect bool
 }
 
@@ -39,7 +40,9 @@ type usagesImp struct {
 	baker  baker.Baker
 	conv   converter.Converter
 
-	pending   constructs.Construct
+	pendingEff bool
+	pendingCon constructs.Construct
+
 	localDefs map[types.Object]constructs.Construct
 	usages    Usages
 }
@@ -64,7 +67,9 @@ func Calculate(info *types.Info, proj constructs.Project, curPkg constructs.Pack
 		baker:  baker,
 		conv:   conv,
 
-		pending:   nil,
+		pendingEff: false,
+		pendingCon: nil,
+
 		localDefs: map[types.Object]constructs.Construct{},
 		usages:    newUsage(),
 	}
@@ -74,21 +79,26 @@ func Calculate(info *types.Info, proj constructs.Project, curPkg constructs.Pack
 	return ui.usages
 }
 
+func (ui *usagesImp) clearPending() {
+	ui.pendingCon = nil
+	ui.pendingEff = false
+}
+
 // flushPendingToRead writes any pending as a read usage
 // and clears the pending.
 //
 // If the usage hasn't been consumed it is assumed
 // to have been read from, e.g. `a + b`.
 func (ui *usagesImp) flushPendingToRead() {
-	ui.addRead(ui.pending)
-	ui.pending = nil
+	ui.addRead(ui.pendingCon)
+	ui.clearPending()
 }
 
 // flushPendingToWrite writes any pending as a write usage
 // and clears the pending.
 func (ui *usagesImp) flushPendingToWrite() {
-	ui.addWrite(ui.pending)
-	ui.pending = nil
+	ui.addWrite(ui.pendingCon, ui.pendingEff)
+	ui.clearPending()
 }
 
 // addRead adds the given construct as a read usage.
@@ -99,9 +109,12 @@ func (ui *usagesImp) addRead(c constructs.Construct) {
 }
 
 // addWrite adds the given construct as a write usage.
-func (ui *usagesImp) addWrite(c constructs.Construct) {
+func (ui *usagesImp) addWrite(c constructs.Construct, eff bool) {
 	if !utils.IsNil(c) {
 		ui.usages.Writes.Add(c)
+		if eff {
+			ui.usages.SideEffect = true
+		}
 	}
 }
 
@@ -209,9 +222,9 @@ func (ui *usagesImp) processCall(call *ast.CallExpr) {
 
 	// Function invocation, e.g. `fmt.Println(f.x)`
 	ui.processNode(call.Fun)
-	if !utils.IsNil(ui.pending) {
-		ui.usages.Invokes.Add(ui.pending)
-		ui.pending = nil
+	if !utils.IsNil(ui.pendingCon) {
+		ui.usages.Invokes.Add(ui.pendingCon)
+		ui.clearPending()
 	}
 }
 
@@ -221,12 +234,14 @@ func (ui *usagesImp) processBuiltinCall(call *ast.CallExpr) {
 		exp = p.X
 	}
 	if id, ok := exp.(*ast.Ident); ok {
+		ui.clearPending()
 
 		switch id.Name {
 		case `append`, `cap`, `complex`, `copy`, `imag`, `len`,
 			`make`, `max`, `min`, `new`, `real`, `recover`:
 			if typ, ok := ui.info.Types[call]; ok {
-				ui.pending = ui.conv.ConvertType(typ.Type)
+				ui.pendingCon = ui.conv.ConvertType(typ.Type)
+				ui.pendingEff = false
 			}
 			return
 
@@ -248,7 +263,7 @@ func (ui *usagesImp) processCompositeLit(comp *ast.CompositeLit) {
 		ui.flushPendingToRead()
 	}
 	ui.processNode(comp.Type)
-	ui.pending = nil // flush the internally defined type
+	ui.clearPending() // flush the internally defined type
 }
 
 func (ui *usagesImp) processFunc(fn *ast.FuncType) {
@@ -314,9 +329,9 @@ func (ui *usagesImp) processIdent(id *ast.Ident) {
 		}
 
 		ui.flushPendingToRead()
-		ui.pending = ui.conv.ConvertType(def.Type())
-		ui.addWrite(ui.pending)
-		ui.localDefs[def] = ui.pending
+		ui.pendingCon = ui.conv.ConvertType(def.Type())
+		ui.addWrite(ui.pendingCon, false)
+		ui.localDefs[def] = ui.pendingCon
 		return
 	}
 
@@ -336,23 +351,25 @@ func (ui *usagesImp) processIdent(id *ast.Ident) {
 	// Check if defined earlier and reuse defined type.
 	if usage, ok := ui.localDefs[obj]; ok {
 		ui.flushPendingToRead()
-		ui.pending = usage
+		ui.pendingCon = usage
 		return
 	}
 
 	// Return builtin type.
 	if obj.Pkg() == nil {
 		if typ := ui.baker.TypeByName(obj.Name()); !utils.IsNil(typ) {
-			ui.pending = typ
+			ui.pendingCon = typ
+			ui.pendingEff = false
 			return
 		}
 	}
 
 	// Return basic types as usage.
 	if basic, ok := obj.Type().(*types.Basic); ok && basic.Kind() != types.Invalid {
-		ui.pending = ui.proj.NewBasic(constructs.BasicArgs{
+		ui.pendingCon = ui.proj.NewBasic(constructs.BasicArgs{
 			RealType: basic,
 		})
+		ui.pendingEff = false
 		return
 	}
 
@@ -371,24 +388,25 @@ func (ui *usagesImp) processIdent(id *ast.Ident) {
 		instType = ui.conv.ConvertInstanceTypes(named.TypeArgs())
 	}
 
-	ui.pending = ui.proj.NewTempReference(constructs.TempReferenceArgs{
+	ui.pendingCon = ui.proj.NewTempReference(constructs.TempReferenceArgs{
 		RealType:      obj.Type(),
 		PackagePath:   pkgPath,
 		Name:          obj.Name(),
 		InstanceTypes: instType,
 		Package:       ui.curPkg.Source(),
 	})
+	ui.pendingEff = true
 }
 
 func (ui *usagesImp) processIncDec(stmt *ast.IncDecStmt) {
 	ui.processNode(stmt.X)
-	if !utils.IsNil(ui.pending) {
-		ui.usages.Writes.Add(ui.pending)
-		ui.pending = nil
+	if !utils.IsNil(ui.pendingCon) {
+		ui.addWrite(ui.pendingCon, false)
+		ui.clearPending()
 	} else if typ, ok := ui.info.Types[stmt.X]; ok {
 		// Handle `*(func())++` where the increment is on
 		// the returned type, or `mapFoo["cat"]++`.
-		ui.addWrite(ui.conv.ConvertType(typ.Type))
+		ui.addWrite(ui.conv.ConvertType(typ.Type), false)
 	}
 }
 
@@ -404,7 +422,8 @@ func (ui *usagesImp) processIndex(expr *ast.IndexExpr) {
 
 	// Prepare the pending after the indexing.
 	if elem, ok := ui.info.Types[expr]; ok {
-		ui.pending = ui.conv.ConvertType(elem.Type)
+		ui.pendingCon = ui.conv.ConvertType(elem.Type)
+		ui.pendingEff = false
 	}
 }
 
@@ -419,8 +438,8 @@ func (ui *usagesImp) processIndexList(expr *ast.IndexListExpr) {
 	// set the pending after the index to be read from but leave
 	// it in pending since the same type is going to be used.
 	ui.processNode(expr.X)
-	if !utils.IsNil(ui.pending) {
-		ui.usages.Reads.Add(ui.pending)
+	if !utils.IsNil(ui.pendingCon) {
+		ui.usages.Reads.Add(ui.pendingCon)
 	}
 }
 
@@ -463,23 +482,25 @@ func (ui *usagesImp) processSelector(sel *ast.SelectorExpr) {
 	}
 
 	ui.processNode(sel.X)
-	if utils.IsNil(ui.pending) {
+	if utils.IsNil(ui.pendingCon) {
+		ui.pendingEff = false
 		// The left hand side is empty so this wasn't like `foo.Bar`,
 		// it was instead like `foo().Bar` where some expression results
 		// in a selection on a type. If a locally defined type then skip
 		// the select since it won't reference anything useful.
 		if _, ok := ui.localDefs[selObj.Obj()]; ok {
-			ui.pending = ui.conv.ConvertType(selObj.Type())
+			ui.pendingCon = ui.conv.ConvertType(selObj.Type())
 			return
 		}
-		ui.pending = ui.conv.ConvertType(selObj.Recv())
+		ui.pendingCon = ui.conv.ConvertType(selObj.Recv())
 	}
 
-	ui.addRead(ui.pending)
-	ui.pending = ui.proj.NewSelection(constructs.SelectionArgs{
+	ui.addRead(ui.pendingCon)
+	ui.pendingCon = ui.proj.NewSelection(constructs.SelectionArgs{
 		Name:   sel.Sel.Name,
-		Origin: ui.pending,
+		Origin: ui.pendingCon,
 	})
+	ui.pendingEff = false
 }
 
 func (ui *usagesImp) processValueSpec(spec *ast.ValueSpec) {

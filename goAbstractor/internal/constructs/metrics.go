@@ -18,6 +18,7 @@ type Metrics interface {
 	Indents() int
 	Getter() bool
 	Setter() bool
+	SideEffect() bool
 
 	Reads() collections.ReadonlySortedSet[Construct]
 	Writes() collections.ReadonlySortedSet[Construct]

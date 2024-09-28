@@ -24,6 +24,7 @@ type metricsImp struct {
 	indents    int
 	getter     bool
 	setter     bool
+	sideEffect bool
 
 	reads   collections.SortedSet[constructs.Construct]
 	writes  collections.SortedSet[constructs.Construct]
@@ -42,6 +43,7 @@ func newMetrics(args constructs.MetricsArgs) constructs.Metrics {
 		indents:    args.Indents,
 		getter:     args.Getter,
 		setter:     args.Setter,
+		sideEffect: args.SideEffect,
 
 		reads:   args.Reads,
 		writes:  args.Writes,
@@ -63,6 +65,7 @@ func (m *metricsImp) CodeCount() int      { return m.codeCount }
 func (m *metricsImp) Indents() int        { return m.indents }
 func (m *metricsImp) Getter() bool        { return m.getter }
 func (m *metricsImp) Setter() bool        { return m.setter }
+func (m *metricsImp) SideEffect() bool    { return m.sideEffect }
 
 func (m *metricsImp) Reads() collections.ReadonlySortedSet[constructs.Construct] {
 	return m.reads.Readonly()
@@ -121,7 +124,8 @@ func (m *metricsImp) ToJson(ctx *jsonify.Context) jsonify.Datum {
 		AddNonZero(ctx, `setter`, m.setter).
 		AddNonZero(ctx.Short(), `reads`, m.reads.ToSlice()).
 		AddNonZero(ctx.Short(), `writes`, m.writes.ToSlice()).
-		AddNonZero(ctx.Short(), `invokes`, m.invokes.ToSlice())
+		AddNonZero(ctx.Short(), `invokes`, m.invokes.ToSlice()).
+		AddNonZero(ctx, `sideEffect`, m.sideEffect)
 }
 
 func (m *metricsImp) String() string {
