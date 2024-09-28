@@ -17,9 +17,10 @@ import (
 )
 
 type Usages struct {
-	Reads   collections.SortedSet[constructs.Construct]
-	Writes  collections.SortedSet[constructs.Construct]
-	Invokes collections.SortedSet[constructs.Construct]
+	Reads      collections.SortedSet[constructs.Construct]
+	Writes     collections.SortedSet[constructs.Construct]
+	Invokes    collections.SortedSet[constructs.Construct]
+	SideEffect bool
 }
 
 func newUsage() Usages {
@@ -220,20 +221,20 @@ func (ui *usagesImp) processBuiltinCall(call *ast.CallExpr) {
 		exp = p.X
 	}
 	if id, ok := exp.(*ast.Ident); ok {
-		rtArgs := make([]types.Type, len(call.Args)+1)
-		args := make([]constructs.TypeDesc, len(call.Args)+1)
-		if typ, ok := ui.info.Types[call]; ok {
-			rtArgs[0] = typ.Type
-			args[0] = ui.conv.ConvertType(typ.Type)
-		}
-		for i, arg := range call.Args {
-			if typ, ok := ui.info.Types[arg]; ok {
-				rtArgs[i+1] = typ.Type
-				args[i+1] = ui.conv.ConvertType(typ.Type)
+
+		switch id.Name {
+		case `append`, `cap`, `complex`, `copy`, `imag`, `len`,
+			`make`, `max`, `min`, `new`, `real`, `recover`:
+			if typ, ok := ui.info.Types[call]; ok {
+				ui.pending = ui.conv.ConvertType(typ.Type)
 			}
-		}
-		if method := ui.baker.MethodByName(id.Name, rtArgs, args); !utils.IsNil(method) {
-			ui.usages.Invokes.Add(method)
+			return
+
+		case `clear`, `close`, `delete`, `panic`:
+			return
+
+		case `print`, `println`:
+			ui.usages.SideEffect = true
 			return
 		}
 	}

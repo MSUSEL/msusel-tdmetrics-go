@@ -8,6 +8,7 @@ import (
 	"github.com/Snow-Gremlin/goToolbox/collections/enumerator"
 	"github.com/Snow-Gremlin/goToolbox/collections/sortedSet"
 	"github.com/Snow-Gremlin/goToolbox/comp"
+	"github.com/Snow-Gremlin/goToolbox/terrors/terror"
 	"github.com/Snow-Gremlin/goToolbox/utils"
 
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/assert"
@@ -32,6 +33,17 @@ type interfaceDescImp struct {
 	alive bool
 }
 
+func findSigByName(abs []constructs.Abstract, name string) constructs.Signature {
+	for _, ab := range abs {
+		if ab.Name() == name {
+			return ab.Signature()
+		}
+	}
+	panic(terror.New(`failed to find signature in interface abstract by name`).
+		With(`name`, name).
+		With(`abs`, abs))
+}
+
 func newInterfaceDesc(args constructs.InterfaceDescArgs) constructs.InterfaceDesc {
 	assert.ArgHasNoNils(`abstracts`, args.Abstracts)
 	assert.ArgHasNoNils(`exact`, args.Exact)
@@ -42,17 +54,26 @@ func newInterfaceDesc(args constructs.InterfaceDescArgs) constructs.InterfaceDes
 
 		switch args.Hint {
 		case hint.Pointer:
-			// TODO: Implement
+			// Get $deref's only resulting real type.
+			ret := findSigByName(args.Abstracts, `$deref`).Results()[0].Type().GoType()
+			args.RealType = types.NewPointer(ret)
 
 		case hint.List:
-			// TODO: Implement
+			// Get $get's only resulting real type.
+			ret := findSigByName(args.Abstracts, `$get`).Results()[0].Type().GoType()
+			args.RealType = types.NewSlice(ret)
 
 		case hint.Map:
-			// TODO: Implement
+			// Get $set's two parameter real types.
+			params := findSigByName(args.Abstracts, `$set`).Params()
+			keyRet := params[0].Type().GoType()
+			valRet := params[1].Type().GoType()
+			args.RealType = types.NewMap(keyRet, valRet)
 
 		case hint.Chan:
-			// TODO: Implement
-			//args.RealType =
+			// Get $send's only parameter real type.
+			ret := findSigByName(args.Abstracts, `$send`).Params()[0].Type().GoType()
+			args.RealType = types.NewSlice(ret)
 
 		case hint.Complex64:
 			args.RealType = types.Typ[types.Complex64]

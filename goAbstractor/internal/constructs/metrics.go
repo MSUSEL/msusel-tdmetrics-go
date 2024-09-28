@@ -112,6 +112,10 @@ type MetricsArgs struct {
 	//
 	// e.g. `point.getX()` has an invocation of `point.getX`.
 	Invokes collections.SortedSet[Construct]
+
+	// SideEffect indicates this metrics has something in it that
+	// effects data outside the expression or method.
+	SideEffect bool
 }
 
 type MetricsFactory interface {

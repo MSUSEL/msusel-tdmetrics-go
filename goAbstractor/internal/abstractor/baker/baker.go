@@ -23,7 +23,6 @@ const BuiltinName = `$builtin`
 
 type Baker interface {
 	TypeByName(name string) constructs.TypeDecl
-	MethodByName(name string, rtArgs []types.Type, args []constructs.TypeDesc) constructs.Construct
 
 	BakeBuiltin() constructs.Package
 	BakeAny() constructs.InterfaceDecl

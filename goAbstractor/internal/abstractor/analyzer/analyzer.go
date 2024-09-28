@@ -31,5 +31,6 @@ func Analyze(info *types.Info, proj constructs.Project, curPkg constructs.Packag
 		Reads:      usages.Reads,
 		Writes:     usages.Writes,
 		Invokes:    usages.Invokes,
+		SideEffect: usages.SideEffect,
 	})
 }
