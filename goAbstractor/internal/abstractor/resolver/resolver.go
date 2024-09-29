@@ -29,6 +29,7 @@ func Resolve(proj constructs.Project, log *logger.Logger) {
 	resolve.Receivers()
 	resolve.ExpandInstantiations()
 	resolve.TempReferences()
+	resolve.TempDeclRefs()
 	resolve.ObjectInterfaces()
 	resolve.Inheritance()
 	resolve.DeadCodeElimination()
@@ -219,6 +220,52 @@ func (r *resolverImp) resolveTempRef(ref constructs.TempReference) {
 		panic(terror.New(`unexpected declaration type`).
 			With(`kind`, typ.Kind()).
 			With(`decl`, typ))
+	}
+}
+
+func (r *resolverImp) TempDeclRefs() {
+	r.log.Log(`resolve method references`)
+	refs := r.proj.TempDeclRefs()
+	for i := range refs.Count() {
+		r.resolveTempDeclRef(refs.Get(i))
+	}
+
+	r.proj.AllConstructs().Foreach(func(c constructs.Construct) {
+		if trc, has := c.(constructs.TempDeclRefContainer); has {
+			trc.RemoveTempDeclRefs()
+		}
+	})
+	r.proj.ClearAllTempDeclRefs()
+}
+
+func (r *resolverImp) resolveTempDeclRef(ref constructs.TempDeclRef) {
+	if ref.Resolved() {
+		return
+	}
+
+	_, decl, ok := r.proj.FindDecl(ref.PackagePath(), ref.Name(), true)
+	if !ok {
+		panic(terror.New(`failed to find temp declaration referenced`).
+			With(`package path`, ref.PackagePath()).
+			With(`name`, ref.Name()).
+			With(`instance types`, ref.InstanceTypes()))
+	}
+	if len(ref.InstanceTypes()) <= 0 {
+		ref.SetResolution(decl)
+		return
+	}
+
+	switch decl.Kind() {
+	case kind.Object:
+		ref.SetResolution(instantiator.Object(r.proj, nil, decl.(constructs.Object), ref.InstanceTypes()...))
+	case kind.InterfaceDecl:
+		ref.SetResolution(instantiator.InterfaceDecl(r.proj, nil, decl.(constructs.InterfaceDecl), ref.InstanceTypes()...))
+	case kind.Method:
+		ref.SetResolution(instantiator.Method(r.proj, decl.(constructs.Method), ref.InstanceTypes()...))
+	default:
+		panic(terror.New(`unexpected declaration type`).
+			With(`kind`, decl.Kind()).
+			With(`decl`, decl))
 	}
 }
 

@@ -26,6 +26,7 @@ import (
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs/selection"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs/signature"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs/structDesc"
+	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs/tempDeclRef"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs/tempReference"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs/typeParam"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs/value"
@@ -45,6 +46,7 @@ type projectImp struct {
 	constructs.MethodFactory
 	constructs.ObjectFactory
 	constructs.ValueFactory
+	constructs.TempDeclRefFactory
 
 	constructs.BasicFactory
 	constructs.InterfaceDescFactory
@@ -72,6 +74,7 @@ func New(locs locs.Set) constructs.Project {
 		MethodFactory:        method.New(),
 		ObjectFactory:        object.New(),
 		ValueFactory:         value.New(),
+		TempDeclRefFactory:   tempDeclRef.New(),
 
 		BasicFactory:         basic.New(),
 		InterfaceDescFactory: interfaceDesc.New(),
@@ -108,6 +111,7 @@ func (p *projectImp) AllConstructs() collections.Enumerator[constructs.Construct
 		enumerator.Cast[constructs.Construct](p.Signatures().Enumerate()),
 		enumerator.Cast[constructs.Construct](p.StructDescs().Enumerate()),
 		enumerator.Cast[constructs.Construct](p.TypeParams().Enumerate()),
+		enumerator.Cast[constructs.Construct](p.TempDeclRefs().Enumerate()),
 		enumerator.Cast[constructs.Construct](p.TempReferences().Enumerate()),
 		enumerator.Cast[constructs.Construct](p.Values().Enumerate()),
 	)
@@ -150,6 +154,36 @@ func (p *projectImp) FindType(pkgPath, typeName string, panicOnNotFound bool) (c
 	return pkg, decl, true
 }
 
+func (p *projectImp) FindDecl(pkgPath, name string, panicOnNotFound bool) (constructs.Package, constructs.Declaration, bool) {
+	assert.ArgNotEmpty(`pkgPath`, pkgPath)
+
+	pkg := p.FindPackageByPath(pkgPath)
+	if pkg == nil {
+		if !panicOnNotFound {
+			return nil, nil, false
+		}
+		names := enumerator.Select(p.Packages().Enumerate(),
+			func(pkg constructs.Package) string { return strconv.Quote(pkg.Path()) }).
+			Join(`, `)
+		panic(terror.New(`failed to find package for declaration reference`).
+			With(`name`, name).
+			With(`package path`, pkgPath).
+			With(`existing paths`, `[`+names+`]`))
+	}
+
+	method := pkg.FindDecl(name)
+	if method == nil {
+		if !panicOnNotFound {
+			return pkg, nil, false
+		}
+		panic(terror.New(`failed to find declaration for declaration reference`).
+			With(`decl name`, name).
+			With(`package path`, pkgPath))
+	}
+
+	return pkg, method, true
+}
+
 func (p *projectImp) UpdateIndices() {
 	var index int
 	var kind kind.Kind
@@ -182,7 +216,8 @@ func (p *projectImp) ToJson(ctx *jsonify.Context) jsonify.Datum {
 	m.AddNonZero(ctx, `interfaceDecls`, p.InterfaceDecls().ToSlice()).
 		AddNonZero(ctx, `methods`, p.Methods().ToSlice()).
 		AddNonZero(ctx, `objects`, p.Objects().ToSlice()).
-		AddNonZero(ctx, `values`, p.Values().ToSlice())
+		AddNonZero(ctx, `values`, p.Values().ToSlice()).
+		AddNonZero(ctx, `tempDeclRef`, p.TempDeclRefs().ToSlice())
 
 	m.AddNonZero(ctx, `basics`, p.Basics().ToSlice()).
 		AddNonZero(ctx, `interfaceDescs`, p.InterfaceDescs().ToSlice()).

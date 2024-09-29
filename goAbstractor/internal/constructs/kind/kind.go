@@ -19,6 +19,7 @@ const (
 	Selection     Kind = `selection`
 	Signature     Kind = `signature`
 	StructDesc    Kind = `structDesc`
+	TempDeclRef   Kind = `tempDeclRef`
 	TempReference Kind = `tempReference`
 	TypeParam     Kind = `typeParam`
 	Value         Kind = `value`

@@ -31,6 +31,7 @@ type Package interface {
 
 	Empty() bool
 	FindTypeDecl(name string) TypeDecl
+	FindDecl(name string) Declaration
 	ResolveReceivers()
 }
 

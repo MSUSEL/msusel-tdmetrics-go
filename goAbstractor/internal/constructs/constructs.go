@@ -43,6 +43,15 @@ type TempReferenceContainer interface {
 	RemoveTempReferences()
 }
 
+// TempDeclRefContainer is any construct that can contain a temporary method reference.
+type TempDeclRefContainer interface {
+	Construct
+
+	// RemoveTempDeclRefs should replace any found method reference with the
+	// method that was referenced. References will already be looked up.
+	RemoveTempDeclRefs()
+}
+
 var (
 	_ Construct = Abstract(nil)
 	_ Construct = Argument(nil)
@@ -112,6 +121,13 @@ func ResolvedTempReference(td TypeDesc) TypeDesc {
 		td = td.(TempReference).ResolvedType()
 	}
 	return td
+}
+
+func ResolvedTempDeclRef(con Construct) Construct {
+	for con.Kind() == kind.TempReference {
+		con = con.(TempDeclRef).ResolvedType()
+	}
+	return con
 }
 
 func BlankName(name string) bool {

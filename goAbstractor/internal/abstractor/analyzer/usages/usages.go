@@ -374,6 +374,7 @@ func (ui *usagesImp) processIdent(id *ast.Ident) {
 	}
 
 	// Create a temp reference for this object.
+	ui.pendingEff = true
 	pkgPath := ``
 	if obj.Pkg() != nil {
 		pkgPath = obj.Pkg().Path()
@@ -388,14 +389,11 @@ func (ui *usagesImp) processIdent(id *ast.Ident) {
 		instType = ui.conv.ConvertInstanceTypes(named.TypeArgs())
 	}
 
-	ui.pendingCon = ui.proj.NewTempReference(constructs.TempReferenceArgs{
-		RealType:      obj.Type(),
+	ui.pendingCon = ui.proj.NewTempDeclRef(constructs.TempDeclRefArgs{
 		PackagePath:   pkgPath,
 		Name:          obj.Name(),
 		InstanceTypes: instType,
-		Package:       ui.curPkg.Source(),
 	})
-	ui.pendingEff = true
 }
 
 func (ui *usagesImp) processIncDec(stmt *ast.IncDecStmt) {

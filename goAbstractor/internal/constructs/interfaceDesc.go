@@ -9,7 +9,7 @@ import (
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs/hint"
 )
 
-// TODO: If there are unexported abstracts the interface needs to be locked to a package.
+// TODO: Add test for if there are unexported abstracts the interface needs to be locked to a package.
 
 // InterfaceDesc is a named interface typically explicitly defined at the given
 // location in the source code. The underlying type description

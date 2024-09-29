@@ -7,7 +7,8 @@
   ],
   metrics: [
     { # 1. main method metrics
-      codeCount: 3, complexity: 1, indents: 1, lineCount: 3, loc: 5
+      codeCount: 3, complexity: 1, indents: 1, lineCount: 3, loc: 5,
+      sideEffect: true
     },
   ],
   packages: [

@@ -79,17 +79,17 @@ func (m *metricsImp) Invokes() collections.ReadonlySortedSet[constructs.Construc
 	return m.invokes.Readonly()
 }
 
-func (m *metricsImp) RemoveTempReferences() {
-	resolveTempReferences(m.reads)
-	resolveTempReferences(m.writes)
-	resolveTempReferences(m.invokes)
+func (m *metricsImp) RemoveTempDeclRefs() {
+	resolveTempDeclRefs(m.reads)
+	resolveTempDeclRefs(m.writes)
+	resolveTempDeclRefs(m.invokes)
 }
 
-func resolveTempReferences(set collections.SortedSet[constructs.Construct]) {
+func resolveTempDeclRefs(set collections.SortedSet[constructs.Construct]) {
 	for _, s := range set.ToSlice() {
-		if s.Kind() == kind.TempReference {
+		if s.Kind() == kind.TempDeclRef {
 			set.Remove(s)
-			set.Add(constructs.ResolvedTempReference(s.(constructs.TempReference)))
+			set.Add(constructs.ResolvedTempDeclRef(s.(constructs.TempDeclRef)))
 		}
 	}
 }

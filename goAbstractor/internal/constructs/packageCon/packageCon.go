@@ -140,12 +140,31 @@ func (p *packageImp) findObject(name string) (constructs.Object, bool) {
 		First()
 }
 
+func (p *packageImp) findMethod(name string) (constructs.Method, bool) {
+	return p.methods.Enumerate().
+		Where(func(t constructs.Method) bool { return !t.HasReceiver() && t.Name() == name }).
+		First()
+}
+
 func (p *packageImp) FindTypeDecl(name string) constructs.TypeDecl {
 	if v, ok := p.findInterfaceDecl(name); ok {
 		return v
 	}
 	if v, ok := p.findObject(name); ok {
 		return v
+	}
+	return nil
+}
+
+func (p *packageImp) FindDecl(name string) constructs.Declaration {
+	if v, ok := p.findInterfaceDecl(name); ok {
+		return v
+	}
+	if v, ok := p.findObject(name); ok {
+		return v
+	}
+	if m, ok := p.findMethod(name); ok {
+		return m
 	}
 	return nil
 }
