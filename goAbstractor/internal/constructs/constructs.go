@@ -124,8 +124,16 @@ func ResolvedTempReference(td TypeDesc) TypeDesc {
 }
 
 func ResolvedTempDeclRef(con Construct) Construct {
-	for con.Kind() == kind.TempReference {
-		con = con.(TempDeclRef).ResolvedType()
+	for {
+		if con.Kind() == kind.TempReference {
+			con = con.(TempReference).ResolvedType()
+			continue
+		}
+		if con.Kind() == kind.TempDeclRef {
+			con = con.(TempDeclRef).ResolvedType()
+			continue
+		}
+		break
 	}
 	return con
 }

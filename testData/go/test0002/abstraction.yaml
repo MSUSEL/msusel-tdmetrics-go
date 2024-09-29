@@ -1,11 +1,11 @@
 {
   language: go,
   abstracts: [
-    { name: $get, signature: 3 }, # 1. func $get(index int)(value int)
-    { name: $get, signature: 4 }, # 2. func $get(index int)(value T<any>)
-    { name: $len, signature: 2 }, # 3. func $len() int
-    { name: $set, signature: 5 }, # 4. func $set(index int, value int)
-    { name: $set, signature: 6 }  # 5. func $set(index int, value T<any>)
+    { name: $get, signature: 3, exported: true }, # 1. func $get(index int)(value int)
+    { name: $get, signature: 4, exported: true }, # 2. func $get(index int)(value T<any>)
+    { name: $len, signature: 2, exported: true }, # 3. func $len() int
+    { name: $set, signature: 5, exported: true }, # 4. func $set(index int, value int)
+    { name: $set, signature: 6, exported: true }  # 5. func $set(index int, value T<any>)
   ],
   arguments: [
     {               type: basic1 }, # 1. <unnamed> int
@@ -19,16 +19,11 @@
   ],
   interfaceDecls: [
     { # 1. $builtin.List[T any]
-      name: List,
-      package: 1,
-      typeParams: [ 1 ],
-      interface: 3,
-      instances: [ 1 ]
+      name: List, package: 1, interface: 3, exported: true,
+      typeParams: [ 1 ], instances: [ 1 ]
     },
     { # 2. $builtin.any interface{}
-      name: any,
-      package: 1,
-      interface: 1
+      name: any, package: 1, interface: 1, exported: true
     }
   ],
   interfaceDescs: [
@@ -65,16 +60,21 @@
   ],
   metrics: [
     { # 1.
-      codeCount: 7, complexity: 2, indents: 6, lineCount: 7, loc: 5
+      codeCount: 7, complexity: 2, indents: 6, lineCount: 7, loc: 5,
+      reads: [ argument5, basic1 ], writes: [ basic1 ]
     },
     { # 2.
-      codeCount: 3, complexity: 1, indents: 1, lineCount: 3, loc: 13
+      codeCount: 3, complexity: 1, indents: 1, lineCount: 3, loc: 13,
+      reads: [ argument5, basic1 ]
     },
     { # 3.
-      codeCount: 3, complexity: 1, indents: 1, lineCount: 3, loc: 17
+      codeCount: 3, complexity: 1, indents: 1, lineCount: 3, loc: 17,
+      reads: [ argument5, basic1 ]
     },
     { # 4.
-      codeCount: 6, complexity: 1, indents: 4, lineCount: 6, loc: 21
+      codeCount: 6, complexity: 1, indents: 4, lineCount: 6, loc: 21,
+      sideEffect: true, invokes: [ method1, method2, method4 ],
+      reads: [ interfaceInst1 ], writes: [ interfaceInst1 ]
     }
   ],
   packages: [
