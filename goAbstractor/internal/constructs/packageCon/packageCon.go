@@ -146,6 +146,12 @@ func (p *packageImp) findMethod(name string) (constructs.Method, bool) {
 		First()
 }
 
+func (p *packageImp) findValues(name string) (constructs.Value, bool) {
+	return p.values.Enumerate().
+		Where(func(t constructs.Value) bool { return t.Name() == name }).
+		First()
+}
+
 func (p *packageImp) FindTypeDecl(name string) constructs.TypeDecl {
 	if v, ok := p.findInterfaceDecl(name); ok {
 		return v
@@ -163,8 +169,11 @@ func (p *packageImp) FindDecl(name string) constructs.Declaration {
 	if v, ok := p.findObject(name); ok {
 		return v
 	}
-	if m, ok := p.findMethod(name); ok {
-		return m
+	if v, ok := p.findMethod(name); ok {
+		return v
+	}
+	if v, ok := p.findValues(name); ok {
+		return v
 	}
 	return nil
 }

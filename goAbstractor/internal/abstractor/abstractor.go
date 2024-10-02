@@ -309,6 +309,7 @@ func (ab *abstractor) abstractFuncDecl(decl *ast.FuncDecl) {
 	loc := ab.proj.Locs().NewLoc(decl.Pos())
 	tp := ab.abstractTypeParams(decl.Type.TypeParams)
 
+	exported := decl.Name.IsExported()
 	name := decl.Name.Name
 	if name == `init` && len(recvName) <= 0 && sig.IsVacant() {
 		name = `init#` + strconv.Itoa(ab.curPkg.InitCount())
@@ -317,7 +318,7 @@ func (ab *abstractor) abstractFuncDecl(decl *ast.FuncDecl) {
 	ab.proj.NewMethod(constructs.MethodArgs{
 		Package:    ab.curPkg,
 		Name:       name,
-		Exported:   decl.Name.IsExported(),
+		Exported:   exported,
 		Location:   loc,
 		TypeParams: tp,
 		Signature:  sig,

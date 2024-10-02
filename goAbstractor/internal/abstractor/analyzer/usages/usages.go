@@ -119,6 +119,14 @@ func (ui *usagesImp) addWrite(c constructs.Construct, eff bool) {
 }
 
 func (ui *usagesImp) processNode(node ast.Node) {
+	//defer func() {
+	//	if r := recover(); r != nil {
+	//		panic(terror.New(`error processing node`, terror.RecoveredPanic(r)).
+	//			With(`pos`, ui.proj.Locs().FileSet().Position(node.Pos())).
+	//			WithType(`node`, node))
+	//	}
+	//}()
+
 	if utils.IsNil(node) {
 		return
 	}
@@ -327,6 +335,10 @@ func (ui *usagesImp) processIdent(id *ast.Ident) {
 			// Skip over `t` in `select `t := x.(type)` type definitions.
 			return
 		}
+		if _, ok := def.(*types.Label); ok {
+			// Skip over labels
+			return
+		}
 
 		ui.flushPendingToRead()
 		ui.pendingCon = ui.conv.ConvertType(def.Type())
@@ -366,9 +378,16 @@ func (ui *usagesImp) processIdent(id *ast.Ident) {
 
 	// Return basic types as usage.
 	if basic, ok := obj.Type().(*types.Basic); ok && basic.Kind() != types.Invalid {
-		ui.pendingCon = ui.proj.NewBasic(constructs.BasicArgs{
-			RealType: basic,
-		})
+		switch basic.Kind() {
+		case types.Complex64:
+			ui.pendingCon = ui.baker.BakeComplex64()
+		case types.Complex128:
+			ui.pendingCon = ui.baker.BakeComplex128()
+		default:
+			ui.pendingCon = ui.proj.NewBasic(constructs.BasicArgs{
+				RealType: basic,
+			})
+		}
 		ui.pendingEff = false
 		return
 	}
@@ -419,9 +438,18 @@ func (ui *usagesImp) processIndex(expr *ast.IndexExpr) {
 	ui.flushPendingToRead()
 
 	// Prepare the pending after the indexing.
+	ui.pendingEff = false
 	if elem, ok := ui.info.Types[expr]; ok {
+		if _, ok := elem.Type.(*types.Tuple); ok {
+			// The indexing returned a (value, ok) tuple.
+			// The results are probably used in a function parameter or an
+			// assignment so the pending construct doesn't need to be set.
+			ui.pendingCon = nil
+			return
+		}
+
+		// The indexing returned a single value.
 		ui.pendingCon = ui.conv.ConvertType(elem.Type)
-		ui.pendingEff = false
 	}
 }
 
@@ -473,19 +501,19 @@ func (ui *usagesImp) processSend(send *ast.SendStmt) {
 }
 
 func (ui *usagesImp) processSelector(sel *ast.SelectorExpr) {
-	selObj, ok := ui.info.Selections[sel]
-	if !ok {
-		panic(terror.New(`expected selection info but n found`).
-			With(`expr`, sel))
-	}
-
 	ui.processNode(sel.X)
 	if utils.IsNil(ui.pendingCon) {
-		ui.pendingEff = false
+		selObj, ok := ui.info.Selections[sel]
+		if !ok {
+			panic(terror.New(`expected selection info but not found`).
+				With(`expr`, sel))
+		}
+
 		// The left hand side is empty so this wasn't like `foo.Bar`,
 		// it was instead like `foo().Bar` where some expression results
 		// in a selection on a type. If a locally defined type then skip
 		// the select since it won't reference anything useful.
+		ui.pendingEff = false
 		if _, ok := ui.localDefs[selObj.Obj()]; ok {
 			ui.pendingCon = ui.conv.ConvertType(selObj.Type())
 			return

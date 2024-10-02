@@ -41,6 +41,8 @@ type convImp struct {
 
 func (c *convImp) ConvertType(t types.Type) constructs.TypeDesc {
 	switch t2 := t.(type) {
+	case *types.Alias:
+		return c.convertAlias(t2)
 	case *types.Array:
 		return c.convertArray(t2)
 	case *types.Basic:
@@ -70,6 +72,10 @@ func (c *convImp) ConvertType(t types.Type) constructs.TypeDesc {
 			WithType(`type`, t).
 			With(`value`, t))
 	}
+}
+
+func (c *convImp) convertAlias(t *types.Alias) constructs.TypeDesc {
+	return c.ConvertType(t.Rhs())
 }
 
 func (c *convImp) convertArray(t *types.Array) constructs.TypeDesc {

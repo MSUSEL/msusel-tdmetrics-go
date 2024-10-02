@@ -1,9 +1,9 @@
 {
   language: go,
   abstracts: [
-    { name: Age,  signature: 2 }, # 1. func Age() int
-    { name: Fly,  signature: 1 }, # 2. func Fly()
-    { name: Temp, signature: 3 }  # 3. func Temp() float
+    { name: Age,  signature: 2, exported: true }, # 1. func Age() int
+    { name: Fly,  signature: 1, exported: true }, # 2. func Fly()
+    { name: Temp, signature: 3, exported: true }  # 3. func Temp() float
   ],
   arguments: [
     { type: basic1 }, # 1. <unnamed> int
@@ -15,19 +15,19 @@
   ],
   interfaceDecls: [
     { # 1. main.Animal @ main.go:6
-      name: Animal, package: 1, interface: 1, loc: 6
+      name: Animal, package: 1, interface: 1, loc: 6, exported: true
     },
     { # 2. main.Bat @ main.go:20
-      name: Bat, package: 1, interface: 3, loc: 20
+      name: Bat, package: 1, interface: 3, loc: 20, exported: true
     },
     { # 3. main.Bird @ main.go:10
-      name: Bird, package: 1, interface: 2, loc: 10
+      name: Bird, package: 1, interface: 2, loc: 10, exported: true
     },
     { # 4. main.Filter @ main.go:25
-      name: Flier, package: 1, interface: 5, loc: 25
+      name: Flier, package: 1, interface: 5, loc: 25, exported: true
     },
     { # 5. main.Mammal @ main.go:15
-      name: Mammal, package: 1, interface: 4, loc: 15
+      name: Mammal, package: 1, interface: 4, loc: 15, exported: true
     }
   ],
   interfaceDescs: [
@@ -60,12 +60,23 @@
   ],
   methods: [
     { # 1. maim.main func()()
-      name: main, package: 1, signature: 1, loc: 33, metrics: 1
+      name: main, package: 1, signature: 1, loc: 33, metrics: 3
     }
   ],
   metrics: [
     { # 1.
-      codeCount: 3, complexity: 1, indents: 1, lineCount: 3, loc: 33
+      codeCount: 1, complexity: 1, lineCount: 1, loc: 30,
+      sideEffect: true, # TODO: Fix
+      writes: [ interfaceDecl3 ]
+    },
+    { # 2.
+      codeCount: 1, complexity: 1, lineCount: 1, loc: 31,
+      sideEffect: true, # TODO: Fix
+      writes: [ interfaceDecl2 ]
+    },
+    { # 3.
+      codeCount: 3, complexity: 1, indents: 1, lineCount: 3, loc: 33,
+      sideEffect: true # b/c println
     }
   ],
   packages: [
@@ -73,13 +84,24 @@
       path: command-line-arguments,
       name: main,
       interfaces: [ 1, 2, 3, 4, 5 ],
-      methods: [ 1 ]
+      methods:    [ 1 ],
+      values:     [ 1, 2 ]
     }
   ],
   signatures: [
     {},                 # 1. func()()
     { results: [ 1 ] }, # 2. func() float64
     { results: [ 2 ] }  # 3. func() int
+  ],
+  values: [
+    { # 1.
+      name: _, package: 1, loc: 30,
+      type: interfaceDecl1, metrics: 1
+    },
+    { # 2.
+      name: _, package: 1, loc: 31,
+      type: interfaceDecl4, metrics: 2
+    }
   ],
   locs: {
     '1': main.go

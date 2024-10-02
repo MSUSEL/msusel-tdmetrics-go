@@ -139,6 +139,7 @@ func (r *resolverImp) objectInter(obj constructs.Object) {
 		method := methods.Get(i)
 		abstracts[i] = r.proj.NewAbstract(constructs.AbstractArgs{
 			Name:      method.Name(),
+			Exported:  method.Exported(),
 			Signature: method.Signature(),
 		})
 	}
@@ -157,6 +158,7 @@ func (r *resolverImp) objectInstanceInter(objInst constructs.ObjectInst) {
 		mi := methodInsts.Get(i)
 		abstracts[i] = r.proj.NewAbstract(constructs.AbstractArgs{
 			Name:      mi.Generic().Name(),
+			Exported:  mi.Generic().Exported(),
 			Signature: mi.Resolved(),
 		})
 	}
