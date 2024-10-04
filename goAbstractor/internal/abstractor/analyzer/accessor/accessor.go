@@ -1,7 +1,6 @@
 package accessor
 
 import (
-	"fmt"
 	"go/ast"
 	"go/token"
 	"go/types"
@@ -73,7 +72,6 @@ func isSimpleFetch(info *types.Info, node ast.Node) bool {
 		default:
 			// Anything else (add, subtract, indexer, bitwise-Xor)
 			// means not a simple fetch.
-			fmt.Printf("usagesImp processNode unhandled (%[1]T) %[1]v\n", t)
 			valid = false
 		}
 		return valid
@@ -111,6 +109,7 @@ func isGetter(info *types.Info, funcType *ast.FuncType, funcBody *ast.BlockStmt)
 	return len(funcType.Params.List) == 0 &&
 		funcType.Results != nil &&
 		len(funcType.Results.List) == 1 &&
+		funcBody != nil &&
 		len(funcBody.List) == 1 &&
 		utils.Is(funcBody.List[0], &ret) &&
 		len(ret.Results) == 1 &&
@@ -124,6 +123,7 @@ func isSetter(info *types.Info, funcType *ast.FuncType, funcBody *ast.BlockStmt)
 	var assign *ast.AssignStmt
 	if len(funcType.Params.List) > 1 ||
 		funcType.Results != nil ||
+		funcBody == nil ||
 		len(funcBody.List) != 1 ||
 		!utils.Is(funcBody.List[0], &assign) ||
 		len(assign.Lhs) != 1 ||

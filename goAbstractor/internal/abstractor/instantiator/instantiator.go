@@ -78,6 +78,7 @@ func newInstantiator(proj constructs.Project, decl constructs.Declaration, insta
 	count := len(typeParams)
 	if count != len(instanceTypes) {
 		panic(terror.New(`the amount of type params must match the instance types`).
+			With(`declaration`, decl).
 			With(`type params`, count).
 			With(`instance types`, len(instanceTypes)))
 	}

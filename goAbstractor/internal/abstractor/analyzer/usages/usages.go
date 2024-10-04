@@ -169,7 +169,7 @@ func (ui *usagesImp) processNode(node ast.Node) {
 			// which nodes do not have custom handling on them yet.
 			// Not all nodes need custom handling but a bug might indicate
 			// one that doesn't have custom handling probably should.
-			//fmt.Printf("usagesImp processNode unhandled (%[1]T) %[1]v\n", t)
+			//fmt.Printf("usagesImp.processNode unhandled (%[1]T) %[1]v\n", t)
 			return true
 		}
 		return false
@@ -237,31 +237,56 @@ func (ui *usagesImp) processCall(call *ast.CallExpr) {
 }
 
 func (ui *usagesImp) processBuiltinCall(call *ast.CallExpr) {
+	ui.clearPending()
+	name := getBuiltinCallName(call)
+	switch name {
+	case `append`, `cap`, `complex`, `copy`, `imag`, `len`,
+		`make`, `max`, `min`, `new`, `real`, `recover`,
+		`unsafe.Alignof`, `unsafe.Offsetof`, `unsafe.Sizeof`,
+		`unsafe.String`, `unsafe.StringData`, `unsafe.Slice`,
+		`unsafe.SliceData`, `unsafe.Add`:
+		if typ, ok := ui.info.Types[call]; ok {
+			ui.pendingCon = ui.conv.ConvertType(typ.Type)
+			ui.pendingEff = false
+		}
+		return
+
+	case `clear`, `close`, `delete`, `panic`:
+		return
+
+	case `print`, `println`:
+		ui.usages.SideEffect = true
+		return
+
+	default:
+		panic(terror.New(`failed to get name of builtin function`).
+			With(`name`, name))
+	}
+}
+
+func getBuiltinCallName(call *ast.CallExpr) string {
 	exp := call.Fun
 	if p, ok := exp.(*ast.ParenExpr); ok {
 		exp = p.X
 	}
 	if id, ok := exp.(*ast.Ident); ok {
-		ui.clearPending()
-
-		switch id.Name {
-		case `append`, `cap`, `complex`, `copy`, `imag`, `len`,
-			`make`, `max`, `min`, `new`, `real`, `recover`:
-			if typ, ok := ui.info.Types[call]; ok {
-				ui.pendingCon = ui.conv.ConvertType(typ.Type)
-				ui.pendingEff = false
-			}
-			return
-
-		case `clear`, `close`, `delete`, `panic`:
-			return
-
-		case `print`, `println`:
-			ui.usages.SideEffect = true
-			return
-		}
+		return id.Name
 	}
-	panic(terror.New(`failed to get name of builtin function`).
+	if sel, ok := exp.(*ast.SelectorExpr); ok {
+		src := sel.X
+		if p, ok := src.(*ast.ParenExpr); ok {
+			src = p.X
+		}
+		if id, ok := src.(*ast.Ident); ok {
+			return id.Name + `.` + sel.Sel.Name
+		}
+		panic(terror.New(`unexpected expression in selection for name of builtin function`).
+			WithType(`type`, src).
+			With(`expression`, src).
+			With(`selection`, sel))
+	}
+	panic(terror.New(`unexpected expression for name of builtin function`).
+		WithType(`type`, exp).
 		With(`expression`, exp))
 }
 
