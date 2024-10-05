@@ -365,6 +365,8 @@ func (ui *usagesImp) processIdent(id *ast.Ident) {
 			return
 		}
 
+		// TODO: Handle when def.Type references something local
+
 		ui.flushPendingToRead()
 		ui.pendingCon = ui.conv.ConvertType(def.Type())
 		ui.addWrite(ui.pendingCon, false)

@@ -88,5 +88,5 @@ func (d *dce) primeAliveWithLibrary(entryPkg constructs.Package) {
 
 func (d *dce) updateAlive(c constructs.Construct) {
 
-	// TODO: Finnish
+	// TODO: Finish
 }

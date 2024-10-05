@@ -1505,6 +1505,52 @@ func Test_AssignInForLoop(t *testing.T) {
 		`}`)
 }
 
+func Test_InterFuncStruct(t *testing.T) {
+	tt := parseDecl(t, `foo`,
+		`func foo(x any) string {`,
+		`   type u struct {`,
+		`      name string`,
+		`   }`,
+		`	return x.(u).name`,
+		`}`)
+	tt.checkProj(
+		`{`,
+		// TODO: Finish, No tempReferences
+		`}`)
+}
+
+func Test_ReferencingAnInterFuncStruct(t *testing.T) {
+	tt := parseDecl(t, `foo`,
+		`func foo(x any) string {`,
+		`   type u struct {`,
+		`      name string`,
+		`   }`,
+		`   type t struct {`,
+		`      user u`,
+		`   }`,
+		`	return x.(t).user.name`,
+		`}`)
+	tt.checkProj(
+		`{`,
+		// TODO: Finish, No tempReferences
+		`}`)
+}
+
+func Test_SelfReferencingInterFuncStruct(t *testing.T) {
+	tt := parseDecl(t, `foo`,
+		`func foo(x any) string {`,
+		`   type person struct {`,
+		`      name string`,
+		`      child *person`,
+		`   }`,
+		`	return x.(person).name`,
+		`}`)
+	tt.checkProj(
+		`{`,
+		// TODO: Finish, No tempReferences
+		`}`)
+}
+
 type testTool struct {
 	t      *testing.T
 	proj   constructs.Project

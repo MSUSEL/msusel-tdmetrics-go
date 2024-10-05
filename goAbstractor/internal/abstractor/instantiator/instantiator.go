@@ -16,7 +16,7 @@ func InterfaceDecl(proj constructs.Project, realType types.Type, decl constructs
 	assert.ArgNotNil(`project`, proj)
 	assert.ArgNotNil(`interface decl`, decl)
 
-	i, existing, needsInstance := newInstantiator(proj, decl, instanceTypes)
+	i, existing, needsInstance := newInstantiator(proj, decl, decl.TypeParams(), instanceTypes)
 	if !needsInstance {
 		return decl
 	}
@@ -34,7 +34,7 @@ func Object(proj constructs.Project, realType types.Type, decl constructs.Object
 	assert.ArgNotNil(`project`, proj)
 	assert.ArgNotNil(`object`, decl)
 
-	i, existing, needsInstance := newInstantiator(proj, decl, instanceTypes)
+	i, existing, needsInstance := newInstantiator(proj, decl, decl.TypeParams(), instanceTypes)
 	if !needsInstance {
 		return decl
 	}
@@ -52,7 +52,12 @@ func Method(proj constructs.Project, decl constructs.Method, instanceTypes ...co
 	assert.ArgNotNil(`project`, proj)
 	assert.ArgNotNil(`method`, decl)
 
-	i, existing, needsInstance := newInstantiator(proj, decl, instanceTypes)
+	typeParams := decl.TypeParams()
+	if decl.HasReceiver() {
+		typeParams = decl.Receiver().TypeParams()
+	}
+
+	i, existing, needsInstance := newInstantiator(proj, decl, typeParams, instanceTypes)
 	if !needsInstance {
 		return nil
 	}
@@ -73,8 +78,7 @@ type instantiator struct {
 	conversion    map[constructs.TypeParam]constructs.TypeDesc
 }
 
-func newInstantiator(proj constructs.Project, decl constructs.Declaration, instanceTypes []constructs.TypeDesc) (*instantiator, constructs.Construct, bool) {
-	typeParams := decl.(interface{ TypeParams() []constructs.TypeParam }).TypeParams()
+func newInstantiator(proj constructs.Project, decl constructs.Declaration, typeParams []constructs.TypeParam, instanceTypes []constructs.TypeDesc) (*instantiator, constructs.Construct, bool) {
 	count := len(typeParams)
 	if count != len(instanceTypes) {
 		panic(terror.New(`the amount of type params must match the instance types`).
@@ -192,11 +196,13 @@ func (i *instantiator) Field(f constructs.Field) constructs.Field {
 }
 
 func (i *instantiator) InterfaceInst(in constructs.InterfaceInst) constructs.TypeDesc {
-	return i.typeDecl(in.Generic().(constructs.TypeDecl), in.InstanceTypes())
+	decl := in.Generic()
+	return i.typeDecl(decl, decl.TypeParams(), in.InstanceTypes())
 }
 
 func (i *instantiator) ObjectInst(in constructs.ObjectInst) constructs.TypeDesc {
-	return i.typeDecl(in.Generic().(constructs.TypeDecl), in.InstanceTypes())
+	decl := in.Generic()
+	return i.typeDecl(decl, decl.TypeParams(), in.InstanceTypes())
 }
 
 func (i *instantiator) InterfaceDecl(decl constructs.InterfaceDecl) constructs.TypeDesc {
@@ -204,7 +210,7 @@ func (i *instantiator) InterfaceDecl(decl constructs.InterfaceDecl) constructs.T
 	for i, tp := range decl.TypeParams() {
 		tps[i] = tp
 	}
-	return i.typeDecl(decl, tps)
+	return i.typeDecl(decl, decl.TypeParams(), tps)
 }
 
 func (i *instantiator) Object(decl constructs.Object) constructs.TypeDesc {
@@ -212,7 +218,7 @@ func (i *instantiator) Object(decl constructs.Object) constructs.TypeDesc {
 	for i, tp := range decl.TypeParams() {
 		tps[i] = tp
 	}
-	return i.typeDecl(decl, tps)
+	return i.typeDecl(decl, decl.TypeParams(), tps)
 }
 
 func (i *instantiator) getInstanceTypeChange(tps []constructs.TypeDesc) ([]constructs.TypeDesc, bool) {
@@ -240,7 +246,7 @@ func (i *instantiator) inProgress(decl constructs.TypeDecl, its []constructs.Typ
 	return false
 }
 
-func (i *instantiator) typeDecl(decl constructs.TypeDecl, its []constructs.TypeDesc) constructs.TypeDesc {
+func (i *instantiator) typeDecl(decl constructs.TypeDecl, tps []constructs.TypeParam, its []constructs.TypeDesc) constructs.TypeDesc {
 	its, anyReplaced := i.getInstanceTypeChange(its)
 	if !anyReplaced {
 		return decl
@@ -260,7 +266,7 @@ func (i *instantiator) typeDecl(decl constructs.TypeDecl, its []constructs.TypeD
 		})
 	}
 
-	i2, existing, _ := newInstantiator(i.proj, decl, its)
+	i2, existing, _ := newInstantiator(i.proj, decl, tps, its)
 	if !utils.IsNil(existing) {
 		return existing.(constructs.TypeDesc)
 	}
