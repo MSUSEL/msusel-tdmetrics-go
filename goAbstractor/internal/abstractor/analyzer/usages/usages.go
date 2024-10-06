@@ -1,6 +1,7 @@
 package usages
 
 import (
+	"fmt"
 	"go/ast"
 	"go/token"
 	"go/types"
@@ -79,6 +80,10 @@ func Calculate(info *types.Info, proj constructs.Project, curPkg constructs.Pack
 	return ui.usages
 }
 
+func (ui *usagesImp) pos(n ast.Node) token.Position {
+	return ui.proj.Locs().FileSet().Position(n.Pos())
+}
+
 func (ui *usagesImp) clearPending() {
 	ui.pendingCon = nil
 	ui.pendingEff = false
@@ -122,7 +127,7 @@ func (ui *usagesImp) processNode(node ast.Node) {
 	//defer func() {
 	//	if r := recover(); r != nil {
 	//		panic(terror.New(`error processing node`, terror.RecoveredPanic(r)).
-	//			With(`pos`, ui.proj.Locs().FileSet().Position(node.Pos())).
+	//			With(`pos`, ui.pos(node)).
 	//			WithType(`node`, node))
 	//	}
 	//}()
@@ -133,21 +138,33 @@ func (ui *usagesImp) processNode(node ast.Node) {
 	ast.Inspect(node, func(n ast.Node) bool {
 		switch t := n.(type) {
 		case nil:
-			return true
+			return true // Do Nothing
 		case *ast.AssignStmt:
 			ui.processAssign(t)
+		case *ast.BasicLit:
+			return true // Do Nothing
+		case *ast.BinaryExpr:
+			return true // Do Nothing
 		case *ast.BlockStmt:
 			ui.processBlock(t)
 		case *ast.CallExpr:
 			ui.processCall(t)
+		case *ast.CaseClause:
+			return true // Do Nothing
 		case *ast.CompositeLit:
 			ui.processCompositeLit(t)
+		case *ast.DeclStmt:
+			return true // Do Nothing
 		case *ast.FuncType:
 			ui.processFunc(t)
 		case *ast.FuncDecl:
 			ui.processFunDecl(t)
+		case *ast.GenDecl:
+			return true // Do Nothing
 		case *ast.Ident:
 			ui.processIdent(t)
+		case *ast.IfStmt:
+			return true // Do Nothing
 		case *ast.IncDecStmt:
 			ui.processIncDec(t)
 		case *ast.IndexExpr:
@@ -162,6 +179,12 @@ func (ui *usagesImp) processNode(node ast.Node) {
 			ui.processSend(t)
 		case *ast.SelectorExpr:
 			ui.processSelector(t)
+		case *ast.SwitchStmt:
+			return true // Do Nothing
+		case *ast.TypeAssertExpr:
+			ui.processTypeAssert(t)
+		case *ast.TypeSpec:
+			ui.processTypeSpec(t)
 		case *ast.ValueSpec:
 			ui.processValueSpec(t)
 		default:
@@ -169,7 +192,7 @@ func (ui *usagesImp) processNode(node ast.Node) {
 			// which nodes do not have custom handling on them yet.
 			// Not all nodes need custom handling but a bug might indicate
 			// one that doesn't have custom handling probably should.
-			//fmt.Printf("usagesImp.processNode unhandled (%[1]T) %[1]v\n", t)
+			fmt.Printf("usagesImp.processNode unhandled (%[1]T) %[1]v\n", t)
 			return true
 		}
 		return false
@@ -212,7 +235,8 @@ func (ui *usagesImp) processCall(call *ast.CallExpr) {
 	typ, ok := ui.info.Types[call.Fun]
 	if !ok {
 		panic(terror.New(`failed to find type info`).
-			With(`function`, call.Fun))
+			With(`function`, call.Fun).
+			With(`position`, ui.pos(call)))
 	}
 
 	// Check for explicit cast (conversion), e.g. `int(f.x)`
@@ -238,7 +262,7 @@ func (ui *usagesImp) processCall(call *ast.CallExpr) {
 
 func (ui *usagesImp) processBuiltinCall(call *ast.CallExpr) {
 	ui.clearPending()
-	name := getBuiltinCallName(call)
+	name := ui.getBuiltinCallName(call)
 	switch name {
 	case `append`, `cap`, `complex`, `copy`, `imag`, `len`,
 		`make`, `max`, `min`, `new`, `real`, `recover`,
@@ -260,11 +284,12 @@ func (ui *usagesImp) processBuiltinCall(call *ast.CallExpr) {
 
 	default:
 		panic(terror.New(`failed to get name of builtin function`).
-			With(`name`, name))
+			With(`name`, name).
+			With(`position`, ui.pos(call)))
 	}
 }
 
-func getBuiltinCallName(call *ast.CallExpr) string {
+func (ui *usagesImp) getBuiltinCallName(call *ast.CallExpr) string {
 	exp := call.Fun
 	if p, ok := exp.(*ast.ParenExpr); ok {
 		exp = p.X
@@ -283,11 +308,13 @@ func getBuiltinCallName(call *ast.CallExpr) string {
 		panic(terror.New(`unexpected expression in selection for name of builtin function`).
 			WithType(`type`, src).
 			With(`expression`, src).
-			With(`selection`, sel))
+			With(`selection`, sel).
+			With(`position`, ui.pos(call)))
 	}
 	panic(terror.New(`unexpected expression for name of builtin function`).
 		WithType(`type`, exp).
-		With(`expression`, exp))
+		With(`expression`, exp).
+		With(`position`, ui.pos(call)))
 }
 
 func (ui *usagesImp) processCompositeLit(comp *ast.CompositeLit) {
@@ -357,15 +384,13 @@ func (ui *usagesImp) processIdent(id *ast.Ident) {
 	// Check if this identifier is part of a local definition.
 	if def, ok := ui.info.Defs[id]; ok {
 		if def == nil {
-			// Skip over `t` in `select `t := x.(type)` type definitions.
+			// Skip over `t` in `select t := x.(type)` type definitions.
 			return
 		}
 		if _, ok := def.(*types.Label); ok {
 			// Skip over labels
 			return
 		}
-
-		// TODO: Handle when def.Type references something local
 
 		ui.flushPendingToRead()
 		ui.pendingCon = ui.conv.ConvertType(def.Type())
@@ -533,7 +558,8 @@ func (ui *usagesImp) processSelector(sel *ast.SelectorExpr) {
 		selObj, ok := ui.info.Selections[sel]
 		if !ok {
 			panic(terror.New(`expected selection info but not found`).
-				With(`expr`, sel))
+				With(`expr`, sel).
+				With(`position`, ui.pos(sel)))
 		}
 
 		// The left hand side is empty so this wasn't like `foo.Bar`,
@@ -554,6 +580,57 @@ func (ui *usagesImp) processSelector(sel *ast.SelectorExpr) {
 		Origin: ui.pendingCon,
 	})
 	ui.pendingEff = false
+}
+
+func (ui *usagesImp) processTypeAssert(exp *ast.TypeAssertExpr) {
+	ui.processNode(exp.X)
+	ui.flushPendingToRead()
+
+	t, ok := ui.info.Types[exp.Type]
+	if !ok {
+		panic(terror.New(`Expected a type in a TypeAssert for usages.`).
+			With(`node`, exp.Type).
+			With(`pos`, ui.pos(exp)))
+	}
+
+	if named, ok := t.Type.(*types.Named); ok {
+		if ld, ok := ui.localDefs[named.Obj()]; ok {
+			ui.pendingCon = ld
+			return
+		}
+	}
+	ui.pendingCon = ui.conv.ConvertType(t.Type)
+}
+
+func (ui *usagesImp) processTypeSpec(spec *ast.TypeSpec) {
+	def, ok := ui.info.Defs[spec.Name]
+	if !ok {
+		panic(terror.New(`Expected a local definition in TypeSpec for usages.`).
+			With(`name`, spec.Name).
+			With(`pos`, ui.pos(spec)))
+	}
+
+	ui.flushPendingToRead()
+	ui.localDefs[def] = nil
+	ast.Inspect(spec.Type, func(n ast.Node) bool {
+		switch t := n.(type) {
+		case nil:
+			return true
+		case *ast.TypeSpec:
+			ui.processTypeSpec(t)
+			return false
+		case *ast.Field:
+			if typ, ok := ui.info.Types[t.Type]; ok {
+				con := ui.conv.ConvertType(typ.Type)
+				for _, name := range t.Names {
+					if nd, ok := ui.info.Defs[name]; ok {
+						ui.localDefs[nd] = con
+					}
+				}
+			}
+		}
+		return true
+	})
 }
 
 func (ui *usagesImp) processValueSpec(spec *ast.ValueSpec) {

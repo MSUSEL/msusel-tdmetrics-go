@@ -1515,7 +1515,27 @@ func Test_InterFuncStruct(t *testing.T) {
 		`}`)
 	tt.checkProj(
 		`{`,
-		// TODO: Finish, No tempReferences
+		`  arguments: [`,
+		`    { name: x, type: interfaceDesc1 }`,
+		`  ],`,
+		`  basics: [ string ],`,
+		`  interfaceDescs: [`,
+		`    {}`,
+		`  ],`,
+		`  language: go,`,
+		`  metrics: [`,
+		`    {`,
+		`      loc:         1,`,
+		`      codeCount:   6,`,
+		`      complexity:  1,`,
+		`      indents:    13,`,
+		`      lineCount:   6,`,
+		`      reads: [ argument1, basic1 ]`,
+		`    }`,
+		`  ],`,
+		`  packages: [`,
+		`    { name: test, path: test }`,
+		`  ]`,
 		`}`)
 }
 
@@ -1550,6 +1570,9 @@ func Test_SelfReferencingInterFuncStruct(t *testing.T) {
 		// TODO: Finish, No tempReferences
 		`}`)
 }
+
+// TODO: Test an internal `interface { String() string }`.
+// TODO: Test nested internal structs.
 
 type testTool struct {
 	t      *testing.T
