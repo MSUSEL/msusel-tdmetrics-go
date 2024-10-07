@@ -173,13 +173,6 @@ func (c *convImp) convertNamed(t *types.Named) constructs.TypeDesc {
 	// Check if the reference can already be found.
 	_, typ, found := c.proj.FindType(pkgPath, name, false)
 	if !found {
-
-		if pkgPath == `test` && (name == `person` || name == `u`) { // TODO: Fix and Remove
-			u := t.Underlying()
-			_ = u
-			panic(`Boom!`)
-		}
-
 		// Otherwise, create a temporary reference that will be filled later.
 		return c.proj.NewTempReference(constructs.TempReferenceArgs{
 			RealType:      t,

@@ -1551,7 +1551,7 @@ func Test_ReferencingAnInterFuncStruct(t *testing.T) {
 		`	return x.(t).user.name`,
 		`}`)
 	tt.checkProj(
-		`{X`,
+		`{`,
 		`  arguments: [`,
 		`    { name: x, type: interfaceDesc1 }`,
 		`  ],`,
@@ -1587,7 +1587,27 @@ func Test_SelfReferencingInterFuncStruct(t *testing.T) {
 		`}`)
 	tt.checkProj(
 		`{`,
-		// TODO: Finish, No tempReferences
+		`  arguments: [`,
+		`    { name: x, type: interfaceDesc1 }`,
+		`  ],`,
+		`  basics: [ string ],`,
+		`  interfaceDescs: [`,
+		`    {}`,
+		`  ],`,
+		`  language: go,`,
+		`  metrics: [`,
+		`    {`,
+		`      codeCount:  7,`,
+		`      complexity: 1,`,
+		`      indents:   19,`,
+		`      lineCount:  7,`,
+		`      loc:        1,`,
+		`      reads: [ argument1, basic1 ]`,
+		`    }`,
+		`  ],`,
+		`  packages: [`,
+		`    { name: test, path: test }`,
+		`  ]`,
 		`}`)
 }
 

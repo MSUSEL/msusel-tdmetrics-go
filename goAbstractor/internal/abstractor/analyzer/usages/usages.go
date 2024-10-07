@@ -1,7 +1,6 @@
 package usages
 
 import (
-	"fmt"
 	"go/ast"
 	"go/token"
 	"go/types"
@@ -194,7 +193,7 @@ func (ui *usagesImp) processNode(node ast.Node) {
 			// which nodes do not have custom handling on them yet.
 			// Not all nodes need custom handling but a bug might indicate
 			// one that doesn't have custom handling probably should.
-			fmt.Printf("usagesImp.processNode unhandled (%[1]T) %[1]v\n", t)
+			//fmt.Printf("usagesImp.processNode unhandled (%[1]T) %[1]v\n", t)
 			return true
 		}
 		return false
@@ -655,8 +654,14 @@ func (ui *usagesImp) processTypeSpecField(f *ast.Field) {
 			continue
 		}
 
-		if to, ok := tv.Type.(*types.Named); ok {
-			con, conSet = ui.localDefs[to.Obj()]
+		for named := range whereType[*types.Named](walkType(tv.Type)) {
+			if con2, ok := ui.localDefs[named.Obj()]; ok {
+				if con2 == nil {
+					conSet = true
+					con = nil
+					break
+				}
+			}
 		}
 
 		if !conSet {
@@ -696,29 +701,65 @@ func whereType[T types.Type](it iter.Seq[types.Type]) iter.Seq[T] {
 func walkType(start types.Type) iter.Seq[types.Type] {
 	return func(yield func(types.Type) bool) {
 		s := stack.With(start)
+		touched := map[types.Type]struct{}{}
 		for !s.Empty() {
 			cur := s.Pop()
 			if utils.IsNil(cur) {
 				continue
 			}
+
 			if !yield(cur) {
 				return
 			}
+
+			if _, has := touched[cur]; has {
+				continue
+			}
+			touched[cur] = struct{}{}
+
 			switch t := cur.(type) {
 			case *types.Alias:
 				s.Push(t.Rhs())
+
 			case *types.Array:
 				s.Push(t.Elem())
+
 			case *types.Basic:
 				// Do Nothing
+
 			case *types.Chan:
 				s.Push(t.Elem())
+
 			case *types.Interface:
+				for i := range t.NumEmbeddeds() {
+					s.Push(t.EmbeddedType(i))
+				}
+				for i := range t.NumExplicitMethods() {
+					s.Push(t.ExplicitMethod(i).Type())
+				}
+
 			case *types.Map:
 				s.Push(t.Key(), t.Elem())
+
 			case *types.Named:
+				if tp := t.TypeParams(); tp != nil {
+					for i := range tp.Len() {
+						s.Push(tp.At(i))
+					}
+				}
+				if ta := t.TypeArgs(); ta != nil {
+					for i := range ta.Len() {
+						s.Push(ta.At(i))
+					}
+				}
+				s.Push(t.Underlying())
+				for i := range t.NumMethods() {
+					s.Push(t.Method(i).Type())
+				}
+
 			case *types.Pointer:
 				s.Push(t.Elem())
+
 			case *types.Signature:
 				if tp := t.TypeParams(); tp != nil {
 					for i := range tp.Len() {
@@ -726,22 +767,28 @@ func walkType(start types.Type) iter.Seq[types.Type] {
 					}
 				}
 				s.Push(t.Params(), t.Results())
+
 			case *types.Slice:
 				s.Push(t.Elem())
+
 			case *types.Struct:
 				for i := range t.NumFields() {
 					s.Push(t.Field(i).Type())
 				}
+
 			case *types.Tuple:
 				for i := range t.Len() {
 					s.Push(t.At(i).Type())
 				}
+
 			case *types.TypeParam:
 				s.Push(t.Constraint())
+
 			case *types.Union:
 				for i := range t.Len() {
 					s.Push(t.Term(i).Type())
 				}
+
 			default:
 				panic(terror.New(`encountered unhandled type during walk`).
 					WithType(`type`, t).
