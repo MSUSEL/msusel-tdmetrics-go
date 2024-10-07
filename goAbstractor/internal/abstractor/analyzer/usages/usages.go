@@ -5,9 +5,11 @@ import (
 	"go/ast"
 	"go/token"
 	"go/types"
+	"iter"
 
 	"github.com/Snow-Gremlin/goToolbox/collections"
 	"github.com/Snow-Gremlin/goToolbox/collections/sortedSet"
+	"github.com/Snow-Gremlin/goToolbox/collections/stack"
 	"github.com/Snow-Gremlin/goToolbox/terrors/terror"
 	"github.com/Snow-Gremlin/goToolbox/utils"
 
@@ -567,9 +569,15 @@ func (ui *usagesImp) processSelector(sel *ast.SelectorExpr) {
 		// in a selection on a type. If a locally defined type then skip
 		// the select since it won't reference anything useful.
 		ui.pendingEff = false
-		if _, ok := ui.localDefs[selObj.Obj()]; ok {
-			ui.pendingCon = ui.conv.ConvertType(selObj.Type())
+		if con, ok := ui.localDefs[selObj.Obj()]; ok {
+			ui.pendingCon = con
 			return
+		}
+		if named, ok := selObj.Recv().(*types.Named); ok {
+			if con, ok := ui.localDefs[named.Obj()]; ok {
+				ui.pendingCon = con
+				return
+			}
 		}
 		ui.pendingCon = ui.conv.ConvertType(selObj.Recv())
 	}
@@ -618,19 +626,46 @@ func (ui *usagesImp) processTypeSpec(spec *ast.TypeSpec) {
 			return true
 		case *ast.TypeSpec:
 			ui.processTypeSpec(t)
+			// skip children since they will have been
+			// processed by the above call to processTypeSpec.
 			return false
 		case *ast.Field:
-			if typ, ok := ui.info.Types[t.Type]; ok {
-				con := ui.conv.ConvertType(typ.Type)
-				for _, name := range t.Names {
-					if nd, ok := ui.info.Defs[name]; ok {
-						ui.localDefs[nd] = con
-					}
-				}
-			}
+			ui.processTypeSpecField(t)
 		}
 		return true
 	})
+}
+
+func (ui *usagesImp) processTypeSpecField(f *ast.Field) {
+	tv, ok := ui.info.Types[f.Type]
+	if !ok {
+		return
+	}
+
+	var conSet bool
+	var con constructs.Construct
+	for _, name := range f.Names {
+		nd, ok := ui.info.Defs[name]
+		if !ok {
+			continue
+		}
+
+		if conSet {
+			ui.localDefs[nd] = con
+			continue
+		}
+
+		if to, ok := tv.Type.(*types.Named); ok {
+			con, conSet = ui.localDefs[to.Obj()]
+		}
+
+		if !conSet {
+			con = ui.conv.ConvertType(tv.Type)
+			conSet = true
+		}
+
+		ui.localDefs[nd] = con
+	}
 }
 
 func (ui *usagesImp) processValueSpec(spec *ast.ValueSpec) {
@@ -645,5 +680,73 @@ func (ui *usagesImp) processValueSpec(spec *ast.ValueSpec) {
 	for _, value := range spec.Values {
 		ui.processNode(value)
 		ui.flushPendingToRead()
+	}
+}
+
+func whereType[T types.Type](it iter.Seq[types.Type]) iter.Seq[T] {
+	return func(yield func(T) bool) {
+		for t := range it {
+			if t2, ok := t.(T); ok && !yield(t2) {
+				return
+			}
+		}
+	}
+}
+
+func walkType(start types.Type) iter.Seq[types.Type] {
+	return func(yield func(types.Type) bool) {
+		s := stack.With(start)
+		for !s.Empty() {
+			cur := s.Pop()
+			if utils.IsNil(cur) {
+				continue
+			}
+			if !yield(cur) {
+				return
+			}
+			switch t := cur.(type) {
+			case *types.Alias:
+				s.Push(t.Rhs())
+			case *types.Array:
+				s.Push(t.Elem())
+			case *types.Basic:
+				// Do Nothing
+			case *types.Chan:
+				s.Push(t.Elem())
+			case *types.Interface:
+			case *types.Map:
+				s.Push(t.Key(), t.Elem())
+			case *types.Named:
+			case *types.Pointer:
+				s.Push(t.Elem())
+			case *types.Signature:
+				if tp := t.TypeParams(); tp != nil {
+					for i := range tp.Len() {
+						s.Push(tp.At(i))
+					}
+				}
+				s.Push(t.Params(), t.Results())
+			case *types.Slice:
+				s.Push(t.Elem())
+			case *types.Struct:
+				for i := range t.NumFields() {
+					s.Push(t.Field(i).Type())
+				}
+			case *types.Tuple:
+				for i := range t.Len() {
+					s.Push(t.At(i).Type())
+				}
+			case *types.TypeParam:
+				s.Push(t.Constraint())
+			case *types.Union:
+				for i := range t.Len() {
+					s.Push(t.Term(i).Type())
+				}
+			default:
+				panic(terror.New(`encountered unhandled type during walk`).
+					WithType(`type`, t).
+					With(`value`, t))
+			}
+		}
 	}
 }

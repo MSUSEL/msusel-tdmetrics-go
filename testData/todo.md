@@ -31,3 +31,9 @@
 
 - Test literal cast and call:
     `type foo int; func(f foo) bar { ⋯ }; foo(6).bar()`
+
+## Future
+
+- Change access to info to return information for any node as an object
+  with all the important features easily accessible. Simplify the duplicate
+  checks of types and node/type information using an interface for info.
