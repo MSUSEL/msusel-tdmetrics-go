@@ -1611,8 +1611,123 @@ func Test_SelfReferencingInterFuncStruct(t *testing.T) {
 		`}`)
 }
 
-// TODO: Test an internal `interface { String() string }`.
-// TODO: Test nested internal structs.
+func Test_ReferencingAnInterFuncNestedStruct(t *testing.T) {
+	tt := parseDecl(t, `foo`,
+		`func foo(x any) string {`,
+		`   type t struct {`,
+		`      user struct {`,
+		`         name string`,
+		`      }`,
+		`   }`,
+		`	return x.(t).user.name`,
+		`}`)
+	tt.checkProj(
+		`{`,
+		`  arguments: [`,
+		`    { name: x, type: interfaceDesc1 }`,
+		`  ],`,
+		`  basics: [ string ],`,
+		`  interfaceDescs: [`,
+		`    {}`,
+		`  ],`,
+		`  language: go,`,
+		`  metrics: [`,
+		`    {`,
+		`      codeCount:   8,`,
+		`      complexity:  1,`,
+		`      indents:    28,`,
+		`      lineCount:   8,`,
+		`      loc:         1,`,
+		`      reads: [ argument1, basic1 ]`,
+		`    }`,
+		`  ],`,
+		`  packages: [`,
+		`    { name: test, path: test }`,
+		`  ]`,
+		`}`)
+}
+
+func Test_ReferencingAnInterFuncNestedComplexStruct(t *testing.T) {
+	tt := parseDecl(t, `foo`,
+		`func foo(x any) string {`,
+		`   type t struct {`,
+		`      user []*struct {`,
+		`         name string`,
+		`      }`,
+		`   }`,
+		`	return x.(t).user[0].name`,
+		`}`)
+	tt.checkProj(
+		`{`,
+		// TODO: Finish
+		`}`)
+}
+
+func Test_ReferencingAnInterFuncUnnamedStruct(t *testing.T) {
+	tt := parseDecl(t, `foo`,
+		`func foo(x any) string {`,
+		`	return x.(struct {`,
+		`      age  int`,
+		`      name string`,
+		`   }).name`,
+		`}`)
+	tt.checkProj(
+		`{`,
+		// TODO: Finish
+		`}`)
+}
+
+func Test_InterFuncInterface(t *testing.T) {
+	tt := parseDecl(t, `foo`,
+		`func foo(x any) string {`,
+		`   type stringer interface { String() string }`,
+		`   if s, ok := x.(stringer); ok {`,
+		`      return s.String()`,
+		`   }`,
+		`	return "unnamed"`,
+		`}`)
+	tt.checkProj(
+		`{`,
+		// TODO: Fixed
+		`  arguments: [`,
+		`    { type: basic2 },`,
+		`    { name: x, type: interfaceDesc1 }`,
+		`  ],`,
+		`  basics: [ bool, string ],`,
+		`  interfaceDescs: [`,
+		`    {}`,
+		`  ],`,
+		`  language: go,`,
+		`  metrics: [`,
+		`    {`,
+		`      codeCount:   7,`,
+		`      complexity:  2,`,
+		`      indents:    16,`,
+		`      lineCount:   7,`,
+		`      loc:         1,`,
+		`      reads:  [ argument2, basic1 ],`,
+		`      writes: [ basic1 ]`,
+		`    }`,
+		`  ],`,
+		`  packages: [`,
+		`    { name: test, path: test }`,
+		`  ],`,
+		`}`)
+}
+
+func Test_InterFuncUnnamedInterface(t *testing.T) {
+	tt := parseDecl(t, `foo`,
+		`func foo(x any) string {`,
+		`   if s, ok := x.(interface { String() string }); ok {`,
+		`      return s.String()`,
+		`   }`,
+		`	return "unnamed"`,
+		`}`)
+	tt.checkProj(
+		`{`,
+		// TODO: Finish
+		`}`)
+}
 
 type testTool struct {
 	t      *testing.T

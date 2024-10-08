@@ -1,6 +1,7 @@
 package usages
 
 import (
+	"fmt"
 	"go/ast"
 	"go/token"
 	"go/types"
@@ -581,6 +582,11 @@ func (ui *usagesImp) processSelector(sel *ast.SelectorExpr) {
 		ui.pendingCon = ui.conv.ConvertType(selObj.Recv())
 	}
 
+	if sel.Sel.Name == `name` { // TODO: REMOVE
+		fmt.Printf("<<< (%[1]T) %#[1]v\n", ui.pendingCon)
+		//panic(`BOO!`)
+	}
+
 	ui.addRead(ui.pendingCon)
 	ui.pendingCon = ui.proj.NewSelection(constructs.SelectionArgs{
 		Name:   sel.Sel.Name,
@@ -623,13 +629,19 @@ func (ui *usagesImp) processTypeSpec(spec *ast.TypeSpec) {
 		switch t := n.(type) {
 		case nil:
 			return true
+
 		case *ast.TypeSpec:
 			ui.processTypeSpec(t)
 			// skip children since they will have been
 			// processed by the above call to processTypeSpec.
 			return false
+
 		case *ast.Field:
 			ui.processTypeSpecField(t)
+
+		default:
+			// The following print is useful for debugging.
+			//fmt.Printf("usagesImp.processTypeSpec unhandled (%[1]T) %#[1]v\n", t)
 		}
 		return true
 	})
@@ -654,13 +666,21 @@ func (ui *usagesImp) processTypeSpecField(f *ast.Field) {
 			continue
 		}
 
-		for named := range whereType[*types.Named](walkType(tv.Type)) {
-			if con2, ok := ui.localDefs[named.Obj()]; ok {
-				if con2 == nil {
+		for t := range walkType(tv.Type) {
+			fmt.Printf("---> (%[1]T) %#[1]v\n", t) // TODO: Remove
+			switch t2 := t.(type) {
+			case *types.Named:
+				if con2, ok := ui.localDefs[t2.Obj()]; ok && con2 == nil {
 					conSet = true
 					con = nil
-					break
 				}
+			case *types.Interface, *types.Struct:
+				// Skip complex types that act like unnamed local types.
+				conSet = true
+				con = nil
+			}
+			if conSet {
+				break
 			}
 		}
 
@@ -669,6 +689,7 @@ func (ui *usagesImp) processTypeSpecField(f *ast.Field) {
 			conSet = true
 		}
 
+		fmt.Printf(">>> (%[1]T) %#[1]v\n\t>> (%[2]T) %#[2]v\n\n", nd, con) // TODO: Remove
 		ui.localDefs[nd] = con
 	}
 }
@@ -685,16 +706,6 @@ func (ui *usagesImp) processValueSpec(spec *ast.ValueSpec) {
 	for _, value := range spec.Values {
 		ui.processNode(value)
 		ui.flushPendingToRead()
-	}
-}
-
-func whereType[T types.Type](it iter.Seq[types.Type]) iter.Seq[T] {
-	return func(yield func(T) bool) {
-		for t := range it {
-			if t2, ok := t.(T); ok && !yield(t2) {
-				return
-			}
-		}
 	}
 }
 
