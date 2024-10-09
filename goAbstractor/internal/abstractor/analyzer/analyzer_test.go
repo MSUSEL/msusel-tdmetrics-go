@@ -1368,6 +1368,92 @@ func Test_SelectOnUnnamedResultValue(t *testing.T) {
 		`}`)
 }
 
+func Test_LocalPointerDecl(t *testing.T) {
+	tt := parseDecl(t, `foo`,
+		`func foo(x int) int {`,
+		`	p := &x`,
+		`   return *p`,
+		`}`)
+	tt.checkProj(
+		`{`,
+		// TODO: Finish
+		`}`)
+}
+
+func Test_LocalMapDecl(t *testing.T) {
+	tt := parseDecl(t, `foo`,
+		`func foo(x int) int {`,
+		`	m := map[string]int { "x": x }`,
+		`   return m["x"]`,
+		`}`)
+	tt.checkProj(
+		`{`,
+		// TODO: Finish
+		`}`)
+}
+
+func Test_LocalSliceDecl(t *testing.T) {
+	tt := parseDecl(t, `foo`,
+		`func foo(x int) int {`,
+		`	s := []int { x }`,
+		`   return s[0]`,
+		`}`)
+	tt.checkProj(
+		`{`,
+		// TODO: Finish
+		`}`)
+}
+
+func Test_LocalChanDecl(t *testing.T) {
+	tt := parseDecl(t, `foo`,
+		`func foo(x int) int {`,
+		`	s := make(chan int, 1)`,
+		`	s <- x`,
+		`   return <- s`,
+		`}`)
+	tt.checkProj(
+		`{`,
+		// TODO: Finish
+		`}`)
+}
+
+func Test_LocalFuncDecl(t *testing.T) {
+	tt := parseDecl(t, `foo`,
+		`func foo(x int) int {`,
+		`	f := func() int { return x }`,
+		`   return f()`,
+		`}`)
+	tt.checkProj(
+		`{`,
+		// TODO: Finish
+		`}`)
+}
+
+func Test_LocalStructLit(t *testing.T) {
+	tt := parseDecl(t, `foo`,
+		`func foo(x int) int {`,
+		`	s := struct{ v int }{ v: x }`,
+		`   return s.v`,
+		`}`)
+	tt.checkProj(
+		`{`,
+		// TODO: Finish
+		`}`)
+}
+
+func Test_LocalStructDecl(t *testing.T) {
+	tt := parseDecl(t, `foo`,
+		`func foo(x int) int {`,
+		`	type s struct{ v int }`,
+		`	p := s{ v: x }`,
+		`   return p.v`,
+		`}`)
+	tt.checkProj(
+		`{`,
+		// TODO: Finish
+		`}`)
+}
+
 func Test_IncDec(t *testing.T) {
 	tt := parseDecl(t, `foo`,
 		`func foo(x int) int {`,
@@ -1375,6 +1461,37 @@ func Test_IncDec(t *testing.T) {
 		`	y := x`,
 		`	y--`,
 		`	return y`,
+		`}`)
+	tt.checkProj(
+		`{`,
+		`  arguments: [`,
+		`    { name: x, type: basic1 },`,
+		`  ],`,
+		`  basics: [ int ],`,
+		`  language: go,`,
+		`  metrics: [`,
+		`    {`,
+		`      loc:        1,`,
+		`      codeCount:  6,`,
+		`      complexity: 1,`,
+		`      indents:    4,`,
+		`      lineCount:  6,`,
+		`      reads:   [ argument1, basic1 ],`,
+		`      writes:  [ argument1, basic1 ]`,
+		`    }`,
+		`  ],`,
+		`  packages: [`,
+		`    { name: test, path: test }`,
+		`  ]`,
+		`}`)
+}
+
+func Test_IncDecLocals(t *testing.T) {
+	tt := parseDecl(t, `foo`,
+		`func foo(x int) int {`,
+		`	m := map[string]*int { "x": &x }`,
+		`   *m["x"]++`,
+		`	return x`,
 		`}`)
 	tt.checkProj(
 		`{`,

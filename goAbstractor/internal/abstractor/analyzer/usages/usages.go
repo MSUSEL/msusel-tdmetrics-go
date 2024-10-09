@@ -496,7 +496,13 @@ func (ui *usagesImp) processIncDec(stmt *ast.IncDecStmt) {
 	} else if typ, ok := ui.info.Types[stmt.X]; ok {
 		// Handle `*(func())++` where the increment is on
 		// the returned type, or `mapFoo["cat"]++`.
-		ui.addWrite(ui.conv.ConvertType(typ.Type), false)
+		if named, ok := typ.Type.(*types.Named); ok {
+			if con, ok := ui.isLocal(named.Obj()); ok {
+				ui.addWrite(con, false)
+			} else {
+				ui.addWrite(ui.conv.ConvertType(named), false)
+			}
+		}
 	}
 }
 
