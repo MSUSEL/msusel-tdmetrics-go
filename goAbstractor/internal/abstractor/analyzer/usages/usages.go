@@ -5,11 +5,9 @@ import (
 	"go/ast"
 	"go/token"
 	"go/types"
-	"iter"
 
 	"github.com/Snow-Gremlin/goToolbox/collections"
 	"github.com/Snow-Gremlin/goToolbox/collections/sortedSet"
-	"github.com/Snow-Gremlin/goToolbox/collections/stack"
 	"github.com/Snow-Gremlin/goToolbox/terrors/terror"
 	"github.com/Snow-Gremlin/goToolbox/utils"
 
@@ -42,15 +40,16 @@ type usagesImp struct {
 	curPkg constructs.Package
 	baker  baker.Baker
 	conv   converter.Converter
+	root   ast.Node
 
 	pendingEff bool
 	pendingCon constructs.Construct
 
-	localDefs map[types.Object]constructs.Construct
+	localVars map[types.Object]constructs.Construct
 	usages    Usages
 }
 
-func Calculate(info *types.Info, proj constructs.Project, curPkg constructs.Package, baker baker.Baker, conv converter.Converter, node ast.Node) Usages {
+func Calculate(info *types.Info, proj constructs.Project, curPkg constructs.Package, baker baker.Baker, conv converter.Converter, root ast.Node) Usages {
 	assert.ArgNotNil(`info`, info)
 	assert.ArgNotNil(`info.Defs`, info.Defs)
 	assert.ArgNotNil(`info.Instances`, info.Instances)
@@ -60,7 +59,7 @@ func Calculate(info *types.Info, proj constructs.Project, curPkg constructs.Pack
 	assert.ArgNotNil(`proj`, proj)
 	assert.ArgNotNil(`baker`, baker)
 	assert.ArgNotNil(`conv`, conv)
-	assert.ArgNotNil(`node`, node)
+	assert.ArgNotNil(`root`, root)
 	assert.ArgNotNil(`curPkg`, curPkg)
 
 	ui := &usagesImp{
@@ -69,15 +68,16 @@ func Calculate(info *types.Info, proj constructs.Project, curPkg constructs.Pack
 		curPkg: curPkg,
 		baker:  baker,
 		conv:   conv,
+		root:   root,
 
 		pendingEff: false,
 		pendingCon: nil,
 
-		localDefs: map[types.Object]constructs.Construct{},
+		localVars: map[types.Object]constructs.Construct{},
 		usages:    newUsage(),
 	}
 
-	ui.processNode(node)
+	ui.processNode(root)
 
 	return ui.usages
 }
@@ -123,6 +123,25 @@ func (ui *usagesImp) addWrite(c constructs.Construct, eff bool) {
 			ui.usages.SideEffect = true
 		}
 	}
+}
+
+// isLocal determines if the given object was defined within the root
+// node being analyzed for this usage. This includes types or variables
+// such as parameters, results, and type arguments.
+func (ui *usagesImp) isLocal(obj types.Object) (constructs.Construct, bool) {
+	fmt.Printf(">>> isLocal: %#v\n", obj)
+	if con, ok := ui.localVars[obj]; ok {
+		fmt.Printf("   >> localVars: %#v\n\n", con)
+		return con, true
+	}
+
+	if ui.root.Pos() <= obj.Pos() && obj.Pos() <= ui.root.End() {
+		fmt.Printf("   >> localType: %d <= %d <= %d\n\n", ui.root.Pos(), obj.Pos(), ui.root.End())
+		return nil, true
+	}
+
+	fmt.Printf("   >> notLocal\n\n")
+	return nil, false
 }
 
 func (ui *usagesImp) processNode(node ast.Node) {
@@ -345,7 +364,7 @@ func (ui *usagesImp) addArguments(args []*ast.Field) {
 	for _, arg := range args {
 		for _, id := range arg.Names {
 			if obj := ui.info.Defs[id]; obj != nil {
-				ui.localDefs[obj] = ui.proj.NewArgument(constructs.ArgumentArgs{
+				ui.localVars[obj] = ui.proj.NewArgument(constructs.ArgumentArgs{
 					Name: obj.Name(),
 					Type: ui.conv.ConvertType(obj.Type()),
 				})
@@ -358,7 +377,7 @@ func (ui *usagesImp) addTypeParam(tps []*ast.Field) {
 	for _, tp := range tps {
 		for _, id := range tp.Names {
 			if obj := ui.info.Defs[id]; obj != nil {
-				ui.localDefs[obj] = ui.proj.NewTypeParam(constructs.TypeParamArgs{
+				ui.localVars[obj] = ui.proj.NewTypeParam(constructs.TypeParamArgs{
 					Name: obj.Name(),
 					Type: ui.conv.ConvertType(obj.Type()),
 				})
@@ -372,7 +391,7 @@ func (ui *usagesImp) processFunDecl(fn *ast.FuncDecl) {
 		for _, recv := range fn.Recv.List {
 			for _, id := range recv.Names {
 				if obj := ui.info.Defs[id]; obj != nil {
-					ui.localDefs[obj] = ui.conv.ConvertType(obj.Type())
+					ui.localVars[obj] = ui.conv.ConvertType(obj.Type())
 				}
 			}
 		}
@@ -397,7 +416,7 @@ func (ui *usagesImp) processIdent(id *ast.Ident) {
 		ui.flushPendingToRead()
 		ui.pendingCon = ui.conv.ConvertType(def.Type())
 		ui.addWrite(ui.pendingCon, false)
-		ui.localDefs[def] = ui.pendingCon
+		ui.localVars[def] = ui.pendingCon
 		return
 	}
 
@@ -414,8 +433,8 @@ func (ui *usagesImp) processIdent(id *ast.Ident) {
 		return
 	}
 
-	// Check if defined earlier and reuse defined type.
-	if usage, ok := ui.localDefs[obj]; ok {
+	// Check if variable or type was defined within root and reuse type.
+	if usage, ok := ui.isLocal(obj); ok {
 		ui.flushPendingToRead()
 		ui.pendingCon = usage
 		return
@@ -569,12 +588,13 @@ func (ui *usagesImp) processSelector(sel *ast.SelectorExpr) {
 		// in a selection on a type. If a locally defined type then skip
 		// the select since it won't reference anything useful.
 		ui.pendingEff = false
-		if con, ok := ui.localDefs[selObj.Obj()]; ok {
+		if con, ok := ui.isLocal(selObj.Obj()); ok {
 			ui.pendingCon = con
 			return
 		}
+
 		if named, ok := selObj.Recv().(*types.Named); ok {
-			if con, ok := ui.localDefs[named.Obj()]; ok {
+			if con, ok := ui.isLocal(named.Obj()); ok {
 				ui.pendingCon = con
 				return
 			}
@@ -607,7 +627,7 @@ func (ui *usagesImp) processTypeAssert(exp *ast.TypeAssertExpr) {
 	}
 
 	if named, ok := t.Type.(*types.Named); ok {
-		if ld, ok := ui.localDefs[named.Obj()]; ok {
+		if ld, ok := ui.isLocal(named.Obj()); ok {
 			ui.pendingCon = ld
 			return
 		}
@@ -615,83 +635,9 @@ func (ui *usagesImp) processTypeAssert(exp *ast.TypeAssertExpr) {
 	ui.pendingCon = ui.conv.ConvertType(t.Type)
 }
 
-func (ui *usagesImp) processTypeSpec(spec *ast.TypeSpec) {
-	def, ok := ui.info.Defs[spec.Name]
-	if !ok {
-		panic(terror.New(`Expected a local definition in TypeSpec for usages.`).
-			With(`name`, spec.Name).
-			With(`pos`, ui.pos(spec)))
-	}
-
+func (ui *usagesImp) processTypeSpec(_ *ast.TypeSpec) {
+	// A local type is being defined, skip the definition.
 	ui.flushPendingToRead()
-	ui.localDefs[def] = nil
-	ast.Inspect(spec.Type, func(n ast.Node) bool {
-		switch t := n.(type) {
-		case nil:
-			return true
-
-		case *ast.TypeSpec:
-			ui.processTypeSpec(t)
-			// skip children since they will have been
-			// processed by the above call to processTypeSpec.
-			return false
-
-		case *ast.Field:
-			ui.processTypeSpecField(t)
-
-		default:
-			// The following print is useful for debugging.
-			//fmt.Printf("usagesImp.processTypeSpec unhandled (%[1]T) %#[1]v\n", t)
-		}
-		return true
-	})
-}
-
-func (ui *usagesImp) processTypeSpecField(f *ast.Field) {
-	tv, ok := ui.info.Types[f.Type]
-	if !ok {
-		return
-	}
-
-	var conSet bool
-	var con constructs.Construct
-	for _, name := range f.Names {
-		nd, ok := ui.info.Defs[name]
-		if !ok {
-			continue
-		}
-
-		if conSet {
-			ui.localDefs[nd] = con
-			continue
-		}
-
-		for t := range walkType(tv.Type) {
-			fmt.Printf("---> (%[1]T) %#[1]v\n", t) // TODO: Remove
-			switch t2 := t.(type) {
-			case *types.Named:
-				if con2, ok := ui.localDefs[t2.Obj()]; ok && con2 == nil {
-					conSet = true
-					con = nil
-				}
-			case *types.Interface, *types.Struct:
-				// Skip complex types that act like unnamed local types.
-				conSet = true
-				con = nil
-			}
-			if conSet {
-				break
-			}
-		}
-
-		if !conSet {
-			con = ui.conv.ConvertType(tv.Type)
-			conSet = true
-		}
-
-		fmt.Printf(">>> (%[1]T) %#[1]v\n\t>> (%[2]T) %#[2]v\n\n", nd, con) // TODO: Remove
-		ui.localDefs[nd] = con
-	}
 }
 
 func (ui *usagesImp) processValueSpec(spec *ast.ValueSpec) {
@@ -706,105 +652,5 @@ func (ui *usagesImp) processValueSpec(spec *ast.ValueSpec) {
 	for _, value := range spec.Values {
 		ui.processNode(value)
 		ui.flushPendingToRead()
-	}
-}
-
-func walkType(start types.Type) iter.Seq[types.Type] {
-	return func(yield func(types.Type) bool) {
-		s := stack.With(start)
-		touched := map[types.Type]struct{}{}
-		for !s.Empty() {
-			cur := s.Pop()
-			if utils.IsNil(cur) {
-				continue
-			}
-
-			if !yield(cur) {
-				return
-			}
-
-			if _, has := touched[cur]; has {
-				continue
-			}
-			touched[cur] = struct{}{}
-
-			switch t := cur.(type) {
-			case *types.Alias:
-				s.Push(t.Rhs())
-
-			case *types.Array:
-				s.Push(t.Elem())
-
-			case *types.Basic:
-				// Do Nothing
-
-			case *types.Chan:
-				s.Push(t.Elem())
-
-			case *types.Interface:
-				for i := range t.NumEmbeddeds() {
-					s.Push(t.EmbeddedType(i))
-				}
-				for i := range t.NumExplicitMethods() {
-					s.Push(t.ExplicitMethod(i).Type())
-				}
-
-			case *types.Map:
-				s.Push(t.Key(), t.Elem())
-
-			case *types.Named:
-				if tp := t.TypeParams(); tp != nil {
-					for i := range tp.Len() {
-						s.Push(tp.At(i))
-					}
-				}
-				if ta := t.TypeArgs(); ta != nil {
-					for i := range ta.Len() {
-						s.Push(ta.At(i))
-					}
-				}
-				s.Push(t.Underlying())
-				for i := range t.NumMethods() {
-					s.Push(t.Method(i).Type())
-				}
-
-			case *types.Pointer:
-				s.Push(t.Elem())
-
-			case *types.Signature:
-				if tp := t.TypeParams(); tp != nil {
-					for i := range tp.Len() {
-						s.Push(tp.At(i))
-					}
-				}
-				s.Push(t.Params(), t.Results())
-
-			case *types.Slice:
-				s.Push(t.Elem())
-
-			case *types.Struct:
-				for i := range t.NumFields() {
-					s.Push(t.Field(i).Type())
-				}
-
-			case *types.Tuple:
-				for i := range t.Len() {
-					s.Push(t.At(i).Type())
-				}
-
-			case *types.TypeParam:
-				s.Push(t.Constraint())
-
-			case *types.Union:
-				for i := range t.Len() {
-					s.Push(t.Term(i).Type())
-				}
-
-			default:
-				panic(terror.New(`encountered unhandled type during walk`).
-					WithType(`type`, t).
-					With(`value`, t))
-			}
-		}
 	}
 }
