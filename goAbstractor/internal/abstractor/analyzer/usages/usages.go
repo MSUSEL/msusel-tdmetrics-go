@@ -1,6 +1,7 @@
 package usages
 
 import (
+	"fmt"
 	"go/ast"
 	"go/token"
 	"go/types"
@@ -21,6 +22,10 @@ type Usages struct {
 	Writes  collections.SortedSet[constructs.Construct]
 	Invokes collections.SortedSet[constructs.Construct]
 
+	// SideEffect indicates that the usage definitely has a side effect
+	// when true, however, false only means it isn't known yet.
+	// Any invokes of another method that has a side effect means this
+	// has a side effect too but will not be determined yet.
 	SideEffect bool
 }
 
@@ -59,8 +64,11 @@ func Calculate(info *types.Info, proj constructs.Project, curPkg constructs.Pack
 	assert.ArgNotNil(`root`, root)
 	assert.ArgNotNil(`curPkg`, curPkg)
 
+	fSet := proj.Locs().FileSet()
+	assert.ArgNotNil(`fSet`, fSet)
+
 	ui := &usagesImp{
-		fSet:    curPkg.Source().Fset,
+		fSet:    fSet,
 		info:    info,
 		proj:    proj,
 		curPkg:  curPkg,
@@ -71,14 +79,17 @@ func Calculate(info *types.Info, proj constructs.Project, curPkg constructs.Pack
 		pending: nil,
 	}
 
-	//ast.Print(proj.Locs().FileSet(), root)
 	ui.processNode(root)
 
 	return ui.usages
 }
 
 func (ui *usagesImp) pos(pr posReader) token.Position {
-	return ui.fSet.Position(pr.Pos())
+	pos := token.NoPos
+	if !utils.IsNil(pr) {
+		pos = pr.Pos()
+	}
+	return ui.fSet.Position(pos)
 }
 
 func (ui *usagesImp) hasPending() bool {
@@ -87,20 +98,62 @@ func (ui *usagesImp) hasPending() bool {
 
 func (ui *usagesImp) setPendingConstruct(c constructs.Construct) {
 	ui.flushPendingToRead()
+	fmt.Printf("  - PendingCon: %v\n", c)
 	ui.pending = c
 }
 
 func (ui *usagesImp) setPendingType(t types.Type) {
 	ui.flushPendingToRead()
+	fmt.Printf("  - PendingType: %v\n", t)
+
 	if utils.IsNil(t) {
+		fmt.Printf("  + PendingType nil\n")
 		return
 	}
-	if named, ok := stripNamed(t); ok {
-		if isLocal(ui.root, named.Obj()) {
-			return
-		}
+
+	if isLocalType(ui.root, t) {
+		fmt.Printf("  + PendingType local\n")
+		return
 	}
+
 	ui.pending = ui.conv.ConvertType(t)
+}
+
+func (ui *usagesImp) setPendingObject(o types.Object) {
+	ui.flushPendingToRead()
+	fmt.Printf("  - PendingObject: %v\n", o)
+
+	if utils.IsNil(o) {
+		fmt.Printf("  + PendingObject nil\n")
+		return
+	}
+
+	if _, ok := o.(*types.Label); ok {
+		// Skip over labels
+		fmt.Printf("  > label\n")
+		return
+	}
+
+	if isLocal(ui.root, o) {
+		ui.setPendingType(o.Type())
+		return
+	}
+
+	pkgPath := ``
+	if o.Pkg() != nil {
+		pkgPath = o.Pkg().Path()
+	}
+
+	var instType []constructs.TypeDesc
+	if named, ok := stripNamed(o.Type()); ok {
+		instType = ui.conv.ConvertInstanceTypes(named.TypeArgs())
+	}
+
+	ui.pending = ui.proj.NewTempDeclRef(constructs.TempDeclRefArgs{
+		PackagePath:   pkgPath,
+		Name:          o.Name(),
+		InstanceTypes: instType,
+	})
 }
 
 func (ui *usagesImp) clearPending() {
@@ -134,6 +187,7 @@ func (ui *usagesImp) flushPendingToInvoke() {
 // addRead adds the given construct as a read usage.
 func (ui *usagesImp) addRead(c constructs.Construct) {
 	if !utils.IsNil(c) {
+		fmt.Printf("  + Reads: %v\n", c)
 		ui.usages.Reads.Add(c)
 	}
 }
@@ -141,6 +195,7 @@ func (ui *usagesImp) addRead(c constructs.Construct) {
 // addWrite adds the given construct as a write usage.
 func (ui *usagesImp) addWrite(c constructs.Construct) {
 	if !utils.IsNil(c) {
+		fmt.Printf("  + Write: %v\n", c)
 		ui.usages.Writes.Add(c)
 	}
 }
@@ -148,6 +203,7 @@ func (ui *usagesImp) addWrite(c constructs.Construct) {
 // addInvoke adds the given construct as an invoke usage.
 func (ui *usagesImp) addInvoke(c constructs.Construct) {
 	if !utils.IsNil(c) {
+		fmt.Printf("  + Invoke: %v\n", c)
 		ui.usages.Invokes.Add(c)
 	}
 }
@@ -306,21 +362,12 @@ func (ui *usagesImp) processCompositeLit(comp *ast.CompositeLit) {
 }
 
 func (ui *usagesImp) processIdent(id *ast.Ident) {
+	fmt.Printf(">>> processIdent: %v @ %s\n", id, ui.pos(id))
+
 	// Check if this identifier is part of a definition.
 	if def, ok := ui.info.Defs[id]; ok {
-		if def == nil {
-			// Skip over `t` in `select t := x.(type)` type definitions.
-			return
-		}
-		if _, ok := def.(*types.Label); ok {
-			// Skip over labels
-			return
-		}
-
-		// If the definition isn't of a local type the it has been written.
-		// Add to write and leave the pending so it can also be used in
-		// read or invoke.
-		ui.setPendingType(def.Type())
+		fmt.Printf("  > def object: %v\n", def)
+		ui.setPendingObject(def)
 		ui.addWrite(ui.pending)
 		return
 	}
@@ -328,6 +375,7 @@ func (ui *usagesImp) processIdent(id *ast.Ident) {
 	// Check if the identifier is being used.
 	obj, ok := ui.info.Uses[id]
 	if !ok {
+		fmt.Printf("  > no uses\n")
 		return
 	}
 
@@ -335,17 +383,14 @@ func (ui *usagesImp) processIdent(id *ast.Ident) {
 	// https://pkg.go.dev/builtin#pkg-constants
 	switch obj.Id() {
 	case `_.true`, `_.false`, `_.nil`, `_.iota`:
+		fmt.Printf("  > build-in constants: %v\n", obj.Id())
 		return
 	}
 
-	// Check if object was defined within root and reuse type.
-	if ok := isLocal(ui.root, obj); ok {
-		return
-	}
-
-	// Return builtin type.
+	// Return built-in type.
 	if obj.Pkg() == nil {
 		if typ := ui.baker.TypeByName(obj.Name()); !utils.IsNil(typ) {
+			fmt.Printf("  > build-in type: %v\n", typ)
 			ui.setPendingConstruct(typ)
 			return
 		}
@@ -353,6 +398,7 @@ func (ui *usagesImp) processIdent(id *ast.Ident) {
 
 	// Return basic types as usage.
 	if basic, ok := obj.Type().(*types.Basic); ok && basic.Kind() != types.Invalid {
+		fmt.Printf("  > basic type: %v\n", basic)
 		switch basic.Kind() {
 		case types.Complex64:
 			ui.setPendingConstruct(ui.baker.BakeComplex64())
@@ -366,22 +412,8 @@ func (ui *usagesImp) processIdent(id *ast.Ident) {
 		return
 	}
 
-	// Create a temp reference for this object.
-	pkgPath := ``
-	if obj.Pkg() != nil {
-		pkgPath = obj.Pkg().Path()
-	}
-
-	var instType []constructs.TypeDesc
-	if named, ok := stripNamed(obj.Type()); ok {
-		instType = ui.conv.ConvertInstanceTypes(named.TypeArgs())
-	}
-
-	ui.setPendingConstruct(ui.proj.NewTempDeclRef(constructs.TempDeclRefArgs{
-		PackagePath:   pkgPath,
-		Name:          obj.Name(),
-		InstanceTypes: instType,
-	}))
+	fmt.Printf("  > object: %v\n", obj)
+	ui.setPendingObject(obj)
 }
 
 func (ui *usagesImp) processIncDec(stmt *ast.IncDecStmt) {
@@ -464,8 +496,10 @@ func (ui *usagesImp) processSend(send *ast.SendStmt) {
 }
 
 func (ui *usagesImp) processSelector(sel *ast.SelectorExpr) {
+	fmt.Printf(">>> processSelector: %v @ %s\n", sel, ui.pos(sel))
 	ui.processNode(sel.X)
 	if ui.hasPending() {
+		fmt.Printf("  > pending: %v\n", ui.pending)
 		ui.setPendingConstruct(ui.proj.NewSelection(constructs.SelectionArgs{
 			Name:   sel.Sel.Name,
 			Origin: ui.pending,
@@ -479,6 +513,7 @@ func (ui *usagesImp) processSelector(sel *ast.SelectorExpr) {
 			With(`expr`, sel).
 			With(`position`, ui.pos(sel)))
 	}
+	fmt.Printf("  > selObj: %v\n", selObj)
 
 	// The left hand side is empty so this wasn't like `foo.Bar`,
 	// it was instead like `foo().Bar` where some expression results

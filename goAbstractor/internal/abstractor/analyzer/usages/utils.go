@@ -17,6 +17,11 @@ func isLocal(root ast.Node, query posReader) bool {
 	return root.Pos() <= pos && pos <= root.End()
 }
 
+func isLocalType(root ast.Node, t types.Type) bool {
+	named, ok := stripNamed(t)
+	return ok && isLocal(root, named.Obj())
+}
+
 func unparen(node ast.Node) ast.Node {
 	if p, ok := node.(*ast.ParenExpr); ok {
 		return p.X
