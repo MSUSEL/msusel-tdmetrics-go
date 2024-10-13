@@ -4,8 +4,11 @@ import (
 	"go/ast"
 	"go/token"
 	"go/types"
+	"iter"
 
+	"github.com/Snow-Gremlin/goToolbox/collections/stack"
 	"github.com/Snow-Gremlin/goToolbox/terrors/terror"
+	"github.com/Snow-Gremlin/goToolbox/utils"
 )
 
 type posReader interface {
@@ -17,11 +20,6 @@ func isLocal(root ast.Node, query posReader) bool {
 	return root.Pos() <= pos && pos <= root.End()
 }
 
-func isLocalType(root ast.Node, t types.Type) bool {
-	named, ok := stripNamed(t)
-	return ok && isLocal(root, named.Obj())
-}
-
 func unparen(node ast.Node) ast.Node {
 	if p, ok := node.(*ast.ParenExpr); ok {
 		return p.X
@@ -29,12 +27,19 @@ func unparen(node ast.Node) ast.Node {
 	return node
 }
 
-func stripNamed(typ types.Type) (*types.Named, bool) {
-	if pointer, ok := typ.(*types.Pointer); ok {
-		typ = pointer.Elem()
+func getPkgPath(o types.Object) string {
+	if o.Pkg() != nil {
+		return o.Pkg().Path()
 	}
-	named, ok := typ.(*types.Named)
-	return named, ok
+	return ``
+}
+
+func getInstTypes(o types.Object) *types.TypeList {
+	var instType *types.TypeList
+	if named := getNamed(o.Type()); named != nil {
+		instType = named.TypeArgs()
+	}
+	return instType
 }
 
 func getName(fSet *token.FileSet, expr ast.Expr) string {
@@ -57,4 +62,114 @@ func getName(fSet *token.FileSet, expr ast.Expr) string {
 		WithType(`type`, exp).
 		With(`expression`, exp).
 		With(`position`, fSet.Position(expr.Pos())))
+}
+
+func getNamed(t types.Type) *types.Named {
+	named, _ := last(where[*types.Named](walkType(t)))
+	return named
+}
+
+func last[T any](it iter.Seq[T]) (T, bool) {
+	var found bool
+	var value T
+	for v := range it {
+		value = v
+		found = true
+	}
+	return value, found
+}
+
+func where[TOut, TIn any](it iter.Seq[TIn]) iter.Seq[TOut] {
+	return func(yield func(TOut) bool) {
+		for v := range it {
+			if out, ok := any(v).(TOut); ok {
+				if !yield(out) {
+					return
+				}
+			}
+		}
+	}
+}
+
+func walkType(start types.Type) iter.Seq[types.Type] {
+	return func(yield func(types.Type) bool) {
+		s := stack.With(start)
+		touched := map[types.Type]struct{}{}
+		for !s.Empty() {
+			cur := s.Pop()
+			if utils.IsNil(cur) {
+				continue
+			}
+			if !yield(cur) {
+				return
+			}
+			if _, has := touched[cur]; has {
+				continue
+			}
+			touched[cur] = struct{}{}
+			switch t := cur.(type) {
+			case *types.Alias:
+				s.Push(t.Rhs())
+			case *types.Array:
+				s.Push(t.Elem())
+			case *types.Basic:
+				// Do Nothing
+			case *types.Chan:
+				s.Push(t.Elem())
+			case *types.Interface:
+				for i := range t.NumEmbeddeds() {
+					s.Push(t.EmbeddedType(i))
+				}
+				for i := range t.NumExplicitMethods() {
+					s.Push(t.ExplicitMethod(i).Type())
+				}
+			case *types.Map:
+				s.Push(t.Key(), t.Elem())
+			case *types.Named:
+				if tp := t.TypeParams(); tp != nil {
+					for i := range tp.Len() {
+						s.Push(tp.At(i))
+					}
+				}
+				if ta := t.TypeArgs(); ta != nil {
+					for i := range ta.Len() {
+						s.Push(ta.At(i))
+					}
+				}
+				s.Push(t.Underlying())
+				for i := range t.NumMethods() {
+					s.Push(t.Method(i).Type())
+				}
+			case *types.Pointer:
+				s.Push(t.Elem())
+			case *types.Signature:
+				if tp := t.TypeParams(); tp != nil {
+					for i := range tp.Len() {
+						s.Push(tp.At(i))
+					}
+				}
+				s.Push(t.Params(), t.Results())
+			case *types.Slice:
+				s.Push(t.Elem())
+			case *types.Struct:
+				for i := range t.NumFields() {
+					s.Push(t.Field(i).Type())
+				}
+			case *types.Tuple:
+				for i := range t.Len() {
+					s.Push(t.At(i).Type())
+				}
+			case *types.TypeParam:
+				s.Push(t.Constraint())
+			case *types.Union:
+				for i := range t.Len() {
+					s.Push(t.Term(i).Type())
+				}
+			default:
+				panic(terror.New(`encountered unhandled type during walk`).
+					WithType(`type`, t).
+					With(`value`, t))
+			}
+		}
+	}
 }

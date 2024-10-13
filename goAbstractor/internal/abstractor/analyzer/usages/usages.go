@@ -48,7 +48,8 @@ type usagesImp struct {
 	root   ast.Node
 	usages Usages
 
-	pending constructs.Construct
+	pending   constructs.Construct
+	pendingSE bool
 }
 
 func Calculate(info *types.Info, proj constructs.Project, curPkg constructs.Package, baker baker.Baker, conv converter.Converter, root ast.Node) Usages {
@@ -68,15 +69,14 @@ func Calculate(info *types.Info, proj constructs.Project, curPkg constructs.Pack
 	assert.ArgNotNil(`fSet`, fSet)
 
 	ui := &usagesImp{
-		fSet:    fSet,
-		info:    info,
-		proj:    proj,
-		curPkg:  curPkg,
-		baker:   baker,
-		conv:    conv,
-		root:    root,
-		usages:  newUsage(),
-		pending: nil,
+		fSet:   fSet,
+		info:   info,
+		proj:   proj,
+		curPkg: curPkg,
+		baker:  baker,
+		conv:   conv,
+		root:   root,
+		usages: newUsage(),
 	}
 
 	ui.processNode(root)
@@ -106,12 +106,13 @@ func (ui *usagesImp) setPendingType(t types.Type) {
 	ui.flushPendingToRead()
 	fmt.Printf("  - PendingType: %v\n", t)
 
-	if utils.IsNil(t) {
-		fmt.Printf("  + PendingType nil\n")
+	named := getNamed(t)
+	if named == nil {
+		fmt.Printf("  + PendingType no named\n")
 		return
 	}
 
-	if isLocalType(ui.root, t) {
+	if isLocal(ui.root, named.Obj()) {
 		fmt.Printf("  + PendingType local\n")
 		return
 	}
@@ -139,18 +140,28 @@ func (ui *usagesImp) setPendingObject(o types.Object) {
 		return
 	}
 
-	pkgPath := ``
-	if o.Pkg() != nil {
-		pkgPath = o.Pkg().Path()
+	var instType []constructs.TypeDesc
+	if itList := getInstTypes(o); !utils.IsNil(itList) {
+		instType = ui.conv.ConvertInstanceTypes(itList)
 	}
 
-	var instType []constructs.TypeDesc
-	if named, ok := stripNamed(o.Type()); ok {
-		instType = ui.conv.ConvertInstanceTypes(named.TypeArgs())
+	if _, ok := o.(*types.TypeName); ok {
+		ui.pending = ui.proj.NewTempReference(constructs.TempReferenceArgs{
+			RealType:      o.Type(),
+			PackagePath:   getPkgPath(o),
+			Name:          o.Name(),
+			InstanceTypes: instType,
+			Package:       ui.curPkg.Source(),
+		})
+		return
+	}
+
+	if _, ok := o.(*types.Var); ok {
+		ui.pendingSE = true
 	}
 
 	ui.pending = ui.proj.NewTempDeclRef(constructs.TempDeclRefArgs{
-		PackagePath:   pkgPath,
+		PackagePath:   getPkgPath(o),
 		Name:          o.Name(),
 		InstanceTypes: instType,
 	})
@@ -158,6 +169,7 @@ func (ui *usagesImp) setPendingObject(o types.Object) {
 
 func (ui *usagesImp) clearPending() {
 	ui.pending = nil
+	ui.pendingSE = false
 }
 
 // flushPendingToRead writes any pending as a read usage
@@ -173,7 +185,7 @@ func (ui *usagesImp) flushPendingToRead() {
 // flushPendingToWrite writes any pending as a write usage
 // and clears the pending.
 func (ui *usagesImp) flushPendingToWrite() {
-	ui.addWrite(ui.pending)
+	ui.addWrite(ui.pending, ui.pendingSE)
 	ui.clearPending()
 }
 
@@ -193,10 +205,13 @@ func (ui *usagesImp) addRead(c constructs.Construct) {
 }
 
 // addWrite adds the given construct as a write usage.
-func (ui *usagesImp) addWrite(c constructs.Construct) {
+func (ui *usagesImp) addWrite(c constructs.Construct, sideEffect bool) {
 	if !utils.IsNil(c) {
 		fmt.Printf("  + Write: %v\n", c)
 		ui.usages.Writes.Add(c)
+		if sideEffect {
+			ui.usages.SideEffect = true
+		}
 	}
 }
 
@@ -258,6 +273,8 @@ func (ui *usagesImp) processNode(node ast.Node) {
 			ui.processCall(t)
 		case *ast.CompositeLit:
 			ui.processCompositeLit(t)
+		case *ast.FuncDecl:
+			ui.processFuncDecl(t)
 		case *ast.Ident:
 			ui.processIdent(t)
 		case *ast.IncDecStmt:
@@ -361,6 +378,12 @@ func (ui *usagesImp) processCompositeLit(comp *ast.CompositeLit) {
 	ui.processNode(comp.Type)
 }
 
+func (ui *usagesImp) processFuncDecl(decl *ast.FuncDecl) {
+	// Skip over receiver, parameter, returns, and type parameters.
+	// Those will be visible in the abstraction data outside of usages.
+	ui.processNode(decl.Body)
+}
+
 func (ui *usagesImp) processIdent(id *ast.Ident) {
 	fmt.Printf(">>> processIdent: %v @ %s\n", id, ui.pos(id))
 
@@ -368,7 +391,7 @@ func (ui *usagesImp) processIdent(id *ast.Ident) {
 	if def, ok := ui.info.Defs[id]; ok {
 		fmt.Printf("  > def object: %v\n", def)
 		ui.setPendingObject(def)
-		ui.addWrite(ui.pending)
+		ui.addWrite(ui.pending, ui.pendingSE)
 		return
 	}
 
@@ -399,16 +422,6 @@ func (ui *usagesImp) processIdent(id *ast.Ident) {
 	// Return basic types as usage.
 	if basic, ok := obj.Type().(*types.Basic); ok && basic.Kind() != types.Invalid {
 		fmt.Printf("  > basic type: %v\n", basic)
-		switch basic.Kind() {
-		case types.Complex64:
-			ui.setPendingConstruct(ui.baker.BakeComplex64())
-		case types.Complex128:
-			ui.setPendingConstruct(ui.baker.BakeComplex128())
-		default:
-			ui.setPendingConstruct(ui.proj.NewBasic(constructs.BasicArgs{
-				RealType: basic,
-			}))
-		}
 		return
 	}
 
