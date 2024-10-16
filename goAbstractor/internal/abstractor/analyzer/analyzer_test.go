@@ -1089,14 +1089,42 @@ func Test_SelectOnUnnamedResultValue(t *testing.T) {
 		`  packages: [`,
 		`    { name: test, path: test }`,
 		`  ],`,
-		`  selections: [`,
-		`    { name: y, origin: structDesc1 }`, // TODO: This is in an external struct and should be in usage.
-		`  ],`,
-		`  structDescs: [`,
-		`    { fields: [ 1 ] }`,
-		`  ],`,
+		`  selections: [],`, // TODO: y selection, use where y is defined as a field, y is an identifier so it should have an object.
 		`  tempDeclRef: [`,
 		`    { name: bar, packagePath: test }`,
+		`  ]`,
+		`}`)
+}
+
+func Test_SelectOnNamedResultValue(t *testing.T) {
+	tt := parseDecl(t, `val`,
+		`type foo struct{ y int }`,
+		`func bar() foo {`,
+		`	return foo{ y: 24 }`,
+		`}`,
+		`var val = bar().y`)
+	tt.checkProj(
+		`{`,
+		`  language: go,`,
+		`  metrics: [`,
+		`    {`,
+		`      loc:        5,`,
+		`      codeCount:  1,`,
+		`      complexity: 1,`,
+		`      lineCount:  1,`,
+		`      invokes: [ tempDeclRef1 ],`,
+		`      reads:   [ tempReference1 ]`,
+		`    }`,
+		`  ],`,
+		`  packages: [`,
+		`    { name: test, path: test }`,
+		`  ],`,
+		`  selections: []`, // TODO: y selection
+		`  tempDeclRef: [`,
+		`    { name: bar, packagePath: test }`,
+		`  ],`,
+		`  tempReferences: [`,
+		`	 { name: foo, packagePath: test }`,
 		`  ]`,
 		`}`)
 }
@@ -1301,22 +1329,27 @@ func Test_IncDec_External(t *testing.T) {
 	tt := parseDecl(t, `foo`,
 		`var x int`,
 		`func foo() {`,
-		`	x++`, // TODO: External access needs to be read/write
+		`	x++`,
 		`}`)
 	tt.checkProj(
 		`{`,
 		`  language: go,`,
 		`  metrics: [`,
 		`    {`,
-		`      loc:        1,`,
-		`      codeCount:  6,`,
+		`      loc:        2,`,
+		`      codeCount:  3,`,
 		`      complexity: 1,`,
-		`      indents:    4,`,
-		`      lineCount:  6`,
+		`      indents:    1,`,
+		`      lineCount:  3,`,
+		`      sideEffect: true,`,
+		`      writes: [ tempDeclRef1 ]`,
 		`    }`,
 		`  ],`,
 		`  packages: [`,
 		`    { name: test, path: test }`,
+		`  ],`,
+		`  tempDeclRef: [`,
+		`    { name: x, packagePath: test }`,
 		`  ]`,
 		`}`)
 }

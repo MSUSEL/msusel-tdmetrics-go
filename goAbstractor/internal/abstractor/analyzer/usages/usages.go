@@ -38,6 +38,15 @@ func newUsage() Usages {
 	}
 }
 
+const printDebugLogging = true
+
+func logDebug(format string, args ...any) {
+	if printDebugLogging {
+		fmt.Printf(format, args...)
+		fmt.Println()
+	}
+}
+
 type usagesImp struct {
 	fSet   *token.FileSet
 	info   *types.Info
@@ -67,6 +76,15 @@ func Calculate(info *types.Info, proj constructs.Project, curPkg constructs.Pack
 
 	fSet := proj.Locs().FileSet()
 	assert.ArgNotNil(`fSet`, fSet)
+
+	switch t := root.(type) {
+	case *ast.FuncDecl:
+		// Skip over receiver, parameter, returns, and type parameters.
+		// Those will be visible in the abstraction data outside of usages.
+		root = t.Body
+	case *ast.FuncLit:
+		root = t.Body
+	}
 
 	ui := &usagesImp{
 		fSet:   fSet,
@@ -98,22 +116,22 @@ func (ui *usagesImp) hasPending() bool {
 
 func (ui *usagesImp) setPendingConstruct(c constructs.Construct) {
 	ui.flushPendingToRead()
-	fmt.Printf("  - PendingCon: %v\n", c)
+	logDebug(`  - PendingCon: %v`, c)
 	ui.pending = c
 }
 
 func (ui *usagesImp) setPendingType(t types.Type) {
 	ui.flushPendingToRead()
-	fmt.Printf("  - PendingType: %v\n", t)
+	logDebug(`  - PendingType: %v`, t)
 
 	named := getNamed(t)
 	if named == nil {
-		fmt.Printf("  + PendingType no named\n")
+		logDebug(`  + PendingType no named`)
 		return
 	}
 
 	if isLocal(ui.root, named.Obj()) {
-		fmt.Printf("  + PendingType local\n")
+		logDebug(`  + PendingType local`)
 		return
 	}
 
@@ -122,20 +140,21 @@ func (ui *usagesImp) setPendingType(t types.Type) {
 
 func (ui *usagesImp) setPendingObject(o types.Object) {
 	ui.flushPendingToRead()
-	fmt.Printf("  - PendingObject: %v\n", o)
+	logDebug(`  - PendingObject: %v`, o)
 
 	if utils.IsNil(o) {
-		fmt.Printf("  + PendingObject nil\n")
+		logDebug(`  + PendingObject nil`)
 		return
 	}
 
 	if _, ok := o.(*types.Label); ok {
 		// Skip over labels
-		fmt.Printf("  > label\n")
+		logDebug(`  > label`)
 		return
 	}
 
 	if isLocal(ui.root, o) {
+		logDebug(`  > local, set type`)
 		ui.setPendingType(o.Type())
 		return
 	}
@@ -146,6 +165,7 @@ func (ui *usagesImp) setPendingObject(o types.Object) {
 	}
 
 	if _, ok := o.(*types.TypeName); ok {
+		logDebug(`  > type name %v`, o)
 		ui.pending = ui.proj.NewTempReference(constructs.TempReferenceArgs{
 			RealType:      o.Type(),
 			PackagePath:   getPkgPath(o),
@@ -199,7 +219,7 @@ func (ui *usagesImp) flushPendingToInvoke() {
 // addRead adds the given construct as a read usage.
 func (ui *usagesImp) addRead(c constructs.Construct) {
 	if !utils.IsNil(c) {
-		fmt.Printf("  + Reads: %v\n", c)
+		logDebug(`  + Reads: %v`, c)
 		ui.usages.Reads.Add(c)
 	}
 }
@@ -207,7 +227,7 @@ func (ui *usagesImp) addRead(c constructs.Construct) {
 // addWrite adds the given construct as a write usage.
 func (ui *usagesImp) addWrite(c constructs.Construct, sideEffect bool) {
 	if !utils.IsNil(c) {
-		fmt.Printf("  + Write: %v\n", c)
+		logDebug(`  + Write: %v`, c)
 		ui.usages.Writes.Add(c)
 		if sideEffect {
 			ui.usages.SideEffect = true
@@ -218,7 +238,7 @@ func (ui *usagesImp) addWrite(c constructs.Construct, sideEffect bool) {
 // addInvoke adds the given construct as an invoke usage.
 func (ui *usagesImp) addInvoke(c constructs.Construct) {
 	if !utils.IsNil(c) {
-		fmt.Printf("  + Invoke: %v\n", c)
+		logDebug(`  + Invoke: %v`, c)
 		ui.usages.Invokes.Add(c)
 	}
 }
@@ -273,8 +293,6 @@ func (ui *usagesImp) processNode(node ast.Node) {
 			ui.processCall(t)
 		case *ast.CompositeLit:
 			ui.processCompositeLit(t)
-		case *ast.FuncDecl:
-			ui.processFuncDecl(t)
 		case *ast.Ident:
 			ui.processIdent(t)
 		case *ast.IncDecStmt:
@@ -302,7 +320,7 @@ func (ui *usagesImp) processNode(node ast.Node) {
 			// which nodes do not have custom handling on them yet.
 			// Not all nodes need custom handling but a bug might indicate
 			// one that doesn't have custom handling probably should.
-			//fmt.Printf("usagesImp.processNode unhandled (%[1]T) %[1]v\n", t)
+			//logDebug(`usagesImp.processNode unhandled (%[1]T) %[1]v`, t)
 			return true
 		}
 		return false
@@ -378,12 +396,6 @@ func (ui *usagesImp) processCompositeLit(comp *ast.CompositeLit) {
 	ui.processNode(comp.Type)
 }
 
-func (ui *usagesImp) processFuncDecl(decl *ast.FuncDecl) {
-	// Skip over receiver, parameter, returns, and type parameters.
-	// Those will be visible in the abstraction data outside of usages.
-	ui.processNode(decl.Body)
-}
-
 func (ui *usagesImp) processIdent(id *ast.Ident) {
 	fmt.Printf(">>> processIdent: %v @ %s\n", id, ui.pos(id))
 
@@ -417,12 +429,6 @@ func (ui *usagesImp) processIdent(id *ast.Ident) {
 			ui.setPendingConstruct(typ)
 			return
 		}
-	}
-
-	// Return basic types as usage.
-	if basic, ok := obj.Type().(*types.Basic); ok && basic.Kind() != types.Invalid {
-		fmt.Printf("  > basic type: %v\n", basic)
-		return
 	}
 
 	fmt.Printf("  > object: %v\n", obj)
@@ -511,6 +517,7 @@ func (ui *usagesImp) processSend(send *ast.SendStmt) {
 func (ui *usagesImp) processSelector(sel *ast.SelectorExpr) {
 	fmt.Printf(">>> processSelector: %v @ %s\n", sel, ui.pos(sel))
 	ui.processNode(sel.X)
+	fmt.Printf(">>> processSelector.X: %v\n", ui.pending)
 	if ui.hasPending() {
 		fmt.Printf("  > pending: %v\n", ui.pending)
 		ui.setPendingConstruct(ui.proj.NewSelection(constructs.SelectionArgs{
