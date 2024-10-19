@@ -8,6 +8,7 @@ import (
 
 	"github.com/Snow-Gremlin/goToolbox/collections"
 	"github.com/Snow-Gremlin/goToolbox/collections/sortedSet"
+	"github.com/Snow-Gremlin/goToolbox/collections/stack"
 	"github.com/Snow-Gremlin/goToolbox/terrors/terror"
 	"github.com/Snow-Gremlin/goToolbox/utils"
 
@@ -38,7 +39,7 @@ func newUsage() Usages {
 	}
 }
 
-const printDebugLogging = true
+const printDebugLogging = false
 
 func logDebug(format string, args ...any) {
 	if printDebugLogging {
@@ -57,6 +58,7 @@ type usagesImp struct {
 	root   ast.Node
 	usages Usages
 
+	compLits  collections.Stack[*ast.CompositeLit]
 	pending   constructs.Construct
 	pendingSE bool
 }
@@ -77,27 +79,29 @@ func Calculate(info *types.Info, proj constructs.Project, curPkg constructs.Pack
 	fSet := proj.Locs().FileSet()
 	assert.ArgNotNil(`fSet`, fSet)
 
-	switch t := root.(type) {
+	start := root
+	switch t := start.(type) {
 	case *ast.FuncDecl:
 		// Skip over receiver, parameter, returns, and type parameters.
 		// Those will be visible in the abstraction data outside of usages.
-		root = t.Body
+		start = t.Body
 	case *ast.FuncLit:
-		root = t.Body
+		start = t.Body
 	}
 
 	ui := &usagesImp{
-		fSet:   fSet,
-		info:   info,
-		proj:   proj,
-		curPkg: curPkg,
-		baker:  baker,
-		conv:   conv,
-		root:   root,
-		usages: newUsage(),
+		fSet:     fSet,
+		info:     info,
+		proj:     proj,
+		curPkg:   curPkg,
+		baker:    baker,
+		conv:     conv,
+		root:     root,
+		usages:   newUsage(),
+		compLits: stack.New[*ast.CompositeLit](),
 	}
 
-	ui.processNode(root)
+	ui.processNode(start)
 
 	return ui.usages
 }
@@ -164,11 +168,21 @@ func (ui *usagesImp) setPendingObject(o types.Object) {
 		instType = ui.conv.ConvertInstanceTypes(itList)
 	}
 
-	if _, ok := o.(*types.TypeName); ok {
-		logDebug(`  > type name %v`, o)
+	if tn, ok := o.(*types.TypeName); ok {
+		logDebug(`  > type name: %v: %v`, o, tn)
+
+		pkgPath := getPkgPath(o)
+		if len(pkgPath) <= 0 {
+			if basic, ok := o.Type().(*types.Basic); ok && basic.Kind() != types.Invalid {
+				logDebug(`  > basic: %v`, basic)
+				return
+			}
+		}
+
+		logDebug(`  > temp ref: %v`, o)
 		ui.pending = ui.proj.NewTempReference(constructs.TempReferenceArgs{
 			RealType:      o.Type(),
-			PackagePath:   getPkgPath(o),
+			PackagePath:   pkgPath,
 			Name:          o.Name(),
 			InstanceTypes: instType,
 			Package:       ui.curPkg.Source(),
@@ -176,10 +190,34 @@ func (ui *usagesImp) setPendingObject(o types.Object) {
 		return
 	}
 
-	if _, ok := o.(*types.Var); ok {
+	if v, ok := o.(*types.Var); ok {
+		logDebug(`  > type var: %v`, v)
+		if v.IsField() {
+			if compLit := ui.compLits.Peek(); !utils.IsNil(compLit) {
+				compType := ui.info.Types[compLit.Type].Type
+				logDebug(`  > field sel: %v => %v`, compType, v.Name())
+				ui.setPendingType(compType)
+				if ui.hasPending() {
+					logDebug(`  > pending field selObj: %v`, ui.pending)
+					ui.setPendingConstruct(ui.proj.NewSelection(constructs.SelectionArgs{
+						Name:   v.Name(),
+						Origin: ui.pending,
+					}))
+					return
+				}
+			}
+
+			logDebug(`  > field without recv: %v`, v)
+			ui.setPendingType(v.Type())
+			return
+		}
+
+		// If not a field, then it is a global variable being either
+		// read from or written two so it is a potential side effect.
 		ui.pendingSE = true
 	}
 
+	logDebug(`  > temp decl ref: %v`, o)
 	ui.pending = ui.proj.NewTempDeclRef(constructs.TempDeclRefArgs{
 		PackagePath:   getPkgPath(o),
 		Name:          o.Name(),
@@ -387,21 +425,23 @@ func (ui *usagesImp) processCall(call *ast.CallExpr) {
 }
 
 func (ui *usagesImp) processCompositeLit(comp *ast.CompositeLit) {
+	ui.compLits.Push(comp)
+	defer ui.compLits.Pop()
+
 	for _, elem := range comp.Elts {
 		ui.processNode(elem)
-		ui.flushPendingToRead()
+		ui.flushPendingToWrite()
 	}
 
-	// Skip over comp.Type, the internally defined type.
 	ui.processNode(comp.Type)
 }
 
 func (ui *usagesImp) processIdent(id *ast.Ident) {
-	fmt.Printf(">>> processIdent: %v @ %s\n", id, ui.pos(id))
+	logDebug(`>>> processIdent: %v @ %s`, id, ui.pos(id))
 
 	// Check if this identifier is part of a definition.
 	if def, ok := ui.info.Defs[id]; ok {
-		fmt.Printf("  > def object: %v\n", def)
+		logDebug(`  > def object: %v`, def)
 		ui.setPendingObject(def)
 		ui.addWrite(ui.pending, ui.pendingSE)
 		return
@@ -410,7 +450,7 @@ func (ui *usagesImp) processIdent(id *ast.Ident) {
 	// Check if the identifier is being used.
 	obj, ok := ui.info.Uses[id]
 	if !ok {
-		fmt.Printf("  > no uses\n")
+		logDebug(`  > no uses`)
 		return
 	}
 
@@ -418,20 +458,20 @@ func (ui *usagesImp) processIdent(id *ast.Ident) {
 	// https://pkg.go.dev/builtin#pkg-constants
 	switch obj.Id() {
 	case `_.true`, `_.false`, `_.nil`, `_.iota`:
-		fmt.Printf("  > build-in constants: %v\n", obj.Id())
+		logDebug(`  > build-in constants: %v`, obj.Id())
 		return
 	}
 
 	// Return built-in type.
 	if obj.Pkg() == nil {
 		if typ := ui.baker.TypeByName(obj.Name()); !utils.IsNil(typ) {
-			fmt.Printf("  > build-in type: %v\n", typ)
+			logDebug(`  > build-in type: %v`, typ)
 			ui.setPendingConstruct(typ)
 			return
 		}
 	}
 
-	fmt.Printf("  > object: %v\n", obj)
+	logDebug(`  > object: %v`, obj)
 	ui.setPendingObject(obj)
 }
 
@@ -515,11 +555,11 @@ func (ui *usagesImp) processSend(send *ast.SendStmt) {
 }
 
 func (ui *usagesImp) processSelector(sel *ast.SelectorExpr) {
-	fmt.Printf(">>> processSelector: %v @ %s\n", sel, ui.pos(sel))
+	logDebug(`>>> processSelector: %v @ %s`, sel, ui.pos(sel))
 	ui.processNode(sel.X)
-	fmt.Printf(">>> processSelector.X: %v\n", ui.pending)
+	logDebug(`>>> processSelector.X: %v`, ui.pending)
 	if ui.hasPending() {
-		fmt.Printf("  > pending: %v\n", ui.pending)
+		logDebug(`  > pending sel.X: %v`, ui.pending)
 		ui.setPendingConstruct(ui.proj.NewSelection(constructs.SelectionArgs{
 			Name:   sel.Sel.Name,
 			Origin: ui.pending,
@@ -533,12 +573,23 @@ func (ui *usagesImp) processSelector(sel *ast.SelectorExpr) {
 			With(`expr`, sel).
 			With(`position`, ui.pos(sel)))
 	}
-	fmt.Printf("  > selObj: %v\n", selObj)
+	logDebug(`  > selObj: %v`, selObj)
 
-	// The left hand side is empty so this wasn't like `foo.Bar`,
-	// it was instead like `foo().Bar` where some expression results
-	// in a selection on a type. If a locally defined type then skip
-	// the select since it won't reference anything useful.
+	if !isLocal(ui.root, selObj.Obj()) {
+		logDebug(`  > non-local selObj: %v at %v`, selObj.Obj(), ui.pos(selObj.Obj()))
+		ui.setPendingConstruct(ui.conv.ConvertType(selObj.Recv()))
+		if ui.hasPending() {
+			logDebug(`  > pending selObj: %v`, ui.pending)
+			ui.setPendingConstruct(ui.proj.NewSelection(constructs.SelectionArgs{
+				Name:   sel.Sel.Name,
+				Origin: ui.pending,
+			}))
+			return
+		}
+	}
+
+	// TODO: Fix this
+	logDebug(`  > selection fallback: %v`, selObj)
 	ui.setPendingType(selObj.Recv())
 	ui.flushPendingToRead()
 	ui.setPendingType(selObj.Obj().Type())

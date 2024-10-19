@@ -919,8 +919,8 @@ func Test_ConstructInit(t *testing.T) {
 	tt := parseDecl(t, `val`,
 		`type Foo struct{ x, y int }`,
 		`var val = Foo{`,
-		`	x: 14,`,
-		`	y: 42,`,
+		`  x: 14,`,
+		`  y: 42,`,
 		`}`)
 	tt.checkProj(
 		`{`,
@@ -930,16 +930,63 @@ func Test_ConstructInit(t *testing.T) {
 		`      loc:        2,`,
 		`      codeCount:  4,`,
 		`      complexity: 1,`,
-		`      indents:    6,`,
+		`      indents:    8,`,
 		`      lineCount:  4,`,
 		`      reads:  [ tempReference1 ],`,
-		`      writes: [ tempReference1 ]`,
+		`      writes: [ selection1, selection2, tempReference1 ]`,
 		`    }`,
 		`  ],`,
 		`  packages: [`,
 		`    { name: test, path: test }`,
 		`  ],`,
+		`  selections: [`,
+		`    { name: x, origin: tempReference1 },`,
+		`    { name: y, origin: tempReference1 }`,
+		`  ],`,
 		`  tempReferences: [`,
+		`    { name: Foo, packagePath: test }`,
+		`  ]`,
+		`}`)
+}
+
+func Test_DeepConstructInit(t *testing.T) {
+	tt := parseDecl(t, `val`,
+		`type Bar struct { y, z int }`,
+		`type Foo struct{`,
+		`  a struct { b, c int }`,
+		`  x Bar`,
+		`}`,
+		`var val = Foo{`,
+		`  a: struct { b, c int }{ b: 12, c: 34 },`,
+		`  x: Bar{ y: 90, z: 112 },`,
+		`}`)
+	tt.checkProj(
+		`{`,
+		`  language: go,`,
+		`  metrics: [`,
+		`    {`,
+		`      loc:        6,`,
+		`      codeCount:  4,`,
+		`      complexity: 1,`,
+		`      indents:    8,`,
+		`      lineCount:  4,`,
+		`      reads:  [ selection1, selection2, tempReference1, tempReference2 ],`,
+		`      writes: [ selection3, selection4, tempReference1, tempReference2 ]`,
+		`    }`,
+		`  ],`,
+		`  packages: [`,
+		`    { name: test, path: test }`,
+		`  ],`,
+		`  selections: [`,
+		`    { name: a, origin: tempReference2 },`,
+		// b and c aren't selected because the struct is local
+		// even though it is equivalent to the external inner struct.
+		`    { name: x, origin: tempReference2 },`,
+		`    { name: y, origin: tempReference1 },`,
+		`    { name: z, origin: tempReference1 }`,
+		`  ],`,
+		`  tempReferences: [`,
+		`    { name: Bar, packagePath: test },`,
 		`    { name: Foo, packagePath: test }`,
 		`  ]`,
 		`}`)
@@ -1076,6 +1123,10 @@ func Test_SelectOnUnnamedResultValue(t *testing.T) {
 		`var val = bar().y`)
 	tt.checkProj(
 		`{`,
+		`  basics: [ int ],`,
+		`  fields: [`,
+		`    { name: y, type: basic1 }`,
+		`  ],`,
 		`  language: go,`,
 		`  metrics: [`,
 		`    {`,
@@ -1083,13 +1134,19 @@ func Test_SelectOnUnnamedResultValue(t *testing.T) {
 		`      codeCount:  1,`,
 		`      complexity: 1,`,
 		`      lineCount:  1,`,
-		`      invokes: [ tempDeclRef1 ]`,
+		`      invokes: [ tempDeclRef1 ],`,
+		`      reads:   [ selection1, structDesc1 ]`,
 		`    }`,
 		`  ],`,
 		`  packages: [`,
 		`    { name: test, path: test }`,
 		`  ],`,
-		`  selections: [],`, // TODO: y selection, use where y is defined as a field, y is an identifier so it should have an object.
+		`  selections: [`,
+		`    { name: y, origin: structDesc1 }`,
+		`  ],`,
+		`  structDescs: [`,
+		`    { fields: [ 1 ] }`,
+		`  ],`,
 		`  tempDeclRef: [`,
 		`    { name: bar, packagePath: test }`,
 		`  ]`,
@@ -1113,13 +1170,15 @@ func Test_SelectOnNamedResultValue(t *testing.T) {
 		`      complexity: 1,`,
 		`      lineCount:  1,`,
 		`      invokes: [ tempDeclRef1 ],`,
-		`      reads:   [ tempReference1 ]`,
+		`      reads:   [ selection1, tempReference1 ]`,
 		`    }`,
 		`  ],`,
 		`  packages: [`,
 		`    { name: test, path: test }`,
 		`  ],`,
-		`  selections: []`, // TODO: y selection
+		`  selections: [`,
+		`    { name: y, origin: tempReference1 }`,
+		`  ],`,
 		`  tempDeclRef: [`,
 		`    { name: bar, packagePath: test }`,
 		`  ],`,
@@ -1679,6 +1738,8 @@ func Test_InterFuncUnnamedInterface(t *testing.T) {
 		`  ],`,
 		`}`)
 }
+
+// TODO: Add test with panic and recover.
 
 type testTool struct {
 	t      *testing.T
