@@ -39,7 +39,7 @@ func newUsage() Usages {
 	}
 }
 
-const printDebugLogging = false
+const printDebugLogging = true
 
 func logDebug(format string, args ...any) {
 	if printDebugLogging {
@@ -158,6 +158,26 @@ func (ui *usagesImp) setPendingObject(o types.Object) {
 	}
 
 	if isLocal(ui.root, o) {
+
+		// TODO: REMOVE
+		//=============================================================
+		const tagPkgPath = `test` // `internal/abi`
+		const tagName = `bar`     //`u`
+		if o.Pkg() != nil && o.Pkg().Path() == tagPkgPath && o.Name() == tagName {
+			fmt.Printf(">>> setPendingObject: %v, %s\n", o, ui.pos(o))
+			named := getNamed(o.Type())
+			if named == nil {
+				fmt.Printf(">>> no named in type: %v", o.Type())
+			}
+			obj := named.Obj()
+			fmt.Printf(">>> named.Obj: %v, %s\n", obj, obj.Name())
+			if isLocal(ui.root, obj) {
+				fmt.Printf(">>> not local: %v", named)
+			}
+			fmt.Println()
+		}
+		//=============================================================
+
 		logDebug(`  > local, set type`)
 		ui.setPendingType(o.Type())
 		return
@@ -173,10 +193,17 @@ func (ui *usagesImp) setPendingObject(o types.Object) {
 
 		pkgPath := getPkgPath(o)
 		if len(pkgPath) <= 0 {
+			if typ := ui.baker.TypeByName(o.Name()); !utils.IsNil(typ) {
+				logDebug(`  > build-in type: %v`, typ)
+				ui.setPendingConstruct(typ)
+				return
+			}
+
 			if basic, ok := o.Type().(*types.Basic); ok && basic.Kind() != types.Invalid {
 				logDebug(`  > basic: %v`, basic)
 				return
 			}
+			return
 		}
 
 		logDebug(`  > temp ref: %v`, o)
@@ -408,6 +435,7 @@ func (ui *usagesImp) processCall(call *ast.CallExpr) {
 
 	// Check for explicit cast (conversion), e.g. `int(f.x)`
 	if typ.IsType() {
+		// TODO: FIX ISSUE WITH DEFINED TYPE
 		ui.processNode(call.Fun)
 		ui.flushPendingToWrite()
 		return
@@ -469,6 +497,10 @@ func (ui *usagesImp) processIdent(id *ast.Ident) {
 			ui.setPendingConstruct(typ)
 			return
 		}
+	}
+
+	if obj.Pkg() != nil && obj.Pkg().Path() == `internal/abi` && obj.Name() == `u` { // TODO: REMOVE
+		fmt.Printf(">>> processIndent: %v, %s\n", obj, ui.pos(obj))
 	}
 
 	logDebug(`  > object: %v`, obj)
@@ -599,10 +631,16 @@ func (ui *usagesImp) processTypeAssert(exp *ast.TypeAssertExpr) {
 	ui.processNode(exp.X)
 	ui.flushPendingToRead()
 
+	if utils.IsNil(exp.Type) {
+		// Type assertions for type switches, e.g `switch t := x.(type)`.
+		return
+	}
+
 	tv, ok := ui.info.Types[exp.Type]
 	if !ok {
 		panic(terror.New(`Expected a type in a TypeAssert for usages.`).
-			With(`node`, exp.Type).
+			With(`type`, types.ExprString(exp.Type)).
+			With(`x`, types.ExprString(exp.X)).
 			With(`pos`, ui.pos(exp)))
 	}
 

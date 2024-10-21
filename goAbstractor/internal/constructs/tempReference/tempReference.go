@@ -25,7 +25,7 @@ type tempReferenceImp struct {
 }
 
 func newTempReference(args constructs.TempReferenceArgs) constructs.TempReference {
-	// pkgPath may be empty for $builtin
+	// args.PackagePath may be empty for $builtin
 	assert.ArgNotEmpty(`name`, args.Name)
 	assert.ArgHasNoNils(`instance types`, args.InstanceTypes)
 

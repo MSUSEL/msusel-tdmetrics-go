@@ -57,9 +57,9 @@
     },
     { # 2. main()
       codeCount: 6, complexity: 1, indents: 5, lineCount: 6, loc: 17,
-      invokes: [ selection2 ],
-      reads:   [ basic1, object1 ],
-      writes:  [ object1 ]
+      invokes: [ selection3 ],
+      reads:   [ object1 ],
+      writes:  [ object1, selection2 ]
     }
   ],
   objects: [
@@ -82,7 +82,8 @@
   ],
   selections: [
     { name: Name, origin: interfaceInst1 }, # 1. Pointer[Cat].Name
-    { name: Pet,  origin: object1 }         # 2. Cat.Pet()
+    { name: Name, origin: object1 },        # 2. Cat.Name
+    { name: Pet,  origin: object1 }         # 3. Cat.Pet()
   ],
   signatures: [
     {},                 # 1. func()()

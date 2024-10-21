@@ -60,21 +60,17 @@
   ],
   metrics: [
     { # 1.
-      codeCount: 7, complexity: 2, indents: 6, lineCount: 7, loc: 5,
-      reads: [ argument5, basic1 ], writes: [ basic1 ]
+      codeCount: 7, complexity: 2, indents: 6, lineCount: 7, loc: 5
     },
     { # 2.
-      codeCount: 3, complexity: 1, indents: 1, lineCount: 3, loc: 13,
-      reads: [ argument5, basic1 ]
+      codeCount: 3, complexity: 1, indents: 1, lineCount: 3, loc: 13
     },
     { # 3.
-      codeCount: 3, complexity: 1, indents: 1, lineCount: 3, loc: 17,
-      reads: [ argument5, basic1 ]
+      codeCount: 3, complexity: 1, indents: 1, lineCount: 3, loc: 17
     },
     { # 4.
       codeCount: 6, complexity: 1, indents: 4, lineCount: 6, loc: 21,
-      sideEffect: true, invokes: [ method1, method2, method4 ],
-      reads: [ interfaceInst1 ], writes: [ interfaceInst1 ]
+      sideEffect: true, invokes: [ method1, method2, method4 ]
     }
   ],
   packages: [

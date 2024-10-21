@@ -66,12 +66,10 @@
   metrics: [
     { # 1.
       codeCount: 1, complexity: 1, lineCount: 1, loc: 30,
-      sideEffect: true, # TODO: Fix
       writes: [ interfaceDecl3 ]
     },
     { # 2.
       codeCount: 1, complexity: 1, lineCount: 1, loc: 31,
-      sideEffect: true, # TODO: Fix
       writes: [ interfaceDecl2 ]
     },
     { # 3.

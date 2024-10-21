@@ -87,9 +87,13 @@ func (m *metricsImp) RemoveTempDeclRefs() {
 
 func resolveTempDeclRefs(set collections.SortedSet[constructs.Construct]) {
 	for _, s := range set.ToSlice() {
-		if s.Kind() == kind.TempDeclRef {
+		switch s.Kind() {
+		case kind.TempDeclRef:
 			set.Remove(s)
 			set.Add(constructs.ResolvedTempDeclRef(s.(constructs.TempDeclRef)))
+		case kind.TempReference:
+			set.Remove(s)
+			set.Add(constructs.ResolvedTempReference(s.(constructs.TempReference)))
 		}
 	}
 }

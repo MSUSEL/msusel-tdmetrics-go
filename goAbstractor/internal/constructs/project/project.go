@@ -146,7 +146,7 @@ func (p *projectImp) FindType(pkgPath, typeName string, panicOnNotFound bool) (c
 		if !panicOnNotFound {
 			return pkg, nil, false
 		}
-		panic(terror.New(`failed to find type declaration for type reference`).
+		panic(terror.New(`failed to find type for type reference`).
 			With(`type name`, typeName).
 			With(`package path`, pkgPath))
 	}

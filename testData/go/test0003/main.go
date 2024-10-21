@@ -16,7 +16,7 @@ func (c *Cat) Pet() {
 
 func main() {
 	c := Cat{
-		Name: `mittens`,
+		Name: `Mittens`,
 	}
 	c.Pet()
 }

@@ -378,6 +378,48 @@ func Test_SimpleSwitch(t *testing.T) {
 		`}`)
 }
 
+func Test_TypeSwitchAndTypeUnwrapping(t *testing.T) {
+	tt := parseDecl(t, `bar`,
+		`func bar(a, b any) {`,
+		`   switch t := a.(type) {`,
+		`      case bool:`,
+		`         type u struct {`,
+		`            name  string`,
+		`            value bool`,
+		`         }`,
+		`         b.(*u).value = t`,
+		`      case int:`,
+		`         type u struct {`,
+		`            name  string`,
+		`            value int`,
+		`         }`,
+		`         b.(*u).value = t`,
+		`      case string:`,
+		`         type u struct {`,
+		`            name  string`,
+		`            value string`,
+		`         }`,
+		`         b.(*u).value = t`,
+		`   }`,
+		`}`)
+	tt.checkProj(
+		`{`,
+		`  language: go,`,
+		`  metrics: [`,
+		`    {`,
+		`      loc:          1,`,
+		`      codeCount:   22,`,
+		`      complexity:   4,`,
+		`      indents:    177,`,
+		`      lineCount:   22`,
+		`    }`,
+		`  ],`,
+		`  packages: [`,
+		`    { name: test, path: test }`,
+		`  ]`,
+		`}`)
+}
+
 func Test_DeferInBlock(t *testing.T) {
 	tt := parseExpr(t,
 		`func() {`,
@@ -1735,11 +1777,75 @@ func Test_InterFuncUnnamedInterface(t *testing.T) {
 		`  ],`,
 		`  packages: [`,
 		`    { name: test, path: test }`,
-		`  ],`,
+		`  ]`,
 		`}`)
 }
 
-// TODO: Add test with panic and recover.
+func Test_PanicRecover(t *testing.T) {
+	tt := parseDecl(t, `bar`,
+		`var foo map[string]int`,
+		`func bar(x string) (value int, err string) {`,
+		`   defer func() {`,
+		`      if r := recover(); r != nil {`,
+		`         value = -1`,
+		`         err   = r.(string)`,
+		`      }`,
+		`   }()`,
+		`   if v, ok := foo[x]; ok {`,
+		`      return v, ""`,
+		`   }`,
+		`	panic("nope")`,
+		`}`)
+	tt.checkProj(
+		`{`,
+		`  language: go,`,
+		`  metrics: [`,
+		`    {`,
+		`      loc:         2,`,
+		`      codeCount:  12,`,
+		`      complexity:  3,`,
+		`      indents:    49,`,
+		`      lineCount:  12,`,
+		`      reads: [ tempDeclRef1 ],`,
+		`    }`,
+		`  ],`,
+		`  packages: [`,
+		`    { name: test, path: test }`,
+		`  ],`,
+		`  tempDeclRef: [`,
+		`    { name: foo, packagePath: test }`,
+		`  ]`,
+		`}`)
+}
+
+func Test_NonLocalReferenceEmbedded(t *testing.T) {
+	tt := parseDecl(t, `baz`,
+		`type foo struct { name string }`,
+		`func baz(a any) foo {`,
+		`   type bar struct { foo; age int }`,
+		`   return a.(bar).foo`,
+		`}`)
+	tt.checkProj(
+		`{`,
+		`  language: go,`,
+		`  metrics: [`,
+		`    {`,
+		`      loc:         2,`,
+		`      codeCount:  12,`,
+		`      complexity:  3,`,
+		`      indents:    49,`,
+		`      lineCount:  12,`,
+		`      reads: [ tempDeclRef1 ],`,
+		`    }`,
+		`  ],`,
+		`  packages: [`,
+		`    { name: test, path: test }`,
+		`  ],`,
+		`  tempDeclRef: [`,
+		`    { name: foo, packagePath: test }`,
+		`  ]`,
+		`}`)
+}
 
 type testTool struct {
 	t      *testing.T
