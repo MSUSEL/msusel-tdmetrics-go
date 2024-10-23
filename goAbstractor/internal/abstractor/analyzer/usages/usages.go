@@ -39,7 +39,7 @@ func newUsage() Usages {
 	}
 }
 
-const printDebugLogging = true
+const printDebugLogging = false
 
 func logDebug(format string, args ...any) {
 	if printDebugLogging {
@@ -130,16 +130,18 @@ func (ui *usagesImp) setPendingType(t types.Type) {
 
 	named := getNamed(t)
 	if named == nil {
-		logDebug(`  + PendingType no named`)
+		logDebug(`    - no named`)
 		return
 	}
 
+	logDebug(`    - named.Obj: %v @ %v`, named.Obj(), ui.pos(named.Obj()))
 	if isLocal(ui.root, named.Obj()) {
-		logDebug(`  + PendingType local`)
+		logDebug(`    - local`)
 		return
 	}
 
-	ui.pending = ui.conv.ConvertType(t)
+	ui.pending = ui.conv.ConvertType(named)
+	logDebug(`    - converted: %v`, ui.pending)
 }
 
 func (ui *usagesImp) setPendingObject(o types.Object) {
@@ -147,38 +149,18 @@ func (ui *usagesImp) setPendingObject(o types.Object) {
 	logDebug(`  - PendingObject: %v`, o)
 
 	if utils.IsNil(o) {
-		logDebug(`  + PendingObject nil`)
+		logDebug(`    + nil`)
 		return
 	}
 
 	if _, ok := o.(*types.Label); ok {
 		// Skip over labels
-		logDebug(`  > label`)
+		logDebug(`    + label`)
 		return
 	}
 
 	if isLocal(ui.root, o) {
-
-		// TODO: REMOVE
-		//=============================================================
-		const tagPkgPath = `test` // `internal/abi`
-		const tagName = `bar`     //`u`
-		if o.Pkg() != nil && o.Pkg().Path() == tagPkgPath && o.Name() == tagName {
-			fmt.Printf(">>> setPendingObject: %v, %s\n", o, ui.pos(o))
-			named := getNamed(o.Type())
-			if named == nil {
-				fmt.Printf(">>> no named in type: %v", o.Type())
-			}
-			obj := named.Obj()
-			fmt.Printf(">>> named.Obj: %v, %s\n", obj, obj.Name())
-			if isLocal(ui.root, obj) {
-				fmt.Printf(">>> not local: %v", named)
-			}
-			fmt.Println()
-		}
-		//=============================================================
-
-		logDebug(`  > local, set type`)
+		logDebug(`    - local > set type`)
 		ui.setPendingType(o.Type())
 		return
 	}
@@ -189,24 +171,26 @@ func (ui *usagesImp) setPendingObject(o types.Object) {
 	}
 
 	if tn, ok := o.(*types.TypeName); ok {
-		logDebug(`  > type name: %v: %v`, o, tn)
+		logDebug(`    - type name: %v: %v`, o, tn)
 
 		pkgPath := getPkgPath(o)
 		if len(pkgPath) <= 0 {
 			if typ := ui.baker.TypeByName(o.Name()); !utils.IsNil(typ) {
-				logDebug(`  > build-in type: %v`, typ)
+				logDebug(`      - built-in type: %v`, typ)
 				ui.setPendingConstruct(typ)
 				return
 			}
 
 			if basic, ok := o.Type().(*types.Basic); ok && basic.Kind() != types.Invalid {
-				logDebug(`  > basic: %v`, basic)
+				logDebug(`      + basic: %v`, basic)
 				return
 			}
+
+			logDebug(`      + dump built-in`)
 			return
 		}
 
-		logDebug(`  > temp ref: %v`, o)
+		logDebug(`      - temp ref: %v`, o)
 		ui.pending = ui.proj.NewTempReference(constructs.TempReferenceArgs{
 			RealType:      o.Type(),
 			PackagePath:   pkgPath,
@@ -218,14 +202,14 @@ func (ui *usagesImp) setPendingObject(o types.Object) {
 	}
 
 	if v, ok := o.(*types.Var); ok {
-		logDebug(`  > type var: %v`, v)
+		logDebug(`    - type var: %v`, v)
 		if v.IsField() {
 			if compLit := ui.compLits.Peek(); !utils.IsNil(compLit) {
 				compType := ui.info.Types[compLit.Type].Type
-				logDebug(`  > field sel: %v => %v`, compType, v.Name())
+				logDebug(`      - field sel: %v => %v`, compType, v.Name())
 				ui.setPendingType(compType)
 				if ui.hasPending() {
-					logDebug(`  > pending field selObj: %v`, ui.pending)
+					logDebug(`      - pending field selObj: %v`, ui.pending)
 					ui.setPendingConstruct(ui.proj.NewSelection(constructs.SelectionArgs{
 						Name:   v.Name(),
 						Origin: ui.pending,
@@ -234,7 +218,7 @@ func (ui *usagesImp) setPendingObject(o types.Object) {
 				}
 			}
 
-			logDebug(`  > field without recv: %v`, v)
+			logDebug(`      - field without recv: %v`, v)
 			ui.setPendingType(v.Type())
 			return
 		}
@@ -244,7 +228,7 @@ func (ui *usagesImp) setPendingObject(o types.Object) {
 		ui.pendingSE = true
 	}
 
-	logDebug(`  > temp decl ref: %v`, o)
+	logDebug(`    - temp decl ref: %v`, o)
 	ui.pending = ui.proj.NewTempDeclRef(constructs.TempDeclRefArgs{
 		PackagePath:   getPkgPath(o),
 		Name:          o.Name(),
@@ -435,7 +419,7 @@ func (ui *usagesImp) processCall(call *ast.CallExpr) {
 
 	// Check for explicit cast (conversion), e.g. `int(f.x)`
 	if typ.IsType() {
-		// TODO: FIX ISSUE WITH DEFINED TYPE
+		// TODO: FIX ISSUE WITH LOCALLY DEFINED TYPE
 		ui.processNode(call.Fun)
 		ui.flushPendingToWrite()
 		return
@@ -469,7 +453,7 @@ func (ui *usagesImp) processIdent(id *ast.Ident) {
 
 	// Check if this identifier is part of a definition.
 	if def, ok := ui.info.Defs[id]; ok {
-		logDebug(`  > def object: %v`, def)
+		logDebug(`  > processIdent: def object: %v`, def)
 		ui.setPendingObject(def)
 		ui.addWrite(ui.pending, ui.pendingSE)
 		return
@@ -478,7 +462,7 @@ func (ui *usagesImp) processIdent(id *ast.Ident) {
 	// Check if the identifier is being used.
 	obj, ok := ui.info.Uses[id]
 	if !ok {
-		logDebug(`  > no uses`)
+		logDebug(`  > processIdent: no uses`)
 		return
 	}
 
@@ -486,24 +470,20 @@ func (ui *usagesImp) processIdent(id *ast.Ident) {
 	// https://pkg.go.dev/builtin#pkg-constants
 	switch obj.Id() {
 	case `_.true`, `_.false`, `_.nil`, `_.iota`:
-		logDebug(`  > build-in constants: %v`, obj.Id())
+		logDebug(`  > processIdent: build-in constants: %v`, obj.Id())
 		return
 	}
 
 	// Return built-in type.
 	if obj.Pkg() == nil {
 		if typ := ui.baker.TypeByName(obj.Name()); !utils.IsNil(typ) {
-			logDebug(`  > build-in type: %v`, typ)
+			logDebug(`  > processIdent: build-in type: %v`, typ)
 			ui.setPendingConstruct(typ)
 			return
 		}
 	}
 
-	if obj.Pkg() != nil && obj.Pkg().Path() == `internal/abi` && obj.Name() == `u` { // TODO: REMOVE
-		fmt.Printf(">>> processIndent: %v, %s\n", obj, ui.pos(obj))
-	}
-
-	logDebug(`  > object: %v`, obj)
+	logDebug(`  > processIdent: object: %v`, obj)
 	ui.setPendingObject(obj)
 }
 

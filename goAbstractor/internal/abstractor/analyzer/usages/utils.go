@@ -65,18 +65,11 @@ func getName(fSet *token.FileSet, expr ast.Expr) string {
 }
 
 func getNamed(t types.Type) *types.Named {
-	named, _ := last(where[*types.Named](walkType(t)))
-	return named
-}
-
-func last[T any](it iter.Seq[T]) (T, bool) {
-	var found bool
-	var value T
-	for v := range it {
-		value = v
-		found = true
+	for named := range where[*types.Named](walkType(t)) {
+		// return first type hit.
+		return named
 	}
-	return value, found
+	return nil
 }
 
 func where[TOut, TIn any](it iter.Seq[TIn]) iter.Seq[TOut] {
@@ -91,6 +84,10 @@ func where[TOut, TIn any](it iter.Seq[TIn]) iter.Seq[TOut] {
 	}
 }
 
+// walkType walks the tree of types. This will only return unique
+// types and skip any types already outputted. This will output a type
+// followed walking the children. Siblings in a type are output in reverse
+// order, such that `map[T]S` will output `S` then `T`.
 func walkType(start types.Type) iter.Seq[types.Type] {
 	return func(yield func(types.Type) bool) {
 		s := stack.With(start)
