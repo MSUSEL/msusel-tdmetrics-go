@@ -10,6 +10,7 @@ import (
 
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/assert"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs"
+	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs/hint"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs/kind"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/jsonify"
 )
@@ -28,20 +29,60 @@ func newInstance(args constructs.InterfaceInstArgs) constructs.InterfaceInst {
 	assert.ArgNotNil(`resolved`, args.Resolved)
 	assert.ArgNotEmpty(`instance types`, args.InstanceTypes)
 	assert.ArgHasNoNils(`instance types`, args.InstanceTypes)
+	if !args.Generic.IsGeneric() {
+		panic(terror.New(`may not create an instance on a non-generic interface`).
+			With(`interface`, args.Generic))
+	}
 
 	if utils.IsNil(args.RealType) {
 		pkg := args.Generic.Package()
 		assert.ArgNotNil(`package`, pkg)
 
-		tArgs := make([]types.Type, len(args.InstanceTypes))
-		for i, ip := range args.InstanceTypes {
-			tArgs[i] = ip.GoType()
+		switch args.Generic.Interface().Hint() {
+		case hint.Pointer:
+			// TODO: Implement
+			assert.NotImplemented()
+
+		case hint.List:
+			// TODO: Implement
+			assert.NotImplemented()
+
+		case hint.Map:
+			// TODO: Implement
+			assert.NotImplemented()
+
+		case hint.Chan:
+			// TODO: Implement
+			assert.NotImplemented()
+
+		default:
+			gt := args.Generic.GoType()
+			ggt, ok := gt.(interface {
+				types.Type
+				TypeParams() *types.TypeParamList
+			})
+			if !ok {
+				panic(terror.New(`go type is not a generic type`).
+					With(`type`, args.Generic).
+					With(`goType`, gt))
+			}
+			if ggt.TypeParams().Len() <= 0 {
+				panic(terror.New(`may not create an instance with a non-generic go type`).
+					With(`type`, args.Generic).
+					With(`goType`, gt))
+			}
+
+			tArgs := make([]types.Type, len(args.InstanceTypes))
+			for i, ip := range args.InstanceTypes {
+				tArgs[i] = ip.GoType()
+			}
+
+			rt, err := types.Instantiate(nil, ggt, tArgs, true)
+			if err != nil {
+				panic(terror.New(`failed to instantiate an interface instance`, err))
+			}
+			args.RealType = rt
 		}
-		rt, err := types.Instantiate(nil, args.Generic.GoType(), tArgs, true)
-		if err != nil {
-			panic(terror.New(`failed to instantiate an interface instance`, err))
-		}
-		args.RealType = rt
 	}
 	assert.ArgNotNil(`real type`, args.RealType)
 

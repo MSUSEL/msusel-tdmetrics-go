@@ -15,7 +15,7 @@ func (c *Cat) Pet() {
 }
 
 func main() {
-	c := Cat{
+	c := &Cat{
 		Name: `Mittens`,
 	}
 	c.Pet()

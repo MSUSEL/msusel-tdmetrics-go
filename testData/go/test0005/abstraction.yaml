@@ -122,32 +122,32 @@
     },
     { # 2. NewCat @ main.go:27
       codeCount: 6, complexity: 1, indents: 6, lineCount: 6, loc: 27,
-      reads: [ object1, selection2, selection4 ]
+      reads: [ object1, selection1, selection2 ]
     },
     { # 3. Cat.Meow @ main.go:36
       codeCount: 3, complexity: 1, indents: 1, lineCount: 3, loc: 36,
       invokes: [ value1 ],
-      reads:   [ interfaceInst1, selection3 ]
+      reads:   [ object1, selection2 ]
     },
     { # 4. Cat.String @ main.go:41
       codeCount: 3, complexity: 1, indents: 1, lineCount: 3, loc: 41,
       getter: true,
-      reads: [ interfaceInst1, selection3 ]
+      reads: [ object1, selection2 ]
     },
     { # 5. NextYear @ main.go:46
       codeCount: 5, complexity: 2, indents: 4, lineCount: 5, loc: 46,
-      reads:  [ interfaceInst1, interfaceInst2 ],
-      writes: [ interfaceInst1, selection1 ]
+      reads:  [ object1 ],
+      writes: [ object1, selection1 ]
     },
     { # 6. Cats.Youngest @ main.go:53
       codeCount: 9, complexity: 4, indents: 11, lineCount: 9, loc: 53,
-      reads:  [ interfaceInst1, object1, object2, selection1 ],
-      writes: [ interfaceInst1 ]
+      reads:  [ object1, object2, selection1 ],
+      writes: [ object1 ]
     },
     { # 7. Pet(c Pointer[Cat]) @ main.go:65
       codeCount: 3, complexity: 1, indents: 1, lineCount: 3, loc: 65,
       invokes: [ value1 ],
-      reads:   [ interfaceInst1, selection3 ]
+      reads:   [ object1, selection2 ]
     }
   ],
   objects: [
@@ -176,10 +176,8 @@
     }
   ],
   selections: [
-    { name: Age,  origin: interfaceInst1 }, # 1.
-    { name: Age,  origin: object1        }, # 2.
-    { name: Name, origin: interfaceInst1 }, # 3.
-    { name: Name, origin: object1        }  # 4.
+    { name: Age,  origin: object1 }, # 1.
+    { name: Name, origin: object1 }  # 2.
   ],
   signatures: [
     {}, # 1. func()()
