@@ -201,7 +201,15 @@ func (r *resolverImp) resolveTempRef(ref constructs.TempReference) {
 		return
 	}
 
-	_, typ, ok := r.proj.FindType(ref.PackagePath(), ref.Name(), true)
+	// Try to find instance of type or non-generic type.
+	_, typ, ok := r.proj.FindType(ref.PackagePath(), ref.Name(), ref.InstanceTypes(), false)
+	if ok {
+		ref.SetResolution(typ)
+		return
+	}
+
+	// Try to find generic type and then create the instance if needed.
+	_, typ, ok = r.proj.FindType(ref.PackagePath(), ref.Name(), []constructs.TypeDesc{}, true)
 	if !ok {
 		panic(terror.New(`failed to find temp referenced object`).
 			With(`package path`, ref.PackagePath()).
@@ -245,7 +253,15 @@ func (r *resolverImp) resolveTempDeclRef(ref constructs.TempDeclRef) {
 		return
 	}
 
-	_, decl, ok := r.proj.FindDecl(ref.PackagePath(), ref.Name(), true)
+	// Try to find instance of declaration or non-generic declaration.
+	_, decl, ok := r.proj.FindDecl(ref.PackagePath(), ref.Name(), ref.InstanceTypes(), false)
+	if ok {
+		ref.SetResolution(decl)
+		return
+	}
+
+	// Try to find generic declaration and then create the instance if needed.
+	_, decl, ok = r.proj.FindDecl(ref.PackagePath(), ref.Name(), []constructs.TypeDesc{}, true)
 	if !ok {
 		panic(terror.New(`failed to find temp declaration referenced`).
 			With(`package path`, ref.PackagePath()).

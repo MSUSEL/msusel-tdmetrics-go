@@ -124,7 +124,7 @@ func (p *projectImp) EntryPoint() constructs.Package {
 	return pkg
 }
 
-func (p *projectImp) FindType(pkgPath, typeName string, panicOnNotFound bool) (constructs.Package, constructs.TypeDecl, bool) {
+func (p *projectImp) FindType(pkgPath, name string, instTypes []constructs.TypeDesc, panicOnNotFound bool) (constructs.Package, constructs.TypeDesc, bool) {
 	assert.ArgNotEmpty(`pkgPath`, pkgPath)
 
 	pkg := p.FindPackageByPath(pkgPath)
@@ -136,25 +136,59 @@ func (p *projectImp) FindType(pkgPath, typeName string, panicOnNotFound bool) (c
 			func(pkg constructs.Package) string { return strconv.Quote(pkg.Path()) }).
 			Join(`, `)
 		panic(terror.New(`failed to find package for type reference`).
-			With(`type name`, typeName).
+			With(`type name`, name).
+			With(`instance types`, instTypes).
 			With(`package path`, pkgPath).
 			With(`existing paths`, `[`+names+`]`))
 	}
 
-	decl := pkg.FindTypeDecl(typeName)
+	decl := pkg.FindTypeDecl(name)
 	if decl == nil {
 		if !panicOnNotFound {
 			return pkg, nil, false
 		}
 		panic(terror.New(`failed to find type for type reference`).
-			With(`type name`, typeName).
+			With(`type name`, name).
+			With(`instance types`, instTypes).
+			With(`package path`, pkgPath))
+	}
+
+	if len(instTypes) > 0 {
+		switch t := decl.(type) {
+		case constructs.InterfaceDecl:
+			if inst, ok := t.FindInstance(instTypes); ok {
+				return pkg, inst, true
+			}
+			return pkg, nil, false
+		case constructs.Object:
+			if inst, ok := t.FindInstance(instTypes); ok {
+				return pkg, inst, true
+			}
+			return pkg, nil, false
+		case constructs.Method:
+			panic(terror.New(`can not use method instance as type for type reference`).
+				With(`type name`, name).
+				With(`instance types`, instTypes).
+				With(`method`, t).
+				With(`package path`, pkgPath))
+		case constructs.Value:
+			panic(terror.New(`can not get an instance of a value for type reference`).
+				With(`type name`, name).
+				With(`instance types`, instTypes).
+				With(`value`, t).
+				With(`package path`, pkgPath))
+		}
+		panic(terror.New(`unexpected type for type reference instance`).
+			With(`type name`, name).
+			With(`instance types`, instTypes).
+			With(`declaration`, decl).
 			With(`package path`, pkgPath))
 	}
 
 	return pkg, decl, true
 }
 
-func (p *projectImp) FindDecl(pkgPath, name string, panicOnNotFound bool) (constructs.Package, constructs.Declaration, bool) {
+func (p *projectImp) FindDecl(pkgPath, name string, instTypes []constructs.TypeDesc, panicOnNotFound bool) (constructs.Package, constructs.Construct, bool) {
 	assert.ArgNotEmpty(`pkgPath`, pkgPath)
 
 	pkg := p.FindPackageByPath(pkgPath)
@@ -171,8 +205,8 @@ func (p *projectImp) FindDecl(pkgPath, name string, panicOnNotFound bool) (const
 			With(`existing paths`, `[`+names+`]`))
 	}
 
-	method := pkg.FindDecl(name)
-	if method == nil {
+	decl := pkg.FindDecl(name)
+	if decl == nil {
 		if !panicOnNotFound {
 			return pkg, nil, false
 		}
@@ -181,7 +215,38 @@ func (p *projectImp) FindDecl(pkgPath, name string, panicOnNotFound bool) (const
 			With(`package path`, pkgPath))
 	}
 
-	return pkg, method, true
+	if len(instTypes) > 0 {
+		switch t := decl.(type) {
+		case constructs.InterfaceDecl:
+			if inst, ok := t.FindInstance(instTypes); ok {
+				return pkg, inst, true
+			}
+			return pkg, nil, false
+		case constructs.Object:
+			if inst, ok := t.FindInstance(instTypes); ok {
+				return pkg, inst, true
+			}
+			return pkg, nil, false
+		case constructs.Method:
+			if inst, ok := t.FindInstance(instTypes); ok {
+				return pkg, inst, true
+			}
+			return pkg, nil, false
+		case constructs.Value:
+			panic(terror.New(`can not get an instance of a value for declaration reference`).
+				With(`type name`, name).
+				With(`instance types`, instTypes).
+				With(`value`, t).
+				With(`package path`, pkgPath))
+		}
+		panic(terror.New(`unexpected declaration for declaration reference instance`).
+			With(`type name`, name).
+			With(`instance types`, instTypes).
+			With(`declaration`, decl).
+			With(`package path`, pkgPath))
+	}
+
+	return pkg, decl, true
 }
 
 func (p *projectImp) UpdateIndices() {

@@ -35,11 +35,11 @@ func getPkgPath(o types.Object) string {
 }
 
 func getInstTypes(o types.Object) *types.TypeList {
-	var instType *types.TypeList
-	if named := getNamed(o.Type()); named != nil {
-		instType = named.TypeArgs()
+	type TA interface{ TypeArgs() *types.TypeList }
+	if t, ok := o.Type().(TA); ok {
+		return t.TypeArgs()
 	}
-	return instType
+	return nil
 }
 
 func getName(fSet *token.FileSet, expr ast.Expr) string {

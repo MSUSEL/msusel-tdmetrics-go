@@ -83,8 +83,10 @@ func newInstantiator(proj constructs.Project, decl constructs.Declaration, typeP
 	if count != len(instanceTypes) {
 		panic(terror.New(`the amount of type params must match the instance types`).
 			With(`declaration`, decl).
-			With(`type params`, count).
-			With(`instance types`, len(instanceTypes)))
+			With(`type params count`, count).
+			With(`instance types count`, len(instanceTypes)).
+			With(`type params`, typeParams).
+			With(`instance types`, instanceTypes))
 	}
 
 	// Check declaration is a generic type.
@@ -258,6 +260,10 @@ func (i *instantiator) typeDecl(decl constructs.TypeDecl, tps []constructs.TypeP
 	// directly, e.g. `type Foo[T any] interface { Get() Foo[T]  }` or
 	// indirectly. e.g. `type Foo[T any] interface { Children() List[Foo[T]] }`
 	if i.inProgress(decl, its) {
+		_, typ, found := i.proj.FindType(decl.Package().Path(), decl.Name(), its, false)
+		if found {
+			return typ
+		}
 		return i.proj.NewTempReference(constructs.TempReferenceArgs{
 			PackagePath:   decl.Package().Path(),
 			Name:          decl.Name(),
@@ -324,10 +330,15 @@ func (i *instantiator) TempReference(r constructs.TempReference) constructs.Type
 		return i.TypeDesc(r.ResolvedType())
 	}
 
+	instTp := applyToSlice(r.InstanceTypes(), i.TypeDesc)
+	_, typ, found := i.proj.FindType(r.PackagePath(), r.Name(), instTp, false)
+	if found {
+		return typ
+	}
 	return i.proj.NewTempReference(constructs.TempReferenceArgs{
 		PackagePath:   r.PackagePath(),
 		Name:          r.Name(),
-		InstanceTypes: applyToSlice(r.InstanceTypes(), i.TypeDesc),
+		InstanceTypes: instTp,
 		Package:       i.decl.Package().Source(),
 	})
 }

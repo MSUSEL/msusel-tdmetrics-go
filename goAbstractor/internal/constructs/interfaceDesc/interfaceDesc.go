@@ -135,7 +135,7 @@ func (id *interfaceDescImp) Approx() []constructs.TypeDesc     { return id.appro
 func (id *interfaceDescImp) PinnedPackage() constructs.Package { return id.pinnedPkg }
 
 func (id *interfaceDescImp) IsPinned() bool {
-	return utils.IsNil(id.pinnedPkg)
+	return !utils.IsNil(id.pinnedPkg)
 }
 
 func (id *interfaceDescImp) IsGeneral() bool {

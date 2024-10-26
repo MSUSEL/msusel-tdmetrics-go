@@ -159,6 +159,12 @@ func (ui *usagesImp) setPendingObject(o types.Object) {
 		return
 	}
 
+	if _, ok := o.(*types.PkgName); ok {
+		// Skip over package names
+		logDebug(`    + package name`)
+		return
+	}
+
 	if isLocal(ui.root, o) {
 		logDebug(`    - local > set type`)
 		ui.setPendingType(o.Type())
@@ -187,6 +193,13 @@ func (ui *usagesImp) setPendingObject(o types.Object) {
 			}
 
 			logDebug(`      + dump built-in`)
+			return
+		}
+
+		_, typ, found := ui.proj.FindType(pkgPath, o.Name(), instType, false)
+		if found {
+			logDebug(`      + type found: %v`, typ)
+			ui.pending = typ
 			return
 		}
 
@@ -228,9 +241,17 @@ func (ui *usagesImp) setPendingObject(o types.Object) {
 		ui.pendingSE = true
 	}
 
+	pkgPath := getPkgPath(o)
+	_, typ, found := ui.proj.FindDecl(pkgPath, o.Name(), instType, false)
+	if found {
+		logDebug(`      + decl found: %v`, typ)
+		ui.pending = typ
+		return
+	}
+
 	logDebug(`    - temp decl ref: %v`, o)
 	ui.pending = ui.proj.NewTempDeclRef(constructs.TempDeclRefArgs{
-		PackagePath:   getPkgPath(o),
+		PackagePath:   pkgPath,
 		Name:          o.Name(),
 		InstanceTypes: instType,
 	})
@@ -419,7 +440,6 @@ func (ui *usagesImp) processCall(call *ast.CallExpr) {
 
 	// Check for explicit cast (conversion), e.g. `int(f.x)`
 	if typ.IsType() {
-		// TODO: FIX ISSUE WITH LOCALLY DEFINED TYPE
 		ui.processNode(call.Fun)
 		ui.flushPendingToWrite()
 		return
@@ -581,9 +601,8 @@ func (ui *usagesImp) processSelector(sel *ast.SelectorExpr) {
 
 	selObj, ok := ui.info.Selections[sel]
 	if !ok {
-		panic(terror.New(`expected selection info but not found`).
-			With(`expr`, sel).
-			With(`position`, ui.pos(sel)))
+		logDebug(`  > no selection info: %v`, sel)
+		return
 	}
 	logDebug(`  > selObj: %v`, selObj)
 
@@ -600,7 +619,6 @@ func (ui *usagesImp) processSelector(sel *ast.SelectorExpr) {
 		}
 	}
 
-	// TODO: Fix this
 	logDebug(`  > selection fallback: %v`, selObj)
 	ui.setPendingType(selObj.Recv())
 	ui.flushPendingToRead()

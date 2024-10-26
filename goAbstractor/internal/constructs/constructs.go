@@ -59,6 +59,7 @@ var (
 	_ Construct = Package(nil)
 	_ Construct = Metrics(nil)
 	_ Construct = MethodInst(nil)
+	_ Construct = TempDeclRef(nil)
 
 	// These are the implementations of type descriptions.
 	// None of these have generics defined on them but may carry

@@ -38,22 +38,39 @@ func newInstance(args constructs.InterfaceInstArgs) constructs.InterfaceInst {
 		pkg := args.Generic.Package()
 		assert.ArgNotNil(`package`, pkg)
 
+		tArgs := make([]types.Type, len(args.InstanceTypes))
+		for i, ip := range args.InstanceTypes {
+			tArgs[i] = ip.GoType()
+		}
+
 		switch args.Generic.Interface().Hint() {
 		case hint.Pointer:
-			// TODO: Implement
-			assert.NotImplemented()
+			if len(tArgs) != 1 {
+				panic(terror.New(`an instance of a pointer must have exactly one type argument`).
+					With(`type args`, tArgs))
+			}
+			args.RealType = types.NewPointer(tArgs[0])
 
 		case hint.List:
-			// TODO: Implement
-			assert.NotImplemented()
+			if len(tArgs) != 1 {
+				panic(terror.New(`an instance of a list must have exactly one type argument`).
+					With(`type args`, tArgs))
+			}
+			args.RealType = types.NewSlice(tArgs[0])
 
 		case hint.Map:
-			// TODO: Implement
-			assert.NotImplemented()
+			if len(tArgs) != 2 {
+				panic(terror.New(`an instance of a map must have exactly two type arguments`).
+					With(`type args`, tArgs))
+			}
+			args.RealType = types.NewMap(tArgs[0], tArgs[1])
 
 		case hint.Chan:
-			// TODO: Implement
-			assert.NotImplemented()
+			if len(tArgs) != 1 {
+				panic(terror.New(`an instance of a channel must have exactly one type argument`).
+					With(`type args`, tArgs))
+			}
+			args.RealType = types.NewChan(types.SendRecv, tArgs[0])
 
 		default:
 			gt := args.Generic.GoType()
@@ -70,11 +87,6 @@ func newInstance(args constructs.InterfaceInstArgs) constructs.InterfaceInst {
 				panic(terror.New(`may not create an instance with a non-generic go type`).
 					With(`type`, args.Generic).
 					With(`goType`, gt))
-			}
-
-			tArgs := make([]types.Type, len(args.InstanceTypes))
-			for i, ip := range args.InstanceTypes {
-				tArgs[i] = ip.GoType()
 			}
 
 			rt, err := types.Instantiate(nil, ggt, tArgs, true)
