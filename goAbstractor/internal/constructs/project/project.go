@@ -2,6 +2,7 @@ package project
 
 import (
 	"strconv"
+	"strings"
 
 	"github.com/Snow-Gremlin/goToolbox/collections"
 	"github.com/Snow-Gremlin/goToolbox/collections/enumerator"
@@ -266,33 +267,41 @@ func (p *projectImp) String() string {
 	return jsonify.ToString(p)
 }
 
+func pl(k kind.Kind) string {
+	s := string(k)
+	if !strings.HasSuffix(s, `s`) {
+		s += `s`
+	}
+	return s
+}
+
 func (p *projectImp) ToJson(ctx *jsonify.Context) jsonify.Datum {
 	m := jsonify.NewMap().
 		Add(ctx, `language`, `go`).
 		AddNonZero(ctx, `locs`, p.locations)
 
-	m.AddNonZero(ctx, `abstracts`, p.Abstracts().ToSlice()).
-		AddNonZero(ctx, `arguments`, p.Arguments().ToSlice()).
-		AddNonZero(ctx, `fields`, p.Fields().ToSlice()).
-		AddNonZero(ctx, `packages`, p.Packages().ToSlice()).
-		AddNonZero(ctx, `metrics`, p.Metrics().ToSlice()).
-		AddNonZero(ctx, `selections`, p.Selections().ToSlice())
+	m.AddNonZero(ctx, pl(kind.Abstract), p.Abstracts().ToSlice()).
+		AddNonZero(ctx, pl(kind.Argument), p.Arguments().ToSlice()).
+		AddNonZero(ctx, pl(kind.Field), p.Fields().ToSlice()).
+		AddNonZero(ctx, pl(kind.Package), p.Packages().ToSlice()).
+		AddNonZero(ctx, pl(kind.Metrics), p.Metrics().ToSlice()).
+		AddNonZero(ctx, pl(kind.Selection), p.Selections().ToSlice()).
+		AddNonZero(ctx, pl(kind.TempDeclRef), p.TempDeclRefs().ToSlice())
 
-	m.AddNonZero(ctx, `interfaceDecls`, p.InterfaceDecls().ToSlice()).
-		AddNonZero(ctx, `methods`, p.Methods().ToSlice()).
-		AddNonZero(ctx, `objects`, p.Objects().ToSlice()).
-		AddNonZero(ctx, `values`, p.Values().ToSlice()).
-		AddNonZero(ctx, `tempDeclRef`, p.TempDeclRefs().ToSlice())
+	m.AddNonZero(ctx, pl(kind.InterfaceDecl), p.InterfaceDecls().ToSlice()).
+		AddNonZero(ctx, pl(kind.Method), p.Methods().ToSlice()).
+		AddNonZero(ctx, pl(kind.Object), p.Objects().ToSlice()).
+		AddNonZero(ctx, pl(kind.Value), p.Values().ToSlice())
 
-	m.AddNonZero(ctx, `basics`, p.Basics().ToSlice()).
-		AddNonZero(ctx, `interfaceDescs`, p.InterfaceDescs().ToSlice()).
-		AddNonZero(ctx, `interfaceInst`, p.InterfaceInsts().ToSlice()).
-		AddNonZero(ctx, `methodInst`, p.MethodInsts().ToSlice()).
-		AddNonZero(ctx, `objectInst`, p.ObjectInsts().ToSlice()).
-		AddNonZero(ctx, `tempReferences`, p.TempReferences().ToSlice()).
-		AddNonZero(ctx, `signatures`, p.Signatures().ToSlice()).
-		AddNonZero(ctx, `structDescs`, p.StructDescs().ToSlice()).
-		AddNonZero(ctx, `typeParams`, p.TypeParams().ToSlice())
+	m.AddNonZero(ctx, pl(kind.Basic), p.Basics().ToSlice()).
+		AddNonZero(ctx, pl(kind.InterfaceDesc), p.InterfaceDescs().ToSlice()).
+		AddNonZero(ctx, pl(kind.InterfaceInst), p.InterfaceInsts().ToSlice()).
+		AddNonZero(ctx, pl(kind.MethodInst), p.MethodInsts().ToSlice()).
+		AddNonZero(ctx, pl(kind.ObjectInst), p.ObjectInsts().ToSlice()).
+		AddNonZero(ctx, pl(kind.TempReference), p.TempReferences().ToSlice()).
+		AddNonZero(ctx, pl(kind.Signature), p.Signatures().ToSlice()).
+		AddNonZero(ctx, pl(kind.StructDesc), p.StructDescs().ToSlice()).
+		AddNonZero(ctx, pl(kind.TypeParam), p.TypeParams().ToSlice())
 
 	return m
 }

@@ -11,142 +11,156 @@
     os: windows,
     path: [ '~.', '#' ],
     data: {
-      abstracts:      865,
-      arguments:     2954,
+      abstracts:     2267,
+      arguments:     3063,
       basics:          15,
-      fields:        2327,
-      instances:      571,
-      interfaceDecls:  61,
-      interfaceDescs: 638,
+      fields:        2384,
+      interfaceDecls:  63,
+      interfaceDescs: 958,
+      interfaceInst:  594,
       language:         1,
-      locs:           438,
-      methods:       4940,
-      objects:        719,
-      packages:        50,
-      signatures:    3508,
-      structDescs:    626,
-      typeParams:      24,
-      values:        3740 
+      locs:           451,
+      methods:       5177,
+      metrics:       4687,
+      objectInst:       8,
+      objects:        747,
+      packages:        59,
+      selections:    1775,
+      signatures:    3675,
+      structDescs:    651,
+      typeParams:      30,
+      values:        3799 
     }
   },
   {
     name: package names,
     os: windows,
     path: [ packages, '..', name ],
-    data: [ $builtin, cmp, cats, errors, fmt, abi, bytealg, chacha8rand,
-            rtcov, cpu, fmtsort, goarch, godebugs, goexperiment, goos,
-            itoa, oserror, poll, race, reflectlite, safefilepath, execenv,
-            windows, registry, sysdll, testlog, unsafeheader, io, fs, math,
-            bits, os, path, reflect, runtime, atomic, math, sys, slices,
-            sort, strconv, strings, sync, atomic, syscall, time, unicode,
-            utf16, utf8, unsafe ]
+    data: [ $builtin, cmp, cats, errors, fmt, abi, asan, bisect, bytealg,
+            byteorder, chacha8rand, rtcov, cpu, filepathlite, fmtsort,
+            goarch, godebug, godebugs, goexperiment, goos, itoa, msan,
+            oserror, poll, profilerecord, race, reflectlite, atomic,
+            exithook, stringslite, execenv, windows, registry, sysdll,
+            testlog, unsafeheader, io, fs, iter, math, bits, os, path,
+            reflect, runtime, math, sys, slices, sort, strconv, strings,
+            sync, atomic, syscall, time, unicode, utf16, utf8, unsafe ]
   },
   {
     name: cats,
     os: windows,
     path: [ packages, name=cats ],
     data: {
-      index: 13093,
+      index: 3,
       name: cats,
       path: command-line-arguments,
       imports: [
-        13095, # fmt
-        13130, # sort
-        13131, # strconv
-        13132  # strings
+         5, # fmt
+        49, # sort
+        50, # strconv
+        51  # strings
       ],
-      methods: [ 7436, 7437, 7438, 7439, 7440, 7441, 7442, 7443, 7444,
-                 7445, 7446, 7447, 7448, 7449, 7450, 7451, 7452, 7453 ],
-      objects: [ 12372, 12373, 12374, 12375, 12376 ],
-      values: [ 17299, 17300, 17301, 17302, 17303, 17304, 17305, 17306,
-                17307, 17308, 17309, 17310, 17311, 17312, 17313, 17314,
-                17315, 17316, 17317, 17318, 17319, 17320, 17321, 17322,
-                17323, 17324, 17325 ]
+      objects: [
+        1, # Cat
+        2, # CatBreed
+        3, # CatTable
+        4, # ID
+        5  # IDSlice
+      ],
+      methods: [ 5, 6, 7, 8, 9, 10, 11, 12, 13, 14,
+                 15, 16, 17, 18, 19, 20, 21, 22 ],
+      values:  [ 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11,
+                12, 13, 14, 15, 16, 17, 18, 19, 20,
+                21, 22, 23, 24, 25, 26, 27 ]
     }
   },
   {
     name: objects,
     os: windows,
-    path: [ objects, package=~^13093$, '!loc' ],
+    path: [ objects, package=~^3$, '!loc' ],
     data: [
       {
-        index: 12372, name: Cat, package: 13093, data: 16798
+        index: 1, name: Cat, package: 3, exported: true,
+        data: 169, # struct { Name string, Breed CatBreed, Age int }
+        interface: 1, # any
       },
       {
-        index: 12373, name: CatBreed, package: 13093, data: 16650,
-        methods: [ 7450 ]
+        index: 2, name: CatBreed, package: 3, exported: true,
+        data: 2, interface: 775,
+        methods: [ 19 ]
       },
       {
-        index: 12374, name: CatTable, package: 13093, data: 16673,
-        methods: [ 7436, 7437, 7438, 7439, 7440, 7441,
-                   7442, 7443, 7444, 7445, 7448, 7451 ]
+        index: 3, name: CatTable, package: 3, exported: true,
+        data: 26, interface: 629,
+        methods: [ 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 17, 20 ]
       },
       {
-        index: 12375, name: ID, package: 13093, data: 16659,
+        index: 4, name: ID, package: 3, exported: true,
+        data: 11, interface: 1,
       },
       {
-        index: 12376, name: IDSlice, package: 13093, data: 16669,
-        methods: [ 7446, 7447, 7452, 7453 ]
+        index: 5, name: IDSlice, package: 3, exported: true,
+        data: 21, interface: 716,
+        methods: [ 15, 16, 21, 22 ]
       }
     ]
   },
   {
     name: methods,
     os: windows,
-    path: [ methods, package=~^13093$, '!~^(metrics|loc)$' ],
+    path: [ methods, package=~^3$, '!~^(metrics|loc)$' ],
     data: [
-      { index: 7436, name: Add,           package: 13093, receiver: 12374, signature: 14742 },
-      { index: 7437, name: AddNew,        package: 13093, receiver: 12374, signature: 15379 },
-      { index: 7438, name: Age,           package: 13093, receiver: 12374, signature: 14739 },
-      { index: 7439, name: AgeRange,      package: 13093, receiver: 12374, signature: 13144 },
-      { index: 7440, name: AllBreeds,     package: 13093, receiver: 12374, signature: 13257 },
-      { index: 7441, name: AllIDs,        package: 13093, receiver: 12374, signature: 13282 },
-      { index: 7442, name: Breed,         package: 13093, receiver: 12374, signature: 14741 },
-      { index: 7443, name: CatsWithBreed, package: 13093, receiver: 12374, signature: 14021 },
-      { index: 7444, name: CatsWithName,  package: 13093, receiver: 12374, signature: 15360 },
-      { index: 7445, name: Has,           package: 13093, receiver: 12374, signature: 14738 },
-      { index: 7446, name: Len,           package: 13093, receiver: 12376, signature: 13143 },
-      { index: 7447, name: Less,          package: 13093, receiver: 12376, signature: 14699 },
-      { index: 7448, name: Name,          package: 13093, receiver: 12374, signature: 14740 },
-      { index: 7449, name: NewID,         package: 13093,                  signature: 13281 },
-      { index: 7450, name: String,        package: 13093, receiver: 12373, signature: 13164 },
-      { index: 7451, name: String,        package: 13093, receiver: 12374, signature: 13164 },
-      { index: 7452, name: String,        package: 13093, receiver: 12376, signature: 13164 },
-      { index: 7453, name: Swap,          package: 13093, receiver: 12376, signature: 14698 }
+      { index:  5, name: Add,           exported: true, package: 3, receiver: 3, signature: 1702 },
+      { index:  6, name: AddNew,        exported: true, package: 3, receiver: 3, signature: 2364 },
+      { index:  7, name: Age,           exported: true, package: 3, receiver: 3, signature: 1699 },
+      { index:  8, name: AgeRange,      exported: true, package: 3, receiver: 3, signature:    4 },
+      { index:  9, name: AllBreeds,     exported: true, package: 3, receiver: 3, signature:  132 },
+      { index: 10, name: AllIDs,        exported: true, package: 3, receiver: 3, signature:  143 },
+      { index: 11, name: Breed,         exported: true, package: 3, receiver: 3, signature: 1701 },
+      { index: 12, name: CatsWithBreed, exported: true, package: 3, receiver: 3, signature:  951 },
+      { index: 13, name: CatsWithName,  exported: true, package: 3, receiver: 3, signature: 2344 },
+      { index: 14, name: Has,           exported: true, package: 3, receiver: 3, signature: 1698 },
+      { index: 15, name: Len,           exported: true, package: 3, receiver: 5, signature:    3 },
+      { index: 16, name: Less,          exported: true, package: 3, receiver: 5, signature: 1657 },
+      { index: 17, name: Name,          exported: true, package: 3, receiver: 3, signature: 1700 },
+      { index: 18, name: NewID,         exported: true, package: 3,              signature:  142 },
+      { index: 19, name: String,        exported: true, package: 3, receiver: 2, signature:   26 },
+      { index: 20, name: String,        exported: true, package: 3, receiver: 3, signature:   26 },
+      { index: 21, name: String,        exported: true, package: 3, receiver: 5, signature:   26 },
+      { index: 22, name: Swap,          exported: true, package: 3, receiver: 5, signature: 1656 }
     ]
   },
   {
     name: variables and constants,
     os: windows,
-    path: [ values, package=~^13093$, ~^(name|type|const)$ ],
+    path: [ values, package=~^3$, ~^(name|type|const)$ ],
     data: [
-      { const: true, name: Abyssinian,        type: 12373 }, # 12373 = CatBreed
-      { const: true, name: AmericanShorthair, type: 12373 },
-      { const: true, name: Balinese,          type: 12373 },
-      { const: true, name: Bengal,            type: 12373 },
-      { const: true, name: Bombay,            type: 12373 },
-      { const: true, name: BritishShorthair,  type: 12373 },
-      { const: true, name: Burmese,           type: 12373 },
-      { const: true, name: CornishRex,        type: 12373 },
-      { const: true, name: DevonRex,          type: 12373 },
-      { const: true, name: EgyptianMau,       type: 12373 },
-      { const: true, name: ExoticShorthair,   type: 12373 },
-      { const: true, name: Himalayan,         type: 12373 },
-      { const: true, name: JapaneseBobtail,   type: 12373 },
-      { const: true, name: MaineCoon,         type: 12373 },
-      { const: true, name: Manx,              type: 12373 },
-      { const: true, name: Munchkin,          type: 12373 },
-      { const: true, name: NorwegianForest,   type: 12373 },
-      { const: true, name: Persian,           type: 12373 },
-      { const: true, name: Ragdoll,           type: 12373 },
-      { const: true, name: RussianBlue,       type: 12373 },
-      { const: true, name: Savannah,          type: 12373 },
-      { const: true, name: ScottishFold,      type: 12373 },
-      { const: true, name: Siamese,           type: 12373 },
-      { const: true, name: Siberian,          type: 12373 },
-      { const: true, name: alreadyExistsInTable, type: 3834 }, # 3834 = string
-      { const: true, name: doesNotExistInTable,  type: 3834 },
-      { name: nextIDValue, type: 3821 } # 3821 = int
+      { const: true, name: Abyssinian,           type: object2 }, # object2 = CatBreed
+      { const: true, name: AmericanShorthair,    type: object2 },
+      { const: true, name: Balinese,             type: object2 },
+      { const: true, name: Bengal,               type: object2 },
+      { const: true, name: Bombay,               type: object2 },
+      { const: true, name: BritishShorthair,     type: object2 },
+      { const: true, name: Burmese,              type: object2 },
+      { const: true, name: CornishRex,           type: object2 },
+      { const: true, name: DevonRex,             type: object2 },
+      { const: true, name: EgyptianMau,          type: object2 },
+      { const: true, name: ExoticShorthair,      type: object2 },
+      { const: true, name: Himalayan,            type: object2 },
+      { const: true, name: JapaneseBobtail,      type: object2 },
+      { const: true, name: MaineCoon,            type: object2 },
+      { const: true, name: Manx,                 type: object2 },
+      { const: true, name: Munchkin,             type: object2 },
+      { const: true, name: NorwegianForest,      type: object2 },
+      { const: true, name: Persian,              type: object2 },
+      { const: true, name: Ragdoll,              type: object2 },
+      { const: true, name: RussianBlue,          type: object2 },
+      { const: true, name: Savannah,             type: object2 },
+      { const: true, name: ScottishFold,         type: object2 },
+      { const: true, name: Siamese,              type: object2 },
+      { const: true, name: Siberian,             type: object2 },
+      { const: true, name: alreadyExistsInTable, type: basic15 }, # basic15 = string
+      { const: true, name: doesNotExistInTable,  type: basic15 },
+      {              name: nextIDValue,          type: basic2  } # basic2 = int
     ]
   }
 ]

@@ -220,7 +220,7 @@ func Test_SimpleWithDefer(t *testing.T) {
 		`    { name: close,   origin: tempReference1 },`,
 		`    { name: doStuff, origin: tempReference1 }`,
 		`  ],`,
-		`  tempDeclRef: [`,
+		`  tempDeclRefs: [`,
 		`    { name: open, packagePath: test }`,
 		`  ],`,
 		`  tempReferences: [`,
@@ -669,7 +669,7 @@ func Test_GetterWithDereference(t *testing.T) {
 		`  packages: [`,
 		`    { name: test, path: test }`,
 		`  ],`,
-		`  tempDeclRef: [`,
+		`  tempDeclRefs: [`,
 		`    { packagePath: test, name: bar }`,
 		`  ]`,
 		`}`)
@@ -698,7 +698,7 @@ func Test_GetterWithParentheses(t *testing.T) {
 		`  packages: [`,
 		`    { name: test, path: test }`,
 		`  ],`,
-		`  tempDeclRef: [`,
+		`  tempDeclRefs: [`,
 		`    { packagePath: test, name: bar }`,
 		`  ]`,
 		`}`)
@@ -728,7 +728,7 @@ func Test_GetterWithNamedReturn(t *testing.T) {
 		`  packages: [`,
 		`    { name: test, path: test }`,
 		`  ],`,
-		`  tempDeclRef: [`,
+		`  tempDeclRefs: [`,
 		`    { packagePath: test, name: bar }`,
 		`  ]`,
 		`}`)
@@ -823,7 +823,7 @@ func Test_SetterWithReference(t *testing.T) {
 		`  packages: [`,
 		`    { name: test, path: test }`,
 		`  ],`,
-		`  tempDeclRef: [`,
+		`  tempDeclRefs: [`,
 		`    { name: bar, packagePath: test }`,
 		`  ]`,
 		`}`)
@@ -853,7 +853,7 @@ func Test_SetterWithParentheses(t *testing.T) {
 		`  packages: [`,
 		`    { name: test, path: test }`,
 		`  ],`,
-		`  tempDeclRef: [`,
+		`  tempDeclRefs: [`,
 		`    { name: bar, packagePath: test }`,
 		`  ]`,
 		`}`)
@@ -881,7 +881,7 @@ func Test_NotReverseSetter(t *testing.T) {
 		`  packages: [`,
 		`    { name: test, path: test }`,
 		`  ],`,
-		`  tempDeclRef: [`,
+		`  tempDeclRefs: [`,
 		`    { name: bar, packagePath: test }`,
 		`  ]`,
 		`}`)
@@ -1059,7 +1059,7 @@ func Test_SingletonMethodCallInit(t *testing.T) {
 		`  selections: [`,
 		`    { name: f, origin: tempDeclRef1 }`,
 		`  ],`,
-		`  tempDeclRef: [`,
+		`  tempDeclRefs: [`,
 		`    { name: singleton, packagePath: test }`,
 		`  ]`,
 		`}`)
@@ -1088,7 +1088,7 @@ func Test_SingletonFieldInit(t *testing.T) {
 		`  selections: [`,
 		`    { name: y, origin: tempDeclRef1 }`,
 		`  ],`,
-		`  tempDeclRef: [`,
+		`  tempDeclRefs: [`,
 		`    { name: singleton, packagePath: test }`,
 		`  ]`,
 		`}`)
@@ -1189,7 +1189,7 @@ func Test_SelectOnUnnamedResultValue(t *testing.T) {
 		`  structDescs: [`,
 		`    { fields: [ 1 ] }`,
 		`  ],`,
-		`  tempDeclRef: [`,
+		`  tempDeclRefs: [`,
 		`    { name: bar, packagePath: test }`,
 		`  ]`,
 		`}`)
@@ -1221,7 +1221,7 @@ func Test_SelectOnNamedResultValue(t *testing.T) {
 		`  selections: [`,
 		`    { name: y, origin: tempReference1 }`,
 		`  ],`,
-		`  tempDeclRef: [`,
+		`  tempDeclRefs: [`,
 		`    { name: bar, packagePath: test }`,
 		`  ],`,
 		`  tempReferences: [`,
@@ -1449,7 +1449,7 @@ func Test_IncDec_External(t *testing.T) {
 		`  packages: [`,
 		`    { name: test, path: test }`,
 		`  ],`,
-		`  tempDeclRef: [`,
+		`  tempDeclRefs: [`,
 		`    { name: x, packagePath: test }`,
 		`  ]`,
 		`}`)
@@ -1812,7 +1812,7 @@ func Test_PanicRecover(t *testing.T) {
 		`  packages: [`,
 		`    { name: test, path: test }`,
 		`  ],`,
-		`  tempDeclRef: [`,
+		`  tempDeclRefs: [`,
 		`    { name: foo, packagePath: test }`,
 		`  ]`,
 		`}`)

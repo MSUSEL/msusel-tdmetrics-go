@@ -1,107 +1,150 @@
 {
   language: go,
   abstracts: [
-    { name: $deref, signature: 30 }, # 1. func $deref() Foo[T<string|int>]
-    { name: $deref, signature: 31 }  # 2. func $deref() T<any>
+    { exported: true, name: $deref, signature: 2 }, # 1. func $deref() ???
+    { exported: true, name: $deref, signature: 3 }, # 2. func $deref() ???
+    { exported: true, name: Add,    signature: 5 }  # 3. func Add( ??? ) ???
   ],
   arguments: [
-    { type: 14 }, # 3. <unnamed> Pointer[Foo[T<string|int>]]
-    { type: 15 }, # 4. <unnamed> Foo[T<string|int>]
-    { type: 36 }, # 5. <unnamed> T<any>
-    { type: 38 }, # 6. <unnamed> T<string|int|uint>
-    { name: v, type: 37 }, # 7. v T<string|int>
-    { name: v, type: 38 }  # 8. v T<string|int|uint>
+    { type: interfaceInst1 },      # 1. TODO: Finish Annotating
+    { type: objectInst2 },         # 2.
+    { type: typeParam1 },          # 3.
+    { type: typeParam3 },          # 4.
+    { name: v, type: typeParam2 }, # 5.
+    { name: v, type: typeParam3 }  # 6.
   ],
-  basics: [
-    int,   #  9. int
-    uint,  # 10. uint
-    string, # 11. string
-    bool
-  ],
+  basics: [ int, uint, string ],
   fields: [
-    { name: value, type: 37 }, # 12. value T<string|int>
-    { name: value, type: 38 }  # 13. value T<string|int|uint>
-  ],
-  instances: [
-    { # 14. Pointer[Foo[T<string|int>]]
-      generic: 16,
-      instanceTypes: [ 15 ],
-      resolved: 21
-    },
-    { # 15. main.Foo[T string|int]
-      generic: 26,
-      instanceTypes: [ 37 ],
-      resolved: 34
-    } # TODO: Need to add instance of Foo[string]
+    { name: value, type: basic3 },     # 1. value string
+    { name: value, type: typeParam2 }, # 2. value string|int
+    { name: value, type: typeParam3 }  # 3. value string|int|uint
   ],
   interfaceDecls: [
-    { # 16. $builtin.Pointer[T any]
-      name: Pointer, package: 27, interface: 22,
-      typeParams: [ 36 ],
-      instances: [ 14 ]
+    { # 1. Pointer[T any] {  ???  }
+      name: Pointer, package: 1, interface: 5, exported: true,
+      instances:  [ 1 ],
+      typeParams: [ 1 ]
     },
-    { # 17. $builtin.any interface{}
-      name: any, package: 27, interface: 18
+    { # 2. any
+      name: any, package: 1, interface: 1, exported: true
     }
   ],
   interfaceDescs: [
-    {},                       # 18. interface {}
-    { exact: [ 11, 9 ] },     # 19. interface { string | int }
-    { exact: [ 11, 9, 10 ] }, # 20. interface { string | int | uint }
-    { abstracts: [ 1 ] },     # 21. interface { $deref() Foo[T<string|int>] }
-    { abstracts: [ 2 ] }      # 22. interface { $deref() T<any> }
+    {}, # 1. any
+    {   # 2. string|int
+      exact: [ basic3, basic1 ],
+      # inherits 3 because 2 is more restrictive and can be used anywhere 3 can be,
+      # but 3 can't be used anywhere 2 can be since 3 might be an uint instance.
+      inherits: [ 3 ]
+    },
+    { # 3. string|int|uint
+      exact:    [ basic3, basic1, basic2 ],
+      inherits: [ 1 ]
+    },
+    { # 4. interface { ??? }
+      abstracts: [ 1 ],
+      inherits:  [ 1 ]
+    },
+    { # 5. interface { ??? }
+      abstracts: [ 2 ],
+      inherits:  [ 1 ]
+    },
+    { # 6. interface { ??? }
+      abstracts: [ 3 ],
+      inherits:  [ 1 ]
+    }
+  ],
+  interfaceInst: [
+    { # 1. 
+      generic: 1, resolved: 4,
+      instanceTypes: [ objectInst2 ]
+    }
   ],
   methods: [
-    { # 23. func (*Foo) Add(v T) T where T string|int|uint @ main.go:9
-      name: Add, package: 28, receiver: 26, signature: 33, loc: 9,
-      metrics: { codeCount: 4, complexity: 1, indents: 2, lineCount: 4 }
+    { # 1.
+      name: Add, package: 2, signature: 5, exported: true,
+      receiver: 1, loc: 9, metrics: 1
     },
-    { # 24. func New[T string|int](v T) $builtin.Pointer[main.Foo[T]] @ main.go:14
-      name: New, package: 28, signature: 32, loc: 14,
-      typeParams: [ 37 ],
-      metrics: { codeCount: 3, complexity: 1, indents: 1, lineCount: 3 }
+    { # 2.
+      name: New, package: 2, signature: 4, exported: true,
+      loc: 14, metrics: 2,
+      typeParams: [ 2 ]
     },
-    { # 25. func main() @ main.go:18
-      name: main, package: 28, signature: 29, loc: 18,
-      metrics: { codeCount: 4, complexity: 1, indents: 2, lineCount: 4 }
+    { # 3.
+      name: main, package: 2, signature: 1,
+      loc: 18, metrics: 3
+    }
+  ],
+  metrics: [
+    { # 1.
+      codeCount: 4, complexity: 1, indents: 2, lineCount: 4, loc: 9,
+      reads:  [ object1, selection3 ],
+      writes: [ selection3 ]
+    },
+    { # 2.
+      codeCount: 3, complexity: 1, indents: 1, lineCount: 3, loc: 14,
+      reads: [ object1, objectInst2, selection2 ]
+    },
+    { # 3.
+      codeCount: 4, complexity: 1, indents: 2, lineCount: 4, loc: 18,
+      invokes: [ method2, selection1 ],
+      reads:   [ objectInst1 ],
+      writes:  [ objectInst1 ]
+    }
+  ],
+  objectInst: [
+    { # 1. Foo[string]
+      generic: 1, resolved: 1,
+      instanceTypes: [ basic3 ]
+    },
+    { # 2. Foo[string|int]
+      generic: 1, resolved: 2,
+      instanceTypes: [ typeParam2 ]
     }
   ],
   objects: [
-    { # 26. main.Foo[T string|int|uint]{ value T }{ Add(v T) T }
-      name: Foo, package: 28, data: 35, loc: 5,
-      instances: [ 15 ],
-      methods: [ 23 ],
-      typeParams: [ 38 ]
+    { # 1. Foo[T string|int|uint] ???
+      loc: 5, name: Foo, package: 2,
+      exported: true, data: 3, interface: 6,
+      instances:  [ 1, 2 ],
+      methods:    [ 1 ],
+      typeParams: [ 3 ]
     }
   ],
   packages: [
-    { # 27. $builtin package
+    { # 1. $builtin package
       name: $builtin,
       path: $builtin,
-      interfaces: [ 16, 17 ]
+      interfaces: [ 1, 2 ]
     },
-    { # 28. main package
+    { # 2. main package
       name: main,
       path: command-line-arguments,
-      objects: [ 26 ],
-      methods: [ 23, 24, 25 ]
+      methods: [ 1, 2, 3 ],
+      objects: [ 1 ]
     }
   ],
+  selections: [
+    { name: Add,   origin: objectInst1 }, # 1. Foo[string].Add
+    { name: value, origin: objectInst2 }, # 2. Foo[string|int].value
+    { name: value, origin: object1 }      # 3. Foo[string|int|uint].value
+  ],
   signatures: [
-    {}, # 29. func()
-    { results: [ 4 ] }, # 30. func() Foo[T<string|int>]
-    { results: [ 5 ] }, # 31. func() T<any>
-    { params: [ 7 ], results: [ 3 ] }, # 32. func(v T<string|int>) Pointer[Foo[T]]
-    { params: [ 8 ], results: [ 6 ] }  # 33. func(v T<string|int|uint>) T
+    {},                                # 1. func()()
+    { results: [ 2 ] },                # 2. func() ???
+    { results: [ 3 ] },                # 3. func() ???
+    { params: [ 5 ], results: [ 1 ] }, # 4. func( ??? ) ???
+    { params: [ 6 ], results: [ 4 ] }  # 5. func( ??? ) ???
   ],
   structDescs: [
-    { fields: [ 12 ] }, # 34. struct{ value T<string|int> }
-    { fields: [ 13 ] }  # 35. struct{ value T<string|int|uint> }
+    { fields: [ 1 ] }, # 1. struct { value string }
+    { fields: [ 2 ] }, # 2. struct { value string|int }
+    { fields: [ 3 ] }  # 3. struct { value string|int|uint }
   ],
   typeParams: [
-    { name: T, type: 17 }, # 36. T any
-    { name: T, type: 19 }, # 37. T string|int
-    { name: T, type: 20 }  # 38. T string|int|uint
+    { name: T, type: interfaceDecl2 }, # 1. T any
+    { name: T, type: interfaceDesc2 }, # 2. T string|int
+    { name: T, type: interfaceDesc3 }  # 3. T string|int|uint
   ],
   locs: {
     '1': main.go
