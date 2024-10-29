@@ -157,9 +157,9 @@ func (i *instanceImp) ToJson(ctx *jsonify.Context) jsonify.Datum {
 	return jsonify.NewMap().
 		AddIf(ctx, ctx.IsDebugKindIncluded(), `kind`, i.Kind()).
 		AddIf(ctx, ctx.IsDebugIndexIncluded(), `index`, i.index).
-		AddNonZero(ctx.OnlyIndex(), `generic`, i.generic).
-		AddNonZero(ctx.OnlyIndex(), `resolved`, i.resolved).
-		AddNonZero(ctx.Short(), `instanceTypes`, i.instanceTypes)
+		Add(ctx.OnlyIndex(), `generic`, i.generic).
+		Add(ctx.OnlyIndex(), `resolved`, i.resolved).
+		Add(ctx.Short(), `instanceTypes`, i.instanceTypes)
 }
 
 func (i *instanceImp) String() string {

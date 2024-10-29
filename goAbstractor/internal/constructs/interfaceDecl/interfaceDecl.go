@@ -130,12 +130,12 @@ func (d *interfaceDeclImp) ToJson(ctx *jsonify.Context) jsonify.Datum {
 	return jsonify.NewMap().
 		AddIf(ctx, ctx.IsDebugKindIncluded(), `kind`, d.Kind()).
 		AddIf(ctx, ctx.IsDebugIndexIncluded(), `index`, d.index).
-		AddNonZero(ctx.OnlyIndex(), `package`, d.pkg).
-		AddNonZero(ctx, `name`, d.name).
+		Add(ctx.OnlyIndex(), `package`, d.pkg).
+		Add(ctx, `name`, d.name).
+		Add(ctx.OnlyIndex(), `interface`, d.inter).
 		AddNonZero(ctx, `loc`, d.loc).
 		AddNonZero(ctx, `exported`, d.exported).
 		AddNonZero(ctx.OnlyIndex(), `typeParams`, d.typeParams).
-		AddNonZero(ctx.OnlyIndex(), `interface`, d.inter).
 		AddNonZero(ctx.OnlyIndex(), `instances`, d.instances.ToSlice())
 }
 
