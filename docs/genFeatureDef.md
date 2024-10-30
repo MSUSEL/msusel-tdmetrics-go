@@ -147,6 +147,10 @@ to the current package.
 Another example is `scope` that may be set `private`, `public`, `internal`, etc.
 This is similar to `exported` except for Java instead of Go.
 
+Some additional information can be added on request during the abstraction.
+For example the construct `kind` and `index` in the project's list
+can be added to the JSON for debugging.
+
 ## Schema
 
 The following is the object definitions for the different parts that are
@@ -161,32 +165,32 @@ reduce the size of the JSON file.
 The project is the top most JSON object. It contains lists of all the
 constructs and additional information about the project.
 
-| Name           | Optional | Description |
-|:---------------|:--------:|:------------|
-| abstracts      | ⬤ | List of [abstracts](#abstract) |
-| arguments      | ⬤ | List of [arguments](#argument) |
-| basics         | ⬤ | List of [basics](#basic) |
-| fields         | ⬤ | List of [fields](#field) |
-| interfaceDecls | ⬤ | List of [interfaceDecls](#interface-declaration) |
-| interfaceDescs | ⬤ | List of [interfaceDescs](#interface-description) |
-| interfaceInsts | ⬤ | List of [interfaceInsts](#interface-instance) |
-| language       | ◯ | A string for the source code language, e.g. `go`, `java`. |
-| locs           | ◯ | [Locations](#locations) |
-| methodInsts    | ⬤ | List of [methodInsts](#method-instance) |
-| methods        | ⬤ | List of [methods](#method) |
-| metrics        | ⬤ | List of [metrics](#metrics) |
-| objectInsts    | ⬤ | List of [objectInsts](#object-instance) |
-| objects        | ⬤ | List of [objects](#object) |
-| packages       | ⬤ | List of [packages](#package) |
-| selections     | ⬤ | List of [selections](#selection) |
-| signatures     | ⬤ | List of [signatures](#signature) |
-| structDescs    | ⬤ | List of [structDescs](#structure-description) |
-| typeParams     | ⬤ | List of [typeParams](#type-parameter) |
-| values         | ⬤ | List of [values](#value) |
+| Name             | Optional | Description |
+|:-----------------|:--------:|:------------|
+| `abstracts`      | ⬤ | List of [Abstracts](#abstract) |
+| `arguments`      | ⬤ | List of [Arguments](#argument) |
+| `basics`         | ⬤ | List of [Basics](#basic) |
+| `fields`         | ⬤ | List of [Fields](#field) |
+| `interfaceDecls` | ⬤ | List of [Interface Declarations](#interface-declaration) |
+| `interfaceDescs` | ⬤ | List of [Interface Descriptions](#interface-description) |
+| `interfaceInsts` | ⬤ | List of [Interface Instances](#interface-instance) |
+| `language`       | ◯ | A string for the source code language, e.g. `go`, `java`. |
+| `locs`           | ◯ | [Locations](#locations) |
+| `methodInsts`    | ⬤ | List of [Method Instances](#method-instance) |
+| `methods`        | ⬤ | List of [Methods](#method) |
+| `metrics`        | ⬤ | List of [Metrics](#metrics) |
+| `objectInsts`    | ⬤ | List of [Object Instances](#object-instance) |
+| `objects`        | ⬤ | List of [Objects](#object) |
+| `packages`       | ⬤ | List of [Packages](#package) |
+| `selections`     | ⬤ | List of [Selections](#selection) |
+| `signatures`     | ⬤ | List of [Signatures](#signature) |
+| `structDescs`    | ⬤ | List of [Structure Descriptions](#structure-description) |
+| `typeParams`     | ⬤ | List of [Type Parameters](#type-parameter) |
+| `values`         | ⬤ | List of [Values](#value) |
 
 ### Abstract
 
-An abstract is a single named signature, i.e a bodiless function,
+An abstract (`abstract`) is a single named signature, i.e a bodiless function,
 that exists in an interface.
 
 For example, the following has the abstracts `Foo()` and `Bar(s string) int`.
@@ -200,17 +204,17 @@ interface {
 }
 ```
 
-| Name      | Optional | Description |
-|:----------|:--------:|:------------|
-| exported  | ⬤ | Boolean defaulted to false. True if the scope is "exported". |
-| index     | ⬤ | The index of this abstract in the projects list of abstracts. |
-| kind      | ⬤ | `abstract` |
-| name      | ◯ | The string name for the abstract. |
-| signature | ◯ | [Index](#indices) for the [Signature](#signature). |
+| Name        | Optional | Description |
+|:------------|:--------:|:------------|
+| `exported`  | ⬤ | Boolean defaulted to false. True if the scope is "exported". |
+| `index`     | ⬤ | The [Index](#indices) of this abstract in the project's `abstracts` list. |
+| `kind`      | ⬤ | `abstract` |
+| `name`      | ◯ | The string name for the abstract. |
+| `signature` | ◯ | [Index](#indices) for the [Signature](#signature). |
 
 ### Argument
 
-An argument is an optionally named parameter or result. For example
+An argument (`argument`) is an optionally named parameter or result. For example
 `Foo(x string, y int)(ok bool, err error)` has four arguments: `x string`,
 `y int`, `ok bool`, `err error`. The same function could be defined without
 names `Foo(string, int)(bool, error)` and still have four arguments.
@@ -219,16 +223,16 @@ may have different argument names from the method that it matches with.
 Any repeat type argument in Go is expanded, e.g. `Foo(x, y float64)` will
 have two arguments, `x float64` and `y float64`.
 
-| Name  | Optional | Description |
-|:------|:--------:|:------------|
-| index | ⬤ | The index of this argument in the projects list of arguments. |
-| kind  | ⬤ | `argument` |
-| name  | ⬤ | The optional string name for the argument. |
-| type  | ◯ | [Key](#keys) for any [Type Description](#type-descriptions). |
+| Name    | Optional | Description |
+|:--------|:--------:|:------------|
+| `index` | ⬤ | The [Index](#indices) of this argument in the project's `arguments` list. |
+| `kind`  | ⬤ | `argument` |
+| `name`  | ⬤ | The optional string name for the argument. |
+| `type`  | ◯ | [Key](#keys) for any [Type Description](#type-descriptions). |
 
 ### Basic
 
-Basic types define the set of built-in types being used by the application,
+A basic type (`basic`) defines a built-in type being used by the application,
 e.g. `int`, `float64`, `float`, `double`. The basics between Go and Java
 don't overlap perfectly. Things that are aliased, such as `rune` is an alias
 for `uint32`, are un-aliased. No methods are attached to the basic types.
@@ -242,16 +246,17 @@ Compound built-in types, such as `error` and `complex64`, are replaced by
 interfaces with the components of the compound type accessible through
 the [abstracts](#abstract) of that interface.
 
-| Name  | Optional | Description |
-|:------|:--------:|:------------|
-| index | ⬤ | The index of this basic type in the projects list of basics. |
-| kind  | ⬤ | `basic` |
-| name  | ◯ | The optional string name for the basic type, e.g. `int`, `bool`, `string`. |
+| Name    | Optional | Description |
+|:--------|:--------:|:------------|
+| `index` | ⬤ | The [Index](#indices) of this basic in the project's `basics` list. |
+| `kind`  | ⬤ | `basic` |
+| `name`  | ◯ | The string name for the basic type, e.g. `int`, `bool`, `string`. |
 
 ### Field
 
-A field is a single named type inside of a [structure](#structure-description).
-Foe example the following has the fields `x int` and `y string`.
+A field (`field`) is a single named type inside of
+a [structure](#structure-description).
+For example, the following has the fields `x int` and `y string`.
 
 ```Go
 struct {
@@ -263,56 +268,71 @@ struct {
 Any repeat type fields in Go is expanded, e.g. `struct { x, y float64 }` will
 have two fields, `x float64` and `y float64`.
 
-| Name     | Optional | Description |
-|:---------|:--------:|:------------|
-| embedded | ⬤ | Boolean defaulted to false. True if the field is from an embedded struct. |
-| exported | ⬤ | Boolean defaulted to false. True if the scope is "exported". |
-| index    | ⬤ | The index of this field in the projects list of fields. |
-| kind     | ⬤ | `field` |
-| name     | ◯ | The string name for the field. |
-| type     | ◯ | [Key](#keys) for any [Type Description](#type-descriptions). |
+| Name       | Optional | Description |
+|:-----------|:--------:|:------------|
+| `embedded` | ⬤ | Boolean defaulted to false. True if the field is from an embedded struct. |
+| `exported` | ⬤ | Boolean defaulted to false. True if the scope is "exported". |
+| `index`    | ⬤ | The [Index](#indices) of this field in the project's `fields` list. |
+| `kind`     | ⬤ | `field` |
+| `name`     | ◯ | The string name for the field. |
+| `type`     | ◯ | [Key](#keys) for any [Type Description](#type-descriptions). |
 
 ### Interface Declaration
 
-TODO: Add comment
+An interface declaration (`interfaceDecl`) is a named definition of an
+interface. For example, the following is the declaration of `Foo` with
+a [type parameter](#type-parameter) `T` and an [abstract](#abstract) `Bar`.
 
-| Name       | Optional | Description |
-|:-----------|:--------:|:------------|
-| exported   | ⬤ | Boolean defaulted to false. True if the scope is "exported". |
-| index      | ⬤ | The index of this interface in the projects list of interface declarations. |
-| instances  | ⬤ | List of [Indices](#indices) to [Interface Instances](#interface-instance). |
-| interface  | ◯ | The [Index](#indices) to the declared [Interface](#interface-description) type. |
-| kind       | ⬤ | `interfaceDecl` |
-| loc        | ⬤ | The [Location](#locations) lookup integer. |
-| name       | ◯ | The name of the declared interface. |
-| package    | ◯ | The [Index](#indices) to the [Package](#package) this declaration is declared in. |
-| typeParams | ⬤ | List of [Indices](#indices) to [Type Parameters](#type-parameter) if this interface is generic. |
+```Go
+type Foo[T any] interface {
+  Bar(value T) string
+}
+```
+
+| Name         | Optional | Description |
+|:-------------|:--------:|:------------|
+| `exported`   | ⬤ | Boolean defaulted to false. True if the scope is "exported". |
+| `index`      | ⬤ | The [Index](#indices) of this interface declaration in the project's `interfaceDecls` list. |
+| `instances`  | ⬤ | List of [Indices](#indices) to [Interface Instances](#interface-instance). |
+| `interface`  | ◯ | The [Index](#indices) to the declared [Interface](#interface-description) type. |
+| `kind`       | ⬤ | `interfaceDecl` |
+| `loc`        | ⬤ | The [Location](#locations) offset. |
+| `name`       | ◯ | The name of the declared interface. |
+| `package`    | ◯ | The [Index](#indices) to the [Package](#package) this declaration is declared in. |
+| `typeParams` | ⬤ | List of [Indices](#indices) to [Type Parameters](#type-parameter) if this interface is generic. |
 
 ### Interface Description
 
-TODO: Add comment
+An interface description (`interfaceDesc`) describes the type of an interface.
+This interface type may be the type for an interface declaration, interface
+instances, and interface literal, e.g. `interface { String() string }`.
 
-| Name       | Optional | Description |
-|:-----------|:--------:|:------------|
-| abstracts  | ⬤ | List of [Indices](#indices) to [Abstracts](#abstract). |
-| approx     | ⬤ | List of [Keys](#keys) to any [Type Description](#type-descriptions) for approximate constraints. |
-| exact      | ⬤ | List of [Keys](#keys) to any [Type Description](#type-descriptions) for exact constraints. |
-| index      | ⬤ | The index of this interface in the projects list of interface descriptions. |
-| inherits   | ⬤ | List of [Indices](#indices) to inherited [Interfaces](#interface-description). |
-| kind       | ⬤ | `interfaceDesc` |
-| package    | ⬤ | The [Index](#indices) to the [Package](#package) this interface is pinned to. |
+| Name         | Optional | Description |
+|:-------------|:--------:|:------------|
+| `abstracts`  | ⬤ | List of [Indices](#indices) to [Abstracts](#abstract). |
+| `approx`     | ⬤ | List of [Keys](#keys) to any [Type Description](#type-descriptions) for approximate constraints. |
+| `exact`      | ⬤ | List of [Keys](#keys) to any [Type Description](#type-descriptions) for exact constraints. |
+| `index`      | ⬤ | The [Index](#indices) of this interface in the projects' `interfaceDescs` list. |
+| `inherits`   | ⬤ | List of [Indices](#indices) to inherited [Interfaces](#interface-description). |
+| `kind`       | ⬤ | `interfaceDesc` |
+| `package`    | ⬤ | The [Index](#indices) to the [Package](#package) this interface is pinned to. |
 
 ### Interface Instance
 
-TODO: Add comment
+An interface instance (`interfaceInst`) is an instantiation of a generic
+interface declaration.
+The instance types are the type arguments used in the type parameters.
+The instance types may be type parameters as well as a fully realized type.
+For example, `type Foo[T any] interface { Value() T }` with instance type `bool`
+will create `type Foo[bool] interface { Value() bool }`.
 
-| Name          | Optional | Description |
-|:--------------|:--------:|:------------|
-| generic       | ◯ | The [Index](#indices) of the generic [Interface Declaration](#interface-declaration) this is an instance of. |
-| index         | ⬤ | The index of this instance in the projects list of interface instances. |
-| instanceTypes | ◯ | List of [Keys](#keys) to any [Type Description](#type-descriptions) for exact constraints. |
-| kind          | ⬤ | `interfaceInst` |
-| resolved      | ◯ | The [Index](#indices) to the [Interface Type Description](#interface-description) this instance defines. |
+| Name            | Optional | Description |
+|:----------------|:--------:|:------------|
+| `generic`       | ◯ | The [Index](#indices) of the generic [Interface Declaration](#interface-declaration) this is an instance of. |
+| `index`         | ⬤ | The [Index](#indices) of this interface in the projects' `interfaceInsts` list. |
+| `instanceTypes` | ◯ | List of [Keys](#keys) to any [Type Description](#type-descriptions) for exact constraints. |
+| `kind`          | ⬤ | `interfaceInst` |
+| `resolved`      | ◯ | The [Index](#indices) to the [Interface Type Description](#interface-description) this instance defines. |
 
 ### Locations
 
