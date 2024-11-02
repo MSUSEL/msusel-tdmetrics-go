@@ -202,8 +202,8 @@ func (p *packageImp) ToJson(ctx *jsonify.Context) jsonify.Datum {
 	return jsonify.NewMap().
 		AddIf(ctx, ctx.IsDebugKindIncluded(), `kind`, p.Kind()).
 		AddIf(ctx, ctx.IsDebugIndexIncluded(), `index`, p.index).
-		AddNonZero(ctx, `path`, p.path).
-		AddNonZero(ctx, `name`, p.name).
+		Add(ctx, `path`, p.path).
+		Add(ctx, `name`, p.name).
 		AddNonZero(ctx.OnlyIndex(), `imports`, p.imports.ToSlice()).
 		AddNonZero(ctx.OnlyIndex(), `interfaces`, p.interfaces.ToSlice()).
 		AddNonZero(ctx.OnlyIndex(), `methods`, p.methods.ToSlice()).

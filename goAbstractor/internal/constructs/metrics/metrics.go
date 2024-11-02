@@ -119,7 +119,7 @@ func (m *metricsImp) ToJson(ctx *jsonify.Context) jsonify.Datum {
 	return jsonify.NewMap().
 		AddIf(ctx, ctx.IsDebugKindIncluded(), `kind`, m.Kind()).
 		AddIf(ctx, ctx.IsDebugIndexIncluded(), `index`, m.index).
-		AddNonZero(ctx, `loc`, m.loc).
+		Add(ctx, `loc`, m.loc).
 		AddNonZero(ctx, `complexity`, m.complexity).
 		AddNonZero(ctx, `lineCount`, m.lineCount).
 		AddNonZero(ctx, `codeCount`, m.codeCount).
