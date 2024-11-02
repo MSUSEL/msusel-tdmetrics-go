@@ -361,7 +361,9 @@ $104 - 98 + 1 = 7$, to determine the `loc` is on the 7th line of "C.go".
 
 ### Method
 
-TODO: Finish
+A method declaration (`method`) us a named definition of a function not
+attached to an object or a method with a receiver object. The method may be
+generic and have used instances attached to it.
 
 | Name         | Optional | Description |
 |:------------ |:--------:|:------------|
@@ -379,7 +381,12 @@ TODO: Finish
 
 ### Method Instance
 
-TODO: Finish
+A method instance (`methodInst`) is an instantiation of a generic
+[method declaration](#method).
+The instance types are the type arguments used in the type parameters.
+The instance types may be type parameters as well as a fully realized type.
+For example, `type Foo[T any]() T { ... }` with instance type `bool`
+will create `type Foo[bool]() bool { ... }`.
 
 | Name            | Optional | Description |
 |:----------------|:--------:|:------------|
@@ -392,7 +399,10 @@ TODO: Finish
 
 ### Metrics
 
-TODO: Finish
+A metrics (`metrics`) is measurements done to a set of expressions.
+The body of a [method](#method) and the initializer for a [value](#value)
+contain expressions that are measured. These measurements are used in
+technical debt analysis.
 
 | Name         | Optional | Description |
 |:------------ |:--------:|:------------|
@@ -412,7 +422,23 @@ TODO: Finish
 
 ### Object
 
-TODO: Finish
+An object declaration (`object`) is a collection of data via a
+[structure](#structure-description) with zero or more [methods](#method),
+like a "class" in Java. The object may be generic if it has type parameters.
+
+The following code defines the object `Foo` with the structure
+`struct { x, y int }`  and a method `Bar`.
+
+```Go
+type Foo struct {
+  x, y int
+}
+
+func (f Foo) Bar() { ... }
+```
+
+If the named type in Go is defined without a struct, e.g. `type Foo int`,
+the abstractor will have to pack the type into struct.
 
 | Name            | Optional | Description |
 |:----------------|:--------:|:------------|
@@ -430,7 +456,12 @@ TODO: Finish
 
 ### Object Instance
 
-TODO: Finish
+A object instance (`objectInst`) is an instantiation of a generic
+[object declaration](#object).
+The instance types are the type arguments used in the type parameters.
+The instance types may be type parameters as well as a fully realized type.
+For example, `type Foo[T any] struct { value T }` with instance type `bool`
+will create `type Foo[bool] struct { value bool }`.
 
 | Name            | Optional | Description |
 |:----------------|:--------:|:------------|
@@ -443,7 +474,8 @@ TODO: Finish
 
 ### Package
 
-TODO: Finish
+A package (`package`) is a collection of code usually in several files that
+typically are all part of a related library.
 
 | Name         | Optional | Description |
 |:-------------|:--------:|:------------|
@@ -459,7 +491,13 @@ TODO: Finish
 
 ### Selection
 
-TODO: Finish
+A selection (`selection`) represents a field, method, or abstract being
+accessed. A selection is typically caused by a `dot` in both Java and Go,
+e.g. `f.x` is `x` selected from `f`.
+
+Selections are used in [metrics](#metrics) to indicate higher detailed
+information than simply specifying the type of the selected field, method,
+or abstract.
 
 | Name     | Optional | Description |
 |:---------|:--------:|:------------|
@@ -470,7 +508,24 @@ TODO: Finish
 
 ### Signature
 
-TODO: Finish
+A signature (`signature`) represents the shape of a method's input and output
+[arguments](#argument). It can be used in interface abstracts, as function pointers,
+delegate types, methods of an object, or a function.
+For example `func(x int) string`. The names of arguments are ignored in many
+cases since the signature types determine if two signatures are the same even
+if the names are different.
+
+In the following there are three abstracts in an interface. `Foo` and `Bar` have
+the same signature `func(int) string` and `Baz` has the signature
+`func() (int, bool)`.
+
+```Go
+interface {
+  Foo(x int) string
+  Bar(y int) (name string)
+  Baz() (value int, okay bool)
+}
+```
 
 | Name       | Optional | Description |
 |:-----------|:--------:|:------------|
@@ -482,7 +537,17 @@ TODO: Finish
 
 ### Structure Description
 
-TODO: Finish
+A structure description (`structDesc`) describes a collection of values,
+called [fields](#field), like a record, tuple, or class properties.
+The following struct contains three fields:
+
+```Go
+struct {
+  name string
+  age  int
+  id   uint64
+}
+```
 
 | Name     | Optional | Description |
 |:---------|:--------:|:------------|
@@ -492,7 +557,17 @@ TODO: Finish
 
 ### Type Parameter
 
-TODO: Finish
+A type parameter (`typeParam`) is a type defined with a generic
+[object](#object) or [method](#method). These are named parameters that define
+custom types for the declaration. Different instances define the types,
+instance types or type arguments, that realize these parameters.
+
+For example `T any` is a type parameter in the following code. The `value`
+is of type `T` meaning it will become the type used as an argument into `T`.
+
+```Go
+type Foo[T any] struct { value T }
+```
 
 | Name    | Optional | Description |
 |:--------|:--------:|:------------|
@@ -503,7 +578,9 @@ TODO: Finish
 
 ### Value
 
-TODO: Finish
+A value declaration (`value`) is a package level variable outside of any
+declared object. A value may be constant and may be initialized by an
+expression. For example `var X = 10`.
 
 | Name       | Optional | Description |
 |:-----------|:--------:|:------------|
