@@ -1,8 +1,6 @@
 package assert
 
 import (
-	"fmt"
-
 	"github.com/Snow-Gremlin/goToolbox/terrors/terror"
 	"github.com/Snow-Gremlin/goToolbox/utils"
 )
@@ -39,9 +37,6 @@ func ArgNotEmpty(name string, value any) {
 }
 
 func ArgHasNoNils[T any, S ~[]T](name string, values S) {
-	if name == `setXX` {
-		fmt.Println(`]>>`, values)
-	}
 	for _, v := range values {
 		if utils.IsNil(v) {
 			panic(terror.New(`slice may not contain a nil`).

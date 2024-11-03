@@ -86,8 +86,9 @@ func Comparer() comp.Comparer[constructs.ObjectInst] {
 	return func(a, b constructs.ObjectInst) int {
 		aImp, bImp := a.(*instanceImp), b.(*instanceImp)
 		return comp.Or(
+			constructs.ComparerPend(aImp.generic, bImp.generic),
 			constructs.ComparerPend(aImp.resolved, bImp.resolved),
-			constructs.SliceComparerPend(bImp.instanceTypes, bImp.instanceTypes),
+			constructs.SliceComparerPend(aImp.instanceTypes, bImp.instanceTypes),
 		)
 	}
 }

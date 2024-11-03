@@ -2,12 +2,10 @@ package metrics
 
 import (
 	"cmp"
-	"fmt"
+	"slices"
 
 	"github.com/Snow-Gremlin/goToolbox/collections"
 	"github.com/Snow-Gremlin/goToolbox/comp"
-	"github.com/Snow-Gremlin/goToolbox/terrors/terror"
-	"github.com/Snow-Gremlin/goToolbox/utils"
 
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/assert"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs"
@@ -92,25 +90,13 @@ func (m *metricsImp) RemoveTempDeclRefs() {
 }
 
 func (m *metricsImp) resolveTempDeclRefs(set collections.SortedSet[constructs.Construct]) {
-	slice := set.ToSlice()
+	slice := slices.Clone(set.ToSlice())
 	for i, s := range slice {
-		if utils.IsNil(s) {
-			assert.ArgHasNoNils(`setXX`, slice)
-			fmt.Println(`]]]`, slice)
-			panic(terror.New(`WTF`).
-				With(`index`, i).
-				With(`Pos`, m.loc))
-		}
-
-		switch s.Kind() {
-		case kind.TempDeclRef:
-			set.Remove(s)
-			set.Add(constructs.ResolvedTempDeclRef(s.(constructs.TempDeclRef)))
-		case kind.TempReference:
-			set.Remove(s)
-			set.Add(constructs.ResolvedTempReference(s.(constructs.TempReference)))
-		}
+		slice[i] = constructs.ResolvedTempDeclRef(s)
 	}
+	assert.ArgHasNoNils(`resolved refs`, slice)
+	set.Clear()
+	set.Add(slice...)
 }
 
 func (m *metricsImp) CompareTo(other constructs.Construct) int {
