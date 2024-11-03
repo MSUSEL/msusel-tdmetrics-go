@@ -2,9 +2,12 @@ package metrics
 
 import (
 	"cmp"
+	"fmt"
 
 	"github.com/Snow-Gremlin/goToolbox/collections"
 	"github.com/Snow-Gremlin/goToolbox/comp"
+	"github.com/Snow-Gremlin/goToolbox/terrors/terror"
+	"github.com/Snow-Gremlin/goToolbox/utils"
 
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/assert"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs"
@@ -33,6 +36,9 @@ type metricsImp struct {
 
 func newMetrics(args constructs.MetricsArgs) constructs.Metrics {
 	assert.ArgNotNil(`location`, args.Location)
+	assert.ArgHasNoNils(`reads`, args.Reads.ToSlice())
+	assert.ArgHasNoNils(`writes`, args.Writes.ToSlice())
+	assert.ArgHasNoNils(`invokes`, args.Invokes.ToSlice())
 
 	return &metricsImp{
 		loc: args.Location,
@@ -80,13 +86,22 @@ func (m *metricsImp) Invokes() collections.ReadonlySortedSet[constructs.Construc
 }
 
 func (m *metricsImp) RemoveTempDeclRefs() {
-	resolveTempDeclRefs(m.reads)
-	resolveTempDeclRefs(m.writes)
-	resolveTempDeclRefs(m.invokes)
+	m.resolveTempDeclRefs(m.reads)
+	m.resolveTempDeclRefs(m.writes)
+	m.resolveTempDeclRefs(m.invokes)
 }
 
-func resolveTempDeclRefs(set collections.SortedSet[constructs.Construct]) {
-	for _, s := range set.ToSlice() {
+func (m *metricsImp) resolveTempDeclRefs(set collections.SortedSet[constructs.Construct]) {
+	slice := set.ToSlice()
+	for i, s := range slice {
+		if utils.IsNil(s) {
+			assert.ArgHasNoNils(`setXX`, slice)
+			fmt.Println(`]]]`, slice)
+			panic(terror.New(`WTF`).
+				With(`index`, i).
+				With(`Pos`, m.loc))
+		}
+
 		switch s.Kind() {
 		case kind.TempDeclRef:
 			set.Remove(s)

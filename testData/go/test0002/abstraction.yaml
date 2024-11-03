@@ -37,7 +37,7 @@
       inherits:  [ 1 ]
     }
   ],
-  interfaceInst: [
+  interfaceInsts: [
     { # 1. List[int]
       generic: 1,
       instanceTypes: [ basic1 ],

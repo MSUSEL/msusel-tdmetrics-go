@@ -1,49 +1,87 @@
 {
   language: go,
-  classes: [
-    { # 1. Foo[T any] { value T }{ Get() T } @ main.go:5
-      name: Foo, package: 9, data: 12, interface: 3, loc: 5,
-      typeParams: [ 7 ],
-      methods: [ 4 ]
-    }
+  abstracts: [
+    { name: Get, signature: 2, exported: true } # 1. Get() T <any>
   ],
-  interfaces: [
-    {}, # 2. any
-    {   # 3. interface { Get() T }
-      inherits: [ 2 ],
-      typeParams: [ 7 ],
-      methods: [ 6 ]
-    }
+  arguments: [
+    { type: typeParam1 } # 1. <unnamed> T
+  ],
+  basics: [ int ],
+  fields: [
+    { name: value, type: basic1 },     # 1. value int
+    { name: value, type: typeParam1 }, # 2. value T
+    { name: value, type: typeParam2 }  # 3. value X
+  ],
+  interfaceDescs: [
+    {},                                   # 1. any
+    { abstracts: [ 1 ], inherits: [ 1 ] } # 2. interface { Get() T }
   ],
   methods: [
-    { # 4. func (f *Foo[T]) Get() T @ main.go
-      name: Get, package: 9, receiver: 1, signature: 11, loc: 9,
-      metrics: { codeCount: 3, complexity: 1, indents: 1, lineCount: 3 }
+    { # 1. func (Foo) Get() T <any>
+      name: Get, exported: true, loc: 9,
+      metrics: 1, package: 1, receiver: 1, signature: 2
     },
-    { # 5. func main() @ main.go:13
-      name: main, package: 9, signature: 10, loc: 13,
-      metrics: { codeCount: 4, complexity: 1, indents: 2, lineCount: 4 }
+    { # 2. func main()
+      name: main, loc: 13, metrics: 2, package: 1, signature: 1
     }
   ],
-  named: [
-    { name: Get,   type: 11 }, # 6. func Get() T
-    { name: T,     type:  2 }, # 7. T any
-    { name: value, type:  7 }  # 8. value T
+  metrics: [
+    { # 1. `Foo[T].Get() T` metrics
+      codeCount: 3, complexity: 1, indents: 1, lineCount: 3,
+      loc: 9, getter: true,
+      reads: [ objectInst2, selection3 ]
+    },
+    { # 2. `main()` metrics
+      codeCount: 4, complexity: 1, indents: 2, lineCount: 4,
+      loc: 13, sideEffect: true,
+      invokes: [ selection1 ],
+      reads: [ object1, objectInst1 ],
+      writes: [ objectInst1, selection2 ]
+    }
+  ],
+  objectInsts: [
+    { # 1. Foo[int]
+      generic: 1, resolved: 1,
+      instanceTypes: [ basic1 ]
+    },
+    { # 2. Foo[X any]
+      generic: 1, resolved: 3,
+      instanceTypes: [ typeParam2 ]
+    }
+  ],
+  objects: [
+    { # 1. Foo[T any]{ value T }{ Get() T }
+      name: Foo, package: 1, loc: 5,
+      data: 2, exported: true, interface: 2,
+      instances:  [ 1, 2 ],
+      methods:    [ 1 ],
+      typeParams: [ 1 ]
+    }
   ],
   packages: [
-    { # 9. main package
-      name: main,
-      path: command-line-arguments,
-      classes: [ 1 ],
-      methods: [ 4, 5 ]
+    { # 1. main package
+      name: main, path: command-line-arguments,
+      methods: [ 1, 2 ],
+      objects: [ 1 ]
     }
   ],
-  signatures: [
-    {}, # 10. func()()
-    { return: 7 } # 11. func() T
+  selections: [
+    { name: Get,   origin: objectInst1 }, # 1. Foo[int].Get() int
+    { name: value, origin: objectInst1 }, # 2. Foo[int].value int
+    { name: value, origin: objectInst2 }  # 3. Foo[X].value X
   ],
-  structs: [
-    { fields: [ 8 ] } # 12. struct { value T }
+  signatures: [
+    {},                # 1. func()()
+    { results: [ 1 ] } # 2. func() T <any>
+  ],
+  structDescs: [
+    { fields: [ 1 ] }, # 1. struct { value int }
+    { fields: [ 2 ] }, # 2. struct { value T }
+    { fields: [ 3 ] }  # 3. struct { value X }
+  ],
+  typeParams: [
+    { name: T, type: interfaceDesc1 }, # 1. T any
+    { name: X, type: interfaceDesc1 }  # 2. X any
   ],
   locs: {
     '1': main.go

@@ -79,7 +79,7 @@
       abstracts: [ 11 ], inherits: [ 1 ]
     }
   ],
-  interfaceInst: [
+  interfaceInsts: [
     { # 1. Pointer[Cat]{ $deref() Cat }
       generic: 2, resolved: 2,
       instanceTypes: [ object1 ],

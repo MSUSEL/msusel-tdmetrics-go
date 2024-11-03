@@ -54,7 +54,7 @@
       inherits:  [ 1 ]
     }
   ],
-  interfaceInst: [
+  interfaceInsts: [
     { # 1. 
       generic: 1, resolved: 4,
       instanceTypes: [ objectInst2 ]
@@ -92,7 +92,7 @@
       writes:  [ objectInst1 ]
     }
   ],
-  objectInst: [
+  objectInsts: [
     { # 1. Foo[string]
       generic: 1, resolved: 1,
       instanceTypes: [ basic3 ]

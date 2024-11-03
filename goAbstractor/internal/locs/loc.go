@@ -1,6 +1,7 @@
 package locs
 
 import (
+	"fmt"
 	"go/token"
 
 	"github.com/Snow-Gremlin/goToolbox/utils"
@@ -14,6 +15,7 @@ type Loc interface {
 	Flag()
 	Pos() token.Pos
 	Info() (int, string, int)
+	String() string
 }
 
 type locImp struct {
@@ -59,4 +61,9 @@ func (c *locImp) ToJson(ctx *jsonify.Context) jsonify.Datum {
 	}
 
 	return jsonify.New(ctx, offset)
+}
+
+func (c *locImp) String() string {
+	_, file, line := c.Info()
+	return fmt.Sprintf(`%s:%d`, file, line)
 }
