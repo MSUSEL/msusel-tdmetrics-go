@@ -83,12 +83,6 @@ func (m *metricsImp) Invokes() collections.ReadonlySortedSet[constructs.Construc
 	return m.invokes.Readonly()
 }
 
-func (m *metricsImp) RemoveTempReferences() {
-	// Regardless of if there are temp type references or temp declaration
-	// references run the same replacement.
-	m.RemoveTempDeclRefs()
-}
-
 func (m *metricsImp) RemoveTempDeclRefs() {
 	m.resolveTempDeclRefs(m.reads)
 	m.resolveTempDeclRefs(m.writes)

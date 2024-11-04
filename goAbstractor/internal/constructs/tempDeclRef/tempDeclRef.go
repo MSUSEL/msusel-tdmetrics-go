@@ -5,7 +5,6 @@ import (
 
 	"github.com/Snow-Gremlin/goToolbox/collections/enumerator"
 	"github.com/Snow-Gremlin/goToolbox/comp"
-	"github.com/Snow-Gremlin/goToolbox/terrors/terror"
 	"github.com/Snow-Gremlin/goToolbox/utils"
 
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/assert"
@@ -28,14 +27,6 @@ func newTempDeclRef(args constructs.TempDeclRefArgs) constructs.TempDeclRef {
 	assert.ArgNotEmpty(`name`, args.Name)
 	assert.ArgHasNoNils(`instance types`, args.InstanceTypes)
 
-	// TODO: REMOVE
-	if args.PackagePath == `slices` && args.Name == `AppendSeq` {
-		panic(terror.New(`may not create a temp reference`).
-			With(`package path`, args.PackagePath).
-			With(`instance types`, args.InstanceTypes).
-			With(`name`, args.Name))
-	}
-
 	return &tempDeclRefImp{
 		pkgPath:   args.PackagePath,
 		instTypes: args.InstanceTypes,
@@ -43,7 +34,7 @@ func newTempDeclRef(args constructs.TempDeclRefArgs) constructs.TempDeclRef {
 	}
 }
 
-func (r *tempDeclRefImp) IsTypeMethodRef() {}
+func (r *tempDeclRefImp) IsTempDeclRef() {}
 
 func (r *tempDeclRefImp) Kind() kind.Kind     { return kind.TempDeclRef }
 func (r *tempDeclRefImp) Index() int          { return r.index }

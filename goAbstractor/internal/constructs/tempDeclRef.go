@@ -10,7 +10,7 @@ import (
 // resolving the since one thing that is resolved is all references.
 type TempDeclRef interface {
 	Construct
-	IsTypeMethodRef()
+	IsTempDeclRef()
 
 	PackagePath() string
 	Name() string

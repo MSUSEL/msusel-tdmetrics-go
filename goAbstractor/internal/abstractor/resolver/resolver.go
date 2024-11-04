@@ -32,8 +32,7 @@ func Resolve(proj constructs.Project, log *logger.Logger) {
 
 	// First pass of removing references.
 	// This includes creating instances that were referenced in the metrics.
-	resolve.TempReferences()
-	resolve.TempDeclRefs()
+	resolve.References()
 
 	// Fill out all instantiations of generic object, interface, and methods.
 	resolve.ExpandInstantiations()
@@ -41,8 +40,7 @@ func Resolve(proj constructs.Project, log *logger.Logger) {
 	// Second pass of removing references.
 	// This takes care of any references that the instantiation had to make.
 	// There should be none but doesn't hurt to check.
-	resolve.TempReferences()
-	resolve.TempDeclRefs()
+	resolve.References()
 
 	// Determine interfaces for objects and object instances.
 	resolve.ObjectInterfaces()
@@ -209,13 +207,14 @@ func (r *resolverImp) Inheritance() {
 	log2.Log()
 }
 
-func (r *resolverImp) TempReferences() {
+func (r *resolverImp) References() {
 	r.log.Log(`resolve references`)
-	refs := r.proj.TempReferences()
-	if refs.Count() <= 0 {
-		return
-	}
+	r.tempReferences()
+	r.tempDeclRefs()
+}
 
+func (r *resolverImp) tempReferences() {
+	refs := r.proj.TempReferences()
 	for i := range refs.Count() {
 		r.resolveTempRef(refs.Get(i))
 	}
@@ -265,13 +264,8 @@ func (r *resolverImp) resolveTempRef(ref constructs.TempReference) {
 	}
 }
 
-func (r *resolverImp) TempDeclRefs() {
-	r.log.Log(`resolve method references`)
+func (r *resolverImp) tempDeclRefs() {
 	refs := r.proj.TempDeclRefs()
-	if refs.Count() <= 0 {
-		return
-	}
-
 	for i := range refs.Count() {
 		r.resolveTempDeclRef(refs.Get(i))
 	}

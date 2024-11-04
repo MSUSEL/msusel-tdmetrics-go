@@ -4,6 +4,7 @@ import (
 	"strings"
 
 	"github.com/Snow-Gremlin/goToolbox/comp"
+	"github.com/Snow-Gremlin/goToolbox/terrors/terror"
 	"github.com/Snow-Gremlin/goToolbox/utils"
 
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs/kind"
@@ -118,25 +119,55 @@ func CompareTo[T Construct](a T, b Construct, cmp comp.Comparer[T]) int {
 }
 
 func ResolvedTempReference(td TypeDesc) TypeDesc {
-	for td.Kind() == kind.TempReference {
-		td = td.(TempReference).ResolvedType()
+	if utils.IsNil(td) {
+		panic(terror.New(`Construct given to ResolvedTempDeclRef was nil`))
 	}
-	return td
-}
-
-func ResolvedTempDeclRef(con Construct) Construct {
+	resolved := td
 	for {
-		if con.Kind() == kind.TempReference {
-			con = con.(TempReference).ResolvedType()
-			continue
-		}
-		if con.Kind() == kind.TempDeclRef {
-			con = con.(TempDeclRef).ResolvedType()
+		if resolved.Kind() == kind.TempReference {
+			tr := resolved.(TempReference)
+			resolved = tr.ResolvedType()
+			if utils.IsNil(resolved) {
+				panic(terror.New(`TempReference in ResolvedTempReference resolved to nil`).
+					With(`Ref`, tr).
+					With(`Start`, td))
+			}
 			continue
 		}
 		break
 	}
-	return con
+	return resolved
+}
+
+func ResolvedTempDeclRef(con Construct) Construct {
+	if utils.IsNil(con) {
+		panic(terror.New(`Construct given to ResolvedTempDeclRef was nil`))
+	}
+	resolved := con
+	for {
+		if resolved.Kind() == kind.TempReference {
+			tr := resolved.(TempReference)
+			resolved = tr.ResolvedType()
+			if utils.IsNil(resolved) {
+				panic(terror.New(`TempReference in ResolvedTempDeclRef resolved to nil`).
+					With(`Ref`, tr).
+					With(`Start`, con))
+			}
+			continue
+		}
+		if resolved.Kind() == kind.TempDeclRef {
+			tr := resolved.(TempDeclRef)
+			resolved = tr.ResolvedType()
+			if utils.IsNil(resolved) {
+				panic(terror.New(`TempDeclRef in ResolvedTempDeclRef resolved to nil`).
+					With(`Ref`, tr).
+					With(`Start`, con))
+			}
+			continue
+		}
+		break
+	}
+	return resolved
 }
 
 func BlankName(name string) bool {
