@@ -136,7 +136,8 @@ func Comparer() comp.Comparer[constructs.InterfaceInst] {
 		}
 		return comp.Or(
 			constructs.ComparerPend(aImp.resolved, bImp.resolved),
-			constructs.SliceComparerPend(bImp.instanceTypes, bImp.instanceTypes),
+			constructs.SliceComparerPend(aImp.instanceTypes, bImp.instanceTypes),
+			constructs.ComparerPend(aImp.generic, bImp.generic),
 		)
 	}
 }

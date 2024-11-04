@@ -20,19 +20,19 @@ type ObjectInst interface {
 	IsObjectInst()
 
 	Generic() Object
-	Resolved() StructDesc
+	ResolvedData() StructDesc
+	ResolvedInterface() InterfaceDesc
 	InstanceTypes() []TypeDesc
 
 	Methods() collections.ReadonlySortedSet[MethodInst]
 	AddMethod(method MethodInst) MethodInst
-	Interface() InterfaceDesc
-	SetInterface(it InterfaceDesc)
+	SetResolvedInterface(it InterfaceDesc)
 }
 
 type ObjectInstArgs struct {
 	RealType      types.Type
 	Generic       Object
-	Resolved      StructDesc
+	ResolvedData  StructDesc
 	InstanceTypes []TypeDesc
 }
 

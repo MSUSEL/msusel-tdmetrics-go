@@ -25,14 +25,35 @@ func Resolve(proj constructs.Project, log *logger.Logger) {
 		log:  log,
 		proj: proj,
 	}
+
+	// Resolve imports of packages and receivers in methods.
 	resolve.Imports()
 	resolve.Receivers()
-	resolve.ExpandInstantiations()
+
+	// First pass of removing references.
+	// This includes creating instances that were referenced in the metrics.
 	resolve.TempReferences()
 	resolve.TempDeclRefs()
+
+	// Fill out all instantiations of generic object, interface, and methods.
+	resolve.ExpandInstantiations()
+
+	// Second pass of removing references.
+	// This takes care of any references that the instantiation had to make.
+	// There should be none but doesn't hurt to check.
+	resolve.TempReferences()
+	resolve.TempDeclRefs()
+
+	// Determine interfaces for objects and object instances.
 	resolve.ObjectInterfaces()
+
+	// Determine inheritance hierarchy to solidify duck-typing.
 	resolve.Inheritance()
+
+	// Remove anything that isn't needed.
 	resolve.DeadCodeElimination()
+
+	// Update the locations and indices to prepare for outputting.
 	resolve.Locations()
 	resolve.Indices()
 }
@@ -83,6 +104,7 @@ func (r *resolverImp) expandInstantiations(obj constructs.Object) {
 		}
 	}
 
+	// Now that all the instances were collected, expand the instances.
 	its := obj.Instances()
 	for i := range its.Count() {
 		r.expandObjectInst(obj, its.Get(i))
@@ -113,18 +135,24 @@ func (r *resolverImp) ObjectInterfaces() {
 	log2 := r.log.Group(`objectInterfaces`).Prefix(`  `)
 	log3 := log2.Prefix(`  `)
 
+	// Resolve all objects
 	objects := r.proj.Objects()
 	for i := range objects.Count() {
 		obj := objects.Get(i)
+
+		// If the object doesn't have an interface create one and set it.
 		if utils.IsNil(obj.Interface()) {
 			log2.Logf(`%d) %s.%s`, i, obj.Package().Path(), obj.Name())
 			r.objectInter(obj)
 		}
 
+		// Resolve all instances for the object
 		insts := obj.Instances()
 		for j := range insts.Count() {
 			it := insts.Get(j)
-			if utils.IsNil(it.Interface()) {
+
+			// If the instance doesn't have an interface create one and set it.
+			if utils.IsNil(it.ResolvedInterface()) {
 				log3.Logf(`%d.%d) [%s]`, i, j, enumerator.Enumerate(it.InstanceTypes()...).Join(`, `))
 				r.objectInstanceInter(it)
 			}
@@ -167,7 +195,7 @@ func (r *resolverImp) objectInstanceInter(objInst constructs.ObjectInst) {
 		Abstracts: abstracts,
 		Package:   objInst.Generic().Package().Source(),
 	})
-	objInst.SetInterface(it)
+	objInst.SetResolvedInterface(it)
 }
 
 func (r *resolverImp) Inheritance() {
@@ -184,6 +212,10 @@ func (r *resolverImp) Inheritance() {
 func (r *resolverImp) TempReferences() {
 	r.log.Log(`resolve references`)
 	refs := r.proj.TempReferences()
+	if refs.Count() <= 0 {
+		return
+	}
+
 	for i := range refs.Count() {
 		r.resolveTempRef(refs.Get(i))
 	}
@@ -236,6 +268,10 @@ func (r *resolverImp) resolveTempRef(ref constructs.TempReference) {
 func (r *resolverImp) TempDeclRefs() {
 	r.log.Log(`resolve method references`)
 	refs := r.proj.TempDeclRefs()
+	if refs.Count() <= 0 {
+		return
+	}
+
 	for i := range refs.Count() {
 		r.resolveTempDeclRef(refs.Get(i))
 	}

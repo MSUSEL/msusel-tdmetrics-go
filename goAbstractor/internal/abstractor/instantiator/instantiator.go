@@ -295,7 +295,7 @@ func (i *instantiator) createInstance(realType types.Type) constructs.Construct 
 		return i.proj.NewObjectInst(constructs.ObjectInstArgs{
 			RealType:      realType,
 			Generic:       d,
-			Resolved:      i.StructDesc(d.Data()),
+			ResolvedData:  i.StructDesc(d.Data()),
 			InstanceTypes: i.instanceTypes,
 		})
 	case kind.Method:

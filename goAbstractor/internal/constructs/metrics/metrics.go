@@ -83,6 +83,12 @@ func (m *metricsImp) Invokes() collections.ReadonlySortedSet[constructs.Construc
 	return m.invokes.Readonly()
 }
 
+func (m *metricsImp) RemoveTempReferences() {
+	// Regardless of if there are temp type references or temp declaration
+	// references run the same replacement.
+	m.RemoveTempDeclRefs()
+}
+
 func (m *metricsImp) RemoveTempDeclRefs() {
 	m.resolveTempDeclRefs(m.reads)
 	m.resolveTempDeclRefs(m.writes)
@@ -120,7 +126,7 @@ func (m *metricsImp) ToJson(ctx *jsonify.Context) jsonify.Datum {
 	return jsonify.NewMap().
 		AddIf(ctx, ctx.IsDebugKindIncluded(), `kind`, m.Kind()).
 		AddIf(ctx, ctx.IsDebugIndexIncluded(), `index`, m.index).
-		Add(ctx, `loc`, m.loc).
+		AddNonZero(ctx, `loc`, m.loc). // Should only be zero for unit-tests.
 		AddNonZero(ctx, `complexity`, m.complexity).
 		AddNonZero(ctx, `lineCount`, m.lineCount).
 		AddNonZero(ctx, `codeCount`, m.codeCount).

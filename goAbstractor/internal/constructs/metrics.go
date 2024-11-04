@@ -8,6 +8,7 @@ import (
 
 type Metrics interface {
 	Construct
+	TempReferenceContainer
 	TempDeclRefContainer
 	IsMetrics()
 

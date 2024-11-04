@@ -3,27 +3,31 @@
   abstracts: [
     { exported: true, name: $deref, signature: 2 }, # 1. func $deref() ???
     { exported: true, name: $deref, signature: 3 }, # 2. func $deref() ???
-    { exported: true, name: Add,    signature: 5 }  # 3. func Add( ??? ) ???
+    { exported: true, name: Add,    signature: 4 }, # 3. func Add( ??? ) ???
+    { exported: true, name: Add,    signature: 6 }, # 4. func Add( ??? ) ???
+    { exported: true, name: Add,    signature: 7 }  # 5. func Add( ??? ) ???
   ],
   arguments: [
-    { type: interfaceInst1 },      # 1. TODO: Finish Annotating
-    { type: objectInst2 },         # 2.
-    { type: typeParam1 },          # 3.
-    { type: typeParam3 },          # 4.
-    { name: v, type: typeParam2 }, # 5.
-    { name: v, type: typeParam3 }  # 6.
+    { type: basic3 },              # 1. <unnamed> string
+    { type: interfaceInst1 },      # 2. <unnamed>  ???
+    { type: objectInst2 },         # 3. <unnamed> Foo[string|int]
+    { type: typeParam1 },          # 4. <unnamed> T <any>
+    { type: typeParam2 },          # 5. <unnamed> T <string|int>
+    { type: typeParam3 },          # 6. <unnamed> T <string|int|uint>
+    { name: v, type: basic3 },     # 7. v string
+    { name: v, type: typeParam2 }, # 8. v T <string|int>
+    { name: v, type: typeParam3 }  # 9. v T <string|int|uint>
   ],
   basics: [ int, uint, string ],
   fields: [
     { name: value, type: basic3 },     # 1. value string
-    { name: value, type: typeParam2 }, # 2. value string|int
-    { name: value, type: typeParam3 }  # 3. value string|int|uint
+    { name: value, type: typeParam2 }, # 2. value T <string|int>
+    { name: value, type: typeParam3 }  # 3. value T <string|int|uint>
   ],
   interfaceDecls: [
     { # 1. Pointer[T any] {  ???  }
       name: Pointer, package: 1, interface: 5, exported: true,
-      instances:  [ 1 ],
-      typeParams: [ 1 ]
+      instances: [ 1 ], typeParams: [ 1 ]
     },
     { # 2. any
       name: any, package: 1, interface: 1, exported: true
@@ -33,46 +37,59 @@
     {}, # 1. any
     {   # 2. string|int
       exact: [ basic3, basic1 ],
-      # inherits 3 because 2 is more restrictive and can be used anywhere 3 can be,
+      # Inherits 3 because 2 is more restrictive and can be used anywhere 3 can be,
       # but 3 can't be used anywhere 2 can be since 3 might be an uint instance.
       inherits: [ 3 ]
     },
     { # 3. string|int|uint
-      exact:    [ basic3, basic1, basic2 ],
-      inherits: [ 1 ]
+      exact: [ basic3, basic1, basic2 ], inherits: [ 1 ]
     },
     { # 4. interface { ??? }
-      abstracts: [ 1 ],
-      inherits:  [ 1 ]
+      abstracts: [ 1 ], inherits: [ 1 ]
     },
     { # 5. interface { ??? }
-      abstracts: [ 2 ],
-      inherits:  [ 1 ]
+      abstracts: [ 2 ], inherits: [ 1 ]
     },
     { # 6. interface { ??? }
-      abstracts: [ 3 ],
-      inherits:  [ 1 ]
+      abstracts: [ 3 ], inherits: [ 1 ]
+    },
+    { # 7. interface { ??? }
+      abstracts: [ 4 ], inherits: [ 1 ]
+    },
+    { # 8. interface { ??? }
+      abstracts: [ 5 ], inherits: [ 1 ]
     }
   ],
   interfaceInsts: [
-    { # 1. 
+    { # 1. Pointer[Foo[string|int]]
       generic: 1, resolved: 4,
       instanceTypes: [ objectInst2 ]
     }
   ],
   methods: [
-    { # 1.
-      name: Add, package: 2, signature: 5, exported: true,
-      receiver: 1, loc: 9, metrics: 1
+    { # 1. func (Foo[T string|int|uint]) Add(v T) T <string|int|uint>
+      name: Add, package: 2, signature: 7, exported: true,
+      receiver: 1, loc: 9, metrics: 1,
+      instances: [ 1, 2 ],
     },
     { # 2.
-      name: New, package: 2, signature: 4, exported: true,
+      name: New, package: 2, signature: 5, exported: true,
       loc: 14, metrics: 2,
       typeParams: [ 2 ]
     },
     { # 3.
       name: main, package: 2, signature: 1,
       loc: 18, metrics: 3
+    }
+  ],
+  methodInsts: [
+    { # 1.
+      generic: 1, receiver: 1, resolved: 4,
+      instanceTypes: [ basic3 ]
+    },
+    { # 2.
+      generic: 1, receiver: 2, resolved: 6,
+      instanceTypes: [ typeParam2 ]
     }
   ],
   metrics: [
@@ -94,18 +111,18 @@
   ],
   objectInsts: [
     { # 1. Foo[string]
-      generic: 1, resolved: 1,
-      instanceTypes: [ basic3 ]
+      generic: 1, resData: 1, resInterface: 6,
+      instanceTypes: [ basic3 ], methods: [ 1 ]
     },
     { # 2. Foo[string|int]
-      generic: 1, resolved: 2,
-      instanceTypes: [ typeParam2 ]
+      generic: 1, resData: 2, resInterface: 7,
+      instanceTypes: [ typeParam2 ], methods: [ 2 ]
     }
   ],
   objects: [
     { # 1. Foo[T string|int|uint] ???
       loc: 5, name: Foo, package: 2,
-      exported: true, data: 3, interface: 6,
+      exported: true, data: 3, interface: 8,
       instances:  [ 1, 2 ],
       methods:    [ 1 ],
       typeParams: [ 3 ]
@@ -131,10 +148,12 @@
   ],
   signatures: [
     {},                                # 1. func()()
-    { results: [ 2 ] },                # 2. func() ???
-    { results: [ 3 ] },                # 3. func() ???
-    { params: [ 5 ], results: [ 1 ] }, # 4. func( ??? ) ???
-    { params: [ 6 ], results: [ 4 ] }  # 5. func( ??? ) ???
+    { results: [ 3 ] },                # 2. func() Foo[string|int]
+    { results: [ 4 ] },                # 3. func() T <any>
+    { params: [ 7 ], results: [ 1 ] }, # 4. func(v string) string
+    { params: [ 8 ], results: [ 2 ] }, # 5. func(v T <sting|int>) ???
+    { params: [ 8 ], results: [ 5 ] }, # 6. func(v T) T <string|int>
+    { params: [ 9 ], results: [ 6 ] }  # 7. func(v T) T <string|int|uint>
   ],
   structDescs: [
     { fields: [ 1 ] }, # 1. struct { value string }

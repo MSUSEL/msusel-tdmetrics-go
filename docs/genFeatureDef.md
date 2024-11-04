@@ -332,7 +332,7 @@ will create `type Foo[bool] interface { Value() bool }`.
 | `index`         | ⬤ | The [index](#indices) of this interface in the projects' `interfaceInsts` list. |
 | `instanceTypes` | ◯ | List of [keys](#keys) to any [type description](#type-descriptions) for type arguments. |
 | `kind`          | ⬤ | `interfaceInst` |
-| `resolved`      | ◯ | The [index](#indices) to the [interface description](#interface-description) this instance defines. |
+| `resolved`      | ◯ | The [index](#indices) to the resolved [interface description](#interface-description) this instance defines. |
 
 ### Locations
 
@@ -395,7 +395,7 @@ will create `type Foo[bool]() bool { ... }`.
 | `instanceTypes` | ◯ | List of [keys](#keys) to any [type description](#type-descriptions) for type arguments. |
 | `kind`          | ⬤ | `methodInst` |
 | `receiver`      | ⬤ | The [index](#indices) of the [object instance](#object-instance) for the receiver of this method, if it has one. |
-| `resolved`      | ◯ | The [index](#indices) to the [signature](#signature) this instance defines. |
+| `resolved`      | ◯ | The [index](#indices) to the resolved [signature](#signature) this instance defines. |
 
 ### Metrics
 
@@ -470,7 +470,8 @@ will create `type Foo[bool] struct { value bool }`.
 | `instanceTypes` | ◯ | List of [keys](#keys) to any [type description](#type-descriptions) for type arguments. |
 | `kind`          | ⬤ | `objectInst` |
 | `methods`       | ◯ | List of [indices](#indices) of the [method instances](#method) for this instance. |
-| `resolved`      | ◯ | The [index](#indices) to the [structure description](#structure-description) this instance defines. |
+| `resData`       | ◯ | The [index](#indices) to the resolved [structure description](#structure-description) this instance defines. |
+| `resInterface`  | ◯ | The [index](#indices) to the resolved [interface description](#interface-description) this instance defines. |
 
 ### Package
 

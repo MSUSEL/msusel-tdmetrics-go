@@ -1,6 +1,7 @@
 package objectInst
 
 import (
+	"fmt"
 	"go/types"
 
 	"github.com/Snow-Gremlin/goToolbox/collections"
@@ -17,19 +18,19 @@ import (
 )
 
 type instanceImp struct {
-	realType      types.Type
-	generic       constructs.Object
-	resolved      constructs.StructDesc
-	instanceTypes []constructs.TypeDesc
-	methods       collections.SortedSet[constructs.MethodInst]
-	inter         constructs.InterfaceDesc
-	index         int
-	alive         bool
+	realType          types.Type
+	generic           constructs.Object
+	resolvedData      constructs.StructDesc
+	resolvedInterface constructs.InterfaceDesc
+	instanceTypes     []constructs.TypeDesc
+	methods           collections.SortedSet[constructs.MethodInst]
+	index             int
+	alive             bool
 }
 
 func newInstance(args constructs.ObjectInstArgs) constructs.ObjectInst {
 	assert.ArgNotNil(`generic`, args.Generic)
-	assert.ArgNotNil(`resolved`, args.Resolved)
+	assert.ArgNotNil(`resolved data`, args.ResolvedData)
 	assert.ArgNotEmpty(`instance types`, args.InstanceTypes)
 	assert.ArgHasNoNils(`instance types`, args.InstanceTypes)
 
@@ -45,7 +46,7 @@ func newInstance(args constructs.ObjectInstArgs) constructs.ObjectInst {
 	inst := &instanceImp{
 		realType:      args.RealType,
 		generic:       args.Generic,
-		resolved:      args.Resolved,
+		resolvedData:  args.ResolvedData,
 		instanceTypes: args.InstanceTypes,
 		methods:       sortedSet.New(methodInst.Comparer()),
 	}
@@ -62,9 +63,10 @@ func (i *instanceImp) Alive() bool         { return i.alive }
 func (i *instanceImp) SetAlive(alive bool) { i.alive = alive }
 func (m *instanceImp) GoType() types.Type  { return m.realType }
 
-func (m *instanceImp) Generic() constructs.Object           { return m.generic }
-func (m *instanceImp) Resolved() constructs.StructDesc      { return m.resolved }
-func (m *instanceImp) InstanceTypes() []constructs.TypeDesc { return m.instanceTypes }
+func (m *instanceImp) Generic() constructs.Object                  { return m.generic }
+func (m *instanceImp) ResolvedData() constructs.StructDesc         { return m.resolvedData }
+func (m *instanceImp) ResolvedInterface() constructs.InterfaceDesc { return m.resolvedInterface }
+func (m *instanceImp) InstanceTypes() []constructs.TypeDesc        { return m.instanceTypes }
 
 func (m *instanceImp) AddMethod(method constructs.MethodInst) constructs.MethodInst {
 	v, _ := m.methods.TryAdd(method)
@@ -75,8 +77,9 @@ func (m *instanceImp) Methods() collections.ReadonlySortedSet[constructs.MethodI
 	return m.methods.Readonly()
 }
 
-func (m *instanceImp) Interface() constructs.InterfaceDesc      { return m.inter }
-func (m *instanceImp) SetInterface(it constructs.InterfaceDesc) { m.inter = it }
+func (m *instanceImp) SetResolvedInterface(it constructs.InterfaceDesc) {
+	m.resolvedInterface = it
+}
 
 func (i *instanceImp) CompareTo(other constructs.Construct) int {
 	return constructs.CompareTo[constructs.ObjectInst](i, other, Comparer())
@@ -86,9 +89,9 @@ func Comparer() comp.Comparer[constructs.ObjectInst] {
 	return func(a, b constructs.ObjectInst) int {
 		aImp, bImp := a.(*instanceImp), b.(*instanceImp)
 		return comp.Or(
-			constructs.ComparerPend(aImp.generic, bImp.generic),
-			constructs.ComparerPend(aImp.resolved, bImp.resolved),
+			constructs.ComparerPend(aImp.resolvedData, bImp.resolvedData),
 			constructs.SliceComparerPend(aImp.instanceTypes, bImp.instanceTypes),
+			constructs.ComparerPend(aImp.generic, bImp.generic),
 		)
 	}
 }
@@ -110,13 +113,16 @@ func (i *instanceImp) ToJson(ctx *jsonify.Context) jsonify.Datum {
 		AddIf(ctx, ctx.IsDebugKindIncluded(), `kind`, i.Kind()).
 		AddIf(ctx, ctx.IsDebugIndexIncluded(), `index`, i.index).
 		Add(ctx.OnlyIndex(), `generic`, i.generic).
-		Add(ctx.OnlyIndex(), `resolved`, i.resolved).
+		Add(ctx.OnlyIndex(), `resData`, i.resolvedData).
+		Add(ctx.OnlyIndex(), `resInterface`, i.resolvedInterface).
 		Add(ctx.Short(), `instanceTypes`, i.instanceTypes).
 		AddNonZero(ctx.OnlyIndex(), `methods`, i.methods.ToSlice())
 }
 
 func (i *instanceImp) String() string {
-	return i.generic.Name() +
-		`[` + enumerator.Enumerate(i.instanceTypes...).Join(`, `) + `]` +
-		i.resolved.String()
+	return fmt.Sprintf(`%s[%s]%v%v`,
+		i.generic.Name(),
+		enumerator.Enumerate(i.instanceTypes...).Join(`, `),
+		i.resolvedData,
+		i.resolvedInterface)
 }
