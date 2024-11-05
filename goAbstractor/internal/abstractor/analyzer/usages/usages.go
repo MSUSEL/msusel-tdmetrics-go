@@ -144,7 +144,7 @@ func (ui *usagesImp) setPendingType(t types.Type) {
 	logDebug(`    - converted: %v`, ui.pending)
 }
 
-func (ui *usagesImp) setPendingObject(o types.Object) {
+func (ui *usagesImp) setPendingObject(o types.Object, instType []constructs.TypeDesc) {
 	ui.flushPendingToRead()
 	logDebug(`  - PendingObject: %v`, o)
 
@@ -166,14 +166,9 @@ func (ui *usagesImp) setPendingObject(o types.Object) {
 	}
 
 	if isLocal(ui.root, o) {
-		logDebug(`    - local > set type`)
+		logDebug(`    - local: set type`)
 		ui.setPendingType(o.Type())
 		return
-	}
-
-	var instType []constructs.TypeDesc
-	if itList := getInstTypes(o); !utils.IsNil(itList) {
-		instType = ui.conv.ConvertInstanceTypes(itList)
 	}
 
 	if tn, ok := o.(*types.TypeName); ok {
@@ -371,6 +366,8 @@ func (ui *usagesImp) processNode(node ast.Node) {
 			ui.processIndex(t)
 		case *ast.IndexListExpr:
 			ui.processIndexList(t)
+		case *ast.KeyValueExpr:
+			ui.processKeyValue(t)
 		case *ast.RangeStmt:
 			ui.processRange(t)
 		case *ast.ReturnStmt:
@@ -457,6 +454,7 @@ func (ui *usagesImp) processCall(call *ast.CallExpr) {
 }
 
 func (ui *usagesImp) processCompositeLit(comp *ast.CompositeLit) {
+	logDebug(`>>> processCompositeLit: %v @ %s`, comp, ui.pos(comp))
 	ui.compLits.Push(comp)
 	defer ui.compLits.Pop()
 
@@ -466,6 +464,9 @@ func (ui *usagesImp) processCompositeLit(comp *ast.CompositeLit) {
 	}
 
 	ui.processNode(comp.Type)
+	if ui.hasPending() {
+		ui.addWrite(ui.pending, ui.pendingSE)
+	}
 }
 
 func (ui *usagesImp) processIdent(id *ast.Ident) {
@@ -474,7 +475,7 @@ func (ui *usagesImp) processIdent(id *ast.Ident) {
 	// Check if this identifier is part of a definition.
 	if def, ok := ui.info.Defs[id]; ok {
 		logDebug(`  > processIdent: def object: %v`, def)
-		ui.setPendingObject(def)
+		ui.setPendingObject(def, nil)
 		ui.addWrite(ui.pending, ui.pendingSE)
 		return
 	}
@@ -503,8 +504,16 @@ func (ui *usagesImp) processIdent(id *ast.Ident) {
 		}
 	}
 
+	// Find any type arguments for this object.
+	var instType []constructs.TypeDesc
+	if itList := ui.info.Instances[id].TypeArgs; !utils.IsNil(itList) {
+		instType = ui.conv.ConvertInstanceTypes(itList)
+	} else if itList := getInstTypes(obj); !utils.IsNil(itList) {
+		instType = ui.conv.ConvertInstanceTypes(itList)
+	}
+
 	logDebug(`  > processIdent: object: %v`, obj)
-	ui.setPendingObject(obj)
+	ui.setPendingObject(obj, instType)
 }
 
 func (ui *usagesImp) processIncDec(stmt *ast.IncDecStmt) {
@@ -560,7 +569,17 @@ func (ui *usagesImp) processIndexList(expr *ast.IndexListExpr) {
 	ui.addRead(ui.pending)
 }
 
+func (ui *usagesImp) processKeyValue(kv *ast.KeyValueExpr) {
+	logDebug(`>>> processKeyValue: %v @ %s`, kv, ui.pos(kv))
+	ui.processNode(kv.Key)
+	ui.flushPendingToWrite()
+
+	ui.processNode(kv.Value)
+	ui.flushPendingToRead()
+}
+
 func (ui *usagesImp) processRange(r *ast.RangeStmt) {
+	logDebug(`>>> processRange: %v @ %s`, r, ui.pos(r))
 	ui.processNode(r.Key)
 	ui.flushPendingToWrite()
 

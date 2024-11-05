@@ -254,9 +254,25 @@ func (r *resolverImp) resolveTempRef(ref constructs.TempReference) {
 
 	switch typ.Kind() {
 	case kind.Object:
-		ref.SetResolution(instantiator.Object(r.proj, ref.GoType(), typ.(constructs.Object), ref.InstanceTypes()...))
+		res := instantiator.Object(r.proj, ref.GoType(), typ.(constructs.Object), ref.InstanceTypes()...)
+		if utils.IsNil(res) {
+			panic(terror.New(`failed to resolve object type reference`).
+				With(`package path`, ref.PackagePath()).
+				With(`name`, ref.Name()).
+				With(`instance types`, ref.InstanceTypes()))
+		}
+		ref.SetResolution(res)
+
 	case kind.InterfaceDecl:
-		ref.SetResolution(instantiator.InterfaceDecl(r.proj, ref.GoType(), typ.(constructs.InterfaceDecl), ref.InstanceTypes()...))
+		res := instantiator.InterfaceDecl(r.proj, ref.GoType(), typ.(constructs.InterfaceDecl), ref.InstanceTypes()...)
+		if utils.IsNil(res) {
+			panic(terror.New(`failed to resolve interface type reference`).
+				With(`package path`, ref.PackagePath()).
+				With(`name`, ref.Name()).
+				With(`instance types`, ref.InstanceTypes()))
+		}
+		ref.SetResolution(res)
+
 	default:
 		panic(terror.New(`unexpected declaration type`).
 			With(`kind`, typ.Kind()).
@@ -305,11 +321,35 @@ func (r *resolverImp) resolveTempDeclRef(ref constructs.TempDeclRef) {
 
 	switch decl.Kind() {
 	case kind.Object:
-		ref.SetResolution(instantiator.Object(r.proj, nil, decl.(constructs.Object), ref.InstanceTypes()...))
+		res := instantiator.Object(r.proj, nil, decl.(constructs.Object), ref.InstanceTypes()...)
+		if utils.IsNil(res) {
+			panic(terror.New(`failed to resolve object declaration reference`).
+				With(`package path`, ref.PackagePath()).
+				With(`name`, ref.Name()).
+				With(`instance types`, ref.InstanceTypes()))
+		}
+		ref.SetResolution(res)
+
 	case kind.InterfaceDecl:
-		ref.SetResolution(instantiator.InterfaceDecl(r.proj, nil, decl.(constructs.InterfaceDecl), ref.InstanceTypes()...))
+		res := instantiator.InterfaceDecl(r.proj, nil, decl.(constructs.InterfaceDecl), ref.InstanceTypes()...)
+		if utils.IsNil(res) {
+			panic(terror.New(`failed to resolve interface declaration reference`).
+				With(`package path`, ref.PackagePath()).
+				With(`name`, ref.Name()).
+				With(`instance types`, ref.InstanceTypes()))
+		}
+		ref.SetResolution(res)
+
 	case kind.Method:
-		ref.SetResolution(instantiator.Method(r.proj, decl.(constructs.Method), ref.InstanceTypes()...))
+		res := instantiator.Method(r.proj, decl.(constructs.Method), ref.InstanceTypes()...)
+		if utils.IsNil(res) {
+			panic(terror.New(`failed to resolve method declaration reference`).
+				With(`package path`, ref.PackagePath()).
+				With(`name`, ref.Name()).
+				With(`instance types`, ref.InstanceTypes()))
+		}
+		ref.SetResolution(res)
+
 	default:
 		panic(terror.New(`unexpected declaration type`).
 			With(`kind`, decl.Kind()).

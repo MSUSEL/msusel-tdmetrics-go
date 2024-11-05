@@ -59,7 +59,7 @@ func Method(proj constructs.Project, decl constructs.Method, instanceTypes ...co
 
 	i, existing, needsInstance := newInstantiator(proj, decl, typeParams, instanceTypes)
 	if !needsInstance {
-		return nil
+		return decl
 	}
 	if !utils.IsNil(existing) {
 		return existing.(constructs.MethodInst)
