@@ -9,7 +9,7 @@
   ],
   arguments: [
     { type: basic3 },              #  1. <unnamed> string
-    { type: interfaceDecl1 },      #  2. <unnamed> Pointer[T <any>]
+    { type: interfaceDecl1 },      #  2. <unnamed> Pointer[T <any>] ???
     { type: interfaceInst1 },      #  3. <unnamed> Pointer[Foo[T <string|int>]]
     { type: objectInst2 },         #  4. <unnamed> Foo[T <string|int>]
     { type: typeParam1 },          #  5. <unnamed> T <any>
@@ -68,7 +68,7 @@
     }
   ],
   methods: [
-    { # 1. func (Foo[T string|int|uint]) Add(v T) T <string|int|uint>
+    { # 1. func (Foo[T string|int|uint]) Add(v T) T
       name: Add, package: 2, signature: 8, exported: true,
       receiver: 1, loc: 9, metrics: 1,
       instances: [ 1, 3 ],
@@ -88,11 +88,11 @@
       generic: 1, receiver: 1, resolved: 4,
       instanceTypes: [ basic3 ]
     },
-    { # 2.
-      generic: 2, receiver: 2, resolved: 5,
+    { # 2. func New(v sting) Pointer[T <any>] ???
+      generic: 2, resolved: 5,
       instanceTypes: [ basic3 ]
     },
-    { # 3. func New(v sting) Pointer[Foo[string]]
+    { # 3. func (Foo[T <string|int>]) Add(v T) T
       generic: 1, receiver: 2, resolved: 7,
       instanceTypes: [ typeParam2 ]
     }
@@ -105,31 +105,28 @@
     },
     { # 2. New metrics
       codeCount: 3, complexity: 1, indents: 1, lineCount: 3, loc: 14,
-      reads: [ object1, objectInst2, selection2 ],
-      writes: [ selection2 ] # TODO: Shouldn't this be 
+      reads:  [ objectInst2 ],
+      writes: [ objectInst2, selection2 ]
     },
     { # 3. main metrics
       codeCount: 4, complexity: 1, indents: 2, lineCount: 4, loc: 18,
-      invokes: [
-        methodInst3, # TODO: Shouldn't this be invoking `New(v string) Foo[string]`?
-        selection1
-      ],
+      invokes: [ methodInst2, selection1 ],
       reads:   [ objectInst1 ],
       writes:  [ objectInst1 ]
     }
   ],
   objectInsts: [
-    { # 1. Foo[string] ???
+    { # 1. main.Foo[string]{ value string }{ Add(v string) string }
       generic: 1, resData: 1, resInterface: 6,
       instanceTypes: [ basic3 ], methods: [ 1 ]
     },
-    { # 2. Foo[string|int] ???
+    { # 2. main.Foo[T string|int]{ value T }{ Add(v T) T }
       generic: 1, resData: 2, resInterface: 7,
-      instanceTypes: [ typeParam2 ], methods: [ 2 ]
+      instanceTypes: [ typeParam2 ], methods: [ 3 ]
     }
   ],
   objects: [
-    { # 1. Foo[T string|int|uint] ???
+    { # 1. main.Foo[T string|int|uint]{ value T }{ Add(v T) T }
       loc: 5, name: Foo, package: 2,
       exported: true, data: 3, interface: 8,
       instances:  [ 1, 2 ],
@@ -156,18 +153,20 @@
     { name: value, origin: object1 }      # 3. Foo[string|int|uint].value
   ],
   signatures: [
-    {},                                # 1. func()()
-    { results: [ 3 ] },                # 2. func() Foo[string|int]
-    { results: [ 4 ] },                # 3. func() T <any>
-    { params: [ 7 ], results: [ 1 ] }, # 4. func(v string) string
-    { params: [ 8 ], results: [ 2 ] }, # 5. func(v T <sting|int>) Pointer[Foo[T]]
-    { params: [ 8 ], results: [ 5 ] }, # 6. func(v T) T <string|int>
-    { params: [ 9 ], results: [ 6 ] }  # 7. func(v T) T <string|int|uint>
+    {},                                 # 1. func()()
+    {                 results: [ 4 ] }, # 2. func() Foo[string|int]
+    {                 results: [ 5 ] }, # 3. func() T <any>
+    { params: [  8 ], results: [ 1 ] }, # 4. func(v string) string
+    # TODO: Why does 5 use result 2 instead of `Pointer[Foo[string]]`?
+    { params: [  8 ], results: [ 2 ] }, # 5. func(v string) Pointer[T <any>] ???
+    { params: [  9 ], results: [ 3 ] }, # 6. func(v T <string|int>) Pointer[Foo[T]]
+    { params: [  9 ], results: [ 6 ] }, # 7. func(v T) T <string|int>
+    { params: [ 10 ], results: [ 7 ] }  # 8. func(v T) T <string|int|uint>
   ],
   structDescs: [
     { fields: [ 1 ] }, # 1. struct { value string }
-    { fields: [ 2 ] }, # 2. struct { value string|int }
-    { fields: [ 3 ] }  # 3. struct { value string|int|uint }
+    { fields: [ 2 ] }, # 2. struct { value T <string|int> }
+    { fields: [ 3 ] }  # 3. struct { value T <string|int|uint> }
   ],
   typeParams: [
     { name: T, type: interfaceDecl2 }, # 1. T any

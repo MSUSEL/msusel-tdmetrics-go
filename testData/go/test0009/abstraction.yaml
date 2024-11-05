@@ -1,13 +1,20 @@
 {
   language: go,
   abstracts: [
-    { # 1. Mul(v T) T <int|float64|string>
-      name: Mul, signature: 2, exported: true
-    }
+    { name: Mul, signature: 2, exported: true }, # 1. Mul(v T) T <int|float64|string>
+    { name: Mul, signature: 3, exported: true }, # 2.
+    { name: Mul, signature: 4, exported: true }, # 3.
+    { name: Mul, signature: 5, exported: true }  # 4.
   ],
   arguments: [
-    { type: typeParam1 },         # 1. <unnamed> T <int|float64|string>
-    { name: v, type: typeParam1 } # 2. v T <int|float64|string>
+    { type: basic1 },             # 1. <unnamed> int
+    { type: basic2 },             # 2. <unnamed> float64
+    { type: basic3 },             # 3. <unnamed> string
+    { type: typeParam1 },         # 4.
+    { name: v, type: basic1 },    # 5. v int
+    { name: v, type: basic2 },    # 6. v float64
+    { name: v, type: basic3 },    # 7. v string
+    { name: v, type: typeParam1 } # 8.
   ],
   basics: [ int, float64, string ],
   fields: [

@@ -1,58 +1,82 @@
 {
   language: go,
   abstracts: [
-    { name: Get, signature: 2, exported: true } # 1. Get() T <any>
+    { name: Get, signature: 2, exported: true }, # 1. Get() int
+    { name: Get, signature: 3, exported: true }, # 2. Get() T <any>
+    { name: Get, signature: 4, exported: true }  # 3. Get() X <any>
   ],
   arguments: [
-    { type: typeParam1 } # 1. <unnamed> T
+    { type: basic1 },     # 1. <unnamed> int
+    { type: typeParam1 }, # 2. <unnamed> T <any>
+    { type: typeParam2 }  # 3. <unnamed> X <any>
   ],
   basics: [ int ],
   fields: [
     { name: value, type: basic1 },     # 1. value int
-    { name: value, type: typeParam1 }, # 2. value T
-    { name: value, type: typeParam2 }  # 3. value X
+    { name: value, type: typeParam1 }, # 2. value T <any>
+    { name: value, type: typeParam2 }  # 3. value X <any>
   ],
   interfaceDescs: [
-    {},                                   # 1. any
-    { abstracts: [ 1 ], inherits: [ 1 ] } # 2. interface { Get() T }
+    {},                                    # 1. any
+    { abstracts: [ 1 ], inherits: [ 1 ] }, # 2. interface{ Get() int }
+    { abstracts: [ 2 ], inherits: [ 1 ] }, # 3. interface{ Get() T <any> }
+    { abstracts: [ 3 ], inherits: [ 1 ] }  # 4. interface{ Get() X <any> }
+  ],
+  methodInsts: [
+    { # 1. func (Foo[int]) Get() int
+      generic: 1, receiver: 1, resolved: 2,
+      instanceTypes: [ basic1 ]
+    },
+    { # 2. func (Foo[X <any>]) Get() X
+      generic: 1, receiver: 2, resolved: 4,
+      instanceTypes: [ typeParam2 ]
+    }
   ],
   methods: [
-    { # 1. func (Foo) Get() T <any>
+    { # 1. func (Foo[T <any>]) Get() T
       name: Get, exported: true, loc: 9,
-      metrics: 1, package: 1, receiver: 1, signature: 2
+      metrics: 1, package: 1, receiver: 1, signature: 3,
+      instances: [ 1, 2 ]
     },
     { # 2. func main()
       name: main, loc: 13, metrics: 2, package: 1, signature: 1
     }
   ],
   metrics: [
-    { # 1. `Foo[T].Get() T` metrics
+    { # 1. Foo[T <any>].Get() T metrics
       codeCount: 3, complexity: 1, indents: 1, lineCount: 3,
       loc: 9, getter: true,
-      reads: [ objectInst2, selection3 ]
+      reads: [
+        objectInst2, # Foo[X <any>]
+        selection3   # Foo[X <any>].value X
+      ]
     },
-    { # 2. `main()` metrics
+    { # 2. main() metrics
       codeCount: 4, complexity: 1, indents: 2, lineCount: 4,
       loc: 13, sideEffect: true,
-      invokes: [ selection1 ],
-      reads: [ object1, objectInst1 ],
-      writes: [ objectInst1, selection2 ]
+      invokes: [ selection1  ], # Foo[int].Get() int
+      reads:   [ objectInst1 ], # Foo[int]
+      writes:  [
+        objectInst1, # Foo[int]
+        selection2   # Foo[int].value int
+      ]
     }
   ],
   objectInsts: [
-    { # 1. Foo[int]
-      generic: 1, resolved: 1,
-      instanceTypes: [ basic1 ]
+    { # 1. Foo[int]{ value int }{ Get() int }
+      generic: 1, resData: 1, resInterface: 2,
+      methods: [ 1 ], instanceTypes: [ basic1 ]
     },
-    { # 2. Foo[X any]
-      generic: 1, resolved: 3,
+    { # 2. Foo[X <any>]{ value X }{ Get() X }
+      generic: 1, resData: 3, resInterface: 4,
+      methods: [ 2 ],
       instanceTypes: [ typeParam2 ]
     }
   ],
   objects: [
-    { # 1. Foo[T any]{ value T }{ Get() T }
+    { # 1. Foo[T <any>]{ value T }{ Get() T }
       name: Foo, package: 1, loc: 5,
-      data: 2, exported: true, interface: 2,
+      data: 2, exported: true, interface: 3,
       instances:  [ 1, 2 ],
       methods:    [ 1 ],
       typeParams: [ 1 ]
@@ -68,16 +92,18 @@
   selections: [
     { name: Get,   origin: objectInst1 }, # 1. Foo[int].Get() int
     { name: value, origin: objectInst1 }, # 2. Foo[int].value int
-    { name: value, origin: objectInst2 }  # 3. Foo[X].value X
+    { name: value, origin: objectInst2 }  # 3. Foo[X <any>].value X
   ],
   signatures: [
-    {},                # 1. func()()
-    { results: [ 1 ] } # 2. func() T <any>
+    {},                 # 1. func()()
+    { results: [ 1 ] }, # 2. func() int
+    { results: [ 2 ] }, # 3. func() T <any>
+    { results: [ 3 ] }  # 4. func() X <any>
   ],
   structDescs: [
     { fields: [ 1 ] }, # 1. struct { value int }
-    { fields: [ 2 ] }, # 2. struct { value T }
-    { fields: [ 3 ] }  # 3. struct { value X }
+    { fields: [ 2 ] }, # 2. struct { value T <any> }
+    { fields: [ 3 ] }  # 3. struct { value X <any> }
   ],
   typeParams: [
     { name: T, type: interfaceDesc1 }, # 1. T any
