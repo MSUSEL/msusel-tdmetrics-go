@@ -1,40 +1,51 @@
 {
   language: go,
   abstracts: [
-    { name: Mul, signature: 2, exported: true }, # 1. Mul(v T) T <int|float64|string>
-    { name: Mul, signature: 3, exported: true }, # 2.
-    { name: Mul, signature: 4, exported: true }, # 3.
-    { name: Mul, signature: 5, exported: true }  # 4.
+    { name: Mul, signature: 2, exported: true }, # 1. Mul(v int) int
+    { name: Mul, signature: 3, exported: true }, # 2. Mul(v float64) float64
+    { name: Mul, signature: 4, exported: true }, # 3. Mul(v string) string
+    { name: Mul, signature: 5, exported: true }  # 4. Mul(v T) T <int|float64|string>
   ],
   arguments: [
     { type: basic1 },             # 1. <unnamed> int
     { type: basic2 },             # 2. <unnamed> float64
     { type: basic3 },             # 3. <unnamed> string
-    { type: typeParam1 },         # 4.
+    { type: typeParam1 },         # 4. <unnamed> T <int|float64|string>
     { name: v, type: basic1 },    # 5. v int
     { name: v, type: basic2 },    # 6. v float64
     { name: v, type: basic3 },    # 7. v string
-    { name: v, type: typeParam1 } # 8.
+    { name: v, type: typeParam1 } # 8. v T <int|float64|string>
   ],
   basics: [ int, float64, string ],
   fields: [
     { name: value, type: basic1 } # 1. value int
   ],
   interfaceDescs: [
-    {}, # 1. any
-    {   # 2. int|float64|string
-      exact: [ basic1, basic2, basic3 ],
-      inherits: [ 1 ]
+    { exact: [ basic1, basic2, basic3 ] }, # 1. int|float64|string
+    { abstracts: [ 1 ] }, # 2. interface{ Mul(v int) int }
+    { abstracts: [ 2 ] }, # 3. interface{ Mul(v float64) float64 }
+    { abstracts: [ 3 ] }, # 4. interface{ Mul(v string) string }
+    { abstracts: [ 4 ] }  # 5. interface{ Mul(v T) T <int|float64|string> }
+  ],
+  methodInsts: [
+    { # 1. func (A[int]) Mul(v int) int
+      generic: 1, receiver: 1, resolved: 2,
+      instanceTypes: [ basic1 ]
     },
-    { # 3. interface{ Mul(v T) T <int|float64|string> }
-      abstracts: [ 1 ],
-      inherits:  [ 1 ]
+    { # 2. func (A[float64]) Mul(v float64) float64
+      generic: 1, receiver: 2, resolved: 3,
+      instanceTypes: [ basic2 ]
+    },
+    { # 3. func (A[string]) Mul(v string) string
+      generic: 1, receiver: 3, resolved: 4,
+      instanceTypes: [ basic3 ]
     }
   ],
   methods: [
-    { # 1. func (A) Mul(v T) T <int|float64|string>
+    { # 1. func (A[T int|float64|string]) Mul(v T) T
       name: Mul, exported: true, loc: 12,
-      metrics: 1, package: 1, receiver: 1, signature: 2
+      metrics: 1, package: 1, receiver: 1, signature: 5,
+      instances: [ 1, 2, 3 ]
     },
     { # 2. func main()
       name: main, loc: 28,
@@ -42,7 +53,7 @@
     }
   ],
   metrics: [
-    { # 1. A.Mul(v T) T metrics
+    { # 1. (A[T int|float64|string]) Mul(v T) T metrics
       codeCount: 15, complexity: 5, indents: 21, lineCount: 15, loc: 12,
       reads: [ object1, selection7 ]
     },
@@ -50,27 +61,27 @@
       codeCount: 5, complexity: 1, indents: 3, lineCount: 5, loc: 28,
       sideEffect: true,
       invokes: [ selection1, selection2, selection3 ],
-      reads:   [ object1, objectInst1, objectInst2, objectInst3 ],
-      writes:  [ selection4, selection5, selection6 ]
+      reads:   [ objectInst1, objectInst2, objectInst3 ],
+      writes:  [ objectInst1, objectInst2, objectInst3, selection4, selection5, selection6 ]
     }
   ],
   objectInsts: [
-    { # 1. A[int]
-      generic: 1, resolved: 1,
-      instanceTypes: [ basic1 ]
+    { # 1. A[int]{ value int }{ Mul(v int) int }
+      generic: 1, resData: 1, resInterface: 2,
+      instanceTypes: [ basic1 ], methods: [ 1 ]
     },
-    { # 2. A[float64]
-      generic: 1, resolved: 1,
-      instanceTypes: [ basic2 ]
+    { # 2. A[float64]{ value float64 }{ Mul(v float64) float64 }
+      generic: 1, resData: 1, resInterface: 3,
+      instanceTypes: [ basic2 ], methods: [ 2 ],
     },
-    { # 3. A[string]
-      generic: 1, resolved: 1,
-      instanceTypes: [ basic3 ]
+    { # 3. A[string]{ value string }{ Mul(v string) string }
+      generic: 1, resData: 1, resInterface: 4,
+      instanceTypes: [ basic3 ], methods: [ 3 ]
     }
   ],
   objects: [
-    { # 1. A { value int }{ Mul(v T) T <int|float64|string> }
-      name: A, package: 1, data: 1, interface: 3, loc: 8,
+    { # 1. A[T int|float64|string] { value int }{ Mul(v T) T }
+      name: A, package: 1, data: 1, interface: 5, loc: 8,
       exported: true,
       instances:  [ 1, 2, 3 ],
       methods:    [ 1 ],
@@ -94,14 +105,17 @@
     { name: value, origin: object1 }      # 7. A[T].value
   ],
   signatures: [
-    {},                               # 1. func()()
-    { params: [ 2 ], results: [ 1 ] } # 2. func(v T) T <int|float64|string>
+    {},                                # 1. func()()
+    { params: [ 5 ], results: [ 1 ] }, # 2. func(v int) int
+    { params: [ 6 ], results: [ 2 ] }, # 3. func(v float64) float64
+    { params: [ 7 ], results: [ 3 ] }, # 4. func(v string) string
+    { params: [ 8 ], results: [ 4 ] }  # 5. func(v T) T <int|float64|string>
   ],
   structDescs: [
     { fields: [ 1 ] } # 1. struct{ value int }
   ],
   typeParams: [
-    { name: T, type: interfaceDesc2 } # 1. T int|float64|string
+    { name: T, type: interfaceDesc1 } # 1. T int|float64|string
   ],
   locs: {
     '1': main.go

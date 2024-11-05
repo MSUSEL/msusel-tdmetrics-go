@@ -1,206 +1,316 @@
 {
   language: go,
-  basics: [
-    bool,  # 1. bool
-    int,   # 2. int
-    string # 3. string
+  abstracts: [
+    { exported: true, name: $compare, signature: 25 },
+    { exported: true, name: $deref,   signature:  2 },
+    { exported: true, name: $deref,   signature:  5 },
+    { exported: true, name: $deref,   signature:  6 },
+    { exported: true, name: $get,     signature:  7 },
+    { exported: true, name: $get,     signature:  8 },
+    { exported: true, name: $get,     signature:  9 },
+    { exported: true, name: $get,     signature: 10 },
+    { exported: true, name: $get,     signature: 11 },
+    { exported: true, name: $get,     signature: 12 },
+    { exported: true, name: $get,     signature: 19 },
+    { exported: true, name: $get,     signature: 21 },
+    { exported: true, name: $get,     signature: 23 },
+    { exported: true, name: $len,     signature:  2 },
+    { exported: true, name: $set,     signature: 13 },
+    { exported: true, name: $set,     signature: 14 },
+    { exported: true, name: $set,     signature: 15 },
+    { exported: true, name: $set,     signature: 16 },
+    { exported: true, name: $set,     signature: 17 },
+    { exported: true, name: $set,     signature: 18 },
+    { exported: true, name: $set,     signature: 20 },
+    { exported: true, name: $set,     signature: 22 },
+    { exported: true, name: $set,     signature: 24 },
+    { exported: true, name: AsSlices, signature:  3 },
+    { exported: true, name: AsSlices, signature:  4 }
   ],
-  classes: [
-    { # 4. main.Bacon { Set Set[ ??? ] }{} @ main.go:36
-      name: Bacon, package: 52, data: 72, interface: 11, loc: 36
+  arguments: [
+    { type: basic2 },
+    { type: interfaceDecl1 },
+    { type: interfaceInst5 },
+    { type: interfaceInst6 },
+    { type: typeParam5 },
+    { type: typeParam9 },
+    { name: found, type: basic1 },
+    { name: index, type: basic2 },
+    { name: key, type: basic3 },
+    { name: key, type: typeParam2 },
+    { name: key, type: typeParam7 },
+    { name: other, type: interfaceDecl4 },
+    { name: s, type: interfaceInst3 },
+    { name: s, type: interfaceInst4 },
+    { name: s, type: typeParam4 },
+    { name: value, type: basic3 },
+    { name: value, type: interfaceInst1 },
+    { name: value, type: interfaceInst2 },
+    { name: value, type: typeParam2 },
+    { name: value, type: typeParam5 },
+    { name: value, type: typeParam6 },
+    { name: value, type: typeParam8 }
+  ],
+  basics: [ bool, int, string ],
+  fields: [
+    { exported: true, name: Set, type: objectInst1 },
+    { name: m, type: interfaceInst8 },
+    { name: m, type: typeParam3 }
+  ],
+  interfaceDecls: [
+    {
+      name: List, package: 1, exported: true, interface: 12,
+      instances:  [ 3, 4, 5, 6, 7 ],
+      typeParams: [ 5 ],
     },
-    { # 5. main.Set[K any, V any, M ~Map[K,Pointer[V]]] { m M }{
-      #      AsSlices() struct { $value1 List[K]; $value2 List[Pointer[V]] }
-      #    }
-      name: Set, package: 52, data: 73, interface: 13, loc: 9,
-      typeParams: [ 33, 42, 35 ],
-      methods: [ 19 ]
+    {
+      name: Map, package: 1, exported: true, interface: 16,
+      instances:  [ 8, 9 ],
+      typeParams: [ 7, 8 ],
+    },
+    {
+      name: Pointer, package: 1, exported: true, interface: 6,
+      instances:  [ 1, 2 ],
+      typeParams: [ 5 ],
+    },
+    {
+      name: any, package: 1, exported: true, interface: 1
+    },
+    {
+      name: comparable, package: 1, exported: true, interface: 4
     }
   ],
-  interDefs: [
-    { # 6. $builtin.List[T any] {
-      #      $cap() int;
-      #      $get(index int) T;
-      #      $len() int;
-      #      $set(index int, value T)
-      #    }
-      name: List, package: 51, type: 14
+  interfaceDescs: [
+    {},
+    { approx: [interfaceInst7], inherits: [1] },
+    { approx: [interfaceInst9], inherits: [1] },
+    { abstracts: [1], inherits: [1] },
+    { abstracts: [2], inherits: [1] },
+    { abstracts: [3], inherits: [1] },
+    { abstracts: [4], inherits: [1] },
+    { abstracts: [14, 5, 15], inherits: [1] },
+    { abstracts: [14, 6, 16], inherits: [1] },
+    { abstracts: [14, 7, 17], inherits: [1] },
+    { abstracts: [14, 8, 18], inherits: [1] },
+    { abstracts: [14, 9, 19], inherits: [1] },
+    { abstracts: [14, 10, 20], inherits: [1] },
+    { abstracts: [14, 11, 21], inherits: [1] },
+    { abstracts: [14, 12, 22], inherits: [1] },
+    { abstracts: [14, 13, 23], inherits: [1] },
+    { abstracts: [24], inherits: [1] },
+    { abstracts: [25], inherits: [1] }
+  ],
+  interfaceInsts: [
+    {
+      generic: 3, resolved: 5,
+      instanceTypes: [ basic2 ]
     },
-    { # 7. $builtin.Map[TKey any, TValue any]{
-      #       $get(key TKey) struct { value TValue; ok bool }
-      #       $len() int
-      #       $set(key TKey, value TValue)
-      #     }
-      name: Map, package: 51, type: 16
+    {
+      generic: 3, resolved: 7,
+      instanceTypes: [ typeParam9 ]
     },
-    { # 8. $builtin.Pointer[T any]{ $deref() T }
-      name: Pointer, package: 51, type: 15
+    {
+      generic: 1, resolved: 8,
+      instanceTypes: [ basic3 ]
     },
-    { # 9. $builtin.any any
-      name: any, package: 51, type: 11
+    {
+      generic: 1, resolved: 9,
+      instanceTypes: [ interfaceInst1 ]
     },
-    { # 10. $builtin.comparable[T any] { $compare(other T) int }
-      name: comparable, package: 51, type: 12
+    {
+      generic: 1, resolved: 10,
+      instanceTypes: [ interfaceInst2 ]
+    },
+    {
+      generic: 1, resolved: 11,
+      instanceTypes: [ typeParam2 ]
+    },
+    {
+      generic: 1, resolved: 13,
+      instanceTypes: [ typeParam6 ]
+    },
+    {
+      generic: 2, resolved: 14,
+      instanceTypes: [ basic3, interfaceInst1 ]
+    },
+    {
+      generic: 2, resolved: 15,
+      instanceTypes: [ typeParam2, interfaceInst2 ]
     }
   ],
-  interfaces: [
-    {}, # 11. any
-    {   # 12. interface { $compare(other any) int }
-      inherits: [ 11 ],
-      methods: [ 23 ]
+  methodInsts: [
+    {
+      generic: 1,
+      instanceTypes: [basic3, basic2, interfaceInst8],
+      receiver: 1,
+      resolved: 3
     },
-    { # 13. interface[K<comparable>, V<any>, M<~Map[K<any>,Pointer[V<any>]]>]{
-      #       AsSlices() struct { $value1 List[K<any>]; $value2 List[Pointer[V<any>]] }
-      #     }
-      inherits: [ 12 ],
-      typeParams: [ 33, 42, 35 ],
-      methods: [ 32 ]
+    {
+      generic: 1,
+      instanceTypes: [typeParam2, typeParam9, typeParam3],
+      receiver: 2,
+      resolved: 3
     },
-    { # 14. interface[T any] {
-      #       $cap() int
-      #       $get[T any](index int) T
-      #       $len() int
-      #       $set[T any](index int, value T)
-      #     } 
-      inherits: [ 11 ],
-      typeParams: [ 38 ],
-      methods: [ 22, 25, 27, 28 ]
-    },
-    { # 15. interface[T any] { $deref[T any]() T }
-      inherits: [ 11 ],
-      typeParams: [ 38 ],
-      methods: [ 24 ]
-    },
-    { # 16. interface[TKey any, TValue any]{
-      #       $get(key TKey) struct { value TValue; ok bool }
-      #       $len() int
-      #       $set(key TKey, value TValue)
-      #     }
-      inherits: [ 11 ],
-      typeParams: [ 40, 41 ],
-      methods: [ 26, 27, 29 ]
-    },
-    { # 17. interface { ~List[ T<any> ] }
-      inherits: [ 11 ],
-      approx: [ 65 ]
-    },
-    { # 18. interface { ~Map[ K<any>, Pointer[ V<any> ] ] }
-      inherits: [ 11 ],
-      approx: [ 68 ]
+    { generic: 2, instanceTypes: [basic3, interfaceInst3], resolved: 26 },
+    {
+      generic: 2,
+      instanceTypes: [interfaceInst1, interfaceInst4],
+      resolved: 27
     }
   ],
   methods: [
-    { # 19. func main.Set.AsSlices() struct { $value1 List[K]; $value2 List[Pointer[V]] } @ main.go:13
-      name: AsSlices, package: 52, receiver: 5, signature: 55, loc: 13,
-      metrics: { codeCount: 11, complexity: 2, indents: 12, lineCount: 11 }
+    {
+      exported: true,
+      instances: [1, 2],
+      loc: 13,
+      metrics: 1,
+      name: AsSlices,
+      package: 2,
+      receiver: 2,
+      signature: 4
     },
-    { # 20. func main.PrintSlice[T any, S ~List[T]](s S) @ main.go:25
-      name: PrintSlice, package: 52, signature: 60, loc: 25,
-      metrics: { codeCount: 10, complexity: 3, indents: 13, lineCount: 10 }
+    {
+      exported: true,
+      instances: [3, 4],
+      loc: 25,
+      metrics: 2,
+      name: PrintSlice,
+      package: 2,
+      signature: 28,
+      typeParams: [6, 4]
     },
-    { # 21. func main.main() @ main.go:40
-      name: main, package: 52, signature: 53, loc: 40,
-      metrics: { codeCount: 16, complexity: 1, indents: 26, lineCount: 16 }
+    { loc: 40, metrics: 3, name: main, package: 2, signature: 1 }
+  ],
+  metrics: [
+    {
+      codeCount: 11,
+      complexity: 2,
+      indents: 12,
+      lineCount: 11,
+      loc: 13,
+      reads: [interfaceDecl5, objectInst2, selection4],
+      writes: [interfaceDecl5]
+    },
+    {
+      codeCount: 10,
+      complexity: 3,
+      indents: 13,
+      lineCount: 10,
+      loc: 25,
+      sideEffect: true
+    },
+    {
+      codeCount: 16,
+      complexity: 1,
+      indents: 26,
+      invokes: [methodInst3, methodInst4, selection1],
+      lineCount: 16,
+      loc: 40,
+      reads: [object1, objectInst1],
+      sideEffect: true,
+      writes: [object1, objectInst1, selection2, selection3]
     }
   ],
-  named: [
-    { name: $cap,     type: 54 }, # 22. func $cap() int
-    { name: $compare, type: 56 }, # 23. func $compare(other any) int
-    { name: $deref,   type: 57 }, # 24. func $deref[T any]() T
-    { name: $get,     type: 58 }, # 25. func $get[T any](index int) T
-    { name: $get,     type: 61 }, # 26. func $get[TKey any, TValue any](key TKey<any>) struct { value TValue<any>; ok bool }
-    { name: $len,     type: 54 }, # 27. func $len() int
-    { name: $set,     type: 59 }, # 28. func $set[T any](index int, value T)
-    { name: $set,     type: 62 }, # 29. func $set[TKey any, TValue any](key TKey<any>, value TValue<any>)
-    { name: $value1,  type: 64 }, # 30. $value1 List[K<any>]
-    { name: $value2,  type: 66 }, # 31. $value2 List[Pointer[V<any>]]
-    { name: AsSlices, type: 55 }, # 32. func AsSlices() struct { $value1 List[K<any>]; $value2 List[Pointer[V<any>]] }
-    { name: K,        type: 10 }, # 33. K $builtin.comparable
-    { name: K,        type: 11 }, # 34. K any
-    { name: M,        type: 18 }, # 35. M ~Map[K<any>,Pointer[V<any>]]
-    { name: S,        type: 17 }, # 36. S ~List[T<any>]
-    { name: Set,      type: 63 }, # 37. Set Set[string, int, Map[string, Pointer[int]]]
-    { name: T,        type:  9 }, # 38. T $builtin.any
-    { name: T,        type: 11 }, # 39. T any
-    { name: TKey,     type:  9 }, # 40. TKey $builtin.any
-    { name: TValue,   type:  9 }, # 41. TValue $builtin.any
-    { name: V,        type: 11 }, # 42. V any
-    { name: index,    type:  2 }, # 43. index int
-    { name: key,      type: 40 }, # 44. key TKey<any>
-    { name: m,        type: 35 }, # 45. m M<~Map[K<any>,Pointer[V<any>]]>
-    { name: ok,       type:  1 }, # 46. ok bool
-    { name: other,    type:  9 }, # 47. other any
-    { name: s,        type: 36 }, # 48. s S<~List[T<any>]>
-    { name: value,    type: 38 }, # 49. value T<any>
-    { name: value,    type: 41 }  # 50. value TValue<any>
+  objectInsts: [
+    {
+      generic: 2,
+      instanceTypes: [basic3, basic2, interfaceInst8],
+      methods: [1],
+      resData: 2,
+      resInterface: 17
+    },
+    {
+      generic: 2,
+      instanceTypes: [typeParam2, typeParam9, typeParam3],
+      methods: [2],
+      resData: 3,
+      resInterface: 17
+    }
+  ],
+  objects: [
+    {
+      data: 1,
+      exported: true,
+      interface: 1,
+      loc: 36,
+      name: Bacon,
+      package: 2
+    },
+    {
+      data: 3,
+      exported: true,
+      instances: [1, 2],
+      interface: 18,
+      loc: 9,
+      methods: [1],
+      name: Set,
+      package: 2,
+      typeParams: [1, 9, 3]
+    }
   ],
   packages: [
-    { # 51. $builtin package
-      name: $builtin,
-      path: $builtin,
-      interDefs: [ 6, 7, 8, 9, 10 ]
+    {
+      name: $builtin, path: $builtin,
+      interfaces: [1, 2, 3, 4, 5]
     },
-    { # 52. main package
+    {
+      methods: [1, 2, 3],
       name: main,
+      objects: [1, 2],
       path: command-line-arguments,
-      classes: [ 4, 5 ],
-      methods: [ 19, 20, 21 ]
     }
+  ],
+  selections: [
+    { name: AsSlices, origin: object1 },
+    { name: Set,      origin: object1 },
+    { name: m,        origin: objectInst1 },
+    { name: m,        origin: objectInst2 }
   ],
   signatures: [
-    {}, # 53. func()()
-    {   # 54. func() int
-      return: 2
-    },
-    { # 55. func() struct { $value1 List[K<any>]; $value2 List[Pointer[V<any>]] }
-      return: 71
-    },
-    { # 56. func(other any) int
-      params: [ 47 ],
-      return: 2
-    },
-    { # 57. func[T any]() T
-      typeParams: [ 38 ],
-      return: 38
-    },
-    { # 58. func[T any](index int) T
-      typeParams: [ 38 ],
-      params: [ 43 ],
-      return: 38
-    },
-    { # 59. func[T any](index int, value T)
-      typeParams: [ 38 ],
-      params: [ 43, 49 ]
-    },
-    { # 60. func[T any, S ~List[T]](s S)
-      typeParams: [ 39, 36 ],
-      params: [ 48 ]
-    },
-    { # 61. func[TKey any, TValue any](key TKey) struct { value TValue; ok bool }
-      typeParams: [ 40, 41 ],
-      params: [ 44 ],
-      return: 74
-    },
-    { # 62. func[TKey any, TValue any](key TKey, value TValue)
-      typeParams: [ 40, 41 ],
-      params: [ 44, 50 ]
-    }
+    {},
+    { results: [1] },
+    { results: [2, 2] },
+    { results: [4, 3] },
+    { results: [5] },
+    { results: [6] },
+    { params: [8], results: [16] },
+    { params: [8], results: [17] },
+    { params: [8], results: [18] },
+    { params: [8], results: [19] },
+    { params: [8], results: [20] },
+    { params: [8], results: [21] },
+    { params: [8, 16] },
+    { params: [8, 17] },
+    { params: [8, 18] },
+    { params: [8, 19] },
+    { params: [8, 20] },
+    { params: [8, 21] },
+    { params: [9], results: [17, 7] },
+    { params: [9, 17] },
+    { params: [10], results: [18, 7] },
+    { params: [10, 18] },
+    { params: [11], results: [22, 7] },
+    { params: [11, 22] },
+    { params: [12], results: [1] },
+    { params: [13] },
+    { params: [14] },
+    { params: [15] }
   ],
-  solids: [
-    { target: 5, typeParams: [ 3, 2, 67 ] }, # 63. Set[string, int, Map[string, Pointer[int]]]
-    { target: 6, typeParams: [ 34 ] },       # 64. List[K<any>]              <<====================== TODO: Why not 33: List[K<comparable>]?
-    { target: 6, typeParams: [ 39 ] },       # 65. List[T<any>]
-    { target: 6, typeParams: [ 70 ] },       # 66. List[Pointer[V<any>]]
-    { target: 7, typeParams: [ 3, 69 ] },    # 67. Map[string, Pointer[int]]
-    { target: 7, typeParams: [ 34, 70 ] },   # 68. Map[K<any>, Pointer[V<any>]]
-    { target: 8, typeParams: [ 2 ] },        # 69. Pointer[int]
-    { target: 8, typeParams: [ 42 ] }        # 70. Pointer[V<any>]
+  structDescs: [
+    { fields: [ 1 ] },
+    { fields: [ 2 ] },
+    { fields: [ 3 ] }
   ],
-  structs: [
-    { fields: [ 30, 31 ] }, # 71. struct { $value1 List[K<any>]; $value2 List[Pointer[V<any>]] }
-    { fields: [ 37 ] },     # 72. struct { Set Set[ ??? ] }
-    { fields: [ 45 ] },     # 73. struct { m M<~Map[K<any>,Pointer[V<any>]]> }
-    { fields: [ 50, 46 ] }  # 74. struct { value TValue<any>; ok bool }
+  typeParams: [
+    { name: K,      type: interfaceDecl5 },
+    { name: K,      type: interfaceDesc1 },
+    { name: M,      type: interfaceDesc3 },
+    { name: S,      type: interfaceDesc2 },
+    { name: T,      type: interfaceDecl4 },
+    { name: T,      type: interfaceDesc1 },
+    { name: TKey,   type: interfaceDecl5 },
+    { name: TValue, type: interfaceDecl4 },
+    { name: V,      type: interfaceDesc1 }
   ],
   locs: {
     '1': main.go

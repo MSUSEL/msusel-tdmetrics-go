@@ -1,61 +1,122 @@
 {
   language: go,
-  basics: [
-    float64, # 1. float64
-    int,     # 2. int
-    string   # 3. string
+  abstracts: [
+    { name: Mul, signature: 2, exported: true } # 1. Mul(v int)
   ],
-  classes: [
-    { # 4. class A[T float64|int|string] { value T }{ Mul(v int) } @ main.go:8
-      name: A, package: 13, data: 16, interface: 5, loc: 8,
-      typeParams: [ 10 ],
-      methods: [ 7 ]
-    }
+  arguments: [
+    { name: v, type: basic1 } # 1. v int
   ],
-  interfaces: [
-    { # 5. interface[T float64|int|string] { Mul(v int) }
-      typeParams: [ 10 ],
-      inherits: [ 6 ],
-      methods: [ 9 ]
+  basics: [ int, float64, string ],
+  fields: [
+    { name: value, type: basic1 },    # 1. value int
+    { name: value, type: basic2 },    # 2. value float64
+    { name: value, type: basic3 },    # 3. value string
+    { name: value, type: typeParam1 } # 4. value T <int|float64|string>
+  ],
+  interfaceDescs: [
+    { exact: [ basic1, basic2, basic3 ] }, # 1. int|float64|string
+    { abstracts: [ 1 ] }                   # 2. interface{ Mul(v int) }
+  ],
+  methodInsts: [
+    { # 1. func (A[int]) Mul(v int)
+      generic: 1, receiver: 1, resolved: 2,
+      instanceTypes: [ basic1 ]
     },
-    { # 6. interface { float64|int|string }
-      exact: [ 1, 2, 3 ]
+    { # 2. func (A[float64]) Mul(v int)
+      generic: 1, receiver: 2, resolved: 2,
+      instanceTypes: [ basic2 ]
+    },
+    { # 3. func (A[string]) Mul(v int)
+      generic: 1, receiver: 3, resolved: 2,
+      instanceTypes: [ basic3 ]
     }
   ],
   methods: [
-    { # 7. func (a A[T]) Mul(v int) @ main.go:12
-      name: Mul, package: 13, receiver: 4, signature: 15, loc: 12,
-      metrics: { codeCount: 16, complexity: 5, indents: 23, lineCount: 16 }
+    { # 1. func (A[T int|float64|string]) Mul(v int)
+      name: Mul, package: 1, exported: true, loc: 12,
+      metrics: 1, receiver: 1, signature: 2,
+      instances: [ 1, 2, 3 ]
     },
-    { # 8. func main() @ main.go:28
-      name: main, package: 13, signature: 14, loc: 29,
-      metrics: { codeCount: 11, complexity: 1, indents: 9, lineCount: 13 }
+    { # 2. func main()
+      name: main, package: 1, loc: 29,
+      metrics: 2, signature: 1
     }
   ],
-  named: [
-    { name: Mul,   type: 15 }, #  9. func Mul(v int)
-    { name: T,     type:  6 }, # 10. T float64|int|string
-    { name: v,     type:  2 }, # 11. v int
-    { name: value, type: 10 }  # 12. value T
+  metrics: [
+    { # 1. A.Mul(v int) metrics
+      loc: 12, codeCount: 16, complexity: 5, indents: 23, lineCount: 16,
+      reads:  [ object1, selection7 ],
+      writes: [ selection7 ]
+    },
+    { # 2. main() metrics
+      loc: 29, codeCount: 11, complexity: 1, indents: 9, lineCount: 13,
+      sideEffect: true,
+      invokes: [
+        selection1, selection2, selection3
+      ],
+      reads: [
+        objectInst1, objectInst2, objectInst3,
+        selection4, selection5, selection6
+      ],
+      writes: [
+        objectInst1, objectInst2, objectInst3,
+        selection4, selection5, selection6
+      ]
+    }
+  ],
+  objectInsts: [
+    { # 1. main.A[int]{ value int }{ Mul(v int) }
+      generic: 1, resData: 1, resInterface: 2,
+      instanceTypes: [ basic1 ],
+      methods: [ 1 ]
+    },
+    { # 2. main.A[float64]{ value float64 }{ Mul(v float64) }
+      generic: 1, resData: 2, resInterface: 2,
+      instanceTypes: [ basic2 ],
+      methods: [ 2 ]
+    },
+    { # 3. main.A[string]{ value string }{ Mul(v string) }
+      generic: 1, resData: 3, resInterface: 2,
+      instanceTypes: [ basic3 ],
+      methods: [ 3 ]
+    }
+  ],
+  objects: [
+    { # 1. main.A[T int|float64|string]{ value T }{ Mul(v int) }
+      name: A, package: 1, data: 4, interface: 2,
+      exported: true, loc: 8,
+      typeParams: [ 1 ], methods: [ 1 ],
+      instances: [ 1, 2, 3 ],
+    }
   ],
   packages: [
-    { # 13. main package
-      name: main,
-      path: command-line-arguments,
-      classes: [ 4 ],
-      methods: [ 7, 8 ]
+    { # 1. main package
+      name: main, path: command-line-arguments,
+      methods: [ 1, 2 ],
+      objects: [ 1 ]
     }
+  ],
+  selections: [
+    { name: Mul,   origin: objectInst1 }, # 1. A[int].Mul
+    { name: Mul,   origin: objectInst2 }, # 2. A[float64].Mul
+    { name: Mul,   origin: objectInst3 }, # 3. A[string].Mul
+    { name: value, origin: objectInst1 }, # 4. A[int].value int
+    { name: value, origin: objectInst2 }, # 5. A[float64].value int
+    { name: value, origin: objectInst3 }, # 6. A[string].value int
+    { name: value, origin: object1 }      # 7. A[T int|float64|string].value T
   ],
   signatures: [
-    {}, # 14. func()()
-    {   # 15. func(v int)
-      params: [ 11 ]
-    }
+    {},               # 1. func()()
+    { params: [ 1 ] } # 2. func(v int)
   ],
-  structs: [
-    { # 16. struct { value T }
-      fields: [ 12 ]
-    }
+  structDescs: [
+    { fields: [ 1 ] }, # 1. struct{ value int }
+    { fields: [ 2 ] }, # 2. struct{ value float64 }
+    { fields: [ 3 ] }, # 3. struct{ value string }
+    { fields: [ 4 ] }  # 4. struct{ value T <int|float64|string> }
+  ],
+  typeParams: [
+    { name: T, type: interfaceDesc1 } # 1. T int|float64|string
   ],
   locs: {
     '1': main.go
