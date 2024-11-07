@@ -9,7 +9,7 @@
   ],
   arguments: [
     { type: basic3 },              #  1. <unnamed> string
-    { type: interfaceDecl1 },      #  2. <unnamed> Pointer[T <any>] ???
+    { type: interfaceDecl1 },      #  2. <unnamed> Pointer[T <any>]
     { type: interfaceInst1 },      #  3. <unnamed> Pointer[Foo[T <string|int>]]
     { type: objectInst2 },         #  4. <unnamed> Foo[T <string|int>]
     { type: typeParam1 },          #  5. <unnamed> T <any>
@@ -29,9 +29,6 @@
     { # 1. Pointer[T any] { $deref() T <any> }
       name: Pointer, package: 1, interface: 5, exported: true,
       instances: [ 1 ], typeParams: [ 1 ]
-    },
-    { # 2. any
-      name: any, package: 1, interface: 1, exported: true
     }
   ],
   interfaceDescs: [
@@ -89,7 +86,7 @@
       instanceTypes: [ basic3 ]
     },
     { # 2. func New(v sting) Pointer[T <any>] ???
-      generic: 2, resolved: 5,
+      generic: 2, resolved: 566,
       instanceTypes: [ basic3 ]
     },
     { # 3. func (Foo[T <string|int>]) Add(v T) T
@@ -138,7 +135,7 @@
     { # 1. $builtin package
       name: $builtin,
       path: $builtin,
-      interfaces: [ 1, 2 ]
+      interfaces: [ 1 ]
     },
     { # 2. main package
       name: main,
@@ -169,7 +166,7 @@
     { fields: [ 3 ] }  # 3. struct { value T <string|int|uint> }
   ],
   typeParams: [
-    { name: T, type: interfaceDecl2 }, # 1. T any
+    { name: T, type: interfaceDesc1 }, # 1. T any
     { name: T, type: interfaceDesc2 }, # 2. T string|int
     { name: T, type: interfaceDesc3 }  # 3. T string|int|uint
   ],

@@ -21,9 +21,6 @@
     { # 1. $builtin.List[T any]
       name: List, package: 1, interface: 3, exported: true,
       typeParams: [ 1 ], instances: [ 1 ]
-    },
-    { # 2. $builtin.any interface{}
-      name: any, package: 1, interface: 1, exported: true
     }
   ],
   interfaceDescs: [
@@ -77,7 +74,7 @@
     { # 1. $builtin package
       path: $builtin,
       name: $builtin,
-      interfaces: [ 1, 2 ]
+      interfaces: [ 1 ]
     },
     { # 2. main package
       path: command-line-arguments,
@@ -107,7 +104,7 @@
     }
   ],
   typeParams: [
-    { name: T, type: interfaceDecl2 } # 1. T any
+    { name: T, type: interfaceDesc1 } # 1. T any
   ],
   locs: {
     '1': main.go

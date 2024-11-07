@@ -25,7 +25,7 @@ type Baker interface {
 	TypeByName(name string) constructs.TypeDecl
 
 	BakeBuiltin() constructs.Package
-	BakeAny() constructs.InterfaceDecl
+	BakeAny() constructs.InterfaceDesc
 	BakeList() constructs.InterfaceDecl
 	BakeChan() constructs.InterfaceDecl
 	BakeMap() constructs.InterfaceDecl
@@ -115,22 +115,15 @@ func (b *bakerImp) bakeBasic(kind types.BasicKind) constructs.Basic {
 
 // BakeAny bakes in an interface to represent "any"
 // the base object that (almost) all other types inherit from.
-func (b *bakerImp) BakeAny() constructs.InterfaceDecl {
-	return bakeOnce(b, `any`, func() constructs.InterfaceDecl {
+func (b *bakerImp) BakeAny() constructs.InterfaceDesc {
+	return bakeOnce(b, `any`, func() constructs.InterfaceDesc {
 		pkg := b.BakeBuiltin()
 		real := types.NewInterfaceType(nil, nil)
 
 		// any interface{}
-		return b.proj.NewInterfaceDecl(constructs.InterfaceDeclArgs{
+		return b.proj.NewInterfaceDesc(constructs.InterfaceDescArgs{
 			RealType: real,
-			Package:  pkg,
-			Name:     `any`,
-			Exported: true,
-			Interface: b.proj.NewInterfaceDesc(constructs.InterfaceDescArgs{
-				RealType: real,
-				Package:  pkg.Source(),
-			}),
-			Location: locs.NoLoc(),
+			Package:  pkg.Source(),
 		})
 	})
 }

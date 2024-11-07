@@ -11,13 +11,13 @@
     os: windows,
     path: [ '~.', '#' ],
     data: {
-      abstracts:      2342,
-      arguments:      3132,
+      abstracts:      2339,
+      arguments:      3133,
       basics:           15,
       fields:         2384,
-      interfaceDecls:   63,
-      interfaceDescs:  980,
-      interfaceInsts:  601,
+      interfaceDecls:   62,
+      interfaceDescs:  978,
+      interfaceInsts:  599,
       language:          1,
       locs:            451,
       methodInsts:     101,
@@ -27,9 +27,9 @@
       objects:         747,
       packages:         59,
       selections:     1775,
-      signatures:     3758,
+      signatures:     3754,
       structDescs:     651,
-      typeParams:       30,
+      typeParams:       29,
       values:         3799 
     }
   },
@@ -86,12 +86,12 @@
       },
       {
         index: 2, name: CatBreed, package: 3, exported: true,
-        data: 2, interface: 797,
+        data: 2, interface: 795,
         methods: [ 19 ]
       },
       {
         index: 3, name: CatTable, package: 3, exported: true,
-        data: 26, interface: 636,
+        data: 26, interface: 634,
         methods: [ 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 17, 20 ]
       },
       {
@@ -100,7 +100,7 @@
       },
       {
         index: 5, name: IDSlice, package: 3, exported: true,
-        data: 21, interface: 723,
+        data: 21, interface: 721,
         methods: [ 15, 16, 21, 22 ]
       }
     ]
@@ -110,24 +110,24 @@
     os: windows,
     path: [ methods, package=~^3$, '!~^(metrics|loc)$' ],
     data: [
-      { index:  5, name: Add,           exported: true, package: 3, receiver: 3, signature: 1735 },
-      { index:  6, name: AddNew,        exported: true, package: 3, receiver: 3, signature: 2397 },
-      { index:  7, name: Age,           exported: true, package: 3, receiver: 3, signature: 1732 },
+      { index:  5, name: Add,           exported: true, package: 3, receiver: 3, signature: 1734 },
+      { index:  6, name: AddNew,        exported: true, package: 3, receiver: 3, signature: 2394 },
+      { index:  7, name: Age,           exported: true, package: 3, receiver: 3, signature: 1731 },
       { index:  8, name: AgeRange,      exported: true, package: 3, receiver: 3, signature:    4 },
       { index:  9, name: AllBreeds,     exported: true, package: 3, receiver: 3, signature:  146 },
       { index: 10, name: AllIDs,        exported: true, package: 3, receiver: 3, signature:  157 },
-      { index: 11, name: Breed,         exported: true, package: 3, receiver: 3, signature: 1734 },
-      { index: 12, name: CatsWithBreed, exported: true, package: 3, receiver: 3, signature:  972 },
-      { index: 13, name: CatsWithName,  exported: true, package: 3, receiver: 3, signature: 2377 },
-      { index: 14, name: Has,           exported: true, package: 3, receiver: 3, signature: 1731 },
+      { index: 11, name: Breed,         exported: true, package: 3, receiver: 3, signature: 1733 },
+      { index: 12, name: CatsWithBreed, exported: true, package: 3, receiver: 3, signature:  971 },
+      { index: 13, name: CatsWithName,  exported: true, package: 3, receiver: 3, signature: 2374 },
+      { index: 14, name: Has,           exported: true, package: 3, receiver: 3, signature: 1730 },
       { index: 15, name: Len,           exported: true, package: 3, receiver: 5, signature:    3 },
-      { index: 16, name: Less,          exported: true, package: 3, receiver: 5, signature: 1690 },
-      { index: 17, name: Name,          exported: true, package: 3, receiver: 3, signature: 1733 },
+      { index: 16, name: Less,          exported: true, package: 3, receiver: 5, signature: 1689 },
+      { index: 17, name: Name,          exported: true, package: 3, receiver: 3, signature: 1732 },
       { index: 18, name: NewID,         exported: true, package: 3,              signature:  156 },
       { index: 19, name: String,        exported: true, package: 3, receiver: 2, signature:   26 },
       { index: 20, name: String,        exported: true, package: 3, receiver: 3, signature:   26 },
       { index: 21, name: String,        exported: true, package: 3, receiver: 5, signature:   26 },
-      { index: 22, name: Swap,          exported: true, package: 3, receiver: 5, signature: 1689 }
+      { index: 22, name: Swap,          exported: true, package: 3, receiver: 5, signature: 1688 }
     ]
   },
   {

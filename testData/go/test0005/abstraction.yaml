@@ -48,10 +48,7 @@
       typeParams: [ 1 ],
       instances:  [ 1 ]
     },
-    { # 3. interface $builtin.any{}
-      name: any, package: 1, interface: 1, exported: true
-    },
-    { # 4. interface cats.Toy{ Play(c Pointer[Cat]) } @ main.go:13
+    { # 3. interface cats.Toy{ Play(c Pointer[Cat]) } @ main.go:13
       name: Toy, package: 2, interface: 7, loc: 13, exported: true
     }
   ],
@@ -165,12 +162,12 @@
     { # 1. package $builtin
       name: $builtin,
       path: $builtin,
-      interfaces: [ 1, 2, 3 ]
+      interfaces: [ 1, 2 ]
     },
     { # 2. package cats
       name: cats,
       path: command-line-arguments,
-      interfaces: [ 4 ],
+      interfaces: [ 3 ],
       methods: [ 1, 2, 3, 4, 5, 6 ],
       objects: [ 1, 2 ],
       values:  [ 1 ]
@@ -201,7 +198,7 @@
     { fields: [ 3, 2 ] } # 2. struct{ Name string; Age int }
   ],
   typeParams: [
-    { name: T, type: interfaceDecl3 } # 1. T any
+    { name: T, type: interfaceDesc1 } # 1. T any
   ],
   values: [
     { # 1. cats.log := func(value string) @ main.go:24
