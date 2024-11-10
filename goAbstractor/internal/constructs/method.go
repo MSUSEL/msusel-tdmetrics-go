@@ -18,7 +18,7 @@ type Method interface {
 	SetReceiver(recv Object)
 	NeedsReceiver() bool
 	Receiver() Object
-	NoCopyRecv() bool
+	PointerRecv() bool
 
 	IsInit() bool
 	IsMain() bool
@@ -44,11 +44,10 @@ type MethodArgs struct {
 	RecvName   string
 	Receiver   Object
 
-	// NoCopyRecv indicates the receiver is passed by pointer and therefore
-	// should not be copied. This currently is not used in abstraction
-	// because it doesn't matter if a copy is assigned to or not. If assigned
-	// to at all, the receiver type is a mutable according to the abstraction.
-	NoCopyRecv bool
+	// PointerRecv indicates the receiver is passed by pointer
+	// and therefore should not be copied. This also changes how
+	// the method is accessible via an interface.
+	PointerRecv bool
 }
 
 type MethodFactory interface {

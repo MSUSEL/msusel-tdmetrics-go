@@ -222,7 +222,7 @@ func (ab *abstractor) abstractValueSpec(spec *ast.ValueSpec, isConst bool) {
 	var metrics constructs.Metrics
 	for i, name := range spec.Names {
 		if i < len(spec.Values) {
-			metrics = analyzer.Analyze(ab.info(), ab.proj, ab.curPkg, ab.baker, ab.converter(), spec.Values[i])
+			metrics = analyzer.Analyze(ab.log, ab.info(), ab.proj, ab.curPkg, ab.baker, ab.converter(), spec.Values[i])
 		}
 
 		tv, has := ab.info().Defs[name]
@@ -272,7 +272,7 @@ func (ab *abstractor) abstractReceiver(decl *ast.FuncDecl) (bool, string) {
 			With(`pos`, ab.pos(decl.Pos())))
 	}
 
-	noCopyRecv := false
+	ptrRecv := false
 	tv, has := ab.info().Types[decl.Recv.List[0].Type]
 	if !has {
 		panic(terror.New(`function receiver not found in types info`).
@@ -281,7 +281,7 @@ func (ab *abstractor) abstractReceiver(decl *ast.FuncDecl) (bool, string) {
 
 	recv := tv.Type
 	if p, ok := recv.(*types.Pointer); ok {
-		noCopyRecv = true
+		ptrRecv = true
 		recv = p.Elem()
 	}
 
@@ -294,18 +294,18 @@ func (ab *abstractor) abstractReceiver(decl *ast.FuncDecl) (bool, string) {
 	ab.setTypeParamOverrides(n.TypeArgs(), n.TypeParams(), decl)
 
 	recvName := n.Origin().Obj().Name()
-	return noCopyRecv, recvName
+	return ptrRecv, recvName
 }
 
 func (ab *abstractor) abstractFuncDecl(decl *ast.FuncDecl) {
 	info := ab.info()
 	obj := info.Defs[decl.Name]
 
-	noCopyRecv, recvName := ab.abstractReceiver(decl)
+	ptrRecv, recvName := ab.abstractReceiver(decl)
 	sig := ab.converter().ConvertSignature(obj.Type().(*types.Signature))
 	ab.clearTypeParamOverrides()
 
-	metrics := analyzer.Analyze(ab.info(), ab.proj, ab.curPkg, ab.baker, ab.converter(), decl)
+	metrics := analyzer.Analyze(ab.log, ab.info(), ab.proj, ab.curPkg, ab.baker, ab.converter(), decl)
 	loc := ab.proj.Locs().NewLoc(decl.Pos())
 	tp := ab.abstractTypeParams(decl.Type.TypeParams)
 
@@ -316,14 +316,14 @@ func (ab *abstractor) abstractFuncDecl(decl *ast.FuncDecl) {
 	}
 
 	ab.proj.NewMethod(constructs.MethodArgs{
-		Package:    ab.curPkg,
-		Name:       name,
-		Exported:   exported,
-		Location:   loc,
-		TypeParams: tp,
-		Signature:  sig,
-		Metrics:    metrics,
-		RecvName:   recvName,
-		NoCopyRecv: noCopyRecv,
+		Package:     ab.curPkg,
+		Name:        name,
+		Exported:    exported,
+		Location:    loc,
+		TypeParams:  tp,
+		Signature:   sig,
+		Metrics:     metrics,
+		RecvName:    recvName,
+		PointerRecv: ptrRecv,
 	})
 }

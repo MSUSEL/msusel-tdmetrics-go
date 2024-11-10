@@ -54,6 +54,13 @@ func (d *structDescImp) GoType() types.Type  { return d.realType }
 
 func (d *structDescImp) Fields() []constructs.Field { return d.fields }
 
+func (d *structDescImp) Synthetic() bool {
+	// "$data" can't exist in Go code, so we know this must have been
+	// created synthetically during abstraction if there is only one
+	// field and it has the name "$data".
+	return len(d.fields) == 1 && d.fields[0].Name() == `$data`
+}
+
 func (d *structDescImp) CompareTo(other constructs.Construct) int {
 	return constructs.CompareTo[constructs.StructDesc](d, other, Comparer())
 }
@@ -78,9 +85,10 @@ func (d *structDescImp) ToJson(ctx *jsonify.Context) jsonify.Datum {
 	return jsonify.NewMap().
 		AddIf(ctx, ctx.IsDebugKindIncluded(), `kind`, d.Kind()).
 		AddIf(ctx, ctx.IsDebugIndexIncluded(), `index`, d.index).
+		AddNonZero(ctx, `synthetic`, d.Synthetic).
 		AddNonZero(ctx.OnlyIndex(), `fields`, d.fields)
 }
 
 func (d *structDescImp) String() string {
-	return `struct{ ` + enumerator.Enumerate(d.fields...).Join(`; `) + `}`
+	return `struct{ ` + enumerator.Enumerate(d.fields...).Join(`; `) + ` }`
 }

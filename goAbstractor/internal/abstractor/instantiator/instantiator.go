@@ -1,7 +1,6 @@
 package instantiator
 
 import (
-	"fmt"
 	"go/types"
 	"slices"
 
@@ -200,11 +199,6 @@ func (i *instantiator) Field(f constructs.Field) constructs.Field {
 
 func (i *instantiator) InterfaceInst(in constructs.InterfaceInst) constructs.TypeDesc {
 	decl := in.Generic()
-
-	// TODO: We lose the inner type `Foo[Bar[T]]` => `Foo[X]` missing the `Bar[T]`
-	fmt.Println()
-	fmt.Println(`>>>`, i.decl, `[`, i.instanceTypes, `] =>`, in, `=>`, decl)
-
 	return i.typeDecl(decl, decl.TypeParams(), in.InstanceTypes())
 }
 
@@ -234,11 +228,10 @@ func (i *instantiator) getInstanceTypeChange(tps []constructs.TypeDesc) ([]const
 	its := make([]constructs.TypeDesc, len(tps))
 	for j, td := range tps {
 		its[j] = td
-		if tp, ok := td.(constructs.TypeParam); ok {
-			if t, has := i.conversion[tp]; has {
-				its[j] = t
-				anyReplaced = true
-			}
+		td2 := i.TypeDesc(td)
+		if td2.CompareTo(td) != 0 {
+			its[j] = td2
+			anyReplaced = true
 		}
 	}
 	return its, anyReplaced

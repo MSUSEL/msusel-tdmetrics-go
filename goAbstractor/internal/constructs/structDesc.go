@@ -12,6 +12,11 @@ type StructDesc interface {
 	TypeDesc
 	IsStructDesc()
 
+	// Synthetic indicates this is a structure created around
+	// a non-struct data for an object, e.g. `type Cat int`
+	// has a synthetic `struct { $data int }`.
+	Synthetic() bool
+
 	Fields() []Field
 }
 

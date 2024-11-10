@@ -4,6 +4,9 @@ import (
 	"go/ast"
 	"go/token"
 	"math"
+
+	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/assert"
+	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/logger"
 )
 
 type Complexity struct {
@@ -14,6 +17,7 @@ type Complexity struct {
 }
 
 type complexityImp struct {
+	log        *logger.Logger
 	fSet       *token.FileSet
 	complexity int
 	minLine    int
@@ -23,8 +27,14 @@ type complexityImp struct {
 }
 
 // Calculate gathers positional information for indents and cyclomatic complexity.
-func Calculate(node ast.Node, fSet *token.FileSet) Complexity {
+func Calculate(log *logger.Logger, node ast.Node, fSet *token.FileSet) Complexity {
+	assert.ArgNotNil(`node`, node)
+	assert.ArgNotNil(`fSet`, fSet)
+
+	log.Logf(`complexity`)
+
 	c := &complexityImp{
+		log:        log,
 		fSet:       fSet,
 		complexity: 1,
 		maxLine:    0,

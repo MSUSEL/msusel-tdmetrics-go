@@ -33,7 +33,7 @@ type methodImp struct {
 	metrics    constructs.Metrics
 	recvName   string
 	receiver   constructs.Object
-	noCopyRecv bool
+	ptrRecv    bool
 
 	instances collections.SortedSet[constructs.MethodInst]
 }
@@ -65,7 +65,7 @@ func newMethod(args constructs.MethodArgs) constructs.Method {
 		metrics:    args.Metrics,
 		recvName:   args.RecvName,
 		receiver:   args.Receiver,
-		noCopyRecv: args.NoCopyRecv,
+		ptrRecv:    args.PointerRecv,
 		instances:  sortedSet.New(methodInst.Comparer()),
 	}
 
@@ -113,7 +113,7 @@ func (m *methodImp) FindInstance(instanceTypes []constructs.TypeDesc) (construct
 func (m *methodImp) ReceiverName() string               { return m.recvName }
 func (m *methodImp) SetReceiver(recv constructs.Object) { m.receiver = recv }
 func (m *methodImp) Receiver() constructs.Object        { return m.receiver }
-func (m *methodImp) NoCopyRecv() bool                   { return m.noCopyRecv }
+func (m *methodImp) PointerRecv() bool                  { return m.ptrRecv }
 
 func (m *methodImp) NeedsReceiver() bool {
 	return utils.IsNil(m.receiver) && len(m.recvName) > 0
@@ -185,6 +185,7 @@ func (m *methodImp) ToJson(ctx *jsonify.Context) jsonify.Datum {
 		AddNonZero(ctx.OnlyIndex(), `metrics`, m.metrics).
 		AddNonZero(ctx.OnlyIndex(), `instances`, m.instances.ToSlice()).
 		AddNonZero(ctx.OnlyIndex(), `receiver`, m.receiver).
+		AddNonZero(ctx, `ptrRecv`, m.ptrRecv).
 		AddNonZeroIf(ctx, ctx.IsDebugReceiverIncluded(), `recvName`, m.recvName)
 }
 

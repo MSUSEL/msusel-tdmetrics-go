@@ -21,6 +21,7 @@ import (
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs/project"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/jsonify"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/locs"
+	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/logger"
 )
 
 func Test_Empty(t *testing.T) {
@@ -2012,7 +2013,7 @@ func parseExpr(t *testing.T, lines ...string) *testTool {
 	err = types.CheckExpr(tt.fSet, nil, token.NoPos, expr, tt.info)
 	check.NoError(t).Require(err)
 
-	tt.m = Analyze(tt.info, tt.proj, tt.curPkg, tt.baker, tt.conv, expr)
+	tt.m = Analyze(logger.New(), tt.info, tt.proj, tt.curPkg, tt.baker, tt.conv, expr)
 	tt.proj.UpdateIndices()
 	return tt
 }
@@ -2031,7 +2032,7 @@ func parseDecl(t *testing.T, name string, lines ...string) *testTool {
 	target := findNode(file, name)
 	check.NotNil(t).Name(`found name`).With(`name`, name).Assert(target)
 
-	tt.m = Analyze(tt.info, tt.proj, tt.curPkg, tt.baker, tt.conv, target)
+	tt.m = Analyze(logger.New(), tt.info, tt.proj, tt.curPkg, tt.baker, tt.conv, target)
 	tt.proj.UpdateIndices()
 	return tt
 }

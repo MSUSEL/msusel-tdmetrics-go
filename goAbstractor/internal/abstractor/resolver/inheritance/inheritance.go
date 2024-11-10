@@ -9,14 +9,14 @@ import (
 )
 
 type Node[T any] interface {
+	comparable
+
 	// Implements determines if this interface implements the other interface.
 	Implements(other T) bool
 
 	AddInherits(parent T) T
 
 	Inherits() collections.SortedSet[T]
-
-	comparable
 }
 
 type Inheritance[T Node[T]] interface {

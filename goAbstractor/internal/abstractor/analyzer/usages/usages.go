@@ -1,7 +1,6 @@
 package usages
 
 import (
-	"fmt"
 	"go/ast"
 	"go/token"
 	"go/types"
@@ -16,6 +15,7 @@ import (
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/abstractor/converter"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/assert"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs"
+	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/logger"
 )
 
 type Usages struct {
@@ -39,16 +39,8 @@ func newUsage() Usages {
 	}
 }
 
-const printDebugLogging = false
-
-func logDebug(format string, args ...any) {
-	if printDebugLogging {
-		fmt.Printf(format, args...)
-		fmt.Println()
-	}
-}
-
 type usagesImp struct {
+	log    *logger.Logger
 	fSet   *token.FileSet
 	info   *types.Info
 	proj   constructs.Project
@@ -63,7 +55,7 @@ type usagesImp struct {
 	pendingSE bool
 }
 
-func Calculate(info *types.Info, proj constructs.Project, curPkg constructs.Package, baker baker.Baker, conv converter.Converter, root ast.Node) Usages {
+func Calculate(log *logger.Logger, info *types.Info, proj constructs.Project, curPkg constructs.Package, baker baker.Baker, conv converter.Converter, root ast.Node) Usages {
 	assert.ArgNotNil(`info`, info)
 	assert.ArgNotNil(`info.Defs`, info.Defs)
 	assert.ArgNotNil(`info.Instances`, info.Instances)
@@ -75,6 +67,9 @@ func Calculate(info *types.Info, proj constructs.Project, curPkg constructs.Pack
 	assert.ArgNotNil(`conv`, conv)
 	assert.ArgNotNil(`root`, root)
 	assert.ArgNotNil(`curPkg`, curPkg)
+
+	log.Logf(`usages`)
+	log2 := log.Group(`usages`).Prefix(`|  `)
 
 	fSet := proj.Locs().FileSet()
 	assert.ArgNotNil(`fSet`, fSet)
@@ -90,6 +85,7 @@ func Calculate(info *types.Info, proj constructs.Project, curPkg constructs.Pack
 	}
 
 	ui := &usagesImp{
+		log:      log2,
 		fSet:     fSet,
 		info:     info,
 		proj:     proj,
@@ -120,85 +116,85 @@ func (ui *usagesImp) hasPending() bool {
 
 func (ui *usagesImp) setPendingConstruct(c constructs.Construct) {
 	ui.flushPendingToRead()
-	logDebug(`  - PendingCon: %v`, c)
+	ui.log.Logf(`  - PendingCon: %v`, c)
 	ui.pending = c
 }
 
 func (ui *usagesImp) setPendingType(t types.Type) {
 	ui.flushPendingToRead()
-	logDebug(`  - PendingType: %v`, t)
+	ui.log.Logf(`  - PendingType: %v`, t)
 
 	named := getNamed(t)
 	if named == nil {
-		logDebug(`    - no named`)
+		ui.log.Logf(`    - no named`)
 		return
 	}
 
-	logDebug(`    - named.Obj: %v @ %v`, named.Obj(), ui.pos(named.Obj()))
+	ui.log.Logf(`    - named.Obj: %v @ %v`, named.Obj(), ui.pos(named.Obj()))
 	if isLocal(ui.root, named.Obj()) {
-		logDebug(`    - local`)
+		ui.log.Logf(`    - local`)
 		return
 	}
 
 	ui.pending = ui.conv.ConvertType(named)
-	logDebug(`    - converted: %v`, ui.pending)
+	ui.log.Logf(`    - converted: %v`, ui.pending)
 }
 
 func (ui *usagesImp) setPendingObject(o types.Object, instType []constructs.TypeDesc) {
 	ui.flushPendingToRead()
-	logDebug(`  - PendingObject: %v`, o)
+	ui.log.Logf(`  - PendingObject: %v`, o)
 
 	if utils.IsNil(o) {
-		logDebug(`    + nil`)
+		ui.log.Logf(`    + nil`)
 		return
 	}
 
 	if _, ok := o.(*types.Label); ok {
 		// Skip over labels
-		logDebug(`    + label`)
+		ui.log.Logf(`    + label`)
 		return
 	}
 
 	if _, ok := o.(*types.PkgName); ok {
 		// Skip over package names
-		logDebug(`    + package name`)
+		ui.log.Logf(`    + package name`)
 		return
 	}
 
 	if isLocal(ui.root, o) {
-		logDebug(`    - local: set type`)
+		ui.log.Logf(`    - local: set type`)
 		ui.setPendingType(o.Type())
 		return
 	}
 
 	if tn, ok := o.(*types.TypeName); ok {
-		logDebug(`    - type name: %v: %v`, o, tn)
+		ui.log.Logf(`    - type name: %v: %v`, o, tn)
 
 		pkgPath := getPkgPath(o)
 		if len(pkgPath) <= 0 {
 			if typ := ui.baker.TypeByName(o.Name()); !utils.IsNil(typ) {
-				logDebug(`      - built-in type: %v`, typ)
+				ui.log.Logf(`      - built-in type: %v`, typ)
 				ui.setPendingConstruct(typ)
 				return
 			}
 
 			if basic, ok := o.Type().(*types.Basic); ok && basic.Kind() != types.Invalid {
-				logDebug(`      + basic: %v`, basic)
+				ui.log.Logf(`      + basic: %v`, basic)
 				return
 			}
 
-			logDebug(`      + dump built-in`)
+			ui.log.Logf(`      + dump built-in`)
 			return
 		}
 
 		_, typ, found := ui.proj.FindType(pkgPath, o.Name(), instType, false)
 		if found {
-			logDebug(`      + type found: %v`, typ)
+			ui.log.Logf(`      + type found: %v`, typ)
 			ui.pending = typ
 			return
 		}
 
-		logDebug(`      - temp ref: %v`, o)
+		ui.log.Logf(`      - temp ref: %v`, o)
 		ui.pending = ui.proj.NewTempReference(constructs.TempReferenceArgs{
 			RealType:      o.Type(),
 			PackagePath:   pkgPath,
@@ -210,14 +206,14 @@ func (ui *usagesImp) setPendingObject(o types.Object, instType []constructs.Type
 	}
 
 	if v, ok := o.(*types.Var); ok {
-		logDebug(`    - type var: %v`, v)
+		ui.log.Logf(`    - type var: %v`, v)
 		if v.IsField() {
 			if compLit := ui.compLits.Peek(); !utils.IsNil(compLit) {
 				compType := ui.info.Types[compLit.Type].Type
-				logDebug(`      - field sel: %v => %v`, compType, v.Name())
+				ui.log.Logf(`      - field sel: %v => %v`, compType, v.Name())
 				ui.setPendingType(compType)
 				if ui.hasPending() {
-					logDebug(`      - pending field selObj: %v`, ui.pending)
+					ui.log.Logf(`      - pending field selObj: %v`, ui.pending)
 					ui.setPendingConstruct(ui.proj.NewSelection(constructs.SelectionArgs{
 						Name:   v.Name(),
 						Origin: ui.pending,
@@ -226,7 +222,7 @@ func (ui *usagesImp) setPendingObject(o types.Object, instType []constructs.Type
 				}
 			}
 
-			logDebug(`      - field without recv: %v`, v)
+			ui.log.Logf(`      - field without recv: %v`, v)
 			ui.setPendingType(v.Type())
 			return
 		}
@@ -239,12 +235,12 @@ func (ui *usagesImp) setPendingObject(o types.Object, instType []constructs.Type
 	pkgPath := getPkgPath(o)
 	_, typ, found := ui.proj.FindDecl(pkgPath, o.Name(), instType, false)
 	if found {
-		logDebug(`      + decl found: %v`, typ)
+		ui.log.Logf(`      + decl found: %v`, typ)
 		ui.pending = typ
 		return
 	}
 
-	logDebug(`    - temp decl ref: %v`, o)
+	ui.log.Logf(`    - temp decl ref: %v`, o)
 	ui.pending = ui.proj.NewTempDeclRef(constructs.TempDeclRefArgs{
 		PackagePath:   pkgPath,
 		Name:          o.Name(),
@@ -284,7 +280,7 @@ func (ui *usagesImp) flushPendingToInvoke() {
 // addRead adds the given construct as a read usage.
 func (ui *usagesImp) addRead(c constructs.Construct) {
 	if !utils.IsNil(c) {
-		logDebug(`  + Reads: %v`, c)
+		ui.log.Logf(`  + Reads: %v`, c)
 		ui.usages.Reads.Add(c)
 	}
 }
@@ -292,7 +288,7 @@ func (ui *usagesImp) addRead(c constructs.Construct) {
 // addWrite adds the given construct as a write usage.
 func (ui *usagesImp) addWrite(c constructs.Construct, sideEffect bool) {
 	if !utils.IsNil(c) {
-		logDebug(`  + Write: %v`, c)
+		ui.log.Logf(`  + Write: %v`, c)
 		ui.usages.Writes.Add(c)
 		if sideEffect {
 			ui.usages.SideEffect = true
@@ -303,7 +299,7 @@ func (ui *usagesImp) addWrite(c constructs.Construct, sideEffect bool) {
 // addInvoke adds the given construct as an invoke usage.
 func (ui *usagesImp) addInvoke(c constructs.Construct) {
 	if !utils.IsNil(c) {
-		logDebug(`  + Invoke: %v`, c)
+		ui.log.Logf(`  + Invoke: %v`, c)
 		ui.usages.Invokes.Add(c)
 	}
 }
@@ -387,7 +383,7 @@ func (ui *usagesImp) processNode(node ast.Node) {
 			// which nodes do not have custom handling on them yet.
 			// Not all nodes need custom handling but a bug might indicate
 			// one that doesn't have custom handling probably should.
-			//logDebug(`usagesImp.processNode unhandled (%[1]T) %[1]v`, t)
+			//ui.log.Logf(`usagesImp.processNode unhandled (%[1]T) %[1]v`, t)
 			return true
 		}
 		return false
@@ -454,7 +450,7 @@ func (ui *usagesImp) processCall(call *ast.CallExpr) {
 }
 
 func (ui *usagesImp) processCompositeLit(comp *ast.CompositeLit) {
-	logDebug(`>>> processCompositeLit: %v @ %s`, comp, ui.pos(comp))
+	ui.log.Logf(`>>> processCompositeLit: %v @ %s`, comp, ui.pos(comp))
 	ui.compLits.Push(comp)
 	defer ui.compLits.Pop()
 
@@ -470,11 +466,11 @@ func (ui *usagesImp) processCompositeLit(comp *ast.CompositeLit) {
 }
 
 func (ui *usagesImp) processIdent(id *ast.Ident) {
-	logDebug(`>>> processIdent: %v @ %s`, id, ui.pos(id))
+	ui.log.Logf(`>>> processIdent: %v @ %s`, id, ui.pos(id))
 
 	// Check if this identifier is part of a definition.
 	if def, ok := ui.info.Defs[id]; ok {
-		logDebug(`  > processIdent: def object: %v`, def)
+		ui.log.Logf(`  > processIdent: def object: %v`, def)
 		ui.setPendingObject(def, nil)
 		ui.addWrite(ui.pending, ui.pendingSE)
 		return
@@ -483,7 +479,7 @@ func (ui *usagesImp) processIdent(id *ast.Ident) {
 	// Check if the identifier is being used.
 	obj, ok := ui.info.Uses[id]
 	if !ok {
-		logDebug(`  > processIdent: no uses`)
+		ui.log.Logf(`  > processIdent: no uses`)
 		return
 	}
 
@@ -491,14 +487,14 @@ func (ui *usagesImp) processIdent(id *ast.Ident) {
 	// https://pkg.go.dev/builtin#pkg-constants
 	switch obj.Id() {
 	case `_.true`, `_.false`, `_.nil`, `_.iota`:
-		logDebug(`  > processIdent: build-in constants: %v`, obj.Id())
+		ui.log.Logf(`  > processIdent: build-in constants: %v`, obj.Id())
 		return
 	}
 
 	// Return built-in type.
 	if obj.Pkg() == nil {
 		if typ := ui.baker.TypeByName(obj.Name()); !utils.IsNil(typ) {
-			logDebug(`  > processIdent: build-in type: %v`, typ)
+			ui.log.Logf(`  > processIdent: build-in type: %v`, typ)
 			ui.setPendingConstruct(typ)
 			return
 		}
@@ -512,7 +508,7 @@ func (ui *usagesImp) processIdent(id *ast.Ident) {
 		instType = ui.conv.ConvertInstanceTypes(itList)
 	}
 
-	logDebug(`  > processIdent: object: %v`, obj)
+	ui.log.Logf(`  > processIdent: object: %v`, obj)
 	ui.setPendingObject(obj, instType)
 }
 
@@ -570,7 +566,7 @@ func (ui *usagesImp) processIndexList(expr *ast.IndexListExpr) {
 }
 
 func (ui *usagesImp) processKeyValue(kv *ast.KeyValueExpr) {
-	logDebug(`>>> processKeyValue: %v @ %s`, kv, ui.pos(kv))
+	ui.log.Logf(`>>> processKeyValue: %v @ %s`, kv, ui.pos(kv))
 	ui.processNode(kv.Key)
 	ui.flushPendingToWrite()
 
@@ -579,7 +575,7 @@ func (ui *usagesImp) processKeyValue(kv *ast.KeyValueExpr) {
 }
 
 func (ui *usagesImp) processRange(r *ast.RangeStmt) {
-	logDebug(`>>> processRange: %v @ %s`, r, ui.pos(r))
+	ui.log.Logf(`>>> processRange: %v @ %s`, r, ui.pos(r))
 	ui.processNode(r.Key)
 	ui.flushPendingToWrite()
 
@@ -606,11 +602,11 @@ func (ui *usagesImp) processSend(send *ast.SendStmt) {
 }
 
 func (ui *usagesImp) processSelector(sel *ast.SelectorExpr) {
-	logDebug(`>>> processSelector: %v @ %s`, sel, ui.pos(sel))
+	ui.log.Logf(`>>> processSelector: %v @ %s`, sel, ui.pos(sel))
 	ui.processNode(sel.X)
-	logDebug(`>>> processSelector.X: %v`, ui.pending)
+	ui.log.Logf(`>>> processSelector.X: %v`, ui.pending)
 	if ui.hasPending() {
-		logDebug(`  > pending sel.X: %v`, ui.pending)
+		ui.log.Logf(`  > pending sel.X: %v`, ui.pending)
 		ui.setPendingConstruct(ui.proj.NewSelection(constructs.SelectionArgs{
 			Name:   sel.Sel.Name,
 			Origin: ui.pending,
@@ -620,16 +616,16 @@ func (ui *usagesImp) processSelector(sel *ast.SelectorExpr) {
 
 	selObj, ok := ui.info.Selections[sel]
 	if !ok {
-		logDebug(`  > no selection info: %v`, sel)
+		ui.log.Logf(`  > no selection info: %v`, sel)
 		return
 	}
-	logDebug(`  > selObj: %v`, selObj)
+	ui.log.Logf(`  > selObj: %v`, selObj)
 
 	if !isLocal(ui.root, selObj.Obj()) {
-		logDebug(`  > non-local selObj: %v at %v`, selObj.Obj(), ui.pos(selObj.Obj()))
+		ui.log.Logf(`  > non-local selObj: %v at %v`, selObj.Obj(), ui.pos(selObj.Obj()))
 		ui.setPendingConstruct(ui.conv.ConvertType(selObj.Recv()))
 		if ui.hasPending() {
-			logDebug(`  > pending selObj: %v`, ui.pending)
+			ui.log.Logf(`  > pending selObj: %v`, ui.pending)
 			ui.setPendingConstruct(ui.proj.NewSelection(constructs.SelectionArgs{
 				Name:   sel.Sel.Name,
 				Origin: ui.pending,
@@ -638,7 +634,7 @@ func (ui *usagesImp) processSelector(sel *ast.SelectorExpr) {
 		}
 	}
 
-	logDebug(`  > selection fallback: %v`, selObj)
+	ui.log.Logf(`  > selection fallback: %v`, selObj)
 	ui.setPendingType(selObj.Recv())
 	ui.flushPendingToRead()
 	ui.setPendingType(selObj.Obj().Type())

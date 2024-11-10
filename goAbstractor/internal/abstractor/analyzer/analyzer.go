@@ -11,10 +11,15 @@ import (
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/abstractor/converter"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/assert"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs"
+	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/logger"
 )
 
-func Analyze(info *types.Info, proj constructs.Project, curPkg constructs.Package, baker baker.Baker, conv converter.Converter, node ast.Node) constructs.Metrics {
+func Analyze(log *logger.Logger, info *types.Info, proj constructs.Project, curPkg constructs.Package, baker baker.Baker, conv converter.Converter, node ast.Node) constructs.Metrics {
 	assert.ArgNotNil(`curPkg`, curPkg)
+
+	log = log.Group(`analyze`).Prefix(`|  `)
+	log.Logf(`analyze`)
+	log2 := log.Prefix(`|  `)
 
 	switch curPkg.Path() {
 	case `runtime`, `unsafe`, `reflect`:
@@ -24,9 +29,9 @@ func Analyze(info *types.Info, proj constructs.Project, curPkg constructs.Packag
 
 	var (
 		loc    = proj.Locs().NewLoc(node.Pos())
-		cmplx  = complexity.Calculate(node, proj.Locs().FileSet())
-		acc    = accessor.Calculate(info, node)
-		usages = usages.Calculate(info, proj, curPkg, baker, conv, node)
+		cmplx  = complexity.Calculate(log2, node, proj.Locs().FileSet())
+		acc    = accessor.Calculate(log2, info, node)
+		usages = usages.Calculate(log2, info, proj, curPkg, baker, conv, node)
 	)
 
 	return proj.NewMetrics(constructs.MetricsArgs{

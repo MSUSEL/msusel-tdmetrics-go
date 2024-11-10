@@ -143,7 +143,7 @@ func (id *interfaceDescImp) IsGeneral() bool {
 }
 
 func (id *interfaceDescImp) Implements(other constructs.InterfaceDesc) bool {
-	rtIt, ok := other.(*interfaceDescImp).realType.(*types.Interface)
+	rtIt, ok := other.GoType().(*types.Interface)
 	return ok && types.Implements(id.realType, rtIt)
 }
 
@@ -198,23 +198,25 @@ func (id *interfaceDescImp) ToJson(ctx *jsonify.Context) jsonify.Datum {
 		AddNonZero(ctx.OnlyIndex(), `abstracts`, id.abstracts).
 		AddNonZero(ctx.Short(), `approx`, id.approx).
 		AddNonZero(ctx.Short(), `exact`, id.exact).
-		AddNonZero(ctx.OnlyIndex(), `inherits`, id.inherits.ToSlice())
+		AddNonZero(ctx.OnlyIndex(), `inherits`, id.inherits.ToSlice()).
+		AddNonZero(ctx, `hint`, string(id.hint))
 }
 
 func (id *interfaceDescImp) String() string {
 	internals := ``
-	if len(id.abstracts) > 0 {
-		internals += enumerator.Enumerate(id.abstracts...).Join(`; `) + `; `
-	}
+	next := ``
 	if len(id.exact) > 0 {
+		next = `; `
 		internals += enumerator.Enumerate(id.exact...).Join(`|`)
 		if len(id.approx) > 0 {
-			internals += `|~` + enumerator.Enumerate(id.approx...).Join(`|~`) + `; `
-		} else {
-			internals += `; `
+			internals += `|~` + enumerator.Enumerate(id.approx...).Join(`|~`)
 		}
 	} else if len(id.approx) > 0 {
-		internals += `~` + enumerator.Enumerate(id.approx...).Join(`|~`) + `; `
+		next = `; `
+		internals += `~` + enumerator.Enumerate(id.approx...).Join(`|~`)
+	}
+	if len(id.abstracts) > 0 {
+		internals += next + enumerator.Enumerate(id.abstracts...).Join(`; `)
 	}
 	if len(internals) <= 0 {
 		return `any`
@@ -223,5 +225,5 @@ func (id *interfaceDescImp) String() string {
 	if id.IsPinned() {
 		head = id.pinnedPkg.Path() + `:`
 	}
-	return head + `interface{ ` + internals + `}`
+	return head + `interface{ ` + internals + ` }`
 }

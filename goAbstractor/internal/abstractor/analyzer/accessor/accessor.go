@@ -9,6 +9,7 @@ import (
 
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/assert"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs"
+	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/logger"
 )
 
 type Accessor struct {
@@ -16,12 +17,14 @@ type Accessor struct {
 	Setter bool
 }
 
-func Calculate(info *types.Info, node ast.Node) Accessor {
+func Calculate(log *logger.Logger, info *types.Info, node ast.Node) Accessor {
 	assert.ArgNotNil(`info`, info)
 	assert.ArgNotNil(`info.Defs`, info.Defs)
 	assert.ArgNotNil(`info.Types`, info.Types)
 	assert.ArgNotNil(`info.Uses`, info.Uses)
 	assert.ArgNotNil(`node`, node)
+
+	log.Logf(`accessor`)
 
 	k := Accessor{}
 	if funcType, funcBody, ok := getTypeAndBody(node); ok {
