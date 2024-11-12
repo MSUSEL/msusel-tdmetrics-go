@@ -64,24 +64,19 @@ func getName(fSet *token.FileSet, expr ast.Expr) string {
 		With(`position`, fSet.Position(expr.Pos())))
 }
 
-func getNamed(t types.Type) *types.Named {
-	for named := range where[*types.Named](walkType(t)) {
-		// return first type hit.
-		return named
-	}
-	return nil
-}
-
-func where[TOut, TIn any](it iter.Seq[TIn]) iter.Seq[TOut] {
-	return func(yield func(TOut) bool) {
-		for v := range it {
-			if out, ok := any(v).(TOut); ok {
-				if !yield(out) {
-					return
-				}
-			}
+func getNamed(t types.Type) (*types.Named, *types.Pointer) {
+	var pointer *types.Pointer
+	for node := range walkType(t) {
+		switch n := node.(type) {
+		case *types.Named:
+			return n, pointer
+		case *types.Pointer:
+			pointer = n
+		default:
+			pointer = nil
 		}
 	}
+	return nil, nil
 }
 
 // walkType walks the tree of types. This will only return unique

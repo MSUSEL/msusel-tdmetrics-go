@@ -124,7 +124,7 @@ func (ui *usagesImp) setPendingType(t types.Type) {
 	ui.flushPendingToRead()
 	ui.log.Logf(`  - PendingType: %v`, t)
 
-	named := getNamed(t)
+	named, pointer := getNamed(t)
 	if named == nil {
 		ui.log.Logf(`    - no named`)
 		return
@@ -136,8 +136,14 @@ func (ui *usagesImp) setPendingType(t types.Type) {
 		return
 	}
 
+	if pointer != nil {
+		ui.pending = ui.conv.ConvertType(pointer)
+		ui.log.Logf(`    - converted ptr: %v`, ui.pending)
+		return
+	}
+
 	ui.pending = ui.conv.ConvertType(named)
-	ui.log.Logf(`    - converted: %v`, ui.pending)
+	ui.log.Logf(`    - converted obj: %v`, ui.pending)
 }
 
 func (ui *usagesImp) setPendingObject(o types.Object, instType []constructs.TypeDesc) {
