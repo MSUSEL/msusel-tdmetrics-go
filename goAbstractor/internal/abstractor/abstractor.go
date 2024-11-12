@@ -16,6 +16,7 @@ import (
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/abstractor/converter"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/abstractor/resolver"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs"
+	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs/innate"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs/project"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/locs"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/logger"
@@ -164,7 +165,7 @@ func (ab *abstractor) abstractTypeSpec(spec *ast.TypeSpec) {
 		st = ab.proj.NewStructDesc(constructs.StructDescArgs{
 			Fields: []constructs.Field{
 				ab.proj.NewField(constructs.FieldArgs{
-					Name:     `$data`,
+					Name:     innate.Data,
 					Exported: true,
 					Embedded: true,
 					Type:     typ,

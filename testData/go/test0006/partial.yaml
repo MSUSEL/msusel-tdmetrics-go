@@ -11,7 +11,7 @@
     os: windows,
     path: [ '~.', '#' ],
     data: {
-      abstracts:      2339,
+      abstracts:      1874,
       arguments:      3133,
       basics:           15,
       fields:         2384,

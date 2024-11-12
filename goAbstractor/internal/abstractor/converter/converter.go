@@ -9,6 +9,7 @@ import (
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/abstractor/baker"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/abstractor/instantiator"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs"
+	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs/innate"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs/kind"
 )
 
@@ -164,7 +165,7 @@ func (c *convImp) convertNamed(t *types.Named) constructs.TypeDesc {
 		if typ := c.baker.TypeByName(name); !utils.IsNil(typ) {
 			return typ
 		}
-		pkgPath = baker.BuiltinName
+		pkgPath = innate.Builtin
 	}
 
 	// Get any type parameters.

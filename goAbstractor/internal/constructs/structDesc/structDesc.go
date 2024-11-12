@@ -10,6 +10,7 @@ import (
 
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/assert"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs"
+	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs/innate"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs/kind"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/jsonify"
 )
@@ -58,7 +59,7 @@ func (d *structDescImp) Synthetic() bool {
 	// "$data" can't exist in Go code, so we know this must have been
 	// created synthetically during abstraction if there is only one
 	// field and it has the name "$data".
-	return len(d.fields) == 1 && d.fields[0].Name() == `$data`
+	return len(d.fields) == 1 && d.fields[0].Name() == innate.Data
 }
 
 func (d *structDescImp) CompareTo(other constructs.Construct) int {
@@ -85,7 +86,7 @@ func (d *structDescImp) ToJson(ctx *jsonify.Context) jsonify.Datum {
 	return jsonify.NewMap().
 		AddIf(ctx, ctx.IsDebugKindIncluded(), `kind`, d.Kind()).
 		AddIf(ctx, ctx.IsDebugIndexIncluded(), `index`, d.index).
-		AddNonZero(ctx, `synthetic`, d.Synthetic).
+		AddNonZero(ctx, `synthetic`, d.Synthetic()).
 		AddNonZero(ctx.OnlyIndex(), `fields`, d.fields)
 }
 

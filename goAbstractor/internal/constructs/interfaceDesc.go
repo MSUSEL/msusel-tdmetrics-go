@@ -38,6 +38,8 @@ type InterfaceDesc interface {
 	IsPinned() bool
 
 	// Abstracts is the set of named signatures for this interface.
+	// This does not contain any additional abstracts, only the original
+	// that this interface was defined with.
 	Abstracts() []Abstract
 
 	// Exact types are like `string|int|bool` where the
@@ -53,6 +55,16 @@ type InterfaceDesc interface {
 
 	// Implements determines if this interface implements the other interface.
 	Implements(other InterfaceDesc) bool
+
+	// AdditionalAbstracts the set of additional named signatures for this
+	// interface that were resolved from an underlying type.
+	// The additional abstracts are not used in a comparison since they are
+	// resolved from an underlying type they should match anyway once resolved.
+	AdditionalAbstracts() []Abstract
+
+	// SetAdditionalAbstracts overrides any prior additional abstracts with
+	// the given set of abstracts.
+	SetAdditionalAbstracts(abstracts []Abstract)
 
 	AddInherits(it InterfaceDesc) InterfaceDesc
 

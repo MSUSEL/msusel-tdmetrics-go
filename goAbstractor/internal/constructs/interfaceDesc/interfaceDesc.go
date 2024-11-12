@@ -8,12 +8,12 @@ import (
 	"github.com/Snow-Gremlin/goToolbox/collections/enumerator"
 	"github.com/Snow-Gremlin/goToolbox/collections/sortedSet"
 	"github.com/Snow-Gremlin/goToolbox/comp"
-	"github.com/Snow-Gremlin/goToolbox/terrors/terror"
 	"github.com/Snow-Gremlin/goToolbox/utils"
 
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/assert"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs/hint"
+	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs/innate"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs/kind"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/jsonify"
 )
@@ -26,22 +26,12 @@ type interfaceDescImp struct {
 	abstracts []constructs.Abstract
 	exact     []constructs.TypeDesc
 	approx    []constructs.TypeDesc
+	additions []constructs.Abstract
 
 	inherits collections.SortedSet[constructs.InterfaceDesc]
 
 	index int
 	alive bool
-}
-
-func findSigByName(abs []constructs.Abstract, name string) constructs.Signature {
-	for _, ab := range abs {
-		if ab.Name() == name {
-			return ab.Signature()
-		}
-	}
-	panic(terror.New(`failed to find signature in interface abstract by name`).
-		With(`name`, name).
-		With(`abs`, abs))
 }
 
 func newInterfaceDesc(args constructs.InterfaceDescArgs) constructs.InterfaceDesc {
@@ -55,24 +45,24 @@ func newInterfaceDesc(args constructs.InterfaceDescArgs) constructs.InterfaceDes
 		switch args.Hint {
 		case hint.Pointer:
 			// Get $deref's only resulting real type.
-			ret := findSigByName(args.Abstracts, `$deref`).Results()[0].Type().GoType()
+			ret := constructs.FindSigByName(args.Abstracts, innate.Deref).Results()[0].Type().GoType()
 			args.RealType = types.NewPointer(ret)
 
 		case hint.List:
 			// Get $get's only resulting real type.
-			ret := findSigByName(args.Abstracts, `$get`).Results()[0].Type().GoType()
+			ret := constructs.FindSigByName(args.Abstracts, innate.Get).Results()[0].Type().GoType()
 			args.RealType = types.NewSlice(ret)
 
 		case hint.Map:
 			// Get $set's two parameter real types.
-			params := findSigByName(args.Abstracts, `$set`).Params()
+			params := constructs.FindSigByName(args.Abstracts, innate.Set).Params()
 			keyRet := params[0].Type().GoType()
 			valRet := params[1].Type().GoType()
 			args.RealType = types.NewMap(keyRet, valRet)
 
 		case hint.Chan:
 			// Get $send's only parameter real type.
-			ret := findSigByName(args.Abstracts, `$send`).Params()[0].Type().GoType()
+			ret := constructs.FindSigByName(args.Abstracts, innate.Send).Params()[0].Type().GoType()
 			args.RealType = types.NewSlice(ret)
 
 		case hint.Complex64:
@@ -147,6 +137,14 @@ func (id *interfaceDescImp) Implements(other constructs.InterfaceDesc) bool {
 	return ok && types.Implements(id.realType, rtIt)
 }
 
+func (id *interfaceDescImp) AdditionalAbstracts() []constructs.Abstract {
+	return id.additions
+}
+
+func (id *interfaceDescImp) SetAdditionalAbstracts(abstracts []constructs.Abstract) {
+	id.additions = abstracts
+}
+
 func (id *interfaceDescImp) AddInherits(it constructs.InterfaceDesc) constructs.InterfaceDesc {
 	v, _ := id.inherits.TryAdd(it)
 	return v
@@ -191,11 +189,12 @@ func (id *interfaceDescImp) ToJson(ctx *jsonify.Context) jsonify.Datum {
 	if ctx.IsShort() {
 		return jsonify.NewSprintf(`%s%d`, id.Kind(), id.index)
 	}
+	ab := append(append([]constructs.Abstract{}, id.abstracts...), id.additions...)
 	return jsonify.NewMap().
 		AddIf(ctx, ctx.IsDebugKindIncluded(), `kind`, id.Kind()).
 		AddIf(ctx, ctx.IsDebugIndexIncluded(), `index`, id.index).
 		AddNonZero(ctx.OnlyIndex(), `package`, id.pinnedPkg).
-		AddNonZero(ctx.OnlyIndex(), `abstracts`, id.abstracts).
+		AddNonZero(ctx.OnlyIndex(), `abstracts`, ab).
 		AddNonZero(ctx.Short(), `approx`, id.approx).
 		AddNonZero(ctx.Short(), `exact`, id.exact).
 		AddNonZero(ctx.OnlyIndex(), `inherits`, id.inherits.ToSlice()).

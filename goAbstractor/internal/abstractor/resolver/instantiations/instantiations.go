@@ -1,9 +1,12 @@
 package instantiations
 
 import (
+	"go/types"
+
 	"github.com/Snow-Gremlin/goToolbox/terrors/terror"
 	"github.com/Snow-Gremlin/goToolbox/utils"
 
+	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/abstractor/baker"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/abstractor/instantiator"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs"
 )
@@ -14,6 +17,10 @@ func ExpandInstantiations(proj constructs.Project) {
 	objects := proj.Objects()
 	for i := range objects.Count() {
 		expandInstantiations(proj, objects.Get(i))
+	}
+	bk := baker.New(proj)
+	for i := range objects.Count() {
+		fillOutPointerReceivers(bk, proj, objects.Get(i))
 	}
 }
 
@@ -52,4 +59,25 @@ func expandObjectInst(proj constructs.Project, obj constructs.Object, instance c
 		methodInst.SetReceiver(instance)
 		instance.AddMethod(methodInst)
 	}
+}
+
+func fillOutPointerReceivers(bk baker.Baker, proj constructs.Project, obj constructs.Object) {
+	if hasPointerReceivers(obj) {
+		ptr := bk.BakePointer()
+		// create a pointer for the generic object.
+		rt := types.NewPointer(obj.GoType())
+		instantiator.InterfaceDecl(proj, rt, ptr, obj)
+
+		oIts := obj.Instances()
+		for i := range oIts.Count() {
+			oIt := oIts.Get(i)
+			// create a pointer for the object interface.
+			rt := types.NewPointer(oIt.GoType())
+			instantiator.InterfaceDecl(proj, rt, ptr, oIt)
+		}
+	}
+}
+
+func hasPointerReceivers(obj constructs.Object) bool {
+	return obj.Methods().Enumerate().Any(constructs.Method.PointerRecv)
 }

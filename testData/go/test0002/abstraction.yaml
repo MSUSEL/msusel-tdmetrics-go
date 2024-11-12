@@ -27,11 +27,13 @@
     {}, # 1. interface{}
     {   # 2. interface{ $len()int; $get(int)int; $set(int,int) }
       abstracts: [ 3, 1, 4 ],
-      inherits:  [ 1 ]
+      inherits:  [ 1 ],
+      hint: list
     }, 
     { # 3. interface{ $len()int; $get(int)T; $set(int,T) }
       abstracts: [ 3, 2, 5 ],
-      inherits:  [ 1 ]
+      inherits:  [ 1 ],
+      hint: list
     }
   ],
   interfaceInsts: [

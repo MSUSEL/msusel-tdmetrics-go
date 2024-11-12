@@ -1,8 +1,7 @@
 // The baked in types are stored for quick lookup and
 // to ensure only one instance of each type is created.
 //
-// The function names are prepended with a `$` to avoid duck-typing
-// with user-defined types. Some of these types don't normally exist in Go,
+// Some of these types don't normally exist in Go,
 // but are used to represent the construct in a way that can be abstracted.
 // Other types represent the built-in types such as error.
 package baker
@@ -16,10 +15,9 @@ import (
 
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs/hint"
+	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs/innate"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/locs"
 )
-
-const BuiltinName = `$builtin`
 
 type Baker interface {
 	TypeByName(name string) constructs.TypeDecl
@@ -84,19 +82,19 @@ func (b *bakerImp) TypeByName(name string) constructs.TypeDecl {
 
 // BakeBuiltin bakes in a package to represent the builtin package.
 func (b *bakerImp) BakeBuiltin() constructs.Package {
-	return bakeOnce(b, BuiltinName, func() constructs.Package {
+	return bakeOnce(b, innate.Builtin, func() constructs.Package {
 		builtinPkg := &packages.Package{
-			PkgPath: BuiltinName,
-			Name:    BuiltinName,
+			PkgPath: innate.Builtin,
+			Name:    innate.Builtin,
 			Fset:    b.proj.Locs().FileSet(),
-			Types:   types.NewPackage(BuiltinName, BuiltinName),
+			Types:   types.NewPackage(innate.Builtin, innate.Builtin),
 		}
 
 		// package $builtin
 		return b.proj.NewPackage(constructs.PackageArgs{
 			RealPkg: builtinPkg,
-			Path:    BuiltinName,
-			Name:    BuiltinName,
+			Path:    innate.Builtin,
+			Name:    innate.Builtin,
 		})
 	})
 }
@@ -169,7 +167,7 @@ func (b *bakerImp) BakeList() constructs.InterfaceDecl {
 
 		// $len() int
 		lenFunc := b.proj.NewAbstract(constructs.AbstractArgs{
-			Name:     `$len`,
+			Name:     innate.Len,
 			Exported: true,
 			Signature: b.proj.NewSignature(constructs.SignatureArgs{
 				Results: []constructs.Argument{intArg},
@@ -179,7 +177,7 @@ func (b *bakerImp) BakeList() constructs.InterfaceDecl {
 
 		// $get(index int) T
 		getFunc := b.proj.NewAbstract(constructs.AbstractArgs{
-			Name:     `$get`,
+			Name:     innate.Get,
 			Exported: true,
 			Signature: b.proj.NewSignature(constructs.SignatureArgs{
 				Params:  []constructs.Argument{indexArg},
@@ -190,7 +188,7 @@ func (b *bakerImp) BakeList() constructs.InterfaceDecl {
 
 		// $set(index int, value T)
 		setFunc := b.proj.NewAbstract(constructs.AbstractArgs{
-			Name:     `$set`,
+			Name:     innate.Set,
 			Exported: true,
 			Signature: b.proj.NewSignature(constructs.SignatureArgs{
 				Params:  []constructs.Argument{indexArg, valueArg},
@@ -254,7 +252,7 @@ func (b *bakerImp) BakeChan() constructs.InterfaceDecl {
 
 		// $len() int
 		lenFunc := b.proj.NewAbstract(constructs.AbstractArgs{
-			Name:     `$len`,
+			Name:     innate.Len,
 			Exported: true,
 			Signature: b.proj.NewSignature(constructs.SignatureArgs{
 				Results: []constructs.Argument{intArg},
@@ -264,7 +262,7 @@ func (b *bakerImp) BakeChan() constructs.InterfaceDecl {
 
 		// $recv() (T, bool)
 		recvFunc := b.proj.NewAbstract(constructs.AbstractArgs{
-			Name:     `$recv`,
+			Name:     innate.Recv,
 			Exported: true,
 			Signature: b.proj.NewSignature(constructs.SignatureArgs{
 				Results: []constructs.Argument{valueArg, okayArg},
@@ -274,7 +272,7 @@ func (b *bakerImp) BakeChan() constructs.InterfaceDecl {
 
 		// $send(value T)
 		sendFunc := b.proj.NewAbstract(constructs.AbstractArgs{
-			Name:     `$send`,
+			Name:     innate.Send,
 			Exported: true,
 			Signature: b.proj.NewSignature(constructs.SignatureArgs{
 				Params:  []constructs.Argument{valueArg},
@@ -350,7 +348,7 @@ func (b *bakerImp) BakeMap() constructs.InterfaceDecl {
 
 		// $len() int
 		lenFunc := b.proj.NewAbstract(constructs.AbstractArgs{
-			Name:     `$len`,
+			Name:     innate.Len,
 			Exported: true,
 			Signature: b.proj.NewSignature(constructs.SignatureArgs{
 				Results: []constructs.Argument{intArg},
@@ -360,7 +358,7 @@ func (b *bakerImp) BakeMap() constructs.InterfaceDecl {
 
 		// $get(key TKey) (TValue, bool)
 		getFunc := b.proj.NewAbstract(constructs.AbstractArgs{
-			Name:     `$get`,
+			Name:     innate.Get,
 			Exported: true,
 			Signature: b.proj.NewSignature(constructs.SignatureArgs{
 				Params:  []constructs.Argument{keyArg},
@@ -371,7 +369,7 @@ func (b *bakerImp) BakeMap() constructs.InterfaceDecl {
 
 		// $set(key TKey, value TValue)
 		setFunc := b.proj.NewAbstract(constructs.AbstractArgs{
-			Name:     `$set`,
+			Name:     innate.Set,
 			Exported: true,
 			Signature: b.proj.NewSignature(constructs.SignatureArgs{
 				Params:  []constructs.Argument{keyArg, valueArg},
@@ -418,7 +416,7 @@ func (b *bakerImp) BakePointer() constructs.InterfaceDecl {
 
 		// $deref() T
 		derefFunc := b.proj.NewAbstract(constructs.AbstractArgs{
-			Name:     `$deref`,
+			Name:     innate.Deref,
 			Exported: true,
 			Signature: b.proj.NewSignature(constructs.SignatureArgs{
 				Results: []constructs.Argument{resultArg},
@@ -459,7 +457,7 @@ func (b *bakerImp) BakeComplex64() constructs.InterfaceDecl {
 
 		// $real() float32
 		realFunc := b.proj.NewAbstract(constructs.AbstractArgs{
-			Name:     `$real`,
+			Name:     innate.Real,
 			Exported: true,
 			Signature: b.proj.NewSignature(constructs.SignatureArgs{
 				Results: []constructs.Argument{floatArg},
@@ -469,7 +467,7 @@ func (b *bakerImp) BakeComplex64() constructs.InterfaceDecl {
 
 		// $imag() float32
 		imagFunc := b.proj.NewAbstract(constructs.AbstractArgs{
-			Name:     `$imag`,
+			Name:     innate.Imag,
 			Exported: true,
 			Signature: b.proj.NewSignature(constructs.SignatureArgs{
 				Results: []constructs.Argument{floatArg},
@@ -510,7 +508,7 @@ func (b *bakerImp) BakeComplex128() constructs.InterfaceDecl {
 
 		// $real() float64
 		realFunc := b.proj.NewAbstract(constructs.AbstractArgs{
-			Name:     `$real`,
+			Name:     innate.Real,
 			Exported: true,
 			Signature: b.proj.NewSignature(constructs.SignatureArgs{
 				Results: []constructs.Argument{floatArg},
@@ -520,7 +518,7 @@ func (b *bakerImp) BakeComplex128() constructs.InterfaceDecl {
 
 		// $imag() float64
 		imagFunc := b.proj.NewAbstract(constructs.AbstractArgs{
-			Name:     `$imag`,
+			Name:     innate.Imag,
 			Exported: true,
 			Signature: b.proj.NewSignature(constructs.SignatureArgs{
 				Results: []constructs.Argument{floatArg},
@@ -604,7 +602,7 @@ func (b *bakerImp) BakeComparable() constructs.InterfaceDecl {
 
 		// func $compare(other any) int
 		cmpFunc := b.proj.NewAbstract(constructs.AbstractArgs{
-			Name:     `$compare`,
+			Name:     innate.Compare,
 			Exported: true,
 			Signature: b.proj.NewSignature(constructs.SignatureArgs{
 				Params:  []constructs.Argument{otherArg},

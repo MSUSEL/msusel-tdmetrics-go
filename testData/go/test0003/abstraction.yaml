@@ -11,16 +11,17 @@
   ],
   interfaceDecls: [
     { # 1. main.Animal interface { Pet() } @ main.go:5
-      name: Animal, package: 1, interface: 1, loc: 5, exported: true,
+      name: Animal, package: 1, interface: 2, loc: 5, exported: true,
     }
   ],
   interfaceDescs: [
-    { abstracts: [ 1 ] } # 1. interface { Pat() }
+    {},                                   # 1. any
+    { abstracts: [ 1 ], inherits: [ 1 ] } # 2. interface { Pat() }
   ],
   methods: [
     { # 1. Cat.Pet() @ main.go:13
       name: Pet, package: 1, receiver: 1, signature: 1,
-      metrics: 1, loc: 13, exported: true
+      metrics: 1, loc: 13, exported: true, ptrRecv: true,
     },
     { # 2. main() @ main.go:17
       name: main, package: 1, signature: 1,

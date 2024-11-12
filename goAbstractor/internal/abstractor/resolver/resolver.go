@@ -34,6 +34,7 @@ func Resolve(proj constructs.Project, log *logger.Logger) {
 	resolve.References()
 
 	// Fill out all instantiations of generic object, interface, and methods.
+	// Also fill out all pointer receivers that are still not defined.
 	resolve.ExpandInstantiations()
 
 	// Second pass of removing references.

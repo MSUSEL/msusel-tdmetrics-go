@@ -173,3 +173,14 @@ func ResolvedTempDeclRef(con Construct) Construct {
 func BlankName(name string) bool {
 	return len(name) <= 0 || name == `_` || name == `.`
 }
+
+func FindSigByName(abs []Abstract, name string) Signature {
+	for _, ab := range abs {
+		if ab.Name() == name {
+			return ab.Signature()
+		}
+	}
+	panic(terror.New(`failed to find signature in interface abstract by name`).
+		With(`name`, name).
+		With(`abs`, abs))
+}
