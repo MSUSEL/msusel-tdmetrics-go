@@ -91,7 +91,7 @@ func writeJson(path string, minimize bool, p constructs.Project) error {
 	}
 
 	if len(path) > 0 {
-		return os.WriteFile(path, b, 0666)
+		return os.WriteFile(path, b, 0o666)
 	}
 	_, err = fmt.Println(string(b))
 	return err

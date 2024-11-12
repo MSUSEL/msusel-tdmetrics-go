@@ -44,7 +44,7 @@ func (tt *testTool) abstract(patterns ...string) *testTool {
 		patterns = []string{`main.go`}
 	}
 
-	verbose := true //testing.Verbose()
+	verbose := true // testing.Verbose()
 	ps, err := reader.Read(&reader.Config{
 		Verbose:    verbose,
 		Dir:        pathToTestData + tt.dir,

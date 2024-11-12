@@ -27,7 +27,6 @@ type Metrics interface {
 
 // MetricsArgs are measurements taken for a method body or expression.
 type MetricsArgs struct {
-
 	// Location is the unique location for the expression.
 	// This is used as a key to determine different metrics.
 	//

@@ -383,7 +383,7 @@ func (ui *usagesImp) processNode(node ast.Node) {
 			// which nodes do not have custom handling on them yet.
 			// Not all nodes need custom handling but a bug might indicate
 			// one that doesn't have custom handling probably should.
-			//ui.log.Logf(`usagesImp.processNode unhandled (%[1]T) %[1]v`, t)
+			// ui.log.Logf(`usagesImp.processNode unhandled (%[1]T) %[1]v`, t)
 			return true
 		}
 		return false

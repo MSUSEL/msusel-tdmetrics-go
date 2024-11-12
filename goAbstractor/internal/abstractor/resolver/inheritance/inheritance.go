@@ -20,7 +20,6 @@ type Node[T any] interface {
 }
 
 type Inheritance[T Node[T]] interface {
-
 	// Process adds a new node into the inheritance forest as a parent of
 	// the correct nodes and having the correct parents added to it.
 	//

@@ -27,8 +27,10 @@ type (
 	}
 )
 
-var _ Animal = Bird(nil)
-var _ Flier = Bat(nil)
+var (
+	_ Animal = Bird(nil)
+	_ Flier  = Bat(nil)
+)
 
 func main() {
 	println(`okay`)

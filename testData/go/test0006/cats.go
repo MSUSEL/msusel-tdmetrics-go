@@ -284,8 +284,7 @@ func (ct CatTable) CatsWithName(name string) IDSlice {
 // String returns a formatted table view of the cat table for debugging.
 func (ct CatTable) String() string {
 	idTitle, nameTitle, breedTitle, ageTitle := `ID`, `Name`, `Breed`, `Age`
-	idLenMax, nameLenMax, breedLenMax, ageLenMax :=
-		len(idTitle), len(nameTitle), len(breedTitle), len(ageTitle)
+	idLenMax, nameLenMax, breedLenMax, ageLenMax := len(idTitle), len(nameTitle), len(breedTitle), len(ageTitle)
 	for id, c := range ct {
 		if idLen := len(id); idLen > idLenMax {
 			idLenMax = idLen

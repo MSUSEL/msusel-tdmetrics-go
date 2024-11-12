@@ -16,7 +16,6 @@ type Selection interface {
 }
 
 type SelectionArgs struct {
-
 	// Name is the name of the field, method, parameter, result, etc
 	// that is being selected in the origin.
 	Name string

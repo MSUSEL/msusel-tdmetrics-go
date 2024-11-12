@@ -11,7 +11,6 @@ type (
 
 	// Toy represents anything to distract cats from knocking things off of counters.
 	Toy interface {
-
 		// Play uses this toy on the given cat.
 		Play(c *Cat)
 	}

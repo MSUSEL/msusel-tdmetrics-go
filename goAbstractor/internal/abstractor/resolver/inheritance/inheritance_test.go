@@ -264,7 +264,8 @@ func (ti tInheritance) String() string {
 }
 
 func writeNodes(siblings collections.SortedSet[*tNode], write func(text string),
-	touched map[*tNode]bool, first bool, indent string) {
+	touched map[*tNode]bool, first bool, indent string,
+) {
 	count := siblings.Count()
 	for i := range count {
 		node := siblings.Get(i)

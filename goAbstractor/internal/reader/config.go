@@ -9,7 +9,6 @@ import (
 
 // Config is the read and parse configuration.
 type Config struct {
-
 	// Verbose indicates that the parse logs
 	// should be written to the standard out.
 	Verbose bool

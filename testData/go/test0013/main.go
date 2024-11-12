@@ -19,8 +19,10 @@ type Point struct {
 
 func (p Point) Sum() int { return p.x + p.y }
 
-type IXCoord interface{ GetX() int }
-type IYCoord interface{ GetY() int }
+type (
+	IXCoord interface{ GetX() int }
+	IYCoord interface{ GetY() int }
+)
 
 type IPoint interface {
 	IXCoord
