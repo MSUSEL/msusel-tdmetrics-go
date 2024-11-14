@@ -1936,6 +1936,72 @@ func Test_InstanceCalls(t *testing.T) {
 		`}`)
 }
 
+func Test_PointerObject(t *testing.T) {
+	tt := parseDecl(t, `bar`,
+		`type foo struct { name string }`,
+		`func (f *foo) getName() string { return f.name }`,
+		`func bar(f *foo) string {`,
+		`   return f.getName()`,
+		`}`)
+	tt.checkProj(
+		`{`,
+		`  language: go,`,
+		`  abstracts: [`,
+		`    { name: $deref, signature: 1, exported: true },`, // 1. $deref() foo
+		`    { name: $deref, signature: 2, exported: true }`,  // 2. $deref() T <any>
+		`  ],`,
+		`  arguments: [`,
+		`    { type: tempReference1 },`, // 1. <unnamed> foo
+		`    { type: typeParam1 }`,      // 2. <unnamed> T <any>
+		`  ],`,
+		`  interfaceDecls: [`,
+		`    {`, // 1. $builtin.Pointer[T any]{ $deref() T <any> }
+		`      name: Pointer, package: 1, interface: 3, exported: true,`,
+		`      instances: [ 1 ], typeParams: [ 1 ]`,
+		`    }`,
+		`  ],`,
+		`  interfaceDescs: [`,
+		`    {},`, // 1. any
+		`    { abstracts: [ 1 ], hint: pointer },`, // 2. interface { $deref() foo }
+		`    { abstracts: [ 2 ], hint: pointer }`,  // 3. interface { $deref() T <any> }
+		`  ],`,
+		`  interfaceInsts: [`,
+		`    {`, // 1. Pointer[foo]{ $deref() foo }
+		`      generic: 1, resolved: 2,`,
+		`      instanceTypes: [ tempReference1 ]`,
+		`    }`,
+		`  ],`,
+		`  metrics: [`,
+		`    {`,
+		`      loc:        3,`,
+		`      codeCount:  3,`,
+		`      complexity: 1,`,
+		`      indents:    3,`,
+		`      lineCount:  3,`,
+		`      reads: [ interfaceInst1 ],`, // Pointer[foo]
+		`      invokes: [ selection1 ]`,    // Pointer[foo].getName()
+		`    }`,
+		`  ],`,
+		`  packages: [`,
+		`    { name: $builtin, path: $builtin, interfaces: [ 1 ] },`, // 1. $builtin package
+		`    { name: test, path: test }`,                             // 2. test package
+		`  ],`,
+		`  selections: [`,
+		`    { name: getName, origin: interfaceInst1 }`, // 1. Pointer[foo].getName()
+		`  ],`,
+		`  signatures: [`,
+		`    { results: [ 1 ] },`, // 1. func() foo
+		`    { results: [ 2 ] }`,  // 2. func() T <any>
+		`  ],`,
+		`  tempReferences: [`,
+		`    { name: foo, packagePath: test }`, // 1. test:foo
+		`  ],`,
+		`  typeParams: [`,
+		`    { name: T, type: interfaceDesc1 }`, // 1. T any
+		`  ]`,
+		`}`)
+}
+
 type testTool struct {
 	t      *testing.T
 	proj   constructs.Project

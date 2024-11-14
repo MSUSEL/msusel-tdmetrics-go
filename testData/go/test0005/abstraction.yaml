@@ -88,72 +88,95 @@
   methods: [
     { # 1. func (*cats.Cat) Meow() @ main.go:36
       name: Meow, package: 2, receiver: 1, signature: 1,
-      loc: 36, metrics: 3, exported: true, ptrRecv: true
+      loc: 35, metrics: 3, exported: true, ptrRecv: true
     },
     { # 2. func NewCat(name string, age int) Pointer[Cat] @ main.go:27
       name: NewCat, package: 2, signature: 13,
-      loc: 27, metrics: 2, exported: true
+      loc: 26, metrics: 2, exported: true
     },
     { # 3. func NextYear(cats ...List[Pointer[Cat]]) @ main.go:46
       name: NextYear, package: 2, signature: 8,
-      loc: 46, metrics: 5, exported: true
+      loc: 45, metrics: 5, exported: true
     },
     { # 4. func Pet(c Pointer[Cat]) @ main.go:65
       name: Pet, package: 2, signature: 7,
-      loc: 65, metrics: 7, exported: true
+      loc: 64, metrics: 7, exported: true
     },
     { # 5. func (*cats.Cat) String() string @ main.go:41
       name: String, package: 2, receiver: 1, signature: 3,
-      loc: 41, metrics: 4, exported: true, ptrRecv: true
+      loc: 40, metrics: 4, exported: true, ptrRecv: true
     },
     { # 6. func (cats.Cats) Youngest() Cat @ main.go:53
       name: Youngest, package: 2, receiver: 2, signature: 4,
-      loc: 53, metrics: 6, exported: true
+      loc: 52, metrics: 6, exported: true
     }
   ],
   metrics: [
-    { # 1. cats.log @ main.go:24
-      codeCount: 1, complexity: 1, lineCount: 1, loc: 24,
-      sideEffect: true
+    { # 1. cats.log @ main.go:23
+      codeCount: 1, complexity: 1, lineCount: 1, loc: 23,
+      sideEffect: true # b/c println
     },
-    { # 2. NewCat @ main.go:27
-      codeCount: 6, complexity: 1, indents: 6, lineCount: 6, loc: 27,
-      reads:  [ object1 ],
-      writes: [ object1, selection1, selection2 ]
+    { # 2. NewCat @ main.go:26
+      codeCount: 6, complexity: 1, indents: 6, lineCount: 6, loc: 26,
+      reads: [ object1 ], # Cat
+      writes: [
+        object1,    # Cat
+        selection2, # Cat.Age
+        selection4  # Cat.Name
+      ]
     },
-    { # 3. Cat.Meow @ main.go:36
-      codeCount: 3, complexity: 1, indents: 1, lineCount: 3, loc: 36,
-      invokes: [ value1 ],
-      reads:   [ object1, selection2 ]
+    { # 3. Cat.Meow @ main.go:35
+      codeCount: 3, complexity: 1, indents: 1, lineCount: 3, loc: 35,
+      invokes: [ value1 ], # log(value string)
+      reads: [
+        interfaceInst1, # Pointer[Cat]
+        selection3      # Pointer[Cat].Name
+      ]
     },
-    { # 4. Cat.String @ main.go:41
-      codeCount: 3, complexity: 1, indents: 1, lineCount: 3, loc: 41,
+    { # 4. Cat.String @ main.go:40
+      codeCount: 3, complexity: 1, indents: 1, lineCount: 3, loc: 40,
       getter: true,
-      reads: [ object1, selection2 ]
+      reads: [
+        interfaceInst1, # Pointer[Cat]
+        selection3      # Pointer[Cat].Name
+      ]
     },
-    { # 5. NextYear @ main.go:46
-      codeCount: 5, complexity: 2, indents: 4, lineCount: 5, loc: 46,
-      reads:  [ object1 ],
-      writes: [ object1, selection1 ]
+    { # 5. NextYear @ main.go:45
+      codeCount: 5, complexity: 2, indents: 4, lineCount: 5, loc: 45,
+      # TODO: This should read from List[Pointer[Cat]] because of the for-range.
+      reads: [ interfaceInst1 ], # Pointer[Cat]
+      writes: [
+        interfaceInst1, # Pointer[Cat]
+        selection1      # Pointer[Cat].Age
+      ]
     },
-    { # 6. Cats.Youngest @ main.go:53
-      codeCount: 9, complexity: 4, indents: 11, lineCount: 9, loc: 53,
-      reads:  [ object1, object2, selection1 ],
-      writes: [ object1 ]
+    { # 6. Cats.Youngest @ main.go:52
+      codeCount: 9, complexity: 4, indents: 11, lineCount: 9, loc: 52,
+      # TODO: This should read from List[Pointer[Cat]] because of the for-range.
+      reads: [
+        interfaceInst1, # Pointer[Cat]
+        object1,        # Cat
+        object2,        # Cats
+        selection1      # Pointer[Cat].Age
+      ],
+      writes: [ interfaceInst1 ] # Pointer[Cat]
     },
-    { # 7. Pet(c Pointer[Cat]) @ main.go:65
-      codeCount: 3, complexity: 1, indents: 1, lineCount: 3, loc: 65,
-      invokes: [ value1 ],
-      reads:   [ object1, selection2 ]
+    { # 7. Pet(c Pointer[Cat]) @ main.go:64
+      codeCount: 3, complexity: 1, indents: 1, lineCount: 3, loc: 64,
+      invokes: [ value1 ], # log(value string)
+      reads: [
+        interfaceInst1, # Pointer[Cat]
+        selection3      # Pointer[Cat].Name
+      ]
     }
   ],
   objects: [
-    { # 1. Cat struct{ Name string; Age int } { <only pointer methods> } @ main.go:7
+    { # 1. Cat { Name string; Age int }{ <only pointer methods> } @ main.go:7
       name: Cat, package: 2, data: 2, interface: 1, loc: 7, exported: true,
       methods: [ 1, 5 ]
     },
-    { # 2. Cats struct{ $data List[Pointer[Cat]] } { Youngest; $len; $get; $set } @ main.go:20
-      name: Cats, package: 2, data: 1, interface: 7, loc: 20, exported: true,
+    { # 2. Cats { $data List[Pointer[Cat]] }{ Youngest; $len; $get; $set } @ main.go:19
+      name: Cats, package: 2, data: 1, interface: 7, loc: 19, exported: true,
       methods: [ 6 ]
     }
   ],
@@ -167,30 +190,32 @@
       name: cats,
       path: command-line-arguments,
       interfaces: [ 3 ],
-      methods: [ 1, 2, 3, 4, 5, 6 ],
-      objects: [ 1, 2 ],
-      values:  [ 1 ]
+      methods:    [ 1, 2, 3, 4, 5, 6 ],
+      objects:    [ 1, 2 ],
+      values:     [ 1 ]
     }
   ],
   selections: [
-    { name: Age,  origin: object1 }, # 1.
-    { name: Name, origin: object1 }  # 2.
+    { name: Age,  origin: interfaceInst1 }, # 1. Pointer[Cat].Age
+    { name: Age,  origin: object1 },        # 2. Cat.Age
+    { name: Name, origin: interfaceInst1 }, # 3. Pointer[Cat].Name
+    { name: Name, origin: object1 }         # 4. Cat.Name
   ],
   signatures: [
-    {}, # 1. func()()
-    { results: [ 1 ] }, # 2. func() int
-    { results: [ 2 ] }, # 3. func() string
-    { results: [ 3 ] }, # 4. func() Pointer[Cat]
-    { results: [ 4 ] }, # 5. func() Cat
-    { results: [ 5 ] }, # 6. func() T<any>
-    { params: [ 7 ] },  # 7. func(c Pointer[Cat])
-    { params: [ 8 ], variadic: true },  #  8. func(cats ...List[Pointer[Cat]])
-    { params: [ 9 ], results: [ 12 ] }, #  9. func(index int) (value Pointer[Cat])
-    { params: [ 9 ], results: [ 13 ] }, # 10. func(index int) (value T<any>)
-    { params: [  9, 12 ] }, # 11. func(index int, value Pointer[Cat])
-    { params: [  9, 13 ] }, # 12. func(index int, value T<any>)
+    {},                                     #  1. func()()
+    { results: [ 1 ] },                     #  2. func() int
+    { results: [ 2 ] },                     #  3. func() string
+    { results: [ 3 ] },                     #  4. func() Pointer[Cat]
+    { results: [ 4 ] },                     #  5. func() Cat
+    { results: [ 5 ] },                     #  6. func() T<any>
+    { params: [ 7 ] },                      #  7. func(c Pointer[Cat])
+    { params: [ 8 ], variadic: true },      #  8. func(cats ...List[Pointer[Cat]])
+    { params: [ 9 ], results: [ 12 ] },     #  9. func(index int) (value Pointer[Cat])
+    { params: [ 9 ], results: [ 13 ] },     # 10. func(index int) (value T<any>)
+    { params: [  9, 12 ] },                 # 11. func(index int, value Pointer[Cat])
+    { params: [  9, 13 ] },                 # 12. func(index int, value T<any>)
     { params: [ 10,  6 ], results: [ 3 ] }, # 13. func(name string, age int) Pointer[Cat]
-    { params: [ 11 ] } # 14. func(value string)
+    { params: [ 11 ] }                      # 14. func(value string)
   ],
   structDescs: [
     { fields: [ 1 ], synthetic: true }, # 1. struct{ $data List[Pointer[Cat]] }
@@ -200,8 +225,8 @@
     { name: T, type: interfaceDesc1 } # 1. T any
   ],
   values: [
-    { # 1. cats.log := func(value string) @ main.go:24
-      name: log, package: 2, type: signature14, loc: 24, metrics: 1
+    { # 1. cats.log := func(value string) @ main.go:23
+      name: log, package: 2, type: signature14, loc: 23, metrics: 1
     }
   ],
   locs: {

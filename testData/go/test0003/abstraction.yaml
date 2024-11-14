@@ -50,13 +50,25 @@
     { # 1. Cat.Pet()
       codeCount: 3, complexity: 1, indents: 1, lineCount: 3, loc: 13,
       sideEffect: true, # b/c println
-      reads: [ object1, selection1 ]
+      reads: [
+        interfaceInst1, # Pointer[Cat]
+        selection1      # Pointer[Cat].Name
+      ]
     },
     { # 2. main()
       codeCount: 6, complexity: 1, indents: 5, lineCount: 6, loc: 17,
-      invokes: [ selection2 ],
-      reads:   [ object1 ],
-      writes:  [ object1, selection1 ]
+      invokes: [
+        selection3 # Pointer[Cat].Pet()
+      ],
+      reads: [
+        interfaceInst1, # Pointer[Cat]
+        object1         # Cat
+      ],
+      writes: [
+        interfaceInst1, # Pointer[Cat]
+        object1,        # Cat
+        selection2      # Cat.Name
+      ]
     }
   ],
   objects: [
@@ -78,8 +90,9 @@
     }
   ],
   selections: [
-    { name: Name, origin: object1 }, # 1. Cat.Name
-    { name: Pet,  origin: object1 }  # 2. Cat.Pet()
+    { name: Name, origin: interfaceInst1 }, # 1. Pointer[Cat].Name
+    { name: Name, origin: object1 },        # 2. Cat.Name
+    { name: Pet,  origin: interfaceInst1 }  # 3. Pointer[Cat].Pet()
   ],
   signatures: [
     {},                 # 1. func()()

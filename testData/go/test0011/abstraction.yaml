@@ -1,67 +1,73 @@
 {
-  language: go, # TODO: Finish Annotation
+  language: go,
   abstracts: [
-    { name: $compare, signature: 23, exported: true }, #  1. $compare(other any) int
+    { name: $compare, signature: 26, exported: true }, #  1. $compare(other any) int
     { name: $deref,   signature:  2, exported: true }, #  2. $deref() int
-    { name: $deref,   signature:  5, exported: true }, #  3. $deref( ??? ) ???
-    { name: $deref,   signature:  6, exported: true }, #  4. $deref( ??? ) ???
-    { name: $get,     signature:  7, exported: true }, #  5. $get( ??? ) ???
-    { name: $get,     signature:  8, exported: true }, #  6. $get( ??? ) ???
-    { name: $get,     signature:  9, exported: true }, #  7. $get( ??? ) ???
-    { name: $get,     signature: 10, exported: true }, #  8. $get( ??? ) ???
-    { name: $get,     signature: 11, exported: true }, #  9. $get( ??? ) ???
-    { name: $get,     signature: 17, exported: true }, # 10. $get( ??? ) ???
-    { name: $get,     signature: 19, exported: true }, # 11. $get( ??? ) ???
-    { name: $get,     signature: 21, exported: true }, # 12. $get( ??? ) ???
+    { name: $deref,   signature:  6, exported: true }, #  3. $deref() ???
+    { name: $deref,   signature:  7, exported: true }, #  4. $deref() ???
+    { name: $get,     signature:  8, exported: true }, #  5. $get() ???
+    { name: $get,     signature:  9, exported: true }, #  6. $get() ???
+    { name: $get,     signature: 10, exported: true }, #  7. $get() ???
+    { name: $get,     signature: 11, exported: true }, #  8. $get() ???
+    { name: $get,     signature: 12, exported: true }, #  9. $get() ???
+    { name: $get,     signature: 13, exported: true }, # 10. $get() ???
+    { name: $get,     signature: 20, exported: true }, # 11. $get() ???
+    { name: $get,     signature: 22, exported: true }, # 12. $get() ???
+    { name: $get,     signature: 24, exported: true }, # 13. $get() ???
     { name: $len,     signature:  2, exported: true }, # 14. $len() int
-    { name: $set,     signature: 12, exported: true }, # 15. $set( ??? ) ???
-    { name: $set,     signature: 13, exported: true }, # 16. $set( ??? ) ???
-    { name: $set,     signature: 14, exported: true }, # 17. $set( ??? ) ???
-    { name: $set,     signature: 15, exported: true }, # 18. $set( ??? ) ???
-    { name: $set,     signature: 16, exported: true }, # 19. $set( ??? ) ???
-    { name: $set,     signature: 18, exported: true }, # 20. $set( ??? ) ???
-    { name: $set,     signature: 20, exported: true }, # 21. $set( ??? ) ???
-    { name: $set,     signature: 22, exported: true }, # 22. $set( ??? ) ???
+    { name: $set,     signature: 14, exported: true }, # 15. $set( ??? )
+    { name: $set,     signature: 15, exported: true }, # 16. $set( ??? )
+    { name: $set,     signature: 16, exported: true }, # 17. $set( ??? )
+    { name: $set,     signature: 17, exported: true }, # 18. $set( ??? )
+    { name: $set,     signature: 18, exported: true }, # 19. $set( ??? )
+    { name: $set,     signature: 19, exported: true }, # 20. $set( ??? )
+    { name: $set,     signature: 21, exported: true }, # 21. $set( ??? )
+    { name: $set,     signature: 23, exported: true }, # 22. $set( ??? )
+    { name: $set,     signature: 25, exported: true }, # 23. $set( ??? )
     { name: AsSlices, signature:  3, exported: true }, # 24. AsSlices( ??? ) ???
-    { name: AsSlices, signature:  4, exported: true }  # 25. AsSlices( ??? ) ???
+    { name: AsSlices, signature:  4, exported: true }, # 25. AsSlices( ??? ) ???
+    { name: AsSlices, signature:  5, exported: true }  # 26. AsSlices( ??? ) ???
   ],
   arguments: [
     {              type: basic2 },         #  1. <unnamed> int
-    {              type: interfaceDecl1 }, #  2. <unnamed> ???
-    {              type: interfaceInst5 }, #  3. <unnamed> ???
-    {              type: interfaceInst6 }, #  4. <unnamed> ???
-    {              type: typeParam5 },     #  5. <unnamed> T <any>
-    {              type: typeParam8 },     #  6. <unnamed> V <any>
-    { name: found, type: basic1 },         #  7. found bool
-    { name: index, type: basic2 },         #  8. index int
-    { name: key,   type: basic3 },         #  9. key string
-    { name: key,   type: typeParam2 },     # 10. key K <any>
-    { name: key,   type: typeParam6 },     # 11. key TKey <comparable>
-    { name: other, type: interfaceDesc1 }, # 12. other any
-    { name: s,     type: interfaceInst3 }, # 13. s ???
-    { name: s,     type: interfaceInst4 }, # 14. s ???
-    { name: s,     type: typeParam4 },     # 15. s ???
-    { name: value, type: basic3 },         # 16. value string
-    { name: value, type: interfaceInst1 }, # 17. value ???
-    { name: value, type: interfaceInst2 }, # 18. value ???
-    { name: value, type: typeParam2 },     # 19. value K <any>
-    { name: value, type: typeParam5 },     # 20. value T <any>
-    { name: value, type: typeParam7 }      # 22. value TValue <any>
+    {              type: interfaceDecl1 }, #  2. <unnamed> List[ ??? ]
+    {              type: interfaceInst4 }, #  3. <unnamed> ???
+    {              type: interfaceInst5 }, #  4. <unnamed> ???
+    {              type: interfaceInst6 }, #  5. <unnamed> ???
+    {              type: interfaceInst7 }, #  6. <unnamed> ???
+    {              type: typeParam5 },     #  7. <unnamed> T <any>
+    {              type: typeParam8 },     #  8. <unnamed> V <any>
+    { name: found, type: basic1 },         #  9. found bool
+    { name: index, type: basic2 },         # 10. index int
+    { name: key,   type: basic3 },         # 11. key string
+    { name: key,   type: typeParam2 },     # 12. key K <any>
+    { name: key,   type: typeParam6 },     # 13. key TKey <comparable>
+    { name: other, type: interfaceDesc1 }, # 14. other any
+    { name: s,     type: interfaceInst3 }, # 15. s ???
+    { name: s,     type: interfaceInst5 }, # 16. s ???
+    { name: s,     type: typeParam4 },     # 17. s ???
+    { name: value, type: basic3 },         # 18. value string
+    { name: value, type: interfaceDecl3 }, # 19. value ???
+    { name: value, type: interfaceInst1 }, # 20. value ???
+    { name: value, type: interfaceInst2 }, # 21. value ???
+    { name: value, type: typeParam2 },     # 22. value K <any>
+    { name: value, type: typeParam5 },     # 23. value T <any>
+    { name: value, type: typeParam7 }      # 24. value TValue <any>
   ],
   basics: [ bool, int, string ],
   fields: [
     { name: Set, type: objectInst1, exported: true }, # 1. Set ???
-    { name: m,   type: interfaceInst7 },              # 2. m ???
+    { name: m,   type: interfaceInst8 },              # 2. m ???
     { name: m,   type: typeParam3 }                   # 3. m ???
   ],
   interfaceDecls: [
-    { # 1. $builtin.List ???
-      name: List, package: 1, exported: true, interface: 12,
-      typeParams: [ 5 ], instances: [ 3, 4, 5, 6 ]
+    { # 1. $builtin.List[ ??? ]
+      name: List, package: 1, exported: true, interface: 13,
+      typeParams: [ 5 ], instances: [ 3, 4, 5, 6, 7 ]
     },
-    { # 2. $builtin.Map ???
-      name: Map, package: 1, exported: true, interface: 15,
-      typeParams: [ 6, 7 ], instances: [ 7, 8 ]
+    { # 2. $builtin.Map[ ??? ]
+      name: Map, package: 1, exported: true, interface: 16,
+      typeParams: [ 6, 7 ], instances: [ 8, 9 ]
     },
     { # 3. $builtin.Pointer[T any]{ $deref ??? }
       name: Pointer, package: 1, exported: true, interface: 6,
@@ -72,84 +78,90 @@
     }
   ],
   interfaceDescs: [
-    {},                                              #  1. any
-    { approx: [ interfaceDecl1 ], inherits: [ 1 ] }, #  2.
-    { approx: [ interfaceInst8 ], inherits: [ 1 ] }, #  3.
-    { abstracts: [ 1 ],           inherits: [ 1 ] }, #  4. interface{ $compare ??? }
-    { abstracts: [ 2 ],           inherits: [ 1 ] }, #  5. interface{ $deref ??? }
-    { abstracts: [ 3 ],           inherits: [ 1 ] }, #  6. interface{ $deref ??? }
-    { abstracts: [ 4 ],           inherits: [ 1 ] }, #  7. interface{ $deref ??? }
-    { abstracts: [ 13,  5, 14 ],  inherits: [ 1 ] }, #  8. interface{ $len() int; $get ??? $set ??? }
-    { abstracts: [ 13,  6, 15 ],  inherits: [ 1 ] }, #  9. interface{ $len() int; $get ??? $set ??? }
-    { abstracts: [ 13,  7, 16 ],  inherits: [ 1 ] }, # 10. interface{ $len() int; $get ??? $set ??? }
-    { abstracts: [ 13,  8, 17 ],  inherits: [ 1 ] }, # 11. interface{ $len() int; $get ??? $set ??? }
-    { abstracts: [ 13,  9, 18 ],  inherits: [ 1 ] }, # 12. interface{ $len() int; $get ??? $set ??? }
-    { abstracts: [ 13, 10, 19 ],  inherits: [ 1 ] }, # 13. interface{ $len() int; $get ??? $set ??? }
-    { abstracts: [ 13, 11, 20 ],  inherits: [ 1 ] }, # 14. interface{ $len() int; $get ??? $set ??? }
-    { abstracts: [ 13, 12, 21 ],  inherits: [ 1 ] }, # 15. interface{ $len() int; $get ??? $set ??? }
-    { abstracts: [ 22 ],          inherits: [ 1 ] }, # 16. interface{ AsSlices ??? }
-    { abstracts: [ 23 ],          inherits: [ 1 ] }  # 17. interface{ AsSlices ??? }
+    {},                                                                #  1. any
+    { approx: [ interfaceDecl1 ], inherits: [ 1 ] },                   #  2. ~List[ ??? ]
+    { approx: [ interfaceInst9 ], inherits: [ 1 ] },                   #  3. ???
+    { abstracts: [ 1 ],           inherits: [ 1 ], hint: comparable }, #  4. interface{ $compare ??? }
+    { abstracts: [ 2 ],           inherits: [ 1 ], hint: pointer },    #  5. interface{ $deref ??? }
+    { abstracts: [ 3 ],           inherits: [ 1 ], hint: pointer },    #  6. interface{ $deref ??? }
+    { abstracts: [ 4 ],           inherits: [ 1 ], hint: pointer },    #  7. interface{ $deref ??? }
+    { abstracts: [ 14,  5, 15 ],  inherits: [ 1 ], hint: list },       #  8. interface{ $len() int; $get ??? $set ??? }
+    { abstracts: [ 14,  6, 16 ],  inherits: [ 1 ], hint: list },       #  9. interface{ $len() int; $get ??? $set ??? }
+    { abstracts: [ 14,  7, 17 ],  inherits: [ 1 ], hint: list },       # 10. interface{ $len() int; $get ??? $set ??? }
+    { abstracts: [ 14,  8, 18 ],  inherits: [ 1 ], hint: list },       # 11. interface{ $len() int; $get ??? $set ??? }
+    { abstracts: [ 14,  9, 19 ],  inherits: [ 1 ], hint: list },       # 12. interface{ $len() int; $get ??? $set ??? }
+    { abstracts: [ 14, 10, 20 ],  inherits: [ 1 ], hint: list },       # 13. interface{ $len() int; $get ??? $set ??? }
+    { abstracts: [ 14, 11, 21 ],  inherits: [ 1 ], hint: map },        # 14. interface{ $len() int; $get ??? $set ??? }
+    { abstracts: [ 14, 12, 22 ],  inherits: [ 1 ], hint: map },        # 15. interface{ $len() int; $get ??? $set ??? }
+    { abstracts: [ 14, 13, 23 ],  inherits: [ 1 ], hint: map },        # 16. interface{ $len() int; $get ??? $set ??? }
+    { abstracts: [ 24 ],          inherits: [ 1 ] },                   # 17. interface{ AsSlices ??? }
+    { abstracts: [ 25 ],          inherits: [ 1 ] },                   # 18. interface{ AsSlices ??? }
+    { abstracts: [ 26 ],          inherits: [ 1 ] }                    # 19. interface{ AsSlices ??? }
   ],
   interfaceInsts: [
-    { # 1.
+    { # 1. Pointer[int]
       generic: 3, resolved: 5,
       instanceTypes: [ basic2 ]
     },
-    { # 2.
+    { # 2. Pointer[TValue any]
       generic: 3, resolved: 7,
       instanceTypes: [ typeParam8 ]
     },
-    { # 3.
+    { # 3. ???
       generic: 1, resolved: 8,
       instanceTypes: [ basic3 ]
     },
-    { # 4.
+    { # 4. ???
       generic: 1, resolved: 9,
+      instanceTypes: [ interfaceDecl3 ]
+    },
+    { # 5. ???
+      generic: 1, resolved: 10,
       instanceTypes: [ interfaceInst1 ]
     },
-    { # 5.
-      generic: 1, resolved: 10,
+    { # 6. ???
+      generic: 1, resolved: 11,
       instanceTypes: [ interfaceInst2 ]
     },
-    { # 6.
-      generic: 1, resolved: 11,
+    { # 7. ???
+      generic: 1, resolved: 12,
       instanceTypes: [ typeParam2 ]
     },
-    { # 7.
-      generic: 2, resolved: 13,
+    { # 8. ???
+      generic: 2, resolved: 14,
       instanceTypes: [ basic3, interfaceInst1 ]
     },
-    { # 8.
-      generic: 2, resolved: 14,
+    { # 9. ???
+      generic: 2, resolved: 15,
       instanceTypes: [ typeParam2, interfaceInst2 ]
     }
   ],
   methodInsts: [
-    { # 1.
-      generic: 1, receiver: 1, resolved: 3,
-      instanceTypes: [ basic3, basic2, interfaceInst7 ]
-    },
-    { # 2.
+    { # 1. ???
       generic: 1, receiver: 2, resolved: 3,
       instanceTypes: [ typeParam2, typeParam8, typeParam3 ]
     },
-    { # 3.
-      generic: 2, resolved: 24,
+    { # 2. ???
+      generic: 1, receiver: 1, resolved: 4,
+      instanceTypes: [ basic3, basic2, interfaceInst8 ]
+    },
+    { # 3. ???
+      generic: 2, resolved: 27,
       instanceTypes: [ basic3, interfaceInst3 ]
     },
-    { # 4.
-      generic: 2, resolved: 25,
-      instanceTypes: [ interfaceInst1, interfaceInst4 ]
+    { # 4. ???
+      generic: 2, resolved: 28,
+      instanceTypes: [ interfaceInst1, interfaceInst5 ]
     }
   ],
   methods: [
-    { # 1.
-      name: AsSlices, package: 2, receiver: 2, signature: 4,
+    { # 1. ???
+      name: AsSlices, package: 2, receiver: 2, signature: 5,
       exported: true, loc: 13, metrics: 1,
       instances: [ 1, 2 ]
     },
-    { # 2.
-      name: PrintSlice, package: 2, signature: 26,
+    { # 2. ???
+      name: PrintSlice, package: 2, signature: 29,
       exported: true, loc: 25, metrics: 2,
       instances:  [ 3, 4 ],
       typeParams: [ 5, 4 ]
@@ -160,16 +172,16 @@
     }
   ],
   metrics: [
-    { # 1.
+    { # 1. ???
       loc: 13, codeCount: 11, complexity: 2, indents: 12, lineCount: 11,
-      reads:  [ interfaceDecl5, objectInst2, selection4 ],
-      writes: [ interfaceDecl5 ]
+      reads:  [ interfaceDecl4, objectInst2, selection4 ],
+      writes: [ interfaceDecl4 ]
     },
-    { # 2.
+    { # 2. ???
       loc: 25, codeCount: 10, complexity: 3, indents: 13, lineCount: 10,
       sideEffect: true
     },
-    { # 3.
+    { # 3. ???
       loc: 40, codeCount: 16, complexity: 1, indents: 26, lineCount: 16,
       sideEffect: true,
       invokes: [ methodInst3, methodInst4, selection1 ],
@@ -178,34 +190,34 @@
     }
   ],
   objectInsts: [
-    { # 1.
-      generic: 2, resData: 2, resInterface: 17,
+    { # 1. ???
+      generic: 2, resData: 2, resInterface: 18,
       instanceTypes: [ basic3, basic2, interfaceInst8 ],
-      methods: [ 1 ]
-    },
-    { # 2.
-      generic: 2, resData: 3, resInterface: 17,
-      instanceTypes: [ typeParam2, typeParam9, typeParam3 ],
       methods: [ 2 ]
+    },
+    { # 2. ???
+      generic: 2, resData: 3, resInterface: 17,
+      instanceTypes: [ typeParam2, typeParam8, typeParam3 ],
+      methods: [ 1 ]
     }
   ],
   objects: [
-    { # 1.
+    { # 1. ???
       name: Bacon, package: 2, data: 1,
       exported: true, interface: 1, loc: 36
     },
-    { # 2.
+    { # 2. ???
       name: Set, package: 2, data: 3,
-      exported: true, interface: 18, loc: 9,
+      exported: true, interface: 19, loc: 9,
       instances:  [ 1, 2 ],
       methods:    [ 1 ],
-      typeParams: [ 1, 9, 3 ]
+      typeParams: [ 1, 8, 3 ]
     }
   ],
   packages: [
     { # 1. $builtin package
       name: $builtin, path: $builtin,
-      interfaces: [ 1, 2, 3, 4, 5 ]
+      interfaces: [ 1, 2, 3, 4 ]
     },
     { # 2. main package
       name: main, path: command-line-arguments,
@@ -213,40 +225,41 @@
     }
   ],
   selections: [
-    { name: AsSlices, origin: object1 },     # 1.
-    { name: Set,      origin: object1 },     # 2.
-    { name: m,        origin: objectInst1 }, # 3.
-    { name: m,        origin: objectInst2 }  # 4.
+    { name: AsSlices, origin: object1 },     # 1. ???
+    { name: Set,      origin: object1 },     # 2. ???
+    { name: m,        origin: objectInst1 }, # 3. ???
+    { name: m,        origin: objectInst2 }  # 4. ???
   ],
   signatures: [
     {},                                     #  1. func()()
     { results: [ 1 ] },                     #  2. func() int
-    { results: [ 2, 2 ] },                  #  3. func() ???
-    { results: [ 4, 3 ] },                  #  4. func() ???
-    { results: [ 5 ] },                     #  5. func() ???
-    { results: [ 6 ] },                     #  6. func() V <any>
-    { params: [ 8 ], results: [ 16 ] },     #  7. func(index int)(value string)
-    { params: [ 8 ], results: [ 17 ] },     #  8. func(index int) ???
-    { params: [ 8 ], results: [ 18 ] },     #  9. func(index int) ???
-    { params: [ 8 ], results: [ 19 ] },     # 10. func(index int) ???
-    { params: [ 8 ], results: [ 20 ] },     # 11. func(index int) ???
-    { params: [ 8 ], results: [ 21 ] },     # 12. func(index int) ???
-    { params: [ 8, 16 ] },                  # 13. func(index int, value string )
-    { params: [ 8, 17 ] },                  # 14. func(index int, ??? )
-    { params: [ 8, 18 ] },                  # 15. func(index int, ??? )
-    { params: [ 8, 19 ] },                  # 16. func(index int, ??? )
-    { params: [ 8, 20 ] },                  # 17. func(index int, ??? )
-    { params: [ 8, 21 ] },                  # 18. func(index int, ??? )
-    { params: [ 9 ], results: [ 17, 7 ] },  # 19. func(key string)( ???, found bool)
-    { params: [ 9, 17 ] },                  # 20. func(key string, ??? )
-    { params: [ 10 ], results: [ 18, 7 ] }, # 21. func( ??? )( ???, found bool)
-    { params: [ 10, 18 ] },                 # 22. func( ???, ??? )
-    { params: [ 11 ], results: [ 22, 7 ] }, # 23. func( ??? )( ???, found bool)
-    { params: [ 11, 22 ] },                 # 24. func( ???, ??? )
-    { params: [ 12 ], results: [ 1 ] },     # 25. func(other any) int
-    { params: [ 13 ] },                     # 26. func( ??? )
-    { params: [ 14 ] },                     # 27. func( ??? )
-    { params: [ 15 ] }                      # 28. func( ??? )
+    { results: [ 2, 3 ] },                  #  3. func() ???
+    { results: [ 2, 4 ] },                  #  4. func() ???
+    { results: [ 6, 5 ] },                  #  5. func() ???
+    { results: [ 7 ] },                     #  6. func() V <any> ???
+    { results: [ 8 ] },                     #  6. func() V <any> ???
+    { params: [ 10 ], results: [ 18 ] },    #  7. func(index int)(value string)
+    { params: [ 10 ], results: [ 19 ] },    #  8. func(index int) ???
+    { params: [ 10 ], results: [ 20 ] },    #  9. func(index int) ???
+    { params: [ 10 ], results: [ 21 ] },    # 10. func(index int) ???
+    { params: [ 10 ], results: [ 22 ] },    # 11. func(index int) ???
+    { params: [ 10 ], results: [ 23 ] },    # 12. func(index int) ???
+    { params: [ 10, 18 ] },                 # 13. func(index int, value string )
+    { params: [ 10, 19 ] },                 # 14. func(index int, ??? )
+    { params: [ 10, 20 ] },                 # 15. func(index int, ??? )
+    { params: [ 10, 21 ] },                 # 16. func(index int, ??? )
+    { params: [ 10, 22 ] },                 # 17. func(index int, ??? )
+    { params: [ 10, 23 ] },                 # 18. func(index int, ??? )
+    { params: [ 11 ], results: [ 20, 9 ] }, # 19. func(key string)( ???, found bool)
+    { params: [ 11, 20 ] },                 # 20. func(key string, ??? )
+    { params: [ 12 ], results: [ 21, 9 ] }, # 21. func( ??? )( ???, found bool)
+    { params: [ 12, 21 ] },                 # 22. func( ???, ??? )
+    { params: [ 13 ], results: [ 24, 9 ] }, # 23. func( ??? )( ???, found bool)
+    { params: [ 13, 24 ] },                 # 24. func( ???, ??? )
+    { params: [ 14 ], results: [ 1 ] },     # 25. func(other any) int
+    { params: [ 15 ] },                     # 26. func( ??? )
+    { params: [ 16 ] },                     # 27. func( ??? )
+    { params: [ 17 ] }                      # 28. func( ??? )
   ],
   structDescs: [
     { fields: [ 1 ] }, # 1. struct{ Set ??? }
@@ -254,14 +267,13 @@
     { fields: [ 3 ] }  # 3. struct{ m ??? }
   ],
   typeParams: [
-    { name: K,      type: interfaceDecl5 }, # 1. K comparable
+    { name: K,      type: interfaceDecl4 }, # 1. K comparable
     { name: K,      type: interfaceDesc1 }, # 2. K any
     { name: M,      type: interfaceDesc3 }, # 3. M ???
-    { name: S,      type: interfaceDesc2 }, # 4. S ???
-    { name: T,      type: interfaceDecl4 }, # 5. T any
+    { name: S,      type: interfaceDesc2 }, # 4. S ~List[ ??? ]
     { name: T,      type: interfaceDesc1 }, # 6. T any
-    { name: TKey,   type: interfaceDecl5 }, # 7. TKey comparable
-    { name: TValue, type: interfaceDecl4 }, # 8. TValue any
+    { name: TKey,   type: interfaceDecl4 }, # 7. TKey comparable
+    { name: TValue, type: interfaceDesc1 }, # 8. TValue any
     { name: V,      type: interfaceDesc1 }  # 9. V any
   ],
   locs: {

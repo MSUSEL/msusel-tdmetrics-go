@@ -60,20 +60,20 @@
   ],
   methods: [
     { # 1. maim.main func()()
-      name: main, package: 1, signature: 1, loc: 33, metrics: 3
+      name: main, package: 1, signature: 1, loc: 35, metrics: 3
     }
   ],
   metrics: [
     { # 1.
-      codeCount: 1, complexity: 1, lineCount: 1, loc: 30,
+      codeCount: 1, complexity: 1, lineCount: 1, loc: 31,
       writes: [ interfaceDecl3 ]
     },
     { # 2.
-      codeCount: 1, complexity: 1, lineCount: 1, loc: 31,
+      codeCount: 1, complexity: 1, lineCount: 1, loc: 32,
       writes: [ interfaceDecl2 ]
     },
     { # 3.
-      codeCount: 3, complexity: 1, indents: 1, lineCount: 3, loc: 33,
+      codeCount: 3, complexity: 1, indents: 1, lineCount: 3, loc: 35,
       sideEffect: true # b/c println
     }
   ],
@@ -93,11 +93,11 @@
   ],
   values: [
     { # 1.
-      name: _, package: 1, loc: 30,
+      name: _, package: 1, loc: 31,
       type: interfaceDecl1, metrics: 1
     },
     { # 2.
-      name: _, package: 1, loc: 31,
+      name: _, package: 1, loc: 32,
       type: interfaceDecl4, metrics: 2
     }
   ],
