@@ -39,7 +39,8 @@ func main() {
   //ppa.Bar() // ppa.Bar undefined (type **A has no field or method Bar)
   _ = ppa
 
-  //var ba B = a // cannot use a (variable of type A) as B value in variable declaration: A does not implement B (method Bar has pointer receiver)
+  //var ba B = a // cannot use a (variable of type A) as B value in variable declaration:
+                 // A does not implement B (method Bar has pointer receiver)
 
   var bpa B = pa
   //bpa[`bpa`] = 4 // invalid operation: cannot index bpa (variable of type B)
@@ -47,7 +48,7 @@ func main() {
   bpa.Bar()
 
   var pbpa *B = &bpa
-  //pbpa[`pbpa`] = 6 // invalid operation: cannot index pbpa (variable of type *B)
+  //pbpa[`pbpa`] = 5 // invalid operation: cannot index pbpa (variable of type *B)
   //pbpa.Foo() // pbpa.Foo undefined (type *B is pointer to interface, not interface)
   //pbpa.Bar() // pbpa.Bar undefined (type *B is pointer to interface, not interface)
   _ = pbpa

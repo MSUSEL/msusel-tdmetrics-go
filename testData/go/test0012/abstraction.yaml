@@ -1,67 +1,101 @@
 {
   language: go,
-  basics: [
-    int,   # 1. int
-    string # 2. string
-  ],
-  classes: [
-    { # 3. main.Y { int }{ ??? }
-      name: Y, package: 13, data: 1, interface: 5, loc: 13,
-      methods: [ 7 ]
+  abstracts: [
+    { # 1. String() string
+      exported: true, name: String, signature: 2
     }
   ],
-  interDefs: [
-    { # 4. main.X interface { ~int; String() string }
-      name: X, package: 13, type: 6, loc: 8
+  arguments: [
+    { type: basic2 },             # 1. <unnamed> string
+    { name: x, type: typeParam2 } # 2. x T <interface{ ~int, String() string }>
+  ],
+  basics: [ int, string ],
+  fields: [
+    { # 1. $data int
+      exported: true, name: $data, type: basic1
     }
   ],
-  interfaces: [
-    { # 5. interface { String() string }
-      methods: [ 10 ]
+  interfaceDecls: [
+    { # 1. X{ ~int, String() string }
+      name: X, package: 1, interface: 2, exported: true, loc: 8 
+    }
+  ],
+  interfaceDescs: [
+    { # 1. interface{ String() string }
+      abstracts: [ 1 ]
     },
-    { # 6. interface { ~int; String() string }
-      inherits: [ 5 ],
-      methods: [ 10 ],
-      approx: [ 1 ]
+    { # 2. interface{ ~int, String() string }
+      abstracts: [ 1 ], approx: [ basic1 ], inherits: [ 1 ]
+    }
+  ],
+  methodInsts: [
+    { # 1. Z[Y](x Y)
+      generic: 2, resolved: 3, instanceTypes: [ object1 ]
     }
   ],
   methods: [
-    { # 7. func (Y) String() string @ main.go:15
-      name: String, package: 13, receiver: 3, signature: 15, loc: 15,
-      metrics: { codeCount: 3, complexity: 1, indents: 1, lineCount: 3 }
+    { # 1. String() string
+      name: String, package: 1, receiver: 1, signature: 2,
+      exported: true, loc: 15, metrics: 1
     },
-    { # 8. func Z[T interface { ~int; String() string }](x T) @ main.go:19
-      name: Z, package: 13, signature: 16, loc: 19,
-      metrics: { codeCount: 3, complexity: 1, indents: 1, lineCount: 3 }
+    {
+      # TODO: Shouldn't this be `typeParams[2]`?
+      # 2. Z[T interface{ String() string }](x T <interface{ ~int, String() string }>)
+      name: Z, package: 1, signature: 3,
+      exported: true, loc: 19, metrics: 2,
+      typeParams: [ 1 ], instances: [ 1 ]
     },
-    { # 9. func main.main() @ main.go:23
-      name: main, package: 13, signature: 14, loc: 23,
-      metrics: { codeCount: 4, complexity: 1, indents: 2, lineCount: 4 }
+    { # 3. main()
+      name: main, package: 1, signature: 1,
+      loc: 23, metrics: 3
     }
   ],
-  named: [
-    { name: String, type: 15 }, # 10. func String() string
-    { name: T,      type:  6 }, # 11. T interface { ~int; String() string }
-    { name: x,      type: 11 }  # 12. x T
+  metrics: [
+    { # 1. `String() string` metrics
+      codeCount: 3, complexity: 1, getter: true,
+      indents: 1, lineCount: 3, loc: 15
+    },
+    { # 2. `Z[T](x T)` metrics
+      codeCount: 3, complexity: 1, indents: 1, lineCount: 3, loc: 19,
+      sideEffect: true,
+      invokes: [ selection1 ],
+      reads: [ interfaceDecl1 ]
+    },
+    { # 3. `main()` metrics
+      codeCount: 4, complexity: 1, indents: 2, lineCount: 4, loc: 23,
+      invokes: [ methodInst1 ],
+      reads: [ object1 ],
+      writes: [ object1 ]
+    }
+  ],
+  objects: [
+    { # 1. Y{ $data int }
+      name: Y, package: 1, interface: 1, data: 1,
+      exported: true, loc: 13, methods: [ 1 ]
+    }
   ],
   packages: [
-    { # 13. main package
-      name: main,
-      path: command-line-arguments,
-      classes: [ 3 ],
-      interDefs: [ 4 ],
-      methods: [ 7, 8, 9 ]
+    { # 1. main package
+      name: main, path: command-line-arguments,
+      interfaces: [ 1 ], methods: [ 1, 2, 3 ], objects: [ 1 ],
+    }
+  ],
+  selections: [
+    { # 1. interface{ String() string }.String()
+      name: String, origin: interfaceDecl1
     }
   ],
   signatures: [
-    {}, # 14. func()()
-    {   # 15. func() string
-      return: 2
-    },
-    { # 16. func[T interface { ~int; String() string }](x T)
-      typeParams: [ 11 ],
-      params: [ 12 ]
-    }
+    {},                 # 1. func()
+    { results: [ 1 ] }, # 2. func() string
+    { params: [ 2 ] }   # 3. func(x T <interface{ ~int, String() string }>)
+  ],
+  structDescs: [
+    { fields: [ 1 ], synthetic: true } # 1. $data int
+  ],
+  typeParams: [
+    { name: T, type: interfaceDecl1 }, # 1. T interface{ String() string }
+    { name: T, type: interfaceDesc2 }  # 2. T interface{ ~int, String() string }
   ],
   locs: {
     '1': main.go
