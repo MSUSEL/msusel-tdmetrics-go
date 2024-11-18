@@ -29,7 +29,7 @@ jobs:
           os: windows-latest
         - name: MacOS
           os: macos-latest
-    name: Go Abstractor (${{ matrix.trials.name }})
+    name: Go Abstractor Tests (${{ matrix.trials.name }})
     runs-on: ${{ matrix.trials.os }}
     steps:
       - uses: actions/checkout@v4
@@ -48,7 +48,7 @@ jobs:
         run: go test -cover ./...
  
   goLint:
-    name: lint
+    name: Go Abstractor Lint
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
