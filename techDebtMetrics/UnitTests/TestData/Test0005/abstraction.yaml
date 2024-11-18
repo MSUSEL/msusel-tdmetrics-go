@@ -1,165 +1,236 @@
 # This abstraction is the same as goAbstractor/tests/test0005/expected.yaml
 {
   language: go,
-  packages: [
-    {
-      path: command-line-arguments,
-      name: cats,
-      methods: [
-        { # NewCat(name string, age int) *Cat
-          name: NewCat, signature: 25,
-          metrics: { codeCount: 6, complexity: 1, indents: 6, lineCount: 6 }
-        },
-        { # NextYear(cats ...*Cat)
-          name: NextYear, signature: 28,
-          metrics: { codeCount: 5, complexity: 2, indents: 4, lineCount: 5 }
-        },
-        { # Pet(c *Cat)
-          name: Pet, signature: 20,
-          metrics: { codeCount: 3, complexity: 1, indents: 1, lineCount: 3 }
-        }
+  abstracts: [
+    { name: $deref,   signature:  5, exported: true }, #  1. func $deref() Cat
+    { name: $deref,   signature:  6, exported: true }, #  2. func $deref() T<any>
+    { name: $get,     signature:  9, exported: true }, #  3. func $get(index int) (value Pointer[Cat])
+    { name: $get,     signature: 10, exported: true }, #  4. func $get(index int) (value T<any>)
+    { name: $len,     signature:  2, exported: true }, #  5. func $len() int
+    { name: $set,     signature: 11, exported: true }, #  6. func $set(index int, value Pointer[Cat])
+    { name: $set,     signature: 12, exported: true }, #  7. func $set(index int, value T<any>)
+    { name: Meow,     signature:  1, exported: true }, #  8. func Meow()
+    { name: Play,     signature:  7, exported: true }, #  9. func Play(c Pointer[Cat])
+    { name: String,   signature:  3, exported: true }, # 10. func String() string
+    { name: Youngest, signature:  4, exported: true }  # 11. func Youngest() Pointer[Cat]
+  ],
+  arguments: [
+    {              type: basic1         }, #  1. <unnamed> int
+    {              type: basic2         }, #  2. <unnamed> string
+    {              type: interfaceInst1 }, #  3. <unnamed> Pointer[Cat]
+    {              type: object1        }, #  4. <unnamed> Cat
+    {              type: typeParam1     }, #  5. <unnamed> T<any>
+    { name: age,   type: basic1         }, #  6. age int
+    { name: c,     type: interfaceInst1 }, #  7. c Pointer[Cat]
+    { name: cats,  type: interfaceInst2 }, #  8. cats List[Pointer[Cat]]
+    { name: index, type: basic1         }, #  9. index int
+    { name: name,  type: basic2         }, # 10. name string
+    { name: value, type: basic2         }, # 11. value string
+    { name: value, type: interfaceInst1 }, # 12. value Pointer[Cat]
+    { name: value, type: typeParam1     }  # 13. value T<any>
+  ],
+  basics: [
+    int,   # 1. int
+    string # 2. string
+  ],
+  fields: [
+    { name: $data, type: interfaceInst2, exported: true }, # 1. $data List[Pointer[Cat]]
+    { name: Age,   type: basic1,         exported: true }, # 2. Age int
+    { name: Name,  type: basic2,         exported: true }  # 3. Name string
+  ],
+  interfaceDecls: [
+    { # 1. interface List[T any]{ $len() int; $get(int) T<any>; $set(int, T<any>) }
+      name: List, package: 1, interface: 5, exported: true,
+      typeParams: [ 1 ],
+      instances:  [ 2 ]
+    },
+    { # 2. interface Pointer[T any]{ $deref() T<any> }
+      name: Pointer, package: 1, interface: 3, exported: true,
+      typeParams: [ 1 ],
+      instances:  [ 1 ]
+    },
+    { # 3. interface cats.Toy{ Play(c Pointer[Cat]) } @ main.go:13
+      name: Toy, package: 2, interface: 6, loc: 13, exported: true
+    }
+  ],
+  interfaceDescs: [
+    {}, # 1. interface{}
+    {   # 2. interface{ $deref() Cat; Meow(); String() string }
+      abstracts: [ 1, 8, 10 ], inherits: [ 1 ], hint: pointer
+    },
+    { # 3. interface{ $deref() T<any> }
+      abstracts: [ 2 ], inherits: [ 1 ], hint: pointer
+    },
+    { # 4. interface{ $len() int; $get(int) Pointer[Cat]; $set(int, Pointer[Cat]) }
+      abstracts: [ 5, 3, 6 ], inherits: [ 1 ], hint: list
+    },
+    { # 5. interface{ $len() int; $get(int) T<any>; $set(int, T<any>) }
+      abstracts: [ 5, 4, 7 ], inherits: [ 1 ], hint: list
+    },
+    { # 6. interface{ Play(c Pointer[Cat]) }
+      abstracts: [ 9 ], inherits: [ 1 ]
+    },
+    { # 7. interface{ Youngest() Pointer[Cat]; $len() int;
+      #               $get(index int) (value Pointer[Cat]);
+      #               $set(index int, value Pointer[Cat]) }
+      abstracts: [ 11, 5, 3, 6 ], inherits: [ 1 ]
+    }
+  ],
+  interfaceInsts: [
+    { # 1. Pointer[Cat]{ $deref() Cat }
+      generic: 2, resolved: 2,
+      instanceTypes: [ object1 ],
+    },
+    { # 2. List[Pointer[Cat]]{ $len() int; $get(int) Pointer[Cat]; $set(int, Pointer[Cat]) }
+      generic: 1, resolved: 4,
+      instanceTypes: [ interfaceInst1 ]
+    }
+  ],
+  methods: [
+    { # 1. func (*cats.Cat) Meow() @ main.go:36
+      name: Meow, package: 2, receiver: 1, signature: 1,
+      loc: 35, metrics: 3, exported: true, ptrRecv: true
+    },
+    { # 2. func NewCat(name string, age int) Pointer[Cat] @ main.go:27
+      name: NewCat, package: 2, signature: 13,
+      loc: 26, metrics: 2, exported: true
+    },
+    { # 3. func NextYear(cats ...List[Pointer[Cat]]) @ main.go:46
+      name: NextYear, package: 2, signature: 8,
+      loc: 45, metrics: 5, exported: true
+    },
+    { # 4. func Pet(c Pointer[Cat]) @ main.go:65
+      name: Pet, package: 2, signature: 7,
+      loc: 64, metrics: 7, exported: true
+    },
+    { # 5. func (*cats.Cat) String() string @ main.go:41
+      name: String, package: 2, receiver: 1, signature: 3,
+      loc: 40, metrics: 4, exported: true, ptrRecv: true
+    },
+    { # 6. func (cats.Cats) Youngest() Cat @ main.go:53
+      name: Youngest, package: 2, receiver: 2, signature: 4,
+      loc: 52, metrics: 6, exported: true
+    }
+  ],
+  metrics: [
+    { # 1. cats.log @ main.go:23
+      codeCount: 1, complexity: 1, lineCount: 1, loc: 23,
+      sideEffect: true # b/c println
+    },
+    { # 2. NewCat @ main.go:26
+      codeCount: 6, complexity: 1, indents: 6, lineCount: 6, loc: 26,
+      reads: [ object1 ], # Cat
+      writes: [
+        object1,    # Cat
+        selection2, # Cat.Age
+        selection4  # Cat.Name
+      ]
+    },
+    { # 3. Cat.Meow @ main.go:35
+      codeCount: 3, complexity: 1, indents: 1, lineCount: 3, loc: 35,
+      invokes: [ value1 ], # log(value string)
+      reads: [
+        interfaceInst1, # Pointer[Cat]
+        selection3      # Pointer[Cat].Name
+      ]
+    },
+    { # 4. Cat.String @ main.go:40
+      codeCount: 3, complexity: 1, indents: 1, lineCount: 3, loc: 40,
+      getter: true,
+      reads: [
+        interfaceInst1, # Pointer[Cat]
+        selection3      # Pointer[Cat].Name
+      ]
+    },
+    { # 5. NextYear @ main.go:45
+      codeCount: 5, complexity: 2, indents: 4, lineCount: 5, loc: 45,
+      # TODO: This should read from List[Pointer[Cat]] because of the for-range.
+      reads: [ interfaceInst1 ], # Pointer[Cat]
+      writes: [
+        interfaceInst1, # Pointer[Cat]
+        selection1      # Pointer[Cat].Age
+      ]
+    },
+    { # 6. Cats.Youngest @ main.go:52
+      codeCount: 9, complexity: 4, indents: 11, lineCount: 9, loc: 52,
+      # TODO: This should read from List[Pointer[Cat]] because of the for-range.
+      reads: [
+        interfaceInst1, # Pointer[Cat]
+        object1,        # Cat
+        object2,        # Cats
+        selection1      # Pointer[Cat].Age
       ],
-      types: [
-        { # 33. Cat struct { Name string; Age int }
-          name: Cat, type: 32, interface: 7,
-          methods: [
-            { # func (c *Cat) Meow()
-              name: Meow, signature: 26,
-              metrics: { codeCount: 3, complexity: 1, indents: 1, lineCount: 3 }
-            },
-            { # func (c *Cat) String() string
-              name: String, signature: 27,
-              metrics: { codeCount: 3, complexity: 1, indents: 1, lineCount: 3 }
-            }
-          ]
-        },
-        { # 34. Toy interface { Play(c *Cat) }
-          name: Toy, type: 5, interface: 5
-        },
-        { # 35. Cats []*Cat
-          name: Cats, type: 31, interface: 8,
-          methods: [
-            { # func (cats Cats) Youngest() *Cat
-              name: Youngest, signature: 29,
-              metrics: { codeCount: 9, complexity: 4, indents: 11, lineCount: 9 }
-            }
-          ]
-        }
-      ],
-      values: [
-        { name: log, type: 24 } # log func(value string)
+      writes: [ interfaceInst1 ] # Pointer[Cat]
+    },
+    { # 7. Pet(c Pointer[Cat]) @ main.go:64
+      codeCount: 3, complexity: 1, indents: 1, lineCount: 3, loc: 64,
+      invokes: [ value1 ], # log(value string)
+      reads: [
+        interfaceInst1, # Pointer[Cat]
+        selection3      # Pointer[Cat].Name
       ]
     }
   ],
-  types: {
-    basics: [
-      string, # 1. string
-      int     # 2. int
-    ],
-    interfaces: [
-      {}, # 3. any
-      {   # 4. pointer[T]
-        inherits: [ 3 ],
-        typeParams: [ 11 ],
-        methods: {
-          $deref: 19
-        }
-      },
-      { # 5. interface { Play(c *Cat) }
-        inherits: [ 3 ],
-        methods: {
-          Play: 20
-        }
-      },
-      { # 6. list[T]
-        inherits: [ 3 ],
-        typeParams: [ 11 ],
-        methods: {
-          $cap: 21,
-          $get: 22,
-          $len: 21,
-          $set: 23
-        }
-      },
-      { # 7. interface { Meow(); String() string }
-        inherits: [ 3 ],
-        methods: {
-          Meow: 26,
-          String: 27
-        }
-      },
-      { # 8. interface { Youngest() *Cat }
-        inherits: [ 3 ],
-        methods: {
-          Youngest: 29
-        }
-      }
-    ],
-    named: [
-      { name: Name,  type:  1 }, #  9. Name string
-      { name: Age,   type:  2 }, # 10. Age int
-      { name: T,     type:  3 }, # 11. T any
-      { name: c,     type: 30 }, # 12. c *Cat
-      { name: index, type:  2 }, # 13. index int
-      { name: value, type: 11 }, # 14. value T
-      { name: value, type:  1 }, # 15. value string
-      { name: name,  type:  1 }, # 16. name string
-      { name: age,   type:  2 }, # 17. age int
-      { name: cats,  type: 31 }  # 18. cats []*Cat
-    ],
-    signatures: [
-      { # 19. func[T any]() T
-        typeParams: [ 11 ],
-        return: 11
-      },
-      { # 20. func(c *Cat)
-        params: [ 12 ]
-      },
-      { # 21. func() int
-        return: 2
-      },
-      { # 22. func[T any](index int) T
-        typeParams: [ 11 ],
-        params: [ 13 ],
-        return: 11
-      },
-      { # 23. func[T any](index int, value T)
-        typeParams: [ 11 ],
-        params: [ 13, 14 ]
-      },
-      { # 24. func(value string)
-        params: [ 15 ]
-      },
-      { # 25. func(name string, age int) *Cat
-        params: [ 16, 17 ],
-        return: 30
-      },
-      {}, # 26. func()
-      { # 27. func() string
-        return: 1
-      },
-      { # 28. func(cats ...*Cat)
-        params: [ 18 ],
-        variadic: true
-      },
-      { # 29. func() *Cat
-        return: 30
-      }
-    ],
-    solids: [
-      { # 30. *Cat
-        typeParams: [ 33 ],
-        target: 4
-      },
-      { # 31. []*Cat
-        typeParams: [ 30 ],
-        target: 6
-      }
-    ],
-    structs: [
-      { # 32. struct { Name string; Age int }
-        fields: [ 9, 10 ]
-      }
-    ],
+  objects: [
+    { # 1. Cat { Name string; Age int }{ <only pointer methods> } @ main.go:7
+      name: Cat, package: 2, data: 2, interface: 1, loc: 7, exported: true,
+      methods: [ 1, 5 ]
+    },
+    { # 2. Cats { $data List[Pointer[Cat]] }{ Youngest; $len; $get; $set } @ main.go:19
+      name: Cats, package: 2, data: 1, interface: 7, loc: 19, exported: true,
+      methods: [ 6 ]
+    }
+  ],
+  packages: [
+    { # 1. package $builtin
+      name: $builtin,
+      path: $builtin,
+      interfaces: [ 1, 2 ]
+    },
+    { # 2. package cats
+      name: cats,
+      path: command-line-arguments,
+      interfaces: [ 3 ],
+      methods:    [ 1, 2, 3, 4, 5, 6 ],
+      objects:    [ 1, 2 ],
+      values:     [ 1 ]
+    }
+  ],
+  selections: [
+    { name: Age,  origin: interfaceInst1 }, # 1. Pointer[Cat].Age
+    { name: Age,  origin: object1 },        # 2. Cat.Age
+    { name: Name, origin: interfaceInst1 }, # 3. Pointer[Cat].Name
+    { name: Name, origin: object1 }         # 4. Cat.Name
+  ],
+  signatures: [
+    {},                                     #  1. func()()
+    { results: [ 1 ] },                     #  2. func() int
+    { results: [ 2 ] },                     #  3. func() string
+    { results: [ 3 ] },                     #  4. func() Pointer[Cat]
+    { results: [ 4 ] },                     #  5. func() Cat
+    { results: [ 5 ] },                     #  6. func() T<any>
+    { params: [ 7 ] },                      #  7. func(c Pointer[Cat])
+    { params: [ 8 ], variadic: true },      #  8. func(cats ...List[Pointer[Cat]])
+    { params: [ 9 ], results: [ 12 ] },     #  9. func(index int) (value Pointer[Cat])
+    { params: [ 9 ], results: [ 13 ] },     # 10. func(index int) (value T<any>)
+    { params: [  9, 12 ] },                 # 11. func(index int, value Pointer[Cat])
+    { params: [  9, 13 ] },                 # 12. func(index int, value T<any>)
+    { params: [ 10,  6 ], results: [ 3 ] }, # 13. func(name string, age int) Pointer[Cat]
+    { params: [ 11 ] }                      # 14. func(value string)
+  ],
+  structDescs: [
+    { fields: [ 1 ], synthetic: true }, # 1. struct{ $data List[Pointer[Cat]] }
+    { fields: [ 3, 2 ] }                # 2. struct{ Name string; Age int }
+  ],
+  typeParams: [
+    { name: T, type: interfaceDesc1 } # 1. T any
+  ],
+  values: [
+    { # 1. cats.log := func(value string) @ main.go:23
+      name: log, package: 2, type: signature14, loc: 23, metrics: 1
+    }
+  ],
+  locs: {
+    '1': cats.go
   }
 }

@@ -16,7 +16,7 @@ predetermine which types would duck-type and define that via implementations.
     - [Declarations](#declarations)
     - [Indices](#indices)
     - [Keys](#keys)
-    - [Additional Information](#additional-information)
+    - [Extra Information](#extra-information)
   - [Schema](#schema)
     - [Project](#project)
     - [Abstract](#abstract)
@@ -129,7 +129,7 @@ names by adding an "s" to any kind that doesn't already end in an "s"
 (i.e. `metrics` is still `metrics`) as basic pluralization of the kind name.
 The second capture is the index into the list for the project's item.
 
-### Additional Information
+### Extra Information
 
 The JSON may contain additional information about scoping or how information
 was defined. This additional information can be ignored for most cases.
@@ -165,28 +165,28 @@ reduce the size of the JSON file.
 The project is the top most JSON object. It contains lists of all the
 constructs and additional information about the project.
 
-| Name             | Optional | Description |
-|:-----------------|:--------:|:------------|
-| `abstracts`      | ⬤ | List of [abstracts](#abstract) |
-| `arguments`      | ⬤ | List of [arguments](#argument) |
-| `basics`         | ⬤ | List of [basics](#basic) |
-| `fields`         | ⬤ | List of [Fields](#field) |
-| `interfaceDecls` | ⬤ | List of [interface declarations](#interface-declaration) |
-| `interfaceDescs` | ⬤ | List of [interface descriptions](#interface-description) |
-| `interfaceInsts` | ⬤ | List of [interface instances](#interface-instance) |
-| `language`       | ◯ | A string for the source code language, e.g. `go`, `java`. |
-| `locs`           | ◯ | [locations](#locations) |
-| `methods`        | ⬤ | List of [methods](#method) |
-| `methodInsts`    | ⬤ | List of [method instances](#method-instance) |
-| `metrics`        | ⬤ | List of [metrics](#metrics) |
-| `objects`        | ⬤ | List of [objects](#object) |
-| `objectInsts`    | ⬤ | List of [object instances](#object-instance) |
-| `packages`       | ⬤ | List of [packages](#package) |
-| `selections`     | ⬤ | List of [selections](#selection) |
-| `signatures`     | ⬤ | List of [signatures](#signature) |
-| `structDescs`    | ⬤ | List of [structure descriptions](#structure-description) |
-| `typeParams`     | ⬤ | List of [type parameters](#type-parameter) |
-| `values`         | ⬤ | List of [values](#value) |
+| Name             | Optional | Extra | Description |
+|:-----------------|:--------:|:-----:|:------------|
+| `abstracts`      | ⬤ | ◯ | List of [abstracts](#abstract) |
+| `arguments`      | ⬤ | ◯ | List of [arguments](#argument) |
+| `basics`         | ⬤ | ◯ | List of [basics](#basic) |
+| `fields`         | ⬤ | ◯ | List of [Fields](#field) |
+| `interfaceDecls` | ⬤ | ◯ | List of [interface declarations](#interface-declaration) |
+| `interfaceDescs` | ⬤ | ◯ | List of [interface descriptions](#interface-description) |
+| `interfaceInsts` | ⬤ | ◯ | List of [interface instances](#interface-instance) |
+| `language`       | ◯ | ◯ | A string for the source code language, e.g. `go`, `java`. |
+| `locs`           | ◯ | ◯ | [locations](#locations) |
+| `methods`        | ⬤ | ◯ | List of [methods](#method) |
+| `methodInsts`    | ⬤ | ◯ | List of [method instances](#method-instance) |
+| `metrics`        | ⬤ | ◯ | List of [metrics](#metrics) |
+| `objects`        | ⬤ | ◯ | List of [objects](#object) |
+| `objectInsts`    | ⬤ | ◯ | List of [object instances](#object-instance) |
+| `packages`       | ⬤ | ◯ | List of [packages](#package) |
+| `selections`     | ⬤ | ◯ | List of [selections](#selection) |
+| `signatures`     | ⬤ | ◯ | List of [signatures](#signature) |
+| `structDescs`    | ⬤ | ◯ | List of [structure descriptions](#structure-description) |
+| `typeParams`     | ⬤ | ◯ | List of [type parameters](#type-parameter) |
+| `values`         | ⬤ | ◯ | List of [values](#value) |
 
 ### Abstract
 
@@ -204,13 +204,13 @@ interface {
 }
 ```
 
-| Name        | Optional | Description |
-|:------------|:--------:|:------------|
-| `exported`  | ⬤ | True if the scope is "exported". |
-| `index`     | ⬤ | The [index](#indices) of this abstract in the project's `abstracts` list. |
-| `kind`      | ⬤ | `abstract` |
-| `name`      | ◯ | The string name for the abstract. |
-| `signature` | ◯ | [Index](#indices) for the [signature](#signature). |
+| Name        | Optional | Extra | Description |
+|:------------|:--------:|:-----:|:------------|
+| `exported`  | ◯ | ⬤ | True if the scope is "exported". |
+| `index`     | ◯ | ⬤ | The [index](#indices) of this abstract in the project's `abstracts` list. |
+| `kind`      | ◯ | ⬤ | `abstract` |
+| `name`      | ◯ | ◯ | The string name for the abstract. |
+| `signature` | ◯ | ◯ | [Index](#indices) for the [signature](#signature). |
 
 ### Argument
 
@@ -223,12 +223,12 @@ may have different argument names from the method that it matches with.
 Any repeat type argument in Go is expanded, e.g. `Foo(x, y float64)` will
 have two arguments, `x float64` and `y float64`.
 
-| Name    | Optional | Description |
-|:--------|:--------:|:------------|
-| `index` | ⬤ | The [index](#indices) of this argument in the project's `arguments` list. |
-| `kind`  | ⬤ | `argument` |
-| `name`  | ⬤ | The optional string name for the argument. |
-| `type`  | ◯ | [Key](#keys) for any [type description](#type-descriptions). |
+| Name    | Optional | Extra | Description |
+|:--------|:--------:|:-----:|:------------|
+| `index` | ◯ | ⬤ | The [index](#indices) of this argument in the project's `arguments` list. |
+| `kind`  | ◯ | ⬤ | `argument` |
+| `name`  | ⬤ | ◯ | The optional string name for the argument. |
+| `type`  | ◯ | ◯ | [Key](#keys) for any [type description](#type-descriptions). |
 
 ### Basic
 
@@ -246,11 +246,14 @@ Compound built-in types, such as `error` and `complex64`, are replaced by
 interfaces with the components of the compound type accessible through
 the [abstracts](#abstract) of that interface.
 
-| Name    | Optional | Description |
-|:--------|:--------:|:------------|
-| `index` | ⬤ | The [index](#indices) of this basic in the project's `basics` list. |
-| `kind`  | ⬤ | `basic` |
-| `name`  | ◯ | The string name for the basic type, e.g. `int`, `bool`, `string`. |
+If the `index` and `kind` are not being outputted, then the basic type may
+be a string containing the name instead of an object.
+
+| Name    | Optional | Extra | Description |
+|:--------|:--------:|:-----:|:------------|
+| `index` | ◯ | ⬤ | The [index](#indices) of this basic in the project's `basics` list. |
+| `kind`  | ◯ | ⬤ | `basic` |
+| `name`  | ◯ | ◯ | The string name for the basic type, e.g. `int`, `bool`, `string`. |
 
 ### Field
 
@@ -268,14 +271,14 @@ struct {
 Any repeat type fields in Go is expanded, e.g. `struct { x, y float64 }` will
 have two fields, `x float64` and `y float64`.
 
-| Name       | Optional | Description |
-|:-----------|:--------:|:------------|
-| `embedded` | ⬤ | True if the field is from an embedded struct. |
-| `exported` | ⬤ | True if the scope is "exported". |
-| `index`    | ⬤ | The [index](#indices) of this field in the project's `fields` list. |
-| `kind`     | ⬤ | `field` |
-| `name`     | ◯ | The string name for the field. |
-| `type`     | ◯ | [Key](#keys) for any [type description](#type-descriptions). |
+| Name       | Optional | Extra | Description |
+|:-----------|:--------:|:-----:|:------------|
+| `embedded` | ◯ | ⬤ | True if the field is from an embedded struct. |
+| `exported` | ◯ | ⬤ | True if the scope is "exported". |
+| `index`    | ◯ | ⬤ | The [index](#indices) of this field in the project's `fields` list. |
+| `kind`     | ◯ | ⬤ | `field` |
+| `name`     | ◯ | ◯ | The string name for the field. |
+| `type`     | ◯ | ◯ | [Key](#keys) for any [type description](#type-descriptions). |
 
 ### Interface Declaration
 
@@ -289,17 +292,17 @@ type Foo[T any] interface {
 }
 ```
 
-| Name         | Optional | Description |
-|:-------------|:--------:|:------------|
-| `exported`   | ⬤ | True if the scope is "exported". |
-| `index`      | ⬤ | The [index](#indices) of this interface declaration in the project's `interfaceDecls` list. |
-| `instances`  | ⬤ | List of [indices](#indices) to [interface instances](#interface-instance). |
-| `interface`  | ◯ | The [index](#indices) to the declared [interface](#interface-description) type. |
-| `kind`       | ⬤ | `interfaceDecl` |
-| `loc`        | ⬤ | The [location](#locations) offset. |
-| `name`       | ◯ | The name of the declared interface. |
-| `package`    | ◯ | The [index](#indices) to the [package](#package) this declaration is declared in. |
-| `typeParams` | ⬤ | List of [indices](#indices) to [type parameters](#type-parameter) if this interface is generic. |
+| Name         | Optional | Extra | Description |
+|:-------------|:--------:|:-----:|:------------|
+| `exported`   | ◯ | ⬤ | True if the scope is "exported". |
+| `index`      | ◯ | ⬤ | The [index](#indices) of this interface declaration in the project's `interfaceDecls` list. |
+| `instances`  | ⬤ | ◯ | List of [indices](#indices) to [interface instances](#interface-instance). |
+| `interface`  | ◯ | ◯ | The [index](#indices) to the declared [interface](#interface-description) type. |
+| `kind`       | ◯ | ⬤ | `interfaceDecl` |
+| `loc`        | ⬤ | ◯ | The [location](#locations) offset. |
+| `name`       | ◯ | ◯ | The name of the declared interface. |
+| `package`    | ◯ | ◯ | The [index](#indices) to the [package](#package) this declaration is declared in. |
+| `typeParams` | ⬤ | ◯ | List of [indices](#indices) to [type parameters](#type-parameter) if this interface is generic. |
 
 ### Interface Description
 
@@ -307,15 +310,16 @@ An interface description (`interfaceDesc`) describes the type of an interface.
 This interface type may be the type for an interface declaration, interface
 instances, and interface literal, e.g. `interface { String() string }`.
 
-| Name        | Optional | Description |
-|:------------|:--------:|:------------|
-| `abstracts` | ⬤ | List of [indices](#indices) to [abstracts](#abstract). |
-| `approx`    | ⬤ | List of [keys](#keys) to any [type description](#type-descriptions) for approximate constraints. |
-| `exact`     | ⬤ | List of [keys](#keys) to any [type description](#type-descriptions) for exact constraints. |
-| `index`     | ⬤ | The [index](#indices) of this interface in the projects' `interfaceDescs` list. |
-| `inherits`  | ⬤ | List of [indices](#indices) to inherited [interfaces](#interface-description). |
-| `kind`      | ⬤ | `interfaceDesc` |
-| `package`   | ⬤ | The [index](#indices) to the [package](#package) this interface is pinned to. |
+| Name        | Optional | Extra | Description |
+|:------------|:--------:|:-----:|:------------|
+| `abstracts` | ⬤ | ◯ | List of [indices](#indices) to [abstracts](#abstract). |
+| `approx`    | ⬤ | ◯ | List of [keys](#keys) to any [type description](#type-descriptions) for approximate constraints. |
+| `exact`     | ⬤ | ◯ | List of [keys](#keys) to any [type description](#type-descriptions) for exact constraints. |
+| `hint`      | ◯ | ⬤ | A string indicating if the interface is a stand-in for a type, e.g. `pointer`, `chan`, `list` |
+| `index`     | ◯ | ⬤ | The [index](#indices) of this interface in the projects' `interfaceDescs` list. |
+| `inherits`  | ⬤ | ◯ | List of [indices](#indices) to inherited [interfaces](#interface-description). |
+| `kind`      | ◯ | ⬤ | `interfaceDesc` |
+| `package`   | ⬤ | ◯ | The [index](#indices) to the [package](#package) this interface is pinned to. |
 
 ### Interface Instance
 
@@ -326,13 +330,13 @@ The instance types may be type parameters as well as a fully realized type.
 For example, `type Foo[T any] interface { Value() T }` with instance type `bool`
 will create `type Foo[bool] interface { Value() bool }`.
 
-| Name            | Optional | Description |
-|:----------------|:--------:|:------------|
-| `generic`       | ◯ | The [index](#indices) of the generic [interface declaration](#interface-declaration) this is an instance of. |
-| `index`         | ⬤ | The [index](#indices) of this interface in the projects' `interfaceInsts` list. |
-| `instanceTypes` | ◯ | List of [keys](#keys) to any [type description](#type-descriptions) for type arguments. |
-| `kind`          | ⬤ | `interfaceInst` |
-| `resolved`      | ◯ | The [index](#indices) to the resolved [interface description](#interface-description) this instance defines. |
+| Name            | Optional | Extra | Description |
+|:----------------|:--------:|:-----:|:------------|
+| `generic`       | ◯ | ◯ | The [index](#indices) of the generic [interface declaration](#interface-declaration) this is an instance of. |
+| `index`         | ◯ | ⬤ | The [index](#indices) of this interface in the projects' `interfaceInsts` list. |
+| `instanceTypes` | ◯ | ◯ | List of [keys](#keys) to any [type description](#type-descriptions) for type arguments. |
+| `kind`          | ◯ | ⬤ | `interfaceInst` |
+| `resolved`      | ◯ | ◯ | The [index](#indices) to the resolved [interface description](#interface-description) this instance defines. |
 
 ### Locations
 
@@ -365,19 +369,21 @@ A method declaration (`method`) us a named definition of a function not
 attached to an object or a method with a receiver object. The method may be
 generic and have used instances attached to it.
 
-| Name         | Optional | Description |
-|:------------ |:--------:|:------------|
-| `exported`   | ⬤ | True if the scope is "exported". |
-| `index`      | ⬤ | The [index](#indices) of this method in the projects' `methods` list. |
-| `instances`  | ⬤ | List of [indices](#indices) to [method instances](#method-instance). |
-| `kind`       | ⬤ | `method` |
-| `loc`        | ⬤ | The [location](#locations) offset. |
-| `name`       | ◯ | The name of the declared method. |
-| `metrics`    | ⬤ | The [index](#indices) of the [metrics](#metrics) for this method. |
-| `package`    | ◯ | The [index](#indices) of the [package](#package) this method is declared in. |
-| `receiver`   | ⬤ | The [index](#indices) of the [object](#object) that is the receiver if there is one. |
-| `signature`  | ◯ | The [index](#indices) of the [signature](#signature) for this method. |
-| `typeParams` | ⬤ | List of [indices](#indices) to [type parameters](#type-parameter) if this method is generic. |
+| Name         | Optional | Extra | Description |
+|:-------------|:--------:|:-----:|:------------|
+| `exported`   | ◯ | ⬤ | True if the scope is "exported". |
+| `index`      | ◯ | ⬤ | The [index](#indices) of this method in the projects' `methods` list. |
+| `instances`  | ⬤ | ◯ | List of [indices](#indices) to [method instances](#method-instance). |
+| `kind`       | ◯ | ⬤ | `method` |
+| `loc`        | ⬤ | ◯ | The [location](#locations) offset. |
+| `name`       | ◯ | ◯ | The name of the declared method. |
+| `metrics`    | ⬤ | ◯ | The [index](#indices) of the [metrics](#metrics) for this method. |
+| `package`    | ◯ | ◯ | The [index](#indices) of the [package](#package) this method is declared in. |
+| `ptrRecv`    | ◯ | ⬤ | A boolean indicating if the method had a Go's pointer receiver. |
+| `receiver`   | ⬤ | ◯ | The [index](#indices) of the [object](#object) that is the receiver if there is one. |
+| `recvName`   | ◯ | ⬤ | The name given to the receiver. |
+| `signature`  | ◯ | ◯ | The [index](#indices) of the [signature](#signature) for this method. |
+| `typeParams` | ⬤ | ◯ | List of [indices](#indices) to [type parameters](#type-parameter) if this method is generic. |
 
 ### Method Instance
 
@@ -388,14 +394,14 @@ The instance types may be type parameters as well as a fully realized type.
 For example, `type Foo[T any]() T { ... }` with instance type `bool`
 will create `type Foo[bool]() bool { ... }`.
 
-| Name            | Optional | Description |
-|:----------------|:--------:|:------------|
-| `generic`       | ◯ | The [index](#indices) of the generic [method](#method) this is an instance of. |
-| `index`         | ⬤ | The [index](#indices) of this method instance in the projects' `methodInsts` list. |
-| `instanceTypes` | ◯ | List of [keys](#keys) to any [type description](#type-descriptions) for type arguments. |
-| `kind`          | ⬤ | `methodInst` |
-| `receiver`      | ⬤ | The [index](#indices) of the [object instance](#object-instance) for the receiver of this method, if it has one. |
-| `resolved`      | ◯ | The [index](#indices) to the resolved [signature](#signature) this instance defines. |
+| Name            | Optional | Extra | Description |
+|:----------------|:--------:|:-----:|:------------|
+| `generic`       | ◯ | ◯ | The [index](#indices) of the generic [method](#method) this is an instance of. |
+| `index`         | ◯ | ⬤ | The [index](#indices) of this method instance in the projects' `methodInsts` list. |
+| `instanceTypes` | ◯ | ◯ | List of [keys](#keys) to any [type description](#type-descriptions) for type arguments. |
+| `kind`          | ◯ | ⬤ | `methodInst` |
+| `receiver`      | ⬤ | ◯ | The [index](#indices) of the [object instance](#object-instance) for the receiver of this method, if it has one. |
+| `resolved`      | ◯ | ◯ | The [index](#indices) to the resolved [signature](#signature) this instance defines. |
 
 ### Metrics
 
@@ -404,21 +410,21 @@ The body of a [method](#method) and the initializer for a [value](#value)
 contain expressions that are measured. These measurements are used in
 technical debt analysis.
 
-| Name         | Optional | Description |
-|:------------ |:--------:|:------------|
-| `codeCount`  | ⬤ | The number of lines in the method that are not comments or empty. |
-| `complexity` | ⬤ | The cyclomatic complexity of the method. |
-| `getter`     | ⬤ | True indicates the method is a getter pattern. |
-| `indents`    | ⬤ | The indent complexity of the method. |
-| `index`      | ⬤ | The [index](#indices) of this metrics in the projects' `metrics` list. |
-| `invokes`    | ⬤ | List of [keys](#keys) to methods that were invoked in the method. |
-| `kind`       | ⬤ | `metrics` |
-| `lineCount`  | ⬤ | The number of lines in the method. |
-| `loc`        | ◯ | The [location](#locations) offset. |
-| `reads`      | ⬤ | List of [keys](#keys) to types that were read from in the method. |
-| `setter`     | ⬤ | True indicates the method is a setter pattern. |
-| `sideEffect` | ⬤ | True indicates this method directly has side effects without checking invoked method. |
-| `writes`     | ⬤ | List of [keys](#keys) to types that were written to in the method. |
+| Name         | Optional | Extra | Description |
+|:-------------|:--------:|:-----:|:------------|
+| `codeCount`  | ⬤ | ◯ | The number of lines in the method that are not comments or empty. |
+| `complexity` | ⬤ | ◯ | The cyclomatic complexity of the method. |
+| `getter`     | ⬤ | ◯ | True indicates the method is a getter pattern. |
+| `indents`    | ⬤ | ◯ | The indent complexity of the method. |
+| `index`      | ◯ | ⬤ | The [index](#indices) of this metrics in the projects' `metrics` list. |
+| `invokes`    | ⬤ | ◯ | List of [keys](#keys) to methods that were invoked in the method. |
+| `kind`       | ◯ | ⬤ | `metrics` |
+| `lineCount`  | ⬤ | ◯ | The number of lines in the method. |
+| `loc`        | ◯ | ◯ | The [location](#locations) offset. |
+| `reads`      | ⬤ | ◯ | List of [keys](#keys) to types that were read from in the method. |
+| `setter`     | ⬤ | ◯ | True indicates the method is a setter pattern. |
+| `sideEffect` | ◯ | ⬤ | True indicates this method directly has side effects without checking invoked method. |
+| `writes`     | ⬤ | ◯ | List of [keys](#keys) to types that were written to in the method. |
 
 ### Object
 
@@ -440,19 +446,19 @@ func (f Foo) Bar() { ... }
 If the named type in Go is defined without a struct, e.g. `type Foo int`,
 the abstractor will have to pack the type into struct.
 
-| Name            | Optional | Description |
-|:----------------|:--------:|:------------|
-| `data`       | ◯ | The [index](#indices) of the [structure description](#structure-description). |
-| `exported`   | ⬤ | True if the scope is "exported". |
-| `index`      | ⬤ | The [index](#indices) of this object in the projects' `objects` list. |
-| `instances`  | ⬤ | List of [indices](#indices) to [object instances](#object-instance). |
-| `kind`       | ⬤ | `object` |
-| `loc`        | ⬤ | The [location](#locations) offset. |
-| `methods`    | ⬤ | List of [indices](#indices) to [methods](#method) that have this object as a receiver. |
-| `name`       | ◯ | The name of the declared object. |
-| `package`    | ◯ | The [index](#indices) of the [package](#package) this object is declared in. |
-| `typeParams` | ⬤ | List of [indices](#indices) to [type parameters](#type-parameter) if this object is generic. |
-| `interface`  | ◯ | The [index](#indices) to the [interface description](#interface-description) that this object matches with. |
+| Name         | Optional | Extra | Description |
+|:-------------|:--------:|:-----:|:------------|
+| `data`       | ◯ | ◯ | The [index](#indices) of the [structure description](#structure-description). |
+| `exported`   | ◯ | ⬤ | True if the scope is "exported". |
+| `index`      | ◯ | ⬤ | The [index](#indices) of this object in the projects' `objects` list. |
+| `instances`  | ⬤ | ◯ | List of [indices](#indices) to [object instances](#object-instance). |
+| `kind`       | ◯ | ⬤ | `object` |
+| `loc`        | ⬤ | ◯ | The [location](#locations) offset. |
+| `methods`    | ⬤ | ◯ | List of [indices](#indices) to [methods](#method) that have this object as a receiver. |
+| `name`       | ◯ | ◯ | The name of the declared object. |
+| `package`    | ◯ | ◯ | The [index](#indices) of the [package](#package) this object is declared in. |
+| `typeParams` | ⬤ | ◯ | List of [indices](#indices) to [type parameters](#type-parameter) if this object is generic. |
+| `interface`  | ◯ | ◯ | The [index](#indices) to the [interface description](#interface-description) that this object matches with. |
 
 ### Object Instance
 
@@ -463,32 +469,32 @@ The instance types may be type parameters as well as a fully realized type.
 For example, `type Foo[T any] struct { value T }` with instance type `bool`
 will create `type Foo[bool] struct { value bool }`.
 
-| Name            | Optional | Description |
-|:----------------|:--------:|:------------|
-| `generic`       | ◯ | The [index](#indices) of the generic [object](#object) this is an instance of. |
-| `index`         | ⬤ | The [index](#indices) of this object instance in the projects' `objectInsts` list. |
-| `instanceTypes` | ◯ | List of [keys](#keys) to any [type description](#type-descriptions) for type arguments. |
-| `kind`          | ⬤ | `objectInst` |
-| `methods`       | ◯ | List of [indices](#indices) of the [method instances](#method) for this instance. |
-| `resData`       | ◯ | The [index](#indices) to the resolved [structure description](#structure-description) this instance defines. |
-| `resInterface`  | ◯ | The [index](#indices) to the resolved [interface description](#interface-description) this instance defines. |
+| Name            | Optional | Extra | Description |
+|:----------------|:--------:|:-----:|:------------|
+| `generic`       | ◯ | ◯ | The [index](#indices) of the generic [object](#object) this is an instance of. |
+| `index`         | ◯ | ⬤ | The [index](#indices) of this object instance in the projects' `objectInsts` list. |
+| `instanceTypes` | ◯ | ◯ | List of [keys](#keys) to any [type description](#type-descriptions) for type arguments. |
+| `kind`          | ◯ | ⬤ | `objectInst` |
+| `methods`       | ◯ | ◯ | List of [indices](#indices) of the [method instances](#method) for this instance. |
+| `resData`       | ◯ | ◯ | The [index](#indices) to the resolved [structure description](#structure-description) this instance defines. |
+| `resInterface`  | ◯ | ◯ | The [index](#indices) to the resolved [interface description](#interface-description) this instance defines. |
 
 ### Package
 
 A package (`package`) is a collection of code usually in several files that
 typically are all part of a related library.
 
-| Name         | Optional | Description |
-|:-------------|:--------:|:------------|
-| `imports`    | ⬤ | List of [indices](#indices) of [packages](#package) that this package depends on. |
-| `index`      | ⬤ | The [index](#indices) of this package in the projects' `packages` list. |
-| `interfaces` | ⬤ | List of [indices](#indices) of [interfaces](#interface-declaration) declared in this package. |
-| `kind`       | ⬤ | `package` |
-| `methods`    | ⬤ | List of [indices](#indices) of [methods](#method) declared in this package. |
-| `name`       | ◯ | The name of the package. |
-| `objects`    | ⬤ | List of [indices](#indices) of [object](#object) declared in this package. |
-| `path`       | ◯ | The path to this package. |
-| `values`     | ⬤ | List of [indices](#indices) of [values](#value) declared in this package. |
+| Name         | Optional | Extra | Description |
+|:-------------|:--------:|:-----:|:------------|
+| `imports`    | ⬤ | ◯ | List of [indices](#indices) of [packages](#package) that this package depends on. |
+| `index`      | ◯ | ⬤ | The [index](#indices) of this package in the projects' `packages` list. |
+| `interfaces` | ⬤ | ◯ | List of [indices](#indices) of [interfaces](#interface-declaration) declared in this package. |
+| `kind`       | ◯ | ⬤ | `package` |
+| `methods`    | ⬤ | ◯ | List of [indices](#indices) of [methods](#method) declared in this package. |
+| `name`       | ◯ | ◯ | The name of the package. |
+| `objects`    | ⬤ | ◯ | List of [indices](#indices) of [object](#object) declared in this package. |
+| `path`       | ◯ | ◯ | The path to this package. |
+| `values`     | ⬤ | ◯ | List of [indices](#indices) of [values](#value) declared in this package. |
 
 ### Selection
 
@@ -500,12 +506,12 @@ Selections are used in [metrics](#metrics) to indicate higher detailed
 information than simply specifying the type of the selected field, method,
 or abstract.
 
-| Name     | Optional | Description |
-|:---------|:--------:|:------------|
-| `index`  | ⬤ | The [index](#indices) of this selection in the projects' `selections` list. |
-| `kind`   | ⬤ | `selection` |
-| `name`   | ◯ | The name of the field, method, or abstract that is selected. The `f` in `x.f`. |
-| `origin` | ◯ | The [key](#keys) to the [construct](#constructs) that is selected from. The `x` in `x.f`. |
+| Name     | Optional | Extra | Description |
+|:---------|:--------:|:-----:|:------------|
+| `index`  | ◯ | ⬤ | The [index](#indices) of this selection in the projects' `selections` list. |
+| `kind`   | ◯ | ⬤ | `selection` |
+| `name`   | ◯ | ◯ | The name of the field, method, or abstract that is selected. The `f` in `x.f`. |
+| `origin` | ◯ | ◯ | The [key](#keys) to the [construct](#constructs) that is selected from. The `x` in `x.f`. |
 
 ### Signature
 
@@ -528,13 +534,13 @@ interface {
 }
 ```
 
-| Name       | Optional | Description |
-|:-----------|:--------:|:------------|
-| `index`    | ⬤ | The [index](#indices) of this signature in the projects' `signatures` list. |
-| `kind`     | ⬤ | `signature` |
-| `variadic` | ⬤ | True indicates the last parameter is a variable length parameter. |
-| `params`   | ⬤ | List of [indices](#indices) of [arguments](#argument) for input parameters. |
-| `results`  | ⬤ | List of [indices](#indices) of [arguments](#argument) for output results. |
+| Name       | Optional | Extra | Description |
+|:-----------|:--------:|:-----:|:------------|
+| `index`    | ◯ | ⬤ | The [index](#indices) of this signature in the projects' `signatures` list. |
+| `kind`     | ◯ | ⬤ | `signature` |
+| `variadic` | ⬤ | ◯ | True indicates the last parameter is a variable length parameter. |
+| `params`   | ⬤ | ◯ | List of [indices](#indices) of [arguments](#argument) for input parameters. |
+| `results`  | ⬤ | ◯ | List of [indices](#indices) of [arguments](#argument) for output results. |
 
 ### Structure Description
 
@@ -550,11 +556,12 @@ struct {
 }
 ```
 
-| Name     | Optional | Description |
-|:---------|:--------:|:------------|
-| `fields` | ⬤ | List of [indices](#indices) of [fields](#field) in this structure. |
-| `index`  | ⬤ | The [index](#indices) of this structure in the projects' `structDescs` list. |
-| `kind`   | ⬤ | `structDesc` |
+| Name        | Optional | Extra | Description |
+|:------------|:--------:|:-----:|:------------|
+| `fields`    | ⬤ | ◯ | List of [indices](#indices) of [fields](#field) in this structure. |
+| `index`     | ◯ | ⬤ | The [index](#indices) of this structure in the projects' `structDescs` list. |
+| `kind`      | ◯ | ⬤ | `structDesc` |
+| `synthetic` | ◯ | ⬤ | A boolean indicating if the abstractor had to create this structure for non-struct types, e.g. `type foo int` |
 
 ### Type Parameter
 
@@ -570,12 +577,12 @@ is of type `T` meaning it will become the type used as an argument into `T`.
 type Foo[T any] struct { value T }
 ```
 
-| Name    | Optional | Description |
-|:--------|:--------:|:------------|
-| `index` | ⬤ | The [index](#indices) of this type parameter in the projects' `typeParams` list. |
-| `kind`  | ⬤ | `typeParam` |
-| `name`  | ◯ | The name of the type parameter. |
-| `type`  | ◯ | The [key](#keys) for the [type](#type-descriptions) of this type parameter. |
+| Name    | Optional | Extra | Description |
+|:--------|:--------:|:-----:|:------------|
+| `index` | ◯ | ⬤ | The [index](#indices) of this type parameter in the projects' `typeParams` list. |
+| `kind`  | ◯ | ⬤ | `typeParam` |
+| `name`  | ◯ | ◯ | The name of the type parameter. |
+| `type`  | ◯ | ◯ | The [key](#keys) for the [type](#type-descriptions) of this type parameter. |
 
 ### Value
 
@@ -583,14 +590,14 @@ A value declaration (`value`) is a package level variable outside of any
 declared object. A value may be constant and may be initialized by an
 expression. For example `var X = 10`.
 
-| Name       | Optional | Description |
-|:-----------|:--------:|:------------|
-| `const`    | ⬤ | True indicates the value is constant after initialization |
-| `exported` | ⬤ | True if the scope is "exported". |
-| `index`    | ⬤ | The [index](#indices) of this value in the projects' `values` list. |
-| `kind`     | ⬤ | `value` |
-| `loc`      | ⬤ | The [location](#locations) offset. |
-| `metrics`  | ⬤ | The [index](#indices) of the [metrics](#metrics) for the initializer expression. |
-| `name`     | ◯ | The name of the value. |
-| `package`  | ◯ | The [index](#indices) of the [package](#package) this value is described in. |
-| `type`     | ◯ | The [key](#keys) for the [type](#type-descriptions) of this value. |
+| Name       | Optional | Extra | Description |
+|:-----------|:--------:|:-----:|:------------|
+| `const`    | ⬤ | ◯ | True indicates the value is constant after initialization |
+| `exported` | ◯ | ⬤ | True if the scope is "exported". |
+| `index`    | ◯ | ⬤ | The [index](#indices) of this value in the projects' `values` list. |
+| `kind`     | ◯ | ⬤ | `value` |
+| `loc`      | ⬤ | ◯ | The [location](#locations) offset. |
+| `metrics`  | ⬤ | ◯ | The [index](#indices) of the [metrics](#metrics) for the initializer expression. |
+| `name`     | ◯ | ◯ | The name of the value. |
+| `package`  | ◯ | ◯ | The [index](#indices) of the [package](#package) this value is described in. |
+| `type`     | ◯ | ◯ | The [key](#keys) for the [type](#type-descriptions) of this value. |

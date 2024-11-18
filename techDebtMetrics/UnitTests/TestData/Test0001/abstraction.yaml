@@ -1,24 +1,28 @@
 # This abstraction is the same as goAbstractor/tests/test0001/expected.yaml
 {
   language: go,
-  packages: [
-    {
-      path: command-line-arguments,
-      name: main,
-      methods: [
-        { # func main()
-          name: main, signature: 2,
-          metrics: { codeCount: 3, complexity: 1, indents: 1, lineCount: 3 }
-        }
-      ]
+  methods: [
+    { # 1. main.main func()() @ main.go:5
+      name: main, package: 1, signature: 1, loc: 5, metrics: 1
     }
   ],
-  types: {
-    interfaces: [
-      {} # 1. any
-    ],
-    signatures: [
-      {} # 2. func()()
-    ],
-  }
+  metrics: [
+    { # 1. main method metrics
+      codeCount: 3, complexity: 1, indents: 1, lineCount: 3, loc: 5,
+      sideEffect: true
+    },
+  ],
+  packages: [
+    { # 1. main
+      name: main,
+      path: command-line-arguments,
+      methods: [ 1 ] # main
+    }
+  ],
+  signatures: [
+    {} # 1. func()()
+  ],
+  locs: {
+    '1': main.go
+  },
 }
