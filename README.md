@@ -7,7 +7,7 @@ Ph.D. research at Montana State University's
 This project defines the pipeline for evaluating technical debt
 analysis for procedural and object oriented languages.
 
-![diagram](./docs/diagram.svg)
+![diagram](./docs/pipelineDiagram.svg)
 
 1. [Go Feature Abstractor](./goAbstractor/)
 2. [Java Feature Abstractor](./javaAbstractor/)
