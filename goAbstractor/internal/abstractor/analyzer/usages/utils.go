@@ -35,6 +35,11 @@ func getPkgPath(o types.Object) string {
 }
 
 func getInstTypes(o types.Object) *types.TypeList {
+	switch o.(type) {
+	case *types.Const, *types.Var:
+		return nil
+	}
+
 	type TA interface{ TypeArgs() *types.TypeList }
 	if t, ok := o.Type().(TA); ok {
 		return t.TypeArgs()

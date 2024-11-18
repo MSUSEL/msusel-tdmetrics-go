@@ -2002,6 +2002,36 @@ func Test_PointerObject(t *testing.T) {
 		`}`)
 }
 
+func Test_VarWithTypeParam(t *testing.T) {
+	tt := parseDecl(t, `baz`,
+		`type foo[T any] struct { value T }`,
+		`var bar = foo[string]{ value: "bar" }`,
+		`func baz() string { return bar.value }`)
+	tt.checkProj(
+		`{`,
+		`  language: go,`,
+		`  metrics: [`,
+		`    {`,
+		`      loc:        3,`,
+		`      codeCount:  1,`,
+		`      complexity: 1,`,
+		`      lineCount:  1,`,
+		`      getter:     true,`,
+		`      reads: [ selection1, tempDeclRef1 ]`,
+		`    }`,
+		`  ],`,
+		`  packages: [`,
+		`    { name: test, path: test }`,
+		`  ],`,
+		`  selections: [`,
+		`    { name: value, origin: tempDeclRef1 }`,
+		`  ],`,
+		`  tempDeclRefs: [`,
+		`    { name: bar, packagePath: test }`,
+		`  ]`,
+		`}`)
+}
+
 type testTool struct {
 	t      *testing.T
 	proj   constructs.Project
