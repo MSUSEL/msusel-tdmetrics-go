@@ -9,25 +9,26 @@
   {
     name: counts,
     os: windows,
+    goVersion: 1.23.3,
     path: [ '~.', '#' ],
     data: {
       abstracts:      2386,
-      arguments:      3105,
+      arguments:      3106,
       basics:           15,
-      fields:         2349,
+      fields:         2350,
       interfaceDecls:   62,
       interfaceDescs:  811,
       interfaceInsts:  666,
       language:          1,
       locs:            451,
       methodInsts:     101,
-      methods:        5177,
+      methods:        5179,
       metrics:        4687,
       objectInsts:      21,
       objects:         747,
       packages:         59,
       selections:     1762,
-      signatures:     3747,
+      signatures:     3750,
       structDescs:     638,
       typeParams:       29,
       values:         3799 
@@ -36,6 +37,7 @@
   {
     name: package names,
     os: windows,
+    goVersion: 1.23.3,
     path: [ packages, '..', name ],
     data: [ $builtin, cmp, cats, errors, fmt, abi, asan, bisect, bytealg,
             byteorder, chacha8rand, rtcov, cpu, filepathlite, fmtsort,
@@ -49,6 +51,7 @@
   {
     name: cats,
     os: windows,
+    goVersion: 1.23.3,
     path: [ packages, name=cats ],
     data: {
       index: 3,
@@ -77,6 +80,7 @@
   {
     name: objects,
     os: windows,
+    goVersion: 1.23.3,
     path: [ objects, package=~^3$, '!loc' ],
     data: [
       {
@@ -108,31 +112,33 @@
   {
     name: methods,
     os: windows,
+    goVersion: 1.23.3,
     path: [ methods, package=~^3$, '!~^(metrics|loc)$' ],
     data: [
-      { index:  5, name: Add,           exported: true, package: 3, receiver: 3, signature: 1783 },
-      { index:  6, name: AddNew,        exported: true, package: 3, receiver: 3, signature: 2401 },
-      { index:  7, name: Age,           exported: true, package: 3, receiver: 3, signature: 1780 },
+      { index:  5, name: Add,           exported: true, package: 3, receiver: 3, signature: 1785 },
+      { index:  6, name: AddNew,        exported: true, package: 3, receiver: 3, signature: 2403 },
+      { index:  7, name: Age,           exported: true, package: 3, receiver: 3, signature: 1782 },
       { index:  8, name: AgeRange,      exported: true, package: 3, receiver: 3, signature:    4 },
       { index:  9, name: AllBreeds,     exported: true, package: 3, receiver: 3, signature:  129 },
       { index: 10, name: AllIDs,        exported: true, package: 3, receiver: 3, signature:  139 },
-      { index: 11, name: Breed,         exported: true, package: 3, receiver: 3, signature: 1782 },
+      { index: 11, name: Breed,         exported: true, package: 3, receiver: 3, signature: 1784 },
       { index: 12, name: CatsWithBreed, exported: true, package: 3, receiver: 3, signature: 1025 },
-      { index: 13, name: CatsWithName,  exported: true, package: 3, receiver: 3, signature: 2381 },
-      { index: 14, name: Has,           exported: true, package: 3, receiver: 3, signature: 1779 },
+      { index: 13, name: CatsWithName,  exported: true, package: 3, receiver: 3, signature: 2383 },
+      { index: 14, name: Has,           exported: true, package: 3, receiver: 3, signature: 1781 },
       { index: 15, name: Len,           exported: true, package: 3, receiver: 5, signature:    3 },
-      { index: 16, name: Less,          exported: true, package: 3, receiver: 5, signature: 1738 },
-      { index: 17, name: Name,          exported: true, package: 3, receiver: 3, signature: 1781 },
+      { index: 16, name: Less,          exported: true, package: 3, receiver: 5, signature: 1740 },
+      { index: 17, name: Name,          exported: true, package: 3, receiver: 3, signature: 1783 },
       { index: 18, name: NewID,         exported: true, package: 3,              signature:  138 },
       { index: 19, name: String,        exported: true, package: 3, receiver: 2, signature:   26 },
       { index: 20, name: String,        exported: true, package: 3, receiver: 3, signature:   26 },
       { index: 21, name: String,        exported: true, package: 3, receiver: 5, signature:   26 },
-      { index: 22, name: Swap,          exported: true, package: 3, receiver: 5, signature: 1737 }
+      { index: 22, name: Swap,          exported: true, package: 3, receiver: 5, signature: 1739 }
     ]
   },
   {
     name: variables and constants,
     os: windows,
+    goVersion: 1.23.3,
     path: [ values, package=~^3$, ~^(name|type|const)$ ],
     data: [
       { const: true, name: Abyssinian,           type: object2 }, # object2 = CatBreed

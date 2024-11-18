@@ -112,10 +112,11 @@ func (tt *testTool) full() *testTool {
 }
 
 type partialTest struct {
-	Name string `yaml:"name"`
-	Path []any  `yaml:"path"`
-	Data any    `yaml:"data"`
-	OS   string `yaml:"os"`
+	Name      string `yaml:"name"`
+	Path      []any  `yaml:"path"`
+	Data      any    `yaml:"data"`
+	OS        string `yaml:"os"`
+	GoVersion string `yaml:"goVersion"`
 }
 
 func (tt *testTool) partial() *testTool {
@@ -131,7 +132,10 @@ func (tt *testTool) partial() *testTool {
 func (tt *testTool) runPartialTest(pt partialTest) {
 	tt.t.Run(pt.Name, func(t *testing.T) {
 		if len(pt.OS) > 0 && runtime.GOOS != pt.OS {
-			t.Skip(`The OS changes the specific type indices, this test is for ` + pt.OS + `.`)
+			t.Skip(`The OS changes the specific indices, this test is for ` + pt.OS + `.`)
+		}
+		if len(pt.GoVersion) > 0 && runtime.Version() != pt.GoVersion {
+			t.Skip(`The Go version changes the specific indices, this test is for ` + pt.GoVersion + `.`)
 		}
 
 		ctx := jsonify.NewContext().IncludeDebugIndex(true)
