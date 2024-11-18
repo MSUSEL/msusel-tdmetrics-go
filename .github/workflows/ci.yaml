@@ -60,6 +60,7 @@ jobs:
         uses: golangci/golangci-lint-action@v6
         with:
           version: latest
+          working-directory: ./goAbstractor
           args: --out-format=colored-line-number
 
   techDebtMetrics:
