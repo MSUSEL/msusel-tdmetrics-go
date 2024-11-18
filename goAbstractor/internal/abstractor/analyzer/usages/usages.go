@@ -246,6 +246,12 @@ func (ui *usagesImp) setPendingObject(o types.Object, instType []constructs.Type
 		return
 	}
 
+	switch pkgPath {
+	case `runtime`, `syscall`:
+		ui.log.Logf(`    - ignoring decl: %v`, o)
+		return
+	}
+
 	ui.log.Logf(`    - temp decl ref: %v`, o)
 	ui.pending = ui.proj.NewTempDeclRef(constructs.TempDeclRefArgs{
 		PackagePath:   pkgPath,
