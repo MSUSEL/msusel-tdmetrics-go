@@ -1,7 +1,6 @@
 package metrics
 
 import (
-	"cmp"
 	"slices"
 
 	"github.com/Snow-Gremlin/goToolbox/collections"
@@ -106,7 +105,13 @@ func (m *metricsImp) CompareTo(other constructs.Construct) int {
 func Comparer() comp.Comparer[constructs.Metrics] {
 	return func(a, b constructs.Metrics) int {
 		aImp, bImp := a.(*metricsImp), b.(*metricsImp)
-		return cmp.Compare(int(aImp.loc.Pos()), int(bImp.loc.Pos()))
+		aOffset, aFile, aLine := aImp.loc.Info()
+		bOffset, bFile, bLine := bImp.loc.Info()
+		return comp.Or(
+			comp.DefaultPend(aFile, bFile),
+			comp.DefaultPend(aLine, bLine),
+			comp.DefaultPend(aOffset, bOffset),
+		)
 	}
 }
 

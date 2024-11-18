@@ -259,7 +259,7 @@ func (i *instantiator) typeDecl(decl constructs.TypeDecl, tps []constructs.TypeP
 	// directly, e.g. `type Foo[T any] interface { Get() Foo[T]  }` or
 	// indirectly. e.g. `type Foo[T any] interface { Children() List[Foo[T]] }`
 	if i.inProgress(decl, its) {
-		_, typ, found := i.proj.FindType(decl.Package().Path(), decl.Name(), its, false)
+		typ, found := i.proj.FindType(decl.Package().Path(), decl.Name(), its, true, false)
 		if found {
 			return typ
 		}
@@ -330,7 +330,7 @@ func (i *instantiator) TempReference(r constructs.TempReference) constructs.Type
 	}
 
 	instTp := applyToSlice(r.InstanceTypes(), i.TypeDesc)
-	_, typ, found := i.proj.FindType(r.PackagePath(), r.Name(), instTp, false)
+	typ, found := i.proj.FindType(r.PackagePath(), r.Name(), instTp, true, false)
 	if found {
 		return typ
 	}

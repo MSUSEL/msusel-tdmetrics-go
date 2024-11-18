@@ -125,13 +125,23 @@ func (p *projectImp) EntryPoint() constructs.Package {
 	return pkg
 }
 
-func (p *projectImp) FindType(pkgPath, name string, instTypes []constructs.TypeDesc, panicOnNotFound bool) (constructs.Package, constructs.TypeDesc, bool) {
+func (p *projectImp) FindType(pkgPath, name string, instTypes []constructs.TypeDesc, allowRef, panicOnNotFound bool) (constructs.TypeDesc, bool) {
 	assert.ArgNotEmpty(`pkgPath`, pkgPath)
+
+	if allowRef {
+		itComp := constructs.SliceComparer[constructs.TypeDesc]()
+		ref, found := p.TempReferences().Enumerate().Where(func(ref constructs.TempReference) bool {
+			return ref.PackagePath() == pkgPath && ref.Name() == name && itComp(ref.InstanceTypes(), instTypes) == 0
+		}).First()
+		if found {
+			return ref, true
+		}
+	}
 
 	pkg := p.FindPackageByPath(pkgPath)
 	if pkg == nil {
 		if !panicOnNotFound {
-			return nil, nil, false
+			return nil, false
 		}
 		names := enumerator.Select(p.Packages().Enumerate(),
 			func(pkg constructs.Package) string { return strconv.Quote(pkg.Path()) }).
@@ -146,7 +156,7 @@ func (p *projectImp) FindType(pkgPath, name string, instTypes []constructs.TypeD
 	decl := pkg.FindTypeDecl(name)
 	if decl == nil {
 		if !panicOnNotFound {
-			return pkg, nil, false
+			return nil, false
 		}
 		panic(terror.New(`failed to find type for type reference`).
 			With(`type name`, name).
@@ -158,14 +168,14 @@ func (p *projectImp) FindType(pkgPath, name string, instTypes []constructs.TypeD
 		switch t := decl.(type) {
 		case constructs.InterfaceDecl:
 			if inst, ok := t.FindInstance(instTypes); ok {
-				return pkg, inst, true
+				return inst, true
 			}
-			return pkg, nil, false
+			return nil, false
 		case constructs.Object:
 			if inst, ok := t.FindInstance(instTypes); ok {
-				return pkg, inst, true
+				return inst, true
 			}
-			return pkg, nil, false
+			return nil, false
 		case constructs.Method:
 			panic(terror.New(`can not use method instance as type for type reference`).
 				With(`type name`, name).
@@ -186,16 +196,26 @@ func (p *projectImp) FindType(pkgPath, name string, instTypes []constructs.TypeD
 			With(`package path`, pkgPath))
 	}
 
-	return pkg, decl, true
+	return decl, true
 }
 
-func (p *projectImp) FindDecl(pkgPath, name string, instTypes []constructs.TypeDesc, panicOnNotFound bool) (constructs.Package, constructs.Construct, bool) {
+func (p *projectImp) FindDecl(pkgPath, name string, instTypes []constructs.TypeDesc, allowRef, panicOnNotFound bool) (constructs.Construct, bool) {
 	assert.ArgNotEmpty(`pkgPath`, pkgPath)
+
+	if allowRef {
+		itComp := constructs.SliceComparer[constructs.TypeDesc]()
+		ref, found := p.TempDeclRefs().Enumerate().Where(func(ref constructs.TempDeclRef) bool {
+			return ref.PackagePath() == pkgPath && ref.Name() == name && itComp(ref.InstanceTypes(), instTypes) == 0
+		}).First()
+		if found {
+			return ref, true
+		}
+	}
 
 	pkg := p.FindPackageByPath(pkgPath)
 	if pkg == nil {
 		if !panicOnNotFound {
-			return nil, nil, false
+			return nil, false
 		}
 		names := enumerator.Select(p.Packages().Enumerate(),
 			func(pkg constructs.Package) string { return strconv.Quote(pkg.Path()) }).
@@ -209,7 +229,7 @@ func (p *projectImp) FindDecl(pkgPath, name string, instTypes []constructs.TypeD
 	decl := pkg.FindDecl(name)
 	if decl == nil {
 		if !panicOnNotFound {
-			return pkg, nil, false
+			return nil, false
 		}
 		panic(terror.New(`failed to find declaration for declaration reference`).
 			With(`decl name`, name).
@@ -220,19 +240,19 @@ func (p *projectImp) FindDecl(pkgPath, name string, instTypes []constructs.TypeD
 		switch t := decl.(type) {
 		case constructs.InterfaceDecl:
 			if inst, ok := t.FindInstance(instTypes); ok {
-				return pkg, inst, true
+				return inst, true
 			}
-			return pkg, nil, false
+			return nil, false
 		case constructs.Object:
 			if inst, ok := t.FindInstance(instTypes); ok {
-				return pkg, inst, true
+				return inst, true
 			}
-			return pkg, nil, false
+			return nil, false
 		case constructs.Method:
 			if inst, ok := t.FindInstance(instTypes); ok {
-				return pkg, inst, true
+				return inst, true
 			}
-			return pkg, nil, false
+			return nil, false
 		case constructs.Value:
 			panic(terror.New(`can not get an instance of a value for declaration reference`).
 				With(`type name`, name).
@@ -247,7 +267,7 @@ func (p *projectImp) FindDecl(pkgPath, name string, instTypes []constructs.TypeD
 			With(`package path`, pkgPath))
 	}
 
-	return pkg, decl, true
+	return decl, true
 }
 
 func (p *projectImp) UpdateIndices() {

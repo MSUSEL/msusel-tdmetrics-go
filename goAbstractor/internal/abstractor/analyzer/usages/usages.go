@@ -193,7 +193,7 @@ func (ui *usagesImp) setPendingObject(o types.Object, instType []constructs.Type
 			return
 		}
 
-		_, typ, found := ui.proj.FindType(pkgPath, o.Name(), instType, false)
+		typ, found := ui.proj.FindType(pkgPath, o.Name(), instType, true, false)
 		if found {
 			ui.log.Logf(`      + type found: %v`, typ)
 			ui.pending = typ
@@ -239,7 +239,7 @@ func (ui *usagesImp) setPendingObject(o types.Object, instType []constructs.Type
 	}
 
 	pkgPath := getPkgPath(o)
-	_, typ, found := ui.proj.FindDecl(pkgPath, o.Name(), instType, false)
+	typ, found := ui.proj.FindDecl(pkgPath, o.Name(), instType, true, false)
 	if found {
 		ui.log.Logf(`      + decl found: %v`, typ)
 		ui.pending = typ

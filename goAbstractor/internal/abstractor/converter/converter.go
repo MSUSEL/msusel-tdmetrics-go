@@ -172,7 +172,7 @@ func (c *convImp) convertNamed(t *types.Named) constructs.TypeDesc {
 	instanceTp := c.ConvertInstanceTypes(t.TypeArgs())
 
 	// Check if the reference can already be found.
-	_, typ, found := c.proj.FindType(pkgPath, name, instanceTp, false)
+	typ, found := c.proj.FindType(pkgPath, name, instanceTp, true, false)
 	if !found {
 		// Otherwise, create a temporary reference that will be filled later.
 		return c.proj.NewTempReference(constructs.TempReferenceArgs{
@@ -185,6 +185,8 @@ func (c *convImp) convertNamed(t *types.Named) constructs.TypeDesc {
 	}
 
 	switch typ.Kind() {
+	case kind.TempReference:
+		return typ
 	case kind.InterfaceDecl:
 		return instantiator.InterfaceDecl(c.proj, t.Underlying(), typ.(constructs.InterfaceDecl), instanceTp...)
 	case kind.Object:

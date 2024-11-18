@@ -1,0 +1,331 @@
+{
+  language: go,
+  abstracts: [
+    { name: $get,     signature:  9, exported: true }, #  1. $get(index int)(value animals.Animal)
+    { name: $get,     signature: 10, exported: true }, #  2. $get(index int)(value T <any>)
+    { name: $len,     signature:  3, exported: true }, #  3. $len() int
+    { name: $set,     signature: 11, exported: true }, #  4. $set(index int, value animals.Animal)
+    { name: $set,     signature: 12, exported: true }, #  5. $set(index int, value T <any>)
+    { name: Breed,    signature:  5, exported: true }, #  6. Breed() enums.CatBreed
+    { name: Breed,    signature:  6, exported: true }, #  7. Breed() enums.DogBreed
+    { name: Kind,     signature:  4, exported: true }, #  8. Kind() enums.AnimalKind
+    { name: isAnimal, signature:  1 },                 #  9. isAnimal()
+    { name: isCat,    signature:  1 },                 # 10. isCat()
+    { name: isDog,    signature:  1 },                 # 11. isDog()
+    { name: valid,    signature:  2 }                  # 12. valid() bool
+  ],
+  arguments: [
+    {              type: basic1 },         #  1. <unnamed> bool
+    {              type: basic2 },         #  2. <unnamed> int
+    {              type: interfaceDecl2 }, #  3. <unnamed> animals.Animal
+    {              type: object3 },        #  4. <unnamed> enums.AnimalKind
+    {              type: object4 },        #  5. <unnamed> enums.CatBreed
+    {              type: object5 },        #  6. <unnamed> enums.DogBreed
+    { name: breed, type: typeParam1 },     #  7. breed B <enums.CatBreed|enums.DogBreed>
+    { name: e,     type: interfaceDecl5 }, #  8. e enums.Enum
+    { name: index, type: basic2 },         #  9. index int
+    { name: value, type: interfaceDecl2 }, # 10. value animals.Animal
+    { name: value, type: typeParam2 }      # 11. value T <any>
+  ],
+  basics: [ bool, int, string ],
+  fields: [
+    { name: $data, type: basic3, exported: true }, # 1. $data string
+    { name: breed, type: object4 },                # 2. breed enums.CatBreed
+    { name: breed, type: object5 }                 # 3. breed enums.DogBreed
+  ],
+  interfaceDecls: [
+    { # 1. $builtin.List[T any]{ $len() int; $get(index int)(value T <any>); $set(index int, value T <any>) }
+      name: List, package: 1, interface: 4, exported: true, 
+      typeParams: [2], instances: [1],
+    },
+    { # 2. animals.Animal{ Kind() enums.AnimalKind; isAnimal() }
+      name: Animal, package: 3, interface: 10, loc: 38, exported: true
+    },
+    { # 3. animals.Cat{ Breed() enums.CatBreed; isCat() }
+      name: Cat, package: 3, interface: 8, loc: 61, exported: true
+    },
+    { # 4. animals.Dog{ Breed() enums.DogBreed; isDog() }
+      name: Dog, package: 3, interface: 9, loc: 81, exported: true
+    },
+    { # 5. enums.Enum{ valid() bool }
+      name: Enum, package: 4, interface: 11, loc: 155, exported: true
+    }
+  ],
+  interfaceDescs: [
+    {}, # 1. any
+    {   # 2. enums.CatBreed|enums.DogBreed
+      exact: [object4, object5], inherits: [1]
+    },
+    { # 3. interface{ $len() int; $get(index int)(value animals.Animal); $set(index int, value animals.Animal) }
+      abstracts: [3, 1, 4], hint: list, inherits: [1]
+    },
+    { # 4. interface{ $len() int; $get(index int)(value T <any>); $set(index int, value T <any>) }
+      abstracts: [3, 2, 5], hint: list, inherits: [1]
+    },
+    { # 5. interface{ Breed() enums.CatBreed; Kind() enums.AnimalKind; isAnimal(); isCat() }
+      abstracts: [6, 8, 9, 10], inherits: [1, 8, 10]
+    },
+    { # 6. interface{ Breed() enums.DogBreed; Kind() enums.AnimalKind; isAnimal(); isDog() }
+      abstracts: [7, 8, 9, 11], inherits: [1, 9, 10]
+    },
+    { # 7. interface{ valid() bool }
+      abstracts: [12], inherits: [11]
+    },
+    { # 8. animals.interface{ Breed() enums.CatBreed; isCat() }
+      abstracts: [6, 10], inherits: [1], package: 3
+    },
+    { # 9. animals.interface{ Breed() enums.DogBreed; isDog() }
+      abstracts: [7, 11], inherits: [1], package: 3
+    },
+    { # 10. animals.interface{ Kind() enums.AnimalKind; isAnimal() }
+      abstracts: [8, 9], inherits: [1], package: 3
+    },
+    { # 11. enums.interface{ valid() bool }
+      abstracts: [12], inherits: [1], package: 4
+    }
+  ],
+  interfaceInsts: [
+    { # 1. $builtin.List[animals.Animal]
+      generic: 1, instanceTypes: [interfaceDecl2], resolved: 3
+    }
+  ],
+  methods: [
+    { # 1. main.main()
+      name: main, package: 2, signature: 1,
+      loc: 20, metrics: 2
+    },
+    { # 2. (animals.cat).Breed() enums.CatBreed
+      name: Breed, package: 3, receiver: 1, signature: 5,
+      exported: true, loc: 71, metrics: 5
+    },
+    { # 3. (animals.dog).Breed() enums.DogBreed
+      name: Breed, package: 3, receiver: 2, signature: 6,
+      exported: true, loc: 91, metrics: 9
+    },
+    { # 4. (animals.cat).Kind() enums.AnimalKind
+      name: Kind, package: 3, receiver: 1, signature: 4,
+      exported: true, loc: 70, metrics: 4
+    },
+    { # 5. (animals.dog).Kind() enums.AnimalKind
+      name: Kind, package: 3, receiver: 2, signature: 4,
+      exported: true, loc: 90, metrics: 8
+    },
+    { # 6. animals.New(breed B <enums.CatBreed|enums.DogBreed>) animals.Animal
+      name: New, package: 3, signature: 7,
+      exported: true, loc: 43, metrics: 3,
+      typeParams: [1]
+    },
+    { # 7. (animals.cat).isAnimal()
+      name: isAnimal, package: 3, receiver: 1, signature: 1,
+      loc: 74, metrics: 7
+    },
+    { # 8. (animals.dog).isAnimal()
+      name: isAnimal, package: 3, receiver: 2, signature: 1,
+      loc: 94, metrics: 11
+    },
+    { # 9. (animals.cat).isCat()
+      name: isCat, package: 3, receiver: 1, signature: 1,
+      loc: 73, metrics: 6
+    },
+    { # 10. (animals.dog).isDog()
+      name: isDog, package: 3, receiver: 2, signature: 1,
+      loc: 93, metrics: 10
+    },
+    { # 11. enum.Valid(e enums.Enum) bool
+      name: Valid, package: 4, signature: 8,
+      exported: true, loc: 159, metrics: 23
+    },
+    { # 12. (enums.AnimalKind).valid() bool
+      name: valid, package: 4, receiver: 3, signature: 2,
+      loc: 106, metrics: 14
+    },
+    { # 13. (enums.CatBreed).valid() bool
+      name: valid, package: 4, receiver: 4, signature: 2,
+      loc: 125, metrics: 18
+    },
+    { # 14. (enums.DogBreed).valid() bool
+      name: valid, package: 4, receiver: 5, signature: 2,
+      loc: 144, metrics: 22
+    }
+  ],
+  metrics: [
+    { codeCount: 5, complexity: 1, indents: 14, lineCount: 5, loc: 14 },
+    {
+      codeCount: 12, complexity: 4, indents: 21, lineCount: 12, loc: 20,
+      sideEffect: true,
+      invokes: [selection1, selection2, selection3],
+      reads: [interfaceDecl2, interfaceDecl3, interfaceDecl4, value1],
+      writes: [interfaceDecl2]
+    },
+    {
+      codeCount: 12, complexity: 4, indents: 13, lineCount: 12, loc: 43,
+      reads: [object1, object2, object4, object5],
+      writes: [object1, object2, selection4, selection5]
+    },
+    { codeCount: 1, complexity: 1, getter: true, lineCount: 1, loc: 70 },
+    {
+      codeCount: 1, complexity: 1, getter: true, lineCount: 1, loc: 71,
+      reads: [object1, selection4]
+    },
+    { codeCount: 1, complexity: 1, lineCount: 1, loc: 73 },
+    { codeCount: 1, complexity: 1, lineCount: 1, loc: 74 },
+    { codeCount: 1, complexity: 1, getter: true, lineCount: 1, loc: 90 },
+    {
+      codeCount: 1, complexity: 1, getter: true, lineCount: 1, loc: 91,
+      reads: [object2, selection5]
+    },
+    { codeCount: 1, complexity: 1, lineCount: 1, loc: 93 },
+    { codeCount: 1, complexity: 1, lineCount: 1, loc: 94 },
+    { codeCount: 1, complexity: 1, lineCount: 1, loc: 102 },
+    { codeCount: 1, complexity: 1, lineCount: 1, loc: 103 },
+    {
+      codeCount: 7, complexity: 2, indents: 6, lineCount: 7, loc: 106,
+      reads: [object3, value2, value4]
+    },
+    { codeCount: 1, complexity: 1, lineCount: 1, loc: 120 },
+    { codeCount: 1, complexity: 1, lineCount: 1, loc: 121 },
+    { codeCount: 1, complexity: 1, lineCount: 1, loc: 122 },
+    {
+      codeCount: 7, complexity: 2, indents: 6, lineCount: 7, loc: 125,
+      reads: [object4, value6, value7, value9]
+    },
+    { codeCount: 1, complexity: 1, lineCount: 1, loc: 139 },
+    { codeCount: 1, complexity: 1, lineCount: 1, loc: 140 },
+    { codeCount: 1, complexity: 1, lineCount: 1, loc: 141 },
+    {
+      codeCount: 7, complexity: 2, indents: 6, lineCount: 7, loc: 144,
+      reads: [object5, value3, value5, value8]
+    },
+    {
+      codeCount: 3, complexity: 1, indents: 1, lineCount: 3, loc: 159,
+      invokes: [selection6],
+      reads: [interfaceDecl5]
+    }
+  ],
+  objects: [
+    { # 1. animals.cat{ breed enums.CatBreed }
+      name: cat, package: 3, data: 2, interface: 5, loc: 66,
+      methods: [2, 4, 7, 9]
+    },
+    { # 2. animals.dog{ breed enums.DogBreed }
+      name: dog, package: 3, data: 3, interface: 6, loc: 86,
+      methods: [3, 5, 8, 10]
+    },
+    { # 3. enums.AnimalKind{ $data string }
+      name: AnimalKind, package: 4, data: 1, interface: 7, loc: 99,
+      exported: true, methods: [12]
+    },
+    { # 4. enums.CatBreed{ $data string }
+      name: CatBreed, package: 4, data: 1, interface: 7, loc: 117,
+      exported: true, methods: [13]
+    },
+    { # 5. enums.DogBreed{ $data string }
+      name: DogBreed, package: 4, data: 1, interface: 7, loc: 136,
+      exported: true, methods: [14]
+    }
+  ],
+  packages: [
+    { # 1. $builtin package
+      interfaces: [1], name: $builtin, path: $builtin
+    },
+    { # 2. main package
+      name: main, path: command-line-arguments,
+      imports: [3, 4],
+      methods: [1],
+      values: [1]
+    },
+    { # 3. animals package
+      name: animals, path: test0014/animals,
+      imports: [4],
+      interfaces: [2, 3, 4],
+      methods: [2, 3, 4, 5, 6, 7, 8, 9, 10],
+      objects: [1, 2]
+    },
+    { # 4. enums package
+      name: enums, path: test0014/enums,
+      interfaces: [5],
+      methods: [11, 12, 13, 14],
+      objects: [3, 4, 5],
+      values: [2, 3, 4, 5, 6, 7, 8, 9]
+    }
+  ],
+  selections: [
+    { name: Breed, origin: interfaceDecl3 }, # 1. animals.Cat.Breed
+    { name: Breed, origin: interfaceDecl4 }, # 2. animals.Dog.Breed
+    { name: Kind,  origin: interfaceDecl2 }, # 3. animals.Animal.Kind
+    { name: breed, origin: object1 },        # 4. animals.cat.breed
+    { name: breed, origin: object2 },        # 5. animals.dog.breed
+    { name: valid, origin: interfaceDecl5 }  # 6. enums.Enum.valid
+  ],
+  signatures: [
+    {},                             #  1. func()
+    { results: [1] },               #  2. func() bool
+    { results: [2] },               #  3. func() int
+    { results: [4] },               #  4. func() enums.AnimalKind
+    { results: [5] },               #  5. func() enums.CatBreed
+    { results: [6] },               #  6. func() enums.DogBreed
+    { params: [7], results: [3] },  #  7. func(breed B <enums.CatBreed|enums.DogBreed>) animals.Animal
+    { params: [8], results: [1] },  #  8. func(e enums.Enum) bool
+    { params: [9], results: [10] }, #  9. func(index int)(value animals.Animal)
+    { params: [9], results: [11] }, # 10. func(index int)(value T <any>)
+    { params: [9, 10] },            # 11. func(index int, value animals.Animal)
+    { params: [9, 11] }             # 12. func(index int, value T <any>)
+  ],
+  structDescs: [
+    { fields: [1], synthetic: true }, # 1. struct{ $data string }
+    { fields: [2] },                  # 2. struct{ breed enums.CatBreed }
+    { fields: [3] }                   # 3. struct{ breed enums.DogBreed }
+  ],
+  typeParams: [
+    { name: B, type: interfaceDesc2 }, # 1. B enums.CatBreed|enums.DogBreed
+    { name: T, type: interfaceDesc1 }  # 2. T any
+  ],
+  values: [
+    { # 1. var main.pets List[animals.Animal]
+      name: pets, package: 2, type: interfaceInst1,
+      loc: 14, metrics: 1
+    },
+    { # 2. const enums.Cat enums.AnimalKind{ $data string }
+      name: Cat, package: 4, type: object3, const: true,
+      exported: true, loc: 102, metrics: 12
+    },
+    { # 3. const enums.Chihuahua enums.DogBreed{ $data string }
+      name: Chihuahua, package: 4, type: object5, const: true,
+      exported: true, loc: 140, metrics: 20
+    },
+    { # 4. const enums.Dog enums.AnimalKind{ $data string }
+      name: Dog, package: 4, type: object3, const: true,
+      exported: true, loc: 103, metrics: 13
+    },
+    { # 5. const enums.Husky enums.DogBreed{ $data string }
+      name: Husky, package: 4, type: object5, const: true,
+      exported: true, loc: 141, metrics: 21
+    },
+    { # 6. const enums.MaineCoon enums.CatBreed{ $data string }
+      name: MaineCoon, package: 4, type: object4, const: true,
+      exported: true, loc: 121, metrics: 16
+    },
+    { # 7. const enums.Persian enums.CatBreed{ $data string }
+      name: Persian, package: 4, type: object4, const: true,
+      exported: true, loc: 122, metrics: 17
+    },
+    { # 8. const enums.Poodle enums.DogBreed{ $data string }
+      name: Poodle, package: 4, type: object5, const: true,
+      exported: true, loc: 139, metrics: 19
+    },
+    { # 9. const enums.Siamese enums.CatBreed{ $data string }
+      name: Siamese, package: 4, type: object4, const: true,
+      exported: true, loc: 120, metrics: 15
+    }
+  ],
+  locs: {
+      '1': main.go,
+     '32': test0014/animals/animal.go,
+     '55': test0014/animals/cat.go,
+     '75': test0014/animals/dog.go,
+     '95': test0014/enums/animal.go,
+    '113': test0014/enums/cat.go,
+    '132': test0014/enums/dog.go,
+    '151': test0014/enums/valid.go
+  },
+}

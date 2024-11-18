@@ -39,7 +39,7 @@ type Project interface {
 	Locs() locs.Set
 	AllConstructs() collections.Enumerator[Construct]
 	EntryPoint() Package
-	FindType(pkgPath, name string, instTypes []TypeDesc, panicOnNotFound bool) (Package, TypeDesc, bool)
-	FindDecl(pkgPath, name string, instTypes []TypeDesc, panicOnNotFound bool) (Package, Construct, bool)
+	FindType(pkgPath, name string, instTypes []TypeDesc, allowRef, panicOnNotFound bool) (TypeDesc, bool)
+	FindDecl(pkgPath, name string, instTypes []TypeDesc, allowRef, panicOnNotFound bool) (Construct, bool)
 	UpdateIndices()
 }

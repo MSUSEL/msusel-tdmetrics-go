@@ -14,7 +14,7 @@ type Loc interface {
 
 	Flag()
 	Pos() token.Pos
-	Info() (int, string, int)
+	Info() (offset int, file string, line int)
 	String() string
 }
 
@@ -43,7 +43,7 @@ func (c *locImp) Pos() token.Pos {
 	return c.p
 }
 
-func (c *locImp) Info() (int, string, int) {
+func (c *locImp) Info() (offset int, file string, line int) {
 	if utils.IsNil(c.s) {
 		return 0, ``, 0
 	}

@@ -92,15 +92,15 @@ func (s *setImp) finish() {
 	}
 }
 
-func (s *setImp) infoFor(p token.Pos) (int, string, int) {
+func (s *setImp) infoFor(p token.Pos) (offset int, file string, line int) {
 	s.finish()
 	if p <= token.NoPos {
 		return 0, ``, 0
 	}
 
 	fsp := s.fs.Position(p)
-	file, line := s.cleanPath(fsp.Filename), fsp.Line
-	offset := s.offsets[file] + line - 1
+	file, line = s.cleanPath(fsp.Filename), fsp.Line
+	offset = s.offsets[file] + line - 1
 	return offset, file, line
 }
 
