@@ -1,4 +1,5 @@
-﻿using Constructs.Tooling;
+﻿using Constructs.Data;
+using Constructs.Tooling;
 using System.Collections.Generic;
 
 namespace Constructs;
@@ -23,14 +24,7 @@ public class Package : IConstruct, IInitializable {
     public IReadOnlyList<Method> Methods => this.inMethods.AsReadOnly();
     private readonly List<Method> inMethods = [];
 
-    internal Package(Data.Node node) {
-        Data.Object obj = node.AsObject();
-        obj.PreallocateList("types", this.inTypes);
-        obj.PreallocateList("values", this.inValues);
-        obj.PreallocateList("methods", this.inMethods);
-    }
-
-    void IInitializable.Initialize(TypeGetter getter, Data.Node node) {
+    void IInitializable.Initialize(Package package, Data.Node node) {
         Data.Object obj = node.AsObject();
 
         this.Path = obj.ReadString("path");

@@ -1,4 +1,5 @@
-﻿using Constructs.Exceptions;
+﻿using Constructs.Data;
+using Constructs.Exceptions;
 using Constructs.Tooling;
 
 namespace Constructs;
@@ -10,7 +11,7 @@ public class Method : IConstruct, IInitializable {
         throw new UninitializedException("signature");
     private ITypeDesc? inSignature;
 
-    void IInitializable.Initialize(TypeGetter getter, Data.Node node) {
+    void IInitializable.Initialize(Package package, Node node) {
         Data.Object obj = node.AsObject();
         this.Name = obj.ReadString("name");
         this.inSignature = obj.ReadIndexType<ITypeDesc>("signature", getter);

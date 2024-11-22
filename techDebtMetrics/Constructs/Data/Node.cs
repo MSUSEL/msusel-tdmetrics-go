@@ -12,6 +12,12 @@ internal class Node(YamlNode source) {
         return new Node(yaml.Documents[0].RootNode);
     }
 
+    public bool IsObject => this.source is YamlMappingNode;
+
+    public bool IsArray => this.source is YamlSequenceNode;
+
+    public bool IsScalar => this.source is YamlScalarNode;
+
     public Object AsObject() => new(this.source as YamlMappingNode ??
         throw new System.InvalidCastException("Not an object node at " + this.source.End));
 
@@ -30,3 +36,4 @@ internal class Node(YamlNode source) {
     
     public uint AsUint() => uint.Parse(this.AsString());
 }
+ 

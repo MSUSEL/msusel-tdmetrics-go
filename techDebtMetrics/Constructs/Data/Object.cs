@@ -1,5 +1,4 @@
 ﻿using Constructs.Exceptions;
-using Constructs.Tooling;
 using System.Collections.Generic;
 using System.Linq;
 using YamlDotNet.RepresentationModel;
@@ -25,12 +24,12 @@ internal class Object(YamlMappingNode source) : Node(source) {
         }
     }
 
-    public void InitializeList<T>(TypeGetter getter, string name, List<T> list)
+    public void InitializeList<T>(Project project, string name, List<T> list)
         where T : IInitializable {
         if (this.Contains(name)) {
             Array listArr = this[name].AsArray();
             for (int i = 0; i < listArr.Count; ++i)
-                list[i].Initialize(getter, listArr[i]);
+                list[i].Initialize(project, listArr[i]);
         }
     }
 
@@ -44,18 +43,23 @@ internal class Object(YamlMappingNode source) : Node(source) {
     
     public uint ReadUint(string name) => this.readValue(name).AsUint();
 
-    public T ReadIndexType<T>(string name, TypeGetter getter)
+    public T ReadIndexType<T>(string name, Project project)
         where T : ITypeDesc =>
-        getter.GetTypeAtIndex<T>(this.ReadUint(name));
+        project.GetTypeAtIndex<T>(this.ReadUint(name));
 
-    public void ReadIndexTypeList<T>(string name, TypeGetter getter, List<T> list)
+    public void ReadIndexTypeList<T>(string name, Project project, List<T> list)
         where T : ITypeDesc {
         if (this.Contains(name)) {
             Array exactArr = this[name].AsArray();
             for (int i = 0; i < exactArr.Count; ++i) {
                 uint typeIndex = exactArr[i].AsUint();
-                list.Add(getter.GetTypeAtIndex<T>(typeIndex));
+                list.Add(project.GetTypeAtIndex<T>(typeIndex));
             }
         }
     }
+
+    public T ReadKey<T>(string name, Project project)
+        where T : ITypeDesc =>
+        // TODO: FIX
+        project.GetTypeAtIndex<T>(this.ReadUint(name));
 }

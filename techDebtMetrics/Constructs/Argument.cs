@@ -1,22 +1,23 @@
-﻿using Constructs.Exceptions;
+﻿using Constructs.Data;
+using Constructs.Exceptions;
 using Constructs.Tooling;
 
 namespace Constructs;
 
-public class Named : ITypeDesc, IInitializable {
+public class Field : ITypeDesc, IInitializable {
     public string Name { get; private set; } = "";
 
-    public ITypeDesc Type => this.inType ??
+    public TypeDef Type => this.inType ??
         throw new UninitializedException("type");
-    private ITypeDesc? inType;
+    private TypeDef? inType;
 
     void IInitializable.Initialize(TypeGetter getter, Data.Node node) {
         Data.Object obj = node.AsObject();
         this.Name = obj.ReadString("name");
-        this.inType = obj.ReadIndexType<ITypeDesc>("type", getter);
+        this.inType = obj.ReadIndexType<TypeDef>("type", getter);
     }
 
-    public override string ToString() => this.Name + ":" + this.Type;
+    public override string ToString() => this.Name + ":" + this.inType;
 
     public void ToStub(Journal j) {
         j.Write(this.Name);

@@ -1,14 +1,15 @@
-﻿using Constructs.Tooling;
+﻿using Constructs.Data;
+using Constructs.Tooling;
 using System.Collections.Generic;
 
 namespace Constructs;
 
-public class Interface : ITypeDesc, IInitializable {
+public class InterfaceDecl : ITypeDesc, IInitializable {
     public IReadOnlyList<Named> TypeParams => this.inTypeParams.AsReadOnly();
     private readonly List<Named> inTypeParams = [];
 
-    public IReadOnlyList<Interface> Inherits => this.inInherits.AsReadOnly();
-    private readonly List<Interface> inInherits = [];
+    public IReadOnlyList<InterfaceDecl> Inherits => this.inInherits.AsReadOnly();
+    private readonly List<InterfaceDecl> inInherits = [];
 
     public IReadOnlyDictionary<string, ITypeDesc> Methods => this.inMethods.AsReadOnly();
     private readonly Dictionary<string, ITypeDesc> inMethods = [];
