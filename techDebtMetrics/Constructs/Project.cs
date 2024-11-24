@@ -10,6 +10,7 @@ namespace Constructs;
 /// </summary>
 public class Project : IConstruct {
     public readonly string Language;
+    public readonly Locations Locations;
 
     public IReadOnlyList<Abstract> Abstracts => this.inAbstracts.AsReadOnly();
     private readonly List<Abstract> inAbstracts = [];
@@ -84,6 +85,7 @@ public class Project : IConstruct {
     internal Project(Node root) {
         Object obj = root.AsObject();
         this.Language = obj.ReadString("language");
+        this.Locations = new(obj["locs"]);
 
         obj.PreallocateList("abstracts", this.inAbstracts);
         obj.PreallocateList("arguments", this.inArguments);
@@ -103,9 +105,6 @@ public class Project : IConstruct {
         obj.PreallocateList("structDescs", this.inStructDescs);
         obj.PreallocateList("typeParams", this.inTypeParams);
         obj.PreallocateList("values", this.inValues);
-
-        // TODO: FINISH
-        //obj.PreallocateList("locs", this.inLocs);
 
         obj.InitializeList(this, "abstracts", this.inAbstracts);
         obj.InitializeList(this, "arguments", this.inArguments);
@@ -127,9 +126,8 @@ public class Project : IConstruct {
         obj.InitializeList(this, "values", this.inValues);
     }
 
+    public override string ToString() => Journal.ToString(this);
+
     public void ToStub(Journal j) =>
         j.Write(this.Packages, separator: "\n\n");
-
-    public string ToStub() =>
-        new Journal().Write(this).ToString();
 }

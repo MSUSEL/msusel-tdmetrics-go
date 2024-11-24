@@ -7,7 +7,9 @@ public class ObjectInst : ITypeDesc, IInitializable {
 
     // TODO: Implements
 
-    void IInitializable.Initialize(Package package, Node node) { }
+    void IInitializable.Initialize(Project project, Node node) { }
+
+    public override string ToString() => Journal.ToString(this);
 
     public void ToStub(Journal j) { }
 }

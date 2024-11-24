@@ -7,5 +7,7 @@ public class Signature : ITypeDesc, IInitializable {
     
     void IInitializable.Initialize(Project project, Node node) { }
 
+    public override string ToString() => Journal.ToString(this);
+
     public void ToStub(Journal j) { }
 }

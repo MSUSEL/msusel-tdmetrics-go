@@ -4,6 +4,10 @@ using System.Text;
 namespace Constructs.Tooling;
 
 public class Journal {
+
+    static public string ToString<T>(T c) where T : IConstruct =>
+        new Journal().Write(c).ToString();
+
     private readonly StringBuilder sb;
     private readonly string indent;
 
@@ -20,6 +24,8 @@ public class Journal {
         this.indent = indent;
         this.Short = isShort;
     }
+
+    public bool Long => !this.Short;
 
     public Journal Indent => new(this.sb, this.indent+"   ", this.Short);
 
@@ -63,8 +69,12 @@ public class Journal {
         return this;
     }
 
-    public Journal Write<T>(T c) where T : IConstruct {
-        c.ToStub(this);
+    public Journal Write<T>(T? c, string prefix = "", string suffix = "") where T : IConstruct {
+        if (c is not null) {
+            this.Write(prefix);
+            c.ToStub(this);
+            this.Write(suffix);
+        }
         return this;
     }
 
@@ -75,8 +85,8 @@ public class Journal {
         where T : IConstruct =>
         this.Write(list, prefix, suffix, separator).WriteLine();
 
-    public Journal WriteLine<T>(T c) where T : IConstruct =>
-        this.Write(c).WriteLine();
+    public Journal WriteLine<T>(T? c, string prefix = "", string suffix = "") where T : IConstruct =>
+        this.Write(c, prefix, suffix).WriteLine();
 
     public Journal WriteLine() {
         this.sb.Append('\n');

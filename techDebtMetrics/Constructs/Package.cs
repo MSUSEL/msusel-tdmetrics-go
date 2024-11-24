@@ -24,7 +24,7 @@ public class Package : IConstruct, IInitializable {
     public IReadOnlyList<Method> Methods => this.inMethods.AsReadOnly();
     private readonly List<Method> inMethods = [];
 
-    void IInitializable.Initialize(Package package, Data.Node node) {
+    void IInitializable.Initialize(Project project, Data.Node node) {
         Data.Object obj = node.AsObject();
 
         this.Path = obj.ReadString("path");
@@ -42,6 +42,8 @@ public class Package : IConstruct, IInitializable {
         obj.InitializeList(getter, "values", this.inValues);
         obj.InitializeList(getter, "methods", this.inMethods);
     }
+
+    public override string ToString() => Journal.ToString(this);
 
     public void ToStub(Journal j) {
         j.Write("package ").Write(this.Name).WriteLine(" {");

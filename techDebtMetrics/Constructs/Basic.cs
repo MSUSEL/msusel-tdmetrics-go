@@ -6,13 +6,9 @@ namespace Constructs;
 public class Basic : ITypeDesc, IInitializable {
     public string Name { get; private set; } = "";
 
-    void IInitializable.Initialize(TypeGetter getter, Data.Node node) {
-        if (node.IsScalar) this.Name = node.AsString();
-        else {
-            Data.Object obj = node.AsObject();
-            this.Name = obj.ReadString("name");
-        }
-    }
+    void IInitializable.Initialize(Project project, Node node) =>
+        this.Name = node.IsScalar ? node.AsString() :
+            this.Name = node.AsObject().ReadString("name");
 
     public override string ToString() => this.Name;
 

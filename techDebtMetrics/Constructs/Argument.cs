@@ -4,17 +4,17 @@ using Constructs.Tooling;
 
 namespace Constructs;
 
-public class Field : ITypeDesc, IInitializable {
+public class Argument : IConstruct, IInitializable {
     public string Name { get; private set; } = "";
 
-    public TypeDef Type => this.inType ??
+    public ITypeDesc Type => this.inType ??
         throw new UninitializedException("type");
-    private TypeDef? inType;
+    private ITypeDesc? inType;
 
-    void IInitializable.Initialize(TypeGetter getter, Data.Node node) {
-        Data.Object obj = node.AsObject();
-        this.Name = obj.ReadString("name");
-        this.inType = obj.ReadIndexType<TypeDef>("type", getter);
+    void IInitializable.Initialize(Project project, Node node) {
+        Object obj = node.AsObject();
+        this.Name   = obj.TryReadString("name");
+        this.inType = obj.ReadKey<ITypeDesc>("type", project);
     }
 
     public override string ToString() => this.Name + ":" + this.inType;

@@ -3,9 +3,11 @@ using Constructs.Tooling;
 
 namespace Constructs;
 
-public class TypeParam : ITypeDesc, IInitializable {
+public class TypeParam : IConstruct, IInitializable {
    
     void IInitializable.Initialize(Project project, Node node) { }
+
+    public override string ToString() => Journal.ToString(this);
 
     public void ToStub(Journal j) { }
 }
