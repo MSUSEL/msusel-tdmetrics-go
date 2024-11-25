@@ -5,7 +5,7 @@ namespace Constructs.Tooling;
 
 public class Journal {
 
-    static public string ToString<T>(T c) where T : IConstruct =>
+    public static string ToString<T>(T c) where T : IConstruct =>
         new Journal().Write(c).ToString();
 
     private readonly StringBuilder sb;

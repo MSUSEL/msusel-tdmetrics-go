@@ -17,17 +17,13 @@ public class MethodDecl : IDeclaration, IInitializable {
         throw new UninitializedException(nameof(this.Signature));
     private Signature? inSignature;
 
-    public Metrics Metrics => this.inMetrics ??
-        throw new UninitializedException(nameof(this.Metrics));
-    private Metrics? inMetrics;
+    public Metrics? Metrics { get; private set; }
 
     public Package Package => this.inPackage ??
         throw new UninitializedException(nameof(this.Package));
     private Package? inPackage;
 
-    public ObjectDecl Receiver => this.inReceiver ??
-        throw new UninitializedException(nameof(this.Receiver));
-    private ObjectDecl? inReceiver;
+    public ObjectDecl? Receiver { get; private set; }
 
     public IReadOnlyList<TypeParam> TypeParams => this.inTypeParams.AsReadOnly();
     private List<TypeParam> inTypeParams = [];
@@ -38,9 +34,9 @@ public class MethodDecl : IDeclaration, IInitializable {
         this.Location     = obj.TryReadLocation("loc", project);
         this.inInstances  = obj.TryReadIndexList("instances", project.MethodInsts);
         this.inSignature  = obj.ReadIndex("signature", project.Signatures);
-        this.inMetrics    = obj.ReadIndex("metrics", project.Metrics);
+        this.Metrics      = obj.TryReadIndex("metrics", project.Metrics);
         this.inPackage    = obj.ReadIndex("package", project.Packages);
-        this.inReceiver   = obj.ReadIndex("receiver", project.ObjectDecls);
+        this.Receiver     = obj.TryReadIndex("receiver", project.ObjectDecls);
         this.inTypeParams = obj.TryReadIndexList("typeParams", project.TypeParams);
     }
 

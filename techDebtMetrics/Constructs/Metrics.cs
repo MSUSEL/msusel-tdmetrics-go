@@ -55,6 +55,14 @@ public class Metrics : IConstruct, IInitializable {
     public override string ToString() => Journal.ToString(this);
 
     public void ToStub(Journal j) {
-        // TODO: Implement
+        j.WriteLine("{");
+        j.Indent.
+            WriteLine("codeCount:  " + this.CodeCount).
+            WriteLine("complexity: " + this.Complexity).
+            WriteLine("indents:    " + this.Indents).
+            WriteLine("lineCount:  " + this.LineCount);
+        if (this.Getter) j.Indent.WriteLine("getter");
+        if (this.Setter) j.Indent.WriteLine("setter");
+        j.WriteLine("}");
     }
 }

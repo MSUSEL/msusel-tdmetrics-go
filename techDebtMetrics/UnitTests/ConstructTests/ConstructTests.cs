@@ -2,7 +2,7 @@ using System;
 using System.IO;
 using Constructs;
 
-namespace UnitTests.Constructs;
+namespace UnitTests.ConstructTests;
 
 public class ConstructTests {
 
@@ -14,10 +14,10 @@ public class ConstructTests {
 
     [Test]
     public void StubTest0003() => runStubTest(3);
-    
+
     [Test]
     public void StubTest0004() => runStubTest(4);
-    
+
     [Test]
     public void StubTest0005() => runStubTest(5);
 
@@ -34,7 +34,7 @@ public class ConstructTests {
 
     static private void runStubTest(int testNum) {
         Project proj = readTestPackage(testNum);
-        string got = proj.ToStub();
+        string got = proj.ToString();
         string exp = readExpectedStub(testNum).ReplaceLineEndings("\n");
         if (got != exp) {
             Console.WriteLine(got);

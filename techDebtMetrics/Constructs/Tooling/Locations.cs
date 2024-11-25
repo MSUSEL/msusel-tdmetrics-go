@@ -33,7 +33,7 @@ public class Locations {
         get {
             int index = this.findRange(offset);
             if (index < 0) return Unknown;
-            Location pos = this.offsets[index - 1];
+            Location pos = this.offsets[index];
             return new(offset - pos.LineNo, pos.Path);
         }
     }

@@ -1,4 +1,5 @@
 ﻿using Constructs.Tooling;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using YamlDotNet.RepresentationModel;
@@ -23,16 +24,16 @@ internal class Node(YamlNode source) {
     public bool IsScalar => this.source is YamlScalarNode;
 
     public Object AsObject() => new(this.source as YamlMappingNode ??
-        throw new System.InvalidCastException("Not an object node at " + this.source.End));
+        throw new InvalidCastException("Not an object node at " + this.source.End));
 
     public Array AsArray() => new(this.source as YamlSequenceNode ??
-        throw new System.InvalidCastException("Not an array node at " + this.source.End));
+        throw new InvalidCastException("Not an array node at " + this.source.End));
 
     private YamlScalarNode asValue() => this.source as YamlScalarNode ??
-        throw new System.InvalidCastException("Not a value node at " + this.source.End);
+        throw new InvalidCastException("Not a value node at " + this.source.End);
 
     public string AsString() => this.asValue().Value ??
-        throw new System.Exception("Null string from value node.");
+        throw new Exception("Null string from value node.");
 
     public bool AsBool() => bool.Parse(this.AsString());
 
@@ -42,15 +43,19 @@ internal class Node(YamlNode source) {
         project.Locations[this.AsInt()];
 
     public T AsIndex<T>(IReadOnlyList<T> source)
-        where T : IConstruct =>
-        source[this.AsInt()];
+        where T : IConstruct {
+        int index = this.AsInt()-1;
+        if (index < 0 || index >= source.Count)
+            throw new Exception("Index out of range [0.." + source.Count + "): " + index);
+        return source[index];
+    }
 
     public T AsKey<T>(Project project)
         where T : IConstruct =>
         (T)readKey(this.AsString(), project);
 
     static private int keySplitPoint(string key) {
-        for (int i = key.Length - 1; i >= 0; --i {
+        for (int i = key.Length - 1; i >= 0; --i) {
             if (!char.IsDigit(key[i])) return i + 1;
         }
         throw new System.Exception("bad key: " + key);
@@ -61,24 +66,24 @@ internal class Node(YamlNode source) {
         string name = key[..split];
         int index = int.Parse(key[split..]);
         return name switch {
-            "abstract" => project.Abstracts[index],
-            "argument" => project.Arguments[index],
-            "basic" => project.Basics[index],
-            "field" => project.Fields[index],
+            "abstract"      => project.Abstracts[index],
+            "argument"      => project.Arguments[index],
+            "basic"         => project.Basics[index],
+            "field"         => project.Fields[index],
             "interfaceDecl" => project.InterfaceDecls[index],
             "interfaceDesc" => project.InterfaceDescs[index],
             "interfaceInst" => project.InterfaceInsts[index],
-            "method" => project.Methods[index],
-            "methodInst" => project.MethodInsts[index],
-            "metrics" => project.Metrics[index],
-            "object" => project.ObjectDecls[index],
-            "objectInst" => project.ObjectInsts[index],
-            "package" => project.Packages[index],
-            "selection" => project.Selections[index],
-            "signature" => project.Signatures[index],
-            "structDesc" => project.StructDescs[index],
-            "typeParam" => project.TypeParams[index],
-            "value" => project.Values[index],
+            "method"        => project.MethodDecls[index],
+            "methodInst"    => project.MethodInsts[index],
+            "metrics"       => project.Metrics[index],
+            "object"        => project.ObjectDecls[index],
+            "objectInst"    => project.ObjectInsts[index],
+            "package"       => project.Packages[index],
+            "selection"     => project.Selections[index],
+            "signature"     => project.Signatures[index],
+            "structDesc"    => project.StructDescs[index],
+            "typeParam"     => project.TypeParams[index],
+            "value"         => project.Values[index],
             _ => throw new InvalidDataException(name)
         };
     }
