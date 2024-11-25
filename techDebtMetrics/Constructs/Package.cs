@@ -13,56 +13,45 @@ public class Package : IConstruct, IInitializable {
     public string Name { get; private set; } = "";
 
     public IReadOnlyList<Package> Imports => this.inImports.AsReadOnly();
-    private readonly List<Package> inImports = [];
+    private List<Package> inImports = [];
 
-    public IReadOnlyList<TypeDef> Types => this.inTypes.AsReadOnly();
-    private readonly List<TypeDef> inTypes = [];
+    public IReadOnlyList<InterfaceDecl> Interfaces => this.inInterfaces.AsReadOnly();
+    private List<InterfaceDecl> inInterfaces = [];
 
-    public IReadOnlyList<ValueDef> Values => this.inValues.AsReadOnly();
-    private readonly List<ValueDef> inValues = [];
+    public IReadOnlyList<MethodDecl> Methods => this.inMethods.AsReadOnly();
+    private List<MethodDecl> inMethods = [];
 
-    public IReadOnlyList<Method> Methods => this.inMethods.AsReadOnly();
-    private readonly List<Method> inMethods = [];
+    public IReadOnlyList<ObjectDecl> Objects => this.inObjects.AsReadOnly();
+    private List<ObjectDecl> inObjects = [];
 
-    void IInitializable.Initialize(Project project, Data.Node node) {
-        Data.Object obj = node.AsObject();
+    public IReadOnlyList<Value> Values => this.inValues.AsReadOnly();
+    private List<Value> inValues = [];
 
-        this.Path = obj.ReadString("path");
-        this.Name = obj.ReadString("name");
-
-        if (obj.Contains("imports")) {        
-            Data.Array importArr = obj["imports"].AsArray();
-            for (int i = 0; i < importArr.Count; i++) {
-                uint pkgIndex = importArr[i].AsUint();
-                this.inImports.Add(getter.GetPackageAtIndex(pkgIndex));
-            }
-        }
-
-        obj.InitializeList(getter, "types", this.inTypes);
-        obj.InitializeList(getter, "values", this.inValues);
-        obj.InitializeList(getter, "methods", this.inMethods);
+    void IInitializable.Initialize(Project project, Node node) {
+        Object obj = node.AsObject();
+        this.Path         = obj.ReadString("path");
+        this.Name         = obj.ReadString("name");
+        this.inImports    = obj.TryReadIndexList("imports", project.Packages);
+        this.inInterfaces = obj.TryReadIndexList("interfaces", project.InterfaceDecls);
+        this.inMethods    = obj.TryReadIndexList("methods", project.MethodDecls);
+        this.inObjects    = obj.TryReadIndexList("objects", project.ObjectDecls);
+        this.inValues     = obj.TryReadIndexList("values", project.Values);
     }
 
     public override string ToString() => Journal.ToString(this);
 
     public void ToStub(Journal j) {
-        j.Write("package ").Write(this.Name).WriteLine(" {");
+        j.Write("package ").Write(this.Name);
+        if (j.Long) {
+            j.WriteLine(" {");
+            Journal j2 = j.Indent.AsShort;
+            j2.Write("path: ").Write(this.Path).WriteLine(";");
+            j2.Write("imports: ").Write(this.Imports).WriteLine(";");
 
-        Journal j2 = j.Indent;
-        j2.Write("path: ").Write(this.Path).WriteLine(";");
 
-        foreach (Package import in this.Imports)
-            j2.WriteLine().Write("import ").Write(import.Name).Write(" => ").Write(import.Path).WriteLine(";");
 
-        foreach (TypeDef td in this.Types)
-            j2.WriteLine().Write(td).WriteLine(";");
 
-        foreach (ValueDef vd in this.Values)
-            j2.WriteLine().Write(vd).WriteLine(";");
-        
-        foreach (Method m in this.Methods)
-            j2.WriteLine().Write(m).WriteLine(";");
-
-        j.Write("}");
+            j.Write("}");
+        }
     }
 }

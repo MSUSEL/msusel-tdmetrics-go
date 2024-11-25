@@ -3,7 +3,7 @@ using Constructs.Tooling;
 
 namespace Constructs;
 
-public class Struct : ITypeDesc, IInitializable {
+public class StructDesc : ITypeDesc, IInitializable {
 
     void IInitializable.Initialize(Project project, Node node) { }
 

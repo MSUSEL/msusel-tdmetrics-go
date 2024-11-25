@@ -9,10 +9,16 @@ public class Locations {
 
     private readonly List<Location> offsets;
 
-    internal Locations(Node node) =>
+    internal Locations(Node? node) {
+        if (node is null) {
+            this.offsets = [];
+            return;
+        }
+
         this.offsets = new(node.AsObject().Children.
             Select(child => new Location(int.Parse(child.Key), child.Value.AsString())).
             Order());
+    }
 
     private int findRange(int offset) {
         int index = this.offsets.BinarySearch(new Location(offset, ""));

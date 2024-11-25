@@ -18,75 +18,75 @@ internal class Object(YamlMappingNode source) : Node(source) {
 
     public void PreallocateList<T>(string name, List<T> list)
         where T : new() =>
-        this.tryReadNode(name)?.AsArray().PreallocateList(list);
+        this.TryReadNode(name)?.AsArray().PreallocateList(list);
 
     public void InitializeList<T>(Project project, string name, List<T> list)
         where T : IInitializable =>
-        this.tryReadNode(name)?.AsArray().InitializeList<T>(project, list);
+        this.TryReadNode(name)?.AsArray().InitializeList<T>(project, list);
 
     #region Must Reads
 
-    private Node readNode(string name) =>
+    public Node ReadNode(string name) =>
         this.source.Children.TryGetValue(new YamlScalarNode(name), out YamlNode? value) ?
             new Node(value) :
             throw new MissingDataException("Expected "+name+" in object at "+this.source.Start.ToString());
 
-    public string ReadString(string name) => this.readNode(name).AsString();
+    public string ReadString(string name) => this.ReadNode(name).AsString();
 
-    public bool ReadBool(string name) => this.readNode(name).AsBool();
+    public bool ReadBool(string name) => this.ReadNode(name).AsBool();
 
-    public int ReadInt(string name) => this.readNode(name).AsInt();
+    public int ReadInt(string name) => this.ReadNode(name).AsInt();
 
     public T ReadIndex<T>(string name, IReadOnlyList<T> source)
         where T : IConstruct =>
-        this.readNode(name).AsIndex(source);
+        this.ReadNode(name).AsIndex(source);
 
     public List<T> ReadIndexList<T>(string name, IReadOnlyList<T> source)
         where T : IConstruct =>
-        this.readNode(name).AsArray().AsIndexList(source);
+        this.ReadNode(name).AsArray().AsIndexList(source);
 
     public T ReadKey<T>(string name, Project project)
         where T : IConstruct =>
-        this.readNode(name).AsKey<T>(project);
+        this.ReadNode(name).AsKey<T>(project);
 
     public List<T> ReadKeyList<T>(string name, Project project)
         where T : IConstruct =>
-        this.readNode(name).AsArray().AsKeyList<T>(project);
+        this.ReadNode(name).AsArray().AsKeyList<T>(project);
 
     public Location ReadLocation(string name, Project project) =>
-        this.readNode(name).AsLocation(project);
+        this.ReadNode(name).AsLocation(project);
 
     #endregion
     #region Optional Reads
 
-    private Node? tryReadNode(string name) =>
+    public Node? TryReadNode(string name) =>
         this.source.Children.TryGetValue(new YamlScalarNode(name), out YamlNode? value) ?
             new Node(value) : null;
 
-    public string TryReadString(string name) => this.tryReadNode(name)?.AsString() ?? "";
+    public string TryReadString(string name) => this.TryReadNode(name)?.AsString() ?? "";
 
-    public bool TryReadBool(string name) => this.tryReadNode(name)?.AsBool() ?? false;
+    public bool TryReadBool(string name) => this.TryReadNode(name)?.AsBool() ?? false;
 
-    public int TryReadInt(string name) => this.tryReadNode(name)?.AsInt() ?? 0;
+    public int TryReadInt(string name) => this.TryReadNode(name)?.AsInt() ?? 0;
 
     public T? TryReadIndex<T>(string name, IReadOnlyList<T> source)
         where T : class, IConstruct =>
-        this.tryReadNode(name)?.AsIndex(source);
+        this.TryReadNode(name)?.AsIndex(source);
 
     public List<T> TryReadIndexList<T>(string name, IReadOnlyList<T> source)
         where T : IConstruct =>
-        this.tryReadNode(name)?.AsArray()?.AsIndexList(source) ?? [];
+        this.TryReadNode(name)?.AsArray()?.AsIndexList(source) ?? [];
 
     public T? TryReadKey<T>(string name, Project project)
         where T : class, IConstruct =>
-        this.tryReadNode(name)?.AsKey<T>(project);
+        this.TryReadNode(name)?.AsKey<T>(project);
 
     public List<T> TryReadKeyList<T>(string name, Project project)
         where T : IConstruct =>
-        this.tryReadNode(name)?.AsArray()?.AsKeyList<T>(project) ?? [];
+        this.TryReadNode(name)?.AsArray()?.AsKeyList<T>(project) ?? [];
 
     public Location TryReadLocation(string name, Project project) =>
-        this.tryReadNode(name)?.AsLocation(project) ?? Locations.Unknown;
+        this.TryReadNode(name)?.AsLocation(project) ?? Locations.Unknown;
 
     #endregion
 }

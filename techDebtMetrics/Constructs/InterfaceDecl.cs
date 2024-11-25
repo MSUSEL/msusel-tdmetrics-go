@@ -14,11 +14,11 @@ public class InterfaceDecl : ITypeDesc, IDeclaration, IInitializable {
     private List<InterfaceInst> inInstances = [];
 
     public InterfaceDesc Interface => this.inInterface ??
-        throw new UninitializedException("interface");
+        throw new UninitializedException(nameof(this.Interface));
     private InterfaceDesc? inInterface;
 
     public Package Package => this.inPackage ??
-        throw new UninitializedException("package");
+        throw new UninitializedException(nameof(this.Package));
     private Package? inPackage;
 
     public IReadOnlyList<TypeParam> TypeParams => this.inTypeParams.AsReadOnly();

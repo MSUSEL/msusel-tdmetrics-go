@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 namespace Constructs;
 
-public class Method : IDeclaration, IInitializable {
+public class MethodDecl : IDeclaration, IInitializable {
     public string Name { get; private set; } = "";
 
     public Location Location { get; private set; }
@@ -14,19 +14,19 @@ public class Method : IDeclaration, IInitializable {
     private List<MethodInst> inInstances = [];
 
     public Signature Signature => this.inSignature ??
-        throw new UninitializedException("signature");
+        throw new UninitializedException(nameof(this.Signature));
     private Signature? inSignature;
 
     public Metrics Metrics => this.inMetrics ??
-        throw new UninitializedException("metrics");
+        throw new UninitializedException(nameof(this.Metrics));
     private Metrics? inMetrics;
 
     public Package Package => this.inPackage ??
-        throw new UninitializedException("package");
+        throw new UninitializedException(nameof(this.Package));
     private Package? inPackage;
 
     public ObjectDecl Receiver => this.inReceiver ??
-        throw new UninitializedException("receiver");
+        throw new UninitializedException(nameof(this.Receiver));
     private ObjectDecl? inReceiver;
 
     public IReadOnlyList<TypeParam> TypeParams => this.inTypeParams.AsReadOnly();

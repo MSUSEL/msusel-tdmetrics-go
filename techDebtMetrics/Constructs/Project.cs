@@ -33,8 +33,8 @@ public class Project : IConstruct {
     public IReadOnlyList<InterfaceInst> InterfaceInsts => this.inInterfaceInsts.AsReadOnly();
     private readonly List<InterfaceInst> inInterfaceInsts = [];
     
-    public IReadOnlyList<Method> Methods => this.inMethods.AsReadOnly();
-    private readonly List<Method> inMethods = [];
+    public IReadOnlyList<MethodDecl> MethodDecls => this.inMethodDecls.AsReadOnly();
+    private readonly List<MethodDecl> inMethodDecls = [];
 
     public IReadOnlyList<MethodInst> MethodInsts => this.inMethodInsts.AsReadOnly();
     private readonly List<MethodInst> inMethodInsts = [];
@@ -57,8 +57,8 @@ public class Project : IConstruct {
     public IReadOnlyList<Signature> Signatures => this.inSignatures.AsReadOnly();
     private readonly List<Signature> inSignatures = [];
 
-    public IReadOnlyList<Struct> StructDescs => this.inStructDescs.AsReadOnly();
-    private readonly List<Struct> inStructDescs = [];
+    public IReadOnlyList<StructDesc> StructDescs => this.inStructDescs.AsReadOnly();
+    private readonly List<StructDesc> inStructDescs = [];
 
     public IReadOnlyList<TypeParam> TypeParams => this.inTypeParams.AsReadOnly();
     private readonly List<TypeParam> inTypeParams = [];
@@ -85,7 +85,7 @@ public class Project : IConstruct {
     internal Project(Node root) {
         Object obj = root.AsObject();
         this.Language = obj.ReadString("language");
-        this.Locations = new(obj["locs"]);
+        this.Locations = new(obj.TryReadNode("locs"));
 
         obj.PreallocateList("abstracts", this.inAbstracts);
         obj.PreallocateList("arguments", this.inArguments);
@@ -94,7 +94,7 @@ public class Project : IConstruct {
         obj.PreallocateList("interfaceDecls", this.inInterfaceDecls);
         obj.PreallocateList("interfaceDescs", this.inInterfaceDescs);
         obj.PreallocateList("interfaceInsts", this.inInterfaceInsts);
-        obj.PreallocateList("methods", this.inMethods);
+        obj.PreallocateList("methods", this.inMethodDecls);
         obj.PreallocateList("methodInsts", this.inMethodInsts);
         obj.PreallocateList("metrics", this.inMetrics);
         obj.PreallocateList("objects", this.inObjectDecls);
@@ -113,7 +113,7 @@ public class Project : IConstruct {
         obj.InitializeList(this, "interfaceDecls", this.inInterfaceDecls);
         obj.InitializeList(this, "interfaceDescs", this.inInterfaceDescs);
         obj.InitializeList(this, "interfaceInsts", this.inInterfaceInsts);
-        obj.InitializeList(this, "methods", this.inMethods);
+        obj.InitializeList(this, "methods", this.inMethodDecls);
         obj.InitializeList(this, "methodInsts", this.inMethodInsts);
         obj.InitializeList(this, "metrics", this.inMetrics);
         obj.InitializeList(this, "objects", this.inObjectDecls);
@@ -128,6 +128,8 @@ public class Project : IConstruct {
 
     public override string ToString() => Journal.ToString(this);
 
-    public void ToStub(Journal j) =>
+    public void ToStub(Journal j) {
+        // TODO: Implement
         j.Write(this.Packages, separator: "\n\n");
+    }
 }

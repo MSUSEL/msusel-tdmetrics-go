@@ -8,7 +8,7 @@ public class Field : IConstruct, IInitializable {
     public string Name { get; private set; } = "";
 
     public ITypeDesc Type => this.inType ??
-        throw new UninitializedException("type");
+        throw new UninitializedException(nameof(this.Type));
     private ITypeDesc? inType;
 
     void IInitializable.Initialize(Project project, Node node) {

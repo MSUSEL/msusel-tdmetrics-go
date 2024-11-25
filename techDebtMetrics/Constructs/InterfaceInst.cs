@@ -8,14 +8,14 @@ namespace Constructs;
 public class InterfaceInst : ITypeDesc, IInitializable {
 
     public InterfaceDecl Generic => this.inGeneric ??
-        throw new UninitializedException("generic");
+        throw new UninitializedException(nameof(this.Generic));
     private InterfaceDecl? inGeneric;
 
     public IReadOnlyList<ITypeDesc> InstanceTypes => this.inInstanceTypes.AsReadOnly();
     private List<ITypeDesc> inInstanceTypes = [];
 
     public InterfaceDesc Resolved => this.inResolved ??
-        throw new UninitializedException("resolved");
+        throw new UninitializedException(nameof(this.Resolved));
     private InterfaceDesc? inResolved;
 
     void IInitializable.Initialize(Project project, Node node) {

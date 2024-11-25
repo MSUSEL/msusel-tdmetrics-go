@@ -8,7 +8,7 @@ public class Abstract : IConstruct, IInitializable {
     public string Name { get; private set; } = "";
 
     public Signature Signature => this.inSignature ??
-        throw new UninitializedException("signature");
+        throw new UninitializedException(nameof(this.Signature));
     private Signature? inSignature;
 
     void IInitializable.Initialize(Project project, Node node) {

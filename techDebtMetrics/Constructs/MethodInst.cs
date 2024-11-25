@@ -7,9 +7,9 @@ namespace Constructs;
 
 public class MethodInst : IConstruct, IInitializable {
 
-    public Method Generic => this.inGeneric ??
-        throw new UninitializedException("generic");
-    private Method? inGeneric;
+    public MethodDecl Generic => this.inGeneric ??
+        throw new UninitializedException(nameof(this.Generic));
+    private MethodDecl? inGeneric;
 
     public IReadOnlyList<ITypeDesc> InstanceTypes => this.inInstanceTypes.AsReadOnly();
     private List<ITypeDesc> inInstanceTypes = [];
@@ -17,12 +17,12 @@ public class MethodInst : IConstruct, IInitializable {
     public ObjectInst? Receiver { get; private set; }
 
     public Signature Resolved => this.inResolved ??
-        throw new UninitializedException("resolved");
+        throw new UninitializedException(nameof(this.Resolved));
     private Signature? inResolved;
 
     void IInitializable.Initialize(Project project, Node node) {
         Object obj = node.AsObject();
-        this.inGeneric       = obj.ReadIndex("generics", project.Methods);
+        this.inGeneric       = obj.ReadIndex("generics", project.MethodDecls);
         this.inInstanceTypes = obj.ReadKeyList<ITypeDesc>("instances", project);
         this.Receiver        = obj.TryReadIndex("receiver", project.ObjectInsts);
         this.inResolved      = obj.ReadIndex("resolved", project.Signatures);
@@ -31,8 +31,6 @@ public class MethodInst : IConstruct, IInitializable {
     public override string ToString() => Journal.ToString(this);
 
     public void ToStub(Journal j) =>
-        j.AsShort.Write(this.Receiver, suffix: ".").
-            AsShort.Write(this.Generic).
-            AsLong.Write(this.InstanceTypes, "<", ">").
-            AsShort.Write(this.Resolved);
+        j.AsShort.Write(this.Receiver, suffix: ".").Write(this.Generic).
+            Write(this.InstanceTypes, "<", ">").Write(this.Resolved);
 }
