@@ -22,6 +22,6 @@ public class Field : IConstruct, IInitializable {
     public void ToStub(Journal j) {
         j.Write(this.Name);
         if (!j.Short)
-            j.Write(" ").AsShort.Write(this.Type);
+            j.Write(" ").AsShort.Write(this.Type).Write(";");
     }
 }

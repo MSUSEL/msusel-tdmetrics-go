@@ -44,14 +44,14 @@ public class Package : IConstruct, IInitializable {
         j.Write("package ").Write(this.Name);
         if (j.Long) {
             j.WriteLine(" {");
-            Journal j2 = j.Indent.AsShort;
-            j2.Write("path: ").Write(this.Path).WriteLine(";");
-            j2.Write("imports: ").Write(this.Imports).WriteLine(";");
-            j2.WriteLine(this.Interfaces, prefix: "\n", suffix: "\n", separator: "\n\n");
-            j2.WriteLine(this.Methods, prefix: "\n", suffix: "\n", separator: "\n\n");
-            j2.WriteLine(this.Objects, prefix: "\n", suffix: "\n", separator: "\n\n");
-            j2.WriteLine(this.Values, prefix: "\n", suffix: "\n", separator: "\n\n");
-            j.Write("}");
+            Journal j2 = j.Indent.AsLong;
+            j2.Write("path: " + this.Path + ";");
+            j2.AsShort.Write(this.Imports, prefix: "\nimports: ", suffix: ";");
+            j2.Write(this.Interfaces, prefix:"\n", suffix: ";", separator: ";\n");
+            j2.Write(this.Methods, prefix: "\n", suffix: ";", separator: ";\n");
+            j2.Write(this.Objects, prefix: "\n", suffix: ";", separator: ";\n");
+            j2.Write(this.Values, prefix: "\n", suffix: ";", separator: ";\n");
+            j.Write("\n}");
         }
     }
 }

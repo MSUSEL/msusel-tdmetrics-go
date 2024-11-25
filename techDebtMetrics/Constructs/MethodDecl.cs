@@ -43,5 +43,5 @@ public class MethodDecl : IDeclaration, IInitializable {
     public override string ToString() => Journal.ToString(this);
 
     public void ToStub(Journal j) =>
-        j.Write(this.Name).AsShort.Write(this.Signature);
+        j.Write(this.Name).Write(this.Signature);
 }

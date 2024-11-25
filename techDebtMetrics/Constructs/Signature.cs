@@ -28,6 +28,8 @@ public class Signature : ITypeDesc, IInitializable {
     public void ToStub(Journal j) {
         j.Write("(").Write(this.Params);
         if (this.Variadic) j.Write("...");
-        j.Write(")").Write(this.Results, "(", ")");
+        j.Write(")");
+        if (this.Results.Count == 1) j.Write(this.Results[0], prefix: " ");
+        else j.Write(this.Results, "(", ")");
     }
 }

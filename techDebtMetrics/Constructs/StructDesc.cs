@@ -21,6 +21,6 @@ public class StructDesc : ITypeDesc, IInitializable {
     public void ToStub(Journal j) {
         j.WriteLine("{");
         j.Indent.Write(this.Fields, separator: "\n");
-        j.WriteLine("}");
+        j.Write("\n}");
     }
 }

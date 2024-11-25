@@ -20,15 +20,16 @@ public class InterfaceInst : ITypeDesc, IInitializable {
 
     void IInitializable.Initialize(Project project, Node node) {
         Object obj = node.AsObject();
-        this.inGeneric       = obj.ReadIndex("generics", project.InterfaceDecls);
-        this.inInstanceTypes = obj.ReadKeyList<ITypeDesc>("instances", project);
+        this.inGeneric       = obj.ReadIndex("generic", project.InterfaceDecls);
+        this.inInstanceTypes = obj.ReadKeyList<ITypeDesc>("instanceTypes", project);
         this.inResolved      = obj.ReadIndex("resolved", project.InterfaceDescs);
     }
 
     public override string ToString() => Journal.ToString(this);
 
-    public void ToStub(Journal j) =>
-        j.AsShort.Write(this.Generic).
-            AsLong.Write(this.InstanceTypes, "<", ">").
-            AsShort.Write(this.Resolved);
+    public void ToStub(Journal j) {
+        j.Write(this.Generic.Name).
+            AsLong.Write(this.InstanceTypes, "<", ">");
+        if (j.Long) j.AsShort.Write(this.Resolved);
+    }
 }

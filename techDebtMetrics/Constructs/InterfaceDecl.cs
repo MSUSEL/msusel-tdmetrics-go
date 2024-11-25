@@ -37,9 +37,8 @@ public class InterfaceDecl : ITypeDesc, IDeclaration, IInitializable {
     public override string ToString() => Journal.ToString(this);
 
     public void ToStub(Journal j) {
-        j.Write("interface ").Write(this.Name);
-        if (j.Long)
-            j.Write(this.TypeParams, "<", ">").
-                Write(this.Interface);
+        if (j.Long) j.Write("interface ");
+        j.Write(this.Name).Write(this.TypeParams, "<", ">");
+        if (j.Long) j.Write(this.Interface);
     }
 }

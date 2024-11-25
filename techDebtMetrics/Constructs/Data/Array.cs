@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using YamlDotNet.RepresentationModel;
 
@@ -21,8 +22,13 @@ internal class Array(YamlSequenceNode source) : Node(source) {
 
     public void InitializeList<T>(Project project, IReadOnlyList<T> list)
         where T : IInitializable {
-        for (int i = 0; i < this.Count; ++i)
-            list[i].Initialize(project, this[i]);
+        for (int i = 0; i < this.Count; ++i) {
+            try {
+                list[i].Initialize(project, this[i]);
+            } catch(Exception ex) {
+                throw new Exception("Failed to initialize #" + i + " in " + typeof(T).Name + " list:", ex);
+            }
+        }
     }
 
     public List<T> AsIndexList<T>(IReadOnlyList<T> source)

@@ -58,32 +58,39 @@ internal class Node(YamlNode source) {
         for (int i = key.Length - 1; i >= 0; --i) {
             if (!char.IsDigit(key[i])) return i + 1;
         }
-        throw new System.Exception("bad key: " + key);
+        throw new Exception("bad key: " + key);
+    }
+
+    static private IConstruct readKeyIndex<T>(string key, int index, IReadOnlyList<T> source)
+        where T : IConstruct {
+        if (index < 0 || index >= source.Count)
+            throw new Exception("Key " + key + " out of range [0.." + source.Count + "): " + index);
+        return source[index];
     }
 
     static private IConstruct readKey(string key, Project project) {
         int split = keySplitPoint(key);
         string name = key[..split];
-        int index = int.Parse(key[split..]);
+        int index = int.Parse(key[split..])-1;
         return name switch {
-            "abstract"      => project.Abstracts[index],
-            "argument"      => project.Arguments[index],
-            "basic"         => project.Basics[index],
-            "field"         => project.Fields[index],
-            "interfaceDecl" => project.InterfaceDecls[index],
-            "interfaceDesc" => project.InterfaceDescs[index],
-            "interfaceInst" => project.InterfaceInsts[index],
-            "method"        => project.MethodDecls[index],
-            "methodInst"    => project.MethodInsts[index],
-            "metrics"       => project.Metrics[index],
-            "object"        => project.ObjectDecls[index],
-            "objectInst"    => project.ObjectInsts[index],
-            "package"       => project.Packages[index],
-            "selection"     => project.Selections[index],
-            "signature"     => project.Signatures[index],
-            "structDesc"    => project.StructDescs[index],
-            "typeParam"     => project.TypeParams[index],
-            "value"         => project.Values[index],
+            "abstract"      => readKeyIndex(key, index, project.Abstracts),
+            "argument"      => readKeyIndex(key, index, project.Arguments),
+            "basic"         => readKeyIndex(key, index, project.Basics),
+            "field"         => readKeyIndex(key, index, project.Fields),
+            "interfaceDecl" => readKeyIndex(key, index, project.InterfaceDecls),
+            "interfaceDesc" => readKeyIndex(key, index, project.InterfaceDescs),
+            "interfaceInst" => readKeyIndex(key, index, project.InterfaceInsts),
+            "method"        => readKeyIndex(key, index, project.MethodDecls),
+            "methodInst"    => readKeyIndex(key, index, project.MethodInsts),
+            "metrics"       => readKeyIndex(key, index, project.Metrics),
+            "object"        => readKeyIndex(key, index, project.ObjectDecls),
+            "objectInst"    => readKeyIndex(key, index, project.ObjectInsts),
+            "package"       => readKeyIndex(key, index, project.Packages),
+            "selection"     => readKeyIndex(key, index, project.Selections),
+            "signature"     => readKeyIndex(key, index, project.Signatures),
+            "structDesc"    => readKeyIndex(key, index, project.StructDescs),
+            "typeParam"     => readKeyIndex(key, index, project.TypeParams),
+            "value"         => readKeyIndex(key, index, project.Values),
             _ => throw new InvalidDataException(name)
         };
     }

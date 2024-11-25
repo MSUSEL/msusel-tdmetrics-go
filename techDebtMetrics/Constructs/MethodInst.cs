@@ -22,8 +22,8 @@ public class MethodInst : IConstruct, IInitializable {
 
     void IInitializable.Initialize(Project project, Node node) {
         Object obj = node.AsObject();
-        this.inGeneric       = obj.ReadIndex("generics", project.MethodDecls);
-        this.inInstanceTypes = obj.ReadKeyList<ITypeDesc>("instances", project);
+        this.inGeneric       = obj.ReadIndex("generic", project.MethodDecls);
+        this.inInstanceTypes = obj.ReadKeyList<ITypeDesc>("instanceTypes", project);
         this.Receiver        = obj.TryReadIndex("receiver", project.ObjectInsts);
         this.inResolved      = obj.ReadIndex("resolved", project.Signatures);
     }

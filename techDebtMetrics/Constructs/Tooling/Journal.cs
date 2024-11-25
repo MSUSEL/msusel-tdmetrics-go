@@ -83,10 +83,10 @@ public class Journal {
 
     public Journal WriteLine<T>(IReadOnlyList<T> list, string prefix = "", string suffix = "", string separator = ", ")
         where T : IConstruct =>
-        this.Write(list, prefix, suffix, separator).WriteLine();
+        this.Write(list, prefix, suffix + "\n", separator);
 
     public Journal WriteLine<T>(T? c, string prefix = "", string suffix = "") where T : IConstruct =>
-        this.Write(c, prefix, suffix).WriteLine();
+        this.Write(c, prefix, suffix + "\n");
 
     public Journal WriteLine() {
         this.sb.Append('\n');

@@ -40,14 +40,15 @@ public class InterfaceDesc : ITypeDesc, IInitializable {
 
         j.WriteLine("{");
         Journal j2 = j.Indent.AsShort;
-        j2.WriteLine(this.Inherits, "[ ", " ]");
+        j2.WriteLine(this.Inherits, prefix: "implements: ", suffix: ";");
         if (this.Exact.Count > 0 || this.Approx.Count > 0) {
             j2.Write(this.Exact, separator: "|");
             if (this.Exact.Count > 0 && this.Approx.Count > 0)
                 j2.Write("|");
             j2.Write(this.Exact, prefix: "~", separator: "|~");
+            j2.WriteLine(";");
         }
-        j2.AsLong.WriteLine(this.Abstracts, separator: "\n");
+        j2.AsLong.WriteLine(this.Abstracts, suffix: ";", separator: ";\n");
         j.Write("}");
     }
 }

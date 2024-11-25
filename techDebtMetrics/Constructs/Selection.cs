@@ -14,7 +14,7 @@ public class Selection : IConstruct, IInitializable {
     void IInitializable.Initialize(Project project, Node node) {
         Object obj = node.AsObject();
         this.Name     = obj.ReadString("name");
-        this.inOrigin = obj.ReadKey<IConstruct>("orign", project);
+        this.inOrigin = obj.ReadKey<IConstruct>("origin", project);
     }
 
     public override string ToString() => Journal.ToString(this);

@@ -20,8 +20,8 @@ public class Argument : IConstruct, IInitializable {
     public override string ToString() => this.Name + ":" + this.inType;
 
     public void ToStub(Journal j) {
-        j.Write(this.Name);
-        if (!j.Short)
-            j.Write(" ").AsShort.Write(this.Type);
+        j.AsShort.Write(this.Type);
+        if (!string.IsNullOrEmpty(this.Name))
+            j.Write(" ").Write(this.Name);
     }
 }

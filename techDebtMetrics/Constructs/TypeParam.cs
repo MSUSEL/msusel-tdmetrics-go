@@ -4,7 +4,7 @@ using Constructs.Tooling;
 
 namespace Constructs;
 
-public class TypeParam : IConstruct, IInitializable {
+public class TypeParam : ITypeDesc, IInitializable {
 
     public string Name { get; private set; } = "";
 

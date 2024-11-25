@@ -22,6 +22,6 @@ public class Abstract : IConstruct, IInitializable {
     public void ToStub(Journal j) {
         j.Write(this.Name);
         if (j.Long)
-            j.Write(" ").AsShort.Write(this.Signature);
+            j.AsShort.Write(this.Signature);
     }
 }

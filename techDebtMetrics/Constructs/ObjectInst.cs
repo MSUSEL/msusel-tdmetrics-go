@@ -29,8 +29,8 @@ public class ObjectInst : ITypeDesc, IInitializable {
 
     void IInitializable.Initialize(Project project, Node node) {
         Object obj = node.AsObject();
-        this.inGeneric           = obj.ReadIndex("generics", project.ObjectDecls);
-        this.inInstanceTypes     = obj.ReadKeyList<ITypeDesc>("instances", project);
+        this.inGeneric           = obj.ReadIndex("generic", project.ObjectDecls);
+        this.inInstanceTypes     = obj.ReadKeyList<ITypeDesc>("instanceTypes", project);
         this.Receiver            = obj.TryReadIndex("receiver", project.ObjectInsts);
         this.inMethods           = obj.TryReadKeyList<MethodInst>("methods", project);
         this.inResolvedData      = obj.ReadIndex("resData", project.StructDescs);
@@ -40,6 +40,6 @@ public class ObjectInst : ITypeDesc, IInitializable {
     public override string ToString() => Journal.ToString(this);
 
     public void ToStub(Journal j) =>
-        j.AsShort.Write(this.Receiver, suffix: ".").Write(this.Generic).
+        j.AsShort.Write(this.Receiver, suffix: ".").Write(this.Generic.Name).
             Write(this.InstanceTypes, "<", ">").Write(this.ResolvedData);
 }

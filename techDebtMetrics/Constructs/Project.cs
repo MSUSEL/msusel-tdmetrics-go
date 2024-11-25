@@ -129,5 +129,5 @@ public class Project : IConstruct {
     public override string ToString() => Journal.ToString(this);
 
     public void ToStub(Journal j) =>
-        j.Write(this.Packages, separator: "\n\n");
+        j.AsLong.Write(this.Packages, separator: "\n\n");
 }

@@ -38,7 +38,7 @@ public class ObjectDecl : ITypeDesc, IDeclaration, IInitializable {
         this.Location     = obj.TryReadLocation("loc", project);
         this.inInstances  = obj.TryReadIndexList("instances", project.MethodInsts);
         this.inInterface  = obj.ReadIndex("interface", project.InterfaceDescs);
-        this.inData       = obj.ReadIndex("generics", project.StructDescs);
+        this.inData       = obj.ReadIndex("data", project.StructDescs);
         this.inPackage    = obj.ReadIndex("package", project.Packages);
         this.inTypeParams = obj.TryReadIndexList("typeParams", project.TypeParams);
         this.inMethods    = obj.TryReadIndexList("methods", project.MethodDecls);
@@ -47,9 +47,11 @@ public class ObjectDecl : ITypeDesc, IDeclaration, IInitializable {
     public override string ToString() => Journal.ToString(this);
 
     public void ToStub(Journal j) {
-        j.Write("class ").Write(this.Name);
+        if (j.Long) j.Write("class ");
+        j.Write(this.Name);
         if (j.Long) {
-            j.Write(this.Data).WriteLine("{");
+            j.WriteLine("{");
+            j.Indent.Write(this.Data.Fields, separator: "\n");
             j.Indent.Write(this.Methods, separator: "\n");
             j.WriteLine().Write("}");
         }
