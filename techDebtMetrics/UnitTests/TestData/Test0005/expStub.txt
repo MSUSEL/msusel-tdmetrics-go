@@ -1,5 +1,24 @@
-package cats {
-   path: command-line-arguments;
+package $builtin {
+  path: $builtin;
+
+  interface List<T any> {
+    implements: any;
+    $len() int;
+    $get(int index) T value;
+    $set(int index, T value);
+  }
+
+  interface Pointer<T any> {
+    implements: any;
+    $deref() T;
+  }
+}
+
+
+
+
+
+
 
    Cat: class {
       Data struct {
@@ -50,3 +69,80 @@ package cats {
    }<Cat>);
 }
 
+
+
+
+package cats {
+  path: command-line-arguments;
+
+  interface Toy {
+    implements: any;
+    Play(Pointer<class Cat {
+      Name string;
+      Age int;
+      Meow();
+      String() string;
+    }> c);
+  }
+
+  class Cat {
+    Name string;
+    Age int;
+    Meow();
+    String() string;
+  }
+
+  class Cats {
+    $data List<Pointer<class Cat {
+      Name string;
+      Age int;
+      Meow();
+      String() string;
+    }>Pointer<class Cat {
+      Name string;
+      Age int;
+      Meow();
+      String() string;
+    }>>;
+    Youngest() Pointer<class Cat {
+      Name string;
+      Age int;
+      Meow();
+      String() string;
+    }>;
+  }
+
+  Meow();
+  NewCat(string name, int age) Pointer<class Cat {
+    Name string;
+    Age int;
+    Meow();
+    String() string;
+  }>;
+  NextYear(List<Pointer<class Cat {
+    Name string;
+    Age int;
+    Meow();
+    String() string;
+  }>Pointer<class Cat {
+    Name string;
+    Age int;
+    Meow();
+    String() string;
+  }>> cats...);
+  Pet(Pointer<class Cat {
+    Name string;
+    Age int;
+    Meow();
+    String() string;
+  }> c);
+  String() string;
+  Youngest() Pointer<class Cat {
+    Name string;
+    Age int;
+    Meow();
+    String() string;
+  }>;
+
+  var (string value) log;
+}

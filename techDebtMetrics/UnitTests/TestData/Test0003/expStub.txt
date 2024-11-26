@@ -1,20 +1,25 @@
 package $builtin {
-   path: $builtin;
-   interface Pointer<T {}>{
-      implements: {};
-      $deref() T;
-   };
+  path: $builtin;
+
+  interface Pointer<T any> {
+    implements: any;
+    $deref() T;
+  }
 }
 
 package main {
-   path: command-line-arguments;
-   interface Animal{
-      implements: {};
-      Pet();
-   };
-   Pet();
-   main();
-   class Cat{
-      Name string;Pet()
-   };
+  path: command-line-arguments;
+
+  interface Animal {
+    implements: any;
+    Pet();
+  }
+
+  class Cat {
+    Name string;
+    Pet();
+  }
+
+  Pet();
+  main();
 }

@@ -18,6 +18,10 @@ public class InterfaceDesc : ITypeDesc, IInitializable {
     public IReadOnlyList<InterfaceDesc> Inherits => this.inInherits.AsReadOnly();
     private List<InterfaceDesc> inInherits = [];
 
+    public IReadOnlyList<IInterface> Uses => this.inUses.AsReadOnly();
+    private List<IInterface> inUses = [];
+    internal void AddUses(IInterface use) => this.inUses.Add(use);
+
     public bool IsEmpty =>
         this.Abstracts.Count <= 0 && this.Approx.Count <= 0 &&
         this.Exact.Count <= 0 && this.Inherits.Count <= 0;
@@ -33,14 +37,20 @@ public class InterfaceDesc : ITypeDesc, IInitializable {
     public override string ToString() => Journal.ToString(this);
 
     public void ToStub(Journal j) {
+        if (j.Short && this.Uses.Count > 0) {
+            j.AsShort.Write(this.Uses[0]);
+            return;
+        }
+
         if (this.IsEmpty) {
-            j.Write("{}");
+            j.Write("any");
             return;
         }
 
         j.WriteLine("{");
         Journal j2 = j.Indent.AsShort;
-        j2.WriteLine(this.Inherits, prefix: "implements: ", suffix: ";");
+        if (j.Long)
+            j2.WriteLine(this.Inherits, prefix: "implements: ", suffix: ";");
         if (this.Exact.Count > 0 || this.Approx.Count > 0) {
             j2.Write(this.Exact, separator: "|");
             if (this.Exact.Count > 0 && this.Approx.Count > 0)

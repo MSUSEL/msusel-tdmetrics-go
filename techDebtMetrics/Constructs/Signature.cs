@@ -14,6 +14,10 @@ public class Signature : ITypeDesc, IInitializable {
     public IReadOnlyList<Argument> Results => this.inResults.AsReadOnly();
     private List<Argument> inResults = [];
 
+    public IReadOnlyList<IMethod> Uses => this.inUses.AsReadOnly();
+    private List<IMethod> inUses = [];
+    internal void AddUses(IMethod use) => this.inUses.Add(use);
+
     public bool IsEmpty => this.Variadic && this.Params.Count <= 0 && this.Results.Count <= 0;
 
     void IInitializable.Initialize(Project project, Node node) {

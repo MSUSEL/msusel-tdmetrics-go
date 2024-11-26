@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 namespace Constructs;
 
-public class InterfaceDecl : ITypeDesc, IDeclaration, IInitializable {
+public class InterfaceDecl : IInterface, IDeclaration, IInitializable {
     public string Name { get; private set; } = "";
 
     public Location Location { get; private set; }
@@ -32,6 +32,7 @@ public class InterfaceDecl : ITypeDesc, IDeclaration, IInitializable {
         this.inInterface  = obj.ReadIndex("interface", project.InterfaceDescs);
         this.inPackage    = obj.ReadIndex("package", project.Packages);
         this.inTypeParams = obj.TryReadIndexList("typeParams", project.TypeParams);
+        this.Interface.AddUses(this);
     }
 
     public override string ToString() => Journal.ToString(this);
@@ -39,6 +40,6 @@ public class InterfaceDecl : ITypeDesc, IDeclaration, IInitializable {
     public void ToStub(Journal j) {
         if (j.Long) j.Write("interface ");
         j.Write(this.Name).Write(this.TypeParams, "<", ">");
-        if (j.Long) j.Write(this.Interface);
+        if (j.Long) j.Write(" ").Write(this.Interface);
     }
 }

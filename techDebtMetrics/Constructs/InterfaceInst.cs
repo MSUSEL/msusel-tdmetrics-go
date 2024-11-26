@@ -5,7 +5,8 @@ using System.Collections.Generic;
 
 namespace Constructs;
 
-public class InterfaceInst : ITypeDesc, IInitializable {
+public class InterfaceInst : IInterface, IInitializable {
+    public string Name => this.Generic.Name;
 
     public InterfaceDecl Generic => this.inGeneric ??
         throw new UninitializedException(nameof(this.Generic));
@@ -14,22 +15,23 @@ public class InterfaceInst : ITypeDesc, IInitializable {
     public IReadOnlyList<ITypeDesc> InstanceTypes => this.inInstanceTypes.AsReadOnly();
     private List<ITypeDesc> inInstanceTypes = [];
 
-    public InterfaceDesc Resolved => this.inResolved ??
-        throw new UninitializedException(nameof(this.Resolved));
-    private InterfaceDesc? inResolved;
+    public InterfaceDesc Interface => this.inInterface ??
+        throw new UninitializedException(nameof(this.Interface));
+    private InterfaceDesc? inInterface;
 
     void IInitializable.Initialize(Project project, Node node) {
         Object obj = node.AsObject();
         this.inGeneric       = obj.ReadIndex("generic", project.InterfaceDecls);
         this.inInstanceTypes = obj.ReadKeyList<ITypeDesc>("instanceTypes", project);
-        this.inResolved      = obj.ReadIndex("resolved", project.InterfaceDescs);
+        this.inInterface     = obj.ReadIndex("resolved", project.InterfaceDescs);
+        this.Interface.AddUses(this);
     }
 
     public override string ToString() => Journal.ToString(this);
 
     public void ToStub(Journal j) {
-        j.Write(this.Generic.Name).
+        j.Write(this.Name).
             AsLong.Write(this.InstanceTypes, "<", ">");
-        if (j.Long) j.AsShort.Write(this.Resolved);
+        if (j.Long) j.AsShort.Write(this.Interface);
     }
 }

@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 namespace Constructs;
 
-public class ObjectDecl : ITypeDesc, IDeclaration, IInitializable {
+public class ObjectDecl : IObject, IDeclaration, IInitializable {
 
     public string Name { get; private set; } = "";
 
@@ -42,6 +42,7 @@ public class ObjectDecl : ITypeDesc, IDeclaration, IInitializable {
         this.inPackage    = obj.ReadIndex("package", project.Packages);
         this.inTypeParams = obj.TryReadIndexList("typeParams", project.TypeParams);
         this.inMethods    = obj.TryReadIndexList("methods", project.MethodDecls);
+        this.Data.AddUses(this);
     }
 
     public override string ToString() => Journal.ToString(this);
@@ -50,10 +51,10 @@ public class ObjectDecl : ITypeDesc, IDeclaration, IInitializable {
         if (j.Long) j.Write("class ");
         j.Write(this.Name);
         if (j.Long) {
-            j.WriteLine("{");
-            j.Indent.Write(this.Data.Fields, separator: "\n");
-            j.Indent.Write(this.Methods, separator: "\n");
-            j.WriteLine().Write("}");
+            j.WriteLine(" {");
+            j.Indent.Write(this.Data.Fields, suffix: "\n", separator: "\n");
+            j.Indent.Write(this.Methods, suffix: ";\n", separator: ";\n");
+            j.Write("}");
         }
     }
 }

@@ -1,3 +1,9 @@
-﻿namespace Constructs;
+﻿using Constructs.Tooling;
 
-public interface IDeclaration : IConstruct { }
+namespace Constructs;
+
+public interface IDeclaration : IConstruct {
+    public string Name { get; }
+    public Location Location { get; }
+    public Package Package { get; }
+}

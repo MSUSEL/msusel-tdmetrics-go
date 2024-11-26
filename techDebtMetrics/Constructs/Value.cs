@@ -1,7 +1,6 @@
 ﻿using Constructs.Data;
 using Constructs.Exceptions;
 using Constructs.Tooling;
-using System.Collections.Generic;
 
 namespace Constructs;
 
@@ -35,5 +34,10 @@ public class Value : IDeclaration, IInitializable {
 
     public override string ToString() => Journal.ToString(this);
 
-    public void ToStub(Journal j) { }
+    public void ToStub(Journal j) {
+        if (j.Long)
+            j.Write(this.Constant ? "const " : "var ").
+                AsShort.Write(this.Type, suffix: " ");
+        j.Write(this.Name);  
+    }
 }

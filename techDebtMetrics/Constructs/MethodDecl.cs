@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 namespace Constructs;
 
-public class MethodDecl : IDeclaration, IInitializable {
+public class MethodDecl : IMethod, IDeclaration, IInitializable {
     public string Name { get; private set; } = "";
 
     public Location Location { get; private set; }
@@ -38,6 +38,7 @@ public class MethodDecl : IDeclaration, IInitializable {
         this.inPackage    = obj.ReadIndex("package", project.Packages);
         this.Receiver     = obj.TryReadIndex("receiver", project.ObjectDecls);
         this.inTypeParams = obj.TryReadIndexList("typeParams", project.TypeParams);
+        this.Signature.AddUses(this);
     }
 
     public override string ToString() => Journal.ToString(this);
