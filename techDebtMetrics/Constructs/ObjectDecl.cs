@@ -52,7 +52,7 @@ public class ObjectDecl : IObject, IDeclaration, IInitializable {
         j.Write(this.Name);
         if (j.Long) {
             j.WriteLine(" {");
-            j.Indent.Write(this.Data.Fields, suffix: "\n", separator: "\n");
+            j.Indent.Write(this.Data.Fields, suffix: ";\n", separator: ";\n");
             j.Indent.Write(this.Methods, suffix: ";\n", separator: ";\n");
             j.Write("}");
         }

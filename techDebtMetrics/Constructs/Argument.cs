@@ -17,11 +17,8 @@ public class Argument : IConstruct, IInitializable {
         this.inType = obj.ReadKey<ITypeDesc>("type", project);
     }
 
-    public override string ToString() => this.Name + ":" + this.inType;
+    public override string ToString() => Journal.ToString(this);
 
-    public void ToStub(Journal j) {
-        j.AsShort.Write(this.Type);
-        if (!string.IsNullOrEmpty(this.Name))
-            j.Write(" ").Write(this.Name);
-    }
+    public void ToStub(Journal j) =>
+        j.AsShort.Write(this.Type).Write(this.Name, prefix: " ");
 }

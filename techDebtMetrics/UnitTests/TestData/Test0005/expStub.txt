@@ -1,148 +1,45 @@
 package $builtin {
   path: $builtin;
 
-  interface List<T any> {
+  interface List<any T> {
     implements: any;
     $len() int;
-    $get(int index) T value;
+    $get(int index) T;
     $set(int index, T value);
   }
 
-  interface Pointer<T any> {
+  interface Pointer<any T> {
     implements: any;
     $deref() T;
   }
 }
-
-
-
-
-
-
-
-   Cat: class {
-      Data struct {
-         Name string;
-         Age int;
-      }
-      Meow();
-      String() => string;
-   };
-
-   Toy: interface: any {
-      Play(c interface<T any>: any {
-         $deref<T any>() => T;
-      }<Cat>);
-   };
-
-   Cats: class {
-      Data interface<T any>: any {
-         $cap() => int;
-         $get<T any>(index int) => T;
-         $len() => int;
-         $set<T any>(index int, value T);
-      }<interface<T any>: any {
-         $deref<T any>() => T;
-      }<Cat>>
-      Youngest() => interface<T any>: any {
-         $deref<T any>() => T;
-      }<Cat>;
-   };
-
-   log (value string);
-
-   NewCat(name string, age int) => interface<T any>: any {
-      $deref<T any>() => T;
-   }<Cat>;
-
-   NextYear(cats interface<T any>: any {
-      $cap() => int;
-      $get<T any>(index int) => T;
-      $len() => int;
-      $set<T any>(index int, value T);
-   }<interface<T any>: any {
-      $deref<T any>() => T;
-   }<Cat>> ...);
-
-   Pet(c interface<T any>: any {
-      $deref<T any>() => T;
-   }<Cat>);
-}
-
-
-
 
 package cats {
   path: command-line-arguments;
 
   interface Toy {
     implements: any;
-    Play(Pointer<class Cat {
-      Name string;
-      Age int;
-      Meow();
-      String() string;
-    }> c);
+    Play(Pointer<Cat> c);
   }
 
   class Cat {
-    Name string;
-    Age int;
+    string Name;
+    int Age;
     Meow();
     String() string;
   }
 
   class Cats {
-    $data List<Pointer<class Cat {
-      Name string;
-      Age int;
-      Meow();
-      String() string;
-    }>Pointer<class Cat {
-      Name string;
-      Age int;
-      Meow();
-      String() string;
-    }>>;
-    Youngest() Pointer<class Cat {
-      Name string;
-      Age int;
-      Meow();
-      String() string;
-    }>;
+    List<Pointer<Cat>> $data;
+    Youngest() Pointer<Cat>;
   }
 
   Meow();
-  NewCat(string name, int age) Pointer<class Cat {
-    Name string;
-    Age int;
-    Meow();
-    String() string;
-  }>;
-  NextYear(List<Pointer<class Cat {
-    Name string;
-    Age int;
-    Meow();
-    String() string;
-  }>Pointer<class Cat {
-    Name string;
-    Age int;
-    Meow();
-    String() string;
-  }>> cats...);
-  Pet(Pointer<class Cat {
-    Name string;
-    Age int;
-    Meow();
-    String() string;
-  }> c);
+  NewCat(string name, int age) Pointer<Cat>;
+  NextYear(List<Pointer<Cat>> cats...);
+  Pet(Pointer<Cat> c);
   String() string;
-  Youngest() Pointer<class Cat {
-    Name string;
-    Age int;
-    Meow();
-    String() string;
-  }>;
+  Youngest() Pointer<Cat>;
 
   var (string value) log;
 }

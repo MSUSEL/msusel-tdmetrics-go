@@ -58,6 +58,10 @@ public class Journal {
             this.writeOneLine(parts[i], i == max);
     }
 
+    private void writeStub<T>(T c)
+        where T : IConstruct =>
+        c.ToStub(this);
+
     public Journal Write(string text, string prefix = "", string suffix = "") {
         if (!string.IsNullOrEmpty(text))
             this.writeText(prefix + text + suffix);
@@ -68,21 +72,22 @@ public class Journal {
         where T : IConstruct {
         int count = list.Count;
         if (count > 0) {
-            this.writeText(prefix);
-            list[0].ToStub(this);
+            this.writeText(prefix); 
+            this.writeStub(list[0]);
             for (int i = 1; i < count; ++i) {
                 this.writeText(separator);
-                list[i].ToStub(this);
+                this.writeStub(list[i]);
             }
             this.writeText(suffix);
         }
         return this;
     }
 
-    public Journal Write<T>(T? c, string prefix = "", string suffix = "") where T : IConstruct {
+    public Journal Write<T>(T? c, string prefix = "", string suffix = "")
+        where T : IConstruct {
         if (c is not null) {
             this.writeText(prefix);
-            c.ToStub(this);
+            this.writeStub(c);
             this.writeText(suffix);
         }
         return this;
@@ -95,7 +100,8 @@ public class Journal {
         where T : IConstruct =>
         this.Write(list, prefix, suffix + NewLine, separator);
 
-    public Journal WriteLine<T>(T? c, string prefix = "", string suffix = "") where T : IConstruct =>
+    public Journal WriteLine<T>(T? c, string prefix = "", string suffix = "")
+        where T : IConstruct =>
         this.Write(c, prefix, suffix + NewLine);
 
     public Journal WriteLine() {

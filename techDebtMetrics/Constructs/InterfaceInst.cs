@@ -31,7 +31,7 @@ public class InterfaceInst : IInterface, IInitializable {
 
     public void ToStub(Journal j) {
         j.Write(this.Name).
-            AsLong.Write(this.InstanceTypes, "<", ">");
+            AsShort.Write(this.InstanceTypes, "<", ">");
         if (j.Long) j.AsShort.Write(this.Interface);
     }
 }

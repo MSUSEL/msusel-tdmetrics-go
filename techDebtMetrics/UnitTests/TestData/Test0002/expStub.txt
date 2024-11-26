@@ -1,10 +1,10 @@
 package $builtin {
   path: $builtin;
 
-  interface List<T any> {
+  interface List<any T> {
     implements: any;
     $len() int;
-    $get(int index) T value;
+    $get(int index) T;
     $set(int index, T value);
   }
 }

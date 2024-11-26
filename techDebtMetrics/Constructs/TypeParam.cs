@@ -21,8 +21,8 @@ public class TypeParam : ITypeDesc, IInitializable {
     public override string ToString() => Journal.ToString(this);
 
     public void ToStub(Journal j) {
-        j.Write(this.Name);
         if (j.Long)
-            j.AsShort.Write(this.Type, prefix: " ");
+            j.AsShort.Write(this.Type, suffix: " ");
+        j.Write(this.Name);
     }
 }

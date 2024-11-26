@@ -33,7 +33,8 @@ public class Signature : ITypeDesc, IInitializable {
         j.Write("(").Write(this.Params);
         if (this.Variadic) j.Write("...");
         j.Write(")");
-        if (this.Results.Count == 1) j.Write(this.Results[0], prefix: " ");
+        if (this.Results.Count == 1)
+            j.AsShort.Write(this.Results[0].Type, prefix: " ");
         else j.Write(this.Results, "(", ")");
     }
 }
