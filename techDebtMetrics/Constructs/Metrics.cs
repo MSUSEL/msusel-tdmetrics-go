@@ -21,7 +21,7 @@ public class Metrics : IConstruct, IInitializable {
     public int LineCount { get; private set; }
 
     /// <summary>True indicates the method is a getter pattern.</summary>
-    public bool Getter {  get; private set; }
+    public bool Getter { get; private set; }
 
     /// <summary>True indicates the method is a setter pattern.</summary>
     public bool Setter { get; private set; }
@@ -40,16 +40,16 @@ public class Metrics : IConstruct, IInitializable {
 
     void IInitializable.Initialize(Project project, Node node) {
         Object obj = node.AsObject();
-        this.Location   = obj.ReadLocation("loc", project);
-        this.CodeCount  = obj.TryReadInt("codeCount");
+        this.Location = obj.ReadLocation("loc", project);
+        this.CodeCount = obj.TryReadInt("codeCount");
         this.Complexity = obj.TryReadInt("complexity");
-        this.Indents    = obj.TryReadInt("indents");
-        this.LineCount  = obj.TryReadInt("lineCounr");
-        this.Getter     = obj.TryReadBool("getter");
-        this.Setter     = obj.TryReadBool("setter");
+        this.Indents = obj.TryReadInt("indents");
+        this.LineCount = obj.TryReadInt("lineCounr");
+        this.Getter = obj.TryReadBool("getter");
+        this.Setter = obj.TryReadBool("setter");
         this.inInvokess = obj.TryReadKeyList<IConstruct>("invokes", project);
-        this.inReads    = obj.TryReadKeyList<IConstruct>("reads", project);
-        this.inWrites   = obj.TryReadKeyList<IConstruct>("writes", project);
+        this.inReads = obj.TryReadKeyList<IConstruct>("reads", project);
+        this.inWrites = obj.TryReadKeyList<IConstruct>("writes", project);
     }
 
     public override string ToString() => Journal.ToString(this);

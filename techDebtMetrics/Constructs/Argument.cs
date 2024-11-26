@@ -13,7 +13,7 @@ public class Argument : IConstruct, IInitializable {
 
     void IInitializable.Initialize(Project project, Node node) {
         Object obj = node.AsObject();
-        this.Name   = obj.TryReadString("name");
+        this.Name = obj.TryReadString("name");
         this.inType = obj.ReadKey<ITypeDesc>("type", project);
     }
 

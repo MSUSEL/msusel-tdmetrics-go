@@ -21,9 +21,9 @@ public class InterfaceInst : IInterface, IInitializable {
 
     void IInitializable.Initialize(Project project, Node node) {
         Object obj = node.AsObject();
-        this.inGeneric       = obj.ReadIndex("generic", project.InterfaceDecls);
+        this.inGeneric = obj.ReadIndex("generic", project.InterfaceDecls);
         this.inInstanceTypes = obj.ReadKeyList<ITypeDesc>("instanceTypes", project);
-        this.inInterface     = obj.ReadIndex("resolved", project.InterfaceDescs);
+        this.inInterface = obj.ReadIndex("resolved", project.InterfaceDescs);
         this.Interface.AddUses(this);
     }
 

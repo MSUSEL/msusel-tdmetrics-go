@@ -29,9 +29,9 @@ public class InterfaceDesc : ITypeDesc, IInitializable {
     void IInitializable.Initialize(Project project, Node node) {
         Object obj = node.AsObject();
         this.inAbstracts = obj.TryReadIndexList("abstracts", project.Abstracts);
-        this.inApprox    = obj.TryReadKeyList<ITypeDesc>("approx", project);
-        this.inExact     = obj.TryReadKeyList<ITypeDesc>("exact", project);
-        this.inInherits  = obj.TryReadIndexList("inherits", project.InterfaceDescs);
+        this.inApprox = obj.TryReadKeyList<ITypeDesc>("approx", project);
+        this.inExact = obj.TryReadKeyList<ITypeDesc>("exact", project);
+        this.inInherits = obj.TryReadIndexList("inherits", project.InterfaceDescs);
     }
 
     public override string ToString() => Journal.ToString(this);

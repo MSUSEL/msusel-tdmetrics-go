@@ -30,13 +30,13 @@ public class MethodDecl : IMethod, IDeclaration, IInitializable {
 
     void IInitializable.Initialize(Project project, Node node) {
         Object obj = node.AsObject();
-        this.Name         = obj.ReadString("name");
-        this.Location     = obj.TryReadLocation("loc", project);
-        this.inInstances  = obj.TryReadIndexList("instances", project.MethodInsts);
-        this.inSignature  = obj.ReadIndex("signature", project.Signatures);
-        this.Metrics      = obj.TryReadIndex("metrics", project.Metrics);
-        this.inPackage    = obj.ReadIndex("package", project.Packages);
-        this.Receiver     = obj.TryReadIndex("receiver", project.ObjectDecls);
+        this.Name = obj.ReadString("name");
+        this.Location = obj.TryReadLocation("loc", project);
+        this.inInstances = obj.TryReadIndexList("instances", project.MethodInsts);
+        this.inSignature = obj.ReadIndex("signature", project.Signatures);
+        this.Metrics = obj.TryReadIndex("metrics", project.Metrics);
+        this.inPackage = obj.ReadIndex("package", project.Packages);
+        this.Receiver = obj.TryReadIndex("receiver", project.ObjectDecls);
         this.inTypeParams = obj.TryReadIndexList("typeParams", project.TypeParams);
         this.Signature.AddUses(this);
     }

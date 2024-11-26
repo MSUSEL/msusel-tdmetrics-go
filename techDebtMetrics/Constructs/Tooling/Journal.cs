@@ -72,7 +72,7 @@ public class Journal {
         where T : IConstruct {
         int count = list.Count;
         if (count > 0) {
-            this.writeText(prefix); 
+            this.writeText(prefix);
             this.writeStub(list[0]);
             for (int i = 1; i < count; ++i) {
                 this.writeText(separator);

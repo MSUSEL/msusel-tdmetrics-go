@@ -16,7 +16,7 @@ internal class Array(YamlSequenceNode source) : Node(source) {
 
     public void PreallocateList<T>(List<T> list)
         where T : new() {
-        for (int i = this.Count-1; i >= 0; --i)
+        for (int i = this.Count - 1; i >= 0; --i)
             list.Add(new T());
     }
 
@@ -25,7 +25,7 @@ internal class Array(YamlSequenceNode source) : Node(source) {
         for (int i = 0; i < this.Count; ++i) {
             try {
                 list[i].Initialize(project, this[i]);
-            } catch(Exception ex) {
+            } catch (Exception ex) {
                 throw new Exception("Failed to initialize #" + i + " in " + typeof(T).Name + " list:", ex);
             }
         }

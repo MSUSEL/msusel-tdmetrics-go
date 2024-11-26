@@ -29,7 +29,7 @@ internal class Object(YamlMappingNode source) : Node(source) {
     public Node ReadNode(string name) =>
         this.source.Children.TryGetValue(new YamlScalarNode(name), out YamlNode? value) ?
             new Node(value) :
-            throw new MissingDataException("expected \""+name+"\" in object at "+this.source.Start.ToString());
+            throw new MissingDataException("expected \"" + name + "\" in object at " + this.source.Start.ToString());
 
     public string ReadString(string name) => this.ReadNode(name).AsString();
 

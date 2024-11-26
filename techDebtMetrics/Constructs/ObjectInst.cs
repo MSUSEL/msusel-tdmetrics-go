@@ -28,11 +28,11 @@ public class ObjectInst : IObject, IInitializable {
 
     void IInitializable.Initialize(Project project, Node node) {
         Object obj = node.AsObject();
-        this.inGeneric       = obj.ReadIndex("generic", project.ObjectDecls);
+        this.inGeneric = obj.ReadIndex("generic", project.ObjectDecls);
         this.inInstanceTypes = obj.ReadKeyList<ITypeDesc>("instanceTypes", project);
-        this.inMethods       = obj.TryReadKeyList<MethodInst>("methods", project);
-        this.inInterface     = obj.ReadIndex("resInterface", project.InterfaceDescs);
-        this.inResolvedData  = obj.ReadIndex("resData", project.StructDescs);
+        this.inMethods = obj.TryReadKeyList<MethodInst>("methods", project);
+        this.inInterface = obj.ReadIndex("resInterface", project.InterfaceDescs);
+        this.inResolvedData = obj.ReadIndex("resData", project.StructDescs);
         this.Data.AddUses(this);
     }
 

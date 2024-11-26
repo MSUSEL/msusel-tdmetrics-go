@@ -47,7 +47,7 @@ public class Package : IConstruct, IInitializable {
             Journal j2 = j.Indent.AsLong;
             j2.Write(this.Path, prefix: "path: ", suffix: ";");
             j2.AsShort.Write(this.Imports, prefix: "\nimports: ", suffix: ";");
-            j2.Write(this.Interfaces, prefix:"\n\n", separator: "\n\n");
+            j2.Write(this.Interfaces, prefix: "\n\n", separator: "\n\n");
             j2.Write(this.Objects, prefix: "\n\n", separator: "\n\n");
             j2.Write(this.Methods, prefix: "\n\n", suffix: ";", separator: ";\n");
             j2.Write(this.Values, prefix: "\n\n", suffix: ";", separator: ";\n");

@@ -13,7 +13,7 @@ public class Selection : IConstruct, IInitializable {
 
     void IInitializable.Initialize(Project project, Node node) {
         Object obj = node.AsObject();
-        this.Name     = obj.ReadString("name");
+        this.Name = obj.ReadString("name");
         this.inOrigin = obj.ReadKey<IConstruct>("origin", project);
     }
 

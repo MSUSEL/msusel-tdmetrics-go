@@ -22,8 +22,8 @@ public class Signature : ITypeDesc, IInitializable {
 
     void IInitializable.Initialize(Project project, Node node) {
         Object obj = node.AsObject();
-        this.Variadic  = obj.TryReadBool("variadic");
-        this.inParams  = obj.TryReadIndexList("params", project.Arguments);
+        this.Variadic = obj.TryReadBool("variadic");
+        this.inParams = obj.TryReadIndexList("params", project.Arguments);
         this.inResults = obj.TryReadIndexList("results", project.Arguments);
     }
 

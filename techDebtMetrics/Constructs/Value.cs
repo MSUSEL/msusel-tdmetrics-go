@@ -24,11 +24,11 @@ public class Value : IDeclaration, IInitializable {
 
     void IInitializable.Initialize(Project project, Node node) {
         Object obj = node.AsObject();
-        this.Name      = obj.ReadString("name");
-        this.Location  = obj.TryReadLocation("loc", project);
-        this.Constant  = obj.TryReadBool("const");
-        this.Metrics   = obj.TryReadIndex("metrics", project.Metrics);
-        this.inType    = obj.ReadKey<ITypeDesc>("type", project);
+        this.Name = obj.ReadString("name");
+        this.Location = obj.TryReadLocation("loc", project);
+        this.Constant = obj.TryReadBool("const");
+        this.Metrics = obj.TryReadIndex("metrics", project.Metrics);
+        this.inType = obj.ReadKey<ITypeDesc>("type", project);
         this.inPackage = obj.ReadIndex("package", project.Packages);
     }
 
@@ -38,6 +38,6 @@ public class Value : IDeclaration, IInitializable {
         if (j.Long)
             j.Write(this.Constant ? "const " : "var ").
                 AsShort.Write(this.Type, suffix: " ");
-        j.Write(this.Name);  
+        j.Write(this.Name);
     }
 }

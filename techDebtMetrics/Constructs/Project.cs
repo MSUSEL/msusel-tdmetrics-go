@@ -29,10 +29,10 @@ public class Project : IConstruct {
 
     public IReadOnlyList<InterfaceDesc> InterfaceDescs => this.inInterfaceDescs.AsReadOnly();
     private readonly List<InterfaceDesc> inInterfaceDescs = [];
-    
+
     public IReadOnlyList<InterfaceInst> InterfaceInsts => this.inInterfaceInsts.AsReadOnly();
     private readonly List<InterfaceInst> inInterfaceInsts = [];
-    
+
     public IReadOnlyList<MethodDecl> MethodDecls => this.inMethodDecls.AsReadOnly();
     private readonly List<MethodDecl> inMethodDecls = [];
 

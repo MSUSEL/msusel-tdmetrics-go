@@ -1,6 +1,6 @@
+using Constructs;
 using System;
 using System.IO;
-using Constructs;
 
 namespace UnitTests.Constructs;
 
@@ -14,10 +14,10 @@ public class ConstructTests {
 
     [Test]
     public void StubTest0003() => runStubTest(3);
-    
+
     [Test]
     public void StubTest0004() => runStubTest(4);
-    
+
     [Test]
     public void StubTest0005() => runStubTest(5);
 

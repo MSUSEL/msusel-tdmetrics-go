@@ -34,14 +34,14 @@ public class ObjectDecl : IObject, IDeclaration, IInitializable {
 
     void IInitializable.Initialize(Project project, Node node) {
         Object obj = node.AsObject();
-        this.Name         = obj.ReadString("name");
-        this.Location     = obj.TryReadLocation("loc", project);
-        this.inInstances  = obj.TryReadIndexList("instances", project.MethodInsts);
-        this.inInterface  = obj.ReadIndex("interface", project.InterfaceDescs);
-        this.inData       = obj.ReadIndex("data", project.StructDescs);
-        this.inPackage    = obj.ReadIndex("package", project.Packages);
+        this.Name = obj.ReadString("name");
+        this.Location = obj.TryReadLocation("loc", project);
+        this.inInstances = obj.TryReadIndexList("instances", project.MethodInsts);
+        this.inInterface = obj.ReadIndex("interface", project.InterfaceDescs);
+        this.inData = obj.ReadIndex("data", project.StructDescs);
+        this.inPackage = obj.ReadIndex("package", project.Packages);
         this.inTypeParams = obj.TryReadIndexList("typeParams", project.TypeParams);
-        this.inMethods    = obj.TryReadIndexList("methods", project.MethodDecls);
+        this.inMethods = obj.TryReadIndexList("methods", project.MethodDecls);
         this.Data.AddUses(this);
     }
 

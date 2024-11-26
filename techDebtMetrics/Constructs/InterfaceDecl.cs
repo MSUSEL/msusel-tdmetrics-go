@@ -26,11 +26,11 @@ public class InterfaceDecl : IInterface, IDeclaration, IInitializable {
 
     void IInitializable.Initialize(Project project, Node node) {
         Object obj = node.AsObject();
-        this.Name         = obj.ReadString("name");
-        this.Location     = obj.TryReadLocation("loc", project);
-        this.inInstances  = obj.TryReadIndexList("instances", project.InterfaceInsts);
-        this.inInterface  = obj.ReadIndex("interface", project.InterfaceDescs);
-        this.inPackage    = obj.ReadIndex("package", project.Packages);
+        this.Name = obj.ReadString("name");
+        this.Location = obj.TryReadLocation("loc", project);
+        this.inInstances = obj.TryReadIndexList("instances", project.InterfaceInsts);
+        this.inInterface = obj.ReadIndex("interface", project.InterfaceDescs);
+        this.inPackage = obj.ReadIndex("package", project.Packages);
         this.inTypeParams = obj.TryReadIndexList("typeParams", project.TypeParams);
         this.Interface.AddUses(this);
     }

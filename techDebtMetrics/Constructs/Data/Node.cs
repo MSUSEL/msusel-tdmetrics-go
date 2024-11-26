@@ -44,7 +44,7 @@ internal class Node(YamlNode source) {
 
     public T AsIndex<T>(IReadOnlyList<T> source)
         where T : IConstruct {
-        int index = this.AsInt()-1;
+        int index = this.AsInt() - 1;
         if (index < 0 || index >= source.Count)
             throw new Exception("Index out of range [0.." + source.Count + "): " + index);
         return source[index];
@@ -71,28 +71,27 @@ internal class Node(YamlNode source) {
     static private IConstruct readKey(string key, Project project) {
         int split = keySplitPoint(key);
         string name = key[..split];
-        int index = int.Parse(key[split..])-1;
+        int index = int.Parse(key[split..]) - 1;
         return name switch {
-            "abstract"      => readKeyIndex(key, index, project.Abstracts),
-            "argument"      => readKeyIndex(key, index, project.Arguments),
-            "basic"         => readKeyIndex(key, index, project.Basics),
-            "field"         => readKeyIndex(key, index, project.Fields),
+            "abstract" => readKeyIndex(key, index, project.Abstracts),
+            "argument" => readKeyIndex(key, index, project.Arguments),
+            "basic" => readKeyIndex(key, index, project.Basics),
+            "field" => readKeyIndex(key, index, project.Fields),
             "interfaceDecl" => readKeyIndex(key, index, project.InterfaceDecls),
             "interfaceDesc" => readKeyIndex(key, index, project.InterfaceDescs),
             "interfaceInst" => readKeyIndex(key, index, project.InterfaceInsts),
-            "method"        => readKeyIndex(key, index, project.MethodDecls),
-            "methodInst"    => readKeyIndex(key, index, project.MethodInsts),
-            "metrics"       => readKeyIndex(key, index, project.Metrics),
-            "object"        => readKeyIndex(key, index, project.ObjectDecls),
-            "objectInst"    => readKeyIndex(key, index, project.ObjectInsts),
-            "package"       => readKeyIndex(key, index, project.Packages),
-            "selection"     => readKeyIndex(key, index, project.Selections),
-            "signature"     => readKeyIndex(key, index, project.Signatures),
-            "structDesc"    => readKeyIndex(key, index, project.StructDescs),
-            "typeParam"     => readKeyIndex(key, index, project.TypeParams),
-            "value"         => readKeyIndex(key, index, project.Values),
+            "method" => readKeyIndex(key, index, project.MethodDecls),
+            "methodInst" => readKeyIndex(key, index, project.MethodInsts),
+            "metrics" => readKeyIndex(key, index, project.Metrics),
+            "object" => readKeyIndex(key, index, project.ObjectDecls),
+            "objectInst" => readKeyIndex(key, index, project.ObjectInsts),
+            "package" => readKeyIndex(key, index, project.Packages),
+            "selection" => readKeyIndex(key, index, project.Selections),
+            "signature" => readKeyIndex(key, index, project.Signatures),
+            "structDesc" => readKeyIndex(key, index, project.StructDescs),
+            "typeParam" => readKeyIndex(key, index, project.TypeParams),
+            "value" => readKeyIndex(key, index, project.Values),
             _ => throw new InvalidDataException(name)
         };
     }
 }
- 
