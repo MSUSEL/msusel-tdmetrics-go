@@ -4,7 +4,18 @@ using System.Collections.Generic;
 
 namespace Constructs;
 
+/// <summary>
+/// The metrics gathered from code expressions for either a method
+/// or the initializer to a package level variable or constant.
+/// </summary>
+/// <remarks>
+/// Several variables or constants may have the same metrics, determinable via the location,
+/// if the initialization expressions were used to initialize multiple at a time,
+/// e.g. `var A, B = func() (int, int) { return 13, 45 }()`
+/// </remarks>
+/// <see cref="../../docs/genFeatureDef.md#metrics"/>
 public class Metrics : IConstruct, IInitializable {
+
     /// <summary>The location this metrics was read from.</summary>
     public Location Location { get; private set; }
 

@@ -4,10 +4,14 @@ using Constructs.Tooling;
 
 namespace Constructs;
 
+/// <summary>A type parameter name and type description.</summary>
+/// <see cref="../../docs/genFeatureDef.md#type-parameter"/>
 public class TypeParam : ITypeDesc, IInitializable {
 
+    /// <summary>The name of the type parameter.</summary>
     public string Name { get; private set; } = "";
 
+    /// <summary>The type description of the type parameter.</summary>
     public ITypeDesc Type => this.inType ??
         throw new UninitializedException(nameof(this.Type));
     private ITypeDesc? inType;

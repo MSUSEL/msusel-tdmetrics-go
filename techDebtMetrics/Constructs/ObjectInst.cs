@@ -5,26 +5,35 @@ using System.Collections.Generic;
 
 namespace Constructs;
 
+/// <summary>An object instance of a generic object.</summary>
+/// <see cref="../../docs/genFeatureDef.md#object-instance"/>
 public class ObjectInst : IObject, IInitializable {
+
+    /// <summary>The name of the object declaration.</summary>
     public string Name => this.Generic.Name;
 
+    /// <summary>The generic object this is an instance of.</summary>
     public ObjectDecl Generic => this.inGeneric ??
         throw new UninitializedException(nameof(this.Generic));
     private ObjectDecl? inGeneric;
 
-    public IReadOnlyList<ITypeDesc> InstanceTypes => this.inInstanceTypes.AsReadOnly();
-    private readonly List<ITypeDesc> inInstanceTypes = [];
-
-    public IReadOnlyList<MethodInst> Methods => this.inMethods.AsReadOnly();
-    private readonly List<MethodInst> inMethods = [];
-
+    /// <summary>The interface that summarizes the methods of this object.</summary>
     public InterfaceDesc Interface => this.inInterface ??
         throw new UninitializedException(nameof(this.Interface));
     private InterfaceDesc? inInterface;
 
+    /// <summary>The data contated by this object.</summary>
     public StructDesc Data => this.inResolvedData ??
         throw new UninitializedException(nameof(this.Data));
     private StructDesc? inResolvedData;
+
+    /// <summary>The type arguments put into the type parameters to create this instance.</summary>
+    public IReadOnlyList<ITypeDesc> InstanceTypes => this.inInstanceTypes.AsReadOnly();
+    private readonly List<ITypeDesc> inInstanceTypes = [];
+
+    /// <summary>The methods that have been declared as members to this object.</summary>
+    public IReadOnlyList<MethodInst> Methods => this.inMethods.AsReadOnly();
+    private readonly List<MethodInst> inMethods = [];
 
     void IInitializable.Initialize(Project project, Node node) {
         Object obj = node.AsObject();

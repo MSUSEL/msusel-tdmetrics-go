@@ -17,14 +17,14 @@ public class InterfaceInst : IInterface, IInitializable {
         throw new UninitializedException(nameof(this.Generic));
     private InterfaceDecl? inGeneric;
 
-    /// <summary>The type arguments put into the type parameters to create this instance.</summary>
-    public IReadOnlyList<ITypeDesc> InstanceTypes => this.inInstanceTypes.AsReadOnly();
-    private readonly List<ITypeDesc> inInstanceTypes = [];
-
     /// <summary>The interface type description for this instance.</summary>
     public InterfaceDesc Interface => this.inInterface ??
         throw new UninitializedException(nameof(this.Interface));
     private InterfaceDesc? inInterface;
+
+    /// <summary>The type arguments put into the type parameters to create this instance.</summary>
+    public IReadOnlyList<ITypeDesc> InstanceTypes => this.inInstanceTypes.AsReadOnly();
+    private readonly List<ITypeDesc> inInstanceTypes = [];
 
     void IInitializable.Initialize(Project project, Node node) {
         Object obj = node.AsObject();

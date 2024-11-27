@@ -5,32 +5,42 @@ using System.Collections.Generic;
 
 namespace Constructs;
 
+/// <summary>A declaration of an interface.</summary>
+/// <see cref="../../docs/genFeatureDef.md#object"/>
 public class ObjectDecl : IObject, IDeclaration, IInitializable {
 
+    /// <summary>The name of the object declaration.</summary>
     public string Name { get; private set; } = "";
 
+    /// <summary>The location the object was defined.</summary>
     public Location Location { get; private set; }
 
-    public IReadOnlyList<MethodInst> Instances => this.inInstances.AsReadOnly();
-    private readonly List<MethodInst> inInstances = [];
-
+    /// <summary>The interface that summarizes the methods of this object.</summary>
     public InterfaceDesc Interface => this.inInterface ??
         throw new UninitializedException(nameof(this.Interface));
     private InterfaceDesc? inInterface;
 
+    /// <summary>The data contated by this object.</summary>
     public StructDesc Data => this.inData ??
         throw new UninitializedException(nameof(this.Data));
     private StructDesc? inData;
 
+    /// <summary>The package the object was declared in.</summary>
     public Package Package => this.inPackage ??
         throw new UninitializedException(nameof(this.Package));
     private Package? inPackage;
 
+    /// <summary>The type parameters for this object if the object is generic.</summary>
     public IReadOnlyList<TypeParam> TypeParams => this.inTypeParams.AsReadOnly();
     private readonly List<TypeParam> inTypeParams = [];
 
+    /// <summary>The methods that have been declared as members to this object.</summary>
     public IReadOnlyList<MethodDecl> Methods => this.inMethods.AsReadOnly();
     private readonly List<MethodDecl> inMethods = [];
+
+    /// <summary>The instances for this declaration if the object is generic.</summary>
+    public IReadOnlyList<MethodInst> Instances => this.inInstances.AsReadOnly();
+    private readonly List<MethodInst> inInstances = [];
 
     void IInitializable.Initialize(Project project, Node node) {
         Object obj = node.AsObject();
@@ -39,9 +49,9 @@ public class ObjectDecl : IObject, IDeclaration, IInitializable {
         this.inInterface = obj.ReadIndex("interface", project.InterfaceDescs);
         this.inData = obj.ReadIndex("data", project.StructDescs);
         this.inPackage = obj.ReadIndex("package", project.Packages);
-        obj.TryReadIndexList("instances", this.inInstances, project.MethodInsts);
         obj.TryReadIndexList("typeParams", this.inTypeParams, project.TypeParams);
         obj.TryReadIndexList("methods", this.inMethods, project.MethodDecls);
+        obj.TryReadIndexList("instances", this.inInstances, project.MethodInsts);
         this.Data.AddUses(this);
     }
 

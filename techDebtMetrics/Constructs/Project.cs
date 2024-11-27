@@ -5,64 +5,85 @@ using System.IO;
 
 namespace Constructs;
 
-/// <summary>
-/// A project represents all the packages to completely describe a program or a library.
-/// </summary>
+/// <summary>A project represents all the packages to completely describe a program or a library.</summary>
+/// <see cref="../../docs/genFeatureDef.md#project"/>
 public class Project : IConstruct {
+
+    /// <summary>The name of the langauge that this project was created from.</summary>
     public readonly string Language;
+
+    /// <summary>The file paths and line numbers for the source code that created this package.</summary>
     public readonly Locations Locations;
 
+    /// <summary>The collection of all abstracts in this project.</summary>
     public IReadOnlyList<Abstract> Abstracts => this.inAbstracts.AsReadOnly();
     private readonly List<Abstract> inAbstracts = [];
 
+    /// <summary>The collection of all arguments in this project.</summary>
     public IReadOnlyList<Argument> Arguments => this.inArguments.AsReadOnly();
     private readonly List<Argument> inArguments = [];
 
+    /// <summary>The collection of all basic in this project.</summary>
     public IReadOnlyList<Basic> Basics => this.inBasics.AsReadOnly();
     private readonly List<Basic> inBasics = [];
 
+    /// <summary>The collection of all fields in this project.</summary>
     public IReadOnlyList<Field> Fields => this.inFields.AsReadOnly();
     private readonly List<Field> inFields = [];
 
+    /// <summary>The collection of all interface declarations in this project.</summary>
     public IReadOnlyList<InterfaceDecl> InterfaceDecls => this.inInterfaceDecls.AsReadOnly();
     private readonly List<InterfaceDecl> inInterfaceDecls = [];
 
+    /// <summary>The collection of all interface type descriptions in this project.</summary>
     public IReadOnlyList<InterfaceDesc> InterfaceDescs => this.inInterfaceDescs.AsReadOnly();
     private readonly List<InterfaceDesc> inInterfaceDescs = [];
 
+    /// <summary>The collection of all interface instances in this project.</summary>
     public IReadOnlyList<InterfaceInst> InterfaceInsts => this.inInterfaceInsts.AsReadOnly();
     private readonly List<InterfaceInst> inInterfaceInsts = [];
 
+    /// <summary>The collection of all method declarations in this project.</summary>
     public IReadOnlyList<MethodDecl> MethodDecls => this.inMethodDecls.AsReadOnly();
     private readonly List<MethodDecl> inMethodDecls = [];
 
+    /// <summary>The collection of all method instances in this project.</summary>
     public IReadOnlyList<MethodInst> MethodInsts => this.inMethodInsts.AsReadOnly();
     private readonly List<MethodInst> inMethodInsts = [];
 
+    /// <summary>The collection of all metrics in this project.</summary>
     public IReadOnlyList<Metrics> Metrics => this.inMetrics.AsReadOnly();
     private readonly List<Metrics> inMetrics = [];
 
+    /// <summary>The collection of all metrics in this project.</summary>
     public IReadOnlyList<ObjectDecl> ObjectDecls => this.inObjectDecls.AsReadOnly();
     private readonly List<ObjectDecl> inObjectDecls = [];
 
+    /// <summary>The collection of all object instances in this project.</summary>
     public IReadOnlyList<ObjectInst> ObjectInsts => this.inObjectInsts.AsReadOnly();
     private readonly List<ObjectInst> inObjectInsts = [];
 
+    /// <summary>The collection of all packages in this project.</summary>
     public IReadOnlyList<Package> Packages => this.inPackages.AsReadOnly();
     private readonly List<Package> inPackages = [];
 
+    /// <summary>The collection of all selections in this project.</summary>
     public IReadOnlyList<Selection> Selections => this.inSelections.AsReadOnly();
     private readonly List<Selection> inSelections = [];
 
+    /// <summary>The collection of all signature type descriptions in this project.</summary>
     public IReadOnlyList<Signature> Signatures => this.inSignatures.AsReadOnly();
     private readonly List<Signature> inSignatures = [];
 
+    /// <summary>The collection of all structure type descriptions in this project.</summary>
     public IReadOnlyList<StructDesc> StructDescs => this.inStructDescs.AsReadOnly();
     private readonly List<StructDesc> inStructDescs = [];
 
+    /// <summary>The collection of all type parameters in this project.</summary>
     public IReadOnlyList<TypeParam> TypeParams => this.inTypeParams.AsReadOnly();
     private readonly List<TypeParam> inTypeParams = [];
 
+    /// <summary>The collection of all values and constants in this project.</summary>
     public IReadOnlyList<Value> Values => this.inValues.AsReadOnly();
     private readonly List<Value> inValues = [];
 

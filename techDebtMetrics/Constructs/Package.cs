@@ -8,22 +8,32 @@ namespace Constructs;
 /// A package is typically a folder of code containing zero or more classes (types).
 /// A package may have imports, static methods, and global variables too.
 /// </summary>
+/// <see cref="../../docs/genFeatureDef.md#package"/>
 public class Package : IConstruct, IInitializable {
+
+    /// <summary>The import path for this package.</summary>
     public string Path { get; private set; } = "";
+
+    /// <summary>The name of the package.</summary>
     public string Name { get; private set; } = "";
 
+    /// <summary>The list of packages that this package imports.</summary>
     public IReadOnlyList<Package> Imports => this.inImports.AsReadOnly();
     private readonly List<Package> inImports = [];
 
+    /// <summary>The list of interfaces declared in this package.</summary>
     public IReadOnlyList<InterfaceDecl> Interfaces => this.inInterfaces.AsReadOnly();
     private readonly List<InterfaceDecl> inInterfaces = [];
 
+    /// <summary>The list of methods declared in this package.</summary>
     public IReadOnlyList<MethodDecl> Methods => this.inMethods.AsReadOnly();
     private readonly List<MethodDecl> inMethods = [];
 
+    /// <summary>The list of objects declared in this package.</summary>
     public IReadOnlyList<ObjectDecl> Objects => this.inObjects.AsReadOnly();
     private readonly List<ObjectDecl> inObjects = [];
 
+    /// <summary>The package level values and constants declared in this package.</summary>
     public IReadOnlyList<Value> Values => this.inValues.AsReadOnly();
     private readonly List<Value> inValues = [];
 

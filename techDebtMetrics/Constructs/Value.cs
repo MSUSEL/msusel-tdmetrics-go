@@ -4,20 +4,31 @@ using Constructs.Tooling;
 
 namespace Constructs;
 
+/// <summary>A package level value or constant declaration.</summary>
+/// <see cref="../../docs/genFeatureDef.md#value"/>
 public class Value : IDeclaration, IInitializable {
 
+    /// <summary>The name of the object declaration.</summary>
     public string Name { get; private set; } = "";
 
+    /// <summary>The location the object was defined.</summary>
     public Location Location { get; private set; }
 
+    /// <summary>Intidcates if the value is constant, readonly, or assign once.</summary>
     public bool Constant { get; private set; }
 
+    /// <summary>
+    /// Metrics gathered from the initialization expression for the varlue
+    /// or constant, if it had an initialization expression.
+    /// </summary>
     public Metrics? Metrics { get; private set; }
 
+    /// <summary>The type of the value or constant.</summary>
     public ITypeDesc Type => this.inType ??
         throw new UninitializedException(nameof(this.Type));
     private ITypeDesc? inType;
 
+    /// <summary>The package the value or constant was declared in.</summary>
     public Package Package => this.inPackage ??
         throw new UninitializedException(nameof(this.Package));
     private Package? inPackage;
