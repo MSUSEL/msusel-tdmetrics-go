@@ -9,13 +9,13 @@ public class Signature : ITypeDesc, IInitializable {
     public bool Variadic { get; private set; }
 
     public IReadOnlyList<Argument> Params => this.inParams.AsReadOnly();
-    private List<Argument> inParams = [];
+    private readonly List<Argument> inParams = [];
 
     public IReadOnlyList<Argument> Results => this.inResults.AsReadOnly();
-    private List<Argument> inResults = [];
+    private readonly List<Argument> inResults = [];
 
     public IReadOnlyList<IMethod> Uses => this.inUses.AsReadOnly();
-    private List<IMethod> inUses = [];
+    private readonly List<IMethod> inUses = [];
     internal void AddUses(IMethod use) => this.inUses.Add(use);
 
     public bool IsEmpty => this.Variadic && this.Params.Count <= 0 && this.Results.Count <= 0;
@@ -23,8 +23,8 @@ public class Signature : ITypeDesc, IInitializable {
     void IInitializable.Initialize(Project project, Node node) {
         Object obj = node.AsObject();
         this.Variadic = obj.TryReadBool("variadic");
-        this.inParams = obj.TryReadIndexList("params", project.Arguments);
-        this.inResults = obj.TryReadIndexList("results", project.Arguments);
+        obj.TryReadIndexList("params", this.inParams, project.Arguments);
+        obj.TryReadIndexList("results", this.inResults, project.Arguments);
     }
 
     public override string ToString() => Journal.ToString(this);

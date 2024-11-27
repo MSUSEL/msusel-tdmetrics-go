@@ -12,7 +12,7 @@ public class ObjectDecl : IObject, IDeclaration, IInitializable {
     public Location Location { get; private set; }
 
     public IReadOnlyList<MethodInst> Instances => this.inInstances.AsReadOnly();
-    private List<MethodInst> inInstances = [];
+    private readonly List<MethodInst> inInstances = [];
 
     public InterfaceDesc Interface => this.inInterface ??
         throw new UninitializedException(nameof(this.Interface));
@@ -27,21 +27,21 @@ public class ObjectDecl : IObject, IDeclaration, IInitializable {
     private Package? inPackage;
 
     public IReadOnlyList<TypeParam> TypeParams => this.inTypeParams.AsReadOnly();
-    private List<TypeParam> inTypeParams = [];
+    private readonly List<TypeParam> inTypeParams = [];
 
     public IReadOnlyList<MethodDecl> Methods => this.inMethods.AsReadOnly();
-    private List<MethodDecl> inMethods = [];
+    private readonly List<MethodDecl> inMethods = [];
 
     void IInitializable.Initialize(Project project, Node node) {
         Object obj = node.AsObject();
         this.Name = obj.ReadString("name");
         this.Location = obj.TryReadLocation("loc", project);
-        this.inInstances = obj.TryReadIndexList("instances", project.MethodInsts);
         this.inInterface = obj.ReadIndex("interface", project.InterfaceDescs);
         this.inData = obj.ReadIndex("data", project.StructDescs);
         this.inPackage = obj.ReadIndex("package", project.Packages);
-        this.inTypeParams = obj.TryReadIndexList("typeParams", project.TypeParams);
-        this.inMethods = obj.TryReadIndexList("methods", project.MethodDecls);
+        obj.TryReadIndexList("instances", this.inInstances, project.MethodInsts);
+        obj.TryReadIndexList("typeParams", this.inTypeParams, project.TypeParams);
+        obj.TryReadIndexList("methods", this.inMethods, project.MethodDecls);
         this.Data.AddUses(this);
     }
 

@@ -4,9 +4,14 @@ using Constructs.Tooling;
 
 namespace Constructs;
 
+/// <summary>An argument is a parameter or result value in a signature.</summary>
+/// <see cref="../../docs/genFeatureDef.md#argument"/>
 public class Argument : IConstruct, IInitializable {
+
+    /// <summary>Optional name of argument or an empty string.</summary>
     public string Name { get; private set; } = "";
 
+    /// <summary>The type of the argument.</summary>
     public ITypeDesc Type => this.inType ??
         throw new UninitializedException(nameof(this.Type));
     private ITypeDesc? inType;

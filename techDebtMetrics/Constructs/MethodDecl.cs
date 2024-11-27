@@ -11,7 +11,7 @@ public class MethodDecl : IMethod, IDeclaration, IInitializable {
     public Location Location { get; private set; }
 
     public IReadOnlyList<MethodInst> Instances => this.inInstances.AsReadOnly();
-    private List<MethodInst> inInstances = [];
+    private readonly List<MethodInst> inInstances = [];
 
     public Signature Signature => this.inSignature ??
         throw new UninitializedException(nameof(this.Signature));
@@ -26,18 +26,18 @@ public class MethodDecl : IMethod, IDeclaration, IInitializable {
     public ObjectDecl? Receiver { get; private set; }
 
     public IReadOnlyList<TypeParam> TypeParams => this.inTypeParams.AsReadOnly();
-    private List<TypeParam> inTypeParams = [];
+    private readonly List<TypeParam> inTypeParams = [];
 
     void IInitializable.Initialize(Project project, Node node) {
         Object obj = node.AsObject();
         this.Name = obj.ReadString("name");
         this.Location = obj.TryReadLocation("loc", project);
-        this.inInstances = obj.TryReadIndexList("instances", project.MethodInsts);
         this.inSignature = obj.ReadIndex("signature", project.Signatures);
         this.Metrics = obj.TryReadIndex("metrics", project.Metrics);
         this.inPackage = obj.ReadIndex("package", project.Packages);
         this.Receiver = obj.TryReadIndex("receiver", project.ObjectDecls);
-        this.inTypeParams = obj.TryReadIndexList("typeParams", project.TypeParams);
+        obj.TryReadIndexList("instances", this.inInstances, project.MethodInsts);
+        obj.TryReadIndexList("typeParams", this.inTypeParams, project.TypeParams);
         this.Signature.AddUses(this);
     }
 

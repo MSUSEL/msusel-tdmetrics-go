@@ -13,7 +13,7 @@ public class MethodInst : IMethod, IConstruct, IInitializable {
     private MethodDecl? inGeneric;
 
     public IReadOnlyList<ITypeDesc> InstanceTypes => this.inInstanceTypes.AsReadOnly();
-    private List<ITypeDesc> inInstanceTypes = [];
+    private readonly List<ITypeDesc> inInstanceTypes = [];
 
     public ObjectInst? Receiver { get; private set; }
 
@@ -24,9 +24,9 @@ public class MethodInst : IMethod, IConstruct, IInitializable {
     void IInitializable.Initialize(Project project, Node node) {
         Object obj = node.AsObject();
         this.inGeneric = obj.ReadIndex("generic", project.MethodDecls);
-        this.inInstanceTypes = obj.ReadKeyList<ITypeDesc>("instanceTypes", project);
         this.Receiver = obj.TryReadIndex("receiver", project.ObjectInsts);
         this.inSignature = obj.ReadIndex("resolved", project.Signatures);
+        obj.ReadKeyList("instanceTypes", this.inInstanceTypes, project);
         this.Signature.AddUses(this);
     }
 

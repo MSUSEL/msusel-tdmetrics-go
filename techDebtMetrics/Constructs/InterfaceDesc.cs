@@ -4,34 +4,42 @@ using System.Collections.Generic;
 
 namespace Constructs;
 
+/// <summary>An interface type description.</summary>
+/// <see cref="../../docs/genFeatureDef.md#interface-description"/>
 public class InterfaceDesc : ITypeDesc, IInitializable {
 
+    /// <summary>The list of abstracts, named function signatures, for this interface.</summary>
     public IReadOnlyList<Abstract> Abstracts => this.inAbstracts.AsReadOnly();
-    private List<Abstract> inAbstracts = [];
+    private readonly List<Abstract> inAbstracts = [];
 
+    /// <summary>The list of approximate type constraints.</summary>
     public IReadOnlyList<ITypeDesc> Approx => this.inApprox.AsReadOnly();
-    private List<ITypeDesc> inApprox = [];
+    private readonly List<ITypeDesc> inApprox = [];
 
+    /// <summary>The list of exact type constraints.</summary>
     public IReadOnlyList<ITypeDesc> Exact => this.inExact.AsReadOnly();
-    private List<ITypeDesc> inExact = [];
+    private readonly List<ITypeDesc> inExact = [];
 
+    /// <summary>The interfaces that this interface inherits.</summary>
     public IReadOnlyList<InterfaceDesc> Inherits => this.inInherits.AsReadOnly();
-    private List<InterfaceDesc> inInherits = [];
+    private readonly List<InterfaceDesc> inInherits = [];
 
+    /// <summary>The list of interface declarations and instances that have this interface.</summary>
     public IReadOnlyList<IInterface> Uses => this.inUses.AsReadOnly();
-    private List<IInterface> inUses = [];
+    private readonly List<IInterface> inUses = [];
     internal void AddUses(IInterface use) => this.inUses.Add(use);
 
+    /// <summary>Indicates this interface is the base type of all other types.</summary>
     public bool IsEmpty =>
         this.Abstracts.Count <= 0 && this.Approx.Count <= 0 &&
         this.Exact.Count <= 0 && this.Inherits.Count <= 0;
 
     void IInitializable.Initialize(Project project, Node node) {
         Object obj = node.AsObject();
-        this.inAbstracts = obj.TryReadIndexList("abstracts", project.Abstracts);
-        this.inApprox = obj.TryReadKeyList<ITypeDesc>("approx", project);
-        this.inExact = obj.TryReadKeyList<ITypeDesc>("exact", project);
-        this.inInherits = obj.TryReadIndexList("inherits", project.InterfaceDescs);
+        obj.TryReadIndexList("abstracts", this.inAbstracts, project.Abstracts);
+        obj.TryReadKeyList("approx", this.inApprox, project);
+        obj.TryReadKeyList("exact", this.inExact, project);
+        obj.TryReadIndexList("inherits", this.inInherits, project.InterfaceDescs);
     }
 
     public override string ToString() => Journal.ToString(this);

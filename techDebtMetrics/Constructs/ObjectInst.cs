@@ -13,10 +13,10 @@ public class ObjectInst : IObject, IInitializable {
     private ObjectDecl? inGeneric;
 
     public IReadOnlyList<ITypeDesc> InstanceTypes => this.inInstanceTypes.AsReadOnly();
-    private List<ITypeDesc> inInstanceTypes = [];
+    private readonly List<ITypeDesc> inInstanceTypes = [];
 
     public IReadOnlyList<MethodInst> Methods => this.inMethods.AsReadOnly();
-    private List<MethodInst> inMethods = [];
+    private readonly List<MethodInst> inMethods = [];
 
     public InterfaceDesc Interface => this.inInterface ??
         throw new UninitializedException(nameof(this.Interface));
@@ -29,10 +29,10 @@ public class ObjectInst : IObject, IInitializable {
     void IInitializable.Initialize(Project project, Node node) {
         Object obj = node.AsObject();
         this.inGeneric = obj.ReadIndex("generic", project.ObjectDecls);
-        this.inInstanceTypes = obj.ReadKeyList<ITypeDesc>("instanceTypes", project);
-        this.inMethods = obj.TryReadKeyList<MethodInst>("methods", project);
         this.inInterface = obj.ReadIndex("resInterface", project.InterfaceDescs);
         this.inResolvedData = obj.ReadIndex("resData", project.StructDescs);
+        obj.ReadKeyList("instanceTypes", this.inInstanceTypes, project);
+        obj.TryReadKeyList("methods", this.inMethods, project);
         this.Data.AddUses(this);
     }
 

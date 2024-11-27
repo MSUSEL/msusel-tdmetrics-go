@@ -28,15 +28,15 @@ public class Metrics : IConstruct, IInitializable {
 
     /// <summary>List of methods that were invoked in the method.</summary>
     public IReadOnlyList<IConstruct> Invokess => this.inInvokess.AsReadOnly();
-    private List<IConstruct> inInvokess = [];
+    private readonly List<IConstruct> inInvokess = [];
 
     /// <summary>List of types that were read from in the method.</summary>
     public IReadOnlyList<IConstruct> Reads => this.inReads.AsReadOnly();
-    private List<IConstruct> inReads = [];
+    private readonly List<IConstruct> inReads = [];
 
     /// <summary>List of types that were written to in the method.</summary>
     public IReadOnlyList<IConstruct> Writes => this.inWrites.AsReadOnly();
-    private List<IConstruct> inWrites = [];
+    private readonly List<IConstruct> inWrites = [];
 
     void IInitializable.Initialize(Project project, Node node) {
         Object obj = node.AsObject();
@@ -47,9 +47,9 @@ public class Metrics : IConstruct, IInitializable {
         this.LineCount = obj.TryReadInt("lineCounr");
         this.Getter = obj.TryReadBool("getter");
         this.Setter = obj.TryReadBool("setter");
-        this.inInvokess = obj.TryReadKeyList<IConstruct>("invokes", project);
-        this.inReads = obj.TryReadKeyList<IConstruct>("reads", project);
-        this.inWrites = obj.TryReadKeyList<IConstruct>("writes", project);
+        obj.TryReadKeyList("invokes", this.inInvokess, project);
+        obj.TryReadKeyList("reads", this.inReads, project);
+        obj.TryReadKeyList("writes", this.inWrites, project);
     }
 
     public override string ToString() => Journal.ToString(this);

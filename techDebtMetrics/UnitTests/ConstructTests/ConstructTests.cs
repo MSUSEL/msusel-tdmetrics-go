@@ -2,7 +2,7 @@ using Constructs;
 using System;
 using System.IO;
 
-namespace UnitTests.Constructs;
+namespace UnitTests.ConstructTests;
 
 public class ConstructTests {
 

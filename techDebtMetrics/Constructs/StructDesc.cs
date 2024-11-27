@@ -7,17 +7,17 @@ namespace Constructs;
 public class StructDesc : ITypeDesc, IInitializable {
 
     public IReadOnlyList<Field> Fields => this.inFields.AsReadOnly();
-    private List<Field> inFields = [];
+    private readonly List<Field> inFields = [];
 
     public IReadOnlyList<IObject> Uses => this.inUses.AsReadOnly();
-    private List<IObject> inUses = [];
+    private readonly List<IObject> inUses = [];
     internal void AddUses(IObject use) => this.inUses.Add(use);
 
     public bool IsEmpty => this.Fields.Count <= 0;
 
     void IInitializable.Initialize(Project project, Node node) {
         Object obj = node.AsObject();
-        this.inFields = obj.TryReadIndexList("fields", project.Fields);
+        obj.TryReadIndexList("fields", this.inFields, project.Fields);
     }
 
     public override string ToString() => Journal.ToString(this);

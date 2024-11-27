@@ -13,29 +13,29 @@ public class Package : IConstruct, IInitializable {
     public string Name { get; private set; } = "";
 
     public IReadOnlyList<Package> Imports => this.inImports.AsReadOnly();
-    private List<Package> inImports = [];
+    private readonly List<Package> inImports = [];
 
     public IReadOnlyList<InterfaceDecl> Interfaces => this.inInterfaces.AsReadOnly();
-    private List<InterfaceDecl> inInterfaces = [];
+    private readonly List<InterfaceDecl> inInterfaces = [];
 
     public IReadOnlyList<MethodDecl> Methods => this.inMethods.AsReadOnly();
-    private List<MethodDecl> inMethods = [];
+    private readonly List<MethodDecl> inMethods = [];
 
     public IReadOnlyList<ObjectDecl> Objects => this.inObjects.AsReadOnly();
-    private List<ObjectDecl> inObjects = [];
+    private readonly List<ObjectDecl> inObjects = [];
 
     public IReadOnlyList<Value> Values => this.inValues.AsReadOnly();
-    private List<Value> inValues = [];
+    private readonly List<Value> inValues = [];
 
     void IInitializable.Initialize(Project project, Node node) {
         Object obj = node.AsObject();
         this.Path = obj.ReadString("path");
         this.Name = obj.ReadString("name");
-        this.inImports = obj.TryReadIndexList("imports", project.Packages);
-        this.inInterfaces = obj.TryReadIndexList("interfaces", project.InterfaceDecls);
-        this.inMethods = obj.TryReadIndexList("methods", project.MethodDecls);
-        this.inObjects = obj.TryReadIndexList("objects", project.ObjectDecls);
-        this.inValues = obj.TryReadIndexList("values", project.Values);
+        obj.TryReadIndexList("imports", this.inImports, project.Packages);
+        obj.TryReadIndexList("interfaces", this.inInterfaces, project.InterfaceDecls);
+        obj.TryReadIndexList("methods", this.inMethods, project.MethodDecls);
+        obj.TryReadIndexList("objects", this.inObjects, project.ObjectDecls);
+        obj.TryReadIndexList("values", this.inValues, project.Values);
     }
 
     public override string ToString() => Journal.ToString(this);
