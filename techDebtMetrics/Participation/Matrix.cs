@@ -49,6 +49,7 @@ public class Matrix(int rows, int columns, double epsilon = 1.0e-9) : IEnumerabl
         (int index, bool found) = node.FindEdge(edge);
         if (found) node.Edges[index] = edge;
         else node.Insert(index, edge);
+        this.nodes[row] = node;
     }
 
     private bool removeValue(int row, int column) {
@@ -60,6 +61,7 @@ public class Matrix(int rows, int columns, double epsilon = 1.0e-9) : IEnumerabl
         (int index, bool found) = node.FindEdge(edge);
         if (found) {
             node.Remove(index);
+            this.nodes[row] = node;
             return true;
         }
         return false;
@@ -98,7 +100,7 @@ public class Matrix(int rows, int columns, double epsilon = 1.0e-9) : IEnumerabl
                     yield return new(row, column, 0.0);
             } else {
                 for (int column = 0, index = 0; column < this.Columns; ++column) {
-                    if (index <= node.Edges.Length) {
+                    if (index < node.Edges.Length) {
                         Edge edge = node.Edges[index];
                         if (edge.Column == column) {
                             yield return new(row, column, edge.Value);
@@ -114,15 +116,17 @@ public class Matrix(int rows, int columns, double epsilon = 1.0e-9) : IEnumerabl
 
     public string Serialize() {
         StringBuilder sb = new();
-        sb.AppendFormat("0 {0}x{1}\n", this.Rows, this.Columns);
+        sb.AppendFormat("0 {0}x{1}", this.Rows, this.Columns);
         foreach (Node node in this.nodes) {
-            bool first = true;
-            foreach (Edge edge in node.Edges) {
-                if (first) first = false;
-                else sb.Append(' ');
-                sb.AppendFormat("{0}:{1:0.0000}", edge.Column, edge.Value);
-            }
             sb.Append('\n');
+            bool first = true;
+            if (node.Edges is not null) {
+                foreach (Edge edge in node.Edges) {
+                    if (first) first = false;
+                    else sb.Append(' ');
+                    sb.AppendFormat("{0}:{1:0.0000}", edge.Column, edge.Value);
+                }
+            }
         }
         return sb.ToString();
     }

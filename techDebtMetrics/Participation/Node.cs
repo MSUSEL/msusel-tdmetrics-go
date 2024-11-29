@@ -25,12 +25,12 @@ internal record struct Node(Edge[] Edges) {
     }
 
     public readonly (int index, bool found) FindEdge(Edge edge) {
-        if (this.Edges is null) return (-1, false);
+        if (this.Edges is null) return (0, false);
         int index = Array.BinarySearch(this.Edges, edge);
         return index switch {
-            >= 0 => (index, true),    // exact match
-            ~0 => (-1, false),        // not found
-            _ => (~index - 1, false), // nearest match
+            >= 0 => (index, true),            // exact match
+            ~0 => (this.Edges.Length, false), // not found
+            _ => (~index - 1, false),         // nearest match
         };
     }
 }
