@@ -6,7 +6,7 @@ namespace UnitTests.ParticipationTests;
 public class MatrixTests {
 
     [Test]
-    public void MatrixTest001() {
+    public void SerializeAndString() {
         Matrix m = new(4, 4);
         checkString(m.Serialize(),
             "0 4x4\n\n\n\n");
@@ -69,7 +69,7 @@ public class MatrixTests {
     }
 
     [Test]
-    public void MatrixTest002() {
+    public void Deserialize() {
         Matrix m = Matrix.Deserialize(
             "0 4x4\n\n\n\n");
         checkString(m.ToString(),
@@ -119,6 +119,32 @@ public class MatrixTests {
             " [  -,   -,  -,   -   ]]");
     }
 
+    [Test]
+    public void Multiplication() {
+        Matrix m1 = new(new double[,] {
+            { 1.0, 0.0, 0.0, 0.0 },
+            { 0.0, 0.0, 1.0, 0.0 },
+            { 0.0, 1.0, 0.5, 0.5 },
+            { 0.0, 0.0, 0.0, 0.0 } });
+        checkString(m1.ToString(),
+            "[[ 1.0,  -,   -,   -  ],",
+            " [  -,   -,  1.0,  -  ],",
+            " [  -,  1.0, 0.5, 0.5 ],",
+            " [  -,   -,   -,   -  ]]");
+
+        Matrix m2 = m1*m1;
+        checkString(m2.ToString(),
+            "[[ 1.0,  -,   -,   -  ],",
+            " [  -,   -,  1.0,  -  ],",
+            " [  -,  1.0, 0.5, 0.5 ],",
+            " [  -,   -,   -,   -  ]]");
+
+    }
+
+    [Test]
+    public void Addition() {
+        // TODO: Finish
+    }
 
     private static void checkString(string got, params string[] expLines) {
         string exp = string.Join('\n', expLines);
