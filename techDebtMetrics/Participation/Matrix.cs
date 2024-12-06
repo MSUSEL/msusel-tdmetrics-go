@@ -52,8 +52,7 @@ public class Matrix : IEnumerable<Entry> {
     private double getValue(int row, int column) {
         SortedDictionary<int, double> node = this.data[row];
         if (node is null) return 0.0;
-        node.TryGetValue(column, out double value);
-        return value;
+        return node.TryGetValue(column, out double value) ? value : 0.0;
     }
 
     private void setValue(int row, int column, double value) {
@@ -92,9 +91,6 @@ public class Matrix : IEnumerable<Entry> {
                 yield return new(row, column, 0.0);
         }
     }
-
-    // TODO: Finish
-    //public IEnumerator<Entry> RegionEnumerate(int startRow, int startColumn, int rows, int columns)
 
     #endregion
     #region Serialization
@@ -185,96 +181,160 @@ public class Matrix : IEnumerable<Entry> {
             throw new Exception("The left's columns (" + left.Columns + ") must be equal to the right's rows (" + right.Rows + ").");
 
         Matrix result = new(left.Rows, right.Columns, left.Epsilon);
-        for (int row = 0; row < left.Rows; ++row) {
-            SortedDictionary<int, double> node = left.data[row];
-            if (node is not null) {
-                for (int column = 0; column < right.Columns; ++column) {
-                    double sum = 0.0;
-                    foreach (KeyValuePair<int, double> edge in node)
-                        sum += edge.Value * right[edge.Key, row];
-                    result[row, column] = sum;
-                }
+        for (int column = 0; column < right.Columns; ++column) {
+            SortedDictionary<int, double> rightNode = right.getColumn(column);
+            for (int row = 0; row < left.Rows; ++row) {
+                double sum = 0.0;
+                zipAnd(left.data[row], rightNode, (column, leftValue, rightValue) =>
+                    sum += leftValue * rightValue);
+                result[row, column] = sum;
             }
         }
         return result;
     }
 
-    public static Matrix Zip(Matrix left, Matrix right, Func<double, double, double> joiner) {
-        if (left.Rows != right.Rows || left.Columns != right.Columns)
-            throw new Exception("The left (" + left.Rows + "x" + left.Columns + ") and right (" + right.Rows + "x" + right.Columns + ") matrices need to be the same size.");
+    public static Vector operator *(Matrix left, Vector right) {
+        if (left.Columns != right.Rows)
+            throw new Exception("The left's columns (" + left.Columns + ") must be equal to the right's rows (" + right.Rows + ").");
 
-        Matrix result = new(left.Rows, left.Columns, left.Epsilon);
+        Vector result = new(left.Rows, left.Epsilon);
+        SortedDictionary<int, double> rightNode = right.getDictionary();
         for (int row = 0; row < left.Rows; ++row) {
-            SortedDictionary<int, double> leftNode = left.data[row];
-            SortedDictionary<int, double> rightNode = right.data[row];
-
-            if (leftNode is not null) {
-                if (rightNode is not null) {
-                    SortedDictionary<int, double>.Enumerator leftIt = leftNode.GetEnumerator();
-                    SortedDictionary<int, double>.Enumerator rightIt = leftNode.GetEnumerator();
-                    KeyValuePair<int, double>? leftPair = leftIt.MoveNext() ? leftIt.Current : null;
-                    KeyValuePair<int, double>? rightPair = rightIt.MoveNext() ? rightIt.Current : null;
-
-                    while (leftPair is not null && rightPair is not null) {
-                        if (leftPair.Value.Key < rightPair.Value.Key) {
-                            result[row, leftPair.Value.Key] = joiner(leftPair.Value.Value, 0.0);
-                            leftPair = leftIt.MoveNext() ? leftIt.Current : null;
-
-                        } else if (leftPair.Value.Key > rightPair.Value.Key) {
-                            result[row, rightPair.Value.Key] = joiner(0.0, rightPair.Value.Value);
-                            rightPair = rightIt.MoveNext() ? rightIt.Current : null;
-
-                        } else {
-                            result[row, leftPair.Value.Key] = joiner(leftPair.Value.Value, rightPair.Value.Value);
-                            leftPair = leftIt.MoveNext() ? leftIt.Current : null;
-                            rightPair = rightIt.MoveNext() ? rightIt.Current : null;
-                        }
-                    }
-
-                    while (leftPair is not null) {
-                        result[row, leftPair.Value.Key] = joiner(leftPair.Value.Value, 0.0);
-                        leftPair = leftIt.MoveNext() ? leftIt.Current : null;
-                    }
-
-                    while (rightPair is not null) {
-                        result[row, rightPair.Value.Key] = joiner(0.0, rightPair.Value.Value);
-                        rightPair = rightIt.MoveNext() ? rightIt.Current : null;
-                    }
-
-                } else {
-                    foreach (KeyValuePair<int, double> edge in leftNode)
-                        result[row, edge.Key] = joiner(edge.Value, 0.0);
-                }
-
-            } else if (rightNode is not null) {
-                foreach (KeyValuePair<int, double> edge in rightNode)
-                    result[row, edge.Key] = joiner(0.0, edge.Value);
-            }
+            double sum = 0.0;
+            zipAnd(left.data[row], rightNode, (column, leftValue, rightValue) =>
+                sum += leftValue * rightValue);
+            result[row] = sum;
         }
         return result;
     }
 
     public static Matrix operator +(Matrix left, Matrix right) =>
-        Zip(left, right, (leftValue, rightValue) => leftValue + rightValue);
+        overlay(left, right, (leftValue, rightValue) => leftValue + rightValue);
 
     public static Matrix operator -(Matrix left, Matrix right) =>
-        Zip(left, right, (leftValue, rightValue) => leftValue - rightValue);
+        overlay(left, right, (leftValue, rightValue) => leftValue - rightValue);
 
-    public static Matrix operator -(Matrix matrix) {
-        Matrix result = new(matrix.Rows, matrix.Columns, matrix.Epsilon);
-        foreach (Entry entry in matrix.ShortEnumerate())
-            result[entry.Row, entry.Column] = -entry.Value;
+    public static Matrix operator -(Matrix matrix) =>
+        matrix.perEntry((v) => -v);
+
+    public static Matrix operator *(Matrix left, double right) =>
+        left.perEntry((v) => v*right);
+
+    public static Matrix operator *(double left, Matrix right) =>
+        right.perEntry((v) => v * left);
+
+    #endregion
+    #region Helpers
+
+    private Matrix perEntry(Func<double, double> handle) {
+        Matrix result = new(this.Rows, this.Columns, this.Epsilon);
+        for (int row = 0; row < this.Rows; ++row) {
+            SortedDictionary<int, double> node = this.data[row];
+            if (node is not null && node.Count > 0) {
+                SortedDictionary<int, double> resultNode = [];
+                foreach (KeyValuePair<int, double> pair in node)
+                    resultNode[pair.Key] = handle(pair.Value);
+                result.data[row] = resultNode;
+            }
+        }
         return result;
     }
 
-    public static Matrix operator *(Matrix left, double right) {
+    private SortedDictionary<int, double> getColumn(int column) {
+        SortedDictionary<int, double> col = [];
+        for (int row = 0; row < this.Rows; ++row) {
+            if (this.data[row].TryGetValue(column, out double value))
+                col[row] = value;
+        }
+        return col;
+    }
+
+    private static Matrix overlay(Matrix left, Matrix right, Func<double, double, double> joiner) {
+        if (left.Rows != right.Rows || left.Columns != right.Columns)
+            throw new Exception("The left (" + left.Rows + "x" + left.Columns + ") and right (" + right.Rows + "x" + right.Columns + ") matrices need to be the same size.");
+
         Matrix result = new(left.Rows, left.Columns, left.Epsilon);
-        foreach (Entry entry in left.ShortEnumerate())
-            result[entry.Row, entry.Column] = entry.Value * right;
+        for (int row = 0; row < left.Rows; ++row) {
+            zipOr(left.data[row], right.data[row], (column, leftVal, rightVal) =>
+                result[row, column] = joiner(leftVal, rightVal));
+        }
         return result;
     }
 
-    public static Matrix operator *(double left, Matrix right) => right * left;
+    static private bool zipOr(SortedDictionary<int, double> left, SortedDictionary<int, double> right, Action<int, double, double> handle) {
+        if (left is null) {
+            if (right is null) return false;
+
+            foreach (KeyValuePair<int, double> edge in right)
+                handle(edge.Key, 0.0, edge.Value);
+            return right.Count > 0;
+        }
+
+        if (right is null) {
+            foreach (KeyValuePair<int, double> edge in left)
+                handle(edge.Key, edge.Value, 0.0);
+            return left.Count > 0;
+        }
+
+        SortedDictionary<int, double>.Enumerator leftIt = left.GetEnumerator();
+        SortedDictionary<int, double>.Enumerator rightIt = right.GetEnumerator();
+        KeyValuePair<int, double>? leftEdge = leftIt.MoveNext() ? leftIt.Current : null;
+        KeyValuePair<int, double>? rightEdge = rightIt.MoveNext() ? rightIt.Current : null;
+        bool called = leftEdge is not null || rightEdge is not null;
+
+        while (leftEdge is not null && rightEdge is not null) {
+            if (leftEdge.Value.Key < rightEdge.Value.Key) {
+                handle(leftEdge.Value.Key, leftEdge.Value.Value, 0.0);
+                leftEdge = leftIt.MoveNext() ? leftIt.Current : null;
+
+            } else if (leftEdge.Value.Key > rightEdge.Value.Key) {
+                handle(rightEdge.Value.Key, 0.0, rightEdge.Value.Value);
+                rightEdge = rightIt.MoveNext() ? rightIt.Current : null;
+
+            } else {
+                handle(leftEdge.Value.Key, leftEdge.Value.Value, rightEdge.Value.Value);
+                leftEdge = leftIt.MoveNext() ? leftIt.Current : null;
+                rightEdge = rightIt.MoveNext() ? rightIt.Current : null;
+            }
+        }
+
+        while (leftEdge is not null) {
+            handle(leftEdge.Value.Key, leftEdge.Value.Value, 0.0);
+            leftEdge = leftIt.MoveNext() ? leftIt.Current : null;
+        }
+
+        while (rightEdge is not null) {
+            handle(rightEdge.Value.Key, 0.0, rightEdge.Value.Value);
+            rightEdge = rightIt.MoveNext() ? rightIt.Current : null;
+        }
+        return called;
+    }
+
+    static private bool zipAnd(SortedDictionary<int, double> left, SortedDictionary<int, double> right, Action<int, double, double> handle) {
+        if (left is null || right is null) return false;
+
+        SortedDictionary<int, double>.Enumerator leftIt = left.GetEnumerator();
+        SortedDictionary<int, double>.Enumerator rightIt = right.GetEnumerator();
+        KeyValuePair<int, double>? leftEdge = leftIt.MoveNext() ? leftIt.Current : null;
+        KeyValuePair<int, double>? rightEdge = rightIt.MoveNext() ? rightIt.Current : null;
+        bool called = false;
+
+        while (leftEdge is not null && rightEdge is not null) {
+            if (leftEdge.Value.Key < rightEdge.Value.Key)
+                leftEdge = leftIt.MoveNext() ? leftIt.Current : null;
+
+            else if (leftEdge.Value.Key > rightEdge.Value.Key)
+                rightEdge = rightIt.MoveNext() ? rightIt.Current : null;
+
+            else {
+                handle(leftEdge.Value.Key, leftEdge.Value.Value, rightEdge.Value.Value);
+                leftEdge = leftIt.MoveNext() ? leftIt.Current : null;
+                rightEdge = rightIt.MoveNext() ? rightIt.Current : null;
+                called = true;
+            }
+        }
+        return called;
+    }
 
     #endregion
 
