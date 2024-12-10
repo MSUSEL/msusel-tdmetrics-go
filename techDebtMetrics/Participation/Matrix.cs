@@ -55,12 +55,16 @@ public class Matrix : Data {
         new(this.GetColumnNode(column), this.Rows, this.Epsilon);
 
     protected override bool ColumnHasZero(int column) =>
-        this.data.Any((node) => !node.ContainsKey(column));
+        this.data.Any((node) => !(node?.ContainsKey(column) ?? false));
 
     public override IEnumerable<Entry> ShortEnumerate() {
-        for (int row = 0; row < this.Rows; ++row)
-            foreach (KeyValuePair<int, double> edge in this.data[row])
-                yield return new(row, edge.Key, edge.Value);
+        for (int row = 0; row < this.Rows; ++row) {
+            SortedDictionary<int, double> node = this.data[row];
+            if (node is not null) {
+                foreach (KeyValuePair<int, double> edge in node)
+                    yield return new(row, edge.Key, edge.Value);
+            }
+        }
     }
 
     public override IEnumerable<Entry> FullEnumerate() {
@@ -115,7 +119,7 @@ public class Matrix : Data {
             throw new Exception("The left's columns (" + left.Columns + ") must be equal to the right's rows (" + right.Rows + ").");
 
         Vector result = new(left.Rows, left.Epsilon);
-        SortedDictionary<int, double> rightNode = right.getDictionary();
+        SortedDictionary<int, double> rightNode = right.GetDictionary();
         for (int row = 0; row < left.Rows; ++row) {
             double sum = 0.0;
             zipAnd(left.data[row], rightNode, (column, leftValue, rightValue) =>

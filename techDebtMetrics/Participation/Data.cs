@@ -5,21 +5,35 @@ using System.Text;
 
 namespace Participation;
 
+/// <summary>This is the shared parts of a sparse metrix and vector.</summary>
 public abstract class Data : IEnumerable<Entry> {
 
+    /// <summary>The fixed number of rows.</summary>
     public abstract int Rows { get; }
+
+    /// <summary>The fixed number of columns.</summary>
     public abstract int Columns { get; }
+
+    /// <summary>The epsilon for an epsilon comparison.</summary>
     public abstract double Epsilon { get; }
 
-    protected abstract bool ColumnHasZero(int column);
-
+    /// <summary>Enumerates all of the values in the data.</summary>
+    /// <returns>The enumerator of all the values in the data.</returns>
     public IEnumerator<Entry> GetEnumerator() => this.FullEnumerate().GetEnumerator();
     IEnumerator IEnumerable.GetEnumerator() => this.FullEnumerate().GetEnumerator();
 
+    /// <summary>Enumerates only the non-zero values in the data.</summary>
+    /// <returns>The enumerator of all non-zero values in the data.</returns>
     public abstract IEnumerable<Entry> ShortEnumerate();
 
+    /// <summary>Enumerates all of the values in the data.</summary>
+    /// <returns>The enumerator of all the values in the data.</returns>
     public abstract IEnumerable<Entry> FullEnumerate();
 
+    /// <summary>Gets or sets the value at the given row and column.</summary>
+    /// <param name="row">The row to get or set, [0..Rows).</param>
+    /// <param name="column">The column to get or set, [0..Columns).</param>
+    /// <returns>The value at the given row and column.</returns>
     public double this[int row, int column] {
         get {
             this.CheckRange(row, column);
@@ -32,6 +46,17 @@ public abstract class Data : IEnumerable<Entry> {
             else this.SetValue(row, column, value);
         }
     }
+
+    /// <summary>Gets or sets the value at the given row and column.</summary>
+    /// <param name="row">The row to get or set, [0..Rows).</param>
+    /// <param name="column">The column to get or set, [0..Columns).</param>
+    /// <returns>The value at the given row and column.</returns>
+    public double this[Index row, Index column] {
+        get => this[row.GetOffset(this.Rows), column.GetOffset(this.Columns)];
+        set => this[row.GetOffset(this.Rows), column.GetOffset(this.Columns)] = value;
+    }
+
+    protected abstract bool ColumnHasZero(int column);
 
     protected void CheckRange(int row, int column) {
         if (row < 0 || row >= this.Rows)

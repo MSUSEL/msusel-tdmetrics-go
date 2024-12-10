@@ -31,6 +31,12 @@ public class Vector : Data {
             this[row] = data[row];
     }
 
+    internal Vector(SortedDictionary<int, double> data, int rows, double epsilon) {
+        this.rows = rows;
+        this.epsilon = epsilon;
+        this.data = data;
+    }
+
     public override int Rows => this.rows;
     public override int Columns => 1;
     public override double Epsilon => this.epsilon;
@@ -49,7 +55,20 @@ public class Vector : Data {
     protected override bool RemoveValue(int row, int column) =>
         this.data.Remove(row);
 
-    internal SortedDictionary<int, double> getDictionary() => this.data;
+    protected override bool ColumnHasZero(int column) =>
+        column != 0 || this.data.Count != this.Rows;
+
+    protected override SortedDictionary<int, double> GetColumnNode(int column) =>
+        column == 0 ? this.data : [];
+
+    protected override SortedDictionary<int, double> GetRowNode(int row) {
+        SortedDictionary<int, double> result = [];
+        if (this.data.TryGetValue(row, out double value))
+            result.Add(row, value);
+        return result;
+    }
+
+    internal SortedDictionary<int, double> GetDictionary() => this.data;
 
     public override IEnumerable<Entry> ShortEnumerate() {
         foreach (KeyValuePair<int, double> edge in this.data)
@@ -59,7 +78,7 @@ public class Vector : Data {
     public override IEnumerable<Entry> FullEnumerate() {
         int next = 0;
         foreach (KeyValuePair<int, double> edge in this.data) {
-            for (int row = 0; row < edge.Key; ++row)
+            for (int row = next; row < edge.Key; ++row)
                 yield return new(row, 0, 0.0);
             yield return new(edge.Key, 0, edge.Value);
             next = edge.Key + 1;
