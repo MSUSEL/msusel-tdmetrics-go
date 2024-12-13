@@ -8,14 +8,34 @@ namespace Participation;
 /// <summary>This is the shared parts of a sparse metrix and vector.</summary>
 public abstract class Data : IEnumerable<Entry> {
 
+    /// <summary>The default epsilong value to use for comparing data.-</summary>
+    public const double DefaultEpsilon = 1.0e-9;
+
+    /// <summary>Creates a new data.</summary>
+    /// <param name="rows">The number of rows for the data.</param>
+    /// <param name="columns">The number of columns for the data.</param>
+    /// <param name="epsilon">The epsilon comparitor for the values in the data.</param>
+    protected Data(int rows, int columns, double epsilon) {
+        if (rows < 1)
+            throw new ArgumentException("Must have a positive non-zero number of rows.", nameof(rows));
+        if (columns < 1)
+            throw new ArgumentException("Must have a positive non-zero number of columns.", nameof(columns));
+        if (double.IsNegative(epsilon))
+            throw new ArgumentException("Must have a positive value epsilon.", nameof(epsilon));
+
+        this.Rows = rows;
+        this.Columns = columns;
+        this.Epsilon = epsilon;
+    }
+
     /// <summary>The fixed number of rows.</summary>
-    public abstract int Rows { get; }
+    public readonly int Rows;
 
     /// <summary>The fixed number of columns.</summary>
-    public abstract int Columns { get; }
+    public readonly int Columns;
 
     /// <summary>The epsilon for an epsilon comparison.</summary>
-    public abstract double Epsilon { get; }
+    public readonly double Epsilon;
 
     /// <summary>Enumerates all of the values in the data.</summary>
     /// <returns>The enumerator of all the values in the data.</returns>
@@ -56,8 +76,14 @@ public abstract class Data : IEnumerable<Entry> {
         set => this[row.GetOffset(this.Rows), column.GetOffset(this.Columns)] = value;
     }
 
+    /// <summary>Determines if the given column has at least one zero.</summary>
+    /// <param name="column">The valid column to check.</param>
+    /// <returns>True if the given column contains a zero, otherwise false.</returns>
     protected abstract bool ColumnHasZero(int column);
 
+    /// <summary>Checks if the given values are valid, otherwise an exception is thrown.</summary>
+    /// <param name="row">The row to check.</param>
+    /// <param name="column">The column to check.</param>
     protected void CheckRange(int row, int column) {
         if (row < 0 || row >= this.Rows)
             throw new IndexOutOfRangeException("Row must be in [0.." + this.Rows + "), the given row was " + row);
@@ -65,18 +91,48 @@ public abstract class Data : IEnumerable<Entry> {
             throw new IndexOutOfRangeException("Column must be in [0.." + this.Columns + "), the given column was " + column);
     }
 
+    /// <summary>Gets the value at the given row and column.</summary>
+    /// <param name="row">The valid row to get from.</param>
+    /// <param name="column">The value column to get from.</param>
+    /// <returns>The value at the given row and column.</returns>
     protected abstract double GetValue(int row, int column);
 
+    /// <summary>This will set the non-zero value to the given row and column.</summary>
+    /// <param name="row">The valid row to set to.</param>
+    /// <param name="column">The valid column to set to.</param>
+    /// <param name="value">The non-zero value to set.</param>
     protected abstract void SetValue(int row, int column, double value);
 
+    /// <summary>Removes the value at the given row and column.</summary>
+    /// <remarks>This is called when setting a zero value.</remarks>
+    /// <param name="row">The valid row to remove.</param>
+    /// <param name="column">The valid column to remove.</param>
+    /// <returns>True if the value was reoved, false if the value didn't exist or was already zero.</returns>
     protected abstract bool RemoveValue(int row, int column);
 
+    /// <summary>
+    /// Gets the whole column as a dictionary containing the non-zero values in the column,
+    /// keyed with the column number of each non-zero value.
+    /// </summary>
+    /// <param name="column">The column to get.</param>
+    /// <returns>The dictionary containing the column numbers paired with the non-zero values.</returns>
     protected abstract SortedDictionary<int, double> GetColumnNode(int column);
 
+    /// <summary>
+    /// Gets the whole row as a dictionary containing the non-zero values in the row,
+    /// keyed with the row number of each non-zero value.
+    /// </summary>
+    /// <param name="column">The row to get.</param>
+    /// <returns>The dictionary containing the row numbers paired with the non-zero values.</returns>
     protected abstract SortedDictionary<int, double> GetRowNode(int row);
 
+    /// <summary>Gets the string for the data.</summary>
+    /// <returns>The string for the data.</returns>
     public override string ToString() => this.ToString("{0:0.0###;-0.0###;-}");
 
+    /// <summary>Gets the string for the data.</summary>
+    /// <param name="format">The format to use for each number in the data.</param>
+    /// <returns>The string for the data.</returns>
     public string ToString(string format) {
         int[] lefts = new int[this.Columns];
         int[] rights = new int[this.Columns];
@@ -86,12 +142,16 @@ public abstract class Data : IEnumerable<Entry> {
             if (lefts[entry.Column] < left) lefts[entry.Column] = left;
             if (rights[entry.Column] < right) rights[entry.Column] = right;
         }
+        bool zeroNotMeasured = true;
+        int zeroLeft = 0, zeroRight = 0;
         for (int column = 0; column < this.Columns; ++column) {
             if (this.ColumnHasZero(column)) {
-                // TODO: Measure once
-                (int left, int right) = measureNumber(string.Format(format, 0.0));
-                if (lefts[column] < left) lefts[column] = left;
-                if (rights[column] < right) rights[column] = right;
+                if (zeroNotMeasured) {
+                    (zeroLeft, zeroRight) = measureNumber(string.Format(format, 0.0));
+                    zeroNotMeasured = false;
+                }
+                if (lefts[column] < zeroLeft) lefts[column] = zeroLeft;
+                if (rights[column] < zeroRight) rights[column] = zeroRight;
             }
         }
 
@@ -115,16 +175,38 @@ public abstract class Data : IEnumerable<Entry> {
         return sb.ToString();
     }
 
+    /// <summary>
+    /// This measures the left and right side of a decimal point in the stringified number.
+    /// This will attempt to center non-numbers and numbers without a decimal point.
+    /// </summary>
+    /// <remarks>
+    /// This could be made better to handle numbers without a decimal point, check for numbers
+    /// next to 'e' or 'E', and handle numbers using decimal point other than '.', however,
+    /// for now, that isn't required for this project.
+    /// This works well for the default formatting passed into ToString().
+    /// </remarks>
+    /// <param name="text">The stringified number to measure the size of.</param>
+    /// <returns>
+    /// The size of the number to the left of the decimal point
+    /// and to the right and including the decimal point.
+    /// </returns>
     private static (int left, int right) measureNumber(string text) {
-
-        // TODO: Improve zero values
-
-        if (text == "-") return (0, 1);
         char[] centers = ['.', 'e', 'E'];
-        string[] parts = text.Split(centers, 2);
-        return (parts[0].Length, parts.Length > 1 ? parts[1].Length + 1 : 0);
+        int length = text.Length;
+        int index = text.IndexOfAny(centers);
+        if (index < 0) index = length >> 1;
+        return (index - 1, length - index + 1);
     }
 
+    /// <summary>
+    /// This zips together two sorted dictionaries with the given actions.
+    /// If the left OR the right has a value for a column, this will call the given action.
+    /// Zero will be used for whichever dictionary doesn't have a value for a column.
+    /// </summary>
+    /// <param name="left">The left dictionary in the zip. This may be null.</param>
+    /// <param name="right">The right dictionary in the zip. This may be null.</param>
+    /// <param name="handle">The handle for processing each column found in either dictionary.</param>
+    /// <returns>True if any values were passed to the action, false otherwise.</returns>
     static protected bool zipOr(SortedDictionary<int, double> left, SortedDictionary<int, double> right, Action<int, double, double> handle) {
         if (left is null) {
             if (right is null) return false;
@@ -174,6 +256,14 @@ public abstract class Data : IEnumerable<Entry> {
         return called;
     }
 
+    /// <summary>
+    /// This zips together two sorted dictionaries with the given actions.
+    /// If the left AND the right has a value for a column, this will call the given action.
+    /// </summary>
+    /// <param name="left">The left dictionary in the zip. This may be null.</param>
+    /// <param name="right">The right dictionary in the zip. This may be null.</param>
+    /// <param name="handle">The handle for processing each column found in both dictionary.</param>
+    /// <returns>True if any values were passed to the action, false otherwise.</returns>
     static protected bool zipAnd(SortedDictionary<int, double> left, SortedDictionary<int, double> right, Action<int, double, double> handle) {
         if (left is null || right is null) return false;
 
@@ -200,6 +290,8 @@ public abstract class Data : IEnumerable<Entry> {
         return called;
     }
 
+    /// <summary>Serializes the data into a string.</summary>
+    /// <returns>The serialized data.</returns>
     public string Serialize() {
         StringBuilder sb = new();
         string version = "0"; // currently the only version is "0".
@@ -219,8 +311,13 @@ public abstract class Data : IEnumerable<Entry> {
         return sb.ToString();
     }
 
+    /// <summary>Deserializes the data from a string.</summary>
+    /// <typeparam name="T">The implementation of data to deserialize into.</typeparam>
+    /// <param name="factory">The factory for the implementation to deserialize into.</param>
+    /// <param name="data">The data to deserialize from.</param>
+    /// <returns>The created and populated with the deserialized data.</returns>
     static protected T deserialize<T>(Func<int, int, T> factory, string data)
-        where T: Data {
+        where T : Data {
         string[] lines = data.Split('\n');
         (int rows, int columns) = deserializeHeader(lines[0]);
         T d = factory(rows, columns);
@@ -229,6 +326,9 @@ public abstract class Data : IEnumerable<Entry> {
         return d;
     }
 
+    /// <summary>Deserializes the header information from the serialization.</summary>
+    /// <param name="header">The first line of the serialized data.</param>
+    /// <returns>The number of rows and columns specified in the header.</returns>
     static private (int rows, int columns) deserializeHeader(string header) {
         string[] parts = header.Trim().Split(' ');
         if (parts.Length != 2)
@@ -255,6 +355,10 @@ public abstract class Data : IEnumerable<Entry> {
         return (rows, columns);
     }
 
+    /// <summary>Deserialized a row of data from the serialized string.</summary>
+    /// <param name="d">The data to write the row to.</param>
+    /// <param name="row">The row being written.</param>
+    /// <param name="line">The line of serialized data for the row.</param>
     static private void deserializeRow(Data d, int row, string line) {
         if (row < 0 || row >= d.Rows)
             throw new Exception("Expected a row number to be in the range [0.." + d.Rows + "), but it was " + row + ".");

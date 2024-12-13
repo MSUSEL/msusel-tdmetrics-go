@@ -4,44 +4,35 @@ using System.Collections.Generic;
 namespace Participation;
 
 public class Vector : Data {
-
-    public readonly int rows;
-    public readonly double epsilon;
-
     private readonly SortedDictionary<int, double> data;
 
-    static public Vector Deserialize(string data, double epsilon = 1.0e-9) =>
+    static public Vector Deserialize(string data, double epsilon = DefaultEpsilon) =>
         deserialize((rows, columns) => {
             if (columns != 1)
                 throw new Exception("Expected the number of columns to be only one for a vector, but got " + columns);
             return new Vector(rows, epsilon);
         }, data);
 
-    public Vector(int rows, double epsilon = 1.0e-9) {
-        this.rows = rows;
-        this.epsilon = epsilon;
+    public Vector(int rows, double epsilon = DefaultEpsilon) :
+        base(rows, 1, epsilon) =>
         this.data = [];
-    }
 
-    public Vector(double[] data, double epsilon = 1.0e-9) {
-        this.rows = data.Length;
-        this.epsilon = epsilon;
-        this.data = [];
+    public Vector(double[] data, double epsilon = DefaultEpsilon) :
+        this(data.Length, epsilon) {
         for (int row = 0; row < this.Rows; ++row)
             this[row] = data[row];
     }
 
-    internal Vector(SortedDictionary<int, double> data, int rows, double epsilon) {
-        this.rows = rows;
-        this.epsilon = epsilon;
+    internal Vector(SortedDictionary<int, double> data, int rows, double epsilon) :
+        base(rows, 1, epsilon) =>
         this.data = data;
-    }
-
-    public override int Rows => this.rows;
-    public override int Columns => 1;
-    public override double Epsilon => this.epsilon;
 
     public double this[int row] {
+        get => this[row, 0];
+        set => this[row, 0] = value;
+    }
+
+    public double this[Index row] {
         get => this[row, 0];
         set => this[row, 0] = value;
     }

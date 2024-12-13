@@ -4,37 +4,44 @@ using System.Linq;
 
 namespace Participation;
 
+/// <summary>A 2D sparse matrix.</summary>
+/// <remarks>
+/// This matrix assumes that there will likely be a value in every row and every column
+/// however the number of non-zero entries is expected to be very small.
+/// </remarks>
 public class Matrix : Data {
-
-    private readonly int rows;
-    private readonly int columns;
-    private readonly double epsilon;
-
     private readonly SortedDictionary<int, double>[] data;
 
-    static public Matrix Deserialize(string data, double epsilon = 1.0e-9) =>
+    /// <summary>Deserialized the given data into a matrix.</summary>
+    /// <param name="data">The serialized data to populate this matrix with.</param>
+    /// <param name="epsilon">The epsilon comparitor used for determining if a value is zero or not.</param>
+    /// <returns>The deserialized matrix.</returns>
+    static public Matrix Deserialize(string data, double epsilon = DefaultEpsilon) =>
         deserialize((rows, columns) => new Matrix(rows, columns, epsilon), data);
 
-    public Matrix(int rows, int columns, double epsilon = 1.0e-9) {
-        this.rows = rows;
-        this.columns = columns;
-        this.epsilon = epsilon;
+    /// <summary>Creates a new sparse matrix.</summary>
+    /// <param name="rows">The number of rows for the matrix.</param>
+    /// <param name="columns">The number of columns for the matrix.</param>
+    /// <param name="epsilon">The epsilon comparitor used for determining if a value is zero or not.</param>
+    public Matrix(int rows, int columns, double epsilon = DefaultEpsilon) :
+        base(rows, columns, epsilon) =>
         this.data = new SortedDictionary<int, double>[rows];
-    }
 
-    public Matrix(double[,] data, double epsilon = 1.0e-9) {
-        this.rows = data.GetLength(0);
-        this.columns = data.GetLength(1);
-        this.epsilon = epsilon;
-        this.data = new SortedDictionary<int, double>[this.Rows];
+    /// <summary>Creates a sparse matrix populated with the given data.</summary>
+    /// <param name="data">The data to populate the matrix with.</param>
+    /// <param name="epsilon">The epsilon comparitor used for determining if a value is zero or not.</param>
+    public Matrix(double[,] data, double epsilon = DefaultEpsilon) :
+        this(data.GetLength(0), data.GetLength(1), epsilon) {
         for (int row = 0; row < this.Rows; ++row)
             for (int column = 0; column < this.Columns; ++column)
                 this[row, column] = data[row, column];
     }
 
-    public override int Rows => this.rows;
-    public override int Columns => this.columns;
-    public override double Epsilon => this.epsilon;
+    /// <summary>Gets a column of the matrix as a vector.</summary>
+    /// <param name="column">The column to get.</param>
+    /// <returns>The vector for the column.</returns>
+    public Vector GetColumn(int column) =>
+        new(this.GetColumnNode(column), this.Rows, this.Epsilon);
 
     protected override double GetValue(int row, int column) {
         SortedDictionary<int, double> node = this.data[row];
@@ -50,9 +57,6 @@ public class Matrix : Data {
 
     protected override bool RemoveValue(int row, int column) =>
         this.data[row]?.Remove(column) ?? false;
-
-    public Vector GetColumn(int column) =>
-        new(this.GetColumnNode(column), this.Rows, this.Epsilon);
 
     protected override bool ColumnHasZero(int column) =>
         this.data.Any((node) => !(node?.ContainsKey(column) ?? false));
@@ -97,6 +101,10 @@ public class Matrix : Data {
     protected override SortedDictionary<int, double> GetRowNode(int row) =>
         this.data[row];
 
+    /// <summary>This multiplies two matrices together.</summary>
+    /// <param name="left">The left matrix in the multiplication.</param>
+    /// <param name="right">The right matrix in the multiplication.</param>
+    /// <returns>The result matrix of the multiplication.</returns>
     public static Matrix operator *(Matrix left, Matrix right) {
         if (left.Columns != right.Rows)
             throw new Exception("The left's columns (" + left.Columns + ") must be equal to the right's rows (" + right.Rows + ").");
@@ -114,6 +122,10 @@ public class Matrix : Data {
         return result;
     }
 
+    /// <summary>This multiplies a matrix with a vector.</summary>
+    /// <param name="left">The matrix in the multiplication.</param>
+    /// <param name="right">The vector in the multiplication.</param>
+    /// <returns>The result vector of the multiplication..</returns>
     public static Vector operator *(Matrix left, Vector right) {
         if (left.Columns != right.Rows)
             throw new Exception("The left's columns (" + left.Columns + ") must be equal to the right's rows (" + right.Rows + ").");
@@ -129,20 +141,51 @@ public class Matrix : Data {
         return result;
     }
 
+    /// <summary>This adds two matrices together.</summary>
+    /// <param name="left">The left matrix in the sum.</param>
+    /// <param name="right">The right matrix in the sum.</param>
+    /// <returns>The sum of the two matrices.</returns>
     public static Matrix operator +(Matrix left, Matrix right) =>
         overlay(left, right, (leftValue, rightValue) => leftValue + rightValue);
 
+    /// <summary>This subtracts one matrix from another.</summary>
+    /// <param name="left">The left matrix to subtract the right matrix from..</param>
+    /// <param name="right">The right matrix to subtract from the left matrix.</param>
+    /// <returns>The difference between the matrixes.</returns>
     public static Matrix operator -(Matrix left, Matrix right) =>
         overlay(left, right, (leftValue, rightValue) => leftValue - rightValue);
 
+    /// <summary>This negates the matrix.</summary>
+    /// <param name="matrix">The matrix to negate.</param>
+    /// <returns>The negated matrix.</returns>
     public static Matrix operator -(Matrix matrix) =>
-        matrix.perEntry((v) => -v);
+        matrix.perEntry(v => -v);
 
+    /// <summary>This scales te matrix by a specific value.</summary>
+    /// <param name="left">The matrix to scale.</param>
+    /// <param name="right">The value to scale the matrix by.</param>
+    /// <returns>The scaled matrix.</returns>
     public static Matrix operator *(Matrix left, double right) =>
-        left.perEntry((v) => v*right);
-
+        left.perEntry(v => v * right);
+    
+    /// <summary>This scales te matrix by a specific value.</summary>
+    /// <param name="left">The value to scale the matrix by.</param>
+    /// <param name="right">The matrix to scale.</param>
+    /// <returns>The scaled matrix.</returns>
     public static Matrix operator *(double left, Matrix right) =>
-        right.perEntry((v) => v * left);
+        right.perEntry(v => v * left);
+
+    private static Matrix overlay(Matrix left, Matrix right, Func<double, double, double> joiner) {
+        if (left.Rows != right.Rows || left.Columns != right.Columns)
+            throw new Exception("The left (" + left.Rows + "x" + left.Columns + ") and right (" + right.Rows + "x" + right.Columns + ") matrices need to be the same size.");
+
+        Matrix result = new(left.Rows, left.Columns, left.Epsilon);
+        for (int row = 0; row < left.Rows; ++row) {
+            zipOr(left.data[row], right.data[row], (column, leftVal, rightVal) =>
+                result[row, column] = joiner(leftVal, rightVal));
+        }
+        return result;
+    }
 
     private Matrix perEntry(Func<double, double> handle) {
         Matrix result = new(this.Rows, this.Columns, this.Epsilon);
@@ -154,18 +197,6 @@ public class Matrix : Data {
                     resultNode[pair.Key] = handle(pair.Value);
                 result.data[row] = resultNode;
             }
-        }
-        return result;
-    }
-
-    private static Matrix overlay(Matrix left, Matrix right, Func<double, double, double> joiner) {
-        if (left.Rows != right.Rows || left.Columns != right.Columns)
-            throw new Exception("The left (" + left.Rows + "x" + left.Columns + ") and right (" + right.Rows + "x" + right.Columns + ") matrices need to be the same size.");
-
-        Matrix result = new(left.Rows, left.Columns, left.Epsilon);
-        for (int row = 0; row < left.Rows; ++row) {
-            zipOr(left.data[row], right.data[row], (column, leftVal, rightVal) =>
-                result[row, column] = joiner(leftVal, rightVal));
         }
         return result;
     }
