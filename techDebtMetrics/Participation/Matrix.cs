@@ -34,7 +34,20 @@ public class Matrix : Data {
         this(data.GetLength(0), data.GetLength(1), epsilon) {
         for (int row = 0; row < this.Rows; ++row)
             for (int column = 0; column < this.Columns; ++column)
-                this[row, column] = data[row, column];
+                this.SetIfNonZero(row, column, data[row, column]);
+    }
+
+    /// <summary>Creates a new sparse matrix.</summary>
+    /// <param name="rows">The number of rows for the matrix.</param>
+    /// <param name="columns">The number of columns for the matrix.</param>
+    /// <param name="entries">The data to populate thr matrix with.</param>
+    /// <param name="epsilon">The epsilon comparitor used for determining if a value is zero or not.</param>
+    public Matrix(int rows, int columns, IEnumerable<Entry> entries, double epsilon = DefaultEpsilon) :
+        this(rows, columns, epsilon) {
+        foreach (Entry entry in entries) {
+            this.CheckRange(entry.Row, entry.Column);
+            this.SetIfNonZero(entry.Row, entry.Column, entry.Value);
+        }
     }
 
     #region Data overrides
@@ -105,6 +118,16 @@ public class Matrix : Data {
     public Vector GetColumn(int column) =>
         new(this.GetColumnNode(column), this.Rows, this.Epsilon);
 
+    /// <summary>Creates a copy of this matrix.</summary>
+    /// <returns>The clone of this matrix.</returns>
+    public Matrix Clone() =>
+        new(this.Rows, this.Columns, this, this.Epsilon);
+
+    /// <summary>Creates a transposed matrix of this matrix.</summary>
+    /// <returns>The transposed matrix.</returns>
+    public Matrix Transpose() =>
+        new(this.Columns, this.Rows, this.Select(e => new Entry(e.Column, e.Row, e.Value)), this.Epsilon);
+
     /// <summary>This multiplies two matrices together.</summary>
     /// <param name="left">The left matrix in the multiplication.</param>
     /// <param name="right">The right matrix in the multiplication.</param>
@@ -159,26 +182,6 @@ public class Matrix : Data {
     public static Matrix operator -(Matrix left, Matrix right) =>
         overlay(left, right, (leftValue, rightValue) => leftValue - rightValue);
 
-    /// <summary>This negates the matrix.</summary>
-    /// <param name="matrix">The matrix to negate.</param>
-    /// <returns>The negated matrix.</returns>
-    public static Matrix operator -(Matrix matrix) =>
-        matrix.perEntry(v => -v);
-
-    /// <summary>This scales te matrix by a specific value.</summary>
-    /// <param name="left">The matrix to scale.</param>
-    /// <param name="right">The value to scale the matrix by.</param>
-    /// <returns>The scaled matrix.</returns>
-    public static Matrix operator *(Matrix left, double right) =>
-        left.perEntry(v => v * right);
-
-    /// <summary>This scales te matrix by a specific value.</summary>
-    /// <param name="left">The value to scale the matrix by.</param>
-    /// <param name="right">The matrix to scale.</param>
-    /// <returns>The scaled matrix.</returns>
-    public static Matrix operator *(double left, Matrix right) =>
-        right.perEntry(v => v * left);
-
     /// <summary>
     /// This will join two same sized matrices to create a new matrix.
     /// The given joiner will be calle for any entry in the left OR right matrix that is non-zero.
@@ -200,24 +203,23 @@ public class Matrix : Data {
         return result;
     }
 
-    /// <summary>This runs the given handle on every non-zero value to create a new matrix.</summary>
-    /// <param name="handle">The handle to call for each non-zero.</param>
-    /// <returns>The new matrix created.</returns>
-    private Matrix perEntry(Func<double, double> handle) {
-        Matrix result = new(this.Rows, this.Columns, this.Epsilon);
-        for (int row = 0; row < this.Rows; ++row) {
-            SortedDictionary<int, double> node = this.data[row];
-            if (node is not null && node.Count > 0) {
-                SortedDictionary<int, double> resultNode = [];
-                foreach (KeyValuePair<int, double> pair in node) {
-                    double value = handle(pair.Value);
-                    if (!this.IsZero(value))
-                        resultNode[pair.Key] = value;
-                }
-                if (resultNode.Count > 0)
-                    result.data[row] = resultNode;
-            }
-        }
-        return result;
-    }
+    /// <summary>This negates the matrix.</summary>
+    /// <param name="matrix">The matrix to negate.</param>
+    /// <returns>The negated matrix.</returns>
+    public static Matrix operator -(Matrix matrix) =>
+        new(matrix.Rows, matrix.Columns, matrix.Select(e => new Entry(e.Row, e.Column, -e.Value)), matrix.Epsilon);
+
+    /// <summary>This scales te matrix by a specific value.</summary>
+    /// <param name="left">The matrix to scale.</param>
+    /// <param name="right">The value to scale the matrix by.</param>
+    /// <returns>The scaled matrix.</returns>
+    public static Matrix operator *(Matrix left, double right) =>
+        new(left.Rows, left.Columns, left.Select(e => new Entry(e.Row, e.Column, e.Value*right)), left.Epsilon);
+
+    /// <summary>This scales te matrix by a specific value.</summary>
+    /// <param name="left">The value to scale the matrix by.</param>
+    /// <param name="right">The matrix to scale.</param>
+    /// <returns>The scaled matrix.</returns>
+    public static Matrix operator *(double left, Matrix right) =>
+        new(right.Rows, right.Columns, right.Select(e => new Entry(e.Row, e.Column, left*e.Value)), right.Epsilon);
 }

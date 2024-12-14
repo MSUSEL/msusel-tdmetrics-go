@@ -222,11 +222,13 @@ public abstract class Data : IEnumerable<Entry> {
     /// and to the right and including the decimal point.
     /// </returns>
     private static (int left, int right) measureNumber(string text) {
-        char[] centers = ['.', 'e', 'E'];
         int length = text.Length;
+        if (length <= 0) return (0, 0);
+
+        char[] centers = ['.', 'e', 'E'];
         int index = text.IndexOfAny(centers);
         if (index < 0) index = length >> 1;
-        return (index - 1, length - index + 1);
+        return (index, length - index);
     }
 
     /// <summary>

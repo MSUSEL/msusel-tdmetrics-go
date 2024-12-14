@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Participation;
 
@@ -35,7 +36,7 @@ public class Vector : Data {
     public Vector(double[] data, double epsilon = DefaultEpsilon) :
         this(data.Length, epsilon) {
         for (int row = 0; row < this.Rows; ++row)
-            this[row] = data[row];
+            this.SetIfNonZero(row, 0, data[row]);
     }
 
     /// <summary>Creates a new sparse vector directly given the data to use.</summary>
@@ -45,6 +46,18 @@ public class Vector : Data {
     internal Vector(SortedDictionary<int, double> data, int rows, double epsilon = DefaultEpsilon) :
         base(rows, 1, epsilon) =>
         this.data = data;
+
+    /// <summary>Creates a new sparse vector.</summary>
+    /// <param name="rows">The number of rows for the vector.</param>
+    /// <param name="entries">The data to populate thr matrix with.</param>
+    /// <param name="epsilon">The epsilon comparitor used for determining if a value is zero or not.</param>
+    public Vector(int rows, IEnumerable<Entry> entries,   double epsilon = DefaultEpsilon) :
+        this(rows, epsilon) {
+        foreach (Entry entry in entries) {
+            this.CheckRange(entry.Row, entry.Column);
+            this.SetIfNonZero(entry.Row, entry.Column, entry.Value);
+        }
+    }
 
     /// <summary>Gets or sets the value at the given row.</summary>
     /// <param name="row">The row to get or set, [0..Rows).</param>
@@ -104,6 +117,11 @@ public class Vector : Data {
     }
 
     #endregion
+    
+    /// <summary>Creates a copy of this vector.</summary>
+    /// <returns>The clone of this vector.</returns>
+    public Vector Clone() =>
+        new(this.Rows, this, this.Epsilon);
 
     /// <summary>This adds two vectors together.</summary>
     /// <param name="left">The left vector in the sum.</param>
@@ -118,26 +136,6 @@ public class Vector : Data {
     /// <returns>The difference between the vectors.</returns>
     public static Vector operator -(Vector left, Vector right) =>
         overlay(left, right, (leftValue, rightValue) => leftValue - rightValue);
-
-    /// <summary>This negates the vector.</summary>
-    /// <param name="vector">The vector to negate.</param>
-    /// <returns>The negated mavectortrix.</returns>
-    public static Vector operator -(Vector vector) =>
-        vector.perEntry(v => -v);
-
-    /// <summary>This scales te vector by a specific value.</summary>
-    /// <param name="left">The vector to scale.</param>
-    /// <param name="right">The value to scale the vector by.</param>
-    /// <returns>The scaled vector.</returns>
-    public static Vector operator *(Vector left, double right) =>
-        left.perEntry(v => v * right);
-
-    /// <summary>This scales te vector by a specific value.</summary>
-    /// <param name="left">The value to scale the vector by.</param>
-    /// <param name="right">The vector to scale.</param>
-    /// <returns>The scaled vector.</returns>
-    public static Vector operator *(double left, Vector right) =>
-        right.perEntry(v => v * left);
 
     /// <summary>
     /// This will join two same sized matrices to create a new vector.
@@ -158,18 +156,23 @@ public class Vector : Data {
         return result;
     }
 
-    /// <summary>This runs the given handle on every non-zero value to create a new vector.</summary>
-    /// <param name="handle">The handle to call for each non-zero.</param>
-    /// <returns>The new vector created.</returns>
-    private Vector perEntry(Func<double, double> handle) {
-        Vector result = new(this.Rows, this.Epsilon);
-        SortedDictionary<int, double> node = this.data;
-        SortedDictionary<int, double> resultNode = result.data;
-        foreach (KeyValuePair<int, double> pair in node) {
-            double value = handle(pair.Value);
-            if (!this.IsZero(value))
-                resultNode[pair.Key] = value;
-        }
-        return result;
-    }
+    /// <summary>This negates the vector.</summary>
+    /// <param name="vector">The vector to negate.</param>
+    /// <returns>The negated mavectortrix.</returns>
+    public static Vector operator -(Vector vector) =>
+        new(vector.Rows, vector.Select(e => new Entry(e.Row, e.Column, -e.Value)), vector.Epsilon);
+
+    /// <summary>This scales te vector by a specific value.</summary>
+    /// <param name="left">The vector to scale.</param>
+    /// <param name="right">The value to scale the vector by.</param>
+    /// <returns>The scaled vector.</returns>
+    public static Vector operator *(Vector left, double right) =>
+        new(left.Rows, left.Select(e => new Entry(e.Row, e.Column, e.Value*right)), left.Epsilon);
+
+    /// <summary>This scales te vector by a specific value.</summary>
+    /// <param name="left">The value to scale the vector by.</param>
+    /// <param name="right">The vector to scale.</param>
+    /// <returns>The scaled vector.</returns>
+    public static Vector operator *(double left, Vector right) =>
+        new(right.Rows, right.Select(e => new Entry(e.Row, e.Column, left*e.Value)), right.Epsilon);
 }
