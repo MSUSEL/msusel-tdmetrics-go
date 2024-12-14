@@ -3,9 +3,18 @@ using System.Collections.Generic;
 
 namespace Participation;
 
+/// <summary>A 1D sparse vector.</summary>
+/// <remarks>
+/// This vector assumes that the number of non-zero
+/// entries is expected to be very small.
+/// </remarks>
 public class Vector : Data {
     private readonly SortedDictionary<int, double> data;
 
+    /// <summary>Deserialized the given data into a vector.</summary>
+    /// <param name="data">The serialized data to populate this vector with.</param>
+    /// <param name="epsilon">The epsilon comparitor used for determining if a value is zero or not.</param>
+    /// <returns>The deserialized vector.</returns>
     static public Vector Deserialize(string data, double epsilon = DefaultEpsilon) =>
         deserialize((rows, columns) => {
             if (columns != 1)
@@ -13,29 +22,47 @@ public class Vector : Data {
             return new Vector(rows, epsilon);
         }, data);
 
+    /// <summary>Creates a new sparse vector.</summary>
+    /// <param name="rows">The number of rows for the vector.</param>
+    /// <param name="epsilon">The epsilon comparitor used for determining if a value is zero or not.</param>
     public Vector(int rows, double epsilon = DefaultEpsilon) :
         base(rows, 1, epsilon) =>
         this.data = [];
 
+    /// <summary>Creates a new sparse vector.</summary>
+    /// <param name="data">The data to populate the vector with.</param>
+    /// <param name="epsilon">The epsilon comparitor used for determining if a value is zero or not.</param>
     public Vector(double[] data, double epsilon = DefaultEpsilon) :
         this(data.Length, epsilon) {
         for (int row = 0; row < this.Rows; ++row)
             this[row] = data[row];
     }
 
-    internal Vector(SortedDictionary<int, double> data, int rows, double epsilon) :
+    /// <summary>Creates a new sparse vector directly given the data to use.</summary>
+    /// <param name="data">The data to use in this vector.</param>
+    /// <param name="rows">The number of rows for the vector.</param>
+    /// <param name="epsilon">The epsilon comparitor used for determining if a value is zero or not.</param>
+    internal Vector(SortedDictionary<int, double> data, int rows, double epsilon = DefaultEpsilon) :
         base(rows, 1, epsilon) =>
         this.data = data;
 
+    /// <summary>Gets or sets the value at the given row.</summary>
+    /// <param name="row">The row to get or set, [0..Rows).</param>
+    /// <returns>The value at the given row.</returns>
     public double this[int row] {
         get => this[row, 0];
         set => this[row, 0] = value;
     }
 
+    /// <summary>Gets or sets the value at the given row.</summary>
+    /// <param name="row">The row to get or set, [0..Rows).</param>
+    /// <returns>The value at the given row.</returns>
     public double this[Index row] {
         get => this[row, 0];
         set => this[row, 0] = value;
     }
+
+    #region Data overrides
 
     protected override double GetValue(int row, int column) =>
         this.data.TryGetValue(row, out double value) ? value : 0.0;
@@ -49,17 +76,15 @@ public class Vector : Data {
     protected override bool ColumnHasZero(int column) =>
         column != 0 || this.data.Count != this.Rows;
 
-    protected override SortedDictionary<int, double> GetColumnNode(int column) =>
+    internal override SortedDictionary<int, double> GetColumnNode(int column) =>
         column == 0 ? this.data : [];
 
-    protected override SortedDictionary<int, double> GetRowNode(int row) {
+    internal override SortedDictionary<int, double> GetRowNode(int row) {
         SortedDictionary<int, double> result = [];
         if (this.data.TryGetValue(row, out double value))
             result.Add(row, value);
         return result;
     }
-
-    internal SortedDictionary<int, double> GetDictionary() => this.data;
 
     public override IEnumerable<Entry> ShortEnumerate() {
         foreach (KeyValuePair<int, double> edge in this.data)
@@ -76,5 +101,75 @@ public class Vector : Data {
         }
         for (int row = next; row < this.Rows; ++row)
             yield return new(row, 0, 0.0);
+    }
+
+    #endregion
+
+    /// <summary>This adds two vectors together.</summary>
+    /// <param name="left">The left vector in the sum.</param>
+    /// <param name="right">The right vector in the sum.</param>
+    /// <returns>The sum of the two vectors.</returns>
+    public static Vector operator +(Vector left, Vector right) =>
+        overlay(left, right, (leftValue, rightValue) => leftValue + rightValue);
+
+    /// <summary>This subtracts one vector from another.</summary>
+    /// <param name="left">The left vector to subtract the right vector from..</param>
+    /// <param name="right">The right vector to subtract from the left vector.</param>
+    /// <returns>The difference between the vectors.</returns>
+    public static Vector operator -(Vector left, Vector right) =>
+        overlay(left, right, (leftValue, rightValue) => leftValue - rightValue);
+
+    /// <summary>This negates the vector.</summary>
+    /// <param name="vector">The vector to negate.</param>
+    /// <returns>The negated mavectortrix.</returns>
+    public static Vector operator -(Vector vector) =>
+        vector.perEntry(v => -v);
+
+    /// <summary>This scales te vector by a specific value.</summary>
+    /// <param name="left">The vector to scale.</param>
+    /// <param name="right">The value to scale the vector by.</param>
+    /// <returns>The scaled vector.</returns>
+    public static Vector operator *(Vector left, double right) =>
+        left.perEntry(v => v * right);
+
+    /// <summary>This scales te vector by a specific value.</summary>
+    /// <param name="left">The value to scale the vector by.</param>
+    /// <param name="right">The vector to scale.</param>
+    /// <returns>The scaled vector.</returns>
+    public static Vector operator *(double left, Vector right) =>
+        right.perEntry(v => v * left);
+
+    /// <summary>
+    /// This will join two same sized matrices to create a new vector.
+    /// The given joiner will be calle for any entry in the left OR right vector that is non-zero.
+    /// </summary>
+    /// <param name="left">The left vector in the overlay.</param>
+    /// <param name="right">The right vector in the overlay.</param>
+    /// <param name="joiner">The function to call when either the left OR right value is non-zero.</param>
+    /// <returns>The resulting joined vector.</returns>
+    private static Vector overlay(Vector left, Vector right, Func<double, double, double> joiner) {
+        if (left.Rows != right.Rows)
+            throw new Exception("The left (" + left.Rows + ") and " +
+                "right (" + right.Rows + ") vectors need to be the same size.");
+
+        Vector result = new(left.Rows, left.Epsilon);
+        zipOr(left.data, right.data, (row, leftVal, rightVal) =>
+            result.SetIfNonZero(row, 0, joiner(leftVal, rightVal)));
+        return result;
+    }
+
+    /// <summary>This runs the given handle on every non-zero value to create a new vector.</summary>
+    /// <param name="handle">The handle to call for each non-zero.</param>
+    /// <returns>The new vector created.</returns>
+    private Vector perEntry(Func<double, double> handle) {
+        Vector result = new(this.Rows, this.Epsilon);
+        SortedDictionary<int, double> node = this.data;
+        SortedDictionary<int, double> resultNode = result.data;
+        foreach (KeyValuePair<int, double> pair in node) {
+            double value = handle(pair.Value);
+            if (!this.IsZero(value))
+                resultNode[pair.Key] = value;
+        }
+        return result;
     }
 }

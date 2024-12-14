@@ -61,7 +61,7 @@ public abstract class Data : IEnumerable<Entry> {
         }
         set {
             this.CheckRange(row, column);
-            if (double.Abs(value) < this.Epsilon)
+            if (this.IsZero(value))
                 this.RemoveValue(row, column);
             else this.SetValue(row, column, value);
         }
@@ -76,19 +76,50 @@ public abstract class Data : IEnumerable<Entry> {
         set => this[row.GetOffset(this.Rows), column.GetOffset(this.Columns)] = value;
     }
 
+    /// <summary>Determines if the given value is zero with the epsilon.</summary>
+    /// <param name="value">The value to check if zero.</param>
+    /// <returns>True if the value is zero, false otherwise.</returns>
+    protected bool IsZero(double value) => double.Abs(value) < this.Epsilon;
+
+    /// <summary>Determines if the two values are equal with the given epsilon.</summary>
+    /// <param name="x">The first value in the check.</param>
+    /// <param name="y">The second value in the check.</param>
+    /// <returns>True if the two values are equal, false otherwise.</returns>
+    protected bool Equal(double x, double y) => this.IsZero(x - y);
+
     /// <summary>Determines if the given column has at least one zero.</summary>
     /// <param name="column">The valid column to check.</param>
     /// <returns>True if the given column contains a zero, otherwise false.</returns>
     protected abstract bool ColumnHasZero(int column);
 
-    /// <summary>Checks if the given values are valid, otherwise an exception is thrown.</summary>
+    /// <summary>Checks if the given row and column are valid, otherwise an exception is thrown.</summary>
     /// <param name="row">The row to check.</param>
     /// <param name="column">The column to check.</param>
     protected void CheckRange(int row, int column) {
+        this.CheckRow(row);
+        this.CheckColumn(column);
+    }
+
+    /// <summary>Checks if the given row are valid, otherwise an exception is thrown.</summary>
+    /// <param name="row">The row to check.</param>
+    protected void CheckRow(int row) {
         if (row < 0 || row >= this.Rows)
             throw new IndexOutOfRangeException("Row must be in [0.." + this.Rows + "), the given row was " + row);
+    }
+
+    /// <summary>Checks if the given column are valid, otherwise an exception is thrown.</summary>
+    /// <param name="column">The column to check.</param>
+    protected void CheckColumn(int column) {
         if (column < 0 || column >= this.Columns)
             throw new IndexOutOfRangeException("Column must be in [0.." + this.Columns + "), the given column was " + column);
+    }
+
+    /// <summary>Sets the given value if the value is non-zero, otherwise has no effect.</summary>
+    /// <param name="row">The valid row to set to.</param>
+    /// <param name="column">The valid column to set to.</param>
+    /// <param name="value">The value to set if non-zero.</param>
+    internal void SetIfNonZero(int row, int column, double value) {
+        if (!this.IsZero(value)) this.SetValue(row, column, value);
     }
 
     /// <summary>Gets the value at the given row and column.</summary>
@@ -116,7 +147,7 @@ public abstract class Data : IEnumerable<Entry> {
     /// </summary>
     /// <param name="column">The column to get.</param>
     /// <returns>The dictionary containing the column numbers paired with the non-zero values.</returns>
-    protected abstract SortedDictionary<int, double> GetColumnNode(int column);
+    internal abstract SortedDictionary<int, double> GetColumnNode(int column);
 
     /// <summary>
     /// Gets the whole row as a dictionary containing the non-zero values in the row,
@@ -124,7 +155,7 @@ public abstract class Data : IEnumerable<Entry> {
     /// </summary>
     /// <param name="column">The row to get.</param>
     /// <returns>The dictionary containing the row numbers paired with the non-zero values.</returns>
-    protected abstract SortedDictionary<int, double> GetRowNode(int row);
+    internal abstract SortedDictionary<int, double> GetRowNode(int row);
 
     /// <summary>Gets the string for the data.</summary>
     /// <returns>The string for the data.</returns>

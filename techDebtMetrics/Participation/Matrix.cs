@@ -37,11 +37,7 @@ public class Matrix : Data {
                 this[row, column] = data[row, column];
     }
 
-    /// <summary>Gets a column of the matrix as a vector.</summary>
-    /// <param name="column">The column to get.</param>
-    /// <returns>The vector for the column.</returns>
-    public Vector GetColumn(int column) =>
-        new(this.GetColumnNode(column), this.Rows, this.Epsilon);
+    #region Data overrides
 
     protected override double GetValue(int row, int column) {
         SortedDictionary<int, double> node = this.data[row];
@@ -88,7 +84,7 @@ public class Matrix : Data {
         }
     }
 
-    protected override SortedDictionary<int, double> GetColumnNode(int column) {
+    internal override SortedDictionary<int, double> GetColumnNode(int column) {
         SortedDictionary<int, double> result = [];
         for (int row = 0; row < this.Rows; ++row) {
             SortedDictionary<int, double> node = this.data[row];
@@ -98,8 +94,16 @@ public class Matrix : Data {
         return result;
     }
 
-    protected override SortedDictionary<int, double> GetRowNode(int row) =>
+    internal override SortedDictionary<int, double> GetRowNode(int row) =>
         this.data[row];
+
+    #endregion
+
+    /// <summary>Gets a column of the matrix as a vector.</summary>
+    /// <param name="column">The column to get.</param>
+    /// <returns>The vector for the column.</returns>
+    public Vector GetColumn(int column) =>
+        new(this.GetColumnNode(column), this.Rows, this.Epsilon);
 
     /// <summary>This multiplies two matrices together.</summary>
     /// <param name="left">The left matrix in the multiplication.</param>
@@ -116,7 +120,7 @@ public class Matrix : Data {
                 double sum = 0.0;
                 zipAnd(left.data[row], rightNode, (column, leftValue, rightValue) =>
                     sum += leftValue * rightValue);
-                result[row, column] = sum;
+                result.SetIfNonZero(row, column, sum);
             }
         }
         return result;
@@ -131,12 +135,12 @@ public class Matrix : Data {
             throw new Exception("The left's columns (" + left.Columns + ") must be equal to the right's rows (" + right.Rows + ").");
 
         Vector result = new(left.Rows, left.Epsilon);
-        SortedDictionary<int, double> rightNode = right.GetDictionary();
+        SortedDictionary<int, double> rightNode = right.GetColumnNode(0);
         for (int row = 0; row < left.Rows; ++row) {
             double sum = 0.0;
             zipAnd(left.data[row], rightNode, (column, leftValue, rightValue) =>
                 sum += leftValue * rightValue);
-            result[row] = sum;
+            result.SetIfNonZero(row, 0, sum);
         }
         return result;
     }
@@ -151,7 +155,7 @@ public class Matrix : Data {
     /// <summary>This subtracts one matrix from another.</summary>
     /// <param name="left">The left matrix to subtract the right matrix from..</param>
     /// <param name="right">The right matrix to subtract from the left matrix.</param>
-    /// <returns>The difference between the matrixes.</returns>
+    /// <returns>The difference between the matrices.</returns>
     public static Matrix operator -(Matrix left, Matrix right) =>
         overlay(left, right, (leftValue, rightValue) => leftValue - rightValue);
 
@@ -167,7 +171,7 @@ public class Matrix : Data {
     /// <returns>The scaled matrix.</returns>
     public static Matrix operator *(Matrix left, double right) =>
         left.perEntry(v => v * right);
-    
+
     /// <summary>This scales te matrix by a specific value.</summary>
     /// <param name="left">The value to scale the matrix by.</param>
     /// <param name="right">The matrix to scale.</param>
@@ -175,27 +179,43 @@ public class Matrix : Data {
     public static Matrix operator *(double left, Matrix right) =>
         right.perEntry(v => v * left);
 
+    /// <summary>
+    /// This will join two same sized matrices to create a new matrix.
+    /// The given joiner will be calle for any entry in the left OR right matrix that is non-zero.
+    /// </summary>
+    /// <param name="left">The left matrix in the overlay.</param>
+    /// <param name="right">The right matrix in the overlay.</param>
+    /// <param name="joiner">The function to call when either the left OR right value is non-zero.</param>
+    /// <returns>The resulting joined matrix.</returns>
     private static Matrix overlay(Matrix left, Matrix right, Func<double, double, double> joiner) {
         if (left.Rows != right.Rows || left.Columns != right.Columns)
-            throw new Exception("The left (" + left.Rows + "x" + left.Columns + ") and right (" + right.Rows + "x" + right.Columns + ") matrices need to be the same size.");
+            throw new Exception("The left (" + left.Rows + "x" + left.Columns + ") and " +
+                "right (" + right.Rows + "x" + right.Columns + ") matrices need to be the same size.");
 
         Matrix result = new(left.Rows, left.Columns, left.Epsilon);
         for (int row = 0; row < left.Rows; ++row) {
             zipOr(left.data[row], right.data[row], (column, leftVal, rightVal) =>
-                result[row, column] = joiner(leftVal, rightVal));
+                result.SetIfNonZero(row, column, joiner(leftVal, rightVal)));
         }
         return result;
     }
 
+    /// <summary>This runs the given handle on every non-zero value to create a new matrix.</summary>
+    /// <param name="handle">The handle to call for each non-zero.</param>
+    /// <returns>The new matrix created.</returns>
     private Matrix perEntry(Func<double, double> handle) {
         Matrix result = new(this.Rows, this.Columns, this.Epsilon);
         for (int row = 0; row < this.Rows; ++row) {
             SortedDictionary<int, double> node = this.data[row];
             if (node is not null && node.Count > 0) {
                 SortedDictionary<int, double> resultNode = [];
-                foreach (KeyValuePair<int, double> pair in node)
-                    resultNode[pair.Key] = handle(pair.Value);
-                result.data[row] = resultNode;
+                foreach (KeyValuePair<int, double> pair in node) {
+                    double value = handle(pair.Value);
+                    if (!this.IsZero(value))
+                        resultNode[pair.Key] = value;
+                }
+                if (resultNode.Count > 0)
+                    result.data[row] = resultNode;
             }
         }
         return result;
