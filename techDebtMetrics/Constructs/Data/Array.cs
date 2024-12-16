@@ -38,7 +38,7 @@ internal class Array(YamlSequenceNode source) : Node(source) {
         where T : IInitializable {
         for (int i = 0; i < this.Count; ++i) {
             try {
-                list[i].Initialize(project, this[i]);
+                list[i].Initialize(project, i, this[i]);
             } catch (Exception ex) {
                 throw new Exception("Failed to initialize #" + i + " in " + typeof(T).Name + " list:", ex);
             }

@@ -8,6 +8,9 @@ namespace Constructs;
 /// <see cref="../../docs/genFeatureDef.md#interface-description"/>
 public class InterfaceDesc : ITypeDesc, IInitializable {
 
+    /// <summary>Gets the index of this construct in the project list.</summary>
+    public int Index { get; private set; } = 0;
+
     /// <summary>The list of abstracts, named function signatures, for this interface.</summary>
     public IReadOnlyList<Abstract> Abstracts => this.inAbstracts.AsReadOnly();
     private readonly List<Abstract> inAbstracts = [];
@@ -34,7 +37,8 @@ public class InterfaceDesc : ITypeDesc, IInitializable {
         this.Abstracts.Count <= 0 && this.Approx.Count <= 0 &&
         this.Exact.Count <= 0 && this.Inherits.Count <= 0;
 
-    void IInitializable.Initialize(Project project, Node node) {
+    void IInitializable.Initialize(Project project, int index, Node node) {
+        this.Index = index;
         Object obj = node.AsObject();
         obj.TryReadIndexList("abstracts", this.inAbstracts, project.Abstracts);
         obj.TryReadKeyList("approx", this.inApprox, project);

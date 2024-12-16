@@ -9,8 +9,12 @@ namespace Participation;
 /// This matrix assumes that there will likely be a value in every row and every column
 /// however the number of non-zero entries is expected to be very small.
 /// </remarks>
-public class Matrix : Data {
-    private readonly SortedDictionary<int, double>[] data;
+/// <remarks>Creates a new sparse matrix.</remarks>
+/// <param name="rows">The number of rows for the matrix.</param>
+/// <param name="columns">The number of columns for the matrix.</param>
+/// <param name="epsilon">The epsilon comparitor used for determining if a value is zero or not.</param>
+public class Matrix(int rows, int columns, double epsilon = Data.DefaultEpsilon) : Data(rows, columns, epsilon) {
+    private readonly SortedDictionary<int, double>[] data = new SortedDictionary<int, double>[rows];
 
     /// <summary>Deserialized the given data into a matrix.</summary>
     /// <param name="data">The serialized data to populate this matrix with.</param>
@@ -18,14 +22,6 @@ public class Matrix : Data {
     /// <returns>The deserialized matrix.</returns>
     static public Matrix Deserialize(string data, double epsilon = DefaultEpsilon) =>
         deserialize((rows, columns) => new Matrix(rows, columns, epsilon), data);
-
-    /// <summary>Creates a new sparse matrix.</summary>
-    /// <param name="rows">The number of rows for the matrix.</param>
-    /// <param name="columns">The number of columns for the matrix.</param>
-    /// <param name="epsilon">The epsilon comparitor used for determining if a value is zero or not.</param>
-    public Matrix(int rows, int columns, double epsilon = DefaultEpsilon) :
-        base(rows, columns, epsilon) =>
-        this.data = new SortedDictionary<int, double>[rows];
 
     /// <summary>Creates a sparse matrix populated with the given data.</summary>
     /// <param name="data">The data to populate the matrix with.</param>
@@ -214,12 +210,12 @@ public class Matrix : Data {
     /// <param name="right">The value to scale the matrix by.</param>
     /// <returns>The scaled matrix.</returns>
     public static Matrix operator *(Matrix left, double right) =>
-        new(left.Rows, left.Columns, left.Select(e => new Entry(e.Row, e.Column, e.Value*right)), left.Epsilon);
+        new(left.Rows, left.Columns, left.Select(e => new Entry(e.Row, e.Column, e.Value * right)), left.Epsilon);
 
     /// <summary>This scales te matrix by a specific value.</summary>
     /// <param name="left">The value to scale the matrix by.</param>
     /// <param name="right">The matrix to scale.</param>
     /// <returns>The scaled matrix.</returns>
     public static Matrix operator *(double left, Matrix right) =>
-        new(right.Rows, right.Columns, right.Select(e => new Entry(e.Row, e.Column, left*e.Value)), right.Epsilon);
+        new(right.Rows, right.Columns, right.Select(e => new Entry(e.Row, e.Column, left * e.Value)), right.Epsilon);
 }

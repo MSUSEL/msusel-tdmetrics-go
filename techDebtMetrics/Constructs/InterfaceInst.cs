@@ -9,6 +9,9 @@ namespace Constructs;
 /// <see cref="../../docs/genFeatureDef.md#interface-instance"/>
 public class InterfaceInst : IInterface, IInitializable {
 
+    /// <summary>Gets the index of this construct in the project list.</summary>
+    public int Index { get; private set; } = 0;
+
     /// <summary>The name of this interface.</summary>
     public string Name => this.Generic.Name;
 
@@ -26,7 +29,8 @@ public class InterfaceInst : IInterface, IInitializable {
     public IReadOnlyList<ITypeDesc> InstanceTypes => this.inInstanceTypes.AsReadOnly();
     private readonly List<ITypeDesc> inInstanceTypes = [];
 
-    void IInitializable.Initialize(Project project, Node node) {
+    void IInitializable.Initialize(Project project, int index, Node node) {
+        this.Index = index;
         Object obj = node.AsObject();
         this.inGeneric = obj.ReadIndex("generic", project.InterfaceDecls);
         this.inInterface = obj.ReadIndex("resolved", project.InterfaceDescs);

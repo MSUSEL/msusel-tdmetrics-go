@@ -8,6 +8,9 @@ namespace Constructs;
 /// <see cref="../../docs/genFeatureDef.md#field"/>
 public class Field : IConstruct, IInitializable {
 
+    /// <summary>Gets the index of this construct in the project list.</summary>
+    public int Index { get; private set; } = 0;
+
     /// <summary>The name of the field.</summary>
     public string Name { get; private set; } = "";
 
@@ -16,7 +19,8 @@ public class Field : IConstruct, IInitializable {
         throw new UninitializedException(nameof(this.Type));
     private ITypeDesc? inType;
 
-    void IInitializable.Initialize(Project project, Node node) {
+    void IInitializable.Initialize(Project project, int index, Node node) {
+        this.Index = index;
         Object obj = node.AsObject();
         this.Name = obj.ReadString("name");
         this.inType = obj.ReadKey<ITypeDesc>("type", project);

@@ -51,7 +51,7 @@ public class Vector : Data {
     /// <param name="rows">The number of rows for the vector.</param>
     /// <param name="entries">The data to populate thr matrix with.</param>
     /// <param name="epsilon">The epsilon comparitor used for determining if a value is zero or not.</param>
-    public Vector(int rows, IEnumerable<Entry> entries,   double epsilon = DefaultEpsilon) :
+    public Vector(int rows, IEnumerable<Entry> entries, double epsilon = DefaultEpsilon) :
         this(rows, epsilon) {
         foreach (Entry entry in entries) {
             this.CheckRange(entry.Row, entry.Column);
@@ -117,7 +117,7 @@ public class Vector : Data {
     }
 
     #endregion
-    
+
     /// <summary>Creates a copy of this vector.</summary>
     /// <returns>The clone of this vector.</returns>
     public Vector Clone() =>
@@ -167,12 +167,12 @@ public class Vector : Data {
     /// <param name="right">The value to scale the vector by.</param>
     /// <returns>The scaled vector.</returns>
     public static Vector operator *(Vector left, double right) =>
-        new(left.Rows, left.Select(e => new Entry(e.Row, e.Column, e.Value*right)), left.Epsilon);
+        new(left.Rows, left.Select(e => new Entry(e.Row, e.Column, e.Value * right)), left.Epsilon);
 
     /// <summary>This scales te vector by a specific value.</summary>
     /// <param name="left">The value to scale the vector by.</param>
     /// <param name="right">The vector to scale.</param>
     /// <returns>The scaled vector.</returns>
     public static Vector operator *(double left, Vector right) =>
-        new(right.Rows, right.Select(e => new Entry(e.Row, e.Column, left*e.Value)), right.Epsilon);
+        new(right.Rows, right.Select(e => new Entry(e.Row, e.Column, left * e.Value)), right.Epsilon);
 }

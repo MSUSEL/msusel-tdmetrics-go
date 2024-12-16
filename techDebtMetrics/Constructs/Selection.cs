@@ -8,6 +8,9 @@ namespace Constructs;
 /// <see cref="../../docs/genFeatureDef.md#selection"/>
 public class Selection : IConstruct, IInitializable {
 
+    /// <summary>Gets the index of this construct in the project list.</summary>
+    public int Index { get; private set; } = 0;
+
     /// <summary>The name of the field, abstract, etc that is being selected from the origin.</summary>
     public string Name { get; private set; } = "";
 
@@ -16,7 +19,8 @@ public class Selection : IConstruct, IInitializable {
         throw new UninitializedException(nameof(this.Origin));
     private IConstruct? inOrigin;
 
-    void IInitializable.Initialize(Project project, Node node) {
+    void IInitializable.Initialize(Project project, int index, Node node) {
+        this.Index = index;
         Object obj = node.AsObject();
         this.Name = obj.ReadString("name");
         this.inOrigin = obj.ReadKey<IConstruct>("origin", project);

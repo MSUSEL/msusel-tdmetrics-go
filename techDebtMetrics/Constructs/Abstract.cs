@@ -8,6 +8,9 @@ namespace Constructs;
 /// <see cref="../../docs/genFeatureDef.md#abstract"/>
 public class Abstract : IConstruct, IInitializable {
 
+    /// <summary>Gets the index of this construct in the project list.</summary>
+    public int Index { get; private set; } = 0;
+
     /// <summary>The name of the function signature.</summary>
     public string Name { get; private set; } = "";
 
@@ -16,7 +19,8 @@ public class Abstract : IConstruct, IInitializable {
         throw new UninitializedException(nameof(this.Signature));
     private Signature? inSignature;
 
-    void IInitializable.Initialize(Project project, Node node) {
+    void IInitializable.Initialize(Project project, int index, Node node) {
+        this.Index = index;
         Object obj = node.AsObject();
         this.Name = obj.ReadString("name");
         this.inSignature = obj.ReadIndex("signature", project.Signatures);

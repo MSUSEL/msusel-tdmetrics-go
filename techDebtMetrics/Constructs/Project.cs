@@ -9,6 +9,9 @@ namespace Constructs;
 /// <see cref="../../docs/genFeatureDef.md#project"/>
 public class Project : IConstruct {
 
+    /// <summary>Returns 1 since there is only one project.</summary>
+    public int Index => 1;
+
     /// <summary>The name of the langauge that this project was created from.</summary>
     public readonly string Language;
 

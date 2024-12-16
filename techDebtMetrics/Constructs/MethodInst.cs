@@ -9,6 +9,9 @@ namespace Constructs;
 /// <see cref="../../docs/genFeatureDef.md#method-instance"/>
 public class MethodInst : IMethod, IConstruct, IInitializable {
 
+    /// <summary>Gets the index of this construct in the project list.</summary>
+    public int Index { get; private set; } = 0;
+
     /// <summary>The name of this method.</summary>
     public string Name => this.Generic.Name;
 
@@ -32,7 +35,8 @@ public class MethodInst : IMethod, IConstruct, IInitializable {
         throw new UninitializedException(nameof(this.Signature));
     private Signature? inSignature;
 
-    void IInitializable.Initialize(Project project, Node node) {
+    void IInitializable.Initialize(Project project, int index, Node node) {
+        this.Index = index;
         Object obj = node.AsObject();
         this.inGeneric = obj.ReadIndex("generic", project.MethodDecls);
         this.Receiver = obj.TryReadIndex("receiver", project.ObjectInsts);

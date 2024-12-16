@@ -9,6 +9,9 @@ namespace Constructs;
 /// <see cref="../../docs/genFeatureDef.md#object-instance"/>
 public class ObjectInst : IObject, IInitializable {
 
+    /// <summary>Gets the index of this construct in the project list.</summary>
+    public int Index { get; private set; } = 0;
+
     /// <summary>The name of the object declaration.</summary>
     public string Name => this.Generic.Name;
 
@@ -35,7 +38,8 @@ public class ObjectInst : IObject, IInitializable {
     public IReadOnlyList<MethodInst> Methods => this.inMethods.AsReadOnly();
     private readonly List<MethodInst> inMethods = [];
 
-    void IInitializable.Initialize(Project project, Node node) {
+    void IInitializable.Initialize(Project project, int index, Node node) {
+        this.Index = index;
         Object obj = node.AsObject();
         this.inGeneric = obj.ReadIndex("generic", project.ObjectDecls);
         this.inInterface = obj.ReadIndex("resInterface", project.InterfaceDescs);

@@ -11,6 +11,9 @@ namespace Constructs;
 /// <see cref="../../docs/genFeatureDef.md#package"/>
 public class Package : IConstruct, IInitializable {
 
+    /// <summary>Gets the index of this construct in the project list.</summary>
+    public int Index { get; private set; } = 0;
+
     /// <summary>The import path for this package.</summary>
     public string Path { get; private set; } = "";
 
@@ -37,7 +40,8 @@ public class Package : IConstruct, IInitializable {
     public IReadOnlyList<Value> Values => this.inValues.AsReadOnly();
     private readonly List<Value> inValues = [];
 
-    void IInitializable.Initialize(Project project, Node node) {
+    void IInitializable.Initialize(Project project, int index, Node node) {
+        this.Index = index;
         Object obj = node.AsObject();
         this.Path = obj.ReadString("path");
         this.Name = obj.ReadString("name");

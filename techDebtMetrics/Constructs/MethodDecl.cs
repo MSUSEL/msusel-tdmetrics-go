@@ -9,6 +9,9 @@ namespace Constructs;
 /// <see cref="../../docs/genFeatureDef.md#method"/>
 public class MethodDecl : IMethod, IDeclaration, IInitializable {
 
+    /// <summary>Gets the index of this construct in the project list.</summary>
+    public int Index { get; private set; } = 0;
+
     /// <summary>The name of the method declaration.</summary>
     public string Name { get; private set; } = "";
 
@@ -42,7 +45,11 @@ public class MethodDecl : IMethod, IDeclaration, IInitializable {
     public IReadOnlyList<MethodInst> Instances => this.inInstances.AsReadOnly();
     private readonly List<MethodInst> inInstances = [];
 
-    void IInitializable.Initialize(Project project, Node node) {
+    /// <summary>True if this method is generic, false otherwise.</summary>
+    public bool Generic => this.TypeParams.Count > 0;
+
+    void IInitializable.Initialize(Project project, int index, Node node) {
+        this.Index = index;
         Object obj = node.AsObject();
         this.Name = obj.ReadString("name");
         this.Location = obj.TryReadLocation("loc", project);

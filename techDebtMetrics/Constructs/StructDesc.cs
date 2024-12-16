@@ -8,6 +8,9 @@ namespace Constructs;
 /// <see cref="../../docs/genFeatureDef.md#structure-description"/>
 public class StructDesc : ITypeDesc, IInitializable {
 
+    /// <summary>Gets the index of this construct in the project list.</summary>
+    public int Index { get; private set; } = 0;
+
     /// <summary>The list of fields for this structure.</summary>
     public IReadOnlyList<Field> Fields => this.inFields.AsReadOnly();
     private readonly List<Field> inFields = [];
@@ -20,7 +23,8 @@ public class StructDesc : ITypeDesc, IInitializable {
     /// <summary>Indicates if this structure has no fields.</summary>
     public bool IsEmpty => this.Fields.Count <= 0;
 
-    void IInitializable.Initialize(Project project, Node node) {
+    void IInitializable.Initialize(Project project, int index, Node node) {
+        this.Index = index;
         Object obj = node.AsObject();
         obj.TryReadIndexList("fields", this.inFields, project.Fields);
     }

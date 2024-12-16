@@ -8,6 +8,9 @@ namespace Constructs;
 /// <see cref="../../docs/genFeatureDef.md#signature"/>
 public class Signature : ITypeDesc, IInitializable {
 
+    /// <summary>Gets the index of this construct in the project list.</summary>
+    public int Index { get; private set; } = 0;
+
     /// <summary>Indicates that the last parameter of the signature may have zero or more values.</summary>
     public bool Variadic { get; private set; }
 
@@ -27,7 +30,8 @@ public class Signature : ITypeDesc, IInitializable {
     /// <summary>Indicates that this method has no parameters or results.</summary>
     public bool IsEmpty => this.Params.Count <= 0 && this.Results.Count <= 0;
 
-    void IInitializable.Initialize(Project project, Node node) {
+    void IInitializable.Initialize(Project project, int index, Node node) {
+        this.Index = index;
         Object obj = node.AsObject();
         this.Variadic = obj.TryReadBool("variadic");
         obj.TryReadIndexList("params", this.inParams, project.Arguments);

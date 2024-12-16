@@ -9,6 +9,9 @@ namespace Constructs;
 /// <see cref="../../docs/genFeatureDef.md#interface-declaration"/>
 public class InterfaceDecl : IInterface, IDeclaration, IInitializable {
 
+    /// <summary>Gets the index of this construct in the project list.</summary>
+    public int Index { get; private set; } = 0;
+
     /// <summary>The name of the interface declaration.</summary>
     public string Name { get; private set; } = "";
 
@@ -33,7 +36,11 @@ public class InterfaceDecl : IInterface, IDeclaration, IInitializable {
     public IReadOnlyList<InterfaceInst> Instances => this.inInstances.AsReadOnly();
     private readonly List<InterfaceInst> inInstances = [];
 
-    void IInitializable.Initialize(Project project, Node node) {
+    /// <summary>True if this interface is generic, false otherwise.</summary>
+    public bool Generic => this.TypeParams.Count > 0;
+
+    void IInitializable.Initialize(Project project, int index, Node node) {
+        this.Index = index;
         Object obj = node.AsObject();
         this.Name = obj.ReadString("name");
         this.Location = obj.TryReadLocation("loc", project);

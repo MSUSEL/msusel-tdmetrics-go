@@ -16,6 +16,9 @@ namespace Constructs;
 /// <see cref="../../docs/genFeatureDef.md#metrics"/>
 public class Metrics : IConstruct, IInitializable {
 
+    /// <summary>Gets the index of this construct in the project list.</summary>
+    public int Index { get; private set; } = 0;
+
     /// <summary>The location this metrics was read from.</summary>
     public Location Location { get; private set; }
 
@@ -49,7 +52,8 @@ public class Metrics : IConstruct, IInitializable {
     public IReadOnlyList<IConstruct> Writes => this.inWrites.AsReadOnly();
     private readonly List<IConstruct> inWrites = [];
 
-    void IInitializable.Initialize(Project project, Node node) {
+    void IInitializable.Initialize(Project project, int index, Node node) {
+        this.Index = index;
         Object obj = node.AsObject();
         this.Location = obj.ReadLocation("loc", project);
         this.CodeCount = obj.TryReadInt("codeCount");

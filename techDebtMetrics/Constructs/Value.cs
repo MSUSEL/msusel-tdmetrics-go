@@ -8,6 +8,9 @@ namespace Constructs;
 /// <see cref="../../docs/genFeatureDef.md#value"/>
 public class Value : IDeclaration, IInitializable {
 
+    /// <summary>Gets the index of this construct in the project list.</summary>
+    public int Index { get; private set; } = 0;
+
     /// <summary>The name of the object declaration.</summary>
     public string Name { get; private set; } = "";
 
@@ -33,7 +36,8 @@ public class Value : IDeclaration, IInitializable {
         throw new UninitializedException(nameof(this.Package));
     private Package? inPackage;
 
-    void IInitializable.Initialize(Project project, Node node) {
+    void IInitializable.Initialize(Project project, int index, Node node) {
+        this.Index = index;
         Object obj = node.AsObject();
         this.Name = obj.ReadString("name");
         this.Location = obj.TryReadLocation("loc", project);
