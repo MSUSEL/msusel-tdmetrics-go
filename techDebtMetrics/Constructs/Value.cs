@@ -17,11 +17,11 @@ public class Value : IDeclaration, IInitializable {
     /// <summary>The location the object was defined.</summary>
     public Location Location { get; private set; }
 
-    /// <summary>Intidcates if the value is constant, readonly, or assign once.</summary>
+    /// <summary>Indicates if the value is constant, readonly, or assign once.</summary>
     public bool Constant { get; private set; }
 
     /// <summary>
-    /// Metrics gathered from the initialization expression for the varlue
+    /// Metrics gathered from the initialization expression for the value
     /// or constant, if it had an initialization expression.
     /// </summary>
     public Metrics? Metrics { get; private set; }

@@ -18,8 +18,8 @@ internal static class GeneralExt {
     /// <typeparam name="T">The type of values to create strings for.</typeparam>
     /// <param name="source">The source of the values to convert to strings.</param>
     /// <param name="prefix">The prefix to add to the front of each item when creating a string.</param>
-    /// <param name="suffix">The suffix to add to the end of each item whem creating a string.</param>
-    /// <param name="onNull">The string to use inplace of the item when the item is null.</param>
+    /// <param name="suffix">The suffix to add to the end of each item when creating a string.</param>
+    /// <param name="onNull">The string to use in-place of the item when the item is null.</param>
     /// <returns>The enumerator of strings for the given values.</returns>
     public static IEnumerable<string> ToStrings<T>(this IEnumerable<T> source, string prefix = "", string suffix = "", string onNull = "<null>") =>
         source.Select(x => prefix + (x?.ToString() ?? onNull) + suffix);

@@ -7,7 +7,7 @@ namespace Constructs.Tooling;
 public class Journal {
 
     /// <summary>Gets the string for a journal of the given construct.</summary>
-    /// <param name="c">The construct to journel.</param>
+    /// <param name="c">The construct to journal.</param>
     /// <returns>The string for the given construct.</returns>
     public static string ToString(IConstruct c) =>
         new Journal().Write(c).ToString();
@@ -15,10 +15,10 @@ public class Journal {
     private readonly StringBuilder sb;
     private readonly string indent;
 
-    /// <summary>Indicates the writes to a journel should be short.</summary>
+    /// <summary>Indicates the writes to a journal should be short.</summary>
     public readonly bool Short;
 
-    /// <summary>The newline character used in the journel.</summary>
+    /// <summary>The newline character used in the journal.</summary>
     public const char NewLine = '\n';
     private const string newLineStr = "\n";
 
@@ -28,33 +28,33 @@ public class Journal {
     /// <summary>The default separator to use between items in a list.</summary>
     public const string CommaSeparator = ", ";
 
-    /// <summary>Creates a new journel to write with.</summary>
+    /// <summary>Creates a new journal to write with.</summary>
     public Journal() {
         this.sb = new();
         this.indent = "";
         this.Short = false;
     }
 
-    /// <summary>Creates a journel with the given values.</summary>
+    /// <summary>Creates a journal with the given values.</summary>
     /// <param name="sb">The string builder to write to.</param>
     /// <param name="indent">The indent to use on each line.</param>
-    /// <param name="isShort">Indicates if the journel should be short or long.</param>
+    /// <param name="isShort">Indicates if the journal should be short or long.</param>
     private Journal(StringBuilder sb, string indent, bool isShort) {
         this.sb = sb;
         this.indent = indent;
         this.Short = isShort;
     }
 
-    /// <summary>Indicates the writes to a journel should be long.</summary>
+    /// <summary>Indicates the writes to a journal should be long.</summary>
     public bool Long => !this.Short;
 
-    /// <summary>Returns a journel that writes to this journel with additional indents.</summary>
+    /// <summary>Returns a journal that writes to this journal with additional indents.</summary>
     public Journal Indent => new(this.sb, this.indent + IndentText, this.Short);
 
-    /// <summary>Returns a journel that indicates short writes.</summary>
+    /// <summary>Returns a journal that indicates short writes.</summary>
     public Journal AsShort => new(this.sb, this.indent, true);
 
-    /// <summary>Returns a journel that indicates long writes.</summary>
+    /// <summary>Returns a journal that indicates long writes.</summary>
     public Journal AsLong => new(this.sb, this.indent, false);
 
     private void writeOneLine(string text, bool last) {
@@ -80,24 +80,24 @@ public class Journal {
     private void writeStub(IConstruct c) =>
         c.ToStub(this);
 
-    /// <summary>Writes the given text to the journel.</summary>
-    /// <param name="text">The text to write to the journel.</param>
+    /// <summary>Writes the given text to the journal.</summary>
+    /// <param name="text">The text to write to the journal.</param>
     /// <param name="prefix">A prefix to write before the text, if the text is not null nor empty.</param>
-    /// <param name="suffix">A suffex to write after the text, if the text is not null nor empty.</param>
-    /// <returns>This journel for chaining.</returns>
+    /// <param name="suffix">A suffix to write after the text, if the text is not null nor empty.</param>
+    /// <returns>This journal for chaining.</returns>
     public Journal Write(string text, string prefix = "", string suffix = "") {
         if (!string.IsNullOrEmpty(text))
             this.writeText(prefix + text + suffix);
         return this;
     }
 
-    /// <summary>Writes a list of constructs to the journel.</summary>
+    /// <summary>Writes a list of constructs to the journal.</summary>
     /// <typeparam name="T">The type of constructs to write.</typeparam>
     /// <param name="list">The list of constructs to write.</param>
     /// <param name="prefix">The prefix to write before the list, if the list is not empty.</param>
     /// <param name="suffix">The suffix to write after the list, if the list is not empty.</param>
     /// <param name="separator">The text to write between the list items.</param>
-    /// <returns>This journel for chaining.</returns>
+    /// <returns>This journal for chaining.</returns>
     public Journal Write<T>(IReadOnlyList<T> list, string prefix = "", string suffix = "", string separator = CommaSeparator)
         where T : IConstruct {
         int count = list.Count;
@@ -113,11 +113,11 @@ public class Journal {
         return this;
     }
 
-    /// <summary>Writes the given construct to the journel.</summary>
+    /// <summary>Writes the given construct to the journal.</summary>
     /// <param name="c">The construct to write.</param>
     /// <param name="prefix">The prefix to write before the construct, if the construct is not null.</param>
     /// <param name="suffix">The suffix to write after the construct, if the construct is not null.</param>
-    /// <returns>This journel for chaining.</returns>
+    /// <returns>This journal for chaining.</returns>
     public Journal Write(IConstruct? c, string prefix = "", string suffix = "") {
         if (c is not null) {
             this.writeText(prefix);
@@ -127,41 +127,41 @@ public class Journal {
         return this;
     }
 
-    /// <summary>Writes the given text to the journel, followed by a new line if the text is not null nor empty.</summary>
-    /// <param name="text">The text to write to the journel.</param>
+    /// <summary>Writes the given text to the journal, followed by a new line if the text is not null nor empty.</summary>
+    /// <param name="text">The text to write to the journal.</param>
     /// <param name="prefix">A prefix to write before the text, if the text is not null nor empty.</param>
-    /// <param name="suffix">A suffex to write after the text, if the text is not null nor empty.</param>
-    /// <returns>This journel for chaining.</returns>
+    /// <param name="suffix">A suffix to write after the text, if the text is not null nor empty.</param>
+    /// <returns>This journal for chaining.</returns>
     public Journal WriteLine(string text, string prefix = "", string suffix = "") =>
         this.Write(text, prefix, suffix + NewLine);
 
-    /// <summary>Writes a list of constructs to the journel, followed by a new line if the list is not empty.</summary>
+    /// <summary>Writes a list of constructs to the journal, followed by a new line if the list is not empty.</summary>
     /// <typeparam name="T">The type of constructs to write.</typeparam>
     /// <param name="list">The list of constructs to write.</param>
     /// <param name="prefix">The prefix to write before the list, if the list is not empty.</param>
     /// <param name="suffix">The suffix to write after the list, if the list is not empty.</param>
     /// <param name="separator">The text to write between the list items.</param>
-    /// <returns>This journel for chaining.</returns>
+    /// <returns>This journal for chaining.</returns>
     public Journal WriteLine<T>(IReadOnlyList<T> list, string prefix = "", string suffix = "", string separator = CommaSeparator)
         where T : IConstruct =>
         this.Write(list, prefix, suffix + NewLine, separator);
 
-    /// <summary>Writes the given construct to the journel, followed by a new line if the construct is not null.</summary>
+    /// <summary>Writes the given construct to the journal, followed by a new line if the construct is not null.</summary>
     /// <param name="c">The construct to write.</param>
     /// <param name="prefix">The prefix to write before the construct, if the construct is not null.</param>
     /// <param name="suffix">The suffix to write after the construct, if the construct is not null.</param>
-    /// <returns>This journel for chaining.</returns>
+    /// <returns>This journal for chaining.</returns>
     public Journal WriteLine(IConstruct? c, string prefix = "", string suffix = "") =>
         this.Write(c, prefix, suffix + NewLine);
 
-    /// <summary>Writes a new line to the journel.</summary>
-    /// <returns>This journel for chaining.</returns>
+    /// <summary>Writes a new line to the journal.</summary>
+    /// <returns>This journal for chaining.</returns>
     public Journal WriteLine() {
         this.sb.Append(NewLine);
         return this;
     }
 
-    /// <summary>Gets the text that has been written to the journel.</summary>
-    /// <returns>The journel's text.</returns>
+    /// <summary>Gets the text that has been written to the journal.</summary>
+    /// <returns>The journal's text.</returns>
     public override string ToString() => this.sb.ToString();
 }

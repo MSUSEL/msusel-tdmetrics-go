@@ -9,6 +9,6 @@ public interface IObject : ITypeDesc {
     /// <summary>The interface that summarizes the methods of this object.</summary>
     public InterfaceDesc Interface { get; }
 
-    /// <summary>The data contated by this object.</summary>
+    /// <summary>The data contained by this object.</summary>
     public StructDesc Data { get; }
 }

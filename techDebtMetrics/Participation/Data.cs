@@ -1,20 +1,21 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace Participation;
 
-/// <summary>This is the shared parts of a sparse metrix and vector.</summary>
+/// <summary>This is the shared parts of a sparse matrix and vector.</summary>
 public abstract class Data : IEnumerable<Entry> {
 
-    /// <summary>The default epsilong value to use for comparing data.-</summary>
+    /// <summary>The default epsilon value to use for comparing data.-</summary>
     public const double DefaultEpsilon = 1.0e-9;
 
     /// <summary>Creates a new data.</summary>
     /// <param name="rows">The number of rows for the data.</param>
     /// <param name="columns">The number of columns for the data.</param>
-    /// <param name="epsilon">The epsilon comparitor for the values in the data.</param>
+    /// <param name="epsilon">The epsilon comparator for the values in the data.</param>
     protected Data(int rows, int columns, double epsilon) {
         if (rows < 1)
             throw new ArgumentException("Must have a positive non-zero number of rows.", nameof(rows));
@@ -138,7 +139,7 @@ public abstract class Data : IEnumerable<Entry> {
     /// <remarks>This is called when setting a zero value.</remarks>
     /// <param name="row">The valid row to remove.</param>
     /// <param name="column">The valid column to remove.</param>
-    /// <returns>True if the value was reoved, false if the value didn't exist or was already zero.</returns>
+    /// <returns>True if the value was removed, false if the value didn't exist or was already zero.</returns>
     protected abstract bool RemoveValue(int row, int column);
 
     /// <summary>
@@ -205,6 +206,23 @@ public abstract class Data : IEnumerable<Entry> {
         }
         return sb.ToString();
     }
+
+    /// <summary>Determines if this data is equal to the given object.</summary>
+    /// <param name="obj">The other data to check.</param>
+    /// <returns>True if the other data is equal to this data.</returns>
+    public override bool Equals(object? obj) {
+        if (obj is null) return false;
+        if (ReferenceEquals(this, obj)) return true;
+        if ((obj is not Data other) ||
+            (this.Rows != other.Rows) ||
+            (this.Columns != other.Columns)) return false;
+        return this.ShortEnumerate().SequenceEqual(other.ShortEnumerate(), new Entry.Comparer(this.Epsilon));
+    }
+
+    /// <summary>Gets the hash for this data.</summary>
+    /// <returns>The hash of this data.</returns>
+    public override int GetHashCode() =>
+        HashCode.Combine(this.Rows, this.Columns, this.ShortEnumerate());
 
     /// <summary>
     /// This measures the left and right side of a decimal point in the stringified number.

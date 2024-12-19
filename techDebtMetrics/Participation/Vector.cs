@@ -14,7 +14,7 @@ public class Vector : Data {
 
     /// <summary>Deserialized the given data into a vector.</summary>
     /// <param name="data">The serialized data to populate this vector with.</param>
-    /// <param name="epsilon">The epsilon comparitor used for determining if a value is zero or not.</param>
+    /// <param name="epsilon">The epsilon comparator used for determining if a value is zero or not.</param>
     /// <returns>The deserialized vector.</returns>
     static public Vector Deserialize(string data, double epsilon = DefaultEpsilon) =>
         deserialize((rows, columns) => {
@@ -25,14 +25,14 @@ public class Vector : Data {
 
     /// <summary>Creates a new sparse vector.</summary>
     /// <param name="rows">The number of rows for the vector.</param>
-    /// <param name="epsilon">The epsilon comparitor used for determining if a value is zero or not.</param>
+    /// <param name="epsilon">The epsilon comparator used for determining if a value is zero or not.</param>
     public Vector(int rows, double epsilon = DefaultEpsilon) :
         base(rows, 1, epsilon) =>
         this.data = [];
 
     /// <summary>Creates a new sparse vector.</summary>
     /// <param name="data">The data to populate the vector with.</param>
-    /// <param name="epsilon">The epsilon comparitor used for determining if a value is zero or not.</param>
+    /// <param name="epsilon">The epsilon comparator used for determining if a value is zero or not.</param>
     public Vector(double[] data, double epsilon = DefaultEpsilon) :
         this(data.Length, epsilon) {
         for (int row = 0; row < this.Rows; ++row)
@@ -42,7 +42,7 @@ public class Vector : Data {
     /// <summary>Creates a new sparse vector directly given the data to use.</summary>
     /// <param name="data">The data to use in this vector.</param>
     /// <param name="rows">The number of rows for the vector.</param>
-    /// <param name="epsilon">The epsilon comparitor used for determining if a value is zero or not.</param>
+    /// <param name="epsilon">The epsilon comparator used for determining if a value is zero or not.</param>
     internal Vector(SortedDictionary<int, double> data, int rows, double epsilon = DefaultEpsilon) :
         base(rows, 1, epsilon) =>
         this.data = data;
@@ -50,7 +50,7 @@ public class Vector : Data {
     /// <summary>Creates a new sparse vector.</summary>
     /// <param name="rows">The number of rows for the vector.</param>
     /// <param name="entries">The data to populate thr matrix with.</param>
-    /// <param name="epsilon">The epsilon comparitor used for determining if a value is zero or not.</param>
+    /// <param name="epsilon">The epsilon comparator used for determining if a value is zero or not.</param>
     public Vector(int rows, IEnumerable<Entry> entries, double epsilon = DefaultEpsilon) :
         this(rows, epsilon) {
         foreach (Entry entry in entries) {
@@ -158,7 +158,7 @@ public class Vector : Data {
 
     /// <summary>This negates the vector.</summary>
     /// <param name="vector">The vector to negate.</param>
-    /// <returns>The negated mavectortrix.</returns>
+    /// <returns>The negated vector.</returns>
     public static Vector operator -(Vector vector) =>
         new(vector.Rows, vector.Select(e => new Entry(e.Row, e.Column, -e.Value)), vector.Epsilon);
 

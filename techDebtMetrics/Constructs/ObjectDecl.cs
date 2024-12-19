@@ -23,7 +23,7 @@ public class ObjectDecl : IObject, IDeclaration, IInitializable {
         throw new UninitializedException(nameof(this.Interface));
     private InterfaceDesc? inInterface;
 
-    /// <summary>The data contated by this object.</summary>
+    /// <summary>The data contained by this object.</summary>
     public StructDesc Data => this.inData ??
         throw new UninitializedException(nameof(this.Data));
     private StructDesc? inData;

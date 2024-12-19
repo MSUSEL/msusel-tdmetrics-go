@@ -15,7 +15,7 @@ type Config struct {
 
 	// Dir is the path to the main package or primary package.
 	// The path should contain the mod file.
-	// The path follows the standard patter for go tools.
+	// The path follows the standard pattern for go tools.
 	Dir string
 
 	// Patterns is the patterns to load the packages with.

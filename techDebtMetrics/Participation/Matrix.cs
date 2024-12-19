@@ -12,20 +12,20 @@ namespace Participation;
 /// <remarks>Creates a new sparse matrix.</remarks>
 /// <param name="rows">The number of rows for the matrix.</param>
 /// <param name="columns">The number of columns for the matrix.</param>
-/// <param name="epsilon">The epsilon comparitor used for determining if a value is zero or not.</param>
+/// <param name="epsilon">The epsilon comparator used for determining if a value is zero or not.</param>
 public class Matrix(int rows, int columns, double epsilon = Data.DefaultEpsilon) : Data(rows, columns, epsilon) {
     private readonly SortedDictionary<int, double>[] data = new SortedDictionary<int, double>[rows];
 
     /// <summary>Deserialized the given data into a matrix.</summary>
     /// <param name="data">The serialized data to populate this matrix with.</param>
-    /// <param name="epsilon">The epsilon comparitor used for determining if a value is zero or not.</param>
+    /// <param name="epsilon">The epsilon comparator used for determining if a value is zero or not.</param>
     /// <returns>The deserialized matrix.</returns>
     static public Matrix Deserialize(string data, double epsilon = DefaultEpsilon) =>
         deserialize((rows, columns) => new Matrix(rows, columns, epsilon), data);
 
     /// <summary>Creates a sparse matrix populated with the given data.</summary>
     /// <param name="data">The data to populate the matrix with.</param>
-    /// <param name="epsilon">The epsilon comparitor used for determining if a value is zero or not.</param>
+    /// <param name="epsilon">The epsilon comparator used for determining if a value is zero or not.</param>
     public Matrix(double[,] data, double epsilon = DefaultEpsilon) :
         this(data.GetLength(0), data.GetLength(1), epsilon) {
         for (int row = 0; row < this.Rows; ++row)
@@ -37,7 +37,7 @@ public class Matrix(int rows, int columns, double epsilon = Data.DefaultEpsilon)
     /// <param name="rows">The number of rows for the matrix.</param>
     /// <param name="columns">The number of columns for the matrix.</param>
     /// <param name="entries">The data to populate thr matrix with.</param>
-    /// <param name="epsilon">The epsilon comparitor used for determining if a value is zero or not.</param>
+    /// <param name="epsilon">The epsilon comparator used for determining if a value is zero or not.</param>
     public Matrix(int rows, int columns, IEnumerable<Entry> entries, double epsilon = DefaultEpsilon) :
         this(rows, columns, epsilon) {
         foreach (Entry entry in entries) {

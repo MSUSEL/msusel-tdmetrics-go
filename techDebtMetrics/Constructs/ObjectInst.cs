@@ -25,7 +25,7 @@ public class ObjectInst : IObject, IInitializable {
         throw new UninitializedException(nameof(this.Interface));
     private InterfaceDesc? inInterface;
 
-    /// <summary>The data contated by this object.</summary>
+    /// <summary>The data contained by this object.</summary>
     public StructDesc Data => this.inResolvedData ??
         throw new UninitializedException(nameof(this.Data));
     private StructDesc? inResolvedData;
