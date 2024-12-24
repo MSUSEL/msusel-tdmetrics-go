@@ -23,11 +23,17 @@ public class ConstructTests {
 
     #region Test Tools...
 
-    static private string getTestDataDir =>
-        string.Format("{0}/../../../TestData", Environment.CurrentDirectory);
+    static private string testDataDir;
+
+    static ConstructTests() {
+        string curDir = Environment.CurrentDirectory;
+        int index = curDir.LastIndexOf("UnitTests");
+        if (index == -1) throw new Exception("Failed to find test data folder from " + curDir);
+        testDataDir = curDir[0..index]+"UnitTests/TestData";
+    }
 
     static private string getTestPath(int testNum, string fileName) =>
-        string.Format("{0}/Test{1:D4}/{2}", getTestDataDir, testNum, fileName);
+        string.Format("{0}/Test{1:D4}/{2}", testDataDir, testNum, fileName);
 
     static private Project readTestPackage(int testNum, string fileName = "abstraction.yaml") =>
         Project.FromFile(getTestPath(testNum, fileName));
