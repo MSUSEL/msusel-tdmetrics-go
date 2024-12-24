@@ -1,5 +1,7 @@
 # MSU SECL Technical Debt Analysis of Go
 
+![Testing Status](https://github.com/MSUSEL/msusel-tdmetrics-go/actions/workflows/ci.yaml/badge.svg)
+
 This project is part of [Grant Nelson](https://github.com/Grant-Nelson)'s
 Ph.D. research at Montana State University's
 [Software Engineering and Cybersecurity Laboratory](https://www.montana.edu/cyber/).
