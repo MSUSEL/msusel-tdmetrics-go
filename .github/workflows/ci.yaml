@@ -87,4 +87,4 @@ jobs:
       - name: Run Program
         working-directory: ./techDebtMetrics
         timeout-minutes: 60
-        run: dotnet test -v detailed ${{ matrix.trials.flags }}
+        run: dotnet test -v minimal ${{ matrix.trials.flags }}
