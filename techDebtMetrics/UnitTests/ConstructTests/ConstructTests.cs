@@ -7,44 +7,49 @@ namespace UnitTests.ConstructTests;
 public class ConstructTests {
 
     [Test]
-    public void StubTest0001() => runStubTest(1);
+    public void StubTest0001() => runStubTest(testPath("go", 1));
 
     [Test]
-    public void StubTest0002() => runStubTest(2);
+    public void StubTest0002() => runStubTest(testPath("go", 2));
 
     [Test]
-    public void StubTest0003() => runStubTest(3);
+    public void StubTest0003() => runStubTest(testPath("go", 3));
 
     [Test]
-    public void StubTest0004() => runStubTest(4);
+    public void StubTest0004() => runStubTest(testPath("go", 4));
 
     [Test]
-    public void StubTest0005() => runStubTest(5);
+    public void StubTest0005() => runStubTest(testPath("go", 5));
 
     #region Test Tools...
 
-    static private string testDataDir;
+    static private readonly string repoDir;
+
+    static private readonly string testDataDir;
 
     static ConstructTests() {
+        const string repoName = "msusel-tdmetrics-go";
         string curDir = Environment.CurrentDirectory;
-        int index = curDir.LastIndexOf("UnitTests");
-        if (index == -1) throw new Exception("Failed to find test data folder from " + curDir);
-        testDataDir = curDir[0..index]+"UnitTests/TestData";
+        int index = curDir.LastIndexOf(repoName);
+        if (index == -1) throw new Exception("Failed to find root directory of the repo from " + curDir);
+        index += repoName.Length;
+        repoDir = curDir[0..index];
+        testDataDir = repoDir + "/testData";
     }
 
-    static private string getTestPath(int testNum, string fileName) =>
-        string.Format("{0}/Test{1:D4}/{2}", testDataDir, testNum, fileName);
+    static private string testPath(string sourceLang, int testNum) =>
+        string.Format("{0}/{1}/test{2:D4}", testDataDir, sourceLang, testNum);
 
-    static private Project readTestPackage(int testNum, string fileName = "abstraction.yaml") =>
-        Project.FromFile(getTestPath(testNum, fileName));
+    static private Project readTestPackage(string testPath, string fileName = "abstraction.yaml") =>
+        Project.FromFile(testPath + "/" + fileName);
 
-    static private string readExpectedStub(int testNum, string fileName = "expStub.txt") =>
-        File.ReadAllText(getTestPath(testNum, fileName)).Trim();
+    static private string readExpectedStub(string testPath, string fileName = "expStub.txt") =>
+        File.ReadAllText(testPath + "/" + fileName).Trim();
 
-    static private void runStubTest(int testNum) {
-        Project proj = readTestPackage(testNum);
+    static private void runStubTest(string testPath) {
+        Project proj = readTestPackage(testPath);
         string got = proj.ToString();
-        string exp = readExpectedStub(testNum).ReplaceLineEndings("\n");
+        string exp = readExpectedStub(testPath).ReplaceLineEndings("\n");
         if (got != exp) {
             Console.WriteLine(got);
             Assert.That(got, Is.EqualTo(exp));
