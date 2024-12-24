@@ -23,8 +23,11 @@ public class ConstructTests {
 
     #region Test Tools...
 
+    static private string getTestDataDir =>
+        string.Format("{0}/../../../TestData", Environment.CurrentDirectory);
+
     static private string getTestPath(int testNum, string fileName) =>
-        string.Format("../../../TestData/Test{0:D4}/{1}", testNum, fileName);
+        string.Format("{0}/Test{1:D4}/{2}", getTestDataDir, testNum, fileName);
 
     static private Project readTestPackage(int testNum, string fileName = "abstraction.yaml") =>
         Project.FromFile(getTestPath(testNum, fileName));
