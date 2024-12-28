@@ -68,6 +68,7 @@ public class ObjectDecl : IObject, IDeclaration, IInitializable {
         if (j.Long) j.Write("class ");
         j.Write(this.Name);
         if (j.Long) {
+            j.Write(this.TypeParams, "<", ">");
             j.WriteLine(" {");
             j.Indent.Write(this.Data.Fields, suffix: ";\n", separator: ";\n");
             j.Indent.Write(this.Methods, suffix: ";\n", separator: ";\n");

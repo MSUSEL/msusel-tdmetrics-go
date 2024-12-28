@@ -21,6 +21,32 @@ public class ConstructTests {
     [Test]
     public void StubTest0005() => runStubTest(testPath("go", 5));
 
+    // Skip /go/test0006, or make a stub test able to pick one package.
+
+    [Test]
+    public void StubTest0007() => runStubTest(testPath("go", 7));
+
+    [Test]
+    public void StubTest0008() => runStubTest(testPath("go", 8));
+
+    [Test]
+    public void StubTest0009() => runStubTest(testPath("go", 9));
+
+    [Test]
+    public void StubTest0010() => runStubTest(testPath("go", 10));
+
+    [Test]
+    public void StubTest0011() => runStubTest(testPath("go", 11));
+
+    [Test]
+    public void StubTest0012() => runStubTest(testPath("go", 12));
+
+    [Test]
+    public void StubTest0013() => runStubTest(testPath("go", 13));
+
+    [Test]
+    public void StubTest0014() => runStubTest(testPath("go", 14));
+
     #region Test Tools...
 
     static private readonly string repoDir;

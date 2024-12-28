@@ -1,6 +1,7 @@
 ﻿using Constructs.Data;
 using Constructs.Tooling;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Constructs;
 
@@ -31,6 +32,10 @@ public class Package : IConstruct, IInitializable {
     /// <summary>The list of methods declared in this package.</summary>
     public IReadOnlyList<MethodDecl> Methods => this.inMethods.AsReadOnly();
     private readonly List<MethodDecl> inMethods = [];
+
+    /// <summary>The list of methods declared in this package and not part of an object.</summary>
+    public IReadOnlyList<MethodDecl> StaticMethods =>
+        this.Methods.Where(m => m.Receiver is null).ToList();
 
     /// <summary>The list of objects declared in this package.</summary>
     public IReadOnlyList<ObjectDecl> Objects => this.inObjects.AsReadOnly();
@@ -63,7 +68,7 @@ public class Package : IConstruct, IInitializable {
             j2.AsShort.Write(this.Imports, prefix: "\nimports: ", suffix: ";");
             j2.Write(this.Interfaces, prefix: "\n\n", separator: "\n\n");
             j2.Write(this.Objects, prefix: "\n\n", separator: "\n\n");
-            j2.Write(this.Methods, prefix: "\n\n", suffix: ";", separator: ";\n");
+            j2.Write(this.StaticMethods, prefix: "\n\n", suffix: ";", separator: ";\n");
             j2.Write(this.Values, prefix: "\n\n", suffix: ";", separator: ";\n");
             j.Write("\n}");
         }

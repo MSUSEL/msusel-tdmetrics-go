@@ -45,12 +45,14 @@ public class ObjectInst : IObject, IInitializable {
         this.inInterface = obj.ReadIndex("resInterface", project.InterfaceDescs);
         this.inResolvedData = obj.ReadIndex("resData", project.StructDescs);
         obj.ReadKeyList("instanceTypes", this.inInstanceTypes, project);
-        obj.TryReadKeyList("methods", this.inMethods, project);
+        obj.TryReadIndexList("methods", this.inMethods, project.MethodInsts);
         this.Data.AddUses(this);
     }
 
     public override string ToString() => Journal.ToString(this);
 
-    public void ToStub(Journal j) =>
-        j.AsShort.Write(this.Name).Write(this.InstanceTypes, "<", ">").Write(this.Data);
+    public void ToStub(Journal j) {
+        j.AsShort.Write(this.Name).Write(this.InstanceTypes, "<", ">");
+        if (j.Long) j.AsShort.Write(this.Data);
+    }
 }

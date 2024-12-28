@@ -1,0 +1,20 @@
+package $builtin {
+  path: $builtin;
+
+  interface Pointer<any T> {
+    implements: any;
+    $deref() T;
+  }
+}
+
+package main {
+  path: command-line-arguments;
+
+  class Foo<string|int|uint T> {
+    T value;
+    Add(T v) T;
+  }
+
+  New<string|int T>(T v) Pointer<Foo<T>>;
+  main();
+}

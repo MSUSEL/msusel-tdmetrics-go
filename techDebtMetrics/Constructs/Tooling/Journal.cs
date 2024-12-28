@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Text;
 
 namespace Constructs.Tooling;
@@ -11,6 +12,10 @@ public class Journal {
     /// <returns>The string for the given construct.</returns>
     public static string ToString(IConstruct c) =>
         new Journal().Write(c).ToString();
+
+    private readonly record struct StubMark(IConstruct Construct, bool Short);
+
+    private static readonly HashSet<StubMark> stubbing = [];
 
     private readonly StringBuilder sb;
     private readonly string indent;
@@ -77,8 +82,16 @@ public class Journal {
             this.writeOneLine(parts[i], i == max);
     }
 
-    private void writeStub(IConstruct c) =>
-        c.ToStub(this);
+    private void writeStub(IConstruct c) {
+        StubMark m = new(c, this.Short);
+        try {
+            if (!stubbing.Add(m))
+                throw new Exception("Journel detected loop in " + c.GetType().FullName + " when " + (this.Short ? "short" : "long") + ".");
+            c.ToStub(this);
+        } finally {
+            stubbing.Remove(m);
+        }
+    }
 
     /// <summary>Writes the given text to the journal.</summary>
     /// <param name="text">The text to write to the journal.</param>

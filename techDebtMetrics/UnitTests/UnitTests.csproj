@@ -11,8 +11,11 @@
 
   <ItemGroup>
     <Compile Remove="ConstructTests\test1\**" />
+    <Compile Remove="TestData\**" />
     <EmbeddedResource Remove="ConstructTests\test1\**" />
+    <EmbeddedResource Remove="TestData\**" />
     <None Remove="ConstructTests\test1\**" />
+    <None Remove="TestData\**" />
   </ItemGroup>
 
   <ItemGroup>
@@ -37,10 +40,6 @@
 
   <ItemGroup>
     <Using Include="NUnit.Framework" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="TestData\Test0005\" />
   </ItemGroup>
 
 </Project>
