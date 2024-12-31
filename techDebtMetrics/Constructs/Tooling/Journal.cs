@@ -13,6 +13,12 @@ public class Journal {
     public static string ToString(IConstruct c) =>
         new Journal().Write(c).ToString();
 
+    /// <summary>Gets the short string for a journal of the given construct.</summary>
+    /// <param name="c">The construct to journal.</param>
+    /// <returns>The short string for the given construct.</returns>
+    public static string ToShort(IConstruct c) =>
+        new Journal().AsShort.Write(c).ToString();
+
     private readonly record struct StubMark(IConstruct Construct, bool Short);
 
     private static readonly HashSet<StubMark> stubbing = [];

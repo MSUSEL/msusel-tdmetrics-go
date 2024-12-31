@@ -51,6 +51,6 @@ public class InterfaceInst : IInterface, IInitializable {
     public void ToStub(Journal j) {
         j.Write(this.Name).
             AsShort.Write(this.InstanceTypes, "<", ">");
-        if (j.Long) j.AsShort.Write(this.Interface);
+        if (j.Long) j.Write(this.Interface);
     }
 }

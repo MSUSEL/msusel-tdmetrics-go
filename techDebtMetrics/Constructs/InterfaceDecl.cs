@@ -1,5 +1,6 @@
 ﻿using Constructs.Data;
 using Constructs.Exceptions;
+using Constructs.Extensions;
 using Constructs.Tooling;
 using System.Collections.Generic;
 
@@ -65,8 +66,12 @@ public class InterfaceDecl : IInterface, IDeclaration, IInitializable {
     public void ToStub(Journal j) {
         if (j.Long) j.Write("interface ");
         j.Write(this.Name).Write(this.TypeParams, "<", ">");
-        if (j.Long) j.Write(" ").Write(this.Interface);
-        foreach (InterfaceInst inst in this.Instances)
-            j.WriteLine().AsShort.Write("inst ").Write(inst);
+        if (j.Long) {
+            j.Write(" ").Write(this.Interface);
+            foreach (InterfaceInst inst in this.Instances) {
+                if (inst.IsConcrete())
+                    j.WriteLine().AsShort.Write("inst ").Write(inst);
+            }
+        }
     }
 }

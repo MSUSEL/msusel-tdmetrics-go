@@ -1,5 +1,6 @@
 ﻿using Constructs.Data;
 using Constructs.Exceptions;
+using Constructs.Extensions;
 using Constructs.Tooling;
 using System.Collections.Generic;
 
@@ -77,8 +78,10 @@ public class MethodDecl : IMethod, IDeclaration, IInitializable {
     public void ToStub(Journal j) {
         j.Write(this.Name).Write(this.TypeParams, "<", ">").Write(this.Signature);
         if (j.Long && this.Receiver is null) {
-            foreach (MethodInst inst in this.Instances)
-                j.WriteLine().AsShort.Write("inst ").Write(inst);
+            foreach (MethodInst inst in this.Instances) {
+                if (inst.IsConcrete())
+                    j.WriteLine().AsShort.Write("inst ").Write(inst);
+            }
         }
     }
 }

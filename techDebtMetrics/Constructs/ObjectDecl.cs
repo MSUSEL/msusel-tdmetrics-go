@@ -1,5 +1,6 @@
 ﻿using Constructs.Data;
 using Constructs.Exceptions;
+using Constructs.Extensions;
 using Constructs.Tooling;
 using System.Collections.Generic;
 
@@ -84,8 +85,10 @@ public class ObjectDecl : IObject, IDeclaration, IInitializable {
             j.Indent.Write(this.Data.Fields, suffix: ";\n", separator: ";\n");
             j.Indent.Write(this.Methods, suffix: ";\n", separator: ";\n");
             j.Write("}");
-            foreach (ObjectInst inst in this.Instances)
-                j.WriteLine().AsShort.Write("inst ").Write(inst);
+            foreach (ObjectInst inst in this.Instances) {
+                if (inst.IsConcrete())
+                    j.WriteLine().AsShort.Write("inst ").Write(inst);
+            }
         }
     }
 }
