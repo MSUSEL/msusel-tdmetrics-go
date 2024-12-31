@@ -45,6 +45,18 @@ public class Package : IConstruct, IInitializable {
     public IReadOnlyList<Value> Values => this.inValues.AsReadOnly();
     private readonly List<Value> inValues = [];
 
+    /// <summary>Enumerates all the constructs that are directly part of this construct.</summary>
+    public IEnumerable<IConstruct> SubConstructs {
+        get {
+            foreach (IConstruct c in this.Imports) yield return c;
+            foreach (IConstruct c in this.Interfaces) yield return c;
+            foreach (IConstruct c in this.Methods) yield return c;
+            foreach (IConstruct c in this.StaticMethods) yield return c;
+            foreach (IConstruct c in this.Objects) yield return c;
+            foreach (IConstruct c in this.Values) yield return c;
+        }
+    }
+
     void IInitializable.Initialize(Project project, int index, Node node) {
         this.Index = index;
         Object obj = node.AsObject();

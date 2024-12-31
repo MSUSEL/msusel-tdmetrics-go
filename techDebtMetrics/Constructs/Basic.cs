@@ -1,5 +1,6 @@
 using Constructs.Data;
 using Constructs.Tooling;
+using System.Collections.Generic;
 
 namespace Constructs;
 
@@ -15,6 +16,9 @@ public class Basic : ITypeDesc, IInitializable {
 
     /// <summary>This is the name for the basic type.</summary>
     public string Name { get; private set; } = "";
+
+    /// <summary>Enumerates all the constructs that are directly part of this construct.</summary>
+    public IEnumerable<IConstruct> SubConstructs => [];
 
     void IInitializable.Initialize(Project project, int index, Node node) {
         this.Index = index;

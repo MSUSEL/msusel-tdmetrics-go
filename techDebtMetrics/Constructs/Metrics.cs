@@ -52,6 +52,9 @@ public class Metrics : IConstruct, IInitializable {
     public IReadOnlyList<IConstruct> Writes => this.inWrites.AsReadOnly();
     private readonly List<IConstruct> inWrites = [];
 
+    /// <summary>Enumerates all the constructs that are directly part of this construct.</summary>
+    public IEnumerable<IConstruct> SubConstructs => [];
+
     void IInitializable.Initialize(Project project, int index, Node node) {
         this.Index = index;
         Object obj = node.AsObject();

@@ -29,6 +29,14 @@ public class InterfaceInst : IInterface, IInitializable {
     public IReadOnlyList<ITypeDesc> InstanceTypes => this.inInstanceTypes.AsReadOnly();
     private readonly List<ITypeDesc> inInstanceTypes = [];
 
+    /// <summary>Enumerates all the constructs that are directly part of this construct.</summary>
+    public IEnumerable<IConstruct> SubConstructs {
+        get {
+            foreach (IConstruct c in this.InstanceTypes) yield return c;
+            yield return this.Interface;
+        }
+    }
+
     void IInitializable.Initialize(Project project, int index, Node node) {
         this.Index = index;
         Object obj = node.AsObject();

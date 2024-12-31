@@ -23,6 +23,9 @@ public class StructDesc : ITypeDesc, IInitializable {
     /// <summary>Indicates if this structure has no fields.</summary>
     public bool IsEmpty => this.Fields.Count <= 0;
 
+    /// <summary>Enumerates all the constructs that are directly part of this construct.</summary>
+    public IEnumerable<IConstruct> SubConstructs => this.Fields;
+
     void IInitializable.Initialize(Project project, int index, Node node) {
         this.Index = index;
         Object obj = node.AsObject();

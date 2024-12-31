@@ -48,6 +48,16 @@ public class MethodDecl : IMethod, IDeclaration, IInitializable {
     /// <summary>True if this method is generic, false otherwise.</summary>
     public bool Generic => this.TypeParams.Count > 0;
 
+    /// <summary>Enumerates all the constructs that are directly part of this construct.</summary>
+    public IEnumerable<IConstruct> SubConstructs {
+        get {
+            foreach (IConstruct c in this.TypeParams) yield return c;
+            yield return this.Signature;
+            foreach (IConstruct c in this.Instances) yield return c;
+            if (this.Metrics is not null) yield return this.Metrics;
+        }
+    }
+
     void IInitializable.Initialize(Project project, int index, Node node) {
         this.Index = index;
         Object obj = node.AsObject();
@@ -64,6 +74,11 @@ public class MethodDecl : IMethod, IDeclaration, IInitializable {
 
     public override string ToString() => Journal.ToString(this);
 
-    public void ToStub(Journal j) =>
+    public void ToStub(Journal j) {
         j.Write(this.Name).Write(this.TypeParams, "<", ">").Write(this.Signature);
+        if (j.Long && this.Receiver is null) {
+            foreach (MethodInst inst in this.Instances)
+                j.WriteLine().AsShort.Write("inst ").Write(inst);
+        }
+    }
 }

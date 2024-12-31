@@ -90,6 +90,30 @@ public class Project : IConstruct {
     public IReadOnlyList<Value> Values => this.inValues.AsReadOnly();
     private readonly List<Value> inValues = [];
 
+    /// <summary>Enumerates all the constructs that are directly part of this construct.</summary>
+    public IEnumerable<IConstruct> SubConstructs {
+        get {
+            foreach (IConstruct c in this.Abstracts) yield return c;
+            foreach (IConstruct c in this.Arguments) yield return c;
+            foreach (IConstruct c in this.Basics) yield return c;
+            foreach (IConstruct c in this.Fields) yield return c;
+            foreach (IConstruct c in this.InterfaceDecls) yield return c;
+            foreach (IConstruct c in this.InterfaceDescs) yield return c;
+            foreach (IConstruct c in this.InterfaceInsts) yield return c;
+            foreach (IConstruct c in this.MethodDecls) yield return c;
+            foreach (IConstruct c in this.MethodInsts) yield return c;
+            foreach (IConstruct c in this.Metrics) yield return c;
+            foreach (IConstruct c in this.ObjectDecls) yield return c;
+            foreach (IConstruct c in this.ObjectInsts) yield return c;
+            foreach (IConstruct c in this.Packages) yield return c;
+            foreach (IConstruct c in this.Selections) yield return c;
+            foreach (IConstruct c in this.Signatures) yield return c;
+            foreach (IConstruct c in this.StructDescs) yield return c;
+            foreach (IConstruct c in this.TypeParams) yield return c;
+            foreach (IConstruct c in this.Values) yield return c;
+        }
+    }
+
     /// <summary>Loads a project from a YAML file.</summary>
     /// <param name="path">The file path to read from.</param>
     /// <returns>The project that was read from the YAML.</returns>

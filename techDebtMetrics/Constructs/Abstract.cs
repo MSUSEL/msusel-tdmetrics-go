@@ -1,6 +1,7 @@
 ﻿using Constructs.Data;
 using Constructs.Exceptions;
 using Constructs.Tooling;
+using System.Collections.Generic;
 
 namespace Constructs;
 
@@ -18,6 +19,9 @@ public class Abstract : IConstruct, IInitializable {
     public Signature Signature => this.inSignature ??
         throw new UninitializedException(nameof(this.Signature));
     private Signature? inSignature;
+
+    /// <summary>Enumerates all the constructs that are directly part of this construct.</summary>
+    public IEnumerable<IConstruct> SubConstructs => [this.Signature];
 
     void IInitializable.Initialize(Project project, int index, Node node) {
         this.Index = index;

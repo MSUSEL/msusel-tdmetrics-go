@@ -38,6 +38,16 @@ public class ObjectInst : IObject, IInitializable {
     public IReadOnlyList<MethodInst> Methods => this.inMethods.AsReadOnly();
     private readonly List<MethodInst> inMethods = [];
 
+    /// <summary>Enumerates all the constructs that are directly part of this construct.</summary>
+    public IEnumerable<IConstruct> SubConstructs {
+        get {
+            foreach (IConstruct c in this.InstanceTypes) yield return c;
+            yield return this.Data;
+            yield return this.Interface;
+            foreach (IConstruct c in this.Methods) yield return c;
+        }
+    }
+
     void IInitializable.Initialize(Project project, int index, Node node) {
         this.Index = index;
         Object obj = node.AsObject();

@@ -1,6 +1,7 @@
 ﻿using Constructs.Data;
 using Constructs.Exceptions;
 using Constructs.Tooling;
+using System.Collections.Generic;
 
 namespace Constructs;
 
@@ -18,6 +19,9 @@ public class Selection : IConstruct, IInitializable {
     public IConstruct Origin => this.inOrigin ??
         throw new UninitializedException(nameof(this.Origin));
     private IConstruct? inOrigin;
+
+    /// <summary>Enumerates all the constructs that are directly part of this construct.</summary>
+    public IEnumerable<IConstruct> SubConstructs => [this.Origin];
 
     void IInitializable.Initialize(Project project, int index, Node node) {
         this.Index = index;

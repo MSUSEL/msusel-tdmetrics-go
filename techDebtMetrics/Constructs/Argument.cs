@@ -1,6 +1,7 @@
 ﻿using Constructs.Data;
 using Constructs.Exceptions;
 using Constructs.Tooling;
+using System.Collections.Generic;
 
 namespace Constructs;
 
@@ -18,6 +19,9 @@ public class Argument : IConstruct, IInitializable {
     public ITypeDesc Type => this.inType ??
         throw new UninitializedException(nameof(this.Type));
     private ITypeDesc? inType;
+
+    /// <summary>Enumerates all the constructs that are directly part of this construct.</summary>
+    public IEnumerable<IConstruct> SubConstructs => [this.Type];
 
     void IInitializable.Initialize(Project project, int index, Node node) {
         this.Index = index;

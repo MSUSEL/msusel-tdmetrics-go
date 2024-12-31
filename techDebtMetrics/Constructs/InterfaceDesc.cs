@@ -37,6 +37,15 @@ public class InterfaceDesc : ITypeDesc, IInitializable {
         this.Abstracts.Count <= 0 && this.Approx.Count <= 0 &&
         this.Exact.Count <= 0 && this.Inherits.Count <= 0;
 
+    /// <summary>Enumerates all the constructs that are directly part of this construct.</summary>
+    public IEnumerable<IConstruct> SubConstructs {
+        get {
+            foreach (var c in this.Abstracts) yield return c;
+            foreach (var c in this.Approx) yield return c;
+            foreach (var c in this.Exact) yield return c;
+        }
+    }
+
     void IInitializable.Initialize(Project project, int index, Node node) {
         this.Index = index;
         Object obj = node.AsObject();

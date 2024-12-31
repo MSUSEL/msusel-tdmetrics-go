@@ -30,6 +30,14 @@ public class Signature : ITypeDesc, IInitializable {
     /// <summary>Indicates that this method has no parameters or results.</summary>
     public bool IsEmpty => this.Params.Count <= 0 && this.Results.Count <= 0;
 
+    /// <summary>Enumerates all the constructs that are directly part of this construct.</summary>
+    public IEnumerable<IConstruct> SubConstructs {
+        get {
+            foreach (IConstruct c in this.Params) yield return c;
+            foreach (IConstruct c in this.Results) yield return c;
+        }
+    }
+
     void IInitializable.Initialize(Project project, int index, Node node) {
         this.Index = index;
         Object obj = node.AsObject();

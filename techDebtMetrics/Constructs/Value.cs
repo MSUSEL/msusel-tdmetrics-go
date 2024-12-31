@@ -1,6 +1,7 @@
 ﻿using Constructs.Data;
 using Constructs.Exceptions;
 using Constructs.Tooling;
+using System.Collections.Generic;
 
 namespace Constructs;
 
@@ -35,6 +36,14 @@ public class Value : IDeclaration, IInitializable {
     public Package Package => this.inPackage ??
         throw new UninitializedException(nameof(this.Package));
     private Package? inPackage;
+
+    /// <summary>Enumerates all the constructs that are directly part of this construct.</summary>
+    public IEnumerable<IConstruct> SubConstructs {
+        get {
+            yield return this.Type;
+            if (this.Metrics is not null) yield return this.Metrics;
+        }
+    }
 
     void IInitializable.Initialize(Project project, int index, Node node) {
         this.Index = index;

@@ -42,11 +42,22 @@ public class ObjectDecl : IObject, IDeclaration, IInitializable {
     private readonly List<MethodDecl> inMethods = [];
 
     /// <summary>The instances for this declaration if the object is generic.</summary>
-    public IReadOnlyList<MethodInst> Instances => this.inInstances.AsReadOnly();
-    private readonly List<MethodInst> inInstances = [];
+    public IReadOnlyList<ObjectInst> Instances => this.inInstances.AsReadOnly();
+    private readonly List<ObjectInst> inInstances = [];
 
     /// <summary>True if this object is generic, false otherwise.</summary>
     public bool Generic => this.TypeParams.Count > 0;
+
+    /// <summary>Enumerates all the constructs that are directly part of this construct.</summary>
+    public IEnumerable<IConstruct> SubConstructs {
+        get {
+            foreach (IConstruct c in this.TypeParams) yield return c;
+            yield return this.Data;
+            yield return this.Interface;
+            foreach (IConstruct c in this.Methods) yield return c;
+            foreach (IConstruct c in this.Instances) yield return c;
+        }
+    }
 
     void IInitializable.Initialize(Project project, int index, Node node) {
         this.Index = index;
@@ -58,7 +69,7 @@ public class ObjectDecl : IObject, IDeclaration, IInitializable {
         this.inPackage = obj.ReadIndex("package", project.Packages);
         obj.TryReadIndexList("typeParams", this.inTypeParams, project.TypeParams);
         obj.TryReadIndexList("methods", this.inMethods, project.MethodDecls);
-        obj.TryReadIndexList("instances", this.inInstances, project.MethodInsts);
+        obj.TryReadIndexList("instances", this.inInstances, project.ObjectInsts);
         this.Data.AddUses(this);
     }
 
@@ -73,6 +84,8 @@ public class ObjectDecl : IObject, IDeclaration, IInitializable {
             j.Indent.Write(this.Data.Fields, suffix: ";\n", separator: ";\n");
             j.Indent.Write(this.Methods, suffix: ";\n", separator: ";\n");
             j.Write("}");
+            foreach (ObjectInst inst in this.Instances)
+                j.WriteLine().AsShort.Write("inst ").Write(inst);
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using Constructs.Tooling;
+using System.Collections.Generic;
 
 namespace Constructs;
 
@@ -12,4 +13,11 @@ public interface IConstruct {
 
     /// <summary>Gets the index of this construct in the project list.</summary>
     public int Index { get; }
+
+    /// <summary>Enumerates all the constructs that are directly part of this construct.</summary>
+    /// <remarks>
+    /// This will not return packages, generics, receivers, or inheritance since
+    /// those constructs are more superior/parents constructs.
+    /// </remarks>
+    public IEnumerable<IConstruct> SubConstructs { get; }
 }
