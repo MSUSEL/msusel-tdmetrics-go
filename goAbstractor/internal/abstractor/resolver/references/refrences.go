@@ -7,17 +7,18 @@ import (
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/abstractor/instantiator"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs/kind"
+	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/logger"
 )
 
-func References(proj constructs.Project) {
-	tempReferences(proj)
-	tempDeclRefs(proj)
+func References(log *logger.Logger, proj constructs.Project) {
+	tempReferences(log, proj)
+	tempDeclRefs(log, proj)
 }
 
-func tempReferences(proj constructs.Project) {
+func tempReferences(log *logger.Logger, proj constructs.Project) {
 	refs := proj.TempReferences()
 	for i := range refs.Count() {
-		resolveTempRef(proj, refs.Get(i))
+		resolveTempRef(log, proj, refs.Get(i))
 	}
 
 	proj.AllConstructs().Foreach(func(c constructs.Construct) {
@@ -28,7 +29,7 @@ func tempReferences(proj constructs.Project) {
 	proj.ClearAllTempReferences()
 }
 
-func resolveTempRef(proj constructs.Project, ref constructs.TempReference) {
+func resolveTempRef(log *logger.Logger, proj constructs.Project, ref constructs.TempReference) {
 	if ref.Resolved() {
 		return
 	}
@@ -55,7 +56,7 @@ func resolveTempRef(proj constructs.Project, ref constructs.TempReference) {
 
 	switch typ.Kind() {
 	case kind.Object:
-		res := instantiator.Object(proj, ref.GoType(), typ.(constructs.Object), ref.InstanceTypes()...)
+		res := instantiator.Object(log, proj, ref.GoType(), typ.(constructs.Object), ref.InstanceTypes()...)
 		if utils.IsNil(res) {
 			panic(terror.New(`failed to resolve object type reference`).
 				With(`package path`, ref.PackagePath()).
@@ -65,7 +66,7 @@ func resolveTempRef(proj constructs.Project, ref constructs.TempReference) {
 		ref.SetResolution(res)
 
 	case kind.InterfaceDecl:
-		res := instantiator.InterfaceDecl(proj, ref.GoType(), typ.(constructs.InterfaceDecl), ref.InstanceTypes()...)
+		res := instantiator.InterfaceDecl(log, proj, ref.GoType(), typ.(constructs.InterfaceDecl), ref.InstanceTypes()...)
 		if utils.IsNil(res) {
 			panic(terror.New(`failed to resolve interface type reference`).
 				With(`package path`, ref.PackagePath()).
@@ -81,10 +82,10 @@ func resolveTempRef(proj constructs.Project, ref constructs.TempReference) {
 	}
 }
 
-func tempDeclRefs(proj constructs.Project) {
+func tempDeclRefs(log *logger.Logger, proj constructs.Project) {
 	refs := proj.TempDeclRefs()
 	for i := range refs.Count() {
-		resolveTempDeclRef(proj, refs.Get(i))
+		resolveTempDeclRef(log, proj, refs.Get(i))
 	}
 
 	proj.AllConstructs().Foreach(func(c constructs.Construct) {
@@ -95,7 +96,7 @@ func tempDeclRefs(proj constructs.Project) {
 	proj.ClearAllTempDeclRefs()
 }
 
-func resolveTempDeclRef(proj constructs.Project, ref constructs.TempDeclRef) {
+func resolveTempDeclRef(log *logger.Logger, proj constructs.Project, ref constructs.TempDeclRef) {
 	if ref.Resolved() {
 		return
 	}
@@ -122,7 +123,7 @@ func resolveTempDeclRef(proj constructs.Project, ref constructs.TempDeclRef) {
 
 	switch decl.Kind() {
 	case kind.Object:
-		res := instantiator.Object(proj, nil, decl.(constructs.Object), ref.InstanceTypes()...)
+		res := instantiator.Object(log, proj, nil, decl.(constructs.Object), ref.InstanceTypes()...)
 		if utils.IsNil(res) {
 			panic(terror.New(`failed to resolve object declaration reference`).
 				With(`package path`, ref.PackagePath()).
@@ -132,7 +133,7 @@ func resolveTempDeclRef(proj constructs.Project, ref constructs.TempDeclRef) {
 		ref.SetResolution(res)
 
 	case kind.InterfaceDecl:
-		res := instantiator.InterfaceDecl(proj, nil, decl.(constructs.InterfaceDecl), ref.InstanceTypes()...)
+		res := instantiator.InterfaceDecl(log, proj, nil, decl.(constructs.InterfaceDecl), ref.InstanceTypes()...)
 		if utils.IsNil(res) {
 			panic(terror.New(`failed to resolve interface declaration reference`).
 				With(`package path`, ref.PackagePath()).
@@ -142,7 +143,7 @@ func resolveTempDeclRef(proj constructs.Project, ref constructs.TempDeclRef) {
 		ref.SetResolution(res)
 
 	case kind.Method:
-		res := instantiator.Method(proj, decl.(constructs.Method), ref.InstanceTypes()...)
+		res := instantiator.Method(log, proj, decl.(constructs.Method), ref.InstanceTypes()...)
 		if utils.IsNil(res) {
 			panic(terror.New(`failed to resolve method declaration reference`).
 				With(`package path`, ref.PackagePath()).

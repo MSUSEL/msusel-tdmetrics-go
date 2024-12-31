@@ -2066,7 +2066,8 @@ func newTestTool(t *testing.T) *testTool {
 		Name: pkgName,
 	})
 	baker := baker.New(proj)
-	conv := converter.New(baker, proj, curPkg, nil)
+	log := logger.New()
+	conv := converter.New(log, baker, proj, curPkg, nil)
 	return &testTool{
 		t:      t,
 		proj:   proj,

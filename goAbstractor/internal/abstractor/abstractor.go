@@ -68,7 +68,7 @@ func (ab *abstractor) info() *types.Info {
 }
 
 func (ab *abstractor) converter() converter.Converter {
-	return converter.New(ab.baker, ab.proj, ab.curPkg, ab.tpReplacer)
+	return converter.New(ab.log, ab.baker, ab.proj, ab.curPkg, ab.tpReplacer)
 }
 
 func (ab *abstractor) abstractProject() {

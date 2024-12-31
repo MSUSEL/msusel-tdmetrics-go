@@ -84,7 +84,7 @@ func (r *resolverImp) Receivers() {
 
 func (r *resolverImp) ExpandInstantiations() {
 	r.log.Log(`expand instantiations`)
-	instantiations.ExpandInstantiations(r.proj)
+	instantiations.ExpandInstantiations(r.log, r.proj)
 }
 
 func (r *resolverImp) GenerateInterfaces() {
@@ -105,7 +105,7 @@ func (r *resolverImp) Inheritance() {
 
 func (r *resolverImp) References() {
 	r.log.Log(`resolve references`)
-	references.References(r.proj)
+	references.References(r.log, r.proj)
 }
 
 func (r *resolverImp) DeadCodeElimination() {

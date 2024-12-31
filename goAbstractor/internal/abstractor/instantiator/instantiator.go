@@ -10,13 +10,15 @@ import (
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/assert"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs/kind"
+	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/logger"
 )
 
-func InterfaceDecl(proj constructs.Project, realType types.Type, decl constructs.InterfaceDecl, instanceTypes ...constructs.TypeDesc) constructs.TypeDesc {
+func InterfaceDecl(log *logger.Logger, proj constructs.Project, realType types.Type, decl constructs.InterfaceDecl, instanceTypes ...constructs.TypeDesc) constructs.TypeDesc {
 	assert.ArgNotNil(`project`, proj)
 	assert.ArgNotNil(`interface decl`, decl)
 
-	i, existing, needsInstance := newInstantiator(proj, decl, decl.TypeParams(), instanceTypes)
+	log2 := log.Group(`instantiator`).Prefix(`|  `)
+	i, existing, needsInstance := newInstantiator(log2, proj, decl, decl.TypeParams(), instanceTypes)
 	if !needsInstance {
 		return decl
 	}
@@ -30,11 +32,12 @@ func InterfaceDecl(proj constructs.Project, realType types.Type, decl constructs
 	return i.createInstance(realType).(constructs.InterfaceInst)
 }
 
-func Object(proj constructs.Project, realType types.Type, decl constructs.Object, instanceTypes ...constructs.TypeDesc) constructs.TypeDesc {
+func Object(log *logger.Logger, proj constructs.Project, realType types.Type, decl constructs.Object, instanceTypes ...constructs.TypeDesc) constructs.TypeDesc {
 	assert.ArgNotNil(`project`, proj)
 	assert.ArgNotNil(`object`, decl)
 
-	i, existing, needsInstance := newInstantiator(proj, decl, decl.TypeParams(), instanceTypes)
+	log2 := log.Group(`instantiator`).Prefix(`|  `)
+	i, existing, needsInstance := newInstantiator(log2, proj, decl, decl.TypeParams(), instanceTypes)
 	if !needsInstance {
 		return decl
 	}
@@ -48,16 +51,17 @@ func Object(proj constructs.Project, realType types.Type, decl constructs.Object
 	return i.createInstance(realType).(constructs.ObjectInst)
 }
 
-func Method(proj constructs.Project, decl constructs.Method, instanceTypes ...constructs.TypeDesc) constructs.Construct {
+func Method(log *logger.Logger, proj constructs.Project, decl constructs.Method, instanceTypes ...constructs.TypeDesc) constructs.Construct {
 	assert.ArgNotNil(`project`, proj)
 	assert.ArgNotNil(`method`, decl)
 
+	log2 := log.Group(`instantiator`).Prefix(`|  `)
 	typeParams := decl.TypeParams()
 	if decl.HasReceiver() {
 		typeParams = decl.Receiver().TypeParams()
 	}
 
-	i, existing, needsInstance := newInstantiator(proj, decl, typeParams, instanceTypes)
+	i, existing, needsInstance := newInstantiator(log2, proj, decl, typeParams, instanceTypes)
 	if !needsInstance {
 		return decl
 	}
@@ -71,6 +75,7 @@ func Method(proj constructs.Project, decl constructs.Method, instanceTypes ...co
 }
 
 type instantiator struct {
+	log           *logger.Logger
 	prior         *instantiator
 	proj          constructs.Project
 	decl          constructs.Declaration
@@ -78,7 +83,7 @@ type instantiator struct {
 	conversion    map[constructs.TypeParam]constructs.TypeDesc
 }
 
-func newInstantiator(proj constructs.Project, decl constructs.Declaration, typeParams []constructs.TypeParam, instanceTypes []constructs.TypeDesc) (*instantiator, constructs.Construct, bool) {
+func newInstantiator(log *logger.Logger, proj constructs.Project, decl constructs.Declaration, typeParams []constructs.TypeParam, instanceTypes []constructs.TypeDesc) (*instantiator, constructs.Construct, bool) {
 	count := len(typeParams)
 	if count != len(instanceTypes) {
 		panic(terror.New(`the amount of type params must match the instance types`).
@@ -89,7 +94,7 @@ func newInstantiator(proj constructs.Project, decl constructs.Declaration, typeP
 			With(`instance types`, instanceTypes))
 	}
 
-	// Check declaration is a generic type.
+	// Check declaration is a generic type, leave otherwise.
 	if count <= 0 {
 		return nil, nil, false
 	}
@@ -129,6 +134,7 @@ func newInstantiator(proj constructs.Project, decl constructs.Declaration, typeP
 		conversion[tp] = instanceTypes[i]
 	}
 	return &instantiator{
+		log:           log,
 		proj:          proj,
 		decl:          decl,
 		instanceTypes: instanceTypes,
@@ -271,7 +277,7 @@ func (i *instantiator) typeDecl(decl constructs.TypeDecl, tps []constructs.TypeP
 		})
 	}
 
-	i2, existing, _ := newInstantiator(i.proj, decl, tps, its)
+	i2, existing, _ := newInstantiator(i.log, i.proj, decl, tps, its)
 	if !utils.IsNil(existing) {
 		return existing.(constructs.TypeDesc)
 	}
