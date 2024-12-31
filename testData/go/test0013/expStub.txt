@@ -1,0 +1,39 @@
+package main {
+  path: command-line-arguments;
+
+  interface IPoint {
+    implements: IXCoord, IYCoord, {
+      Sum() int;
+    };
+    GetX() int;
+    GetY() int;
+    Sum() int;
+  }
+
+  interface IXCoord {
+    GetX() int;
+  }
+
+  interface IYCoord {
+    GetY() int;
+  }
+
+  class Point {
+    XCoord XCoord;
+    YCoord YCoord;
+    Sum() int;
+  }
+
+  class XCoord {
+    int x;
+    GetX() int;
+  }
+
+  class YCoord {
+    int y;
+    GetY() int;
+  }
+
+  PrintPoint(IPoint p);
+  main();
+}

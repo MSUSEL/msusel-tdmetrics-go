@@ -5,6 +5,7 @@ package $builtin {
     implements: any;
     $deref() T;
   }
+  inst Pointer<Foo<string>>
 }
 
 package main {
@@ -14,7 +15,9 @@ package main {
     T value;
     Add(T v) T;
   }
+  inst Foo<string>
 
-  New<string|int T>(T v) Pointer<Foo<T>>;
+  New<string|int T>(T v) Pointer<Foo<T>>
+  inst New<string>(string v) Pointer<Foo<string>>;
   main();
 }

@@ -1,0 +1,96 @@
+package $builtin {
+  path: $builtin;
+
+  interface List<any T> {
+    implements: any;
+    $len() int;
+    $get(int index) T;
+    $set(int index, T value);
+  }
+  inst List<Animal>
+}
+
+package main {
+  path: command-line-arguments;
+  imports: package animals, package enums;
+
+  main();
+
+  var List<Animal> pets;
+}
+
+package animals {
+  path: test0014/animals;
+  imports: package enums;
+
+  interface Animal {
+    implements: any;
+    Kind() AnimalKind;
+    isAnimal();
+  }
+
+  interface Cat {
+    implements: any;
+    Breed() CatBreed;
+    isCat();
+  }
+
+  interface Dog {
+    implements: any;
+    Breed() DogBreed;
+    isDog();
+  }
+
+  class cat {
+    CatBreed breed;
+    Breed() CatBreed;
+    Kind() AnimalKind;
+    isAnimal();
+    isCat();
+  }
+
+  class dog {
+    DogBreed breed;
+    Breed() DogBreed;
+    Kind() AnimalKind;
+    isAnimal();
+    isDog();
+  }
+
+  New<CatBreed|DogBreed B>(B breed) Animal;
+}
+
+package enums {
+  path: test0014/enums;
+
+  interface Enum {
+    implements: any;
+    valid() bool;
+  }
+
+  class AnimalKind {
+    string $data;
+    valid() bool;
+  }
+
+  class CatBreed {
+    string $data;
+    valid() bool;
+  }
+
+  class DogBreed {
+    string $data;
+    valid() bool;
+  }
+
+  Valid(Enum e) bool;
+
+  const AnimalKind Cat;
+  const DogBreed Chihuahua;
+  const AnimalKind Dog;
+  const DogBreed Husky;
+  const CatBreed MaineCoon;
+  const CatBreed Persian;
+  const DogBreed Poodle;
+  const CatBreed Siamese;
+}

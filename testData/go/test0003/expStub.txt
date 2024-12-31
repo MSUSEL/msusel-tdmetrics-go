@@ -5,6 +5,7 @@ package $builtin {
     implements: any;
     $deref() T;
   }
+  inst Pointer<Cat>
 }
 
 package main {
@@ -20,6 +21,5 @@ package main {
     Pet();
   }
 
-  Pet();
   main();
 }

@@ -1,0 +1,13 @@
+package main {
+  path: command-line-arguments;
+
+  class A<int|float64|string T> {
+    int value;
+    Mul(T v) T;
+  }
+  inst A<int>
+  inst A<float64>
+  inst A<string>
+
+  main();
+}

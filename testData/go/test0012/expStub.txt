@@ -1,0 +1,20 @@
+package main {
+  path: command-line-arguments;
+
+  interface X {
+    implements: {
+      String() string;
+    };
+    ~int;
+    String() string;
+  }
+
+  class Y {
+    int $data;
+    String() string;
+  }
+
+  Z<X T>(T x);
+  inst Z<Y>(Y x) // TODO: No inst given
+  main();
+}

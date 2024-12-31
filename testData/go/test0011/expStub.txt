@@ -1,0 +1,51 @@
+package $builtin {
+  path: $builtin;
+
+  interface List<any T> {
+    implements: any;
+    $len() int;
+    $get(int index) T;
+    $set(int index, T value);
+  }
+  inst List<string>
+  inst List<Pointer<int>>
+
+  interface Map<comparable TKey, any TValue> {
+    implements: any;
+    $len() int;
+    $get(TKey key)(TValue value, bool found);
+    $set(TKey key, TValue value);
+  }
+  inst Map<string, Pointer<int>>
+
+  interface Pointer<any T> {
+    implements: any;
+    $deref() T;
+  }
+  inst Pointer<int>
+
+  interface comparable {
+    implements: any;
+    $compare(any other) int;
+  }
+}
+
+package main {
+  path: command-line-arguments;
+
+  class Bacon {
+    Set<string, int, Map<string, Pointer<int>>> Set;
+  }
+
+  class Set<comparable K, any V, ~Map<K, Pointer<V>> M> {
+    M m;
+    AsSlices()(List<K>, List<Pointer<V>>);
+  }
+  // TODO: The following instance is missing
+  inst Set<string, int, Map<string, Pointer<int>>>
+
+  PrintSlice<any T, ~List<T> S>(S s)
+  inst PrintSlice<string, List<string>>(List<string> s)
+  inst PrintSlice<Pointer<int>, List<Pointer<int>>>(List<Pointer<int>> s);
+  main();
+}

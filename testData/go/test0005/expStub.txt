@@ -7,11 +7,13 @@ package $builtin {
     $get(int index) T;
     $set(int index, T value);
   }
+  inst List<Pointer<Cat>>
 
   interface Pointer<any T> {
     implements: any;
     $deref() T;
   }
+  inst Pointer<Cat>
 }
 
 package cats {
@@ -34,12 +36,9 @@ package cats {
     Youngest() Pointer<Cat>;
   }
 
-  Meow();
   NewCat(string name, int age) Pointer<Cat>;
   NextYear(List<Pointer<Cat>> cats...);
   Pet(Pointer<Cat> c);
-  String() string;
-  Youngest() Pointer<Cat>;
 
   var (string value) log;
 }

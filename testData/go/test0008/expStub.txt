@@ -5,6 +5,7 @@ package $builtin {
     implements: any;
     $deref() T;
   }
+  inst Pointer<Foo<int>>
 }
 
 package main {
@@ -14,6 +15,7 @@ package main {
     T value;
     Get() T;
   }
+  inst Foo<int>
 
   main();
 }
