@@ -31,6 +31,7 @@ type Baker interface {
 	BakeComplex64() constructs.InterfaceDecl
 	BakeComplex128() constructs.InterfaceDecl
 	BakeError() constructs.InterfaceDecl
+	BakeComparableAbstract() constructs.Abstract
 	BakeComparable() constructs.InterfaceDecl
 }
 
@@ -580,13 +581,12 @@ func (b *bakerImp) BakeError() constructs.InterfaceDecl {
 	})
 }
 
-// BakeComparable bakes in an interface to represent a Go comparable.
+// BakeComparableAbstract bakes in an abstract method for a comparable interface
+// to represent a Go comparable.
 //
-//	type comparable interface {
-//		$compare(other any) int
-//	}
-func (b *bakerImp) BakeComparable() constructs.InterfaceDecl {
-	return bakeOnce(b, `comparable`, func() constructs.InterfaceDecl {
+//	$compare(other any) int
+func (b *bakerImp) BakeComparableAbstract() constructs.Abstract {
+	return bakeOnce(b, `comparableAbstract`, func() constructs.Abstract {
 		pkg := b.BakeBuiltin()
 
 		// <unnamed> int
@@ -601,7 +601,7 @@ func (b *bakerImp) BakeComparable() constructs.InterfaceDecl {
 		})
 
 		// func $compare(other any) int
-		cmpFunc := b.proj.NewAbstract(constructs.AbstractArgs{
+		return b.proj.NewAbstract(constructs.AbstractArgs{
 			Name:     innate.Compare,
 			Exported: true,
 			Signature: b.proj.NewSignature(constructs.SignatureArgs{
@@ -610,6 +610,20 @@ func (b *bakerImp) BakeComparable() constructs.InterfaceDecl {
 				Package: pkg.Source(),
 			}),
 		})
+	})
+}
+
+// BakeComparable bakes in an interface to represent a Go comparable.
+//
+//	type comparable interface {
+//		$compare(other any) int
+//	}
+func (b *bakerImp) BakeComparable() constructs.InterfaceDecl {
+	return bakeOnce(b, `comparable`, func() constructs.InterfaceDecl {
+		pkg := b.BakeBuiltin()
+
+		// func $compare(other any) int
+		cmpFunc := b.BakeComparableAbstract()
 
 		// comparable
 		return b.proj.NewInterfaceDecl(constructs.InterfaceDeclArgs{

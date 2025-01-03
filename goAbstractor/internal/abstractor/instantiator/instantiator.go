@@ -94,13 +94,17 @@ func newInstantiator(log *logger.Logger, proj constructs.Project, decl construct
 			With(`instance types`, instanceTypes))
 	}
 
+	log.Logf(`instantiating %v`, decl)
+	log.Logf(`|- with %v`, instanceTypes)
+
 	// Check declaration is a generic type, leave otherwise.
 	if count <= 0 {
+		log.Logf(`'- not generic`)
 		return nil, nil, false
 	}
 
 	// Check if instance types match the declaration types.
-	// For example if `func Foo[T any]() { ... Func[T]() ... }` is given such that
+	// For example if `func Foo[T any]() { ... Foo[T]() ... }` is given such that
 	// the call to `Foo` doesn't need an instance since it matches the generic.
 	same := true
 	for i, tp := range typeParams {
@@ -110,6 +114,7 @@ func newInstantiator(log *logger.Logger, proj constructs.Project, decl construct
 		}
 	}
 	if same {
+		log.Logf(`'- instantiation has same type arguments as type parameters`)
 		return nil, nil, false
 	}
 
@@ -125,6 +130,7 @@ func newInstantiator(log *logger.Logger, proj constructs.Project, decl construct
 		instance, found = decl.(constructs.Method).FindInstance(instanceTypes)
 	}
 	if found {
+		log.Logf(`'- instantiation found`)
 		return nil, instance, true
 	}
 
@@ -133,6 +139,7 @@ func newInstantiator(log *logger.Logger, proj constructs.Project, decl construct
 	for i, tp := range typeParams {
 		conversion[tp] = instanceTypes[i]
 	}
+	log.Logf(`|- instantiation needed`)
 	return &instantiator{
 		log:           log,
 		proj:          proj,
@@ -289,27 +296,36 @@ func (i *instantiator) createInstance(realType types.Type) constructs.Construct 
 	switch i.decl.Kind() {
 	case kind.InterfaceDecl:
 		d := i.decl.(constructs.InterfaceDecl)
-		return i.proj.NewInterfaceInst(constructs.InterfaceInstArgs{
+		inst := i.proj.NewInterfaceInst(constructs.InterfaceInstArgs{
 			RealType:      realType,
 			Generic:       d,
 			Resolved:      i.InterfaceDesc(d.Interface()),
 			InstanceTypes: i.instanceTypes,
 		})
+		i.log.Logf(`'- instantiated interface: %v`, inst)
+		return inst
+
 	case kind.Object:
 		d := i.decl.(constructs.Object)
-		return i.proj.NewObjectInst(constructs.ObjectInstArgs{
+		obj := i.proj.NewObjectInst(constructs.ObjectInstArgs{
 			RealType:      realType,
 			Generic:       d,
 			ResolvedData:  i.StructDesc(d.Data()),
 			InstanceTypes: i.instanceTypes,
 		})
+		i.log.Logf(`'- instantiated object: %v`, obj)
+		return obj
+
 	case kind.Method:
 		d := i.decl.(constructs.Method)
-		return i.proj.NewMethodInst(constructs.MethodInstArgs{
+		md := i.proj.NewMethodInst(constructs.MethodInstArgs{
 			Generic:       d,
 			Resolved:      i.Signature(d.Signature()),
 			InstanceTypes: i.instanceTypes,
 		})
+		i.log.Logf(`'- instantiated method: %v`, md)
+		return md
+
 	default:
 		panic(terror.New(`unexpected declaration type`).
 			With(`kind`, i.decl.Kind()).

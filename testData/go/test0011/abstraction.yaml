@@ -218,6 +218,7 @@
       methods: [ 2 ]
     },
     { # TODO: Determine how `K` became `any` which isn't a supertype of `comparable`.
+      wrong: "FIX",
       # 2. main.Set[K any, V any, M ~Map[K any, Pointer[V any]]]
       generic: 2, resData: 3, resInterface: 17,
       instanceTypes: [ typeParam2, typeParam8, typeParam3 ],

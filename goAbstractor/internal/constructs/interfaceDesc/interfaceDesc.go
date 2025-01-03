@@ -3,6 +3,7 @@ package interfaceDesc
 import (
 	"go/token"
 	"go/types"
+	"strings"
 
 	"github.com/Snow-Gremlin/goToolbox/collections"
 	"github.com/Snow-Gremlin/goToolbox/collections/enumerator"
@@ -72,10 +73,15 @@ func newInterfaceDesc(args constructs.InterfaceDescArgs) constructs.InterfaceDes
 			args.RealType = types.Typ[types.Complex128]
 
 		default: // hint.None, hint.Comparable
-			methods := make([]*types.Func, len(args.Abstracts))
-			for i, abstract := range args.Abstracts {
-				methods[i] = types.NewFunc(token.NoPos, args.Package.Types,
-					abstract.Name(), abstract.Signature().GoType().(*types.Signature))
+			methods := make([]*types.Func, 0, len(args.Abstracts))
+			for _, abstract := range args.Abstracts {
+				name := abstract.Name()
+				if strings.HasPrefix(name, `$`) {
+					continue
+				}
+				sig := abstract.Signature().GoType().(*types.Signature)
+				m := types.NewFunc(token.NoPos, args.Package.Types, name, sig)
+				methods = append(methods, m)
 			}
 
 			embedded := []types.Type{}

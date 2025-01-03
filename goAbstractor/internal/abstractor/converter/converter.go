@@ -9,6 +9,7 @@ import (
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/abstractor/baker"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/abstractor/instantiator"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs"
+	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs/hint"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs/innate"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs/kind"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/logger"
@@ -111,7 +112,22 @@ func (c *convImp) convertChan(t *types.Chan) constructs.TypeDesc {
 func (c *convImp) convertInterface(t *types.Interface) constructs.InterfaceDesc {
 	t.Complete()
 
+	if t.Empty() {
+		if t.IsComparable() {
+			return c.baker.BakeComparable().Interface()
+		}
+		return c.baker.BakeAny()
+	}
+
+	h := hint.None
 	abstracts := []constructs.Abstract{}
+	if t.IsComparable() && t.NumMethods() > 0 {
+		h = hint.Comparable
+		comp := c.baker.BakeComparableAbstract()
+		abstracts = append(abstracts, comp)
+		c.log.Logf(`add comparable to %v`, t)
+	}
+
 	pinned := false
 	for i := range t.NumMethods() {
 		f := t.Method(i)
@@ -141,6 +157,7 @@ func (c *convImp) convertInterface(t *types.Interface) constructs.InterfaceDesc 
 	}
 
 	return c.proj.NewInterfaceDesc(constructs.InterfaceDescArgs{
+		Hint:      h,
 		RealType:  t,
 		PinnedPkg: pinnedPkg,
 		Exact:     exact,

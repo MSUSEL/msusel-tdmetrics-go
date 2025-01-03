@@ -59,6 +59,8 @@ func (tt *testTool) abstract(patterns ...string) *testTool {
 	var log *logger.Logger
 	if verbose {
 		log = logger.New()
+		// Use the group filters to show specific algorithm logs while debugging.
+		// log = log.Show(`instantiator`)
 	}
 
 	tt.proj = abstractor.Abstract(abstractor.Config{
