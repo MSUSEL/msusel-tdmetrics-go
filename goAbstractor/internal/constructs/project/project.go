@@ -1,6 +1,7 @@
 package project
 
 import (
+	"fmt"
 	"strconv"
 	"strings"
 
@@ -283,10 +284,6 @@ func (p *projectImp) UpdateIndices() {
 	})
 }
 
-func (p *projectImp) String() string {
-	return jsonify.ToString(p)
-}
-
 func pl(k kind.Kind) string {
 	s := string(k)
 	if !strings.HasSuffix(s, `s`) {
@@ -324,4 +321,37 @@ func (p *projectImp) ToJson(ctx *jsonify.Context) jsonify.Datum {
 		AddNonZero(ctx, pl(kind.TypeParam), p.TypeParams().ToSlice())
 
 	return m
+}
+
+func stringCon[T any, S ~[]T](buf *strings.Builder, k kind.Kind, s S) {
+	buf.WriteString(pl(k) + " {\n")
+	for i, k := range s {
+		buf.WriteString(fmt.Sprintf("  %2d. %q\n", i+1, fmt.Sprint(k)))
+	}
+	buf.WriteString("}\n")
+}
+
+func (p *projectImp) String() string {
+	buf := &strings.Builder{}
+	stringCon(buf, kind.Abstract, p.Abstracts().ToSlice())
+	stringCon(buf, kind.Argument, p.Arguments().ToSlice())
+	stringCon(buf, kind.Basic, p.Basics().ToSlice())
+	stringCon(buf, kind.Field, p.Fields().ToSlice())
+	stringCon(buf, kind.InterfaceDecl, p.InterfaceDecls().ToSlice())
+	stringCon(buf, kind.InterfaceDesc, p.InterfaceDescs().ToSlice())
+	stringCon(buf, kind.InterfaceInst, p.InterfaceInsts().ToSlice())
+	stringCon(buf, kind.MethodInst, p.MethodInsts().ToSlice())
+	stringCon(buf, kind.Method, p.Methods().ToSlice())
+	stringCon(buf, kind.Metrics, p.Metrics().ToSlice())
+	stringCon(buf, kind.ObjectInst, p.ObjectInsts().ToSlice())
+	stringCon(buf, kind.Object, p.Objects().ToSlice())
+	stringCon(buf, kind.Package, p.Packages().ToSlice())
+	stringCon(buf, kind.Selection, p.Selections().ToSlice())
+	stringCon(buf, kind.Signature, p.Signatures().ToSlice())
+	stringCon(buf, kind.StructDesc, p.StructDescs().ToSlice())
+	stringCon(buf, kind.TempDeclRef, p.TempDeclRefs().ToSlice())
+	stringCon(buf, kind.TempReference, p.TempReferences().ToSlice())
+	stringCon(buf, kind.TypeParam, p.TypeParams().ToSlice())
+	stringCon(buf, kind.Value, p.Values().ToSlice())
+	return buf.String()
 }

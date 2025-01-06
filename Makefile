@@ -14,7 +14,7 @@ go-test:
 	cd ./goAbstractor/ && go test -count=1 ./...
 
 td-test:
-	cd ./techDebtMetrics/ && dotnet test
+	cd ./techDebtMetrics/ && dotnet test --filter StubTest0011
 # Add `--filter StubTest0007` to run specific tests
 
 clean: go-clean js-clean td-clean

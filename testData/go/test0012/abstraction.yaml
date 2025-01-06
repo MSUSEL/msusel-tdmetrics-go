@@ -1,52 +1,60 @@
 {
   language: go,
   abstracts: [
-    { # 1. String() string
-      exported: true, name: String, signature: 2
-    }
+    { exported: true, name: $equal, signature: 3 }, # 1. $equal(other any) bool
+    { exported: true, name: String, signature: 2 }  # 2. String() string
   ],
   arguments: [
-    { type: basic2 },             # 1. <unnamed> string
-    { name: x, type: typeParam2 } # 2. x T <interface{ ~int, String() string }>
+    {              type: basic1 },         # 1. <unnamed> bool
+    {              type: basic3 },         # 2. <unnamed> string
+    { name: other, type: interfaceDesc1 }, # 3. other any
+    { name: x,     type: typeParam2 }      # 4. x T <interface{ ~int, $equal(any) bool, String() string }>
   ],
-  basics: [ int, string ],
+  basics: [ bool, int, string ],
   fields: [
-    { # 1. $data int
-      exported: true, name: $data, type: basic1
-    }
+    { exported: true, name: $data, type: basic2 } # 1. $data int
   ],
   interfaceDecls: [
-    { # 1. X{ ~int, String() string }
-      name: X, package: 1, interface: 2, exported: true, loc: 8 
+    { # 1. $builtin.comparable
+      name: comparable, package: 1, interface: 2, exported: true
+    },
+    { # 2. X{ ~int, String() string }
+      name: X, package: 2, interface: 3, exported: true, loc: 8 
     }
   ],
   interfaceDescs: [
-    { # 1. interface{ String() string }
-      abstracts: [ 1 ]
+    { # 1. any
+      inherits: [ 2 ]
     },
-    { # 2. interface{ ~int, String() string }
-      abstracts: [ 1 ], approx: [ basic1 ], inherits: [ 1 ]
+    { # 2. interface{ $equal func(other any) bool }
+      abstracts: [ 1 ], hint: comparable
+    },
+    { # 3. interface{ ~int; $equal func(other any) bool; String func() string }
+      abstracts: [ 1, 2 ], approx: [ basic2 ], inherits: [ 4 ], hint: comparable
+    },
+    { # 4. interface{ String() string }
+      abstracts: [ 2 ], inherits: [ 1 ]
     }
   ],
   methodInsts: [
-    { # 1. Z[Y](x Y)
-      generic: 2, resolved: 3, instanceTypes: [ object1 ]
+    { # 1. Z[Y](x T) // TODO: Shouldn't it be `x Y`?
+      generic: 2, resolved: 4, instanceTypes: [ object1 ]
     }
   ],
   methods: [
     { # 1. String() string
-      name: String, package: 1, receiver: 1, signature: 2,
+      name: String, package: 2, receiver: 1, signature: 2,
       exported: true, loc: 15, metrics: 1
     },
     {
       # TODO: Shouldn't this be `typeParams[2]`?
       # 2. Z[T interface{ String() string }](x T <interface{ ~int, String() string }>)
-      name: Z, package: 1, signature: 3,
+      name: Z, package: 2, signature: 4,
       exported: true, loc: 19, metrics: 2,
       typeParams: [ 1 ], instances: [ 1 ]
     },
     { # 3. main()
-      name: main, package: 1, signature: 1,
+      name: main, package: 2, signature: 1,
       loc: 23, metrics: 3
     }
   ],
@@ -59,7 +67,7 @@
       codeCount: 3, complexity: 1, indents: 1, lineCount: 3, loc: 19,
       sideEffect: true,
       invokes: [ selection1 ],
-      reads: [ interfaceDecl1 ]
+      reads: [ interfaceDecl2 ]
     },
     { # 3. `main()` metrics
       codeCount: 4, complexity: 1, indents: 2, lineCount: 4, loc: 23,
@@ -70,32 +78,37 @@
   ],
   objects: [
     { # 1. Y{ $data int }
-      name: Y, package: 1, interface: 1, data: 1,
+      name: Y, package: 2, interface: 4, data: 1,
       exported: true, loc: 13, methods: [ 1 ]
     }
   ],
   packages: [
     { # 1. main package
+      name: $builtin, path: $builtin,
+      interfaces: [ 1 ]
+    },
+    { # 2. main package
       name: main, path: command-line-arguments,
-      interfaces: [ 1 ], methods: [ 1, 2, 3 ], objects: [ 1 ],
+      interfaces: [ 2 ], methods: [ 1, 2, 3 ], objects: [ 1 ]
     }
   ],
   selections: [
     { # 1. interface{ String() string }.String()
-      name: String, origin: interfaceDecl1
+      name: String, origin: interfaceDecl2
     }
   ],
   signatures: [
-    {},                 # 1. func()
-    { results: [ 1 ] }, # 2. func() string
-    { params: [ 2 ] }   # 3. func(x T <interface{ ~int, String() string }>)
+    {},                                # 1. func()
+    { results: [ 2 ] },                # 2. func() string
+    { params: [ 3 ], results: [ 1 ] }, # 3. func(other any) bool
+    { params: [ 4 ] }                  # 4. func(x T <interface{ ~int, String() string }>)
   ],
   structDescs: [
     { fields: [ 1 ], synthetic: true } # 1. $data int
   ],
   typeParams: [
-    { name: T, type: interfaceDecl1 }, # 1. T interface{ String() string }
-    { name: T, type: interfaceDesc2 }  # 2. T interface{ ~int, String() string }
+    { name: T, type: interfaceDecl2 }, # 1. T X
+    { name: T, type: interfaceDesc3 }  # 2. T interface{ ~int, $equal(any) bool; String() string }
   ],
   locs: {
     '1': main.go

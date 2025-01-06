@@ -2,6 +2,7 @@ package tests
 
 import (
 	"encoding/json"
+	"fmt"
 	"os"
 	"runtime"
 	"slices"
@@ -110,6 +111,11 @@ func (tt *testTool) full() *testTool {
 		diffLines := diff.Default().PlusMinus(expLines, gotLines)
 		tt.t.Error("\n" + strings.Join(diffLines, "\n"))
 	}
+	return tt
+}
+
+func (tt *testTool) dump() *testTool {
+	fmt.Println(tt.proj)
 	return tt
 }
 

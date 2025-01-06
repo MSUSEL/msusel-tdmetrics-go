@@ -138,6 +138,7 @@ func (b *bakerImp) BakeAny() constructs.InterfaceDesc {
 // Note: The difference between an array and slice aren't
 // important for abstraction, so they are combined into one.
 // Also `cap` and `offset` aren't important, so ignored.
+// This also doesn't add `equal` when a comparable array.
 func (b *bakerImp) BakeList() constructs.InterfaceDecl {
 	return bakeOnce(b, `List[T any]`, func() constructs.InterfaceDecl {
 		pkg := b.BakeBuiltin()
@@ -222,7 +223,8 @@ func (b *bakerImp) BakeList() constructs.InterfaceDecl {
 //	}
 //
 // Note: Doesn't have `cap`, `trySend`, or `tryRecv` as defined in reflect
-// because those aren't important for abstraction
+// because those aren't important for abstraction.
+// Also doesn't have `equal` method despite channels being comparable by pointer.
 func (b *bakerImp) BakeChan() constructs.InterfaceDecl {
 	return bakeOnce(b, `Chan[T any]`, func() constructs.InterfaceDecl {
 		pkg := b.BakeBuiltin()
@@ -299,13 +301,13 @@ func (b *bakerImp) BakeChan() constructs.InterfaceDecl {
 
 // BakeMap bakes in an interface to represent a Go map:
 //
-//	type map[TKey, TValue any] interface {
+//	type map[TKey comparable, TValue any] interface {
 //		$len() int
 //		$get(key TKey) (TValue, bool)
 //		$set(key TKey, value TValue)
 //	}
 //
-// Note: Doesn't currently require Key to be comparable as defined in reflect.
+// Note: Maps are not comparable so equal is not defined.
 func (b *bakerImp) BakeMap() constructs.InterfaceDecl {
 	return bakeOnce(b, `Map[TKey comparable, TValue any]`, func() constructs.InterfaceDecl {
 		pkg := b.BakeBuiltin()
@@ -398,7 +400,10 @@ func (b *bakerImp) BakeMap() constructs.InterfaceDecl {
 //
 //	type pointer[T any] interface {
 //		$deref() T
+//		$equal(other any) bool
 //	}
+//
+// Note: Doesn't have `equal` method despite pointers being comparable.
 func (b *bakerImp) BakePointer() constructs.InterfaceDecl {
 	return bakeOnce(b, `Pointer[T any]`, func() constructs.InterfaceDecl {
 		pkg := b.BakeBuiltin()
@@ -447,6 +452,8 @@ func (b *bakerImp) BakePointer() constructs.InterfaceDecl {
 //		$real() float32
 //		$imag() float32
 //	}
+//
+// Note: Doesn't have `equal` method despite complex being comparable.
 func (b *bakerImp) BakeComplex64() constructs.InterfaceDecl {
 	return bakeOnce(b, `complex64`, func() constructs.InterfaceDecl {
 		pkg := b.BakeBuiltin()
@@ -498,6 +505,8 @@ func (b *bakerImp) BakeComplex64() constructs.InterfaceDecl {
 //		$real() float64
 //		$imag() float64
 //	}
+//
+// Note: Doesn't have `equal` method despite complex being comparable.
 func (b *bakerImp) BakeComplex128() constructs.InterfaceDecl {
 	return bakeOnce(b, `complex128`, func() constructs.InterfaceDecl {
 		pkg := b.BakeBuiltin()
@@ -557,7 +566,7 @@ func (b *bakerImp) BakeError() constructs.InterfaceDecl {
 			Type: b.bakeBasic(types.String),
 		})
 
-		// func Error() string
+		// Error() string
 		errFunc := b.proj.NewAbstract(constructs.AbstractArgs{
 			Name:     `Error`,
 			Exported: true,
@@ -581,17 +590,38 @@ func (b *bakerImp) BakeError() constructs.InterfaceDecl {
 	})
 }
 
-// BakeComparableAbstract bakes in an abstract method for a comparable interface
-// to represent a Go comparable.
+// BakeComparableAbstract bakes in an abstract method, equal,
+// for a comparable interface to represent a Go comparable.
 //
-//	$compare(other any) int
+//	$equal(other any) bool
 func (b *bakerImp) BakeComparableAbstract() constructs.Abstract {
 	return bakeOnce(b, `comparableAbstract`, func() constructs.Abstract {
+
+		// Construct the full comparable so that anything using just the
+		// abstract can later be determined  that it inherits the comparable.
+		return b.BakeComparable().Interface().Abstracts()[0]
+	})
+}
+
+// BakeComparable bakes in an interface to represent a Go comparable.
+//
+// The comparable types have `==` and `!=` operators. The `equal` function
+// therefore returns true for equal and false for not equal.
+// This is a subset of ordered types that also have `<`, `>`, `<=`, and `>=`
+// operators.
+//
+//	type comparable interface {
+//		$equal(other any) bool
+//	}
+//
+// See https://go.dev/ref/spec#Comparison_operators
+func (b *bakerImp) BakeComparable() constructs.InterfaceDecl {
+	return bakeOnce(b, `comparable`, func() constructs.InterfaceDecl {
 		pkg := b.BakeBuiltin()
 
-		// <unnamed> int
+		// <unnamed> bool
 		intArg := b.proj.NewArgument(constructs.ArgumentArgs{
-			Type: b.bakeBasic(types.Int),
+			Type: b.bakeBasic(types.Bool),
 		})
 
 		// other any
@@ -600,9 +630,9 @@ func (b *bakerImp) BakeComparableAbstract() constructs.Abstract {
 			Type: b.BakeAny(),
 		})
 
-		// func $compare(other any) int
-		return b.proj.NewAbstract(constructs.AbstractArgs{
-			Name:     innate.Compare,
+		// $equal(other any) bool
+		cmpFunc := b.proj.NewAbstract(constructs.AbstractArgs{
+			Name:     innate.Equal,
 			Exported: true,
 			Signature: b.proj.NewSignature(constructs.SignatureArgs{
 				Params:  []constructs.Argument{otherArg},
@@ -610,20 +640,6 @@ func (b *bakerImp) BakeComparableAbstract() constructs.Abstract {
 				Package: pkg.Source(),
 			}),
 		})
-	})
-}
-
-// BakeComparable bakes in an interface to represent a Go comparable.
-//
-//	type comparable interface {
-//		$compare(other any) int
-//	}
-func (b *bakerImp) BakeComparable() constructs.InterfaceDecl {
-	return bakeOnce(b, `comparable`, func() constructs.InterfaceDecl {
-		pkg := b.BakeBuiltin()
-
-		// func $compare(other any) int
-		cmpFunc := b.BakeComparableAbstract()
 
 		// comparable
 		return b.proj.NewInterfaceDecl(constructs.InterfaceDeclArgs{
