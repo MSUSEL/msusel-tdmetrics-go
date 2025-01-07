@@ -2,7 +2,8 @@ package $builtin {
   path: $builtin;
 
   interface List<any T> {
-    implements: any;
+    // TODO: Should only be comparable not any since comparable should inherit any.
+    implements: any, comparable;
     $len() int;
     $get(int index) T;
     $set(int index, T value);
@@ -11,7 +12,7 @@ package $builtin {
   inst List<Pointer<int>>
 
   interface Map<comparable TKey, any TValue> {
-    implements: any;
+    implements: any, comparable;
     $len() int;
     $get(TKey key)(TValue value, bool found);
     $set(TKey key, TValue value);
@@ -19,14 +20,13 @@ package $builtin {
   inst Map<string, Pointer<int>>
 
   interface Pointer<any T> {
-    implements: any;
+    implements: any, comparable;
     $deref() T;
   }
   inst Pointer<int>
 
   interface comparable {
-    implements: any;
-    $compare(any other) int;
+    $equal(any other) bool;
   }
 }
 

@@ -68,14 +68,24 @@ public class InterfaceDesc : ITypeDesc, IInitializable {
             return;
         }
 
-        bool hasAbs    = this.Abstracts.Count > 0;
-        bool hasExact  = this.Exact.Count > 0;
-        bool hasApprox = this.Approx.Count > 0;
+        bool hasAbs       = this.Abstracts.Count > 0;
+        bool hasExact     = this.Exact.Count > 0;
+        bool hasApprox    = this.Approx.Count > 0;
+        bool hasInherits  = this.Inherits.Count > 0;
+        bool showInherits = j.Long && hasInherits;
+        bool showParens   = showInherits || hasAbs;
+        Journal j2 = j;
 
-        if (hasAbs) j.WriteLine("{");
-        Journal j2 = j.Indent.AsShort;
-        if (j.Long)
+        if (showParens) {
+            j.WriteLine("{");
+            j2 = j.Indent.AsShort;
+        }
+        if (showInherits)
             j2.WriteLine(this.Inherits, prefix: "implements: ", suffix: ";");
+        if (!hasAbs && !hasExact && !hasApprox) {
+            if (showParens) j2.WriteLine("any");
+            else j2.Write("any");
+        }
         if (hasExact || hasApprox) {
             j2.Write(this.Exact, separator: "|");
             if (hasExact && hasApprox)
@@ -83,9 +93,7 @@ public class InterfaceDesc : ITypeDesc, IInitializable {
             j2.Write(this.Approx, prefix: "~", separator: "|~");
             if (hasAbs) j2.WriteLine(";");
         }
-        if (hasAbs) {
-            j2.AsLong.WriteLine(this.Abstracts, suffix: ";", separator: ";\n");
-            j.Write("}");
-        }
+        j2.AsLong.WriteLine(this.Abstracts, suffix: ";", separator: ";\n");
+        if (showParens) j.Write("}");
     }
 }

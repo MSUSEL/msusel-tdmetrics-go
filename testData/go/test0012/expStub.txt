@@ -1,3 +1,11 @@
+package $builtin {
+  path: $builtin;
+
+  interface comparable {
+    $equal(any other) bool;
+  }
+}
+
 package main {
   path: command-line-arguments;
 
@@ -6,6 +14,7 @@ package main {
       String() string;
     };
     ~int;
+    $equal(any other) bool;
     String() string;
   }
 
@@ -16,5 +25,6 @@ package main {
 
   Z<X T>(T x);
   inst Z<Y>(Y x) // TODO: No inst given
+
   main();
 }
