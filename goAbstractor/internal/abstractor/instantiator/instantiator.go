@@ -187,37 +187,47 @@ func applyToSlice[T any, S ~[]T](s S, handle func(T) T) S {
 }
 
 func (i *instantiator) Abstract(a constructs.Abstract) constructs.Abstract {
-	return i.proj.NewAbstract(constructs.AbstractArgs{
+	a2 := i.proj.NewAbstract(constructs.AbstractArgs{
 		Name:      a.Name(),
 		Exported:  a.Exported(),
 		Signature: i.Signature(a.Signature()),
 	})
+	i.log.Logf(`|- create Abstract: %v`, a2)
+	return a2
 }
 
 func (i *instantiator) Argument(a constructs.Argument) constructs.Argument {
-	return i.proj.NewArgument(constructs.ArgumentArgs{
+	a2 := i.proj.NewArgument(constructs.ArgumentArgs{
 		Name: a.Name(),
 		Type: i.TypeDesc(a.Type()),
 	})
+	i.log.Logf(`|- create Argument: %v`, a2)
+	return a2
 }
 
 func (i *instantiator) Field(f constructs.Field) constructs.Field {
-	return i.proj.NewField(constructs.FieldArgs{
+	f2 := i.proj.NewField(constructs.FieldArgs{
 		Name:     f.Name(),
 		Exported: f.Exported(),
 		Type:     i.TypeDesc(f.Type()),
 		Embedded: f.Embedded(),
 	})
+	i.log.Logf(`|- create Field: %v`, f2)
+	return f2
 }
 
 func (i *instantiator) InterfaceInst(in constructs.InterfaceInst) constructs.TypeDesc {
 	decl := in.Generic()
-	return i.typeDecl(decl, decl.TypeParams(), in.InstanceTypes())
+	in2 := i.typeDecl(decl, decl.TypeParams(), in.InstanceTypes())
+	i.log.Logf(`|- create InterfaceInst: %v`, in2)
+	return in2
 }
 
 func (i *instantiator) ObjectInst(in constructs.ObjectInst) constructs.TypeDesc {
 	decl := in.Generic()
-	return i.typeDecl(decl, decl.TypeParams(), in.InstanceTypes())
+	in2 := i.typeDecl(decl, decl.TypeParams(), in.InstanceTypes())
+	i.log.Logf(`|- create ObjectInst: %v`, in2)
+	return in2
 }
 
 func (i *instantiator) InterfaceDecl(decl constructs.InterfaceDecl) constructs.TypeDesc {
@@ -225,7 +235,9 @@ func (i *instantiator) InterfaceDecl(decl constructs.InterfaceDecl) constructs.T
 	for i, tp := range decl.TypeParams() {
 		tps[i] = tp
 	}
-	return i.typeDecl(decl, decl.TypeParams(), tps)
+	decl2 := i.typeDecl(decl, decl.TypeParams(), tps)
+	i.log.Logf(`|- create InterfaceDecl: %v`, decl2)
+	return decl2
 }
 
 func (i *instantiator) Object(decl constructs.Object) constructs.TypeDesc {
@@ -233,7 +245,9 @@ func (i *instantiator) Object(decl constructs.Object) constructs.TypeDesc {
 	for i, tp := range decl.TypeParams() {
 		tps[i] = tp
 	}
-	return i.typeDecl(decl, decl.TypeParams(), tps)
+	decl2 := i.typeDecl(decl, decl.TypeParams(), tps)
+	i.log.Logf(`|- create Object: %v`, decl2)
+	return decl2
 }
 
 func (i *instantiator) getInstanceTypeChange(tps []constructs.TypeDesc) ([]constructs.TypeDesc, bool) {
@@ -334,13 +348,15 @@ func (i *instantiator) createInstance(realType types.Type) constructs.Construct 
 }
 
 func (i *instantiator) InterfaceDesc(it constructs.InterfaceDesc) constructs.InterfaceDesc {
-	return i.proj.NewInterfaceDesc(constructs.InterfaceDescArgs{
+	it2 := i.proj.NewInterfaceDesc(constructs.InterfaceDescArgs{
 		Hint:      it.Hint(),
 		Abstracts: applyToSlice(it.Abstracts(), i.Abstract),
 		Exact:     applyToSlice(it.Exact(), i.TypeDesc),
 		Approx:    applyToSlice(it.Approx(), i.TypeDesc),
 		Package:   i.decl.Package().Source(),
 	})
+	i.log.Logf(`|- create InterfaceDesc: %v`, it2)
+	return it2
 }
 
 func (i *instantiator) TempReference(r constructs.TempReference) constructs.TypeDesc {
@@ -356,28 +372,34 @@ func (i *instantiator) TempReference(r constructs.TempReference) constructs.Type
 	if found {
 		return typ
 	}
-	return i.proj.NewTempReference(constructs.TempReferenceArgs{
+	r2 := i.proj.NewTempReference(constructs.TempReferenceArgs{
 		PackagePath:   r.PackagePath(),
 		Name:          r.Name(),
 		InstanceTypes: instTp,
 		Package:       i.decl.Package().Source(),
 	})
+	i.log.Logf(`|- create TempReference: %v`, r2)
+	return r2
 }
 
 func (i *instantiator) Signature(s constructs.Signature) constructs.Signature {
-	return i.proj.NewSignature(constructs.SignatureArgs{
+	s2 := i.proj.NewSignature(constructs.SignatureArgs{
 		Variadic: s.Variadic(),
 		Params:   applyToSlice(s.Params(), i.Argument),
 		Results:  applyToSlice(s.Results(), i.Argument),
 		Package:  i.decl.Package().Source(),
 	})
+	i.log.Logf(`|- create Signature: %v`, s2)
+	return s2
 }
 
 func (i *instantiator) StructDesc(s constructs.StructDesc) constructs.StructDesc {
-	return i.proj.NewStructDesc(constructs.StructDescArgs{
+	s2 := i.proj.NewStructDesc(constructs.StructDescArgs{
 		Fields:  applyToSlice(s.Fields(), i.Field),
 		Package: i.decl.Package().Source(),
 	})
+	i.log.Logf(`|- create StructDesc: %v`, s2)
+	return s2
 }
 
 func (i *instantiator) TypeParam(tp constructs.TypeParam) constructs.TypeDesc {

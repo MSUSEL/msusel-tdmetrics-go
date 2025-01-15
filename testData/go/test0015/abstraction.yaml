@@ -1,0 +1,116 @@
+{
+  language: go,
+  abstracts: [
+    { name: $equal, signature: 7, exported: true }, # 1. $equal(other any) bool
+    { name: $get,   signature: 3, exported: true }, # 2. $get(index int)(value T <any>)
+    { name: $get,   signature: 4, exported: true }, # 3. $get(index int)(value T <comparable>)
+    { name: $len,   signature: 2, exported: true }, # 4. $len() int
+    { name: $set,   signature: 5, exported: true }, # 5. $set(index int, value T <any>)
+    { name: $set,   signature: 6, exported: true }  # 6. $set(index int, value T <comparable>)
+  ],
+  arguments: [
+    {              type: basic1         }, #  1. <unnamed> bool
+    {              type: basic2         }, #  2. <unnamed> int
+    {              type: interfaceDecl1 }, #  3. <unnamed> List[T <any>]
+    {              type: interfaceInst1 }, #  4. <unnamed> List[T <comparable>]
+    { name: index, type: basic2         }, #  5. index int
+    { name: other, type: interfaceDesc1 }, #  6. other any
+    { name: t,     type: interfaceDecl1 }, #  7. t List[T <any>]
+    { name: t,     type: interfaceInst1 }, #  8. t List[T <comparable>]
+    { name: value, type: typeParam2     }, #  9. value T <any>
+    { name: value, type: typeParam3     }  # 10. value T <comparable>
+  ],
+  basics: [ bool, int ],
+  interfaceDecls: [
+    { # 1. $builtin.List[T any]{ $len; $get; $set }
+      name: List, package: 1, interface: 3, exported: true,
+      typeParams: [ 2 ], instances: [ 1 ],
+    },
+    { # 2. $builtin.comparable{ $equal }
+      name: comparable, package: 1, interface: 2, exported: true
+    }
+  ],
+  interfaceDescs: [
+    { }, # 1. any
+    {    # 2. [comparable] interface{ $equal }
+      abstracts: [ 1 ], hint: comparable
+    },
+    { # 3. [list] interface[T <any>]{ $len; $get; $set }
+      abstracts: [ 4, 2, 5 ], hint: list,
+      TODO: "TODO: Should inherit only `comparable` or `any`",
+      inherits: [ 1, 2 ]
+    },
+    { # 4. [list] interface[T <comparable>]{ $len; $get; $set }
+      abstracts: [ 4, 3, 6 ], hint: list,
+      TODO: "TODO: Should inherit only `comparable` or `any`",
+      inherits: [ 1, 2 ]
+    }
+  ],
+  interfaceInsts: [
+    { # 1. List[comparable]
+      generic: 1, instanceTypes: [ typeParam3 ], resolved: 4
+    }
+  ],
+  methodInsts: [
+    { # 1. main.AsSlice[int](t List[int]) List[int]
+      TODO: "Fix that this has `List[T <comparable>]` instead `List[int]`, used dump to see",
+      generic: 1, instanceTypes: [ basic2 ], resolved: 8
+    }
+  ],
+  methods: [
+    { # 1. main.AsSlice[T components](t List[T <any>]) List[T <any>]
+      name: AsSlice, package: 2, signature: 9, typeParams: [ 1 ],
+      exported: true, loc: 8, metrics: 1, instances: [ 1 ]
+    },
+    { # 2. main.main()
+      name: main, package: 2, signature: 1,
+      loc: 12, metrics: 2
+    }
+  ],
+  metrics: [
+    { # 1. metrics for `AsSlice`
+      codeCount: 3, complexity: 1, indents: 1, lineCount: 3, loc: 8,
+      reads: [ interfaceDecl2 ]
+    },
+    { # 2. metrics for `main`
+      codeCount: 3, complexity: 1, indents: 1, lineCount: 3, loc: 12,
+      sideEffect: true,
+      invokes: [ methodInst1 ]
+    }
+  ],
+  packages: [
+    { # 1. $builtin package
+      name: $builtin, path: $builtin,
+      interfaces: [ 1, 2 ]
+    },
+    { # 2. main package
+      name: main, path: command-line-arguments,
+      methods: [ 1, 2 ],
+    }
+  ],
+  signatures: [
+    {},                                 # 1. func()
+    { results: [ 2 ] },                 # 2. func() int
+    { params: [ 5 ], results: [  9 ] }, # 3. func(index int)(value T <any>)
+    { params: [ 5 ], results: [ 10 ] }, # 4. func(index int)(value T <comparable>)
+    { params: [ 5,  9 ] },              # 5. func(index int, value T <any>)
+    { params: [ 5, 10 ] },              # 6. func(index int, value T <comparable>)
+    { params: [ 6 ], results: [ 1 ] },  # 7. func(other any) bool
+    {
+      params: [ 7 ], results: [ 3 ],    # 8. func(t List[T <any>]) List[T <any>]
+      variadic: true
+    },
+    {
+      params: [ 8 ], results: [ 4 ],    # 9. func(t List[T <comparable>]) List[T <comparable>]
+      variadic: true
+    }
+  ],
+  typeParams: [
+    { name: T, type: interfaceDecl2 }, # 1. T comparable
+    { name: T, type: interfaceDesc1 }, # 2. T any
+    { name: T, type: interfaceDesc2 }  # 3. T comparable (the type description)
+  ],
+  locs: {
+    '1': main.go
+  }
+}

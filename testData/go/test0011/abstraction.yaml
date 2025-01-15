@@ -215,7 +215,7 @@
     }
   ],
   objectInsts: [
-    { # 1. main.Set[string, V int, M Map[string, Pointer[int]]]
+    { # 1. main.Set[K string, V int, M Map[string, Pointer[int]]]
       generic: 2, resData: 2, resInterface: 18,
       instanceTypes: [ basic3, basic2, interfaceInst8 ],
       methods: [ 2 ]
@@ -259,7 +259,7 @@
     {},                                      #  1. func()()
     { results: [ 2 ] },                      #  2. func() int
     { results: [ 3, 4 ] },                   #  3. func()(List[T <any>], List[Pointer[T]])
-    { results: [ 3, 5 ] },                   #  4. func()(List[T <any>], List[Pointer[int]])
+    { results: [ 3, 5 ] },                   #  4. func()(List[T <any>], List[Pointer[int]]) // TODO: Should be List[string]?
     { results: [ 7, 6 ] },                   #  5. func()(List[K <any>], List[Pointer[V <any>]])
     { results: [ 8 ] },                      #  6. func() T <any>
     { results: [ 9 ] },                      #  7. func() V <any>

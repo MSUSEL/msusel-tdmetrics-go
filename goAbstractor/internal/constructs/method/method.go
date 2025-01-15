@@ -204,6 +204,8 @@ func (m *methodImp) String() string {
 		buf.WriteString(enumerator.Enumerate(m.typeParams...).Join(`, `))
 		buf.WriteString(`]`)
 	}
-	buf.WriteString(`(--)`)
+	sig := m.signature.String()
+	sig, _ = strings.CutPrefix(sig, `func`)
+	buf.WriteString(sig)
 	return buf.String()
 }

@@ -97,3 +97,16 @@ type InterfaceDescFactory interface {
 	NewInterfaceDesc(args InterfaceDescArgs) InterfaceDesc
 	InterfaceDescs() collections.ReadonlySortedSet[InterfaceDesc]
 }
+
+// IsAny determines if the given type is an `any` type.
+func IsAny(a types.Type) bool {
+	ai, ok := a.(*types.Interface)
+	return ok && ai.Empty() && !ai.IsComparable()
+}
+
+// IsComparable determines if the given type is a `comparable` type.
+// This will be false if the type is comparable but not empty.
+func IsComparable(a types.Type) bool {
+	ai, ok := a.(*types.Interface)
+	return ok && ai.NumMethods() <= 0 && ai.NumEmbeddeds() <= 0 && ai.IsComparable()
+}

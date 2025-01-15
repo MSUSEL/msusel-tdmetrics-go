@@ -86,7 +86,7 @@ public class ObjectDecl : IObject, IDeclaration, IInitializable {
             j.Indent.Write(this.Methods, suffix: ";\n", separator: ";\n");
             j.Write("}");
             foreach (ObjectInst inst in this.Instances) {
-                if (inst.IsConcrete())
+                if (inst.IsConcrete(true))
                     j.WriteLine().AsShort.Write("inst ").Write(inst);
             }
         }

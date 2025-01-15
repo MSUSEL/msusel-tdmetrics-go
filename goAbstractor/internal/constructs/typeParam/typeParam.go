@@ -21,6 +21,15 @@ type typeParamImp struct {
 func newTypeParam(args constructs.TypeParamArgs) constructs.TypeParam {
 	assert.ArgValidId(`name`, args.Name)
 	assert.ArgNotNil(`type`, args.Type)
+
+	// So that type params will match correctly when reading from types.Type
+	// and from ast.Node, always use the type description for interfaces
+	// and not the declarations.
+	if itDecl, ok := args.Type.(constructs.InterfaceDecl); ok {
+		args.Type = itDecl.Interface()
+		assert.ArgNotNil(`decl.type`, args.Type)
+	}
+
 	return &typeParamImp{
 		name: args.Name,
 		typ:  args.Type,

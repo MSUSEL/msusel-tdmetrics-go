@@ -28,8 +28,9 @@ func New(
 	curPkg constructs.Package,
 	tpReplacer map[*types.TypeParam]*types.TypeParam,
 ) Converter {
+	log2 := log.Group(`converter`).Prefix(`|  `)
 	return &convImp{
-		log:        log,
+		log:        log2,
 		baker:      baker,
 		proj:       proj,
 		curPkg:     curPkg,
@@ -46,6 +47,27 @@ type convImp struct {
 }
 
 func (c *convImp) ConvertType(t types.Type) constructs.TypeDesc {
+	c.log.Logf("convert type: %v", t)
+	t2 := c.convertType(t)
+	c.log.Logf("|  result: %v", t2)
+	return t2
+}
+
+func (c *convImp) ConvertSignature(t *types.Signature) constructs.Signature {
+	c.log.Logf("convert signature: %v", t)
+	t2 := c.convertSignature(t)
+	c.log.Logf("|  result: %v", t2)
+	return t2
+}
+
+func (c *convImp) ConvertInstanceTypes(t *types.TypeList) []constructs.TypeDesc {
+	c.log.Logf("convert instance types: %v", t)
+	t2 := c.convertInstanceTypes(t)
+	c.log.Logf("|  result: %v", t2)
+	return t2
+}
+
+func (c *convImp) convertType(t types.Type) constructs.TypeDesc {
 	switch t2 := t.(type) {
 	case *types.Alias:
 		return c.convertAlias(t2)
@@ -64,7 +86,7 @@ func (c *convImp) ConvertType(t types.Type) constructs.TypeDesc {
 	case *types.Pointer:
 		return c.convertPointer(t2)
 	case *types.Signature:
-		return c.ConvertSignature(t2)
+		return c.convertSignature(t2)
 	case *types.Slice:
 		return c.convertSlice(t2)
 	case *types.Struct:
@@ -81,11 +103,11 @@ func (c *convImp) ConvertType(t types.Type) constructs.TypeDesc {
 }
 
 func (c *convImp) convertAlias(t *types.Alias) constructs.TypeDesc {
-	return c.ConvertType(t.Rhs())
+	return c.convertType(t.Rhs())
 }
 
 func (c *convImp) convertArray(t *types.Array) constructs.TypeDesc {
-	elem := c.ConvertType(t.Elem())
+	elem := c.convertType(t.Elem())
 	generic := c.baker.BakeList()
 	return instantiator.InterfaceDecl(c.log, c.proj, t.Underlying(), generic, elem)
 }
@@ -104,7 +126,7 @@ func (c *convImp) convertBasic(t *types.Basic) constructs.TypeDesc {
 }
 
 func (c *convImp) convertChan(t *types.Chan) constructs.TypeDesc {
-	elem := c.ConvertType(t.Elem())
+	elem := c.convertType(t.Elem())
 	generic := c.baker.BakeChan()
 	return instantiator.InterfaceDecl(c.log, c.proj, t.Underlying(), generic, elem)
 }
@@ -112,11 +134,11 @@ func (c *convImp) convertChan(t *types.Chan) constructs.TypeDesc {
 func (c *convImp) convertInterface(t *types.Interface) constructs.InterfaceDesc {
 	t.Complete()
 
-	if t.Empty() {
-		if t.IsComparable() {
-			return c.baker.BakeComparable().Interface()
-		}
+	if constructs.IsAny(t) {
 		return c.baker.BakeAny()
+	}
+	if constructs.IsComparable(t) {
+		return c.baker.BakeComparable().Interface()
 	}
 
 	h := hint.None
@@ -131,7 +153,7 @@ func (c *convImp) convertInterface(t *types.Interface) constructs.InterfaceDesc 
 	pinned := false
 	for i := range t.NumMethods() {
 		f := t.Method(i)
-		sig := c.ConvertSignature(f.Type().(*types.Signature))
+		sig := c.convertSignature(f.Type().(*types.Signature))
 		abstract := c.proj.NewAbstract(constructs.AbstractArgs{
 			Name:      f.Name(),
 			Exported:  f.Exported(),
@@ -168,8 +190,8 @@ func (c *convImp) convertInterface(t *types.Interface) constructs.InterfaceDesc 
 }
 
 func (c *convImp) convertMap(t *types.Map) constructs.TypeDesc {
-	key := c.ConvertType(t.Key())
-	value := c.ConvertType(t.Elem())
+	key := c.convertType(t.Key())
+	value := c.convertType(t.Elem())
 	generic := c.baker.BakeMap()
 	return instantiator.InterfaceDecl(c.log, c.proj, t.Underlying(), generic, key, value)
 }
@@ -190,7 +212,7 @@ func (c *convImp) convertNamed(t *types.Named) constructs.TypeDesc {
 	}
 
 	// Get any type parameters.
-	instanceTp := c.ConvertInstanceTypes(t.TypeArgs())
+	instanceTp := c.convertInstanceTypes(t.TypeArgs())
 
 	// Check if the reference can already be found.
 	typ, found := c.proj.FindType(pkgPath, name, instanceTp, true, false)
@@ -220,25 +242,26 @@ func (c *convImp) convertNamed(t *types.Named) constructs.TypeDesc {
 }
 
 func (c *convImp) convertPointer(t *types.Pointer) constructs.TypeDesc {
-	elem := c.ConvertType(t.Elem())
+	elem := c.convertType(t.Elem())
 	generic := c.baker.BakePointer()
 	return instantiator.InterfaceDecl(c.log, c.proj, t.Underlying(), generic, elem)
 }
 
-func (c *convImp) ConvertSignature(t *types.Signature) constructs.Signature {
+func (c *convImp) convertSignature(t *types.Signature) constructs.Signature {
 	// Don't output receiver or receiver type here.
 	// Don't convert type parameters here.
-	return c.proj.NewSignature(constructs.SignatureArgs{
+	t2 := c.proj.NewSignature(constructs.SignatureArgs{
 		RealType: t,
 		Variadic: t.Variadic(),
 		Params:   c.convertArguments(t.Params()),
 		Results:  c.convertArguments(t.Results()),
 		Package:  c.curPkg.Source(),
 	})
+	return t2
 }
 
 func (c *convImp) convertSlice(t *types.Slice) constructs.TypeDesc {
-	elem := c.ConvertType(t.Elem())
+	elem := c.convertType(t.Elem())
 	generic := c.baker.BakeList()
 	return instantiator.InterfaceDecl(c.log, c.proj, t.Underlying(), generic, elem)
 }
@@ -251,7 +274,7 @@ func (c *convImp) convertStruct(t *types.Struct) constructs.StructDesc {
 			field := c.proj.NewField(constructs.FieldArgs{
 				Name:     f.Name(),
 				Exported: f.Exported(),
-				Type:     c.ConvertType(f.Type()),
+				Type:     c.convertType(f.Type()),
 				Embedded: f.Embedded(),
 			})
 			fields = append(fields, field)
@@ -272,7 +295,7 @@ func (c *convImp) convertArguments(t *types.Tuple) []constructs.Argument {
 		t2 := t.At(i)
 		list[i] = c.proj.NewArgument(constructs.ArgumentArgs{
 			Name: t2.Name(),
-			Type: c.ConvertType(t2.Type()),
+			Type: c.convertType(t2.Type()),
 		})
 	}
 	return list
@@ -290,7 +313,7 @@ func (c *convImp) convertUnion(t *types.Union) constructs.InterfaceDesc {
 func (c *convImp) readUnionTerms(t *types.Union) (exact, approx []constructs.TypeDesc) {
 	for i := range t.Len() {
 		term := t.Term(i)
-		it := c.ConvertType(term.Type())
+		it := c.convertType(term.Type())
 		if term.Tilde() {
 			approx = append(approx, it)
 		} else {
@@ -308,14 +331,14 @@ func (c *convImp) convertTypeParam(t *types.TypeParam) constructs.TypeParam {
 	t2 := t.Obj().Type().Underlying()
 	return c.proj.NewTypeParam(constructs.TypeParamArgs{
 		Name: t.Obj().Name(),
-		Type: c.ConvertType(t2),
+		Type: c.convertType(t2),
 	})
 }
 
-func (c *convImp) ConvertInstanceTypes(t *types.TypeList) []constructs.TypeDesc {
+func (c *convImp) convertInstanceTypes(t *types.TypeList) []constructs.TypeDesc {
 	list := make([]constructs.TypeDesc, t.Len())
 	for i := range t.Len() {
-		list[i] = c.ConvertType(t.At(i))
+		list[i] = c.convertType(t.At(i))
 	}
 	return list
 }

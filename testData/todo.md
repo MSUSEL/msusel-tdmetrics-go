@@ -9,7 +9,7 @@
     `func init() {}`
 
 - Add circular type param test:
-    `type Set[T utils.Comparable[T]] interface {}`
+    `type Set[T Node[T]] interface {}`
 
 - Test multiple assignments:
     `x, y := 1, 2` and
@@ -22,6 +22,8 @@
 
 - Test a method expression call:
     `type foo struct{ ... }; func(f foo) bar { ⋯ }; foo.bar(foo{})`
+
+- Test `cmp.Ordered` being used as a type parameter.
 
 ## Future
 

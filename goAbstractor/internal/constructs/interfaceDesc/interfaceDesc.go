@@ -137,7 +137,21 @@ func (id *interfaceDescImp) IsGeneral() bool {
 
 func (id *interfaceDescImp) Implements(other constructs.InterfaceDesc) bool {
 	rtIt, ok := other.GoType().(*types.Interface)
-	return ok && types.Implements(id.realType, rtIt)
+	return ok && implements(id.realType, rtIt)
+}
+
+func implements(a types.Type, b *types.Interface) bool {
+	// Correct for `types.Implements` saying that `any` implements `comparable`.
+	switch {
+	case a == b:
+		return false
+	case constructs.IsAny(b):
+		return true
+	case constructs.IsComparable(a):
+		return false
+	default:
+		return types.Implements(a, b)
+	}
 }
 
 func (id *interfaceDescImp) AdditionalAbstracts() []constructs.Abstract {
@@ -220,12 +234,19 @@ func (id *interfaceDescImp) String() string {
 	if len(id.abstracts) > 0 {
 		internals += next + enumerator.Enumerate(id.abstracts...).Join(`; `)
 	}
+
 	if len(internals) <= 0 {
 		return `any`
 	}
+
 	head := ``
 	if id.IsPinned() {
 		head = id.pinnedPkg.Path() + `:`
 	}
-	return head + `interface{ ` + internals + ` }`
+
+	result := head + `interface{ ` + internals + ` }`
+	if result == `interface{ $equal func(other any) bool }` {
+		result = `comparable`
+	}
+	return result
 }
