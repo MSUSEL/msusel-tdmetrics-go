@@ -1,30 +1,33 @@
 {
   language: go,
   abstracts: [
-    { name: $equal, signature: 7, exported: true }, # 1. $equal(other any) bool
-    { name: $get,   signature: 3, exported: true }, # 2. $get(index int)(value T <any>)
-    { name: $get,   signature: 4, exported: true }, # 3. $get(index int)(value T <comparable>)
-    { name: $len,   signature: 2, exported: true }, # 4. $len() int
-    { name: $set,   signature: 5, exported: true }, # 5. $set(index int, value T <any>)
-    { name: $set,   signature: 6, exported: true }  # 6. $set(index int, value T <comparable>)
+    { name: $equal, signature: 9, exported: true }, # 1. $equal(other any) bool
+    { name: $get,   signature: 3, exported: true }, # 2. $get(index int)(value int)
+    { name: $get,   signature: 4, exported: true }, # 3. $get(index int)(value T <any>)
+    { name: $get,   signature: 5, exported: true }, # 4. $get(index int)(value T <comparable>)
+    { name: $len,   signature: 2, exported: true }, # 5. $len() int
+    { name: $set,   signature: 6, exported: true }, # 6. $set(index int, value int)
+    { name: $set,   signature: 7, exported: true }, # 7. $set(index int, value T <any>)
+    { name: $set,   signature: 8, exported: true }  # 8. $set(index int, value T <comparable>)
   ],
   arguments: [
     {              type: basic1         }, #  1. <unnamed> bool
     {              type: basic2         }, #  2. <unnamed> int
-    {              type: interfaceDecl1 }, #  3. <unnamed> List[T <any>]
-    {              type: interfaceInst1 }, #  4. <unnamed> List[T <comparable>]
+    {              type: interfaceInst1 }, #  3. <unnamed> List[int]
+    {              type: interfaceInst2 }, #  4. <unnamed> List[T <comparable>]
     { name: index, type: basic2         }, #  5. index int
     { name: other, type: interfaceDesc1 }, #  6. other any
-    { name: t,     type: interfaceDecl1 }, #  7. t List[T <any>]
-    { name: t,     type: interfaceInst1 }, #  8. t List[T <comparable>]
-    { name: value, type: typeParam2     }, #  9. value T <any>
-    { name: value, type: typeParam3     }  # 10. value T <comparable>
+    { name: t,     type: interfaceInst1 }, #  7. t List[int]
+    { name: t,     type: interfaceInst2 }, #  8. t List[T <comparable>]
+    { name: value, type: basic2         }, #  9. value T <any>
+    { name: value, type: typeParam1     }, # 10. value T <any>
+    { name: value, type: typeParam2     }  # 11. value T <comparable>
   ],
   basics: [ bool, int ],
   interfaceDecls: [
     { # 1. $builtin.List[T any]{ $len; $get; $set }
-      name: List, package: 1, interface: 3, exported: true,
-      typeParams: [ 2 ], instances: [ 1 ],
+      name: List, package: 1, interface: 4, exported: true,
+      typeParams: [ 1 ], instances: [ 1, 2 ],
     },
     { # 2. $builtin.comparable{ $equal }
       name: comparable, package: 1, interface: 2, exported: true
@@ -33,33 +36,39 @@
   interfaceDescs: [
     { }, # 1. any
     {    # 2. [comparable] interface{ $equal }
-      abstracts: [ 1 ], hint: comparable
+      abstracts: [ 1 ], hint: comparable,
+      inherits: [ 1 ],
+      TODO: "Should inherit `any`"
     },
-    { # 3. [list] interface[T <any>]{ $len; $get; $set }
-      abstracts: [ 4, 2, 5 ], hint: list,
-      TODO: "TODO: Should inherit only `comparable` or `any`",
-      inherits: [ 1, 2 ]
+    { # 3. [list] interface[int]{ $len; $get; $set }
+      abstracts: [ 5, 2, 6 ], hint: list,
+      inherits: [ 2 ]
     },
-    { # 4. [list] interface[T <comparable>]{ $len; $get; $set }
-      abstracts: [ 4, 3, 6 ], hint: list,
-      TODO: "TODO: Should inherit only `comparable` or `any`",
-      inherits: [ 1, 2 ]
+    { # 4. [list] interface[T <any>]{ $len; $get; $set }
+      abstracts: [ 5, 3, 7 ], hint: list,
+      inherits: [ 2 ]
+    },
+    { # 5. [list] interface[T <comparable>]{ $len; $get; $set }
+      abstracts: [ 5, 4, 8 ], hint: list,
+      inherits: [ 2 ]
     }
   ],
   interfaceInsts: [
-    { # 1. List[comparable]
-      generic: 1, instanceTypes: [ typeParam3 ], resolved: 4
+    { # 1. List[int]
+      generic: 1, instanceTypes: [ basic2 ], resolved: 3
+    },
+    { # 2. List[T <comparable>]
+      generic: 1, instanceTypes: [ typeParam2 ], resolved: 5
     }
   ],
   methodInsts: [
     { # 1. main.AsSlice[int](t List[int]) List[int]
-      TODO: "Fix that this has `List[T <comparable>]` instead `List[int]`, used dump to see",
-      generic: 1, instanceTypes: [ basic2 ], resolved: 8
+      generic: 1, instanceTypes: [ basic2 ], resolved: 10
     }
   ],
   methods: [
     { # 1. main.AsSlice[T components](t List[T <any>]) List[T <any>]
-      name: AsSlice, package: 2, signature: 9, typeParams: [ 1 ],
+      name: AsSlice, package: 2, signature: 11, typeParams: [ 2 ],
       exported: true, loc: 8, metrics: 1, instances: [ 1 ]
     },
     { # 2. main.main()
@@ -91,11 +100,13 @@
   signatures: [
     {},                                 # 1. func()
     { results: [ 2 ] },                 # 2. func() int
-    { params: [ 5 ], results: [  9 ] }, # 3. func(index int)(value T <any>)
-    { params: [ 5 ], results: [ 10 ] }, # 4. func(index int)(value T <comparable>)
-    { params: [ 5,  9 ] },              # 5. func(index int, value T <any>)
-    { params: [ 5, 10 ] },              # 6. func(index int, value T <comparable>)
-    { params: [ 6 ], results: [ 1 ] },  # 7. func(other any) bool
+    { params: [ 5 ], results: [  9 ] }, # 3. func(index int)(value int)
+    { params: [ 5 ], results: [ 10 ] }, # 4. func(index int)(value T <any>)
+    { params: [ 5 ], results: [ 11 ] }, # 5. func(index int)(value T <comparable>)
+    { params: [ 5,  9 ] },              # 6. func(index int, value int)
+    { params: [ 5, 10 ] },              # 7. func(index int, value T <any>)
+    { params: [ 5, 11 ] },              # 8. func(index int, value T <comparable>)
+    { params: [ 6 ], results: [ 1 ] },  # 9. func(other any) bool
     {
       params: [ 7 ], results: [ 3 ],    # 8. func(t List[T <any>]) List[T <any>]
       variadic: true
@@ -106,9 +117,8 @@
     }
   ],
   typeParams: [
-    { name: T, type: interfaceDecl2 }, # 1. T comparable
-    { name: T, type: interfaceDesc1 }, # 2. T any
-    { name: T, type: interfaceDesc2 }  # 3. T comparable (the type description)
+    { name: T, type: interfaceDesc1 }, # 1. T any
+    { name: T, type: interfaceDesc2 }  # 2. T comparable
   ],
   locs: {
     '1': main.go
