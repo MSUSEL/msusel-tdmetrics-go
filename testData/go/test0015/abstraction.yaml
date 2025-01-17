@@ -37,20 +37,19 @@
     { }, # 1. any
     {    # 2. [comparable] interface{ $equal }
       abstracts: [ 1 ], hint: comparable,
-      inherits: [ 1 ],
-      TODO: "Should inherit `any`"
+      inherits: [ 1 ]
     },
     { # 3. [list] interface[int]{ $len; $get; $set }
       abstracts: [ 5, 2, 6 ], hint: list,
-      inherits: [ 2 ]
+      inherits: [ 1 ]
     },
     { # 4. [list] interface[T <any>]{ $len; $get; $set }
       abstracts: [ 5, 3, 7 ], hint: list,
-      inherits: [ 2 ]
+      inherits: [ 1 ]
     },
     { # 5. [list] interface[T <comparable>]{ $len; $get; $set }
       abstracts: [ 5, 4, 8 ], hint: list,
-      inherits: [ 2 ]
+      inherits: [ 1 ]
     }
   ],
   interfaceInsts: [

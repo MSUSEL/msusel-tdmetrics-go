@@ -94,13 +94,7 @@ func (r *resolverImp) GenerateInterfaces() {
 
 func (r *resolverImp) Inheritance() {
 	r.log.Log(`resolve inheritance`)
-	its := r.proj.InterfaceDescs()
-	log2 := r.log.Group(`inheritance`).Prefix(`  `)
-	in := inheritance.New(interfaceDesc.Comparer(), log2)
-	for i := range its.Count() {
-		in.Process(its.Get(i))
-	}
-	log2.Log()
+	inheritance.Resolve(r.log, interfaceDesc.Comparer(), r.proj.InterfaceDescs())
 }
 
 func (r *resolverImp) References() {

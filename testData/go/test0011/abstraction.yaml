@@ -2,8 +2,8 @@
   language: go,
   abstracts: [
     { name: $deref,   signature:  2, exported: true }, #  1. $deref() int
-    { name: $deref,   signature:  6, exported: true }, #  2. $deref() T <any>
-    { name: $deref,   signature:  7, exported: true }, #  3. $deref() V <any>
+    { name: $deref,   signature:  5, exported: true }, #  2. $deref() T <any>
+    { name: $deref,   signature:  6, exported: true }, #  3. $deref() V <any>
     { name: $equal,   signature: 26, exported: true }, #  4. $equal(other any) bool
     { name: $get,     signature:  8, exported: true }, #  5. $get(index int)(value string)
     { name: $get,     signature:  9, exported: true }, #  6. $get(index int)(value Pointer[T <any>])

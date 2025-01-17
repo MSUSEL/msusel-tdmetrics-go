@@ -134,11 +134,12 @@ func (c *convImp) convertChan(t *types.Chan) constructs.TypeDesc {
 func (c *convImp) convertInterface(t *types.Interface) constructs.InterfaceDesc {
 	t.Complete()
 
-	if constructs.IsAny(t) {
+	if t.Empty() { // any
 		return c.baker.BakeAny()
 	}
-	if constructs.IsComparable(t) {
-		return c.baker.BakeComparable().Interface()
+
+	if t.IsComparable() && t.NumMethods() <= 0 && t.NumEmbeddeds() <= 0 {
+		return c.baker.BakeComparable().Interface() // comparable
 	}
 
 	h := hint.None

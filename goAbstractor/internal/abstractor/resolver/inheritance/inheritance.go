@@ -8,15 +8,22 @@ import (
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/logger"
 )
 
+func Resolve[T Node[T]](log *logger.Logger, cmp comp.Comparer[T], its collections.ReadonlySortedSet[T]) {
+	log2 := log.Group(`inheritance`).Prefix(`  `)
+	in := New(cmp, log2)
+	for i := range its.Count() {
+		in.Process(its.Get(i))
+	}
+	log2.Log()
+}
+
 type Node[T any] interface {
 	comparable
+	AddInherits(parent T) T
+	Inherits() collections.SortedSet[T]
 
 	// Implements determines if this interface implements the other interface.
 	Implements(other T) bool
-
-	AddInherits(parent T) T
-
-	Inherits() collections.SortedSet[T]
 }
 
 type Inheritance[T Node[T]] interface {
@@ -101,12 +108,15 @@ func (in *inheritanceImp[T]) addParent(siblings collections.SortedSet[T], n T, t
 		}
 	}
 
-	if parentedSiblings {
+	switch {
+	case parentedSiblings:
 		log.Log(` └─ add: parented sibling`)
 		siblings.Add(n)
-	} else if addedToSibling {
+
+	case addedToSibling:
 		log.Log(` └─ no-op: added to sibling`)
-	} else {
+
+	default:
 		log.Log(` └─ add: default`)
 		siblings.Add(n)
 	}
@@ -124,8 +134,9 @@ func (in *inheritanceImp[T]) seekInherits(siblings collections.SortedSet[T], n T
 		if n.Implements(a) {
 			log.Logf(` + %v`, a)
 			n.AddInherits(a)
-		} else {
-			in.seekInherits(a.Inherits(), n, touched, log)
+			continue
 		}
+
+		in.seekInherits(a.Inherits(), n, touched, log)
 	}
 }

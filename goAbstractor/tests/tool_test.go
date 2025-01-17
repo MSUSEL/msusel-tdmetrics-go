@@ -122,6 +122,7 @@ func (tt *testTool) full() *testTool {
 }
 
 func (tt *testTool) dump() *testTool {
+	fmt.Println()
 	fmt.Println(tt.proj)
 	return tt
 }

@@ -93,7 +93,11 @@ func newInterfaceDesc(args constructs.InterfaceDescArgs) constructs.InterfaceDes
 				embedded = append(embedded, types.NewUnion(terms))
 			}
 
-			args.RealType = types.NewInterfaceType(methods, embedded).Complete()
+			if args.Hint == hint.Comparable && len(methods) <= 0 && len(embedded) <= 0 {
+				args.RealType = types.Universe.Lookup("comparable").Type().Underlying()
+			} else {
+				args.RealType = types.NewInterfaceType(methods, embedded).Complete()
+			}
 		}
 	}
 	assert.ArgNotNil(`real type`, args.RealType)
@@ -136,22 +140,9 @@ func (id *interfaceDescImp) IsGeneral() bool {
 }
 
 func (id *interfaceDescImp) Implements(other constructs.InterfaceDesc) bool {
-	rtIt, ok := other.GoType().(*types.Interface)
-	return ok && implements(id.realType, rtIt)
-}
-
-func implements(a types.Type, b *types.Interface) bool {
-	// Correct for `types.Implements` saying that `any` implements `comparable`.
-	switch {
-	case a == b:
-		return false
-	case constructs.IsAny(b):
-		return true
-	case constructs.IsComparable(a):
-		return false
-	default:
-		return types.Implements(a, b)
-	}
+	thisIt := id.realType
+	otherIt, ok := other.GoType().(*types.Interface)
+	return ok && types.Implements(thisIt, otherIt)
 }
 
 func (id *interfaceDescImp) AdditionalAbstracts() []constructs.Abstract {
