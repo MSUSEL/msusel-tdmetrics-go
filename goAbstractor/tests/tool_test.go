@@ -29,15 +29,17 @@ const (
 
 func newTest(t *testing.T, dir string) *testTool {
 	return &testTool{
-		t:   t,
-		dir: dir,
+		t:       t,
+		dir:     dir,
+		verbose: true, // testing.Verbose()
 	}
 }
 
 type testTool struct {
-	t    *testing.T
-	dir  string
-	proj constructs.Project
+	t       *testing.T
+	dir     string
+	verbose bool
+	proj    constructs.Project
 }
 
 func (tt *testTool) abstract(patterns ...string) *testTool {
@@ -45,9 +47,8 @@ func (tt *testTool) abstract(patterns ...string) *testTool {
 		patterns = []string{`main.go`}
 	}
 
-	verbose := true // testing.Verbose()
 	ps, err := reader.Read(&reader.Config{
-		Verbose:    verbose,
+		Verbose:    tt.verbose,
 		Dir:        pathToTestData + tt.dir,
 		Patterns:   patterns,
 		BuildFlags: []string{`-tags=test`},
@@ -58,17 +59,8 @@ func (tt *testTool) abstract(patterns ...string) *testTool {
 		Require(err)
 
 	var log *logger.Logger
-	if verbose {
-		log = logger.New()
-		// Use the group filters to show specific algorithm logs while debugging.
-		// log = log.Show(`analyze`)
-		// log = log.Show(`converter`)
-		// log = log.Show(`files`)
-		// log = log.Show(`inheritance`)
-		// log = log.Show(`instantiator`)
-		// log = log.Show(`generateInterfaces`)
-		// log = log.Show(`packages`)
-		// log = log.Show(`usages`)
+	if tt.verbose {
+		log = configLogger(logger.New())
 	}
 
 	tt.proj = abstractor.Abstract(abstractor.Config{

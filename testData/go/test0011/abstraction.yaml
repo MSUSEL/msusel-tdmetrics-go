@@ -4,137 +4,124 @@
     { name: $deref,   signature:  2, exported: true }, #  1. $deref() int
     { name: $deref,   signature:  5, exported: true }, #  2. $deref() T <any>
     { name: $deref,   signature:  6, exported: true }, #  3. $deref() V <any>
-    { name: $equal,   signature: 26, exported: true }, #  4. $equal(other any) bool
-    { name: $get,     signature:  8, exported: true }, #  5. $get(index int)(value string)
-    { name: $get,     signature:  9, exported: true }, #  6. $get(index int)(value Pointer[T <any>])
-    { name: $get,     signature: 10, exported: true }, #  7. $get(index int)(value Pointer[int])
-    { name: $get,     signature: 11, exported: true }, #  8. $get(index int)(value Pointer[V <any>])
-    { name: $get,     signature: 12, exported: true }, #  9. $get(index int)(value K <any>)
-    { name: $get,     signature: 13, exported: true }, # 10. $get(index int)(value T <any>)
-    { name: $get,     signature: 20, exported: true }, # 11. $get(key string)(value Pointer[int], found bool)
-    { name: $get,     signature: 22, exported: true }, # 12. $get(key V <any>)(value Pointer[TValue <any>], found bool)
-    { name: $get,     signature: 24, exported: true }, # 13. $get(key TKey <comparable>)(value TValue <any>, found bool)
-    { name: $len,     signature:  2, exported: true }, # 14. $len() int
-    { name: $set,     signature: 14, exported: true }, # 15. $set(index int, value string)
-    { name: $set,     signature: 15, exported: true }, # 16. $set(index int, value Pointer[T <any>])
-    { name: $set,     signature: 16, exported: true }, # 17. $set(index int, value Pointer[int])
-    { name: $set,     signature: 17, exported: true }, # 18. $set(index int, value Pointer[V <any>])
-    { name: $set,     signature: 18, exported: true }, # 19. $set(index int, value K <any>)
-    { name: $set,     signature: 19, exported: true }, # 20. $set(index int, value T <any>)
-    { name: $set,     signature: 21, exported: true }, # 21. $set(key string, value Pointer[int])
-    { name: $set,     signature: 23, exported: true }, # 22. $set(key K <any>, value Pointer[V <any>])
-    { name: $set,     signature: 25, exported: true }, # 23. $set(key TKey <comparable>, value TValue <any>)
-    { name: AsSlices, signature:  3, exported: true }, # 24. AsSlices()(List[T <any>], List[Pointer[T <any>]])
-    { name: AsSlices, signature:  4, exported: true }, # 25. AsSlices()(List[T <any>], List[Pointer[int]])
-    { name: AsSlices, signature:  5, exported: true }  # 26. AsSlices()(List[K <any>], List[Pointer[V <any>]])
+    { name: $equal,   signature: 23, exported: true }, #  4. $equal(other any) bool
+    { name: $get,     signature:  7, exported: true }, #  5. $get(index int)(value string)
+    { name: $get,     signature:  8, exported: true }, #  6. $get(index int)(value Pointer[int])
+    { name: $get,     signature:  9, exported: true }, #  7. $get(index int)(value Pointer[V <any>])
+    { name: $get,     signature: 10, exported: true }, #  8. $get(index int)(value K comparable)
+    { name: $get,     signature: 11, exported: true }, #  9. $get(index int)(value T <any>)
+    { name: $get,     signature: 17, exported: true }, # 10. $get(key string)(value Pointer[int], found bool)
+    { name: $get,     signature: 19, exported: true }, # 11. $get(key K <comparable>)(value Pointer[V <any>], found bool)
+    { name: $get,     signature: 21, exported: true }, # 12. $get(key TKey <comparable>)(value TValue <any>, found bool)
+    { name: $len,     signature:  2, exported: true }, # 13. $len() int
+    { name: $set,     signature: 12, exported: true }, # 14. $set(index int, value string)
+    { name: $set,     signature: 13, exported: true }, # 15. $set(index int, value Pointer[int])
+    { name: $set,     signature: 14, exported: true }, # 16. $set(index int, value Pointer[V <any>])
+    { name: $set,     signature: 15, exported: true }, # 17. $set(index int, value K <comparable>)
+    { name: $set,     signature: 16, exported: true }, # 18. $set(index int, value T <any>)
+    { name: $set,     signature: 18, exported: true }, # 19. $set(key string, value Pointer[int])
+    { name: $set,     signature: 20, exported: true }, # 20. $set(key K <any>, value Pointer[V <any>])
+    { name: $set,     signature: 22, exported: true }, # 21. $set(key TKey <comparable>, value TValue <any>)
+    { name: AsSlices, signature:  3, exported: true }, # 22. AsSlices()(List[string], List[Pointer[int]])
+    { name: AsSlices, signature:  4, exported: true }, # 23. AsSlices()(List[K comparable], List[Pointer[V <any>]])
   ],
   arguments: [
     {              type: basic1 },         #  1. <unnamed> bool
     {              type: basic2 },         #  2. <unnamed> int
-    {              type: interfaceDecl1 }, #  3. <unnamed> List[T <any>]
-    {              type: interfaceInst4 }, #  4. <unnamed> List[Pointer[T <any>]]
-    {              type: interfaceInst5 }, #  5. <unnamed> List[Pointer[int]]
-    {              type: interfaceInst6 }, #  6. <unnamed> List[Pointer[V <any>]]
-    {              type: interfaceInst7 }, #  7. <unnamed> List[K <any>]
-    {              type: typeParam5 },     #  8. <unnamed> T <any>
-    {              type: typeParam8 },     #  9. <unnamed> V <any>
-    { name: found, type: basic1 },         # 10. found bool
-    { name: index, type: basic2 },         # 11. index int
-    { name: key,   type: basic3 },         # 12. key string
-    { name: key,   type: typeParam2 },     # 13. key K <any>
-    { name: key,   type: typeParam6 },     # 14. key TKey <comparable>
-    { name: other, type: interfaceDesc1 }, # 15. other any
-    { name: s,     type: interfaceInst3 }, # 16. s List[string]
-    { name: s,     type: interfaceInst5 }, # 17. s List[Pointer[int]]
-    { name: s,     type: typeParam4 },     # 18. s S <~List[T any]>
-    { name: value, type: basic3 },         # 19. value string
-    { name: value, type: interfaceDecl3 }, # 20. value Pointer[T <any>]
-    { name: value, type: interfaceInst1 }, # 21. value Pointer[int]
-    { name: value, type: interfaceInst2 }, # 22. value Pointer[V <any>]
-    { name: value, type: typeParam2 },     # 23. value K <any>
-    { name: value, type: typeParam5 },     # 24. value T <any>
-    { name: value, type: typeParam7 }      # 25. value TValue <any>
+    {              type: interfaceInst3 }, #  3. <unnamed> List[string]
+    {              type: interfaceInst4 }, #  4. <unnamed> List[Pointer[int]]
+    {              type: interfaceInst5 }, #  5. <unnamed> List[Pointer[V <any>]]
+    {              type: interfaceInst6 }, #  6. <unnamed> List[K <comparable>]
+    {              type: typeParam4 },     #  7. <unnamed> T <any>
+    {              type: typeParam7 },     #  8. <unnamed> V <any>
+    { name: found, type: basic1 },         #  9. found bool
+    { name: index, type: basic2 },         # 10. index int
+    { name: key,   type: basic3 },         # 11. key string
+    { name: key,   type: typeParam1 },     # 12. key K <comparable>
+    { name: key,   type: typeParam5 },     # 13. key TKey <comparable>
+    { name: other, type: interfaceDesc1 }, # 14. other any
+    { name: s,     type: interfaceInst3 }, # 15. s List[string]
+    { name: s,     type: interfaceInst4 }, # 16. s List[Pointer[int]]
+    { name: s,     type: typeParam3 },     # 17. s S <~List[T any]>
+    { name: value, type: basic3 },         # 18. value string
+    { name: value, type: interfaceInst1 }, # 19. value Pointer[int]
+    { name: value, type: interfaceInst2 }, # 20. value Pointer[V <any>]
+    { name: value, type: typeParam1 },     # 21. value K <comparable>
+    { name: value, type: typeParam4 },     # 22. value T <any>
+    { name: value, type: typeParam6 }      # 23. value TValue <any>
   ],
   basics: [ bool, int, string ],
   fields: [
     { name: Set, type: objectInst1, exported: true }, # 1. Set Set[string, int, Map[string, Pointer[int]]]
-    { name: m,   type: interfaceInst8 },              # 2. m Map[string, Pointer[int]]
-    { name: m,   type: typeParam3 }                   # 3. m M <~Map[K any, Pointer[V any]]>
+    { name: m,   type: interfaceInst7 },              # 2. m Map[string, Pointer[int]]
+    { name: m,   type: typeParam2 }                   # 3. m M <~Map[K comparable, Pointer[V any]]>
   ],
   interfaceDecls: [
     { # 1. $builtin.List[T any]{ $len() int; $get(index int)(value T); $set(index int, value T) }
-      name: List, package: 1, exported: true, interface: 13,
-      typeParams: [ 5 ], instances: [ 3, 4, 5, 6, 7 ]
+      name: List, package: 1, exported: true, interface: 12,
+      typeParams: [ 4 ], instances: [ 3, 4, 5, 6 ]
     },
     { # 2. $builtin.Map[TKey comparable, TValue any]{ $len() int; $get(key TKey)(value TValue, found bool); $set(key TKey, value TValue) }
-      name: Map, package: 1, exported: true, interface: 16,
-      typeParams: [ 6, 7 ], instances: [ 8, 9 ]
+      name: Map, package: 1, exported: true, interface: 15,
+      typeParams: [ 5, 6 ], instances: [ 7, 8 ]
     },
     { # 3. $builtin.Pointer[T any]{ $deref() T <any> }
       name: Pointer, package: 1, exported: true, interface: 5,
-      typeParams: [ 5 ], instances: [ 1, 2 ]
+      typeParams: [ 4 ], instances: [ 1, 2 ]
     },
     { # 4. $builtin.comparable{ $equal(other any) bool }
       name: comparable, package: 1, exported: true, interface: 7
     }
   ],
   interfaceDescs: [
-    { # 1. any ( TODO: Why does any inherit comparer? )
-      inherits: [ 7 ]
+    { }, # 1. any
+    {    # 2. ~List[T any]
+      approx: [ interfaceDecl1 ], inherits: [ 1 ]
     },
-    { # 2. ~List[T any]
-      approx: [ interfaceDecl1 ], inherits: [ 1, 7 ]
-    },
-    { # 3. ~Map[K any, Pointer[V any]]
-      approx: [ interfaceInst9 ], inherits: [ 1, 7 ]
+    { # 3. ~Map[K comparable, Pointer[V any]]
+      approx: [ interfaceInst8 ], inherits: [ 1 ]
     },
     { # 4. interface{ $deref() int }
-      abstracts: [ 1 ], inherits: [ 1, 7 ], hint: pointer
+      abstracts: [ 1 ], inherits: [ 1 ], hint: pointer
     },
     { # 5. interface{ $deref() T <any> }
-      abstracts: [ 2 ], inherits: [ 1, 7 ], hint: pointer
+      abstracts: [ 2 ], inherits: [ 1 ], hint: pointer
     },
     { # 6. interface{ $deref() V <any> }
       abstracts: [ 3 ], inherits: [ 1 ], hint: pointer
     },
     { # 7. interface{ $compare(other any) int }
-      abstracts: [ 4 ], hint: comparable
+      abstracts: [ 4 ], inherits: [ 1 ], hint: comparable
     },
     { # 8. interface{ $len() int; $get(index int)(value string); $set(index int, value string) }
-      abstracts: [ 14, 5, 15 ], inherits: [ 1, 7 ], hint: list
+      abstracts: [ 13, 5, 14 ], inherits: [ 1 ], hint: list
     },
-    { # 9. interface{ $len() int; $get(index int)(value Pointer[T <any>]); $set(index int, value Pointer[T <any>]) }
-      abstracts: [ 14, 6, 16 ], inherits: [ 1, 7 ], hint: list
+    { # 9. interface{ $len() int; $get(index int)(value Pointer[int]); $set(index int, value Pointer[int]) }
+      abstracts: [ 13, 6, 15 ], inherits: [ 1 ], hint: list
     },
-    { # 10. interface{ $len() int; $get(index int)(value Pointer[int]); $set(index int, value Pointer[int]) }
-      abstracts: [ 14, 7, 17 ], inherits: [ 1, 7 ], hint: list
+    { # 10. interface{ $len() int; $get(index int)(value Pointer[V <any>]); $set(index int, value Pointer[V <any>]) }
+      abstracts: [ 13, 7, 16 ], inherits: [ 1 ], hint: list
     },
-    { # 11. interface{ $len() int; $get(index int)(value Pointer[V <any>]); $set(index int, value Pointer[V <any>]) }
-      abstracts: [ 14, 8, 18 ], inherits: [ 1, 7 ], hint: list
+    { # 11. interface{ $len() int; $get(index int)(value K <comparable>); $set(index int, value K <comparable>) }
+      abstracts: [ 13, 8, 17 ], inherits: [ 1 ], hint: list
     },
-    { # 12. interface{ $len() int; $get(index int)(value K <any>); $set(index int, value K <any>) }
-      abstracts: [ 14, 9, 19 ], inherits: [ 1, 7 ], hint: list
+    { # 12. interface{ $len() int; $get(index int)(value T <any>); $set(index int, value T <any>) }
+      abstracts: [ 13, 9, 18 ], inherits: [ 1 ], hint: list
     },
-    { # 13. interface{ $len() int; $get(index int)(value T <any>); $set(index int, value T <any>) }
-      abstracts: [ 14, 10, 20 ], inherits: [ 1, 7 ], hint: list
+    { # 13. interface{ $len() int; $get(key string)(value Pointer[int], found bool); $set(key string, value Pointer[int]) }
+      abstracts: [ 13, 10, 19 ], inherits: [ 1 ], hint: map
     },
-    { # 14. interface{ $len() int; $get(key string)(value Pointer[int], found bool); $set(key string, value Pointer[int]) }
-      abstracts: [ 14, 11, 21 ], inherits: [ 1, 7 ], hint: map
+    { # 14. interface{ $len() int; $get(key K <comparable>)(value Pointer[V <any>], found bool); $set(key K <comparable>, value V <any>) }
+      abstracts: [ 13, 11, 20 ], inherits: [ 1 ], hint: map
     },
-    { # 15. interface{ $len() int; $get(key K <any>)(value Pointer[V <any>], found bool); $set(key K <any>, value Pointer[V <any>]) }
-      abstracts: [ 14, 12, 22 ], inherits: [ 1, 7 ], hint: map
+    { # 15. interface{ $len() int; $get(key TKey <comparable>)(value TValue <any>, found bool); $set(key TKey <comparable>, value TValue <any>) }
+      abstracts: [ 13, 12, 21 ], inherits: [ 1 ], hint: map
     },
-    { # 16. interface{ $len() int; $get(key TKey <comparable>)(value TValue <any>, found bool); $set(key TKey <comparable>, value TValue <any>) }
-      abstracts: [ 14, 13, 23 ], inherits: [ 1, 7 ], hint: map
+    { # 16. interface{ AsSlices()(List[string], List[Pointer[int]]) }
+      abstracts: [ 22 ], inherits: [ 1 ]
     },
-    { # 17. interface{ AsSlices()(List[T <any>], List[Pointer[T <any>]]) }
-      abstracts: [ 24 ], inherits: [ 1, 7 ]
-    },
-    { # 18. interface{ AsSlices()(List[T <any>], List[Pointer[int]]) }
-      abstracts: [ 25 ], inherits: [ 1, 7 ]
-    },
-    { # 19. interface{ AsSlices()(List[K <any>], List[Pointer[V <any>]]) }
-      abstracts: [ 26 ], inherits: [ 1, 7 ]
+    { # 17. interface{ AsSlices()(List[K <comparable>], List[Pointer[V <any>]]) }
+      abstracts: [ 23 ], inherits: [ 1 ]
     }
   ],
   interfaceInsts: [
@@ -142,54 +129,48 @@
       generic: 3, resolved: 4, instanceTypes: [ basic2 ]
     },
     { # 2. Pointer[V any]
-      generic: 3, resolved: 6, instanceTypes: [ typeParam8 ]
+      generic: 3, resolved: 6, instanceTypes: [ typeParam7 ]
     },
     { # 3. List[string]
       generic: 1, resolved: 8, instanceTypes: [ basic3 ]
     },
-    { # 4. List[Pointer[T any]]
-      generic: 1, resolved: 9, instanceTypes: [ interfaceDecl3 ]
+    { # 4. List[Pointer[int]]
+      generic: 1, resolved: 9, instanceTypes: [ interfaceInst1 ]
     },
-    { # 5. List[Pointer[int]]
-      generic: 1, resolved: 10, instanceTypes: [ interfaceInst1 ]
+    { # 5. List[Pointer[V any]]
+      generic: 1, resolved: 10, instanceTypes: [ interfaceInst2 ]
     },
-    { # 6. List[Pointer[V any]]
-      generic: 1, resolved: 11, instanceTypes: [ interfaceInst2 ]
+    { # 6. List[K comparable]
+      generic: 1, resolved: 11, instanceTypes: [ typeParam1 ]
     },
-    { # 7. List[K any]
-      generic: 1, resolved: 12, instanceTypes: [ typeParam2 ]
+    { # 7. Map[string, Pointer[int]]
+      generic: 2, resolved: 13, instanceTypes: [ basic3, interfaceInst1 ]
     },
-    { # 8. Map[string, Pointer[int]]
-      generic: 2, resolved: 14, instanceTypes: [ basic3, interfaceInst1 ]
-    },
-    { # 9. Map[K any, Pointer[V any]]
-      generic: 2, resolved: 15, instanceTypes: [ typeParam2, interfaceInst2 ]
+    { # 8. Map[K comparable, Pointer[V any]]
+      generic: 2, resolved: 14, instanceTypes: [ typeParam1, interfaceInst2 ]
     }
   ],
   methodInsts: [
-    { # 1. (Set[K any, V any, M ~Map[K, Pointer[V]]]) AsSlice()(List[K], List[Pointer[V]])
-      generic: 1, receiver: 2, resolved: 3, instanceTypes: [ typeParam2, typeParam8, typeParam3 ]
+    { # 1. (Set[string, int, Map[string, Pointer[int]]]) AsSlice()(List[string], List[Pointer[int]])
+      generic: 1, receiver: 1, resolved: 3, instanceTypes: [ basic3, basic2, interfaceInst7 ]
     },
-    { # 2. (Set[string, int, Map[string, Pointer[int]]]) AsSlice()(List[string], List[Pointer[int]])
-      generic: 1, receiver: 1, resolved: 4, instanceTypes: [ basic3, basic2, interfaceInst8 ]
+    { # 2. PrintSlice[string, List[string]](s S)
+      generic: 2, resolved: 24, instanceTypes: [ basic3, interfaceInst3 ]
     },
-    { # 3. PrintSlice[string, List[string]](s S)
-      generic: 2, resolved: 27, instanceTypes: [ basic3, interfaceInst3 ]
-    },
-    { # 4. PrintSlice[Pointer[int], List[Pointer[int]]](s S)
-      generic: 2, resolved: 28, instanceTypes: [ interfaceInst1, interfaceInst5 ]
+    { # 3. PrintSlice[Pointer[int], List[Pointer[int]]](s S)
+      generic: 2, resolved: 25, instanceTypes: [ interfaceInst1, interfaceInst4 ]
     }
   ],
   methods: [
-    { # 1. (main.Set[K comparable, V any, M ~Map[K <any>, Pointer[TValue <any>]]]) AsSlice()(List[K], List[Pointer[TValue]])
-      name: AsSlices, package: 2, receiver: 2, signature: 5,
+    { # 1. (main.Set[K comparable, V any, M ~Map[K <comparable>, Pointer[V <any>]]]) AsSlice()(List[K], List[Pointer[V]])
+      name: AsSlices, package: 2, receiver: 2, signature: 4,
       exported: true, loc: 13, metrics: 1,
-      instances: [ 1, 2 ]
+      instances: [ 1 ]
     },
     { # 2. main.PrintSlice[T any, S ~List[T]](s S)
-      name: PrintSlice, package: 2, signature: 29,
+      name: PrintSlice, package: 2, signature: 26,
       exported: true, loc: 25, metrics: 2,
-      typeParams: [ 5, 4 ], instances:  [ 3, 4 ]
+      typeParams: [ 4, 3 ], instances:  [ 2, 3 ]
     },
     { # 3. main.main()
       name: main, package: 2, signature: 1,
@@ -199,7 +180,7 @@
   metrics: [
     { # 1. (Set) AsSlice metrics
       loc: 13, codeCount: 11, complexity: 2, indents: 12, lineCount: 11,
-      reads:  [ interfaceDecl4, objectInst2, selection4 ],
+      reads:  [ interfaceDecl4, object2, selection4 ],
       writes: [ interfaceDecl4 ]
     },
     { # 2. PrintSlice metrics
@@ -209,21 +190,15 @@
     { # 3. main metrics
       loc: 40, codeCount: 16, complexity: 1, indents: 26, lineCount: 16,
       sideEffect: true,
-      invokes: [ methodInst3, methodInst4, selection1 ],
+      invokes: [ methodInst2, methodInst3, selection1 ],
       reads:   [ object1, objectInst1 ],
       writes:  [ object1, objectInst1, selection2, selection3 ]
     }
   ],
   objectInsts: [
     { # 1. main.Set[K string, V int, M Map[string, Pointer[int]]]
-      generic: 2, resData: 2, resInterface: 18,
-      instanceTypes: [ basic3, basic2, interfaceInst8 ],
-      methods: [ 2 ]
-    },
-    { # TODO: Determine how `K` became `any` which isn't a supertype of `comparable`.
-      # 2. main.Set[K any, V any, M ~Map[K any, Pointer[V any]]]
-      generic: 2, resData: 3, resInterface: 17,
-      instanceTypes: [ typeParam2, typeParam8, typeParam3 ],
+      generic: 2, resData: 2, resInterface: 16,
+      instanceTypes: [ basic3, basic2, interfaceInst7 ],
       methods: [ 1 ]
     }
   ],
@@ -232,11 +207,11 @@
       name: Bacon, package: 2, data: 1,
       exported: true, interface: 1, loc: 36
     },
-    { # TODO: Shouldn't it be `~Map[K comparable, ...]`?
-      # 2. main.Set[K comparable, V any, M ~Map[K any, Pointer[V any]]]{ m M }
+    {
+      # 2. main.Set[K comparable, V any, M ~Map[K comparable, Pointer[V any]]]{ m M }
       name: Set, package: 2, data: 3,
-      exported: true, interface: 19, loc: 9,
-      methods: [ 1 ], typeParams: [ 1, 8, 3 ], instances: [ 1, 2 ]
+      exported: true, interface: 17, loc: 9,
+      methods: [ 1 ], typeParams: [ 1, 7, 2 ], instances: [ 1 ]
     }
   ],
   packages: [
@@ -253,51 +228,47 @@
     { name: AsSlices, origin: object1 },     # 1. Bacon.AsSlices
     { name: Set,      origin: object1 },     # 2. Bacon.Set
     { name: m,        origin: objectInst1 }, # 3. Set[string, int, Map[string, Pointer[int]]].m
-    { name: m,        origin: objectInst2 }  # 4. Set[K any, V any, M ~Map[K any, Pointer[V any]]].m // TODO: K any?
+    { name: m,        origin: object2 }      # 4. Set[K comparable, V any, M ~Map[K comparable, Pointer[V any]]].m
   ],
   signatures: [
-    {},                                      #  1. func()()
-    { results: [ 2 ] },                      #  2. func() int
-    { results: [ 3, 4 ] },                   #  3. func()(List[T <any>], List[Pointer[T]])
-    { results: [ 3, 5 ] },                   #  4. func()(List[T <any>], List[Pointer[int]]) // TODO: Should be List[string]?
-    { results: [ 7, 6 ] },                   #  5. func()(List[K <any>], List[Pointer[V <any>]])
-    { results: [ 8 ] },                      #  6. func() T <any>
-    { results: [ 9 ] },                      #  7. func() V <any>
-    { params: [ 11 ], results: [ 19 ] },     #  8. func(index int)(value string)
-    { params: [ 11 ], results: [ 20 ] },     #  9. func(index int)(value Pointer[T <any>])
-    { params: [ 11 ], results: [ 21 ] },     # 10. func(index int)(value Pointer[int])
-    { params: [ 11 ], results: [ 22 ] },     # 11. func(index int)(value Pointer[v <any>])
-    { params: [ 11 ], results: [ 23 ] },     # 12. func(index int)(value K <any>)
-    { params: [ 11 ], results: [ 24 ] },     # 13. func(index int)(value T <any>)
-    { params: [ 11, 19 ] },                  # 14. func(index int, value string)
-    { params: [ 11, 20 ] },                  # 15. func(index int, value Pointer[T <any>])
-    { params: [ 11, 21 ] },                  # 16. func(index int, value Pointer[int])
-    { params: [ 11, 22 ] },                  # 17. func(index int, value Pointer[V <any>])
-    { params: [ 11, 23 ] },                  # 18. func(index int, value K <any>)
-    { params: [ 11, 24 ] },                  # 19. func(index int, value T <any>)
-    { params: [ 12 ], results: [ 21, 10 ] }, # 20. func(key string)(value Pointer[int], found bool)
-    { params: [ 12, 21 ] },                  # 21. func(key string, value Pointer[int])
-    { params: [ 13 ], results: [ 22, 10 ] }, # 22. func(key K <any>)(value Pointer[V <any>], found bool)
-    { params: [ 13, 22 ] },                  # 23. func(key K <any>, value Pointer[V <any>])
-    { params: [ 14 ], results: [ 25, 10 ] }, # 24. func(key TKey <comparable>)(value TValue <any>, found bool)
-    { params: [ 14, 25 ] },                  # 25. func(key TKey <comparable>, value TValue <any>)
-    { params: [ 15 ], results: [ 1 ] },      # 26. func(other any) bool
-    { params: [ 16 ] },                      # 27. func(s List[string])
-    { params: [ 17 ] },                      # 28. func(s List[Pointer[int]])
-    { params: [ 18 ] }                       # 29. func(s S <~List[T <any>]>)
+    {},                                     #  1. func()()
+    { results: [ 2 ] },                     #  2. func() int
+    { results: [ 3, 4 ] },                  #  3. func()(List[string], List[Pointer[int]])
+    { results: [ 6, 5 ] },                  #  4. func()(List[K <comparable>], List[Pointer[V <any>]])
+    { results: [ 7 ] },                     #  5. func() T <any>
+    { results: [ 8 ] },                     #  6. func() V <any>
+    { params: [ 10 ], results: [ 18 ] },    #  7. func(index int)(value string)
+    { params: [ 10 ], results: [ 19 ] },    #  8. func(index int)(value Pointer[int])
+    { params: [ 10 ], results: [ 20 ] },    #  9. func(index int)(value Pointer[V <any>])
+    { params: [ 10 ], results: [ 21 ] },    # 10. func(index int)(value K <comparable>)
+    { params: [ 10 ], results: [ 22 ] },    # 11. func(index int)(value T <any>)
+    { params: [ 10, 18 ] },                 # 12. func(index int, value string)
+    { params: [ 10, 19 ] },                 # 13. func(index int, value Pointer[int])
+    { params: [ 10, 20 ] },                 # 14. func(index int, value Pointer[V <any>])
+    { params: [ 10, 21 ] },                 # 15. func(index int, value K <comparable>)
+    { params: [ 10, 22 ] },                 # 16. func(index int, value T <any>)
+    { params: [ 11 ], results: [ 19, 9 ] }, # 17. func(key string)(value Pointer[int], found bool)
+    { params: [ 11, 19 ] },                 # 18. func(key string, value Pointer[int])
+    { params: [ 12 ], results: [ 20, 9 ] }, # 19. func(key K <comparable>)(value Pointer[V <any>], found bool)
+    { params: [ 12, 20 ] },                 # 20. func(key K <comparable>, value Pointer[V <any>])
+    { params: [ 13 ], results: [ 23, 9 ] }, # 21. func(key TKey <comparable>)(value TValue <any>, found bool)
+    { params: [ 13, 23 ] },                 # 22. func(key TKey <comparable>, value TValue <any>)
+    { params: [ 14 ], results: [ 1 ] },     # 23. func(other any) bool
+    { params: [ 15 ] },                     # 24. func(s List[string])
+    { params: [ 16 ] },                     # 25. func(s List[Pointer[int]])
+    { params: [ 17 ] }                      # 26. func(s S <~List[T <any>]>)
   ],
   structDescs: [
     { fields: [ 1 ] }, # 1. struct{ Set Set[string, int, Map[string, Pointer[int]]] }
     { fields: [ 2 ] }, # 2. struct{ m Map[string, Pointer[int]] }
-    { fields: [ 3 ] }  # 3. struct{ m M <~Map[K any, Pointer[V any]]> }
+    { fields: [ 3 ] }  # 3. struct{ m M <~Map[K comparable, Pointer[V any]]> }
   ],
   typeParams: [
-    { name: K,      type: interfaceDecl4 }, # 1. K comparable
-    { name: K,      type: interfaceDesc1 }, # 2. K any
-    { name: M,      type: interfaceDesc3 }, # 3. M ~Map[K any, Pointer[V any]] // TODO: K any?
+    { name: K,      type: interfaceDesc7 }, # 1. K comparable
+    { name: M,      type: interfaceDesc3 }, # 3. M ~Map[K comparable, Pointer[V any]]
     { name: S,      type: interfaceDesc2 }, # 4. S ~List[T any]
     { name: T,      type: interfaceDesc1 }, # 5. T any
-    { name: TKey,   type: interfaceDecl4 }, # 6. TKey comparable
+    { name: TKey,   type: interfaceDesc7 }, # 6. TKey comparable
     { name: TValue, type: interfaceDesc1 }, # 7. TValue any
     { name: V,      type: interfaceDesc1 }  # 8. V any
   ],

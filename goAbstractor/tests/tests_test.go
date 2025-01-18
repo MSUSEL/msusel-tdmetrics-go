@@ -1,6 +1,23 @@
 package tests
 
-import "testing"
+import (
+	"testing"
+
+	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/logger"
+)
+
+func configLogger(log *logger.Logger) *logger.Logger {
+	// Use the group filters to show specific algorithm logs while debugging.
+	// log = log.Show(`analyze`)
+	// log = log.Show(`converter`)
+	// log = log.Show(`files`)
+	log = log.Show(`inheritance`)
+	// log = log.Show(`instantiator`)
+	// log = log.Show(`generateInterfaces`)
+	// log = log.Show(`packages`)
+	// log = log.Show(`usages`)
+	return log
+}
 
 func Test_T0001(t *testing.T) { newTest(t, `test0001`).abstract().full() }
 func Test_T0002(t *testing.T) { newTest(t, `test0002`).abstract().full() }
