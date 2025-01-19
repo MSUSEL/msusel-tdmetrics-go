@@ -11,7 +11,7 @@ func configLogger(log *logger.Logger) *logger.Logger {
 	// log = log.Show(`analyze`)
 	// log = log.Show(`converter`)
 	// log = log.Show(`files`)
-	log = log.Show(`inheritance`)
+	// log = log.Show(`inheritance`)
 	// log = log.Show(`instantiator`)
 	// log = log.Show(`generateInterfaces`)
 	// log = log.Show(`packages`)

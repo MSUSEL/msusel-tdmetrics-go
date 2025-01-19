@@ -17,6 +17,15 @@ func Resolve[T Node[T]](log *logger.Logger, cmp comp.Comparer[T], its collection
 	log2.Log()
 }
 
+type relationship int
+
+const (
+	// unknown indicates that a relationship hasn't been determined.
+	unknown relationship = iota
+	subtype
+	supertype
+)
+
 type Node[T any] interface {
 	comparable
 	AddInherits(parent T) T
@@ -54,43 +63,59 @@ func New[T Node[T]](comp comp.Comparer[T], log *logger.Logger) Inheritance[T] {
 
 func (in *inheritanceImp[T]) Process(node T) {
 	in.log.Logf(`╶─(%d) insert %v`, in.count, node)
-	touched := map[T]struct{}{node: {}}
-	in.addParent(in.roots, node, touched, in.log.Prefix(`  `))
+	relations := map[T]relationship{node: unknown}
+	in.addParent(in.roots, node, relations, in.log.Prefix(`  `))
 	in.count++
 }
 
-func (in *inheritanceImp[T]) addParent(siblings collections.SortedSet[T], n T, touched map[T]struct{}, log *logger.Logger) {
+func (in *inheritanceImp[T]) getRelationship(n, a T, relations map[T]relationship) (relationship, bool) {
+	rel, touched := relations[a]
+	if !touched {
+		switch {
+		case a.Implements(n):
+			rel = subtype
+		case n.Implements(a):
+			rel = supertype
+		default:
+			rel = unknown
+		}
+		relations[a] = rel
+	}
+	return rel, touched
+}
+
+func (in *inheritanceImp[T]) addParent(siblings collections.SortedSet[T], n T, relations map[T]relationship, log *logger.Logger) {
 	log2 := log.Prefix(` │ `)
 	addedToSibling := false
 	parentedSiblings := false
 	for i := siblings.Count() - 1; i >= 0; i-- {
 		a := siblings.Get(i)
-		if _, has := touched[a]; has {
-			// Already checked so skip it.
-			continue
-		}
-		touched[a] = struct{}{}
 
-		switch {
-		case a.Implements(n):
+		rel, touched := in.getRelationship(n, a, relations)
+		switch rel {
+		case subtype:
 			// Yi <: X, meaning `n` is a parent (sub-type) of `a`,
 			// so add `n` as a parent of `a` and don't add it here.
 			//
 			// For example: {A, B} is a parent of {A, B, C} but {A, B, C}
 			// may already have the parent {A} in it, so we have to recursively
 			// call addParent to re-parent {A} as a parent of {A, B}.
-			log.Logf(` ├─(%d) parent %v`, i, a)
-			in.addParent(a.Inherits(), n, touched, log2)
+			log.Logf(` ├─(%d) parent of %v`, i, a)
+			if touched {
+				log2.Log(` └─ skip: already checked`)
+			} else {
+				in.addParent(a.Inherits(), n, relations, log2)
+			}
 			addedToSibling = true
 
-		case n.Implements(a):
+		case supertype:
 			// Yi :> X, meaning `n` is a child (super-type) of `a`,
 			// so move `a` from this set and add `a` as a parent of `n`.
 			// This means that `n` is a parent in this set since otherwise
 			// `a` would have been a parent to another object in this set.
 			// We can simply add `a` to `n` since `a` has already been
 			// checked against the other parents, hence it was in this set.
-			log.Logf(` ├─(%d) child %v`, i, a)
+			log.Logf(` ├─(%d) child of %v`, i, a)
 			n.AddInherits(a)
 			siblings.RemoveRange(i, 1)
 			parentedSiblings = true
@@ -104,7 +129,7 @@ func (in *inheritanceImp[T]) addParent(siblings collections.SortedSet[T], n T, t
 			// have the parents {A} and {D} in it. We want to add {A} as
 			// a parent to {A, B, C}.
 			log.Logf(` ├─(%d) else %v`, i, a)
-			in.seekInherits(a.Inherits(), n, touched, log2)
+			in.seekInherits(a.Inherits(), n, relations, log2)
 		}
 	}
 
@@ -122,21 +147,17 @@ func (in *inheritanceImp[T]) addParent(siblings collections.SortedSet[T], n T, t
 	}
 }
 
-func (in *inheritanceImp[T]) seekInherits(siblings collections.SortedSet[T], n T, touched map[T]struct{}, log *logger.Logger) {
+func (in *inheritanceImp[T]) seekInherits(siblings collections.SortedSet[T], n T, relations map[T]relationship, log *logger.Logger) {
 	for i := siblings.Count() - 1; i >= 0; i-- {
 		a := siblings.Get(i)
-		if _, has := touched[a]; has {
-			// Already checked so skip it.
-			continue
-		}
-		touched[a] = struct{}{}
 
-		if n.Implements(a) {
+		rel, _ := in.getRelationship(n, a, relations)
+		if rel == supertype {
 			log.Logf(` + %v`, a)
 			n.AddInherits(a)
 			continue
 		}
 
-		in.seekInherits(a.Inherits(), n, touched, log)
+		in.seekInherits(a.Inherits(), n, relations, log)
 	}
 }

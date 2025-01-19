@@ -63,10 +63,10 @@
       abstracts: [3, 2, 5], hint: list, inherits: [1]
     },
     { # 5. interface{ Breed() enums.CatBreed; Kind() enums.AnimalKind; isAnimal(); isCat() }
-      abstracts: [6, 8, 9, 10], inherits: [1, 8, 10]
+      abstracts: [6, 8, 9, 10], inherits: [8, 10]
     },
     { # 6. interface{ Breed() enums.DogBreed; Kind() enums.AnimalKind; isAnimal(); isDog() }
-      abstracts: [7, 8, 9, 11], inherits: [1, 9, 10]
+      abstracts: [7, 8, 9, 11], inherits: [9, 10]
     },
     { # 7. interface{ valid() bool }
       abstracts: [12], inherits: [11]
