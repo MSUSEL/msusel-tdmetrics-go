@@ -19,18 +19,6 @@ static public class ConstructExts {
         Stack<IConstruct> pending = [];
         Stack<string> indents = [];
 
-        //======================================================================== TODO: REMOVE
-        if (show) Console.WriteLine("----[ START ]--------------------------------------");
-        
-        // TODO: Debug why Set<string, int, Map<string, Pointer<int>>> was not being outputted.
-
-        static void print(IConstruct c, string indent) {
-            string text = "(" + (c is ITypeDesc) + ", " + (c is TypeParam) + ") " + c.GetType().FullName + "\n" + c;
-            Console.WriteLine(indent + "|-- " + text.Replace("\n", "\n"+indent+"|   "));
-        }
-        if (show) print(con, ">> ");
-        //========================================================================
-
         foreach (IConstruct sub in con.SubConstructs) {
             if (touched.Contains(sub)) continue;
             pending.Push(sub);
@@ -42,10 +30,6 @@ static public class ConstructExts {
             string indent = indents.Pop();
             if (!touched.Add(c)) continue;
 
-            //======================================================================== TODO: REMOVE
-            if (show) print(c, indent);
-            //========================================================================
-
             if (c is ITypeDesc td) yield return td;
 
             foreach (IConstruct sub in c.SubConstructs) {
@@ -53,10 +37,6 @@ static public class ConstructExts {
                 indents.Push(indent + "|  ");
             }
         }
-        
-        //======================================================================== TODO: REMOVE
-        if (show) Console.WriteLine("----[ END ]----------------------------------------");
-        //========================================================================
     }
 
     /// <summary>

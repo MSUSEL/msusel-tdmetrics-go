@@ -46,6 +46,9 @@ public class ConstructTests {
 
     [Test]
     public void StubTest0014() => runStubTest(testPath("go", 14));
+    
+    [Test]
+    public void StubTest0015() => runStubTest(testPath("go", 15));
 
     #region Test Tools...
 

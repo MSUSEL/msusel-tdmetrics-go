@@ -1,0 +1,24 @@
+package $builtin {
+  path: $builtin;
+
+  interface List<any T> {
+    implements: any;
+    $len() int;
+    $get(int index) T;
+    $set(int index, T value);
+  }
+  inst List<int>
+
+  interface comparable {
+    implements: any;
+    $equal(any other) bool;
+  }
+}
+
+package main {
+  path: command-line-arguments;
+
+  AsSlice<comparable T>(List<T> t...) List<T>
+  inst AsSlice<int>(List<int> t...) List<int>;
+  main();
+}

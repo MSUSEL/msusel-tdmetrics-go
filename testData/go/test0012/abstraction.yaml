@@ -8,7 +8,8 @@
     {              type: basic1 },         # 1. <unnamed> bool
     {              type: basic3 },         # 2. <unnamed> string
     { name: other, type: interfaceDesc1 }, # 3. other any
-    { name: x,     type: typeParam2 }      # 4. x T <interface{ ~int, $equal(any) bool, String() string }>
+    { name: x,     type: object1 },        # 4. x Y{ $data int }
+    { name: x,     type: typeParam1 }      # 5. x T <interface{ ~int, $equal(any) bool, String() string }>
   ],
   basics: [ bool, int, string ],
   fields: [
@@ -23,21 +24,19 @@
     }
   ],
   interfaceDescs: [
-    { # 1. any
-      inherits: [ 2 ]
-    },
-    { # 2. interface{ $equal func(other any) bool }
-      abstracts: [ 1 ], hint: comparable
+    { }, # 1. any
+    {    # 2. comparable interface{ $equal func(other any) bool }
+      abstracts: [ 1 ], inherits: [ 1 ], hint: comparable
     },
     { # 3. interface{ ~int; $equal func(other any) bool; String func() string }
-      abstracts: [ 1, 2 ], approx: [ basic2 ], inherits: [ 4 ], hint: comparable
+      abstracts: [ 1, 2 ], approx: [ basic2 ], inherits: [ 2, 4 ], hint: comparable
     },
     { # 4. interface{ String() string }
       abstracts: [ 2 ], inherits: [ 1 ]
     }
   ],
   methodInsts: [
-    { # 1. Z[Y](x T) // TODO: Shouldn't it be `x Y`?
+    { # 1. Z[Y](x Y)
       generic: 2, resolved: 4, instanceTypes: [ object1 ]
     }
   ],
@@ -46,10 +45,8 @@
       name: String, package: 2, receiver: 1, signature: 2,
       exported: true, loc: 15, metrics: 1
     },
-    {
-      # TODO: Shouldn't this be `typeParams[2]`?
-      # 2. Z[T interface{ String() string }](x T <interface{ ~int, String() string }>)
-      name: Z, package: 2, signature: 4,
+    { # 2. Z[T <interface{ ~int, String() string }>](x T)
+      name: Z, package: 2, signature: 5,
       exported: true, loc: 19, metrics: 2,
       typeParams: [ 1 ], instances: [ 1 ]
     },
@@ -101,14 +98,14 @@
     {},                                # 1. func()
     { results: [ 2 ] },                # 2. func() string
     { params: [ 3 ], results: [ 1 ] }, # 3. func(other any) bool
-    { params: [ 4 ] }                  # 4. func(x T <interface{ ~int, String() string }>)
+    { params: [ 4 ] },                 # 4. func(x Y)
+    { params: [ 5 ] }                  # 5. func(x T <interface{ ~int, String() string }>)
   ],
   structDescs: [
     { fields: [ 1 ], synthetic: true } # 1. $data int
   ],
   typeParams: [
-    { name: T, type: interfaceDecl2 }, # 1. T X
-    { name: T, type: interfaceDesc3 }  # 2. T interface{ ~int, $equal(any) bool; String() string }
+    { name: T, type: interfaceDesc3 } # 1. T interface{ ~int, $equal(any) bool; String() string }
   ],
   locs: {
     '1': main.go

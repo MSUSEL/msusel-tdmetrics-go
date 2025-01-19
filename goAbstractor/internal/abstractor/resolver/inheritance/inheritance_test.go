@@ -195,6 +195,26 @@ func Test_AddingLeaves(t *testing.T) {
 		`      └──{C}`)
 }
 
+func Test_InjectBetween(t *testing.T) {
+	in := newTest(t)
+	in.Process(`A`)
+	in.Process(`A`, `B`, `C`)
+	in.Process(`A`, `B`, `D`)
+	in.Check(
+		`┌──{A, B, C}`,
+		`│  └──{A}`,
+		`└──{A, B, D}`,
+		`   └──{A}`)
+	in.Process(`A`, `B`)
+	in.Check(
+		`┌──{A, B, C}`,
+		`│  └──{A, B}`,
+		`│     └──{A}`,
+		`└──{A, B, D}`,
+		`   └──{A, B}`,
+		`      └──{A}`)
+}
+
 func Test_TNodeTest(t *testing.T) {
 	n1 := newTNode(`A`, `B`, `C`)
 	n2 := newTNode(`A`, `B`)
