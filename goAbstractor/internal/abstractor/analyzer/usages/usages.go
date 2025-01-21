@@ -137,12 +137,12 @@ func (ui *usagesImp) setPendingType(t types.Type) {
 	}
 
 	if pointer != nil {
-		ui.pending = ui.conv.ConvertType(pointer)
+		ui.pending = ui.conv.ConvertType(pointer, named.Obj().Name())
 		ui.log.Logf(`    - converted ptr: %v`, ui.pending)
 		return
 	}
 
-	ui.pending = ui.conv.ConvertType(named)
+	ui.pending = ui.conv.ConvertType(named, named.Obj().Name())
 	ui.log.Logf(`    - converted obj: %v`, ui.pending)
 }
 
@@ -515,9 +515,9 @@ func (ui *usagesImp) processIdent(id *ast.Ident) {
 	// Find any type arguments for this object.
 	var instType []constructs.TypeDesc
 	if itList := ui.info.Instances[id].TypeArgs; !utils.IsNil(itList) {
-		instType = ui.conv.ConvertInstanceTypes(itList)
+		instType = ui.conv.ConvertInstanceTypes(itList, obj.Name())
 	} else if itList := getInstTypes(obj); !utils.IsNil(itList) {
-		instType = ui.conv.ConvertInstanceTypes(itList)
+		instType = ui.conv.ConvertInstanceTypes(itList, obj.Name())
 	}
 
 	ui.log.Logf(`  > processIdent: object: %v`, obj)
@@ -635,7 +635,7 @@ func (ui *usagesImp) processSelector(sel *ast.SelectorExpr) {
 
 	if !isLocal(ui.root, selObj.Obj()) {
 		ui.log.Logf(`  > non-local selObj: %v at %v`, selObj.Obj(), ui.pos(selObj.Obj()))
-		ui.setPendingConstruct(ui.conv.ConvertType(selObj.Recv()))
+		ui.setPendingConstruct(ui.conv.ConvertType(selObj.Recv(), selObj.Recv().String()))
 		if ui.hasPending() {
 			ui.log.Logf(`  > pending selObj: %v`, ui.pending)
 			ui.setPendingConstruct(ui.proj.NewSelection(constructs.SelectionArgs{

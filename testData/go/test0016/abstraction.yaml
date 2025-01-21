@@ -1,0 +1,307 @@
+{
+  language: go,
+  abstracts: [
+    { TODO: Far too many repeated for T },
+    { name: $deref, signature:  3, exported: true }, #  1.
+    { name: $deref, signature: 13, exported: true }, #  2.
+    { name: $equal, signature: 21, exported: true }, #  3.
+    { name: Next,   signature:  2, exported: true }, #  4.
+    { name: Next,   signature:  5, exported: true }, #  5.
+    { name: Next,   signature:  6, exported: true }, #  6.
+    { name: Next,   signature:  7, exported: true }, #  7.
+    { name: Next,   signature:  8, exported: true }, #  8.
+    { name: Next,   signature:  9, exported: true }, #  9.
+    { name: Next,   signature: 10, exported: true }, # 10.
+    { name: Next,   signature: 11, exported: true }, # 11.
+    { name: Next,   signature: 12, exported: true }, # 12.
+    { name: Next,   signature: 13, exported: true }, # 13.
+    { name: Next,   signature: 14, exported: true }, # 14.
+    { name: Next,   signature: 15, exported: true }, # 15.
+    { name: Next,   signature: 16, exported: true }, # 16.
+    { name: Next,   signature: 17, exported: true }, # 17.
+    { name: Next,   signature: 18, exported: true }, # 18.
+    { name: Next,   signature: 19, exported: true }, # 19.
+    { name: Next,   signature: 20, exported: true }  # 20.
+  ],
+  arguments: [
+    { type: basic1 },         #  1.
+    { type: basic2 },         #  2.
+    { type: interfaceInst1 }, #  3.
+    { type: object1 },        #  4.
+    { type: typeParam1 },     #  5.
+    { type: typeParam2 },     #  6.
+    { type: typeParam3 },     #  7.
+    { type: typeParam4 },     #  8.
+    { type: typeParam5 },     #  9.
+    { type: typeParam6 },     # 10.
+    { type: typeParam7 },     # 11.
+    { type: typeParam8 },     # 12.
+    { type: typeParam9 },     # 13.
+    { type: typeParam1 },     # 14.
+    { type: typeParam3 },     # 15.
+    { type: typeParam4 },     # 16.
+    { type: typeParam5 },     # 17.
+    { type: typeParam6 },     # 18,
+    { type: typeParam7 },     # 19.
+    { type: typeParam8 },     # 20.
+    { type: typeParam9 },     # 21.
+    { name: other, type: interfaceDesc1 }, # 22.
+    { name: start, type: typeParam2 },     # 23.
+    { name: stop,  type: typeParam2 }      # 24.
+  ],
+  basics: [ bool, int ],
+  fields: [
+    { # 1.
+      name: next, type: interfaceInst1
+    }
+  ],
+  interfaceDecls: [
+    { # 1.
+      name: Pointer, package: 1, interface: 3, exported: true,
+      typeParams: [ 1 ],
+      instances: [ 1 ]
+    },
+    { # 2.
+      name: comparable, package: 1, interface: 4,
+      exported: true
+    },
+    { # 3.
+      name: Node, package: 2, interface: 13, exported: true, loc: 5,
+      typeParams: [ 1 ],
+      instances: [ 2, 3, 4, 5, 6, 7, 8 ]
+    }
+  ],
+  interfaceDescs: [
+    {}, # 1.
+    {   # 2.
+      abstracts: [ 1, 4 ], hint: pointer, inherits: [ 4 ]
+    },
+    { # 3.
+      abstracts: [ 2 ], hint: pointer, inherits: [ 4 ]
+    },
+    { # 4.
+      abstracts: [ 3 ], hint: comparable, inherits: [ 1 ]
+    },
+    { # 5.
+      abstracts: [ 3, 5 ], hint: comparable, inherits: [ 6 ]
+    },
+    { # 6.
+      abstracts: [ 3, 6 ], hint: comparable, inherits: [ 7 ]
+    },
+    { # 7.
+      abstracts: [ 3, 7 ], hint: comparable, inherits: [ 8 ]
+    },
+    { # 8.
+      abstracts: [ 3, 8 ], hint: comparable, inherits: [ 9 ]
+    },
+    { # 9.
+      abstracts: [ 3, 9 ], hint: comparable, inherits: [ 10 ]
+    },
+    { # 10.
+      abstracts: [ 3, 10 ], hint: comparable, inherits: [ 11 ]
+    },
+    { # 11.
+      abstracts: [ 3, 11 ], hint: comparable, inherits: [ 12 ]
+    },
+    { # 12.
+      abstracts: [ 3, 12 ], hint: comparable, inherits: [ 4 ]
+    },
+    { # 13.
+      abstracts: [ 3, 13 ], hint: comparable, inherits: [ 4 ]
+    },
+    { # 14.
+      abstracts: [ 3, 14 ], hint: comparable, inherits: [ 1 ]
+    },
+    { # 15.
+      abstracts: [ 3, 15 ], hint: comparable, inherits: [ 1 ]
+    },
+    { # 16.
+      abstracts: [ 3, 16 ], hint: comparable, inherits: [ 1 ]
+    },
+    { # 17.
+      abstracts: [ 3, 17 ], hint: comparable, inherits: [ 1 ]
+    },
+    { # 18.
+      abstracts: [ 3, 18 ], hint: comparable, inherits: [ 1 ]
+    },
+    { # 19.
+      abstracts: [ 3, 19 ], hint: comparable, inherits: [ 1 ]
+    },
+    { # 20.
+      abstracts: [ 3, 20 ], hint: comparable, inherits: [ 1 ]
+    }
+  ],
+  interfaceInsts: [
+    { # 1.
+      generic: 1, resolved: 2, instanceTypes: [ object1 ]
+    },
+    { # 2.
+      generic: 3, resolved: 14, instanceTypes: [ typeParam3 ]
+    },
+    { # 3.
+      generic: 3, resolved: 15, instanceTypes: [ typeParam4 ]
+    },
+    { # 4.
+      generic: 3, resolved: 16, instanceTypes: [ typeParam5 ]
+    },
+    { # 5.
+      generic: 3, resolved: 17, instanceTypes: [ typeParam6 ]
+    },
+    { # 6.
+      generic: 3, resolved: 18, instanceTypes: [ typeParam7 ]
+    },
+    { # 7.
+      generic: 3, resolved: 19, instanceTypes: [ typeParam8 ]
+    },
+    { # 8.
+      generic: 3, resolved: 20, instanceTypes: [ typeParam9 ]
+    }
+  ],
+  methodInsts: [
+    { # 1.
+      generic: 1, resolved: 22, instanceTypes: [ interfaceInst1 ]
+    }
+  ],
+  methods: [
+    {
+      exported: true,
+      instances: [ 1 ],
+      loc: 10,
+      metrics: 1,
+      name: Len,
+      package: 2,
+      signature: 22,
+      typeParams: [ 10 ]
+    },
+    {
+      exported: true,
+      loc: 22,
+      metrics: 2,
+      name: Next,
+      package: 2,
+      ptrRecv: true,
+      receiver: 1,
+      signature: 2
+    },
+    {
+      loc: 26,
+      metrics: 3,
+      name: main,
+      package: 2,
+      signature: 1
+    }
+  ],
+  metrics: [
+    { # 1.
+      loc: 10,
+      codeCount:  7,
+      complexity: 2,
+      indents:    6,
+      lineCount:  7,
+      invokes: [ selection1 ],
+      reads:   [ interfaceInst2 ],
+      writes:  [ interfaceInst3 ]
+    },
+    { # 2.
+      loc: 22,
+      codeCount:  3,
+      complexity: 1,
+      indents:    1,
+      lineCount:  3,
+      getter: true,
+      reads: [ interfaceInst1 ]
+    },
+    { # 3.
+      loc: 26,
+      codeCount:  4,
+      complexity: 1,
+      indents:    2,
+      lineCount:  4,
+      sideEffect: true,
+      invokes: [ methodInst1 ],
+      reads: [
+        interfaceInst1,
+        object1
+      ],
+      writes: [
+        interfaceInst1,
+        object1,
+        selection2
+      ]
+    }
+  ],
+  objects: [
+    { # 1.
+      name: nodeImp, package: 2, data: 1, interface: 1, loc: 18,
+      methods: [ 2 ]
+    }
+  ],
+  packages: [
+    { # 1.
+      name: $builtin, path: $builtin,
+      interfaces: [ 1, 2 ]
+    },
+    { # 2.
+      name: main, path: command-line-arguments,
+      interfaces: [ 3 ],
+      methods:    [ 1, 2, 3 ],
+      objects:    [ 1 ],
+    }
+  ],
+  selections: [
+    { name: Next, origin: interfaceInst6 }, # 1.
+    { name: next, origin: object1 }         # 2.
+  ],
+  signatures: [
+    {}, # 1.
+    { results: [  3 ] }, #  2.
+    { results: [  4 ] }, #  3.
+    { results: [  5 ] }, #  4.
+    { results: [  6 ] }, #  5.
+    { results: [  7 ] }, #  6.
+    { results: [  8 ] }, #  7.
+    { results: [  9 ] }, #  8.
+    { results: [ 10 ] }, #  9.
+    { results: [ 11 ] }, # 10.
+    { results: [ 12 ] }, # 11.
+    { results: [ 13 ] }, # 12.
+    { results: [ 14 ] }, # 13.
+    { results: [ 15 ] }, # 14.
+    { results: [ 16 ] }, # 15.
+    { results: [ 17 ] }, # 16.
+    { results: [ 18 ] }, # 17.
+    { results: [ 19 ] }, # 18.
+    { results: [ 20 ] }, # 19.
+    { results: [ 21 ] }, # 20.
+    { params: [ 22 ],     results: [ 1 ] }, # 21.
+    { params: [ 23, 24 ], results: [ 2 ] }  # 22.
+  ],
+  structDescs: [
+    { fields: [ 1 ] } # 1.
+  ],
+  tempTypeParamRefs: [
+    { type: typeParam2 }, # 1.
+    { type: typeParam3 }, # 2.
+    { type: typeParam4 }, # 3.
+    { type: typeParam5 }, # 4.
+    { type: typeParam6 }, # 5.
+    { type: typeParam7 }, # 6.
+    { type: typeParam8 }, # 7.
+    { type: typeParam9 }  # 8.
+  ],
+  typeParams: [
+    { name: T, type: interfaceDesc1 },  #  1.
+    { name: T, type: interfaceDesc5 },  #  2.
+    { name: T, type: interfaceDesc6 },  #  3.
+    { name: T, type: interfaceDesc7 },  #  4.
+    { name: T, type: interfaceDesc8 },  #  5.
+    { name: T, type: interfaceDesc9 },  #  6.
+    { name: T, type: interfaceDesc10 }, #  7.
+    { name: T, type: interfaceDesc11 }, #  8.
+    { name: T, type: interfaceDesc12 }, #  9.
+    { name: T, type: interfaceInst8 }   # 10.
+  ],
+  locs: {
+    '1': main.go
+  }
+}

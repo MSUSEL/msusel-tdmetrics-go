@@ -34,6 +34,7 @@ type Project interface {
 	SignatureFactory
 	StructDescFactory
 	TempReferenceFactory
+	TempTypeParamRefFactory
 	TypeParamFactory
 
 	Locs() locs.Set

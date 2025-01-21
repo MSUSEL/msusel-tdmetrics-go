@@ -2,6 +2,7 @@ package typeParam
 
 import (
 	"go/types"
+	"strings"
 
 	"github.com/Snow-Gremlin/goToolbox/comp"
 
@@ -16,6 +17,8 @@ type typeParamImp struct {
 	typ   constructs.TypeDesc
 	index int
 	alive bool
+
+	loopPrevention bool
 }
 
 func newTypeParam(args constructs.TypeParamArgs) constructs.TypeParam {
@@ -59,10 +62,15 @@ func Comparer() comp.Comparer[constructs.TypeParam] {
 		if aImp == bImp {
 			return 0
 		}
-		return comp.Or(
-			comp.DefaultPend(aImp.name, bImp.name),
-			constructs.ComparerPend(aImp.typ, bImp.typ),
-		)
+		if cmp := strings.Compare(aImp.name, bImp.name); cmp != 0 {
+			return cmp
+		}
+		if aImp.loopPrevention {
+			return 0
+		}
+		aImp.loopPrevention = true
+		defer func() { aImp.loopPrevention = false }()
+		return constructs.ComparerPend(aImp.typ, bImp.typ)()
 	}
 }
 
@@ -85,5 +93,10 @@ func (t *typeParamImp) ToJson(ctx *jsonify.Context) jsonify.Datum {
 }
 
 func (t *typeParamImp) String() string {
-	return t.name + ` ` + t.typ.String()
+	if t.loopPrevention {
+		return t.name
+	}
+	t.loopPrevention = true
+	defer func() { t.loopPrevention = false }()
+	return t.name + t.typ.String()
 }

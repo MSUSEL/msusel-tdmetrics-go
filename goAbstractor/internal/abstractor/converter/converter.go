@@ -16,9 +16,9 @@ import (
 )
 
 type Converter interface {
-	ConvertType(t types.Type) constructs.TypeDesc
-	ConvertSignature(t *types.Signature) constructs.Signature
-	ConvertInstanceTypes(t *types.TypeList) []constructs.TypeDesc
+	ConvertType(t types.Type, context string) constructs.TypeDesc
+	ConvertSignature(t *types.Signature, context string) constructs.Signature
+	ConvertInstanceTypes(t *types.TypeList, context string) []constructs.TypeDesc
 }
 
 func New(
@@ -44,25 +44,36 @@ type convImp struct {
 	proj       constructs.Project
 	curPkg     constructs.Package
 	tpReplacer map[*types.TypeParam]*types.TypeParam
+	context    string
+	tpSeen     map[string]constructs.TempTypeParamRef
 }
 
-func (c *convImp) ConvertType(t types.Type) constructs.TypeDesc {
+func (c *convImp) ConvertType(t types.Type, context string) constructs.TypeDesc {
 	c.log.Logf("convert type: %v", t)
+	c.tpSeen = map[string]constructs.TempTypeParamRef{}
+	c.context = context
 	t2 := c.convertType(t)
+	c.tpSeen = nil
 	c.log.Logf("|  result: %v", t2)
 	return t2
 }
 
-func (c *convImp) ConvertSignature(t *types.Signature) constructs.Signature {
+func (c *convImp) ConvertSignature(t *types.Signature, context string) constructs.Signature {
 	c.log.Logf("convert signature: %v", t)
+	c.tpSeen = map[string]constructs.TempTypeParamRef{}
+	c.context = context
 	t2 := c.convertSignature(t)
+	c.tpSeen = nil
 	c.log.Logf("|  result: %v", t2)
 	return t2
 }
 
-func (c *convImp) ConvertInstanceTypes(t *types.TypeList) []constructs.TypeDesc {
+func (c *convImp) ConvertInstanceTypes(t *types.TypeList, context string) []constructs.TypeDesc {
 	c.log.Logf("convert instance types: %v", t)
+	c.tpSeen = map[string]constructs.TempTypeParamRef{}
+	c.context = context
 	t2 := c.convertInstanceTypes(t)
+	c.tpSeen = nil
 	c.log.Logf("|  result: %v", t2)
 	return t2
 }
@@ -324,16 +335,42 @@ func (c *convImp) readUnionTerms(t *types.Union) (exact, approx []constructs.Typ
 	return exact, approx
 }
 
-func (c *convImp) convertTypeParam(t *types.TypeParam) constructs.TypeParam {
+func (c *convImp) convertTypeParam(t *types.TypeParam) constructs.TypeDesc {
 	if tr, ok := c.tpReplacer[t]; ok {
 		t = tr
 	}
 
+	name := t.Obj().Name()
+	if ref, ok := c.tpSeen[name]; ok {
+		if ref == nil {
+			ref = c.proj.NewTempTypeParamRef(constructs.TempTypeParamRefArgs{
+				RealType: t,
+				Name:     name,
+			})
+			c.tpSeen[name] = ref
+		}
+
+		// TODO: Can not use reference to skip loops because T may be
+		//       used in multiple places and is contained in the type
+		//       definition scope.
+		// TODO: Make sure that the references are being replaced?
+		// TODO: Check if tp or tpRef exists already using type, maybe?
+
+		return ref
+	}
+
+	c.tpSeen[name] = nil
 	t2 := t.Obj().Type().Underlying()
-	return c.proj.NewTypeParam(constructs.TypeParamArgs{
-		Name: t.Obj().Name(),
+	tpDesc := c.proj.NewTypeParam(constructs.TypeParamArgs{
+		Name: name,
 		Type: c.convertType(t2),
 	})
+
+	if ref, ok := c.tpSeen[name]; ok && ref != nil {
+		ref.SetResolution(tpDesc)
+	}
+
+	return tpDesc
 }
 
 func (c *convImp) convertInstanceTypes(t *types.TypeList) []constructs.TypeDesc {

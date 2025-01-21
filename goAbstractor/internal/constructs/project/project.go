@@ -30,6 +30,7 @@ import (
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs/structDesc"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs/tempDeclRef"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs/tempReference"
+	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs/tempTypeParamRef"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs/typeParam"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs/value"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/jsonify"
@@ -58,6 +59,7 @@ type projectImp struct {
 	constructs.SignatureFactory
 	constructs.StructDescFactory
 	constructs.TempReferenceFactory
+	constructs.TempTypeParamRefFactory
 	constructs.TypeParamFactory
 
 	locations locs.Set
@@ -78,15 +80,16 @@ func New(locs locs.Set) constructs.Project {
 		ValueFactory:         value.New(),
 		TempDeclRefFactory:   tempDeclRef.New(),
 
-		BasicFactory:         basic.New(),
-		InterfaceDescFactory: interfaceDesc.New(),
-		InterfaceInstFactory: interfaceInst.New(),
-		MethodInstFactory:    methodInst.New(),
-		ObjectInstFactory:    objectInst.New(),
-		SignatureFactory:     signature.New(),
-		StructDescFactory:    structDesc.New(),
-		TempReferenceFactory: tempReference.New(),
-		TypeParamFactory:     typeParam.New(),
+		BasicFactory:            basic.New(),
+		InterfaceDescFactory:    interfaceDesc.New(),
+		InterfaceInstFactory:    interfaceInst.New(),
+		MethodInstFactory:       methodInst.New(),
+		ObjectInstFactory:       objectInst.New(),
+		SignatureFactory:        signature.New(),
+		StructDescFactory:       structDesc.New(),
+		TempReferenceFactory:    tempReference.New(),
+		TempTypeParamRefFactory: tempTypeParamRef.New(),
+		TypeParamFactory:        typeParam.New(),
 
 		locations: locs,
 	}
@@ -115,6 +118,7 @@ func (p *projectImp) AllConstructs() collections.Enumerator[constructs.Construct
 		enumerator.Cast[constructs.Construct](p.TypeParams().Enumerate()),
 		enumerator.Cast[constructs.Construct](p.TempDeclRefs().Enumerate()),
 		enumerator.Cast[constructs.Construct](p.TempReferences().Enumerate()),
+		enumerator.Cast[constructs.Construct](p.TempTypeParamRefs().Enumerate()),
 		enumerator.Cast[constructs.Construct](p.Values().Enumerate()),
 	)
 }
@@ -316,6 +320,7 @@ func (p *projectImp) ToJson(ctx *jsonify.Context) jsonify.Datum {
 		AddNonZero(ctx, pl(kind.MethodInst), p.MethodInsts().ToSlice()).
 		AddNonZero(ctx, pl(kind.ObjectInst), p.ObjectInsts().ToSlice()).
 		AddNonZero(ctx, pl(kind.TempReference), p.TempReferences().ToSlice()).
+		AddNonZero(ctx, pl(kind.TempTypeParamRef), p.TempTypeParamRefs().ToSlice()).
 		AddNonZero(ctx, pl(kind.Signature), p.Signatures().ToSlice()).
 		AddNonZero(ctx, pl(kind.StructDesc), p.StructDescs().ToSlice()).
 		AddNonZero(ctx, pl(kind.TypeParam), p.TypeParams().ToSlice())
@@ -356,6 +361,7 @@ func (p *projectImp) String() string {
 	stringCon(buf, kind.StructDesc, p.StructDescs().ToSlice())
 	stringCon(buf, kind.TempDeclRef, p.TempDeclRefs().ToSlice())
 	stringCon(buf, kind.TempReference, p.TempReferences().ToSlice())
+	stringCon(buf, kind.TempTypeParamRef, p.TempTypeParamRefs().ToSlice())
 	stringCon(buf, kind.TypeParam, p.TypeParams().ToSlice())
 	stringCon(buf, kind.Value, p.Values().ToSlice())
 	return buf.String()

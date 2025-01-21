@@ -1,0 +1,84 @@
+package tempTypeParamRef
+
+import (
+	"fmt"
+	"go/types"
+
+	"github.com/Snow-Gremlin/goToolbox/comp"
+	"github.com/Snow-Gremlin/goToolbox/utils"
+
+	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/assert"
+	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs"
+	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs/kind"
+	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/jsonify"
+)
+
+type tempTypeParamRefImp struct {
+	realType types.Type
+	name     string
+	index    int
+	alive    bool
+	resolved constructs.TypeDesc
+}
+
+func newTempTypeParamRef(args constructs.TempTypeParamRefArgs) constructs.TempTypeParamRef {
+	assert.ArgNotNil(`real type`, args.RealType)
+
+	return &tempTypeParamRefImp{
+		realType: args.RealType,
+		name:     args.Name,
+	}
+}
+
+func (r *tempTypeParamRefImp) IsTypeDesc()         {}
+func (r *tempTypeParamRefImp) IsTypeTypeParamRef() {}
+
+func (r *tempTypeParamRefImp) Kind() kind.Kind     { return kind.TempTypeParamRef }
+func (r *tempTypeParamRefImp) Index() int          { return r.index }
+func (r *tempTypeParamRefImp) SetIndex(index int)  { r.index = index }
+func (r *tempTypeParamRefImp) Alive() bool         { return r.alive }
+func (r *tempTypeParamRefImp) SetAlive(alive bool) { r.alive = alive }
+func (r *tempTypeParamRefImp) GoType() types.Type  { return r.realType }
+func (r *tempTypeParamRefImp) Name() string        { return r.name }
+
+func (r *tempTypeParamRefImp) ResolvedType() constructs.TypeDesc { return r.resolved }
+
+func (r *tempTypeParamRefImp) Resolved() bool {
+	return !utils.IsNil(r.resolved)
+}
+
+func (r *tempTypeParamRefImp) SetResolution(typ constructs.TypeDesc) {
+	assert.ArgNotNil(`type`, typ)
+	r.resolved = typ
+}
+
+func (r *tempTypeParamRefImp) CompareTo(other constructs.Construct) int {
+	return constructs.CompareTo[constructs.TempTypeParamRef](r, other, Comparer())
+}
+
+func Comparer() comp.Comparer[constructs.TempTypeParamRef] {
+	return func(a, b constructs.TempTypeParamRef) int {
+		aImp, bImp := a.(*tempTypeParamRefImp), b.(*tempTypeParamRefImp)
+		if aImp == bImp {
+			return 0
+		}
+		return comp.Default[int]()(aImp.index, bImp.index)
+	}
+}
+
+func (r *tempTypeParamRefImp) ToJson(ctx *jsonify.Context) jsonify.Datum {
+	if ctx.IsOnlyIndex() {
+		return jsonify.New(ctx, r.index)
+	}
+	if ctx.IsShort() {
+		return jsonify.NewSprintf(`%s%d`, r.Kind(), r.index)
+	}
+	return jsonify.NewMap().
+		AddIf(ctx, ctx.IsDebugKindIncluded(), `kind`, r.Kind()).
+		AddIf(ctx, ctx.IsDebugIndexIncluded(), `index`, r.index).
+		AddNonZero(ctx.Short(), `type`, r.resolved)
+}
+
+func (r *tempTypeParamRefImp) String() string {
+	return fmt.Sprintf(`ref tp %d`, r.index)
+}

@@ -205,6 +205,7 @@ func Test_InjectBetween(t *testing.T) {
 		`│  └──{A}`,
 		`└──{A, B, D}`,
 		`   └──{A}`)
+
 	in.Process(`A`, `B`)
 	in.Check(
 		`┌──{A, B, C}`,

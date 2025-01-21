@@ -145,7 +145,7 @@ func (ab *abstractor) abstractTypeSpec(spec *ast.TypeSpec) {
 
 	loc := ab.proj.Locs().NewLoc(spec.Pos())
 	tp := ab.abstractTypeParams(spec.TypeParams)
-	typ := ab.converter().ConvertType(tv.Type)
+	typ := ab.converter().ConvertType(tv.Type, tv.Type.String())
 
 	if it, ok := typ.(constructs.InterfaceDesc); ok {
 		ab.proj.NewInterfaceDecl(constructs.InterfaceDeclArgs{
@@ -186,17 +186,17 @@ func (ab *abstractor) abstractTypeSpec(spec *ast.TypeSpec) {
 	})
 }
 
-func (ab *abstractor) abstractTypeParams(fields *ast.FieldList) []constructs.TypeParam {
+func (ab *abstractor) abstractTypeParams(fields *ast.FieldList, context string) []constructs.TypeParam {
 	ns := []constructs.TypeParam{}
 	if !utils.IsNil(fields) {
 		for _, field := range fields.List {
-			ns = append(ns, ab.abstractTypeParam(field)...)
+			ns = append(ns, ab.abstractTypeParam(field, context)...)
 		}
 	}
 	return ns
 }
 
-func (ab *abstractor) abstractTypeParam(field *ast.Field) []constructs.TypeParam {
+func (ab *abstractor) abstractTypeParam(field *ast.Field, context string) []constructs.TypeParam {
 	ns := []constructs.TypeParam{}
 	if utils.IsNil(field) {
 		return ns
@@ -208,7 +208,7 @@ func (ab *abstractor) abstractTypeParam(field *ast.Field) []constructs.TypeParam
 			With(`pos`, ab.pos(field.Pos())))
 	}
 
-	typ := ab.converter().ConvertType(tv.Type)
+	typ := ab.converter().ConvertType(tv.Type, context)
 	for _, name := range field.Names {
 		named := ab.proj.NewTypeParam(constructs.TypeParamArgs{
 			Name: name.Name,
@@ -232,7 +232,7 @@ func (ab *abstractor) abstractValueSpec(spec *ast.ValueSpec, isConst bool) {
 				With(`pos`, ab.pos(spec.Pos())))
 		}
 
-		typ := ab.converter().ConvertType(tv.Type())
+		typ := ab.converter().ConvertType(tv.Type(), name.Name)
 		ab.proj.NewValue(constructs.ValueArgs{
 			Package:  ab.curPkg,
 			Name:     name.Name,
@@ -303,12 +303,12 @@ func (ab *abstractor) abstractFuncDecl(decl *ast.FuncDecl) {
 	obj := info.Defs[decl.Name]
 
 	ptrRecv, recvName := ab.abstractReceiver(decl)
-	sig := ab.converter().ConvertSignature(obj.Type().(*types.Signature))
+	sig := ab.converter().ConvertSignature(obj.Type().(*types.Signature), decl.Name.Name)
 	ab.clearTypeParamOverrides()
 
 	metrics := analyzer.Analyze(ab.log, ab.info(), ab.proj, ab.curPkg, ab.baker, ab.converter(), decl)
 	loc := ab.proj.Locs().NewLoc(decl.Pos())
-	tp := ab.abstractTypeParams(decl.Type.TypeParams)
+	tp := ab.abstractTypeParams(decl.Type.TypeParams, decl.Name.Name)
 
 	exported := decl.Name.IsExported()
 	name := decl.Name.Name

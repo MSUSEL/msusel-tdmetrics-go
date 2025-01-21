@@ -41,6 +41,7 @@ type TempReferenceContainer interface {
 
 	// RemoveTempReferences should replace any found reference with the type
 	// description that was referenced. References will already be looked up.
+	// This will also remove any TempTypeParamRefs.
 	RemoveTempReferences()
 }
 
@@ -129,6 +130,16 @@ func ResolvedTempReference(td TypeDesc) TypeDesc {
 			resolved = tr.ResolvedType()
 			if utils.IsNil(resolved) {
 				panic(terror.New(`TempReference in ResolvedTempReference resolved to nil`).
+					With(`Ref`, tr).
+					With(`Start`, td))
+			}
+			continue
+		}
+		if resolved.Kind() == kind.TempTypeParamRef {
+			tr := resolved.(TempTypeParamRef)
+			resolved = tr.ResolvedType()
+			if utils.IsNil(resolved) {
+				panic(terror.New(`TempTypeParamRef in ResolvedTempReference resolved to nil`).
 					With(`Ref`, tr).
 					With(`Start`, td))
 			}
