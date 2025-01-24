@@ -1,0 +1,32 @@
+package $builtin {
+  path: $builtin;
+
+  interface Pointer<any T> {
+    implements: comparable;
+    $deref() T;
+  }
+  inst Pointer<nodeImp>
+
+  interface comparable {
+    implements: any;
+    $equal(any other) bool;
+  }
+}
+
+package main {
+  path: command-line-arguments;
+
+  interface Node<any T> {
+    implements: comparable;
+    $equal(any other) bool;
+    Next() T;
+  }
+
+  class nodeImp {
+    Pointer<nodeImp> next;
+    Next() Pointer<nodeImp>;
+  }
+
+  Len<Node<T> T>(T start, T stop) int;
+  main();
+}
