@@ -13,6 +13,7 @@ type TempTypeParamRef interface {
 	IsTypeTypeParamRef()
 
 	ResolvedType() TypeDesc
+	Context() string
 	Name() string
 	Resolved() bool
 	SetResolution(typ TypeDesc)
@@ -20,6 +21,7 @@ type TempTypeParamRef interface {
 
 type TempTypeParamRefArgs struct {
 	RealType types.Type
+	Context  string
 	Name     string
 }
 

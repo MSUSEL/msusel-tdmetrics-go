@@ -1,6 +1,7 @@
 package converter
 
 import (
+	"fmt"
 	"go/types"
 
 	"github.com/Snow-Gremlin/goToolbox/terrors/terror"
@@ -27,6 +28,7 @@ func New(
 	proj constructs.Project,
 	curPkg constructs.Package,
 	tpReplacer map[*types.TypeParam]*types.TypeParam,
+	typeCache map[any]any,
 ) Converter {
 	log2 := log.Group(`converter`).Prefix(`|  `)
 	return &convImp{
@@ -35,6 +37,7 @@ func New(
 		proj:       proj,
 		curPkg:     curPkg,
 		tpReplacer: tpReplacer,
+		typeCache:  typeCache,
 	}
 }
 
@@ -46,13 +49,14 @@ type convImp struct {
 	tpReplacer map[*types.TypeParam]*types.TypeParam
 	context    string
 	tpSeen     map[string]constructs.TempTypeParamRef
+	typeCache  map[any]any
 }
 
 func (c *convImp) ConvertType(t types.Type, context string) constructs.TypeDesc {
 	c.log.Logf("convert type: %v", t)
 	c.tpSeen = map[string]constructs.TempTypeParamRef{}
 	c.context = context
-	t2 := c.convertType(t)
+	t2 := cache(c, t, c.convertType)
 	c.tpSeen = nil
 	c.log.Logf("|  result: %v", t2)
 	return t2
@@ -62,7 +66,7 @@ func (c *convImp) ConvertSignature(t *types.Signature, context string) construct
 	c.log.Logf("convert signature: %v", t)
 	c.tpSeen = map[string]constructs.TempTypeParamRef{}
 	c.context = context
-	t2 := c.convertSignature(t)
+	t2 := cache(c, t, c.convertSignature)
 	c.tpSeen = nil
 	c.log.Logf("|  result: %v", t2)
 	return t2
@@ -72,40 +76,52 @@ func (c *convImp) ConvertInstanceTypes(t *types.TypeList, context string) []cons
 	c.log.Logf("convert instance types: %v", t)
 	c.tpSeen = map[string]constructs.TempTypeParamRef{}
 	c.context = context
-	t2 := c.convertInstanceTypes(t)
+	t2 := cache(c, t, c.convertInstanceTypes)
 	c.tpSeen = nil
 	c.log.Logf("|  result: %v", t2)
+	return t2
+}
+
+func cache[T, R any](c *convImp, t T, handle func(T) R) R {
+	if cached, ok := c.typeCache[t]; ok {
+		if v, ok := cached.(R); ok {
+			return v
+		}
+		panic(fmt.Errorf("expected cached value for %v to be %T but got %T", t, cached, utils.Zero[R]()))
+	}
+	t2 := handle(t)
+	c.typeCache[t] = t2
 	return t2
 }
 
 func (c *convImp) convertType(t types.Type) constructs.TypeDesc {
 	switch t2 := t.(type) {
 	case *types.Alias:
-		return c.convertAlias(t2)
+		return cache(c, t2, c.convertAlias)
 	case *types.Array:
-		return c.convertArray(t2)
+		return cache(c, t2, c.convertArray)
 	case *types.Basic:
-		return c.convertBasic(t2)
+		return cache(c, t2, c.convertBasic)
 	case *types.Chan:
-		return c.convertChan(t2)
+		return cache(c, t2, c.convertChan)
 	case *types.Interface:
-		return c.convertInterface(t2)
+		return cache(c, t2, c.convertInterface)
 	case *types.Map:
-		return c.convertMap(t2)
+		return cache(c, t2, c.convertMap)
 	case *types.Named:
-		return c.convertNamed(t2)
+		return cache(c, t2, c.convertNamed)
 	case *types.Pointer:
-		return c.convertPointer(t2)
+		return cache(c, t2, c.convertPointer)
 	case *types.Signature:
-		return c.convertSignature(t2)
+		return cache(c, t2, c.convertSignature)
 	case *types.Slice:
-		return c.convertSlice(t2)
+		return cache(c, t2, c.convertSlice)
 	case *types.Struct:
-		return c.convertStruct(t2)
+		return cache(c, t2, c.convertStruct)
 	case *types.TypeParam:
-		return c.convertTypeParam(t2)
+		return cache(c, t2, c.convertTypeParam)
 	case *types.Union:
-		return c.convertUnion(t2)
+		return cache(c, t2, c.convertUnion)
 	default:
 		panic(terror.New(`unhandled type`).
 			WithType(`type`, t).
@@ -114,11 +130,11 @@ func (c *convImp) convertType(t types.Type) constructs.TypeDesc {
 }
 
 func (c *convImp) convertAlias(t *types.Alias) constructs.TypeDesc {
-	return c.convertType(t.Rhs())
+	return cache(c, t.Rhs(), c.convertType)
 }
 
 func (c *convImp) convertArray(t *types.Array) constructs.TypeDesc {
-	elem := c.convertType(t.Elem())
+	elem := cache(c, t.Elem(), c.convertType)
 	generic := c.baker.BakeList()
 	return instantiator.InterfaceDecl(c.log, c.proj, t.Underlying(), generic, elem)
 }
@@ -137,7 +153,7 @@ func (c *convImp) convertBasic(t *types.Basic) constructs.TypeDesc {
 }
 
 func (c *convImp) convertChan(t *types.Chan) constructs.TypeDesc {
-	elem := c.convertType(t.Elem())
+	elem := cache(c, t.Elem(), c.convertType)
 	generic := c.baker.BakeChan()
 	return instantiator.InterfaceDecl(c.log, c.proj, t.Underlying(), generic, elem)
 }
@@ -165,7 +181,7 @@ func (c *convImp) convertInterface(t *types.Interface) constructs.InterfaceDesc 
 	pinned := false
 	for i := range t.NumMethods() {
 		f := t.Method(i)
-		sig := c.convertSignature(f.Type().(*types.Signature))
+		sig := cache(c, f.Type().(*types.Signature), c.convertSignature)
 		abstract := c.proj.NewAbstract(constructs.AbstractArgs{
 			Name:      f.Name(),
 			Exported:  f.Exported(),
@@ -202,8 +218,8 @@ func (c *convImp) convertInterface(t *types.Interface) constructs.InterfaceDesc 
 }
 
 func (c *convImp) convertMap(t *types.Map) constructs.TypeDesc {
-	key := c.convertType(t.Key())
-	value := c.convertType(t.Elem())
+	key := cache(c, t.Key(), c.convertType)
+	value := cache(c, t.Elem(), c.convertType)
 	generic := c.baker.BakeMap()
 	return instantiator.InterfaceDecl(c.log, c.proj, t.Underlying(), generic, key, value)
 }
@@ -224,7 +240,7 @@ func (c *convImp) convertNamed(t *types.Named) constructs.TypeDesc {
 	}
 
 	// Get any type parameters.
-	instanceTp := c.convertInstanceTypes(t.TypeArgs())
+	instanceTp := cache(c, t.TypeArgs(), c.convertInstanceTypes)
 
 	// Check if the reference can already be found.
 	typ, found := c.proj.FindType(pkgPath, name, instanceTp, true, false)
@@ -254,7 +270,7 @@ func (c *convImp) convertNamed(t *types.Named) constructs.TypeDesc {
 }
 
 func (c *convImp) convertPointer(t *types.Pointer) constructs.TypeDesc {
-	elem := c.convertType(t.Elem())
+	elem := cache(c, t.Elem(), c.convertType)
 	generic := c.baker.BakePointer()
 	return instantiator.InterfaceDecl(c.log, c.proj, t.Underlying(), generic, elem)
 }
@@ -265,15 +281,15 @@ func (c *convImp) convertSignature(t *types.Signature) constructs.Signature {
 	t2 := c.proj.NewSignature(constructs.SignatureArgs{
 		RealType: t,
 		Variadic: t.Variadic(),
-		Params:   c.convertArguments(t.Params()),
-		Results:  c.convertArguments(t.Results()),
+		Params:   cache(c, t.Params(), c.convertArguments),
+		Results:  cache(c, t.Results(), c.convertArguments),
 		Package:  c.curPkg.Source(),
 	})
 	return t2
 }
 
 func (c *convImp) convertSlice(t *types.Slice) constructs.TypeDesc {
-	elem := c.convertType(t.Elem())
+	elem := cache(c, t.Elem(), c.convertType)
 	generic := c.baker.BakeList()
 	return instantiator.InterfaceDecl(c.log, c.proj, t.Underlying(), generic, elem)
 }
@@ -286,7 +302,7 @@ func (c *convImp) convertStruct(t *types.Struct) constructs.StructDesc {
 			field := c.proj.NewField(constructs.FieldArgs{
 				Name:     f.Name(),
 				Exported: f.Exported(),
-				Type:     c.convertType(f.Type()),
+				Type:     cache(c, f.Type(), c.convertType),
 				Embedded: f.Embedded(),
 			})
 			fields = append(fields, field)
@@ -307,7 +323,7 @@ func (c *convImp) convertArguments(t *types.Tuple) []constructs.Argument {
 		t2 := t.At(i)
 		list[i] = c.proj.NewArgument(constructs.ArgumentArgs{
 			Name: t2.Name(),
-			Type: c.convertType(t2.Type()),
+			Type: cache(c, t2.Type(), c.convertType),
 		})
 	}
 	return list
@@ -325,7 +341,7 @@ func (c *convImp) convertUnion(t *types.Union) constructs.InterfaceDesc {
 func (c *convImp) readUnionTerms(t *types.Union) (exact, approx []constructs.TypeDesc) {
 	for i := range t.Len() {
 		term := t.Term(i)
-		it := c.convertType(term.Type())
+		it := cache(c, term.Type(), c.convertType)
 		if term.Tilde() {
 			approx = append(approx, it)
 		} else {
@@ -345,17 +361,13 @@ func (c *convImp) convertTypeParam(t *types.TypeParam) constructs.TypeDesc {
 		if ref == nil {
 			ref = c.proj.NewTempTypeParamRef(constructs.TempTypeParamRefArgs{
 				RealType: t,
+				Context:  c.context,
 				Name:     name,
 			})
 			c.tpSeen[name] = ref
 		}
 
-		// TODO: Can not use reference to skip loops because T may be
-		//       used in multiple places and is contained in the type
-		//       definition scope.
 		// TODO: Make sure that the references are being replaced?
-		// TODO: Check if tp or tpRef exists already using type, maybe?
-
 		return ref
 	}
 
@@ -363,7 +375,7 @@ func (c *convImp) convertTypeParam(t *types.TypeParam) constructs.TypeDesc {
 	t2 := t.Obj().Type().Underlying()
 	tpDesc := c.proj.NewTypeParam(constructs.TypeParamArgs{
 		Name: name,
-		Type: c.convertType(t2),
+		Type: cache(c, t2, c.convertType),
 	})
 
 	if ref, ok := c.tpSeen[name]; ok && ref != nil {
@@ -376,7 +388,7 @@ func (c *convImp) convertTypeParam(t *types.TypeParam) constructs.TypeDesc {
 func (c *convImp) convertInstanceTypes(t *types.TypeList) []constructs.TypeDesc {
 	list := make([]constructs.TypeDesc, t.Len())
 	for i := range t.Len() {
-		list[i] = c.convertType(t.At(i))
+		list[i] = cache(c, t.At(i), c.convertType)
 	}
 	return list
 }

@@ -15,6 +15,7 @@ import (
 
 type tempTypeParamRefImp struct {
 	realType types.Type
+	context  string
 	name     string
 	index    int
 	alive    bool
@@ -23,10 +24,13 @@ type tempTypeParamRefImp struct {
 
 func newTempTypeParamRef(args constructs.TempTypeParamRefArgs) constructs.TempTypeParamRef {
 	assert.ArgNotNil(`real type`, args.RealType)
+	assert.ArgNotEmpty(`name`, args.Name)
+	assert.ArgNotEmpty(`context`, args.Context)
 
 	return &tempTypeParamRefImp{
 		realType: args.RealType,
 		name:     args.Name,
+		context:  args.Context,
 	}
 }
 
@@ -39,6 +43,7 @@ func (r *tempTypeParamRefImp) SetIndex(index int)  { r.index = index }
 func (r *tempTypeParamRefImp) Alive() bool         { return r.alive }
 func (r *tempTypeParamRefImp) SetAlive(alive bool) { r.alive = alive }
 func (r *tempTypeParamRefImp) GoType() types.Type  { return r.realType }
+func (r *tempTypeParamRefImp) Context() string     { return r.context }
 func (r *tempTypeParamRefImp) Name() string        { return r.name }
 
 func (r *tempTypeParamRefImp) ResolvedType() constructs.TypeDesc { return r.resolved }
@@ -48,6 +53,10 @@ func (r *tempTypeParamRefImp) Resolved() bool {
 }
 
 func (r *tempTypeParamRefImp) SetResolution(typ constructs.TypeDesc) {
+	if r.resolved == typ {
+		return
+	}
+	assert.ArgIsNil(`resolved`, r.resolved)
 	assert.ArgNotNil(`type`, typ)
 	r.resolved = typ
 }
@@ -62,7 +71,10 @@ func Comparer() comp.Comparer[constructs.TempTypeParamRef] {
 		if aImp == bImp {
 			return 0
 		}
-		return comp.Default[int]()(aImp.index, bImp.index)
+		return comp.Or(
+			comp.DefaultPend(aImp.context, bImp.context),
+			comp.DefaultPend(aImp.name, bImp.name),
+		)
 	}
 }
 
@@ -76,9 +88,11 @@ func (r *tempTypeParamRefImp) ToJson(ctx *jsonify.Context) jsonify.Datum {
 	return jsonify.NewMap().
 		AddIf(ctx, ctx.IsDebugKindIncluded(), `kind`, r.Kind()).
 		AddIf(ctx, ctx.IsDebugIndexIncluded(), `index`, r.index).
+		AddNonZero(ctx.Short(), `context`, r.context).
+		AddNonZero(ctx.Short(), `name`, r.name).
 		AddNonZero(ctx.Short(), `type`, r.resolved)
 }
 
 func (r *tempTypeParamRefImp) String() string {
-	return fmt.Sprintf(`ref tp %d`, r.index)
+	return fmt.Sprintf(`ref tp %s:%s`, r.context, r.name)
 }

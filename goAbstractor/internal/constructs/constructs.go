@@ -74,6 +74,7 @@ var (
 	_ TypeDesc = StructDesc(nil)
 	_ TypeDesc = TypeParam(nil)
 	_ TypeDesc = TempReference(nil)
+	_ TypeDesc = TempTypeParamRef(nil)
 
 	// A TypeDecl is both a TypeDesc and a Declaration.
 	_ TypeDesc    = TypeDecl(nil)

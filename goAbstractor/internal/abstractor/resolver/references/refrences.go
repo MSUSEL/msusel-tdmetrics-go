@@ -27,6 +27,7 @@ func tempReferences(log *logger.Logger, proj constructs.Project) {
 		}
 	})
 	proj.ClearAllTempReferences()
+	proj.ClearAllTempTypeParamRefs()
 }
 
 func resolveTempRef(log *logger.Logger, proj constructs.Project, ref constructs.TempReference) {

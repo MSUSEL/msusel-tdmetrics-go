@@ -65,6 +65,10 @@ func (r *tempReferenceImp) Resolved() bool {
 }
 
 func (r *tempReferenceImp) SetResolution(typ constructs.TypeDesc) {
+	if r.typ == typ {
+		return
+	}
+	assert.ArgIsNil(`resolved`, r.typ)
 	assert.ArgNotNil(`type`, typ)
 	r.typ = typ
 }

@@ -1,67 +1,54 @@
 {
   language: go,
   abstracts: [
-    { name: $deref, signature: 3, exported: true }, # 1. $deref() Foo[T <any>]
-    { name: $deref, signature: 4, exported: true }, # 2. $deref() Foo[int]
-    { name: $deref, signature: 5, exported: true }, # 3. $deref() Foo[X <any>]
-    { name: $deref, signature: 6, exported: true }, # 4. $deref() T <any>
-    { name: Get,    signature: 2, exported: true }, # 5. Get() int
-    { name: Get,    signature: 6, exported: true }, # 6. Get() T <any>
-    { name: Get,    signature: 7, exported: true }  # 7. Get() X <any>
+    { name: $deref, signature: 3, exported: true }, # 1. $deref() Foo[int]
+    { name: $deref, signature: 4, exported: true }, # 2. $deref() Foo[T <any>]
+    { name: $deref, signature: 5, exported: true }, # 3. $deref() T <any>
+    { name: Get,    signature: 2, exported: true }, # 4. Get() int
+    { name: Get,    signature: 5, exported: true }  # 5. Get() T <any>
   ],
   arguments: [
     { type: basic1 },      # 1. <unnamed> int
-    { type: object1 },     # 2. <unnamed> Foo[T <any>]
-    { type: objectInst1 }, # 3. <unnamed> Foo[int]
-    { type: objectInst2 }, # 4. <unnamed> Foo[X <any>]
-    { type: typeParam1 },  # 5. <unnamed> T <any>
-    { type: typeParam2 }   # 6. <unnamed> X <any>
+    { type: objectInst1 }, # 2. <unnamed> Foo[int]
+    { type: object1 },     # 3. <unnamed> Foo[T <any>]
+    { type: typeParam1 },  # 4. <unnamed> T <any>
   ],
   basics: [ int ],
   fields: [
     { name: value, type: basic1 },     # 1. value int
     { name: value, type: typeParam1 }, # 2. value T <any>
-    { name: value, type: typeParam2 }  # 3. value X <any>
   ],
   interfaceDecls: [
     { # 1. Pointer[T any]{ $deref() T <any> }
-      name: Pointer, package: 1, interface: 5, exported: true,
-      instances: [ 1, 2, 3 ], typeParams: [ 1 ]
+      name: Pointer, package: 1, interface: 4, exported: true,
+      instances: [ 1, 2 ], typeParams: [ 1 ]
     }
   ],
   interfaceDescs: [
     {},                                                      # 1. any
-    { abstracts: [ 1, 6 ], inherits: [ 1 ], hint: pointer }, # 2. interface{ $deref() Foo[T <any>]; Get() T }
-    { abstracts: [ 2, 5 ], inherits: [ 1 ], hint: pointer }, # 3. interface{ $deref() Foo[int]; Get() int }
-    { abstracts: [ 3, 7 ], inherits: [ 1 ], hint: pointer }, # 4. interface{ $deref() Foo[X <any>]; Get() X }
-    { abstracts: [ 4 ],    inherits: [ 1 ], hint: pointer }  # 5. interface{ $deref() T <any> }
+    { abstracts: [ 1, 4 ], inherits: [ 1 ], hint: pointer }, # 2. interface{ $deref() Foo[int]; Get() int }
+    { abstracts: [ 2, 5 ], inherits: [ 1 ], hint: pointer }, # 3. interface{ $deref() Foo[T <any>]; Get() T }
+    { abstracts: [ 3 ],    inherits: [ 1 ], hint: pointer }  # 4. interface{ $deref() T <any> }
   ],
   interfaceInsts: [
-    { # 1. Pointer[Foo[T <any>]]{ $deref() Foo[T]; Get() T }
-      generic: 1, resolved: 2, instanceTypes: [ object1 ]
+    { # 1. Pointer[Foo[int]]{ $deref() Foo[int]; Get() int }
+      generic: 1, resolved: 2, instanceTypes: [ objectInst1 ]
     },
-    { # 2. Pointer[Foo[int]]{ $deref() Foo[int]; Get() int }
-      generic: 1, resolved: 3, instanceTypes: [ objectInst1 ]
-    },
-    { # 3. Pointer[Foo[X <any>]]{ $deref() Foo[X]; Get() X }
-      generic: 1, resolved: 4, instanceTypes: [ objectInst2 ]
+    { # 2. Pointer[Foo[T <any>]]{ $deref() Foo[T]; Get() T }
+      generic: 1, resolved: 3, instanceTypes: [ object1 ]
     }
   ],
   methodInsts: [
     { # 1. func (*Foo[int]) Get() int
       generic: 1, receiver: 1, resolved: 2,
       instanceTypes: [ basic1 ]
-    },
-    { # 2. func (*Foo[X <any>]) Get() X
-      generic: 1, receiver: 2, resolved: 7,
-      instanceTypes: [ typeParam2 ]
     }
   ],
   methods: [
     { # 1. func (*Foo[T <any>]) Get() T
       name: Get, exported: true, ptrRecv: true, loc: 9,
-      metrics: 1, package: 2, receiver: 1, signature: 6,
-      instances: [ 1, 2 ]
+      metrics: 1, package: 2, receiver: 1, signature: 5,
+      instances: [ 1 ]
     },
     { # 2. func main()
       name: main, loc: 13, metrics: 2, package: 2, signature: 1
@@ -72,8 +59,8 @@
       codeCount: 3, complexity: 1, indents: 1, lineCount: 3,
       loc: 9, getter: true,
       reads: [
-        interfaceInst3, # Pointer[Foo[X <any>]]
-        selection2      # Pointer[Foo[X <any>]].value X
+        interfaceInst2, # Pointer[Foo[T <any>]]
+        selection2      # Pointer[Foo[T <any>]].value X
       ]
     },
     { # 2. main() metrics
@@ -81,11 +68,11 @@
       loc: 13, sideEffect: true,
       invokes: [ selection1  ], # Foo[int].Get() int
       reads: [
-        interfaceInst2, # Pointer[Foo[int]]
+        interfaceInst1, # Pointer[Foo[int]]
         objectInst1     # Foo[int]
       ],
       writes: [
-        interfaceInst2, # Pointer[Foo[int]]
+        interfaceInst1, # Pointer[Foo[int]]
         objectInst1,    # Foo[int]
         selection3      # Foo[int].value int
       ]
@@ -95,18 +82,13 @@
     { # 1. Foo[int]{ value int }{}
       generic: 1, resData: 1, resInterface: 1,
       methods: [ 1 ], instanceTypes: [ basic1 ]
-    },
-    { # 2. Foo[X <any>]{ value X }{}
-      generic: 1, resData: 3, resInterface: 1,
-      methods: [ 2 ],
-      instanceTypes: [ typeParam2 ]
     }
   ],
   objects: [
     { # 1. Foo[T <any>]{ value T }{}
       name: Foo, package: 2, loc: 5,
       data: 2, exported: true, interface: 1,
-      instances:  [ 1, 2 ],
+      instances:  [ 1 ],
       methods:    [ 1 ],
       typeParams: [ 1 ]
     }
@@ -116,34 +98,30 @@
       name: $builtin, path: $builtin,
       interfaces: [ 1 ]
     },
-    { # 1. main package
+    { # 2. main package
       name: main, path: command-line-arguments,
       methods: [ 1, 2 ],
       objects: [ 1 ]
     }
   ],
   selections: [
-    { name: Get,   origin: interfaceInst2 }, # 1. Pointer[Foo[int]].Get() int
-    { name: value, origin: interfaceInst3 }, # 2. Pointer[Foo[X <any>]].value X
+    { name: Get,   origin: interfaceInst1 }, # 1. Pointer[Foo[int]].Get() int
+    { name: value, origin: interfaceInst2 }, # 2. Pointer[Foo[X <any>]].value X
     { name: value, origin: objectInst1 }     # 3. Foo[int].value int
   ],
   signatures: [
     {},                 # 1. func()()
     { results: [ 1 ] }, # 2. func() int
-    { results: [ 2 ] }, # 3. func() Foo[T <any>]
-    { results: [ 3 ] }, # 4. func() Foo[int]
-    { results: [ 4 ] }, # 5. func() Foo[X <any>]
-    { results: [ 5 ] }, # 6. func() T <any>
-    { results: [ 6 ] }  # 7. func() X <any>
+    { results: [ 2 ] }, # 3. func() Foo[int]
+    { results: [ 3 ] }, # 4. func() Foo[T <any>]
+    { results: [ 4 ] }  # 5. func() T <any>
   ],
   structDescs: [
     { fields: [ 1 ] }, # 1. struct { value int }
-    { fields: [ 2 ] }, # 2. struct { value T <any> }
-    { fields: [ 3 ] }  # 3. struct { value X <any> }
+    { fields: [ 2 ] }  # 2. struct { value T <any> }
   ],
   typeParams: [
     { name: T, type: interfaceDesc1 }, # 1. T any
-    { name: X, type: interfaceDesc1 }  # 2. X any
   ],
   locs: {
     '1': main.go

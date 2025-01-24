@@ -98,5 +98,5 @@ func (t *typeParamImp) String() string {
 	}
 	t.loopPrevention = true
 	defer func() { t.loopPrevention = false }()
-	return t.name + t.typ.String()
+	return t.name + ` ` + t.typ.String()
 }

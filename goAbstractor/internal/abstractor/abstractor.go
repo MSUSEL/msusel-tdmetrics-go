@@ -37,10 +37,11 @@ func Abstract(cfg Config) constructs.Project {
 	)
 
 	ab := &abstractor{
-		packages: cfg.Packages,
-		log:      log,
-		baker:    bk,
-		proj:     proj,
+		packages:  cfg.Packages,
+		log:       log,
+		baker:     bk,
+		proj:      proj,
+		typeCache: map[any]any{},
 	}
 	ab.abstractProject()
 
@@ -57,6 +58,7 @@ type abstractor struct {
 	proj       constructs.Project
 	curPkg     constructs.Package
 	tpReplacer map[*types.TypeParam]*types.TypeParam
+	typeCache  map[any]any
 }
 
 func (ab *abstractor) pos(pos token.Pos) token.Position {
@@ -68,7 +70,7 @@ func (ab *abstractor) info() *types.Info {
 }
 
 func (ab *abstractor) converter() converter.Converter {
-	return converter.New(ab.log, ab.baker, ab.proj, ab.curPkg, ab.tpReplacer)
+	return converter.New(ab.log, ab.baker, ab.proj, ab.curPkg, ab.tpReplacer, ab.typeCache)
 }
 
 func (ab *abstractor) abstractProject() {
@@ -143,9 +145,10 @@ func (ab *abstractor) abstractTypeSpec(spec *ast.TypeSpec) {
 			With(`pos`, ab.pos(spec.Pos())))
 	}
 
+	context := tv.Type.String()
 	loc := ab.proj.Locs().NewLoc(spec.Pos())
-	tp := ab.abstractTypeParams(spec.TypeParams)
-	typ := ab.converter().ConvertType(tv.Type, tv.Type.String())
+	tp := ab.abstractTypeParams(spec.TypeParams, context)
+	typ := ab.converter().ConvertType(tv.Type, context)
 
 	if it, ok := typ.(constructs.InterfaceDesc); ok {
 		ab.proj.NewInterfaceDecl(constructs.InterfaceDeclArgs{

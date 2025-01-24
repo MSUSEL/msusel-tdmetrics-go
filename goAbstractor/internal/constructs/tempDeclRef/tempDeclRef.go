@@ -52,6 +52,10 @@ func (r *tempDeclRefImp) Resolved() bool {
 }
 
 func (r *tempDeclRefImp) SetResolution(con constructs.Construct) {
+	if r.con == con {
+		return
+	}
+	assert.ArgIsNil(`resolved`, r.con)
 	assert.ArgNotNil(`con`, con)
 	r.con = con
 }
