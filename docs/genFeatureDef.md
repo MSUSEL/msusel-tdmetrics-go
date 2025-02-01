@@ -214,14 +214,18 @@ interface {
 
 ### Argument
 
-An argument (`argument`) is an optionally named parameter or result. For example
-`Foo(x string, y int)(ok bool, err error)` has four arguments: `x string`,
+An argument (`argument`) is an optionally named parameter or result.
+For example, the following method has four arguments: `x string`,
 `y int`, `ok bool`, `err error`. The same function could be defined without
 names `Foo(string, int)(bool, error)` and still have four arguments.
 In many cases the name of the argument is ignored since interface abstracts
 may have different argument names from the method that it matches with.
-Any repeat type argument in Go is expanded, e.g. `Foo(x, y float64)` will
+Any repeat type argument in Go is expanded, e.g. `Bar(x, y float64)` will
 have two arguments, `x float64` and `y float64`.
+
+```Go
+Foo(x string, y int)(ok bool, err error)
+```
 
 | Name    | Optional | Extra | Description |
 |:--------|:--------:|:-----:|:------------|
@@ -308,7 +312,15 @@ type Foo[T any] interface {
 
 An interface description (`interfaceDesc`) describes the type of an interface.
 This interface type may be the type for an interface declaration, interface
-instances, and interface literal, e.g. `interface { String() string }`.
+instances, and interface literal.
+
+```Go
+interface { String() string }
+```
+
+```Go
+interface { int | ~string }
+```
 
 | Name        | Optional | Extra | Description |
 |:------------|:--------:|:-----:|:------------|
@@ -369,6 +381,14 @@ A method declaration (`method`) us a named definition of a function not
 attached to an object or a method with a receiver object. The method may be
 generic and have used instances attached to it.
 
+```Go
+func Foo[T any](value T) { }
+```
+
+```Go
+func (b *Bar[T]) Foo(value T) { }
+```
+
 | Name         | Optional | Extra | Description |
 |:-------------|:--------:|:-----:|:------------|
 | `exported`   | ◯ | ⬤ | True if the scope is "exported". |
@@ -392,7 +412,11 @@ A method instance (`methodInst`) is an instantiation of a generic
 The instance types are the type arguments used in the type parameters.
 The instance types may be type parameters as well as a fully realized type.
 For example, `type Foo[T any]() T { ... }` with instance type `bool`
-will create `type Foo[bool]() bool { ... }`.
+will create the following:
+
+```Go
+type Foo[bool]() bool { ... }
+```
 
 | Name            | Optional | Extra | Description |
 |:----------------|:--------:|:-----:|:------------|
@@ -467,7 +491,11 @@ A object instance (`objectInst`) is an instantiation of a generic
 The instance types are the type arguments used in the type parameters.
 The instance types may be type parameters as well as a fully realized type.
 For example, `type Foo[T any] struct { value T }` with instance type `bool`
-will create `type Foo[bool] struct { value bool }`.
+will create the following:
+
+```Go
+type Foo[bool] struct { value bool }
+```
 
 | Name            | Optional | Extra | Description |
 |:----------------|:--------:|:-----:|:------------|
@@ -505,6 +533,10 @@ e.g. `f.x` is `x` selected from `f`.
 Selections are used in [metrics](#metrics) to indicate higher detailed
 information than simply specifying the type of the selected field, method,
 or abstract.
+
+```Go
+foo.value
+```
 
 | Name     | Optional | Extra | Description |
 |:---------|:--------:|:-----:|:------------|
@@ -588,7 +620,11 @@ type Foo[T any] struct { value T }
 
 A value declaration (`value`) is a package level variable outside of any
 declared object. A value may be constant and may be initialized by an
-expression. For example `var X = 10`.
+expression.
+
+```Go
+var X = 10
+```
 
 | Name       | Optional | Extra | Description |
 |:-----------|:--------:|:-----:|:------------|
