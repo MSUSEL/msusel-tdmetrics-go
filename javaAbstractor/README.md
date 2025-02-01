@@ -4,6 +4,7 @@
   - [Resources](#resources)
   - [Setup Abstractor](#setup-abstractor)
   - [Running Abstractor](#running-abstractor)
+  - [Running Tests](#running-tests)
 
 ## Resources
 
@@ -37,3 +38,9 @@
    all the needed dependencies for this project.
 
 ## Running Abstractor
+
+1. Install the Java abstractor with `mvn install`.
+
+## Running Tests
+
+Run the tests with `mvn test`.
