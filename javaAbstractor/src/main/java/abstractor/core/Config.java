@@ -10,9 +10,10 @@ public class Config {
     public String input  = "";
     public String output = "";
 
-    public boolean verbose;
-    public boolean writeTypes;
-    public boolean writeIndices;
+    public boolean verbose      = false;
+    public boolean minimize     = false;
+    public boolean writeTypes   = false;
+    public boolean writeIndices = false;
 
     /**
      * This will populate the configs with the given command line arguments
@@ -48,24 +49,28 @@ public class Config {
                 return false;
             }
 
+            // Read and validate the arguments.
             if (!cmd.hasOption("input")) {
                 out.println("Must provide an input folder.");
                 out.println("Use -h for help with arguments.");
                 return false;
             }
-            this.input = cmd.getOptionValue("input");
-            
+            String input = cmd.getOptionValue("input");
+            // TODO: Check that the input exists.
+
             if (!cmd.hasOption("output")) {
                 out.println("Must provide an output file.");
                 out.println("Use -h for help with arguments.");
                 return false;
             }
-            this.output = cmd.getOptionValue("output");
-        
+            String output = cmd.getOptionValue("output");
+            // TODO: Check that the output base directory exists.
 
-
-
-
+            // Write new values to config.
+            this.input    = input;
+            this.output   = output;
+            this.verbose  = cmd.hasOption("verbose");
+            this.minimize = cmd.hasOption("minimize");
             return true;
 
         } catch(ParseException ex) {
@@ -86,6 +91,7 @@ public class Config {
 
         ArrayList<String> flags = new ArrayList<String>();
         if (this.verbose) flags.add("Verbose");
+        if (this.minimize) flags.add("Minimize");
         if (this.writeTypes) flags.add("Write Types");
         if (this.writeIndices) flags.add("Write Indices");
     
