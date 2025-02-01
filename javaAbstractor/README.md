@@ -1,14 +1,10 @@
 # Java Abstractor
 
 - [Java Abstractor](#java-abstractor)
-  - [Resources](#resources)
   - [Setup Abstractor](#setup-abstractor)
   - [Running Abstractor](#running-abstractor)
   - [Running Tests](#running-tests)
-
-## Resources
-
-- [Eclipse JDT API](https://www.vogella.com/tutorials/EclipseJDT/article.html)
+  - [Resources](#resources)
 
 ## Setup Abstractor
 
@@ -39,8 +35,19 @@
 
 ## Running Abstractor
 
-1. Install the Java abstractor with `mvn install`.
+1. Compile with `mvn clean compile assembly:single`.
+
+2. Run with `java -jar .\target\abstractor-0.1-jar-with-dependencies.jar <options>`.
+
+3. For help with the `<options>` use `-help`.
 
 ## Running Tests
 
 Run the tests with `mvn test`.
+
+## Resources
+
+- [Eclipse JDT API](https://www.vogella.com/tutorials/EclipseJDT/article.html)
+
+- [How to build a CLI app with Maven](https://www.sohamkamani.com/java/cli-app-with-maven/).
+  Includes how to setup tests with junit.
