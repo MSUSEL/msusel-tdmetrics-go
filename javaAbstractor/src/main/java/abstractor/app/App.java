@@ -7,6 +7,7 @@ public class App {
     public static void main(String[] args) {
         final Config cfg = new Config();
         if (!cfg.FromArgs(args, null)) return;
-        new Abstractor(cfg).run();
+        Abstractor ab = new Abstractor(cfg);
+        ab.run();
     }
 }

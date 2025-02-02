@@ -1,5 +1,8 @@
 package abstractor.core;
 
+import spoon.Launcher;
+import spoon.reflect.declaration.CtClass;
+
 public class Abstractor {
     private final Config cfg;
 
@@ -8,6 +11,17 @@ public class Abstractor {
     }
 
     public void run() {
-        System.out.println(this.cfg);
+        try {
+            System.out.println("Config:"+this.cfg);
+            System.out.println("===========================");
+
+
+            CtClass l = Launcher.parseClass("class A { void m() { System.out.println(\"yeah\");} }");
+            System.out.println(l);
+
+
+        } catch(Exception ex) {
+            System.out.println(ex);
+        }
     }
 }

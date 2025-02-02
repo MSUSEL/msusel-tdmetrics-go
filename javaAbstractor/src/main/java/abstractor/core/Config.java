@@ -7,16 +7,18 @@ import java.io.PrintWriter;
 import org.apache.commons.cli.*;
 
 public class Config {
-    public String input  = "";
+    public String input = "";
     public String output = "";
 
-    public boolean verbose      = false;
-    public boolean minimize     = false;
-    public boolean writeTypes   = false;
+    public boolean verbose = false;
+    public boolean minimize = false;
+    public boolean writeTypes = false;
     public boolean writeIndices = false;
 
     /**
-     * This will populate the configs with the given command line arguments
+     * This will populate the configs with the given command line arguments.
+     * 
+     * @see https://commons.apache.org/proper/commons-cli/usage.html
      * @param args The full command line that was passed into the main method.
      * @param out  The output to write errors and help out to.
      *             If null, the default output (System.out) is used.

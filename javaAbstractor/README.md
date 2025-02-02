@@ -8,11 +8,14 @@
 
 ## Setup Abstractor
 
-1. Install an OpenJDK. This project was built using
-   [RedHat OpenJDK v1.8.0](https://developers.redhat.com/products/openjdk/download)
+1. Install OpenJDK 17.0.14 for Java 17.
+   1. This project was built using
+      [OpenLogic](https://www.openlogic.com/openjdk-downloads).
+   2. See the [Java 17 Almanac](https://javaalmanac.io/jdk/17/)  
 
-2. Install Maven. This project was built using
-   [Apache Maven v3.9.9](https://maven.apache.org/download.cgi)
+2. Install Maven.
+   1. This project was built using
+      [Apache Maven v3.9.9](https://maven.apache.org/download.cgi)
 
 3. Check the install by running the Maven version check `mvn -v`.
 
@@ -23,15 +26,10 @@
     msusel-tdmetrics-go\javaAbstractor> mvn -v
     Apache Maven 3.9.9 (8e8579a9e76f7d015ee5ec7bfcdc97d260186937)
     Maven home: C:\Program Files\Apache\Maven\3.9.9
-    Java version: 1.8.0_392, vendor: Red Hat, Inc., runtime: C:\Program Files (x86)\RedHat\OpenJDK\1.8.0\jre
+    Java version: 17.0.14, vendor: OpenLogic, runtime: C:\Program Files (x86)\OpenJDK\17.0.14
     Default locale: en_US, platform encoding: Cp1252
     OS name: "windows 11", version: "10.0", arch: "amd64", family: "windows"
     ```
-
-4. From the same folder as this README.md, run `mvn compile`.
-
-   This will finish installing by downloading
-   all the needed dependencies for this project.
 
 ## Running Abstractor
 
@@ -47,7 +45,18 @@ Run the tests with `mvn test`.
 
 ## Resources
 
-- [Eclipse JDT API](https://www.vogella.com/tutorials/EclipseJDT/article.html)
+- Spoon
+  - [Spoon Forge](https://spoon.gforge.inria.fr/)
+    - Has the Spoon BibTeX reference to [Paper](https://inria.hal.science/hal-01078532/document)
+  - [Maven Repository](https://central.sonatype.com/artifact/fr.inria.gforge.spoon/spoon-core)
+  - [Examples](https://github.com/SpoonLabs/spoon-examples/tree/master)
+
+- Eclipse JDT API
+  - [Project](https://projects.eclipse.org/projects/eclipse.jdt)
+  - [Github](https://github.com/eclipse-jdt/eclipse.jdt.core)
+  - [Programmer Guide](https://github.com/eclipse-jdt/eclipse.jdt.core/wiki/Programmer-Guide)
+  - [Vogella Plugin Example](https://www.vogella.com/tutorials/EclipseJDT/article.html)
+  - [Maven Repository](https://mvnrepository.com/artifact/org.eclipse.jdt/org.eclipse.jdt.core/3.40.0)
 
 - [How to build a CLI app with Maven](https://www.sohamkamani.com/java/cli-app-with-maven/).
   Includes how to setup tests with junit.
