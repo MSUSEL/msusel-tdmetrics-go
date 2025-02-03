@@ -1,20 +1,58 @@
-package abstractor.core;
+package abstractor.app;
 
 import java.util.ArrayList;
-import java.io.PrintStream;
-import java.io.PrintWriter;
+import java.io.*;
+import java.nio.file.*;
 
 import org.apache.commons.cli.*;
 
 public class Config {
-    public String input = "";
-    public String output = "";
+    public String input;
+    public String output;
 
-    public boolean verbose = false;
-    public boolean minimize = false;
-    public boolean writeTypes = false;
-    public boolean writeIndices = false;
+    public boolean verbose;
+    public boolean minimize;
+    public boolean writeTypes;
+    public boolean writeIndices;
 
+    static private Options getArgsOptions() {
+        final Options op = new Options();
+        op.addOption("i", "input", true,
+            "The input path to the project to read. "+
+            "The project directory must have a pom.xml Maven file.");
+        
+        op.addOption("o", "output", true,
+            "The output file path to write the JSON to. "+
+            "If not given, the JSON will be outputted to the console.");
+
+        op.addOption("h", "help", false,
+            "Prints this message.");
+        
+        op.addOption("m", "minimize", false,
+            "Indicates the JSON output should beb minimized instead of formatted.");
+        
+        op.addOption("v", "verbose", false,
+            "Indicates the abstraction process should output additional status information.");
+        return op;
+    }
+
+    static private boolean isValidInput(String input) {
+        final Path inPath = Path.of(input);
+        return Files.exists(inPath) &&
+            Files.isDirectory(inPath) &&
+            Files.exists(Path.of(input, "pom.xml"));
+    }
+
+    static private boolean isValidOutput(String output) {
+        if (output == null) return true;
+        final Path outPath = Path.of(output);
+        final Path parPath = outPath.getParent();
+        return parPath != null &&
+            Files.exists(parPath) &&
+            Files.isDirectory(parPath) &&
+            (outPath.endsWith(".json") || outPath.endsWith(".yaml") || outPath.endsWith(".yml"));
+    }
+    
     /**
      * This will populate the configs with the given command line arguments.
      * 
@@ -27,19 +65,7 @@ public class Config {
      */
     public boolean FromArgs(String[] args, PrintStream out) {
         if (out == null) out = System.out;
-        final Options options = new Options()
-            .addOption("i", "input", true,
-                "The input path to the directory of the project or package to read. "+
-                "The project directory should have a go.mod file.")
-            .addOption("o", "output", true,
-                "The output file path to write the JSON to. "+
-                "If not given, the JSON will be outputted to the console.")
-            .addOption("h", "help", false,
-                "Prints this message.")
-            .addOption("m", "minimize", false,
-                "Indicates the JSON output should beb minimized instead of formatted.")
-            .addOption("v", "verbose", false,
-                "Indicates the abstraction process should output additional status information.");
+        final Options options = getArgsOptions();
 
         try {
             final CommandLine cmd = new DefaultParser().parse(options, args);
@@ -53,20 +79,23 @@ public class Config {
 
             // Read and validate the arguments.
             if (!cmd.hasOption("input")) {
-                out.println("Must provide an input folder.");
+                out.println("Must provide an input path to project folder containing a pom.xml Maven file.");
                 out.println("Use -h for help with arguments.");
                 return false;
             }
             String input = cmd.getOptionValue("input");
-            // TODO: Check that the input exists.
-
-            if (!cmd.hasOption("output")) {
-                out.println("Must provide an output file.");
+            if (!isValidInput(input)) {
+                out.println("Input path must be an existing directory containing a pom.xml Maven file.");
                 out.println("Use -h for help with arguments.");
                 return false;
             }
+
             String output = cmd.getOptionValue("output");
-            // TODO: Check that the output base directory exists.
+            if (!isValidOutput(output)) {
+                out.println("If an output path is given, it must be in an existing directory and a JSON (or YAML) file.");
+                out.println("Use -h for help with arguments.");
+                return false;
+            }
 
             // Write new values to config.
             this.input    = input;
