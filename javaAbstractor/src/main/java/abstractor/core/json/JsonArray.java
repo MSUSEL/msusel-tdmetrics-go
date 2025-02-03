@@ -41,7 +41,7 @@ public class JsonArray extends ArrayList<JsonNode> implements JsonNode {
 
     public String toString() {
         ByteArrayOutputStream buf = new ByteArrayOutputStream();
-        this.toString(new PrintWriter(buf), false, "");
+        this.toString(new PrintStream(buf), false, "");
         return buf.toString();
     }
 }
