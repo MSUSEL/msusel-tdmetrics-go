@@ -215,16 +215,28 @@ interface {
 ### Argument
 
 An argument (`argument`) is an optionally named parameter or result.
-For example, the following method has four arguments: `x string`,
-`y int`, `ok bool`, `err error`. The same function could be defined without
-names `Foo(string, int)(bool, error)` and still have four arguments.
-In many cases the name of the argument is ignored since interface abstracts
-may have different argument names from the method that it matches with.
-Any repeat type argument in Go is expanded, e.g. `Bar(x, y float64)` will
-have two arguments, `x float64` and `y float64`.
+
+For example, the `Foo` method below has four arguments: `x string`,
+`y int`, `ok bool`, `err error`.
 
 ```Go
-Foo(x string, y int)(ok bool, err error)
+func Foo(x string, y int)(ok bool, err error) { }
+```
+
+The next method `Bar` has a matching signature to `Foo`
+but defined with nameless arguments.
+In many cases the name of the argument is ignored since interface abstracts
+may have different argument names from the method that it matches with.
+
+```Go
+func Bar(string, int)(bool, error) { }
+```
+
+Any repeat type argument in Go is expanded.
+For example, `Baz` below has two arguments, `x float64` and `y float64`.
+
+```Go
+func Baz(x, y float64) { }
 ```
 
 | Name    | Optional | Extra | Description |
@@ -275,6 +287,10 @@ struct {
 Any repeat type fields in Go is expanded, e.g. `struct { x, y float64 }` will
 have two fields, `x float64` and `y float64`.
 
+Any embedded fields will be named using the name of the base type,
+e.g. `struct { *Foo[int] }` will be the same as `struct { Foo *Foo[int] }`.
+Unnamed types are not allowed to be embedded into a struct.
+
 | Name       | Optional | Extra | Description |
 |:-----------|:--------:|:-----:|:------------|
 | `embedded` | ◯ | ⬤ | True if the field is from an embedded struct. |
@@ -293,6 +309,10 @@ a [type parameter](#type-parameter) `T` and an [abstract](#abstract) `Bar`.
 ```Go
 type Foo[T any] interface {
   Bar(value T) string
+}
+
+type Baz interface {
+  Error() string
 }
 ```
 
@@ -316,9 +336,7 @@ instances, and interface literal.
 
 ```Go
 interface { String() string }
-```
 
-```Go
 interface { int | ~string }
 ```
 
@@ -339,8 +357,24 @@ An interface instance (`interfaceInst`) is an instantiation of a generic
 interface declaration.
 The instance types are the type arguments used in the type parameters.
 The instance types may be type parameters as well as a fully realized type.
-For example, `type Foo[T any] interface { Value() T }` with instance type `bool`
-will create `type Foo[bool] interface { Value() bool }`.
+For example, `Foo[T any]` with instance type `bool` will create `Foo[bool]`.
+
+```Go
+type Foo[T any] interface { Value() T }
+
+type Foo[bool] interface { Value() bool }
+```
+
+Some instances are still generic instead of a fully realized type.
+For example, `Foo[T any]` with type parameter `S` will create `Foo[S]`.
+Any type parameter being used in an instance will always be the same
+as the original or a subtype. If they are the same, then at least one of the
+other type parameters in the instance must be a subtype.
+
+```Go
+func Bar[S int | string]() Foo[S] { }
+```
+
 
 | Name            | Optional | Extra | Description |
 |:----------------|:--------:|:-----:|:------------|
@@ -354,39 +388,56 @@ will create `type Foo[bool] interface { Value() bool }`.
 
 The locations (`locations`) is a map from offsets to file names.
 The offsets start at 1 and accumulate with the line count of each file.
-For example, given 3 files `A.go`, `B.go`, and `C.go` that have 42, 55,
-and 38 lines respectively, the following locations map could be created:
+For example, given 3 files `Apple.go`, `Banana.go`, and `Carrot.go` that
+have 42, 55, and 38 lines respectively, the following locations map
+could be created:
 
 ```JSON
 {
-  "1": "A.go",
-  "43": "B.go",
-  "98": "C.go",
+  "1": "Apple.go",
+  "43": "Banana.go",
+  "98": "Carrot.go",
 }
 ```
 
 The `loc` item in some constructs are the offset into this map.
-The `loc` offset may be tween two file offsets because the file offsets
-indicate line 1 in the file. For the above example a `loc` of 1 would mean
-the first line in "A.go", 2 is the second line in "A.go", and 42 is the last
-line in "A.go". Then 43 is the first line in "B.go", 44 is the second line,
-and so on. Given 104 we can determine it is in "C.go" since that file's offset
-is the largest value equal to or less than the offset, then we can subtract
-the file offset from the `loc` offset plus one to get the line number,
-$104 - 98 + 1 = 7$, to determine the `loc` is on the 7th line of "C.go".
+The `loc` offset may be between two file offsets because the file offsets
+indicate line 1 in the file.
+
+To determine the file and lines, find the highest number offset
+that is less than or equal to the location. That will give you the file
+and the offset to that file's first line. Then $loc - firstLine + 1 = line$.
+
+For the above example, given $104$ we can determine it is in "Carrot.go".
+"Carrot.go"'s first line is at the offset $98$, so we calculate the line with
+$104 - 98 + 1 = 7$, to determine the `loc` is on the 7th line of "Carrot.go".
+
+| loc |    file   | lineNum |
+|----:|----------:|--------:|
+|   1 |  Apple.go |    1    |
+|   2 |  Apple.go |    2    |
+|  41 |  Apple.go |   41    |
+|  42 |  Apple.go |   42    |
+|  43 | Banana.go |    1    |
+|  44 | Banana.go |    2    |
+|  96 | Banana.go |   53    |
+|  97 | Banana.go |   54    |
+|  98 | Carrot.go |    1    |
+|  99 | Carrot.go |    2    |
+| 104 | Carrot.go |    7    |
 
 ### Method
 
 A method declaration (`method`) us a named definition of a function not
-attached to an object or a method with a receiver object. The method may be
-generic and have used instances attached to it.
+attached to an object or a method with a receiver object.
+The method may be generic and have instances attached to it.
 
 ```Go
 func Foo[T any](value T) { }
-```
 
-```Go
 func (b *Bar[T]) Foo(value T) { }
+
+func Baz(value int)(ok bool, err error) { }
 ```
 
 | Name         | Optional | Extra | Description |
@@ -411,11 +462,29 @@ A method instance (`methodInst`) is an instantiation of a generic
 [method declaration](#method).
 The instance types are the type arguments used in the type parameters.
 The instance types may be type parameters as well as a fully realized type.
-For example, `type Foo[T any]() T { ... }` with instance type `bool`
-will create the following:
+
+For example, `Foo[T any](value T)` with instance type `bool`
+will create, `Foo[bool](value bool)`. The instance was created by
+calling `Foo` inside a method with the type argument given.
+The type argument may be another tye parameter, meaning the method is
+still generic, or concrete to fully realize the method.
 
 ```Go
-type Foo[bool]() bool { ... }
+func Foo[T any](value T) { }
+
+func Foo[bool]() bool { }
+```
+
+Instances of a receiver cascade down to create instances of the methods with
+that receiver. Below `Bar[T]` gets fully realized with `int`. The generic
+method `Bar[T].Foo` then has an instance for `Bar[int].Foo`.
+
+```Go
+type Bar[T any] struct { }
+
+func (b *Bar[T]) Foo(value T) { }
+
+func (b *Bar[int]) Foo(value int) { }
 ```
 
 | Name            | Optional | Extra | Description |
@@ -454,21 +523,35 @@ technical debt analysis.
 
 An object declaration (`object`) is a collection of data via a
 [structure](#structure-description) with zero or more [methods](#method),
-like a "class" in Java. The object may be generic if it has type parameters.
+like a "class" in Java.
 
 The following code defines the object `Foo` with the structure
 `struct { x, y int }`  and a method `Bar`.
 
 ```Go
-type Foo struct {
-  x, y int
-}
+type Foo struct { x, y int }
 
-func (f Foo) Bar() { ... }
+func (f Foo) Bar() { }
 ```
 
-If the named type in Go is defined without a struct, e.g. `type Foo int`,
+The object may be generic if it has type parameters.
+Objects
+
+```Go
+type Bar[T any] struct { x, y T }
+
+func (b Bar[T]) Bar(x, y T) { }
+```
+
+If the named type in Go is defined without a struct, e.g. `Baz`,
 the abstractor will have to pack the type into struct.
+
+```Go
+type Baz int
+
+type Baz struct { $data int }
+```
+
 
 | Name         | Optional | Extra | Description |
 |:-------------|:--------:|:-----:|:------------|
@@ -490,10 +573,11 @@ A object instance (`objectInst`) is an instantiation of a generic
 [object declaration](#object).
 The instance types are the type arguments used in the type parameters.
 The instance types may be type parameters as well as a fully realized type.
-For example, `type Foo[T any] struct { value T }` with instance type `bool`
-will create the following:
+For example, `Foo[T any]` with instance type `bool` will create `Foo[bool]`:
 
 ```Go
+type Foo[T any] struct { value T }
+
 type Foo[bool] struct { value bool }
 ```
 
@@ -528,15 +612,17 @@ typically are all part of a related library.
 
 A selection (`selection`) represents a field, method, or abstract being
 accessed. A selection is typically caused by a `dot` in both Java and Go,
-e.g. `f.x` is `x` selected from `f`.
+e.g. `f.value` is `value` selected from `f` of type `Foo`.
+
+```Go
+type Foo { value int }
+
+func Bar(f Foo) int { return f.value }
+```
 
 Selections are used in [metrics](#metrics) to indicate higher detailed
 information than simply specifying the type of the selected field, method,
 or abstract.
-
-```Go
-foo.value
-```
 
 | Name     | Optional | Extra | Description |
 |:---------|:--------:|:-----:|:------------|
@@ -624,6 +710,10 @@ expression.
 
 ```Go
 var X = 10
+
+var Y, Z = func() (int, int) {
+  return X*2, X+3
+}()
 ```
 
 | Name       | Optional | Extra | Description |

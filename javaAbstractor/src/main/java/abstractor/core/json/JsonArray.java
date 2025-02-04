@@ -9,7 +9,6 @@ public class JsonArray extends ArrayList<JsonNode> implements JsonNode {
         for(JsonNode node: nodes) this.add(node);
     }
 
-
     public boolean isSimple() {
         for (JsonNode elem : this) {
             if (!(elem instanceof JsonValue))

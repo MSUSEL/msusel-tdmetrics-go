@@ -40,8 +40,8 @@ flowchart LR
     S --> T
 ```
 
-If $S \supset T \supset U$, then $U$ inherits $T$ and $T$ inherits $S$.
-$U$ inherits $S$ too, in OO this could be defined by the developer,
+If $S \supset T \supset U$, then $S$ inherits $T$ and $T$ inherits $U$.
+$S$ inherits $U$ too, in OO this could be defined by the developer,
 however with duck typing we assume it is only a transient inheritance
 through $T$.
 

@@ -36,7 +36,7 @@ public class Abstractor {
 
     /**
      * Parses the source for a given class and adds it.
-     * @example parseClass("class A { void m() { System.out.println(\"yeah\");} }"); 
+     * @example parseClass("class C { void m() { System.out.println(\"hello\"); } }"); 
      * @param source The class source code.
      */
     public void addClassFromSource(String source) {
@@ -49,11 +49,11 @@ public class Abstractor {
 
     public JsonNode toJson(boolean writeTypes, boolean writeIndices) {
         JsonObject obj = new JsonObject();
-        obj.put("language", JsonValue.of("Java"));
+        obj.put("language", JsonValue.of("java"));
 
 
 
-        
+
         return obj;
     }
 }
