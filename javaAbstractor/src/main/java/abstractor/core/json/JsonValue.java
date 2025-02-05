@@ -51,20 +51,43 @@ public class JsonValue implements JsonNode {
     public int asInt() {
         if (this.isInt()) return (int)this.value;
         if (this.isDouble()) return (int)((double)this.value);
+        if (this.isBool()) return (boolean)this.value ? 1 : 0;
+        if (this.isString()) {
+            try {
+                return Integer.parseInt((String)this.value);
+            } catch(Exception ex) {}
+            try {
+                return (int)Double.parseDouble((String)this.value);
+            } catch(Exception ex) {}
+            if (Boolean.parseBoolean((String)this.value)) return 1;
+        }
         return 0;
     }
     
     public double asDouble() {
         if (this.isDouble()) return (double)this.value;
-        if (this.isInt()) return (int)this.value;
+        if (this.isInt()) return (double)((int)this.value);
+        if (this.isBool()) return (boolean)this.value ? 1.0 : 0.0;
+        if (this.isString()) {
+            try {
+                return Double.parseDouble((String)this.value);
+            } catch(Exception ex) {}
+            if (Boolean.parseBoolean((String)this.value)) return 1.0;
+        }
         return 0.0;
     }
     
     public boolean asBool() {
         if (this.isBool()) return (boolean)this.value;
-        if (this.isInt()) return (int)this.value > 0;
-        if (this.isDouble()) return (double)this.value > 0.0;
-        return this.value == "true";
+        if (this.isInt()) return (int)this.value != 0;
+        if (this.isDouble()) return (double)this.value != 0.0;
+        if (this.isString()) {
+            if (Boolean.parseBoolean((String)this.value)) return true;
+            try {
+                return Double.parseDouble((String)this.value) != 0.0;
+            } catch(Exception ex) {}
+        }
+        return false;
     }
 
     public String toString() {

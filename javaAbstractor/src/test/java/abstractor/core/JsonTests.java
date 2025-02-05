@@ -10,34 +10,174 @@ public class JsonTests {
     
     @Test
     public void FormatValueNull() {
-        assertEquals("null", JsonValue.ofNull().toString());
+        final JsonValue v = JsonValue.ofNull();
+        assertEquals(true, v.isNull());
+        assertEquals(false, v.isString());
+        assertEquals(false, v.isInt());
+        assertEquals(false, v.isDouble());
+        assertEquals(false, v.isBool());
+
+        assertEquals("null", v.toString());
+        assertEquals("null", v.asString());
+        assertEquals(0, v.asInt());
+        assertEquals(0.0, v.asDouble());
+        assertEquals(false, v.asBool());
     }
 
     @Test
-    public void FormatValueBool() {
-        assertEquals("true", JsonValue.of(true).toString());
-        assertEquals("false", JsonValue.of(false).toString());
+    public void FormatValueBool1() {
+        final JsonValue v1 = JsonValue.of(true);
+        assertEquals(false, v1.isNull());
+        assertEquals(false, v1.isString());
+        assertEquals(false, v1.isInt());
+        assertEquals(false, v1.isDouble());
+        assertEquals(true, v1.isBool());
+
+        assertEquals("true", v1.toString());
+        assertEquals("true", v1.asString());
+        assertEquals(1, v1.asInt());
+        assertEquals(1.0, v1.asDouble());
+        assertEquals(true, v1.asBool());
     }
     
     @Test
-    public void FormatValueInt() {
-        assertEquals("0", JsonValue.of(0).toString());
-        assertEquals("-123", JsonValue.of(-123).toString());
-        assertEquals("321", JsonValue.of(321).toString());
+    public void FormatValueBool2() {
+        final JsonValue v2 = JsonValue.of(false);
+        assertEquals("false", v2.toString());
+        assertEquals("false", v2.asString());
+        assertEquals(0, v2.asInt());
+        assertEquals(0.0, v2.asDouble());
+        assertEquals(false, v2.asBool());
+    }
+    
+    @Test
+    public void FormatValueInt1() {
+        final JsonValue v1 = JsonValue.of(321);
+        assertEquals(false, v1.isNull());
+        assertEquals(false, v1.isString());
+        assertEquals(true, v1.isInt());
+        assertEquals(false, v1.isDouble());
+        assertEquals(false, v1.isBool());
+
+        assertEquals("321", v1.toString());
+        assertEquals("321", v1.asString());
+        assertEquals(321, v1.asInt());
+        assertEquals(321.0, v1.asDouble());
+        assertEquals(true, v1.asBool());
     }
 
     @Test
-    public void FormatValueFloat() {
-        assertEquals("0.0", JsonValue.of(0.0).toString());
-        assertEquals("-123.45", JsonValue.of(-123.45).toString());
-        assertEquals("45.321", JsonValue.of(45.321).toString());
+    public void FormatValueInt2() {
+        final JsonValue v2 = JsonValue.of(0);
+        assertEquals("0", v2.toString());
+        assertEquals("0", v2.asString());
+        assertEquals(0, v2.asInt());
+        assertEquals(0.0, v2.asDouble());
+        assertEquals(false, v2.asBool());
     }
 
     @Test
-    public void FormatValueString() {
-        assertEquals("\"\"", JsonValue.of("").toString());
-        assertEquals("\"cat\"", JsonValue.of("cat").toString());
-        assertEquals("\"hell\\\\o \\\"world\\\"\"", JsonValue.of("hell\\o \"world\"").toString());
+    public void FormatValueInt3() {
+        final JsonValue v3 = JsonValue.of(-123);
+        assertEquals("-123", v3.toString());
+    }
+
+    @Test
+    public void FormatValueDouble1() {
+        final JsonValue v1 = JsonValue.of(45.321);
+        assertEquals(false, v1.isNull());
+        assertEquals(false, v1.isString());
+        assertEquals(false, v1.isInt());
+        assertEquals(true, v1.isDouble());
+        assertEquals(false, v1.isBool());
+
+        assertEquals("45.321", v1.toString());
+        assertEquals("45.321", v1.asString());
+        assertEquals(45, v1.asInt());
+        assertEquals(45.321, v1.asDouble());
+        assertEquals(true, v1.asBool());
+    }
+
+    @Test
+    public void FormatValueDouble2() {
+        final JsonValue v2 = JsonValue.of(0.0);
+        assertEquals("0.0", v2.toString());
+        assertEquals("0.0", v2.asString());
+        assertEquals(0, v2.asInt());
+        assertEquals(0.0, v2.asDouble());
+        assertEquals(false, v2.asBool());
+    }
+
+    @Test
+    public void FormatValueDouble3() {
+        final JsonValue v3 = JsonValue.of(-123.45);
+        assertEquals("-123.45", v3.toString());
+    }
+
+    @Test
+    public void FormatValueString1() {
+        final JsonValue v1 = JsonValue.of("cat");
+        assertEquals(false, v1.isNull());
+        assertEquals(true, v1.isString());
+        assertEquals(false, v1.isInt());
+        assertEquals(false, v1.isDouble());
+        assertEquals(false, v1.isBool());
+
+        assertEquals("\"cat\"", v1.toString());
+        assertEquals("cat", v1.asString());
+        assertEquals(0, v1.asInt());
+        assertEquals(0, v1.asDouble());
+        assertEquals(false, v1.asBool());
+    }
+
+    @Test
+    public void FormatValueString2() {
+        final JsonValue v2 = JsonValue.of("0");
+        assertEquals("\"0\"", v2.toString());
+        assertEquals("0", v2.asString());
+        assertEquals(0, v2.asInt());
+        assertEquals(0.0, v2.asDouble());
+        assertEquals(false, v2.asBool());
+    }
+
+    @Test
+    public void FormatValueString3() {
+        final JsonValue v3 = JsonValue.of("12.34");
+        assertEquals("\"12.34\"", v3.toString());
+        assertEquals("12.34", v3.asString());
+        assertEquals(12, v3.asInt());
+        assertEquals(12.34, v3.asDouble());
+        assertEquals(true, v3.asBool());
+    }
+
+    @Test
+    public void FormatValueString4() {
+        final JsonValue v4 = JsonValue.of("true");
+        assertEquals("\"true\"", v4.toString());
+        assertEquals("true", v4.asString());
+        assertEquals(1, v4.asInt());
+        assertEquals(1.0, v4.asDouble());
+        assertEquals(true, v4.asBool());
+    }
+
+    @Test
+    public void FormatValueString5() {
+        final JsonValue v5 = JsonValue.of("");
+        assertEquals("\"\"", v5.toString());
+        assertEquals("", v5.asString());
+        assertEquals(0, v5.asInt());
+        assertEquals(0.0, v5.asDouble());
+        assertEquals(false, v5.asBool());
+    }
+
+    @Test
+    public void FormatValueString6() {
+        final JsonValue v6 = JsonValue.of("hell\\o \"world\"");
+        assertEquals("\"hell\\\\o \\\"world\\\"\"", v6.toString());
+        assertEquals("hell\\o \"world\"", v6.asString());
+        assertEquals(0, v6.asInt());
+        assertEquals(0.0, v6.asDouble());
+        assertEquals(false, v6.asBool());
     }
 
     @Test
