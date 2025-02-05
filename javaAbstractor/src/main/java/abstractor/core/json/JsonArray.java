@@ -19,7 +19,7 @@ public class JsonArray extends ArrayList<JsonNode> implements JsonNode {
 
     public void toString(PrintStream sb, boolean minimize, String indent) {
         if (isEmpty()) {
-            sb.append("[]");
+            sb.append(minimize? "[]": "[ ]");
             return;
         }
 
@@ -32,15 +32,20 @@ public class JsonArray extends ArrayList<JsonNode> implements JsonNode {
             if (first) first = false;
             else sb.append(",");
             if (!minimize) sb.append(separator);
+            
             elem.toString(sb, minimize, indent2);            
         }
         if (!minimize) sb.append(simple ? " " : "\n"+indent);
         sb.append("]");
     }
 
-    public String toString() {
+    public String toString(boolean minimize) {
         ByteArrayOutputStream buf = new ByteArrayOutputStream();
-        this.toString(new PrintStream(buf), false, "");
+        this.toString(new PrintStream(buf), minimize, "");
         return buf.toString();
+    }
+
+    public String toString() {
+        return this.toString(false);
     }
 }

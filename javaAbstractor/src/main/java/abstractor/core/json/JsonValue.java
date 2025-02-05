@@ -4,6 +4,20 @@ import java.io.PrintStream;
 
 public class JsonValue implements JsonNode {
 
+    public static String escape(String text) {
+        StringBuilder sb = new StringBuilder();
+        sb.append('"');
+        for (char c : text.toCharArray()) {
+            switch (c) {
+                case '\\': sb.append("\\\\"); break;
+                case '"':  sb.append("\\\""); break;
+                default:   sb.append(c);      break;
+            }
+        }
+        sb.append('"');
+        return sb.toString();
+    }
+
     public static JsonValue of(String value) { return new JsonValue(value); }
 
     public static JsonValue of(int value) { return new JsonValue(value); }
@@ -55,10 +69,12 @@ public class JsonValue implements JsonNode {
 
     public String toString() {
         if (this.isNull()) return "null";
-        if (this.isString())
-            return "\""+this.value.toString()
-                .replaceAll("\\", "\\\\").replaceAll("\"", "\\\"")+"\"";
+        if (this.isString()) return escape(this.value.toString());
         return this.value.toString();
+    }
+    
+    public String toString(boolean minimize) {
+        return this.toString();
     }
     
     public void toString(PrintStream sb, boolean minimize, String indent) {

@@ -63,6 +63,17 @@ jobs:
           working-directory: ./goAbstractor
           args: --out-format=colored-line-number
 
+  javaAbstractor:
+    name: Java Abstractor Lint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+      - run: mvn test
+
   techDebtMetrics:
     strategy:
       fail-fast: false
