@@ -6,13 +6,14 @@ import java.io.PrintStream;
 
 import abstractor.core.Abstractor;
 import abstractor.core.json.*;
+import abstractor.core.log.*;
 
 public class App {
     public static void main(String[] args) {
         final Config cfg = new Config();
         if (!cfg.FromArgs(args, null)) return;
 
-        Abstractor ab = new Abstractor(cfg.verbose ? System.out : null);
+        Abstractor ab = new Abstractor(cfg.verbose ? new Stream() : new Null());
         ab.addMavenProject(cfg.input);
 
         JsonNode node = ab.toJson(cfg.writeTypes, cfg.writeIndices);
