@@ -44,6 +44,14 @@ public class JsonValue implements JsonNode {
     
     public boolean isNull() { return this.value == null; }
 
+    public boolean isEmpty() {
+        if (this.isBool()) return !(boolean)this.value;
+        if (this.isInt()) return (int)this.value == 0;
+        if (this.isDouble()) return (double)this.value == 0.0;
+        if (this.isString()) return ((String)this.value).isEmpty();
+        return true;
+    }
+
     public String asString() {
         return this.isNull()? "null": this.value.toString();
     }

@@ -5,14 +5,15 @@ import spoon.MavenLauncher;
 import spoon.reflect.CtModel;
 import spoon.reflect.declaration.*;
 
-import abstractor.core.json.*;
 import abstractor.core.log.*;
 
 public class Abstractor {
-    private final Logger out;
+    private final Logger log;
+    private final Project proj;
 
-    public Abstractor(Logger out) {
-        this.out = out;
+    public Abstractor(Logger log, Project proj) {
+        this.log = log;
+        this.proj = proj;
     }
 
     /**
@@ -20,7 +21,7 @@ public class Abstractor {
      * @param mavenProject The path to the project file. 
      */
     public void addMavenProject(String mavenProject) {
-        this.out.log("Reading " + mavenProject);
+        this.log.log("Reading " + mavenProject);
         final MavenLauncher launcher = new MavenLauncher(mavenProject,
                  MavenLauncher.SOURCE_TYPE.APP_SOURCE);
         this.addModel(launcher.buildModel());
@@ -44,26 +45,28 @@ public class Abstractor {
     }
 
     private void addPackage(CtPackage pkg) {
-        this.out.log("Adding package " + pkg);
-        this.out.push();
-
-        //TODO: Store package for later
-
+        if (this.proj.packages.contains(pkg)) return;
+        this.log.log("Adding package " + pkg);
+        this.log.push();
+        this.proj.packages.add(pkg);
         for (CtType<?> t : pkg.getTypes())
             this.addType(t);
-        this.out.pop();
+        this.log.pop();
     }
 
     private void addType(CtType<?> t) {
         if (t instanceof CtEnum<?> e) this.addEnum(e);
         else if (t instanceof CtClass<?> c) this.addClass(c);
         else if (t instanceof CtInterface<?> i) this.addInterface(i);
-        else this.out.log("Unhandled (" + t.getClass().getName() + ") "+t.getQualifiedName());
+        else this.log.error("Unhandled (" + t.getClass().getName() + ") "+t.getQualifiedName());
     }
     
     private void addEnum(CtEnum<?> e) {
-        this.out.log("Adding enum " + e.getQualifiedName());
+        this.log.log("Adding enum " + e.getQualifiedName());
+        
         // TODO: Implement
+
+        this.log.error("enum unimplemented");
     }
 
     /**
@@ -71,22 +74,24 @@ public class Abstractor {
      * @param c The class to process.
      */
     private void addClass(CtClass<?> c) {
-        this.out.log("Adding class " + c.getQualifiedName());
+        if (this.proj.objects.contains(c)) return;
+        this.log.log("Adding class " + c.getQualifiedName());
+        this.log.push();
+        this.proj.objects.add(c);
+
         // TODO: Implement
+        
+        this.log.pop();
     }
     
     private void addInterface(CtInterface<?> i) {
-        this.out.log("Adding interface " + i.getQualifiedName());
+        if (this.proj.interfaceDecls.contains(i)) return;
+        this.log.log("Adding interface " + i.getQualifiedName());
+        this.log.push();
+        this.proj.interfaceDecls.add(i);
+        
         // TODO: Implement
-    }
 
-    public JsonNode toJson(boolean writeTypes, boolean writeIndices) {
-        JsonObject obj = new JsonObject();
-        obj.put("language", JsonValue.of("java"));
-
-
-
-
-        return obj;
+        this.log.pop();
     }
 }

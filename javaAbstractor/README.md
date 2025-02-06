@@ -60,3 +60,5 @@ Run the tests with `mvn test`.
 
 - [How to build a CLI app with Maven](https://www.sohamkamani.com/java/cli-app-with-maven/).
   Includes how to setup tests with junit.
+
+- [SpotBugs for Maven to Lint Java](https://spotbugs.readthedocs.io/en/latest/maven.html)

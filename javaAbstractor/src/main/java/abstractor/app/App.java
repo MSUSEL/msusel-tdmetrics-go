@@ -4,29 +4,36 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.PrintStream;
 
-import abstractor.core.Abstractor;
+import abstractor.core.*;
 import abstractor.core.json.*;
 import abstractor.core.log.*;
 
 public class App {
+    
     public static void main(String[] args) {
         final Config cfg = new Config();
         if (!cfg.FromArgs(args, null)) return;
 
-        Abstractor ab = new Abstractor(cfg.verbose ? new Stream() : new Null());
+        Logger log = new Logger(cfg.verbose);
+        Project proj = new Project();
+        Abstractor ab = new Abstractor(log, proj);
         ab.addMavenProject(cfg.input);
 
-        JsonNode node = ab.toJson(cfg.writeTypes, cfg.writeIndices);
+        JsonNode node = Writer.toJson(log, proj, cfg.writeKinds, cfg.writeIndices);
         if (cfg.output == null) {
             node.toString(System.out, cfg.minimize, "");
-            return;
+            System.out.println();
+        } else {
+            try (PrintStream fileWriter = new PrintStream(new File(cfg.output))) {
+                node.toString(fileWriter, cfg.minimize, "");
+                fileWriter.println();
+            } catch (FileNotFoundException e) {
+                log.error("Error creating or writing to file: " + e.getMessage());
+            }
         }
 
-        try (PrintStream fileWriter = new PrintStream(new File(cfg.output))) {
-            node.toString(fileWriter, cfg.minimize, "");
-            fileWriter.println();
-        } catch (FileNotFoundException e) {
-            System.err.println("Error creating or writing to file: " + e.getMessage());
-        }
+        if (log.errorCount() > 0)
+            System.err.println("Had " + log.errorCount() + " errors");
+        else System.out.println("Success");
     }
 }

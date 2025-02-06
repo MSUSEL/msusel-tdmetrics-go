@@ -12,7 +12,7 @@ public class Config {
 
     public boolean verbose;
     public boolean minimize;
-    public boolean writeTypes;
+    public boolean writeKinds;
     public boolean writeIndices;
 
     static private Options getArgsOptions() {
@@ -45,12 +45,15 @@ public class Config {
 
     static private boolean isValidOutput(String output) {
         if (output == null) return true;
-        final Path outPath = Path.of(output);
-        final Path parPath = outPath.getParent();
-        return parPath != null &&
-            Files.exists(parPath) &&
-            Files.isDirectory(parPath) &&
-            (outPath.endsWith(".json") || outPath.endsWith(".yaml") || outPath.endsWith(".yml"));
+        final boolean ext =
+            output.endsWith(".json") ||
+            output.endsWith(".yaml") ||
+            output.endsWith(".yml");
+        if (!ext) return false;
+
+        final Path parPath = Path.of(output).getParent();
+        if (parPath == null) return true;
+        return Files.exists(parPath) && Files.isDirectory(parPath);
     }
     
     /**
@@ -123,7 +126,7 @@ public class Config {
         ArrayList<String> flags = new ArrayList<String>();
         if (this.verbose) flags.add("Verbose");
         if (this.minimize) flags.add("Minimize");
-        if (this.writeTypes) flags.add("Write Types");
+        if (this.writeKinds) flags.add("Write Types");
         if (this.writeIndices) flags.add("Write Indices");
     
         if (!flags.isEmpty()) {

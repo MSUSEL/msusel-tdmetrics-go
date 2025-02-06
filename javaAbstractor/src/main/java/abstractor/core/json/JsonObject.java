@@ -13,6 +13,26 @@ public class JsonObject extends HashMap<String, JsonNode> implements JsonNode {
         return true;
     }
 
+    public void put(String key, boolean value) { this.put(key, JsonValue.of(value)); }
+
+    public void put(String key, int value) { this.put(key, JsonValue.of(value)); }
+    
+    public void put(String key, double value) { this.put(key, JsonValue.of(value)); }
+    
+    public void put(String key, String value) { this.put(key, JsonValue.of(value)); }
+
+    public void putNotEmpty(String key, JsonNode value) {
+        if (!value.isEmpty()) this.put(key, value);
+    }
+
+    public void putNotEmpty(String key, boolean value) { this.putNotEmpty(key, JsonValue.of(value)); }
+
+    public void putNotEmpty(String key, int value) { this.putNotEmpty(key, JsonValue.of(value)); }
+    
+    public void putNotEmpty(String key, double value) { this.putNotEmpty(key, JsonValue.of(value)); }
+    
+    public void putNotEmpty(String key, String value) { this.putNotEmpty(key, JsonValue.of(value)); }
+
     public void toString(PrintStream sb, boolean minimize, String indent) {
         if (isEmpty()) {
             sb.append(minimize? "{}": "{ }");
@@ -44,7 +64,5 @@ public class JsonObject extends HashMap<String, JsonNode> implements JsonNode {
         return buf.toString();
     }
 
-    public String toString() {
-        return this.toString(false);
-    }
+    public String toString() { return this.toString(false); }
 }
