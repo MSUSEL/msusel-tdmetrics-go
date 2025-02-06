@@ -375,7 +375,6 @@ other type parameters in the instance must be a subtype.
 func Bar[S int | string]() Foo[S] { }
 ```
 
-
 | Name            | Optional | Extra | Description |
 |:----------------|:--------:|:-----:|:------------|
 | `generic`       | ◯ | ◯ | The [index](#indices) of the generic [interface declaration](#interface-declaration) this is an instance of. |
@@ -551,7 +550,6 @@ type Baz int
 
 type Baz struct { $data int }
 ```
-
 
 | Name         | Optional | Extra | Description |
 |:-------------|:--------:|:-----:|:------------|

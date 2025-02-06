@@ -3,7 +3,7 @@ package abstractor.core;
 import abstractor.core.json.*;
 import abstractor.core.log.Logger;
 import spoon.reflect.cu.SourcePosition;
-import spoon.reflect.declaration.CtPackage;
+import spoon.reflect.declaration.*;
 
 public class Writer {
     private final Logger log;
@@ -60,6 +60,25 @@ public class Writer {
         return array;
     }
 
+    private JsonNode objectToJson(CtClass<?> c) {
+        JsonObject obj = new JsonObject();
+        if (this.writeKinds) obj.put("kind", "object");
+        if (this.writeIndices) obj.put("index", this.indexOf(c));
+        obj.put("name", c.getSimpleName());
+        obj.put("package", this.indexOf(c.getPackage()));
+
+        // TODO: add more
+
+        return obj;
+    }
+
+    private JsonNode objectSetToJson() {
+        JsonArray array = new JsonArray();
+        for (CtClass<?> c : this.proj.objects)
+            array.add(this.objectToJson(c));
+        return array;
+    }
+
     private JsonNode projectToJson() {
         JsonObject obj = new JsonObject();
 
@@ -77,7 +96,9 @@ public class Writer {
         // TODO: methods
         // TODO: methodInsts
         // TODO: metrics
-        // TODO: objects
+        
+        obj.putNotEmpty("objects", this.objectSetToJson());
+
         // TODO: objectInsts
         
         obj.putNotEmpty("packages", this.packageSetToJson());

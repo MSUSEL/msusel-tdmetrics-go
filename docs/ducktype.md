@@ -50,7 +50,7 @@ flowchart LR
     S --> T --> U
 ```
 
-If $S \supset T$, $S \supset V$, and $T \nsupseteq V$,
+If $S \supset T$, $S \supset V$, $T \nsupseteq V$, and $V \nsupseteq T$,
 then $S$ inherits both $T$ and $V$ directly.
 
 ```mermaid
@@ -155,6 +155,6 @@ function SeekParents:
    foreach Yi in Siblings:
       if Yi :> X:
          add Yi to X.Parents
-      else:
+      else if Yi overlaps X:
          call SeekParents with Yi.Parents and X
 ```
