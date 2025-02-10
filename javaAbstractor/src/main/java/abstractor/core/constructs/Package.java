@@ -1,0 +1,71 @@
+package abstractor.core.constructs;
+
+import java.util.TreeSet;
+
+import abstractor.core.cmp.Cmp;
+import abstractor.core.json.*;
+import spoon.reflect.cu.SourcePosition;
+import spoon.reflect.declaration.CtPackage;
+
+public class Package extends Construct {
+    public final CtPackage pkg;
+    public final String name;
+    public final String path;
+
+    public final TreeSet<Package> imports = new TreeSet<Package>();
+
+    // | `interfaces` | ⬤ | ◯ | List of [indices](#indices) of [interfaces](#interface-declaration) declared in this package. |
+    // | `methods`    | ⬤ | ◯ | List of [indices](#indices) of [methods](#method) declared in this package. |
+    // | `objects`    | ⬤ | ◯ | List of [indices](#indices) of [object](#object) declared in this package. |
+    // | `values`     | ⬤ | ◯ | List of [indices](#indices) of [values](#value) declared in this package. |
+    
+    static public Package Create(Project proj, CtPackage pkg) {
+        Package existing = proj.packages.findWithSource(pkg);
+        if (existing != null) return existing;
+        return proj.packages.tryAdd(new Package(pkg));
+    }
+
+    static private String packagePath(CtPackage p) {
+        SourcePosition pos = p.getPosition();
+        if (!pos.isValidPosition()) return "";
+        
+        String path = pos.getFile().getPath();
+        final String tail = "package-info.java";
+        if (path.endsWith(tail))
+            path = path.substring(0, path.length()-tail.length());
+        return path;
+    }
+
+    private Package(CtPackage pkg) {
+        this.pkg  = pkg;
+        this.name = pkg.getQualifiedName();
+        this.path = packagePath(pkg);
+    }
+    
+    public Object source() { return this.pkg; }
+    public String kind() { return "package"; }
+
+    @Override
+    public int compareTo(Construct c) {
+        return Cmp.or(
+            () -> super.compareTo(c),
+            Cmp.defer(this.name, () -> ((Package)c).name),
+            Cmp.defer(this.path, () -> ((Package)c).path)
+        );
+    }
+
+    @Override
+    public JsonNode toJson(JsonHelper h) {
+        JsonObject obj = (JsonObject)super.toJson(h);
+        obj.put("name", this.name);
+        obj.putNotEmpty("path", this.path);
+        obj.putNotEmpty("imports", indexSet(imports));
+
+        // TODO: USE CORRECT SETS
+        //obj.putNotEmpty("interfaces", this.indexer.indexSet( this.proj.interfaceDecls));
+        //obj.putNotEmpty("method", this.indexer.indexSet(this.proj.methods));
+        //obj.putNotEmpty("objects", this.indexer.indexSet(this.proj.objects));
+        // TODO: values
+        return obj;
+    }
+}

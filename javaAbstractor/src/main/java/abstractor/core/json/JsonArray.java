@@ -8,6 +8,10 @@ public class JsonArray extends ArrayList<JsonNode> implements JsonNode {
     public JsonArray(JsonNode ...nodes) {
         for(JsonNode node: nodes) this.add(node);
     }
+
+    public JsonArray(Iterable<JsonNode> nodes) {
+        for (JsonNode node: nodes) this.add(node);
+    }
     
     public void add(boolean value) { this.add(JsonValue.of(value)); }
 

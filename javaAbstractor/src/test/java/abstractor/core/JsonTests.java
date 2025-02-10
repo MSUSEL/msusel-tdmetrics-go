@@ -228,8 +228,9 @@ public class JsonTests {
         simple.put("one", JsonValue.of(1));
         simple.put("two", JsonValue.of(2));
         simple.put("three", JsonValue.of(3));
-        assertEquals("{ \"one\": 1, \"two\": 2, \"three\": 3 }", simple.toString(false));
-        assertEquals("{\"one\":1,\"two\":2,\"three\":3}", simple.toString(true));
+        // Outputs sorted alphabetically by key.
+        assertEquals("{ \"one\": 1, \"three\": 3, \"two\": 2 }", simple.toString(false));
+        assertEquals("{\"one\":1,\"three\":3,\"two\":2}", simple.toString(true));
     }
 
     @Test

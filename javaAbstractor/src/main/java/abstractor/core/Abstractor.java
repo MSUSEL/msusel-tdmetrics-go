@@ -55,22 +55,13 @@ public class Abstractor {
     }
 
     private void addType(CtType<?> t) {
-        if (t instanceof CtEnum<?> e) this.addEnum(e);
-        else if (t instanceof CtClass<?> c) this.addClass(c);
+        if (t instanceof CtClass<?> c) this.addClass(c);
         else if (t instanceof CtInterface<?> i) this.addInterface(i);
         else this.log.error("Unhandled (" + t.getClass().getName() + ") "+t.getQualifiedName());
     }
-    
-    private void addEnum(CtEnum<?> e) {
-        this.log.log("Adding enum " + e.getQualifiedName());
-        
-        // TODO: Implement
-
-        this.log.error("enum unimplemented");
-    }
 
     /**
-     * Handles adding and processing classes and records.
+     * Handles adding and processing classes, enums, and records.
      * @param c The class to process.
      */
     private void addClass(CtClass<?> c) {
@@ -78,6 +69,19 @@ public class Abstractor {
         this.log.log("Adding class " + c.getQualifiedName());
         this.log.push();
         this.proj.objects.add(c);
+        for (CtMethod<?> m : c.getAllMethods())
+            this.addMethod(m);
+
+        // TODO: Implement
+        
+        this.log.pop();
+    }
+
+    private void addMethod(CtMethod<?> m) {
+        if (this.proj.methods.contains(m)) return;
+        this.log.log("Adding method " + m.prettyprint());
+        this.log.push();
+        this.proj.methods.add(m);
 
         // TODO: Implement
         
@@ -89,9 +93,22 @@ public class Abstractor {
         this.log.log("Adding interface " + i.getQualifiedName());
         this.log.push();
         this.proj.interfaceDecls.add(i);
+        for (CtMethod<?> m : i.getAllMethods())
+            this.addAbstract(m);
         
         // TODO: Implement
 
+        this.log.pop();
+    }
+
+    private void addAbstract(CtMethod<?> m) {
+        if (this.proj.abstracts.contains(m)) return;
+        this.log.log("Adding abstract " + m.prettyprint());
+        this.log.push();
+        this.proj.abstracts.add(m);
+
+        // TODO: Implement
+        
         this.log.pop();
     }
 }

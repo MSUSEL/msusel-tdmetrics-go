@@ -1,9 +1,10 @@
 package abstractor.core.json;
 
-import java.io.*;
-import java.util.HashMap;
+import java.io.PrintStream;
+import java.io.ByteArrayOutputStream;
+import java.util.TreeMap;
 
-public class JsonObject extends HashMap<String, JsonNode> implements JsonNode {
+public class JsonObject extends TreeMap<String, JsonNode> implements JsonNode {
     
     public boolean isSimple() {
         for (JsonNode elem : this.values()) {
@@ -44,12 +45,12 @@ public class JsonObject extends HashMap<String, JsonNode> implements JsonNode {
         final boolean simple = this.isSimple();
         final String indent2 = indent + "  ";
         final String separator = simple ? " " : "\n"+indent2;
-        for (String key : this.keySet()) {
+        for (Object key : this.keySet()) {
             if (first) first = false;
             else sb.append(",");
             if (!minimize) sb.append(separator);
 
-            sb.append(JsonValue.escape(key));
+            sb.append(JsonValue.escape((String)key));
             sb.append(":");
             if (!minimize) sb.append(" ");
             this.get(key).toString(sb, minimize, indent2);            
