@@ -2,9 +2,10 @@ package abstractor.core;
 
 import spoon.Launcher;
 import spoon.MavenLauncher;
-import spoon.reflect.CtModel;
+import spoon.reflect.*;
 import spoon.reflect.declaration.*;
-
+import abstractor.core.constructs.*;
+import abstractor.core.constructs.Package;
 import abstractor.core.log.*;
 
 public class Abstractor {
@@ -45,10 +46,10 @@ public class Abstractor {
     }
 
     private void addPackage(CtPackage pkg) {
-        if (this.proj.packages.contains(pkg)) return;
+        if (this.proj.packages.containsSource(pkg)) return;
         this.log.log("Adding package " + pkg);
         this.log.push();
-        this.proj.packages.add(pkg);
+        Package.Create(this.proj, pkg);
         for (CtType<?> t : pkg.getTypes())
             this.addType(t);
         this.log.pop();
@@ -56,7 +57,7 @@ public class Abstractor {
 
     private void addType(CtType<?> t) {
         if (t instanceof CtClass<?> c) this.addClass(c);
-        else if (t instanceof CtInterface<?> i) this.addInterface(i);
+        //else if (t instanceof CtInterface<?> i) this.addInterface(i);
         else this.log.error("Unhandled (" + t.getClass().getName() + ") "+t.getQualifiedName());
     }
 
@@ -65,20 +66,21 @@ public class Abstractor {
      * @param c The class to process.
      */
     private void addClass(CtClass<?> c) {
-        if (this.proj.objects.contains(c)) return;
+        if (this.proj.objects.containsSource(c)) return;
         this.log.log("Adding class " + c.getQualifiedName());
         this.log.push();
-        this.proj.objects.add(c);
-        for (CtMethod<?> m : c.getAllMethods())
-            this.addMethod(m);
+        ObjectDecl.Create(this.proj, c);
+        //for (CtMethod<?> m : c.getAllMethods())
+        //    this.addMethod(m);
 
         // TODO: Implement
         
         this.log.pop();
     }
 
+    /*
     private void addMethod(CtMethod<?> m) {
-        if (this.proj.methods.contains(m)) return;
+        if (this.proj.methods.containsSource(m)) return;
         this.log.log("Adding method " + m.prettyprint());
         this.log.push();
         this.proj.methods.add(m);
@@ -89,7 +91,7 @@ public class Abstractor {
     }
     
     private void addInterface(CtInterface<?> i) {
-        if (this.proj.interfaceDecls.contains(i)) return;
+        if (this.proj.interfaceDecls.containsSource(i)) return;
         this.log.log("Adding interface " + i.getQualifiedName());
         this.log.push();
         this.proj.interfaceDecls.add(i);
@@ -102,7 +104,7 @@ public class Abstractor {
     }
 
     private void addAbstract(CtMethod<?> m) {
-        if (this.proj.abstracts.contains(m)) return;
+        if (this.proj.abstracts.containsSource(m)) return;
         this.log.log("Adding abstract " + m.prettyprint());
         this.log.push();
         this.proj.abstracts.add(m);
@@ -111,4 +113,5 @@ public class Abstractor {
         
         this.log.pop();
     }
+    */
 }

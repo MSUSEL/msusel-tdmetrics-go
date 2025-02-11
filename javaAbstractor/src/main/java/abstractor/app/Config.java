@@ -12,8 +12,9 @@ public class Config {
 
     public boolean verbose;
     public boolean minimize;
-    public boolean writeKinds;
-    public boolean writeIndices;
+
+    public boolean writeKinds = true;
+    public boolean writeIndices = true;
 
     static private Options getArgsOptions() {
         final Options op = new Options();

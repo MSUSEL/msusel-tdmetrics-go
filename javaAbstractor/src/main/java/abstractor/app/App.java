@@ -5,6 +5,7 @@ import java.io.FileNotFoundException;
 import java.io.PrintStream;
 
 import abstractor.core.*;
+import abstractor.core.constructs.Project;
 import abstractor.core.json.*;
 import abstractor.core.log.*;
 
@@ -19,7 +20,11 @@ public class App {
         Abstractor ab = new Abstractor(log, proj);
         ab.addMavenProject(cfg.input);
 
-        JsonNode node = Writer.toJson(log, proj, cfg.writeKinds, cfg.writeIndices);
+        JsonHelper h = new JsonHelper();
+        h.writeKinds = cfg.writeKinds;
+        h.writeIndices = cfg.writeIndices;
+        JsonNode node = proj.toJson(h);
+
         if (cfg.output == null) {
             node.toString(System.out, cfg.minimize, "");
             System.out.println();

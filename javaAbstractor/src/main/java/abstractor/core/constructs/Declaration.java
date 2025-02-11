@@ -27,8 +27,8 @@ public abstract class Declaration extends Construct {
     public int compareTo(Construct c) {
         return Cmp.or(
             () -> super.compareTo(c),
-            Cmp.defer(this.name, ((Declaration)c).name),
-            Cmp.defer(this.pkg, ((Declaration)c).pkg)
+            Cmp.defer(this.name, () -> ((Declaration)c).name),
+            Cmp.defer(this.pkg, () -> ((Declaration)c).pkg)
         );
     }
 }

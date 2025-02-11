@@ -28,6 +28,8 @@ public class Project implements Jsonable {
     }
 
     public JsonNode toJson(JsonHelper h) {
+        this.setIndices();
+
         JsonObject obj = new JsonObject();
         obj.put("language", "java");
         // TODO: locs
