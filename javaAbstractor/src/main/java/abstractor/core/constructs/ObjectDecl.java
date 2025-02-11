@@ -8,7 +8,7 @@ public class ObjectDecl extends Declaration {
     private final CtClass<?> src;
 
     static public ObjectDecl Create(Project proj, CtClass<?> src) {
-        ObjectDecl existing = proj.objects.findWithSource(src);
+        ObjectDecl existing = proj.objectDecls.findWithSource(src);
         if (existing != null) return existing;
 
         final Location loc = new Location(src.getPosition());
@@ -18,7 +18,9 @@ public class ObjectDecl extends Declaration {
         // TODO: Handle enum?
         //if (c instanceof CtEnum<?> e) {}
 
-        return proj.objects.tryAdd(new ObjectDecl(src, pkg, loc, name));
+        ObjectDecl od = proj.objectDecls.tryAdd(new ObjectDecl(src, pkg, loc, name));
+        pkg.objectDecls.add(od);
+        return od;
     }
 
     private ObjectDecl(CtClass<?> src, Package pkg, Location loc, String name) {
@@ -37,7 +39,6 @@ public class ObjectDecl extends Declaration {
         // TODO: | `methods`    | ⬤ | List of [indices](#indices) to [methods](#method) that have this object as a receiver. |
         // TODO: | `typeParams` | ⬤ | List of [indices](#indices) to [type parameters](#type-parameter) if this object is generic. |
         // TODO: | `interface`  | ◯ | The [index](#indices) to the [interface description](#interface-description) that this object matches with. 
-
         return obj;
     }
 

@@ -57,7 +57,7 @@ public class Abstractor {
 
     private void addType(CtType<?> t) {
         if (t instanceof CtClass<?> c) this.addClass(c);
-        //else if (t instanceof CtInterface<?> i) this.addInterface(i);
+        else if (t instanceof CtInterface<?> i) this.addInterface(i);
         else this.log.error("Unhandled (" + t.getClass().getName() + ") "+t.getQualifiedName());
     }
 
@@ -66,7 +66,7 @@ public class Abstractor {
      * @param c The class to process.
      */
     private void addClass(CtClass<?> c) {
-        if (this.proj.objects.containsSource(c)) return;
+        if (this.proj.objectDecls.containsSource(c)) return;
         this.log.log("Adding class " + c.getQualifiedName());
         this.log.push();
         ObjectDecl.Create(this.proj, c);
@@ -89,20 +89,22 @@ public class Abstractor {
         
         this.log.pop();
     }
+    */
     
     private void addInterface(CtInterface<?> i) {
         if (this.proj.interfaceDecls.containsSource(i)) return;
         this.log.log("Adding interface " + i.getQualifiedName());
         this.log.push();
-        this.proj.interfaceDecls.add(i);
-        for (CtMethod<?> m : i.getAllMethods())
-            this.addAbstract(m);
+        InterfaceDecl.Create(proj, i);
+        //for (CtMethod<?> m : i.getAllMethods())
+        //    this.addAbstract(m);
         
         // TODO: Implement
 
         this.log.pop();
     }
 
+    /*
     private void addAbstract(CtMethod<?> m) {
         if (this.proj.abstracts.containsSource(m)) return;
         this.log.log("Adding abstract " + m.prettyprint());

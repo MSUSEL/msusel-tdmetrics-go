@@ -7,13 +7,13 @@ public class Project implements Jsonable {
     // TODO: arguments
     // TODO: basics
     // TODO: fields
-    // TODO: interfaceDecls
+    public final Factory<InterfaceDecl> interfaceDecls = new Factory<InterfaceDecl>();
     // TODO: interfaceDescs
     // TODO: interfaceInsts
     // TODO: methods
     // TODO: methodInsts
     // TODO: metrics
-    public final Factory<ObjectDecl> objects = new Factory<ObjectDecl>();
+    public final Factory<ObjectDecl> objectDecls = new Factory<ObjectDecl>();
     // TODO: objectInsts
     public final Factory<Package> packages = new Factory<Package>();
     // TODO: selections
@@ -23,7 +23,8 @@ public class Project implements Jsonable {
     // TODO: values
 
     public void setIndices() {
-        this.objects.setIndices();
+        this.interfaceDecls.setIndices();
+        this.objectDecls.setIndices();
         this.packages.setIndices();
     }
 
@@ -38,13 +39,13 @@ public class Project implements Jsonable {
         // TODO: arguments
         // TODO: basics
         // TODO: fields
-        // TODO: interfaceDecls
+        obj.putNotEmpty("interfaceDecls", this.interfaceDecls.toJson(h));
         // TODO: interfaceDescs
         // TODO: interfaceInsts
         // TODO: methods
         // TODO: methodInsts
         // TODO: metrics
-        obj.putNotEmpty("objects", this.objects.toJson(h));
+        obj.putNotEmpty("objects", this.objectDecls.toJson(h));
         // TODO: objectInsts
         obj.putNotEmpty("packages", this.packages.toJson(h));
         // TODO: selections

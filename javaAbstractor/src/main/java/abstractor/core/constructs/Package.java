@@ -13,11 +13,10 @@ public class Package extends Construct {
     public final String path;
 
     public final TreeSet<Package> imports = new TreeSet<Package>();
-
-    // | `interfaces` | ⬤ | ◯ | List of [indices](#indices) of [interfaces](#interface-declaration) declared in this package. |
-    // | `methods`    | ⬤ | ◯ | List of [indices](#indices) of [methods](#method) declared in this package. |
-    // | `objects`    | ⬤ | ◯ | List of [indices](#indices) of [object](#object) declared in this package. |
-    // | `values`     | ⬤ | ◯ | List of [indices](#indices) of [values](#value) declared in this package. |
+    public final TreeSet<InterfaceDecl> interfaceDecls = new TreeSet<InterfaceDecl>();
+    // TODO: | `methods`    | ⬤ | ◯ | List of [indices](#indices) of [methods](#method) declared in this package. |
+    public final TreeSet<ObjectDecl> objectDecls = new TreeSet<ObjectDecl>();
+    // TODO: | `values`     | ⬤ | ◯ | List of [indices](#indices) of [values](#value) declared in this package. |
     
     static public Package Create(Project proj, CtPackage pkg) {
         Package existing = proj.packages.findWithSource(pkg);
@@ -60,11 +59,9 @@ public class Package extends Construct {
         obj.put("name", this.name);
         obj.putNotEmpty("path", this.path);
         obj.putNotEmpty("imports", indexSet(imports));
-
-        // TODO: USE CORRECT SETS
-        //obj.putNotEmpty("interfaces", this.indexer.indexSet( this.proj.interfaceDecls));
-        //obj.putNotEmpty("method", this.indexer.indexSet(this.proj.methods));
-        //obj.putNotEmpty("objects", this.indexer.indexSet(this.proj.objects));
+        obj.putNotEmpty("interfaces", Construct.indexSet(this.interfaceDecls));
+        // TODO: methods
+        obj.putNotEmpty("objects", Construct.indexSet(this.objectDecls));
         // TODO: values
         return obj;
     }
