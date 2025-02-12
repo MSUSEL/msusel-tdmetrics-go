@@ -7,6 +7,7 @@ import java.util.TreeMap;
 public class JsonObject extends TreeMap<String, JsonNode> implements JsonNode {
     
     public boolean isSimple() {
+        if (this.size() > 20) return false;
         for (JsonNode elem : this.values()) {
             if (!(elem instanceof JsonValue))
                 return false;

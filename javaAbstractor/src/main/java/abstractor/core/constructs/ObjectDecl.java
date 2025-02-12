@@ -1,5 +1,7 @@
 package abstractor.core.constructs;
 
+import java.util.TreeSet;
+
 import abstractor.core.cmp.Cmp;
 import abstractor.core.json.*;
 import spoon.reflect.declaration.CtClass;
@@ -7,11 +9,13 @@ import spoon.reflect.declaration.CtClass;
 public class ObjectDecl extends Declaration {
     private final CtClass<?> src;
 
+    public final TreeSet<MethodDecl> methodDecls = new TreeSet<MethodDecl>();
+
     static public ObjectDecl Create(Project proj, CtClass<?> src) {
         ObjectDecl existing = proj.objectDecls.findWithSource(src);
         if (existing != null) return existing;
 
-        final Location loc = new Location(src.getPosition());
+        final Locations.Location loc = proj.locations.create(src.getPosition());
         final Package pkg = Package.Create(proj, src.getPackage());
         final String name = src.getSimpleName();
 
@@ -23,7 +27,7 @@ public class ObjectDecl extends Declaration {
         return od;
     }
 
-    private ObjectDecl(CtClass<?> src, Package pkg, Location loc, String name) {
+    private ObjectDecl(CtClass<?> src, Package pkg, Locations.Location loc, String name) {
         super(pkg, loc, name);
         this.src = src;
     }
@@ -36,7 +40,7 @@ public class ObjectDecl extends Declaration {
         JsonObject obj = (JsonObject)super.toJson(h);
         // TODO: | `data`       | ◯ | The [index](#indices) of the [structure description](#structure-description). |
         // TODO: | `instances`  | ⬤ | List of [indices](#indices) to [object instances](#object-instance). |
-        // TODO: | `methods`    | ⬤ | List of [indices](#indices) to [methods](#method) that have this object as a receiver. |
+        obj.putNotEmpty("methods", Construct.indexList(this.methodDecls));
         // TODO: | `typeParams` | ⬤ | List of [indices](#indices) to [type parameters](#type-parameter) if this object is generic. |
         // TODO: | `interface`  | ◯ | The [index](#indices) to the [interface description](#interface-description) that this object matches with. 
         return obj;

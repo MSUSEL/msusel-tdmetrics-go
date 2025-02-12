@@ -4,6 +4,7 @@ import spoon.Launcher;
 import spoon.MavenLauncher;
 import spoon.reflect.*;
 import spoon.reflect.declaration.*;
+import spoon.reflect.reference.CtFieldReference;
 import abstractor.core.constructs.*;
 import abstractor.core.constructs.Package;
 import abstractor.core.log.*;
@@ -69,27 +70,30 @@ public class Abstractor {
         if (this.proj.objectDecls.containsSource(c)) return;
         this.log.log("Adding class " + c.getQualifiedName());
         this.log.push();
-        ObjectDecl.Create(this.proj, c);
-        //for (CtMethod<?> m : c.getAllMethods())
-        //    this.addMethod(m);
+        ObjectDecl obj = ObjectDecl.Create(this.proj, c);
+        for (CtMethod<?> m : c.getAllMethods())
+            this.addMethod(obj, m);
+
+        //for (CtFieldReference<?> fr : c.getAllFields()) {
+	    //    CtField<?> f = fr.getFieldDeclaration();
+        //    f.
+        //}
 
         // TODO: Implement
         
         this.log.pop();
     }
 
-    /*
-    private void addMethod(CtMethod<?> m) {
-        if (this.proj.methods.containsSource(m)) return;
+    private void addMethod(ObjectDecl receiver, CtMethod<?> m) {
+        if (this.proj.methodDecls.containsSource(m)) return;
         this.log.log("Adding method " + m.prettyprint());
         this.log.push();
-        this.proj.methods.add(m);
+        MethodDecl.Create(proj, receiver, m);
 
         // TODO: Implement
         
         this.log.pop();
     }
-    */
     
     private void addInterface(CtInterface<?> i) {
         if (this.proj.interfaceDecls.containsSource(i)) return;

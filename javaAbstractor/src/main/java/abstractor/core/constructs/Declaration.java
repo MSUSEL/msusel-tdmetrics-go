@@ -5,10 +5,10 @@ import abstractor.core.json.*;
 
 public abstract class Declaration extends Construct {
     public final Package pkg;
-    public final Location loc;
+    public final Locations.Location loc;
     public final String name;
 
-    public Declaration(Package pkg, Location loc, String name) {
+    public Declaration(Package pkg, Locations.Location loc, String name) {
         this.pkg = pkg;
         this.loc = loc;
         this.name = name;

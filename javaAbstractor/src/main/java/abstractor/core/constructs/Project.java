@@ -3,6 +3,7 @@ package abstractor.core.constructs;
 import abstractor.core.json.*;
 
 public class Project implements Jsonable {
+    public final Locations locations = new Locations();
     // TODO: abstracts
     // TODO: arguments
     // TODO: basics
@@ -10,7 +11,7 @@ public class Project implements Jsonable {
     public final Factory<InterfaceDecl> interfaceDecls = new Factory<InterfaceDecl>();
     // TODO: interfaceDescs
     // TODO: interfaceInsts
-    // TODO: methods
+    public final Factory<MethodDecl> methodDecls = new Factory<MethodDecl>();
     // TODO: methodInsts
     // TODO: metrics
     public final Factory<ObjectDecl> objectDecls = new Factory<ObjectDecl>();
@@ -22,19 +23,20 @@ public class Project implements Jsonable {
     // TODO: typeParams
     // TODO: values
 
-    public void setIndices() {
+    private void prepareForOutput() {
+        this.locations.prepareForOutput();
         this.interfaceDecls.setIndices();
+        this.methodDecls.setIndices();
         this.objectDecls.setIndices();
         this.packages.setIndices();
     }
 
     public JsonNode toJson(JsonHelper h) {
-        this.setIndices();
+        this.prepareForOutput();
 
         JsonObject obj = new JsonObject();
         obj.put("language", "java");
-        // TODO: locs
-
+        obj.putNotEmpty("locs", this.locations.toJson(h));
         // TODO: abstracts
         // TODO: arguments
         // TODO: basics
@@ -42,7 +44,7 @@ public class Project implements Jsonable {
         obj.putNotEmpty("interfaceDecls", this.interfaceDecls.toJson(h));
         // TODO: interfaceDescs
         // TODO: interfaceInsts
-        // TODO: methods
+        obj.putNotEmpty("methods", this.methodDecls.toJson(h));
         // TODO: methodInsts
         // TODO: metrics
         obj.putNotEmpty("objects", this.objectDecls.toJson(h));
@@ -53,7 +55,6 @@ public class Project implements Jsonable {
         // TODO: structDescs
         // TODO: typeParams
         // TODO: values
-
         return obj;
     }   
 }

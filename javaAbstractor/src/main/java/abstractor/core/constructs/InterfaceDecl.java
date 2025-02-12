@@ -11,7 +11,7 @@ public class InterfaceDecl extends Declaration {
         InterfaceDecl existing = proj.interfaceDecls.findWithSource(src);
         if (existing != null) return existing;
 
-        final Location loc = new Location(src.getPosition());
+        final Locations.Location loc = proj.locations.create(src.getPosition());
         final Package pkg = Package.Create(proj, src.getPackage());
         final String name = src.getSimpleName();
 
@@ -20,7 +20,7 @@ public class InterfaceDecl extends Declaration {
         return id;
     }
 
-    private InterfaceDecl(CtInterface<?> src, Package pkg, Location loc, String name) {
+    private InterfaceDecl(CtInterface<?> src, Package pkg, Locations.Location loc, String name) {
         super(pkg, loc, name);
         this.src = src;
     }

@@ -14,7 +14,7 @@ public class Package extends Construct {
 
     public final TreeSet<Package> imports = new TreeSet<Package>();
     public final TreeSet<InterfaceDecl> interfaceDecls = new TreeSet<InterfaceDecl>();
-    // TODO: | `methods`    | ⬤ | ◯ | List of [indices](#indices) of [methods](#method) declared in this package. |
+    public final TreeSet<MethodDecl> methodDecls = new TreeSet<MethodDecl>();
     public final TreeSet<ObjectDecl> objectDecls = new TreeSet<ObjectDecl>();
     // TODO: | `values`     | ⬤ | ◯ | List of [indices](#indices) of [values](#value) declared in this package. |
     
@@ -60,7 +60,7 @@ public class Package extends Construct {
         obj.putNotEmpty("path", this.path);
         obj.putNotEmpty("imports", indexSet(imports));
         obj.putNotEmpty("interfaces", Construct.indexSet(this.interfaceDecls));
-        // TODO: methods
+        obj.putNotEmpty("methods", Construct.indexSet(this.methodDecls));
         obj.putNotEmpty("objects", Construct.indexSet(this.objectDecls));
         // TODO: values
         return obj;
