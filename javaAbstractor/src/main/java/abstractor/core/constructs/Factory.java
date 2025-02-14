@@ -25,7 +25,7 @@ public class Factory<T extends Construct> implements Jsonable {
         T other = this.set.floor(t);
         if (other == t) return other;
         this.set.add(t);
-        return t;
+        return null;
     }
     
     public void setIndices() {

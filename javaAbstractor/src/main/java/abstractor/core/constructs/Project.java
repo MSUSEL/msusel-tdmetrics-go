@@ -7,7 +7,7 @@ public class Project implements Jsonable {
     // TODO: abstracts
     // TODO: arguments
     // TODO: basics
-    // TODO: fields
+    public final Factory<Field> fields = new Factory<Field>();
     public final Factory<InterfaceDecl> interfaceDecls = new Factory<InterfaceDecl>();
     // TODO: interfaceDescs
     // TODO: interfaceInsts
@@ -19,16 +19,30 @@ public class Project implements Jsonable {
     public final Factory<Package> packages = new Factory<Package>();
     // TODO: selections
     // TODO: signatures
-    // TODO: structDescs
+    public final Factory<StructDesc> structDescs = new Factory<StructDesc>();
     // TODO: typeParams
     // TODO: values
 
     private void prepareForOutput() {
         this.locations.prepareForOutput();
+        // TODO: abstracts
+        // TODO: arguments
+        // TODO: basics
+        this.fields.setIndices();
         this.interfaceDecls.setIndices();
+        // TODO: interfaceDescs
+        // TODO: interfaceInsts
         this.methodDecls.setIndices();
+        // TODO: methodInsts
+        // TODO: metrics
         this.objectDecls.setIndices();
+        // TODO: objectInsts
         this.packages.setIndices();
+        // TODO: selections
+        // TODO: signatures
+        this.structDescs.setIndices();
+        // TODO: typeParams
+        // TODO: values
     }
 
     public JsonNode toJson(JsonHelper h) {
@@ -40,7 +54,7 @@ public class Project implements Jsonable {
         // TODO: abstracts
         // TODO: arguments
         // TODO: basics
-        // TODO: fields
+        obj.putNotEmpty("fields", this.fields.toJson(h));
         obj.putNotEmpty("interfaceDecls", this.interfaceDecls.toJson(h));
         // TODO: interfaceDescs
         // TODO: interfaceInsts
@@ -52,7 +66,7 @@ public class Project implements Jsonable {
         obj.putNotEmpty("packages", this.packages.toJson(h));
         // TODO: selections
         // TODO: signatures
-        // TODO: structDescs
+        obj.putNotEmpty("structDescs", this.structDescs.toJson(h));
         // TODO: typeParams
         // TODO: values
         return obj;

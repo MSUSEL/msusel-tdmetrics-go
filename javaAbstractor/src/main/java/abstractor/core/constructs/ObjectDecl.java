@@ -22,7 +22,10 @@ public class ObjectDecl extends Declaration {
         // TODO: Handle enum?
         //if (c instanceof CtEnum<?> e) {}
 
-        ObjectDecl od = proj.objectDecls.tryAdd(new ObjectDecl(src, pkg, loc, name));
+        ObjectDecl od = new ObjectDecl(src, pkg, loc, name);
+        existing = proj.objectDecls.tryAdd(od);
+        if (existing != null) return existing;
+        
         pkg.objectDecls.add(od);
         return od;
     }

@@ -17,9 +17,11 @@ public class MethodDecl extends Declaration {
         // TODO: src.getBody()
         // TODO: src.getFormalCtTypeParameters()
 
-        
         final String name = src.getSimpleName();
-        MethodDecl md = proj.methodDecls.tryAdd(new MethodDecl(src, pkg, receiver, loc, name));
+        MethodDecl md = new MethodDecl(src, pkg, receiver, loc, name);
+        existing = proj.methodDecls.tryAdd(md);
+        if (existing != null) return existing;
+
         if (pkg != null) pkg.methodDecls.add(md);
         receiver.methodDecls.add(md);
         return md;

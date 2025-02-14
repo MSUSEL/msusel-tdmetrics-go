@@ -15,7 +15,10 @@ public class InterfaceDecl extends Declaration {
         final Package pkg = Package.Create(proj, src.getPackage());
         final String name = src.getSimpleName();
 
-        InterfaceDecl id = proj.interfaceDecls.tryAdd(new InterfaceDecl(src, pkg, loc, name));
+        InterfaceDecl id = new InterfaceDecl(src, pkg, loc, name);
+        existing = proj.interfaceDecls.tryAdd(id);
+        if (existing != null) return existing;
+
         pkg.interfaceDecls.add(id);
         return id;
     }

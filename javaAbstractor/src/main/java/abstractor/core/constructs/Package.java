@@ -21,7 +21,12 @@ public class Package extends Construct {
     static public Package Create(Project proj, CtPackage pkg) {
         Package existing = proj.packages.findWithSource(pkg);
         if (existing != null) return existing;
-        return proj.packages.tryAdd(new Package(pkg));
+
+        Package p = new Package(pkg);
+        existing = proj.packages.tryAdd(p);
+        if (existing != null) return existing;
+
+        return p;
     }
 
     static private String packagePath(CtPackage p) {
