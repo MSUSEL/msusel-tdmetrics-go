@@ -31,7 +31,8 @@ public class Locations implements Jsonable {
         }
 
         public int getLine() {
-            return this.pos.getLine();
+            final int line = this.pos.getLine();
+            return line < 1 ? 1 : line;
         }
 
         @Override
@@ -65,7 +66,7 @@ public class Locations implements Jsonable {
         }
 
         this.offsets.clear();
-        int offset = 0;
+        int offset = 1;
         for (String path : maximums.keySet()) {
             this.offsets.put(path, offset);
             offset += maximums.get(path);

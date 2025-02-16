@@ -4,6 +4,7 @@ import spoon.Launcher;
 import spoon.MavenLauncher;
 import spoon.reflect.*;
 import spoon.reflect.declaration.*;
+import spoon.reflect.reference.*;
 import abstractor.core.constructs.*;
 import abstractor.core.constructs.Package;
 import abstractor.core.log.*;
@@ -74,10 +75,10 @@ public class Abstractor {
         for (CtMethod<?> m : c.getAllMethods())
             this.addMethod(obj, m);
 
-        //for (CtFieldReference<?> fr : c.getAllFields()) {
-	    //    CtField<?> f = fr.getFieldDeclaration();
-        //    f.
-        //}
+        // TODO: Deal with struct
+
+        for (CtFieldReference<?> fr : c.getAllFields())
+            this.addField(fr.getFieldDeclaration());
 
         // TODO: Implement
         
@@ -93,6 +94,12 @@ public class Abstractor {
         // TODO: Implement
         
         this.log.pop();
+    }
+
+    private void addField(CtField<?> f) {
+
+        // TODO: Implement
+    
     }
     
     private void addInterface(CtInterface<?> i) {
