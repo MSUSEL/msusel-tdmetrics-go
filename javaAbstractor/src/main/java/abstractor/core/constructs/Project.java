@@ -4,9 +4,9 @@ import abstractor.core.json.*;
 
 public class Project implements Jsonable {
     public final Locations locations = new Locations();
-    // TODO: abstracts
-    // TODO: arguments
-    // TODO: basics
+    public final Factory<Abstract> abstracts = new Factory<Abstract>();
+    public final Factory<Argument> arguments = new Factory<Argument>();
+    public final Factory<Basic> basics = new Factory<Basic>();
     public final Factory<Field> fields = new Factory<Field>();
     public final Factory<InterfaceDecl> interfaceDecls = new Factory<InterfaceDecl>();
     // TODO: interfaceDescs
@@ -25,9 +25,9 @@ public class Project implements Jsonable {
 
     private void prepareForOutput() {
         this.locations.prepareForOutput();
-        // TODO: abstracts
-        // TODO: arguments
-        // TODO: basics
+        this.abstracts.setIndices();
+        this.arguments.setIndices();
+        this.basics.setIndices();
         this.fields.setIndices();
         this.interfaceDecls.setIndices();
         // TODO: interfaceDescs
@@ -51,9 +51,9 @@ public class Project implements Jsonable {
         JsonObject obj = new JsonObject();
         obj.put("language", "java");
         obj.putNotEmpty("locs", this.locations.toJson(h));
-        // TODO: abstracts
-        // TODO: arguments
-        // TODO: basics
+        obj.putNotEmpty("abstracts", this.abstracts.toJson(h));
+        obj.putNotEmpty("arguments", this.arguments.toJson(h));
+        obj.putNotEmpty("basics", this.basics.toJson(h));
         obj.putNotEmpty("fields", this.fields.toJson(h));
         obj.putNotEmpty("interfaceDecls", this.interfaceDecls.toJson(h));
         // TODO: interfaceDescs

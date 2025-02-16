@@ -4,7 +4,6 @@ import java.util.*;
 
 import abstractor.core.cmp.Cmp;
 import abstractor.core.json.*;
-import javafx.beans.property.ReadOnlyListWrapper;
 import spoon.reflect.declaration.CtClass;
 
 public class StructDesc extends TypeDesc {
@@ -46,7 +45,7 @@ public class StructDesc extends TypeDesc {
     @Override
     public int compareTo(Construct c) {
         return Cmp.or(
-            () -> super.compareTo(c),
+            () -> super.compareTo(c)
             // TODO: | `fields` | List of [indices](#indices) of [fields](#field) in this structure. |
         );
     }

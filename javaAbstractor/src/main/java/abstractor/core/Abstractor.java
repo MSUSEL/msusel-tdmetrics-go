@@ -4,7 +4,6 @@ import spoon.Launcher;
 import spoon.MavenLauncher;
 import spoon.reflect.*;
 import spoon.reflect.declaration.*;
-import spoon.reflect.reference.CtFieldReference;
 import abstractor.core.constructs.*;
 import abstractor.core.constructs.Package;
 import abstractor.core.log.*;
@@ -37,7 +36,8 @@ public class Abstractor {
      * @example parseClass("class C { void m() { System.out.println(\"hello\"); } }"); 
      * @param source The class source code.
      */
-    public void addClassFromSource(String source) {
+    public void addClassFromSource(String ...sourceLines) {
+        String source = String.join("\n", sourceLines);
         this.addClass(Launcher.parseClass(source));
     }
 

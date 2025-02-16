@@ -4,17 +4,17 @@ import abstractor.core.cmp.Cmp;
 import abstractor.core.json.*;
 import spoon.reflect.declaration.CtField;
 
-public class Field extends Construct {
+public class Abstract extends Construct {
     private final CtField<?> src;
 
-    static public Field Create(Project proj, CtField<?> src) {
-        Field existing = proj.fields.findWithSource(src);
+    static public Abstract Create(Project proj, CtField<?> src) {
+        Abstract existing = proj.abstracts.findWithSource(src);
         if (existing != null) return existing;
 
         // TODO: Get initial stuff
 
-        Field f = new Field(src);
-        existing = proj.fields.tryAdd(f);
+        Abstract f = new Abstract(src);
+        existing = proj.abstracts.tryAdd(f);
         if (existing != null) return existing;
         
         // TODO: Finish loading 
@@ -22,19 +22,18 @@ public class Field extends Construct {
         return f;
     }
 
-    private Field(CtField<?> src) {
+    private Abstract(CtField<?> src) {
         this.src = src;
     }
 
     public Object source() { return this.src; }
-    public String kind() { return "field"; }
+    public String kind() { return "abstract"; }
 
     @Override
     public JsonNode toJson(JsonHelper h) {
         JsonObject obj = (JsonObject)super.toJson(h);
-
-        // TODO: | `name`     | ◯ | ◯ | The string name for the field. |
-        // TODO: | `type`     | ◯ | ◯ | [Key](#keys) for any [type description](#type-descriptions). |        
+        // TODO: | `name`      | ◯ | ◯ | The string name for the abstract. |
+        // TODO: | `signature` | ◯ | ◯ | [Index](#indices) for the [signature](#signature). |
         return obj;
     }
 
@@ -43,8 +42,8 @@ public class Field extends Construct {
         return Cmp.or(
             () -> super.compareTo(c)
             
-            // TODO: | `name`     | ◯ | ◯ | The string name for the field. |
-            // TODO: | `type`     | ◯ | ◯ | [Key](#keys) for any [type description](#type-descriptions). |
+            // TODO: | `name`      | ◯ | ◯ | The string name for the abstract. |
+            // TODO: | `signature` | ◯ | ◯ | [Index](#indices) for the [signature](#signature). |
         );
     }   
 }

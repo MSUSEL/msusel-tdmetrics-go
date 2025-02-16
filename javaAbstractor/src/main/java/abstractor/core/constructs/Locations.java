@@ -1,5 +1,6 @@
 package abstractor.core.constructs;
 
+import java.io.File;
 import java.util.TreeSet;
 import java.util.Map.Entry;
 import java.util.TreeMap;
@@ -18,6 +19,19 @@ public class Locations implements Jsonable {
 
         public JsonNode toJson(JsonHelper h) {
             return JsonValue.of(this.offset);
+        }
+
+        public boolean isValid() {
+            return this.pos.isValidPosition();
+        }
+
+        public String getPath() {
+            final File f = this.pos.getFile();
+            return f != null ? f.getPath() : "unknown";
+        }
+
+        public int getLine() {
+            return this.pos.getLine();
         }
 
         @Override
@@ -42,9 +56,9 @@ public class Locations implements Jsonable {
     public void prepareForOutput() {
         TreeMap<String, Integer> maximums = new TreeMap<String, Integer>();
         for (Location loc : this.locs) {
-            if (!loc.pos.isValidPosition()) continue;
-            final String path = loc.pos.getFile().getPath();
-            final int line = loc.pos.getLine();
+            if (!loc.isValid()) continue;
+            final String path = loc.getPath();
+            final int line = loc.getLine();
             final Integer iMax = maximums.get(path);
             final int max = iMax == null ? line : Integer.max((int)iMax, line);
             maximums.put(path, max);
@@ -58,10 +72,10 @@ public class Locations implements Jsonable {
         }
 
         for (Location loc : this.locs) {
-            if (!loc.pos.isValidPosition()) continue;
-            final String path = loc.pos.getFile().getPath();
+            if (!loc.isValid()) continue;
+            final String path = loc.getPath();
             final int fileOffset = this.offsets.get(path);
-            final int line = loc.pos.getLine();
+            final int line = loc.getLine();
             loc.offset = line + fileOffset - 1;
         }
     }
