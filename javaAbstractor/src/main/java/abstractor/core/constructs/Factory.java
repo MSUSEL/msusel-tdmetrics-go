@@ -14,18 +14,11 @@ public class Factory<T extends Construct> implements Jsonable {
         return null;
     }
 
-    public boolean containsSource(Object source) {
-        for (T t : this.set) {
-            if (t.source() == source) return true;
-        }
-        return false;
-    }
-
-    public T tryAdd(T t) {
+    public TryAddResult<T> tryAdd(T t) {
         T other = this.set.floor(t);
-        if (other == t) return other;
+        if (other == t) return new TryAddResult<T>(other, true);
         this.set.add(t);
-        return null;
+        return new TryAddResult<T>(t, false);
     }
     
     public void setIndices() {

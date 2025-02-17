@@ -8,26 +8,7 @@ public class MethodDecl extends Declaration {
     private final CtMethod<?> src;
     public final ObjectDecl receiver;
 
-    static public MethodDecl Create(Project proj, ObjectDecl receiver, CtMethod<?> src) {
-        MethodDecl existing = proj.methodDecls.findWithSource(src);
-        if (existing != null) return existing;
-
-        final Package pkg = receiver.pkg;
-        final Locations.Location loc = proj.locations.create(src.getPosition());
-        // TODO: src.getBody()
-        // TODO: src.getFormalCtTypeParameters()
-
-        final String name = src.getSimpleName();
-        MethodDecl md = new MethodDecl(src, pkg, receiver, loc, name);
-        existing = proj.methodDecls.tryAdd(md);
-        if (existing != null) return existing;
-
-        if (pkg != null) pkg.methodDecls.add(md);
-        receiver.methodDecls.add(md);
-        return md;
-    }
-
-    private MethodDecl(CtMethod<?> src, Package pkg, ObjectDecl receiver, Locations.Location loc, String name) {
+    public MethodDecl(CtMethod<?> src, PackageCon pkg, ObjectDecl receiver, Locations.Location loc, String name) {
         super(pkg, loc, name);
         this.receiver = receiver;
         this.src = src;

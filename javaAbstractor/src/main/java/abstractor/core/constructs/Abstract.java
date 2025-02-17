@@ -7,22 +7,7 @@ import spoon.reflect.declaration.CtField;
 public class Abstract extends Construct {
     private final CtField<?> src;
 
-    static public Abstract Create(Project proj, CtField<?> src) {
-        Abstract existing = proj.abstracts.findWithSource(src);
-        if (existing != null) return existing;
-
-        // TODO: Get initial stuff
-
-        Abstract f = new Abstract(src);
-        existing = proj.abstracts.tryAdd(f);
-        if (existing != null) return existing;
-        
-        // TODO: Finish loading 
-
-        return f;
-    }
-
-    private Abstract(CtField<?> src) {
+    public Abstract(CtField<?> src) {
         this.src = src;
     }
 

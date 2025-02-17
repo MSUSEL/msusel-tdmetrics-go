@@ -7,23 +7,7 @@ import spoon.reflect.declaration.CtInterface;
 public class InterfaceDecl extends Declaration {
     private final CtInterface<?> src;
 
-    static public InterfaceDecl Create(Project proj, CtInterface<?> src) {
-        InterfaceDecl existing = proj.interfaceDecls.findWithSource(src);
-        if (existing != null) return existing;
-
-        final Locations.Location loc = proj.locations.create(src.getPosition());
-        final Package pkg = Package.Create(proj, src.getPackage());
-        final String name = src.getSimpleName();
-
-        InterfaceDecl id = new InterfaceDecl(src, pkg, loc, name);
-        existing = proj.interfaceDecls.tryAdd(id);
-        if (existing != null) return existing;
-
-        pkg.interfaceDecls.add(id);
-        return id;
-    }
-
-    private InterfaceDecl(CtInterface<?> src, Package pkg, Locations.Location loc, String name) {
+    public InterfaceDecl(CtInterface<?> src, PackageCon pkg, Locations.Location loc, String name) {
         super(pkg, loc, name);
         this.src = src;
     }

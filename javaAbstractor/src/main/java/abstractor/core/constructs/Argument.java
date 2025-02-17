@@ -7,22 +7,7 @@ import spoon.reflect.declaration.CtField;
 public class Argument extends Construct {
     private final CtField<?> src;
 
-    static public Argument Create(Project proj, CtField<?> src) {
-        Argument existing = proj.arguments.findWithSource(src);
-        if (existing != null) return existing;
-
-        // TODO: Get initial stuff
-
-        Argument f = new Argument(src);
-        existing = proj.arguments.tryAdd(f);
-        if (existing != null) return existing;
-        
-        // TODO: Finish loading 
-
-        return f;
-    }
-
-    private Argument(CtField<?> src) {
+    public Argument(CtField<?> src) {
         this.src = src;
     }
 

@@ -8,19 +8,7 @@ public class Basic extends TypeDesc {
     private final CtField<?> src;
     private final String name;
 
-    static public Basic Create(Project proj, CtField<?> src) {
-        Basic existing = proj.basics.findWithSource(src);
-        if (existing != null) return existing;
-
-        String name = "TODO"; // TODO: Get name
-
-        Basic f = new Basic(src, name);
-        existing = proj.basics.tryAdd(f);
-        if (existing != null) return existing;
-        return f;
-    }
-
-    private Basic(CtField<?> src, String name) {
+    public Basic(CtField<?> src, String name) {
         this.src = src;
         this.name = name;
     }

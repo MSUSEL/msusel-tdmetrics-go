@@ -11,23 +11,7 @@ public class StructDesc extends TypeDesc {
 
     public final List<Field> fields;
 
-    static public StructDesc Create(Project proj, CtClass<?> src) {
-        StructDesc existing = proj.structDescs.findWithSource(src);
-        if (existing != null) return existing;
-
-        // TODO: Handle enum?
-        //if (c instanceof CtEnum<?> e) {}
-        
-        ArrayList<Field> fields = new ArrayList<Field>();
-
-        StructDesc sd = new StructDesc(src, fields);
-        existing = proj.structDescs.tryAdd(sd);
-        if (existing != null) return existing;
-
-        return sd;
-    }
-
-    private StructDesc(CtClass<?> src, ArrayList<Field> fields) {
+    public StructDesc(CtClass<?> src, ArrayList<Field> fields) {
         this.src = src;
         this.fields = Collections.unmodifiableList(fields);
     }

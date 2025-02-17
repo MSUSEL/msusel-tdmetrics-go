@@ -16,7 +16,7 @@ public class Project implements Jsonable {
     // TODO: metrics
     public final Factory<ObjectDecl> objectDecls = new Factory<ObjectDecl>();
     // TODO: objectInsts
-    public final Factory<Package> packages = new Factory<Package>();
+    public final Factory<PackageCon> packages = new Factory<PackageCon>();
     // TODO: selections
     // TODO: signatures
     public final Factory<StructDesc> structDescs = new Factory<StructDesc>();

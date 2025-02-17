@@ -7,22 +7,7 @@ import spoon.reflect.declaration.CtField;
 public class Field extends Construct {
     private final CtField<?> src;
 
-    static public Field Create(Project proj, CtField<?> src) {
-        Field existing = proj.fields.findWithSource(src);
-        if (existing != null) return existing;
-
-        // TODO: Get initial stuff
-
-        Field f = new Field(src);
-        existing = proj.fields.tryAdd(f);
-        if (existing != null) return existing;
-        
-        // TODO: Finish loading 
-
-        return f;
-    }
-
-    private Field(CtField<?> src) {
+    public Field(CtField<?> src) {
         this.src = src;
     }
 
