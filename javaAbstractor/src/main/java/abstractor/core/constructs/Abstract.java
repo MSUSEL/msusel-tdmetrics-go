@@ -4,7 +4,7 @@ import abstractor.core.cmp.Cmp;
 import abstractor.core.json.*;
 import spoon.reflect.declaration.CtField;
 
-public class Abstract extends Construct {
+public class Abstract extends ConstructImp {
     private final CtField<?> src;
 
     public Abstract(CtField<?> src) {

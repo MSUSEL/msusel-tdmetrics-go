@@ -1,6 +1,8 @@
 package abstractor.core;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
 
@@ -11,33 +13,33 @@ public class JsonTests {
     @Test
     public void FormatValueNull() {
         final JsonValue v = JsonValue.ofNull();
-        assertEquals(true, v.isNull());
-        assertEquals(false, v.isString());
-        assertEquals(false, v.isInt());
-        assertEquals(false, v.isDouble());
-        assertEquals(false, v.isBool());
+        assertTrue(v.isNull());
+        assertFalse(v.isString());
+        assertFalse(v.isInt());
+        assertFalse(v.isDouble());
+        assertFalse(v.isBool());
 
         assertEquals("null", v.toString());
         assertEquals("null", v.asString());
         assertEquals(0, v.asInt());
         assertEquals(0.0, v.asDouble());
-        assertEquals(false, v.asBool());
+        assertFalse(v.asBool());
     }
 
     @Test
     public void FormatValueBool1() {
         final JsonValue v1 = JsonValue.of(true);
-        assertEquals(false, v1.isNull());
-        assertEquals(false, v1.isString());
-        assertEquals(false, v1.isInt());
-        assertEquals(false, v1.isDouble());
-        assertEquals(true, v1.isBool());
+        assertFalse(v1.isNull());
+        assertFalse(v1.isString());
+        assertFalse(v1.isInt());
+        assertFalse(v1.isDouble());
+        assertTrue(v1.isBool());
 
         assertEquals("true", v1.toString());
         assertEquals("true", v1.asString());
         assertEquals(1, v1.asInt());
         assertEquals(1.0, v1.asDouble());
-        assertEquals(true, v1.asBool());
+        assertTrue(v1.asBool());
     }
     
     @Test
@@ -47,23 +49,23 @@ public class JsonTests {
         assertEquals("false", v2.asString());
         assertEquals(0, v2.asInt());
         assertEquals(0.0, v2.asDouble());
-        assertEquals(false, v2.asBool());
+        assertFalse(v2.asBool());
     }
     
     @Test
     public void FormatValueInt1() {
         final JsonValue v1 = JsonValue.of(321);
-        assertEquals(false, v1.isNull());
-        assertEquals(false, v1.isString());
-        assertEquals(true, v1.isInt());
-        assertEquals(false, v1.isDouble());
-        assertEquals(false, v1.isBool());
+        assertFalse(v1.isNull());
+        assertFalse(v1.isString());
+        assertTrue(v1.isInt());
+        assertFalse(v1.isDouble());
+        assertFalse(v1.isBool());
 
         assertEquals("321", v1.toString());
         assertEquals("321", v1.asString());
         assertEquals(321, v1.asInt());
         assertEquals(321.0, v1.asDouble());
-        assertEquals(true, v1.asBool());
+        assertTrue(v1.asBool());
     }
 
     @Test
@@ -73,7 +75,7 @@ public class JsonTests {
         assertEquals("0", v2.asString());
         assertEquals(0, v2.asInt());
         assertEquals(0.0, v2.asDouble());
-        assertEquals(false, v2.asBool());
+        assertFalse(v2.asBool());
     }
 
     @Test
@@ -85,17 +87,17 @@ public class JsonTests {
     @Test
     public void FormatValueDouble1() {
         final JsonValue v1 = JsonValue.of(45.321);
-        assertEquals(false, v1.isNull());
-        assertEquals(false, v1.isString());
-        assertEquals(false, v1.isInt());
-        assertEquals(true, v1.isDouble());
-        assertEquals(false, v1.isBool());
+        assertFalse(v1.isNull());
+        assertFalse(v1.isString());
+        assertFalse(v1.isInt());
+        assertTrue(v1.isDouble());
+        assertFalse(v1.isBool());
 
         assertEquals("45.321", v1.toString());
         assertEquals("45.321", v1.asString());
         assertEquals(45, v1.asInt());
         assertEquals(45.321, v1.asDouble());
-        assertEquals(true, v1.asBool());
+        assertTrue(v1.asBool());
     }
 
     @Test
@@ -105,7 +107,7 @@ public class JsonTests {
         assertEquals("0.0", v2.asString());
         assertEquals(0, v2.asInt());
         assertEquals(0.0, v2.asDouble());
-        assertEquals(false, v2.asBool());
+        assertFalse(v2.asBool());
     }
 
     @Test
@@ -117,17 +119,17 @@ public class JsonTests {
     @Test
     public void FormatValueString1() {
         final JsonValue v1 = JsonValue.of("cat");
-        assertEquals(false, v1.isNull());
-        assertEquals(true, v1.isString());
-        assertEquals(false, v1.isInt());
-        assertEquals(false, v1.isDouble());
-        assertEquals(false, v1.isBool());
+        assertFalse(v1.isNull());
+        assertTrue(v1.isString());
+        assertFalse(v1.isInt());
+        assertFalse(v1.isDouble());
+        assertFalse(v1.isBool());
 
         assertEquals("\"cat\"", v1.toString());
         assertEquals("cat", v1.asString());
         assertEquals(0, v1.asInt());
         assertEquals(0, v1.asDouble());
-        assertEquals(false, v1.asBool());
+        assertFalse(v1.asBool());
     }
 
     @Test
@@ -137,7 +139,7 @@ public class JsonTests {
         assertEquals("0", v2.asString());
         assertEquals(0, v2.asInt());
         assertEquals(0.0, v2.asDouble());
-        assertEquals(false, v2.asBool());
+        assertFalse(v2.asBool());
     }
 
     @Test
@@ -147,7 +149,7 @@ public class JsonTests {
         assertEquals("12.34", v3.asString());
         assertEquals(12, v3.asInt());
         assertEquals(12.34, v3.asDouble());
-        assertEquals(true, v3.asBool());
+        assertTrue(v3.asBool());
     }
 
     @Test
@@ -157,7 +159,7 @@ public class JsonTests {
         assertEquals("true", v4.asString());
         assertEquals(1, v4.asInt());
         assertEquals(1.0, v4.asDouble());
-        assertEquals(true, v4.asBool());
+        assertTrue(v4.asBool());
     }
 
     @Test
@@ -167,7 +169,7 @@ public class JsonTests {
         assertEquals("", v5.asString());
         assertEquals(0, v5.asInt());
         assertEquals(0.0, v5.asDouble());
-        assertEquals(false, v5.asBool());
+        assertFalse(v5.asBool());
     }
 
     @Test
@@ -177,7 +179,7 @@ public class JsonTests {
         assertEquals("hell\\o \"world\"", v6.asString());
         assertEquals(0, v6.asInt());
         assertEquals(0.0, v6.asDouble());
-        assertEquals(false, v6.asBool());
+        assertFalse(v6.asBool());
     }
 
     @Test
@@ -249,5 +251,40 @@ public class JsonTests {
                      "  \"two\": [ 4, 5, 6 ]\n" +
                      "}", complex.toString(false));
         assertEquals("{\"one\":[1,2,3],\"two\":[4,5,6]}", complex.toString(true));
+    }
+
+    @Test
+    public void ParseTrue() throws Exception {
+        JsonNode node = JsonNode.parse("true");
+        assertTrue(node instanceof JsonNode);
+        JsonValue val = (JsonValue)node;
+        assertTrue(val.isBool());
+        assertTrue(val.asBool());
+    }
+
+    @Test
+    public void ParseFalse() throws Exception {
+        JsonNode node = JsonNode.parse("false");
+        assertTrue(node instanceof JsonNode);
+        JsonValue val = (JsonValue)node;
+        assertTrue(val.isBool());
+        assertFalse(val.asBool());
+    }
+    
+    @Test
+    public void ParseNull() throws Exception {
+        JsonNode node = JsonNode.parse("null");
+        assertTrue(node instanceof JsonNode);
+        JsonValue val = (JsonValue)node;
+        assertTrue(val.isNull());
+    }
+    
+    @Test
+    public void ParseSimpleIdent() throws Exception {
+        JsonNode node = JsonNode.parse("hello");
+        assertTrue(node instanceof JsonNode);
+        JsonValue val = (JsonValue)node;
+        assertTrue(val.isString());
+        assertEquals("hello", val.asString());
     }
 }

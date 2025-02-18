@@ -3,7 +3,7 @@ package abstractor.core.constructs;
 import abstractor.core.cmp.Cmp;
 import abstractor.core.json.*;
 
-public abstract class Declaration extends Construct {
+public abstract class Declaration extends ConstructImp {
     public final PackageCon pkg;
     public final Locations.Location loc;
     public final String name;
@@ -17,7 +17,7 @@ public abstract class Declaration extends Construct {
     @Override
     public JsonNode toJson(JsonHelper h) {
         JsonObject obj = (JsonObject)super.toJson(h);
-        if (this.pkg != null) obj.put("package", pkg.getIndex());
+        if (this.pkg != null) obj.put("package", index(pkg));
         obj.putNotEmpty("loc", this.loc.toJson(h));
         obj.putNotEmpty("name", this.name);
         return obj;

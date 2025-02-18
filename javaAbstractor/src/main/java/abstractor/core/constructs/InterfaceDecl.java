@@ -4,7 +4,7 @@ import abstractor.core.cmp.Cmp;
 import abstractor.core.json.*;
 import spoon.reflect.declaration.CtInterface;
 
-public class InterfaceDecl extends Declaration {
+public class InterfaceDecl extends Declaration implements TypeDesc {
     private final CtInterface<?> src;
 
     public InterfaceDecl(CtInterface<?> src, PackageCon pkg, Locations.Location loc, String name) {

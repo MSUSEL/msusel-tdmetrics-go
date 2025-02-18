@@ -22,7 +22,7 @@ public class MethodDecl extends Declaration {
         JsonObject obj = (JsonObject)super.toJson(h);
         // TODO: | `instances`  | ⬤ | List of [indices](#indices) to [method instances](#method-instance). |
         // TODO: | `metrics`    | ⬤ | The [index](#indices) of the [metrics](#metrics) for this method. |
-        obj.putNotEmpty("receiver", this.receiver.getIndex());
+        obj.putNotEmpty("receiver", index(this.receiver));
         // TODO: | `signature`  | ◯ | The [index](#indices) of the [signature](#signature) for this method. |
         // TODO: | `typeParams` | ⬤ | List of [indices](#indices) to [type parameters](#type-parameter) if this method is generic. | 
         return obj;

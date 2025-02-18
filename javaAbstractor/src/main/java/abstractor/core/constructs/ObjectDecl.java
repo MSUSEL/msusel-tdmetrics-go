@@ -6,7 +6,7 @@ import abstractor.core.cmp.Cmp;
 import abstractor.core.json.*;
 import spoon.reflect.declaration.CtClass;
 
-public class ObjectDecl extends Declaration {
+public class ObjectDecl extends Declaration implements TypeDesc {
     private final CtClass<?> src;
     public final StructDesc struct;
     public final TreeSet<MethodDecl> methodDecls = new TreeSet<MethodDecl>();
@@ -25,7 +25,7 @@ public class ObjectDecl extends Declaration {
         JsonObject obj = (JsonObject)super.toJson(h);
         obj.putNotEmpty("data", this.struct.getIndex());
         // TODO: | `instances`  | ⬤ | List of [indices](#indices) to [object instances](#object-instance). |
-        obj.putNotEmpty("methods", Construct.indexList(this.methodDecls));
+        obj.putNotEmpty("methods", indexList(this.methodDecls));
         // TODO: | `typeParams` | ⬤ | List of [indices](#indices) to [type parameters](#type-parameter) if this object is generic. |
         // TODO: | `interface`  | ◯ | The [index](#indices) to the [interface description](#interface-description) that this object matches with. 
         return obj;

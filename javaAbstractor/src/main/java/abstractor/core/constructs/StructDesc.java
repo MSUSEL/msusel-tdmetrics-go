@@ -6,7 +6,7 @@ import abstractor.core.cmp.Cmp;
 import abstractor.core.json.*;
 import spoon.reflect.declaration.CtClass;
 
-public class StructDesc extends TypeDesc {
+public class StructDesc extends ConstructImp implements TypeDesc {
     private final CtClass<?> src;
 
     public final List<Field> fields;
@@ -22,15 +22,15 @@ public class StructDesc extends TypeDesc {
     @Override
     public JsonNode toJson(JsonHelper h) {
         JsonObject obj = (JsonObject)super.toJson(h);
-        // TODO: | `fields` | List of [indices](#indices) of [fields](#field) in this structure. |
+        obj.put("fields", indexList(this.fields));
         return obj;
     }
 
     @Override
     public int compareTo(Construct c) {
         return Cmp.or(
-            () -> super.compareTo(c)
-            // TODO: | `fields` | List of [indices](#indices) of [fields](#field) in this structure. |
+            () -> super.compareTo(c),
+            Cmp.deferList(this.fields, () -> ((StructDesc)c).fields)
         );
     }
 }

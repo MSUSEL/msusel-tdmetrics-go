@@ -2,7 +2,7 @@ package abstractor.core.json;
 
 import java.io.PrintStream;
 
-public class JsonValue implements JsonNode {
+public class JsonValue implements JsonNode, Comparable<JsonValue> {
 
     public static String escape(String text) {
         StringBuilder sb = new StringBuilder();
@@ -53,7 +53,7 @@ public class JsonValue implements JsonNode {
     }
 
     public String asString() {
-        return this.isNull()? "null": this.value.toString();
+        return this.isNull() ? "null" : this.value.toString();
     }
     
     public int asInt() {
@@ -110,5 +110,9 @@ public class JsonValue implements JsonNode {
     
     public void toString(PrintStream sb, boolean minimize, String indent) {
         sb.append(this.toString());
+    }
+
+    public int compareTo(JsonValue o) {
+        return this.toString().compareTo(o.toString());
     }
 }

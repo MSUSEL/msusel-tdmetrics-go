@@ -2,13 +2,13 @@ package abstractor.core.constructs;
 
 import abstractor.core.cmp.Cmp;
 import abstractor.core.json.*;
-import spoon.reflect.declaration.CtField;
+import spoon.reflect.reference.CtTypeReference;
 
-public class Basic extends TypeDesc {
-    private final CtField<?> src;
+public class Basic extends ConstructImp implements TypeDesc {
+    private final CtTypeReference<?> src;
     private final String name;
 
-    public Basic(CtField<?> src, String name) {
+    public Basic(CtTypeReference<?> src, String name) {
         this.src = src;
         this.name = name;
     }

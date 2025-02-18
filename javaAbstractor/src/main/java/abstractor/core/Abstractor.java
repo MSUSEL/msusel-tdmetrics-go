@@ -16,10 +16,12 @@ import abstractor.core.log.*;
 public class Abstractor {
     private final Logger log;
     private final Project proj;
+    private int loopBreak;
 
     public Abstractor(Logger log, Project proj) {
         this.log = log;
         this.proj = proj;
+        this.loopBreak = 0;
     }
 
     /**
@@ -104,9 +106,6 @@ public class Abstractor {
         final String name = c.getSimpleName();
         final StructDesc struct = this.addStruct(c);
 
-        // TODO: Handle enum?
-        //if (c instanceof CtEnum<?> e) {}
-
         final ObjectDecl obj = new ObjectDecl(c, struct, pkgCon, loc, name);
         final TryAddResult<ObjectDecl> prior = this.proj.objectDecls.tryAdd(obj);
         if (prior.existed) return prior.value;
@@ -115,11 +114,6 @@ public class Abstractor {
 
         for (CtMethod<?> m : c.getAllMethods())
             this.addMethod(obj, m);
-
-        // TODO: Deal with struct
-
-        //for (CtFieldReference<?> fr : c.getAllFields())
-        //    this.addField(fr.getFieldDeclaration());
 
         // TODO: Implement
         
@@ -161,8 +155,10 @@ public class Abstractor {
 
         // TODO: Handle enum?
         //if (c instanceof CtEnum<?> e) {}
-        
+
         ArrayList<Field> fields = new ArrayList<Field>();
+        for (CtFieldReference<?> fr : c.getAllFields())
+            fields.add(this.addField(fr.getFieldDeclaration()));
 
         StructDesc sd = new StructDesc(c, fields);
         final TryAddResult<StructDesc> prior = this.proj.structDescs.tryAdd(sd);
@@ -171,19 +167,17 @@ public class Abstractor {
         return sd;
     }
 
-    private Field addField(CtField<?> src) {
-        Field existing = proj.fields.findWithSource(src);
+    private Field addField(CtField<?> f) {
+        Field existing = proj.fields.findWithSource(f);
         if (existing != null) return existing;
 
-        // TODO: Get initial stuff
+        final String name = f.getSimpleName();
+        final TypeDesc type = this.addTypeDesc(f.getType());
 
-        Field f = new Field(src);
-        final TryAddResult<Field> prior = this.proj.fields.tryAdd(f);
+        Field field = new Field(f, name, type);
+        final TryAddResult<Field> prior = this.proj.fields.tryAdd(field);
         if (prior.existed) return prior.value;
-        
-        // TODO: Finish loading 
-
-        return f;
+        return field;
     }
     
     private InterfaceDecl addInterface(CtInterface<?> i) {
@@ -213,18 +207,6 @@ public class Abstractor {
     }
 
     /*
-    static public Basic Create(Project proj, CtField<?> src) {
-        Basic existing = proj.basics.findWithSource(src);
-        if (existing != null) return existing;
-
-        String name = "TODO"; // TODO: Get name
-
-        Basic f = new Basic(src, name);
-        existing = proj.basics.tryAdd(f);
-        if (existing != null) return existing;
-        return f;
-    }
-
     static public Argument Create(Project proj, CtField<?> src) {
         Argument existing = proj.arguments.findWithSource(src);
         if (existing != null) return existing;
@@ -266,4 +248,37 @@ public class Abstractor {
         this.log.pop();
     }
     */
+
+    private TypeDesc addTypeDesc(CtTypeReference<?> tr) {
+        if (tr.isPrimitive()) return this.addBasic(tr);
+
+        this.log.error("Unhandled (" + tr.getClass().getName() + "): "+tr.prettyprint());
+        this.log.push();
+        this.log.log("isAnnotationType:    " + tr.isAnnotationType());
+        this.log.log("isAnonymous:. . . . ." + tr.isAnonymous());
+        this.log.log("isArray:             " + tr.isArray());
+        this.log.log("isClass:. . . . . . ." + tr.isClass());
+        this.log.log("isEnum:              " + tr.isEnum());
+        this.log.log("isGenerics: . . . . ." + tr.isGenerics());
+        this.log.log("isImplicit:          " + tr.isImplicit());
+        this.log.log("isInterface:. . . . ." + tr.isInterface());
+        this.log.log("isLocalType:         " + tr.isLocalType());
+        this.log.log("isParameterized:. . ." + tr.isParameterized());
+        this.log.log("isParentInitialized: " + tr.isParentInitialized());
+        this.log.log("isPrimitive:. . . . ." + tr.isPrimitive());
+        this.log.log("isShadow:            " + tr.isShadow());
+        this.log.log("isSimplyQualified:. ." + tr.isSimplyQualified());
+        this.log.pop();
+        return null;
+    }
+
+    private Basic addBasic(CtTypeReference<?> tr) {
+        Basic existing = proj.basics.findWithSource(tr);
+        if (existing != null) return existing;
+        String name = tr.getSimpleName();
+        Basic b = new Basic(tr, name);
+        final TryAddResult<Basic> prior = this.proj.basics.tryAdd(b);
+        if (prior.existed) return prior.value;
+        return b;
+    }
 }

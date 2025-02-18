@@ -6,7 +6,7 @@ import abstractor.core.cmp.Cmp;
 import abstractor.core.json.*;
 import spoon.reflect.declaration.CtPackage;
 
-public class PackageCon extends Construct {
+public class PackageCon extends ConstructImp {
     public final CtPackage pkg;
     public final String name;
     public final String path;
@@ -27,24 +27,24 @@ public class PackageCon extends Construct {
     public String kind() { return "package"; }
 
     @Override
+    public JsonNode toJson(JsonHelper h) {
+        JsonObject obj = (JsonObject)super.toJson(h);
+        obj.put("name", this.name);
+        obj.putNotEmpty("path", this.path);
+        obj.putNotEmpty("imports", indexSet(imports));
+        obj.putNotEmpty("interfaces", indexSet(this.interfaceDecls));
+        obj.putNotEmpty("methods", indexSet(this.methodDecls));
+        obj.putNotEmpty("objects", indexSet(this.objectDecls));
+        // TODO: values
+        return obj;
+    }
+
+    @Override
     public int compareTo(Construct c) {
         return Cmp.or(
             () -> super.compareTo(c),
             Cmp.defer(this.name, () -> ((PackageCon)c).name),
             Cmp.defer(this.path, () -> ((PackageCon)c).path)
         );
-    }
-
-    @Override
-    public JsonNode toJson(JsonHelper h) {
-        JsonObject obj = (JsonObject)super.toJson(h);
-        obj.put("name", this.name);
-        obj.putNotEmpty("path", this.path);
-        obj.putNotEmpty("imports", indexSet(imports));
-        obj.putNotEmpty("interfaces", Construct.indexSet(this.interfaceDecls));
-        obj.putNotEmpty("methods", Construct.indexSet(this.methodDecls));
-        obj.putNotEmpty("objects", Construct.indexSet(this.objectDecls));
-        // TODO: values
-        return obj;
     }
 }
