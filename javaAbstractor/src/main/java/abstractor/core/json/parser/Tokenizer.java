@@ -117,8 +117,8 @@ public class Tokenizer implements Iterator<Token> {
         if (this.src.hasNext()) {
             final Char c = this.src.next();
             if (this.isDigit(c)) return (int)(c.value - '0');
-            if (c.value >= 'a' || c.value <= 'f') return (int)(c.value - 'a') + 10;
-            if (c.value >= 'A' || c.value <= 'F') return (int)(c.value - 'A') + 10;
+            if (c.value >= 'a' && c.value <= 'f') return (int)(c.value - 'a') + 10;
+            if (c.value >= 'A' && c.value <= 'F') return (int)(c.value - 'A') + 10;
         }
         throw new Exception("expected a hex value.");
     }
@@ -133,17 +133,29 @@ public class Tokenizer implements Iterator<Token> {
             }
             if (next.value == '\\') {
                 if (!this.src.hasNext()) break;
-                c = this.src.next().value;
-                if (next.value == 'u') {
-                    try {
-                        final int v1 = this.readHexDigit();
-                        final int v2 = this.readHexDigit();
-                        final int v3 = this.readHexDigit();
-                        final int v4 = this.readHexDigit();
-                        c = (char)(v1 << 24 | v2 << 16 | v3 << 8 | v4);
-                    } catch (Exception ex) {
-                        return new Token(TokenType.error, "unexpected end of escaped unicode", next.loc);
-                    }
+                final Char escape = this.src.next(); 
+                switch (escape.value) {
+                    case '"':  c = '\"'; break;
+                    case '\\': c = '\\'; break;
+                    case '/':  c = '/';  break;
+                    case 'b':  c = '\b'; break;
+                    case 'f':  c = '\f'; break;
+                    case 'n':  c = '\n'; break;
+                    case 'r':  c = '\r'; break;
+                    case 't':  c = '\t'; break;
+                    case 'u':
+                        try {
+                            final int v1 = this.readHexDigit();
+                            final int v2 = this.readHexDigit();
+                            final int v3 = this.readHexDigit();
+                            final int v4 = this.readHexDigit();
+                            c = (char)(v1 << 12 | v2 << 8 | v3 << 4 | v4);
+                            break;
+                        } catch (Exception ex) {
+                            return new Token(TokenType.error, "unexpected end of escaped unicode", escape.loc);
+                        }
+                    default:
+                        return new Token(TokenType.error, "unexpected escaped value: " + escape.value, escape.loc);
                 }
             }
             buf.append(c);

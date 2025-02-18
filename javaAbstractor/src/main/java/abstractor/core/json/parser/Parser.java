@@ -10,9 +10,10 @@ public class Parser {
     public Parser(Iterator<Token> src) { this.src = src; }
 
     public JsonNode read() throws Exception {
-        if (!this.src.hasNext())
-            throw new Exception("nothing left to read");
-        return this.readNode(this.src.next());
+        if (!this.src.hasNext()) throw new Exception("empty input");
+        final JsonNode node = this.readNode(this.src.next());
+        if (this.src.hasNext()) throw new Exception("unexpected input after end " + this.src.next().loc);
+        return node;
     }
 
     private JsonNode readNode(Token token) throws Exception {
@@ -45,14 +46,14 @@ public class Parser {
                     final String key = token.value;
                     if (!this.src.hasNext()) throw new Exception("unexpected end after key in object");
                     Token sep = this.src.next();
-                    if (sep.token != TokenType.error) throw this.convertError(token);
+                    if (sep.token == TokenType.error) throw this.convertError(token);
                     if (sep.token != TokenType.colon)
                         throw new Exception("expected a colon after key in object but got " + token.value + token.loc);
                     if (!this.src.hasNext()) throw new Exception("unexpected end after colon in object");
                     obj.put(key, this.readNode(this.src.next()));
                     if (!this.src.hasNext()) throw new Exception("unexpected end after value in object");
                     sep = this.src.next();
-                    if (sep.token != TokenType.error) throw this.convertError(token);
+                    if (sep.token == TokenType.error) throw this.convertError(token);
                     if (sep.token == TokenType.comma) continue;
                     if (sep.token == TokenType.closeCurl) return obj;
                     throw new Exception("unexpected character after value in object, got " + token.value + token.loc);
@@ -73,7 +74,7 @@ public class Parser {
                     arr.add(this.readNode(token));
                     if (!this.src.hasNext()) throw new Exception("unexpected end after value in array");
                     Token sep = this.src.next();
-                    if (sep.token != TokenType.error) throw this.convertError(token);
+                    if (sep.token == TokenType.error) throw this.convertError(token);
                     if (sep.token == TokenType.comma) continue;
                     if (sep.token == TokenType.closeSqr) return arr;
                     throw new Exception("unexpected character after value in array, got " + token.value + token.loc);

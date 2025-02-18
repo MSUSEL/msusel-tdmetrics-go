@@ -22,6 +22,7 @@ public class Scanner implements Iterator<Char> {
     public Char next() {
         char cur = this.src.charAt(this.offset);
         this.offset++;
+        this.column++;
         if (cur == '\n') {
             this.lineNo++;
             this.column = 1;

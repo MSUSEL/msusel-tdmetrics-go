@@ -287,4 +287,179 @@ public class JsonTests {
         assertTrue(val.isString());
         assertEquals("hello", val.asString());
     }
+    
+    @Test
+    public void ParseComplexIdent() throws Exception {
+        JsonNode node = JsonNode.parse("$_hello_42");
+        assertTrue(node instanceof JsonNode);
+        JsonValue val = (JsonValue)node;
+        assertTrue(val.isString());
+        assertEquals("$_hello_42", val.asString());
+    }
+
+    @Test
+    public void ParseEmptyQuote() throws Exception {
+        JsonNode node = JsonNode.parse("\"\"");
+        assertTrue(node instanceof JsonNode);
+        JsonValue val = (JsonValue)node;
+        assertTrue(val.isString());
+        assertEquals("", val.asString());
+    }
+
+    @Test
+    public void ParseEscapedQuote() throws Exception {
+        JsonNode node = JsonNode.parse("\"hello \\\"'\\nworld\\t!\"");
+        assertTrue(node instanceof JsonNode);
+        JsonValue val = (JsonValue)node;
+        assertTrue(val.isString());
+        assertEquals("hello \"'\nworld\t!", val.asString());
+    }
+
+    @Test
+    public void ParseHexQuote() throws Exception {
+        JsonNode node = JsonNode.parse("\"\\uF12A\"");
+        assertTrue(node instanceof JsonNode);
+        JsonValue val = (JsonValue)node;
+        assertTrue(val.isString());
+        assertEquals("\uF12A", val.asString());
+    }
+
+    @Test
+    public void ParseZeroInteger() throws Exception {
+        JsonNode node = JsonNode.parse("0");
+        assertTrue(node instanceof JsonNode);
+        JsonValue val = (JsonValue)node;
+        assertTrue(val.isInt());
+        assertEquals(0, val.asInt());
+    }
+
+    @Test
+    public void ParsePosInteger() throws Exception {
+        JsonNode node = JsonNode.parse("1234");
+        assertTrue(node instanceof JsonNode);
+        JsonValue val = (JsonValue)node;
+        assertTrue(val.isInt());
+        assertEquals(1234, val.asInt());
+    }
+
+    @Test
+    public void ParseNegInteger() throws Exception {
+        JsonNode node = JsonNode.parse("-246");
+        assertTrue(node instanceof JsonNode);
+        JsonValue val = (JsonValue)node;
+        assertTrue(val.isInt());
+        assertEquals(-246, val.asInt());
+    }
+
+    @Test
+    public void ParseDecimalReal() throws Exception {
+        JsonNode node = JsonNode.parse("3.14");
+        assertTrue(node instanceof JsonNode);
+        JsonValue val = (JsonValue)node;
+        assertTrue(val.isDouble());
+        assertEquals(3.14, val.asDouble());
+    }
+
+    @Test
+    public void ParseNegDecimalReal() throws Exception {
+        JsonNode node = JsonNode.parse("-0.2");
+        assertTrue(node instanceof JsonNode);
+        JsonValue val = (JsonValue)node;
+        assertTrue(val.isDouble());
+        assertEquals(-0.2, val.asDouble());
+    }
+    
+    @Test
+    public void ParseExpReal() throws Exception {
+        JsonNode node = JsonNode.parse("1e3");
+        assertTrue(node instanceof JsonNode);
+        JsonValue val = (JsonValue)node;
+        assertTrue(val.isDouble());
+        assertEquals(1000.0, val.asDouble());
+    }
+    
+    @Test
+    public void ParseDecAndExpReal() throws Exception {
+        JsonNode node = JsonNode.parse("1.02e03");
+        assertTrue(node instanceof JsonNode);
+        JsonValue val = (JsonValue)node;
+        assertTrue(val.isDouble());
+        assertEquals(1020.0, val.asDouble());
+    }
+
+    @Test
+    public void ParseNegDecAndExpReal() throws Exception {
+        JsonNode node = JsonNode.parse("-124.10e-2");
+        assertTrue(node instanceof JsonNode);
+        JsonValue val = (JsonValue)node;
+        assertTrue(val.isDouble());
+        assertEquals(-1.241, val.asDouble());
+    }
+    
+    @Test
+    public void ParseEmptyArray() throws Exception {
+        JsonNode node = JsonNode.parse(" [ ] ");
+        assertTrue(node instanceof JsonArray);
+        JsonArray arr = (JsonArray)node;
+        assertTrue(arr.isEmpty());
+        assertEquals("[ ]", arr.toString(false));
+    }
+    
+    @Test
+    public void ParseComplexNumberArray() throws Exception {
+        JsonNode node = JsonNode.parse("[ 1,    2,\t3, 4, ]");
+        assertTrue(node instanceof JsonArray);
+        JsonArray arr = (JsonArray)node;
+        assertFalse(arr.isEmpty());
+        assertEquals("[ 1, 2, 3, 4 ]", arr.toString(false));
+    }
+    
+    @Test
+    public void ParseArrayOfArray() throws Exception {
+        JsonNode node = JsonNode.parse("[ [ ], [ hello ], [ 1, 2 ] ]");
+        assertTrue(node instanceof JsonArray);
+        JsonArray arr = (JsonArray)node;
+        assertFalse(arr.isEmpty());
+        assertEquals(
+            "[\n" +
+            "  [ ],\n" +
+            "  [ \"hello\" ],\n" +
+            "  [ 1, 2 ]\n" +            
+            "]", arr.toString(false));
+    }
+
+    @Test
+    public void ParseEmptyObject() throws Exception {
+        JsonNode node = JsonNode.parse("{ }");
+        assertTrue(node instanceof JsonObject);
+        JsonObject obj = (JsonObject)node;
+        assertTrue(obj.isEmpty());
+        assertEquals("{ }", obj.toString(false));
+    }
+    
+    @Test
+    public void ParseComplexObject() throws Exception {
+        JsonNode node = JsonNode.parse("{ hello: world, 12: 34, xyz: [true, false], }");
+        assertTrue(node instanceof JsonObject);
+        JsonObject obj = (JsonObject)node;
+        assertFalse(obj.isEmpty());
+        assertEquals(
+            "{\n" +
+            "  \"12\": 34,\n" +
+            "  \"hello\": \"world\",\n" +
+            "  \"xyz\": [ true, false ]\n" +
+            "}", obj.toString(false));
+    }
+
+    @Test
+    public void ParseComment() throws Exception {
+        JsonNode node = JsonNode.parse(
+            "[ 1, # hello world\n" +
+            " 2, #\n" +
+            "] #byeee");
+        assertTrue(node instanceof JsonArray);
+        JsonArray arr = (JsonArray)node;
+        assertFalse(arr.isEmpty());
+        assertEquals("[ 1, 2 ]", arr.toString(false));
+    }
 }
