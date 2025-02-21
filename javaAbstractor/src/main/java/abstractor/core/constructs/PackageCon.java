@@ -29,7 +29,7 @@ public class PackageCon extends ConstructImp {
     @Override
     public JsonNode toJson(JsonHelper h) {
         JsonObject obj = (JsonObject)super.toJson(h);
-        obj.put("name", this.name);
+        obj.putNotEmpty("name", this.name);
         obj.putNotEmpty("path", this.path);
         obj.putNotEmpty("imports", indexSet(imports));
         obj.putNotEmpty("interfaces", indexSet(this.interfaceDecls));

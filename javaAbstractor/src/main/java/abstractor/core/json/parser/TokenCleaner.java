@@ -1,26 +1,32 @@
 package abstractor.core.json.parser;
 
 import java.util.Iterator;
+import java.util.Map;
 
 public class TokenCleaner implements Iterator<Token> {
     private final Iterator<Token> src;
     private Token next;
+    private Map<String, TokenType> remap;
 
     public TokenCleaner(Iterator<Token> src) {
         this.src = src;
         this.next = null;
+        this.remap = Map.of(
+            "null",  TokenType.nullId,
+            "true",  TokenType.boolId,
+            "false", TokenType.boolId
+        );
     }
 
     private Token readNext() {
         final Token next = this.src.next();
-        if (next.token == TokenType.ident) {
-            if (next.value.equals("null"))  return new Token(TokenType.nullId, next.value, next.loc);
-            if (next.value.equals("true"))  return new Token(TokenType.boolId, next.value, next.loc);
-            if (next.value.equals("false")) return new Token(TokenType.boolId, next.value, next.loc);
+        if (next.token() == TokenType.ident) {
+            TokenType override = this.remap.get(next.value());
+            if (override != null) return new Token(override, next.value(), next.loc());
             return next;
         }
-        if (next.token == TokenType.whitespace) return null;
-        if (next.token == TokenType.comment) return null;
+        if (next.token() == TokenType.whitespace) return null;
+        if (next.token() == TokenType.comment) return null;
         return next;
     }
 

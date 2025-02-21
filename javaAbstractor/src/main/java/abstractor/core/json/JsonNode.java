@@ -7,8 +7,7 @@ import abstractor.core.json.parser.*;
 public interface JsonNode {
     static public JsonNode parse(String ...lines) throws Exception {
         final String input = String.join("\n", lines);
-        final PushBackScanner scan = new PushBackScanner(new Scanner(input));
-        final TokenCleaner tok = new TokenCleaner(new Tokenizer(scan));
+        final TokenCleaner tok = new TokenCleaner(new Tokenizer(new Scanner(input)));
         final Parser src = new Parser(tok);
         return src.read();
     }

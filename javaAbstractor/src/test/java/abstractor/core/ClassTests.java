@@ -2,9 +2,6 @@ package abstractor.core;
 
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertLinesMatch;
-
-import java.util.Arrays;
 
 import org.junit.jupiter.api.Test;
 
@@ -29,14 +26,12 @@ public class ClassTests {
             final JsonHelper jh = new JsonHelper();
             final JsonNode result = proj.toJson(jh);
             final JsonNode exp = JsonNode.parse(lines);
-            assertLinesMatch(
-                Arrays.asList(exp.toString(false).split("\n")),
-                Arrays.asList(result.toString(false).split("\n")));
+            assertEquals(exp.toString(false), result.toString(false));
         });
     }
 
     @Test
-    public void ClassWithOneBasicField() {
+    public void ClassWithFields() {
         final Project proj = classFromSource(
             "public class Foo {",
             "  public int bar;",
