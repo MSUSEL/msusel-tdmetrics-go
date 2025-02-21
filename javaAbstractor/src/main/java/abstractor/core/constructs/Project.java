@@ -20,11 +20,10 @@ public class Project implements Jsonable {
     public final Factory<Selection>     selections     = new Factory<Selection>();
     public final Factory<Signature>     signatures     = new Factory<Signature>();
     public final Factory<StructDesc>    structDescs    = new Factory<StructDesc>();
-    // TODO: typeParams
-    // TODO: values
+    public final Factory<TypeParam>     typeParams     = new Factory<TypeParam>();
+    public final Factory<Value>         values         = new Factory<Value>();
 
-    private void prepareForOutput() {
-        this.locations.prepareForOutput();
+    private void setAllIndices() {
         this.abstracts.setIndices();
         this.arguments.setIndices();
         this.basics.setIndices();
@@ -41,12 +40,13 @@ public class Project implements Jsonable {
         this.selections.setIndices();
         this.signatures.setIndices();
         this.structDescs.setIndices();
-        // TODO: typeParams
-        // TODO: values
+        this.typeParams.setIndices();
+        this.values.setIndices();
     }
 
     public JsonNode toJson(JsonHelper h) {
-        this.prepareForOutput();
+        this.locations.prepareForOutput();
+        this.setAllIndices();
 
         JsonObject obj = new JsonObject();
         obj.put("language", "java");
@@ -67,8 +67,8 @@ public class Project implements Jsonable {
         obj.putNotEmpty("selections",     this.selections.toJson(h));
         obj.putNotEmpty("signatures",     this.signatures.toJson(h));
         obj.putNotEmpty("structDescs",    this.structDescs.toJson(h));
-        // TODO: typeParams
-        // TODO: values
+        obj.putNotEmpty("typeParams",     this.typeParams.toJson(h));
+        obj.putNotEmpty("values",         this.values.toJson(h));
         return obj;
     }   
 }
