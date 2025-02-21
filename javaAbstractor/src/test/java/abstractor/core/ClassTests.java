@@ -30,7 +30,7 @@ public class ClassTests {
             final JsonNode exp = JsonNode.parse(lines);
             final String expStr = exp.toString(false);
             final String resStr = result.toString(false);
-            if (expStr != resStr) {
+            if (!expStr.equals(resStr)) {
                 String diff = String.join("\n", new Diff().PlusMinusByLine(expStr, resStr));
                 fail(diff);
             }
