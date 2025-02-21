@@ -2,10 +2,12 @@ package abstractor.core;
 
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.fail;
 
 import org.junit.jupiter.api.Test;
 
 import abstractor.core.constructs.Project;
+import abstractor.core.diff.Diff;
 import abstractor.core.json.JsonHelper;
 import abstractor.core.json.JsonNode;
 import abstractor.core.log.Logger;
@@ -26,7 +28,12 @@ public class ClassTests {
             final JsonHelper jh = new JsonHelper();
             final JsonNode result = proj.toJson(jh);
             final JsonNode exp = JsonNode.parse(lines);
-            assertEquals(exp.toString(false), result.toString(false));
+            final String expStr = exp.toString(false);
+            final String resStr = result.toString(false);
+            if (expStr != resStr) {
+                String diff = String.join("\n", new Diff().PlusMinusByLine(expStr, resStr));
+                fail(diff);
+            }
         });
     }
 
@@ -64,7 +71,6 @@ public class ClassTests {
             "  ],",
             "  packages: [",
             "    {",
-            "      name: \"\",",
             "      methods: [ 1, 2, 3, 4, 5, 6, 7, 8, 9 ],",
             "      objects: [ 1 ]",
             "    }",

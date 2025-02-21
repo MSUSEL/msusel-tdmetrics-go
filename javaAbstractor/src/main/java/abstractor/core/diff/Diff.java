@@ -156,8 +156,8 @@ public class Diff {
         String[] aLines = aSource.split("\n");
         String[] bLines = bSource.split("\n");
         return PlusMinus(this.Path(aLines, bLines),
-            (int index) -> aSource.charAt(index),
-            (int index) -> bSource.charAt(index),
+            (int index) -> aLines[index],
+            (int index) -> bLines[index],
             equalPrefix, addedPrefix, removedPrefix);
     }
 
@@ -300,8 +300,8 @@ public class Diff {
         String[] aLines = aSource.split("\n");
         String[] bLines = bSource.split("\n");
         return Merge(this.Path(aLines, bLines),
-            (int index) -> aSource.charAt(index),
-            (int index) -> bSource.charAt(index),
+            (int index) -> aLines[index],
+            (int index) -> bLines[index],
             startChange, middleChange, endChange);
     }
 
