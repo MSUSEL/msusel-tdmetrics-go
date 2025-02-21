@@ -16,12 +16,10 @@ import abstractor.core.log.*;
 public class Abstractor {
     private final Logger log;
     private final Project proj;
-    private int loopBreak;
 
     public Abstractor(Logger log, Project proj) {
         this.log = log;
         this.proj = proj;
-        this.loopBreak = 0;
     }
 
     /**
@@ -251,6 +249,7 @@ public class Abstractor {
 
     private TypeDesc addTypeDesc(CtTypeReference<?> tr) {
         if (tr.isPrimitive()) return this.addBasic(tr);
+        //if (tr.isArray())     return this.addArray(tr); // TODO: Add once we have interfaceDesc.
 
         this.log.error("Unhandled (" + tr.getClass().getName() + "): "+tr.prettyprint());
         this.log.push();

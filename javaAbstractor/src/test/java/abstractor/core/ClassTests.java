@@ -26,22 +26,23 @@ public class ClassTests {
     static private void checkJson(Project proj, String ...lines) {
         assertDoesNotThrow(() -> {
             final JsonHelper jh = new JsonHelper();
-            final JsonNode result = proj.toJson(jh);
-            final JsonNode exp = JsonNode.parse(lines);
-            final String expStr = exp.toString(false);
-            final String resStr = result.toString(false);
-            if (!expStr.equals(resStr)) {
-                String diff = String.join("\n", new Diff().PlusMinusByLine(expStr, resStr));
-                fail(diff);
-            }
+            final String result = proj.toJson(jh).toString(false);
+            final String exp = JsonNode.parse(lines).toString(false);
+            assertLines(exp, result);
         });
     }
 
+    static private void assertLines(String exp, String result) {
+        if (!exp.equals(result))
+            fail(String.join("\n", new Diff().PlusMinusByLine(exp, result)));
+    }
+
     @Test
-    public void ClassWithFields() {
+    public void ClassTestWithFields() {
         final Project proj = classFromSource(
             "public class Foo {",
             "  public int bar;",
+            // TODO: add once we have interfaceDesc. "  public int[] baz;",
             "}");
 
         checkJson(proj,
@@ -78,6 +79,20 @@ public class ClassTests {
             "  structDescs: [",
             "    { fields: [ 1 ] }",
             "  ]",
+            "}");
+    }
+
+    @Test
+    public void ClassTestWithMethods() {
+        final Project proj = classFromSource(
+            "public class Foo {",
+            "  int bar(int x, int y) {",
+            "    return x + y*2;",
+            "  }",
+            "}");
+
+        checkJson(proj,
+            "{",
             "}");
     }
 }
