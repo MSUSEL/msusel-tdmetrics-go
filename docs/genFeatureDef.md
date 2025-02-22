@@ -204,6 +204,13 @@ interface {
 }
 ```
 
+```Java
+public interface Named {
+  void Foo();
+  int Bar(String s);
+}
+```
+
 | Name        | Optional | Extra | Description |
 |:------------|:--------:|:-----:|:------------|
 | `exported`  | ◯ | ⬤ | True if the scope is "exported". |
@@ -239,6 +246,13 @@ For example, `Baz` below has two arguments, `x float64` and `y float64`.
 func Baz(x, y float64) { }
 ```
 
+Java is simpler since it only allows one return value that may not be named.
+In the following, there are 3 arguments, an unnamed `boolean`, `String x`, and `int y`.
+
+```Java
+boolean Foo(String x, int y) { }
+```
+
 | Name    | Optional | Extra | Description |
 |:--------|:--------:|:-----:|:------------|
 | `index` | ◯ | ⬤ | The [index](#indices) of this argument in the project's `arguments` list. |
@@ -262,6 +276,9 @@ Compound built-in types, such as `error` and `complex64`, are replaced by
 interfaces with the components of the compound type accessible through
 the [abstracts](#abstract) of that interface.
 
+The Java types like `Integer`, `Character`, etc will use the basic tpe
+`int`, `char` and so on. `String` will be treated as a basic.
+
 If the `index` and `kind` are not being outputted, then the basic type may
 be a string containing the name instead of an object.
 
@@ -284,6 +301,13 @@ struct {
 }
 ```
 
+```Java
+public class Named {
+  public int x;
+  private String y;
+}
+```
+
 Any repeat type fields in Go is expanded, e.g. `struct { x, y float64 }` will
 have two fields, `x float64` and `y float64`.
 
@@ -291,14 +315,15 @@ Any embedded fields will be named using the name of the base type,
 e.g. `struct { *Foo[int] }` will be the same as `struct { Foo *Foo[int] }`.
 Unnamed types are not allowed to be embedded into a struct.
 
-| Name       | Optional | Extra | Description |
-|:-----------|:--------:|:-----:|:------------|
-| `embedded` | ◯ | ⬤ | True if the field is from an embedded struct. |
-| `exported` | ◯ | ⬤ | True if the scope is "exported". |
-| `index`    | ◯ | ⬤ | The [index](#indices) of this field in the project's `fields` list. |
-| `kind`     | ◯ | ⬤ | `field` |
-| `name`     | ◯ | ◯ | The string name for the field. |
-| `type`     | ◯ | ◯ | [Key](#keys) for any [type description](#type-descriptions). |
+| Name         | Optional | Extra | Description |
+|:-------------|:--------:|:-----:|:------------|
+| `embedded`   | ◯ | ⬤ | True if the field is from an embedded struct. |
+| `exported`   | ◯ | ⬤ | True if the scope is "exported". |
+| `visibility` | ◯ | ⬤ | A string of the scope modifiers, like "public" or "private". |
+| `index`      | ◯ | ⬤ | The [index](#indices) of this field in the project's `fields` list. |
+| `kind`       | ◯ | ⬤ | `field` |
+| `name`       | ◯ | ◯ | The string name for the field. |
+| `type`       | ◯ | ◯ | [Key](#keys) for any [type description](#type-descriptions). |
 
 ### Interface Declaration
 
@@ -313,6 +338,16 @@ type Foo[T any] interface {
 
 type Baz interface {
   Error() string
+}
+```
+
+```Java
+public interface Foo<T> {
+  String bar(T value);
+}
+
+public interface Baz {
+  String error();
 }
 ```
 
@@ -338,6 +373,12 @@ instances, and interface literal.
 interface { String() string }
 
 interface { int | ~string }
+```
+
+```Java
+public interface Named {
+  Strings toString();
+}
 ```
 
 | Name        | Optional | Extra | Description |

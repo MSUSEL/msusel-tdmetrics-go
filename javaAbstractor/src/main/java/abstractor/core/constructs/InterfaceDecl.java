@@ -1,35 +1,44 @@
 package abstractor.core.constructs;
 
-import abstractor.core.cmp.Cmp;
-import abstractor.core.json.*;
+import java.util.Collections;
+import java.util.List;
+import java.util.TreeSet;
+
 import spoon.reflect.declaration.CtInterface;
 
-public class InterfaceDecl extends Declaration implements TypeDesc {
-    private final CtInterface<?> src;
+import abstractor.core.cmp.Cmp;
+import abstractor.core.json.*;
 
-    public InterfaceDecl(CtInterface<?> src, PackageCon pkg, Locations.Location loc, String name) {
-        super(pkg, loc, name);
-        this.src = src;
+public class InterfaceDecl extends Declaration implements TypeDesc {
+    public final InterfaceDesc inter;
+    public final List<TypeParam> typeParams;
+    public final TreeSet<InterfaceInst> instances;
+
+    public InterfaceDecl(CtInterface<?> src, PackageCon pkg, Locations.Location loc,
+        String name, InterfaceDesc inter, List<TypeParam> typeParams) {
+        super(src, pkg, loc, name);
+        this.inter = inter;
+        this.typeParams = Collections.unmodifiableList(typeParams);
+        this.instances = new TreeSet<InterfaceInst>();
     }
 
-    public Object source() { return this.src; }
     public String kind() { return "interfaceDecl"; }
     
     @Override
     public JsonNode toJson(JsonHelper h) {
         JsonObject obj = (JsonObject)super.toJson(h);
-        // TODO: | `instances`  | ⬤ | List of [indices](#indices) to [interface instances](#interface-instance). |
-        // TODO: | `interface`  | ◯ | The [index](#indices) to the declared [interface](#interface-description) type. |
-        // TODO: | `typeParams` | ⬤ | List of [indices](#indices) to [type parameters](#type-parameter) if this interface is generic. |
+        obj.putNotEmpty("instance", indexSet(this.instances));
+        obj.put("interface", index(this.inter));
+        obj.putNotEmpty("typeParams", indexList(this.typeParams));
         return obj;
     }
 
     @Override
     public int compareTo(Construct c) {
         return Cmp.or(
-            () -> super.compareTo(c)
-            // TODO: | `interface`  | ◯ | The [index](#indices) to the declared [interface](#interface-description) type. |
-            // TODO: | `typeParams` | ⬤ | List of [indices](#indices) to [type parameters](#type-parameter) if this object is generic. |
+            () -> super.compareTo(c),
+            Cmp.defer(this.inter, () -> ((InterfaceDecl)c).inter),
+            Cmp.deferList(this.typeParams, () -> ((InterfaceDecl)c).typeParams)
         );
     }
 }

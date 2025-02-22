@@ -1,23 +1,31 @@
 package abstractor.core.constructs;
 
-import abstractor.core.cmp.Cmp;
-import abstractor.core.json.*;
 import spoon.reflect.declaration.CtField;
 
+import abstractor.core.cmp.Cmp;
+import abstractor.core.json.*;
+
 public class InterfaceDesc extends ConstructImp implements TypeDesc {
-    private final CtField<?> src;
 
     public InterfaceDesc(CtField<?> src) {
-        this.src = src;
+        super(src);
     }
 
-    public Object source() { return this.src; }
     public String kind() { return "interfaceDesc"; }
 
     @Override
     public JsonNode toJson(JsonHelper h) {
         JsonObject obj = (JsonObject)super.toJson(h);
-        // TODO: Fill out
+
+        // TODO: | `abstracts` | ⬤ | ◯ | List of [indices](#indices) to [abstracts](#abstract). |
+        // TODO: | `approx`    | ⬤ | ◯ | List of [keys](#keys) to any [type description](#type-descriptions) for approximate constraints. |
+        // TODO: | `exact`     | ⬤ | ◯ | List of [keys](#keys) to any [type description](#type-descriptions) for exact constraints. |
+        // TODO: | `hint`      | ◯ | ⬤ | A string indicating if the interface is a stand-in for a type, e.g. `pointer`, `chan`, `list` |
+        // TODO: | `index`     | ◯ | ⬤ | The [index](#indices) of this interface in the projects' `interfaceDescs` list. |
+        // TODO: | `inherits`  | ⬤ | ◯ | List of [indices](#indices) to inherited [interfaces](#interface-description). |
+        // TODO: | `kind`      | ◯ | ⬤ | `interfaceDesc` |
+        // TODO: | `package`   | ⬤ | ◯ | The [index](#indices) to the [package](#package) this interface is pinned to. |
+
         return obj;
     }
 

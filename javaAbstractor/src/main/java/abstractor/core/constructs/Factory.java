@@ -2,12 +2,14 @@ package abstractor.core.constructs;
 
 import java.util.TreeSet;
 
+import spoon.reflect.declaration.CtElement;
+
 import abstractor.core.json.*;
 
 public class Factory<T extends Construct> implements Jsonable {
     private final TreeSet<T> set = new TreeSet<T>();
 
-    public T findWithSource(Object source) {
+    public T findWithSource(CtElement source) {
         for (T t : this.set) {
             if (t.source() == source) return t;
         }

@@ -1,21 +1,22 @@
 package abstractor.core.constructs;
 
-import abstractor.core.cmp.Cmp;
-import abstractor.core.json.*;
 import spoon.reflect.declaration.CtField;
 
+import abstractor.core.cmp.Cmp;
+import abstractor.core.json.*;
+
 public class Field extends ConstructImp {
-    private final CtField<?> src;
     public final String name;
     public final TypeDesc type;
+    public final String visibility;
 
     public Field(CtField<?> src, String name, TypeDesc type) {
-        this.src = src;
+        super(src);
         this.name = name;
         this.type = type;
+        this.visibility = src.getVisibility().toString();
     }
 
-    public Object source() { return this.src; }
     public String kind() { return "field"; }
 
     @Override
@@ -23,6 +24,7 @@ public class Field extends ConstructImp {
         JsonObject obj = (JsonObject)super.toJson(h);
         obj.put("name", this.name);
         obj.put("type", key(this.type));
+        obj.putNotEmpty("visibility", this.visibility);
         return obj;
     }
 

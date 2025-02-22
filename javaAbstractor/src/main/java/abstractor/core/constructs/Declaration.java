@@ -1,5 +1,7 @@
 package abstractor.core.constructs;
 
+import spoon.reflect.declaration.CtModifiable;
+
 import abstractor.core.cmp.Cmp;
 import abstractor.core.json.*;
 
@@ -7,11 +9,14 @@ public abstract class Declaration extends ConstructImp {
     public final PackageCon pkg;
     public final Locations.Location loc;
     public final String name;
+    public final String visibility;
 
-    public Declaration(PackageCon pkg, Locations.Location loc, String name) {
+    public Declaration(CtModifiable src, PackageCon pkg, Locations.Location loc, String name) {
+        super(src);
         this.pkg = pkg;
         this.loc = loc;
         this.name = name;
+        this.visibility = src.getVisibility().toString();
     }
 
     @Override
@@ -20,6 +25,7 @@ public abstract class Declaration extends ConstructImp {
         if (this.pkg != null) obj.put("package", index(pkg));
         obj.putNotEmpty("loc", this.loc.toJson(h));
         obj.putNotEmpty("name", this.name);
+        obj.putNotEmpty("visibility", this.visibility);
         return obj;
     }
 

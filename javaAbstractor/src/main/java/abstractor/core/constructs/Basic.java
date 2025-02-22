@@ -1,19 +1,18 @@
 package abstractor.core.constructs;
 
-import abstractor.core.cmp.Cmp;
-import abstractor.core.json.*;
 import spoon.reflect.reference.CtTypeReference;
 
+import abstractor.core.cmp.Cmp;
+import abstractor.core.json.*;
+
 public class Basic extends ConstructImp implements TypeDesc {
-    private final CtTypeReference<?> src;
-    private final String name;
+    public final String name;
 
     public Basic(CtTypeReference<?> src, String name) {
-        this.src = src;
+        super(src);
         this.name = name;
     }
 
-    public Object source() { return this.src; }
     public String kind() { return "basic"; }
 
     @Override

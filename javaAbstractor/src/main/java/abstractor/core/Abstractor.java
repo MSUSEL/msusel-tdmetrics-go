@@ -29,7 +29,7 @@ public class Abstractor {
     public void addMavenProject(String mavenProject) {
         this.log.log("Reading " + mavenProject);
         final MavenLauncher launcher = new MavenLauncher(mavenProject,
-                 MavenLauncher.SOURCE_TYPE.APP_SOURCE);
+            MavenLauncher.SOURCE_TYPE.APP_SOURCE);
         this.addModel(launcher.buildModel());
     }
 
@@ -47,7 +47,7 @@ public class Abstractor {
     }
 
     private void addModel(CtModel model) {
-        for(CtPackage pkg : model.getAllPackages())
+        for (CtPackage pkg : model.getAllPackages())
             this.addPackage(pkg);
     }
 

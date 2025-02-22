@@ -3,6 +3,7 @@ package abstractor.core.constructs;
 import java.util.TreeSet;
 
 import abstractor.core.json.*;
+import spoon.reflect.declaration.CtElement;
 
 public abstract class ConstructImp implements Construct {
 
@@ -44,8 +45,12 @@ public abstract class ConstructImp implements Construct {
         return indices;
     }
 
+    private final CtElement src;
     private int index;
 
+    public ConstructImp(CtElement src) { this.src = src; }
+
+    public CtElement source() { return this.src; }
     public void setIndex(int index) { this.index = index; }
     public int getIndex() { return this.index; }
 
@@ -56,7 +61,6 @@ public abstract class ConstructImp implements Construct {
         return obj;
     }
 
-    public abstract Object source();
     public abstract String kind();
 
     public int compareTo(Construct c) {

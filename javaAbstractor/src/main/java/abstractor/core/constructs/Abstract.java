@@ -1,34 +1,36 @@
 package abstractor.core.constructs;
 
-import abstractor.core.cmp.Cmp;
-import abstractor.core.json.*;
 import spoon.reflect.declaration.CtField;
 
-public class Abstract extends ConstructImp {
-    private final CtField<?> src;
+import abstractor.core.cmp.Cmp;
+import abstractor.core.json.*;
 
-    public Abstract(CtField<?> src) {
-        this.src = src;
+public class Abstract extends ConstructImp {
+    public final String name;
+    public final Signature signature;
+
+    public Abstract(CtField<?> src, String name, Signature signature) {
+        super(src);
+        this.name = name;
+        this.signature = signature;
     }
 
-    public Object source() { return this.src; }
     public String kind() { return "abstract"; }
 
     @Override
     public JsonNode toJson(JsonHelper h) {
         JsonObject obj = (JsonObject)super.toJson(h);
-        // TODO: | `name`      | ◯ | ◯ | The string name for the abstract. |
-        // TODO: | `signature` | ◯ | ◯ | [Index](#indices) for the [signature](#signature). |
+        obj.put("name", this.name);
+        obj.put("signature", index(this.signature));
         return obj;
     }
 
     @Override
     public int compareTo(Construct c) {
         return Cmp.or(
-            () -> super.compareTo(c)
-            
-            // TODO: | `name`      | ◯ | ◯ | The string name for the abstract. |
-            // TODO: | `signature` | ◯ | ◯ | [Index](#indices) for the [signature](#signature). |
+            () -> super.compareTo(c),
+            Cmp.defer(this.name, () -> ((Abstract)c).name),
+            Cmp.defer(this.signature, () -> ((Abstract)c).signature)
         );
     }   
 }
