@@ -1,6 +1,8 @@
 package abstractor.core.cmp;
 
+import java.util.Iterator;
 import java.util.List;
+import java.util.SortedSet;
 
 public interface Cmp {
     int run();
@@ -17,7 +19,7 @@ public interface Cmp {
         return () -> compare(a, fetch.run());
     }
 
-    static public <T> Cmp deferList(List<? extends Comparable<T>> a, Fetch<List<? extends T>> fetch) {
+    static public <T extends Comparable<T>> Cmp deferList(List<? extends T> a, Fetch<List<? extends T>> fetch) {
         return () -> {
             final List<? extends T> b = fetch.run();
             if (a == null) return b == null ? 0 : -1;
@@ -30,6 +32,24 @@ public interface Cmp {
                 if (cmp != 0) return cmp;
             }
             return Integer.compare(aLen, bLen);
+        };
+    }
+
+    static public <T extends Comparable<T>> Cmp deferSet(SortedSet<? extends T> a, Fetch<SortedSet<? extends T>> fetch) {
+        return () -> {
+            final SortedSet<? extends T> b = fetch.run();
+            if (a == null) return b == null ? 0 : -1;
+            if (b == null) return 1; 
+
+            final Iterator<? extends T> aIt = a.iterator();
+            final Iterator<? extends T> bIt = b.iterator();
+            while (aIt.hasNext() && bIt.hasNext()) {
+                final int cmp = compare(aIt.next(), bIt.next());
+                if (cmp != 0) return cmp;
+            }
+
+            if (aIt.hasNext()) return bIt.hasNext() ? 0 : -1;
+            return bIt.hasNext() ? 1 : 0;
         };
     }
 

@@ -14,7 +14,7 @@ public class InterfaceDecl extends Declaration implements TypeDesc {
     public final List<TypeParam> typeParams;
     public final TreeSet<InterfaceInst> instances;
 
-    public InterfaceDecl(CtInterface<?> src, PackageCon pkg, Locations.Location loc,
+    public InterfaceDecl(CtInterface<?> src, PackageCon pkg, Location loc,
         String name, InterfaceDesc inter, List<TypeParam> typeParams) {
         super(src, pkg, loc, name);
         this.inter = inter;
@@ -27,8 +27,8 @@ public class InterfaceDecl extends Declaration implements TypeDesc {
     @Override
     public JsonNode toJson(JsonHelper h) {
         JsonObject obj = (JsonObject)super.toJson(h);
-        obj.putNotEmpty("instance", indexSet(this.instances));
-        obj.put("interface", index(this.inter));
+        obj.putNotEmpty("instances",  indexSet(this.instances));
+        obj.put("interface",          index(this.inter));
         obj.putNotEmpty("typeParams", indexList(this.typeParams));
         return obj;
     }
@@ -37,7 +37,7 @@ public class InterfaceDecl extends Declaration implements TypeDesc {
     public int compareTo(Construct c) {
         return Cmp.or(
             () -> super.compareTo(c),
-            Cmp.defer(this.inter, () -> ((InterfaceDecl)c).inter),
+            Cmp.defer(this.inter,          () -> ((InterfaceDecl)c).inter),
             Cmp.deferList(this.typeParams, () -> ((InterfaceDecl)c).typeParams)
         );
     }

@@ -318,12 +318,13 @@ Unnamed types are not allowed to be embedded into a struct.
 | Name         | Optional | Extra | Description |
 |:-------------|:--------:|:-----:|:------------|
 | `embedded`   | ◯ | ⬤ | True if the field is from an embedded struct. |
-| `exported`   | ◯ | ⬤ | True if the scope is "exported". |
-| `visibility` | ◯ | ⬤ | A string of the scope modifiers, like "public" or "private". |
 | `index`      | ◯ | ⬤ | The [index](#indices) of this field in the project's `fields` list. |
 | `kind`       | ◯ | ⬤ | `field` |
 | `name`       | ◯ | ◯ | The string name for the field. |
 | `type`       | ◯ | ◯ | [Key](#keys) for any [type description](#type-descriptions). |
+| `visibility` | ◯ | ⬤ | A string of the scope modifiers, like "public", "exported", or "private". |
+
+TODO: Replace `exported` with `visibility` goAbstractor.
 
 ### Interface Declaration
 
@@ -353,7 +354,6 @@ public interface Baz {
 
 | Name         | Optional | Extra | Description |
 |:-------------|:--------:|:-----:|:------------|
-| `exported`   | ◯ | ⬤ | True if the scope is "exported". |
 | `index`      | ◯ | ⬤ | The [index](#indices) of this interface declaration in the project's `interfaceDecls` list. |
 | `instances`  | ⬤ | ◯ | List of [indices](#indices) to [interface instances](#interface-instance). |
 | `interface`  | ◯ | ◯ | The [index](#indices) to the declared [interface](#interface-description) type. |
@@ -362,6 +362,9 @@ public interface Baz {
 | `name`       | ◯ | ◯ | The name of the declared interface. |
 | `package`    | ◯ | ◯ | The [index](#indices) to the [package](#package) this declaration is declared in. |
 | `typeParams` | ⬤ | ◯ | List of [indices](#indices) to [type parameters](#type-parameter) if this interface is generic. |
+| `visibility` | ◯ | ⬤ | A string of the scope modifiers, like "public", "exported", or "private". |
+
+TODO: Replace `exported` with `visibility` goAbstractor.
 
 ### Interface Description
 
@@ -390,7 +393,9 @@ public interface Named {
 | `index`     | ◯ | ⬤ | The [index](#indices) of this interface in the projects' `interfaceDescs` list. |
 | `inherits`  | ⬤ | ◯ | List of [indices](#indices) to inherited [interfaces](#interface-description). |
 | `kind`      | ◯ | ⬤ | `interfaceDesc` |
-| `package`   | ⬤ | ◯ | The [index](#indices) to the [package](#package) this interface is pinned to. |
+| `pin`       | ⬤ | ◯ | The [key](#keys) to the [object](#object), [interface](#interface-declaration) declaration, or [package](#package) this interface is pinned to. |
+
+TODO: Replace `package` with `pin` in goAbstractor.
 
 ### Interface Instance
 
@@ -480,9 +485,17 @@ func (b *Bar[T]) Foo(value T) { }
 func Baz(value int)(ok bool, err error) { }
 ```
 
+```Java
+public class Bar<T> {
+
+  public void Foo(T value);
+  
+  public <T2> void Foo(T2 value);
+}
+```
+
 | Name         | Optional | Extra | Description |
 |:-------------|:--------:|:-----:|:------------|
-| `exported`   | ◯ | ⬤ | True if the scope is "exported". |
 | `index`      | ◯ | ⬤ | The [index](#indices) of this method in the projects' `methods` list. |
 | `instances`  | ⬤ | ◯ | List of [indices](#indices) to [method instances](#method-instance). |
 | `kind`       | ◯ | ⬤ | `method` |
@@ -495,6 +508,9 @@ func Baz(value int)(ok bool, err error) { }
 | `recvName`   | ◯ | ⬤ | The name given to the receiver. |
 | `signature`  | ◯ | ◯ | The [index](#indices) of the [signature](#signature) for this method. |
 | `typeParams` | ⬤ | ◯ | List of [indices](#indices) to [type parameters](#type-parameter) if this method is generic. |
+| `visibility` | ◯ | ⬤ | A string of the scope modifiers, like "public", "exported", or "private". |
+
+TODO: Replace `exported` with `visibility` goAbstractor.
 
 ### Method Instance
 
@@ -550,7 +566,7 @@ technical debt analysis.
 | `getter`     | ⬤ | ◯ | True indicates the method is a getter pattern. |
 | `indents`    | ⬤ | ◯ | The indent complexity of the method. |
 | `index`      | ◯ | ⬤ | The [index](#indices) of this metrics in the projects' `metrics` list. |
-| `invokes`    | ⬤ | ◯ | List of [keys](#keys) to methods that were invoked in the method. |
+| `invokes`    | ⬤ | ◯ | List of [keys](#keys) to methods (declaration or instance) that were invoked in the method. |
 | `kind`       | ◯ | ⬤ | `metrics` |
 | `lineCount`  | ⬤ | ◯ | The number of lines in the method. |
 | `loc`        | ◯ | ◯ | The [location](#locations) offset. |

@@ -1,30 +1,41 @@
 package abstractor.core.constructs;
 
-import abstractor.core.cmp.Cmp;
-import abstractor.core.json.*;
+import java.util.Collections;
+import java.util.List;
+import java.util.TreeSet;
+
 import spoon.reflect.declaration.CtMethod;
 
-public class MethodDecl extends Declaration {
-    private final CtMethod<?> src;
-    public final ObjectDecl receiver;
+import abstractor.core.cmp.Cmp;
+import abstractor.core.json.*;
 
-    public MethodDecl(CtMethod<?> src, PackageCon pkg, ObjectDecl receiver, Locations.Location loc, String name) {
-        super(pkg, loc, name);
+public class MethodDecl extends Declaration implements Method {
+    public final ObjectDecl receiver;
+    public final Metrics metrics;
+    public final Signature signature;
+    public final List<TypeParam> typeParams;
+    public final TreeSet<MethodInst> instances;
+
+    public MethodDecl(CtMethod<?> src, PackageCon pkg, ObjectDecl receiver, Location loc,
+        String name, Signature signature, List<TypeParam> typeParams, Metrics metrics) {
+        super(src, pkg, loc, name);
         this.receiver = receiver;
-        this.src = src;
+        this.metrics = metrics;
+        this.signature = signature;
+        this.typeParams = Collections.unmodifiableList(typeParams);
+        this.instances = new TreeSet<MethodInst>();
     }
 
-    public Object source() { return this.src; }
     public String kind() { return "method"; }
     
     @Override
     public JsonNode toJson(JsonHelper h) {
         JsonObject obj = (JsonObject)super.toJson(h);
-        // TODO: | `instances`  | ⬤ | List of [indices](#indices) to [method instances](#method-instance). |
-        // TODO: | `metrics`    | ⬤ | The [index](#indices) of the [metrics](#metrics) for this method. |
-        obj.putNotEmpty("receiver", index(this.receiver));
-        // TODO: | `signature`  | ◯ | The [index](#indices) of the [signature](#signature) for this method. |
-        // TODO: | `typeParams` | ⬤ | List of [indices](#indices) to [type parameters](#type-parameter) if this method is generic. | 
+        obj.putNotEmpty("instances",  indexSet(this.instances));
+        obj.putNotEmpty("metrics",    index(this.metrics));
+        obj.putNotEmpty("receiver",   index(this.receiver));
+        obj.putNotEmpty("signature",  index(this.signature));
+        obj.putNotEmpty("typeParams", indexList(this.typeParams));
         return obj;
     }
 
@@ -32,9 +43,9 @@ public class MethodDecl extends Declaration {
     public int compareTo(Construct c) {
         return Cmp.or(
             () -> super.compareTo(c),
-            Cmp.defer(this.receiver, () -> ((MethodDecl)c).receiver)
-            // TODO: | `signature`  | ◯ | The [index](#indices) of the [signature](#signature) for this method. |
-            // TODO: | `typeParams` | ⬤ | List of [indices](#indices) to [type parameters](#type-parameter) if this object is generic. |
+            Cmp.defer(this.receiver,       () -> ((MethodDecl)c).receiver),
+            Cmp.defer(this.signature,      () -> ((MethodDecl)c).signature),
+            Cmp.deferList(this.typeParams, () -> ((MethodDecl)c).typeParams)
         );
     }
 }

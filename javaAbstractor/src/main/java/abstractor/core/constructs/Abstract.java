@@ -29,7 +29,7 @@ public class Abstract extends ConstructImp {
     public int compareTo(Construct c) {
         return Cmp.or(
             () -> super.compareTo(c),
-            Cmp.defer(this.name, () -> ((Abstract)c).name),
+            Cmp.defer(this.name,      () -> ((Abstract)c).name),
             Cmp.defer(this.signature, () -> ((Abstract)c).signature)
         );
     }   

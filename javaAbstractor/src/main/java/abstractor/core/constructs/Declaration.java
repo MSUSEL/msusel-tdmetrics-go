@@ -7,11 +7,11 @@ import abstractor.core.json.*;
 
 public abstract class Declaration extends ConstructImp {
     public final PackageCon pkg;
-    public final Locations.Location loc;
+    public final Location loc;
     public final String name;
     public final String visibility;
 
-    public Declaration(CtModifiable src, PackageCon pkg, Locations.Location loc, String name) {
+    public Declaration(CtModifiable src, PackageCon pkg, Location loc, String name) {
         super(src);
         this.pkg = pkg;
         this.loc = loc;

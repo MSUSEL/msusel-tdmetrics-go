@@ -1,14 +1,28 @@
 package abstractor.core.constructs;
 
+import java.util.Collections;
+import java.util.SortedSet;
+import java.util.TreeSet;
+
 import spoon.reflect.declaration.CtField;
 
 import abstractor.core.cmp.Cmp;
 import abstractor.core.json.*;
 
 public class InterfaceDesc extends ConstructImp implements TypeDesc {
+    public final SortedSet<Abstract> abstracts;
+    public final TreeSet<InterfaceDesc> inherits;
+    public final Construct pin;  
 
-    public InterfaceDesc(CtField<?> src) {
+    public InterfaceDesc(CtField<?> src, SortedSet<Abstract> abstracts) {
+        this(src, abstracts, null);
+    }
+
+    public InterfaceDesc(CtField<?> src, SortedSet<Abstract> abstracts, Construct pin) {
         super(src);
+        this.abstracts = Collections.unmodifiableSortedSet(abstracts);
+        this.inherits = new TreeSet<InterfaceDesc>();
+        this.pin = pin;
     }
 
     public String kind() { return "interfaceDesc"; }
@@ -16,24 +30,19 @@ public class InterfaceDesc extends ConstructImp implements TypeDesc {
     @Override
     public JsonNode toJson(JsonHelper h) {
         JsonObject obj = (JsonObject)super.toJson(h);
-
-        // TODO: | `abstracts` | ⬤ | ◯ | List of [indices](#indices) to [abstracts](#abstract). |
-        // TODO: | `approx`    | ⬤ | ◯ | List of [keys](#keys) to any [type description](#type-descriptions) for approximate constraints. |
-        // TODO: | `exact`     | ⬤ | ◯ | List of [keys](#keys) to any [type description](#type-descriptions) for exact constraints. |
-        // TODO: | `hint`      | ◯ | ⬤ | A string indicating if the interface is a stand-in for a type, e.g. `pointer`, `chan`, `list` |
-        // TODO: | `index`     | ◯ | ⬤ | The [index](#indices) of this interface in the projects' `interfaceDescs` list. |
-        // TODO: | `inherits`  | ⬤ | ◯ | List of [indices](#indices) to inherited [interfaces](#interface-description). |
-        // TODO: | `kind`      | ◯ | ⬤ | `interfaceDesc` |
-        // TODO: | `package`   | ⬤ | ◯ | The [index](#indices) to the [package](#package) this interface is pinned to. |
-
+        // Not needed: `approx`, `exact`, `hint`
+        obj.put("abstracts",        indexSet(this.abstracts));
+        obj.putNotEmpty("inherits", indexSet(this.inherits));
+        obj.putNotEmpty("pin",      key(this.pin));
         return obj;
     }
 
     @Override
     public int compareTo(Construct c) {
         return Cmp.or(
-            () -> super.compareTo(c)
-            // TODO: Fill out
+            () -> super.compareTo(c),
+            Cmp.deferSet(this.abstracts, () -> ((InterfaceDesc)c).abstracts),
+            Cmp.defer(this.pin,          () -> ((InterfaceDesc)c).pin)
         );
     }   
 }

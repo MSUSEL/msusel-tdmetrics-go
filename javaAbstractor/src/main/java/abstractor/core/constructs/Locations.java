@@ -1,46 +1,14 @@
 package abstractor.core.constructs;
 
-import java.io.File;
 import java.util.TreeSet;
 import java.util.Map.Entry;
 import java.util.TreeMap;
 
-import abstractor.core.json.*;
 import spoon.reflect.cu.SourcePosition;
 
+import abstractor.core.json.*;
+
 public class Locations implements Jsonable {
-    public class Location implements Jsonable, Comparable<Location> {
-        public final SourcePosition pos;
-        public int offset;
-
-        private Location(SourcePosition pos) {
-            this.pos = pos;
-        }
-
-        public JsonNode toJson(JsonHelper h) {
-            return JsonValue.of(this.offset);
-        }
-
-        public boolean isValid() {
-            return this.pos.isValidPosition();
-        }
-
-        public String getPath() {
-            final File f = this.pos.getFile();
-            return f != null ? f.getPath() : "unknown";
-        }
-
-        public int getLine() {
-            final int line = this.pos.getLine();
-            return line < 1 ? 1 : line;
-        }
-
-        @Override
-        public int compareTo(Location o) {
-            return this.toString().compareTo(o.toString());
-        }
-    }
-
     private final TreeSet<Location> locs = new TreeSet<Location>();
     private final TreeMap<String, Integer> offsets = new TreeMap<String, Integer>();
     
@@ -54,7 +22,7 @@ public class Locations implements Jsonable {
         return loc;
     }
 
-    public void prepareForOutput() {
+    private TreeMap<String, Integer> getMaximums() {
         TreeMap<String, Integer> maximums = new TreeMap<String, Integer>();
         for (Location loc : this.locs) {
             if (!loc.isValid()) continue;
@@ -64,14 +32,19 @@ public class Locations implements Jsonable {
             final int max = iMax == null ? line : Integer.max((int)iMax, line);
             maximums.put(path, max);
         }
+        return maximums;
+    }
 
+    private void setOffsets(TreeMap<String, Integer> maximums) {
         this.offsets.clear();
         int offset = 1;
         for (String path : maximums.keySet()) {
             this.offsets.put(path, offset);
             offset += maximums.get(path);
         }
+    }
 
+    private void updateLocations() {
         for (Location loc : this.locs) {
             if (!loc.isValid()) continue;
             final String path = loc.getPath();
@@ -79,6 +52,11 @@ public class Locations implements Jsonable {
             final int line = loc.getLine();
             loc.offset = line + fileOffset - 1;
         }
+    }
+
+    public void prepareForOutput() {
+        this.setOffsets(this.getMaximums());
+        this.updateLocations();
     }
 
     public JsonNode toJson(JsonHelper h) {
