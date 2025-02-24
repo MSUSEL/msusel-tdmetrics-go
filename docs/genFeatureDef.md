@@ -590,6 +590,14 @@ type Foo struct { x, y int }
 func (f Foo) Bar() { }
 ```
 
+```Java
+public class Foo {
+  private int x, y;
+
+  public Bar() { }
+}
+```
+
 The object may be generic if it has type parameters.
 Objects
 
@@ -597,6 +605,14 @@ Objects
 type Bar[T any] struct { x, y T }
 
 func (b Bar[T]) Bar(x, y T) { }
+```
+
+```Java
+public class Foo<T> {
+  private T x, y;
+  
+  public Bar(T x, T y) { }
+}
 ```
 
 If the named type in Go is defined without a struct, e.g. `Baz`,
@@ -729,6 +745,14 @@ struct {
 }
 ```
 
+```Java
+public class Named {
+  private String name;
+  private int age;
+  private long id;
+}
+```
+
 | Name        | Optional | Extra | Description |
 |:------------|:--------:|:-----:|:------------|
 | `fields`    | ⬤ | ◯ | List of [indices](#indices) of [fields](#field) in this structure. |
@@ -748,6 +772,12 @@ is of type `T` meaning it will become the type used as an argument into `T`.
 
 ```Go
 type Foo[T any] struct { value T }
+```
+
+```Java
+public class Foo<T> {
+  private T value;
+}
 ```
 
 | Name    | Optional | Extra | Description |
@@ -773,12 +803,14 @@ var Y, Z = func() (int, int) {
 
 | Name       | Optional | Extra | Description |
 |:-----------|:--------:|:-----:|:------------|
-| `const`    | ⬤ | ◯ | True indicates the value is constant after initialization |
-| `exported` | ◯ | ⬤ | True if the scope is "exported". |
-| `index`    | ◯ | ⬤ | The [index](#indices) of this value in the projects' `values` list. |
-| `kind`     | ◯ | ⬤ | `value` |
-| `loc`      | ⬤ | ◯ | The [location](#locations) offset. |
-| `metrics`  | ⬤ | ◯ | The [index](#indices) of the [metrics](#metrics) for the initializer expression. |
-| `name`     | ◯ | ◯ | The name of the value. |
-| `package`  | ◯ | ◯ | The [index](#indices) of the [package](#package) this value is described in. |
-| `type`     | ◯ | ◯ | The [key](#keys) for the [type](#type-descriptions) of this value. |
+| `const`      | ⬤ | ◯ | True indicates the value is constant after initialization |
+| `index`      | ◯ | ⬤ | The [index](#indices) of this value in the projects' `values` list. |
+| `kind`       | ◯ | ⬤ | `value` |
+| `loc`        | ⬤ | ◯ | The [location](#locations) offset. |
+| `metrics`    | ⬤ | ◯ | The [index](#indices) of the [metrics](#metrics) for the initializer expression. |
+| `name`       | ◯ | ◯ | The name of the value. |
+| `package`    | ◯ | ◯ | The [index](#indices) of the [package](#package) this value is described in. |
+| `type`       | ◯ | ◯ | The [key](#keys) for the [type](#type-descriptions) of this value. |
+| `visibility` | ◯ | ⬤ | A string of the scope modifiers, like "public", "exported", or "private". |
+
+TODO: Replace `exported` with `visibility` goAbstractor.

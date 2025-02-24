@@ -14,7 +14,7 @@ public class Field extends ConstructImp {
         super(src);
         this.name = name;
         this.type = type;
-        this.visibility = src.getVisibility().toString();
+        this.visibility = src.getVisibility() == null ? "" : src.getVisibility().toString();
     }
 
     public String kind() { return "field"; }

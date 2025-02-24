@@ -27,10 +27,16 @@ public class Metrics extends ConstructImp {
         boolean getter, boolean setter,
         List<Method> invokes, List<TypeDesc> reads, List<TypeDesc> writes) {
         super(src);
-
-
-
-        
+        this.loc        = loc;
+        this.codeCount  = codeCount;
+        this.complexity = complexity;
+        this.indents    = indents;
+        this.lineCount  = lineCount;
+        this.getter     = getter;
+        this.setter     = setter;
+        this.invokes    = invokes;
+        this.reads      = reads;
+        this.writes     = writes;
     }
 
     public String kind() { return "metrics"; }
@@ -38,28 +44,24 @@ public class Metrics extends ConstructImp {
     @Override
     public JsonNode toJson(JsonHelper h) {
         JsonObject obj = (JsonObject)super.toJson(h);
-        // TODO: | `loc`        | ◯ | ◯ | The [location](#locations) offset. |
-        
-        // TODO: | `codeCount`  | ⬤ | ◯ | The number of lines in the method that are not comments or empty. |
-        // TODO: | `complexity` | ⬤ | ◯ | The cyclomatic complexity of the method. |
-        // TODO: | `indents`    | ⬤ | ◯ | The indent complexity of the method. |
-        // TODO: | `lineCount`  | ⬤ | ◯ | The number of lines in the method. |
-        
-        // TODO: | `getter`     | ⬤ | ◯ | True indicates the method is a getter pattern. |
-        // TODO: | `setter`     | ⬤ | ◯ | True indicates the method is a setter pattern. |
-        
-        // TODO: | `invokes`    | ⬤ | ◯ | List of [keys](#keys) to methods that were invoked in the method. |
-        // TODO: | `reads`      | ⬤ | ◯ | List of [keys](#keys) to types that were read from in the method. |
-        // TODO: | `writes`     | ⬤ | ◯ | List of [keys](#keys) to types that were written to in the method. |
-        
+        obj.putNotEmpty("loc",        loc.toJson(h));
+        obj.putNotEmpty("codeCount",  this.codeCount);
+        obj.putNotEmpty("complexity", this.complexity);
+        obj.putNotEmpty("indents",    this.indents);
+        obj.putNotEmpty("lineCount",  this.lineCount);
+        obj.putNotEmpty("getter",     this.getter);
+        obj.putNotEmpty("setter",     this.setter);
+        obj.putNotEmpty("invokes",    keySet(this.invokes));
+        obj.putNotEmpty("reads",      keySet(this.reads));
+        obj.putNotEmpty("writes",     keySet(this.writes));
         return obj;
     }
 
     @Override
     public int compareTo(Construct c) {
         return Cmp.or(
-            () -> super.compareTo(c)
-            // TODO: Fill out
+            () -> super.compareTo(c),
+            Cmp.defer(this.loc, () -> ((Metrics)c).loc)
         );
     }   
 }

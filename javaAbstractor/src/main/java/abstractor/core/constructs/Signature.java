@@ -1,31 +1,42 @@
 package abstractor.core.constructs;
 
-import abstractor.core.cmp.Cmp;
-import abstractor.core.json.*;
+import java.util.List;
+
 import spoon.reflect.declaration.CtField;
 
-public class Signature extends ConstructImp implements TypeDesc {
-    private final CtField<?> src;
+import abstractor.core.cmp.Cmp;
+import abstractor.core.json.*;
 
-    public Signature(CtField<?> src) {
-        this.src = src;
+public class Signature extends ConstructImp implements TypeDesc {
+    public final boolean variadic;
+    public final List<Argument> params;
+    public final List<Argument> results;
+    
+    public Signature(CtField<?> src, boolean variadic, List<Argument> params, List<Argument> results) {
+        super(src);
+        this.variadic = variadic;
+        this.params   = unmodifiableList(params);
+        this.results  = unmodifiableList(results);
     }
 
-    public Object source() { return this.src; }
     public String kind() { return "signature"; }
 
     @Override
     public JsonNode toJson(JsonHelper h) {
         JsonObject obj = (JsonObject)super.toJson(h);
-        // TODO: Fill out
+        obj.putNotEmpty("variadic", this.variadic);
+        obj.putNotEmpty("params",   indexList(this.params));
+        obj.putNotEmpty("results",  indexList(this.results));
         return obj;
     }
 
     @Override
     public int compareTo(Construct c) {
         return Cmp.or(
-            () -> super.compareTo(c)
-            // TODO: Fill out
+            () -> super.compareTo(c),
+            Cmp.defer(this.variadic,    () -> ((Signature)c).variadic),
+            Cmp.deferList(this.params,  () -> ((Signature)c).params),
+            Cmp.deferList(this.results, () -> ((Signature)c).results)
         );
     }   
 }

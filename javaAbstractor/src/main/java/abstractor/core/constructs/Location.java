@@ -34,6 +34,10 @@ public class Location implements Jsonable, Comparable<Location> {
 
     @Override
     public int compareTo(Location o) {
+        if (o == null) return 1;
+        if (this.pos.isValidPosition()) return o.pos.isValidPosition() ? 0 : -1;
+        if (o.pos.isValidPosition()) return 1;
+
         int cmp = this.pos.toString().compareTo(o.pos.toString());
         if (cmp != 0) return cmp;
         return Integer.compare(this.pos.getSourceStart(), o.pos.getSourceStart());

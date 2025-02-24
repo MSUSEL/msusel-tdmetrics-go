@@ -9,6 +9,7 @@ import spoon.reflect.reference.*;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.List;
 
 import abstractor.core.constructs.*;
 import abstractor.core.log.*;
@@ -100,11 +101,13 @@ public class Abstractor {
 
         final CtPackage pkg = c.getPackage();
         final PackageCon pkgCon = pkg == null ? null : this.addPackage(pkg);
-        final Locations.Location loc = proj.locations.create(c.getPosition());
+        final Location loc = proj.locations.create(c.getPosition());
         final String name = c.getSimpleName();
         final StructDesc struct = this.addStruct(c);
 
-        final ObjectDecl obj = new ObjectDecl(c, struct, pkgCon, loc, name);
+        final List<TypeParam> typeParams = null; // TODO: Finish
+
+        final ObjectDecl obj = new ObjectDecl(c, pkgCon, loc, name, struct, typeParams);
         final TryAddResult<ObjectDecl> prior = this.proj.objectDecls.tryAdd(obj);
         if (prior.existed) return prior.value;
         
@@ -127,12 +130,16 @@ public class Abstractor {
         this.log.push();
 
         final PackageCon pkgCon = receiver.pkg;
-        final Locations.Location loc = proj.locations.create(m.getPosition());
+        final Location loc = proj.locations.create(m.getPosition());
         final String name = m.getSimpleName();
+
         // TODO: src.getBody()
         // TODO: src.getFormalCtTypeParameters()
 
-        MethodDecl md = new MethodDecl(m, pkgCon, receiver, loc, name);
+        final Signature signature = null; // TODO: Finish
+        final List<TypeParam> typeParams = null; // TODO: Finish
+
+        MethodDecl md = new MethodDecl(m, pkgCon, receiver, loc, name, signature, typeParams);
         final TryAddResult<MethodDecl> prior = this.proj.methodDecls.tryAdd(md);
         if (prior.existed) return prior.value;
 
@@ -187,10 +194,13 @@ public class Abstractor {
         
         final CtPackage pkg = i.getPackage();
         final PackageCon pkgCon = pkg == null ? null : this.addPackage(pkg);
-        final Locations.Location loc = proj.locations.create(i.getPosition());
+        final Location loc = proj.locations.create(i.getPosition());
         final String name = i.getSimpleName();
 
-        InterfaceDecl id = new InterfaceDecl(i, pkgCon, loc, name);
+        final InterfaceDesc inter = null; // TODO: Finish
+        final List<TypeParam> typeParams = null; // TODO: Finish
+
+        InterfaceDecl id = new InterfaceDecl(i, pkgCon, loc, name, inter, typeParams);
         final TryAddResult<InterfaceDecl> prior = this.proj.interfaceDecls.tryAdd(id);
         if (prior.existed) return prior.value;
 

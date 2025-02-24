@@ -16,7 +16,7 @@ public abstract class Declaration extends ConstructImp {
         this.pkg = pkg;
         this.loc = loc;
         this.name = name;
-        this.visibility = src.getVisibility().toString();
+        this.visibility = src.getVisibility() == null ? "" : src.getVisibility().toString();
     }
 
     @Override

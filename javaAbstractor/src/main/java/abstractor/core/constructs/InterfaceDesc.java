@@ -1,6 +1,5 @@
 package abstractor.core.constructs;
 
-import java.util.Collections;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
@@ -20,7 +19,7 @@ public class InterfaceDesc extends ConstructImp implements TypeDesc {
 
     public InterfaceDesc(CtField<?> src, SortedSet<Abstract> abstracts, Construct pin) {
         super(src);
-        this.abstracts = Collections.unmodifiableSortedSet(abstracts);
+        this.abstracts = unmodifiableSortedSet(abstracts);
         this.inherits = new TreeSet<InterfaceDesc>();
         this.pin = pin;
     }

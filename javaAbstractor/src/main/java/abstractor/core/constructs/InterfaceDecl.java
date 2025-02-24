@@ -1,6 +1,5 @@
 package abstractor.core.constructs;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.TreeSet;
 
@@ -18,7 +17,7 @@ public class InterfaceDecl extends Declaration implements TypeDesc {
         String name, InterfaceDesc inter, List<TypeParam> typeParams) {
         super(src, pkg, loc, name);
         this.inter = inter;
-        this.typeParams = Collections.unmodifiableList(typeParams);
+        this.typeParams = unmodifiableList(typeParams);
         this.instances = new TreeSet<InterfaceInst>();
     }
 

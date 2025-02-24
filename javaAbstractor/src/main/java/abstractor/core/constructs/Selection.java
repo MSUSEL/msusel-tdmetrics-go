@@ -1,31 +1,36 @@
 package abstractor.core.constructs;
 
-import abstractor.core.cmp.Cmp;
-import abstractor.core.json.*;
 import spoon.reflect.declaration.CtField;
 
-public class Selection extends ConstructImp implements TypeDesc {
-    private final CtField<?> src;
+import abstractor.core.cmp.Cmp;
+import abstractor.core.json.*;
 
-    public Selection(CtField<?> src) {
-        this.src = src;
+public class Selection extends ConstructImp {
+    public final String name;
+    public final Construct origin;
+
+    public Selection(CtField<?> src, String name, Construct origin) {
+        super(src);
+        this.name = name;
+        this.origin = origin;
     }
 
-    public Object source() { return this.src; }
     public String kind() { return "selection"; }
 
     @Override
     public JsonNode toJson(JsonHelper h) {
         JsonObject obj = (JsonObject)super.toJson(h);
-        // TODO: Fill out
+        obj.put("name", this.name);
+        obj.put("origin", key(this.origin));
         return obj;
     }
 
     @Override
     public int compareTo(Construct c) {
         return Cmp.or(
-            () -> super.compareTo(c)
-            // TODO: Fill out
+            () -> super.compareTo(c),
+            Cmp.defer(this.name,   () -> ((Selection)c).name),
+            Cmp.defer(this.origin, () -> ((Selection)c).origin)
         );
     }   
 }

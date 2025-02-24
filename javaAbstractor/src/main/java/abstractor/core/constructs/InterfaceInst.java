@@ -1,6 +1,5 @@
 package abstractor.core.constructs;
 
-import java.util.Collections;
 import java.util.List;
 
 import spoon.reflect.declaration.CtField;
@@ -16,7 +15,7 @@ public class InterfaceInst extends ConstructImp implements TypeDesc {
     public InterfaceInst(CtField<?> src, InterfaceDecl generic, List<TypeDesc> instanceTypes, InterfaceDesc resolved) {
         super(src);
         this.generic = generic;
-        this.instanceTypes = Collections.unmodifiableList(instanceTypes);
+        this.instanceTypes = unmodifiableList(instanceTypes);
         this.resolved = resolved;
     }
 

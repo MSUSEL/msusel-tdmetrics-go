@@ -1,31 +1,51 @@
 package abstractor.core.constructs;
 
-import abstractor.core.cmp.Cmp;
-import abstractor.core.json.*;
+import java.util.List;
+import java.util.TreeSet;
+
 import spoon.reflect.declaration.CtField;
 
-public class ObjectInst extends ConstructImp implements TypeDesc {
-    private final CtField<?> src;
+import abstractor.core.cmp.Cmp;
+import abstractor.core.json.*;
 
-    public ObjectInst(CtField<?> src) {
-        this.src = src;
+public class ObjectInst extends ConstructImp implements TypeDesc {
+    public final ObjectDecl generic;
+    public final List<TypeDesc> instanceTypes;
+    public final TreeSet<MethodInst> methods;
+    public final StructDesc resData;
+    public final InterfaceDesc resInterface;
+
+    public ObjectInst(CtField<?> src, ObjectDecl generic, List<TypeDesc> instanceTypes,
+        StructDesc resData, InterfaceDesc resInterface) {
+        super(src);
+        this.generic       = generic;
+        this.instanceTypes = unmodifiableList(instanceTypes);
+        this.methods       = new TreeSet<MethodInst>();
+        this.resData       = resData;
+        this.resInterface  = resInterface;
     }
 
-    public Object source() { return this.src; }
     public String kind() { return "objectInst"; }
 
     @Override
     public JsonNode toJson(JsonHelper h) {
         JsonObject obj = (JsonObject)super.toJson(h);
-        // TODO: Fill out
+        obj.put("generic",       index(this.generic));
+        obj.put("instanceTypes", indexList(this.instanceTypes));
+        obj.put("methods",       indexSet(this.methods));
+        obj.put("resData",       index(this.resData));
+        obj.put("resInterface",  index(this.resInterface));
         return obj;
     }
 
     @Override
     public int compareTo(Construct c) {
         return Cmp.or(
-            () -> super.compareTo(c)
-            // TODO: Fill out
+            () -> super.compareTo(c),
+            Cmp.defer(this.generic,           () -> ((ObjectInst)c).generic),
+            Cmp.deferList(this.instanceTypes, () -> ((ObjectInst)c).instanceTypes),
+            Cmp.defer(this.resData,           () -> ((ObjectInst)c).resData),
+            Cmp.defer(this.resInterface,      () -> ((ObjectInst)c).resInterface)
         );
     }   
 }

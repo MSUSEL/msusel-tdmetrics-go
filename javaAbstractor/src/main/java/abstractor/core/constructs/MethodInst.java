@@ -1,6 +1,5 @@
 package abstractor.core.constructs;
 
-import java.util.Collections;
 import java.util.List;
 
 import spoon.reflect.declaration.CtField;
@@ -19,7 +18,7 @@ public class MethodInst extends ConstructImp implements Method {
         super(src);
         this.generic = generic;
         this.receiver = receiver;
-        this.instanceTypes = Collections.unmodifiableList(instanceTypes);
+        this.instanceTypes = unmodifiableList(instanceTypes);
         this.resolved = resolved;
     }
 

@@ -1,22 +1,20 @@
 package abstractor.core.constructs;
 
-import java.util.*;
+import java.util.List;
+
+import spoon.reflect.declaration.CtClass;
 
 import abstractor.core.cmp.Cmp;
 import abstractor.core.json.*;
-import spoon.reflect.declaration.CtClass;
 
 public class StructDesc extends ConstructImp implements TypeDesc {
-    private final CtClass<?> src;
-
     public final List<Field> fields;
 
-    public StructDesc(CtClass<?> src, ArrayList<Field> fields) {
-        this.src = src;
-        this.fields = Collections.unmodifiableList(fields);
+    public StructDesc(CtClass<?> src, List<Field> fields) {
+        super(src);
+        this.fields = unmodifiableList(fields);
     }
 
-    public Object source() { return this.src; }
     public String kind() { return "structDesc"; }
 
     @Override

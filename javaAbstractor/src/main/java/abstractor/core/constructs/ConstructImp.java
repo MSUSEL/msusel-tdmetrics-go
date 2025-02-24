@@ -1,9 +1,13 @@
 package abstractor.core.constructs;
 
+import java.util.Collections;
+import java.util.List;
+import java.util.SortedSet;
 import java.util.TreeSet;
 
-import abstractor.core.json.*;
 import spoon.reflect.declaration.CtElement;
+
+import abstractor.core.json.*;
 
 public abstract class ConstructImp implements Construct {
 
@@ -15,19 +19,25 @@ public abstract class ConstructImp implements Construct {
         return c == null ? JsonValue.ofNull() : JsonValue.of(c.getIndex());
     }
 
-    static public JsonArray keyList(Iterable<? extends Construct> os) {
+    static public JsonNode keyList(Iterable<? extends Construct> os) {
+        if (os == null) return JsonValue.ofNull();
+        
         JsonArray indices = new JsonArray();
         for (Construct o: os) indices.add(key(o));
         return indices;
     }
 
-    static public JsonArray indexList(Iterable<? extends Construct> os) {
+    static public JsonNode indexList(Iterable<? extends Construct> os) {
+        if (os == null) return JsonValue.ofNull();
+
         JsonArray indices = new JsonArray();
         for (Construct o: os) indices.add(index(o));
         return indices;
     }
 
-    static public JsonArray keySet(Iterable<? extends Construct> os) {
+    static public JsonNode keySet(Iterable<? extends Construct> os) {
+        if (os == null) return JsonValue.ofNull();
+
         TreeSet<JsonValue> set = new TreeSet<JsonValue>();
         for (Construct o: os) set.add(key(o));
         
@@ -36,13 +46,23 @@ public abstract class ConstructImp implements Construct {
         return indices;
     }
 
-    static public JsonArray indexSet(Iterable<? extends Construct> os) {
+    static public JsonNode indexSet(Iterable<? extends Construct> os) {
+        if (os == null) return JsonValue.ofNull();
+
         TreeSet<JsonValue> set = new TreeSet<JsonValue>();
         for (Construct o: os) set.add(index(o));
 
         JsonArray indices = new JsonArray();
         for (JsonValue s: set) indices.add(s);
         return indices;
+    }
+
+    static public <T> List<T> unmodifiableList(List<T> list) {
+        return list == null ? null : Collections.unmodifiableList(list);
+    }
+
+    static public <T> SortedSet<T> unmodifiableSortedSet(SortedSet<T> set) {
+        return set == null ? null : Collections.unmodifiableSortedSet(set);
     }
 
     private final CtElement src;

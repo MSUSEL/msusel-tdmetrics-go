@@ -1,6 +1,5 @@
 package abstractor.core.constructs;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.TreeSet;
 
@@ -11,18 +10,18 @@ import abstractor.core.json.*;
 
 public class MethodDecl extends Declaration implements Method {
     public final ObjectDecl receiver;
-    public final Metrics metrics;
     public final Signature signature;
     public final List<TypeParam> typeParams;
     public final TreeSet<MethodInst> instances;
+    
+    public Metrics metrics; // TODO: Finish
 
     public MethodDecl(CtMethod<?> src, PackageCon pkg, ObjectDecl receiver, Location loc,
-        String name, Signature signature, List<TypeParam> typeParams, Metrics metrics) {
+        String name, Signature signature, List<TypeParam> typeParams) {
         super(src, pkg, loc, name);
         this.receiver = receiver;
-        this.metrics = metrics;
         this.signature = signature;
-        this.typeParams = Collections.unmodifiableList(typeParams);
+        this.typeParams = unmodifiableList(typeParams);
         this.instances = new TreeSet<MethodInst>();
     }
 
