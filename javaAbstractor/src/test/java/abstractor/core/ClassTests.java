@@ -20,7 +20,7 @@ public class ClassTests {
         final Logger log = new Logger(true);
         final Abstractor ab = new Abstractor(log, proj);
         ab.addClassFromSource(lines);
-        assertEquals(0, log.errorCount());
+        assertEquals(0, log.errorCount(), "expected zero errors");
         return proj;
     }
 
@@ -81,6 +81,18 @@ public class ClassTests {
             "  structDescs: [",
             "    { fields: [ 1 ] }",
             "  ]",
+            "}");
+    }
+
+    @Test
+    public void ClassTestWithTypeParams() {
+        final Project proj = classFromSource(
+            "public class Foo<T extends Object> {",
+            "  public T value",
+            "}");
+
+        checkJson(proj,
+            "{",
             "}");
     }
 

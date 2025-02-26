@@ -1,6 +1,6 @@
 package abstractor.core.constructs;
 
-import spoon.reflect.declaration.CtField;
+import spoon.reflect.declaration.CtTypeParameter;
 
 import abstractor.core.cmp.Cmp;
 import abstractor.core.json.*;
@@ -9,7 +9,7 @@ public class TypeParam extends ConstructImp implements TypeDesc {
     public final String name;
     public final TypeDesc type;
     
-    public TypeParam(CtField<?> src, String name, TypeDesc type) {
+    public TypeParam(CtTypeParameter src, String name, TypeDesc type) {
         super(src);
         this.name = name;
         this.type = type;

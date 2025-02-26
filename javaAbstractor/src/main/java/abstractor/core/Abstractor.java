@@ -1,15 +1,15 @@
 package abstractor.core;
 
+import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
+
 import spoon.Launcher;
 import spoon.MavenLauncher;
 import spoon.reflect.*;
 import spoon.reflect.cu.SourcePosition;
 import spoon.reflect.declaration.*;
 import spoon.reflect.reference.*;
-
-import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
 
 import abstractor.core.constructs.*;
 import abstractor.core.log.*;
@@ -104,8 +104,7 @@ public class Abstractor {
         final Location loc = proj.locations.create(c.getPosition());
         final String name = c.getSimpleName();
         final StructDesc struct = this.addStruct(c);
-
-        final List<TypeParam> typeParams = null; // TODO: Finish
+        final List<TypeParam> typeParams = this.addTypeParams(c.getFormalCtTypeParameters());
 
         final ObjectDecl obj = new ObjectDecl(c, pkgCon, loc, name, struct, typeParams);
         final TryAddResult<ObjectDecl> prior = this.proj.objectDecls.tryAdd(obj);
@@ -134,10 +133,9 @@ public class Abstractor {
         final String name = m.getSimpleName();
 
         // TODO: src.getBody()
-        // TODO: src.getFormalCtTypeParameters()
 
         final Signature signature = null; // TODO: Finish
-        final List<TypeParam> typeParams = null; // TODO: Finish
+        final List<TypeParam> typeParams = this.addTypeParams(m.getFormalCtTypeParameters());
 
         MethodDecl md = new MethodDecl(m, pkgCon, receiver, loc, name, signature, typeParams);
         final TryAddResult<MethodDecl> prior = this.proj.methodDecls.tryAdd(md);
@@ -198,7 +196,7 @@ public class Abstractor {
         final String name = i.getSimpleName();
 
         final InterfaceDesc inter = null; // TODO: Finish
-        final List<TypeParam> typeParams = null; // TODO: Finish
+        final List<TypeParam> typeParams = this.addTypeParams(i.getFormalCtTypeParameters());
 
         InterfaceDecl id = new InterfaceDecl(i, pkgCon, loc, name, inter, typeParams);
         final TryAddResult<InterfaceDecl> prior = this.proj.interfaceDecls.tryAdd(id);
@@ -289,5 +287,22 @@ public class Abstractor {
         final TryAddResult<Basic> prior = this.proj.basics.tryAdd(b);
         if (prior.existed) return prior.value;
         return b;
+    }
+
+    private TypeParam addTypeParam(CtTypeParameter tp) {
+        final String name = tp.getQualifiedName();
+        
+        System.out.println(">> " + name + " >> " + tp.prettyprint());
+
+        final TypeDesc type = null;
+
+        // TODO: Finish
+        return new TypeParam(tp, name, type);
+    }
+
+    private List<TypeParam> addTypeParams(List<CtTypeParameter> tps) {
+        List<TypeParam> result = new ArrayList<TypeParam>();
+        for (CtTypeParameter tp : tps) result.add(this.addTypeParam(tp));
+        return result;
     }
 }
