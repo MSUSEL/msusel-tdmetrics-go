@@ -20,7 +20,7 @@ public class StructDesc extends ConstructImp implements TypeDesc {
     @Override
     public JsonNode toJson(JsonHelper h) {
         JsonObject obj = (JsonObject)super.toJson(h);
-        obj.put("fields", indexList(this.fields));
+        obj.putNotEmpty("fields", indexList(this.fields));
         return obj;
     }
 

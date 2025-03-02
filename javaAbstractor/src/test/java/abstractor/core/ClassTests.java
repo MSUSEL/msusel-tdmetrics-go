@@ -72,6 +72,7 @@ public class ClassTests {
     }
 
     @Test
+    @Disabled // TODO: Enable once type params work
     public void ClassTestWithTypeParams() {
         final Project proj = classFromSource(
             "public class Foo<T extends Object> {",
@@ -84,7 +85,6 @@ public class ClassTests {
     }
 
     @Test
-    @Disabled // TODO: Enable
     public void ClassTestWithMethods() {
         final Project proj = classFromSource(
             "public class Foo {",
@@ -94,7 +94,32 @@ public class ClassTests {
             "}");
 
         checkJson(proj,
-            "{",
+            "{" +
+            "  language: java," +
+            "  locs: { 1: unknown }," +
+            "  methods: [" +
+            "    { name: bar, package: 1, receiver: 1 }" +
+            "  ]," + // TODO: Add metrics and signature
+            "  objects: [" +
+            "    {" +
+            "      data: 1," +
+            "      interface: null," +
+            "      loc: 1," +
+            "      methods: [ 1 ]," +
+            "      name: Foo," +
+            "      package: 1," +
+            "      visibility: public" +
+            "    }" +
+            "  ]," +
+            "  packages: [" +
+            "    {" +
+            "      methods: [ 1 ]," +
+            "      objects: [ 1 ]" +
+            "    }" +
+            "  ]," +
+            "  structDescs: [" +
+            "    { }" +
+            "  ]" +
             "}");
     }
 }
