@@ -112,8 +112,15 @@ public class Abstractor {
         
         if (pkgCon != null) pkgCon.objectDecls.add(obj);
 
-        for (CtMethod<?> m : c.getAllMethods())
-            this.addMethod(obj, m);
+        //System.out.println("1) >>> " + c.getSuperclass());
+        //System.out.println("2) >>> " + c.getSuperInterfaces());
+        //System.out.println("3) >>> " + c.getConstructors());
+        //System.out.println("4) >>> " + c.getNestedTypes());
+        //System.out.println("5) >>> " + c.getTypeMembers());
+
+        for (CtMethod<?> m : c.getAllMethods()) {
+            if (m.getParent() == c) this.addMethod(obj, m);
+        }
 
         // TODO: Implement
         
@@ -292,7 +299,7 @@ public class Abstractor {
     private TypeParam addTypeParam(CtTypeParameter tp) {
         final String name = tp.getQualifiedName();
         
-        System.out.println(">> " + name + " >> " + tp.prettyprint());
+        //System.out.println(">> " + name + " >> " + tp.prettyprint());
 
         final TypeDesc type = null;
 
