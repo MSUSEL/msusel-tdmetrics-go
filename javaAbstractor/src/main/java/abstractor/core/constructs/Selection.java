@@ -1,7 +1,5 @@
 package abstractor.core.constructs;
 
-import spoon.reflect.declaration.CtField;
-
 import abstractor.core.cmp.Cmp;
 import abstractor.core.json.*;
 
@@ -9,8 +7,7 @@ public class Selection extends ConstructImp {
     public final String name;
     public final Construct origin;
 
-    public Selection(CtField<?> src, String name, Construct origin) {
-        super(src);
+    public Selection(String name, Construct origin) {
         this.name = name;
         this.origin = origin;
     }

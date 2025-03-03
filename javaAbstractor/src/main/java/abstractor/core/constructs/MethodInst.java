@@ -2,8 +2,6 @@ package abstractor.core.constructs;
 
 import java.util.List;
 
-import spoon.reflect.declaration.CtField;
-
 import abstractor.core.cmp.Cmp;
 import abstractor.core.json.*;
 
@@ -13,9 +11,8 @@ public class MethodInst extends ConstructImp implements Method {
     public final List<TypeDesc> instanceTypes;
     public final Signature resolved;
 
-    public MethodInst(CtField<?> src, MethodDecl generic, ObjectInst receiver,
+    public MethodInst(MethodDecl generic, ObjectInst receiver,
         List<TypeDesc> instanceTypes, Signature resolved) {
-        super(src);
         this.generic = generic;
         this.receiver = receiver;
         this.instanceTypes = unmodifiableList(instanceTypes);

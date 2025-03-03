@@ -34,8 +34,11 @@ public class ClassTests {
     }
 
     static private void assertLines(String exp, String result) {
-        if (!exp.equals(result))
-            fail(String.join("\n", new Diff().PlusMinusByLine(exp, result)));
+        if (!exp.equals(result)) {
+            final String diff = String.join("\n\t", new Diff().PlusMinusByLine(exp, result));
+            System.out.println("Error: unexpected lines\n\t" + diff);
+            fail("unexpected lines (see diff above)");
+        }
     }
 
     @Test
@@ -91,35 +94,52 @@ public class ClassTests {
             "  int bar(int x, int y) {",
             "    return x + y*2;",
             "  }",
+            "  void baz() {",
+            "    System.out.println(\"Baz\");",
+            "  }",
             "}");
 
         checkJson(proj,
-            "{" +
-            "  language: java," +
-            "  locs: { 1: unknown }," +
-            "  methods: [" +
-            "    { name: bar, package: 1, receiver: 1 }" +
-            "  ]," + // TODO: Add metrics and signature
-            "  objects: [" +
-            "    {" +
-            "      data: 1," +
-            "      interface: null," +
-            "      loc: 1," +
-            "      methods: [ 1 ]," +
-            "      name: Foo," +
-            "      package: 1," +
-            "      visibility: public" +
-            "    }" +
-            "  ]," +
-            "  packages: [" +
-            "    {" +
-            "      methods: [ 1 ]," +
-            "      objects: [ 1 ]" +
-            "    }" +
-            "  ]," +
-            "  structDescs: [" +
-            "    { }" +
-            "  ]" +
+            "{",
+            "  arguments: [",
+            "    { type: basic1 },",
+            "    { name: x, type: basic1 },",
+            "    { name: y, type: basic1 }",
+            "  ],",
+            "  basics: [ int ],",
+            "  language: java,",
+            "  locs: { 1: unknown },",
+            "  methods: [",
+            "    { name: bar, package: 1, receiver: 1, signature: 2 },",
+            "    { name: baz, package: 1, receiver: 1, signature: 1 }",
+            "  ],", // TODO: Add metrics
+            "  objects: [",
+            "    {",
+            "      data: 1,",
+            "      interface: null,",
+            "      loc: 1,",
+            "      methods: [ 1, 2 ],",
+            "      name: Foo,",
+            "      package: 1,",
+            "      visibility: public",
+            "    }",
+            "  ],",
+            "  packages: [",
+            "    {",
+            "      methods: [ 1, 2 ],",
+            "      objects: [ 1 ]",
+            "    }",
+            "  ],",
+            "  signatures: [",
+            "    { },",
+            "    {",
+            "      params: [ 2, 3 ],",
+            "      results: [ 1 ]",
+            "    }",
+            "  ],",
+            "  structDescs: [",
+            "    { }",
+            "  ]",
             "}");
     }
 }

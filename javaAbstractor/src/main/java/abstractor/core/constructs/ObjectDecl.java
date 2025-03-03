@@ -3,8 +3,6 @@ package abstractor.core.constructs;
 import java.util.List;
 import java.util.TreeSet;
 
-import spoon.reflect.declaration.CtClass;
-
 import abstractor.core.cmp.Cmp;
 import abstractor.core.json.*;
 
@@ -16,9 +14,9 @@ public class ObjectDecl extends Declaration implements TypeDesc {
     
     public InterfaceDesc inter; // TODO: Finish
 
-    public ObjectDecl(CtClass<?> src, PackageCon pkg, Location loc,
+    public ObjectDecl(PackageCon pkg, Location loc,
         String name, StructDesc struct, List<TypeParam> typeParams) {
-        super(src, pkg, loc, name);
+        super(pkg, loc, name);
         this.struct = struct;
         this.methodDecls = new TreeSet<MethodDecl>();
         this.typeParams = unmodifiableList(typeParams);

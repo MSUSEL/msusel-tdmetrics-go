@@ -9,14 +9,18 @@ public abstract class Declaration extends ConstructImp {
     public final PackageCon pkg;
     public final Location loc;
     public final String name;
-    public final String visibility;
+    
+    public String visibility;
 
-    public Declaration(CtModifiable src, PackageCon pkg, Location loc, String name) {
-        super(src);
+    public Declaration(PackageCon pkg, Location loc, String name) {
         this.pkg = pkg;
         this.loc = loc;
         this.name = name;
-        this.visibility = src.getVisibility() == null ? "" : src.getVisibility().toString();
+        this.visibility = "";
+    }
+
+    public void setVisibility(CtModifiable mod) {
+        this.visibility = mod.getVisibility() == null ? "" : mod.getVisibility().toString();
     }
 
     @Override

@@ -1,7 +1,5 @@
 package abstractor.core.constructs;
 
-import spoon.reflect.declaration.CtInterface;
-
 import abstractor.core.cmp.Cmp;
 import abstractor.core.json.*;
 
@@ -10,9 +8,9 @@ public class Value extends Declaration {
     public final Metrics metrics;
     public final TypeDesc type;
 
-    public Value(CtInterface<?> src, PackageCon pkg, Location loc,
+    public Value(PackageCon pkg, Location loc,
         String name, boolean constant, Metrics metrics, TypeDesc type) {
-        super(src, pkg, loc, name);
+        super(pkg, loc, name);
         this.constant = constant;
         this.metrics  = metrics;
         this.type     = type;

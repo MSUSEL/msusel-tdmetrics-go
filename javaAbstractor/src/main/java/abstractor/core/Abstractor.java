@@ -66,26 +66,20 @@ public class Abstractor {
     }
 
     private PackageCon addPackage(CtPackage pkg) {
-        final PackageCon existing = proj.packages.findWithSource(pkg);
-        if (existing != null) return existing;
-
-        this.log.log("Adding package " + pkg);
-        this.log.push();
-
-        final String name = pkg.getQualifiedName();
-        final String path = packagePath(pkg);
-        final PackageCon pkgCon = new PackageCon(pkg, name, path);
-        final TryAddResult<PackageCon> prior = this.proj.packages.tryAdd(pkgCon);
-        if (prior.existed) return prior.value;
-
-        for (CtType<?> t : pkg.getTypes()) {
-            if (t instanceof CtClass<?> c) this.addClass(c);
-            else if (t instanceof CtInterface<?> i) this.addInterface(i);
-            else this.log.error("Unhandled (" + t.getClass().getName() + ") "+t.getQualifiedName());
-        }
-
-        this.log.pop();
-        return pkgCon;
+        return this.proj.packages.create(this.log, pkg,
+            "package " + pkg.getQualifiedName(),
+            () -> {
+                final String name = pkg.getQualifiedName();
+                final String path = packagePath(pkg);
+                return new PackageCon(name, path);
+            },
+            (PackageCon pkgCon) -> {
+                for (CtType<?> t : pkg.getTypes()) {
+                    if (t instanceof CtClass<?> c) this.addClass(c);
+                    else if (t instanceof CtInterface<?> i) this.addInterface(i);
+                    else this.log.error("Unhandled (" + t.getClass().getName() + ") "+t.getQualifiedName());
+                }
+            });
     }
 
     /**
@@ -93,130 +87,146 @@ public class Abstractor {
      * @param c The class to process.
      */
     private ObjectDecl addClass(CtClass<?> c) {
-        final ObjectDecl existing = proj.objectDecls.findWithSource(c);
-        if (existing != null) return existing;
+        return this.proj.objectDecls.create(this.log, c,
+            "object decl " + c.getQualifiedName(),
+            () -> {
+                final CtPackage pkg = c.getPackage();
+                final PackageCon pkgCon = pkg == null ? null : this.addPackage(pkg);
+                final Location loc = proj.locations.create(c.getPosition());
+                final String name = c.getSimpleName();
+                final StructDesc struct = this.addStruct(c);
+                final List<TypeParam> typeParams = this.addTypeParams(c.getFormalCtTypeParameters());
+                return new ObjectDecl(pkgCon, loc, name, struct, typeParams);
+            },
+            (ObjectDecl obj) -> {
+                obj.setVisibility(c);
+                if (obj.pkg != null) obj.pkg.objectDecls.add(obj);
 
-        this.log.log("Adding class " + c.getQualifiedName());
-        this.log.push();
-
-        final CtPackage pkg = c.getPackage();
-        final PackageCon pkgCon = pkg == null ? null : this.addPackage(pkg);
-        final Location loc = proj.locations.create(c.getPosition());
-        final String name = c.getSimpleName();
-        final StructDesc struct = this.addStruct(c);
-        final List<TypeParam> typeParams = this.addTypeParams(c.getFormalCtTypeParameters());
-
-        final ObjectDecl obj = new ObjectDecl(c, pkgCon, loc, name, struct, typeParams);
-        final TryAddResult<ObjectDecl> prior = this.proj.objectDecls.tryAdd(obj);
-        if (prior.existed) return prior.value;
+                //System.out.println("1) >>> " + c.getSuperclass());
+                //System.out.println("2) >>> " + c.getSuperInterfaces());
+                //System.out.println("3) >>> " + c.getConstructors());
+                //System.out.println("4) >>> " + c.getNestedTypes());
+                //System.out.println("5) >>> " + c.getTypeMembers());
         
-        if (pkgCon != null) pkgCon.objectDecls.add(obj);
-
-        //System.out.println("1) >>> " + c.getSuperclass());
-        //System.out.println("2) >>> " + c.getSuperInterfaces());
-        //System.out.println("3) >>> " + c.getConstructors());
-        //System.out.println("4) >>> " + c.getNestedTypes());
-        //System.out.println("5) >>> " + c.getTypeMembers());
-
-        for (CtMethod<?> m : c.getAllMethods()) {
-            if (m.getParent() == c) this.addMethod(obj, m);
-        }
-
-        // TODO: Implement
+                for (CtMethod<?> m : c.getAllMethods()) {
+                    if (m.getParent() == c) this.addMethod(obj, m);
+                }
         
-        this.log.pop();
-        return obj;
+                // TODO: Finish implementing
+            });
     }
 
     private MethodDecl addMethod(ObjectDecl receiver, CtMethod<?> m) {
-        final MethodDecl existing = proj.methodDecls.findWithSource(m);
-        if (existing != null) return existing;
+        return this.proj.methodDecls.create(this.log, m,
+            "method " + m.getSignature(),
+            () -> {
+                final PackageCon pkgCon = receiver.pkg;
+                final Location loc = proj.locations.create(m.getPosition());
+                final String name = m.getSimpleName();
+                final Signature signature = this.addSignature(m);
+                final List<TypeParam> typeParams = this.addTypeParams(m.getFormalCtTypeParameters());
+                return new MethodDecl(pkgCon, receiver, loc, name, signature, typeParams);
+            },
+            (MethodDecl md) -> {
+                md.setVisibility(m);
+                if (receiver.pkg != null) receiver.pkg.methodDecls.add(md);
+                receiver.methodDecls.add(md);
 
-        this.log.log("Adding method " + m.getSimpleName());
-        this.log.push();
+                // TODO: src.getBody() for metrics
+            });
+    }
 
-        final PackageCon pkgCon = receiver.pkg;
-        final Location loc = proj.locations.create(m.getPosition());
-        final String name = m.getSimpleName();
+    static private boolean isVoid(CtTypeReference<?> tr) {
+        return tr.isPrimitive() && tr.getSimpleName().equals("void");
+    }
 
-        // TODO: src.getBody()
+    private Signature addSignature(CtMethod<?> m) {
+        return this.proj.signatures.create(this.log, m,
+            "signature " + m.getSignature(),
+            () -> {
+                List<CtParameter<?>> params = m.getParameters();
+                boolean variadic = params.size() > 0 && params.get(params.size()-1).isVarArgs();
+                List<Argument> inArgs = new ArrayList<Argument>();
+                for (CtParameter<?> p : params)
+                    inArgs.add(this.addArgument(p));
+        
+                CtTypeReference<?> res = m.getType();
+                List<Argument> outArgs = new ArrayList<Argument>();
+                if (!isVoid(res)) outArgs.add(this.addArgument(res));
 
-        final Signature signature = null; // TODO: Finish
-        final List<TypeParam> typeParams = this.addTypeParams(m.getFormalCtTypeParameters());
+                return new Signature(variadic, inArgs, outArgs);
+            });
+    }
 
-        MethodDecl md = new MethodDecl(m, pkgCon, receiver, loc, name, signature, typeParams);
-        final TryAddResult<MethodDecl> prior = this.proj.methodDecls.tryAdd(md);
-        if (prior.existed) return prior.value;
-
-        // TODO: Implement
-        if (pkgCon != null) pkgCon.methodDecls.add(md);
-        receiver.methodDecls.add(md);
-
-        this.log.pop();
-        return md;
+    private Argument addArgument(CtParameter<?> p) {
+        return this.proj.arguments.create(this.log, p,
+            "parameter " + p.getSimpleName(),
+            () -> {
+                final String name = p.getSimpleName();
+                final TypeDesc type = this.addTypeDesc(p.getType());
+                return new Argument(name, type);
+            });
+    }
+    
+    private Argument addArgument(CtTypeReference<?> t) {
+        return this.proj.arguments.create(this.log, t,
+            "parameter <unnamed> " + t.getSimpleName(),
+            () -> {
+                final TypeDesc type = this.addTypeDesc(t);
+                return new Argument("", type);
+            });
     }
 
     private StructDesc addStruct(CtClass<?> c) {
-        StructDesc existing = proj.structDescs.findWithSource(c);
-        if (existing != null) return existing;
-        
-        this.log.log("Adding struct " + c.getSimpleName());
-        this.log.push();
+        return this.proj.structDescs.create(this.log, c,
+            "struct " + c.getQualifiedName(),
+            () -> {
+                // TODO: Handle enum?
+                //if (c instanceof CtEnum<?> e) {}
 
-        // TODO: Handle enum?
-        //if (c instanceof CtEnum<?> e) {}
+                ArrayList<Field> fields = new ArrayList<Field>();
+                for (CtFieldReference<?> fr : c.getAllFields())
+                    fields.add(this.addField(fr.getFieldDeclaration()));
 
-        ArrayList<Field> fields = new ArrayList<Field>();
-        for (CtFieldReference<?> fr : c.getAllFields())
-            fields.add(this.addField(fr.getFieldDeclaration()));
-
-        StructDesc sd = new StructDesc(c, fields);
-        final TryAddResult<StructDesc> prior = this.proj.structDescs.tryAdd(sd);
-        if (prior.existed) return prior.value;
-
-        return sd;
+                return new StructDesc(fields);
+            });
     }
 
     private Field addField(CtField<?> f) {
-        Field existing = proj.fields.findWithSource(f);
-        if (existing != null) return existing;
-
-        final String name = f.getSimpleName();
-        final TypeDesc type = this.addTypeDesc(f.getType());
-
-        Field field = new Field(f, name, type);
-        final TryAddResult<Field> prior = this.proj.fields.tryAdd(field);
-        if (prior.existed) return prior.value;
-        return field;
+        return this.proj.fields.create(this.log, f,
+            "field " + f.getSimpleName(),
+            () -> {
+                final String name = f.getSimpleName();
+                final TypeDesc type = this.addTypeDesc(f.getType());
+                return new Field(name, type);
+            },
+            (Field field) -> {
+                field.setVisibility(f);
+            });
     }
     
     private InterfaceDecl addInterface(CtInterface<?> i) {
-        final InterfaceDecl existing = proj.interfaceDecls.findWithSource(i);
-        if (existing != null) return existing;
+        return this.proj.interfaceDecls.create(this.log, i,
+            "interface decl " + i.getQualifiedName(),
+            () -> {
+                final CtPackage pkg = i.getPackage();
+                final PackageCon pkgCon = pkg == null ? null : this.addPackage(pkg);
+                final Location loc = proj.locations.create(i.getPosition());
+                final String name = i.getSimpleName();
 
-        this.log.log("Adding interface " + i.getQualifiedName());
-        this.log.push();
-        
-        final CtPackage pkg = i.getPackage();
-        final PackageCon pkgCon = pkg == null ? null : this.addPackage(pkg);
-        final Location loc = proj.locations.create(i.getPosition());
-        final String name = i.getSimpleName();
+                final InterfaceDesc inter = null; // TODO: Finish
+                final List<TypeParam> typeParams = this.addTypeParams(i.getFormalCtTypeParameters());
+                return new InterfaceDecl(pkgCon, loc, name, inter, typeParams);
+            },
+            (InterfaceDecl id) -> {
+                id.setVisibility(i);
+                if (id.pkg != null) id.pkg.interfaceDecls.add(id);
 
-        final InterfaceDesc inter = null; // TODO: Finish
-        final List<TypeParam> typeParams = this.addTypeParams(i.getFormalCtTypeParameters());
-
-        InterfaceDecl id = new InterfaceDecl(i, pkgCon, loc, name, inter, typeParams);
-        final TryAddResult<InterfaceDecl> prior = this.proj.interfaceDecls.tryAdd(id);
-        if (prior.existed) return prior.value;
-
-        //for (CtMethod<?> m : i.getAllMethods())
-        //    this.addAbstract(m);
-        
-        // TODO: Implement
-        if (pkgCon != null) pkgCon.interfaceDecls.add(id);
-
-        this.log.pop();
-        return id;
+                //for (CtMethod<?> m : i.getAllMethods())
+                //    this.addAbstract(m);
+                
+                // TODO: Implement
+            });
     }
 
     /*
@@ -287,24 +297,27 @@ public class Abstractor {
     }
 
     private Basic addBasic(CtTypeReference<?> tr) {
-        Basic existing = proj.basics.findWithSource(tr);
-        if (existing != null) return existing;
-        String name = tr.getSimpleName();
-        Basic b = new Basic(tr, name);
-        final TryAddResult<Basic> prior = this.proj.basics.tryAdd(b);
-        if (prior.existed) return prior.value;
-        return b;
+        return this.proj.basics.create(this.log, tr,
+            "basic " + tr.getSimpleName(),
+            () -> {
+                final String name = tr.getSimpleName();
+                return new Basic(name);
+            });
     }
 
     private TypeParam addTypeParam(CtTypeParameter tp) {
-        final String name = tp.getQualifiedName();
-        
-        //System.out.println(">> " + name + " >> " + tp.prettyprint());
+        return this.proj.typeParams.create(this.log, tp,
+            "type params " + tp.getQualifiedName(),
+            () -> {
+                final String name = tp.getQualifiedName();
+                
+                //System.out.println(">> " + name + " >> " + tp.prettyprint());
 
-        final TypeDesc type = null;
+                final TypeDesc type = null;
 
-        // TODO: Finish
-        return new TypeParam(tp, name, type);
+                // TODO: Finish
+                return new TypeParam(name, type);
+            });
     }
 
     private List<TypeParam> addTypeParams(List<CtTypeParameter> tps) {

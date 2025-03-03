@@ -2,8 +2,6 @@ package abstractor.core.constructs;
 
 import java.util.List;
 
-import spoon.reflect.declaration.CtField;
-
 import abstractor.core.cmp.Cmp;
 import abstractor.core.json.*;
 
@@ -12,8 +10,7 @@ public class Signature extends ConstructImp implements TypeDesc {
     public final List<Argument> params;
     public final List<Argument> results;
     
-    public Signature(CtField<?> src, boolean variadic, List<Argument> params, List<Argument> results) {
-        super(src);
+    public Signature(boolean variadic, List<Argument> params, List<Argument> results) {
         this.variadic = variadic;
         this.params   = unmodifiableList(params);
         this.results  = unmodifiableList(results);

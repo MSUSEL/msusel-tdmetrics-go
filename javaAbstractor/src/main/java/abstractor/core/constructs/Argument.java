@@ -1,7 +1,5 @@
 package abstractor.core.constructs;
 
-import spoon.reflect.declaration.CtField;
-
 import abstractor.core.cmp.Cmp;
 import abstractor.core.json.*;
 
@@ -9,8 +7,7 @@ public class Argument extends ConstructImp {
     public final String name;
     public final TypeDesc type;
 
-    public Argument(CtField<?> src, String name, TypeDesc type) {
-        super(src);
+    public Argument(String name, TypeDesc type) {
         this.name = name;
         this.type = type;
     }

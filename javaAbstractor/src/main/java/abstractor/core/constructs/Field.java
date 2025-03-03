@@ -1,6 +1,6 @@
 package abstractor.core.constructs;
 
-import spoon.reflect.declaration.CtField;
+import spoon.reflect.declaration.CtModifiable;
 
 import abstractor.core.cmp.Cmp;
 import abstractor.core.json.*;
@@ -8,13 +8,16 @@ import abstractor.core.json.*;
 public class Field extends ConstructImp {
     public final String name;
     public final TypeDesc type;
-    public final String visibility;
+    public String visibility;
 
-    public Field(CtField<?> src, String name, TypeDesc type) {
-        super(src);
+    public Field(String name, TypeDesc type) {
         this.name = name;
         this.type = type;
-        this.visibility = src.getVisibility() == null ? "" : src.getVisibility().toString();
+        this.visibility = "";
+    }
+
+    public void setVisibility(CtModifiable mod) {
+        this.visibility = mod.getVisibility() == null ? "" : mod.getVisibility().toString();
     }
 
     public String kind() { return "field"; }

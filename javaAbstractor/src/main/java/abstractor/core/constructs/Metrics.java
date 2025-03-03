@@ -2,8 +2,6 @@ package abstractor.core.constructs;
 
 import java.util.List;
 
-import spoon.reflect.declaration.CtField;
-
 import abstractor.core.cmp.Cmp;
 import abstractor.core.json.*;
 
@@ -22,11 +20,10 @@ public class Metrics extends ConstructImp {
     public final List<TypeDesc> reads;
     public final List<TypeDesc> writes;
     
-    public Metrics(CtField<?> src, Location loc,
+    public Metrics(Location loc,
         int codeCount, int complexity, int indents, int lineCount,
         boolean getter, boolean setter,
         List<Method> invokes, List<TypeDesc> reads, List<TypeDesc> writes) {
-        super(src);
         this.loc        = loc;
         this.codeCount  = codeCount;
         this.complexity = complexity;

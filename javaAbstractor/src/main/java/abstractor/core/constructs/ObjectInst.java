@@ -3,8 +3,6 @@ package abstractor.core.constructs;
 import java.util.List;
 import java.util.TreeSet;
 
-import spoon.reflect.declaration.CtField;
-
 import abstractor.core.cmp.Cmp;
 import abstractor.core.json.*;
 
@@ -15,9 +13,8 @@ public class ObjectInst extends ConstructImp implements TypeDesc {
     public final StructDesc resData;
     public final InterfaceDesc resInterface;
 
-    public ObjectInst(CtField<?> src, ObjectDecl generic, List<TypeDesc> instanceTypes,
+    public ObjectInst(ObjectDecl generic, List<TypeDesc> instanceTypes,
         StructDesc resData, InterfaceDesc resInterface) {
-        super(src);
         this.generic       = generic;
         this.instanceTypes = unmodifiableList(instanceTypes);
         this.methods       = new TreeSet<MethodInst>();

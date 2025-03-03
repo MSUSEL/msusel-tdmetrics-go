@@ -5,8 +5,6 @@ import java.util.List;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
-import spoon.reflect.declaration.CtElement;
-
 import abstractor.core.json.*;
 
 public abstract class ConstructImp implements Construct {
@@ -65,12 +63,10 @@ public abstract class ConstructImp implements Construct {
         return set == null ? null : Collections.unmodifiableSortedSet(set);
     }
 
-    private final CtElement src;
     private int index;
 
-    public ConstructImp(CtElement src) { this.src = src; }
+    protected ConstructImp() { }
 
-    public CtElement source() { return this.src; }
     public void setIndex(int index) { this.index = index; }
     public int getIndex() { return this.index; }
 

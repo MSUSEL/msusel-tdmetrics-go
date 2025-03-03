@@ -3,8 +3,6 @@ package abstractor.core.constructs;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
-import spoon.reflect.declaration.CtField;
-
 import abstractor.core.cmp.Cmp;
 import abstractor.core.json.*;
 
@@ -13,12 +11,11 @@ public class InterfaceDesc extends ConstructImp implements TypeDesc {
     public final TreeSet<InterfaceDesc> inherits;
     public final Construct pin;  
 
-    public InterfaceDesc(CtField<?> src, SortedSet<Abstract> abstracts) {
-        this(src, abstracts, null);
+    public InterfaceDesc(SortedSet<Abstract> abstracts) {
+        this(abstracts, null);
     }
 
-    public InterfaceDesc(CtField<?> src, SortedSet<Abstract> abstracts, Construct pin) {
-        super(src);
+    public InterfaceDesc(SortedSet<Abstract> abstracts, Construct pin) {
         this.abstracts = unmodifiableSortedSet(abstracts);
         this.inherits = new TreeSet<InterfaceDesc>();
         this.pin = pin;

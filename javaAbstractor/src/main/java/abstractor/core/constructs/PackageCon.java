@@ -4,7 +4,6 @@ import java.util.TreeSet;
 
 import abstractor.core.cmp.Cmp;
 import abstractor.core.json.*;
-import spoon.reflect.declaration.CtPackage;
 
 public class PackageCon extends ConstructImp {
     public final String name;
@@ -16,8 +15,7 @@ public class PackageCon extends ConstructImp {
     public final TreeSet<ObjectDecl> objectDecls = new TreeSet<ObjectDecl>();
     public final TreeSet<Value> values = new TreeSet<Value>();
 
-    public PackageCon(CtPackage src, String name, String path) {
-        super(src);
+    public PackageCon(String name, String path) {
         this.name = name;
         this.path = path;
     }
