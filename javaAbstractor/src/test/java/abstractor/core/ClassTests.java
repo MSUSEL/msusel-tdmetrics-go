@@ -97,6 +97,9 @@ public class ClassTests {
             "  void baz() {",
             "    System.out.println(\"Baz\");",
             "  }",
+            //"  void cat(int ...t) {",
+            //"    System.out.println(t)",
+            //"  }",
             "}");
 
         checkJson(proj,

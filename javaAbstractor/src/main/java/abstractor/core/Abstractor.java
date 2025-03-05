@@ -7,6 +7,7 @@ import java.util.List;
 import spoon.Launcher;
 import spoon.MavenLauncher;
 import spoon.reflect.*;
+import spoon.reflect.code.CtBlock;
 import spoon.reflect.cu.SourcePosition;
 import spoon.reflect.declaration.*;
 import spoon.reflect.reference.*;
@@ -131,8 +132,7 @@ public class Abstractor {
                 md.setVisibility(m);
                 if (receiver.pkg != null) receiver.pkg.methodDecls.add(md);
                 receiver.methodDecls.add(md);
-
-                // TODO: src.getBody() for metrics
+                md.metrics = this.addMetrics(m.getBody());
             });
     }
 
@@ -181,13 +181,11 @@ public class Abstractor {
         return this.proj.structDescs.create(this.log, c,
             "struct " + c.getQualifiedName(),
             () -> {
-                // TODO: Handle enum?
+                // Handle enum?
                 //if (c instanceof CtEnum<?> e) {}
-
                 ArrayList<Field> fields = new ArrayList<Field>();
                 for (CtFieldReference<?> fr : c.getAllFields())
                     fields.add(this.addField(fr.getFieldDeclaration()));
-
                 return new StructDesc(fields);
             });
     }
@@ -229,49 +227,6 @@ public class Abstractor {
             });
     }
 
-    /*
-    static public Argument Create(Project proj, CtField<?> src) {
-        Argument existing = proj.arguments.findWithSource(src);
-        if (existing != null) return existing;
-
-        // TODO: Get initial stuff
-
-        Argument f = new Argument(src);
-        existing = proj.arguments.tryAdd(f);
-        if (existing != null) return existing;
-        
-        // TODO: Finish loading 
-
-        return f;
-    }
-
-    static public Abstract Create(Project proj, CtField<?> src) {
-        Abstract existing = proj.abstracts.findWithSource(src);
-        if (existing != null) return existing;
-
-        // TODO: Get initial stuff
-
-        Abstract f = new Abstract(src);
-        existing = proj.abstracts.tryAdd(f);
-        if (existing != null) return existing;
-        
-        // TODO: Finish loading 
-
-        return f;
-    }
-
-    private void addAbstract(CtMethod<?> m) {
-        if (this.proj.abstracts.containsSource(m)) return;
-        this.log.log("Adding abstract " + m.prettyprint());
-        this.log.push();
-        this.proj.abstracts.add(m);
-
-        // TODO: Implement
-        
-        this.log.pop();
-    }
-    */
-
     private TypeDesc addTypeDesc(CtTypeReference<?> tr) {
         if (tr.isPrimitive()) return this.addBasic(tr);
         //if (tr.isArray())     return this.addArray(tr); // TODO: Add once we have interfaceDesc.
@@ -301,6 +256,8 @@ public class Abstractor {
             "basic " + tr.getSimpleName(),
             () -> {
                 final String name = tr.getSimpleName();
+                if (name == "void")
+                    this.log.error("A void was added as a basic.");
                 return new Basic(name);
             });
     }
@@ -324,5 +281,16 @@ public class Abstractor {
         List<TypeParam> result = new ArrayList<TypeParam>();
         for (CtTypeParameter tp : tps) result.add(this.addTypeParam(tp));
         return result;
+    }
+
+    private Metrics addMetrics(CtBlock<?> b) {
+        return this.proj.metrics.create(this.log, b,
+            "metrics",
+            () -> {
+                final Location loc = proj.locations.create(b.getPosition());
+                final Analyzer ana = new Analyzer(this.log, loc);
+                ana.addBlock(b);
+                return ana.getMetrics();
+            });
     }
 }
