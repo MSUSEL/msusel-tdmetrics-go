@@ -22,7 +22,7 @@ public class ObjectInst extends ConstructImp implements TypeDesc {
         this.resInterface  = resInterface;
     }
 
-    public String kind() { return "objectInst"; }
+    public ConstructKind kind() { return ConstructKind.OBJECT_INST; }
 
     @Override
     public JsonNode toJson(JsonHelper h) {

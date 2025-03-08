@@ -6,7 +6,13 @@ import java.util.Map;
 import java.util.TreeSet;
 import java.util.TreeMap;
 
+import spoon.reflect.code.BinaryOperatorKind;
+import spoon.reflect.code.CtBinaryOperator;
 import spoon.reflect.code.CtBlock;
+import spoon.reflect.code.CtCase;
+import spoon.reflect.code.CtComment;
+import spoon.reflect.code.CtIf;
+import spoon.reflect.code.CtLoop;
 import spoon.reflect.code.CtStatement;
 import spoon.reflect.cu.SourcePosition;
 import spoon.reflect.declaration.CtElement;
@@ -35,12 +41,13 @@ public class Analyzer {
     private final List<TypeDesc> writes;
 
     public Analyzer(Logger log, Location loc) {
-        this.log       = log;
-        this.loc       = loc;
-        this.minColumn = new TreeMap<Integer, Integer>();
-        this.invokes   = new ArrayList<Method>();
-        this.reads     = new ArrayList<TypeDesc>();
-        this.writes    = new ArrayList<TypeDesc>();
+        this.log        = log;
+        this.loc        = loc;
+        this.minColumn  = new TreeMap<Integer, Integer>();
+        this.invokes    = new ArrayList<Method>();
+        this.reads      = new ArrayList<TypeDesc>();
+        this.writes     = new ArrayList<TypeDesc>();
+        this.complexity = 1;
     }
 
     public Metrics getMetrics() {
@@ -81,48 +88,18 @@ public class Analyzer {
     }
 
     private void addElement(CtElement elem) {
-        this.addPosition(elem.getPosition());
-        //if (elem instanceof )
+        // Skip over any comments in the code.
+        if (elem instanceof CtComment) return;
 
-        // CtAssertImpl
-        // CtAssignmentImpl
-        // CtBlockImpl
-        // CtBreakImpl
-        // CtCaseImpl
-        // CtClassImpl
-        // CtCodeSnippetStatementImpl
-        // CtCommentImpl
-        // CtConstructorCallImpl
-        // CtContinueImpl
-        // CtDoImpl
-        // CtEnumImpl
-        // CtForEachImpl
-        // CtForImpl
-        // CtIfImpl
-        // CtInterfaceImpl
-        // CtInvocationImpl
-        // CtJavaDocImpl
-        // CtLocalVariableImpl
-        // CtLoopImpl
-        // CtNewClassImpl
-        // CtOperatorAssignmentImpl
-        // CtRecordImpl
-        // CtReturnImpl
-        // CtStatementImpl
-        // CtSwitchImpl
-        // CtSynchronizedImpl
-        // CtThrowImpl
-        // CtTryImpl
-        // CtTryWithResourceImpl
-        // CtUnaryOperatorImpl
-        // CtWhileImpl
-        // CtYieldStatementImpl
+        this.addPosition(elem.getPosition());
+        this.complexity += this.addComplexity(elem);
         
-        this.log.log("+- (" + elem.getClass().getSimpleName() + ") " + elem);
-        this.log.push("|  ");
-        for (CtElement child : elem.getDirectChildren())
-            this.addElement(child);
-        this.log.pop();
+        // Comment out the following, it is only for debugging.
+        //this.log.log("+- (" + elem.getClass().getSimpleName() + ") " + elem);
+        //this.log.push("|  ");
+        //for (CtElement child : elem.getDirectChildren())
+        //    this.addElement(child);
+        //this.log.pop();
     }
 
     private void addPosition(SourcePosition pos) {
@@ -143,10 +120,46 @@ public class Analyzer {
     }
 
     private void detectGetter(CtStatement st) {
-
+        // TODO: Implement
     }
     
     private void detectSetter(CtStatement st) {
+        // TODO: Implement
+    }
+
+    /**
+     * Gets the McCabe cyclomatic complexity for this element.
+     */
+    private int addComplexity(CtElement elem) {
+        // Add one point for each conditional construct, such as an "if" condition
+        if (elem instanceof CtIf ifElem) {
+            final CtStatement elseElem = ifElem.getElseStatement();
+            if (elseElem == null) return 1;
+
+            // Check for "else if(..) { }" and skip adding complexity since the "if" will add it later.
+            if (elseElem instanceof CtIf) return 1;
+
+            // Check for "else { if(..) { }}" and skip adding complexity since the "if" will add it later.
+            if (elseElem instanceof CtBlock elseBlock) {
+                final List<CtStatement> elseChildren = elseBlock.getStatements();
+                if (elseChildren.size() == 1 && elseChildren.get(0) instanceof CtIf) return 1;
+            }
+
+            // The "else" part isn't just an "if" so add complexity for the "else".
+            return 2;
+        }
+
+        // Add one point for each iterative structure (CtDo, CtForEach, CtFor, CtWhile)
+        if (elem instanceof CtLoop) return 1;
+
+        // Add one point for each case or default block in a switch statement
+        if (elem instanceof CtCase) return 1;
         
+        // Add one point for any additional boolean condition, such as the use of && or ||
+        if (elem instanceof CtBinaryOperator opElem &&
+            (opElem.getKind() == BinaryOperatorKind.AND || opElem.getKind() == BinaryOperatorKind.OR))
+            return 1;
+
+        return 0;
     }
 }

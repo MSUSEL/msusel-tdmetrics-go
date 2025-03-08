@@ -19,7 +19,7 @@ public class MethodInst extends ConstructImp implements Method {
         this.resolved = resolved;
     }
 
-    public String kind() { return "methodInst"; }
+    public ConstructKind kind() { return ConstructKind.METHOD_INST; }
 
     @Override
     public JsonNode toJson(JsonHelper h) {

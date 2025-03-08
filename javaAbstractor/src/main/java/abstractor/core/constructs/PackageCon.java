@@ -20,7 +20,7 @@ public class PackageCon extends ConstructImp {
         this.path = path;
     }
     
-    public String kind() { return "package"; }
+    public ConstructKind kind() { return ConstructKind.PACKAGE; }
 
     @Override
     public JsonNode toJson(JsonHelper h) {

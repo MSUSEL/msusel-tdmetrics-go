@@ -16,7 +16,7 @@ public class InterfaceInst extends ConstructImp implements TypeDesc {
         this.resolved = resolved;
     }
 
-    public String kind() { return "interfaceInst"; }
+    public ConstructKind kind() { return ConstructKind.INTERFACE_INST; }
 
     @Override
     public JsonNode toJson(JsonHelper h) {

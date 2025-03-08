@@ -12,7 +12,7 @@ public class Abstract extends ConstructImp {
         this.signature = signature;
     }
 
-    public String kind() { return "abstract"; }
+    public ConstructKind kind() { return ConstructKind.ABSTRACT; }
 
     @Override
     public JsonNode toJson(JsonHelper h) {

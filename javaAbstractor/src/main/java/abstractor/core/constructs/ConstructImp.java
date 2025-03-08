@@ -10,7 +10,7 @@ import abstractor.core.json.*;
 public abstract class ConstructImp implements Construct {
 
     static public JsonValue key(Construct c) {
-        return c == null ? JsonValue.ofNull() : JsonValue.of(c.kind() + c.getIndex());
+        return c == null ? JsonValue.ofNull() : JsonValue.of(c.kind().toString() + c.getIndex());
     }
     
     static public JsonValue index(Construct c) {
@@ -72,12 +72,12 @@ public abstract class ConstructImp implements Construct {
 
     public JsonNode toJson(JsonHelper h) {
         JsonObject obj = new JsonObject();
-        if (h.writeKinds) obj.put("kind", this.kind());
+        if (h.writeKinds) obj.put("kind", this.kind().toString());
         if (h.writeIndices) obj.put("index", this.getIndex());
         return obj;
     }
 
-    public abstract String kind();
+    public abstract ConstructKind kind();
 
     public int compareTo(Construct c) {
         return this.kind().compareTo(c.kind());

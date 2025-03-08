@@ -12,7 +12,7 @@ public class TypeParam extends ConstructImp implements TypeDesc {
         this.type = type;
     }
 
-    public String kind() { return "typeParam"; }
+    public ConstructKind kind() { return ConstructKind.TYPE_PARAM; }
 
     @Override
     public JsonNode toJson(JsonHelper h) {

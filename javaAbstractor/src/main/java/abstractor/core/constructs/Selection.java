@@ -12,7 +12,7 @@ public class Selection extends ConstructImp {
         this.origin = origin;
     }
 
-    public String kind() { return "selection"; }
+    public ConstructKind kind() { return ConstructKind.SELECTION; }
 
     @Override
     public JsonNode toJson(JsonHelper h) {

@@ -21,7 +21,7 @@ public class InterfaceDesc extends ConstructImp implements TypeDesc {
         this.pin = pin;
     }
 
-    public String kind() { return "interfaceDesc"; }
+    public ConstructKind kind() { return ConstructKind.INTERFACE_DESC; }
 
     @Override
     public JsonNode toJson(JsonHelper h) {

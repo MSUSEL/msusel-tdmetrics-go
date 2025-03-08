@@ -16,7 +16,7 @@ public class Value extends Declaration {
         this.type     = type;
     }
 
-    public String kind() { return "value"; }
+    public ConstructKind kind() { return ConstructKind.VALUE; }
 
     @Override
     public JsonNode toJson(JsonHelper h) {

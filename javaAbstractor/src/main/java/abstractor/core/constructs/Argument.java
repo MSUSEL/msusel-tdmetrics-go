@@ -12,7 +12,7 @@ public class Argument extends ConstructImp {
         this.type = type;
     }
 
-    public String kind() { return "argument"; }
+    public ConstructKind kind() { return ConstructKind.ARGUMENT; }
 
     @Override
     public JsonNode toJson(JsonHelper h) {

@@ -1,6 +1,10 @@
 package abstractor.core.constructs;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
 import java.util.TreeSet;
 
 import spoon.reflect.declaration.CtElement;
@@ -9,12 +13,35 @@ import abstractor.core.json.*;
 import abstractor.core.log.Logger;
 
 public class Factory<T extends Construct> implements Jsonable {
+    private final ConstructKind conKind;
     private final TreeSet<T> set;
     private final HashMap<CtElement, T> byElem;
 
-    public Factory() {
+    public Factory(ConstructKind kind) {
+        this.conKind = kind;
         this.set = new TreeSet<T>();
         this.byElem = new HashMap<CtElement, T>();
+    }
+
+    public ConstructKind kind() { return this.conKind; }
+
+    public int size() { return this.set.size(); }
+
+    public T get(int index) {
+        int i = 0;
+        for (T value : this.set) {
+            if (i == index) return value;
+            i++;
+        }
+        return null;
+    }
+
+    public Iterator<T> iterator() { return this.set.iterator(); }
+
+    public List<T> toList() {
+        ArrayList<T> list = new ArrayList<>(this.set.size());
+        for (T value : this.set) list.add(value);
+        return Collections.unmodifiableList(list);
     }
 
     public interface ConstructCreator<T extends Construct> { T create(); }

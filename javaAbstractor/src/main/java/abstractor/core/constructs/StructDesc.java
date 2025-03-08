@@ -12,7 +12,7 @@ public class StructDesc extends ConstructImp implements TypeDesc {
         this.fields = unmodifiableList(fields);
     }
 
-    public String kind() { return "structDesc"; }
+    public ConstructKind kind() { return ConstructKind.STRUCT_DESC; }
 
     @Override
     public JsonNode toJson(JsonHelper h) {

@@ -20,7 +20,7 @@ public class Field extends ConstructImp {
         this.visibility = mod.getVisibility() == null ? "" : mod.getVisibility().toString();
     }
 
-    public String kind() { return "field"; }
+    public ConstructKind kind() { return ConstructKind.FIELD; }
 
     @Override
     public JsonNode toJson(JsonHelper h) {

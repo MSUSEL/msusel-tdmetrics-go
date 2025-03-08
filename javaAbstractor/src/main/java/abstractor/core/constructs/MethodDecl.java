@@ -23,7 +23,7 @@ public class MethodDecl extends Declaration implements Method {
         this.instances = new TreeSet<MethodInst>();
     }
 
-    public String kind() { return "method"; }
+    public ConstructKind kind() { return ConstructKind.METHOD_DECL; }
     
     @Override
     public JsonNode toJson(JsonHelper h) {

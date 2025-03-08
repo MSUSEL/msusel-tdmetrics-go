@@ -19,7 +19,7 @@ public class InterfaceDecl extends Declaration implements TypeDesc {
         this.instances = new TreeSet<InterfaceInst>();
     }
 
-    public String kind() { return "interfaceDecl"; }
+    public ConstructKind kind() { return ConstructKind.INTERFACE_DECL; }
     
     @Override
     public JsonNode toJson(JsonHelper h) {

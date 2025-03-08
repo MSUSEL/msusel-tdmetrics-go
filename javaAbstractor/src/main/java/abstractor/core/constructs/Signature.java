@@ -16,7 +16,7 @@ public class Signature extends ConstructImp implements TypeDesc {
         this.results  = unmodifiableList(results);
     }
 
-    public String kind() { return "signature"; }
+    public ConstructKind kind() { return ConstructKind.SIGNATURE; }
 
     @Override
     public JsonNode toJson(JsonHelper h) {

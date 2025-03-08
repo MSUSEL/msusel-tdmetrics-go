@@ -5,5 +5,5 @@ import abstractor.core.json.Jsonable;
 public interface Construct extends Comparable<Construct>, Jsonable {
     public void setIndex(int index);
     public int getIndex();
-    public String kind();
+    public ConstructKind kind();
 }

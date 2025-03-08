@@ -8,7 +8,7 @@ public class Basic extends ConstructImp implements TypeDesc {
 
     public Basic(String name) { this.name = name; }
 
-    public String kind() { return "basic"; }
+    public ConstructKind kind() { return ConstructKind.BASIC; }
 
     @Override
     public JsonNode toJson(JsonHelper h) {

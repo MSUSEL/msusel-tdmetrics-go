@@ -37,7 +37,7 @@ public class Metrics extends ConstructImp {
         this.writes     = Collections.unmodifiableList(writes);
     }
 
-    public String kind() { return "metrics"; }
+    public ConstructKind kind() { return ConstructKind.METRICS; }
 
     @Override
     public JsonNode toJson(JsonHelper h) {

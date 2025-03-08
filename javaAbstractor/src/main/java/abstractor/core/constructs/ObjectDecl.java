@@ -23,7 +23,7 @@ public class ObjectDecl extends Declaration implements TypeDesc {
         this.instances = new TreeSet<InterfaceInst>();
     }
 
-    public String kind() { return "object"; }
+    public ConstructKind kind() { return ConstructKind.OBJECT_DECL; }
     
     @Override
     public JsonNode toJson(JsonHelper h) {
