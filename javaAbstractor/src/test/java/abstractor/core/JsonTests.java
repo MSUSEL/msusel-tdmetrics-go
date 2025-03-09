@@ -3,6 +3,7 @@ package abstractor.core;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static abstractor.core.Testing.*;
 
 import org.junit.jupiter.api.Test;
 
@@ -185,8 +186,10 @@ public class JsonTests {
     @Test
     public void FormatArrayEmpty() {
         JsonArray simple = new JsonArray();
-        assertEquals("[ ]", simple.toString(false));
-        assertEquals("[]", simple.toString(true));
+        checkJson(JsonFormat.Expand(),   simple, "[ ]");
+        checkJson(JsonFormat.Normal(),   simple, "[ ]");
+        checkJson(JsonFormat.Relaxed(),  simple, "[ ]");
+        checkJson(JsonFormat.Minimize(), simple, "[]");
     }
 
     @Test
@@ -195,8 +198,20 @@ public class JsonTests {
             JsonValue.of(1),
             JsonValue.of(2),
             JsonValue.of(3));
-        assertEquals("[ 1, 2, 3 ]", simple.toString(false));
-        assertEquals("[1,2,3]", simple.toString(true));
+        checkJson(JsonFormat.Expand(), simple,
+            "[",
+            "  1,",
+            "  2,",
+            "  3",
+            "]");
+        checkJson(JsonFormat.Normal(), simple, "[ 1, 2, 3 ]");
+        checkJson(JsonFormat.Relaxed(), simple,
+            "[",
+            "  1,",
+            "  2,",
+            "  3",
+            "]");
+        checkJson(JsonFormat.Minimize(), simple, "[1,2,3]");
     }
     
     @Test
@@ -210,18 +225,39 @@ public class JsonTests {
                 JsonValue.of(4),
                 JsonValue.of(5),
                 JsonValue.of(6)));
-        assertEquals("[\n" +
-                     "  [ 1, 2, 3 ],\n" +
-                     "  [ 4, 5, 6 ]\n" +
-                     "]", complex.toString(false));
-        assertEquals("[[1,2,3],[4,5,6]]", complex.toString(true));
+        checkJson(JsonFormat.Expand(), complex,
+            "[",
+            "  [",
+            "    1,",
+            "    2,",
+            "    3",
+            "  ],",
+            "  [",
+            "    4,",
+            "    5,",
+            "    6",
+            "  ]",
+            "]");
+        checkJson(JsonFormat.Normal(), complex,
+            "[",
+            "  [ 1, 2, 3 ],",
+            "  [ 4, 5, 6 ]",
+            "]");
+        checkJson(JsonFormat.Relaxed(), complex,
+            "[",
+            "  [ 1, 2, 3 ],",
+            "  [ 4, 5, 6 ]",
+            "]");
+        checkJson(JsonFormat.Minimize(), complex, "[[1,2,3],[4,5,6]]");
     }
 
     @Test
     public void FormatObjectEmpty() {
         JsonObject simple = new JsonObject();
-        assertEquals("{ }", simple.toString(false));
-        assertEquals("{}", simple.toString(true));
+        assertEquals("{ }", JsonFormat.Expand().format(simple));
+        assertEquals("{ }", JsonFormat.Normal().format(simple));
+        assertEquals("{ }", JsonFormat.Relaxed().format(simple));
+        assertEquals("{}",  JsonFormat.Minimize().format(simple));
     }
 
     @Test
@@ -231,8 +267,20 @@ public class JsonTests {
         simple.put("two", JsonValue.of(2));
         simple.put("three", JsonValue.of(3));
         // Outputs sorted alphabetically by key.
-        assertEquals("{ \"one\": 1, \"three\": 3, \"two\": 2 }", simple.toString(false));
-        assertEquals("{\"one\":1,\"three\":3,\"two\":2}", simple.toString(true));
+        checkJson(JsonFormat.Expand(), simple,
+            "{",
+            "  \"one\": 1,",
+            "  \"three\": 3,",
+            "  \"two\": 2",
+            "}");
+        checkJson(JsonFormat.Normal(),   simple, "{ \"one\": 1, \"three\": 3, \"two\": 2 }");
+        checkJson(JsonFormat.Relaxed(),  simple, 
+            "{",
+            "  one: 1,",
+            "  three: 3,",
+            "  two: 2",
+            "}");
+        checkJson(JsonFormat.Minimize(), simple, "{\"one\":1,\"three\":3,\"two\":2}");
     }
 
     @Test
@@ -246,11 +294,30 @@ public class JsonTests {
             JsonValue.of(4),
             JsonValue.of(5),
             JsonValue.of(6)));
-        assertEquals("{\n" +
-                     "  \"one\": [ 1, 2, 3 ],\n" +
-                     "  \"two\": [ 4, 5, 6 ]\n" +
-                     "}", complex.toString(false));
-        assertEquals("{\"one\":[1,2,3],\"two\":[4,5,6]}", complex.toString(true));
+        checkJson(JsonFormat.Expand(), complex,
+            "{",
+            "  \"one\": [",
+            "    1,",
+            "    2,",
+            "    3",
+            "  ],",
+            "  \"two\": [",
+            "    4,",
+            "    5,",
+            "    6",
+            "  ]",
+            "}");
+        checkJson(JsonFormat.Normal(), complex,
+            "{",
+            "  \"one\": [ 1, 2, 3 ],",
+            "  \"two\": [ 4, 5, 6 ]",
+            "}");
+        checkJson(JsonFormat.Relaxed(), complex,
+            "{",
+            "  one: [ 1, 2, 3 ],",
+            "  two: [ 4, 5, 6 ]",
+            "}");
+        checkJson(JsonFormat.Minimize(), complex, "{\"one\":[1,2,3],\"two\":[4,5,6]}");
     }
 
     @Test
@@ -402,7 +469,7 @@ public class JsonTests {
         assertTrue(node instanceof JsonArray);
         JsonArray arr = (JsonArray)node;
         assertTrue(arr.isEmpty());
-        assertEquals("[ ]", arr.toString(false));
+        assertEquals("[ ]", arr.toString());
     }
     
     @Test
@@ -411,7 +478,7 @@ public class JsonTests {
         assertTrue(node instanceof JsonArray);
         JsonArray arr = (JsonArray)node;
         assertFalse(arr.isEmpty());
-        assertEquals("[ 1, 2, 3, 4 ]", arr.toString(false));
+        assertEquals("[ 1, 2, 3, 4 ]", arr.toString());
     }
     
     @Test
@@ -425,7 +492,7 @@ public class JsonTests {
             "  [ ],\n" +
             "  [ \"hello\" ],\n" +
             "  [ 1, 2 ]\n" +            
-            "]", arr.toString(false));
+            "]", arr.toString());
     }
 
     @Test
@@ -434,7 +501,7 @@ public class JsonTests {
         assertTrue(node instanceof JsonObject);
         JsonObject obj = (JsonObject)node;
         assertTrue(obj.isEmpty());
-        assertEquals("{ }", obj.toString(false));
+        assertEquals("{ }", obj.toString());
     }
     
     @Test
@@ -448,7 +515,7 @@ public class JsonTests {
             "  \"12\": 34,\n" +
             "  \"hello\": \"world\",\n" +
             "  \"xyz\": [ true, false ]\n" +
-            "}", obj.toString(false));
+            "}", obj.toString());
     }
 
     @Test
@@ -460,6 +527,6 @@ public class JsonTests {
         assertTrue(node instanceof JsonArray);
         JsonArray arr = (JsonArray)node;
         assertFalse(arr.isEmpty());
-        assertEquals("[ 1, 2 ]", arr.toString(false));
+        assertEquals("[ 1, 2 ]", arr.toString());
     }
 }

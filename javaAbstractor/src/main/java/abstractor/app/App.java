@@ -25,12 +25,14 @@ public class App {
         h.writeIndices = cfg.writeIndices;
         JsonNode node = proj.toJson(h);
 
+        JsonFormat fmt = cfg.minimize ? JsonFormat.Minimize() : JsonFormat.Normal();
+
         if (cfg.output == null) {
-            node.toString(System.out, cfg.minimize, "");
+            fmt.format(System.out, node, "");
             System.out.println();
         } else {
             try (PrintStream fileWriter = new PrintStream(new File(cfg.output))) {
-                node.toString(fileWriter, cfg.minimize, "");
+                fmt.format(fileWriter, node, "");
                 fileWriter.println();
             } catch (FileNotFoundException e) {
                 log.error("Error creating or writing to file: " + e.getMessage());

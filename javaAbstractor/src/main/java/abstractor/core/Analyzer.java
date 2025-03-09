@@ -24,6 +24,9 @@ import abstractor.core.constructs.TypeDesc;
 import abstractor.core.log.Logger;
 
 public class Analyzer {
+
+    private static final boolean logElementTree = false;
+
     private final Logger log;
     public final Location loc;
 
@@ -66,7 +69,7 @@ public class Analyzer {
         columns.addAll(this.minColumn.values());
         
         final TreeMap<Integer, Integer> indentMap = new TreeMap<Integer, Integer>();
-        int index = 0;
+        int index = 1;
         for (int col : columns) indentMap.put(col, index++);
 
 	    int indentSum = 0;
@@ -94,12 +97,16 @@ public class Analyzer {
         this.addPosition(elem.getPosition());
         this.complexity += this.addComplexity(elem);
         
-        // Comment out the following, it is only for debugging.
-        //this.log.log("+- (" + elem.getClass().getSimpleName() + ") " + elem);
-        //this.log.push("|  ");
-        //for (CtElement child : elem.getDirectChildren())
-        //    this.addElement(child);
-        //this.log.pop();
+        if (logElementTree) {
+            this.log.log("+- (" + elem.getClass().getSimpleName() + ") " + elem);
+            this.log.push("|  ");
+        }
+
+        for (CtElement child : elem.getDirectChildren())
+            this.addElement(child);
+                
+        if (logElementTree)
+            this.log.pop();
     }
 
     private void addPosition(SourcePosition pos) {

@@ -1,5 +1,7 @@
 package abstractor.core;
 
+import static abstractor.core.Testing.*;
+
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.Disabled;
 
@@ -9,13 +11,13 @@ public class ClassTests {
 
     @Test
     public void ClassTestWithFields() {
-        final Project proj = Testing.classFromSource(
+        final Project proj = classFromSource(
             "public class Foo {",
             "  public int bar;",
             // TODO: add once we have interfaceDesc. "  public int[] baz;",
             "}");
 
-        Testing.checkJson(proj,
+        checkJson(proj,
             "{",
             "  basics: [ int ],",
             "  fields: [",
@@ -43,19 +45,19 @@ public class ClassTests {
     @Test
     @Disabled // TODO: Enable once type params work
     public void ClassTestWithTypeParams() {
-        final Project proj = Testing.classFromSource(
+        final Project proj = classFromSource(
             "public class Foo<T extends Object> {",
             "  public T value",
             "}");
 
-        Testing.checkJson(proj,
+        checkJson(proj,
             "{",
             "}");
     }
 
     @Test
     public void ClassTestWithMethods() {
-        final Project proj = Testing.classFromSource(
+        final Project proj = classFromSource(
             "public class Foo {",
             "  int bar(int x, int y) {",
             "    return x + y*2;",
@@ -68,7 +70,7 @@ public class ClassTests {
             //"  }",
             "}");
 
-        Testing.checkJson(proj,
+        checkJson(proj,
             "{",
             "  arguments: [",
             "    { type: basic1 },",
@@ -83,7 +85,7 @@ public class ClassTests {
             "    { name: baz, package: 1, receiver: 1, signature: 1 }",
             "  ],",
             "  metrics: [",
-            "    { codeCount: 1, complexity: 1, lineCount: 4 }",
+            "    { codeCount: 1, complexity: 1, indents: 1, lineCount: 4 }",
             "  ],",
             "  objects: [",
             "    {",

@@ -1,22 +1,6 @@
 package abstractor.core.json;
 
-import java.io.PrintStream;
-
 public class JsonValue implements JsonNode, Comparable<JsonValue> {
-
-    public static String escape(String text) {
-        StringBuilder sb = new StringBuilder();
-        sb.append('"');
-        for (char c : text.toCharArray()) {
-            switch (c) {
-                case '\\': sb.append("\\\\"); break;
-                case '"':  sb.append("\\\""); break;
-                default:   sb.append(c);      break;
-            }
-        }
-        sb.append('"');
-        return sb.toString();
-    }
 
     public static JsonValue of(String value) { return new JsonValue(value); }
 
@@ -98,19 +82,7 @@ public class JsonValue implements JsonNode, Comparable<JsonValue> {
         return false;
     }
 
-    public String toString() {
-        if (this.isNull()) return "null";
-        if (this.isString()) return escape(this.value.toString());
-        return this.value.toString();
-    }
-    
-    public String toString(boolean minimize) {
-        return this.toString();
-    }
-    
-    public void toString(PrintStream sb, boolean minimize, String indent) {
-        sb.append(this.toString());
-    }
+    public String toString() { return JsonFormat.Normal().format(this); }
 
     public int compareTo(JsonValue o) {
         return this.toString().compareTo(o.toString());

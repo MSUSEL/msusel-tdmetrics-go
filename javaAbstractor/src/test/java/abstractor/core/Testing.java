@@ -7,6 +7,7 @@ import static org.junit.jupiter.api.Assertions.fail;
 import abstractor.core.constructs.Construct;
 import abstractor.core.constructs.Project;
 import abstractor.core.diff.Diff;
+import abstractor.core.json.JsonFormat;
 import abstractor.core.json.JsonHelper;
 import abstractor.core.json.JsonNode;
 import abstractor.core.json.Jsonable;
@@ -26,8 +27,14 @@ public class Testing {
 
     static public void checkJson(Jsonable j, String ...lines) {
         final JsonHelper jh = new JsonHelper();
-        final String result = j == null ? "null" : j.toJson(jh).toString(false);
+        final String result = j == null ? "null" : JsonFormat.Relaxed().format(j.toJson(jh));
         final String exp = formatJson(lines);
+        assertLines(exp, result);
+    }
+
+    static public void checkJson(JsonFormat fmt, JsonNode j, String ...lines) {
+        final String result = fmt.format(j);
+        final String exp = String.join("\n", lines);
         assertLines(exp, result);
     }
 
@@ -43,7 +50,7 @@ public class Testing {
 
     static public String formatJson(String ...lines) {
         try {
-            return JsonNode.parse(lines).toString(false);
+            return JsonFormat.Relaxed().format(JsonNode.parse(lines));
         } catch(Exception ex) {
             fail(ex);
             return "Error";
@@ -57,5 +64,4 @@ public class Testing {
             fail("unexpected lines (see diff above)");
         }
     }
-
 }
