@@ -91,8 +91,8 @@ func Test_SimpleWithExtraIndent(t *testing.T) {
 func Test_SimpleParams(t *testing.T) {
 	tt := parseExpr(t,
 		`func(a int,`,
-		`	  b int,`,
-		`	  c int) int {`,
+		`		b int,`,
+		`		c int) int {`,
 		`	return max(a, b, c)`,
 		`}`)
 	tt.checkProj(
@@ -102,7 +102,7 @@ func Test_SimpleParams(t *testing.T) {
 		`    {`,
 		`      codeCount:  5,`,
 		`      complexity: 1,`,
-		`      indents:    7,`,
+		`      indents:    5,`,
 		`      lineCount:  5`,
 		`    }`,
 		`  ],`,

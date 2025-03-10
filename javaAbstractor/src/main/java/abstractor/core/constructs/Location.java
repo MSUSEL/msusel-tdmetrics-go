@@ -3,43 +3,54 @@ package abstractor.core.constructs;
 import java.io.File;
 
 import spoon.reflect.cu.SourcePosition;
-
+import abstractor.core.cmp.Cmp;
 import abstractor.core.json.*;
 
 public class Location implements Jsonable, Comparable<Location> {
-    public final SourcePosition pos;
+    public final String path;
+    public final int line;
     public int offset;
 
     public Location(SourcePosition pos) {
-        this.pos = pos;
+        String path = "unknown";
+        int line = 0;
+
+        if (pos.isValidPosition()) {
+            final File f = pos.getFile();
+            if (f != null) path = f.getPath();
+            line = pos.getLine();
+        }
+
+       this.path = path;
+       this.line = line;
     }
 
-    public JsonNode toJson(JsonHelper h) {
-        return JsonValue.of(this.offset);
+    public Location(String path, int line) {
+       this.path = path;
+       this.line = line;
     }
+    
+    public JsonNode toJson(JsonHelper h) { return JsonValue.of(this.offset); }
 
-    public boolean isValid() {
-        return this.pos.isValidPosition();
-    }
-
-    public String getPath() {
-        final File f = this.pos.getFile();
-        return f != null ? f.getPath() : "unknown";
-    }
-
-    public int getLine() {
-        final int line = this.pos.getLine();
-        return line < 1 ? 1 : line;
-    }
+    public boolean isValid() { return this.line > 0; }
 
     @Override
     public int compareTo(Location o) {
         if (o == null) return 1;
-        if (this.pos.isValidPosition()) return o.pos.isValidPosition() ? 0 : -1;
-        if (o.pos.isValidPosition()) return 1;
-
-        int cmp = this.pos.toString().compareTo(o.pos.toString());
-        if (cmp != 0) return cmp;
-        return Integer.compare(this.pos.getSourceStart(), o.pos.getSourceStart());
+        return Cmp.or(
+            Cmp.defer(this.path, () -> o.path),
+            Cmp.defer(this.line, () -> o.line)
+        );
     }
+
+    @Override
+    public boolean equals(Object o) {
+        return o != null &&
+            o instanceof Location lo &&
+            this.path.equals(lo.path) &&
+            this.line == lo.line;
+    }
+    
+    @Override
+    public String toString() { return this.path + ":" + this.line; }
 }

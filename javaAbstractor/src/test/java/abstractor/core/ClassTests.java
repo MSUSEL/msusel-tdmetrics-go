@@ -85,7 +85,7 @@ public class ClassTests {
             "    { name: baz, package: 1, receiver: 1, signature: 1 }",
             "  ],",
             "  metrics: [",
-            "    { codeCount: 1, complexity: 1, indents: 1, lineCount: 4 }",
+            "    { codeCount: 3, complexity: 1, indents: 1, lineCount: 3 }",
             "  ],",
             "  objects: [",
             "    {",

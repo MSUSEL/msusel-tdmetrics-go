@@ -132,7 +132,7 @@ public class Abstractor {
                 md.setVisibility(m);
                 if (receiver.pkg != null) receiver.pkg.methodDecls.add(md);
                 receiver.methodDecls.add(md);
-                md.metrics = this.addMetrics(m.getBody());
+                md.metrics = this.addMetrics(m);
             });
     }
 
@@ -283,13 +283,13 @@ public class Abstractor {
         return result;
     }
 
-    private Metrics addMetrics(CtBlock<?> b) {
-        return this.proj.metrics.create(this.log, b,
+    private Metrics addMetrics(CtMethod<?> m) {
+        return this.proj.metrics.create(this.log, m,
             "metrics",
             () -> {
-                final Location loc = proj.locations.create(b.getPosition());
+                final Location loc = proj.locations.create(m.getPosition());
                 final Analyzer ana = new Analyzer(this.log, loc);
-                ana.addBlock(b);
+                ana.addMethod(m);
                 return ana.getMetrics();
             });
     }

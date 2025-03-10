@@ -13,11 +13,11 @@ public class Locations implements Jsonable {
     private final TreeMap<String, Integer> offsets = new TreeMap<String, Integer>();
     
     public Location create(SourcePosition pos) {
-        for (Location loc : this.locs) {
-            if (loc.pos == pos) return loc;
-        }
+        final Location loc = new Location(pos);
 
-        Location loc = new Location(pos);
+        final Location existing = this.locs.floor(loc);
+        if (loc.equals(existing)) return existing;
+
         this.locs.add(loc);
         return loc;
     }
@@ -26,8 +26,8 @@ public class Locations implements Jsonable {
         TreeMap<String, Integer> maximums = new TreeMap<String, Integer>();
         for (Location loc : this.locs) {
             if (!loc.isValid()) continue;
-            final String path = loc.getPath();
-            final int line = loc.getLine();
+            final String path = loc.path;
+            final int line = loc.line;
             final Integer iMax = maximums.get(path);
             final int max = iMax == null ? line : Integer.max((int)iMax, line);
             maximums.put(path, max);
@@ -47,9 +47,9 @@ public class Locations implements Jsonable {
     private void updateLocations() {
         for (Location loc : this.locs) {
             if (!loc.isValid()) continue;
-            final String path = loc.getPath();
+            final String path = loc.path;
             final int fileOffset = this.offsets.get(path);
-            final int line = loc.getLine();
+            final int line = loc.line;
             loc.offset = line + fileOffset - 1;
         }
     }

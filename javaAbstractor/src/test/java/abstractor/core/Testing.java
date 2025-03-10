@@ -15,10 +15,20 @@ import abstractor.core.log.Logger;
 
 public class Testing {
     private Testing() { }
+
+    static private String getTestMethodName() {
+        final StackTraceElement[] ste = Thread.currentThread().getStackTrace();
+        final int depth = 3;
+        return  ste[depth].getClassName() + "." + ste[depth].getMethodName();
+    }
     
     static public Project classFromSource(String ...lines) {
         final Project proj = new Project();
         final Logger log = new Logger(true);
+
+        log.log("");
+        log.log("Testing " + getTestMethodName() + "...");
+
         final Abstractor ab = new Abstractor(log, proj);
         ab.addClassFromSource(lines);
         assertEquals(0, log.errorCount(), "expected zero errors");
