@@ -27,7 +27,7 @@ import abstractor.core.log.Logger;
 
 public class Analyzer {
 
-    private static final boolean logElementTree = true;
+    private static final boolean logElementTree = false;
 
     private final Logger log;
     public final Location loc;
@@ -139,7 +139,7 @@ public class Analyzer {
         if (!pos.isValidPosition()) return;
 
         // TODO: read about pos.getSourceStart()
-        
+
         this.addPosition(pos.getLine(), pos.getColumn());
         this.addPosition(pos.getEndLine(), pos.getEndColumn());
     }

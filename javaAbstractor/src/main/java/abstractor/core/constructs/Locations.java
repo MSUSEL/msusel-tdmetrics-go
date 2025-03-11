@@ -13,11 +13,16 @@ public class Locations implements Jsonable {
     private final TreeMap<String, Integer> offsets = new TreeMap<String, Integer>();
     
     public Location create(SourcePosition pos) {
-        final Location loc = new Location(pos);
+        return this.create(new Location(pos));
+    }
+    
+    public Location create(String path, int line) {
+        return this.create(new Location(path, line));
+    }
 
+    private Location create(Location loc) {
         final Location existing = this.locs.floor(loc);
         if (loc.equals(existing)) return existing;
-
         this.locs.add(loc);
         return loc;
     }
