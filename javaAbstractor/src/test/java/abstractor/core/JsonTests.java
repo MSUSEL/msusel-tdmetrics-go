@@ -209,7 +209,7 @@ public class JsonTests {
             "[",
             "  1,",
             "  2,",
-            "  3",
+            "  3,",
             "]");
         checkJson(JsonFormat.Minimize(), simple, "[1,2,3]");
     }
@@ -246,7 +246,7 @@ public class JsonTests {
         checkJson(JsonFormat.Relaxed(), complex,
             "[",
             "  [ 1, 2, 3 ],",
-            "  [ 4, 5, 6 ]",
+            "  [ 4, 5, 6 ],",
             "]");
         checkJson(JsonFormat.Minimize(), complex, "[[1,2,3],[4,5,6]]");
     }
@@ -278,7 +278,7 @@ public class JsonTests {
             "{",
             "  one: 1,",
             "  three: 3,",
-            "  two: 2",
+            "  two: 2,",
             "}");
         checkJson(JsonFormat.Minimize(), simple, "{\"one\":1,\"three\":3,\"two\":2}");
     }
@@ -315,7 +315,7 @@ public class JsonTests {
         checkJson(JsonFormat.Relaxed(), complex,
             "{",
             "  one: [ 1, 2, 3 ],",
-            "  two: [ 4, 5, 6 ]",
+            "  two: [ 4, 5, 6 ],",
             "}");
         checkJson(JsonFormat.Minimize(), complex, "{\"one\":[1,2,3],\"two\":[4,5,6]}");
     }

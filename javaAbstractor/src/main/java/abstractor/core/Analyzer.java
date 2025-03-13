@@ -12,6 +12,7 @@ import spoon.reflect.code.CtBlock;
 import spoon.reflect.code.CtCase;
 import spoon.reflect.code.CtComment;
 import spoon.reflect.code.CtIf;
+import spoon.reflect.code.CtLocalVariable;
 import spoon.reflect.code.CtLoop;
 import spoon.reflect.code.CtStatement;
 import spoon.reflect.cu.SourcePosition;
@@ -19,6 +20,7 @@ import spoon.reflect.declaration.CtElement;
 import spoon.reflect.declaration.CtMethod;
 import spoon.reflect.declaration.CtParameter;
 import spoon.support.reflect.CtExtendedModifier;
+
 import abstractor.core.constructs.Location;
 import abstractor.core.constructs.Method;
 import abstractor.core.constructs.Metrics;
@@ -95,20 +97,21 @@ public class Analyzer {
 
     public void addMethod(CtMethod<?> m) {
         this.addPosition(m.getPosition());
-        
+
         for (CtExtendedModifier em : m.getExtendedModifiers())
             this.addPosition(em.getPosition());
-        
+
         for (CtParameter<?> p : m.getParameters())
             this.addPosition(p.getPosition());
 
         final CtBlock<?> block = m.getBody();
         this.addPosition(block.getPosition());
-        
+
         final List<CtStatement> stmts = block.getStatements();
         for (CtStatement st : stmts)
             this.addElement(st);
 
+        //this.log.log("accessors:");
         if (stmts.size() == 1) {
             final CtStatement onlySt = stmts.get(0);
             this.detectGetter(onlySt);
@@ -116,15 +119,30 @@ public class Analyzer {
         }
     }
 
+    static private String formatElem(CtElement elem) {
+        String head = elem.toStringDebug().replaceAll("\\s+", " ");
+        if (head.length() > 40) head = head.substring(0, 36) + "...";
+        final SourcePosition pos = elem.getPosition();
+        final String tail = pos.isValidPosition() ?
+            " @ "+pos.getLine() + ":" + pos.getColumn() : "";
+        final String type = elem.getClass().getSimpleName();
+        return "(" + type + ") " + head + tail;
+    }
+
     private void addElement(CtElement elem) {
         // Skip over any comments in the code.
         if (elem instanceof CtComment) return;
+
+        if (elem instanceof CtLocalVariable v) {
+            for (CtExtendedModifier em : v.getExtendedModifiers())
+                this.addPosition(em.getPosition());
+        }
 
         this.addPosition(elem.getPosition());
         this.complexity += this.addComplexity(elem);
         
         if (logElementTree) {
-            this.log.log("+- (" + elem.getClass().getSimpleName() + ") " + elem);
+            this.log.log("+- " + formatElem(elem));
             this.log.push("|  ");
         }
 
@@ -138,7 +156,8 @@ public class Analyzer {
     private void addPosition(SourcePosition pos) {
         if (!pos.isValidPosition()) return;
 
-        // TODO: read about pos.getSourceStart()
+        //this.log.log("  adding <"+pos.getLine()+", "+pos.getColumn()+
+        //    "> <"+pos.getEndLine()+", "+pos.getEndColumn()+">");
 
         this.addPosition(pos.getLine(), pos.getColumn());
         this.addPosition(pos.getEndLine(), pos.getEndColumn());
@@ -166,34 +185,26 @@ public class Analyzer {
      * Gets the McCabe cyclomatic complexity for this element.
      */
     private int addComplexity(CtElement elem) {
-        // Add one point for each conditional construct, such as an "if" condition
-        if (elem instanceof CtIf ifElem) {
-            final CtStatement elseElem = ifElem.getElseStatement();
-            if (elseElem == null) return 1;
+        // Add one point for each conditional construct, such as an "if" condition.
+        // The "else" does not add any additional complication.
+        if (elem instanceof CtIf) return 1;
 
-            // Check for "else if(..) { }" and skip adding complexity since the "if" will add it later.
-            if (elseElem instanceof CtIf) return 1;
-
-            // Check for "else { if(..) { }}" and skip adding complexity since the "if" will add it later.
-            if (elseElem instanceof CtBlock elseBlock) {
-                final List<CtStatement> elseChildren = elseBlock.getStatements();
-                if (elseChildren.size() == 1 && elseChildren.get(0) instanceof CtIf) return 1;
-            }
-
-            // The "else" part isn't just an "if" so add complexity for the "else".
-            return 2;
-        }
-
-        // Add one point for each iterative structure (CtDo, CtForEach, CtFor, CtWhile)
+        // Add one point for each iterative structure (CtDo, CtForEach, CtFor, CtWhile).
         if (elem instanceof CtLoop) return 1;
 
-        // Add one point for each case or default block in a switch statement
-        if (elem instanceof CtCase) return 1;
+        // Add one point for each case block in a switch statement.
+        // The "default" does not add any additional complication.
+        if (elem instanceof CtCase caseElem) {
+            if (caseElem.getCaseExpressions().size() > 0) return 1;
+            return 0;
+        }
         
         // Add one point for any additional boolean condition, such as the use of && or ||
-        if (elem instanceof CtBinaryOperator opElem &&
-            (opElem.getKind() == BinaryOperatorKind.AND || opElem.getKind() == BinaryOperatorKind.OR))
-            return 1;
+        if (elem instanceof CtBinaryOperator opElem) {
+            if (opElem.getKind() == BinaryOperatorKind.AND) return 1;
+            if (opElem.getKind() == BinaryOperatorKind.OR) return 1;
+            return 0;
+        }
 
         return 0;
     }

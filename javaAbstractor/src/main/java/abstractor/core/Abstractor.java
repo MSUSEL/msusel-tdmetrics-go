@@ -7,7 +7,6 @@ import java.util.List;
 import spoon.Launcher;
 import spoon.MavenLauncher;
 import spoon.reflect.*;
-import spoon.reflect.code.CtBlock;
 import spoon.reflect.cu.SourcePosition;
 import spoon.reflect.declaration.*;
 import spoon.reflect.reference.*;

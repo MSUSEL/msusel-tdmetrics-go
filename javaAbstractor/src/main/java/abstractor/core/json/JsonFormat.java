@@ -34,6 +34,11 @@ public class JsonFormat {
             switch (c) {
                 case '\\': sb.append("\\\\"); break;
                 case '"':  sb.append("\\\""); break;
+                case '\b': sb.append("\\b");  break;
+                case '\f': sb.append("\\f");  break;
+                case '\n': sb.append("\\n");  break;
+                case '\r': sb.append("\\r");  break;
+                case '\t': sb.append("\\t");  break;
                 default:   sb.append(c);      break;
             }
         }
@@ -106,7 +111,11 @@ public class JsonFormat {
             
             this.format(sb, elem, indent2, depth + 1);
         }
-        if (!minimize) sb.append(simple ? " " : "\n" + indent);
+        if (!this.minimize) {
+            if (simple) sb.append(" ");
+            else if (this.relaxed) sb.append(",\n" + indent);
+            else sb.append("\n" + indent);
+        }
         sb.append("]");
     }
     
@@ -136,7 +145,11 @@ public class JsonFormat {
             if (!this.minimize) sb.append(" ");
             this.format(sb, j.get(key), indent2, depth + 1);         
         }
-        if (!minimize) sb.append(simple ? " " : "\n" + indent);
+        if (!this.minimize) {
+            if (simple) sb.append(" ");
+            else if (this.relaxed) sb.append(",\n" + indent);
+            else sb.append("\n" + indent);
+        }
         sb.append("}");
     }
 }
