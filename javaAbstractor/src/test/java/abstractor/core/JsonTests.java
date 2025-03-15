@@ -3,10 +3,11 @@ package abstractor.core;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static abstractor.core.Testing.*;
+import static org.junit.jupiter.api.Assertions.fail;
 
 import org.junit.jupiter.api.Test;
 
+import abstractor.core.diff.Diff;
 import abstractor.core.json.*;
 
 public class JsonTests {
@@ -318,6 +319,20 @@ public class JsonTests {
             "  two: [ 4, 5, 6 ],",
             "}");
         checkJson(JsonFormat.Minimize(), complex, "{\"one\":[1,2,3],\"two\":[4,5,6]}");
+    }
+
+    static private void checkJson(JsonFormat fmt, JsonNode j, String ...lines) {
+        final String result = fmt.format(j);
+        final String exp = String.join("\n", lines);
+        assertLines(exp, result);
+    }
+
+    static private void assertLines(String exp, String result) {
+        if (!exp.equals(result)) {
+            final String diff = String.join("\n\t", new Diff().PlusMinusByLine(exp, result));
+            System.out.println("Error: unexpected lines\n\t" + diff);
+            fail("unexpected lines (see diff above)");
+        }
     }
 
     @Test

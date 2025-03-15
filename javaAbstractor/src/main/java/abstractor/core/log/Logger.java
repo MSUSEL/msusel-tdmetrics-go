@@ -12,7 +12,7 @@ public class Logger {
     
     public Logger(boolean verbose) { this(verbose, null, null); }
 
-    public Logger( boolean verbose, PrintStream out, PrintStream err) {
+    public Logger(boolean verbose, PrintStream out, PrintStream err) {
         this.verbose = verbose;
         this.out = out != null ? out : System.out;
         this.err = err != null ? err : System.err;

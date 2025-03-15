@@ -1,21 +1,16 @@
 package abstractor.core;
 
-import static abstractor.core.Testing.*;
-
 import org.junit.jupiter.api.Test;
-
-import abstractor.core.constructs.Project;
 
 public class MetricsTests {
     
     @Test
     public void Empty() {
-        final Project proj = classFromSource(
+        final Tester t = Tester.classFromSource(
             "public class Foo {",
             "  public void bar() { }",
             "}");
-
-        checkConstruct(proj, "metrics1",
+        t.checkConstruct("metrics1",
             "{",
             "  codeCount:  1,",
             "  complexity: 1,",
@@ -26,14 +21,13 @@ public class MetricsTests {
 
     @Test
     public void Simple() {
-        final Project proj = classFromSource(
+        final Tester t = Tester.classFromSource(
             "public class Foo {",
             "  public int bar() {",
             "    return -1;",
             "  }",
             "}");
-
-        checkConstruct(proj, "metrics1",
+        t.checkConstruct("metrics1",
             "{",
             "  codeCount:  3,",
             "  complexity: 1,",
@@ -44,14 +38,13 @@ public class MetricsTests {
     
     @Test
     public void SimpleWithExtraIndent() {
-        final Project proj = classFromSource(
+        final Tester t = Tester.classFromSource(
             "  public class Foo {",
             "      public int bar() {",
             "             return -1;",
             "      }",
             "  }");
-
-        checkConstruct(proj, "metrics1",
+        t.checkConstruct("metrics1",
             "{",
             "  codeCount:  3,",
             "  complexity: 1,",
@@ -62,7 +55,7 @@ public class MetricsTests {
 
     @Test
     public void SimpleParams() {
-        final Project proj = classFromSource(
+        final Tester t = Tester.classFromSource(
             "public class Foo {",
             "   public int bar(int a,",
             "                  int b,",
@@ -70,8 +63,7 @@ public class MetricsTests {
             "       return a + b + c;",
             "   }",
             "}");
-
-        checkConstruct(proj, "metrics1",
+        t.checkConstruct("metrics1",
             "{",
             "  codeCount:  5,",
             "  complexity: 1,",
@@ -82,15 +74,14 @@ public class MetricsTests {
 
     @Test
     public void SimpleWithReturn() {
-        final Project proj = classFromSource(
+        final Tester t = Tester.classFromSource(
             "public class Foo {",
             "   public int bar(int a) {",
             "      final int x = 4 * a + 1;",
             "      return x;",
             "   }",
             "}");
-
-        checkConstruct(proj, "metrics1",
+        t.checkConstruct("metrics1",
             "{",
             "  codeCount:  4,",
             "  complexity: 1,",
@@ -101,7 +92,7 @@ public class MetricsTests {
 
     @Test
     public void SimpleWithSpace() {
-        final Project proj = classFromSource(
+        final Tester t = Tester.classFromSource(
             "public class Foo {",
             "  public int bar(int a) {",
             "    // Bacon is tasty",
@@ -112,8 +103,7 @@ public class MetricsTests {
             "    ",
             "  }",
             "}");
-
-        checkConstruct(proj, "metrics1",
+        t.checkConstruct("metrics1",
             "{",
             "  codeCount:  3,",
             "  complexity: 1,",
@@ -124,7 +114,7 @@ public class MetricsTests {
 
     @Test
     public void SimpleIf() {
-        final Project proj = classFromSource(
+        final Tester t = Tester.classFromSource(
             "public class Foo {",
             "  public void bar() {",
             "    int x = 9;",
@@ -134,8 +124,7 @@ public class MetricsTests {
             "    System.out.println(x);",
             "  }",
             "}");
-
-        checkConstruct(proj, "metrics1",
+        t.checkConstruct("metrics1",
             "{",
             "  codeCount:  7,",
             "  complexity: 2,",
@@ -146,7 +135,7 @@ public class MetricsTests {
 
     @Test
     public void SimpleIfElse() {
-        final Project proj = classFromSource(
+        final Tester t = Tester.classFromSource(
             "public class Foo {",
             "  public void bar() {",
             "    int x = 9;",
@@ -159,7 +148,7 @@ public class MetricsTests {
             "    System.out.println(x);",
             "  }",
             "}");
-        checkConstruct(proj, "metrics1",
+        t.checkConstruct("metrics1",
             "{",
             "  codeCount:  10,",
             "  complexity:  2,",
@@ -170,7 +159,7 @@ public class MetricsTests {
 
     @Test
     public void SimpleIfElseIf() {
-        final Project proj = classFromSource(
+        final Tester t = Tester.classFromSource(
             "public class Foo {",
             "  public void bar() {",
             "    int x = 9;",
@@ -182,7 +171,7 @@ public class MetricsTests {
             "    System.out.println(x)",
             "  }",
             "}");
-        checkConstruct(proj, "metrics1",
+        t.checkConstruct("metrics1",
             "{",
             "  codeCount:  9,",
             "  complexity: 3,",
@@ -193,7 +182,7 @@ public class MetricsTests {
 
     @Test
     public void SimpleIfElseIfElse() {
-        final Project proj = classFromSource(
+        final Tester t = Tester.classFromSource(
             "public class Foo {",
             "  public void bar() {",
             "    int x = 9;",
@@ -207,7 +196,7 @@ public class MetricsTests {
             "    System.out.println(x);",
             "  }",
             "}");
-        checkConstruct(proj, "metrics1",
+        t.checkConstruct("metrics1",
             "{",
             "  codeCount:  11,",
             "  complexity:  3,",
@@ -218,7 +207,7 @@ public class MetricsTests {
 
     @Test
     public void SimpleSwitch() {
-        final Project proj = classFromSource(
+        final Tester t = Tester.classFromSource(
             "public class Foo {",
             "  public void bar() {",
             "    int x = 9;",
@@ -230,15 +219,144 @@ public class MetricsTests {
             "    default:",
             "      x = 2;",
             "    }",
-            "    System.out.println(x)",
+            "    System.out.println(x);",
             "  }",
             "}");
-        checkConstruct(proj, "metrics1",
+        t.checkConstruct("metrics1",
             "{",
             "  codeCount:  12,",
             "  complexity:  3,",
             "  indents:    13,",
             "  lineCount:  12",
+            "}");
+    }
+
+    @Test
+    public void SimpleForLoop() {
+        final Tester t = Tester.classFromSource(
+            "public class Foo {",
+            "  public void bar() {",
+            "    for (int i = 0; i < 10; i++) {",
+            "      System.out.println(i);",
+            "    }",
+            "  }",
+            "}");
+        t.checkConstruct("metrics1",
+            "{",
+            "  codeCount:  5,",
+            "  complexity: 2,",
+            "  indents:    4,",
+            "  lineCount:  5",
+            "}");
+    }
+
+    @Test
+    public void SimpleLogicalOr() {
+        final Tester t = Tester.classFromSource(
+            "public class Foo {",
+            "  public int bar(int x) {",
+            "    if (x < 0 || x > 10) {",
+            "      x = 4;",
+            "    }",
+            "    return x;",
+            "  }",
+            "}");
+        t.checkConstruct("metrics1",
+            "{",
+            "  codeCount:  6,",
+            "  complexity: 3,",
+            "  indents:    5,",
+            "  lineCount:  6",
+            "}");
+    }
+
+    @Test
+    public void OneLineLogicalOr() {
+        final Tester t = Tester.classFromSource(
+            "public class Foo {",
+            "  public boolean bar(int x) {",
+            "    return x < 0 || x > 10;",
+            "  }",
+            "}");
+        t.checkConstruct("metrics1",
+            "{",
+            "  codeCount:  3,",
+            "  complexity: 2,",
+            "  indents:    1,",
+            "  lineCount:  3",
+            "}");
+    }
+
+    @Test
+    public void SimpleLogicalAnd() {
+        final Tester t = Tester.classFromSource(
+            "public class Foo {",
+            "  public boolean bar(int x) {",
+            "    if (x >= 0 && x < 10) {",
+            "      x = 4;",
+            "    }",
+            "    return x;",
+            "  }",
+            "}");
+        t.checkConstruct("metrics1",
+            "{",
+            "  codeCount:  6,",
+            "  complexity: 3,",
+            "  indents:    5,",
+            "  lineCount:  6",
+            "}");
+    }
+
+    @Test
+    public void OneLineLogicalAnd() {
+        final Tester t = Tester.classFromSource(
+            "public class Foo {",
+            "  public boolean bar(int x) {",
+            "    return x >= 0 && x < 10;",
+            "  }",
+            "}");
+        t.checkConstruct("metrics1",
+            "{",
+            "  codeCount:  3,",
+            "  complexity: 2,",
+            "  indents:    1,",
+            "  lineCount:  3",
+            "}");
+    }
+
+    @Test
+    public void OneLineBinaryOp() {
+        final Tester t = Tester.classFromSource(
+            "public class Foo {",
+            "  public boolean bar(int x) {",
+            "    return x >= 0 & x < 10;",
+            "  }",
+            "}");
+        t.checkConstruct("metrics1",
+            "{",
+            "  codeCount:  3,",
+            "  complexity: 1,",
+            "  indents:    1,",
+            "  lineCount:  3",
+            "}");
+    }
+
+    @Test
+    public void GetterWithSelect() {
+        final Tester t = Tester.classFromSource(
+            "public class Foo {",
+            "  private int x;",
+            "  public int bar() {",
+            "    return this.x;",
+            "  }",
+            "}");
+        t.checkConstruct("metrics1",
+            "{",
+            "  codeCount:  3,",
+            "  complexity: 1,",
+            "  indents:    1,",
+            "  lineCount:  3,",
+            "  getter:     true",
             "}");
     }
 }

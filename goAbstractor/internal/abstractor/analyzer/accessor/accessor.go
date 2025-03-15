@@ -107,6 +107,10 @@ func isObjectUsed(obj types.Object, info *types.Info, node ast.Node) bool {
 //
 // Check that there is only one statement that is a return statement,
 // one result, no parameters, and is a simple fetch for the result.
+//
+// The function does not need a receiver and may return a package level
+// variable or constant, since this would work like a static getter
+// on a static class.
 func isGetter(info *types.Info, funcType *ast.FuncType, funcBody *ast.BlockStmt) bool {
 	var ret *ast.ReturnStmt
 	return len(funcType.Params.List) == 0 &&

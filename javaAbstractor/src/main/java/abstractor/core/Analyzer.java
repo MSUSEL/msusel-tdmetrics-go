@@ -11,14 +11,19 @@ import spoon.reflect.code.CtBinaryOperator;
 import spoon.reflect.code.CtBlock;
 import spoon.reflect.code.CtCase;
 import spoon.reflect.code.CtComment;
+import spoon.reflect.code.CtConstructorCall;
 import spoon.reflect.code.CtIf;
+import spoon.reflect.code.CtInvocation;
 import spoon.reflect.code.CtLocalVariable;
 import spoon.reflect.code.CtLoop;
+import spoon.reflect.code.CtReturn;
 import spoon.reflect.code.CtStatement;
+import spoon.reflect.code.CtUnaryOperator;
 import spoon.reflect.cu.SourcePosition;
 import spoon.reflect.declaration.CtElement;
 import spoon.reflect.declaration.CtMethod;
 import spoon.reflect.declaration.CtParameter;
+import spoon.reflect.reference.CtTypeReference;
 import spoon.support.reflect.CtExtendedModifier;
 
 import abstractor.core.constructs.Location;
@@ -111,11 +116,10 @@ public class Analyzer {
         for (CtStatement st : stmts)
             this.addElement(st);
 
-        //this.log.log("accessors:");
         if (stmts.size() == 1) {
             final CtStatement onlySt = stmts.get(0);
-            this.detectGetter(onlySt);
-            this.detectSetter(onlySt);
+            if (detectGetter(m, onlySt)) this.getter = true;
+            else if (detectSetter(m, onlySt)) this.setter = true;
         }
     }
 
@@ -139,7 +143,7 @@ public class Analyzer {
         }
 
         this.addPosition(elem.getPosition());
-        this.complexity += this.addComplexity(elem);
+        this.complexity += addComplexity(elem);
         
         if (logElementTree) {
             this.log.log("+- " + formatElem(elem));
@@ -173,18 +177,42 @@ public class Analyzer {
         this.maxLine = Integer.max(line, this.maxLine);
     }
 
-    private void detectGetter(CtStatement st) {
-        // TODO: Implement
+    private boolean isVoid(CtTypeReference<?> tr) {
+        return tr.isPrimitive() && tr.getSimpleName().equals("void");
+    }
+
+    private boolean isSimpleFetch(CtElement elem) {
+        if (elem instanceof CtConstructorCall) return false;
+        if (elem instanceof CtInvocation) return false;
+        if (elem instanceof CtBinaryOperator) return false;
+        if (elem instanceof CtUnaryOperator) return false;
+
+        this.log.log(">>> isSimpleFetch: "+ formatElem(elem)); // TODO(grantnelson-wf): REMOVE
+
+        for (CtElement child : elem.getDirectChildren()) {
+            if (!isSimpleFetch(child)) return false;
+        }
+        return true;
+    }
+
+    private boolean detectGetter(CtMethod<?> m, CtStatement st) {
+        return m.getParameters().size() == 0 &&
+            !isVoid(m.getType()) &&
+            st instanceof CtReturn ret &&
+            isSimpleFetch(ret);
     }
     
-    private void detectSetter(CtStatement st) {
+    private boolean detectSetter(CtMethod<?> m, CtStatement st) {
         // TODO: Implement
+        return false;
     }
 
     /**
      * Gets the McCabe cyclomatic complexity for this element.
+     * @param elem The element to get the complexity metric for.
+     * @return The complexity metric for the given element.
      */
-    private int addComplexity(CtElement elem) {
+    static private int addComplexity(CtElement elem) {
         // Add one point for each conditional construct, such as an "if" condition.
         // The "else" does not add any additional complication.
         if (elem instanceof CtIf) return 1;

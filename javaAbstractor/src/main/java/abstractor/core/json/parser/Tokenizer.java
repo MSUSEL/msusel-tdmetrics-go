@@ -120,14 +120,14 @@ public class Tokenizer implements Iterator<Token> {
         return new Token(type, buf.toString(), start.loc());
     }
 
-    private int readHexDigit() throws Exception {
+    private int readHexDigit() throws JsonException {
         if (this.src.hasNext()) {
             final Char c = this.src.next();
             if (this.isDigit(c)) return (int)(c.value() - '0');
             if (c.value() >= 'a' && c.value() <= 'f') return (int)(c.value() - 'a') + 10;
             if (c.value() >= 'A' && c.value() <= 'F') return (int)(c.value() - 'A') + 10;
         }
-        throw new Exception("expected a hex value.");
+        throw new JsonException("expected a hex value.");
     }
 
     private Token readQuote(Char start) {

@@ -520,6 +520,147 @@ func Test_DeferWithComplexity(t *testing.T) {
 		`}`)
 }
 
+func Test_SimpleForLoop(t *testing.T) {
+	tt := parseExpr(t,
+		`func() {`,
+		`	for i := 0; i < 10; i++ {`,
+		`		println(i)`,
+		`	}`,
+		`}`)
+	tt.checkProj(
+		`{`,
+		`  language: go,`,
+		`  metrics: [`,
+		`    {`,
+		`      codeCount:  5,`,
+		`      complexity: 2,`,
+		`      indents:    4,`,
+		`      lineCount:  5,`,
+		`      sideEffect: true`,
+		`    }`,
+		`  ],`,
+		`  packages: [`,
+		`    { name: test, path: test }`,
+		`  ]`,
+		`}`)
+}
+
+func Test_SimpleLogicalOr(t *testing.T) {
+	tt := parseExpr(t,
+		`func(x int) int {`,
+		`	if x < 0 || x > 10 {`,
+		`		x = 4`,
+		`	}`,
+		`	return x`,
+		`}`)
+	tt.checkProj(
+		`{`,
+		`  language: go,`,
+		`  metrics: [`,
+		`    {`,
+		`      codeCount:  6,`,
+		`      complexity: 3,`,
+		`      indents:    5,`,
+		`      lineCount:  6`,
+		`    }`,
+		`  ],`,
+		`  packages: [`,
+		`    { name: test, path: test }`,
+		`  ]`,
+		`}`)
+}
+
+func Test_OneLineLogicalOr(t *testing.T) {
+	tt := parseExpr(t,
+		`func(x int) bool {`,
+		`	return x < 0 || x > 10`,
+		`}`)
+	tt.checkProj(
+		`{`,
+		`  language: go,`,
+		`  metrics: [`,
+		`    {`,
+		`      codeCount:  3,`,
+		`      complexity: 2,`,
+		`      indents:    1,`,
+		`      lineCount:  3`,
+		`    }`,
+		`  ],`,
+		`  packages: [`,
+		`    { name: test, path: test }`,
+		`  ]`,
+		`}`)
+}
+
+func Test_SimpleLogicalAnd(t *testing.T) {
+	tt := parseExpr(t,
+		`func(x int) int {`,
+		`	if x >= 0 && x < 10 {`,
+		`		x = 4`,
+		`	}`,
+		`	return x`,
+		`}`)
+	tt.checkProj(
+		`{`,
+		`  language: go,`,
+		`  metrics: [`,
+		`    {`,
+		`      codeCount:  6,`,
+		`      complexity: 3,`,
+		`      indents:    5,`,
+		`      lineCount:  6`,
+		`    }`,
+		`  ],`,
+		`  packages: [`,
+		`    { name: test, path: test }`,
+		`  ]`,
+		`}`)
+}
+
+func Test_OneLineLogicalAnd(t *testing.T) {
+	tt := parseExpr(t,
+		`func(x int) bool {`,
+		`	return x >= 0 && x < 10`,
+		`}`)
+	tt.checkProj(
+		`{`,
+		`  language: go,`,
+		`  metrics: [`,
+		`    {`,
+		`      codeCount:  3,`,
+		`      complexity: 2,`,
+		`      indents:    1,`,
+		`      lineCount:  3`,
+		`    }`,
+		`  ],`,
+		`  packages: [`,
+		`    { name: test, path: test }`,
+		`  ]`,
+		`}`)
+}
+
+func Test_OneLineBinaryOp(t *testing.T) {
+	tt := parseExpr(t,
+		`func(x int) int {`,
+		`	return x + x`,
+		`}`)
+	tt.checkProj(
+		`{`,
+		`  language: go,`,
+		`  metrics: [`,
+		`    {`,
+		`      codeCount:  3,`,
+		`      complexity: 1,`,
+		`      indents:    1,`,
+		`      lineCount:  3`,
+		`    }`,
+		`  ],`,
+		`  packages: [`,
+		`    { name: test, path: test }`,
+		`  ]`,
+		`}`)
+}
+
 func Test_ForRangeWithDefer(t *testing.T) {
 	tt := parseExpr(t,
 		`func() {`,
