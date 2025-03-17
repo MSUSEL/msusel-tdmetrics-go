@@ -228,8 +228,15 @@ public class Abstractor {
 
     private TypeDesc addTypeDesc(CtTypeReference<?> tr) {
         if (tr.isPrimitive()) return this.addBasic(tr);
-        //if (tr.isArray())     return this.addArray(tr); // TODO: Add once we have interfaceDesc.
+        if (tr.isArray())     return this.addArray(tr);
+        if (tr.isClass())     return this.getNamedTypeDesc(tr);
+        if (tr.isInterface()) return this.getNamedTypeDesc(tr);
 
+        // TODO: Finish implementing.
+        return this.unknownTypeDesc(tr);
+    }
+
+    private TypeDesc unknownTypeDesc(CtTypeReference<?> tr) {
         this.log.error("Unhandled (" + tr.getClass().getName() + "): "+tr.prettyprint());
         this.log.push();
         this.log.log("isAnnotationType:    " + tr.isAnnotationType());
@@ -250,6 +257,23 @@ public class Abstractor {
         return null;
     }
 
+    private TypeDescRef getNamedTypeDesc(CtTypeReference<?> tr) {
+        return this.proj.typeDescRefs.create(this.log, tr,
+            "type desc ref "+ tr.getSimpleName(),
+            () -> {
+                final String name = tr.getSimpleName();
+                final String pkgPath = tr.getPath().toString();
+                final List<TypeDesc> tps = this.addTypeArguments(tr.getActualTypeArguments());
+                return new TypeDescRef(tr, pkgPath, name, tps);
+            });
+    }
+
+    private TypeDesc addArray(CtTypeReference<?> tr) {
+        // TODO: IMPLEMENT
+        this.log.error("Unhandled array (" + tr.getClass().getName() + "): "+tr.prettyprint());
+        return this.unknownTypeDesc(tr);
+    }
+
     private Basic addBasic(CtTypeReference<?> tr) {
         return this.proj.basics.create(this.log, tr,
             "basic " + tr.getSimpleName(),
@@ -259,6 +283,18 @@ public class Abstractor {
                     this.log.error("A void was added as a basic.");
                 return new Basic(name);
             });
+    }
+
+    private List<TypeDesc> addTypeArguments(List<CtTypeReference<?>> trs) {
+        List<TypeDesc> result = new ArrayList<TypeDesc>(trs.size());
+        for (CtTypeReference<?> tr : trs) result.add(this.addTypeDesc(tr));
+        return result;
+    }
+
+    private List<TypeParam> addTypeParams(List<CtTypeParameter> tps) {
+        List<TypeParam> result = new ArrayList<TypeParam>(tps.size());
+        for (CtTypeParameter tp : tps) result.add(this.addTypeParam(tp));
+        return result;
     }
 
     private TypeParam addTypeParam(CtTypeParameter tp) {
@@ -274,12 +310,6 @@ public class Abstractor {
                 // TODO: Finish
                 return new TypeParam(name, type);
             });
-    }
-
-    private List<TypeParam> addTypeParams(List<CtTypeParameter> tps) {
-        List<TypeParam> result = new ArrayList<TypeParam>();
-        for (CtTypeParameter tp : tps) result.add(this.addTypeParam(tp));
-        return result;
     }
 
     private Metrics addMetrics(CtMethod<?> m) {

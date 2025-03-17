@@ -17,14 +17,13 @@ import abstractor.core.log.Logger;
 public class Tester {
     
     static public Tester classFromSource(String ...lines) {
-        Tester t = new Tester();
+        final Tester t = new Tester(4);
         t.addClassFromSource(lines);
         return t;
     }
 
-    static private String getTestMethodName() {
+    static private String getTestMethodName(int depth) {
         final StackTraceElement[] ste = Thread.currentThread().getStackTrace();
-        final int depth = 3;
         return  ste[depth].getClassName() + "." + ste[depth].getMethodName();
     }
 
@@ -33,19 +32,21 @@ public class Tester {
     private final Project proj;
     private final Abstractor ab;
 
-    public Tester() {
+    public Tester() { this(3); }
+
+    public Tester(int depth) {
         this.buffer = new ByteArrayOutputStream();
         PrintStream ps = new PrintStream(buffer);
         this.log = new Logger(true, ps, ps);
 
         this.log.log("");
-        this.log.log("Testing " + getTestMethodName() + "...");
+        this.log.log("Testing " + getTestMethodName(depth) + "...");
 
         this.proj = new Project();
         this.ab = new Abstractor(this.log, this.proj);
     }
 
-    private void dumpBuffer() {
+    public void printLogs() {
         System.out.println(this.buffer.toString());
         this.buffer.reset();
     }
@@ -53,7 +54,7 @@ public class Tester {
     public void addClassFromSource(String ...lines) {
         this.ab.addClassFromSource(lines);
         if (this.log.errorCount() > 0) {
-            this.dumpBuffer();
+            this.printLogs();
             fail("expected zero errors");
         }
     }
@@ -70,9 +71,9 @@ public class Tester {
     }
 
     public void checkConstruct(String key, String ...lines) {
-        final Construct con = this.proj.getConstruct(key);
+        final Construct con = this.proj.getConstructWithKey(key);
         if (con == null) {
-            this.dumpBuffer();
+            this.printLogs();
             fail("unable to find "+key+" in given project");
             return;
         }
@@ -83,7 +84,7 @@ public class Tester {
         try {
             return JsonFormat.Relaxed().format(JsonNode.parse(lines));
         } catch(Exception ex) {
-            this.dumpBuffer();
+            this.printLogs();
             fail(ex);
             return "This should be unreachable.";
         }
@@ -91,7 +92,7 @@ public class Tester {
 
     public void assertLines(String exp, String result) {
         if (!exp.equals(result)) {
-            this.dumpBuffer();
+            this.printLogs();
             final String diff = String.join("\n\t", new Diff().PlusMinusByLine(exp, result));
             System.out.println("Error: unexpected lines\n\t" + diff);
             fail("unexpected lines (see diff above)");

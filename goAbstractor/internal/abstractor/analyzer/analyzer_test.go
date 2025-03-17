@@ -1001,7 +1001,7 @@ func Test_SetterWithParentheses(t *testing.T) {
 		`}`)
 }
 
-func Test_NotReverseSetter(t *testing.T) {
+func Test_SetterNotReversed(t *testing.T) {
 	tt := parseDecl(t, `Foo`,
 		`var bar *int`,
 		`func Foo(x *int) {`,

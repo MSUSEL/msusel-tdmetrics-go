@@ -36,6 +36,11 @@ public class Factory<T extends Construct> implements Jsonable {
         return null;
     }
 
+    public void clear() {
+        this.set.clear();
+        this.byElem.clear();
+    }
+
     public Iterator<T> iterator() { return this.set.iterator(); }
 
     public List<T> toList() {

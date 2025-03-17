@@ -1,24 +1,27 @@
 package abstractor.core.constructs;
 
 public enum ConstructKind {
-    ABSTRACT       ("abstract"),
-    ARGUMENT       ("argument"),
-    BASIC          ("basic"),
-    FIELD          ("field"),
-    INTERFACE_DECL ("interfaceDecl"),
-    INTERFACE_DESC ("interfaceDesc"),
-    INTERFACE_INST ("interfaceInst"),
-    METHOD_DECL    ("method"),
-    METHOD_INST    ("methodInst"),
-    METRICS        ("metrics"),
-    OBJECT_DECL    ("object"),
-    OBJECT_INST    ("objectInst"),
-    PACKAGE        ("package"),
-    SELECTION      ("selection"),
-    SIGNATURE      ("signature"),
-    STRUCT_DESC    ("structDesc"),
-    TYPE_PARAM     ("typeParam"),
-    VALUE          ("value");
+    ABSTRACT        ("abstract"),
+    ARGUMENT        ("argument"),
+    BASIC           ("basic"),
+    DECLARATION_REF ("declarationRef"),
+    FIELD           ("field"),
+    INTERFACE_DECL  ("interfaceDecl"),
+    INTERFACE_DESC  ("interfaceDesc"),
+    INTERFACE_INST  ("interfaceInst"),
+    METHOD_DECL     ("method"),
+    METHOD_INST     ("methodInst"),
+    METRICS         ("metrics"),
+    OBJECT_DECL     ("object"),
+    OBJECT_INST     ("objectInst"),
+    PACKAGE         ("package"),
+    SELECTION       ("selection"),
+    SIGNATURE       ("signature"),
+    STRUCT_DESC     ("structDesc"),
+    TYPE_DESC_REF   ("typeDescRef"),
+    TYPE_PARAM      ("typeParam"),
+    TYPE_PARAM_REF  ("typeParamRef"),
+    VALUE           ("value");
 
 
     static public ConstructKind fromName(String name) {

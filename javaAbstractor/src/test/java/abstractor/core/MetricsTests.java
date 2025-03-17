@@ -359,4 +359,117 @@ public class MetricsTests {
             "  getter:     true",
             "}");
     }
+    
+    @Test
+    public void GetterWithParenthesesAndCast() {
+        final Tester t = Tester.classFromSource(
+            "public class Foo {",
+            "  private double x;",
+            "  public int bar() {",
+            "    return ((int)((this.x)));",
+            "  }",
+            "}");
+        t.checkConstruct("metrics1",
+            "{",
+            "  codeCount:  3,",
+            "  complexity: 1,",
+            "  indents:    1,",
+            "  lineCount:  3,",
+            "  getter:     true",
+            "}");
+    }
+
+    @Test
+    public void SetterWithSelect() {
+        final Tester t = Tester.classFromSource(
+            "public class Foo {",
+            "  private int x;",
+            "  public void bar(int x) {",
+            "    this.x = x;",
+            "  }",
+            "}");
+        t.checkConstruct("metrics1",
+            "{",
+            "  codeCount:  3,",
+            "  complexity: 1,",
+            "  indents:    1,",
+            "  lineCount:  3,",
+            "  setter:     true",
+            "}");
+    }
+
+    @Test
+    public void SetterWithParenthesesAndCast() {
+        final Tester t = Tester.classFromSource(
+            "public class Foo {",
+            "  private int x;",
+            "  public void bar(double x) {",
+            "    this.x = ((int)((x)));",
+            "  }",
+            "}");
+        t.checkConstruct("metrics1",
+            "{",
+            "  codeCount:  3,",
+            "  complexity: 1,",
+            "  indents:    1,",
+            "  lineCount:  3,",
+            "  setter:     true",
+            "}");
+    }
+
+    @Test
+    public void SetterWithFieldValue() {
+        final Tester t = Tester.classFromSource(
+            "public class Foo {",
+            "  private int x;",
+            "  public void bar(Foo other) {",
+            "    this.x = other.x;",
+            "  }",
+            "}");
+        t.checkConstruct("metrics1",
+            "{",
+            "  codeCount:  3,",
+            "  complexity: 1,",
+            "  indents:    1,",
+            "  lineCount:  3,",
+            "  setter:     true",
+            "}");
+    }
+
+    @Test
+    public void SetterNotReversed() {
+        final Tester t = Tester.classFromSource(
+            "public class Foo {",
+            "  private int x;",
+            "  public void bar(Foo other) {",
+            "    other.x = this.x;",
+            "  }",
+            "}");
+        t.checkConstruct("metrics1",
+            "{",
+            "  codeCount:  3,",
+            "  complexity: 1,",
+            "  indents:    1,",
+            "  lineCount:  3,",
+            "}");
+    }
+
+    @Test
+    public void LiteralSetter() {
+        final Tester t = Tester.classFromSource(
+            "public class Foo {",
+            "  private boolean visible;",
+            "  public void hide() {",
+            "    this.visible = false;",
+            "  }",
+            "}");
+        t.checkConstruct("metrics1",
+            "{",
+            "  codeCount:  3,",
+            "  complexity: 1,",
+            "  indents:    1,",
+            "  lineCount:  3,",
+            "  setter:     true",
+            "}");
+    }
 }

@@ -29,5 +29,5 @@ public class TypeParam extends ConstructImp implements TypeDesc {
             Cmp.defer(this.name, () -> ((TypeParam)c).name),
             Cmp.defer(this.type, () -> ((TypeParam)c).type)
         );
-    }   
+    }
 }

@@ -7,6 +7,7 @@ import java.util.TreeSet;
 import java.util.TreeMap;
 
 import spoon.reflect.code.BinaryOperatorKind;
+import spoon.reflect.code.CtAssignment;
 import spoon.reflect.code.CtBinaryOperator;
 import spoon.reflect.code.CtBlock;
 import spoon.reflect.code.CtCase;
@@ -23,6 +24,7 @@ import spoon.reflect.cu.SourcePosition;
 import spoon.reflect.declaration.CtElement;
 import spoon.reflect.declaration.CtMethod;
 import spoon.reflect.declaration.CtParameter;
+import spoon.reflect.reference.CtParameterReference;
 import spoon.reflect.reference.CtTypeReference;
 import spoon.support.reflect.CtExtendedModifier;
 
@@ -159,10 +161,8 @@ public class Analyzer {
 
     private void addPosition(SourcePosition pos) {
         if (!pos.isValidPosition()) return;
-
         //this.log.log("  adding <"+pos.getLine()+", "+pos.getColumn()+
         //    "> <"+pos.getEndLine()+", "+pos.getEndColumn()+">");
-
         this.addPosition(pos.getLine(), pos.getColumn());
         this.addPosition(pos.getEndLine(), pos.getEndColumn());
     }
@@ -177,34 +177,56 @@ public class Analyzer {
         this.maxLine = Integer.max(line, this.maxLine);
     }
 
-    private boolean isVoid(CtTypeReference<?> tr) {
+    static private boolean isVoid(CtTypeReference<?> tr) {
         return tr.isPrimitive() && tr.getSimpleName().equals("void");
     }
 
-    private boolean isSimpleFetch(CtElement elem) {
+    static private boolean isSimpleFetch(CtElement elem) {
         if (elem instanceof CtConstructorCall) return false;
         if (elem instanceof CtInvocation) return false;
         if (elem instanceof CtBinaryOperator) return false;
         if (elem instanceof CtUnaryOperator) return false;
-
-        this.log.log(">>> isSimpleFetch: "+ formatElem(elem)); // TODO(grantnelson-wf): REMOVE
-
         for (CtElement child : elem.getDirectChildren()) {
             if (!isSimpleFetch(child)) return false;
         }
         return true;
     }
 
-    private boolean detectGetter(CtMethod<?> m, CtStatement st) {
-        return m.getParameters().size() == 0 &&
-            !isVoid(m.getType()) &&
-            st instanceof CtReturn ret &&
-            isSimpleFetch(ret);
+    static private boolean isObjectUsed(CtParameterReference<?> ref, CtElement elem) {
+        if (elem.equals(ref)) return true;
+        for (CtElement child : elem.getDirectChildren()) {
+            if (isObjectUsed(ref, child)) return true;
+        }
+        return false;
+    }
+
+    static private boolean detectGetter(CtMethod<?> m, CtStatement st) {
+        if (m.getParameters().size() != 0) return false;
+        if (isVoid(m.getType())) return false;
+        if (!(st instanceof CtReturn ret)) return false;
+        if (!isSimpleFetch(ret)) return false;
+        return true;
     }
     
-    private boolean detectSetter(CtMethod<?> m, CtStatement st) {
-        // TODO: Implement
-        return false;
+    static private boolean detectSetter(CtMethod<?> m, CtStatement st) {
+        if (m.getParameters().size() > 1) return false;
+        if (!isVoid(m.getType())) return false;
+        if (!(st instanceof CtAssignment assign)) return false;
+        if (!isSimpleFetch(assign.getAssigned())) return false;
+        if (!isSimpleFetch(assign.getAssignment())) return false;
+
+        // Check for setters may have no parameters for assigning a
+        // literal value, e.g. `func(b *Bar) Hide() { b.visible = false }`.
+        if (m.getParameters().size() == 0) return true;
+
+        // Make sure the parameter isn't used on the left hand side as in a
+        // reversed setter, e.g. `func (b Bar) GetX(x *int) { x* = b.x }`,
+        // The parameter may be used on the right hand side or not at all.
+        // The parameter may not be used at all if the setter is part of an
+        // interface requirement but the value assigned is to a default value.
+        final CtParameter<?> param = m.getParameters().get(0);
+        final CtParameterReference<?> ref = param.getReference();
+        return !isObjectUsed(ref, assign.getAssigned());
     }
 
     /**
