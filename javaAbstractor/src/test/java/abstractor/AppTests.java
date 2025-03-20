@@ -12,6 +12,7 @@ import org.junit.jupiter.api.Test;
 import abstractor.app.App;
 import abstractor.app.Config;
 import abstractor.core.diff.Diff;
+import abstractor.core.json.JsonFormat;
 import abstractor.core.json.JsonNode;
 
 public class AppTests {
@@ -20,23 +21,27 @@ public class AppTests {
     public void test0001() { run("test0001"); }
 
     static private void run(String testName) {
-        final String path = "../testData/java/" + testName;
+        final String testPath = "../testData/java/" + testName;
+        final String absFile  = testPath + "/abstraction.yaml";
 
-        final Config cfg = new Config();
-        cfg.input   = path;
-        cfg.verbose = true;
         final ByteArrayOutputStream buffer = new ByteArrayOutputStream();
-        cfg.defaultOut = new PrintStream(buffer);
+        final JsonFormat format = JsonFormat.Relaxed();
+
+        final Config cfg  = new Config();
+        cfg.input         = testPath;
+        cfg.verbose       = true;
+        cfg.writeIndices  = true;
+        cfg.writeKinds    = true;
+        cfg.defaultOut    = new PrintStream(buffer);
+        cfg.defaultFormat = format;
         assertTrue(App.run(cfg), "App.run returned false.");
 
-        assertDoesNotThrow(() -> {
-            final JsonNode expJson = JsonNode.parseFile(path+"/abstraction.yaml");
-            final String exp = expJson.toString();
-            assertLines(exp, buffer.toString().trim());
-        });
+        final JsonNode expJson = assertDoesNotThrow(() -> JsonNode.parseFile(absFile));
+        final String exp = format.format(expJson);
+        assertLines(exp, buffer.toString().trim());
     }
 
-    static public void assertLines(String exp, String result) {
+    static private void assertLines(String exp, String result) {
         if (!exp.equals(result)) {
             final String diff = String.join("\n\t", new Diff().PlusMinusByLine(exp, result));
             System.out.println("Error: unexpected lines\n\t" + diff);

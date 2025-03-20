@@ -15,7 +15,7 @@ public class Tokenizer implements Iterator<Token> {
 
     public Token next() {
         final Char start = this.src.next();
-        if (this.isWhiteSpace(start)) return this.readWhitespace(start);
+        if (isWhiteSpace(start))  return this.readWhitespace(start);
         if (start.value() == '#') return this.readComment(start);
         if (start.value() == '{') return new Token(TokenType.openCurl,  "{", start.loc());
         if (start.value() == '}') return new Token(TokenType.closeCurl, "}", start.loc());
@@ -24,26 +24,31 @@ public class Tokenizer implements Iterator<Token> {
         if (start.value() == ':') return new Token(TokenType.colon,     ":", start.loc());
         if (start.value() == ',') return new Token(TokenType.comma,     ",", start.loc());
         if (start.value() == '-') return this.readNumber(start);
-        if (this.isDigit(start))  return this.readNumber(start);
+        if (isDigit(start))       return this.readNumber(start);
         if (start.value() == '"') return this.readQuote(start);
         if (start.value() == '$') return this.readIdent(start);
-        if (this.isLetter(start)) return this.readIdent(start);
+        if (isLetter(start))      return this.readIdent(start);
         return new Token(TokenType.error, "unexpected character (" + start.value() + ")", start.loc());
     }
 
-    private boolean isWhiteSpace(Char c) {
+    static private boolean isWhiteSpace(Char c) {
         final char v = c.value();
         return v == '\n' || v == '\r' || v == ' ' || v == '\t';
     }
 
-    private boolean isDigit(Char c) {
+    static private boolean isDigit(Char c) {
         final char v = c.value();
         return v >= '0' && v <= '9';
     }
 
-    private boolean isLetter(Char c) {
+    static private boolean isLetter(Char c) {
         final char v = c.value();
         return (v >= 'a' && v <= 'z') || (v >= 'A' && v <= 'Z') || v == '_';
+    }
+
+    static private boolean isSimpleSep(Char c) {
+        final char v = c.value();
+        return v == '.' || v == '-' || v == '_';
     }
 
     private Token readWhitespace(Char start) {
@@ -51,7 +56,7 @@ public class Tokenizer implements Iterator<Token> {
         buf.append(start.value());
         while (this.src.hasNext()) {
             final Char next = this.src.next();
-            if (!this.isWhiteSpace(next)) {
+            if (!isWhiteSpace(next)) {
                 this.src.pushBack(next);
                 break;
             }
@@ -80,7 +85,7 @@ public class Tokenizer implements Iterator<Token> {
         boolean hasExp= false;
         while (this.src.hasNext()) {
             final Char next = this.src.next();
-            if (this.isDigit(next)) {
+            if (isDigit(next)) {
                 buf.append(next.value());
                 needsDigit = false;
                 optionalSign = false;
@@ -123,7 +128,7 @@ public class Tokenizer implements Iterator<Token> {
     private int readHexDigit() throws JsonException {
         if (this.src.hasNext()) {
             final Char c = this.src.next();
-            if (this.isDigit(c)) return (int)(c.value() - '0');
+            if (isDigit(c)) return (int)(c.value() - '0');
             if (c.value() >= 'a' && c.value() <= 'f') return (int)(c.value() - 'a') + 10;
             if (c.value() >= 'A' && c.value() <= 'F') return (int)(c.value() - 'A') + 10;
         }
@@ -175,7 +180,7 @@ public class Tokenizer implements Iterator<Token> {
         buf.append(start.value());
         while (this.src.hasNext()) {
             final Char next = this.src.next();
-            if (this.isDigit(next) || this.isLetter(next)) { 
+            if (isDigit(next) || isLetter(next) || isSimpleSep(next)) { 
                 buf.append(next.value());
                 continue;
             }

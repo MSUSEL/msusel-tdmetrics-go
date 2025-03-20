@@ -6,6 +6,8 @@ import java.nio.file.*;
 
 import org.apache.commons.cli.*;
 
+import abstractor.core.json.JsonFormat;
+
 public class Config {
     public String input;
     public String output;
@@ -13,8 +15,8 @@ public class Config {
     public boolean verbose;
     public boolean minimize;
 
-    public boolean writeKinds = true;
-    public boolean writeIndices = true;
+    public boolean writeKinds;
+    public boolean writeIndices;
 
     /**
      * The output to print to when output path is null.
@@ -22,6 +24,13 @@ public class Config {
      * to collect the output JSON when testing.
      */
     public PrintStream defaultOut = System.out;
+
+    /**
+     * The default JSON format to output with if minimize is set to false.
+     * This defaults to normal formatting but may be overwritten
+     * to format the output JSON when testing. 
+     */
+    public JsonFormat defaultFormat = JsonFormat.Normal();
 
     static private Options getArgsOptions() {
         final Options op = new Options();
@@ -132,9 +141,9 @@ public class Config {
         sb.append("Output: ").append(this.output);
 
         ArrayList<String> flags = new ArrayList<String>();
-        if (this.verbose) flags.add("Verbose");
-        if (this.minimize) flags.add("Minimize");
-        if (this.writeKinds) flags.add("Write Types");
+        if (this.verbose)      flags.add("Verbose");
+        if (this.minimize)     flags.add("Minimize");
+        if (this.writeKinds)   flags.add("Write Types");
         if (this.writeIndices) flags.add("Write Indices");
     
         if (!flags.isEmpty()) {

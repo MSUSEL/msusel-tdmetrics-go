@@ -1,6 +1,9 @@
 package abstractor.core.constructs;
 
 import java.util.TreeSet;
+import java.io.File;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Map.Entry;
 import java.util.TreeMap;
 
@@ -64,10 +67,26 @@ public class Locations implements Jsonable {
         this.updateLocations();
     }
 
+    static private String cleanPath(String path) {
+        if (path == null) path = "";
+        try { path = new File(path).getCanonicalPath(); }
+        catch (Exception ex) { }
+        return path.replace("\\", "/");
+    }
+
+    static private String subPath(String root, String path) {
+        if (path.startsWith(root)) path = path.substring(root.length());
+        if (path.startsWith("/"))  path = path.substring(1);
+        return path;
+    }
+
     public JsonNode toJson(JsonHelper h) {
+        final String root = cleanPath(h.rootPath);
         JsonObject obj = new JsonObject();
-        for (Entry<String, Integer> file : this.offsets.entrySet())
-            obj.put(file.getValue().toString(), file.getKey());
+        for (Entry<String, Integer> file : this.offsets.entrySet()) {
+            String path = subPath(root, cleanPath(file.getKey()));
+            obj.put(file.getValue().toString(), path);
+        }
         return obj;
     }
 }

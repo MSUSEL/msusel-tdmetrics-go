@@ -20,7 +20,7 @@ public class JsonFormat {
             final char c = cs[i];
             if (c >= 'a' && c <= 'z') continue;
             if (c >= 'A' && c <= 'Z') continue;
-            if (c == '_') continue;
+            if (c == '_' || c == '-' || c == '.') continue;
             if (c >= '0' && c <= '9' && i >= 0) continue;
             return true;
         }

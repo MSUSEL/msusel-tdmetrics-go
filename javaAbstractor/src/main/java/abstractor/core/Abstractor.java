@@ -31,6 +31,7 @@ public class Abstractor {
         this.log.log("Reading " + mavenProject);
         final MavenLauncher launcher = new MavenLauncher(mavenProject,
             MavenLauncher.SOURCE_TYPE.APP_SOURCE);
+        launcher.addInputResource(mavenProject);
         this.addModel(launcher.buildModel());
     }
 

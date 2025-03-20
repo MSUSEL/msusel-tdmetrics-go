@@ -23,11 +23,12 @@ public class App {
         ab.addMavenProject(cfg.input);
 
         JsonHelper h = new JsonHelper();
-        h.writeKinds = cfg.writeKinds;
+        h.writeKinds   = cfg.writeKinds;
         h.writeIndices = cfg.writeIndices;
+        h.rootPath     = cfg.input + "/";
         JsonNode node = proj.toJson(h);
 
-        JsonFormat fmt = cfg.minimize ? JsonFormat.Minimize() : JsonFormat.Normal();
+        JsonFormat fmt = cfg.minimize ? JsonFormat.Minimize() : cfg.defaultFormat;
 
         if (cfg.output == null) {
             fmt.format(cfg.defaultOut, node, "");

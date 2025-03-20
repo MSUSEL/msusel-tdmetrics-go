@@ -1,7 +1,42 @@
- {
+{
   language: java,
+  locs: { 1: EntryPoint.java },
+  methods: [
+    {
+      index: 1, kind: method, loc: 4,
+      name: Main, package: 4, receiver: 1, signature: 1,
+      metrics: 1, visibility: public
+    },
+  ],
+  metrics: [
+    {
+      index: 1, kind: metrics, loc: 4,
+      codeCount: 3, complexity: 1, indents: 1, lineCount: 3
+    },
+  ],
+  objects: [
+    {
+      index: 1, kind: object,
+      name: EntryPoint, package: 4, data: 1, interface: null, # TODO: remove null
+      loc: 3, visibility: public,
+      methods: [ 1 ],
+    },
+  ],
   packages: [
-    { index: 1, kind: package }
-  ]
-  # TODO: Missing method and class
+    { index: 1, kind: package },
+    { index: 2, kind: package, name: testData },
+    { index: 3, kind: package, name: testData.java },
+    {
+      index: 4, kind: package,
+      name: testData.java.test0001,
+      methods: [ 1 ],
+      objects: [ 1 ],
+    },
+  ],
+  signatures: [
+    { index: 1, kind: signature }, # TODO: Finish signature
+  ],
+  structDescs: [
+    { index: 1, kind: structDesc },
+  ],
 }

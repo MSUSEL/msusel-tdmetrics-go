@@ -6,3 +6,5 @@ obj
 out*.json
 out*.yaml
 out*.yml
+
+spoon.classpath*.tmp
