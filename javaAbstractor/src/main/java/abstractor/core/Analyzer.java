@@ -1,8 +1,8 @@
 package abstractor.core;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.TreeSet;
 import java.util.TreeMap;
 
@@ -13,24 +13,29 @@ import spoon.reflect.code.CtBlock;
 import spoon.reflect.code.CtCase;
 import spoon.reflect.code.CtComment;
 import spoon.reflect.code.CtConstructorCall;
+import spoon.reflect.code.CtFieldRead;
 import spoon.reflect.code.CtIf;
 import spoon.reflect.code.CtInvocation;
 import spoon.reflect.code.CtLocalVariable;
 import spoon.reflect.code.CtLoop;
 import spoon.reflect.code.CtReturn;
 import spoon.reflect.code.CtStatement;
+import spoon.reflect.code.CtTypeAccess;
 import spoon.reflect.code.CtUnaryOperator;
 import spoon.reflect.cu.SourcePosition;
 import spoon.reflect.declaration.CtElement;
+import spoon.reflect.declaration.CtExecutable;
 import spoon.reflect.declaration.CtMethod;
 import spoon.reflect.declaration.CtParameter;
 import spoon.reflect.reference.CtParameterReference;
 import spoon.reflect.reference.CtTypeReference;
 import spoon.support.reflect.CtExtendedModifier;
 
+import abstractor.core.constructs.Construct;
+import abstractor.core.constructs.DeclarationRef;
 import abstractor.core.constructs.Location;
-import abstractor.core.constructs.Method;
 import abstractor.core.constructs.Metrics;
+import abstractor.core.constructs.Project;
 import abstractor.core.constructs.TypeDesc;
 import abstractor.core.log.Logger;
 
@@ -38,6 +43,7 @@ public class Analyzer {
 
     private static final boolean logElementTree = false;
 
+    private final Project proj;
     private final Logger log;
     public final Location loc;
 
@@ -50,18 +56,19 @@ public class Analyzer {
     private boolean getter;
     private boolean setter;
 
-    private final List<Method> invokes;
-    private final List<TypeDesc> reads;
-    private final List<TypeDesc> writes;
+    private final Set<Construct> invokes;
+    private final Set<Construct> reads;
+    private final Set<Construct> writes;
 
-    public Analyzer(Logger log, Location loc) {
+    public Analyzer(Project proj, Logger log, Location loc) {
+        this.proj       = proj;
         this.log        = log;
         this.loc        = loc;
         this.minLine    = Integer.MAX_VALUE;
         this.minColumn  = new TreeMap<Integer, Integer>();
-        this.invokes    = new ArrayList<Method>();
-        this.reads      = new ArrayList<TypeDesc>();
-        this.writes     = new ArrayList<TypeDesc>();
+        this.invokes    = new TreeSet<Construct>();
+        this.reads      = new TreeSet<Construct>();
+        this.writes     = new TreeSet<Construct>();
         this.complexity = 1;
     }
 
@@ -146,7 +153,8 @@ public class Analyzer {
 
         this.addPosition(elem.getPosition());
         this.complexity += addComplexity(elem);
-        
+        this.addUsage(elem);
+
         if (logElementTree) {
             this.log.log("+- " + formatElem(elem));
             this.log.push("|  ");
@@ -155,8 +163,7 @@ public class Analyzer {
         for (CtElement child : elem.getDirectChildren())
             this.addElement(child);
 
-        if (logElementTree)
-            this.log.pop();
+        if (logElementTree) this.log.pop();
     }
 
     private void addPosition(SourcePosition pos) {
@@ -257,5 +264,47 @@ public class Analyzer {
         }
 
         return 0;
+    }
+
+    private void addUsage(CtElement elem) {
+        // List<Method> invokes;
+        // List<TypeDesc> reads;
+        // List<TypeDesc> writes;
+
+        if (elem instanceof CtInvocation inv) {
+            final CtExecutable<?> ex = inv.getExecutable().getDeclaration();
+            if (ex instanceof CtMethod<?> method) {
+                DeclarationRef ref = this.proj.declRefs.create(this.log, method,
+                    "add invocation " + method.getSimpleName(),
+                    ()-> {
+                        final String pkgPath = method.getClass().getName();
+                        final String name    = method.getSimpleName();
+                        final List<TypeDesc> tp = null; // TODO: Implement
+                        return new DeclarationRef(method, pkgPath, name, tp);
+                    });
+                this.invokes.add(ref);
+            }
+            return;
+        }
+        if (elem instanceof CtFieldRead fr) {
+
+            // TODO: Implement
+
+            return;
+        }
+        if (elem instanceof CtTypeAccess ta) {
+            
+            // TODO: Implement
+
+            return;
+        }
+        if (elem instanceof CtAssignment as) {
+
+            // TODO: Implement
+
+            return;
+        }
+
+        this.log.log("addUsage: "+formatElem(elem));
     }
 }

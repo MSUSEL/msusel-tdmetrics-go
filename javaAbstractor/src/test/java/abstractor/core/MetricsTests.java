@@ -129,7 +129,8 @@ public class MetricsTests {
             "  codeCount:  7,",
             "  complexity: 2,",
             "  indents:    6,",
-            "  lineCount:  7",
+            "  lineCount:  7,",
+            // TODO: Add invokes
             "}");
     }
 

@@ -317,7 +317,7 @@ public class Abstractor {
             "metrics",
             () -> {
                 final Location loc = proj.locations.create(m.getPosition());
-                final Analyzer ana = new Analyzer(this.log, loc);
+                final Analyzer ana = new Analyzer(this.proj, this.log, loc);
                 ana.addMethod(m);
                 return ana.getMetrics();
             });
