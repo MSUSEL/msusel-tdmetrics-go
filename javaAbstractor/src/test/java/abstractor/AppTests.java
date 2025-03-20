@@ -1,15 +1,18 @@
 package abstractor;
 
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.Collections;
-import java.util.List;
+import java.io.ByteArrayOutputStream;
+import java.io.PrintStream;
 
 import org.junit.jupiter.api.Test;
+
+import abstractor.app.App;
+import abstractor.app.Config;
+import abstractor.core.diff.Diff;
+import abstractor.core.json.JsonNode;
 
 public class AppTests {
     
@@ -17,45 +20,27 @@ public class AppTests {
     public void test0001() { run("test0001"); }
 
     static private void run(String testName) {
-        final String testPath = "../testData/java/" + testName;
-        runCommand("mvn clean compile assembly:single");
-        runCommand("java -jar .\\target\\abstractor-0.1-jar-with-dependencies.jar -i " + testPath);
+        final String path = "../testData/java/" + testName;
+
+        final Config cfg = new Config();
+        cfg.input   = path;
+        cfg.verbose = true;
+        final ByteArrayOutputStream buffer = new ByteArrayOutputStream();
+        cfg.defaultOut = new PrintStream(buffer);
+        assertTrue(App.run(cfg), "App.run returned false.");
+
+        assertDoesNotThrow(() -> {
+            final JsonNode expJson = JsonNode.parseFile(path+"/abstraction.yaml");
+            final String exp = expJson.toString();
+            assertLines(exp, buffer.toString().trim());
+        });
     }
 
-    static private List<String> runCommand(String command) {
-        BufferedReader stdInput = null;
-        BufferedReader stdError = null;
-        try {
-            System.out.println(">>|<< "+Paths.get("").toAbsolutePath());
-
-
-            final Process proc = Runtime.getRuntime().exec(command);
-            stdInput = new BufferedReader(new InputStreamReader(proc.getInputStream()));
-            stdError = new BufferedReader(new InputStreamReader(proc.getErrorStream()));
-
-            final int result = proc.waitFor();
-            if (result == 0) return stdInput.lines().toList();
-
-            dumpLog(stdInput);
-            dumpLog(stdError);
-            fail("Non-zero exit value: " + result);
-
-        } catch (Exception ex) {
-            dumpLog(stdInput);
-            dumpLog(stdError);
-            fail(ex);
+    static public void assertLines(String exp, String result) {
+        if (!exp.equals(result)) {
+            final String diff = String.join("\n\t", new Diff().PlusMinusByLine(exp, result));
+            System.out.println("Error: unexpected lines\n\t" + diff);
+            fail("unexpected lines (see diff above)");
         }
-        return Collections.emptyList();
-    }
-
-    static private void dumpLog(BufferedReader log) {
-        if (log == null) return;
-        try {
-            String s = log.readLine();
-            while (s != null) {
-                System.out.println(s);
-                s = log.readLine();
-            }
-        } catch(Exception ex) { } // ignore error
     }
 }

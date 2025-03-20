@@ -11,10 +11,12 @@ import abstractor.core.log.*;
 
 public class App {
     
-    public static void main(String[] args) {
+    static public void main(String[] args) {
         final Config cfg = new Config();
-        if (!cfg.FromArgs(args, null)) return;
+        if (cfg.FromArgs(args, null)) run(cfg);
+    }
 
+    static public boolean run(Config cfg) {
         Logger log = new Logger(cfg.verbose);
         Project proj = new Project();
         Abstractor ab = new Abstractor(log, proj);
@@ -28,8 +30,8 @@ public class App {
         JsonFormat fmt = cfg.minimize ? JsonFormat.Minimize() : JsonFormat.Normal();
 
         if (cfg.output == null) {
-            fmt.format(System.out, node, "");
-            System.out.println();
+            fmt.format(cfg.defaultOut, node, "");
+            cfg.defaultOut.println();
         } else {
             try (PrintStream fileWriter = new PrintStream(new File(cfg.output))) {
                 fmt.format(fileWriter, node, "");
@@ -39,8 +41,11 @@ public class App {
             }
         }
 
-        if (log.errorCount() > 0)
+        if (log.errorCount() > 0) {
             System.err.println("Had " + log.errorCount() + " errors");
-        else System.out.println("Success");
+            return false;
+        }
+        System.out.println("Success");
+        return true;
     }
 }

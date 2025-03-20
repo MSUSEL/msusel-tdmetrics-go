@@ -1,0 +1,7 @@
+ {
+  language: java,
+  packages: [
+    { index: 1, kind: package }
+  ]
+  # TODO: Missing method and class
+}

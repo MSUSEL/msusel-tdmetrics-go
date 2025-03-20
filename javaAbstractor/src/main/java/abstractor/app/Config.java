@@ -16,6 +16,13 @@ public class Config {
     public boolean writeKinds = true;
     public boolean writeIndices = true;
 
+    /**
+     * The output to print to when output path is null.
+     * This defaults to standard output but may be overwritten
+     * to collect the output JSON when testing.
+     */
+    public PrintStream defaultOut = System.out;
+
     static private Options getArgsOptions() {
         final Options op = new Options();
         op.addOption("i", "input", true,
