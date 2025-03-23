@@ -276,7 +276,7 @@ public class Abstractor {
                 inst.generic.instances.add(inst);
             });
     }
-
+    
     private Basic addBasic(CtTypeReference<?> tr) {
         return this.proj.basics.create(this.log, tr,
             "basic " + tr.getSimpleName(),

@@ -27,7 +27,7 @@ public abstract class Declaration extends ConstructImp {
     public JsonNode toJson(JsonHelper h) {
         JsonObject obj = (JsonObject)super.toJson(h);
         if (this.pkg != null) obj.put("package", index(pkg));
-        obj.putNotEmpty("loc", this.loc.toJson(h));
+        if (this.loc != null) obj.putNotEmpty("loc", this.loc.toJson(h));
         obj.putNotEmpty("name", this.name);
         obj.putNotEmpty("visibility", this.visibility);
         return obj;

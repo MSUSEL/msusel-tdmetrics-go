@@ -83,7 +83,7 @@ public class Baker {
 
     private Signature getSignature(String tdName, TypeDesc td) {
         return this.getConstruct("getSignature<" + tdName + ">", () -> {
-            final List<Argument> params = Collections.emptyList();
+            final List<Argument> params = new ArrayList<Argument>();
             params.add(this.intIndexParam());
             final List<Argument> results = new ArrayList<Argument>();
             results.add(this.genReturn(tdName, td));

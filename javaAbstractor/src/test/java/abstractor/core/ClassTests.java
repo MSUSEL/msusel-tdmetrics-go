@@ -59,34 +59,62 @@ public class ClassTests {
             "  void baz() {",
             "    System.out.println(\"Baz\");",
             "  }",
-            //"  void cat(int ...t) {",
-            //"    System.out.println(t)",
-            //"  }",
+            "  void cat(int ...t) {",
+            "    System.out.println(t)",
+            "  }",
             "}");
         t.checkProject(
             "{",
+            "  abstracts: [",
+            "    { name: $get, signature: 3 },", // 1.
+            "    { name: $get, signature: 4 },", // 2.
+            "    { name: $len, signature: 2 },", // 3.
+            "    { name: $set, signature: 5 },", // 4.
+            "    { name: $set, signature: 6 }",  // 5.
+            "  ],",
             "  arguments: [",
-            "    { type: basic1 },",
-            "    { name: x, type: basic1 },",
-            "    { name: y, type: basic1 }",
+            "    {              type: basic1         },", // 1.
+            "    {              type: typeParam1     },", // 2.
+            "    { name: index, type: basic0         },", // 3.
+            "    { name: t,     type: interfaceInst1 },", // 4.
+            "    { name: value, type: basic1         },", // 5.
+            "    { name: value, type: typeParam1     },", // 6.
+            "    { name: x,     type: basic1         },", // 7.
+            "    { name: y,     type: basic1         }",  // 8.
             "  ],",
             "  basics: [ int ],",
+            "  interfaceDecls: [",
+            "    {", // 1.
+            "      name: $Array, interface: 2,",
+            "      typeParams: [ 1 ],",
+            "    },",
+            "  ],",
+            "  interfaceDescs: [",
+            "    { abstracts: [ 1, 3, 4 ] },", // 1.
+            "    { abstracts: [ 2, 3, 5 ] },", // 2.
+            "    { abstracts: [ ] },",         // 3.
+            "  ],",
+            "  interfaceInsts: [",
+            "    { generic: 1, instanceTypes: [ 1 ], resolved: 1 },", // 1.
+            "  ],",
             "  language: java,",
             "  locs: { 1: unknown },",
             "  methods: [",
-            "    { loc: 2, metrics: 1, name: bar, package: 1, receiver: 1, signature: 2 },",
-            "    { loc: 5, metrics: 2, name: baz, package: 1, receiver: 1, signature: 1 }",
+            "    { loc: 2, metrics: 1, name: bar, package: 1, receiver: 1, signature: 7 },", // 1.
+            "    { loc: 5, metrics: 2, name: baz, package: 1, receiver: 1, signature: 1 },", // 2.
+            "    { loc: 8, metrics: 3, name: cat, package: 1, receiver: 1, signature: 8 }",  // 3.
             "  ],",
             "  metrics: [",
-            "    { loc: 2, codeCount: 3, complexity: 1, indents: 3, lineCount: 3 },",
-            "    { loc: 5, codeCount: 3, complexity: 1, indents: 3, lineCount: 3 }",
+            "    { loc: 2, codeCount: 3, complexity: 1, indents: 3, lineCount: 3 },", // 1.
+            "    { loc: 5, codeCount: 3, complexity: 1, indents: 3, lineCount: 3 },", // 2.
+            "    { loc: 8, codeCount: 3, complexity: 1, indents: 3, lineCount: 3 }",  // 3.
             "  ],",
             "  objects: [",
             "    {",
             "      data: 1,",
             "      interface: null,",
             "      loc: 1,",
-            "      methods: [ 1, 2 ],",
+            "      methods: [ 1, 2, 3 ],",
             "      name: Foo,",
             "      package: 1,",
             "      visibility: public",
@@ -94,7 +122,7 @@ public class ClassTests {
             "  ],",
             "  packages: [",
             "    {",
-            "      methods: [ 1, 2 ],",
+            "      methods: [ 1, 2, 3 ],",
             "      objects: [ 1 ]",
             "    }",
             "  ],",
