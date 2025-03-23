@@ -28,7 +28,7 @@ public class ObjectInst extends ConstructImp implements TypeDesc {
     public JsonNode toJson(JsonHelper h) {
         JsonObject obj = (JsonObject)super.toJson(h);
         obj.put("generic",       index(this.generic));
-        obj.put("instanceTypes", indexList(this.instanceTypes));
+        obj.put("instanceTypes", keyList(this.instanceTypes));
         obj.put("methods",       indexSet(this.methods));
         obj.put("resData",       index(this.resData));
         obj.put("resInterface",  index(this.resInterface));

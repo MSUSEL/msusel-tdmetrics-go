@@ -66,7 +66,7 @@ public class Factory<T extends Construct> implements Jsonable {
             final T newCon = c.create();
 
             T other = this.set.floor(newCon);
-            if (other == newCon) return other;
+            if (newCon.equals(other)) return other;
             this.set.add(newCon);
             this.byElem.put(elem, newCon);
 
@@ -84,7 +84,7 @@ public class Factory<T extends Construct> implements Jsonable {
 
     public T addOrGet(T c) {
         T other = this.set.floor(c);
-        if (other == c) return other;
+        if (c.equals(other)) return other;
         this.set.add(c);
         return c;
     }

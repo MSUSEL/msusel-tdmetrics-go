@@ -25,7 +25,7 @@ public class MethodInst extends ConstructImp implements Method {
     public JsonNode toJson(JsonHelper h) {
         JsonObject obj = (JsonObject)super.toJson(h);
         obj.put("generic",       index(this.generic));
-        obj.put("instanceTypes", indexList(this.instanceTypes));
+        obj.put("instanceTypes", keyList(this.instanceTypes));
         obj.put("receiver",      index(this.receiver));
         obj.put("resolved",      index(this.resolved));
         return obj;
