@@ -82,6 +82,13 @@ public class Factory<T extends Construct> implements Jsonable {
         return this.create(log, elem, title, c, null);
     }
 
+    public T addOrGet(T c) {
+        T other = this.set.floor(c);
+        if (other == c) return other;
+        this.set.add(c);
+        return c;
+    }
+
     public void setIndices() {
         int index = 1;
         for (Construct o : this.set) {

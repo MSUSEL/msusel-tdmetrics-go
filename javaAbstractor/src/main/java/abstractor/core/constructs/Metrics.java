@@ -1,7 +1,7 @@
 package abstractor.core.constructs;
 
 import java.util.Collections;
-import java.util.Set;
+import java.util.SortedSet;
 
 import abstractor.core.cmp.Cmp;
 import abstractor.core.json.*;
@@ -17,14 +17,14 @@ public class Metrics extends ConstructImp {
     public final boolean getter;
     public final boolean setter;
 
-    public final Set<Construct> invokes;
-    public final Set<Construct> reads;
-    public final Set<Construct> writes;
+    public final SortedSet<Construct> invokes;
+    public final SortedSet<Construct> reads;
+    public final SortedSet<Construct> writes;
     
     public Metrics(Location loc,
         int codeCount, int complexity, int indents, int lineCount,
         boolean getter, boolean setter,
-        Set<Construct> invokes, Set<Construct> reads, Set<Construct> writes) {
+        SortedSet<Construct> invokes, SortedSet<Construct> reads, SortedSet<Construct> writes) {
         this.loc        = loc;
         this.codeCount  = codeCount;
         this.complexity = complexity;
@@ -32,9 +32,9 @@ public class Metrics extends ConstructImp {
         this.lineCount  = lineCount;
         this.getter     = getter;
         this.setter     = setter;
-        this.invokes    = Collections.unmodifiableSet(invokes);
-        this.reads      = Collections.unmodifiableSet(reads);
-        this.writes     = Collections.unmodifiableSet(writes);
+        this.invokes    = Collections.unmodifiableSortedSet(invokes);
+        this.reads      = Collections.unmodifiableSortedSet(reads);
+        this.writes     = Collections.unmodifiableSortedSet(writes);
     }
 
     public ConstructKind kind() { return ConstructKind.METRICS; }

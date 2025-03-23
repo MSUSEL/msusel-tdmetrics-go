@@ -2,8 +2,6 @@ package abstractor.core.constructs;
 
 import java.util.TreeSet;
 import java.io.File;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.Map.Entry;
 import java.util.TreeMap;
 

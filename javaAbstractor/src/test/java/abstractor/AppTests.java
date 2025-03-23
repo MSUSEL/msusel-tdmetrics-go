@@ -30,8 +30,8 @@ public class AppTests {
         final Config cfg  = new Config();
         cfg.input         = testPath;
         cfg.verbose       = true;
-        cfg.writeIndices  = true;
-        cfg.writeKinds    = true;
+        cfg.writeIndices  = false;
+        cfg.writeKinds    = false;
         cfg.defaultOut    = new PrintStream(buffer);
         cfg.defaultFormat = format;
         assertTrue(App.run(cfg), "App.run returned false.");

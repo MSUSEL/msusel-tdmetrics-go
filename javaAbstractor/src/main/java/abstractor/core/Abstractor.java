@@ -3,6 +3,8 @@ package abstractor.core;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.SortedSet;
+import java.util.TreeSet;
 
 import spoon.Launcher;
 import spoon.MavenLauncher;
@@ -45,7 +47,7 @@ public class Abstractor {
      */
     public void addClassFromSource(String ...sourceLines) {
         String source = String.join("\n", sourceLines);
-        this.addClass(Launcher.parseClass(source));
+        this.addObjectDecl(Launcher.parseClass(source));
     }
 
     private void addModel(CtModel model) {
@@ -76,8 +78,8 @@ public class Abstractor {
             },
             (PackageCon pkgCon) -> {
                 for (CtType<?> t : pkg.getTypes()) {
-                    if (t instanceof CtClass<?> c) this.addClass(c);
-                    else if (t instanceof CtInterface<?> i) this.addInterface(i);
+                    if (t instanceof CtClass<?> c) this.addObjectDecl(c);
+                    else if (t instanceof CtInterface<?> i) this.addInterfaceDecl(i);
                     else this.log.error("Unhandled (" + t.getClass().getName() + ") "+t.getQualifiedName());
                 }
             });
@@ -87,15 +89,15 @@ public class Abstractor {
      * Handles adding and processing classes, enums, and records.
      * @param c The class to process.
      */
-    private ObjectDecl addClass(CtClass<?> c) {
+    private ObjectDecl addObjectDecl(CtClass<?> c) {
         return this.proj.objectDecls.create(this.log, c,
             "object decl " + c.getQualifiedName(),
             () -> {
-                final CtPackage pkg = c.getPackage();
-                final PackageCon pkgCon = pkg == null ? null : this.addPackage(pkg);
-                final Location loc = proj.locations.create(c.getPosition());
-                final String name = c.getSimpleName();
-                final StructDesc struct = this.addStruct(c);
+                final CtPackage       pkg        = c.getPackage();
+                final PackageCon      pkgCon     = pkg == null ? null : this.addPackage(pkg);
+                final Location        loc        = proj.locations.create(c.getPosition());
+                final String          name       = c.getSimpleName();
+                final StructDesc      struct     = this.addStruct(c);
                 final List<TypeParam> typeParams = this.addTypeParams(c.getFormalCtTypeParameters());
                 return new ObjectDecl(pkgCon, loc, name, struct, typeParams);
             },
@@ -121,10 +123,10 @@ public class Abstractor {
         return this.proj.methodDecls.create(this.log, m,
             "method " + m.getSignature(),
             () -> {
-                final PackageCon pkgCon = receiver.pkg;
-                final Location loc = proj.locations.create(m.getPosition());
-                final String name = m.getSimpleName();
-                final Signature signature = this.addSignature(m);
+                final PackageCon      pkgCon     = receiver.pkg;
+                final Location        loc        = proj.locations.create(m.getPosition());
+                final String          name       = m.getSimpleName();
+                final Signature       signature  = this.addSignature(m);
                 final List<TypeParam> typeParams = this.addTypeParams(m.getFormalCtTypeParameters());
                 return new MethodDecl(pkgCon, receiver, loc, name, signature, typeParams);
             },
@@ -162,7 +164,7 @@ public class Abstractor {
         return this.proj.arguments.create(this.log, p,
             "parameter " + p.getSimpleName(),
             () -> {
-                final String name = p.getSimpleName();
+                final String   name = p.getSimpleName();
                 final TypeDesc type = this.addTypeDesc(p.getType());
                 return new Argument(name, type);
             });
@@ -194,7 +196,7 @@ public class Abstractor {
         return this.proj.fields.create(this.log, f,
             "field " + f.getSimpleName(),
             () -> {
-                final String name = f.getSimpleName();
+                final String   name = f.getSimpleName();
                 final TypeDesc type = this.addTypeDesc(f.getType());
                 return new Field(name, type);
             },
@@ -203,33 +205,27 @@ public class Abstractor {
             });
     }
     
-    private InterfaceDecl addInterface(CtInterface<?> i) {
+    private InterfaceDecl addInterfaceDecl(CtInterface<?> i) {
         return this.proj.interfaceDecls.create(this.log, i,
             "interface decl " + i.getQualifiedName(),
             () -> {
-                final CtPackage pkg = i.getPackage();
-                final PackageCon pkgCon = pkg == null ? null : this.addPackage(pkg);
-                final Location loc = proj.locations.create(i.getPosition());
-                final String name = i.getSimpleName();
-
-                final InterfaceDesc inter = null; // TODO: Finish
+                final CtPackage       pkg        = i.getPackage();
+                final PackageCon      pkgCon     = pkg == null ? null : this.addPackage(pkg);
+                final Location        loc        = proj.locations.create(i.getPosition());
+                final String          name       = i.getSimpleName();
+                final InterfaceDesc   inter      = this.addInterfaceDesc(i);
                 final List<TypeParam> typeParams = this.addTypeParams(i.getFormalCtTypeParameters());
                 return new InterfaceDecl(pkgCon, loc, name, inter, typeParams);
             },
             (InterfaceDecl id) -> {
                 id.setVisibility(i);
-                if (id.pkg != null) id.pkg.interfaceDecls.add(id);
-
-                //for (CtMethod<?> m : i.getAllMethods())
-                //    this.addAbstract(m);
-                
-                // TODO: Implement
+                if (id.pkg != null) id.pkg.interfaceDecls.add(id);                
             });
     }
 
     private TypeDesc addTypeDesc(CtTypeReference<?> tr) {
         if (tr.isPrimitive()) return this.addBasic(tr);
-        if (tr.isArray())     return this.addArray(tr);
+        if (tr.isArray())     return this.addArray((CtArrayTypeReference<?>)tr);
         if (tr.isClass())     return this.getNamedTypeDesc(tr);
         if (tr.isInterface()) return this.getNamedTypeDesc(tr);
 
@@ -269,10 +265,16 @@ public class Abstractor {
             });
     }
 
-    private TypeDesc addArray(CtTypeReference<?> tr) {
-        // TODO: IMPLEMENT
-        this.log.error("Unhandled array (" + tr.getClass().getName() + "): "+tr.prettyprint());
-        return this.unknownTypeDesc(tr);
+    private InterfaceInst addArray(CtArrayTypeReference<?> tr) {
+        return this.proj.interfaceInsts.create(this.log, tr,
+            "array instance " + tr.getSimpleName(),
+            () -> {
+                final TypeDesc elem = this.addTypeDesc(tr.getArrayType());
+                return this.proj.baker.arrayInst(tr.getQualifiedName(), elem);
+            },
+            (InterfaceInst inst) -> {
+                inst.generic.instances.add(inst);
+            });
     }
 
     private Basic addBasic(CtTypeReference<?> tr) {
@@ -283,6 +285,32 @@ public class Abstractor {
                 if (name == "void")
                     this.log.error("A void was added as a basic.");
                 return new Basic(name);
+            });
+    }
+
+    private InterfaceDesc addInterfaceDesc(CtInterface<?> i) {
+        return this.proj.interfaceDescs.create(this.log, i,
+            "interface description " + i.getSimpleName(),
+            () -> {
+                final SortedSet<Abstract> abstracts = new TreeSet<Abstract>();
+                for (CtMethod<?> m : i.getAllMethods())
+                    abstracts.add(this.addAbstract(m));
+
+                // TODO: Determine how to pin this interface.
+                return new InterfaceDesc(abstracts);
+            },
+            (InterfaceDesc id) -> {
+                // TODO: Implement Inheritance
+            });
+    }
+
+    private Abstract addAbstract(CtMethod<?> m) {
+        return this.proj.abstracts.create(this.log, m,
+            "abstract " + m.getSimpleName(),
+            () -> {
+                final String name = m.getSimpleName();
+                final Signature signature = this.addSignature(m);
+                return new Abstract(name, signature);
             });
     }
 

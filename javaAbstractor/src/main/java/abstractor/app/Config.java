@@ -15,8 +15,8 @@ public class Config {
     public boolean verbose;
     public boolean minimize;
 
-    public boolean writeKinds;
-    public boolean writeIndices;
+    public boolean writeKinds   = true;
+    public boolean writeIndices = true;
 
     /**
      * The output to print to when output path is null.

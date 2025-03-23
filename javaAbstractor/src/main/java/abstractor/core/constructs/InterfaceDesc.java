@@ -8,7 +8,7 @@ import abstractor.core.json.*;
 
 public class InterfaceDesc extends ConstructImp implements TypeDesc {
     public final SortedSet<Abstract> abstracts;
-    public final TreeSet<InterfaceDesc> inherits;
+    public final SortedSet<InterfaceDesc> inherits;
     public final Construct pin;  
 
     public InterfaceDesc(SortedSet<Abstract> abstracts) {

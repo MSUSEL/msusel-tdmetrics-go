@@ -1,42 +1,40 @@
 {
   language: java,
-  locs: { 1: EntryPoint.java },
   methods: [
-    {
-      index: 1, kind: method, loc: 4,
-      name: Main, package: 4, receiver: 1, signature: 1,
-      metrics: 1, visibility: public
-    },
+    { # 1. main
+      name: main, package: 4, receiver: 1, signature: 1,
+      metrics: 1, loc: 4, visibility: public
+    }
   ],
   metrics: [
-    {
-      index: 1, kind: metrics, loc: 4,
-      codeCount: 3, complexity: 1, indents: 1, lineCount: 3
-    },
+    { # 1. EntryPoint.main metrics
+      loc: 4, codeCount: 3, complexity: 1, indents: 1, lineCount: 3
+    }
   ],
   objects: [
-    {
-      index: 1, kind: object,
+    { # 1. EntryPoint
       name: EntryPoint, package: 4, data: 1, interface: null, # TODO: remove null
       loc: 3, visibility: public,
       methods: [ 1 ],
-    },
+    }
   ],
   packages: [
-    { index: 1, kind: package },
-    { index: 2, kind: package, name: testData },
-    { index: 3, kind: package, name: testData.java },
+    { },
+    { name: testData },
+    { name: testData.java },
     {
-      index: 4, kind: package,
       name: testData.java.test0001,
-      methods: [ 1 ],
-      objects: [ 1 ],
-    },
+      methods: [ 1 ], # main
+      objects: [ 1 ], # EntryPoint
+    }
   ],
   signatures: [
-    { index: 1, kind: signature }, # TODO: Finish signature
+    {} # 1. func()()
   ],
   structDescs: [
-    { index: 1, kind: structDesc },
+    {} # 1. struct{}
   ],
+  locs: {
+    1: EntryPoint.java
+  }
 }

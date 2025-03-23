@@ -11,6 +11,10 @@ public class Argument extends ConstructImp {
         this.name = name;
         this.type = type;
     }
+    
+    public Argument(TypeDesc type) {
+        this("", type);
+    }
 
     public ConstructKind kind() { return ConstructKind.ARGUMENT; }
 

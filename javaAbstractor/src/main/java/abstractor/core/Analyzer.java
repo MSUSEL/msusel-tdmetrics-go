@@ -2,7 +2,7 @@ package abstractor.core;
 
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
+import java.util.SortedSet;
 import java.util.TreeSet;
 import java.util.TreeMap;
 
@@ -31,12 +31,7 @@ import spoon.reflect.reference.CtParameterReference;
 import spoon.reflect.reference.CtTypeReference;
 import spoon.support.reflect.CtExtendedModifier;
 
-import abstractor.core.constructs.Construct;
-import abstractor.core.constructs.DeclarationRef;
-import abstractor.core.constructs.Location;
-import abstractor.core.constructs.Metrics;
-import abstractor.core.constructs.Project;
-import abstractor.core.constructs.TypeDesc;
+import abstractor.core.constructs.*;
 import abstractor.core.log.Logger;
 
 public class Analyzer {
@@ -56,9 +51,9 @@ public class Analyzer {
     private boolean getter;
     private boolean setter;
 
-    private final Set<Construct> invokes;
-    private final Set<Construct> reads;
-    private final Set<Construct> writes;
+    private final SortedSet<Construct> invokes;
+    private final SortedSet<Construct> reads;
+    private final SortedSet<Construct> writes;
 
     public Analyzer(Project proj, Logger log, Location loc) {
         this.proj       = proj;
@@ -305,6 +300,7 @@ public class Analyzer {
             return;
         }
 
-        this.log.log("addUsage: "+formatElem(elem));
+        // TODO: Use to see elements.
+        //this.log.log("addUsage: "+formatElem(elem));
     }
 }

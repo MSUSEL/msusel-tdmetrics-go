@@ -3,6 +3,7 @@ package abstractor.core.constructs;
 import abstractor.core.json.*;
 
 public class Project implements Jsonable {
+    public final Baker                   baker          = new Baker(this);
     public final Locations               locations      = new Locations();
     public final Factory<Abstract>       abstracts      = new Factory<Abstract>      (ConstructKind.ABSTRACT);
     public final Factory<Argument>       arguments      = new Factory<Argument>      (ConstructKind.ARGUMENT);
