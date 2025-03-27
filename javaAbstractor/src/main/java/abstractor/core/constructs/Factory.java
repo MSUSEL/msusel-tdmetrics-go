@@ -3,38 +3,33 @@ package abstractor.core.constructs;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.TreeSet;
 
 import spoon.reflect.declaration.CtElement;
 
 import abstractor.core.json.*;
-import abstractor.core.log.Logger;
 
-public class Factory<T extends Construct> implements Jsonable {
+public class Factory<T extends Construct> implements Jsonable, Iterable<T> {
     private final ConstructKind conKind;
     private final TreeSet<T> set;
-    private final HashMap<CtElement, T> byElem;
+    private final Map<CtElement, T> byElem;
+    private final Set<CtElement> inProg;
 
     public Factory(ConstructKind kind) {
         this.conKind = kind;
         this.set = new TreeSet<T>();
         this.byElem = new HashMap<CtElement, T>();
+        this.inProg = new HashSet<CtElement>();
     }
 
     public ConstructKind kind() { return this.conKind; }
 
     public int size() { return this.set.size(); }
-
-    public T get(int index) {
-        int i = 0;
-        for (T value : this.set) {
-            if (i == index) return value;
-            i++;
-        }
-        return null;
-    }
 
     public void clear() {
         this.set.clear();
@@ -49,44 +44,51 @@ public class Factory<T extends Construct> implements Jsonable {
         return Collections.unmodifiableList(list);
     }
 
-    public interface ConstructCreator<T extends Construct> { T create(); }
-
-    public interface FinishConstruct<T extends Construct> { void finish(T con); }
-
-    public T create(Logger log, CtElement elem, String title,
-        ConstructCreator<T> c, FinishConstruct<T> f) {
-        final T existing = this.byElem.get(elem);
-        if (existing != null) return existing;
-        
-        if (log != null) {
-            log.log("Adding " + title);
-            log.push();
+    public T get(int index) {
+        int i = 0;
+        for (T value : this.set) {
+            if (i == index) return value;
+            i++;
         }
-        try {
-            final T newCon = c.create();
+        return null;
+    }
 
-            T other = this.set.floor(newCon);
-            if (newCon.equals(other)) return other;
-            this.set.add(newCon);
-            this.byElem.put(elem, newCon);
-
-            if (f != null) f.finish(newCon);
-            return newCon;
-        } finally {
-            if (log != null) log.pop();
-        }
+    public T get(CtElement elem) {
+        return this.byElem.get(elem);
     }
     
-    public T create(Logger log, CtElement elem, String title,
-        ConstructCreator<T> c) {
-        return this.create(log, elem, title, c, null);
+    public T get(T c) {
+        final T other = this.set.floor(c);
+        if (c.equals(other)) return other;
+        return null;
+    }
+
+    public T addOrGet(CtElement elem, T c) {
+        final T other = this.get(c);
+        if (other != null) return other;
+        this.add(elem, c);
+        return c;
     }
 
     public T addOrGet(T c) {
-        T other = this.set.floor(c);
-        if (c.equals(other)) return other;
+        return this.addOrGet(null, c);
+    }
+    
+    public void add(CtElement elem, T c) {
         this.set.add(c);
-        return c;
+        if (elem != null) this.byElem.put(elem, c);
+    }
+    
+    public void startProgress(CtElement elem) {
+        this.inProg.add(elem);
+    }
+    
+    public boolean inProgress(CtElement elem) {
+        return this.inProg.contains(elem);
+    }
+    
+    public void stopProgress(CtElement elem) {
+        this.inProg.remove(elem);
     }
 
     public void setIndices() {

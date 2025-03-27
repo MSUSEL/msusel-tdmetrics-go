@@ -1,7 +1,6 @@
 package abstractor.core;
 
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.Disabled;
 
 public class ClassTests {
 
@@ -164,8 +163,7 @@ public class ClassTests {
             "}");
     }
 
-    @Test
-    @Disabled // TODO: Enable once type params work
+    @Test 
     public void ClassTestWithTypeParams() {
         final Tester t = Tester.classFromSource(
             "public class Foo<T extends Object> {",
@@ -173,6 +171,31 @@ public class ClassTests {
             "}");
         t.checkProject(
             "{",
+            "  fields: [",
+            "    { name: value, type: typeParam1, visibility: public }", // 1. value T
+            "  ],",
+            "  interfaceDescs: [",
+            "    { abstracts: [ ] }", // 1. Object
+            "  ],",
+            "  language: java,",
+            "  locs: { 1: unknown },",
+            "  objects: [",
+            "    {", // 1. Foo struct { value T }
+            "      name: Foo, package: 1,",
+            "      data: 1, interface: null,", // TODO: Fix interface
+            "      visibility: public, loc: 1,",
+            "      typeParams: [ 1 ]",
+            "    },",
+            "  ],",
+            "  packages: [",
+            "    { objects: [ 1 ] }", // 1. main package
+            "  ],",
+            "  structDescs: [",
+            "    { fields: [ 1 ] }", // 1. struct { value T }
+            "  ],",
+            "  typeParams: [",
+            "    { name: T, type: interfaceDesc1 }", // T Object
+            "  ]",
             "}");
     }
 }

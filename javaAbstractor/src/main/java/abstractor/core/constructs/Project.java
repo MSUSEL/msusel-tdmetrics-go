@@ -48,7 +48,20 @@ public class Project implements Jsonable {
         this.typeDescRefs,
         this.typeParams,
         this.typeParamRefs,
+        this.values
+    };
+
+    public final Factory<?>[] declarations = new Factory<?>[] {
+        this.interfaceDecls,
+        this.methodDecls,
+        this.objectDecls,
         this.values,
+    };
+
+    public final Factory<?>[] references = new Factory<?>[] {
+        this.declRefs,
+        this.typeDescRefs,
+        this.typeParamRefs
     };
 
     private void setAllIndices() {

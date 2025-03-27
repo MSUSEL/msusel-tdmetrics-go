@@ -53,9 +53,9 @@ public abstract class Reference<T extends Construct> extends ConstructImp {
     public JsonNode toJson(JsonHelper h) {
         JsonObject obj = (JsonObject)super.toJson(h);
         obj.put("name", this.name);
-        obj.put("context", this.context);
-        obj.put("typeArgs", keyList(this.typeArguments));
-        obj.put("resolved", key(this.res));
+        obj.putNotEmpty("context", this.context);
+        obj.putNotEmpty("typeArgs", keyList(this.typeArguments));
+        obj.putNotEmpty("resolved", key(this.res));
         return obj;
     }
 

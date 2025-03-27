@@ -17,8 +17,8 @@ import abstractor.core.constructs.*;
 import abstractor.core.log.*;
 
 public class Abstractor {
-    private final Logger log;
-    private final Project proj;
+    public final Logger log;
+    public final Project proj;
 
     public Abstractor(Logger log, Project proj) {
         this.log = log;
@@ -50,6 +50,75 @@ public class Abstractor {
         this.addObjectDecl(Launcher.parseClass(source));
     }
 
+    public interface ConstructCreator<T extends Construct> { T create(); }
+    public interface FinishConstruct<T extends Construct> { void finish(T con); }
+    public interface InProgressHandle<T extends Construct> { T handle(); }
+
+    public <T extends Construct, U extends T> T create(Factory<U> factory, CtElement elem,
+        String title, ConstructCreator<U> c, FinishConstruct<U> f, InProgressHandle<T> h) {
+        final T existing = factory.get(elem);
+        if (existing != null) return existing;
+
+        try {
+            if (log != null) {
+                log.log("Adding " + title);
+                log.push();
+            }
+
+            if (factory.inProgress(elem)) {
+                if (h != null) return h.handle();
+                log.error("Error: Already in progress: " + title);
+                return null;
+            }
+
+            factory.startProgress(elem);
+            final U newCon = c.create();
+            factory.stopProgress(elem);
+
+            final U other = factory.get(newCon);
+            if (other != null) return other;
+            factory.add(elem, newCon);
+            
+            this.resolveReferencesFor(elem, newCon);
+            if (f != null) f.finish(newCon);
+            return newCon;
+        } finally {
+            if (log != null) log.pop();
+        }
+    }
+    
+    public <T extends Construct, U extends T> T create(Factory<U> factory, CtElement elem,
+        String title, ConstructCreator<U> c, FinishConstruct<U> f) {
+        return this.create(factory, elem, title, c, f, null);
+    }
+    
+    public <T extends Construct, U extends T> T create(Factory<U> factory, CtElement elem,
+        String title, ConstructCreator<U> c) {
+        return this.create(factory, elem, title, c, null, null);
+    }
+
+    public <T extends Construct> void resolveReferencesFor(CtElement elem, T con) {
+        if (con instanceof Reference<?>) return;
+        
+        if (con instanceof Declaration decl) {
+            for (DeclarationRef ref : this.proj.declRefs) {
+                if (ref.elem.equals(elem)) ref.setResolved(decl);
+            }
+        }
+
+        if (con instanceof TypeDesc td) {
+            for (TypeDescRef ref : this.proj.typeDescRefs) {
+                if (ref.elem.equals(elem)) ref.setResolved(td);
+            }
+        }
+
+        if (con instanceof TypeParam tp) {
+            for (TypeParamRef ref : this.proj.typeParamRefs) {
+                if (ref.elem.equals(elem)) ref.setResolved(tp);
+            }
+        }
+    }
+
     private void addModel(CtModel model) {
         for (CtPackage pkg : model.getAllPackages())
             this.addPackage(pkg);
@@ -69,7 +138,7 @@ public class Abstractor {
     }
 
     private PackageCon addPackage(CtPackage pkg) {
-        return this.proj.packages.create(this.log, pkg,
+        return this.create(this.proj.packages, pkg,
             "package " + pkg.getQualifiedName(),
             () -> {
                 final String name = pkg.getQualifiedName();
@@ -78,9 +147,11 @@ public class Abstractor {
             },
             (PackageCon pkgCon) -> {
                 for (CtType<?> t : pkg.getTypes()) {
-                    if (t instanceof CtClass<?> c) this.addObjectDecl(c);
-                    else if (t instanceof CtInterface<?> i) this.addInterfaceDecl(i);
-                    else this.log.error("Unhandled (" + t.getClass().getName() + ") "+t.getQualifiedName());
+                    if (t instanceof CtClass<?> c) {
+                        if (!this.proj.objectDecls.inProgress(c)) this.addObjectDecl(c);
+                    } else if (t instanceof CtInterface<?> i) {
+                        if (!this.proj.interfaceDecls.inProgress(i)) this.addInterfaceDecl(i);
+                    } else this.log.error("Unhandled (" + t.getClass().getName() + ") "+t.getQualifiedName());
                 }
             });
     }
@@ -89,8 +160,8 @@ public class Abstractor {
      * Handles adding and processing classes, enums, and records.
      * @param c The class to process.
      */
-    private ObjectDecl addObjectDecl(CtClass<?> c) {
-        return this.proj.objectDecls.create(this.log, c,
+    private TypeDesc addObjectDecl(CtClass<?> c) {
+        return this.create(this.proj.objectDecls, c,
             "object decl " + c.getQualifiedName(),
             () -> {
                 final CtPackage       pkg        = c.getPackage();
@@ -116,11 +187,14 @@ public class Abstractor {
                 }
         
                 // TODO: Finish implementing
+            },
+            () -> {
+                return this.addTypeDescRef(c.getReference());
             });
     }
 
     private MethodDecl addMethod(ObjectDecl receiver, CtMethod<?> m) {
-        return this.proj.methodDecls.create(this.log, m,
+        return this.create(this.proj.methodDecls, m,
             "method " + m.getSignature(),
             () -> {
                 final PackageCon      pkgCon     = receiver.pkg;
@@ -143,7 +217,7 @@ public class Abstractor {
     }
 
     private Signature addSignature(CtMethod<?> m) {
-        return this.proj.signatures.create(this.log, m,
+        return this.create(this.proj.signatures, m,
             "signature " + m.getSignature(),
             () -> {
                 List<CtParameter<?>> params = m.getParameters();
@@ -161,7 +235,7 @@ public class Abstractor {
     }
 
     private Argument addArgument(CtParameter<?> p) {
-        return this.proj.arguments.create(this.log, p,
+        return this.create(this.proj.arguments, p,
             "parameter " + p.getSimpleName(),
             () -> {
                 final String   name = p.getSimpleName();
@@ -171,7 +245,7 @@ public class Abstractor {
     }
     
     private Argument addArgument(CtTypeReference<?> t) {
-        return this.proj.arguments.create(this.log, t,
+        return this.create(this.proj.arguments, t,
             "parameter <unnamed> " + t.getSimpleName(),
             () -> {
                 final TypeDesc type = this.addTypeDesc(t);
@@ -180,7 +254,7 @@ public class Abstractor {
     }
 
     private StructDesc addStruct(CtClass<?> c) {
-        return this.proj.structDescs.create(this.log, c,
+        return this.create(this.proj.structDescs, c,
             "struct " + c.getQualifiedName(),
             () -> {
                 // Handle enum?
@@ -193,7 +267,7 @@ public class Abstractor {
     }
 
     private Field addField(CtField<?> f) {
-        return this.proj.fields.create(this.log, f,
+        return this.create(this.proj.fields, f,
             "field " + f.getSimpleName(),
             () -> {
                 final String   name = f.getSimpleName();
@@ -205,8 +279,8 @@ public class Abstractor {
             });
     }
     
-    private InterfaceDecl addInterfaceDecl(CtInterface<?> i) {
-        return this.proj.interfaceDecls.create(this.log, i,
+    private TypeDesc addInterfaceDecl(CtInterface<?> i) {
+        return this.create(this.proj.interfaceDecls, i,
             "interface decl " + i.getQualifiedName(),
             () -> {
                 final CtPackage       pkg        = i.getPackage();
@@ -220,14 +294,18 @@ public class Abstractor {
             (InterfaceDecl id) -> {
                 id.setVisibility(i);
                 if (id.pkg != null) id.pkg.interfaceDecls.add(id);                
+            },
+            () -> {
+                return this.addTypeDescRef(i.getReference());
             });
     }
 
     private TypeDesc addTypeDesc(CtTypeReference<?> tr) {
         if (tr.isPrimitive()) return this.addBasic(tr);
         if (tr.isArray())     return this.addArray((CtArrayTypeReference<?>)tr);
-        if (tr.isClass())     return this.getNamedTypeDesc(tr);
-        if (tr.isInterface()) return this.getNamedTypeDesc(tr);
+        if (tr.isClass())     return this.addNamedTypeDesc(tr);
+        if (tr.isInterface()) return this.addNamedTypeDesc(tr);
+        if (tr.isGenerics())  return this.addTypeParam((CtTypeParameterReference)tr);
 
         // TODO: Finish implementing.
         return this.unknownTypeDesc(tr);
@@ -254,19 +332,28 @@ public class Abstractor {
         return null;
     }
 
-    private TypeDescRef getNamedTypeDesc(CtTypeReference<?> tr) {
-        return this.proj.typeDescRefs.create(this.log, tr,
+    private TypeDesc addNamedTypeDesc(CtTypeReference<?> tr) {
+
+
+
+        // TODO: Switch based on availbility and some lock
+
+        return this.addTypeDescRef(tr);
+    }
+
+    private TypeDescRef addTypeDescRef(CtTypeReference<?> tr) {
+        return this.create(this.proj.typeDescRefs, tr,
             "type desc ref "+ tr.getSimpleName(),
             () -> {
                 final String name = tr.getSimpleName();
-                final String pkgPath = tr.getPath().toString();
+                final String pkgPath = tr.getPackage().toString();
                 final List<TypeDesc> tps = this.addTypeArguments(tr.getActualTypeArguments());
                 return new TypeDescRef(tr, pkgPath, name, tps);
             });
     }
 
     private InterfaceInst addArray(CtArrayTypeReference<?> tr) {
-        return this.proj.interfaceInsts.create(this.log, tr,
+        return this.create(this.proj.interfaceInsts, tr,
             "array instance " + tr.getSimpleName(),
             () -> {
                 final TypeDesc elem = this.addTypeDesc(tr.getArrayType());
@@ -278,7 +365,7 @@ public class Abstractor {
     }
     
     private Basic addBasic(CtTypeReference<?> tr) {
-        return this.proj.basics.create(this.log, tr,
+        return this.create(this.proj.basics, tr,
             "basic " + tr.getSimpleName(),
             () -> {
                 final String name = tr.getSimpleName();
@@ -289,7 +376,7 @@ public class Abstractor {
     }
 
     private InterfaceDesc addInterfaceDesc(CtInterface<?> i) {
-        return this.proj.interfaceDescs.create(this.log, i,
+        return this.create(this.proj.interfaceDescs, i,
             "interface description " + i.getSimpleName(),
             () -> {
                 final SortedSet<Abstract> abstracts = new TreeSet<Abstract>();
@@ -305,7 +392,7 @@ public class Abstractor {
     }
 
     private Abstract addAbstract(CtMethod<?> m) {
-        return this.proj.abstracts.create(this.log, m,
+        return this.create(this.proj.abstracts, m,
             "abstract " + m.getSimpleName(),
             () -> {
                 final String name = m.getSimpleName();
@@ -326,15 +413,23 @@ public class Abstractor {
         return result;
     }
 
+    private TypeParam addTypeParam(CtTypeParameterReference tp) {
+        return this.addTypeParam(tp.getDeclaration());
+    }
+
     private TypeParam addTypeParam(CtTypeParameter tp) {
-        return this.proj.typeParams.create(this.log, tp,
+        return this.create(this.proj.typeParams, tp,
             "type params " + tp.getQualifiedName(),
             () -> {
                 final String name = tp.getQualifiedName();
                 
+                // TODO: Remove
                 //System.out.println(">> " + name + " >> " + tp.prettyprint());
+                //System.out.println(">> >> " + tp.getTypeErasure());
+                //for (CtTypeReference<?> tpr : tp.getSuperInterfaces())
+                //    System.out.println(">>  >> " + tpr.getSimpleName() + " >> " + tpr.prettyprint());
 
-                final TypeDesc type = null;
+                final TypeDesc type = this.addTypeDesc(tp.getTypeErasure());
 
                 // TODO: Finish
                 return new TypeParam(name, type);
@@ -342,11 +437,11 @@ public class Abstractor {
     }
 
     private Metrics addMetrics(CtMethod<?> m) {
-        return this.proj.metrics.create(this.log, m,
+        return this.create(this.proj.metrics, m,
             "metrics",
             () -> {
                 final Location loc = proj.locations.create(m.getPosition());
-                final Analyzer ana = new Analyzer(this.proj, this.log, loc);
+                final Analyzer ana = new Analyzer(this, loc);
                 ana.addMethod(m);
                 return ana.getMetrics();
             });

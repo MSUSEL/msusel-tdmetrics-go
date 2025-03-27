@@ -38,7 +38,7 @@ public class Analyzer {
 
     private static final boolean logElementTree = false;
 
-    private final Project proj;
+    private final Abstractor abs;
     private final Logger log;
     public final Location loc;
 
@@ -55,9 +55,9 @@ public class Analyzer {
     private final SortedSet<Construct> reads;
     private final SortedSet<Construct> writes;
 
-    public Analyzer(Project proj, Logger log, Location loc) {
-        this.proj       = proj;
-        this.log        = log;
+    public Analyzer(Abstractor abs, Location loc) {
+        this.abs        = abs;
+        this.log        = abs.log;
         this.loc        = loc;
         this.minLine    = Integer.MAX_VALUE;
         this.minColumn  = new TreeMap<Integer, Integer>();
@@ -269,7 +269,7 @@ public class Analyzer {
         if (elem instanceof CtInvocation inv) {
             final CtExecutable<?> ex = inv.getExecutable().getDeclaration();
             if (ex instanceof CtMethod<?> method) {
-                DeclarationRef ref = this.proj.declRefs.create(this.log, method,
+                DeclarationRef ref = this.abs.create(this.abs.proj.declRefs, method,
                     "add invocation " + method.getSimpleName(),
                     ()-> {
                         final String pkgPath = method.getClass().getName();
