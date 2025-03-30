@@ -638,6 +638,9 @@ type Baz struct { $data int }
 | `typeParams` | ⬤ | ◯ | List of [indices](#indices) to [type parameters](#type-parameter) if this object is generic. |
 | `interface`  | ◯ | ◯ | The [index](#indices) to the [interface description](#interface-description) that this object matches with. |
 
+
+
+
 ### Object Instance
 
 A object instance (`objectInst`) is an instantiation of a generic

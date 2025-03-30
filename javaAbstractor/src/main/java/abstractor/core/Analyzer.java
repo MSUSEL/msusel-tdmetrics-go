@@ -104,7 +104,7 @@ public class Analyzer {
         return indentSum;
     }
 
-    public void addMethod(CtMethod<?> m) {
+    public void addMethod(CtMethod<?> m) throws Exception {
         this.addPosition(m.getPosition());
 
         for (CtExtendedModifier em : m.getExtendedModifiers())
@@ -137,7 +137,7 @@ public class Analyzer {
         return "(" + type + ") " + head + tail;
     }
 
-    private void addElement(CtElement elem) {
+    private void addElement(CtElement elem) throws Exception {
         // Skip over any comments in the code.
         if (elem instanceof CtComment) return;
 
@@ -261,7 +261,7 @@ public class Analyzer {
         return 0;
     }
 
-    private void addUsage(CtElement elem) {
+    private void addUsage(CtElement elem) throws Exception {
         // List<Method> invokes;
         // List<TypeDesc> reads;
         // List<TypeDesc> writes;

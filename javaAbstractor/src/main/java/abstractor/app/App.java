@@ -11,12 +11,12 @@ import abstractor.core.log.*;
 
 public class App {
     
-    static public void main(String[] args) {
+    static public void main(String[] args) throws Exception {
         final Config cfg = new Config();
         if (cfg.FromArgs(args, null)) run(cfg);
     }
 
-    static public boolean run(Config cfg) {
+    static public boolean run(Config cfg) throws Exception {
         Logger log = new Logger(cfg.verbose);
         Project proj = new Project();
         Abstractor ab = new Abstractor(log, proj);

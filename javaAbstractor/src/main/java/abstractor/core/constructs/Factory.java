@@ -65,7 +65,10 @@ public class Factory<T extends Construct> implements Jsonable, Iterable<T> {
 
     public T addOrGet(CtElement elem, T c) {
         final T other = this.get(c);
-        if (other != null) return other;
+        if (other != null) {
+            this.addElemKey(elem, other);
+            return other;
+        }
         this.add(elem, c);
         return c;
     }
@@ -73,10 +76,14 @@ public class Factory<T extends Construct> implements Jsonable, Iterable<T> {
     public T addOrGet(T c) {
         return this.addOrGet(null, c);
     }
+
+    public void addElemKey(CtElement elem, T c) {
+        if (elem != null) this.byElem.put(elem, c);
+    }
     
     public void add(CtElement elem, T c) {
         this.set.add(c);
-        if (elem != null) this.byElem.put(elem, c);
+        this.addElemKey(elem, c);
     }
     
     public void startProgress(CtElement elem) {

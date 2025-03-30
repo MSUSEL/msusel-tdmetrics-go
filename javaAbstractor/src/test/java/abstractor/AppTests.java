@@ -34,7 +34,9 @@ public class AppTests {
         cfg.writeKinds    = false;
         cfg.defaultOut    = new PrintStream(buffer);
         cfg.defaultFormat = format;
-        assertTrue(App.run(cfg), "App.run returned false.");
+        assertDoesNotThrow(() -> {
+            assertTrue(App.run(cfg), "App.run returned false.");
+        }, "Error running App.run");
 
         final JsonNode expJson = assertDoesNotThrow(() -> JsonNode.parseFile(absFile));
         final String exp = format.format(expJson);

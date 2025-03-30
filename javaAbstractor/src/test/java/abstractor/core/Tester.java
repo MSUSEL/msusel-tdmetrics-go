@@ -1,5 +1,6 @@
 package abstractor.core;
 
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.fail;
 
 import java.io.ByteArrayOutputStream;
@@ -52,7 +53,13 @@ public class Tester {
     }
 
     public void addClassFromSource(String ...lines) {
-        this.ab.addClassFromSource(lines);
+        try {
+            this.ab.addClassFromSource(lines);
+        } catch (Exception ex) {
+            this.printLogs();
+            fail(ex);
+        }
+
         if (this.log.errorCount() > 0) {
             this.printLogs();
             fail("expected zero errors");

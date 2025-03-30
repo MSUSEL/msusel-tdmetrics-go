@@ -28,8 +28,8 @@ public class Baker {
         return value;
     }
 
-    private InterfaceDesc objectDesc() {
-        return this.getConstruct("objectDesc", () -> {
+    public InterfaceDesc objectDesc() {
+        return this.getConstruct("objectInterfaceDesc", () -> {
             final InterfaceDesc desc = new InterfaceDesc(Collections.emptySortedSet());
             return this.proj.interfaceDescs.addOrGet(desc);
         });
