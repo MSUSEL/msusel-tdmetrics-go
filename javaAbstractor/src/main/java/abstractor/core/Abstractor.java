@@ -50,6 +50,47 @@ public class Abstractor {
         this.addObjectDecl(Launcher.parseClass(source));
     }
 
+    public void finish() throws Exception {
+        this.log.log("Finishing");
+        this.log.push();
+        this.resolveAllReferences();
+        this.clearAllReferences();
+        this.log.pop();
+        this.log.log("Finished");
+    }
+
+    private void resolveAllReferences() {
+
+    }
+
+    private void clearAllReferences() {
+        for (DeclarationRef ref : this.proj.declRefs)
+            this.log.errorIf(!ref.isResolved(), "Unresolved decl reference: " + ref.toString());
+        for (TypeDescRef ref : this.proj.typeDescRefs)
+            this.log.errorIf(!ref.isResolved(), "Unresolved type desc reference: " + ref.toString());
+        for (TypeParamRef ref : this.proj.typeParamRefs)
+            this.log.errorIf(!ref.isResolved(), "Unresolved type param reference: " + ref.toString());
+        this.proj.declRefs.clear();
+        this.proj.typeDescRefs.clear();
+        this.proj.typeParamRefs.clear();
+    }
+
+    private <T extends Construct> void resolveReferencesFor(CtElement elem, T con) {
+        if (con instanceof Reference<?>) return;
+        if (con instanceof Declaration decl) {
+            final DeclarationRef ref = this.proj.declRefs.get(elem);
+            if (ref != null) ref.setResolved(decl);
+        }
+        if (con instanceof TypeDesc td) {
+            final TypeDescRef ref = this.proj.typeDescRefs.get(elem);
+            if (ref != null) ref.setResolved(td);
+        }
+        if (con instanceof TypeParam tp) {
+            final TypeParamRef ref = this.proj.typeParamRefs.get(elem);
+            if (ref != null) ref.setResolved(tp);
+        }
+    }
+
     public interface ConstructCreator<T extends Construct> { T create() throws Exception; }
     public interface FinishConstruct<T extends Construct> { void finish(T con) throws Exception; }
     public interface InProgressHandle<T extends Construct> { T handle() throws Exception; }
@@ -60,12 +101,10 @@ public class Abstractor {
         if (existing != null) return existing;
 
         try {
-            if (log != null) {
-                log.log("Adding " + title);
-                log.push();
-            }
+            log.log("Adding " + title);
+            log.push();
 
-            if (factory.inProgress(elem)) {
+            if (factory.inProgress) {
                 if (h != null) {
                     log.log("Already in progress: " + title);
                     return h.handle();
@@ -73,55 +112,34 @@ public class Abstractor {
                 throw new Exception("Already in progress: " + title);
             }
 
-            factory.startProgress(elem);
+            factory.inProgress = true;
             final U newCon = c.create();
-            factory.stopProgress(elem);
 
             final U other = factory.get(newCon);
             if (other != null) {
                 factory.addElemKey(elem, other);
+                factory.inProgress = false;
                 return other;
             }
             factory.add(elem, newCon);
-            
+
             this.resolveReferencesFor(elem, newCon);
             if (f != null) f.finish(newCon);
+            factory.inProgress = false;
             return newCon;
         } finally {
-            if (log != null) log.pop();
+            log.pop();
         }
     }
-    
+
     public <T extends Construct, U extends T> T create(Factory<U> factory, CtElement elem,
         String title, ConstructCreator<U> c, FinishConstruct<U> f) throws Exception {
         return this.create(factory, elem, title, c, f, null);
     }
-    
+
     public <T extends Construct, U extends T> T create(Factory<U> factory, CtElement elem,
         String title, ConstructCreator<U> c) throws Exception{
         return this.create(factory, elem, title, c, null, null);
-    }
-
-    public <T extends Construct> void resolveReferencesFor(CtElement elem, T con) {
-        if (con instanceof Reference<?>) return;
-        
-        if (con instanceof Declaration decl) {
-            for (DeclarationRef ref : this.proj.declRefs) {
-                if (ref.elem.equals(elem)) ref.setResolved(decl);
-            }
-        }
-
-        if (con instanceof TypeDesc td) {
-            for (TypeDescRef ref : this.proj.typeDescRefs) {
-                if (ref.elem.equals(elem)) ref.setResolved(td);
-            }
-        }
-
-        if (con instanceof TypeParam tp) {
-            for (TypeParamRef ref : this.proj.typeParamRefs) {
-                if (ref.elem.equals(elem)) ref.setResolved(tp);
-            }
-        }
     }
 
     private void addModel(CtModel model) throws Exception {
@@ -152,11 +170,9 @@ public class Abstractor {
             },
             (PackageCon pkgCon) -> {
                 for (CtType<?> t : pkg.getTypes()) {
-                    if (t instanceof CtClass<?> c) {
-                        if (!this.proj.objectDecls.inProgress(c)) this.addObjectDecl(c);
-                    } else if (t instanceof CtInterface<?> i) {
-                        if (!this.proj.interfaceDecls.inProgress(i)) this.addInterfaceDecl(i);
-                    } else this.log.error("Unhandled (" + t.getClass().getName() + ") "+t.getQualifiedName());
+                    if (t instanceof CtClass<?> c) this.addObjectDecl(c);
+                    else if (t instanceof CtInterface<?> i) this.addInterfaceDecl(i);
+                    else this.log.error("Unhandled (" + t.getClass().getName() + ") "+t.getQualifiedName());
                 }
             });
     }
@@ -190,7 +206,6 @@ public class Abstractor {
                 for (CtMethod<?> m : c.getAllMethods()) {
                     if (m.getParent() == c) this.addMethod(obj, m);
                 }
-
 
                 SortedSet<Abstract> abstracts = new TreeSet<Abstract>();
                 for (CtMethod<?> m : c.getAllMethods()) {
@@ -375,8 +390,7 @@ public class Abstractor {
             "basic " + tr.getSimpleName(),
             () -> {
                 final String name = tr.getSimpleName();
-                if (name == "void")
-                    this.log.error("A void was added as a basic.");
+                this.log.errorIf(name == "void", "A void was added as a basic.");
                 return new Basic(name);
             });
     }

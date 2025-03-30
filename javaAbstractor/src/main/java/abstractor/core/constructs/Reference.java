@@ -1,6 +1,5 @@
 package abstractor.core.constructs;
 
-import java.util.Collections;
 import java.util.List;
 
 import spoon.reflect.declaration.CtElement;
@@ -22,7 +21,7 @@ public abstract class Reference<T extends Construct> extends ConstructImp {
         this.elem = elem;
         this.context = context;
         this.name = name;
-        this.typeArguments = Collections.unmodifiableList(typeArguments);
+        this.typeArguments = unmodifiableList(typeArguments);
     }
 
     public T getResolved() { return this.res; }
@@ -34,19 +33,6 @@ public abstract class Reference<T extends Construct> extends ConstructImp {
             return true;
         }
         return false;
-    }
-
-    public abstract ConstructKind unresolvedKind();
-    
-    public ConstructKind kind() {
-        if (this.isResolved()) return this.res.kind();
-        return this.unresolvedKind();
-    }
-
-    @Override
-    public int getIndex() {
-        if (this.isResolved()) return this.res.getIndex();
-        return super.getIndex();
     }
 
     @Override
@@ -62,8 +48,7 @@ public abstract class Reference<T extends Construct> extends ConstructImp {
     @Override
     public int compareTo(Construct c) {
         return Cmp.or(
-            // Skip `() -> super.compareTo(c),` so `kind` is not used in comparison to ensure a stable ordering.
-            Cmp.defer(this.unresolvedKind(), () -> ((Reference<?>)c).unresolvedKind()),
+            () -> super.compareTo(c),
             Cmp.defer(this.name, () -> ((Reference<?>)c).name),
             Cmp.defer(this.context, () -> ((Reference<?>)c).context),
             Cmp.deferList(this.typeArguments, () -> ((Reference<?>)c).typeArguments)

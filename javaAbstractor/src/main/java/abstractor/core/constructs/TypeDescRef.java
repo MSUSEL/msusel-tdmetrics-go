@@ -10,5 +10,5 @@ public class TypeDescRef extends Reference<TypeDesc> implements TypeDesc {
         super(elem, context, name, typeParams);
     }
 
-    public ConstructKind unresolvedKind() { return ConstructKind.TYPE_DESC_REF; }
+    public ConstructKind kind() { return ConstructKind.TYPE_DESC_REF; }
 }

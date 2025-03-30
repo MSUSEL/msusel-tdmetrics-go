@@ -10,16 +10,22 @@ import abstractor.core.json.*;
 public abstract class ConstructImp implements Construct {
 
     static public JsonValue key(Construct c) {
-        return c == null ? JsonValue.ofNull() : JsonValue.of(c.kind().toString() + c.getIndex());
+        if (c == null) return JsonValue.ofNull();
+        if (c instanceof Reference ref && ref.isResolved())
+            return key(ref.getResolved());
+        return JsonValue.of(c.kind().toString() + c.getIndex());
     }
     
     static public JsonValue index(Construct c) {
-        return c == null ? JsonValue.ofNull() : JsonValue.of(c.getIndex());
+        if (c == null) return JsonValue.ofNull();
+        if (c instanceof Reference ref && ref.isResolved())
+            return index(ref.getResolved());
+        return JsonValue.of(c.getIndex());
     }
 
     static public JsonNode keyList(Iterable<? extends Construct> os) {
         if (os == null) return JsonValue.ofNull();
-        
+
         JsonArray indices = new JsonArray();
         for (Construct o: os) indices.add(key(o));
         return indices;
@@ -38,7 +44,7 @@ public abstract class ConstructImp implements Construct {
 
         TreeSet<JsonValue> set = new TreeSet<JsonValue>();
         for (Construct o: os) set.add(key(o));
-        
+
         JsonArray indices = new JsonArray();
         for (JsonValue s: set) indices.add(s);
         return indices;
@@ -86,5 +92,13 @@ public abstract class ConstructImp implements Construct {
     @Override
     public boolean equals(Object obj) {
         return obj instanceof Construct c && this.compareTo(c) == 0;
+    }
+
+    @Override
+    public String toString() {
+        JsonHelper jh = new JsonHelper();
+        jh.writeKinds = true;
+        jh.writeIndices = true;
+        return JsonFormat.Relaxed().format(this.toJson(jh));
     }
 }

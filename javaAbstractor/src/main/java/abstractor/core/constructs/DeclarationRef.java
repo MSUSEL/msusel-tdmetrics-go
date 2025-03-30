@@ -10,5 +10,5 @@ public class DeclarationRef extends Reference<Declaration> {
         super(elem, context, name, typeParams);
     }
 
-    public ConstructKind unresolvedKind() { return ConstructKind.DECLARATION_REF; }
+    public ConstructKind kind() { return ConstructKind.DECLARATION_REF; }
 }

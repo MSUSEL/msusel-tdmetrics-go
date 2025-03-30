@@ -28,10 +28,18 @@ public class Logger {
         this.out.println(indent + text.replace("\n", "\n"+indent));
     }
 
+    public void logIf(boolean condition, String text) {
+        if (condition) this.log(text);
+    }
+
     public void error(String text) {
         this.errors++;
         final String indent = this.indent();
         this.err.println(indent + text.replace("\n", "\n"+indent));
+    }
+
+    public void errorIf(boolean condition, String text) {
+        if (condition) this.error(text);
     }
     
     private String indent() {

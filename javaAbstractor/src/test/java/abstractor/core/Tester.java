@@ -55,6 +55,7 @@ public class Tester {
     public void addClassFromSource(String ...lines) {
         try {
             this.ab.addClassFromSource(lines);
+            this.ab.finish();
         } catch (Exception ex) {
             this.printLogs();
             fail(ex);

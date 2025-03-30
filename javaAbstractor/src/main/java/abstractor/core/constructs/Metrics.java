@@ -1,6 +1,5 @@
 package abstractor.core.constructs;
 
-import java.util.Collections;
 import java.util.SortedSet;
 
 import abstractor.core.cmp.Cmp;
@@ -32,9 +31,9 @@ public class Metrics extends ConstructImp {
         this.lineCount  = lineCount;
         this.getter     = getter;
         this.setter     = setter;
-        this.invokes    = Collections.unmodifiableSortedSet(invokes);
-        this.reads      = Collections.unmodifiableSortedSet(reads);
-        this.writes     = Collections.unmodifiableSortedSet(writes);
+        this.invokes    = unmodifiableSortedSet(invokes);
+        this.reads      = unmodifiableSortedSet(reads);
+        this.writes     = unmodifiableSortedSet(writes);
     }
 
     public ConstructKind kind() { return ConstructKind.METRICS; }
