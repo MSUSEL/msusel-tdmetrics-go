@@ -14,18 +14,35 @@ public class ClassTests {
         t.checkProject(
             "{",
             "  abstracts: [",
-            "    { name: $get, signature: 2 },", // 1. $get(index int) int
-            "    { name: $get, signature: 3 },", // 2. $get(index int) T
-            "    { name: $len, signature: 1 },", // 3. $len() int
-            "    { name: $set, signature: 4 },", // 4. $set(index int, value int)
-            "    { name: $set, signature: 5 }",  // 5. $set(index int, value T)
+            "    { name: $get,      signature:  8 },", //  1. $get(index int) int ???
+            "    { name: $get,      signature:  9 },", //  2. $get(index int) T ???
+            "    { name: $len,      signature:  2 },", //  3. $len() int ???
+            "    { name: $set,      signature: 10 },", //  4. $set(index int, value int) ???
+            "    { name: $set,      signature: 11 },", //  5. $set(index int, value T) ???
+            "    { name: clone,     signature:  4 },", //  6. clone ???
+            "    { name: equals,    signature:  7 },", //  7. equals ???
+            "    { name: finalize,  signature:  1 },", //  8. finalize ???
+            "    { name: getClass,  signature:  3 },", //  9. getClass ???
+            "    { name: hashCode,  signature:  2 },", // 10. hashCode ???
+            "    { name: notify,    signature:  1 },", // 11. notify ???
+            "    { name: notifyAll, signature:  1 },", // 12. notifyAll ???
+            "    { name: toString,  signature:  3 },", // 13. toString ???
+            "    { name: wait,      signature:  1 },", // 14. wait ???
+            "    { name: wait,      signature:  5 },", // 15. wait ???
+            "    { name: wait,      signature:  6 }",  // 16. wait ???
             "  ],",
             "  arguments: [",
-            "    {              type: basic1     },", // 1. <unnamed> int
-            "    {              type: typeParam1 },", // 2. <unnamed> T
-            "    { name: index, type: basic1     },", // 3. index int
-            "    { name: value, type: basic1     },", // 4. value int
-            "    { name: value, type: typeParam1 }",  // 5. value T
+            "    {              type: basic1         },", //  1. <unnamed> int ???
+            "    {              type: basic2         },", //  2. <unnamed> ???
+            "    {              type: interfaceDesc5 },", //  3. <unnamed> ???
+            "    {              type: object2        },", //  4. <unnamed> ???
+            "    {              type: typeParam1     },", //  5. <unnamed> T
+            "    { name: arg0,  type: basic3         },", //  6. arg0 ???
+            "    { name: arg0,  type: object2        },", //  7. arg0 ???
+            "    { name: arg1,  type: basic2         },", //  8. arg1 ???
+            "    { name: index, type: basic2         },", //  9. index int ???
+            "    { name: value, type: basic2         },", // 10. value int ???
+            "    { name: value, type: typeParam1     }",  // 11. value T ???
             "  ],",
             "  basics: [ int ],",
             "  fields: [",

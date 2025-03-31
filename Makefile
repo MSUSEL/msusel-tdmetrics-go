@@ -14,7 +14,7 @@ go-test:
 	cd ./goAbstractor/ && go test -count=1 ./...
 
 j-test:
-	cd ./javaAbstractor/ && mvn
+	cd ./javaAbstractor/ && mvn -Dtest=ClassTests#ClassTestWithFields test
 # Add `-Dtest=TestClass#testMethod` to run specific tests
 
 td-test:
