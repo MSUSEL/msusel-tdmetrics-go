@@ -6,13 +6,13 @@ import java.util.TreeSet;
 import abstractor.core.cmp.Cmp;
 import abstractor.core.json.*;
 
-public class MethodDecl extends Declaration implements Method {
+public class MethodDecl extends DeclarationImp implements Method {
     public final ObjectDecl receiver;
     public final Signature signature;
     public final List<TypeParam> typeParams;
     public final TreeSet<MethodInst> instances;
     
-    public Metrics metrics; // TODO: Finish
+    public Metrics metrics;
 
     public MethodDecl(PackageCon pkg, ObjectDecl receiver, Location loc,
         String name, Signature signature, List<TypeParam> typeParams) {

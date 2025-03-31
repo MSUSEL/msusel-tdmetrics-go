@@ -6,7 +6,7 @@ import java.util.TreeSet;
 import abstractor.core.cmp.Cmp;
 import abstractor.core.json.*;
 
-public class InterfaceDecl extends Declaration implements TypeDesc {
+public class InterfaceDecl extends DeclarationImp implements TypeDeclaration {
     public final InterfaceDesc inter;
     public final List<TypeParam> typeParams;
     public final TreeSet<InterfaceInst> instances;

@@ -59,8 +59,19 @@ public class Abstractor {
         this.log.log("Finished");
     }
 
-    private void resolveAllReferences() {
+    private void resolveAllReferences() throws Exception  {
+        for (DeclarationRef ref : this.proj.declRefs) {
+            if (!ref.isResolved()) ref.setResolved(this.addDeclaration(ref.elem));
+        }
 
+        for (TypeDescRef ref : this.proj.typeDescRefs) {
+            if (!ref.isResolved()) ref.setResolved(this.addTypeDeclaration(ref.elem));
+        }
+
+        for (TypeParamRef ref : this.proj.typeParamRefs) {
+            if (!ref.isResolved()) {
+            }
+        }
     }
 
     private void clearAllReferences() {
@@ -106,7 +117,7 @@ public class Abstractor {
 
             if (factory.inProgress) {
                 if (h != null) {
-                    log.log("Already in progress: " + title);
+                    log.log("Handling in progress: " + title);
                     return h.handle();
                 }
                 throw new Exception("Already in progress: " + title);
@@ -169,19 +180,33 @@ public class Abstractor {
                 return new PackageCon(name, path);
             },
             (PackageCon pkgCon) -> {
-                for (CtType<?> t : pkg.getTypes()) {
-                    if (t instanceof CtClass<?> c) this.addObjectDecl(c);
-                    else if (t instanceof CtInterface<?> i) this.addInterfaceDecl(i);
-                    else this.log.error("Unhandled (" + t.getClass().getName() + ") "+t.getQualifiedName());
-                }
+                for (CtType<?> t : pkg.getTypes()) this.addDeclaration(t);
             });
+    }
+
+    private Declaration addDeclaration(CtElement elem) throws Exception {
+        if (elem instanceof CtTypeReference<?> tr) elem = tr.getTypeDeclaration();
+
+        if (elem instanceof CtClass<?> c) return this.addObjectDecl(c);
+        if (elem instanceof CtInterface<?> i) return this.addInterfaceDecl(i);
+        this.log.error("Unhandled decl (" + elem.getClass().getName() + ") "+elem.getShortRepresentation());
+        return null;
+    }
+
+    private TypeDeclaration addTypeDeclaration(CtElement elem) throws Exception {
+        if (elem instanceof CtTypeReference<?> tr) elem = tr.getTypeDeclaration();
+
+        if (elem instanceof CtClass<?> c) return this.addObjectDecl(c);
+        if (elem instanceof CtInterface<?> i) return this.addInterfaceDecl(i);
+        this.log.error("Unhandled type decl (" + elem.getClass().getName() + ") "+elem.getShortRepresentation());
+        return null;
     }
 
     /**
      * Handles adding and processing classes, enums, and records.
      * @param c The class to process.
      */
-    private TypeDesc addObjectDecl(CtClass<?> c) throws Exception {
+    private TypeDeclaration addObjectDecl(CtClass<?> c) throws Exception {
         return this.create(this.proj.objectDecls, c,
             "object decl " + c.getQualifiedName(),
             () -> {
@@ -306,7 +331,7 @@ public class Abstractor {
             });
     }
     
-    private TypeDesc addInterfaceDecl(CtInterface<?> i) throws Exception {
+    private TypeDeclaration addInterfaceDecl(CtInterface<?> i) throws Exception {
         return this.create(this.proj.interfaceDecls, i,
             "interface decl " + i.getQualifiedName(),
             () -> {
@@ -362,9 +387,9 @@ public class Abstractor {
         return null;
     }
 
-    private TypeDescRef addTypeDescRef(CtTypeReference<?> tr) throws Exception {
+    private TypeDeclaration addTypeDescRef(CtTypeReference<?> tr) throws Exception {
         return this.create(this.proj.typeDescRefs, tr,
-            "type desc ref "+ tr.getSimpleName(),
+            "type decl ref "+ tr.getSimpleName(),
             () -> {
                 final String name = tr.getSimpleName();
                 final String pkgPath = tr.getPackage().toString();

@@ -6,13 +6,13 @@ import java.util.TreeSet;
 import abstractor.core.cmp.Cmp;
 import abstractor.core.json.*;
 
-public class ObjectDecl extends Declaration implements TypeDesc {
+public class ObjectDecl extends DeclarationImp implements TypeDeclaration {
     public final StructDesc struct;
     public final TreeSet<MethodDecl> methodDecls;
     public final List<TypeParam> typeParams;
     public final TreeSet<InterfaceInst> instances;
     
-    public InterfaceDesc inter; // TODO: Finish
+    public InterfaceDesc inter;
 
     public ObjectDecl(PackageCon pkg, Location loc,
         String name, StructDesc struct, List<TypeParam> typeParams) {

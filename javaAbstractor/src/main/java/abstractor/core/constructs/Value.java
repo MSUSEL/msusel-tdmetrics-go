@@ -3,7 +3,7 @@ package abstractor.core.constructs;
 import abstractor.core.cmp.Cmp;
 import abstractor.core.json.*;
 
-public class Value extends Declaration {
+public class Value extends DeclarationImp {
     public final boolean constant;
     public final Metrics metrics;
     public final TypeDesc type;
