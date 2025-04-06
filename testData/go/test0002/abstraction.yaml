@@ -24,7 +24,7 @@
     }
   ],
   interfaceDescs: [
-    {}, # 1. interface{}
+    {}, # 1. any
     {   # 2. interface{ $len()int; $get(int)int; $set(int,int) }
       abstracts: [ 3, 1, 4 ],
       inherits:  [ 1 ],

@@ -29,7 +29,7 @@ public abstract class DeclarationImp extends ConstructImp implements Declaration
         if (this.pkg != null) obj.put("package", index(pkg));
         if (this.loc != null) obj.putNotEmpty("loc", this.loc.toJson(h));
         obj.putNotEmpty("name", this.name);
-        obj.putNotEmpty("visibility", this.visibility);
+        obj.putNotEmpty("vis", this.visibility);
         return obj;
     }
 

@@ -3,7 +3,7 @@
   methods: [
     { # 1. main
       name: main, package: 4, receiver: 1, signature: 1,
-      metrics: 1, loc: 4, visibility: public
+      metrics: 1, loc: 4, vis: public
     }
   ],
   metrics: [
@@ -14,7 +14,7 @@
   objects: [
     { # 1. EntryPoint
       name: EntryPoint, package: 4, data: 1, interface: null, # TODO: remove null
-      loc: 3, visibility: public,
+      loc: 3, vis: public,
       methods: [ 1 ],
     }
   ],

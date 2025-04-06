@@ -27,7 +27,7 @@ public class Field extends ConstructImp {
         JsonObject obj = (JsonObject)super.toJson(h);
         obj.put("name", this.name);
         obj.put("type", key(this.type));
-        obj.putNotEmpty("visibility", this.visibility);
+        obj.putNotEmpty("vis", this.visibility);
         return obj;
     }
 

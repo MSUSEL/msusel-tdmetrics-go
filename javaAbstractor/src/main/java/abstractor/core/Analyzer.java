@@ -69,6 +69,8 @@ public class Analyzer {
 
     public Metrics getMetrics() {
         final int lineCount = this.maxLine - this.minLine + 1;
+        if (lineCount <= 0) return null;
+
         final int codeCount = this.minColumn.size();
         final int indents   = this.calcIndent();
         

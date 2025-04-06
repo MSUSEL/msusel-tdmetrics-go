@@ -125,6 +125,10 @@ public class Abstractor {
 
             factory.inProgress = true;
             final U newCon = c.create();
+            if (newCon == null) {
+                factory.inProgress = false;
+                return null;
+            }
 
             final U other = factory.get(newCon);
             if (other != null) {

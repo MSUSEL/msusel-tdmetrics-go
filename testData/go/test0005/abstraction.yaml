@@ -53,7 +53,7 @@
     }
   ],
   interfaceDescs: [
-    {}, # 1. interface{}
+    {}, # 1. any
     {   # 2. interface{ $deref() Cat; Meow(); String() string }
       abstracts: [ 1, 8, 10 ], inherits: [ 1 ], hint: pointer
     },

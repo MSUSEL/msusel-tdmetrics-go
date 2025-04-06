@@ -315,16 +315,16 @@ Any embedded fields will be named using the name of the base type,
 e.g. `struct { *Foo[int] }` will be the same as `struct { Foo *Foo[int] }`.
 Unnamed types are not allowed to be embedded into a struct.
 
-| Name         | Optional | Extra | Description |
-|:-------------|:--------:|:-----:|:------------|
-| `embedded`   | ◯ | ⬤ | True if the field is from an embedded struct. |
-| `index`      | ◯ | ⬤ | The [index](#indices) of this field in the project's `fields` list. |
-| `kind`       | ◯ | ⬤ | `field` |
-| `name`       | ◯ | ◯ | The string name for the field. |
-| `type`       | ◯ | ◯ | [Key](#keys) for any [type description](#type-descriptions). |
-| `visibility` | ◯ | ⬤ | A string of the scope modifiers, like "public", "exported", or "private". |
+| Name       | Optional | Extra | Description |
+|:-----------|:--------:|:-----:|:------------|
+| `embedded` | ◯ | ⬤ | True if the field is from an embedded struct. |
+| `index`    | ◯ | ⬤ | The [index](#indices) of this field in the project's `fields` list. |
+| `kind`     | ◯ | ⬤ | `field` |
+| `name`     | ◯ | ◯ | The string name for the field. |
+| `type`     | ◯ | ◯ | [Key](#keys) for any [type description](#type-descriptions). |
+| `vis`      | ◯ | ⬤ | A string of the scope modifiers, like "public", "exported", or "private". |
 
-TODO: Replace `exported` with `visibility` goAbstractor.
+TODO: Replace `exported` with `vis` goAbstractor.
 
 ### Interface Declaration
 
@@ -362,9 +362,9 @@ public interface Baz {
 | `name`       | ◯ | ◯ | The name of the declared interface. |
 | `package`    | ◯ | ◯ | The [index](#indices) to the [package](#package) this declaration is declared in. |
 | `typeParams` | ⬤ | ◯ | List of [indices](#indices) to [type parameters](#type-parameter) if this interface is generic. |
-| `visibility` | ◯ | ⬤ | A string of the scope modifiers, like "public", "exported", or "private". |
+| `vis`        | ◯ | ⬤ | A string of the scope modifiers, like "public", "exported", or "private". |
 
-TODO: Replace `exported` with `visibility` goAbstractor.
+TODO: Replace `exported` with `vis` goAbstractor.
 
 ### Interface Description
 
@@ -508,9 +508,9 @@ public class Bar<T> {
 | `recvName`   | ◯ | ⬤ | The name given to the receiver. |
 | `signature`  | ◯ | ◯ | The [index](#indices) of the [signature](#signature) for this method. |
 | `typeParams` | ⬤ | ◯ | List of [indices](#indices) to [type parameters](#type-parameter) if this method is generic. |
-| `visibility` | ◯ | ⬤ | A string of the scope modifiers, like "public", "exported", or "private". |
+| `vis`        | ◯ | ⬤ | A string of the scope modifiers, like "public", "exported", or "private". |
 
-TODO: Replace `exported` with `visibility` goAbstractor.
+TODO: Replace `exported` with `vis` goAbstractor.
 
 ### Method Instance
 
@@ -804,16 +804,16 @@ var Y, Z = func() (int, int) {
 }()
 ```
 
-| Name       | Optional | Extra | Description |
-|:-----------|:--------:|:-----:|:------------|
-| `const`      | ⬤ | ◯ | True indicates the value is constant after initialization |
-| `index`      | ◯ | ⬤ | The [index](#indices) of this value in the projects' `values` list. |
-| `kind`       | ◯ | ⬤ | `value` |
-| `loc`        | ⬤ | ◯ | The [location](#locations) offset. |
-| `metrics`    | ⬤ | ◯ | The [index](#indices) of the [metrics](#metrics) for the initializer expression. |
-| `name`       | ◯ | ◯ | The name of the value. |
-| `package`    | ◯ | ◯ | The [index](#indices) of the [package](#package) this value is described in. |
-| `type`       | ◯ | ◯ | The [key](#keys) for the [type](#type-descriptions) of this value. |
-| `visibility` | ◯ | ⬤ | A string of the scope modifiers, like "public", "exported", or "private". |
+| Name      | Optional | Extra | Description |
+|:----------|:--------:|:-----:|:------------|
+| `const`   | ⬤ | ◯ | True indicates the value is constant after initialization |
+| `index`   | ◯ | ⬤ | The [index](#indices) of this value in the projects' `values` list. |
+| `kind`    | ◯ | ⬤ | `value` |
+| `loc`     | ⬤ | ◯ | The [location](#locations) offset. |
+| `metrics` | ⬤ | ◯ | The [index](#indices) of the [metrics](#metrics) for the initializer expression. |
+| `name`    | ◯ | ◯ | The name of the value. |
+| `package` | ◯ | ◯ | The [index](#indices) of the [package](#package) this value is described in. |
+| `type`    | ◯ | ◯ | The [key](#keys) for the [type](#type-descriptions) of this value. |
+| `vis`     | ◯ | ⬤ | A string of the scope modifiers, like "public", "exported", or "private". |
 
-TODO: Replace `exported` with `visibility` goAbstractor.
+TODO: Replace `exported` with `vis` goAbstractor.
