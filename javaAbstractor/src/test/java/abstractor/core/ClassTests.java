@@ -147,23 +147,43 @@ public class ClassTests {
         t.checkProject(
             "{",
             "  abstracts: [",
-            "    { name: $get, signature: 3 },", // 1. $get(index int) int
-            "    { name: $get, signature: 4 },", // 2. $get(index int) T
-            "    { name: $len, signature: 2 },", // 3. $len() int
-            "    { name: $set, signature: 5 },", // 4. $set(index int, value int)
-            "    { name: $set, signature: 6 }",  // 5. $set(index int, value T)
+            "    { name: $get,      signature:  8 },", //  1. $get(index int) int
+            "    { name: $get,      signature:  9 },", //  2. $get(index int) T
+            "    { name: $len,      signature:  2 },", //  3. $len() int
+            "    { name: $set,      signature: 10 },", //  4. $set(index int, value int)
+            "    { name: $set,      signature: 11 },", //  5. $set(index int, value T)
+            "    { name: bar,       signature: 12 },", //  6. bar( ??? ) ???
+            "    { name: baz,       signature:  1 },", //  7. baz( ??? ) ???
+            "    { name: cat,       signature: 13 },", //  8. cat( ??? ) ???
+            "    { name: clone,     signature:  4 },", //  9. clone( ??? ) ???
+            "    { name: equals,    signature:  7 },", // 10. equals( ??? ) ???
+            "    { name: finalize,  signature:  1 },", // 11. finalize( ??? ) ???
+            "    { name: getClass,  signature:  3 },", // 12. getClass( ??? ) ???
+            "    { name: hashCode,  signature:  2 },", // 13. hashCode( ??? ) ???
+            "    { name: notify,    signature:  1 },", // 14. notify( ??? ) ???
+            "    { name: notifyAll, signature:  1 },", // 15. notifyAll( ??? ) ???
+            "    { name: toString,  signature:  3 },", // 16. toString( ??? ) ???
+            "    { name: wait,      signature:  1 },", // 17. wait( ??? ) ???
+            "    { name: wait,      signature:  5 },", // 18. wait( ??? ) ???
+            "    { name: wait,      signature:  6 }",  // 19. wait( ??? ) ???
             "  ],",
             "  arguments: [",
-            "    {              type: basic1         },", // 1. <unnamed> int
-            "    {              type: typeParam1     },", // 2. <unnamed> T
-            "    { name: index, type: basic1         },", // 3. index int
-            "    { name: t,     type: interfaceInst1 },", // 4. t $Array<T>
-            "    { name: value, type: basic1         },", // 5. value int
-            "    { name: value, type: typeParam1     },", // 6. value T
-            "    { name: x,     type: basic1         },", // 7. x int
-            "    { name: y,     type: basic1         }",  // 8. y int
+            "    {              type: basic1         },", //  1. <unnamed> int
+            "    {              type: basic2         },", //  2. <unnamed> ???
+            "    {              type: interfaceDesc5 },", //  3. <unnamed> ???
+            "    {              type: object2        },", //  4. <unnamed> ???
+            "    {              type: typeParam1     },", //  5. <unnamed> T
+            "    { name: arg0,  type: basic3         },", //  6. arg0 ???
+            "    { name: arg0,  type: object2        },", //  7. arg0 ???
+            "    { name: arg1,  type: basic2         },", //  8. arg1 ???
+            "    { name: index, type: basic2         },", //  9. index int
+            "    { name: t,     type: interfaceInst1 },", // 10. t $Array<T>
+            "    { name: value, type: basic2         },", // 11. value int
+            "    { name: value, type: typeParam1     },", // 12. value T
+            "    { name: x,     type: basic2         },", // 13. x int
+            "    { name: y,     type: basic2         }",  // 14. y int
             "  ],",
-            "  basics: [ int ],",
+            "  basics: [ boolean, int, long ],",
             "  interfaceDecls: [",
             "    {", // 1. $Array<T>
             "      name: $Array, interface: 2,",
@@ -173,17 +193,36 @@ public class ClassTests {
             "  interfaceDescs: [",
             "    { abstracts: [ 1, 3, 4 ] },", // 1. interface { $get(index int) int, $len() int, $set(index int, value int) }
             "    { abstracts: [ 2, 3, 5 ] },", // 2. interface { $get(index int) T,   $len() int, $set(index int, value T) }
-            "    { abstracts: [ ] }",         // 3. Object
+            "    {", // 3.
+            "      abstracts: [ 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 6, 7, 8, 9 ],",
+            "      pin: object1,",
+            "    },",
+            "    {", // 4.
+            "      abstracts: [ 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 9 ],",
+            "      pin: object2,",
+            "    },",
+            "    { abstracts: [ ] }", // 5. Object
             "  ],",
             "  interfaceInsts: [",
-            "    { generic: 1, instanceTypes: [ basic1 ], resolved: 1 }", // 1. $Array<int>
+            "    { generic: 1, instanceTypes: [ basic2 ], resolved: 1 }", // 1. $Array<int>
             "  ],",
             "  language: java,",
             "  locs: { 1: unknown },",
             "  methods: [",
-            "    { loc: 2, metrics: 1, name: bar, package: 1, receiver: 1, signature: 7 },", // 1. bar func(x int, y int) int { ... }
-            "    { loc: 5, metrics: 2, name: baz, package: 1, receiver: 1, signature: 1 },", // 2. baz func()() { ... }
-            "    { loc: 8, metrics: 3, name: cat, package: 1, receiver: 1, signature: 8 }",  // 3. cat func(t ...$Array<T>) { ... }
+            "    { name: bar,       package: 1, receiver: 1, signature: 12, loc: 2, metrics: 1 },", //  1. bar(x int, y int) int
+            "    { name: baz,       package: 1, receiver: 1, signature:  1, loc: 5, metrics: 2 },", //  2. baz()
+            "    { name: cat,       package: 1, receiver: 1, signature: 13, loc: 8, metrics: 3 },", //  3. cat(t ...$Array<T>)
+            "    { name: clone,     package: 2, receiver: 2, signature:  4, vis: protected     },", //  4. clone ???
+            "    { name: equals,    package: 2, receiver: 2, signature:  7, vis: public        },", //  5. equals ???
+            "    { name: finalize,  package: 2, receiver: 2, signature:  1, vis: protected     },", //  6. finalize ???
+            "    { name: getClass,  package: 2, receiver: 2, signature:  3, vis: public        },", //  7. getClass ???
+            "    { name: hashCode,  package: 2, receiver: 2, signature:  2, vis: public        },", //  8. hashCode ???
+            "    { name: notify,    package: 2, receiver: 2, signature:  1, vis: public        },", //  9. notify ???
+            "    { name: notifyAll, package: 2, receiver: 2, signature:  1, vis: public        },", // 10. notifyAll ???
+            "    { name: toString,  package: 2, receiver: 2, signature:  3, vis: public        },", // 11. toString ???
+            "    { name: wait,      package: 2, receiver: 2, signature:  1, vis: public        },", // 12. wait ???
+            "    { name: wait,      package: 2, receiver: 2, signature:  5, vis: public        },", // 13. wait ???
+            "    { name: wait,      package: 2, receiver: 2, signature:  6, vis: public        }",  // 14. wait ???
             "  ],",
             "  metrics: [",
             "    { loc: 2, codeCount: 3, complexity: 1, indents: 3, lineCount: 3 },", // 1. metrics for bar
@@ -192,33 +231,47 @@ public class ClassTests {
             "  ],",
             "  objects: [",
             "    {", // 1. Foo struct{}
-            "      name: Foo, package: 1,",
-            "      data: 1, interface: null,", // TODO: Fix interface
+            "      name: Foo, package: 1, data: 1, interface: 3,",
             "      vis: public, loc: 1,",
             "      methods: [ 1, 2, 3 ]",
+            "    },",
+            "    {", // 2.
+            "      name: Object, package: 2, data: 1, interface: 4,",
+            "      vis: public,",
+            "      methods: [ 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14 ]",
             "    }",
             "  ],",
             "  packages: [",
             "    {", // 1. main package
             "      methods: [ 1, 2, 3 ],",
             "      objects: [ 1 ]",
-            "    }",
+            "    },",
+            "    {", // 2. build-in package
+            "      name: java.lang,",
+            "      methods: [ 10, 11, 12, 13, 14, 4, 5, 6, 7, 8, 9 ],",
+            "      objects: [ 2 ],",
+            "    },",
             "  ],",
             "  signatures: [",
-            "    { },",                                  // 1. func()()
-            "    { results: [ 1 ] },",                   // 2. func() int
-            "    { params: [ 3 ], results: [ 1 ] },",    // 3. func(index int) int
-            "    { params: [ 3 ], results: [ 2 ] },",    // 4. func(index int) T
-            "    { params: [ 3, 5 ] },",                 // 5. func(index int, value int)
-            "    { params: [ 3, 6 ] },",                 // 6. func(index int, value T)
-            "    { params: [ 7, 8 ], results: [ 1 ] },", // 7. func(x int, y int) int
-            "    { params: [ 4 ], variadic: true }",     // 8. func(t ...$Array<T>)
+            "    {                                    },", //  1. func()
+            "    {                     results: [ 2 ] },", //  2. func() int
+            "    {                     results: [ 3 ] },", //  3. func( ??? ) ???
+            "    {                     results: [ 4 ] },", //  4. func( ??? ) ???
+            "    { params: [ 6 ]                      },", //  5. func( ??? ) ???
+            "    { params: [ 6, 8 ]                   },", //  6. func( ??? ) ???  
+            "    { params: [ 7 ],      results: [ 1 ] },", //  7. func(index int) int
+            "    { params: [ 9 ],      results: [ 2 ] },", //  8. func(index int) T
+            "    { params: [ 9 ],      results: [ 5 ] },", //  9. func( ??? ) ???
+            "    { params: [ 9, 11 ]                  },", // 10. func(index int, value int)
+            "    { params: [ 9, 12 ]                  },", // 11. func(index int, value T)
+            "    { params: [ 13, 14 ], results: [ 2 ] },", // 12. func(x int, y int) int
+            "    { params: [ 10 ], variadic: true     }",  // 13. func(t ...$Array<T>)
             "  ],",
             "  structDescs: [",
             "    { }", // 1. struct{}
             "  ],",
             "  typeParams: [",
-            "    { name: T, type: interfaceDesc3 }", // 1. T object
+            "    { name: T, type: interfaceDesc5 }", // 1. T object
             "  ]",
             "}");
     }
@@ -232,25 +285,25 @@ public class ClassTests {
         t.checkProject(
             "{",
             "  abstracts: [",
-            "    { name: clone,     signature: 4 },", //  1. clone ???
-            "    { name: equals,    signature: 7 },", //  2. equals ???
-            "    { name: finalize,  signature: 1 },", //  3. finalize ???
-            "    { name: getClass,  signature: 3 },", //  4. getClass ???
-            "    { name: hashCode,  signature: 2 },", //  5. hashCode ???
-            "    { name: notify,    signature: 1 },", //  6. notify ???
-            "    { name: notifyAll, signature: 1 },", //  7. notifyAll ???
-            "    { name: toString,  signature: 3 },", //  8. toString ???
-            "    { name: wait,      signature: 1 },", //  9. wait ???
-            "    { name: wait,      signature: 5 },", // 10. wait ???
-            "    { name: wait,      signature: 6 }",  // 11. wait ???
+            "    { name: clone,     signature: 4 },", //  1. clone() Object
+            "    { name: equals,    signature: 7 },", //  2. equals(arg0 Object) boolean
+            "    { name: finalize,  signature: 1 },", //  3. finalize()
+            "    { name: getClass,  signature: 3 },", //  4. getClass() any // TODO: Is this really "any"?
+            "    { name: hashCode,  signature: 2 },", //  5. hashCode() int
+            "    { name: notify,    signature: 1 },", //  6. notify()
+            "    { name: notifyAll, signature: 1 },", //  7. notifyAll()
+            "    { name: toString,  signature: 3 },", //  8. toString() any // TODO: Shouldn't this be "String"?
+            "    { name: wait,      signature: 1 },", //  9. wait()
+            "    { name: wait,      signature: 5 },", // 10. wait(arg0 long)
+            "    { name: wait,      signature: 6 }",  // 11. wait(arg0 long, arg1 int)
             "  ],",
             "  arguments: [",
             "    {             type: basic1         },", // 1. <unnamed> boolean
             "    {             type: basic2         },", // 2. <unnamed> int
-            "    {             type: interfaceDesc3 },", // 3. <unnamed> ???
-            "    {             type: object2        },", // 4. <unnamed> ???
+            "    {             type: interfaceDesc3 },", // 3. <unnamed> any
+            "    {             type: object2        },", // 4. <unnamed> Object
             "    { name: arg0, type: basic3         },", // 5. arg0 long
-            "    { name: arg0, type: object2        },", // 6. arg0 ???
+            "    { name: arg0, type: object2        },", // 6. arg0 Object
             "    { name: arg1, type: basic2         }",  // 7. arg1 int
             "  ],",
             "  basics: [ boolean, int, long ],",
@@ -258,30 +311,30 @@ public class ClassTests {
             "    { name: value, type: typeParam1, vis: public }", // 1. value T
             "  ],",
             "  interfaceDescs: [",
-            "    {", // 1.
+            "    {", // 1. interface for Foo 
             "      abstracts: [ 1, 10, 11, 2, 3, 4, 5, 6, 7, 8, 9 ],",
-            "      pin: object1,",
+            "      pin: object1",
             "    },",
-            "    {", // 2.
+            "    {", // 2.interface for Object
             "      abstracts: [ 1, 10, 11, 2, 3, 4, 5, 6, 7, 8, 9 ],",
-            "      pin: object2,",
+            "      pin: object2",
             "    },",
-            "    { abstracts: [ ] }", // 3. Object
+            "    { abstracts: [ ] }", // 3. any
             "  ],",
             "  language: java,",
             "  locs: { 1: unknown },",
             "  methods: [",
-            "    { name: clone,     package: 2, receiver: 2, signature: 4, vis: protected },", //  1. ???
-            "    { name: equals,    package: 2, receiver: 2, signature: 7, vis: public    },", //  2. ???
-            "    { name: finalize,  package: 2, receiver: 2, signature: 1, vis: protected },", //  3. ???
-            "    { name: getClass,  package: 2, receiver: 2, signature: 3, vis: public    },", //  4. ???
-            "    { name: hashCode,  package: 2, receiver: 2, signature: 2, vis: public    },", //  5. ???
-            "    { name: notify,    package: 2, receiver: 2, signature: 1, vis: public    },", //  6. ???
-            "    { name: notifyAll, package: 2, receiver: 2, signature: 1, vis: public    },", //  7. ???
-            "    { name: toString,  package: 2, receiver: 2, signature: 3, vis: public    },", //  8. ???
-            "    { name: wait,      package: 2, receiver: 2, signature: 1, vis: public    },", //  9. ???
-            "    { name: wait,      package: 2, receiver: 2, signature: 5, vis: public    },", // 10. ???
-            "    { name: wait,      package: 2, receiver: 2, signature: 6, vis: public    }",  // 11. ???
+            "    { name: clone,     package: 2, receiver: 2, signature: 4, vis: protected },", //  1. clone() Object
+            "    { name: equals,    package: 2, receiver: 2, signature: 7, vis: public    },", //  2. equals(arg0 Object) boolean
+            "    { name: finalize,  package: 2, receiver: 2, signature: 1, vis: protected },", //  3. finalize()
+            "    { name: getClass,  package: 2, receiver: 2, signature: 3, vis: public    },", //  4. getClass() any // TODO: Is this really "any"?
+            "    { name: hashCode,  package: 2, receiver: 2, signature: 2, vis: public    },", //  5. hashCode() int
+            "    { name: notify,    package: 2, receiver: 2, signature: 1, vis: public    },", //  6. notify()
+            "    { name: notifyAll, package: 2, receiver: 2, signature: 1, vis: public    },", //  7. notifyAll()
+            "    { name: toString,  package: 2, receiver: 2, signature: 3, vis: public    },", //  8. toString() any // TODO: Shouldn't this be "String"?
+            "    { name: wait,      package: 2, receiver: 2, signature: 1, vis: public    },", //  9. wait()
+            "    { name: wait,      package: 2, receiver: 2, signature: 5, vis: public    },", // 10. wait(arg0 long)
+            "    { name: wait,      package: 2, receiver: 2, signature: 6, vis: public    }",  // 11. wait(arg0 long, arg1 int)
             "  ],",
             "  objects: [",
             "    {", // 1. Foo<T> { value T }
@@ -290,35 +343,34 @@ public class ClassTests {
             "      typeParams: [ 1 ]",
             "    },",
             "    {", // 2. Object { }
-            "      data: 1,",
-            "      interface: 2,",
+            "      name: Object, package: 2, data: 1, interface: 2,",
             "      methods: [ 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11 ],",
-            "      name: Object,",
-            "      package: 2,",
-            "      vis: public,",
-            "    },",
+            "      vis: public",
+            "    }",
             "  ],",
             "  packages: [",
-            "    { objects: [ 1 ] }", // 1. main package
-            "    {", // 2. ???
+            "    { objects: [ 1 ] },", // 1. main package
+            "    {",                   // 2. built-in package
             "      methods: [ 1, 10, 11, 2, 3, 4, 5, 6, 7, 8, 9 ],",
             "      name: java.lang,",
-            "      objects: [ 2 ],",
-            "    },",
+            "      objects: [ 2 ]",
+            "    }",
             "  ],",
             "  signatures: [",
-            "    {                               },", // 1. ???
-            "    {                results: [ 2 ] },", // 2. ???
-            "    {                results: [ 3 ] },", // 3. ???
-            "    {                results: [ 4 ] },", // 4. ???
-            "    { params: [ 5 ]                 },", // 5. ???
-            "    { params: [ 5, 7 ]              },", // 6. ???
-            "    { params: [ 6 ], results: [ 1 ] }",  // 7. ???
+            "    {                               },", // 1. func()
+            "    {                results: [ 2 ] },", // 2. func() int
+            "    {                results: [ 3 ] },", // 3. func() any
+            "    {                results: [ 4 ] },", // 4. func() Object
+            "    { params: [ 5 ]                 },", // 5. func(arg0 long)
+            "    { params: [ 5, 7 ]              },", // 6. func(arg0 long, arg1 int)
+            "    { params: [ 6 ], results: [ 1 ] }",  // 7. func(arg0 Object) boolean
+            "  ],",
             "  structDescs: [",
-            "    { fields: [ 1 ] }", // 1. struct { value T }
+            "    { },",              // 1. struct { }
+            "    { fields: [ 1 ] }", // 2. struct { value T }
             "  ],",
             "  typeParams: [",
-            "    { name: T, type: interfaceDesc1 }", // T any
+            "    { name: T, type: interfaceDesc3 }", // T any
             "  ]",
             "}");
     }

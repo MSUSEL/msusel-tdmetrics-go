@@ -226,12 +226,10 @@ public class Abstractor {
                 obj.setVisibility(c);
                 if (obj.pkg != null) obj.pkg.objectDecls.add(obj);
 
-                //System.out.println("1) >>> " + c.getSuperclass());
-                //System.out.println("2) >>> " + c.getSuperInterfaces());
-                //System.out.println("3) >>> " + c.getConstructors());
-                //System.out.println("4) >>> " + c.getNestedTypes());
-                //System.out.println("5) >>> " + c.getTypeMembers());
-                
+                for (CtConstructor<?> ctor : c.getConstructors()) {
+                    if (ctor.getParent() == c) this.addConstroctorMethod(obj, ctor);
+                }
+
                 for (CtMethod<?> m : c.getAllMethods()) {
                     if (m.getParent() == c) this.addMethod(obj, m);
                 }
@@ -242,10 +240,30 @@ public class Abstractor {
                 }
                 obj.inter = this.proj.interfaceDescs.addOrGet(new InterfaceDesc(abstracts, obj));
 
+                //System.out.println("1) >>> " + c.getSuperInterfaces());
+                //System.out.println("2) >>> " + c.getNestedTypes());
                 // TODO: Finish implementing
             },
             () -> {
                 return this.addTypeDescRef(c.getReference());
+            });
+    }
+
+    private MethodDecl addConstroctorMethod(ObjectDecl receiver, CtConstructor<?> ctor) throws Exception {
+        return this.create(this.proj.methodDecls, ctor,
+            "constructor " + ctor.getSignature(),
+            () -> {
+                final PackageCon      pkgCon     = receiver.pkg;
+                final Location        loc        = proj.locations.create(ctor.getPosition());
+                final String          name       = receiver.name;
+                final Signature       signature  = this.addConstructSignature(ctor);
+                final List<TypeParam> typeParams = this.addTypeParams(ctor.getFormalCtTypeParameters());
+                return new MethodDecl(pkgCon, receiver, loc, name, signature, typeParams);
+            },
+            (MethodDecl md) -> {
+                md.setVisibility(ctor);
+                if (receiver.pkg != null) receiver.pkg.methodDecls.add(md);
+                receiver.methodDecls.add(md);
             });
     }
 
@@ -272,6 +290,22 @@ public class Abstractor {
         return tr.isPrimitive() && tr.getSimpleName().equals("void");
     }
 
+    private Signature addConstructSignature(CtConstructor<?> m) throws Exception {
+        return this.create(this.proj.signatures, m,
+            "constructor signature " + m.getSignature(),
+            () -> {
+                List<CtParameter<?>> params = m.getParameters();
+                boolean variadic = params.size() > 0 && params.get(params.size()-1).isVarArgs();
+                List<Argument> inArgs = new ArrayList<Argument>();
+                for (CtParameter<?> p : params)  inArgs.add(this.addArgument(p));
+                    
+                List<Argument> outArgs = new ArrayList<Argument>();
+                outArgs.add(this.addUnnamedArgument(m.getType()));
+
+                return new Signature(variadic, inArgs, outArgs);
+            });
+    }
+
     private Signature addSignature(CtMethod<?> m) throws Exception {
         return this.create(this.proj.signatures, m,
             "signature " + m.getSignature(),
@@ -279,8 +313,7 @@ public class Abstractor {
                 List<CtParameter<?>> params = m.getParameters();
                 boolean variadic = params.size() > 0 && params.get(params.size()-1).isVarArgs();
                 List<Argument> inArgs = new ArrayList<Argument>();
-                for (CtParameter<?> p : params)
-                    inArgs.add(this.addArgument(p));
+                for (CtParameter<?> p : params) inArgs.add(this.addArgument(p));
         
                 CtTypeReference<?> res = m.getType();
                 List<Argument> outArgs = new ArrayList<Argument>();
@@ -297,6 +330,15 @@ public class Abstractor {
                 final String   name = p.getSimpleName();
                 final TypeDesc type = this.addTypeDesc(p.getType());
                 return new Argument(name, type);
+            });
+    }
+    
+    private Argument addUnnamedArgument(CtTypeReference<?> p) throws Exception {
+        return this.create(this.proj.arguments, p,
+            "parameter unnamed " + p.getSimpleName(),
+            () -> {
+                final TypeDesc type = this.addTypeDesc(p);
+                return new Argument("", type);
             });
     }
     
@@ -318,6 +360,11 @@ public class Abstractor {
                 ArrayList<Field> fields = new ArrayList<Field>();
                 for (CtFieldReference<?> fr : c.getAllFields())
                     fields.add(this.addField(fr.getFieldDeclaration()));
+
+                // Add extended class as a "$super" field.
+                CtTypeReference<?> superFr = c.getSuperclass();
+                if (superFr != null) fields.add(this.addField("$super", superFr));
+
                 return new StructDesc(fields);
             });
     }
@@ -332,6 +379,15 @@ public class Abstractor {
             },
             (Field field) -> {
                 field.setVisibility(f);
+            });
+    }
+
+    private Field addField(String name, CtTypeReference<?> f) throws Exception {
+        return this.create(this.proj.fields, f,
+            "field " + name,
+            () -> {
+                final TypeDesc type = this.addTypeDesc(f);
+                return new Field(name, type);
             });
     }
     
