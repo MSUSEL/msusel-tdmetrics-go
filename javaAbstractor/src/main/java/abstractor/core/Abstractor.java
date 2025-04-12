@@ -11,6 +11,7 @@ import spoon.MavenLauncher;
 import spoon.reflect.*;
 import spoon.reflect.cu.SourcePosition;
 import spoon.reflect.declaration.*;
+import spoon.reflect.path.CtRole;
 import spoon.reflect.reference.*;
 
 import abstractor.core.constructs.*;
@@ -226,30 +227,35 @@ public class Abstractor {
                 obj.setVisibility(c);
                 if (obj.pkg != null) obj.pkg.objectDecls.add(obj);
 
+                // Add constructors as (static) methods.
                 for (CtConstructor<?> ctor : c.getConstructors()) {
-                    if (ctor.getParent() == c) this.addConstroctorMethod(obj, ctor);
+                    if (ctor.getParent() == c) this.addConstructorMethod(obj, ctor);
                 }
 
+                // Add methods for the class.
                 for (CtMethod<?> m : c.getAllMethods()) {
                     if (m.getParent() == c) this.addMethod(obj, m);
                 }
 
+                // Synthesize the interface description for the class.
                 SortedSet<Abstract> abstracts = new TreeSet<Abstract>();
                 for (CtMethod<?> m : c.getAllMethods()) {
-                    abstracts.add(this.addAbstract(m));
+                    if (!m.isStatic()) abstracts.add(this.addAbstract(m));
                 }
                 obj.inter = this.proj.interfaceDescs.addOrGet(new InterfaceDesc(abstracts, obj));
 
-                //System.out.println("1) >>> " + c.getSuperInterfaces());
-                //System.out.println("2) >>> " + c.getNestedTypes());
                 // TODO: Finish implementing
+                //System.out.println("1) >>> " + c.getSuperInterfaces());
+
+                // Add any nested types.
+                for (CtType<?> nt : c.getNestedTypes()) this.addTypeDesc(nt.getReference());
             },
             () -> {
                 return this.addTypeDescRef(c.getReference());
             });
     }
 
-    private MethodDecl addConstroctorMethod(ObjectDecl receiver, CtConstructor<?> ctor) throws Exception {
+    private MethodDecl addConstructorMethod(ObjectDecl receiver, CtConstructor<?> ctor) throws Exception {
         return this.create(this.proj.methodDecls, ctor,
             "constructor " + ctor.getSignature(),
             () -> {
@@ -365,6 +371,15 @@ public class Abstractor {
                 CtTypeReference<?> superFr = c.getSuperclass();
                 if (superFr != null) fields.add(this.addField("$super", superFr));
 
+                // Add access to nesting class as a "$nest" field.
+                if (c.getRoleInParent() == CtRole.NESTED_TYPE) {
+                    if (c.getParent() instanceof CtTypeReference<?> nest && nest != null) {
+                        fields.add(this.addField("$nest", nest));
+                    } else {
+                        this.log.error("Unhandled nested object decl "+ c.getQualifiedName() + " in " + c.getParent());
+                    }
+                }
+
                 return new StructDesc(fields);
             });
     }
@@ -401,6 +416,13 @@ public class Abstractor {
                 final String          name       = i.getSimpleName();
                 final InterfaceDesc   inter      = this.addInterfaceDesc(i);
                 final List<TypeParam> typeParams = this.addTypeParams(i.getFormalCtTypeParameters());
+
+                if (i.getRoleInParent() == CtRole.NESTED_TYPE) {
+                    // TODO: Need to differentiate this from an interface by
+                    //       the same name nested in a different class or not nested in any class.
+                    this.log.error("Unhandled nested interface decl "+ i.getQualifiedName());
+                }
+
                 return new InterfaceDecl(pkgCon, loc, name, inter, typeParams);
             },
             (InterfaceDecl id) -> {
