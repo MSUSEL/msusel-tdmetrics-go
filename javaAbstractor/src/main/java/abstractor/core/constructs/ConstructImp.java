@@ -23,7 +23,7 @@ public abstract class ConstructImp implements Construct {
         return JsonValue.of(c.getIndex());
     }
 
-    static public JsonNode keyList(Iterable<? extends Construct> os) {
+    static public <T extends Construct> JsonNode keyList(Iterable<T> os) {
         if (os == null) return JsonValue.ofNull();
 
         JsonArray indices = new JsonArray();
@@ -31,7 +31,7 @@ public abstract class ConstructImp implements Construct {
         return indices;
     }
 
-    static public JsonNode indexList(Iterable<? extends Construct> os) {
+    static public <T extends Construct> JsonNode indexList(Iterable<T> os) {
         if (os == null) return JsonValue.ofNull();
 
         JsonArray indices = new JsonArray();
@@ -39,25 +39,25 @@ public abstract class ConstructImp implements Construct {
         return indices;
     }
 
-    static public JsonNode keySet(Iterable<? extends Construct> os) {
+    static public <T extends Construct> JsonNode keySet(Iterable<T> os) {
         if (os == null) return JsonValue.ofNull();
 
-        TreeSet<JsonValue> set = new TreeSet<JsonValue>();
-        for (Construct o: os) set.add(key(o));
+        TreeSet<T> set = new TreeSet<T>();
+        for (T o: os) set.add(o);
 
         JsonArray indices = new JsonArray();
-        for (JsonValue s: set) indices.add(s);
+        for (T s: set) indices.add(key(s));
         return indices;
     }
 
-    static public JsonNode indexSet(Iterable<? extends Construct> os) {
+    static public <T extends Construct> JsonNode indexSet(Iterable<T> os) {
         if (os == null) return JsonValue.ofNull();
 
-        TreeSet<JsonValue> set = new TreeSet<JsonValue>();
-        for (Construct o: os) set.add(index(o));
+        TreeSet<T> set = new TreeSet<T>();
+        for (T o: os) set.add(o);
 
         JsonArray indices = new JsonArray();
-        for (JsonValue s: set) indices.add(s);
+        for (T s: set) indices.add(index(s));
         return indices;
     }
 

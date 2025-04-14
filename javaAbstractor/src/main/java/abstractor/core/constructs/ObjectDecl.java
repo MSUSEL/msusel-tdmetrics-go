@@ -30,7 +30,7 @@ public class ObjectDecl extends DeclarationImp implements TypeDeclaration {
         JsonObject obj = (JsonObject)super.toJson(h);
         obj.put("data",               index(this.struct));
         obj.putNotEmpty("instances",  indexSet(this.instances));
-        obj.putNotEmpty("methods",    indexList(this.methodDecls));
+        obj.putNotEmpty("methods",    indexSet(this.methodDecls));
         obj.putNotEmpty("typeParams", indexList(this.typeParams));
         obj.put("interface",          index(this.inter));
         return obj;

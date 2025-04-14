@@ -6,5 +6,3 @@ obj
 out*.json
 out*.yaml
 out*.yml
-
-**/spoon*.tmp

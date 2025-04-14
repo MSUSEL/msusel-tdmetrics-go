@@ -18,6 +18,8 @@ import abstractor.core.constructs.*;
 import abstractor.core.log.*;
 
 public class Abstractor {
+    static private final boolean logCreate = false;
+
     public final Logger log;
     public final Project proj;
 
@@ -70,8 +72,7 @@ public class Abstractor {
         }
 
         for (TypeParamRef ref : this.proj.typeParamRefs) {
-            if (!ref.isResolved()) {
-            }
+            if (!ref.isResolved()) ref.setResolved(this.addTypeParam((CtTypeParameter)ref.elem));
         }
     }
 
@@ -113,8 +114,10 @@ public class Abstractor {
         if (existing != null) return existing;
 
         try {
-            log.log("Adding " + title);
-            log.push();
+            if (logCreate) {
+                log.log("Adding " + title);
+                log.push();
+            }
 
             if (factory.inProgress) {
                 if (h != null) {
@@ -143,8 +146,9 @@ public class Abstractor {
             if (f != null) f.finish(newCon);
             factory.inProgress = false;
             return newCon;
+
         } finally {
-            log.pop();
+            if (logCreate) log.pop();
         }
     }
 
@@ -363,6 +367,8 @@ public class Abstractor {
             () -> {
                 // Handle enum?
                 //if (c instanceof CtEnum<?> e) {}
+
+                // Collect all fields.
                 ArrayList<Field> fields = new ArrayList<Field>();
                 for (CtFieldReference<?> fr : c.getAllFields())
                     fields.add(this.addField(fr.getFieldDeclaration()));

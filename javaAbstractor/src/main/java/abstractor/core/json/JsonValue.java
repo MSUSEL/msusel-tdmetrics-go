@@ -1,5 +1,7 @@
 package abstractor.core.json;
 
+import java.net.InterfaceAddress;
+
 public class JsonValue implements JsonNode, Comparable<JsonValue> {
 
     public static JsonValue of(String value) { return new JsonValue(value); }
@@ -29,8 +31,8 @@ public class JsonValue implements JsonNode, Comparable<JsonValue> {
     public boolean isNull() { return this.value == null; }
 
     public boolean isEmpty() {
-        if (this.isBool()) return !(boolean)this.value;
-        if (this.isInt()) return (int)this.value == 0;
+        if (this.isBool())   return !(boolean)this.value;
+        if (this.isInt())    return (int)this.value == 0;
         if (this.isDouble()) return (double)this.value == 0.0;
         if (this.isString()) return ((String)this.value).isEmpty();
         return true;
@@ -41,9 +43,9 @@ public class JsonValue implements JsonNode, Comparable<JsonValue> {
     }
     
     public int asInt() {
-        if (this.isInt()) return (int)this.value;
+        if (this.isInt())    return (int)this.value;
         if (this.isDouble()) return (int)((double)this.value);
-        if (this.isBool()) return (boolean)this.value ? 1 : 0;
+        if (this.isBool())   return (boolean)this.value ? 1 : 0;
         if (this.isString()) {
             try {
                 return Integer.parseInt((String)this.value);
@@ -58,8 +60,8 @@ public class JsonValue implements JsonNode, Comparable<JsonValue> {
     
     public double asDouble() {
         if (this.isDouble()) return (double)this.value;
-        if (this.isInt()) return (double)((int)this.value);
-        if (this.isBool()) return (boolean)this.value ? 1.0 : 0.0;
+        if (this.isInt())    return (double)((int)this.value);
+        if (this.isBool())   return (boolean)this.value ? 1.0 : 0.0;
         if (this.isString()) {
             try {
                 return Double.parseDouble((String)this.value);
@@ -70,8 +72,8 @@ public class JsonValue implements JsonNode, Comparable<JsonValue> {
     }
     
     public boolean asBool() {
-        if (this.isBool()) return (boolean)this.value;
-        if (this.isInt()) return (int)this.value != 0;
+        if (this.isBool())   return (boolean)this.value;
+        if (this.isInt())    return (int)this.value != 0;
         if (this.isDouble()) return (double)this.value != 0.0;
         if (this.isString()) {
             if (Boolean.parseBoolean((String)this.value)) return true;
@@ -85,6 +87,15 @@ public class JsonValue implements JsonNode, Comparable<JsonValue> {
     public String toString() { return JsonFormat.Normal().format(this); }
 
     public int compareTo(JsonValue o) {
+        if (this.isNull()) return o.isNull() ? 0 : -1;
+        if (o.isNull()) return 1;
+
+        if (this.isInt() && o.isInt())
+            return Integer.compare(this.asInt(), o.asInt());
+
+        if ((this.isInt() || this.isDouble()) && (o.isInt() || o.isDouble()))
+            return Double.compare(this.asDouble(), o.asDouble());
+
         return this.toString().compareTo(o.toString());
     }
 }
