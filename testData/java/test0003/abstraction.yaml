@@ -5,7 +5,7 @@
     { name: $len,      signature:  2 }, #  3. $len() int
     { name: $set,      signature: 11 }, #  4. $set(index int, value int)
     { name: $set,      signature: 12 }, #  5. $set(index int, value T)
-    { name: bar,       signature: 13 }, #  6. bar( ??? ) ???
+    { name: bar,       signature: 13 }, #  6. bar( ??? ) ??? # TODO: finish filling out
     { name: baz,       signature:  1 }, #  7. baz( ??? ) ???
     { name: cat,       signature: 14 }, #  8. cat( ??? ) ???
     { name: clone,     signature:  5 }, #  9. clone( ??? ) ???
@@ -63,50 +63,51 @@
   language: java,
   locs: { 1: unknown },
   methods: [
-    { name: Foo,       package: 1, receiver: 1, signature:  4, vis: public        }, #  1. Foo ???
-    { name: Object,    package: 2, receiver: 2, signature:  5, vis: public        }, #  2. Object ???
-    { name: bar,       package: 1, receiver: 1, signature: 13, loc: 2, metrics: 1 }, #  3. bar(x int, y int) int
-    { name: baz,       package: 1, receiver: 1, signature:  1, loc: 5, metrics: 2 }, #  4. baz()
-    { name: cat,       package: 1, receiver: 1, signature: 14, loc: 8, metrics: 3 }, #  5. cat(t ...$Array<T>)
-    { name: clone,     package: 2, receiver: 2, signature:  5, vis: protected     }, #  6. clone ???
-    { name: equals,    package: 2, receiver: 2, signature:  8, vis: public        }, #  7. equals ???
-    { name: finalize,  package: 2, receiver: 2, signature:  1, vis: protected     }, #  8. finalize ???
-    { name: getClass,  package: 2, receiver: 2, signature:  3, vis: public        }, #  9. getClass ???
-    { name: hashCode,  package: 2, receiver: 2, signature:  2, vis: public        }, # 10. hashCode ???
-    { name: notify,    package: 2, receiver: 2, signature:  1, vis: public        }, # 11. notify ???
-    { name: notifyAll, package: 2, receiver: 2, signature:  1, vis: public        }, # 12. notifyAll ???
-    { name: toString,  package: 2, receiver: 2, signature:  3, vis: public        }, # 13. toString ???
-    { name: wait,      package: 2, receiver: 2, signature:  1, vis: public        }, # 14. wait ???
-    { name: wait,      package: 2, receiver: 2, signature:  6, vis: public        }, # 15. wait ???
-    { name: wait,      package: 2, receiver: 2, signature:  7, vis: public        }  # 16. wait ???
+    { name: Foo,       package: 2, receiver: 1, signature:  4, vis: public         }, #  1. Foo ???
+    { name: Object,    package: 1, receiver: 2, signature:  5, vis: public         }, #  2. Object ???
+    { name: bar,       package: 2, receiver: 1, signature: 13, loc:  4, metrics: 1 }, #  3. bar(x int, y int) int
+    { name: baz,       package: 2, receiver: 1, signature:  1, loc:  8, metrics: 2 }, #  4. baz()
+    { name: cat,       package: 2, receiver: 1, signature: 14, loc: 12, metrics: 3 }, #  5. cat(t ...$Array<T>)
+    { name: clone,     package: 1, receiver: 2, signature:  5, vis: protected      }, #  6. clone ???
+    { name: equals,    package: 1, receiver: 2, signature:  8, vis: public         }, #  7. equals ???
+    { name: finalize,  package: 1, receiver: 2, signature:  1, vis: protected      }, #  8. finalize ???
+    { name: getClass,  package: 1, receiver: 2, signature:  3, vis: public         }, #  9. getClass ???
+    { name: hashCode,  package: 1, receiver: 2, signature:  2, vis: public         }, # 10. hashCode ???
+    { name: notify,    package: 1, receiver: 2, signature:  1, vis: public         }, # 11. notify ???
+    { name: notifyAll, package: 1, receiver: 2, signature:  1, vis: public         }, # 12. notifyAll ???
+    { name: toString,  package: 1, receiver: 2, signature:  3, vis: public         }, # 13. toString ???
+    { name: wait,      package: 1, receiver: 2, signature:  1, vis: public         }, # 14. wait ???
+    { name: wait,      package: 1, receiver: 2, signature:  6, vis: public         }, # 15. wait ???
+    { name: wait,      package: 1, receiver: 2, signature:  7, vis: public         }  # 16. wait ???
   ],
   metrics: [
-    { loc: 2, codeCount: 3, complexity: 1, indents: 3, lineCount: 3 }, # 1. metrics for bar
-    { loc: 5, codeCount: 3, complexity: 1, indents: 3, lineCount: 3 }, # 2. metrics for baz
-    { loc: 8, codeCount: 3, complexity: 1, indents: 3, lineCount: 3 }  # 3. metrics for cat
+    { loc:  4, codeCount: 3, complexity: 1, indents: 3, lineCount: 3 }, # 1. metrics for bar
+    { loc:  8, codeCount: 3, complexity: 1, indents: 3, lineCount: 3 }, # 2. metrics for baz
+    { loc: 12, codeCount: 3, complexity: 1, indents: 3, lineCount: 3 }  # 3. metrics for cat
   ],
   objects: [
     { # 1. Foo struct{}
-      name: Foo, package: 1, data: 1, interface: 3,
-      vis: public, loc: 1,
+      name: Foo, package: 2, data: 1, interface: 3,
+      vis: public, loc: 3,
       methods: [ 1, 3, 4, 5 ]
     },
     { # 2. Object
-      name: Object, package: 2, data: 1, interface: 4,
+      name: Object, package: 1, data: 1, interface: 4,
       vis: public,
       methods: [ 2, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16 ]
     }
   ],
   packages: [
-    { # 1. main package
-      methods: [ 1, 3, 4, 5 ],
-      objects: [ 1 ]
-    },
-    { # 2. build-in package
+    { # 1. build-in package
       name: java.lang,
       methods: [ 2, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16 ],
       objects: [ 2 ]
     },
+    { # 2. main package
+      name: testData.java.test0003,
+      methods: [ 1, 3, 4, 5 ],
+      objects: [ 1 ]
+    }
   ],
   signatures: [
     {                                    }, #  1. func()

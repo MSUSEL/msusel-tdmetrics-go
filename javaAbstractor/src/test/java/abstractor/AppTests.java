@@ -26,6 +26,9 @@ public class AppTests {
 
     @Test
     public void test0003() { testClass("test0003", "Foo"); }
+    
+    @Test
+    public void test0004() { testClass("test0004", "Foo"); }
 
     static private void runApp(String testName) {
         final String testPath = "../testData/java/" + testName;
