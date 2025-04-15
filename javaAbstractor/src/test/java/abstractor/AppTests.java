@@ -24,6 +24,9 @@ public class AppTests {
     @Test
     public void test0002() { testClass("test0002", "Foo"); }
 
+    @Test
+    public void test0003() { testClass("test0003", "Foo"); }
+
     static private void runApp(String testName) {
         final String testPath = "../testData/java/" + testName;
         final String absFile  = testPath + "/abstraction.yaml";
