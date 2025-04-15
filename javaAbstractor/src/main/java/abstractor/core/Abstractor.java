@@ -24,7 +24,7 @@ public class Abstractor {
     public final Project proj;
 
     public Abstractor(Logger log, Project proj) {
-        this.log = log;
+        this.log  = log;
         this.proj = proj;
     }
 

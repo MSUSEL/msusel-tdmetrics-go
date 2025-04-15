@@ -5,6 +5,9 @@ import static org.junit.jupiter.api.Assertions.fail;
 
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 
 import abstractor.core.constructs.Construct;
 import abstractor.core.constructs.Project;
@@ -52,6 +55,13 @@ public class Tester {
         this.buffer.reset();
     }
 
+    public void addClassFromFile(String path) {
+        assertDoesNotThrow(() -> { 
+            final byte[] data =  Files.readAllBytes(Paths.get(path));
+            this.addClassFromSource(new String(data, StandardCharsets.UTF_8));
+        });
+    }
+
     public void addClassFromSource(String ...lines) {
         try {
             this.ab.addClassFromSource(lines);
@@ -65,6 +75,17 @@ public class Tester {
             this.printLogs();
             fail("expected zero errors");
         }
+    }
+
+    public void checkJsonWithFile(Jsonable j, String path) {
+        final JsonHelper jh = new JsonHelper();
+        final String result = j == null ? "null" : JsonFormat.Relaxed().format(j.toJson(jh));
+        final String exp = this.formatJsonFromFile(path);
+        this.assertLines(exp, result);
+    }
+    
+    public void checkProjectWithFile(String path) {
+        this.checkJsonWithFile(this.proj, path);
     }
 
     public void checkJson(Jsonable j, String ...lines) {
@@ -91,6 +112,16 @@ public class Tester {
     public String formatJson(String ...lines) {
         try {
             return JsonFormat.Relaxed().format(JsonNode.parse(lines));
+        } catch(Exception ex) {
+            this.printLogs();
+            fail(ex);
+            return "This should be unreachable.";
+        }
+    }
+
+    public String formatJsonFromFile(String path) {
+        try {
+            return JsonFormat.Relaxed().format(JsonNode.parseFile(path));
         } catch(Exception ex) {
             this.printLogs();
             fail(ex);

@@ -26,11 +26,11 @@
   basics: [ boolean, int, long ],
   interfaceDescs: [
     { # 1. interface for EntryPoint
-      abstracts: [ 1, 10, 11, 2, 3, 4, 5, 6, 7, 8, 9 ],
+      abstracts: [ 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11 ],
       pin: object1,
     },
     { # 2. interface for Object
-      abstracts: [ 1, 10, 11, 2, 3, 4, 5, 6, 7, 8, 9 ],
+      abstracts: [ 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11 ],
       pin: object2,
     },
     { # 3. any
@@ -68,14 +68,14 @@
     },
     { # 2. Object
       name: Object, package: 2, data: 1, interface: 2, vis: public,
-      methods: [ 10, 11, 12, 13, 14, 2, 3, 4, 5, 6, 7, 9 ]
+      methods: [ 2, 3, 4, 5, 6, 7, 9, 10, 11, 12, 13, 14 ]
     }
   ],
   packages: [
     { }, # 1. <unnamed> # TODO: Needs Imports to contained packages?
     {    # 2. build-in package
       name: java.lang,
-      methods: [ 10, 11, 12, 13, 14, 2, 3, 4, 5, 6, 7, 9 ],
+      methods: [ 2, 3, 4, 5, 6, 7, 9, 10, 11, 12, 13, 14 ],
       objects: [ 2 ]
     },
     { name: testData      }, # 3. testData

@@ -11,6 +11,7 @@ import org.junit.jupiter.api.Test;
 
 import abstractor.app.App;
 import abstractor.app.Config;
+import abstractor.core.Tester;
 import abstractor.core.diff.Diff;
 import abstractor.core.json.JsonFormat;
 import abstractor.core.json.JsonNode;
@@ -18,9 +19,12 @@ import abstractor.core.json.JsonNode;
 public class AppTests {
     
     @Test
-    public void test0001() { run("test0001"); }
+    public void test0001() { runApp("test0001"); }
 
-    static private void run(String testName) {
+    @Test
+    public void test0002() { testClass("test0002", "Foo"); }
+
+    static private void runApp(String testName) {
         final String testPath = "../testData/java/" + testName;
         final String absFile  = testPath + "/abstraction.yaml";
 
@@ -41,6 +45,15 @@ public class AppTests {
         final JsonNode expJson = assertDoesNotThrow(() -> JsonNode.parseFile(absFile));
         final String exp = format.format(expJson);
         assertLines(exp, buffer.toString().trim());
+    }
+
+    static private void testClass(String testName, String className) {
+        final String testPath = "../testData/java/" + testName;
+        final String absFile  = testPath + "/abstraction.yaml";
+
+        final Tester t = new Tester(4);
+        t.addClassFromFile(testPath+"/"+className+".java");
+        t.checkProjectWithFile(absFile);
     }
 
     static private void assertLines(String exp, String result) {
