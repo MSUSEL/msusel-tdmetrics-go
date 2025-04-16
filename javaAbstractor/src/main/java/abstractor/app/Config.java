@@ -26,6 +26,16 @@ public class Config {
     public PrintStream defaultOut = System.out;
 
     /**
+     * The output to print log text to, when not null.
+     */
+    public PrintStream logOut = null;
+
+    /**
+     * The output to print log errors to, when not null.
+     */
+    public PrintStream logErr = null;
+
+    /**
      * The default JSON format to output with if minimize is set to false.
      * This defaults to normal formatting but may be overwritten
      * to format the output JSON when testing. 

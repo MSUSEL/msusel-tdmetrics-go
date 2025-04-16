@@ -1,7 +1,5 @@
 package abstractor.core.json;
 
-import java.net.InterfaceAddress;
-
 public class JsonValue implements JsonNode, Comparable<JsonValue> {
 
     public static JsonValue of(String value) { return new JsonValue(value); }

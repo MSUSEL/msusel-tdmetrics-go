@@ -17,7 +17,7 @@ public class App {
     }
 
     static public boolean run(Config cfg) throws Exception {
-        Logger log = new Logger(cfg.verbose);
+        Logger log = new Logger(cfg.verbose, cfg.logOut, cfg.logErr);
         Project proj = new Project();
         Abstractor ab = new Abstractor(log, proj);
         ab.addMavenProject(cfg.input);

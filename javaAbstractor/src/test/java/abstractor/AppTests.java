@@ -50,7 +50,12 @@ public class AppTests {
 
         final JsonNode expJson = assertDoesNotThrow(() -> JsonNode.parseFile(absFile));
         final String exp = format.format(expJson);
-        assertLines(exp, buffer.toString().trim());
+        final String result = buffer.toString().trim();
+        if (!exp.equals(result)) {
+            final String diff = String.join("\n\t", new Diff().PlusMinusByLine(exp, result));
+            System.out.println("Error: unexpected lines\n\t" + diff);
+            fail("unexpected lines (see diff above)");
+        }
     }
 
     static private void testClass(String testName, String className) {
@@ -60,13 +65,5 @@ public class AppTests {
         final Tester t = new Tester(4);
         t.addClassFromFile(testPath+"/"+className+".java");
         t.checkProjectWithFile(absFile);
-    }
-
-    static private void assertLines(String exp, String result) {
-        if (!exp.equals(result)) {
-            final String diff = String.join("\n\t", new Diff().PlusMinusByLine(exp, result));
-            System.out.println("Error: unexpected lines\n\t" + diff);
-            fail("unexpected lines (see diff above)");
-        }
     }
 }
