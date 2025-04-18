@@ -1,7 +1,6 @@
 package abstractor;
 
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 
 import java.io.ByteArrayOutputStream;
@@ -35,6 +34,7 @@ public class AppTests {
         final String absFile  = testPath + "/abstraction.yaml";
 
         final ByteArrayOutputStream buffer = new ByteArrayOutputStream();
+        final ByteArrayOutputStream logBuf = new ByteArrayOutputStream();
         final JsonFormat format = JsonFormat.Relaxed();
 
         final Config cfg  = new Config();
@@ -43,15 +43,26 @@ public class AppTests {
         cfg.writeIndices  = false;
         cfg.writeKinds    = false;
         cfg.defaultOut    = new PrintStream(buffer);
+        cfg.logOut        = new PrintStream(logBuf);
+        cfg.logErr        = new PrintStream(logBuf);
         cfg.defaultFormat = format;
-        assertDoesNotThrow(() -> {
-            assertTrue(App.run(cfg), "App.run returned false.");
-        }, "Error running App.run");
+
+        try {
+            final boolean success = App.run(cfg);
+            if (!success) {
+                System.out.println(logBuf.toString());
+                fail("App.run returned false.");
+            }
+        } catch(Exception ex) {
+            System.out.println(logBuf.toString());
+            fail(ex);
+        }
 
         final JsonNode expJson = assertDoesNotThrow(() -> JsonNode.parseFile(absFile));
         final String exp = format.format(expJson);
         final String result = buffer.toString().trim();
         if (!exp.equals(result)) {
+            System.out.println(logBuf.toString());
             final String diff = String.join("\n\t", new Diff().PlusMinusByLine(exp, result));
             System.out.println("Error: unexpected lines\n\t" + diff);
             fail("unexpected lines (see diff above)");

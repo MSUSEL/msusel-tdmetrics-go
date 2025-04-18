@@ -1,7 +1,6 @@
 package abstractor.core;
 
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 
 import java.io.ByteArrayOutputStream;
@@ -10,8 +9,6 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
-import abstractor.app.App;
-import abstractor.app.Config;
 import abstractor.core.constructs.Construct;
 import abstractor.core.constructs.Project;
 import abstractor.core.diff.Diff;
@@ -56,19 +53,6 @@ public class Tester {
     public void printLogs() {
         System.out.println(this.buffer.toString());
         this.buffer.reset();
-    }
-
-    public void runApp(String testPath) {
-        final Config cfg  = new Config();
-        cfg.input         = testPath;
-        cfg.verbose       = true;
-        cfg.writeIndices  = false;
-        cfg.writeKinds    = false;
-        cfg.defaultOut    = new PrintStream(buffer);
-        cfg.defaultFormat = JsonFormat.Relaxed();
-        assertDoesNotThrow(() -> {
-            assertTrue(App.run(cfg), "App.run returned false.");
-        }, "Error running App.run");
     }
 
     public void addClassFromFile(String path) {

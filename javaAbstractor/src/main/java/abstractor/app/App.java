@@ -42,12 +42,15 @@ public class App {
                 log.error("Error creating or writing to file: " + e.getMessage());
             }
         }
-
+ 
         if (log.errorCount() > 0) {
-            System.err.println("Had " + log.errorCount() + " errors");
+            final PrintStream errOut = cfg.logErr != null ? cfg.logErr : System.err;
+            errOut.println("Had " + log.errorCount() + " errors");
             return false;
         }
-        System.out.println("Success");
+
+        final PrintStream okOut = cfg.logOut != null ? cfg.logOut : System.out;
+        okOut.println("Success");
         return true;
     }
 }
