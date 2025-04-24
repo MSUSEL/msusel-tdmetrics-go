@@ -104,7 +104,7 @@
       objects: [ 2 ]
     },
     { # 2. main package
-      name: testData.java.test0003,
+      name: testData.java.test1002,
       methods: [ 1, 3, 4, 5 ],
       objects: [ 1 ]
     }

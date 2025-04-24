@@ -1,4 +1,4 @@
-package testData.java.test0003;
+package testData.java.test1002;
 
 public class Foo {
   int bar(int x, int y) {

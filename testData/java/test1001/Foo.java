@@ -1,4 +1,4 @@
-package testData.java.test0002;
+package testData.java.test1001;
 
 public class Foo {
     public int bar;

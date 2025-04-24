@@ -21,13 +21,16 @@ public class AppTests {
     public void test0001() { runApp("test0001"); }
 
     @Test
-    public void test0002() { testClass("test0002", "Foo"); }
+    public void test0002() { runApp("test0002"); }
 
     @Test
-    public void test0003() { testClass("test0003", "Foo"); }
+    public void test1002() { testClass("test1001", "Foo"); }
+
+    @Test
+    public void test1003() { testClass("test1002", "Foo"); }
     
     @Test
-    public void test0004() { testClass("test0004", "Foo"); }
+    public void test1004() { testClass("test1003", "Foo"); }
 
     static private void runApp(String testName) {
         final String testPath = "../testData/java/" + testName;
