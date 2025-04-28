@@ -1,1 +1,163 @@
-{}
+{
+  abstracts: [
+    { name: $get,      signature: 10 }, #  1. ???
+    { name: $get,      signature: 11 }, #  2. ???
+    { name: $get,      signature: 12 }, #  3. ???
+    { name: $len,      signature:  2 }, #  4. ???
+    { name: $set,      signature: 13 }, #  5. ???
+    { name: $set,      signature: 14 }, #  6. ???
+    { name: $set,      signature: 15 }, #  7. ???
+    { name: clone,     signature:  5 }, #  8. ???
+    { name: equals,    signature:  8 }, #  9. ???
+    { name: finalize,  signature:  1 }, # 10. ???
+    { name: getClass,  signature:  3 }, # 11. ???
+    { name: hashCode,  signature:  2 }, # 12. ???
+    { name: notify,    signature:  1 }, # 13. ???
+    { name: notifyAll, signature:  1 }, # 14. ???
+    { name: toString,  signature:  3 }, # 15. ???
+    { name: wait,      signature:  1 }, # 16. ???
+    { name: wait,      signature:  6 }, # 17. ???
+    { name: wait,      signature:  7 }  # 18. ???
+  ],
+  arguments: [
+    {               type: basic1         }, #  1. <unnamed> boolean
+    {               type: basic2         }, #  2. <unnamed> int
+    {               type: interfaceDesc6 }, #  3. <unnamed> any
+    {               type: object1        }, #  4. <unnamed> EntryPoint
+    {               type: object2        }, #  5. <unnamed> Object
+    {               type: typeParam1     }, #  6. <unnamed> T
+    { name: arg0,   type: basic3         }, #  7. arg0   long
+    { name: arg0,   type: object2        }, #  8. arg0   Object
+    { name: arg1,   type: basic2         }, #  9. arg1   int
+    { name: args,   type: interfaceInst2 }, # 10. args    ???
+    { name: index,  type: basic2         }, # 11. index  int
+    { name: value,  type: basic2         }, # 12. value  int
+    { name: value,  type: interfaceDesc6 }, # 13. value  any
+    { name: value,  type: typeParam1     }, # 14. value  T
+    { name: values, type: interfaceInst1 }  # 15. values ???
+  ],
+  basics: [ boolean, int, long ],
+  interfaceDecls: [
+    { # 1. ???
+      name: $Array, interface: 3,
+      typeParams: [ 1 ]
+    }
+  ],
+  interfaceDescs: [
+    { # 1. ???
+      abstracts: [ 1, 4, 5 ]
+    },
+    { # 2. ???
+      abstracts: [ 2, 4, 6 ]
+    },
+    { # 3. ???
+      abstracts: [ 3, 4, 7 ]
+    },
+    { # 4. ???
+      abstracts: [ 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18 ],
+      pin: object1
+    },
+    { # 5. ???
+      abstracts: [ 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18 ],
+      pin: object2
+    },
+    { # 6. any
+      abstracts: [ ]
+    }
+  ],
+  interfaceInsts: [
+    { # 1. ???
+      generic: 1, resolved: 1,
+      instanceTypes: [ basic2 ]
+    },
+    { # 2. ???[any]
+      generic: 1, resolved: 2,
+      instanceTypes: [ interfaceDesc6 ]
+    }
+  ],
+  language: java,
+  locs: { 1: EntryPoint.java },
+  methods: [
+    { name: EntryPoint, package: 5, receiver: 1, signature:  4, vis: public                      }, #  1. ???
+    { name: Object,     package: 2, receiver: 2, signature:  5, vis: public                      }, #  2. ???
+    { name: clone,      package: 2, receiver: 2, signature:  5, vis: protected                   }, #  3. ???
+    { name: equals,     package: 2, receiver: 2, signature:  8, vis: public                      }, #  4. ???
+    { name: finalize,   package: 2, receiver: 2, signature:  1, vis: protected                   }, #  5. ???
+    { name: first,      package: 5, receiver: 1, signature: 16, vis: public, loc: 19, metrics: 3 }, #  6. ???
+    { name: getClass,   package: 2, receiver: 2, signature:  3, vis: public                      }, #  7. ???
+    { name: hashCode,   package: 2, receiver: 2, signature:  2, vis: public                      }, #  8. ???
+    { name: last,       package: 5, receiver: 1, signature: 16, vis: public, loc: 23, metrics: 4 }, #  9. ???
+    { name: main,       package: 5, receiver: 1, signature:  9, vis: public, loc:  6, metrics: 1 }, # 10. ???
+    { name: notify,     package: 2, receiver: 2, signature:  1, vis: public                      }, # 11. ???
+    { name: notifyAll,  package: 2, receiver: 2, signature:  1, vis: public                      }, # 12. ???
+    { name: sum,        package: 5, receiver: 1, signature: 16, vis: public, loc: 13, metrics: 2 }, # 13. ???
+    { name: toString,   package: 2, receiver: 2, signature:  3, vis: public                      }, # 14. ???
+    { name: wait,       package: 2, receiver: 2, signature:  1, vis: public                      }, # 15. ???
+    { name: wait,       package: 2, receiver: 2, signature:  6, vis: public                      }, # 16. ???
+    { name: wait,       package: 2, receiver: 2, signature:  7, vis: public                      }  # 17. ???
+  ],
+  metrics: [
+    { # 1. ???
+      codeCount: 6, complexity: 1, indents: 4, lineCount: 6, loc: 6,
+      invokes: [ method6, method9, method13 ]
+    },
+    { # 2. ???
+      codeCount: 5, complexity: 2, indents: 3, lineCount: 5, loc: 13
+    },
+    { # 3. ???
+      codeCount: 3, complexity: 1, indents: 1, lineCount: 3, loc: 19
+    },
+    { # 4. ???
+      codeCount: 3, complexity: 1, indents: 1, lineCount: 3, loc: 23
+    }
+  ],
+  objects: [
+    { # 1. EntryPoint
+      name: EntryPoint, package: 5, data: 1, interface: 4, loc: 5, vis: public,
+      methods: [ 1, 6, 9, 10, 13 ]
+    },
+    { # 2. Object
+      name: Object, package: 2, data: 1, interface: 5, vis: public,
+      methods: [ 2, 3, 4, 5, 7, 8, 11, 12, 14, 15, 16, 17 ]
+    }
+  ],
+  packages: [
+    { }, # 1. base package
+    {    # 2. built-in package
+      name: java.lang,
+      methods: [ 2, 3, 4, 5, 7, 8, 11, 12, 14, 15, 16, 17 ],
+      objects: [ 2 ]
+    },
+    { name: testData      }, # 3. testData package
+    { name: testData.java }, # 4. testData.java package
+    {                        # 5. testData.java.test0002 package
+      name: testData.java.test0002,
+      methods: [ 1, 6, 9, 10, 13 ],
+      objects: [ 1 ]
+    },
+  ],
+  signatures: [
+    {                                                }, #  1. func()
+    {                 results: [ 2 ]                 }, #  2. func() int
+    {                 results: [ 3 ]                 }, #  3. func() any
+    {                 results: [ 4 ]                 }, #  4. func() EntryPoint
+    {                 results: [ 5 ]                 }, #  5. func() Object
+    { params: [ 7 ]                                  }, #  6. func(arg0 long)
+    { params: [ 7, 9 ]                               }, #  7. func(arg0 long, arg1 int)
+    { params: [ 8 ],  results: [ 1 ]                 }, #  8. func(arg0 Object) boolean
+    { params: [ 10 ]                                 }, #  9. func(???)
+    { params: [ 11 ], results: [ 2 ]                 }, # 10. func(index int) int
+    { params: [ 11 ], results: [ 3 ]                 }, # 11. func(index int) any
+    { params: [ 11 ], results: [ 6 ]                 }, # 12. func(index int) T
+    { params: [ 11, 12 ]                             }, # 13. func(index int, value int)
+    { params: [ 11, 13 ]                             }, # 14. func(index int, value any)
+    { params: [ 11, 14 ]                             }, # 15. func(index int, value T)
+    { params: [ 15 ], results: [ 2 ], variadic: true }  # 16. func(...???) int
+  ],
+  structDescs: [
+    { } # 1. struct{}
+  ],
+  typeParams: [
+    { name: T, type: interfaceDesc6 } # 1. T any
+  ],
+}

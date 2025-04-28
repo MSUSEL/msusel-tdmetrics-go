@@ -18,7 +18,7 @@ import abstractor.core.constructs.*;
 import abstractor.core.log.*;
 
 public class Abstractor {
-    static private final boolean logCreate = false;
+    static private final boolean logCreate = true;
 
     public final Logger log;
     public final Project proj;
@@ -198,7 +198,11 @@ public class Abstractor {
 
         if (elem instanceof CtClass<?> c) return this.addObjectDecl(c);
         if (elem instanceof CtInterface<?> i) return this.addInterfaceDecl(i);
-        this.log.error("Unhandled decl (" + elem.getClass().getName() + ") "+elem.getShortRepresentation());
+        if (elem instanceof CtMethod<?> m) {
+            ObjectDecl obj = (ObjectDecl)this.addObjectDecl((CtClass<?>)m.getDeclaringType());
+            return this.addMethod(obj, m);
+        }
+        this.log.error("Unhandled decl (" + elem.getClass().getName() + ") "+elem.toStringDebug());
         return null;
     }
 
@@ -207,7 +211,7 @@ public class Abstractor {
 
         if (elem instanceof CtClass<?> c) return this.addObjectDecl(c);
         if (elem instanceof CtInterface<?> i) return this.addInterfaceDecl(i);
-        this.log.error("Unhandled type decl (" + elem.getClass().getName() + ") "+elem.getShortRepresentation());
+        this.log.error("Unhandled type decl (" + elem.getClass().getName() + ") "+elem.toStringDebug());
         return null;
     }
 

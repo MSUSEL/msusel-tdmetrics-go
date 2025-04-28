@@ -11,6 +11,7 @@ public class MethodDecl extends DeclarationImp implements Method {
     public final Signature signature;
     public final List<TypeParam> typeParams;
     public final TreeSet<MethodInst> instances;
+    // TODO: Add a flag to indicate if this method is a constructor or not.
     
     public Metrics metrics;
 

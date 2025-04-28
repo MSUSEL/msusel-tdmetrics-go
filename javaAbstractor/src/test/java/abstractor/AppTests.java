@@ -16,7 +16,7 @@ import abstractor.core.json.JsonFormat;
 import abstractor.core.json.JsonNode;
 
 public class AppTests {
-    
+
     @Test
     public void test0001() { runApp("test0001"); }
 
@@ -28,7 +28,7 @@ public class AppTests {
 
     @Test
     public void test1003() { testClass("test1002", "Foo"); }
-    
+
     @Test
     public void test1004() { testClass("test1003", "Foo"); }
 
