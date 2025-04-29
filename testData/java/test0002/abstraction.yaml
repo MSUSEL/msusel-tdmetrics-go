@@ -1,23 +1,23 @@
 {
   abstracts: [
-    { name: $get,      signature: 10 }, #  1. ???
-    { name: $get,      signature: 11 }, #  2. ???
-    { name: $get,      signature: 12 }, #  3. ???
-    { name: $len,      signature:  2 }, #  4. ???
-    { name: $set,      signature: 13 }, #  5. ???
-    { name: $set,      signature: 14 }, #  6. ???
-    { name: $set,      signature: 15 }, #  7. ???
-    { name: clone,     signature:  5 }, #  8. ???
-    { name: equals,    signature:  8 }, #  9. ???
-    { name: finalize,  signature:  1 }, # 10. ???
-    { name: getClass,  signature:  3 }, # 11. ???
-    { name: hashCode,  signature:  2 }, # 12. ???
-    { name: notify,    signature:  1 }, # 13. ???
-    { name: notifyAll, signature:  1 }, # 14. ???
-    { name: toString,  signature:  3 }, # 15. ???
-    { name: wait,      signature:  1 }, # 16. ???
-    { name: wait,      signature:  6 }, # 17. ???
-    { name: wait,      signature:  7 }  # 18. ???
+    { name: $get,      signature: 10 }, #  1. $get(index int) int
+    { name: $get,      signature: 11 }, #  2. $get(index int) any
+    { name: $get,      signature: 12 }, #  3. $get(index int) T
+    { name: $len,      signature:  2 }, #  4. $len() int
+    { name: $set,      signature: 13 }, #  5. $set(index int, value int)
+    { name: $set,      signature: 14 }, #  6. $set(index int, value any)
+    { name: $set,      signature: 15 }, #  7. $set(index int, value T)
+    { name: clone,     signature:  5 }, #  8. clone() Object
+    { name: equals,    signature:  8 }, #  9. equals(arg0 Object) boolean
+    { name: finalize,  signature:  1 }, # 10. finalize()
+    { name: getClass,  signature:  3 }, # 11. getClass() any
+    { name: hashCode,  signature:  2 }, # 12. hashCode() int
+    { name: notify,    signature:  1 }, # 13. notify()
+    { name: notifyAll, signature:  1 }, # 14. notifyAll()
+    { name: toString,  signature:  3 }, # 15. toString() any
+    { name: wait,      signature:  1 }, # 16. wait()
+    { name: wait,      signature:  6 }, # 17. wait(arg0 long)
+    { name: wait,      signature:  7 }  # 18. wait(arg0 long, arg1 int)
   ],
   arguments: [
     {               type: basic1         }, #  1. <unnamed> boolean
@@ -29,35 +29,35 @@
     { name: arg0,   type: basic3         }, #  7. arg0   long
     { name: arg0,   type: object2        }, #  8. arg0   Object
     { name: arg1,   type: basic2         }, #  9. arg1   int
-    { name: args,   type: interfaceInst2 }, # 10. args    ???
+    { name: args,   type: interfaceInst2 }, # 10. args   $Array[any]
     { name: index,  type: basic2         }, # 11. index  int
     { name: value,  type: basic2         }, # 12. value  int
     { name: value,  type: interfaceDesc6 }, # 13. value  any
     { name: value,  type: typeParam1     }, # 14. value  T
-    { name: values, type: interfaceInst1 }  # 15. values ???
+    { name: values, type: interfaceInst1 }  # 15. values $Array[int]
   ],
   basics: [ boolean, int, long ],
   interfaceDecls: [
-    { # 1. ???
+    { # 1. $Array[T any]
       name: $Array, interface: 3,
       typeParams: [ 1 ]
     }
   ],
   interfaceDescs: [
-    { # 1. ???
+    { # 1. interface{ $get(index int) int, $len() int, $set(index int, value int) }
       abstracts: [ 1, 4, 5 ]
     },
-    { # 2. ???
+    { # 2. interface{ $get(index int) any, $len() int, $set(index int, value any) }
       abstracts: [ 2, 4, 6 ]
     },
-    { # 3. ???
+    { # 3. interface{ $get(index int) T, $len() int, $set(index int, value T) }
       abstracts: [ 3, 4, 7 ]
     },
-    { # 4. ???
+    { # 4. interface for EntryPoint
       abstracts: [ 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18 ],
       pin: object1
     },
-    { # 5. ???
+    { # 5. interface for Object
       abstracts: [ 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18 ],
       pin: object2
     },
@@ -66,11 +66,11 @@
     }
   ],
   interfaceInsts: [
-    { # 1. ???
+    { # 1. $Array[int]
       generic: 1, resolved: 1,
       instanceTypes: [ basic2 ]
     },
-    { # 2. ???[any]
+    { # 2. $Array[any]
       generic: 1, resolved: 2,
       instanceTypes: [ interfaceDesc6 ]
     }
@@ -78,36 +78,36 @@
   language: java,
   locs: { 1: EntryPoint.java },
   methods: [
-    { name: EntryPoint, package: 5, receiver: 1, signature:  4, vis: public                      }, #  1. ???
-    { name: Object,     package: 2, receiver: 2, signature:  5, vis: public                      }, #  2. ???
-    { name: clone,      package: 2, receiver: 2, signature:  5, vis: protected                   }, #  3. ???
-    { name: equals,     package: 2, receiver: 2, signature:  8, vis: public                      }, #  4. ???
-    { name: finalize,   package: 2, receiver: 2, signature:  1, vis: protected                   }, #  5. ???
-    { name: first,      package: 5, receiver: 1, signature: 16, vis: public, loc: 19, metrics: 3 }, #  6. ???
-    { name: getClass,   package: 2, receiver: 2, signature:  3, vis: public                      }, #  7. ???
-    { name: hashCode,   package: 2, receiver: 2, signature:  2, vis: public                      }, #  8. ???
-    { name: last,       package: 5, receiver: 1, signature: 16, vis: public, loc: 23, metrics: 4 }, #  9. ???
-    { name: main,       package: 5, receiver: 1, signature:  9, vis: public, loc:  6, metrics: 1 }, # 10. ???
-    { name: notify,     package: 2, receiver: 2, signature:  1, vis: public                      }, # 11. ???
-    { name: notifyAll,  package: 2, receiver: 2, signature:  1, vis: public                      }, # 12. ???
-    { name: sum,        package: 5, receiver: 1, signature: 16, vis: public, loc: 13, metrics: 2 }, # 13. ???
-    { name: toString,   package: 2, receiver: 2, signature:  3, vis: public                      }, # 14. ???
-    { name: wait,       package: 2, receiver: 2, signature:  1, vis: public                      }, # 15. ???
-    { name: wait,       package: 2, receiver: 2, signature:  6, vis: public                      }, # 16. ???
-    { name: wait,       package: 2, receiver: 2, signature:  7, vis: public                      }  # 17. ???
+    { name: EntryPoint, package: 5, receiver: 1, signature:  4, vis: public                      }, #  1. EntryPoint.EntryPoint() EntryPoint
+    { name: Object,     package: 2, receiver: 2, signature:  5, vis: public                      }, #  2. Object.Object() Object
+    { name: clone,      package: 2, receiver: 2, signature:  5, vis: protected                   }, #  3. Object.clone() Object
+    { name: equals,     package: 2, receiver: 2, signature:  8, vis: public                      }, #  4. Object.equals(arg0 Object) boolean
+    { name: finalize,   package: 2, receiver: 2, signature:  1, vis: protected                   }, #  5. Object.finalize()
+    { name: first,      package: 5, receiver: 1, signature: 16, vis: public, loc: 19, metrics: 3 }, #  6. EntryPoint.first(values $Array[int]) int
+    { name: getClass,   package: 2, receiver: 2, signature:  3, vis: public                      }, #  7. Object.getClass() any
+    { name: hashCode,   package: 2, receiver: 2, signature:  2, vis: public                      }, #  8. Object.hashCode() int
+    { name: last,       package: 5, receiver: 1, signature: 16, vis: public, loc: 23, metrics: 4 }, #  9. EntryPoint.last(values $Array[int]) int
+    { name: main,       package: 5, receiver: 1, signature:  9, vis: public, loc:  6, metrics: 1 }, # 10. EntryPoint.main(args $Array[any])
+    { name: notify,     package: 2, receiver: 2, signature:  1, vis: public                      }, # 11. Object.notify()
+    { name: notifyAll,  package: 2, receiver: 2, signature:  1, vis: public                      }, # 12. Object.notifyAll()
+    { name: sum,        package: 5, receiver: 1, signature: 16, vis: public, loc: 13, metrics: 2 }, # 13. EntryPoint.sum(values $Array[int]) int
+    { name: toString,   package: 2, receiver: 2, signature:  3, vis: public                      }, # 14. Object.toString() any
+    { name: wait,       package: 2, receiver: 2, signature:  1, vis: public                      }, # 15. Object.wait()
+    { name: wait,       package: 2, receiver: 2, signature:  6, vis: public                      }, # 16. Object.wait(arg0 long)
+    { name: wait,       package: 2, receiver: 2, signature:  7, vis: public                      }  # 17. Object.wait(arg0 long, arg1 int)
   ],
   metrics: [
-    { # 1. ???
+    { # 1. EntryPoint.main(args $Array[any])
       codeCount: 6, complexity: 1, indents: 4, lineCount: 6, loc: 6,
       invokes: [ method6, method9, method13 ]
     },
-    { # 2. ???
+    { # 2. EntryPoint.sum(values $Array[int]) int
       codeCount: 5, complexity: 2, indents: 3, lineCount: 5, loc: 13
     },
-    { # 3. ???
+    { # 3. EntryPoint.first(values $Array[int]) int
       codeCount: 3, complexity: 1, indents: 1, lineCount: 3, loc: 19
     },
-    { # 4. ???
+    { # 4. EntryPoint.last(values $Array[int]) int
       codeCount: 3, complexity: 1, indents: 1, lineCount: 3, loc: 23
     }
   ],
@@ -145,14 +145,14 @@
     { params: [ 7 ]                                  }, #  6. func(arg0 long)
     { params: [ 7, 9 ]                               }, #  7. func(arg0 long, arg1 int)
     { params: [ 8 ],  results: [ 1 ]                 }, #  8. func(arg0 Object) boolean
-    { params: [ 10 ]                                 }, #  9. func(???)
+    { params: [ 10 ]                                 }, #  9. func(args $Array[any])
     { params: [ 11 ], results: [ 2 ]                 }, # 10. func(index int) int
     { params: [ 11 ], results: [ 3 ]                 }, # 11. func(index int) any
     { params: [ 11 ], results: [ 6 ]                 }, # 12. func(index int) T
     { params: [ 11, 12 ]                             }, # 13. func(index int, value int)
     { params: [ 11, 13 ]                             }, # 14. func(index int, value any)
     { params: [ 11, 14 ]                             }, # 15. func(index int, value T)
-    { params: [ 15 ], results: [ 2 ], variadic: true }  # 16. func(...???) int
+    { params: [ 15 ], results: [ 2 ], variadic: true }  # 16. func(values $Array[int]) int
   ],
   structDescs: [
     { } # 1. struct{}
