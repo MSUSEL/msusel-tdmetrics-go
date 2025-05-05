@@ -201,7 +201,7 @@ func (id *interfaceDescImp) ToJson(ctx *jsonify.Context) jsonify.Datum {
 	return jsonify.NewMap().
 		AddIf(ctx, ctx.IsDebugKindIncluded(), `kind`, id.Kind()).
 		AddIf(ctx, ctx.IsDebugIndexIncluded(), `index`, id.index).
-		AddNonZero(ctx.OnlyIndex(), `package`, id.pinnedPkg).
+		AddNonZero(ctx.OnlyIndex(), `pin`, id.pinnedPkg).
 		AddNonZero(ctx.OnlyIndex(), `abstracts`, ab).
 		AddNonZero(ctx.Short(), `approx`, id.approx).
 		AddNonZero(ctx.Short(), `exact`, id.exact).

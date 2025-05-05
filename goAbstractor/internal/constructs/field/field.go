@@ -78,7 +78,7 @@ func (f *fieldImp) ToJson(ctx *jsonify.Context) jsonify.Datum {
 		AddIf(ctx, ctx.IsDebugIndexIncluded(), `index`, f.index).
 		Add(ctx, `name`, f.name).
 		Add(ctx.Short(), `type`, f.typ).
-		AddNonZero(ctx, `exported`, f.exported).
+		AddNonZeroIf(ctx, f.exported, `vis`, `exported`).
 		AddNonZero(ctx, `embedded`, f.embedded)
 }
 

@@ -134,18 +134,16 @@ The second capture is the index into the list for the project's item.
 The JSON may contain additional information about scoping or how information
 was defined. This additional information can be ignored for most cases.
 
-For example `exported` may exist on most named constructs
+For example `vis` may exist on most named constructs
 (declarations, abstracts, and fields) to indicate the scope of that construct
 when it was defined in Go.
-If exported a Go declaration can be used anywhere inside a project with the
+If "exported" a Go declaration can be used anywhere inside a project with the
 exception of constructs made inside an "internal" package.
 For specifics see Go's documentation on exported constructs and
 internal packages.
-If `exported` is not defined or set to `false` then the declaration is local
+If `vis` is not defined or set to empty then the declaration is local
 to the current package.
-
-Another example is `scope` that may be set `private`, `public`, `internal`, etc.
-This is similar to `exported` except for Java instead of Go.
+For Java `vis` may be set `private`, `public`, `internal`, etc.
 
 Some additional information can be added on request during the abstraction.
 For example the construct `kind` and `index` in the project's list
@@ -213,11 +211,11 @@ public interface Named {
 
 | Name        | Optional | Extra | Description |
 |:------------|:--------:|:-----:|:------------|
-| `exported`  | ◯ | ⬤ | True if the scope is "exported". |
 | `index`     | ◯ | ⬤ | The [index](#indices) of this abstract in the project's `abstracts` list. |
 | `kind`      | ◯ | ⬤ | `abstract` |
 | `name`      | ◯ | ◯ | The string name for the abstract. |
 | `signature` | ◯ | ◯ | [Index](#indices) for the [signature](#signature). |
+| `vis`       | ◯ | ⬤ | A string of the scope modifiers, like "public", "exported", or "private". |
 
 ### Argument
 
@@ -324,8 +322,6 @@ Unnamed types are not allowed to be embedded into a struct.
 | `type`     | ◯ | ◯ | [Key](#keys) for any [type description](#type-descriptions). |
 | `vis`      | ◯ | ⬤ | A string of the scope modifiers, like "public", "exported", or "private". |
 
-TODO: Replace `exported` with `vis` goAbstractor.
-
 ### Interface Declaration
 
 An interface declaration (`interfaceDecl`) is a named definition of an
@@ -364,8 +360,6 @@ public interface Baz {
 | `typeParams` | ⬤ | ◯ | List of [indices](#indices) to [type parameters](#type-parameter) if this interface is generic. |
 | `vis`        | ◯ | ⬤ | A string of the scope modifiers, like "public", "exported", or "private". |
 
-TODO: Replace `exported` with `vis` goAbstractor.
-
 ### Interface Description
 
 An interface description (`interfaceDesc`) describes the type of an interface.
@@ -394,8 +388,6 @@ public interface Named {
 | `inherits`  | ⬤ | ◯ | List of [indices](#indices) to inherited [interfaces](#interface-description). |
 | `kind`      | ◯ | ⬤ | `interfaceDesc` |
 | `pin`       | ⬤ | ◯ | The [key](#keys) to the [object](#object), [interface](#interface-declaration) declaration, or [package](#package) this interface is pinned to. |
-
-TODO: Replace `package` with `pin` in goAbstractor.
 
 ### Interface Instance
 
@@ -509,8 +501,6 @@ public class Bar<T> {
 | `signature`  | ◯ | ◯ | The [index](#indices) of the [signature](#signature) for this method. |
 | `typeParams` | ⬤ | ◯ | List of [indices](#indices) to [type parameters](#type-parameter) if this method is generic. |
 | `vis`        | ◯ | ⬤ | A string of the scope modifiers, like "public", "exported", or "private". |
-
-TODO: Replace `exported` with `vis` goAbstractor.
 
 ### Method Instance
 
@@ -627,7 +617,6 @@ type Baz struct { $data int }
 | Name         | Optional | Extra | Description |
 |:-------------|:--------:|:-----:|:------------|
 | `data`       | ◯ | ◯ | The [index](#indices) of the [structure description](#structure-description). |
-| `exported`   | ◯ | ⬤ | True if the scope is "exported". |
 | `index`      | ◯ | ⬤ | The [index](#indices) of this object in the projects' `objects` list. |
 | `instances`  | ⬤ | ◯ | List of [indices](#indices) to [object instances](#object-instance). |
 | `kind`       | ◯ | ⬤ | `object` |
@@ -637,9 +626,7 @@ type Baz struct { $data int }
 | `package`    | ◯ | ◯ | The [index](#indices) of the [package](#package) this object is declared in. |
 | `typeParams` | ⬤ | ◯ | List of [indices](#indices) to [type parameters](#type-parameter) if this object is generic. |
 | `interface`  | ◯ | ◯ | The [index](#indices) to the [interface description](#interface-description) that this object matches with. |
-
-
-
+| `vis`        | ◯ | ⬤ | A string of the scope modifiers, like "public", "exported", or "private". |
 
 ### Object Instance
 
@@ -815,5 +802,3 @@ var Y, Z = func() (int, int) {
 | `package` | ◯ | ◯ | The [index](#indices) of the [package](#package) this value is described in. |
 | `type`    | ◯ | ◯ | The [key](#keys) for the [type](#type-descriptions) of this value. |
 | `vis`     | ◯ | ⬤ | A string of the scope modifiers, like "public", "exported", or "private". |
-
-TODO: Replace `exported` with `vis` goAbstractor.

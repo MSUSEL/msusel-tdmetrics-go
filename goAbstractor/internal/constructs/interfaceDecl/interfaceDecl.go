@@ -134,7 +134,7 @@ func (d *interfaceDeclImp) ToJson(ctx *jsonify.Context) jsonify.Datum {
 		Add(ctx, `name`, d.name).
 		Add(ctx.OnlyIndex(), `interface`, d.inter).
 		AddNonZero(ctx, `loc`, d.loc).
-		AddNonZero(ctx, `exported`, d.exported).
+		AddNonZeroIf(ctx, d.exported, `vis`, `exported`).
 		AddNonZero(ctx.OnlyIndex(), `typeParams`, d.typeParams).
 		AddNonZero(ctx.OnlyIndex(), `instances`, d.instances.ToSlice())
 }

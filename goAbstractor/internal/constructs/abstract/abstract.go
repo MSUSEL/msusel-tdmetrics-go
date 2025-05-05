@@ -67,7 +67,7 @@ func (a *abstractImp) ToJson(ctx *jsonify.Context) jsonify.Datum {
 		AddIf(ctx, ctx.IsDebugKindIncluded(), `kind`, a.Kind()).
 		AddIf(ctx, ctx.IsDebugIndexIncluded(), `index`, a.index).
 		Add(ctx, `name`, a.name).
-		AddNonZero(ctx, `exported`, a.exported).
+		AddNonZeroIf(ctx, a.exported, `vis`, `exported`).
 		Add(ctx.OnlyIndex(), `signature`, a.signature)
 }
 

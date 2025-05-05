@@ -2,6 +2,9 @@
 
 ## Go Tests
 
+- Test nested types in generic function:
+    `func Foo[A any] { type Bar[B any] struct { X A; Y B }}`
+
 - Check the abstraction of an array:
     `var value [4]byte`
 

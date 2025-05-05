@@ -137,7 +137,7 @@ func (d *objectImp) ToJson(ctx *jsonify.Context) jsonify.Datum {
 		Add(ctx.OnlyIndex(), `package`, d.pkg).
 		Add(ctx, `name`, d.name).
 		AddNonZero(ctx, `loc`, d.loc).
-		AddNonZero(ctx, `exported`, d.exported).
+		AddNonZeroIf(ctx, d.exported, `vis`, `exported`).
 		AddNonZero(ctx.OnlyIndex(), `typeParams`, d.typeParams).
 		Add(ctx.OnlyIndex(), `data`, d.data).
 		AddNonZero(ctx.OnlyIndex(), `instances`, d.instances.ToSlice()).

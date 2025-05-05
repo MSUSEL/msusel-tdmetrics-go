@@ -105,7 +105,7 @@ func (v *valueImp) ToJson(ctx *jsonify.Context) jsonify.Datum {
 		Add(ctx.Short(), `type`, v.typ).
 		AddNonZero(ctx, `loc`, v.loc).
 		AddNonZero(ctx, `const`, v.isConst).
-		AddNonZero(ctx, `exported`, v.exported).
+		AddNonZeroIf(ctx, v.exported, `vis`, `exported`).
 		AddNonZero(ctx.OnlyIndex(), `metrics`, v.metrics)
 }
 
