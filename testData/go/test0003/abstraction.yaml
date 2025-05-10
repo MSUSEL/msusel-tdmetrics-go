@@ -1,9 +1,9 @@
 {
   language: go,
   abstracts: [
-    { name: $deref, signature: 2, exported: true }, # 1. func $deref() Cat
-    { name: $deref, signature: 3, exported: true }, # 2. func $deref() T <any>
-    { name: Pet,    signature: 1, exported: true }  # 3. func Pet()
+    { name: $deref, signature: 2, vis: exported }, # 1. func $deref() Cat
+    { name: $deref, signature: 3, vis: exported }, # 2. func $deref() T <any>
+    { name: Pet,    signature: 1, vis: exported }  # 3. func Pet()
   ],
   arguments: [
     { type: object1 },   # 1. <unnamed> Cat
@@ -13,15 +13,15 @@
     string # 1. string
   ],
   fields: [
-    { name: Name, type: basic1, exported: true } # 1. Name string
+    { name: Name, type: basic1, vis: exported } # 1. Name string
   ],
   interfaceDecls: [
     { # 1. $builtin.Pointer[T any] interface { $deref() T }
-      name: Pointer, package: 1, interface: 3, exported: true,
+      name: Pointer, package: 1, interface: 3, vis: exported,
       instances: [ 1 ], typeParams: [ 1 ]
     },
     { # 2. main.Animal interface { Pet() } @ main.go:5
-      name: Animal, package: 2, interface: 4, loc: 5, exported: true,
+      name: Animal, package: 2, interface: 4, loc: 5, vis: exported,
     }
   ],
   interfaceDescs: [
@@ -39,7 +39,7 @@
   methods: [
     { # 1. Cat.Pet() @ main.go:13
       name: Pet, package: 2, receiver: 1, signature: 1,
-      metrics: 1, loc: 13, exported: true, ptrRecv: true,
+      metrics: 1, loc: 13, vis: exported, ptrRecv: true,
     },
     { # 2. main() @ main.go:17
       name: main, package: 2, signature: 1,
@@ -73,7 +73,7 @@
   ],
   objects: [
     { # 1. Cat struct { Name string }{ Pet() }
-      name: Cat, package: 2, data: 1, interface: 1, loc: 9, exported: true,
+      name: Cat, package: 2, data: 1, interface: 1, loc: 9, vis: exported,
       methods: [ 1 ]
     }
   ],

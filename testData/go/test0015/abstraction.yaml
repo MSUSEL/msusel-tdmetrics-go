@@ -1,14 +1,14 @@
 {
   language: go,
   abstracts: [
-    { name: $equal, signature: 9, exported: true }, # 1. $equal(other any) bool
-    { name: $get,   signature: 3, exported: true }, # 2. $get(index int)(value int)
-    { name: $get,   signature: 4, exported: true }, # 3. $get(index int)(value T <any>)
-    { name: $get,   signature: 5, exported: true }, # 4. $get(index int)(value T <comparable>)
-    { name: $len,   signature: 2, exported: true }, # 5. $len() int
-    { name: $set,   signature: 6, exported: true }, # 6. $set(index int, value int)
-    { name: $set,   signature: 7, exported: true }, # 7. $set(index int, value T <any>)
-    { name: $set,   signature: 8, exported: true }  # 8. $set(index int, value T <comparable>)
+    { name: $equal, signature: 9, vis: exported }, # 1. $equal(other any) bool
+    { name: $get,   signature: 3, vis: exported }, # 2. $get(index int)(value int)
+    { name: $get,   signature: 4, vis: exported }, # 3. $get(index int)(value T <any>)
+    { name: $get,   signature: 5, vis: exported }, # 4. $get(index int)(value T <comparable>)
+    { name: $len,   signature: 2, vis: exported }, # 5. $len() int
+    { name: $set,   signature: 6, vis: exported }, # 6. $set(index int, value int)
+    { name: $set,   signature: 7, vis: exported }, # 7. $set(index int, value T <any>)
+    { name: $set,   signature: 8, vis: exported }  # 8. $set(index int, value T <comparable>)
   ],
   arguments: [
     {              type: basic1         }, #  1. <unnamed> bool
@@ -26,11 +26,11 @@
   basics: [ bool, int ],
   interfaceDecls: [
     { # 1. $builtin.List[T any]{ $len; $get; $set }
-      name: List, package: 1, interface: 4, exported: true,
+      name: List, package: 1, interface: 4, vis: exported,
       typeParams: [ 1 ], instances: [ 1, 2 ],
     },
     { # 2. $builtin.comparable{ $equal }
-      name: comparable, package: 1, interface: 2, exported: true
+      name: comparable, package: 1, interface: 2, vis: exported
     }
   ],
   interfaceDescs: [
@@ -68,7 +68,7 @@
   methods: [
     { # 1. main.AsSlice[T components](t List[T <any>]) List[T <any>]
       name: AsSlice, package: 2, signature: 11, typeParams: [ 2 ],
-      exported: true, loc: 8, metrics: 1, instances: [ 1 ]
+      vis: exported, loc: 8, metrics: 1, instances: [ 1 ]
     },
     { # 2. main.main()
       name: main, package: 2, signature: 1,

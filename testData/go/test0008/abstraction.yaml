@@ -1,11 +1,11 @@
 {
   language: go,
   abstracts: [
-    { name: $deref, signature: 3, exported: true }, # 1. $deref() Foo[int]
-    { name: $deref, signature: 4, exported: true }, # 2. $deref() Foo[T <any>]
-    { name: $deref, signature: 5, exported: true }, # 3. $deref() T <any>
-    { name: Get,    signature: 2, exported: true }, # 4. Get() int
-    { name: Get,    signature: 5, exported: true }  # 5. Get() T <any>
+    { name: $deref, signature: 3, vis: exported }, # 1. $deref() Foo[int]
+    { name: $deref, signature: 4, vis: exported }, # 2. $deref() Foo[T <any>]
+    { name: $deref, signature: 5, vis: exported }, # 3. $deref() T <any>
+    { name: Get,    signature: 2, vis: exported }, # 4. Get() int
+    { name: Get,    signature: 5, vis: exported }  # 5. Get() T <any>
   ],
   arguments: [
     { type: basic1 },      # 1. <unnamed> int
@@ -20,7 +20,7 @@
   ],
   interfaceDecls: [
     { # 1. Pointer[T any]{ $deref() T <any> }
-      name: Pointer, package: 1, interface: 4, exported: true,
+      name: Pointer, package: 1, interface: 4, vis: exported,
       instances: [ 1, 2 ], typeParams: [ 1 ]
     }
   ],
@@ -46,7 +46,7 @@
   ],
   methods: [
     { # 1. func (*Foo[T <any>]) Get() T
-      name: Get, exported: true, ptrRecv: true, loc: 9,
+      name: Get, vis: exported, ptrRecv: true, loc: 9,
       metrics: 1, package: 2, receiver: 1, signature: 5,
       instances: [ 1 ]
     },
@@ -87,7 +87,7 @@
   objects: [
     { # 1. Foo[T <any>]{ value T }{}
       name: Foo, package: 2, loc: 5,
-      data: 2, exported: true, interface: 1,
+      data: 2, vis: exported, interface: 1,
       instances:  [ 1 ],
       methods:    [ 1 ],
       typeParams: [ 1 ]

@@ -1,29 +1,29 @@
 {
   language: go,
   abstracts: [
-    { name: $deref,   signature:  2, exported: true }, #  1. $deref() int
-    { name: $deref,   signature:  5, exported: true }, #  2. $deref() T <any>
-    { name: $deref,   signature:  6, exported: true }, #  3. $deref() V <any>
-    { name: $equal,   signature: 23, exported: true }, #  4. $equal(other any) bool
-    { name: $get,     signature:  7, exported: true }, #  5. $get(index int)(value string)
-    { name: $get,     signature:  8, exported: true }, #  6. $get(index int)(value Pointer[int])
-    { name: $get,     signature:  9, exported: true }, #  7. $get(index int)(value Pointer[V <any>])
-    { name: $get,     signature: 10, exported: true }, #  8. $get(index int)(value K comparable)
-    { name: $get,     signature: 11, exported: true }, #  9. $get(index int)(value T <any>)
-    { name: $get,     signature: 17, exported: true }, # 10. $get(key string)(value Pointer[int], found bool)
-    { name: $get,     signature: 19, exported: true }, # 11. $get(key K <comparable>)(value Pointer[V <any>], found bool)
-    { name: $get,     signature: 21, exported: true }, # 12. $get(key TKey <comparable>)(value TValue <any>, found bool)
-    { name: $len,     signature:  2, exported: true }, # 13. $len() int
-    { name: $set,     signature: 12, exported: true }, # 14. $set(index int, value string)
-    { name: $set,     signature: 13, exported: true }, # 15. $set(index int, value Pointer[int])
-    { name: $set,     signature: 14, exported: true }, # 16. $set(index int, value Pointer[V <any>])
-    { name: $set,     signature: 15, exported: true }, # 17. $set(index int, value K <comparable>)
-    { name: $set,     signature: 16, exported: true }, # 18. $set(index int, value T <any>)
-    { name: $set,     signature: 18, exported: true }, # 19. $set(key string, value Pointer[int])
-    { name: $set,     signature: 20, exported: true }, # 20. $set(key K <any>, value Pointer[V <any>])
-    { name: $set,     signature: 22, exported: true }, # 21. $set(key TKey <comparable>, value TValue <any>)
-    { name: AsSlices, signature:  3, exported: true }, # 22. AsSlices()(List[string], List[Pointer[int]])
-    { name: AsSlices, signature:  4, exported: true }, # 23. AsSlices()(List[K comparable], List[Pointer[V <any>]])
+    { name: $deref,   signature:  2, vis: exported }, #  1. $deref() int
+    { name: $deref,   signature:  5, vis: exported }, #  2. $deref() T <any>
+    { name: $deref,   signature:  6, vis: exported }, #  3. $deref() V <any>
+    { name: $equal,   signature: 23, vis: exported }, #  4. $equal(other any) bool
+    { name: $get,     signature:  7, vis: exported }, #  5. $get(index int)(value string)
+    { name: $get,     signature:  8, vis: exported }, #  6. $get(index int)(value Pointer[int])
+    { name: $get,     signature:  9, vis: exported }, #  7. $get(index int)(value Pointer[V <any>])
+    { name: $get,     signature: 10, vis: exported }, #  8. $get(index int)(value K comparable)
+    { name: $get,     signature: 11, vis: exported }, #  9. $get(index int)(value T <any>)
+    { name: $get,     signature: 17, vis: exported }, # 10. $get(key string)(value Pointer[int], found bool)
+    { name: $get,     signature: 19, vis: exported }, # 11. $get(key K <comparable>)(value Pointer[V <any>], found bool)
+    { name: $get,     signature: 21, vis: exported }, # 12. $get(key TKey <comparable>)(value TValue <any>, found bool)
+    { name: $len,     signature:  2, vis: exported }, # 13. $len() int
+    { name: $set,     signature: 12, vis: exported }, # 14. $set(index int, value string)
+    { name: $set,     signature: 13, vis: exported }, # 15. $set(index int, value Pointer[int])
+    { name: $set,     signature: 14, vis: exported }, # 16. $set(index int, value Pointer[V <any>])
+    { name: $set,     signature: 15, vis: exported }, # 17. $set(index int, value K <comparable>)
+    { name: $set,     signature: 16, vis: exported }, # 18. $set(index int, value T <any>)
+    { name: $set,     signature: 18, vis: exported }, # 19. $set(key string, value Pointer[int])
+    { name: $set,     signature: 20, vis: exported }, # 20. $set(key K <any>, value Pointer[V <any>])
+    { name: $set,     signature: 22, vis: exported }, # 21. $set(key TKey <comparable>, value TValue <any>)
+    { name: AsSlices, signature:  3, vis: exported }, # 22. AsSlices()(List[string], List[Pointer[int]])
+    { name: AsSlices, signature:  4, vis: exported }, # 23. AsSlices()(List[K comparable], List[Pointer[V <any>]])
   ],
   arguments: [
     {              type: basic1 },         #  1. <unnamed> bool
@@ -52,25 +52,25 @@
   ],
   basics: [ bool, int, string ],
   fields: [
-    { name: Set, type: objectInst1, exported: true }, # 1. Set Set[string, int, Map[string, Pointer[int]]]
+    { name: Set, type: objectInst1, vis: exported }, # 1. Set Set[string, int, Map[string, Pointer[int]]]
     { name: m,   type: interfaceInst7 },              # 2. m Map[string, Pointer[int]]
     { name: m,   type: typeParam2 }                   # 3. m M <~Map[K comparable, Pointer[V any]]>
   ],
   interfaceDecls: [
     { # 1. $builtin.List[T any]{ $len() int; $get(index int)(value T); $set(index int, value T) }
-      name: List, package: 1, exported: true, interface: 12,
+      name: List, package: 1, vis: exported, interface: 12,
       typeParams: [ 4 ], instances: [ 3, 4, 5, 6 ]
     },
     { # 2. $builtin.Map[TKey comparable, TValue any]{ $len() int; $get(key TKey)(value TValue, found bool); $set(key TKey, value TValue) }
-      name: Map, package: 1, exported: true, interface: 15,
+      name: Map, package: 1, vis: exported, interface: 15,
       typeParams: [ 5, 6 ], instances: [ 7, 8 ]
     },
     { # 3. $builtin.Pointer[T any]{ $deref() T <any> }
-      name: Pointer, package: 1, exported: true, interface: 5,
+      name: Pointer, package: 1, vis: exported, interface: 5,
       typeParams: [ 4 ], instances: [ 1, 2 ]
     },
     { # 4. $builtin.comparable{ $equal(other any) bool }
-      name: comparable, package: 1, exported: true, interface: 7
+      name: comparable, package: 1, vis: exported, interface: 7
     }
   ],
   interfaceDescs: [
@@ -164,12 +164,12 @@
   methods: [
     { # 1. (main.Set[K comparable, V any, M ~Map[K <comparable>, Pointer[V <any>]]]) AsSlice()(List[K], List[Pointer[V]])
       name: AsSlices, package: 2, receiver: 2, signature: 4,
-      exported: true, loc: 13, metrics: 1,
+      vis: exported, loc: 13, metrics: 1,
       instances: [ 1 ]
     },
     { # 2. main.PrintSlice[T any, S ~List[T]](s S)
       name: PrintSlice, package: 2, signature: 26,
-      exported: true, loc: 25, metrics: 2,
+      vis: exported, loc: 25, metrics: 2,
       typeParams: [ 4, 3 ], instances:  [ 2, 3 ]
     },
     { # 3. main.main()
@@ -205,12 +205,12 @@
   objects: [
     { # 1. main.Bacon{ Set Set[string, V int, M Map[string, Pointer[int]]] }{}
       name: Bacon, package: 2, data: 1,
-      exported: true, interface: 1, loc: 36
+      vis: exported, interface: 1, loc: 36
     },
     {
       # 2. main.Set[K comparable, V any, M ~Map[K comparable, Pointer[V any]]]{ m M }
       name: Set, package: 2, data: 3,
-      exported: true, interface: 17, loc: 9,
+      vis: exported, interface: 17, loc: 9,
       methods: [ 1 ], typeParams: [ 1, 7, 2 ], instances: [ 1 ]
     }
   ],

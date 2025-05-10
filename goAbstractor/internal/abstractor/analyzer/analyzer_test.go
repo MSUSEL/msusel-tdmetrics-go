@@ -2088,8 +2088,8 @@ func Test_PointerObject(t *testing.T) {
 		`{`,
 		`  language: go,`,
 		`  abstracts: [`,
-		`    { name: $deref, signature: 1, exported: true },`, // 1. $deref() foo
-		`    { name: $deref, signature: 2, exported: true }`,  // 2. $deref() T <any>
+		`    { name: $deref, signature: 1, vis: exported },`, // 1. $deref() foo
+		`    { name: $deref, signature: 2, vis: exported }`,  // 2. $deref() T <any>
 		`  ],`,
 		`  arguments: [`,
 		`    { type: tempReference1 },`, // 1. <unnamed> foo
@@ -2097,7 +2097,7 @@ func Test_PointerObject(t *testing.T) {
 		`  ],`,
 		`  interfaceDecls: [`,
 		`    {`, // 1. $builtin.Pointer[T any]{ $deref() T <any> }
-		`      name: Pointer, package: 1, interface: 3, exported: true,`,
+		`      name: Pointer, package: 1, interface: 3, vis: exported,`,
 		`      instances: [ 1 ], typeParams: [ 1 ]`,
 		`    }`,
 		`  ],`,

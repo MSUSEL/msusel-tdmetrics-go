@@ -1,13 +1,13 @@
 {
   language: go,
   abstracts: [
-    { exported: true, name: $deref, signature: 3 }, # 1. $deref() nodeImp
-    { exported: true, name: $deref, signature: 6 }, # 2. $deref() T any
-    { exported: true, name: $equal, signature: 8 }, # 3. $equal(other any) bool
-    { exported: true, name: Next,   signature: 2 }, # 4. Next() Pointer[nodeImp]
-    { exported: true, name: Next,   signature: 5 }, # 5. Next() T <interface{ comparable; Next() T }>
-    { exported: true, name: Next,   signature: 6 }, # 6. Next() T <any>
-    { exported: true, name: Next,   signature: 7 }  # 7. Next() T <interface{ comparable; Next() T }> // TODO: Duplicates 5
+    { vis: exported, name: $deref, signature: 3 }, # 1. $deref() nodeImp
+    { vis: exported, name: $deref, signature: 6 }, # 2. $deref() T any
+    { vis: exported, name: $equal, signature: 8 }, # 3. $equal(other any) bool
+    { vis: exported, name: Next,   signature: 2 }, # 4. Next() Pointer[nodeImp]
+    { vis: exported, name: Next,   signature: 5 }, # 5. Next() T <interface{ comparable; Next() T }>
+    { vis: exported, name: Next,   signature: 6 }, # 6. Next() T <any>
+    { vis: exported, name: Next,   signature: 7 }  # 7. Next() T <interface{ comparable; Next() T }> // TODO: Duplicates 5
   ],
   arguments: [
     {              type: basic1 },         #  1. bool
@@ -29,17 +29,17 @@
   interfaceDecls: [
     { # 1. Pointer[T any]
       name: Pointer, package: 1, interface: 3,
-      exported: true,
+      vis: exported,
       typeParams: [ 1 ],
       instances:  [ 1 ]
     },
     { # 2. comparable
       name: comparable, package: 1, interface: 4,
-      exported: true
+      vis: exported
     },
     { # 3. Node[T any]
       name: Node, package: 2, interface: 6,
-      exported: true, loc: 5,
+      vis: exported, loc: 5,
       typeParams: [ 1 ],
       instances:  [ 2 ]
     }
@@ -83,12 +83,12 @@
     { # 1. func Len[T Node[T <interface{ comparable; Next func() T }> ]](start T, stop T) int
       name: Len, package: 2, signature: 9,
       typeParams: [ 3 ],
-      exported: true, loc: 10, metrics: 1,
+      vis: exported, loc: 10, metrics: 1,
       instances: [ 1 ]
     },
     { # 2. func nodeImp.Next() Pointer[nodeImp]
       name: Next, package: 2, receiver: 1, signature: 2,
-      exported: true, loc: 22, metrics: 2, ptrRecv: true
+      vis: exported, loc: 22, metrics: 2, ptrRecv: true
     },
     { # 3. func main()
       name: main, package: 2, signature: 1,

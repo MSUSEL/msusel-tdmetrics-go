@@ -1,12 +1,12 @@
 {
   language: go,
   abstracts: [
-    { name: $deref, signature: 2, exported: true }, # 1. $deref() A[T <int|float64|string>]
-    { name: $deref, signature: 3, exported: true }, # 2. $deref() A[int]
-    { name: $deref, signature: 4, exported: true }, # 3. $deref() A[float64]
-    { name: $deref, signature: 5, exported: true }, # 4. $deref() A[string]
-    { name: $deref, signature: 6, exported: true }, # 5. $deref() T <any>
-    { name: Mul,    signature: 7, exported: true }  # 6. Mul(v int)
+    { name: $deref, signature: 2, vis: exported }, # 1. $deref() A[T <int|float64|string>]
+    { name: $deref, signature: 3, vis: exported }, # 2. $deref() A[int]
+    { name: $deref, signature: 4, vis: exported }, # 3. $deref() A[float64]
+    { name: $deref, signature: 5, vis: exported }, # 4. $deref() A[string]
+    { name: $deref, signature: 6, vis: exported }, # 5. $deref() T <any>
+    { name: Mul,    signature: 7, vis: exported }  # 6. Mul(v int)
   ],
   arguments: [
     {          type: object1 },     # 1. <unnamed> A[T <int|float64|string>]
@@ -25,7 +25,7 @@
   ],
   interfaceDecls: [
     { # 1. Pointer[T any]{ $deref() T }
-      name: Pointer, package: 1, interface: 7, exported: true,
+      name: Pointer, package: 1, interface: 7, vis: exported,
       instances: [ 1, 2, 3, 4 ],
       typeParams: [ 1 ]
     }
@@ -81,7 +81,7 @@
   ],
   methods: [
     { # 1. func (A[T int|float64|string]) Mul(v int)
-      name: Mul, package: 2, exported: true, ptrRecv: true, loc: 12,
+      name: Mul, package: 2, vis: exported, ptrRecv: true, loc: 12,
       metrics: 1, receiver: 1, signature: 7,
       instances: [ 1, 2, 3 ]
     },
@@ -147,7 +147,7 @@
   objects: [
     { # 1. main.A[T int|float64|string]{ value T }{ Mul(v int) }
       name: A, package: 2, data: 4, interface: 1,
-      exported: true, loc: 8,
+      vis: exported, loc: 8,
       typeParams: [ 2 ], methods: [ 1 ],
       instances: [ 1, 2, 3 ],
     }

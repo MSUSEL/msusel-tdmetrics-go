@@ -84,26 +84,26 @@
     path: [ objects, package=~^3$, '!loc' ],
     data: [
       {
-        index: 1, name: Cat, package: 3, exported: true,
+        index: 1, name: Cat, package: 3, vis: exported,
         data: 158, # struct { Name string, Breed CatBreed, Age int }
         interface: 1, # any
       },
       {
-        index: 2, name: CatBreed, package: 3, exported: true,
+        index: 2, name: CatBreed, package: 3, vis: exported,
         data: 2, interface: 760,
         methods: [ 19 ]
       },
       {
-        index: 3, name: CatTable, package: 3, exported: true,
+        index: 3, name: CatTable, package: 3, vis: exported,
         data: 26, interface: 693,
         methods: [ 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 17, 20 ]
       },
       {
-        index: 4, name: ID, package: 3, exported: true,
+        index: 4, name: ID, package: 3, vis: exported,
         data: 11, interface: 1,
       },
       {
-        index: 5, name: IDSlice, package: 3, exported: true,
+        index: 5, name: IDSlice, package: 3, vis: exported,
         data: 21, interface: 731,
         methods: [ 15, 16, 21, 22 ]
       }
@@ -115,24 +115,24 @@
     goVersion: 1.23.3,
     path: [ methods, package=~^3$, '!~^(metrics|loc)$' ],
     data: [
-      { index:  5, name: Add,           exported: true, package: 3, receiver: 3, signature: 1785 },
-      { index:  6, name: AddNew,        exported: true, package: 3, receiver: 3, signature: 2403 },
-      { index:  7, name: Age,           exported: true, package: 3, receiver: 3, signature: 1782 },
-      { index:  8, name: AgeRange,      exported: true, package: 3, receiver: 3, signature:    4 },
-      { index:  9, name: AllBreeds,     exported: true, package: 3, receiver: 3, signature:  129 },
-      { index: 10, name: AllIDs,        exported: true, package: 3, receiver: 3, signature:  139 },
-      { index: 11, name: Breed,         exported: true, package: 3, receiver: 3, signature: 1784 },
-      { index: 12, name: CatsWithBreed, exported: true, package: 3, receiver: 3, signature: 1025 },
-      { index: 13, name: CatsWithName,  exported: true, package: 3, receiver: 3, signature: 2383 },
-      { index: 14, name: Has,           exported: true, package: 3, receiver: 3, signature: 1781 },
-      { index: 15, name: Len,           exported: true, package: 3, receiver: 5, signature:    3 },
-      { index: 16, name: Less,          exported: true, package: 3, receiver: 5, signature: 1740 },
-      { index: 17, name: Name,          exported: true, package: 3, receiver: 3, signature: 1783 },
-      { index: 18, name: NewID,         exported: true, package: 3,              signature:  138 },
-      { index: 19, name: String,        exported: true, package: 3, receiver: 2, signature:   26 },
-      { index: 20, name: String,        exported: true, package: 3, receiver: 3, signature:   26 },
-      { index: 21, name: String,        exported: true, package: 3, receiver: 5, signature:   26 },
-      { index: 22, name: Swap,          exported: true, package: 3, receiver: 5, signature: 1739 }
+      { index:  5, name: Add,           vis: exported, package: 3, receiver: 3, signature: 1785 },
+      { index:  6, name: AddNew,        vis: exported, package: 3, receiver: 3, signature: 2403 },
+      { index:  7, name: Age,           vis: exported, package: 3, receiver: 3, signature: 1782 },
+      { index:  8, name: AgeRange,      vis: exported, package: 3, receiver: 3, signature:    4 },
+      { index:  9, name: AllBreeds,     vis: exported, package: 3, receiver: 3, signature:  129 },
+      { index: 10, name: AllIDs,        vis: exported, package: 3, receiver: 3, signature:  139 },
+      { index: 11, name: Breed,         vis: exported, package: 3, receiver: 3, signature: 1784 },
+      { index: 12, name: CatsWithBreed, vis: exported, package: 3, receiver: 3, signature: 1025 },
+      { index: 13, name: CatsWithName,  vis: exported, package: 3, receiver: 3, signature: 2383 },
+      { index: 14, name: Has,           vis: exported, package: 3, receiver: 3, signature: 1781 },
+      { index: 15, name: Len,           vis: exported, package: 3, receiver: 5, signature:    3 },
+      { index: 16, name: Less,          vis: exported, package: 3, receiver: 5, signature: 1740 },
+      { index: 17, name: Name,          vis: exported, package: 3, receiver: 3, signature: 1783 },
+      { index: 18, name: NewID,         vis: exported, package: 3,              signature:  138 },
+      { index: 19, name: String,        vis: exported, package: 3, receiver: 2, signature:   26 },
+      { index: 20, name: String,        vis: exported, package: 3, receiver: 3, signature:   26 },
+      { index: 21, name: String,        vis: exported, package: 3, receiver: 5, signature:   26 },
+      { index: 22, name: Swap,          vis: exported, package: 3, receiver: 5, signature: 1739 }
     ]
   },
   {

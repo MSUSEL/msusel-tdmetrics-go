@@ -1,9 +1,9 @@
 {
   language: go,
   abstracts: [
-    { name: Age,  signature: 2, exported: true }, # 1. func Age() int
-    { name: Fly,  signature: 1, exported: true }, # 2. func Fly()
-    { name: Temp, signature: 3, exported: true }  # 3. func Temp() float
+    { name: Age,  signature: 2, vis: exported }, # 1. func Age() int
+    { name: Fly,  signature: 1, vis: exported }, # 2. func Fly()
+    { name: Temp, signature: 3, vis: exported }  # 3. func Temp() float
   ],
   arguments: [
     { type: basic1 }, # 1. <unnamed> int
@@ -15,19 +15,19 @@
   ],
   interfaceDecls: [
     { # 1. main.Animal @ main.go:6
-      name: Animal, package: 1, interface: 1, loc: 6, exported: true
+      name: Animal, package: 1, interface: 1, loc: 6, vis: exported
     },
     { # 2. main.Bat @ main.go:20
-      name: Bat, package: 1, interface: 3, loc: 20, exported: true
+      name: Bat, package: 1, interface: 3, loc: 20, vis: exported
     },
     { # 3. main.Bird @ main.go:10
-      name: Bird, package: 1, interface: 2, loc: 10, exported: true
+      name: Bird, package: 1, interface: 2, loc: 10, vis: exported
     },
     { # 4. main.Filter @ main.go:25
-      name: Flier, package: 1, interface: 5, loc: 25, exported: true
+      name: Flier, package: 1, interface: 5, loc: 25, vis: exported
     },
     { # 5. main.Mammal @ main.go:15
-      name: Mammal, package: 1, interface: 4, loc: 15, exported: true
+      name: Mammal, package: 1, interface: 4, loc: 15, vis: exported
     }
   ],
   interfaceDescs: [

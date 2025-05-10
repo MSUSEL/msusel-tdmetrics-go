@@ -1,10 +1,10 @@
 {
   language: go,
   abstracts: [
-    { name: Mul, signature: 2, exported: true }, # 1. Mul(v int) int
-    { name: Mul, signature: 3, exported: true }, # 2. Mul(v float64) float64
-    { name: Mul, signature: 4, exported: true }, # 3. Mul(v string) string
-    { name: Mul, signature: 5, exported: true }  # 4. Mul(v T) T <int|float64|string>
+    { name: Mul, signature: 2, vis: exported }, # 1. Mul(v int) int
+    { name: Mul, signature: 3, vis: exported }, # 2. Mul(v float64) float64
+    { name: Mul, signature: 4, vis: exported }, # 3. Mul(v string) string
+    { name: Mul, signature: 5, vis: exported }  # 4. Mul(v T) T <int|float64|string>
   ],
   arguments: [
     { type: basic1 },             # 1. <unnamed> int
@@ -43,7 +43,7 @@
   ],
   methods: [
     { # 1. func (A[T int|float64|string]) Mul(v T) T
-      name: Mul, exported: true, loc: 12,
+      name: Mul, vis: exported, loc: 12,
       metrics: 1, package: 1, receiver: 1, signature: 5,
       instances: [ 1, 2, 3 ]
     },
@@ -82,7 +82,7 @@
   objects: [
     { # 1. A[T int|float64|string] { value int }{ Mul(v T) T }
       name: A, package: 1, data: 1, interface: 5, loc: 8,
-      exported: true,
+      vis: exported,
       instances:  [ 1, 2, 3 ],
       methods:    [ 1 ],
       typeParams: [ 1 ]

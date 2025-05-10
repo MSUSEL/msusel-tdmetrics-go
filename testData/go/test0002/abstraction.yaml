@@ -1,11 +1,11 @@
 {
   language: go,
   abstracts: [
-    { name: $get, signature: 3, exported: true }, # 1. func $get(index int)(value int)
-    { name: $get, signature: 4, exported: true }, # 2. func $get(index int)(value T<any>)
-    { name: $len, signature: 2, exported: true }, # 3. func $len() int
-    { name: $set, signature: 5, exported: true }, # 4. func $set(index int, value int)
-    { name: $set, signature: 6, exported: true }  # 5. func $set(index int, value T<any>)
+    { name: $get, signature: 3, vis: exported }, # 1. func $get(index int)(value int)
+    { name: $get, signature: 4, vis: exported }, # 2. func $get(index int)(value T<any>)
+    { name: $len, signature: 2, vis: exported }, # 3. func $len() int
+    { name: $set, signature: 5, vis: exported }, # 4. func $set(index int, value int)
+    { name: $set, signature: 6, vis: exported }  # 5. func $set(index int, value T<any>)
   ],
   arguments: [
     {               type: basic1 }, # 1. <unnamed> int
@@ -19,7 +19,7 @@
   ],
   interfaceDecls: [
     { # 1. $builtin.List[T any]
-      name: List, package: 1, interface: 3, exported: true,
+      name: List, package: 1, interface: 3, vis: exported,
       typeParams: [ 1 ], instances: [ 1 ]
     }
   ],
@@ -58,16 +58,16 @@
     }
   ],
   metrics: [
-    { # 1.
+    { # 1. metrics for sum
       codeCount: 7, complexity: 2, indents: 6, lineCount: 7, loc: 5
     },
-    { # 2.
+    { # 2. metrics for first
       codeCount: 3, complexity: 1, indents: 1, lineCount: 3, loc: 13
     },
-    { # 3.
+    { # 3. metrics for last
       codeCount: 3, complexity: 1, indents: 1, lineCount: 3, loc: 17
     },
-    { # 4.
+    { # 4. metrics for main
       codeCount: 6, complexity: 1, indents: 4, lineCount: 6, loc: 21,
       sideEffect: true, invokes: [ method1, method2, method4 ]
     }

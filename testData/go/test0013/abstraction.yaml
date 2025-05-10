@@ -1,9 +1,9 @@
 {
   language: go,
   abstracts: [
-    { name: GetX, signature: 2, exported: true }, # 1. GetX() int
-    { name: GetY, signature: 2, exported: true }, # 2. GetY() int
-    { name: Sum,  signature: 2, exported: true }  # 3. Sum() int
+    { name: GetX, signature: 2, vis: exported }, # 1. GetX() int
+    { name: GetY, signature: 2, vis: exported }, # 2. GetY() int
+    { name: Sum,  signature: 2, vis: exported }  # 3. Sum() int
   ],
   arguments: [
     { type: basic1 },                 # 1. <unnamed> int
@@ -11,20 +11,20 @@
   ],
   basics: [ int ],
   fields: [
-    { name: XCoord, type: object2, exported: true }, # 1. XCoord XCoord{ x int }
-    { name: YCoord, type: object3, exported: true }, # 2. YCoord YCoord{ y int }
+    { name: XCoord, type: object2, vis: exported }, # 1. XCoord XCoord{ x int }
+    { name: YCoord, type: object3, vis: exported }, # 2. YCoord YCoord{ y int }
     { name: x, type: basic1 },                       # 3. x int
     { name: y, type: basic1 }                        # 4. y int
   ],
   interfaceDecls: [
     { # 1. IPoint{ GetX() int; GetY() int; Sum() int }
-      name: IPoint, package: 1, exported: true, interface: 2, loc: 27
+      name: IPoint, package: 1, vis: exported, interface: 2, loc: 27
     },
     { # 2. IXCoord{ GetX() int }
-      name: IXCoord, package: 1, exported: true, interface: 1, loc: 23
+      name: IXCoord, package: 1, vis: exported, interface: 1, loc: 23
     },
     { # 3. IYCoord{ GetY() int }
-      name: IYCoord, package: 1, exported: true, interface: 3, loc: 24
+      name: IYCoord, package: 1, vis: exported, interface: 3, loc: 24
     }
   ],
   interfaceDescs: [
@@ -36,19 +36,19 @@
   methods: [
     { # 1. GetX() int
       name: GetX, package: 1, receiver: 2, signature: 2,
-      exported: true, loc: 9, metrics: 1
+      vis: exported, loc: 9, metrics: 1
     },
     { # 2. GetY() int
       name: GetY, package: 1, receiver: 3, signature: 2,
-      exported: true, loc: 13, metrics: 2
+      vis: exported, loc: 13, metrics: 2
     },
     { # 3. PrintPoint(p IPoint)
       name: PrintPoint, package: 1, signature: 3,
-      exported: true, loc: 35, metrics: 4
+      vis: exported, loc: 35, metrics: 4
     },
     { # 4. Sum() int
       name: Sum, package: 1, receiver: 1, signature: 2,
-      exported: true, loc: 20, metrics: 3
+      vis: exported, loc: 20, metrics: 3
     },
     { # 5. main()
       name: main, package: 1, signature: 1,
@@ -108,17 +108,17 @@
   objects: [
     { # 1. Point{ XCoord XCoord{ x int }, YCoord YCoord{ y int } }
       name: Point, package: 1, data: 1,
-      exported: true, interface: 4, loc: 15,
+      vis: exported, interface: 4, loc: 15,
       methods: [ 4 ],
     },
     { # 2. XCoord{ x int }
       name: XCoord, package: 1, data: 2,
-      exported: true, interface: 1, loc: 7,
+      vis: exported, interface: 1, loc: 7,
       methods: [ 1 ]
     },
     { # 3. YCoord{ y int }
       name: YCoord, package: 1, data: 3,
-      exported: true, interface: 3, loc: 11,
+      vis: exported, interface: 3, loc: 11,
       methods: [ 2 ]
     }
   ],
