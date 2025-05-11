@@ -6,6 +6,7 @@ import (
 
 	"github.com/Snow-Gremlin/goToolbox/collections/enumerator"
 	"github.com/Snow-Gremlin/goToolbox/comp"
+	"github.com/Snow-Gremlin/goToolbox/terrors/terror"
 	"github.com/Snow-Gremlin/goToolbox/utils"
 
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/assert"
@@ -33,7 +34,9 @@ func newTempReference(args constructs.TempReferenceArgs) constructs.TempReferenc
 		assert.ArgNotNil(`package`, args.Package)
 
 		// Implement if needed.
-		assert.NotImplemented()
+		panic(terror.New(`not implemented`).
+			With("Package Path", args.PackagePath).
+			With("Name", args.Name))
 	}
 	assert.ArgNotNil(`real type`, args.RealType)
 

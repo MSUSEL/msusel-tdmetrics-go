@@ -44,7 +44,3 @@ func ArgHasNoNils[T any, S ~[]T](name string, values S) {
 		}
 	}
 }
-
-func NotImplemented() {
-	panic(terror.New(`not implemented`))
-}

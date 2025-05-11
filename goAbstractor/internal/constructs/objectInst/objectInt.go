@@ -8,6 +8,7 @@ import (
 	"github.com/Snow-Gremlin/goToolbox/collections/enumerator"
 	"github.com/Snow-Gremlin/goToolbox/collections/sortedSet"
 	"github.com/Snow-Gremlin/goToolbox/comp"
+	"github.com/Snow-Gremlin/goToolbox/terrors/terror"
 	"github.com/Snow-Gremlin/goToolbox/utils"
 
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/assert"
@@ -39,7 +40,7 @@ func newInstance(args constructs.ObjectInstArgs) constructs.ObjectInst {
 		assert.ArgNotNil(`package`, pkg)
 
 		// Implement if needed.
-		assert.NotImplemented()
+		panic(terror.New(`not implemented`))
 	}
 	assert.ArgNotNil(`real type`, args.RealType)
 

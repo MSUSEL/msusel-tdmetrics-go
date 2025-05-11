@@ -16,6 +16,8 @@ import (
 // Instances with realized versions of the object,
 // are added for each used instance in the source code.
 // If there are no instances then the generic object isn't used.
+// The type parameters will also contain any nesting type parameters
+// from any generic methods enclosing this object.
 type Object interface {
 	TypeDecl
 	IsObject()

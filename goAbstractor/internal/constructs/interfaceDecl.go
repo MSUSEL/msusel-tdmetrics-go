@@ -16,6 +16,8 @@ import (
 // Instances with realized versions of the interface,
 // are added for each used instance in the source code. If there
 // are no instances then the generic interface isn't used.
+// The type parameters will also contain any nesting type parameters
+// from any generic methods enclosing this interface.
 type InterfaceDecl interface {
 	TypeDecl
 	IsInterface()

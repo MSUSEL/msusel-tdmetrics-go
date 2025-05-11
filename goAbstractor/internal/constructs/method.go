@@ -8,6 +8,13 @@ import (
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/locs"
 )
 
+// Method is a named method typically explicitly defined at the given location
+// in the source code. The method may have a receiver for another project.
+//
+// If type parameters are given then the method is generic.
+// Instances with realized versions of the method,
+// are added for each used instance in the source code.
+// If there are no instances then the generic method isn't used.
 type Method interface {
 	Declaration
 	IsMethod()
