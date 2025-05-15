@@ -7,6 +7,7 @@ import (
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs/kind"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/jsonify"
+	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/stringer"
 )
 
 type fieldImp struct {
@@ -82,6 +83,10 @@ func (f *fieldImp) ToJson(ctx *jsonify.Context) jsonify.Datum {
 		AddNonZero(ctx, `embedded`, f.embedded)
 }
 
+func (f *fieldImp) ToStringer(s stringer.Stringer) {
+	s.Write(f.name, ` `, f.typ)
+}
+
 func (f *fieldImp) String() string {
-	return f.name + ` ` + f.typ.String()
+	return stringer.String(f)
 }

@@ -3,9 +3,9 @@ package interfaceDesc
 import (
 	"go/token"
 	"go/types"
+	"strings"
 
 	"github.com/Snow-Gremlin/goToolbox/collections"
-	"github.com/Snow-Gremlin/goToolbox/collections/enumerator"
 	"github.com/Snow-Gremlin/goToolbox/collections/sortedSet"
 	"github.com/Snow-Gremlin/goToolbox/comp"
 	"github.com/Snow-Gremlin/goToolbox/utils"
@@ -16,6 +16,7 @@ import (
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs/innate"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs/kind"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/jsonify"
+	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/stringer"
 )
 
 type interfaceDescImp struct {
@@ -209,35 +210,42 @@ func (id *interfaceDescImp) ToJson(ctx *jsonify.Context) jsonify.Datum {
 		AddNonZero(ctx, `hint`, string(id.hint))
 }
 
-func (id *interfaceDescImp) String() string {
-	internals := ``
-	next := ``
-	if len(id.exact) > 0 {
-		next = `; `
-		internals += enumerator.Enumerate(id.exact...).Join(`|`)
-		if len(id.approx) > 0 {
-			internals += `|~` + enumerator.Enumerate(id.approx...).Join(`|~`)
-		}
-	} else if len(id.approx) > 0 {
-		next = `; `
-		internals += `~` + enumerator.Enumerate(id.approx...).Join(`|~`)
-	}
-	if len(id.abstracts) > 0 {
-		internals += next + enumerator.Enumerate(id.abstracts...).Join(`; `)
+func (id *interfaceDescImp) ToStringer(s stringer.Stringer) {
+	hasExact := len(id.exact) > 0
+	hasApprox := len(id.approx) > 0
+	hasAbstracts := len(id.abstracts) > 0
+
+	if !hasExact && !hasApprox && !hasAbstracts {
+		s.Write(`any`)
+		return
 	}
 
-	if len(internals) <= 0 {
-		return `any`
-	}
-
-	head := ``
 	if id.IsPinned() {
-		head = id.pinnedPkg.Path() + `:`
+		s.Write(id.pinnedPkg.Path(), `:`)
 	}
 
-	result := head + `interface{ ` + internals + ` }`
-	if result == `interface{ $equal func(other any) bool }` {
-		result = `comparable`
+	s.Write(`interface{`)
+	next := ``
+	if hasExact {
+		next = `; `
+		s.WriteList(``, `|`, ``, id.exact)
+		s.WriteList(`|~`, `|~`, ``, id.approx)
+	} else if hasApprox {
+		next = `; `
+		s.WriteList(`~`, `|~`, ``, id.approx)
 	}
-	return result
+
+	if hasAbstracts {
+		s.WriteList(next, `; `, ``, id.abstracts)
+	}
+	s.Write(` }`)
+
+	check := `interface{ $equal func(other any) bool }`
+	if str, ok := strings.CutSuffix(s.String(), check); ok {
+		s.Reset().Write(str, `comparable`)
+	}
+}
+
+func (id *interfaceDescImp) String() string {
+	return stringer.String(id)
 }

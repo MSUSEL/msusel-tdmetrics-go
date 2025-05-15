@@ -1,8 +1,6 @@
 package value
 
 import (
-	"strings"
-
 	"github.com/Snow-Gremlin/goToolbox/comp"
 	"github.com/Snow-Gremlin/goToolbox/utils"
 
@@ -11,6 +9,7 @@ import (
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs/kind"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/jsonify"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/locs"
+	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/stringer"
 )
 
 type valueImp struct {
@@ -109,13 +108,10 @@ func (v *valueImp) ToJson(ctx *jsonify.Context) jsonify.Datum {
 		AddNonZero(ctx.OnlyIndex(), `metrics`, v.metrics)
 }
 
+func (v *valueImp) ToStringer(s stringer.Stringer) {
+	s.Write(`var `, v.pkg.Path(), `.`, v.name, ` `, v.typ)
+}
+
 func (v *valueImp) String() string {
-	buf := &strings.Builder{}
-	buf.WriteString(`var `)
-	buf.WriteString(v.pkg.Path())
-	buf.WriteString(`.`)
-	buf.WriteString(v.name)
-	buf.WriteString(` `)
-	buf.WriteString(v.typ.String())
-	return buf.String()
+	return stringer.String(v)
 }

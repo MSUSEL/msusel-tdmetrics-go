@@ -11,6 +11,7 @@ import (
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs/kind"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/jsonify"
+	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/stringer"
 )
 
 type basicImp struct {
@@ -48,7 +49,6 @@ func (t *basicImp) SetIndex(index int)  { t.index = index }
 func (t *basicImp) Alive() bool         { return t.alive }
 func (t *basicImp) SetAlive(alive bool) { t.alive = alive }
 func (t *basicImp) GoType() types.Type  { return t.realType }
-func (t *basicImp) String() string      { return t.realType.Name() }
 
 func (t *basicImp) basicKind() int {
 	return int(t.realType.Kind())
@@ -80,3 +80,7 @@ func (t *basicImp) ToJson(ctx *jsonify.Context) jsonify.Datum {
 	}
 	return jsonify.New(ctx, t.realType.Name())
 }
+
+func (t *basicImp) ToStringer(s stringer.Stringer) { s.Write(t.realType.Name()) }
+
+func (t *basicImp) String() string { return t.realType.Name() }

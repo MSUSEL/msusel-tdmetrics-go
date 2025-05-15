@@ -8,11 +8,13 @@ import (
 	"github.com/Snow-Gremlin/goToolbox/utils"
 
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs/kind"
+	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/stringer"
 )
 
 // Construct is part of the source code.
 type Construct interface {
 	comp.Comparable[Construct]
+	stringer.Stringerable
 
 	// String gets a human readable string for this debugging this construct.
 	String() string

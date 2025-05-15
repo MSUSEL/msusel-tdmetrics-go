@@ -4,7 +4,6 @@ import (
 	"go/token"
 	"go/types"
 
-	"github.com/Snow-Gremlin/goToolbox/collections/enumerator"
 	"github.com/Snow-Gremlin/goToolbox/comp"
 	"github.com/Snow-Gremlin/goToolbox/utils"
 
@@ -13,6 +12,7 @@ import (
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs/innate"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs/kind"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/jsonify"
+	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/stringer"
 )
 
 type structDescImp struct {
@@ -90,6 +90,12 @@ func (d *structDescImp) ToJson(ctx *jsonify.Context) jsonify.Datum {
 		AddNonZero(ctx.OnlyIndex(), `fields`, d.fields)
 }
 
+func (d *structDescImp) ToStringer(s stringer.Stringer) {
+	s.Write(`struct{ `).
+		WriteList(``, `; `, ``, d.fields).
+		Write(` }`)
+}
+
 func (d *structDescImp) String() string {
-	return `struct{ ` + enumerator.Enumerate(d.fields...).Join(`; `) + ` }`
+	return stringer.String(d)
 }

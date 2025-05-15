@@ -372,6 +372,7 @@ func (i *instantiator) TempReference(r constructs.TempReference) constructs.Type
 	if found {
 		return typ
 	}
+
 	r2 := i.proj.NewTempReference(constructs.TempReferenceArgs{
 		PackagePath:   r.PackagePath(),
 		Name:          r.Name(),

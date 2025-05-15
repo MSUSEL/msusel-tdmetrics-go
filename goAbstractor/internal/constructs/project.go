@@ -43,4 +43,5 @@ type Project interface {
 	FindType(pkgPath, name string, instTypes []TypeDesc, allowRef, panicOnNotFound bool) (TypeDesc, bool)
 	FindDecl(pkgPath, name string, instTypes []TypeDesc, allowRef, panicOnNotFound bool) (Construct, bool)
 	UpdateIndices()
+	String() string
 }

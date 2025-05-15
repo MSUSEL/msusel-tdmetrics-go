@@ -11,6 +11,7 @@ import (
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs/kind"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/jsonify"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/locs"
+	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/stringer"
 )
 
 type metricsImp struct {
@@ -136,6 +137,10 @@ func (m *metricsImp) ToJson(ctx *jsonify.Context) jsonify.Datum {
 		AddNonZero(ctx.Short(), `writes`, m.writes.ToSlice()).
 		AddNonZero(ctx.Short(), `invokes`, m.invokes.ToSlice()).
 		AddNonZero(ctx, `sideEffect`, m.sideEffect)
+}
+
+func (m *metricsImp) ToStringer(s stringer.Stringer) {
+	s.Write(m.String())
 }
 
 func (m *metricsImp) String() string {

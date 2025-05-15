@@ -5,7 +5,6 @@ import (
 	"strings"
 
 	"github.com/Snow-Gremlin/goToolbox/collections"
-	"github.com/Snow-Gremlin/goToolbox/collections/enumerator"
 	"github.com/Snow-Gremlin/goToolbox/collections/sortedSet"
 	"github.com/Snow-Gremlin/goToolbox/comp"
 	"github.com/Snow-Gremlin/goToolbox/terrors/terror"
@@ -17,6 +16,7 @@ import (
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs/methodInst"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/jsonify"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/locs"
+	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/stringer"
 )
 
 type methodImp struct {
@@ -189,23 +189,20 @@ func (m *methodImp) ToJson(ctx *jsonify.Context) jsonify.Datum {
 		AddNonZeroIf(ctx, ctx.IsDebugReceiverIncluded(), `recvName`, m.recvName)
 }
 
-func (m *methodImp) String() string {
-	buf := &strings.Builder{}
-	buf.WriteString(`func `)
-	buf.WriteString(m.pkg.Path())
-	buf.WriteString(`.`)
+func (m *methodImp) ToStringer(s stringer.Stringer) {
+	s.Write(`func `, m.pkg.Path(), `.`)
 	if len(m.recvName) > 0 {
-		buf.WriteString(m.recvName)
-		buf.WriteString(`.`)
+		s.Write(m.recvName, `.`)
 	}
-	buf.WriteString(m.name)
-	if len(m.typeParams) > 0 {
-		buf.WriteString(`[`)
-		buf.WriteString(enumerator.Enumerate(m.typeParams...).Join(`, `))
-		buf.WriteString(`]`)
-	}
-	sig := m.signature.String()
-	sig, _ = strings.CutPrefix(sig, `func`)
-	buf.WriteString(sig)
-	return buf.String()
+	s.Write(m.name).WriteList(`[`, `, `, `]`, m.typeParams)
+
+	pre := s.String()
+	s.Write(m.signature)
+	suffix := s.String()[len(pre):]
+	suffix, _ = strings.CutPrefix(suffix, `func`)
+	s.Reset().Write(pre, suffix)
+}
+
+func (m *methodImp) String() string {
+	return stringer.String(m)
 }

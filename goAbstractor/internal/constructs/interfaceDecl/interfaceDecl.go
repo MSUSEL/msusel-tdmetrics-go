@@ -2,10 +2,8 @@ package interfaceDecl
 
 import (
 	"go/types"
-	"strings"
 
 	"github.com/Snow-Gremlin/goToolbox/collections"
-	"github.com/Snow-Gremlin/goToolbox/collections/enumerator"
 	"github.com/Snow-Gremlin/goToolbox/collections/sortedSet"
 	"github.com/Snow-Gremlin/goToolbox/comp"
 	"github.com/Snow-Gremlin/goToolbox/utils"
@@ -16,6 +14,7 @@ import (
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs/kind"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/jsonify"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/locs"
+	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/stringer"
 )
 
 type interfaceDeclImp struct {
@@ -139,16 +138,12 @@ func (d *interfaceDeclImp) ToJson(ctx *jsonify.Context) jsonify.Datum {
 		AddNonZero(ctx.OnlyIndex(), `instances`, d.instances.ToSlice())
 }
 
+func (d *interfaceDeclImp) ToStringer(s stringer.Stringer) {
+	s.Write(d.pkg.Path(), `.`, d.name).
+		WriteList(`[`, `, `, `]`, d.typeParams).
+		Write(` interface{--}`)
+}
+
 func (d *interfaceDeclImp) String() string {
-	buf := &strings.Builder{}
-	buf.WriteString(d.pkg.Path())
-	buf.WriteString(`.`)
-	buf.WriteString(d.name)
-	if len(d.typeParams) > 0 {
-		buf.WriteString(`[`)
-		buf.WriteString(enumerator.Enumerate(d.typeParams...).Join(`, `))
-		buf.WriteString(`]`)
-	}
-	buf.WriteString(` interface{--}`)
-	return buf.String()
+	return stringer.String(d)
 }

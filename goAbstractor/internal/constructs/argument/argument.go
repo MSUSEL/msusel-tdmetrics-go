@@ -7,6 +7,7 @@ import (
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs/kind"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/jsonify"
+	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/stringer"
 )
 
 type argumentImp struct {
@@ -75,9 +76,13 @@ func (a *argumentImp) ToJson(ctx *jsonify.Context) jsonify.Datum {
 		Add(ctx.Short(), `type`, a.typ)
 }
 
-func (a *argumentImp) String() string {
+func (a *argumentImp) ToStringer(s stringer.Stringer) {
 	if len(a.name) > 0 {
-		return a.name + ` ` + a.typ.String()
+		s.Write(a.name, ` `)
 	}
-	return a.typ.String()
+	s.Write(a.typ)
+}
+
+func (a *argumentImp) String() string {
+	return stringer.String(a)
 }

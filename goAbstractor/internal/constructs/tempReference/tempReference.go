@@ -2,9 +2,7 @@ package tempReference
 
 import (
 	"go/types"
-	"strings"
 
-	"github.com/Snow-Gremlin/goToolbox/collections/enumerator"
 	"github.com/Snow-Gremlin/goToolbox/comp"
 	"github.com/Snow-Gremlin/goToolbox/terrors/terror"
 	"github.com/Snow-Gremlin/goToolbox/utils"
@@ -13,6 +11,7 @@ import (
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs/kind"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/jsonify"
+	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/stringer"
 )
 
 type tempReferenceImp struct {
@@ -110,18 +109,14 @@ func (r *tempReferenceImp) ToJson(ctx *jsonify.Context) jsonify.Datum {
 		AddNonZero(ctx.Short(), `instanceTypes`, r.instTypes)
 }
 
-func (r *tempReferenceImp) String() string {
-	buf := &strings.Builder{}
-	buf.WriteString(`ref `)
+func (r *tempReferenceImp) ToStringer(s stringer.Stringer) {
+	s.Write(`ref `)
 	if len(r.pkgPath) > 0 {
-		buf.WriteString(r.pkgPath)
-		buf.WriteString(`.`)
+		s.Write(r.pkgPath, `.`)
 	}
-	buf.WriteString(r.name)
-	if len(r.instTypes) > 0 {
-		buf.WriteString(`[`)
-		buf.WriteString(enumerator.Enumerate(r.instTypes...).Join(`, `))
-		buf.WriteString(`]`)
-	}
-	return buf.String()
+	s.Write(r.name).WriteList(`[`, `, `, `]`, r.instTypes)
+}
+
+func (r *tempReferenceImp) String() string {
+	return stringer.String(r)
 }

@@ -7,6 +7,7 @@ import (
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs/kind"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/jsonify"
+	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/stringer"
 )
 
 type abstractImp struct {
@@ -71,6 +72,10 @@ func (a *abstractImp) ToJson(ctx *jsonify.Context) jsonify.Datum {
 		Add(ctx.OnlyIndex(), `signature`, a.signature)
 }
 
+func (a *abstractImp) ToStringer(s stringer.Stringer) {
+	s.Write(a.name, ` `, a.signature)
+}
+
 func (a *abstractImp) String() string {
-	return a.name + ` ` + a.signature.String()
+	return stringer.String(a)
 }

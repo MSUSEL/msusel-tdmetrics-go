@@ -328,7 +328,7 @@ func (p *projectImp) ToJson(ctx *jsonify.Context) jsonify.Datum {
 	return m
 }
 
-func stringCon[T any, S ~[]T](buf *strings.Builder, k kind.Kind, s S) {
+func stringCon[T fmt.Stringer, S ~[]T](buf *strings.Builder, k kind.Kind, s S) {
 	buf.WriteString(pl(k))
 	if len(s) <= 0 {
 		buf.WriteString(" { }\n")
@@ -336,7 +336,7 @@ func stringCon[T any, S ~[]T](buf *strings.Builder, k kind.Kind, s S) {
 	}
 	buf.WriteString(" {\n")
 	for i, k := range s {
-		buf.WriteString(fmt.Sprintf("  %2d. %q\n", i+1, fmt.Sprint(k)))
+		buf.WriteString(fmt.Sprintf("  %2d. %q\n", i+1, k.String()))
 	}
 	buf.WriteString("}\n")
 }

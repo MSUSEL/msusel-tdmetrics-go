@@ -1,13 +1,13 @@
 package methodInst
 
 import (
-	"github.com/Snow-Gremlin/goToolbox/collections/enumerator"
 	"github.com/Snow-Gremlin/goToolbox/comp"
 
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/assert"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs/kind"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/jsonify"
+	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/stringer"
 )
 
 type instanceImp struct {
@@ -88,8 +88,12 @@ func (i *instanceImp) ToJson(ctx *jsonify.Context) jsonify.Datum {
 		AddNonZero(ctx.OnlyIndex(), `receiver`, i.receiver)
 }
 
+func (i *instanceImp) ToStringer(s stringer.Stringer) {
+	s.Write(i.generic.Name(), `[`).
+		WriteList(``, `, `, ``, i.instanceTypes).
+		Write(`]`, i.resolved)
+}
+
 func (i *instanceImp) String() string {
-	return i.generic.Name() +
-		`[` + enumerator.Enumerate(i.instanceTypes...).Join(`, `) + `]` +
-		i.resolved.String()
+	return stringer.String(i)
 }

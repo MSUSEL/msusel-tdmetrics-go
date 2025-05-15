@@ -1,11 +1,9 @@
 package objectInst
 
 import (
-	"fmt"
 	"go/types"
 
 	"github.com/Snow-Gremlin/goToolbox/collections"
-	"github.com/Snow-Gremlin/goToolbox/collections/enumerator"
 	"github.com/Snow-Gremlin/goToolbox/collections/sortedSet"
 	"github.com/Snow-Gremlin/goToolbox/comp"
 	"github.com/Snow-Gremlin/goToolbox/terrors/terror"
@@ -16,6 +14,7 @@ import (
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs/kind"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs/methodInst"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/jsonify"
+	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/stringer"
 )
 
 type instanceImp struct {
@@ -120,10 +119,12 @@ func (i *instanceImp) ToJson(ctx *jsonify.Context) jsonify.Datum {
 		AddNonZero(ctx.OnlyIndex(), `methods`, i.methods.ToSlice())
 }
 
+func (i *instanceImp) ToStringer(s stringer.Stringer) {
+	s.Write(i.generic.Name(), `[`).
+		WriteList(``, `, `, ``, i.instanceTypes).
+		Write(`]`, i.resolvedData, i.resolvedInterface)
+}
+
 func (i *instanceImp) String() string {
-	return fmt.Sprintf(`%s[%s]%v%v`,
-		i.generic.Name(),
-		enumerator.Enumerate(i.instanceTypes...).Join(`, `),
-		i.resolvedData,
-		i.resolvedInterface)
+	return stringer.String(i)
 }

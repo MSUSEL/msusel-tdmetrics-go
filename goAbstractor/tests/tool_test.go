@@ -115,7 +115,7 @@ func (tt *testTool) full() *testTool {
 
 func (tt *testTool) dump() *testTool {
 	fmt.Println()
-	fmt.Println(tt.proj)
+	fmt.Println(tt.proj.String())
 	return tt
 }
 

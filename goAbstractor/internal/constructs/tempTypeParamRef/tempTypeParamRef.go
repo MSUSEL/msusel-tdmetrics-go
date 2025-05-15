@@ -1,7 +1,6 @@
 package tempTypeParamRef
 
 import (
-	"fmt"
 	"go/types"
 
 	"github.com/Snow-Gremlin/goToolbox/comp"
@@ -11,6 +10,7 @@ import (
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs/kind"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/jsonify"
+	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/stringer"
 )
 
 type tempTypeParamRefImp struct {
@@ -93,6 +93,10 @@ func (r *tempTypeParamRefImp) ToJson(ctx *jsonify.Context) jsonify.Datum {
 		AddNonZero(ctx.Short(), `type`, r.resolved)
 }
 
+func (r *tempTypeParamRefImp) ToStringer(s stringer.Stringer) {
+	s.Write(`ref tp `, r.context, `:`, r.name)
+}
+
 func (r *tempTypeParamRefImp) String() string {
-	return fmt.Sprintf(`ref tp %s:%s`, r.context, r.name)
+	return stringer.String(r)
 }

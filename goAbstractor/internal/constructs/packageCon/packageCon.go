@@ -15,6 +15,7 @@ import (
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs/object"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs/value"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/jsonify"
+	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/stringer"
 )
 
 type packageImp struct {
@@ -60,7 +61,6 @@ func (p *packageImp) Alive() bool         { return p.alive }
 func (p *packageImp) SetAlive(alive bool) { p.alive = alive }
 func (p *packageImp) Path() string        { return p.path }
 func (p *packageImp) Name() string        { return p.name }
-func (p *packageImp) String() string      { return p.name }
 
 func (p *packageImp) Source() *packages.Package { return p.pkg }
 
@@ -230,3 +230,7 @@ func (p *packageImp) ResolveReceivers() {
 		}
 	}
 }
+
+func (p *packageImp) ToStringer(s stringer.Stringer) { s.WriteString(p.path) }
+
+func (p *packageImp) String() string { return p.name }

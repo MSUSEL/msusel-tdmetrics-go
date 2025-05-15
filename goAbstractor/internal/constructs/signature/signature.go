@@ -3,9 +3,7 @@ package signature
 import (
 	"go/token"
 	"go/types"
-	"strings"
 
-	"github.com/Snow-Gremlin/goToolbox/collections/enumerator"
 	"github.com/Snow-Gremlin/goToolbox/comp"
 	"github.com/Snow-Gremlin/goToolbox/utils"
 	"golang.org/x/tools/go/packages"
@@ -14,6 +12,7 @@ import (
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs/kind"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/jsonify"
+	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/stringer"
 )
 
 type signatureImp struct {
@@ -106,22 +105,24 @@ func (m *signatureImp) ToJson(ctx *jsonify.Context) jsonify.Datum {
 		AddNonZero(ctx.OnlyIndex(), `results`, m.results)
 }
 
-func (m *signatureImp) String() string {
-	buf := &strings.Builder{}
-	buf.WriteString(`func(`)
-	buf.WriteString(enumerator.Enumerate(m.params...).Join(`, `))
-	buf.WriteString(`)`)
+func (m *signatureImp) ToStringer(s stringer.Stringer) {
+	s.Write(`func(`).
+		WriteList(``, `, `, ``, m.params).
+		Write(`)`)
 	switch len(m.results) {
 	case 0:
 		break
 	case 1:
 		if len(m.results[0].Name()) > 0 {
-			buf.WriteString(`(` + m.results[0].String() + `)`)
+			s.Write(`(`, m.results[0], `)`)
 		} else {
-			buf.WriteString(` ` + m.results[0].String())
+			s.Write(` `, m.results[0])
 		}
 	default:
-		buf.WriteString(`(` + enumerator.Enumerate(m.results...).Join(`, `) + `)`)
+		s.WriteList(`(`, `, `, `)`, m.results)
 	}
-	return buf.String()
+}
+
+func (m *signatureImp) String() string {
+	return stringer.String(m)
 }

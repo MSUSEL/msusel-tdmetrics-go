@@ -2,10 +2,8 @@ package object
 
 import (
 	"go/types"
-	"strings"
 
 	"github.com/Snow-Gremlin/goToolbox/collections"
-	"github.com/Snow-Gremlin/goToolbox/collections/enumerator"
 	"github.com/Snow-Gremlin/goToolbox/collections/sortedSet"
 	"github.com/Snow-Gremlin/goToolbox/comp"
 
@@ -16,6 +14,7 @@ import (
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs/objectInst"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/jsonify"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/locs"
+	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/stringer"
 )
 
 type objectImp struct {
@@ -145,16 +144,12 @@ func (d *objectImp) ToJson(ctx *jsonify.Context) jsonify.Datum {
 		Add(ctx.OnlyIndex(), `interface`, d.inter)
 }
 
+func (d *objectImp) ToStringer(s stringer.Stringer) {
+	s.Write(d.pkg.Path(), `.`, d.name).
+		WriteList(`[`, `, `, `]`, d.typeParams).
+		Write(` struct{--}`)
+}
+
 func (d *objectImp) String() string {
-	buf := &strings.Builder{}
-	buf.WriteString(d.pkg.Path())
-	buf.WriteString(`.`)
-	buf.WriteString(d.name)
-	if len(d.typeParams) > 0 {
-		buf.WriteString(`[`)
-		buf.WriteString(enumerator.Enumerate(d.typeParams...).Join(`, `))
-		buf.WriteString(`]`)
-	}
-	buf.WriteString(` struct{--}`)
-	return buf.String()
+	return stringer.String(d)
 }

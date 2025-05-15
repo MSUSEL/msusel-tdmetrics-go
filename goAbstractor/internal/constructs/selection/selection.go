@@ -1,14 +1,13 @@
 package selection
 
 import (
-	"strings"
-
 	"github.com/Snow-Gremlin/goToolbox/comp"
 
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/assert"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs/kind"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/jsonify"
+	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/stringer"
 )
 
 type selectionImp struct {
@@ -75,10 +74,10 @@ func (s *selectionImp) ToJson(ctx *jsonify.Context) jsonify.Datum {
 		Add(ctx.Short(), `origin`, s.origin)
 }
 
+func (s *selectionImp) ToStringer(str stringer.Stringer) {
+	str.Write(s.origin, `.`, s.name)
+}
+
 func (s *selectionImp) String() string {
-	buf := &strings.Builder{}
-	buf.WriteString(s.origin.String())
-	buf.WriteString(`.`)
-	buf.WriteString(s.name)
-	return buf.String()
+	return stringer.String(s)
 }
