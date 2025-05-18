@@ -21,6 +21,7 @@ type InterfaceInst interface {
 
 	Generic() InterfaceDecl
 	Resolved() InterfaceDesc
+	ImplicitTypes() []TypeDesc
 	InstanceTypes() []TypeDesc
 }
 
@@ -28,6 +29,7 @@ type InterfaceInstArgs struct {
 	RealType      types.Type
 	Generic       InterfaceDecl
 	Resolved      InterfaceDesc
+	ImplicitTypes []TypeDesc
 	InstanceTypes []TypeDesc
 }
 

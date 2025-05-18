@@ -29,11 +29,28 @@ func ArgNotNil(name string, value any) {
 	}
 }
 
+func ArgIsEmpty(name string, value any) {
+	if len, ok := utils.Length(value); !ok || len >= 0 {
+		panic(terror.New(`argument must be empty`).
+			With(`name`, name))
+	}
+}
+
 func ArgNotEmpty(name string, value any) {
 	if len, ok := utils.Length(value); !ok || len <= 0 {
 		panic(terror.New(`argument must not be empty`).
 			With(`name`, name))
 	}
+}
+
+func AnyArgNotEmpty(names string, values ...any) {
+	for _, value := range values {
+		if len, ok := utils.Length(value); ok && len > 0 {
+			return
+		}
+	}
+	panic(terror.New(`at least one argument must not be empty`).
+		With(`names`, names))
 }
 
 func ArgHasNoNils[T any, S ~[]T](name string, values S) {

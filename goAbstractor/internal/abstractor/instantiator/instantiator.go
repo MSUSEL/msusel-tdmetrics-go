@@ -13,12 +13,12 @@ import (
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/logger"
 )
 
-func InterfaceDecl(log *logger.Logger, proj constructs.Project, realType types.Type, decl constructs.InterfaceDecl, instanceTypes ...constructs.TypeDesc) constructs.TypeDesc {
+func InterfaceDecl(log *logger.Logger, proj constructs.Project, realType types.Type, decl constructs.InterfaceDecl, implicitTypes, instanceTypes []constructs.TypeDesc) constructs.TypeDesc {
 	assert.ArgNotNil(`project`, proj)
 	assert.ArgNotNil(`interface decl`, decl)
 
 	log2 := log.Group(`instantiator`).Prefix(`|  `)
-	i, existing, needsInstance := newInstantiator(log2, proj, decl, decl.TypeParams(), instanceTypes)
+	i, existing, needsInstance := newInstantiator(log2, proj, decl, nil, decl.TypeParams(), nil, instanceTypes)
 	if !needsInstance {
 		return decl
 	}
@@ -32,12 +32,12 @@ func InterfaceDecl(log *logger.Logger, proj constructs.Project, realType types.T
 	return i.createInstance(realType).(constructs.InterfaceInst)
 }
 
-func Object(log *logger.Logger, proj constructs.Project, realType types.Type, decl constructs.Object, instanceTypes ...constructs.TypeDesc) constructs.TypeDesc {
+func Object(log *logger.Logger, proj constructs.Project, realType types.Type, decl constructs.Object, implicitTypes, instanceTypes []constructs.TypeDesc) constructs.TypeDesc {
 	assert.ArgNotNil(`project`, proj)
 	assert.ArgNotNil(`object`, decl)
 
 	log2 := log.Group(`instantiator`).Prefix(`|  `)
-	i, existing, needsInstance := newInstantiator(log2, proj, decl, decl.TypeParams(), instanceTypes)
+	i, existing, needsInstance := newInstantiator(log2, proj, decl, nil, decl.TypeParams(), nil, instanceTypes)
 	if !needsInstance {
 		return decl
 	}
@@ -51,7 +51,7 @@ func Object(log *logger.Logger, proj constructs.Project, realType types.Type, de
 	return i.createInstance(realType).(constructs.ObjectInst)
 }
 
-func Method(log *logger.Logger, proj constructs.Project, decl constructs.Method, instanceTypes ...constructs.TypeDesc) constructs.Construct {
+func Method(log *logger.Logger, proj constructs.Project, decl constructs.Method, instanceTypes []constructs.TypeDesc) constructs.Construct {
 	assert.ArgNotNil(`project`, proj)
 	assert.ArgNotNil(`method`, decl)
 
@@ -61,7 +61,7 @@ func Method(log *logger.Logger, proj constructs.Project, decl constructs.Method,
 		typeParams = decl.Receiver().TypeParams()
 	}
 
-	i, existing, needsInstance := newInstantiator(log2, proj, decl, typeParams, instanceTypes)
+	i, existing, needsInstance := newInstantiator(log2, proj, decl, nil, typeParams, nil, instanceTypes)
 	if !needsInstance {
 		return decl
 	}
@@ -83,7 +83,10 @@ type instantiator struct {
 	conversion    map[constructs.TypeParam]constructs.TypeDesc
 }
 
-func newInstantiator(log *logger.Logger, proj constructs.Project, decl constructs.Declaration, typeParams []constructs.TypeParam, instanceTypes []constructs.TypeDesc) (*instantiator, constructs.Construct, bool) {
+func newInstantiator(log *logger.Logger, proj constructs.Project, decl constructs.Declaration,
+	nestTypeParams, typeParams []constructs.TypeParam,
+	implicitTypes, instanceTypes []constructs.TypeDesc) (*instantiator, constructs.Construct, bool) {
+
 	count := len(typeParams)
 	if count != len(instanceTypes) {
 		panic(terror.New(`the amount of type params must match the instance types`).
@@ -298,7 +301,7 @@ func (i *instantiator) typeDecl(decl constructs.TypeDecl, tps []constructs.TypeP
 		})
 	}
 
-	i2, existing, _ := newInstantiator(i.log, i.proj, decl, tps, its)
+	i2, existing, _ := newInstantiator(i.log, i.proj, decl, nil, tps, nil, its)
 	if !utils.IsNil(existing) {
 		return existing.(constructs.TypeDesc)
 	}

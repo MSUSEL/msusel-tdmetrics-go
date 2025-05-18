@@ -19,6 +19,7 @@ type instanceImp struct {
 	realType      types.Type
 	generic       constructs.InterfaceDecl
 	resolved      constructs.InterfaceDesc
+	implicitTypes []constructs.TypeDesc
 	instanceTypes []constructs.TypeDesc
 	index         int
 	alive         bool
@@ -27,7 +28,7 @@ type instanceImp struct {
 func newInstance(args constructs.InterfaceInstArgs) constructs.InterfaceInst {
 	assert.ArgNotNil(`generic`, args.Generic)
 	assert.ArgNotNil(`resolved`, args.Resolved)
-	assert.ArgNotEmpty(`instance types`, args.InstanceTypes)
+	assert.AnyArgNotEmpty(`implicit & instance types`, args.ImplicitTypes, args.InstanceTypes)
 	assert.ArgHasNoNils(`instance types`, args.InstanceTypes)
 	if !args.Generic.IsGeneric() {
 		panic(terror.New(`may not create an instance on a non-generic interface`).
@@ -37,6 +38,10 @@ func newInstance(args constructs.InterfaceInstArgs) constructs.InterfaceInst {
 	if utils.IsNil(args.RealType) {
 		pkg := args.Generic.Package()
 		assert.ArgNotNil(`package`, pkg)
+
+		// TODO: Implement this for nested types.
+		assert.ArgNotEmpty(`instance types`, args.InstanceTypes)
+		assert.ArgIsEmpty(`implicit types`, args.ImplicitTypes)
 
 		tArgs := make([]types.Type, len(args.InstanceTypes))
 		for i, ip := range args.InstanceTypes {
@@ -102,6 +107,7 @@ func newInstance(args constructs.InterfaceInstArgs) constructs.InterfaceInst {
 		realType:      args.RealType,
 		generic:       args.Generic,
 		resolved:      args.Resolved,
+		implicitTypes: args.ImplicitTypes,
 		instanceTypes: args.InstanceTypes,
 	}
 	return args.Generic.AddInstance(inst)
@@ -117,12 +123,10 @@ func (i *instanceImp) Alive() bool         { return i.alive }
 func (i *instanceImp) SetAlive(alive bool) { i.alive = alive }
 func (m *instanceImp) GoType() types.Type  { return m.realType }
 
-func (m *instanceImp) Generic() constructs.InterfaceDecl  { return m.generic }
-func (m *instanceImp) Resolved() constructs.InterfaceDesc { return m.resolved }
-
-func (m *instanceImp) InstanceTypes() []constructs.TypeDesc {
-	return m.instanceTypes
-}
+func (m *instanceImp) Generic() constructs.InterfaceDecl    { return m.generic }
+func (m *instanceImp) Resolved() constructs.InterfaceDesc   { return m.resolved }
+func (m *instanceImp) ImplicitTypes() []constructs.TypeDesc { return m.implicitTypes }
+func (m *instanceImp) InstanceTypes() []constructs.TypeDesc { return m.instanceTypes }
 
 func (i *instanceImp) CompareTo(other constructs.Construct) int {
 	return constructs.CompareTo[constructs.InterfaceInst](i, other, Comparer())
@@ -136,6 +140,7 @@ func Comparer() comp.Comparer[constructs.InterfaceInst] {
 		}
 		return comp.Or(
 			constructs.ComparerPend(aImp.resolved, bImp.resolved),
+			constructs.SliceComparerPend(aImp.implicitTypes, bImp.implicitTypes),
 			constructs.SliceComparerPend(aImp.instanceTypes, bImp.instanceTypes),
 			constructs.ComparerPend(aImp.generic, bImp.generic),
 		)
@@ -143,6 +148,9 @@ func Comparer() comp.Comparer[constructs.InterfaceInst] {
 }
 
 func (i *instanceImp) RemoveTempReferences() {
+	for j, it := range i.implicitTypes {
+		i.implicitTypes[j] = constructs.ResolvedTempReference(it)
+	}
 	for j, it := range i.instanceTypes {
 		i.instanceTypes[j] = constructs.ResolvedTempReference(it)
 	}
@@ -160,11 +168,13 @@ func (i *instanceImp) ToJson(ctx *jsonify.Context) jsonify.Datum {
 		AddIf(ctx, ctx.IsDebugIndexIncluded(), `index`, i.index).
 		Add(ctx.OnlyIndex(), `generic`, i.generic).
 		Add(ctx.OnlyIndex(), `resolved`, i.resolved).
+		Add(ctx.Short(), `implicitTypes`, i.implicitTypes).
 		Add(ctx.Short(), `instanceTypes`, i.instanceTypes)
 }
 
 func (i *instanceImp) ToStringer(s stringer.Stringer) {
 	s.Write(i.generic.Name(), `[`).
+		WriteList(``, `, `, `;`, i.implicitTypes).
 		WriteList(``, `, `, ``, i.instanceTypes).
 		Write(`]`, i.resolved)
 }

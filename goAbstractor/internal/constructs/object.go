@@ -31,7 +31,10 @@ type Object interface {
 
 	IsNamed() bool
 	IsGeneric() bool
+	IsNested() bool
+	Nest() Method
 	TypeParams() []TypeParam
+	ImplicitTypeParams() []TypeParam
 	AddInstance(inst ObjectInst) ObjectInst
 	Instances() collections.ReadonlySortedSet[ObjectInst]
 	FindInstance(instanceTypes []TypeDesc) (ObjectInst, bool)
@@ -43,6 +46,7 @@ type ObjectArgs struct {
 	Name     string
 	Exported bool
 	Location locs.Loc
+	Nest     Method
 
 	TypeParams []TypeParam
 	Data       StructDesc

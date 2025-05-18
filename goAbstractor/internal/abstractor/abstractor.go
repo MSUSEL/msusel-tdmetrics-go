@@ -128,7 +128,7 @@ func (ab *abstractor) abstractGenDecl(decl *ast.GenDecl) {
 		case *ast.ImportSpec:
 			// ignore
 		case *ast.TypeSpec:
-			ab.abstractTypeSpec(s)
+			ab.abstractTypeSpec(s, nil)
 		case *ast.ValueSpec:
 			ab.abstractValueSpec(s, isConst)
 		default:
@@ -138,7 +138,7 @@ func (ab *abstractor) abstractGenDecl(decl *ast.GenDecl) {
 	}
 }
 
-func (ab *abstractor) abstractTypeSpec(spec *ast.TypeSpec) {
+func (ab *abstractor) abstractTypeSpec(spec *ast.TypeSpec, nest constructs.Method) {
 	tv, has := ab.info().Types[spec.Type]
 	if !has {
 		panic(terror.New(`type specification not found in types info`).
@@ -159,6 +159,7 @@ func (ab *abstractor) abstractTypeSpec(spec *ast.TypeSpec) {
 			Interface:  it,
 			TypeParams: tp,
 			Location:   loc,
+			Nest:       nest,
 		})
 		return
 	}
@@ -186,6 +187,7 @@ func (ab *abstractor) abstractTypeSpec(spec *ast.TypeSpec) {
 		Data:       st,
 		TypeParams: tp,
 		Location:   loc,
+		Nest:       nest,
 	})
 }
 
@@ -319,7 +321,7 @@ func (ab *abstractor) abstractFuncDecl(decl *ast.FuncDecl) {
 		name = `init#` + strconv.Itoa(ab.curPkg.InitCount())
 	}
 
-	ab.proj.NewMethod(constructs.MethodArgs{
+	method := ab.proj.NewMethod(constructs.MethodArgs{
 		Package:     ab.curPkg,
 		Name:        name,
 		Exported:    exported,
@@ -329,5 +331,25 @@ func (ab *abstractor) abstractFuncDecl(decl *ast.FuncDecl) {
 		Metrics:     metrics,
 		RecvName:    recvName,
 		PointerRecv: ptrRecv,
+	})
+
+	ab.abstractNestedTypes(decl.Body, method)
+}
+
+func (ab *abstractor) abstractNestedTypes(body *ast.BlockStmt, nest constructs.Method) {
+	if body == nil {
+		return
+	}
+	ast.Inspect(body, func(node ast.Node) bool {
+		if stmt, ok := node.(*ast.DeclStmt); ok {
+			if decl, ok := stmt.Decl.(*ast.GenDecl); ok {
+				for _, spec := range decl.Specs {
+					if typeSpec, ok := spec.(*ast.TypeSpec); ok {
+						ab.abstractTypeSpec(typeSpec, nest)
+					}
+				}
+			}
+		}
+		return true
 	})
 }

@@ -29,6 +29,7 @@ type objectImp struct {
 	typeParams []constructs.TypeParam
 	data       constructs.StructDesc
 	inter      constructs.InterfaceDesc
+	nest       constructs.Method
 
 	methods   collections.SortedSet[constructs.Method]
 	instances collections.SortedSet[constructs.ObjectInst]
@@ -49,6 +50,7 @@ func newObject(args constructs.ObjectArgs) constructs.Object {
 		loc:        args.Location,
 		typeParams: args.TypeParams,
 		data:       args.Data,
+		nest:       args.Nest,
 		methods:    sortedSet.New(method.Comparer()),
 		instances:  sortedSet.New(objectInst.Comparer()),
 	}
@@ -72,6 +74,13 @@ func (d *objectImp) Package() constructs.Package        { return d.pkg }
 func (d *objectImp) Type() constructs.TypeDesc          { return d.data }
 func (d *objectImp) Data() constructs.StructDesc        { return d.data }
 func (d *objectImp) TypeParams() []constructs.TypeParam { return d.typeParams }
+
+func (d *objectImp) ImplicitTypeParams() []constructs.TypeParam {
+	if d.nest == nil {
+		return nil
+	}
+	return d.nest.TypeParams()
+}
 
 func (d *objectImp) Instances() collections.ReadonlySortedSet[constructs.ObjectInst] {
 	return d.instances.Readonly()
@@ -103,6 +112,9 @@ func (d *objectImp) SetInterface(it constructs.InterfaceDesc) { d.inter = it }
 
 func (d *objectImp) IsNamed() bool   { return len(d.name) > 0 }
 func (d *objectImp) IsGeneric() bool { return len(d.typeParams) > 0 }
+func (d *objectImp) IsNested() bool  { return d.nest != nil }
+
+func (d *objectImp) Nest() constructs.Method { return d.nest }
 
 func (d *objectImp) CompareTo(other constructs.Construct) int {
 	return constructs.CompareTo[constructs.Object](d, other, Comparer())
@@ -119,6 +131,7 @@ func Comparer() comp.Comparer[constructs.Object] {
 			comp.DefaultPend(aImp.name, bImp.name),
 			constructs.SliceComparerPend(aImp.typeParams, bImp.typeParams),
 			constructs.ComparerPend(aImp.data, bImp.data),
+			constructs.ComparerPend(aImp.nest, bImp.nest),
 		)
 	}
 }
@@ -141,11 +154,13 @@ func (d *objectImp) ToJson(ctx *jsonify.Context) jsonify.Datum {
 		Add(ctx.OnlyIndex(), `data`, d.data).
 		AddNonZero(ctx.OnlyIndex(), `instances`, d.instances.ToSlice()).
 		AddNonZero(ctx.OnlyIndex(), `methods`, d.methods.ToSlice()).
+		AddNonZero(ctx.OnlyIndex(), `nest`, d.nest).
 		Add(ctx.OnlyIndex(), `interface`, d.inter)
 }
 
 func (d *objectImp) ToStringer(s stringer.Stringer) {
 	s.Write(d.pkg.Path(), `.`, d.name).
+		WriteList(`[`, `, `, `;]`, d.ImplicitTypeParams()).
 		WriteList(`[`, `, `, `]`, d.typeParams).
 		Write(` struct{--}`)
 }

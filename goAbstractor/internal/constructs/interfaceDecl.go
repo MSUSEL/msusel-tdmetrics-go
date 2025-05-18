@@ -25,7 +25,10 @@ type InterfaceDecl interface {
 	Interface() InterfaceDesc
 	IsNamed() bool
 	IsGeneric() bool
+	IsNested() bool
+	Nest() Method
 	TypeParams() []TypeParam
+	ImplicitTypeParams() []TypeParam
 	AddInstance(inst InterfaceInst) InterfaceInst
 	Instances() collections.ReadonlySortedSet[InterfaceInst]
 	FindInstance(instanceTypes []TypeDesc) (InterfaceInst, bool)
@@ -37,6 +40,7 @@ type InterfaceDeclArgs struct {
 	Name     string
 	Exported bool
 	Location locs.Loc
+	Nest     Method
 
 	TypeParams []TypeParam
 	Interface  InterfaceDesc

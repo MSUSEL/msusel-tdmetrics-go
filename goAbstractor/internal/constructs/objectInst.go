@@ -22,6 +22,7 @@ type ObjectInst interface {
 	Generic() Object
 	ResolvedData() StructDesc
 	ResolvedInterface() InterfaceDesc
+	ImplicitTypes() []TypeDesc
 	InstanceTypes() []TypeDesc
 
 	Methods() collections.ReadonlySortedSet[MethodInst]
@@ -33,6 +34,7 @@ type ObjectInstArgs struct {
 	RealType      types.Type
 	Generic       Object
 	ResolvedData  StructDesc
+	ImplicitTypes []TypeDesc
 	InstanceTypes []TypeDesc
 }
 

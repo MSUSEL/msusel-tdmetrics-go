@@ -25,6 +25,7 @@ type interfaceDeclImp struct {
 	loc      locs.Loc
 	index    int
 	alive    bool
+	nest     constructs.Method
 
 	typeParams []constructs.TypeParam
 	inter      constructs.InterfaceDesc
@@ -53,6 +54,7 @@ func newInterfaceDecl(args constructs.InterfaceDeclArgs) constructs.InterfaceDec
 		loc:        args.Location,
 		typeParams: args.TypeParams,
 		inter:      args.Interface,
+		nest:       args.Nest,
 		instances:  sortedSet.New(interfaceInst.Comparer()),
 	}
 }
@@ -76,6 +78,13 @@ func (d *interfaceDeclImp) Type() constructs.TypeDesc           { return d.inter
 func (d *interfaceDeclImp) Interface() constructs.InterfaceDesc { return d.inter }
 func (d *interfaceDeclImp) TypeParams() []constructs.TypeParam  { return d.typeParams }
 
+func (d *interfaceDeclImp) ImplicitTypeParams() []constructs.TypeParam {
+	if d.nest == nil {
+		return nil
+	}
+	return d.nest.TypeParams()
+}
+
 func (d *interfaceDeclImp) Instances() collections.ReadonlySortedSet[constructs.InterfaceInst] {
 	return d.instances.Readonly()
 }
@@ -92,13 +101,11 @@ func (d *interfaceDeclImp) FindInstance(instanceTypes []constructs.TypeDesc) (co
 	}).First()
 }
 
-func (d *interfaceDeclImp) IsNamed() bool {
-	return len(d.name) > 0
-}
+func (d *interfaceDeclImp) IsNamed() bool   { return len(d.name) > 0 }
+func (d *interfaceDeclImp) IsGeneric() bool { return len(d.typeParams) > 0 }
+func (d *interfaceDeclImp) IsNested() bool  { return d.nest != nil }
 
-func (d *interfaceDeclImp) IsGeneric() bool {
-	return len(d.typeParams) > 0
-}
+func (d *interfaceDeclImp) Nest() constructs.Method { return d.nest }
 
 func (d *interfaceDeclImp) CompareTo(other constructs.Construct) int {
 	return constructs.CompareTo[constructs.InterfaceDecl](d, other, Comparer())
@@ -115,6 +122,7 @@ func Comparer() comp.Comparer[constructs.InterfaceDecl] {
 			comp.DefaultPend(aImp.name, bImp.name),
 			constructs.SliceComparerPend(aImp.typeParams, bImp.typeParams),
 			constructs.ComparerPend(aImp.inter, bImp.inter),
+			constructs.ComparerPend(aImp.nest, bImp.nest),
 		)
 	}
 }
@@ -135,11 +143,13 @@ func (d *interfaceDeclImp) ToJson(ctx *jsonify.Context) jsonify.Datum {
 		AddNonZero(ctx, `loc`, d.loc).
 		AddNonZeroIf(ctx, d.exported, `vis`, `exported`).
 		AddNonZero(ctx.OnlyIndex(), `typeParams`, d.typeParams).
+		AddNonZero(ctx.OnlyIndex(), `nest`, d.nest).
 		AddNonZero(ctx.OnlyIndex(), `instances`, d.instances.ToSlice())
 }
 
 func (d *interfaceDeclImp) ToStringer(s stringer.Stringer) {
 	s.Write(d.pkg.Path(), `.`, d.name).
+		WriteList(`[`, `, `, `;]`, d.ImplicitTypeParams()).
 		WriteList(`[`, `, `, `]`, d.typeParams).
 		Write(` interface{--}`)
 }

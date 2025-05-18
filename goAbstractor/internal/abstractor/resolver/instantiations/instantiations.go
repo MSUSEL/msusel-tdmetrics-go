@@ -32,7 +32,7 @@ func expandInstantiations(log *logger.Logger, proj constructs.Project, obj const
 		mIts := methods.Get(i).Instances()
 		for j := range mIts.Count() {
 			it := mIts.Get(j).InstanceTypes()
-			instantiator.Object(log, proj, nil, obj, it...)
+			instantiator.Object(log, proj, nil, obj, nil, it)
 		}
 	}
 
@@ -49,7 +49,7 @@ func expandObjectInst(log *logger.Logger, proj constructs.Project, obj construct
 	methods := obj.Methods()
 	for i := range methods.Count() {
 		method := methods.Get(i)
-		con := instantiator.Method(log, proj, method, instance.InstanceTypes()...)
+		con := instantiator.Method(log, proj, method, instance.InstanceTypes())
 		if utils.IsNil(con) {
 			panic(terror.New(`unable to instantiate method while expanding object`).
 				With(`method`, method).
@@ -67,14 +67,14 @@ func fillOutPointerReceivers(log *logger.Logger, bk baker.Baker, proj constructs
 		ptr := bk.BakePointer()
 		// create a pointer for the generic object.
 		rt := types.NewPointer(obj.GoType())
-		instantiator.InterfaceDecl(log, proj, rt, ptr, obj)
+		instantiator.InterfaceDecl(log, proj, rt, ptr, nil, []constructs.TypeDesc{obj})
 
 		oIts := obj.Instances()
 		for i := range oIts.Count() {
 			oIt := oIts.Get(i)
 			// create a pointer for the object interface.
 			rt := types.NewPointer(oIt.GoType())
-			instantiator.InterfaceDecl(log, proj, rt, ptr, oIt)
+			instantiator.InterfaceDecl(log, proj, rt, ptr, nil, []constructs.TypeDesc{oIt})
 		}
 	}
 }

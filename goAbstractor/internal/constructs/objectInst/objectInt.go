@@ -22,6 +22,7 @@ type instanceImp struct {
 	generic           constructs.Object
 	resolvedData      constructs.StructDesc
 	resolvedInterface constructs.InterfaceDesc
+	implicitTypes     []constructs.TypeDesc
 	instanceTypes     []constructs.TypeDesc
 	methods           collections.SortedSet[constructs.MethodInst]
 	index             int
@@ -31,7 +32,7 @@ type instanceImp struct {
 func newInstance(args constructs.ObjectInstArgs) constructs.ObjectInst {
 	assert.ArgNotNil(`generic`, args.Generic)
 	assert.ArgNotNil(`resolved data`, args.ResolvedData)
-	assert.ArgNotEmpty(`instance types`, args.InstanceTypes)
+	assert.AnyArgNotEmpty(`implicit & instance types`, args.ImplicitTypes, args.InstanceTypes)
 	assert.ArgHasNoNils(`instance types`, args.InstanceTypes)
 
 	if utils.IsNil(args.RealType) {
@@ -47,6 +48,7 @@ func newInstance(args constructs.ObjectInstArgs) constructs.ObjectInst {
 		realType:      args.RealType,
 		generic:       args.Generic,
 		resolvedData:  args.ResolvedData,
+		implicitTypes: args.ImplicitTypes,
 		instanceTypes: args.InstanceTypes,
 		methods:       sortedSet.New(methodInst.Comparer()),
 	}
@@ -66,6 +68,7 @@ func (m *instanceImp) GoType() types.Type  { return m.realType }
 func (m *instanceImp) Generic() constructs.Object                  { return m.generic }
 func (m *instanceImp) ResolvedData() constructs.StructDesc         { return m.resolvedData }
 func (m *instanceImp) ResolvedInterface() constructs.InterfaceDesc { return m.resolvedInterface }
+func (m *instanceImp) ImplicitTypes() []constructs.TypeDesc        { return m.implicitTypes }
 func (m *instanceImp) InstanceTypes() []constructs.TypeDesc        { return m.instanceTypes }
 
 func (m *instanceImp) AddMethod(method constructs.MethodInst) constructs.MethodInst {
@@ -88,8 +91,12 @@ func (i *instanceImp) CompareTo(other constructs.Construct) int {
 func Comparer() comp.Comparer[constructs.ObjectInst] {
 	return func(a, b constructs.ObjectInst) int {
 		aImp, bImp := a.(*instanceImp), b.(*instanceImp)
+		if aImp == bImp {
+			return 0
+		}
 		return comp.Or(
 			constructs.ComparerPend(aImp.resolvedData, bImp.resolvedData),
+			constructs.SliceComparerPend(aImp.implicitTypes, bImp.implicitTypes),
 			constructs.SliceComparerPend(aImp.instanceTypes, bImp.instanceTypes),
 			constructs.ComparerPend(aImp.generic, bImp.generic),
 		)
@@ -97,6 +104,9 @@ func Comparer() comp.Comparer[constructs.ObjectInst] {
 }
 
 func (i *instanceImp) RemoveTempReferences() {
+	for j, it := range i.implicitTypes {
+		i.implicitTypes[j] = constructs.ResolvedTempReference(it)
+	}
 	for j, it := range i.instanceTypes {
 		i.instanceTypes[j] = constructs.ResolvedTempReference(it)
 	}
@@ -115,12 +125,14 @@ func (i *instanceImp) ToJson(ctx *jsonify.Context) jsonify.Datum {
 		Add(ctx.OnlyIndex(), `generic`, i.generic).
 		Add(ctx.OnlyIndex(), `resData`, i.resolvedData).
 		Add(ctx.OnlyIndex(), `resInterface`, i.resolvedInterface).
-		Add(ctx.Short(), `instanceTypes`, i.instanceTypes).
+		AddNonZero(ctx.Short(), `implicitTypes`, i.implicitTypes).
+		AddNonZero(ctx.Short(), `instanceTypes`, i.instanceTypes).
 		AddNonZero(ctx.OnlyIndex(), `methods`, i.methods.ToSlice())
 }
 
 func (i *instanceImp) ToStringer(s stringer.Stringer) {
 	s.Write(i.generic.Name(), `[`).
+		WriteList(``, `, `, `;`, i.implicitTypes).
 		WriteList(``, `, `, ``, i.instanceTypes).
 		Write(`]`, i.resolvedData, i.resolvedInterface)
 }
