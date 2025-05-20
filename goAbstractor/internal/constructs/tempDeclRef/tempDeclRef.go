@@ -12,23 +12,34 @@ import (
 )
 
 type tempDeclRefImp struct {
-	pkgPath   string
-	name      string
-	index     int
-	alive     bool
-	instTypes []constructs.TypeDesc
-	con       constructs.Construct
+	pkgPath       string
+	name          string
+	index         int
+	alive         bool
+	implicitTypes []constructs.TypeDesc
+	instanceTypes []constructs.TypeDesc
+	nest          constructs.Method
+	con           constructs.Construct
 }
 
 func newTempDeclRef(args constructs.TempDeclRefArgs) constructs.TempDeclRef {
 	// pkgPath may be empty for $builtin
 	assert.ArgNotEmpty(`name`, args.Name)
+	assert.ArgHasNoNils(`implicit types`, args.ImplicitTypes)
 	assert.ArgHasNoNils(`instance types`, args.InstanceTypes)
+	if len(args.ImplicitTypes) > 0 {
+		assert.ArgNotNil(`nest`, args.Nest)
+	}
+	if !utils.IsNil(args.Nest) {
+		assert.ArgsHaveSameLength(`implicit types`, args.Nest.TypeParams(), args.ImplicitTypes)
+	}
 
 	return &tempDeclRefImp{
-		pkgPath:   args.PackagePath,
-		instTypes: args.InstanceTypes,
-		name:      args.Name,
+		pkgPath:       args.PackagePath,
+		implicitTypes: args.ImplicitTypes,
+		instanceTypes: args.InstanceTypes,
+		nest:          args.Nest,
+		name:          args.Name,
 	}
 }
 
@@ -42,7 +53,9 @@ func (r *tempDeclRefImp) SetAlive(alive bool) { r.alive = alive }
 func (r *tempDeclRefImp) PackagePath() string { return r.pkgPath }
 func (r *tempDeclRefImp) Name() string        { return r.name }
 
-func (r *tempDeclRefImp) InstanceTypes() []constructs.TypeDesc { return r.instTypes }
+func (r *tempDeclRefImp) ImplicitTypes() []constructs.TypeDesc { return r.implicitTypes }
+func (r *tempDeclRefImp) InstanceTypes() []constructs.TypeDesc { return r.instanceTypes }
+func (r *tempDeclRefImp) Nest() constructs.Method              { return r.nest }
 func (r *tempDeclRefImp) ResolvedType() constructs.Construct   { return r.con }
 
 func (r *tempDeclRefImp) Resolved() bool {
@@ -71,7 +84,9 @@ func Comparer() comp.Comparer[constructs.TempDeclRef] {
 		return comp.Or(
 			comp.DefaultPend(aImp.pkgPath, bImp.pkgPath),
 			comp.DefaultPend(aImp.name, bImp.name),
-			constructs.SliceComparerPend(aImp.instTypes, bImp.instTypes),
+			constructs.SliceComparerPend(aImp.implicitTypes, bImp.implicitTypes),
+			constructs.SliceComparerPend(aImp.instanceTypes, bImp.instanceTypes),
+			constructs.ComparerPend(aImp.nest, bImp.nest),
 		)
 	}
 }
@@ -89,7 +104,9 @@ func (r *tempDeclRefImp) ToJson(ctx *jsonify.Context) jsonify.Datum {
 		AddNonZero(ctx, `packagePath`, r.pkgPath).
 		Add(ctx, `name`, r.name).
 		AddNonZero(ctx.Short(), `resolved`, r.con).
-		AddNonZero(ctx.Short(), `instanceTypes`, r.instTypes)
+		AddNonZero(ctx.Short(), `implicitTypes`, r.implicitTypes).
+		AddNonZero(ctx.Short(), `instanceTypes`, r.instanceTypes).
+		AddNonZero(ctx.OnlyIndex(), `nest`, r.nest)
 }
 
 func (r *tempDeclRefImp) ToStringer(s stringer.Stringer) {
@@ -97,7 +114,9 @@ func (r *tempDeclRefImp) ToStringer(s stringer.Stringer) {
 	if len(r.pkgPath) > 0 {
 		s.Write(r.pkgPath, `.`)
 	}
-	s.Write(r.name).WriteList(`[`, `, `, `]`, r.instTypes)
+	s.Write(r.name).
+		WriteList(`[`, `, `, `;]`, r.implicitTypes).
+		WriteList(`[`, `, `, `]`, r.instanceTypes)
 }
 
 func (r *tempDeclRefImp) String() string {

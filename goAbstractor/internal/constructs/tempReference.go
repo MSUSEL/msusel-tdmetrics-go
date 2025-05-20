@@ -18,7 +18,9 @@ type TempReference interface {
 
 	PackagePath() string
 	Name() string
+	ImplicitTypes() []TypeDesc
 	InstanceTypes() []TypeDesc
+	Nest() Method
 
 	ResolvedType() TypeDesc
 	Resolved() bool
@@ -29,7 +31,9 @@ type TempReferenceArgs struct {
 	RealType      types.Type
 	PackagePath   string
 	Name          string
+	ImplicitTypes []TypeDesc
 	InstanceTypes []TypeDesc
+	Nest          Method
 
 	// Package is needed when the real type isn't given.
 	// The package is used to help create the real type.

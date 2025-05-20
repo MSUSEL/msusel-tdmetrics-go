@@ -15,19 +15,28 @@ import (
 )
 
 type tempReferenceImp struct {
-	realType  types.Type
-	pkgPath   string
-	name      string
-	index     int
-	alive     bool
-	instTypes []constructs.TypeDesc
-	typ       constructs.TypeDesc
+	realType      types.Type
+	pkgPath       string
+	name          string
+	index         int
+	alive         bool
+	implicitTypes []constructs.TypeDesc
+	instanceTypes []constructs.TypeDesc
+	nest          constructs.Method
+	typ           constructs.TypeDesc
 }
 
 func newTempReference(args constructs.TempReferenceArgs) constructs.TempReference {
 	// args.PackagePath may be empty for $builtin
 	assert.ArgNotEmpty(`name`, args.Name)
+	assert.ArgHasNoNils(`implicit types`, args.ImplicitTypes)
 	assert.ArgHasNoNils(`instance types`, args.InstanceTypes)
+	if len(args.ImplicitTypes) > 0 {
+		assert.ArgNotNil(`nest`, args.Nest)
+	}
+	if !utils.IsNil(args.Nest) {
+		assert.ArgsHaveSameLength(`implicit types`, args.Nest.TypeParams(), args.ImplicitTypes)
+	}
 
 	if utils.IsNil(args.RealType) {
 		assert.ArgNotNil(`package`, args.Package)
@@ -40,10 +49,12 @@ func newTempReference(args constructs.TempReferenceArgs) constructs.TempReferenc
 	assert.ArgNotNil(`real type`, args.RealType)
 
 	return &tempReferenceImp{
-		realType:  args.RealType,
-		pkgPath:   args.PackagePath,
-		instTypes: args.InstanceTypes,
-		name:      args.Name,
+		realType:      args.RealType,
+		pkgPath:       args.PackagePath,
+		implicitTypes: args.ImplicitTypes,
+		instanceTypes: args.InstanceTypes,
+		nest:          args.Nest,
+		name:          args.Name,
 	}
 }
 
@@ -59,12 +70,11 @@ func (r *tempReferenceImp) GoType() types.Type  { return r.realType }
 func (r *tempReferenceImp) PackagePath() string { return r.pkgPath }
 func (r *tempReferenceImp) Name() string        { return r.name }
 
-func (r *tempReferenceImp) InstanceTypes() []constructs.TypeDesc { return r.instTypes }
+func (r *tempReferenceImp) ImplicitTypes() []constructs.TypeDesc { return r.implicitTypes }
+func (r *tempReferenceImp) InstanceTypes() []constructs.TypeDesc { return r.instanceTypes }
 func (r *tempReferenceImp) ResolvedType() constructs.TypeDesc    { return r.typ }
-
-func (r *tempReferenceImp) Resolved() bool {
-	return !utils.IsNil(r.typ)
-}
+func (r *tempReferenceImp) Resolved() bool                       { return !utils.IsNil(r.typ) }
+func (r *tempReferenceImp) Nest() constructs.Method              { return r.nest }
 
 func (r *tempReferenceImp) SetResolution(typ constructs.TypeDesc) {
 	if r.typ == typ {
@@ -88,7 +98,9 @@ func Comparer() comp.Comparer[constructs.TempReference] {
 		return comp.Or(
 			comp.DefaultPend(aImp.pkgPath, bImp.pkgPath),
 			comp.DefaultPend(aImp.name, bImp.name),
-			constructs.SliceComparerPend(aImp.instTypes, bImp.instTypes),
+			constructs.SliceComparerPend(aImp.implicitTypes, bImp.implicitTypes),
+			constructs.SliceComparerPend(aImp.instanceTypes, bImp.instanceTypes),
+			constructs.ComparerPend(aImp.nest, bImp.nest),
 		)
 	}
 }
@@ -106,7 +118,9 @@ func (r *tempReferenceImp) ToJson(ctx *jsonify.Context) jsonify.Datum {
 		AddNonZero(ctx, `packagePath`, r.pkgPath).
 		Add(ctx, `name`, r.name).
 		AddNonZero(ctx.Short(), `type`, r.typ).
-		AddNonZero(ctx.Short(), `instanceTypes`, r.instTypes)
+		AddNonZero(ctx.Short(), `implicitTypes`, r.instanceTypes).
+		AddNonZero(ctx.Short(), `instanceTypes`, r.instanceTypes).
+		AddNonZero(ctx.OnlyIndex(), `nest`, r.nest)
 }
 
 func (r *tempReferenceImp) ToStringer(s stringer.Stringer) {
@@ -114,7 +128,9 @@ func (r *tempReferenceImp) ToStringer(s stringer.Stringer) {
 	if len(r.pkgPath) > 0 {
 		s.Write(r.pkgPath, `.`)
 	}
-	s.Write(r.name).WriteList(`[`, `, `, `]`, r.instTypes)
+	s.Write(r.name).
+		WriteList(`[`, `, `, `;]`, r.implicitTypes).
+		WriteList(`[`, `, `, `]`, r.instanceTypes)
 }
 
 func (r *tempReferenceImp) String() string {

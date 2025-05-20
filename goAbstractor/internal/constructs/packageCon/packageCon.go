@@ -128,15 +128,21 @@ func (p *packageImp) Empty() bool {
 		p.values.Enumerate().Empty()
 }
 
-func (p *packageImp) findInterfaceDecl(name string) (constructs.InterfaceDecl, bool) {
+func (p *packageImp) findInterfaceDecl(name string, nest constructs.Method) (constructs.InterfaceDecl, bool) {
 	return p.interfaces.Enumerate().
-		Where(func(t constructs.InterfaceDecl) bool { return t.Name() == name }).
+		Where(func(t constructs.InterfaceDecl) bool {
+			return t.Name() == name
+			// TODO: check if the interface is nested
+		}).
 		First()
 }
 
-func (p *packageImp) findObject(name string) (constructs.Object, bool) {
+func (p *packageImp) findObject(name string, nest constructs.Method) (constructs.Object, bool) {
 	return p.objects.Enumerate().
-		Where(func(t constructs.Object) bool { return t.Name() == name }).
+		Where(func(t constructs.Object) bool {
+			return t.Name() == name
+			// TODO: check if the object is nested
+		}).
 		First()
 }
 
@@ -152,27 +158,29 @@ func (p *packageImp) findValues(name string) (constructs.Value, bool) {
 		First()
 }
 
-func (p *packageImp) FindTypeDecl(name string) constructs.TypeDecl {
-	if v, ok := p.findInterfaceDecl(name); ok {
+func (p *packageImp) FindTypeDecl(name string, nest constructs.Method) constructs.TypeDecl {
+	if v, ok := p.findInterfaceDecl(name, nest); ok {
 		return v
 	}
-	if v, ok := p.findObject(name); ok {
+	if v, ok := p.findObject(name, nest); ok {
 		return v
 	}
 	return nil
 }
 
-func (p *packageImp) FindDecl(name string) constructs.Declaration {
-	if v, ok := p.findInterfaceDecl(name); ok {
+func (p *packageImp) FindDecl(name string, nest constructs.Method) constructs.Declaration {
+	if v, ok := p.findInterfaceDecl(name, nest); ok {
 		return v
 	}
-	if v, ok := p.findObject(name); ok {
+	if v, ok := p.findObject(name, nest); ok {
 		return v
 	}
 	if v, ok := p.findMethod(name); ok {
+		assert.ArgIsNil(`nest`, nest)
 		return v
 	}
 	if v, ok := p.findValues(name); ok {
+		assert.ArgIsNil(`nest`, nest)
 		return v
 	}
 	return nil
@@ -220,7 +228,7 @@ func (p *packageImp) ResolveReceivers() {
 		}
 
 		if rec := m.ReceiverName(); len(rec) > 0 {
-			o, ok := p.findObject(rec)
+			o, ok := p.findObject(rec, nil)
 			if !ok {
 				panic(terror.New(`failed to find receiver object`).
 					With(`name`, rec))

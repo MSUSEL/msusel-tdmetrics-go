@@ -30,8 +30,8 @@ type Package interface {
 	Values() collections.ReadonlySortedSet[Value]
 
 	Empty() bool
-	FindTypeDecl(name string) TypeDecl
-	FindDecl(name string) Declaration
+	FindTypeDecl(name string, nest Method) TypeDecl
+	FindDecl(name string, nest Method) Declaration
 	ResolveReceivers()
 }
 

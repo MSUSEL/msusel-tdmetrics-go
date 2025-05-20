@@ -57,7 +57,7 @@ func resolveTempRef(log *logger.Logger, proj constructs.Project, ref constructs.
 
 	switch typ.Kind() {
 	case kind.Object:
-		res := instantiator.Object(log, proj, ref.GoType(), typ.(constructs.Object), nil, ref.InstanceTypes())
+		res := instantiator.Object(log, proj, ref.GoType(), typ.(constructs.Object), ref.ImplicitTypes(), ref.InstanceTypes())
 		if utils.IsNil(res) {
 			panic(terror.New(`failed to resolve object type reference`).
 				With(`package path`, ref.PackagePath()).
@@ -67,7 +67,7 @@ func resolveTempRef(log *logger.Logger, proj constructs.Project, ref constructs.
 		ref.SetResolution(res)
 
 	case kind.InterfaceDecl:
-		res := instantiator.InterfaceDecl(log, proj, ref.GoType(), typ.(constructs.InterfaceDecl), nil, ref.InstanceTypes())
+		res := instantiator.InterfaceDecl(log, proj, ref.GoType(), typ.(constructs.InterfaceDecl), ref.ImplicitTypes(), ref.InstanceTypes())
 		if utils.IsNil(res) {
 			panic(terror.New(`failed to resolve interface type reference`).
 				With(`package path`, ref.PackagePath()).

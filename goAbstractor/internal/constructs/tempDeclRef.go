@@ -14,7 +14,9 @@ type TempDeclRef interface {
 
 	PackagePath() string
 	Name() string
+	ImplicitTypes() []TypeDesc
 	InstanceTypes() []TypeDesc
+	Nest() Method
 
 	ResolvedType() Construct
 	Resolved() bool
@@ -24,7 +26,9 @@ type TempDeclRef interface {
 type TempDeclRefArgs struct {
 	PackagePath   string
 	Name          string
+	ImplicitTypes []TypeDesc
 	InstanceTypes []TypeDesc
+	Nest          Method
 }
 
 type TempDeclRefFactory interface {

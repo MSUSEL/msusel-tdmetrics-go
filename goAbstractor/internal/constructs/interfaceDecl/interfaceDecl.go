@@ -94,10 +94,12 @@ func (d *interfaceDeclImp) AddInstance(inst constructs.InterfaceInst) constructs
 	return v
 }
 
-func (d *interfaceDeclImp) FindInstance(instanceTypes []constructs.TypeDesc) (constructs.InterfaceInst, bool) {
-	cmp := constructs.SliceComparer[constructs.TypeDesc]()
+func (d *interfaceDeclImp) FindInstance(implicitTypes, instanceTypes []constructs.TypeDesc) (constructs.InterfaceInst, bool) {
 	return d.instances.Enumerate().Where(func(i constructs.InterfaceInst) bool {
-		return cmp(instanceTypes, i.InstanceTypes()) == 0
+		return comp.Or(
+			constructs.SliceComparerPend(implicitTypes, i.ImplicitTypes()),
+			constructs.SliceComparerPend(instanceTypes, i.InstanceTypes()),
+		) == 0
 	}).First()
 }
 

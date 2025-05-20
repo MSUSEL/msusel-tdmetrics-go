@@ -36,6 +36,25 @@ func ArgIsEmpty(name string, value any) {
 	}
 }
 
+func ArgsHaveSameLength(names string, value1, value2 any) {
+	len1, ok := utils.Length(value1)
+	if !ok {
+		panic(terror.New(`first argument unable to get length`).
+			With(`names`, names))
+	}
+	len2, ok := utils.Length(value2)
+	if !ok {
+		panic(terror.New(`second argument unable to get length`).
+			With(`names`, names))
+	}
+	if len1 != len2 {
+		panic(terror.New(`argument must be expected length`).
+			With(`first count`, len1).
+			With(`second count`, len2).
+			With(`names`, names))
+	}
+}
+
 func ArgNotEmpty(name string, value any) {
 	if len, ok := utils.Length(value); !ok || len <= 0 {
 		panic(terror.New(`argument must not be empty`).

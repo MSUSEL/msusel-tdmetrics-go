@@ -13,12 +13,21 @@ import (
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/logger"
 )
 
-func InterfaceDecl(log *logger.Logger, proj constructs.Project, realType types.Type, decl constructs.InterfaceDecl, implicitTypes, instanceTypes []constructs.TypeDesc) constructs.TypeDesc {
+func InterfaceDecl(log *logger.Logger, proj constructs.Project, realType types.Type, decl constructs.InterfaceDecl,
+	implicitTypes, instanceTypes []constructs.TypeDesc) constructs.TypeDesc {
+
 	assert.ArgNotNil(`project`, proj)
 	assert.ArgNotNil(`interface decl`, decl)
+	assert.ArgHasNoNils(`implicit types`, implicitTypes)
+	assert.ArgHasNoNils(`instance types`, instanceTypes)
+
+	itp := decl.ImplicitTypeParams()
+	tp := decl.TypeParams()
+	assert.ArgsHaveSameLength(`implicit types`, implicitTypes, itp)
+	assert.ArgsHaveSameLength(`instance types`, instanceTypes, tp)
 
 	log2 := log.Group(`instantiator`).Prefix(`|  `)
-	i, existing, needsInstance := newInstantiator(log2, proj, decl, nil, decl.TypeParams(), nil, instanceTypes)
+	i, existing, needsInstance := newInstantiator(log2, proj, decl, itp, tp, implicitTypes, instanceTypes)
 	if !needsInstance {
 		return decl
 	}
@@ -32,12 +41,21 @@ func InterfaceDecl(log *logger.Logger, proj constructs.Project, realType types.T
 	return i.createInstance(realType).(constructs.InterfaceInst)
 }
 
-func Object(log *logger.Logger, proj constructs.Project, realType types.Type, decl constructs.Object, implicitTypes, instanceTypes []constructs.TypeDesc) constructs.TypeDesc {
+func Object(log *logger.Logger, proj constructs.Project, realType types.Type, decl constructs.Object,
+	implicitTypes, instanceTypes []constructs.TypeDesc) constructs.TypeDesc {
+
 	assert.ArgNotNil(`project`, proj)
 	assert.ArgNotNil(`object`, decl)
+	assert.ArgHasNoNils(`implicit types`, implicitTypes)
+	assert.ArgHasNoNils(`instance types`, instanceTypes)
+
+	itp := decl.ImplicitTypeParams()
+	tp := decl.TypeParams()
+	assert.ArgsHaveSameLength(`implicit types`, implicitTypes, itp)
+	assert.ArgsHaveSameLength(`instance types`, instanceTypes, tp)
 
 	log2 := log.Group(`instantiator`).Prefix(`|  `)
-	i, existing, needsInstance := newInstantiator(log2, proj, decl, nil, decl.TypeParams(), nil, instanceTypes)
+	i, existing, needsInstance := newInstantiator(log2, proj, decl, itp, tp, implicitTypes, instanceTypes)
 	if !needsInstance {
 		return decl
 	}
@@ -51,7 +69,9 @@ func Object(log *logger.Logger, proj constructs.Project, realType types.Type, de
 	return i.createInstance(realType).(constructs.ObjectInst)
 }
 
-func Method(log *logger.Logger, proj constructs.Project, decl constructs.Method, instanceTypes []constructs.TypeDesc) constructs.Construct {
+func Method(log *logger.Logger, proj constructs.Project, decl constructs.Method,
+	instanceTypes []constructs.TypeDesc) constructs.Construct {
+
 	assert.ArgNotNil(`project`, proj)
 	assert.ArgNotNil(`method`, decl)
 

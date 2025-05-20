@@ -91,10 +91,12 @@ func (d *objectImp) AddInstance(inst constructs.ObjectInst) constructs.ObjectIns
 	return v
 }
 
-func (d *objectImp) FindInstance(instanceTypes []constructs.TypeDesc) (constructs.ObjectInst, bool) {
-	cmp := constructs.SliceComparer[constructs.TypeDesc]()
+func (d *objectImp) FindInstance(implicitTypes, instanceTypes []constructs.TypeDesc) (constructs.ObjectInst, bool) {
 	return d.instances.Enumerate().Where(func(i constructs.ObjectInst) bool {
-		return cmp(instanceTypes, i.InstanceTypes()) == 0
+		return comp.Or(
+			constructs.SliceComparerPend(implicitTypes, i.ImplicitTypes()),
+			constructs.SliceComparerPend(instanceTypes, i.InstanceTypes()),
+		) == 0
 	}).First()
 }
 

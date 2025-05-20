@@ -7,6 +7,7 @@ import (
 
 	"github.com/Snow-Gremlin/goToolbox/collections"
 	"github.com/Snow-Gremlin/goToolbox/collections/enumerator"
+	"github.com/Snow-Gremlin/goToolbox/comp"
 	"github.com/Snow-Gremlin/goToolbox/terrors/terror"
 
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/assert"
@@ -130,13 +131,21 @@ func (p *projectImp) EntryPoint() constructs.Package {
 	return pkg
 }
 
-func (p *projectImp) FindType(pkgPath, name string, instTypes []constructs.TypeDesc, allowRef, panicOnNotFound bool) (constructs.TypeDesc, bool) {
+func (p *projectImp) FindType(pkgPath, name string, nest constructs.Method,
+	implicitTypes, instanceTypes []constructs.TypeDesc,
+	allowRef, panicOnNotFound bool) (constructs.TypeDesc, bool) {
+
 	assert.ArgNotEmpty(`pkgPath`, pkgPath)
 
 	if allowRef {
-		itComp := constructs.SliceComparer[constructs.TypeDesc]()
 		ref, found := p.TempReferences().Enumerate().Where(func(ref constructs.TempReference) bool {
-			return ref.PackagePath() == pkgPath && ref.Name() == name && itComp(ref.InstanceTypes(), instTypes) == 0
+			return comp.Or(
+				comp.DefaultPend(ref.PackagePath(), pkgPath),
+				comp.DefaultPend(ref.Name(), name),
+				constructs.SliceComparerPend(ref.ImplicitTypes(), implicitTypes),
+				constructs.SliceComparerPend(ref.InstanceTypes(), instanceTypes),
+				constructs.ComparerPend(ref.Nest(), nest),
+			) == 0
 		}).First()
 		if found {
 			return ref, true
@@ -153,64 +162,87 @@ func (p *projectImp) FindType(pkgPath, name string, instTypes []constructs.TypeD
 			Join(`, `)
 		panic(terror.New(`failed to find package for type reference`).
 			With(`type name`, name).
-			With(`instance types`, instTypes).
+			With(`nest`, nest).
+			With(`implicit types`, implicitTypes).
+			With(`instance types`, instanceTypes).
 			With(`package path`, pkgPath).
 			With(`existing paths`, `[`+names+`]`))
 	}
 
-	decl := pkg.FindTypeDecl(name)
+	decl := pkg.FindTypeDecl(name, nest)
 	if decl == nil {
 		if !panicOnNotFound {
 			return nil, false
 		}
 		panic(terror.New(`failed to find type for type reference`).
 			With(`type name`, name).
-			With(`instance types`, instTypes).
+			With(`nest`, nest).
+			With(`implicit types`, implicitTypes).
+			With(`instance types`, instanceTypes).
 			With(`package path`, pkgPath))
 	}
 
-	if len(instTypes) > 0 {
+	if len(implicitTypes) > 0 || len(instanceTypes) > 0 {
 		switch t := decl.(type) {
 		case constructs.InterfaceDecl:
-			if inst, ok := t.FindInstance(instTypes); ok {
+			if inst, ok := t.FindInstance(implicitTypes, instanceTypes); ok {
 				return inst, true
 			}
 			return nil, false
+
 		case constructs.Object:
-			if inst, ok := t.FindInstance(instTypes); ok {
+			if inst, ok := t.FindInstance(implicitTypes, instanceTypes); ok {
 				return inst, true
 			}
 			return nil, false
+
 		case constructs.Method:
 			panic(terror.New(`can not use method instance as type for type reference`).
 				With(`type name`, name).
-				With(`instance types`, instTypes).
+				With(`nest`, nest).
+				With(`implicit types`, implicitTypes).
+				With(`instance types`, instanceTypes).
 				With(`method`, t).
 				With(`package path`, pkgPath))
+
 		case constructs.Value:
 			panic(terror.New(`can not get an instance of a value for type reference`).
 				With(`type name`, name).
-				With(`instance types`, instTypes).
+				With(`nest`, nest).
+				With(`implicit types`, implicitTypes).
+				With(`instance types`, instanceTypes).
 				With(`value`, t).
 				With(`package path`, pkgPath))
+
+		default:
+			panic(terror.New(`unexpected type for type reference instance`).
+				With(`type name`, name).
+				With(`nest`, nest).
+				With(`implicit types`, implicitTypes).
+				With(`instance types`, instanceTypes).
+				With(`declaration`, decl).
+				With(`package path`, pkgPath))
 		}
-		panic(terror.New(`unexpected type for type reference instance`).
-			With(`type name`, name).
-			With(`instance types`, instTypes).
-			With(`declaration`, decl).
-			With(`package path`, pkgPath))
 	}
 
 	return decl, true
 }
 
-func (p *projectImp) FindDecl(pkgPath, name string, instTypes []constructs.TypeDesc, allowRef, panicOnNotFound bool) (constructs.Construct, bool) {
+func (p *projectImp) FindDecl(pkgPath, name string, nest constructs.Method,
+	implicitTypes, instanceTypes []constructs.TypeDesc,
+	allowRef, panicOnNotFound bool) (constructs.Construct, bool) {
+
 	assert.ArgNotEmpty(`pkgPath`, pkgPath)
 
 	if allowRef {
-		itComp := constructs.SliceComparer[constructs.TypeDesc]()
 		ref, found := p.TempDeclRefs().Enumerate().Where(func(ref constructs.TempDeclRef) bool {
-			return ref.PackagePath() == pkgPath && ref.Name() == name && itComp(ref.InstanceTypes(), instTypes) == 0
+			return comp.Or(
+				comp.DefaultPend(ref.PackagePath(), pkgPath),
+				comp.DefaultPend(ref.Name(), name),
+				constructs.SliceComparerPend(ref.ImplicitTypes(), implicitTypes),
+				constructs.SliceComparerPend(ref.InstanceTypes(), instanceTypes),
+				constructs.ComparerPend(ref.Nest(), nest),
+			) == 0
 		}).First()
 		if found {
 			return ref, true
@@ -231,7 +263,7 @@ func (p *projectImp) FindDecl(pkgPath, name string, instTypes []constructs.TypeD
 			With(`existing paths`, `[`+names+`]`))
 	}
 
-	decl := pkg.FindDecl(name)
+	decl := pkg.FindDecl(name, nest)
 	if decl == nil {
 		if !panicOnNotFound {
 			return nil, false
@@ -241,35 +273,46 @@ func (p *projectImp) FindDecl(pkgPath, name string, instTypes []constructs.TypeD
 			With(`package path`, pkgPath))
 	}
 
-	if len(instTypes) > 0 {
+	if len(implicitTypes) > 0 || len(instanceTypes) > 0 {
 		switch t := decl.(type) {
 		case constructs.InterfaceDecl:
-			if inst, ok := t.FindInstance(instTypes); ok {
+			if inst, ok := t.FindInstance(implicitTypes, instanceTypes); ok {
 				return inst, true
 			}
 			return nil, false
+
 		case constructs.Object:
-			if inst, ok := t.FindInstance(instTypes); ok {
+			if inst, ok := t.FindInstance(implicitTypes, instanceTypes); ok {
 				return inst, true
 			}
 			return nil, false
+
 		case constructs.Method:
-			if inst, ok := t.FindInstance(instTypes); ok {
+			assert.ArgIsNil(`nest`, nest)
+			assert.ArgIsNil(`implicit types`, implicitTypes)
+			if inst, ok := t.FindInstance(instanceTypes); ok {
 				return inst, true
 			}
 			return nil, false
+
 		case constructs.Value:
 			panic(terror.New(`can not get an instance of a value for declaration reference`).
 				With(`type name`, name).
-				With(`instance types`, instTypes).
+				With(`nest`, nest).
+				With(`implicit types`, implicitTypes).
+				With(`instance types`, instanceTypes).
 				With(`value`, t).
 				With(`package path`, pkgPath))
+
+		default:
+			panic(terror.New(`unexpected declaration for declaration reference instance`).
+				With(`type name`, name).
+				With(`nest`, nest).
+				With(`implicit types`, implicitTypes).
+				With(`instance types`, instanceTypes).
+				With(`declaration`, decl).
+				With(`package path`, pkgPath))
 		}
-		panic(terror.New(`unexpected declaration for declaration reference instance`).
-			With(`type name`, name).
-			With(`instance types`, instTypes).
-			With(`declaration`, decl).
-			With(`package path`, pkgPath))
 	}
 
 	return decl, true
