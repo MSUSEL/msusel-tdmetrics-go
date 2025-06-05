@@ -11,6 +11,7 @@ import "github.com/Snow-Gremlin/goToolbox/collections"
 // is also generic. The type may be a non-type parameter on a generic type,
 // e.g. List[List[T any]] where List[T any] is the instance type.
 type MethodInst interface {
+	NestType
 	Construct
 	TempReferenceContainer
 	IsMethodInst()

@@ -1,8 +1,6 @@
 package metrics
 
 import (
-	"slices"
-
 	"github.com/Snow-Gremlin/goToolbox/collections"
 	"github.com/Snow-Gremlin/goToolbox/comp"
 
@@ -84,19 +82,9 @@ func (m *metricsImp) Invokes() collections.ReadonlySortedSet[constructs.Construc
 }
 
 func (m *metricsImp) RemoveTempDeclRefs() {
-	m.resolveTempDeclRefs(m.reads)
-	m.resolveTempDeclRefs(m.writes)
-	m.resolveTempDeclRefs(m.invokes)
-}
-
-func (m *metricsImp) resolveTempDeclRefs(set collections.SortedSet[constructs.Construct]) {
-	slice := slices.Clone(set.ToSlice())
-	for i, s := range slice {
-		slice[i] = constructs.ResolvedTempDeclRef(s)
-	}
-	assert.ArgHasNoNils(`resolved refs`, slice)
-	set.Clear()
-	set.Add(slice...)
+	constructs.ResolveTempDeclRefSet(m.reads)
+	constructs.ResolveTempDeclRefSet(m.writes)
+	constructs.ResolveTempDeclRefSet(m.invokes)
 }
 
 func (m *metricsImp) CompareTo(other constructs.Construct) int {

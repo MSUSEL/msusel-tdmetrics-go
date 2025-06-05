@@ -18,7 +18,7 @@ type tempDeclRefImp struct {
 	alive         bool
 	implicitTypes []constructs.TypeDesc
 	instanceTypes []constructs.TypeDesc
-	nest          constructs.Method
+	nest          constructs.NestType
 	con           constructs.Construct
 }
 
@@ -30,9 +30,9 @@ func newTempDeclRef(args constructs.TempDeclRefArgs) constructs.TempDeclRef {
 	if len(args.ImplicitTypes) > 0 {
 		assert.ArgNotNil(`nest`, args.Nest)
 	}
-	if !utils.IsNil(args.Nest) {
-		assert.ArgsHaveSameLength(`implicit types`, args.Nest.TypeParams(), args.ImplicitTypes)
-	}
+	//if !utils.IsNil(args.Nest) {
+	//	assert.ArgsHaveSameLength(`implicit types`, args.Nest.TypeParams(), args.ImplicitTypes)
+	//}
 
 	return &tempDeclRefImp{
 		pkgPath:       args.PackagePath,
@@ -55,7 +55,7 @@ func (r *tempDeclRefImp) Name() string        { return r.name }
 
 func (r *tempDeclRefImp) ImplicitTypes() []constructs.TypeDesc { return r.implicitTypes }
 func (r *tempDeclRefImp) InstanceTypes() []constructs.TypeDesc { return r.instanceTypes }
-func (r *tempDeclRefImp) Nest() constructs.Method              { return r.nest }
+func (r *tempDeclRefImp) Nest() constructs.NestType            { return r.nest }
 func (r *tempDeclRefImp) ResolvedType() constructs.Construct   { return r.con }
 
 func (r *tempDeclRefImp) Resolved() bool {

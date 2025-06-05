@@ -55,7 +55,9 @@ type usagesImp struct {
 	pendingSE bool
 }
 
-func Calculate(log *logger.Logger, info *types.Info, proj constructs.Project, curPkg constructs.Package, baker baker.Baker, conv converter.Converter, root ast.Node) Usages {
+func Calculate(log *logger.Logger, info *types.Info, proj constructs.Project,
+	curPkg constructs.Package, baker baker.Baker, conv converter.Converter, root ast.Node) Usages {
+
 	assert.ArgNotNil(`info`, info)
 	assert.ArgNotNil(`info.Defs`, info.Defs)
 	assert.ArgNotNil(`info.Instances`, info.Instances)
@@ -146,7 +148,7 @@ func (ui *usagesImp) setPendingType(t types.Type) {
 	ui.log.Logf(`    - converted obj: %v`, ui.pending)
 }
 
-func (ui *usagesImp) setPendingObject(o types.Object, instType []constructs.TypeDesc) {
+func (ui *usagesImp) setPendingObject(o types.Object, instanceType []constructs.TypeDesc) {
 	ui.flushPendingToRead()
 	ui.log.Logf(`  - PendingObject: %v`, o)
 
@@ -193,7 +195,7 @@ func (ui *usagesImp) setPendingObject(o types.Object, instType []constructs.Type
 			return
 		}
 
-		typ, found := ui.proj.FindType(pkgPath, o.Name(), instType, true, false)
+		typ, found := ui.proj.FindType(pkgPath, o.Name(), ui.conv.Nest(), ui.conv.ImplicitTypes(), instanceType, true, false)
 		if found {
 			ui.log.Logf(`      + type found: %v`, typ)
 			ui.pending = typ
@@ -205,7 +207,9 @@ func (ui *usagesImp) setPendingObject(o types.Object, instType []constructs.Type
 			RealType:      o.Type(),
 			PackagePath:   pkgPath,
 			Name:          o.Name(),
-			InstanceTypes: instType,
+			Nest:          ui.conv.Nest(),
+			ImplicitTypes: ui.conv.ImplicitTypes(),
+			InstanceTypes: instanceType,
 			Package:       ui.curPkg.Source(),
 		})
 		return
@@ -239,7 +243,7 @@ func (ui *usagesImp) setPendingObject(o types.Object, instType []constructs.Type
 	}
 
 	pkgPath := getPkgPath(o)
-	typ, found := ui.proj.FindDecl(pkgPath, o.Name(), instType, true, false)
+	typ, found := ui.proj.FindDecl(pkgPath, o.Name(), ui.conv.Nest(), ui.conv.ImplicitTypes(), instanceType, true, false)
 	if found {
 		ui.log.Logf(`      + decl found: %v`, typ)
 		ui.pending = typ
@@ -256,7 +260,9 @@ func (ui *usagesImp) setPendingObject(o types.Object, instType []constructs.Type
 	ui.pending = ui.proj.NewTempDeclRef(constructs.TempDeclRefArgs{
 		PackagePath:   pkgPath,
 		Name:          o.Name(),
-		InstanceTypes: instType,
+		Nest:          ui.conv.Nest(),
+		ImplicitTypes: ui.conv.ImplicitTypes(),
+		InstanceTypes: instanceType,
 	})
 }
 

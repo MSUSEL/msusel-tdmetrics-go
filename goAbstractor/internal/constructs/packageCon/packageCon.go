@@ -128,20 +128,24 @@ func (p *packageImp) Empty() bool {
 		p.values.Enumerate().Empty()
 }
 
-func (p *packageImp) findInterfaceDecl(name string, nest constructs.Method) (constructs.InterfaceDecl, bool) {
+func (p *packageImp) findInterfaceDecl(name string, nest constructs.NestType) (constructs.InterfaceDecl, bool) {
 	return p.interfaces.Enumerate().
 		Where(func(t constructs.InterfaceDecl) bool {
-			return t.Name() == name
-			// TODO: check if the interface is nested
+			return comp.Or(
+				comp.DefaultPend(t.Name(), name),
+				constructs.ComparerPend(t.Nest(), nest),
+			) == 0
 		}).
 		First()
 }
 
-func (p *packageImp) findObject(name string, nest constructs.Method) (constructs.Object, bool) {
+func (p *packageImp) findObject(name string, nest constructs.NestType) (constructs.Object, bool) {
 	return p.objects.Enumerate().
 		Where(func(t constructs.Object) bool {
-			return t.Name() == name
-			// TODO: check if the object is nested
+			return comp.Or(
+				comp.DefaultPend(t.Name(), name),
+				constructs.ComparerPend(t.Nest(), nest),
+			) == 0
 		}).
 		First()
 }
@@ -158,7 +162,7 @@ func (p *packageImp) findValues(name string) (constructs.Value, bool) {
 		First()
 }
 
-func (p *packageImp) FindTypeDecl(name string, nest constructs.Method) constructs.TypeDecl {
+func (p *packageImp) FindTypeDecl(name string, nest constructs.NestType) constructs.TypeDecl {
 	if v, ok := p.findInterfaceDecl(name, nest); ok {
 		return v
 	}
@@ -168,7 +172,7 @@ func (p *packageImp) FindTypeDecl(name string, nest constructs.Method) construct
 	return nil
 }
 
-func (p *packageImp) FindDecl(name string, nest constructs.Method) constructs.Declaration {
+func (p *packageImp) FindDecl(name string, nest constructs.NestType) constructs.Declaration {
 	if v, ok := p.findInterfaceDecl(name, nest); ok {
 		return v
 	}
@@ -239,6 +243,6 @@ func (p *packageImp) ResolveReceivers() {
 	}
 }
 
-func (p *packageImp) ToStringer(s stringer.Stringer) { s.WriteString(p.path) }
+func (p *packageImp) ToStringer(s stringer.Stringer) { s.WriteString(p.name) }
 
 func (p *packageImp) String() string { return p.name }

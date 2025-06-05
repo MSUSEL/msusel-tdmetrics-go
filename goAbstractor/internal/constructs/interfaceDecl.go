@@ -26,7 +26,7 @@ type InterfaceDecl interface {
 	IsNamed() bool
 	IsGeneric() bool
 	IsNested() bool
-	Nest() Method
+	Nest() NestType
 	TypeParams() []TypeParam
 	ImplicitTypeParams() []TypeParam
 	AddInstance(inst InterfaceInst) InterfaceInst
@@ -40,7 +40,7 @@ type InterfaceDeclArgs struct {
 	Name     string
 	Exported bool
 	Location locs.Loc
-	Nest     Method
+	Nest     NestType
 
 	TypeParams []TypeParam
 	Interface  InterfaceDesc

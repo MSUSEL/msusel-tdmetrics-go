@@ -1,12 +1,15 @@
 package constructs
 
 import (
+	"slices"
 	"strings"
 
+	"github.com/Snow-Gremlin/goToolbox/collections"
 	"github.com/Snow-Gremlin/goToolbox/comp"
 	"github.com/Snow-Gremlin/goToolbox/terrors/terror"
 	"github.com/Snow-Gremlin/goToolbox/utils"
 
+	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/assert"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs/kind"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/stringer"
 )
@@ -55,6 +58,9 @@ type TempDeclRefContainer interface {
 	// method that was referenced. References will already be looked up.
 	RemoveTempDeclRefs()
 }
+
+// NestType is a type that can be nested inside another type.
+type NestType Construct
 
 var (
 	_ Construct = Abstract(nil)
@@ -182,6 +188,16 @@ func ResolvedTempDeclRef(con Construct) Construct {
 		break
 	}
 	return resolved
+}
+
+func ResolveTempDeclRefSet(set collections.SortedSet[Construct]) {
+	slice := slices.Clone(set.ToSlice())
+	for i, s := range slice {
+		slice[i] = ResolvedTempDeclRef(s)
+	}
+	assert.ArgHasNoNils(`resolved refs`, slice)
+	set.Clear()
+	set.Add(slice...)
 }
 
 func BlankName(name string) bool {

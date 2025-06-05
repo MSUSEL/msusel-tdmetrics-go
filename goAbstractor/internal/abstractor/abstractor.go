@@ -1,6 +1,7 @@
 package abstractor
 
 import (
+	"fmt"
 	"go/ast"
 	"go/token"
 	"go/types"
@@ -52,13 +53,15 @@ func Abstract(cfg Config) constructs.Project {
 }
 
 type abstractor struct {
-	packages   []*packages.Package
-	log        *logger.Logger
-	baker      baker.Baker
-	proj       constructs.Project
-	curPkg     constructs.Package
-	tpReplacer map[*types.TypeParam]*types.TypeParam
-	typeCache  map[any]any
+	packages      []*packages.Package
+	log           *logger.Logger
+	baker         baker.Baker
+	proj          constructs.Project
+	curPkg        constructs.Package
+	curNest       constructs.NestType
+	implicitTypes []constructs.TypeDesc
+	tpReplacer    map[*types.TypeParam]*types.TypeParam
+	typeCache     map[any]any
 }
 
 func (ab *abstractor) pos(pos token.Pos) token.Position {
@@ -70,7 +73,7 @@ func (ab *abstractor) info() *types.Info {
 }
 
 func (ab *abstractor) converter() converter.Converter {
-	return converter.New(ab.log, ab.baker, ab.proj, ab.curPkg, ab.tpReplacer, ab.typeCache)
+	return converter.New(ab.log, ab.baker, ab.proj, ab.curPkg, ab.curNest, ab.implicitTypes, ab.tpReplacer, ab.typeCache)
 }
 
 func (ab *abstractor) abstractProject() {
@@ -128,7 +131,7 @@ func (ab *abstractor) abstractGenDecl(decl *ast.GenDecl) {
 		case *ast.ImportSpec:
 			// ignore
 		case *ast.TypeSpec:
-			ab.abstractTypeSpec(s, nil)
+			ab.abstractTypeSpec(s)
 		case *ast.ValueSpec:
 			ab.abstractValueSpec(s, isConst)
 		default:
@@ -138,7 +141,7 @@ func (ab *abstractor) abstractGenDecl(decl *ast.GenDecl) {
 	}
 }
 
-func (ab *abstractor) abstractTypeSpec(spec *ast.TypeSpec, nest constructs.Method) {
+func (ab *abstractor) abstractTypeSpec(spec *ast.TypeSpec) {
 	tv, has := ab.info().Types[spec.Type]
 	if !has {
 		panic(terror.New(`type specification not found in types info`).
@@ -159,7 +162,7 @@ func (ab *abstractor) abstractTypeSpec(spec *ast.TypeSpec, nest constructs.Metho
 			Interface:  it,
 			TypeParams: tp,
 			Location:   loc,
-			Nest:       nest,
+			Nest:       ab.curNest,
 		})
 		return
 	}
@@ -187,7 +190,7 @@ func (ab *abstractor) abstractTypeSpec(spec *ast.TypeSpec, nest constructs.Metho
 		Data:       st,
 		TypeParams: tp,
 		Location:   loc,
-		Nest:       nest,
+		Nest:       ab.curNest,
 	})
 }
 
@@ -306,13 +309,27 @@ func (ab *abstractor) abstractReceiver(decl *ast.FuncDecl) (bool, string) {
 func (ab *abstractor) abstractFuncDecl(decl *ast.FuncDecl) {
 	info := ab.info()
 	obj := info.Defs[decl.Name]
+	loc := ab.proj.Locs().NewLoc(decl.Pos())
 
 	ptrRecv, recvName := ab.abstractReceiver(decl)
 	sig := ab.converter().ConvertSignature(obj.Type().(*types.Signature), decl.Name.Name)
-	ab.clearTypeParamOverrides()
+
+	prevNest := ab.curNest
+	defer func() { ab.curNest = prevNest }()
+	ab.curNest = ab.proj.NewTempDeclRef(constructs.TempDeclRefArgs{
+		PackagePath:   ab.curPkg.Path(),
+		Name:          decl.Name.Name,
+		ImplicitTypes: ab.implicitTypes,
+	})
+
+	fmt.Printf("-----------------------------\n")                                        // TODO: REMOVE
+	fmt.Printf(">> abstractor: abstractFuncDecl: decl.Name:     %s\n", decl.Name.Name)   // TODO: REMOVE
+	fmt.Printf(">> abstractor: abstractFuncDecl: nest:          %v\n", ab.curNest)       // TODO: REMOVE
+	fmt.Printf(">> abstractor: abstractFuncDecl: implicitTypes: %v\n", ab.implicitTypes) // TODO: REMOVE
 
 	metrics := analyzer.Analyze(ab.log, ab.info(), ab.proj, ab.curPkg, ab.baker, ab.converter(), decl)
-	loc := ab.proj.Locs().NewLoc(decl.Pos())
+	ab.clearTypeParamOverrides()
+
 	tp := ab.abstractTypeParams(decl.Type.TypeParams, decl.Name.Name)
 
 	exported := decl.Name.IsExported()
@@ -333,10 +350,12 @@ func (ab *abstractor) abstractFuncDecl(decl *ast.FuncDecl) {
 		PointerRecv: ptrRecv,
 	})
 
-	ab.abstractNestedTypes(decl.Body, method)
+	ab.curNest = method
+	defer func() { ab.curNest = nil }()
+	ab.abstractNestedTypes(decl.Body)
 }
 
-func (ab *abstractor) abstractNestedTypes(body *ast.BlockStmt, nest constructs.Method) {
+func (ab *abstractor) abstractNestedTypes(body *ast.BlockStmt) {
 	if body == nil {
 		return
 	}
@@ -345,7 +364,7 @@ func (ab *abstractor) abstractNestedTypes(body *ast.BlockStmt, nest constructs.M
 			if decl, ok := stmt.Decl.(*ast.GenDecl); ok {
 				for _, spec := range decl.Specs {
 					if typeSpec, ok := spec.(*ast.TypeSpec); ok {
-						ab.abstractTypeSpec(typeSpec, nest)
+						ab.abstractTypeSpec(typeSpec)
 					}
 				}
 			}

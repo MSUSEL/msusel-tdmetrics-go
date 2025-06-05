@@ -131,7 +131,7 @@ func (p *projectImp) EntryPoint() constructs.Package {
 	return pkg
 }
 
-func (p *projectImp) FindType(pkgPath, name string, nest constructs.Method,
+func (p *projectImp) FindType(pkgPath, name string, nest constructs.NestType,
 	implicitTypes, instanceTypes []constructs.TypeDesc,
 	allowRef, panicOnNotFound bool) (constructs.TypeDesc, bool) {
 
@@ -228,7 +228,7 @@ func (p *projectImp) FindType(pkgPath, name string, nest constructs.Method,
 	return decl, true
 }
 
-func (p *projectImp) FindDecl(pkgPath, name string, nest constructs.Method,
+func (p *projectImp) FindDecl(pkgPath, name string, nest constructs.NestType,
 	implicitTypes, instanceTypes []constructs.TypeDesc,
 	allowRef, panicOnNotFound bool) (constructs.Construct, bool) {
 

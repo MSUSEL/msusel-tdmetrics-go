@@ -6,6 +6,7 @@ import (
 	"github.com/Snow-Gremlin/goToolbox/collections"
 	"github.com/Snow-Gremlin/goToolbox/collections/sortedSet"
 	"github.com/Snow-Gremlin/goToolbox/comp"
+	"github.com/Snow-Gremlin/goToolbox/terrors/terror"
 	"github.com/Snow-Gremlin/goToolbox/utils"
 
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/assert"
@@ -25,7 +26,7 @@ type interfaceDeclImp struct {
 	loc      locs.Loc
 	index    int
 	alive    bool
-	nest     constructs.Method
+	nest     constructs.NestType
 
 	typeParams []constructs.TypeParam
 	inter      constructs.InterfaceDesc
@@ -77,12 +78,17 @@ func (d *interfaceDeclImp) Package() constructs.Package         { return d.pkg }
 func (d *interfaceDeclImp) Type() constructs.TypeDesc           { return d.inter }
 func (d *interfaceDeclImp) Interface() constructs.InterfaceDesc { return d.inter }
 func (d *interfaceDeclImp) TypeParams() []constructs.TypeParam  { return d.typeParams }
+func (d *interfaceDeclImp) Nest() constructs.NestType           { return d.nest }
 
 func (d *interfaceDeclImp) ImplicitTypeParams() []constructs.TypeParam {
 	if d.nest == nil {
 		return nil
 	}
-	return d.nest.TypeParams()
+	if method, ok := d.nest.(constructs.Method); ok {
+		return method.TypeParams()
+	}
+	panic(terror.New(`may not get ImplicitTypeParams from a non-method nesting declaration`).
+		WithType(`nest`, d.nest))
 }
 
 func (d *interfaceDeclImp) Instances() collections.ReadonlySortedSet[constructs.InterfaceInst] {
@@ -92,6 +98,10 @@ func (d *interfaceDeclImp) Instances() collections.ReadonlySortedSet[constructs.
 func (d *interfaceDeclImp) AddInstance(inst constructs.InterfaceInst) constructs.InterfaceInst {
 	v, _ := d.instances.TryAdd(inst)
 	return v
+}
+
+func (d *interfaceDeclImp) RemoveTempDeclRefs() {
+	d.nest = constructs.ResolvedTempDeclRef(d.nest).(constructs.Declaration)
 }
 
 func (d *interfaceDeclImp) FindInstance(implicitTypes, instanceTypes []constructs.TypeDesc) (constructs.InterfaceInst, bool) {
@@ -106,8 +116,6 @@ func (d *interfaceDeclImp) FindInstance(implicitTypes, instanceTypes []construct
 func (d *interfaceDeclImp) IsNamed() bool   { return len(d.name) > 0 }
 func (d *interfaceDeclImp) IsGeneric() bool { return len(d.typeParams) > 0 }
 func (d *interfaceDeclImp) IsNested() bool  { return d.nest != nil }
-
-func (d *interfaceDeclImp) Nest() constructs.Method { return d.nest }
 
 func (d *interfaceDeclImp) CompareTo(other constructs.Construct) int {
 	return constructs.CompareTo[constructs.InterfaceDecl](d, other, Comparer())

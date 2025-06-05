@@ -22,4 +22,5 @@ type Declaration interface {
 type TypeDecl interface {
 	Declaration
 	TypeDesc
+	Nest() NestType
 }

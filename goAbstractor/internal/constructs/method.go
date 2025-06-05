@@ -16,6 +16,7 @@ import (
 // are added for each used instance in the source code.
 // If there are no instances then the generic method isn't used.
 type Method interface {
+	NestType
 	Declaration
 	IsMethod()
 

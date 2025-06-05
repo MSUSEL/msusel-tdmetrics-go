@@ -32,7 +32,7 @@ type Object interface {
 	IsNamed() bool
 	IsGeneric() bool
 	IsNested() bool
-	Nest() Method
+	Nest() NestType
 	TypeParams() []TypeParam
 	ImplicitTypeParams() []TypeParam
 	AddInstance(inst ObjectInst) ObjectInst
@@ -46,7 +46,7 @@ type ObjectArgs struct {
 	Name     string
 	Exported bool
 	Location locs.Loc
-	Nest     Method
+	Nest     NestType
 
 	TypeParams []TypeParam
 	Data       StructDesc

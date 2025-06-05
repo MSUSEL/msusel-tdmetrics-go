@@ -17,6 +17,8 @@ import (
 )
 
 type Converter interface {
+	Nest() constructs.NestType
+	ImplicitTypes() []constructs.TypeDesc
 	ConvertType(t types.Type, context string) constructs.TypeDesc
 	ConvertSignature(t *types.Signature, context string) constructs.Signature
 	ConvertInstanceTypes(t *types.TypeList, context string) []constructs.TypeDesc
@@ -27,30 +29,43 @@ func New(
 	baker baker.Baker,
 	proj constructs.Project,
 	curPkg constructs.Package,
+	nest constructs.NestType,
+	implicitTypes []constructs.TypeDesc,
 	tpReplacer map[*types.TypeParam]*types.TypeParam,
 	typeCache map[any]any,
 ) Converter {
 	log2 := log.Group(`converter`).Prefix(`|  `)
+
+	fmt.Printf(">> converter: New: nest:          %v\n", nest)          // TODO: REMOVE
+	fmt.Printf(">> converter: New: implicitTypes: %v\n", implicitTypes) // TODO: REMOVE
+
 	return &convImp{
-		log:        log2,
-		baker:      baker,
-		proj:       proj,
-		curPkg:     curPkg,
-		tpReplacer: tpReplacer,
-		typeCache:  typeCache,
+		log:           log2,
+		baker:         baker,
+		proj:          proj,
+		curPkg:        curPkg,
+		nest:          nest,
+		implicitTypes: implicitTypes,
+		tpReplacer:    tpReplacer,
+		typeCache:     typeCache,
 	}
 }
 
 type convImp struct {
-	log        *logger.Logger
-	baker      baker.Baker
-	proj       constructs.Project
-	curPkg     constructs.Package
-	tpReplacer map[*types.TypeParam]*types.TypeParam
-	context    string
-	tpSeen     map[string]constructs.TempTypeParamRef
-	typeCache  map[any]any
+	log           *logger.Logger
+	baker         baker.Baker
+	proj          constructs.Project
+	curPkg        constructs.Package
+	nest          constructs.NestType
+	implicitTypes []constructs.TypeDesc
+	tpReplacer    map[*types.TypeParam]*types.TypeParam
+	context       string
+	tpSeen        map[string]constructs.TempTypeParamRef
+	typeCache     map[any]any
 }
+
+func (c *convImp) Nest() constructs.NestType            { return c.nest }
+func (c *convImp) ImplicitTypes() []constructs.TypeDesc { return c.implicitTypes }
 
 func (c *convImp) ConvertType(t types.Type, context string) constructs.TypeDesc {
 	c.log.Logf("convert type: %v", t)
@@ -224,6 +239,30 @@ func (c *convImp) convertMap(t *types.Map) constructs.TypeDesc {
 	return instantiator.InterfaceDecl(c.log, c.proj, t.Underlying(), generic, nil, []constructs.TypeDesc{key, value})
 }
 
+// TODO: REMOVE IF NOT USED
+// func findNest(t *types.Named) *types.Func {
+// 	pos := t.Obj().Pos()
+// 	if !pos.IsValid() {
+// 		return nil
+// 	}
+// 	scope := t.Obj().Parent()
+// 	if scope == nil {
+// 		pkg := t.Obj().Pkg()
+// 		if pkg == nil {
+// 			return nil
+// 		}
+// 		scope = pkg.Scope().Innermost(pos)
+// 	}
+// 	for ; scope != nil; scope = scope.Parent() {
+// 		for _, name := range scope.Names() {
+// 			if fn, ok := scope.Lookup(name).(*types.Func); ok && fn.Scope().Contains(pos) {
+// 				return fn
+// 			}
+// 		}
+// 	}
+// 	return nil
+// }
+
 func (c *convImp) convertNamed(t *types.Named) constructs.TypeDesc {
 	pkgPath := ``
 	if !utils.IsNil(t.Obj().Pkg()) {
@@ -240,17 +279,19 @@ func (c *convImp) convertNamed(t *types.Named) constructs.TypeDesc {
 	}
 
 	// Get any type parameters.
-	instanceTp := cache(c, t.TypeArgs(), c.convertInstanceTypes)
+	instanceTypes := cache(c, t.TypeArgs(), c.convertInstanceTypes)
 
 	// Check if the reference can already be found.
-	typ, found := c.proj.FindType(pkgPath, name, instanceTp, true, false)
+	typ, found := c.proj.FindType(pkgPath, name, c.nest, c.implicitTypes, instanceTypes, true, false)
 	if !found {
 		// Otherwise, create a temporary reference that will be filled later.
 		return c.proj.NewTempReference(constructs.TempReferenceArgs{
 			RealType:      t,
 			PackagePath:   pkgPath,
 			Name:          name,
-			InstanceTypes: instanceTp, // TODO: Handle nesting
+			Nest:          c.nest,
+			ImplicitTypes: c.implicitTypes,
+			InstanceTypes: instanceTypes,
 			Package:       c.curPkg.Source(),
 		})
 	}
@@ -259,9 +300,9 @@ func (c *convImp) convertNamed(t *types.Named) constructs.TypeDesc {
 	case kind.TempReference:
 		return typ
 	case kind.InterfaceDecl:
-		return instantiator.InterfaceDecl(c.log, c.proj, t.Underlying(), typ.(constructs.InterfaceDecl), nil, instanceTp) // TODO: Handle nesting
+		return instantiator.InterfaceDecl(c.log, c.proj, t.Underlying(), typ.(constructs.InterfaceDecl), c.implicitTypes, instanceTypes)
 	case kind.Object:
-		return instantiator.Object(c.log, c.proj, t.Underlying(), typ.(constructs.Object), nil, instanceTp) // TODO: Handle nesting
+		return instantiator.Object(c.log, c.proj, t.Underlying(), typ.(constructs.Object), c.implicitTypes, instanceTypes)
 	default:
 		panic(terror.New(`unexpected declaration type`).
 			With(`kind`, typ.Kind()).

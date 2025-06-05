@@ -16,7 +16,7 @@ type TempDeclRef interface {
 	Name() string
 	ImplicitTypes() []TypeDesc
 	InstanceTypes() []TypeDesc
-	Nest() Method
+	Nest() NestType
 
 	ResolvedType() Construct
 	Resolved() bool
@@ -28,7 +28,7 @@ type TempDeclRefArgs struct {
 	Name          string
 	ImplicitTypes []TypeDesc
 	InstanceTypes []TypeDesc
-	Nest          Method
+	Nest          NestType
 }
 
 type TempDeclRefFactory interface {

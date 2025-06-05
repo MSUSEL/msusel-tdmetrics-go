@@ -2209,7 +2209,7 @@ func newTestTool(t *testing.T) *testTool {
 	baker := baker.New(proj)
 	log := logger.New()
 	typeCache := map[any]any{}
-	conv := converter.New(log, baker, proj, curPkg, nil, typeCache)
+	conv := converter.New(log, baker, proj, curPkg, nil, nil, nil, typeCache)
 	return &testTool{
 		t:      t,
 		proj:   proj,

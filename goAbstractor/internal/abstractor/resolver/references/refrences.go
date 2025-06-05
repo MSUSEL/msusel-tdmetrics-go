@@ -36,14 +36,14 @@ func resolveTempRef(log *logger.Logger, proj constructs.Project, ref constructs.
 	}
 
 	// Try to find instance of type or non-generic type.
-	typ, ok := proj.FindType(ref.PackagePath(), ref.Name(), ref.InstanceTypes(), false, false)
+	typ, ok := proj.FindType(ref.PackagePath(), ref.Name(), ref.Nest(), ref.ImplicitTypes(), ref.InstanceTypes(), false, false)
 	if ok {
 		ref.SetResolution(typ)
 		return
 	}
 
 	// Try to find generic type and then create the instance if needed.
-	typ, ok = proj.FindType(ref.PackagePath(), ref.Name(), []constructs.TypeDesc{}, false, true)
+	typ, ok = proj.FindType(ref.PackagePath(), ref.Name(), ref.Nest(), nil, nil, false, true)
 	if !ok {
 		panic(terror.New(`failed to find temp referenced object`).
 			With(`package path`, ref.PackagePath()).
@@ -103,14 +103,14 @@ func resolveTempDeclRef(log *logger.Logger, proj constructs.Project, ref constru
 	}
 
 	// Try to find instance of declaration or non-generic declaration.
-	decl, ok := proj.FindDecl(ref.PackagePath(), ref.Name(), ref.InstanceTypes(), false, false)
+	decl, ok := proj.FindDecl(ref.PackagePath(), ref.Name(), ref.Nest(), ref.ImplicitTypes(), ref.InstanceTypes(), false, false)
 	if ok {
 		ref.SetResolution(decl)
 		return
 	}
 
 	// Try to find generic declaration and then create the instance if needed.
-	decl, ok = proj.FindDecl(ref.PackagePath(), ref.Name(), []constructs.TypeDesc{}, false, true)
+	decl, ok = proj.FindDecl(ref.PackagePath(), ref.Name(), ref.Nest(), nil, nil, false, true)
 	if !ok {
 		panic(terror.New(`failed to find temp declaration referenced`).
 			With(`package path`, ref.PackagePath()).

@@ -1,6 +1,7 @@
 package tempReference
 
 import (
+	"fmt"
 	"go/types"
 
 	"github.com/Snow-Gremlin/goToolbox/comp"
@@ -22,7 +23,7 @@ type tempReferenceImp struct {
 	alive         bool
 	implicitTypes []constructs.TypeDesc
 	instanceTypes []constructs.TypeDesc
-	nest          constructs.Method
+	nest          constructs.NestType
 	typ           constructs.TypeDesc
 }
 
@@ -34,9 +35,9 @@ func newTempReference(args constructs.TempReferenceArgs) constructs.TempReferenc
 	if len(args.ImplicitTypes) > 0 {
 		assert.ArgNotNil(`nest`, args.Nest)
 	}
-	if !utils.IsNil(args.Nest) {
-		assert.ArgsHaveSameLength(`implicit types`, args.Nest.TypeParams(), args.ImplicitTypes)
-	}
+	//if !utils.IsNil(args.Nest) {
+	//	assert.ArgsHaveSameLength(`implicit types`, args.Nest.TypeParams(), args.ImplicitTypes)
+	//}
 
 	if utils.IsNil(args.RealType) {
 		assert.ArgNotNil(`package`, args.Package)
@@ -47,6 +48,11 @@ func newTempReference(args constructs.TempReferenceArgs) constructs.TempReferenc
 			With("Name", args.Name))
 	}
 	assert.ArgNotNil(`real type`, args.RealType)
+
+	if args.Name == `nested` { // TODO: REMOVE
+		fmt.Printf("\n>>%+v\n", args)
+		panic(`BOOM`)
+	}
 
 	return &tempReferenceImp{
 		realType:      args.RealType,
@@ -74,7 +80,7 @@ func (r *tempReferenceImp) ImplicitTypes() []constructs.TypeDesc { return r.impl
 func (r *tempReferenceImp) InstanceTypes() []constructs.TypeDesc { return r.instanceTypes }
 func (r *tempReferenceImp) ResolvedType() constructs.TypeDesc    { return r.typ }
 func (r *tempReferenceImp) Resolved() bool                       { return !utils.IsNil(r.typ) }
-func (r *tempReferenceImp) Nest() constructs.Method              { return r.nest }
+func (r *tempReferenceImp) Nest() constructs.NestType            { return r.nest }
 
 func (r *tempReferenceImp) SetResolution(typ constructs.TypeDesc) {
 	if r.typ == typ {
@@ -127,6 +133,13 @@ func (r *tempReferenceImp) ToStringer(s stringer.Stringer) {
 	s.Write(`ref `)
 	if len(r.pkgPath) > 0 {
 		s.Write(r.pkgPath, `.`)
+	}
+	if r.nest != nil {
+		if named, ok := r.nest.(interface{ Name() string }); ok {
+			s.Write(named.Name(), `.`)
+		} else {
+			s.Write(`<`, r.nest.Kind(), `>`, `.`)
+		}
 	}
 	s.Write(r.name).
 		WriteList(`[`, `, `, `;]`, r.implicitTypes).

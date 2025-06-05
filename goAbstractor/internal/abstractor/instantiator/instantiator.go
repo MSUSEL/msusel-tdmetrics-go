@@ -99,6 +99,7 @@ type instantiator struct {
 	prior         *instantiator
 	proj          constructs.Project
 	decl          constructs.Declaration
+	implicitTypes []constructs.TypeDesc
 	instanceTypes []constructs.TypeDesc
 	conversion    map[constructs.TypeParam]constructs.TypeDesc
 }
@@ -107,12 +108,24 @@ func newInstantiator(log *logger.Logger, proj constructs.Project, decl construct
 	nestTypeParams, typeParams []constructs.TypeParam,
 	implicitTypes, instanceTypes []constructs.TypeDesc) (*instantiator, constructs.Construct, bool) {
 
-	count := len(typeParams)
-	if count != len(instanceTypes) {
+	if len(nestTypeParams) != len(implicitTypes) {
+		panic(terror.New(`the amount of nested type params must match the implicit instance types`).
+			With(`declaration`, decl).
+			With(`nested type params count`, len(nestTypeParams)).
+			With(`implicit types count`, len(implicitTypes)).
+			With(`nested type params`, nestTypeParams).
+			With(`implicit types`, implicitTypes).
+			With(`type params`, typeParams).
+			With(`instance types`, instanceTypes))
+	}
+
+	if len(typeParams) != len(instanceTypes) {
 		panic(terror.New(`the amount of type params must match the instance types`).
 			With(`declaration`, decl).
-			With(`type params count`, count).
+			With(`type params count`, len(typeParams)).
 			With(`instance types count`, len(instanceTypes)).
+			With(`nested type params`, nestTypeParams).
+			With(`implicit types`, implicitTypes).
 			With(`type params`, typeParams).
 			With(`instance types`, instanceTypes))
 	}
@@ -121,7 +134,7 @@ func newInstantiator(log *logger.Logger, proj constructs.Project, decl construct
 	log.Logf(`|- with %v`, instanceTypes)
 
 	// Check declaration is a generic type, leave otherwise.
-	if count <= 0 {
+	if len(nestTypeParams) <= 0 && len(typeParams) <= 0 {
 		log.Logf(`'- not generic`)
 		return nil, nil, false
 	}
@@ -129,13 +142,9 @@ func newInstantiator(log *logger.Logger, proj constructs.Project, decl construct
 	// Check if instance types match the declaration types.
 	// For example if `func Foo[T any]() { ... Foo[T]() ... }` is given such that
 	// the call to `Foo` doesn't need an instance since it matches the generic.
-	same := true
-	for i, tp := range typeParams {
-		if tp != instanceTypes[i] {
-			same = false
-			break
-		}
-	}
+	tpSame := func(a constructs.TypeParam, b constructs.TypeDesc) bool { return a == b }
+	same := slices.EqualFunc(nestTypeParams, instanceTypes, tpSame) &&
+		slices.EqualFunc(typeParams, implicitTypes, tpSame)
 	if same {
 		log.Logf(`'- instantiation has same type arguments as type parameters`)
 		return nil, nil, false
@@ -146,10 +155,11 @@ func newInstantiator(log *logger.Logger, proj constructs.Project, decl construct
 	found := false
 	switch decl.Kind() {
 	case kind.InterfaceDecl:
-		instance, found = decl.(constructs.InterfaceDecl).FindInstance(instanceTypes)
+		instance, found = decl.(constructs.InterfaceDecl).FindInstance(implicitTypes, instanceTypes)
 	case kind.Object:
-		instance, found = decl.(constructs.Object).FindInstance(instanceTypes)
+		instance, found = decl.(constructs.Object).FindInstance(implicitTypes, instanceTypes)
 	case kind.Method:
+		assert.ArgIsEmpty(`implicit types`, implicitTypes)
 		instance, found = decl.(constructs.Method).FindInstance(instanceTypes)
 	}
 	if found {
@@ -158,7 +168,10 @@ func newInstantiator(log *logger.Logger, proj constructs.Project, decl construct
 	}
 
 	// Create a new instantiator for the new instance.
-	conversion := make(map[constructs.TypeParam]constructs.TypeDesc, count)
+	conversion := make(map[constructs.TypeParam]constructs.TypeDesc, len(nestTypeParams)+len(typeParams))
+	for i, tp := range nestTypeParams {
+		conversion[tp] = implicitTypes[i]
+	}
 	for i, tp := range typeParams {
 		conversion[tp] = instanceTypes[i]
 	}
@@ -167,6 +180,7 @@ func newInstantiator(log *logger.Logger, proj constructs.Project, decl construct
 		log:           log,
 		proj:          proj,
 		decl:          decl,
+		implicitTypes: implicitTypes,
 		instanceTypes: instanceTypes,
 		conversion:    conversion,
 	}, nil, true
@@ -241,34 +255,38 @@ func (i *instantiator) Field(f constructs.Field) constructs.Field {
 
 func (i *instantiator) InterfaceInst(in constructs.InterfaceInst) constructs.TypeDesc {
 	decl := in.Generic()
-	in2 := i.typeDecl(decl, decl.TypeParams(), in.InstanceTypes())
+	in2 := i.typeDecl(decl, decl.ImplicitTypeParams(), decl.TypeParams(), in.ImplicitTypes(), in.InstanceTypes())
 	i.log.Logf(`|- create InterfaceInst: %v`, in2)
 	return in2
 }
 
 func (i *instantiator) ObjectInst(in constructs.ObjectInst) constructs.TypeDesc {
 	decl := in.Generic()
-	in2 := i.typeDecl(decl, decl.TypeParams(), in.InstanceTypes())
+	in2 := i.typeDecl(decl, decl.ImplicitTypeParams(), decl.TypeParams(), in.ImplicitTypes(), in.InstanceTypes())
 	i.log.Logf(`|- create ObjectInst: %v`, in2)
 	return in2
 }
 
-func (i *instantiator) InterfaceDecl(decl constructs.InterfaceDecl) constructs.TypeDesc {
-	tps := make([]constructs.TypeDesc, len(decl.TypeParams()))
-	for i, tp := range decl.TypeParams() {
+func castToTypeDesc[T constructs.TypeDesc, S ~[]T](s S) []constructs.TypeDesc {
+	tps := make([]constructs.TypeDesc, len(s))
+	for i, tp := range s {
 		tps[i] = tp
 	}
-	decl2 := i.typeDecl(decl, decl.TypeParams(), tps)
+	return tps
+}
+
+func (i *instantiator) InterfaceDecl(decl constructs.InterfaceDecl) constructs.TypeDesc {
+	implicitTypes := castToTypeDesc(decl.ImplicitTypeParams())
+	instanceTypes := castToTypeDesc(decl.TypeParams())
+	decl2 := i.typeDecl(decl, decl.ImplicitTypeParams(), decl.TypeParams(), implicitTypes, instanceTypes)
 	i.log.Logf(`|- create InterfaceDecl: %v`, decl2)
 	return decl2
 }
 
 func (i *instantiator) Object(decl constructs.Object) constructs.TypeDesc {
-	tps := make([]constructs.TypeDesc, len(decl.TypeParams()))
-	for i, tp := range decl.TypeParams() {
-		tps[i] = tp
-	}
-	decl2 := i.typeDecl(decl, decl.TypeParams(), tps)
+	implicitTypes := castToTypeDesc(decl.ImplicitTypeParams())
+	instanceTypes := castToTypeDesc(decl.TypeParams())
+	decl2 := i.typeDecl(decl, decl.ImplicitTypeParams(), decl.TypeParams(), implicitTypes, instanceTypes)
 	i.log.Logf(`|- create Object: %v`, decl2)
 	return decl2
 }
@@ -287,9 +305,11 @@ func (i *instantiator) getInstanceTypeChange(tps []constructs.TypeDesc) ([]const
 	return its, anyReplaced
 }
 
-func (i *instantiator) inProgress(decl constructs.TypeDecl, its []constructs.TypeDesc) bool {
+func (i *instantiator) inProgress(decl constructs.TypeDecl, implicitTypes, instanceTypes []constructs.TypeDesc) bool {
 	for !utils.IsNil(i) {
-		if i.decl == decl && slices.Equal(i.instanceTypes, its) {
+		if i.decl == decl &&
+			slices.Equal(i.implicitTypes, implicitTypes) &&
+			slices.Equal(i.instanceTypes, instanceTypes) {
 			return true
 		}
 		i = i.prior
@@ -297,9 +317,13 @@ func (i *instantiator) inProgress(decl constructs.TypeDecl, its []constructs.Typ
 	return false
 }
 
-func (i *instantiator) typeDecl(decl constructs.TypeDecl, tps []constructs.TypeParam, its []constructs.TypeDesc) constructs.TypeDesc {
-	its, anyReplaced := i.getInstanceTypeChange(its)
-	if !anyReplaced {
+func (i *instantiator) typeDecl(decl constructs.TypeDecl,
+	nestTypeParams, typeParams []constructs.TypeParam,
+	implicitTypes, instanceTypes []constructs.TypeDesc) constructs.TypeDesc {
+
+	implicitTypes, anyImplicitReplaced := i.getInstanceTypeChange(implicitTypes)
+	instanceTypes, anyInstanceReplaced := i.getInstanceTypeChange(instanceTypes)
+	if !(anyImplicitReplaced || anyInstanceReplaced) {
 		return decl
 	}
 
@@ -308,20 +332,22 @@ func (i *instantiator) typeDecl(decl constructs.TypeDecl, tps []constructs.TypeP
 	// being instantiated being used as part of the type definition
 	// directly, e.g. `type Foo[T any] interface { Get() Foo[T]  }` or
 	// indirectly. e.g. `type Foo[T any] interface { Children() List[Foo[T]] }`
-	if i.inProgress(decl, its) {
-		typ, found := i.proj.FindType(decl.Package().Path(), decl.Name(), its, true, false)
+	if i.inProgress(decl, implicitTypes, instanceTypes) {
+		typ, found := i.proj.FindType(decl.Package().Path(), decl.Name(), decl.Nest(), implicitTypes, instanceTypes, true, false)
 		if found {
 			return typ
 		}
 		return i.proj.NewTempReference(constructs.TempReferenceArgs{
 			PackagePath:   decl.Package().Path(),
 			Name:          decl.Name(),
-			InstanceTypes: its,
+			ImplicitTypes: implicitTypes,
+			InstanceTypes: instanceTypes,
+			Nest:          decl.Nest(),
 			Package:       decl.Package().Source(),
 		})
 	}
 
-	i2, existing, _ := newInstantiator(i.log, i.proj, decl, nil, tps, nil, its)
+	i2, existing, _ := newInstantiator(i.log, i.proj, decl, nestTypeParams, typeParams, implicitTypes, instanceTypes)
 	if !utils.IsNil(existing) {
 		return existing.(constructs.TypeDesc)
 	}
@@ -337,6 +363,7 @@ func (i *instantiator) createInstance(realType types.Type) constructs.Construct 
 			RealType:      realType,
 			Generic:       d,
 			Resolved:      i.InterfaceDesc(d.Interface()),
+			ImplicitTypes: i.implicitTypes,
 			InstanceTypes: i.instanceTypes,
 		})
 		i.log.Logf(`'- instantiated interface: %v`, inst)
@@ -348,12 +375,14 @@ func (i *instantiator) createInstance(realType types.Type) constructs.Construct 
 			RealType:      realType,
 			Generic:       d,
 			ResolvedData:  i.StructDesc(d.Data()),
+			ImplicitTypes: i.implicitTypes,
 			InstanceTypes: i.instanceTypes,
 		})
 		i.log.Logf(`'- instantiated object: %v`, obj)
 		return obj
 
 	case kind.Method:
+		assert.ArgIsEmpty(`implicit types`, i.implicitTypes)
 		d := i.decl.(constructs.Method)
 		md := i.proj.NewMethodInst(constructs.MethodInstArgs{
 			Generic:       d,
@@ -390,8 +419,9 @@ func (i *instantiator) TempReference(r constructs.TempReference) constructs.Type
 		return i.TypeDesc(r.ResolvedType())
 	}
 
-	instTp := applyToSlice(r.InstanceTypes(), i.TypeDesc)
-	typ, found := i.proj.FindType(r.PackagePath(), r.Name(), instTp, true, false)
+	implicitTypes := applyToSlice(r.ImplicitTypes(), i.TypeDesc)
+	instanceTypes := applyToSlice(r.InstanceTypes(), i.TypeDesc)
+	typ, found := i.proj.FindType(r.PackagePath(), r.Name(), r.Nest(), implicitTypes, instanceTypes, true, false)
 	if found {
 		return typ
 	}
@@ -399,7 +429,9 @@ func (i *instantiator) TempReference(r constructs.TempReference) constructs.Type
 	r2 := i.proj.NewTempReference(constructs.TempReferenceArgs{
 		PackagePath:   r.PackagePath(),
 		Name:          r.Name(),
-		InstanceTypes: instTp,
+		Nest:          r.Nest(),
+		ImplicitTypes: implicitTypes,
+		InstanceTypes: instanceTypes,
 		Package:       i.decl.Package().Source(),
 	})
 	i.log.Logf(`|- create TempReference: %v`, r2)
