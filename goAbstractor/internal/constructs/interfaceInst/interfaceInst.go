@@ -168,8 +168,8 @@ func (i *instanceImp) ToJson(ctx *jsonify.Context) jsonify.Datum {
 		AddIf(ctx, ctx.IsDebugIndexIncluded(), `index`, i.index).
 		Add(ctx.OnlyIndex(), `generic`, i.generic).
 		Add(ctx.OnlyIndex(), `resolved`, i.resolved).
-		Add(ctx.Short(), `implicitTypes`, i.implicitTypes).
-		Add(ctx.Short(), `instanceTypes`, i.instanceTypes)
+		AddNonZero(ctx.Short(), `implicitTypes`, i.implicitTypes).
+		AddNonZero(ctx.Short(), `instanceTypes`, i.instanceTypes)
 }
 
 func (i *instanceImp) ToStringer(s stringer.Stringer) {

@@ -6,6 +6,8 @@ import (
 	"go/types"
 	"iter"
 
+	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/abstractor/querier"
+	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs"
 	"github.com/Snow-Gremlin/goToolbox/collections/stack"
 	"github.com/Snow-Gremlin/goToolbox/terrors/terror"
 	"github.com/Snow-Gremlin/goToolbox/utils"
@@ -82,6 +84,25 @@ func getNamed(t types.Type) (*types.Named, *types.Pointer) {
 		}
 	}
 	return nil, nil
+}
+
+func inNest(querier *querier.Querier, nest constructs.NestType, o types.Object) bool {
+	fn := querier.NestingFunc(o)
+	if fn == nil {
+		return false
+	}
+
+	switch n := nest.(type) {
+	case constructs.Method:
+		return fn.Name() == n.Name() && fn.Pkg().Path() == n.Package().Path()
+	case constructs.TempDeclRef:
+		return fn.Name() == n.Name() && fn.Pkg().Path() == n.PackagePath()
+	default:
+		panic(terror.New(`unexpected nest type for inNest`).
+			WithType(`nest type`, n).
+			With(`nest`, n).
+			With(`object`, o))
+	}
 }
 
 // walkType walks the tree of types. This will only return unique

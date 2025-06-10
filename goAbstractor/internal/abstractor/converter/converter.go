@@ -9,6 +9,7 @@ import (
 
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/abstractor/baker"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/abstractor/instantiator"
+	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/abstractor/querier"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs/hint"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs/innate"
@@ -26,6 +27,7 @@ type Converter interface {
 
 func New(
 	log *logger.Logger,
+	querier *querier.Querier,
 	baker baker.Baker,
 	proj constructs.Project,
 	curPkg constructs.Package,
@@ -41,6 +43,7 @@ func New(
 
 	return &convImp{
 		log:           log2,
+		querier:       querier,
 		baker:         baker,
 		proj:          proj,
 		curPkg:        curPkg,
@@ -53,6 +56,7 @@ func New(
 
 type convImp struct {
 	log           *logger.Logger
+	querier       *querier.Querier
 	baker         baker.Baker
 	proj          constructs.Project
 	curPkg        constructs.Package

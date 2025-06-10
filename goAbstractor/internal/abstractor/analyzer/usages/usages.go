@@ -13,6 +13,7 @@ import (
 
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/abstractor/baker"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/abstractor/converter"
+	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/abstractor/querier"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/assert"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/logger"
@@ -40,24 +41,24 @@ func newUsage() Usages {
 }
 
 type usagesImp struct {
-	log    *logger.Logger
-	fSet   *token.FileSet
-	info   *types.Info
-	proj   constructs.Project
-	curPkg constructs.Package
-	baker  baker.Baker
-	conv   converter.Converter
-	root   ast.Node
-	usages Usages
+	log     *logger.Logger
+	querier *querier.Querier
+	proj    constructs.Project
+	curPkg  constructs.Package
+	baker   baker.Baker
+	conv    converter.Converter
+	root    ast.Node
+	usages  Usages
 
 	compLits  collections.Stack[*ast.CompositeLit]
 	pending   constructs.Construct
 	pendingSE bool
 }
 
-func Calculate(log *logger.Logger, info *types.Info, proj constructs.Project,
+func Calculate(log *logger.Logger, querier *querier.Querier, proj constructs.Project,
 	curPkg constructs.Package, baker baker.Baker, conv converter.Converter, root ast.Node) Usages {
 
+	info := querier.Info()
 	assert.ArgNotNil(`info`, info)
 	assert.ArgNotNil(`info.Defs`, info.Defs)
 	assert.ArgNotNil(`info.Instances`, info.Instances)
@@ -73,7 +74,7 @@ func Calculate(log *logger.Logger, info *types.Info, proj constructs.Project,
 	log.Logf(`usages`)
 	log2 := log.Group(`usages`).Prefix(`|  `)
 
-	fSet := proj.Locs().FileSet()
+	fSet := querier.FileSet()
 	assert.ArgNotNil(`fSet`, fSet)
 
 	start := root
@@ -88,8 +89,7 @@ func Calculate(log *logger.Logger, info *types.Info, proj constructs.Project,
 
 	ui := &usagesImp{
 		log:      log2,
-		fSet:     fSet,
-		info:     info,
+		querier:  querier,
 		proj:     proj,
 		curPkg:   curPkg,
 		baker:    baker,
@@ -105,11 +105,10 @@ func Calculate(log *logger.Logger, info *types.Info, proj constructs.Project,
 }
 
 func (ui *usagesImp) pos(pr posReader) token.Position {
-	pos := token.NoPos
 	if !utils.IsNil(pr) {
-		pos = pr.Pos()
+		return ui.querier.Pos(pr.Pos())
 	}
-	return ui.fSet.Position(pos)
+	return ui.querier.Pos(token.NoPos)
 }
 
 func (ui *usagesImp) hasPending() bool {
@@ -175,6 +174,14 @@ func (ui *usagesImp) setPendingObject(o types.Object, instanceType []constructs.
 		return
 	}
 
+	var nest constructs.NestType
+	var implicitTypes []constructs.TypeDesc
+	if inNest(ui.querier, ui.conv.Nest(), o) {
+		ui.log.Logf(`    - in nest: %v`, ui.conv.Nest())
+		nest = ui.conv.Nest()
+		implicitTypes = ui.conv.ImplicitTypes()
+	}
+
 	if tn, ok := o.(*types.TypeName); ok {
 		ui.log.Logf(`    - type name: %v: %v`, o, tn)
 
@@ -195,7 +202,7 @@ func (ui *usagesImp) setPendingObject(o types.Object, instanceType []constructs.
 			return
 		}
 
-		typ, found := ui.proj.FindType(pkgPath, o.Name(), ui.conv.Nest(), ui.conv.ImplicitTypes(), instanceType, true, false)
+		typ, found := ui.proj.FindType(pkgPath, o.Name(), nest, implicitTypes, instanceType, true, false)
 		if found {
 			ui.log.Logf(`      + type found: %v`, typ)
 			ui.pending = typ
@@ -207,8 +214,8 @@ func (ui *usagesImp) setPendingObject(o types.Object, instanceType []constructs.
 			RealType:      o.Type(),
 			PackagePath:   pkgPath,
 			Name:          o.Name(),
-			Nest:          ui.conv.Nest(),
-			ImplicitTypes: ui.conv.ImplicitTypes(),
+			Nest:          nest,
+			ImplicitTypes: implicitTypes,
 			InstanceTypes: instanceType,
 			Package:       ui.curPkg.Source(),
 		})
@@ -219,7 +226,7 @@ func (ui *usagesImp) setPendingObject(o types.Object, instanceType []constructs.
 		ui.log.Logf(`    - type var: %v`, v)
 		if v.IsField() {
 			if compLit := ui.compLits.Peek(); !utils.IsNil(compLit) {
-				compType := ui.info.Types[compLit.Type].Type
+				compType := ui.querier.GetType(compLit.Type)
 				ui.log.Logf(`      - field sel: %v => %v`, compType, v.Name())
 				ui.setPendingType(compType)
 				if ui.hasPending() {
@@ -243,7 +250,7 @@ func (ui *usagesImp) setPendingObject(o types.Object, instanceType []constructs.
 	}
 
 	pkgPath := getPkgPath(o)
-	typ, found := ui.proj.FindDecl(pkgPath, o.Name(), ui.conv.Nest(), ui.conv.ImplicitTypes(), instanceType, true, false)
+	typ, found := ui.proj.FindDecl(pkgPath, o.Name(), nest, implicitTypes, instanceType, true, false)
 	if found {
 		ui.log.Logf(`      + decl found: %v`, typ)
 		ui.pending = typ
@@ -260,8 +267,8 @@ func (ui *usagesImp) setPendingObject(o types.Object, instanceType []constructs.
 	ui.pending = ui.proj.NewTempDeclRef(constructs.TempDeclRefArgs{
 		PackagePath:   pkgPath,
 		Name:          o.Name(),
-		Nest:          ui.conv.Nest(),
-		ImplicitTypes: ui.conv.ImplicitTypes(),
+		Nest:          nest,
+		ImplicitTypes: implicitTypes,
 		InstanceTypes: instanceType,
 	})
 }
@@ -323,13 +330,13 @@ func (ui *usagesImp) addInvoke(c constructs.Construct) {
 }
 
 func (ui *usagesImp) handleBuiltinCall(call *ast.CallExpr) {
-	switch name := getName(ui.fSet, call.Fun); name {
+	switch name := getName(ui.querier.FileSet(), call.Fun); name {
 	case `append`, `cap`, `complex`, `copy`, `imag`, `len`,
 		`make`, `max`, `min`, `new`, `real`, `recover`,
 		`unsafe.Alignof`, `unsafe.Offsetof`, `unsafe.Sizeof`,
 		`unsafe.String`, `unsafe.StringData`, `unsafe.Slice`,
 		`unsafe.SliceData`, `unsafe.Add`:
-		if typ, ok := ui.info.Types[call]; ok {
+		if typ, ok := ui.querier.Info().Types[call]; ok {
 			ui.setPendingType(typ.Type)
 		}
 		return
@@ -442,7 +449,7 @@ func (ui *usagesImp) processCall(call *ast.CallExpr) {
 
 	// Process the invocation target,
 	// e.g. `Bar` in `(*foo.Bar)( ⋯ )` or `foo.Bar( ⋯ )`.
-	typ, ok := ui.info.Types[call.Fun]
+	typ, ok := ui.querier.Info().Types[call.Fun]
 	if !ok {
 		panic(terror.New(`failed to find type info`).
 			With(`function`, call.Fun).
@@ -487,7 +494,7 @@ func (ui *usagesImp) processIdent(id *ast.Ident) {
 	ui.log.Logf(`>>> processIdent: %v @ %s`, id, ui.pos(id))
 
 	// Check if this identifier is part of a definition.
-	if def, ok := ui.info.Defs[id]; ok {
+	if def, ok := ui.querier.Info().Defs[id]; ok {
 		ui.log.Logf(`  > processIdent: def object: %v`, def)
 		ui.setPendingObject(def, nil)
 		ui.addWrite(ui.pending, ui.pendingSE)
@@ -495,7 +502,7 @@ func (ui *usagesImp) processIdent(id *ast.Ident) {
 	}
 
 	// Check if the identifier is being used.
-	obj, ok := ui.info.Uses[id]
+	obj, ok := ui.querier.Info().Uses[id]
 	if !ok {
 		ui.log.Logf(`  > processIdent: no uses`)
 		return
@@ -520,7 +527,7 @@ func (ui *usagesImp) processIdent(id *ast.Ident) {
 
 	// Find any type arguments for this object.
 	var instType []constructs.TypeDesc
-	if itList := ui.info.Instances[id].TypeArgs; !utils.IsNil(itList) {
+	if itList := ui.querier.Info().Instances[id].TypeArgs; !utils.IsNil(itList) {
 		instType = ui.conv.ConvertInstanceTypes(itList, obj.Name())
 	} else if itList := getInstTypes(obj); !utils.IsNil(itList) {
 		instType = ui.conv.ConvertInstanceTypes(itList, obj.Name())
@@ -539,7 +546,7 @@ func (ui *usagesImp) processIncDec(stmt *ast.IncDecStmt) {
 
 	// Handle `*(func())++` where the increment is on
 	// the returned type, or `mapFoo["cat"]++`.
-	if tv, ok := ui.info.Types[stmt.X]; ok {
+	if tv, ok := ui.querier.Info().Types[stmt.X]; ok {
 		ui.setPendingType(tv.Type)
 		ui.flushPendingToWrite()
 	}
@@ -556,7 +563,7 @@ func (ui *usagesImp) processIndex(expr *ast.IndexExpr) {
 	ui.flushPendingToRead()
 
 	// Prepare the pending after the indexing.
-	if tv, ok := ui.info.Types[expr]; ok {
+	if tv, ok := ui.querier.Info().Types[expr]; ok {
 		if _, ok := tv.Type.(*types.Tuple); ok {
 			// The indexing returned a (value, ok) tuple.
 			// The results are probably used in a function parameter or an
@@ -632,7 +639,7 @@ func (ui *usagesImp) processSelector(sel *ast.SelectorExpr) {
 		return
 	}
 
-	selObj, ok := ui.info.Selections[sel]
+	selObj, ok := ui.querier.Info().Selections[sel]
 	if !ok {
 		ui.log.Logf(`  > no selection info: %v`, sel)
 		return
@@ -667,7 +674,7 @@ func (ui *usagesImp) processTypeAssert(exp *ast.TypeAssertExpr) {
 		return
 	}
 
-	tv, ok := ui.info.Types[exp.Type]
+	tv, ok := ui.querier.Info().Types[exp.Type]
 	if !ok {
 		panic(terror.New(`Expected a type in a TypeAssert for usages.`).
 			With(`type`, types.ExprString(exp.Type)).

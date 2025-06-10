@@ -15,6 +15,7 @@ import (
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/abstractor/analyzer"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/abstractor/baker"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/abstractor/converter"
+	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/abstractor/querier"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/abstractor/resolver"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs/innate"
@@ -30,15 +31,15 @@ type Config struct {
 
 func Abstract(cfg Config) constructs.Project {
 	var (
-		log  = cfg.Log
-		fSet = cfg.Packages[0].Fset
-		locs = locs.NewSet(fSet)
-		proj = project.New(locs)
-		bk   = baker.New(proj)
+		log     = cfg.Log
+		querier = querier.New(cfg.Packages)
+		locs    = locs.NewSet(querier.FileSet())
+		proj    = project.New(locs)
+		bk      = baker.New(proj)
 	)
 
 	ab := &abstractor{
-		packages:  cfg.Packages,
+		querier:   querier,
 		log:       log,
 		baker:     bk,
 		proj:      proj,
@@ -53,7 +54,7 @@ func Abstract(cfg Config) constructs.Project {
 }
 
 type abstractor struct {
-	packages      []*packages.Package
+	querier       *querier.Querier
 	log           *logger.Logger
 	baker         baker.Baker
 	proj          constructs.Project
@@ -65,24 +66,20 @@ type abstractor struct {
 }
 
 func (ab *abstractor) pos(pos token.Pos) token.Position {
-	return ab.curPkg.Source().Fset.Position(pos)
-}
-
-func (ab *abstractor) info() *types.Info {
-	return ab.curPkg.Source().TypesInfo
+	return ab.querier.Pos(pos)
 }
 
 func (ab *abstractor) converter() converter.Converter {
-	return converter.New(ab.log, ab.baker, ab.proj, ab.curPkg, ab.curNest, ab.implicitTypes, ab.tpReplacer, ab.typeCache)
+	return converter.New(ab.log, ab.querier, ab.baker, ab.proj,
+		ab.curPkg, ab.curNest, ab.implicitTypes, ab.tpReplacer, ab.typeCache)
 }
 
 func (ab *abstractor) abstractProject() {
 	ab.log.Log(`abstract project`)
 	log2 := ab.log.Group(`packages`).Prefix(`|  `)
-	packages.Visit(ab.packages, func(src *packages.Package) bool {
+	ab.querier.ForeachPackage(func(src *packages.Package) {
 		ab.abstractPackage(src, log2)
-		return true
-	}, nil)
+	})
 }
 
 func (ab *abstractor) abstractPackage(src *packages.Package, log *logger.Logger) {
@@ -142,20 +139,15 @@ func (ab *abstractor) abstractGenDecl(decl *ast.GenDecl) {
 }
 
 func (ab *abstractor) abstractTypeSpec(spec *ast.TypeSpec) {
-	tv, has := ab.info().Types[spec.Type]
-	if !has {
-		panic(terror.New(`type specification not found in types info`).
-			With(`pos`, ab.pos(spec.Pos())))
-	}
-
-	context := tv.Type.String()
+	t := ab.querier.GetType(spec.Type)
+	context := t.String()
 	loc := ab.proj.Locs().NewLoc(spec.Pos())
 	tp := ab.abstractTypeParams(spec.TypeParams, context)
-	typ := ab.converter().ConvertType(tv.Type, context)
+	typ := ab.converter().ConvertType(t, context)
 
 	if it, ok := typ.(constructs.InterfaceDesc); ok {
 		ab.proj.NewInterfaceDecl(constructs.InterfaceDeclArgs{
-			RealType:   tv.Type,
+			RealType:   t,
 			Package:    ab.curPkg,
 			Name:       spec.Name.Name,
 			Exported:   spec.Name.IsExported(),
@@ -183,7 +175,7 @@ func (ab *abstractor) abstractTypeSpec(spec *ast.TypeSpec) {
 	}
 
 	ab.proj.NewObject(constructs.ObjectArgs{
-		RealType:   tv.Type,
+		RealType:   t,
 		Package:    ab.curPkg,
 		Name:       spec.Name.Name,
 		Exported:   spec.Name.IsExported(),
@@ -210,13 +202,8 @@ func (ab *abstractor) abstractTypeParam(field *ast.Field, context string) []cons
 		return ns
 	}
 
-	tv, has := ab.info().Types[field.Type]
-	if !has {
-		panic(terror.New(`field not found in types info`).
-			With(`pos`, ab.pos(field.Pos())))
-	}
-
-	typ := ab.converter().ConvertType(tv.Type, context)
+	t := ab.querier.GetType(field.Type)
+	typ := ab.converter().ConvertType(t, context)
 	for _, name := range field.Names {
 		named := ab.proj.NewTypeParam(constructs.TypeParamArgs{
 			Name: name.Name,
@@ -227,20 +214,19 @@ func (ab *abstractor) abstractTypeParam(field *ast.Field, context string) []cons
 	return ns
 }
 
+func (ab *abstractor) analyze(node ast.Node) constructs.Metrics {
+	return analyzer.Analyze(ab.log, ab.querier, ab.proj, ab.curPkg, ab.baker, ab.converter(), node)
+}
+
 func (ab *abstractor) abstractValueSpec(spec *ast.ValueSpec, isConst bool) {
 	var metrics constructs.Metrics
 	for i, name := range spec.Names {
 		if i < len(spec.Values) {
-			metrics = analyzer.Analyze(ab.log, ab.info(), ab.proj, ab.curPkg, ab.baker, ab.converter(), spec.Values[i])
+			metrics = ab.analyze(spec.Values[i])
 		}
 
-		tv, has := ab.info().Defs[name]
-		if !has {
-			panic(terror.New(`value specification not found in types info`).
-				With(`pos`, ab.pos(spec.Pos())))
-		}
-
-		typ := ab.converter().ConvertType(tv.Type(), name.Name)
+		obj := ab.querier.GetDef(name)
+		typ := ab.converter().ConvertType(obj.Type(), name.Name)
 		ab.proj.NewValue(constructs.ValueArgs{
 			Package:  ab.curPkg,
 			Name:     name.Name,
@@ -282,13 +268,7 @@ func (ab *abstractor) abstractReceiver(decl *ast.FuncDecl) (bool, string) {
 	}
 
 	ptrRecv := false
-	tv, has := ab.info().Types[decl.Recv.List[0].Type]
-	if !has {
-		panic(terror.New(`function receiver not found in types info`).
-			With(`pos`, ab.pos(decl.Pos())))
-	}
-
-	recv := tv.Type
+	recv := ab.querier.GetType(decl.Recv.List[0].Type)
 	if p, ok := recv.(*types.Pointer); ok {
 		ptrRecv = true
 		recv = p.Elem()
@@ -307,7 +287,7 @@ func (ab *abstractor) abstractReceiver(decl *ast.FuncDecl) (bool, string) {
 }
 
 func (ab *abstractor) abstractFuncDecl(decl *ast.FuncDecl) {
-	info := ab.info()
+	info := ab.querier.Info()
 	obj := info.Defs[decl.Name]
 	loc := ab.proj.Locs().NewLoc(decl.Pos())
 
@@ -327,7 +307,7 @@ func (ab *abstractor) abstractFuncDecl(decl *ast.FuncDecl) {
 	fmt.Printf(">> abstractor: abstractFuncDecl: nest:          %v\n", ab.curNest)       // TODO: REMOVE
 	fmt.Printf(">> abstractor: abstractFuncDecl: implicitTypes: %v\n", ab.implicitTypes) // TODO: REMOVE
 
-	metrics := analyzer.Analyze(ab.log, ab.info(), ab.proj, ab.curPkg, ab.baker, ab.converter(), decl)
+	metrics := ab.analyze(decl)
 	ab.clearTypeParamOverrides()
 
 	tp := ab.abstractTypeParams(decl.Type.TypeParams, decl.Name.Name)
@@ -359,6 +339,7 @@ func (ab *abstractor) abstractNestedTypes(body *ast.BlockStmt) {
 	if body == nil {
 		return
 	}
+	// TODO: Simplify the following to only look for type specs.
 	ast.Inspect(body, func(node ast.Node) bool {
 		if stmt, ok := node.(*ast.DeclStmt); ok {
 			if decl, ok := stmt.Decl.(*ast.GenDecl); ok {

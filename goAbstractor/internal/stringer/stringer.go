@@ -22,23 +22,19 @@ type Stringerable interface {
 }
 
 type stringerImp struct {
-	buf    *strings.Builder
-	marked collections.Set[Stringerable]
+	buf        *strings.Builder
+	inProgress collections.Set[Stringerable]
 }
 
 func New() Stringer {
 	return &stringerImp{
-		buf:    &strings.Builder{},
-		marked: set.New[Stringerable](),
+		buf:        &strings.Builder{},
+		inProgress: set.New[Stringerable](),
 	}
 }
 
 func String(args ...any) string {
 	return New().Write(args...).String()
-}
-
-func (s *stringerImp) mark(s2 Stringerable) bool {
-	return s2 != nil && s.marked.Add(s2)
 }
 
 func (s *stringerImp) WriteString(text string) Stringer {
@@ -51,10 +47,13 @@ func (s *stringerImp) WriteString(text string) Stringer {
 func (s *stringerImp) writeOne(arg any) {
 	switch t := arg.(type) {
 	case Stringerable:
-		if s.mark(t) {
-			t.ToStringer(s)
-		} else {
-			s.WriteString(`λ`)
+		if t != nil {
+			if s.inProgress.Add(t) {
+				t.ToStringer(s)
+				s.inProgress.Remove(t)
+			} else {
+				s.WriteString(`λ`)
+			}
 		}
 	case fmt.Stringer:
 		s.WriteString(t.String())

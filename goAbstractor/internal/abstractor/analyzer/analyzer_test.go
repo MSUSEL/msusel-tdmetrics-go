@@ -17,6 +17,7 @@ import (
 
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/abstractor/baker"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/abstractor/converter"
+	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/abstractor/querier"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs/project"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/jsonify"
@@ -2209,7 +2210,8 @@ func newTestTool(t *testing.T) *testTool {
 	baker := baker.New(proj)
 	log := logger.New()
 	typeCache := map[any]any{}
-	conv := converter.New(log, baker, proj, curPkg, nil, nil, nil, typeCache)
+	querier := querier.NewSimple(info, fSet)
+	conv := converter.New(log, querier, baker, proj, curPkg, nil, nil, nil, typeCache)
 	return &testTool{
 		t:      t,
 		proj:   proj,
@@ -2252,7 +2254,8 @@ func parseExpr(t *testing.T, lines ...string) *testTool {
 	err = types.CheckExpr(tt.fSet, nil, token.NoPos, expr, tt.info)
 	check.NoError(t).Require(err)
 
-	tt.m = Analyze(logger.New(), tt.info, tt.proj, tt.curPkg, tt.baker, tt.conv, expr)
+	querier := querier.NewSimple(tt.info, tt.fSet)
+	tt.m = Analyze(logger.New(), querier, tt.proj, tt.curPkg, tt.baker, tt.conv, expr)
 	tt.proj.UpdateIndices()
 	return tt
 }
@@ -2271,7 +2274,8 @@ func parseDecl(t *testing.T, name string, lines ...string) *testTool {
 	target := findNode(file, name)
 	check.NotNil(t).Name(`found name`).With(`name`, name).Assert(target)
 
-	tt.m = Analyze(logger.New(), tt.info, tt.proj, tt.curPkg, tt.baker, tt.conv, target)
+	querier := querier.NewSimple(tt.info, tt.fSet)
+	tt.m = Analyze(logger.New(), querier, tt.proj, tt.curPkg, tt.baker, tt.conv, target)
 	tt.proj.UpdateIndices()
 	return tt
 }

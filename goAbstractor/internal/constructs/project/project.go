@@ -174,6 +174,12 @@ func (p *projectImp) FindType(pkgPath, name string, nest constructs.NestType,
 		if !panicOnNotFound {
 			return nil, false
 		}
+
+		fmt.Print(">>> Interface:\n\t", pkg.InterfaceDecls().Enumerate().Join("\n\t"), "\n") // TODO: REMOVE
+		fmt.Print(">>> Objects:\n\t", pkg.Objects().Enumerate().Join("\n\t"), "\n")          // TODO: REMOVE
+		fmt.Print(">>> Methods:\n\t", pkg.Methods().Enumerate().Join("\n\t"), "\n")          // TODO: REMOVE
+		fmt.Print(">>> Values:\n\t", pkg.Values().Enumerate().Join("\n\t"), "\n")            // TODO: REMOVE
+
 		panic(terror.New(`failed to find type for type reference`).
 			With(`type name`, name).
 			With(`nest`, nest).

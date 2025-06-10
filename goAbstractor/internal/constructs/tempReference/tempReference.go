@@ -1,7 +1,6 @@
 package tempReference
 
 import (
-	"fmt"
 	"go/types"
 
 	"github.com/Snow-Gremlin/goToolbox/comp"
@@ -49,10 +48,10 @@ func newTempReference(args constructs.TempReferenceArgs) constructs.TempReferenc
 	}
 	assert.ArgNotNil(`real type`, args.RealType)
 
-	if args.Name == `nested` { // TODO: REMOVE
-		fmt.Printf("\n>>%+v\n", args)
-		panic(`BOOM`)
-	}
+	//if args.Name == `nested` { // TODO: REMOVE
+	//	fmt.Printf("\n>>%+v\n", args)
+	//	panic(`BOOM`)
+	//}
 
 	return &tempReferenceImp{
 		realType:      args.RealType,
