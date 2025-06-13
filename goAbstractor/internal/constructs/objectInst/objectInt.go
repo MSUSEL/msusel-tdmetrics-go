@@ -103,12 +103,12 @@ func Comparer() comp.Comparer[constructs.ObjectInst] {
 	}
 }
 
-func (i *instanceImp) RemoveTempReferences() {
+func (i *instanceImp) RemoveTempReferences(required bool) {
 	for j, it := range i.implicitTypes {
-		i.implicitTypes[j] = constructs.ResolvedTempReference(it)
+		i.implicitTypes[j] = constructs.ResolvedTempReference(it, required)
 	}
 	for j, it := range i.instanceTypes {
-		i.instanceTypes[j] = constructs.ResolvedTempReference(it)
+		i.instanceTypes[j] = constructs.ResolvedTempReference(it, required)
 	}
 }
 

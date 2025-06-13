@@ -1,6 +1,8 @@
 package packageCon
 
 import (
+	"fmt"
+
 	"github.com/Snow-Gremlin/goToolbox/collections"
 	"github.com/Snow-Gremlin/goToolbox/collections/sortedSet"
 	"github.com/Snow-Gremlin/goToolbox/comp"
@@ -152,13 +154,17 @@ func (p *packageImp) findObject(name string, nest constructs.NestType) (construc
 
 func (p *packageImp) findMethod(name string) (constructs.Method, bool) {
 	return p.methods.Enumerate().
-		Where(func(t constructs.Method) bool { return !t.HasReceiver() && t.Name() == name }).
+		Where(func(t constructs.Method) bool {
+			return !t.HasReceiver() && t.Name() == name
+		}).
 		First()
 }
 
 func (p *packageImp) findValues(name string) (constructs.Value, bool) {
 	return p.values.Enumerate().
-		Where(func(t constructs.Value) bool { return t.Name() == name }).
+		Where(func(t constructs.Value) bool {
+			return t.Name() == name
+		}).
 		First()
 }
 
@@ -188,6 +194,21 @@ func (p *packageImp) FindDecl(name string, nest constructs.NestType) constructs.
 		return v
 	}
 	return nil
+}
+
+func (p *packageImp) DebugPrintDecl() {
+	if !p.InterfaceDecls().Empty() {
+		fmt.Printf("Interface:\n\t%s\n", p.InterfaceDecls().Enumerate().Join("\n\t"))
+	}
+	if !p.Objects().Empty() {
+		fmt.Printf("Objects:\n\t%s\n", p.Objects().Enumerate().Join("\n\t"))
+	}
+	if !p.Methods().Empty() {
+		fmt.Printf("Methods:\n\t%s\n", p.Methods().Enumerate().Join("\n\t"))
+	}
+	if !p.Values().Empty() {
+		fmt.Printf("Values:\n\t%s\n", p.Values().Enumerate().Join("\n\t"))
+	}
 }
 
 func (d *packageImp) CompareTo(other constructs.Construct) int {

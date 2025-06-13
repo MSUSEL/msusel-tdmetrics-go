@@ -38,9 +38,6 @@ func New(
 ) Converter {
 	log2 := log.Group(`converter`).Prefix(`|  `)
 
-	fmt.Printf(">> converter: New: nest:          %v\n", nest)          // TODO: REMOVE
-	fmt.Printf(">> converter: New: implicitTypes: %v\n", implicitTypes) // TODO: REMOVE
-
 	return &convImp{
 		log:           log2,
 		querier:       querier,

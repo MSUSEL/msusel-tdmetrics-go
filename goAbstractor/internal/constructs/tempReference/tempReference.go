@@ -34,9 +34,6 @@ func newTempReference(args constructs.TempReferenceArgs) constructs.TempReferenc
 	if len(args.ImplicitTypes) > 0 {
 		assert.ArgNotNil(`nest`, args.Nest)
 	}
-	//if !utils.IsNil(args.Nest) {
-	//	assert.ArgsHaveSameLength(`implicit types`, args.Nest.TypeParams(), args.ImplicitTypes)
-	//}
 
 	if utils.IsNil(args.RealType) {
 		assert.ArgNotNil(`package`, args.Package)
@@ -47,11 +44,6 @@ func newTempReference(args constructs.TempReferenceArgs) constructs.TempReferenc
 			With("Name", args.Name))
 	}
 	assert.ArgNotNil(`real type`, args.RealType)
-
-	//if args.Name == `nested` { // TODO: REMOVE
-	//	fmt.Printf("\n>>%+v\n", args)
-	//	panic(`BOOM`)
-	//}
 
 	return &tempReferenceImp{
 		realType:      args.RealType,
@@ -88,6 +80,12 @@ func (r *tempReferenceImp) SetResolution(typ constructs.TypeDesc) {
 	assert.ArgIsNil(`resolved`, r.typ)
 	assert.ArgNotNil(`type`, typ)
 	r.typ = typ
+}
+
+func (r *tempReferenceImp) RemoveTempDeclRefs(required bool) {
+	if !utils.IsNil(r.nest) {
+		r.nest = constructs.ResolvedTempDeclRef(r.nest, required).(constructs.NestType)
+	}
 }
 
 func (r *tempReferenceImp) CompareTo(other constructs.Construct) int {
@@ -133,12 +131,8 @@ func (r *tempReferenceImp) ToStringer(s stringer.Stringer) {
 	if len(r.pkgPath) > 0 {
 		s.Write(r.pkgPath, `.`)
 	}
-	if r.nest != nil {
-		if named, ok := r.nest.(interface{ Name() string }); ok {
-			s.Write(named.Name(), `.`)
-		} else {
-			s.Write(`<`, r.nest.Kind(), `>`, `.`)
-		}
+	if !utils.IsNil(r.nest) {
+		s.Write(r.nest.Name(), `:`)
 	}
 	s.Write(r.name).
 		WriteList(`[`, `, `, `;]`, r.implicitTypes).

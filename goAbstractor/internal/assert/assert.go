@@ -51,6 +51,8 @@ func ArgsHaveSameLength(names string, value1, value2 any) {
 		panic(terror.New(`argument must be expected length`).
 			With(`first count`, len1).
 			With(`second count`, len2).
+			With(`first`, value1).
+			With(`second`, value2).
 			With(`names`, names))
 	}
 }

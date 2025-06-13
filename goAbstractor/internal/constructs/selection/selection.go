@@ -37,9 +37,9 @@ func (s *selectionImp) Name() string        { return s.name }
 
 func (s *selectionImp) Origin() constructs.Construct { return s.origin }
 
-func (s *selectionImp) RemoveTempReferences() {
+func (s *selectionImp) RemoveTempReferences(required bool) {
 	if s.origin.Kind() == kind.TempReference {
-		s.origin = constructs.ResolvedTempReference(s.origin.(constructs.TempReference))
+		s.origin = constructs.ResolvedTempReference(s.origin.(constructs.TempReference), required)
 	}
 }
 

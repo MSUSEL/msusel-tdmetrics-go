@@ -47,7 +47,8 @@ type TempReferenceContainer interface {
 	// RemoveTempReferences should replace any found reference with the type
 	// description that was referenced. References will already be looked up.
 	// This will also remove any TempTypeParamRefs.
-	RemoveTempReferences()
+	// If required is true, then it will panic if a reference is not replicable.
+	RemoveTempReferences(required bool)
 }
 
 // TempDeclRefContainer is any construct that can contain a temporary method reference.
@@ -56,11 +57,15 @@ type TempDeclRefContainer interface {
 
 	// RemoveTempDeclRefs should replace any found method reference with the
 	// method that was referenced. References will already be looked up.
-	RemoveTempDeclRefs()
+	// If required is true, then it will panic if a reference is not replicable.
+	RemoveTempDeclRefs(required bool)
 }
 
 // NestType is a type that can be nested inside another type.
-type NestType Construct
+type NestType interface {
+	Construct
+	Name() string
+}
 
 var (
 	_ Construct = Abstract(nil)
@@ -128,7 +133,7 @@ func CompareTo[T Construct](a T, b Construct, cmp comp.Comparer[T]) int {
 	return cmp(a, b.(T))
 }
 
-func ResolvedTempReference(td TypeDesc) TypeDesc {
+func ResolvedTempReference(td TypeDesc, required bool) TypeDesc {
 	if utils.IsNil(td) {
 		panic(terror.New(`Construct given to ResolvedTempDeclRef was nil`))
 	}
@@ -138,6 +143,9 @@ func ResolvedTempReference(td TypeDesc) TypeDesc {
 			tr := resolved.(TempReference)
 			resolved = tr.ResolvedType()
 			if utils.IsNil(resolved) {
+				if !required {
+					return tr
+				}
 				panic(terror.New(`TempReference in ResolvedTempReference resolved to nil`).
 					With(`Ref`, tr).
 					With(`Start`, td))
@@ -148,6 +156,9 @@ func ResolvedTempReference(td TypeDesc) TypeDesc {
 			tr := resolved.(TempTypeParamRef)
 			resolved = tr.ResolvedType()
 			if utils.IsNil(resolved) {
+				if !required {
+					return tr
+				}
 				panic(terror.New(`TempTypeParamRef in ResolvedTempReference resolved to nil`).
 					With(`Ref`, tr).
 					With(`Start`, td))
@@ -159,7 +170,7 @@ func ResolvedTempReference(td TypeDesc) TypeDesc {
 	return resolved
 }
 
-func ResolvedTempDeclRef(con Construct) Construct {
+func ResolvedTempDeclRef(con Construct, required bool) Construct {
 	if utils.IsNil(con) {
 		panic(terror.New(`Construct given to ResolvedTempDeclRef was nil`))
 	}
@@ -169,6 +180,9 @@ func ResolvedTempDeclRef(con Construct) Construct {
 			tr := resolved.(TempReference)
 			resolved = tr.ResolvedType()
 			if utils.IsNil(resolved) {
+				if !required {
+					return tr
+				}
 				panic(terror.New(`TempReference in ResolvedTempDeclRef resolved to nil`).
 					With(`Ref`, tr).
 					With(`Start`, con))
@@ -179,6 +193,9 @@ func ResolvedTempDeclRef(con Construct) Construct {
 			tr := resolved.(TempDeclRef)
 			resolved = tr.ResolvedType()
 			if utils.IsNil(resolved) {
+				if !required {
+					return tr
+				}
 				panic(terror.New(`TempDeclRef in ResolvedTempDeclRef resolved to nil`).
 					With(`Ref`, tr).
 					With(`Start`, con))
@@ -190,10 +207,10 @@ func ResolvedTempDeclRef(con Construct) Construct {
 	return resolved
 }
 
-func ResolveTempDeclRefSet(set collections.SortedSet[Construct]) {
+func ResolveTempDeclRefSet(set collections.SortedSet[Construct], required bool) {
 	slice := slices.Clone(set.ToSlice())
 	for i, s := range slice {
-		slice[i] = ResolvedTempDeclRef(s)
+		slice[i] = ResolvedTempDeclRef(s, required)
 	}
 	assert.ArgHasNoNils(`resolved refs`, slice)
 	set.Clear()

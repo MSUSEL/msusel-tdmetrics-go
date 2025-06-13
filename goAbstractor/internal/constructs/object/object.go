@@ -7,6 +7,7 @@ import (
 	"github.com/Snow-Gremlin/goToolbox/collections/sortedSet"
 	"github.com/Snow-Gremlin/goToolbox/comp"
 	"github.com/Snow-Gremlin/goToolbox/terrors/terror"
+	"github.com/Snow-Gremlin/goToolbox/utils"
 
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/assert"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs"
@@ -97,8 +98,10 @@ func (d *objectImp) AddInstance(inst constructs.ObjectInst) constructs.ObjectIns
 	return v
 }
 
-func (d *objectImp) RemoveTempDeclRefs() {
-	d.nest = constructs.ResolvedTempDeclRef(d.nest).(constructs.Declaration)
+func (d *objectImp) RemoveTempDeclRefs(required bool) {
+	if !utils.IsNil(d.nest) {
+		d.nest = constructs.ResolvedTempDeclRef(d.nest, required).(constructs.NestType)
+	}
 }
 
 func (d *objectImp) FindInstance(implicitTypes, instanceTypes []constructs.TypeDesc) (constructs.ObjectInst, bool) {
@@ -169,7 +172,11 @@ func (d *objectImp) ToJson(ctx *jsonify.Context) jsonify.Datum {
 }
 
 func (d *objectImp) ToStringer(s stringer.Stringer) {
-	s.Write(d.pkg.Path(), `.`, d.name).
+	s.Write(d.pkg.Path(), `.`)
+	if !utils.IsNil(d.nest) {
+		s.Write(d.nest.Name(), `:`)
+	}
+	s.Write(d.name).
 		WriteList(`[`, `, `, `;]`, d.ImplicitTypeParams()).
 		WriteList(`[`, `, `, `]`, d.typeParams).
 		Write(` struct{--}`)

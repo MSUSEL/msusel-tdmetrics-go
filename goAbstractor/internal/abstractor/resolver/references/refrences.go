@@ -11,8 +11,26 @@ import (
 )
 
 func References(log *logger.Logger, proj constructs.Project) {
+	removeTempReferences(proj, false)
+	removeTempDeclRefs(proj, false)
 	tempReferences(log, proj)
 	tempDeclRefs(log, proj)
+}
+
+func removeTempReferences(proj constructs.Project, required bool) {
+	proj.AllConstructs().Foreach(func(c constructs.Construct) {
+		if trc, has := c.(constructs.TempReferenceContainer); has {
+			trc.RemoveTempReferences(required)
+		}
+	})
+}
+
+func removeTempDeclRefs(proj constructs.Project, required bool) {
+	proj.AllConstructs().Foreach(func(c constructs.Construct) {
+		if trc, has := c.(constructs.TempDeclRefContainer); has {
+			trc.RemoveTempDeclRefs(required)
+		}
+	})
 }
 
 func tempReferences(log *logger.Logger, proj constructs.Project) {
@@ -21,11 +39,7 @@ func tempReferences(log *logger.Logger, proj constructs.Project) {
 		resolveTempRef(log, proj, refs.Get(i))
 	}
 
-	proj.AllConstructs().Foreach(func(c constructs.Construct) {
-		if trc, has := c.(constructs.TempReferenceContainer); has {
-			trc.RemoveTempReferences()
-		}
-	})
+	removeTempReferences(proj, true)
 	proj.ClearAllTempReferences()
 	proj.ClearAllTempTypeParamRefs()
 }
@@ -50,7 +64,7 @@ func resolveTempRef(log *logger.Logger, proj constructs.Project, ref constructs.
 			With(`name`, ref.Name()).
 			With(`instance types`, ref.InstanceTypes()))
 	}
-	if len(ref.InstanceTypes()) <= 0 {
+	if len(ref.InstanceTypes()) <= 0 && len(ref.ImplicitTypes()) <= 0 {
 		ref.SetResolution(typ)
 		return
 	}
@@ -89,11 +103,7 @@ func tempDeclRefs(log *logger.Logger, proj constructs.Project) {
 		resolveTempDeclRef(log, proj, refs.Get(i))
 	}
 
-	proj.AllConstructs().Foreach(func(c constructs.Construct) {
-		if trc, has := c.(constructs.TempDeclRefContainer); has {
-			trc.RemoveTempDeclRefs()
-		}
-	})
+	removeTempDeclRefs(proj, true)
 	proj.ClearAllTempDeclRefs()
 }
 
@@ -117,7 +127,7 @@ func resolveTempDeclRef(log *logger.Logger, proj constructs.Project, ref constru
 			With(`name`, ref.Name()).
 			With(`instance types`, ref.InstanceTypes()))
 	}
-	if len(ref.InstanceTypes()) <= 0 {
+	if len(ref.InstanceTypes()) <= 0 && len(ref.ImplicitTypes()) <= 0 {
 		ref.SetResolution(decl)
 		return
 	}

@@ -40,13 +40,15 @@ func (i *instanceImp) Index() int          { return i.index }
 func (i *instanceImp) SetIndex(index int)  { i.index = index }
 func (i *instanceImp) Alive() bool         { return i.alive }
 func (i *instanceImp) SetAlive(alive bool) { i.alive = alive }
+func (i *instanceImp) Name() string        { return i.generic.Name() }
 
-func (m *instanceImp) Generic() constructs.Method     { return m.generic }
-func (m *instanceImp) Resolved() constructs.Signature { return m.resolved }
+func (i *instanceImp) Generic() constructs.Method     { return i.generic }
+func (i *instanceImp) Resolved() constructs.Signature { return i.resolved }
 
-func (m *instanceImp) InstanceTypes() []constructs.TypeDesc  { return m.instanceTypes }
-func (m *instanceImp) Receiver() constructs.ObjectInst       { return m.receiver }
-func (m *instanceImp) SetReceiver(obj constructs.ObjectInst) { m.receiver = obj }
+func (i *instanceImp) TypeParams() []constructs.TypeParam    { return i.generic.TypeParams() }
+func (i *instanceImp) InstanceTypes() []constructs.TypeDesc  { return i.instanceTypes }
+func (i *instanceImp) Receiver() constructs.ObjectInst       { return i.receiver }
+func (i *instanceImp) SetReceiver(obj constructs.ObjectInst) { i.receiver = obj }
 
 func (i *instanceImp) CompareTo(other constructs.Construct) int {
 	return constructs.CompareTo[constructs.MethodInst](i, other, Comparer())
@@ -66,9 +68,9 @@ func Comparer() comp.Comparer[constructs.MethodInst] {
 	}
 }
 
-func (i *instanceImp) RemoveTempReferences() {
+func (i *instanceImp) RemoveTempReferences(required bool) {
 	for j, it := range i.instanceTypes {
-		i.instanceTypes[j] = constructs.ResolvedTempReference(it)
+		i.instanceTypes[j] = constructs.ResolvedTempReference(it, required)
 	}
 }
 

@@ -1,7 +1,6 @@
 package abstractor
 
 import (
-	"fmt"
 	"go/ast"
 	"go/token"
 	"go/types"
@@ -296,16 +295,12 @@ func (ab *abstractor) abstractFuncDecl(decl *ast.FuncDecl) {
 
 	prevNest := ab.curNest
 	defer func() { ab.curNest = prevNest }()
-	ab.curNest = ab.proj.NewTempDeclRef(constructs.TempDeclRefArgs{
+	tempNest := ab.proj.NewTempDeclRef(constructs.TempDeclRefArgs{
 		PackagePath:   ab.curPkg.Path(),
 		Name:          decl.Name.Name,
 		ImplicitTypes: ab.implicitTypes,
 	})
-
-	fmt.Printf("-----------------------------\n")                                        // TODO: REMOVE
-	fmt.Printf(">> abstractor: abstractFuncDecl: decl.Name:     %s\n", decl.Name.Name)   // TODO: REMOVE
-	fmt.Printf(">> abstractor: abstractFuncDecl: nest:          %v\n", ab.curNest)       // TODO: REMOVE
-	fmt.Printf(">> abstractor: abstractFuncDecl: implicitTypes: %v\n", ab.implicitTypes) // TODO: REMOVE
+	ab.curNest = tempNest
 
 	metrics := ab.analyze(decl)
 	ab.clearTypeParamOverrides()
@@ -330,6 +325,7 @@ func (ab *abstractor) abstractFuncDecl(decl *ast.FuncDecl) {
 		PointerRecv: ptrRecv,
 	})
 
+	tempNest.SetResolution(method)
 	ab.curNest = method
 	defer func() { ab.curNest = nil }()
 	ab.abstractNestedTypes(decl.Body)

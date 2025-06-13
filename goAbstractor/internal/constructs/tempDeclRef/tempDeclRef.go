@@ -30,9 +30,6 @@ func newTempDeclRef(args constructs.TempDeclRefArgs) constructs.TempDeclRef {
 	if len(args.ImplicitTypes) > 0 {
 		assert.ArgNotNil(`nest`, args.Nest)
 	}
-	//if !utils.IsNil(args.Nest) {
-	//	assert.ArgsHaveSameLength(`implicit types`, args.Nest.TypeParams(), args.ImplicitTypes)
-	//}
 
 	return &tempDeclRefImp{
 		pkgPath:       args.PackagePath,
@@ -69,6 +66,12 @@ func (r *tempDeclRefImp) SetResolution(con constructs.Construct) {
 	assert.ArgIsNil(`resolved`, r.con)
 	assert.ArgNotNil(`con`, con)
 	r.con = con
+}
+
+func (r *tempDeclRefImp) RemoveTempDeclRefs(required bool) {
+	if !utils.IsNil(r.nest) {
+		r.nest = constructs.ResolvedTempDeclRef(r.nest, required).(constructs.NestType)
+	}
 }
 
 func (r *tempDeclRefImp) CompareTo(other constructs.Construct) int {
@@ -113,6 +116,9 @@ func (r *tempDeclRefImp) ToStringer(s stringer.Stringer) {
 	s.Write(`decl ref `)
 	if len(r.pkgPath) > 0 {
 		s.Write(r.pkgPath, `.`)
+	}
+	if !utils.IsNil(r.nest) {
+		s.Write(r.nest.Name(), `:`)
 	}
 	s.Write(r.name).
 		WriteList(`[`, `, `, `;]`, r.implicitTypes).

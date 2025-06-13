@@ -182,12 +182,12 @@ func Comparer() comp.Comparer[constructs.InterfaceDesc] {
 	}
 }
 
-func (id *interfaceDescImp) RemoveTempReferences() {
+func (id *interfaceDescImp) RemoveTempReferences(required bool) {
 	for i, ap := range id.approx {
-		id.approx[i] = constructs.ResolvedTempReference(ap)
+		id.approx[i] = constructs.ResolvedTempReference(ap, required)
 	}
 	for i, ex := range id.exact {
-		id.exact[i] = constructs.ResolvedTempReference(ex)
+		id.exact[i] = constructs.ResolvedTempReference(ex, required)
 	}
 }
 

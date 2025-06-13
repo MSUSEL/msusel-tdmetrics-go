@@ -100,8 +100,10 @@ func (d *interfaceDeclImp) AddInstance(inst constructs.InterfaceInst) constructs
 	return v
 }
 
-func (d *interfaceDeclImp) RemoveTempDeclRefs() {
-	d.nest = constructs.ResolvedTempDeclRef(d.nest).(constructs.Declaration)
+func (d *interfaceDeclImp) RemoveTempDeclRefs(required bool) {
+	if !utils.IsNil(d.nest) {
+		d.nest = constructs.ResolvedTempDeclRef(d.nest, required).(constructs.NestType)
+	}
 }
 
 func (d *interfaceDeclImp) FindInstance(implicitTypes, instanceTypes []constructs.TypeDesc) (constructs.InterfaceInst, bool) {
@@ -158,7 +160,11 @@ func (d *interfaceDeclImp) ToJson(ctx *jsonify.Context) jsonify.Datum {
 }
 
 func (d *interfaceDeclImp) ToStringer(s stringer.Stringer) {
-	s.Write(d.pkg.Path(), `.`, d.name).
+	s.Write(d.pkg.Path(), `.`)
+	if !utils.IsNil(d.nest) {
+		s.Write(d.nest.Name(), `:`)
+	}
+	s.Write(d.name).
 		WriteList(`[`, `, `, `;]`, d.ImplicitTypeParams()).
 		WriteList(`[`, `, `, `]`, d.typeParams).
 		Write(` interface{--}`)

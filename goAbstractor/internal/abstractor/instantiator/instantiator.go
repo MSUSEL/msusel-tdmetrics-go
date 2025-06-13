@@ -1,6 +1,7 @@
 package instantiator
 
 import (
+	"fmt"
 	"go/types"
 	"slices"
 
@@ -43,6 +44,8 @@ func InterfaceDecl(log *logger.Logger, proj constructs.Project, realType types.T
 
 func Object(log *logger.Logger, proj constructs.Project, realType types.Type, decl constructs.Object,
 	implicitTypes, instanceTypes []constructs.TypeDesc) constructs.TypeDesc {
+
+	fmt.Printf("instantiator:Object: %v <%v; %v>\n", decl, implicitTypes, instanceTypes) // TODO: Remove
 
 	assert.ArgNotNil(`project`, proj)
 	assert.ArgNotNil(`object`, decl)

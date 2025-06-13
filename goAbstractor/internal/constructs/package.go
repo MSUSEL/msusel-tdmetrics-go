@@ -32,6 +32,7 @@ type Package interface {
 	Empty() bool
 	FindTypeDecl(name string, nest NestType) TypeDecl
 	FindDecl(name string, nest NestType) Declaration
+	DebugPrintDecl()
 	ResolveReceivers()
 }
 
