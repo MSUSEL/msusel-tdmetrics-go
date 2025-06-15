@@ -1,7 +1,6 @@
 package instantiator
 
 import (
-	"fmt"
 	"go/types"
 	"slices"
 
@@ -44,8 +43,6 @@ func InterfaceDecl(log *logger.Logger, proj constructs.Project, realType types.T
 
 func Object(log *logger.Logger, proj constructs.Project, realType types.Type, decl constructs.Object,
 	implicitTypes, instanceTypes []constructs.TypeDesc) constructs.TypeDesc {
-
-	fmt.Printf("instantiator:Object: %v <%v; %v>\n", decl, implicitTypes, instanceTypes) // TODO: Remove
 
 	assert.ArgNotNil(`project`, proj)
 	assert.ArgNotNil(`object`, decl)
@@ -162,7 +159,6 @@ func newInstantiator(log *logger.Logger, proj constructs.Project, decl construct
 	case kind.Object:
 		instance, found = decl.(constructs.Object).FindInstance(implicitTypes, instanceTypes)
 	case kind.Method:
-		assert.ArgIsEmpty(`implicit types`, implicitTypes)
 		instance, found = decl.(constructs.Method).FindInstance(instanceTypes)
 	}
 	if found {
@@ -385,7 +381,6 @@ func (i *instantiator) createInstance(realType types.Type) constructs.Construct 
 		return obj
 
 	case kind.Method:
-		assert.ArgIsEmpty(`implicit types`, i.implicitTypes)
 		d := i.decl.(constructs.Method)
 		md := i.proj.NewMethodInst(constructs.MethodInstArgs{
 			Generic:       d,

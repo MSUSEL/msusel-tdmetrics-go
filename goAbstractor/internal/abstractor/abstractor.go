@@ -292,20 +292,29 @@ func (ab *abstractor) abstractFuncDecl(decl *ast.FuncDecl) {
 
 	ptrRecv, recvName := ab.abstractReceiver(decl)
 	sig := ab.converter().ConvertSignature(obj.Type().(*types.Signature), decl.Name.Name)
+	tp := ab.abstractTypeParams(decl.Type.TypeParams, decl.Name.Name)
 
+	// Set the nest for this function. Use the type parameter as the implicit
+	// types for the nest to create a generic instances for nested types.
 	prevNest := ab.curNest
-	defer func() { ab.curNest = prevNest }()
+	prevImplicitTypes := ab.implicitTypes
+	defer func() {
+		ab.curNest = prevNest
+		ab.implicitTypes = prevImplicitTypes
+	}()
 	tempNest := ab.proj.NewTempDeclRef(constructs.TempDeclRefArgs{
 		PackagePath:   ab.curPkg.Path(),
 		Name:          decl.Name.Name,
 		ImplicitTypes: ab.implicitTypes,
 	})
 	ab.curNest = tempNest
+	ab.implicitTypes = make([]constructs.TypeDesc, len(tp))
+	for i, t := range tp {
+		ab.implicitTypes[i] = t
+	}
 
 	metrics := ab.analyze(decl)
 	ab.clearTypeParamOverrides()
-
-	tp := ab.abstractTypeParams(decl.Type.TypeParams, decl.Name.Name)
 
 	exported := decl.Name.IsExported()
 	name := decl.Name.Name
@@ -327,7 +336,6 @@ func (ab *abstractor) abstractFuncDecl(decl *ast.FuncDecl) {
 
 	tempNest.SetResolution(method)
 	ab.curNest = method
-	defer func() { ab.curNest = nil }()
 	ab.abstractNestedTypes(decl.Body)
 }
 

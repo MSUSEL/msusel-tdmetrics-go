@@ -240,30 +240,6 @@ func (c *convImp) convertMap(t *types.Map) constructs.TypeDesc {
 	return instantiator.InterfaceDecl(c.log, c.proj, t.Underlying(), generic, nil, []constructs.TypeDesc{key, value})
 }
 
-// TODO: REMOVE IF NOT USED
-// func findNest(t *types.Named) *types.Func {
-// 	pos := t.Obj().Pos()
-// 	if !pos.IsValid() {
-// 		return nil
-// 	}
-// 	scope := t.Obj().Parent()
-// 	if scope == nil {
-// 		pkg := t.Obj().Pkg()
-// 		if pkg == nil {
-// 			return nil
-// 		}
-// 		scope = pkg.Scope().Innermost(pos)
-// 	}
-// 	for ; scope != nil; scope = scope.Parent() {
-// 		for _, name := range scope.Names() {
-// 			if fn, ok := scope.Lookup(name).(*types.Func); ok && fn.Scope().Contains(pos) {
-// 				return fn
-// 			}
-// 		}
-// 	}
-// 	return nil
-// }
-
 func (c *convImp) convertNamed(t *types.Named) constructs.TypeDesc {
 	pkgPath := ``
 	if !utils.IsNil(t.Obj().Pkg()) {
