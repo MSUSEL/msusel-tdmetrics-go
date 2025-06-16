@@ -231,3 +231,11 @@ func FindSigByName(abs []Abstract, name string) Signature {
 		With(`name`, name).
 		With(`abs`, abs))
 }
+
+func Cast[TOut, TIn Construct, S ~[]TIn](s S) []TOut {
+	tps := make([]TOut, len(s))
+	for i, tp := range s {
+		tps[i] = any(tp).(TOut)
+	}
+	return tps
+}

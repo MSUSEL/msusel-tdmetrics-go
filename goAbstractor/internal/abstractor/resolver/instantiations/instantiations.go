@@ -3,6 +3,7 @@ package instantiations
 import (
 	"go/types"
 
+	"github.com/Snow-Gremlin/goToolbox/collections"
 	"github.com/Snow-Gremlin/goToolbox/terrors/terror"
 	"github.com/Snow-Gremlin/goToolbox/utils"
 
@@ -19,9 +20,15 @@ func ExpandInstantiations(log *logger.Logger, proj constructs.Project) {
 	for i := range objects.Count() {
 		expandInstantiations(log, proj, objects.Get(i))
 	}
+
 	bk := baker.New(proj)
 	for i := range objects.Count() {
 		fillOutPointerReceivers(log, bk, proj, objects.Get(i))
+	}
+
+	methods := proj.Methods()
+	for i := range methods.Count() {
+		expandNestedTypes(log, proj, methods.Get(i))
 	}
 }
 
@@ -31,12 +38,16 @@ func expandInstantiations(log *logger.Logger, proj constructs.Project, obj const
 	for i := range methods.Count() {
 		mIts := methods.Get(i).Instances()
 		for j := range mIts.Count() {
+			// Create an object instance using the type argument for this
+			// method instance so that the method has a receiver for it.
 			it := mIts.Get(j).InstanceTypes()
 			instantiator.Object(log, proj, nil, obj, nil, it)
 		}
 	}
 
-	// Now that all the instances were collected, expand the instances.
+	// Now that all the instances were collected, expand the instances
+	// by adding all the method instance for that object instance, creating
+	// any method instance that is missing.
 	its := obj.Instances()
 	for i := range its.Count() {
 		expandObjectInst(log, proj, obj, its.Get(i))
@@ -44,7 +55,7 @@ func expandInstantiations(log *logger.Logger, proj constructs.Project, obj const
 }
 
 // expandObjectInst adds the given instance into each method if it doesn't
-// exist in that method. Then update methods and receivers for the instance.
+// exist in that method. Then updates methods and receivers for the instance.
 func expandObjectInst(log *logger.Logger, proj constructs.Project, obj constructs.Object, instance constructs.ObjectInst) {
 	methods := obj.Methods()
 	for i := range methods.Count() {
@@ -81,4 +92,49 @@ func fillOutPointerReceivers(log *logger.Logger, bk baker.Baker, proj constructs
 
 func hasPointerReceivers(obj constructs.Object) bool {
 	return obj.Methods().Enumerate().Any(constructs.Method.PointerRecv)
+}
+
+func expandNestedTypes(log *logger.Logger, proj constructs.Project, method constructs.Method) {
+	nestedObjs := findNestedTypes(method, proj.Objects())
+	nestedIts := findNestedTypes(method, proj.InterfaceDecls())
+
+	mIts := method.Instances()
+	for i := range mIts.Count() {
+		mIt := mIts.Get(i)
+		implicitTypes := mIt.InstanceTypes()
+
+		for _, obj := range nestedObjs {
+			instantiator.Object(log, proj, nil, obj, implicitTypes, constructs.Cast[constructs.TypeDesc](obj.TypeParams()))
+			instances := obj.Instances()
+			for j := range instances.Count() {
+				inst := instances.Get(j)
+				instantiator.Object(log, proj, nil, obj, implicitTypes, inst.InstanceTypes())
+			}
+		}
+
+		for _, it := range nestedIts {
+			instantiator.InterfaceDecl(log, proj, nil, it, implicitTypes, constructs.Cast[constructs.TypeDesc](it.TypeParams()))
+			instances := it.Instances()
+			for j := range instances.Count() {
+				inst := instances.Get(j)
+				instantiator.InterfaceDecl(log, proj, nil, it, implicitTypes, inst.InstanceTypes())
+			}
+		}
+	}
+}
+
+func findNestedTypes[T constructs.TypeDecl](nest constructs.NestType, ts collections.ReadonlySortedSet[T]) []T {
+	if utils.IsNil(nest) {
+		return nil
+	}
+	nested := []T{}
+	for i := range ts.Count() {
+		t := ts.Get(i)
+		if n, ok := any(t).(interface{ Nest() constructs.NestType }); ok {
+			if constructs.ComparerPend(n.Nest(), nest)() == 0 {
+				nested = append(nested, t)
+			}
+		}
+	}
+	return nested
 }

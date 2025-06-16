@@ -266,25 +266,17 @@ func (i *instantiator) ObjectInst(in constructs.ObjectInst) constructs.TypeDesc 
 	return in2
 }
 
-func castToTypeDesc[T constructs.TypeDesc, S ~[]T](s S) []constructs.TypeDesc {
-	tps := make([]constructs.TypeDesc, len(s))
-	for i, tp := range s {
-		tps[i] = tp
-	}
-	return tps
-}
-
 func (i *instantiator) InterfaceDecl(decl constructs.InterfaceDecl) constructs.TypeDesc {
-	implicitTypes := castToTypeDesc(decl.ImplicitTypeParams())
-	instanceTypes := castToTypeDesc(decl.TypeParams())
+	implicitTypes := constructs.Cast[constructs.TypeDesc](decl.ImplicitTypeParams())
+	instanceTypes := constructs.Cast[constructs.TypeDesc](decl.TypeParams())
 	decl2 := i.typeDecl(decl, decl.ImplicitTypeParams(), decl.TypeParams(), implicitTypes, instanceTypes)
 	i.log.Logf(`|- create InterfaceDecl: %v`, decl2)
 	return decl2
 }
 
 func (i *instantiator) Object(decl constructs.Object) constructs.TypeDesc {
-	implicitTypes := castToTypeDesc(decl.ImplicitTypeParams())
-	instanceTypes := castToTypeDesc(decl.TypeParams())
+	implicitTypes := constructs.Cast[constructs.TypeDesc](decl.ImplicitTypeParams())
+	instanceTypes := constructs.Cast[constructs.TypeDesc](decl.TypeParams())
 	decl2 := i.typeDecl(decl, decl.ImplicitTypeParams(), decl.TypeParams(), implicitTypes, instanceTypes)
 	i.log.Logf(`|- create Object: %v`, decl2)
 	return decl2
