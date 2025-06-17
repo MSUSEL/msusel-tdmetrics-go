@@ -104,20 +104,24 @@ func expandNestedTypes(log *logger.Logger, proj constructs.Project, method const
 		implicitTypes := mIt.InstanceTypes()
 
 		for _, obj := range nestedObjs {
-			instantiator.Object(log, proj, nil, obj, implicitTypes, constructs.Cast[constructs.TypeDesc](obj.TypeParams()))
+			it := constructs.Cast[constructs.TypeDesc](obj.TypeParams())
+			instantiator.Object(log, proj, obj.GoType(), obj, implicitTypes, it)
+
 			instances := obj.Instances()
 			for j := range instances.Count() {
 				inst := instances.Get(j)
-				instantiator.Object(log, proj, nil, obj, implicitTypes, inst.InstanceTypes())
+				instantiator.Object(log, proj, inst.GoType(), obj, implicitTypes, inst.InstanceTypes())
 			}
 		}
 
 		for _, it := range nestedIts {
-			instantiator.InterfaceDecl(log, proj, nil, it, implicitTypes, constructs.Cast[constructs.TypeDesc](it.TypeParams()))
+			tp := constructs.Cast[constructs.TypeDesc](it.TypeParams())
+			instantiator.InterfaceDecl(log, proj, it.GoType(), it, implicitTypes, tp)
+
 			instances := it.Instances()
 			for j := range instances.Count() {
 				inst := instances.Get(j)
-				instantiator.InterfaceDecl(log, proj, nil, it, implicitTypes, inst.InstanceTypes())
+				instantiator.InterfaceDecl(log, proj, inst.GoType(), it, implicitTypes, inst.InstanceTypes())
 			}
 		}
 	}
