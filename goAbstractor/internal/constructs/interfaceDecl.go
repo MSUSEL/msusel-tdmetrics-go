@@ -20,13 +20,13 @@ import (
 // from any generic methods enclosing this interface.
 type InterfaceDecl interface {
 	TypeDecl
+	Nestable
 	IsInterface()
 
 	Interface() InterfaceDesc
 	IsNamed() bool
 	IsGeneric() bool
 	IsNested() bool
-	Nest() NestType
 	TypeParams() []TypeParam
 	ImplicitTypeParams() []TypeParam
 	AddInstance(inst InterfaceInst) InterfaceInst

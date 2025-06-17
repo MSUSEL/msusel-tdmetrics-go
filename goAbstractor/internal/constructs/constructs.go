@@ -67,6 +67,12 @@ type NestType interface {
 	Name() string
 }
 
+// Nestable is a construct that can be nested inside another construct.
+type Nestable interface {
+	Construct
+	Nest() NestType
+}
+
 var (
 	_ Construct = Abstract(nil)
 	_ Construct = Argument(nil)
@@ -101,6 +107,16 @@ var (
 	// These are type declarations only. They can not be used at TypeDesc.
 	_ Declaration = Method(nil)
 	_ Declaration = Value(nil)
+
+	// These are constructs that can be have other constructs nested inside them.
+	_ NestType = Method(nil)
+	_ NestType = MethodInst(nil)
+
+	// These are constructs that can be nested inside other constructs.
+	_ Nestable = Object(nil)
+	_ Nestable = InterfaceDecl(nil)
+	_ Nestable = TempDeclRef(nil)
+	_ Nestable = TempReference(nil)
 )
 
 func Comparer[T Construct]() comp.Comparer[T] {

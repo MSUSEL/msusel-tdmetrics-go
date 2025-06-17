@@ -20,6 +20,7 @@ import (
 // from any generic methods enclosing this object.
 type Object interface {
 	TypeDecl
+	Nestable
 	IsObject()
 
 	Data() StructDesc
@@ -32,7 +33,6 @@ type Object interface {
 	IsNamed() bool
 	IsGeneric() bool
 	IsNested() bool
-	Nest() NestType
 	TypeParams() []TypeParam
 	ImplicitTypeParams() []TypeParam
 	AddInstance(inst ObjectInst) ObjectInst

@@ -134,10 +134,8 @@ func findNestedTypes[T constructs.TypeDecl](nest constructs.NestType, ts collect
 	nested := []T{}
 	for i := range ts.Count() {
 		t := ts.Get(i)
-		if n, ok := any(t).(interface{ Nest() constructs.NestType }); ok {
-			if constructs.ComparerPend(n.Nest(), nest)() == 0 {
-				nested = append(nested, t)
-			}
+		if constructs.ComparerPend(t.Nest(), nest)() == 0 {
+			nested = append(nested, t)
 		}
 	}
 	return nested

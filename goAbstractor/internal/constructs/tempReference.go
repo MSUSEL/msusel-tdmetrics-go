@@ -14,13 +14,13 @@ import (
 // resolving the since one thing that is resolved is all references.
 type TempReference interface {
 	TypeDesc
+	Nestable
 	IsTypeReference()
 
 	PackagePath() string
 	Name() string
 	ImplicitTypes() []TypeDesc
 	InstanceTypes() []TypeDesc
-	Nest() NestType
 
 	ResolvedType() TypeDesc
 	Resolved() bool
