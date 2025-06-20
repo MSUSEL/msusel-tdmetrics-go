@@ -433,25 +433,71 @@ func (s *substituterImp) subSignature(con constructs.Signature, changed *bool) c
 }
 
 func (s *substituterImp) subStructDesc(con constructs.StructDesc, changed *bool) constructs.StructDesc {
-	panic(terror.New(`unimplemented`)) // TODO: Implement
+	subChanged := false
+	args := constructs.StructDescArgs{
+		Fields:  subConList(s, con.Fields(), &subChanged),
+		Package: s.curPkg.Source(),
+	}
+	return finishSubCon(subChanged, con, s.proj.NewStructDesc, args, changed)
 }
 
-func (s *substituterImp) subTempDeclRef(con constructs.TempDeclRef, changed *bool) constructs.TempDeclRef {
-	panic(terror.New(`unimplemented`)) // TODO: Implement
+func (s *substituterImp) subTempDeclRef(con constructs.TempDeclRef, changed *bool) constructs.Construct {
+	if con.Resolved() {
+		return subCon(s, con.ResolvedType(), changed)
+	}
+	subChanged := false
+	args := constructs.TempDeclRefArgs{
+		PackagePath:   con.PackagePath(),
+		Name:          con.Name(),
+		ImplicitTypes: subConList(s, con.ImplicitTypes(), &subChanged),
+		InstanceTypes: subConList(s, con.InstanceTypes(), &subChanged),
+		Nest:          con.Nest(),
+	}
+	return finishSubCon(subChanged, con, s.proj.NewTempDeclRef, args, changed)
 }
 
-func (s *substituterImp) subTempReference(con constructs.TempReference, changed *bool) constructs.TempReference {
-	panic(terror.New(`unimplemented`)) // TODO: Implement
+func (s *substituterImp) subTempReference(con constructs.TempReference, changed *bool) constructs.Construct {
+	if con.Resolved() {
+		return subCon(s, con.ResolvedType(), changed)
+	}
+	subChanged := false
+	args := constructs.TempReferenceArgs{
+		PackagePath:   con.PackagePath(),
+		Name:          con.Name(),
+		ImplicitTypes: subConList(s, con.ImplicitTypes(), &subChanged),
+		InstanceTypes: subConList(s, con.InstanceTypes(), &subChanged),
+		Nest:          con.Nest(),
+		Package:       s.curPkg.Source(),
+	}
+	return finishSubCon(subChanged, con, s.proj.NewTempReference, args, changed)
 }
 
-func (s *substituterImp) subTempTypeParamRef(con constructs.TempTypeParamRef, changed *bool) constructs.TempTypeParamRef {
-	panic(terror.New(`unimplemented`)) // TODO: Implement
+func (s *substituterImp) subTempTypeParamRef(con constructs.TempTypeParamRef, changed *bool) constructs.Construct {
+	if con.Resolved() {
+		return subCon(s, con.ResolvedType(), changed)
+	}
+	return con
 }
 
 func (s *substituterImp) subTypeParam(con constructs.TypeParam, changed *bool) constructs.TypeParam {
-	panic(terror.New(`unimplemented`)) // TODO: Implement
+	subChanged := false
+	args := constructs.TypeParamArgs{
+		Name: con.Name(),
+		Type: subCon(s, con.Type(), &subChanged),
+	}
+	return finishSubCon(subChanged, con, s.proj.NewTypeParam, args, changed)
 }
 
 func (s *substituterImp) subValue(con constructs.Value, changed *bool) constructs.Value {
-	panic(terror.New(`unimplemented`)) // TODO: Implement
+	subChanged := false
+	args := constructs.ValueArgs{
+		Package:  con.Package(),
+		Name:     con.Name(),
+		Exported: con.Exported(),
+		Location: con.Location(),
+		Type:     subCon(s, con.Type(), &subChanged),
+		Const:    con.Const(),
+		Metrics:  subCon(s, con.Metrics(), &subChanged),
+	}
+	return finishSubCon(subChanged, con, s.proj.NewValue, args, changed)
 }
