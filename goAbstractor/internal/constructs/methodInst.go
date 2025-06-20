@@ -19,6 +19,8 @@ type MethodInst interface {
 	Generic() Method
 	Resolved() Signature
 	InstanceTypes() []TypeDesc
+	SetMetrics(metrics Metrics)
+	Metrics() Metrics
 
 	Receiver() ObjectInst
 	SetReceiver(obj ObjectInst)
@@ -28,6 +30,7 @@ type MethodInstArgs struct {
 	Generic       Method
 	Resolved      Signature
 	InstanceTypes []TypeDesc
+	Metrics       Metrics
 }
 
 type MethodInstFactory interface {

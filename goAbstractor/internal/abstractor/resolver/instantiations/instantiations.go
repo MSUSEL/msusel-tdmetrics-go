@@ -9,6 +9,7 @@ import (
 
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/abstractor/baker"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/abstractor/instantiator"
+	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/abstractor/substituter"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/logger"
 )
@@ -108,6 +109,14 @@ func expandNestedTypes(log *logger.Logger, proj constructs.Project, method const
 		for _, it := range nestedIts {
 			expandNestedInterface(log, proj, implicitTypes, it)
 		}
+
+		replacements := map[constructs.Construct]constructs.Construct{}
+		for i, tp := range method.TypeParams() {
+			replacements[tp] = implicitTypes[i]
+		}
+		sub := substituter.New(log, proj, method.Package(), replacements)
+		metrics, _ := substituter.Substitute(sub, method.Metrics())
+		mIt.SetMetrics(metrics)
 	}
 }
 

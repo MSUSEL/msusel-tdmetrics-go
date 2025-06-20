@@ -32,7 +32,7 @@ type Substituter interface {
 //
 // The given curPkg is the current package that is used when a package
 // is needed but can't be determined from the construct itself.
-func New(log logger.Logger, proj constructs.Project, curPkg constructs.Package, replacements map[constructs.Construct]constructs.Construct) Substituter {
+func New(log *logger.Logger, proj constructs.Project, curPkg constructs.Package, replacements map[constructs.Construct]constructs.Construct) Substituter {
 	assert.ArgNotNil(`project`, proj)
 	assert.ArgNotNil(`current package`, curPkg)
 
@@ -52,7 +52,7 @@ func Substitute[T constructs.Construct](s Substituter, orig T) (T, bool) {
 }
 
 type substituterImp struct {
-	log          logger.Logger
+	log          *logger.Logger
 	proj         constructs.Project
 	curPkg       constructs.Package
 	replacements map[constructs.Construct]constructs.Construct
@@ -350,6 +350,7 @@ func (s *substituterImp) subMethodInst(con constructs.MethodInst, changed *bool)
 		Generic:       con.Generic(),
 		Resolved:      subCon(s, con.Resolved(), &subChanged),
 		InstanceTypes: subConList(s, con.InstanceTypes(), &subChanged),
+		Metrics:       subCon(s, con.Metrics(), &subChanged),
 	}
 	return finishSubCon(subChanged, con, s.proj.NewMethodInst, args, changed)
 }

@@ -14,6 +14,7 @@ type instanceImp struct {
 	generic       constructs.Method
 	resolved      constructs.Signature
 	instanceTypes []constructs.TypeDesc
+	metrics       constructs.Metrics
 	receiver      constructs.ObjectInst
 	index         int
 	alive         bool
@@ -29,6 +30,7 @@ func newInstance(args constructs.MethodInstArgs) constructs.MethodInst {
 		generic:       args.Generic,
 		resolved:      args.Resolved,
 		instanceTypes: args.InstanceTypes,
+		metrics:       args.Metrics,
 	}
 	return args.Generic.AddInstance(inst)
 }
@@ -42,9 +44,10 @@ func (i *instanceImp) Alive() bool         { return i.alive }
 func (i *instanceImp) SetAlive(alive bool) { i.alive = alive }
 func (i *instanceImp) Name() string        { return i.generic.Name() }
 
-func (i *instanceImp) Generic() constructs.Method     { return i.generic }
-func (i *instanceImp) Resolved() constructs.Signature { return i.resolved }
-
+func (i *instanceImp) SetMetrics(metrics constructs.Metrics) { i.metrics = metrics }
+func (i *instanceImp) Metrics() constructs.Metrics           { return i.metrics }
+func (i *instanceImp) Generic() constructs.Method            { return i.generic }
+func (i *instanceImp) Resolved() constructs.Signature        { return i.resolved }
 func (i *instanceImp) TypeParams() []constructs.TypeParam    { return i.generic.TypeParams() }
 func (i *instanceImp) InstanceTypes() []constructs.TypeDesc  { return i.instanceTypes }
 func (i *instanceImp) Receiver() constructs.ObjectInst       { return i.receiver }

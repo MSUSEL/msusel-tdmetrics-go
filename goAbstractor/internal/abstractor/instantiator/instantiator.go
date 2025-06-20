@@ -378,6 +378,7 @@ func (i *instantiator) createInstance(realType types.Type) constructs.Construct 
 			Generic:       d,
 			Resolved:      i.Signature(d.Signature()),
 			InstanceTypes: i.instanceTypes,
+			Metrics:       nil, // Set in `instantiations` later
 		})
 		i.log.Logf(`'- instantiated method: %v`, md)
 		return md
