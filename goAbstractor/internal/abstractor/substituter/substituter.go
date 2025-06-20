@@ -165,14 +165,6 @@ func subConList[T constructs.Construct, S []T](s *substituterImp, list S, change
 	return listSubbed
 }
 
-func castList[TOut, TIn any, SIn ~[]TIn](list SIn) []TOut {
-	casted := make([]TOut, len(list))
-	for i, v := range list {
-		casted[i] = any(v).(TOut)
-	}
-	return casted
-}
-
 func (s *substituterImp) createTempDeclRef(con constructs.Construct, changed *bool) constructs.TempDeclRef {
 	switch con.Kind() {
 	case kind.InterfaceDecl:
