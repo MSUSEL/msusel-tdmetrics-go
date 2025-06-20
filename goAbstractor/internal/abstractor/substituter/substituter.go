@@ -132,26 +132,40 @@ func (s *substituterImp) subConstruct(con constructs.Construct, changed *bool) (
 	}
 }
 
-func subConstruct[T constructs.Construct](s *substituterImp, con T, changed *bool) T {
+func subCon[T constructs.Construct](s *substituterImp, con T, changed *bool) T {
 	return s.subConstruct(con, changed).(T)
 }
 
-func subConstructList[T constructs.Construct, S []T](s *substituterImp, list S, changed *bool) S {
+func subConList[T constructs.Construct, S []T](s *substituterImp, list S, changed *bool) S {
 	listSubbed := make(S, len(list))
 	for i, con := range list {
-		listSubbed[i] = subConstruct(s, con, changed)
+		listSubbed[i] = subCon(s, con, changed)
 	}
 	return listSubbed
+}
+
+func castList[TOut, TIn any, SIn ~[]TIn](list SIn) []TOut {
+	casted := make([]TOut, len(list))
+	for i, v := range list {
+		casted[i] = any(v).(TOut)
+	}
+	return casted
 }
 
 func (s *substituterImp) createTempDeclRef(con constructs.Construct, changed *bool) constructs.TempDeclRef {
 	switch con.Kind() {
 	case kind.InterfaceDecl:
 		return s.createTempDeclRefForInterfaceDecl(con.(constructs.InterfaceDecl), changed)
+	case kind.InterfaceInst:
+		return s.createTempDeclRefForInterfaceInst(con.(constructs.InterfaceInst), changed)
 	case kind.Object:
 		return s.createTempDeclRefForObject(con.(constructs.Object), changed)
+	case kind.ObjectInst:
+		return s.createTempDeclRefForObjectInst(con.(constructs.ObjectInst), changed)
 	case kind.Method:
 		return s.createTempDeclRefForMethod(con.(constructs.Method), changed)
+	case kind.MethodInst:
+		return s.createTempDeclRefForMethodInst(con.(constructs.MethodInst), changed)
 	case kind.Value:
 		return s.createTempDeclRefForValue(con.(constructs.Value), changed)
 	default:
@@ -162,25 +176,61 @@ func (s *substituterImp) createTempDeclRef(con constructs.Construct, changed *bo
 }
 
 func (s *substituterImp) createTempDeclRefForInterfaceDecl(con constructs.InterfaceDecl, changed *bool) constructs.TempDeclRef {
-	//panic(terror.New(`unimplemented`)) // TODO: Implement
-
 	return s.proj.NewTempDeclRef(constructs.TempDeclRefArgs{
-		PackagePath:   con.Package().Path(),
-		Name:          con.Name(),
-		ImplicitTypes: subConstructList(s, con.ImplicitTypeParams()),
+		PackagePath: con.Package().Path(),
+		Name:        con.Name(),
+		Nest:        subCon(s, con.Nest(), changed),
+	})
+}
+
+func (s *substituterImp) createTempDeclRefForInterfaceInst(con constructs.InterfaceInst, changed *bool) constructs.TempDeclRef {
+	return s.proj.NewTempDeclRef(constructs.TempDeclRefArgs{
+		PackagePath:   con.Generic().Package().Path(),
+		Name:          con.Generic().Name(),
+		ImplicitTypes: subConList(s, con.ImplicitTypes(), changed),
+		InstanceTypes: subConList(s, con.InstanceTypes(), changed),
+		Nest:          subCon(s, con.Generic().Nest(), changed),
 	})
 }
 
 func (s *substituterImp) createTempDeclRefForObject(con constructs.Object, changed *bool) constructs.TempDeclRef {
-	panic(terror.New(`unimplemented`)) // TODO: Implement
+	return s.proj.NewTempDeclRef(constructs.TempDeclRefArgs{
+		PackagePath: con.Package().Path(),
+		Name:        con.Name(),
+		Nest:        subCon(s, con.Nest(), changed),
+	})
+}
+
+func (s *substituterImp) createTempDeclRefForObjectInst(con constructs.ObjectInst, changed *bool) constructs.TempDeclRef {
+	return s.proj.NewTempDeclRef(constructs.TempDeclRefArgs{
+		PackagePath:   con.Generic().Package().Path(),
+		Name:          con.Generic().Name(),
+		ImplicitTypes: subConList(s, con.ImplicitTypes(), changed),
+		InstanceTypes: subConList(s, con.InstanceTypes(), changed),
+		Nest:          subCon(s, con.Generic().Nest(), changed),
+	})
 }
 
 func (s *substituterImp) createTempDeclRefForMethod(con constructs.Method, changed *bool) constructs.TempDeclRef {
-	panic(terror.New(`unimplemented`)) // TODO: Implement
+	return s.proj.NewTempDeclRef(constructs.TempDeclRefArgs{
+		PackagePath: con.Package().Path(),
+		Name:        con.Name(),
+	})
+}
+
+func (s *substituterImp) createTempDeclRefForMethodInst(con constructs.MethodInst, changed *bool) constructs.TempDeclRef {
+	return s.proj.NewTempDeclRef(constructs.TempDeclRefArgs{
+		PackagePath:   con.Generic().Package().Path(),
+		Name:          con.Generic().Name(),
+		InstanceTypes: subConList(s, con.InstanceTypes(), changed),
+	})
 }
 
 func (s *substituterImp) createTempDeclRefForValue(con constructs.Value, changed *bool) constructs.TempDeclRef {
-	panic(terror.New(`unimplemented`)) // TODO: Implement
+	return s.proj.NewTempDeclRef(constructs.TempDeclRefArgs{
+		PackagePath: con.Package().Path(),
+		Name:        con.Name(),
+	})
 }
 
 func (s *substituterImp) subAbstract(con constructs.Abstract, changed *bool) constructs.Abstract {
