@@ -14,9 +14,15 @@ import (
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/logger"
 )
 
-func Analyze(log *logger.Logger, querier *querier.Querier, proj constructs.Project,
-	curPkg constructs.Package, baker baker.Baker, conv converter.Converter,
-	node ast.Node) constructs.Metrics {
+func Analyze(
+	log *logger.Logger,
+	querier *querier.Querier,
+	proj constructs.Project,
+	curPkg constructs.Package,
+	baker baker.Baker,
+	conv converter.Converter,
+	node ast.Node,
+) constructs.Metrics {
 
 	assert.ArgNotNil(`curPkg`, curPkg)
 

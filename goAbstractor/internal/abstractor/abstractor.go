@@ -245,6 +245,13 @@ func (ab *abstractor) setTypeParamOverrides(args *types.TypeList, params *types.
 			With(`pos`, ab.pos(decl.Pos())))
 	}
 
+	// Set the arguments as the keys and the parameters as the values
+	// since this will be used to replace the unique type parameters
+	// for a receiver's type parameters in a method.
+	//
+	// For example, for type `foo[T any] struct` a method may be
+	// declared as `func (f foo[U]) bar()`. We want to replace the `U`
+	// with the `T` so that it matches the original type for `foo`.
 	ab.tpReplacer = map[*types.TypeParam]*types.TypeParam{}
 	for i := range count {
 		tp := args.At(i).(*types.TypeParam)

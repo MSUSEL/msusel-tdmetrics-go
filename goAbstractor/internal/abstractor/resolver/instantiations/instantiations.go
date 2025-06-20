@@ -102,32 +102,38 @@ func expandNestedTypes(log *logger.Logger, proj constructs.Project, method const
 	for i := range mIts.Count() {
 		mIt := mIts.Get(i)
 		implicitTypes := mIt.InstanceTypes()
-
 		for _, obj := range nestedObjs {
-			it := constructs.Cast[constructs.TypeDesc](obj.TypeParams())
-			instantiator.Object(log, proj, obj.GoType(), obj, implicitTypes, it)
-
-			instances := obj.Instances()
-			for j := range instances.Count() {
-				inst := instances.Get(j)
-				instantiator.Object(log, proj, inst.GoType(), obj, implicitTypes, inst.InstanceTypes())
-			}
+			expandNestedObject(log, proj, implicitTypes, obj)
 		}
-
 		for _, it := range nestedIts {
-			tp := constructs.Cast[constructs.TypeDesc](it.TypeParams())
-			instantiator.InterfaceDecl(log, proj, it.GoType(), it, implicitTypes, tp)
-
-			instances := it.Instances()
-			for j := range instances.Count() {
-				inst := instances.Get(j)
-				instantiator.InterfaceDecl(log, proj, inst.GoType(), it, implicitTypes, inst.InstanceTypes())
-			}
+			expandNestedInterface(log, proj, implicitTypes, it)
 		}
 	}
 }
 
-func findNestedTypes[T constructs.TypeDecl](nest constructs.NestType, ts collections.ReadonlySortedSet[T]) []T {
+func expandNestedObject(log *logger.Logger, proj constructs.Project, implicitTypes []constructs.TypeDesc, obj constructs.Object) {
+	it := constructs.Cast[constructs.TypeDesc](obj.TypeParams())
+	instantiator.Object(log, proj, obj.GoType(), obj, implicitTypes, it)
+
+	instances := obj.Instances()
+	for j := range instances.Count() {
+		inst := instances.Get(j)
+		instantiator.Object(log, proj, inst.GoType(), obj, implicitTypes, inst.InstanceTypes())
+	}
+}
+
+func expandNestedInterface(log *logger.Logger, proj constructs.Project, implicitTypes []constructs.TypeDesc, it constructs.InterfaceDecl) {
+	tp := constructs.Cast[constructs.TypeDesc](it.TypeParams())
+	instantiator.InterfaceDecl(log, proj, it.GoType(), it, implicitTypes, tp)
+
+	instances := it.Instances()
+	for j := range instances.Count() {
+		inst := instances.Get(j)
+		instantiator.InterfaceDecl(log, proj, inst.GoType(), it, implicitTypes, inst.InstanceTypes())
+	}
+}
+
+func findNestedTypes[T constructs.Nestable](nest constructs.NestType, ts collections.ReadonlySortedSet[T]) []T {
 	if utils.IsNil(nest) {
 		return nil
 	}

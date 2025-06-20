@@ -384,8 +384,6 @@ func (c *convImp) convertTypeParam(t *types.TypeParam) constructs.TypeDesc {
 			})
 			c.tpSeen[name] = ref
 		}
-
-		// TODO: Make sure that the references are being replaced?
 		return ref
 	}
 

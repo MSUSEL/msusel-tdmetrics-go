@@ -160,7 +160,7 @@ func (p *packageImp) findMethod(name string) (constructs.Method, bool) {
 		First()
 }
 
-func (p *packageImp) findValues(name string) (constructs.Value, bool) {
+func (p *packageImp) findValue(name string) (constructs.Value, bool) {
 	return p.values.Enumerate().
 		Where(func(t constructs.Value) bool {
 			return t.Name() == name
@@ -186,11 +186,11 @@ func (p *packageImp) FindDecl(name string, nest constructs.NestType) constructs.
 		return v
 	}
 	if v, ok := p.findMethod(name); ok {
-		assert.ArgIsNil(`nest`, nest)
+		//assert.ArgIsNil(`nest`, nest)
 		return v
 	}
-	if v, ok := p.findValues(name); ok {
-		assert.ArgIsNil(`nest`, nest)
+	if v, ok := p.findValue(name); ok {
+		//assert.ArgIsNil(`nest`, nest)
 		return v
 	}
 	return nil
