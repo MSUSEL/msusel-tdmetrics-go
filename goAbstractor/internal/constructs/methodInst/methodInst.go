@@ -90,6 +90,7 @@ func (i *instanceImp) ToJson(ctx *jsonify.Context) jsonify.Datum {
 		Add(ctx.OnlyIndex(), `generic`, i.generic).
 		Add(ctx.OnlyIndex(), `resolved`, i.resolved).
 		Add(ctx.Short(), `instanceTypes`, i.instanceTypes).
+		AddNonZero(ctx.OnlyIndex(), `metrics`, i.metrics).
 		AddNonZero(ctx.OnlyIndex(), `receiver`, i.receiver)
 }
 

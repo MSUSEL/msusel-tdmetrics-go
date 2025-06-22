@@ -1,6 +1,9 @@
 package metrics
 
 import (
+	"go/ast"
+	"go/types"
+
 	"github.com/Snow-Gremlin/goToolbox/collections"
 	"github.com/Snow-Gremlin/goToolbox/comp"
 
@@ -24,6 +27,8 @@ type metricsImp struct {
 	getter     bool
 	setter     bool
 	sideEffect bool
+	node       ast.Node
+	tpReplacer map[*types.TypeParam]*types.TypeParam
 
 	reads   collections.SortedSet[constructs.Construct]
 	writes  collections.SortedSet[constructs.Construct]
@@ -32,6 +37,7 @@ type metricsImp struct {
 
 func newMetrics(args constructs.MetricsArgs) constructs.Metrics {
 	assert.ArgNotNil(`location`, args.Location)
+	assert.ArgNotNil(`node`, args.Node)
 	assert.ArgHasNoNils(`reads`, args.Reads.ToSlice())
 	assert.ArgHasNoNils(`writes`, args.Writes.ToSlice())
 	assert.ArgHasNoNils(`invokes`, args.Invokes.ToSlice())
@@ -46,6 +52,8 @@ func newMetrics(args constructs.MetricsArgs) constructs.Metrics {
 		getter:     args.Getter,
 		setter:     args.Setter,
 		sideEffect: args.SideEffect,
+		node:       args.Node,
+		tpReplacer: args.TpReplacer,
 
 		reads:   args.Reads,
 		writes:  args.Writes,
@@ -68,6 +76,9 @@ func (m *metricsImp) Indents() int        { return m.indents }
 func (m *metricsImp) Getter() bool        { return m.getter }
 func (m *metricsImp) Setter() bool        { return m.setter }
 func (m *metricsImp) SideEffect() bool    { return m.sideEffect }
+
+func (m *metricsImp) Node() ast.Node                                    { return m.node }
+func (m *metricsImp) TpReplacer() map[*types.TypeParam]*types.TypeParam { return m.tpReplacer }
 
 func (m *metricsImp) Reads() collections.ReadonlySortedSet[constructs.Construct] {
 	return m.reads.Readonly()

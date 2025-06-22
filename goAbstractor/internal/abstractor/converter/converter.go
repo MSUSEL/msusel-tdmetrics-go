@@ -20,6 +20,7 @@ import (
 type Converter interface {
 	Nest() constructs.NestType
 	ImplicitTypes() []constructs.TypeDesc
+	TpReplacer() map[*types.TypeParam]*types.TypeParam
 	ConvertType(t types.Type, context string) constructs.TypeDesc
 	ConvertSignature(t *types.Signature, context string) constructs.Signature
 	ConvertInstanceTypes(t *types.TypeList, context string) []constructs.TypeDesc
@@ -67,6 +68,8 @@ type convImp struct {
 
 func (c *convImp) Nest() constructs.NestType            { return c.nest }
 func (c *convImp) ImplicitTypes() []constructs.TypeDesc { return c.implicitTypes }
+
+func (c *convImp) TpReplacer() map[*types.TypeParam]*types.TypeParam { return c.tpReplacer }
 
 func (c *convImp) ConvertType(t types.Type, context string) constructs.TypeDesc {
 	c.log.Logf("convert type: %v", t)

@@ -45,6 +45,8 @@ func Analyze(
 
 	return proj.NewMetrics(constructs.MetricsArgs{
 		Location:   loc,
+		Node:       node,
+		TpReplacer: conv.TpReplacer(),
 		Complexity: cmplx.Complexity,
 		LineCount:  cmplx.LineCount,
 		CodeCount:  cmplx.CodeCount,

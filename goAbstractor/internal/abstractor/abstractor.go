@@ -46,7 +46,7 @@ func Abstract(cfg Config) constructs.Project {
 	}
 	ab.abstractProject()
 
-	resolver.Resolve(proj, log)
+	resolver.Resolve(proj, querier, log)
 
 	log.Log(`done`)
 	return proj

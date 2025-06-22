@@ -1,6 +1,9 @@
 package constructs
 
 import (
+	"go/ast"
+	"go/types"
+
 	"github.com/Snow-Gremlin/goToolbox/collections"
 
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/locs"
@@ -19,6 +22,8 @@ type Metrics interface {
 	Getter() bool
 	Setter() bool
 	SideEffect() bool
+	Node() ast.Node
+	TpReplacer() map[*types.TypeParam]*types.TypeParam
 
 	Reads() collections.ReadonlySortedSet[Construct]
 	Writes() collections.ReadonlySortedSet[Construct]
@@ -33,6 +38,13 @@ type MetricsArgs struct {
 	// Metrics for values can be attached to zero or more values,
 	// (`var _ = func() int { ⋯ }`) or (`var x, y = func()(int, int) { ⋯ }`).
 	Location locs.Loc
+
+	// Node is the node that was read for this metrics.
+	Node ast.Node
+
+	// TpReplacer is the type replacement for reading the node.
+	// This converts from the type used on a method to the type used on the object.
+	TpReplacer map[*types.TypeParam]*types.TypeParam
 
 	// Complexity is the McCabe's Cyclomatic Complexity value for the method.
 	Complexity int

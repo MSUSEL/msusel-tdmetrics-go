@@ -4,6 +4,7 @@ import (
 	"github.com/Snow-Gremlin/goToolbox/collections"
 	"github.com/Snow-Gremlin/goToolbox/terrors/terror"
 
+	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/abstractor/querier"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/abstractor/resolver/dce"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/abstractor/resolver/genInterfaces"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/abstractor/resolver/inheritance"
@@ -15,14 +16,16 @@ import (
 )
 
 type resolverImp struct {
-	log  *logger.Logger
-	proj constructs.Project
+	log     *logger.Logger
+	querier *querier.Querier
+	proj    constructs.Project
 }
 
-func Resolve(proj constructs.Project, log *logger.Logger) {
+func Resolve(proj constructs.Project, querier *querier.Querier, log *logger.Logger) {
 	resolve := &resolverImp{
-		log:  log,
-		proj: proj,
+		log:     log,
+		querier: querier,
+		proj:    proj,
 	}
 
 	// Resolve imports of packages and receivers in methods.
@@ -84,7 +87,7 @@ func (r *resolverImp) Receivers() {
 
 func (r *resolverImp) ExpandInstantiations() {
 	r.log.Log(`expand instantiations`)
-	instantiations.ExpandInstantiations(r.log, r.proj)
+	instantiations.ExpandInstantiations(r.log, r.querier, r.proj)
 }
 
 func (r *resolverImp) GenerateInterfaces() {
