@@ -10,50 +10,62 @@ import (
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/logger"
 )
 
-func References(log *logger.Logger, proj constructs.Project) {
-	removeTempReferences(proj, false)
-	removeTempDeclRefs(proj, false)
-	tempReferences(log, proj)
-	tempDeclRefs(log, proj)
-}
-
-func removeTempReferences(proj constructs.Project, required bool) {
-	proj.AllConstructs().Foreach(func(c constructs.Construct) {
-		if trc, has := c.(constructs.TempReferenceContainer); has {
-			trc.RemoveTempReferences(required)
-		}
-	})
-}
-
-func removeTempDeclRefs(proj constructs.Project, required bool) {
-	proj.AllConstructs().Foreach(func(c constructs.Construct) {
-		if trc, has := c.(constructs.TempDeclRefContainer); has {
-			trc.RemoveTempDeclRefs(required)
-		}
-	})
-}
-
-func tempReferences(log *logger.Logger, proj constructs.Project) {
-	refs := proj.TempReferences()
-	for i := range refs.Count() {
-		resolveTempRef(log, proj, refs.Get(i))
+func References(log *logger.Logger, proj constructs.Project, required bool) {
+	changed := true
+	for changed {
+		changed = removeTempReferences(proj, required)
+		changed = removeTempDeclRefs(proj, required) || changed
+		changed = tempReferences(log, proj) || changed
+		changed = tempDeclRefs(log, proj) || changed
 	}
+	clearAllTemps(proj)
+}
 
-	removeTempReferences(proj, true)
+func clearAllTemps(proj constructs.Project) {
 	proj.ClearAllTempReferences()
 	proj.ClearAllTempTypeParamRefs()
+	proj.ClearAllTempDeclRefs()
 }
 
-func resolveTempRef(log *logger.Logger, proj constructs.Project, ref constructs.TempReference) {
+func removeTempReferences(proj constructs.Project, required bool) bool {
+	changed := false
+	proj.AllConstructs().Foreach(func(c constructs.Construct) {
+		if trc, has := c.(constructs.TempReferenceContainer); has {
+			changed = trc.RemoveTempReferences(required) || changed
+		}
+	})
+	return changed
+}
+
+func removeTempDeclRefs(proj constructs.Project, required bool) bool {
+	changed := false
+	proj.AllConstructs().Foreach(func(c constructs.Construct) {
+		if trc, has := c.(constructs.TempDeclRefContainer); has {
+			changed = trc.RemoveTempDeclRefs(required) || changed
+		}
+	})
+	return changed
+}
+
+func tempReferences(log *logger.Logger, proj constructs.Project) bool {
+	changed := false
+	refs := proj.TempReferences()
+	for i := range refs.Count() {
+		changed = resolveTempRef(log, proj, refs.Get(i)) || changed
+	}
+	return removeTempReferences(proj, true) || changed
+}
+
+func resolveTempRef(log *logger.Logger, proj constructs.Project, ref constructs.TempReference) bool {
 	if ref.Resolved() {
-		return
+		return false
 	}
 
 	// Try to find instance of type or non-generic type.
 	typ, ok := proj.FindType(ref.PackagePath(), ref.Name(), ref.Nest(), ref.ImplicitTypes(), ref.InstanceTypes(), false, false)
 	if ok {
 		ref.SetResolution(typ)
-		return
+		return true
 	}
 
 	// Try to find generic type and then create the instance if needed.
@@ -66,7 +78,7 @@ func resolveTempRef(log *logger.Logger, proj constructs.Project, ref constructs.
 	}
 	if len(ref.InstanceTypes()) <= 0 && len(ref.ImplicitTypes()) <= 0 {
 		ref.SetResolution(typ)
-		return
+		return true
 	}
 
 	switch typ.Kind() {
@@ -79,6 +91,7 @@ func resolveTempRef(log *logger.Logger, proj constructs.Project, ref constructs.
 				With(`instance types`, ref.InstanceTypes()))
 		}
 		ref.SetResolution(res)
+		return true
 
 	case kind.InterfaceDecl:
 		res := instantiator.InterfaceDecl(log, proj, ref.GoType(), typ.(constructs.InterfaceDecl), ref.ImplicitTypes(), ref.InstanceTypes())
@@ -89,6 +102,7 @@ func resolveTempRef(log *logger.Logger, proj constructs.Project, ref constructs.
 				With(`instance types`, ref.InstanceTypes()))
 		}
 		ref.SetResolution(res)
+		return true
 
 	default:
 		panic(terror.New(`unexpected declaration type`).
@@ -97,26 +111,25 @@ func resolveTempRef(log *logger.Logger, proj constructs.Project, ref constructs.
 	}
 }
 
-func tempDeclRefs(log *logger.Logger, proj constructs.Project) {
+func tempDeclRefs(log *logger.Logger, proj constructs.Project) bool {
+	changed := false
 	refs := proj.TempDeclRefs()
 	for i := range refs.Count() {
-		resolveTempDeclRef(log, proj, refs.Get(i))
+		changed = resolveTempDeclRef(log, proj, refs.Get(i)) || changed
 	}
-
-	removeTempDeclRefs(proj, true)
-	proj.ClearAllTempDeclRefs()
+	return removeTempDeclRefs(proj, true) || changed
 }
 
-func resolveTempDeclRef(log *logger.Logger, proj constructs.Project, ref constructs.TempDeclRef) {
+func resolveTempDeclRef(log *logger.Logger, proj constructs.Project, ref constructs.TempDeclRef) bool {
 	if ref.Resolved() {
-		return
+		return false
 	}
 
 	// Try to find instance of declaration or non-generic declaration.
 	decl, ok := proj.FindDecl(ref.PackagePath(), ref.Name(), ref.Nest(), ref.ImplicitTypes(), ref.InstanceTypes(), false, false)
 	if ok {
 		ref.SetResolution(decl)
-		return
+		return true
 	}
 
 	// Try to find generic declaration and then create the instance if needed.
@@ -129,7 +142,7 @@ func resolveTempDeclRef(log *logger.Logger, proj constructs.Project, ref constru
 	}
 	if len(ref.InstanceTypes()) <= 0 && len(ref.ImplicitTypes()) <= 0 {
 		ref.SetResolution(decl)
-		return
+		return true
 	}
 
 	switch decl.Kind() {
@@ -142,6 +155,7 @@ func resolveTempDeclRef(log *logger.Logger, proj constructs.Project, ref constru
 				With(`instance types`, ref.InstanceTypes()))
 		}
 		ref.SetResolution(res)
+		return true
 
 	case kind.InterfaceDecl:
 		res := instantiator.InterfaceDecl(log, proj, nil, decl.(constructs.InterfaceDecl), nil, ref.InstanceTypes())
@@ -152,6 +166,7 @@ func resolveTempDeclRef(log *logger.Logger, proj constructs.Project, ref constru
 				With(`instance types`, ref.InstanceTypes()))
 		}
 		ref.SetResolution(res)
+		return true
 
 	case kind.Method:
 		res := instantiator.Method(log, proj, decl.(constructs.Method), ref.InstanceTypes())
@@ -162,6 +177,7 @@ func resolveTempDeclRef(log *logger.Logger, proj constructs.Project, ref constru
 				With(`instance types`, ref.InstanceTypes()))
 		}
 		ref.SetResolution(res)
+		return true
 
 	default:
 		panic(terror.New(`unexpected declaration type`).

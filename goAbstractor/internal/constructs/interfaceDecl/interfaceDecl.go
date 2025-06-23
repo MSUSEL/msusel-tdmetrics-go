@@ -100,10 +100,13 @@ func (d *interfaceDeclImp) AddInstance(inst constructs.InterfaceInst) constructs
 	return v
 }
 
-func (d *interfaceDeclImp) RemoveTempDeclRefs(required bool) {
+func (d *interfaceDeclImp) RemoveTempDeclRefs(required bool) bool {
 	if !utils.IsNil(d.nest) {
-		d.nest = constructs.ResolvedTempDeclRef(d.nest, required).(constructs.NestType)
+		nest, changed := constructs.ResolvedTempDeclRef(d.nest, required)
+		d.nest = nest.(constructs.NestType)
+		return changed
 	}
+	return false
 }
 
 func (d *interfaceDeclImp) FindInstance(implicitTypes, instanceTypes []constructs.TypeDesc) (constructs.InterfaceInst, bool) {

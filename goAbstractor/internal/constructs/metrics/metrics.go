@@ -92,10 +92,11 @@ func (m *metricsImp) Invokes() collections.ReadonlySortedSet[constructs.Construc
 	return m.invokes.Readonly()
 }
 
-func (m *metricsImp) RemoveTempDeclRefs(required bool) {
-	constructs.ResolveTempDeclRefSet(m.reads, required)
-	constructs.ResolveTempDeclRefSet(m.writes, required)
-	constructs.ResolveTempDeclRefSet(m.invokes, required)
+func (m *metricsImp) RemoveTempDeclRefs(required bool) bool {
+	changed := constructs.ResolveTempDeclRefSet(m.reads, required)
+	changed = constructs.ResolveTempDeclRefSet(m.writes, required) || changed
+	changed = constructs.ResolveTempDeclRefSet(m.invokes, required) || changed
+	return changed
 }
 
 func (m *metricsImp) CompareTo(other constructs.Construct) int {

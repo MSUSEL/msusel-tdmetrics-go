@@ -103,13 +103,18 @@ func Comparer() comp.Comparer[constructs.ObjectInst] {
 	}
 }
 
-func (i *instanceImp) RemoveTempReferences(required bool) {
+func (i *instanceImp) RemoveTempReferences(required bool) bool {
+	changed := false
+	var subChanged bool
 	for j, it := range i.implicitTypes {
-		i.implicitTypes[j] = constructs.ResolvedTempReference(it, required)
+		i.implicitTypes[j], subChanged = constructs.ResolvedTempReference(it, required)
+		changed = changed || subChanged
 	}
 	for j, it := range i.instanceTypes {
-		i.instanceTypes[j] = constructs.ResolvedTempReference(it, required)
+		i.instanceTypes[j], subChanged = constructs.ResolvedTempReference(it, required)
+		changed = changed || subChanged
 	}
+	return changed
 }
 
 func (i *instanceImp) ToJson(ctx *jsonify.Context) jsonify.Datum {

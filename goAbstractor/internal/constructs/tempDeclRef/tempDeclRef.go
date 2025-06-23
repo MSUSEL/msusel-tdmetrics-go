@@ -68,10 +68,13 @@ func (r *tempDeclRefImp) SetResolution(con constructs.Construct) {
 	r.con = con
 }
 
-func (r *tempDeclRefImp) RemoveTempDeclRefs(required bool) {
+func (r *tempDeclRefImp) RemoveTempDeclRefs(required bool) bool {
 	if !utils.IsNil(r.nest) {
-		r.nest = constructs.ResolvedTempDeclRef(r.nest, required).(constructs.NestType)
+		nest, changed := constructs.ResolvedTempDeclRef(r.nest, required)
+		r.nest = nest.(constructs.NestType)
+		return changed
 	}
+	return false
 }
 
 func (r *tempDeclRefImp) CompareTo(other constructs.Construct) int {

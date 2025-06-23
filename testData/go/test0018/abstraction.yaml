@@ -5,7 +5,8 @@
     { name: x, type: typeParam1  }, # 2. x T
     { name: y, type: basic1      }, # 3. y int
     { name: z, type: objectInst3 }, # 4. z nested[T any; int]
-    { name: z, type: typeParam1  }, # 5. z T
+    { name: z, type: objectInst1 }, # 5. z ???
+    { name: z, type: typeParam1  }, # 6. z T
   ],
   basics: [ int, string ],
   fields: [
@@ -19,15 +20,16 @@
   ],
   methodInsts: [
     { # 1. func main.dat[T int](x int, y int)
-      generic: 1, resolved: 2,
+      generic: 1, resolved: 2, metrics: 1,
       instanceTypes: [ basic2 ],
     },
     { # 2. func main.foo[nested[T any; int]](z nested[T; int])
-      generic: 2, resolved: 4,
+      generic: 2, resolved: 4, metrics: 2,
       instanceTypes: [ objectInst3 ],
     },
-    {
-      # TODO: Needs to have `nested[string; int]`
+    { # 3. ???
+      generic: 2, resolved: 5, metrics: 3,
+      instanceTypes: [ objectInst1 ],
     },
   ],
   methods: [

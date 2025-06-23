@@ -82,10 +82,13 @@ func (r *tempReferenceImp) SetResolution(typ constructs.TypeDesc) {
 	r.typ = typ
 }
 
-func (r *tempReferenceImp) RemoveTempDeclRefs(required bool) {
+func (r *tempReferenceImp) RemoveTempDeclRefs(required bool) bool {
 	if !utils.IsNil(r.nest) {
-		r.nest = constructs.ResolvedTempDeclRef(r.nest, required).(constructs.NestType)
+		nest, changed := constructs.ResolvedTempDeclRef(r.nest, required)
+		r.nest = nest.(constructs.NestType)
+		return changed
 	}
+	return false
 }
 
 func (r *tempReferenceImp) CompareTo(other constructs.Construct) int {

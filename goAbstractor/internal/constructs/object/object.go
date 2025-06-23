@@ -98,10 +98,13 @@ func (d *objectImp) AddInstance(inst constructs.ObjectInst) constructs.ObjectIns
 	return v
 }
 
-func (d *objectImp) RemoveTempDeclRefs(required bool) {
+func (d *objectImp) RemoveTempDeclRefs(required bool) bool {
 	if !utils.IsNil(d.nest) {
-		d.nest = constructs.ResolvedTempDeclRef(d.nest, required).(constructs.NestType)
+		nest, changed := constructs.ResolvedTempDeclRef(d.nest, required)
+		d.nest = nest.(constructs.NestType)
+		return changed
 	}
+	return false
 }
 
 func (d *objectImp) FindInstance(implicitTypes, instanceTypes []constructs.TypeDesc) (constructs.ObjectInst, bool) {

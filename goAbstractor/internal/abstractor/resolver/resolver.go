@@ -34,7 +34,7 @@ func Resolve(proj constructs.Project, querier *querier.Querier, log *logger.Logg
 
 	// First pass of removing references.
 	// This includes creating instances that were referenced in the metrics.
-	resolve.References()
+	resolve.References(false)
 
 	// Fill out all instantiations of generic object, interface, and methods.
 	// Also fill out all pointer receivers that are still not defined.
@@ -43,7 +43,7 @@ func Resolve(proj constructs.Project, querier *querier.Querier, log *logger.Logg
 	// Second pass of removing references.
 	// This takes care of any references that the instantiation had to make.
 	// There should be none but doesn't hurt to check.
-	resolve.References()
+	resolve.References(true)
 
 	// Determine interfaces for objects and object instances.
 	// Also extend the interfaces for pointers.
@@ -100,9 +100,9 @@ func (r *resolverImp) Inheritance() {
 	inheritance.Resolve(r.log, interfaceDesc.Comparer(), r.proj.InterfaceDescs())
 }
 
-func (r *resolverImp) References() {
+func (r *resolverImp) References(required bool) {
 	r.log.Log(`resolve references`)
-	references.References(r.log, r.proj)
+	references.References(r.log, r.proj, required)
 }
 
 func (r *resolverImp) DeadCodeElimination() {

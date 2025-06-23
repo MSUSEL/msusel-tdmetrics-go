@@ -58,8 +58,9 @@ func Comparer() comp.Comparer[constructs.Argument] {
 	}
 }
 
-func (a *argumentImp) RemoveTempReferences(required bool) {
-	a.typ = constructs.ResolvedTempReference(a.typ, required)
+func (a *argumentImp) RemoveTempReferences(required bool) (changed bool) {
+	a.typ, changed = constructs.ResolvedTempReference(a.typ, required)
+	return
 }
 
 func (a *argumentImp) ToJson(ctx *jsonify.Context) jsonify.Datum {

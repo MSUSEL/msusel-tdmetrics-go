@@ -1,7 +1,6 @@
 package substituter
 
 import (
-	"fmt"
 	"maps"
 
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/assert"
@@ -251,8 +250,6 @@ func (s *substituterImp) createTempDeclRefForValue(con constructs.Value, changed
 
 func finishSubCon[TCon constructs.Construct, TArg any](subChanged bool, orig TCon, factory func(TArg) TCon, args TArg, changed *bool) TCon {
 	if subChanged {
-		fmt.Printf(">> Original: %+v\n", orig) // TODO: REMOVE
-		fmt.Printf("   Replaced: %+v\n", args) // TODO: REMOVE
 		*changed = true
 		return factory(args)
 	}

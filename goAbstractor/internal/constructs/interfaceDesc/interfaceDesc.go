@@ -182,13 +182,18 @@ func Comparer() comp.Comparer[constructs.InterfaceDesc] {
 	}
 }
 
-func (id *interfaceDescImp) RemoveTempReferences(required bool) {
+func (id *interfaceDescImp) RemoveTempReferences(required bool) bool {
+	changed := false
+	var subChanged bool
 	for i, ap := range id.approx {
-		id.approx[i] = constructs.ResolvedTempReference(ap, required)
+		id.approx[i], subChanged = constructs.ResolvedTempReference(ap, required)
+		changed = changed || subChanged
 	}
 	for i, ex := range id.exact {
-		id.exact[i] = constructs.ResolvedTempReference(ex, required)
+		id.exact[i], subChanged = constructs.ResolvedTempReference(ex, required)
+		changed = changed || subChanged
 	}
+	return changed
 }
 
 func (id *interfaceDescImp) ToJson(ctx *jsonify.Context) jsonify.Datum {
