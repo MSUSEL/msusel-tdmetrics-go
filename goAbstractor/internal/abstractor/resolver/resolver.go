@@ -34,6 +34,9 @@ func Resolve(proj constructs.Project, querier *querier.Querier, log *logger.Logg
 	resolve.Imports()
 	resolve.Receivers()
 
+	// Expanding instantiations may require instantiating referenced objects
+	// and instantiating referenced objects may create instantiations that
+	// need to be expanded, so loop through both until there are none left.
 	changed := true
 	loopBreak := 10000
 	for changed {

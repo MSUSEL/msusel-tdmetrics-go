@@ -30,7 +30,7 @@ func ArgNotNil(name string, value any) {
 }
 
 func ArgIsEmpty(name string, value any) {
-	if len, ok := utils.Length(value); !ok || len >= 0 {
+	if len, ok := utils.Length(value); !ok || len > 0 {
 		panic(terror.New(`argument must be empty`).
 			With(`name`, name))
 	}

@@ -4,6 +4,7 @@ import (
 	"go/ast"
 	"go/token"
 	"go/types"
+	"maps"
 
 	"github.com/Snow-Gremlin/goToolbox/terrors/terror"
 	"golang.org/x/tools/go/packages"
@@ -21,9 +22,23 @@ func New(packages []*packages.Package) *Querier {
 		panic(terror.New(`no packages provided`))
 	}
 
+	info := &types.Info{
+		Defs:         map[*ast.Ident]types.Object{},
+		FileVersions: map[*ast.File]string{},
+		Implicits:    map[ast.Node]types.Object{},
+		Instances:    map[*ast.Ident]types.Instance{},
+		Scopes:       map[ast.Node]*types.Scope{},
+		Selections:   map[*ast.SelectorExpr]*types.Selection{},
+		Types:        map[ast.Expr]types.TypeAndValue{},
+		Uses:         map[*ast.Ident]types.Object{},
+	}
+	for _, p := range packages {
+		joinInfo(info, p.TypesInfo)
+	}
+
 	q := &Querier{
 		packages: packages,
-		info:     packages[0].TypesInfo,
+		info:     info,
 		fSet:     packages[0].Fset,
 		fnScopes: map[*types.Scope]*types.Func{},
 	}
@@ -40,6 +55,18 @@ func NewSimple(info *types.Info, fSet *token.FileSet) *Querier {
 		info: info,
 		fSet: fSet,
 	}
+}
+
+func joinInfo(info, src *types.Info) {
+	maps.Insert(info.Defs, maps.All(src.Defs))
+	maps.Insert(info.FileVersions, maps.All(src.FileVersions))
+	maps.Insert(info.Implicits, maps.All(src.Implicits))
+	// info.InitOrder isn't used
+	maps.Insert(info.Instances, maps.All(src.Instances))
+	maps.Insert(info.Scopes, maps.All(src.Scopes))
+	maps.Insert(info.Selections, maps.All(src.Selections))
+	maps.Insert(info.Types, maps.All(src.Types))
+	maps.Insert(info.Uses, maps.All(src.Uses))
 }
 
 func (q *Querier) Packages() []*packages.Package    { return q.packages }
