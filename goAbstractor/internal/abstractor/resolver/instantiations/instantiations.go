@@ -16,35 +16,15 @@ import (
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/logger"
 )
 
-// ExpandInstantiations adds propagation of instances so that if an object
-// has a method added after the instance, the method also gets instances created.
-func ExpandInstantiations(log *logger.Logger, querier *querier.Querier, proj constructs.Project) {
-	in := new(log, querier, proj)
-	for in.changed {
-		in.changed = false
-		in.fillOutAllMetrics()
-		in.expandAllInstantiations()
-		in.fillOutAllPointerReceivers()
-		in.expandAllNestedTypes()
-	}
+type Instantiations interface {
+
+	// ExpandInstantiations adds propagation of instances so that if an object
+	// has a method added after the instance, the method also gets instances created.
+	ExpandInstantiations() bool
 }
 
-type instantiation struct {
-	log       *logger.Logger
-	querier   *querier.Querier
-	proj      constructs.Project
-	bk        baker.Baker
-	typeCache map[any]any
-	changed   bool
-
-	doneMetrics    map[constructs.MethodInst]bool
-	doneExpandInst map[constructs.Object]bool
-	donePointerRec map[constructs.Object]bool
-	doneNestedType map[constructs.Method]bool
-}
-
-func new(log *logger.Logger, querier *querier.Querier, proj constructs.Project) *instantiation {
-	return &instantiation{
+func New(log *logger.Logger, querier *querier.Querier, proj constructs.Project) Instantiations {
+	return &instantiationsImp{
 		log:            log,
 		querier:        querier,
 		proj:           proj,
@@ -58,7 +38,30 @@ func new(log *logger.Logger, querier *querier.Querier, proj constructs.Project) 
 	}
 }
 
-func (in *instantiation) fillOutAllMetrics() {
+type instantiationsImp struct {
+	log       *logger.Logger
+	querier   *querier.Querier
+	proj      constructs.Project
+	bk        baker.Baker
+	typeCache map[any]any
+	changed   bool
+
+	doneMetrics    map[constructs.MethodInst]bool
+	doneExpandInst map[constructs.Object]bool
+	donePointerRec map[constructs.Object]bool
+	doneNestedType map[constructs.Method]bool
+}
+
+func (in *instantiationsImp) ExpandInstantiations() bool {
+	in.changed = false
+	in.fillOutAllMetrics()
+	in.expandAllInstantiations()
+	in.fillOutAllPointerReceivers()
+	in.expandAllNestedTypes()
+	return in.changed
+}
+
+func (in *instantiationsImp) fillOutAllMetrics() {
 	methodInsts := in.proj.MethodInsts()
 	for i := range methodInsts.Count() {
 		if mi := methodInsts.Get(i); !in.doneMetrics[mi] {
@@ -69,7 +72,7 @@ func (in *instantiation) fillOutAllMetrics() {
 	}
 }
 
-func (in *instantiation) fillOutMetrics(mi constructs.MethodInst) {
+func (in *instantiationsImp) fillOutMetrics(mi constructs.MethodInst) {
 	m := mi.Generic()
 	curPkg := m.Package()
 	node := m.Metrics().Node()
@@ -79,7 +82,7 @@ func (in *instantiation) fillOutMetrics(mi constructs.MethodInst) {
 	mi.SetMetrics(metrics)
 }
 
-func (in *instantiation) expandAllInstantiations() {
+func (in *instantiationsImp) expandAllInstantiations() {
 	objects := in.proj.Objects()
 	for i := range objects.Count() {
 		if obj := objects.Get(i); !in.doneExpandInst[obj] {
@@ -90,7 +93,7 @@ func (in *instantiation) expandAllInstantiations() {
 	}
 }
 
-func (in *instantiation) expandInstantiations(obj constructs.Object) {
+func (in *instantiationsImp) expandInstantiations(obj constructs.Object) {
 	// Add the method instances to the object.
 	methods := obj.Methods()
 	for i := range methods.Count() {
@@ -114,7 +117,7 @@ func (in *instantiation) expandInstantiations(obj constructs.Object) {
 
 // expandObjectInst adds the given instance into each method if it doesn't
 // exist in that method. Then updates methods and receivers for the instance.
-func (in *instantiation) expandObjectInst(obj constructs.Object, instance constructs.ObjectInst) {
+func (in *instantiationsImp) expandObjectInst(obj constructs.Object, instance constructs.ObjectInst) {
 	methods := obj.Methods()
 	for i := range methods.Count() {
 		method := methods.Get(i)
@@ -131,7 +134,7 @@ func (in *instantiation) expandObjectInst(obj constructs.Object, instance constr
 	}
 }
 
-func (in *instantiation) fillOutAllPointerReceivers() {
+func (in *instantiationsImp) fillOutAllPointerReceivers() {
 	objects := in.proj.Objects()
 	for i := range objects.Count() {
 		if obj := objects.Get(i); !in.donePointerRec[obj] {
@@ -142,7 +145,7 @@ func (in *instantiation) fillOutAllPointerReceivers() {
 	}
 }
 
-func (in *instantiation) fillOutPointerReceivers(obj constructs.Object) {
+func (in *instantiationsImp) fillOutPointerReceivers(obj constructs.Object) {
 	if hasPointerReceivers(obj) {
 		ptr := in.bk.BakePointer()
 		// create a pointer for the generic object.
@@ -163,7 +166,7 @@ func hasPointerReceivers(obj constructs.Object) bool {
 	return obj.Methods().Enumerate().Any(constructs.Method.PointerRecv)
 }
 
-func (in *instantiation) expandAllNestedTypes() {
+func (in *instantiationsImp) expandAllNestedTypes() {
 	methods := in.proj.Methods()
 	for i := range methods.Count() {
 		if m := methods.Get(i); !in.doneNestedType[m] {
@@ -174,7 +177,7 @@ func (in *instantiation) expandAllNestedTypes() {
 	}
 }
 
-func (in *instantiation) expandNestedTypes(method constructs.Method) {
+func (in *instantiationsImp) expandNestedTypes(method constructs.Method) {
 	nestedObjs := findNestedTypes(method, in.proj.Objects())
 	nestedIts := findNestedTypes(method, in.proj.InterfaceDecls())
 
@@ -191,7 +194,7 @@ func (in *instantiation) expandNestedTypes(method constructs.Method) {
 	}
 }
 
-func (in *instantiation) expandNestedObject(implicitTypes []constructs.TypeDesc, obj constructs.Object) {
+func (in *instantiationsImp) expandNestedObject(implicitTypes []constructs.TypeDesc, obj constructs.Object) {
 	it := constructs.Cast[constructs.TypeDesc](obj.TypeParams())
 	instantiator.Object(in.log, in.proj, obj.GoType(), obj, implicitTypes, it)
 
@@ -202,7 +205,7 @@ func (in *instantiation) expandNestedObject(implicitTypes []constructs.TypeDesc,
 	}
 }
 
-func (in *instantiation) expandNestedInterface(implicitTypes []constructs.TypeDesc, it constructs.InterfaceDecl) {
+func (in *instantiationsImp) expandNestedInterface(implicitTypes []constructs.TypeDesc, it constructs.InterfaceDecl) {
 	tp := constructs.Cast[constructs.TypeDesc](it.TypeParams())
 	instantiator.InterfaceDecl(in.log, in.proj, it.GoType(), it, implicitTypes, tp)
 

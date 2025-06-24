@@ -19,6 +19,7 @@ type resolverImp struct {
 	log     *logger.Logger
 	querier *querier.Querier
 	proj    constructs.Project
+	is      instantiations.Instantiations
 }
 
 func Resolve(proj constructs.Project, querier *querier.Querier, log *logger.Logger) {
@@ -26,19 +27,30 @@ func Resolve(proj constructs.Project, querier *querier.Querier, log *logger.Logg
 		log:     log,
 		querier: querier,
 		proj:    proj,
+		is:      instantiations.New(log, querier, proj),
 	}
 
 	// Resolve imports of packages and receivers in methods.
 	resolve.Imports()
 	resolve.Receivers()
 
-	// First pass of removing references.
-	// This includes creating instances that were referenced in the metrics.
-	resolve.References(false)
+	changed := true
+	loopBreak := 10000
+	for changed {
+		changed = false
+		loopBreak--
+		if loopBreak <= 0 {
+			panic(terror.New(`resolver loop exceeded maximum loop count`))
+		}
 
-	// Fill out all instantiations of generic object, interface, and methods.
-	// Also fill out all pointer receivers that are still not defined.
-	resolve.ExpandInstantiations()
+		// First pass of removing references.
+		// This includes creating instances that were referenced in the metrics.
+		changed = resolve.References(false) || changed
+
+		// Fill out all instantiations of generic object, interface, and methods.
+		// Also fill out all pointer receivers that are still not defined.
+		changed = resolve.ExpandInstantiations() || changed
+	}
 
 	// Second pass of removing references.
 	// This takes care of any references that the instantiation had to make.
@@ -85,9 +97,9 @@ func (r *resolverImp) Receivers() {
 	}
 }
 
-func (r *resolverImp) ExpandInstantiations() {
+func (r *resolverImp) ExpandInstantiations() bool {
 	r.log.Log(`expand instantiations`)
-	instantiations.ExpandInstantiations(r.log, r.querier, r.proj)
+	return r.is.ExpandInstantiations()
 }
 
 func (r *resolverImp) GenerateInterfaces() {
@@ -100,9 +112,9 @@ func (r *resolverImp) Inheritance() {
 	inheritance.Resolve(r.log, interfaceDesc.Comparer(), r.proj.InterfaceDescs())
 }
 
-func (r *resolverImp) References(required bool) {
+func (r *resolverImp) References(required bool) bool {
 	r.log.Log(`resolve references`)
-	references.References(r.log, r.proj, required)
+	return references.References(r.log, r.proj, required)
 }
 
 func (r *resolverImp) DeadCodeElimination() {

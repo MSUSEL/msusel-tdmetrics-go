@@ -10,15 +10,15 @@ import (
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/logger"
 )
 
-func References(log *logger.Logger, proj constructs.Project, required bool) {
-	changed := true
-	for changed {
-		changed = removeTempReferences(proj, required)
-		changed = removeTempDeclRefs(proj, required) || changed
-		changed = tempReferences(log, proj) || changed
-		changed = tempDeclRefs(log, proj) || changed
+func References(log *logger.Logger, proj constructs.Project, required bool) bool {
+	changed := removeTempReferences(proj, required)
+	changed = removeTempDeclRefs(proj, required) || changed
+	changed = tempReferences(log, proj) || changed
+	changed = tempDeclRefs(log, proj) || changed
+	if required {
+		clearAllTemps(proj)
 	}
-	clearAllTemps(proj)
+	return changed
 }
 
 func clearAllTemps(proj constructs.Project) {

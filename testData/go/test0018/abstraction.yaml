@@ -5,7 +5,7 @@
     { name: x, type: typeParam1  }, # 2. x T
     { name: y, type: basic1      }, # 3. y int
     { name: z, type: objectInst3 }, # 4. z nested[T any; int]
-    { name: z, type: objectInst1 }, # 5. z ???
+    { name: z, type: objectInst1 }, # 5. z nested[string; int]
     { name: z, type: typeParam1  }, # 6. z T
   ],
   basics: [ int, string ],
@@ -27,8 +27,8 @@
       generic: 2, resolved: 4, metrics: 2,
       instanceTypes: [ objectInst3 ],
     },
-    { # 3. ???
-      generic: 2, resolved: 5, metrics: 3,
+    { # 3. func main.foo[nested[string; int]](z nested[string; int])
+      generic: 2, resolved: 5, metrics: 2,
       instanceTypes: [ objectInst1 ],
     },
   ],
@@ -40,10 +40,10 @@
       instances: [ 1 ],
     },
     { # 2. func main.foo[T any](z T)
-      name: foo, package: 2, signature: 5,
+      name: foo, package: 2, signature: 6,
       loc: 13, metrics: 2,
       typeParams: [ 1 ],
-      instances: [ 2 ],
+      instances: [ 2, 3 ],
     },
     { # 3. func main.main()
       name: main, package: 2, signature: 1,
@@ -102,14 +102,15 @@
     {},                   # 1. func()
     { params: [ 1, 3 ] }, # 2. func(x string, y int)
     { params: [ 2, 3 ] }, # 3. func(x T, y int)
-    { params: [ 4 ]    }, # 4. func(z nested[int])
-    { params: [ 5 ]    }, # 5. func(z T)
+    { params: [ 4 ]    }, # 4. func(z nested[T any; int])
+    { params: [ 5 ]    }, # 5. func(z nested[string; int])
+    { params: [ 6 ]    }, # 6. func(z T)
   ],
   structDescs: [
     { fields: [ 1, 3 ] }, # 1. struct{ X string; Y int }
     { fields: [ 1, 4 ] }, # 2. struct{ X string; Y U }
-    { fields: [ 2, 3 ] }, # 2. struct{ X T; Y int }
-    { fields: [ 2, 4 ] }, # 3. struct{ X T; Y U }
+    { fields: [ 2, 3 ] }, # 3. struct{ X T; Y int }
+    { fields: [ 2, 4 ] }, # 4. struct{ X T; Y U }
   ],
   typeParams: [
     { name: T, type: interfaceDesc1 }, # 1. T any

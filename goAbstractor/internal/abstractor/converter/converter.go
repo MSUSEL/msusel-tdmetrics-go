@@ -277,7 +277,7 @@ func (c *convImp) convertNamed(t *types.Named) constructs.TypeDesc {
 	}
 
 	switch typ.Kind() {
-	case kind.TempReference:
+	case kind.TempReference, kind.InterfaceInst, kind.ObjectInst:
 		return typ
 	case kind.InterfaceDecl:
 		return instantiator.InterfaceDecl(c.log, c.proj, t.Underlying(), typ.(constructs.InterfaceDecl), c.implicitTypes, instanceTypes)
