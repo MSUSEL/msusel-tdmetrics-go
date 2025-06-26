@@ -20,7 +20,8 @@ import (
 )
 
 type methodImp struct {
-	realType *types.Signature
+	funcType *types.Func
+	sigType  *types.Signature
 	pkg      constructs.Package
 	name     string
 	exported bool
@@ -56,6 +57,8 @@ func newMethod(args constructs.MethodArgs) constructs.Method {
 	}
 
 	met := &methodImp{
+		funcType:   args.FuncType,
+		sigType:    args.SigType,
 		pkg:        args.Package,
 		name:       args.Name,
 		exported:   args.Exported,
@@ -83,11 +86,12 @@ func (m *methodImp) Index() int          { return m.index }
 func (m *methodImp) SetIndex(index int)  { m.index = index }
 func (m *methodImp) Alive() bool         { return m.alive }
 func (m *methodImp) SetAlive(alive bool) { m.alive = alive }
-func (m *methodImp) GoType() types.Type  { return m.realType }
+func (m *methodImp) GoType() types.Type  { return m.sigType }
 func (m *methodImp) Name() string        { return m.name }
 func (m *methodImp) Exported() bool      { return m.exported }
 func (m *methodImp) Location() locs.Loc  { return m.loc }
 
+func (m *methodImp) FuncType() *types.Func              { return m.funcType }
 func (m *methodImp) Package() constructs.Package        { return m.pkg }
 func (m *methodImp) Type() constructs.TypeDesc          { return m.signature }
 func (m *methodImp) Signature() constructs.Signature    { return m.signature }

@@ -10,6 +10,7 @@ import (
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/abstractor/baker"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/abstractor/instantiator"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/abstractor/querier"
+	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/assert"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs/hint"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs/innate"
@@ -261,16 +262,29 @@ func (c *convImp) convertNamed(t *types.Named) constructs.TypeDesc {
 	// Get any type parameters.
 	instanceTypes := cache(c, t.TypeArgs(), c.convertInstanceTypes)
 
+	// Determine if type is inside the current nest.
+	var nest constructs.NestType
+	var implicitTypes []constructs.TypeDesc
+	if c.nest != nil {
+		nestFunc := c.nest.FuncType()
+		assert.ArgNotNil(`nest funcType`, nestFunc)
+		realNest := c.querier.NestingFunc(t.Obj())
+		if nestFunc == realNest {
+			nest = c.nest
+			implicitTypes = c.implicitTypes
+		}
+	}
+
 	// Check if the reference can already be found.
-	typ, found := c.proj.FindType(pkgPath, name, c.nest, c.implicitTypes, instanceTypes, true, false)
+	typ, found := c.proj.FindType(pkgPath, name, nest, implicitTypes, instanceTypes, true, false)
 	if !found {
 		// Otherwise, create a temporary reference that will be filled later.
 		return c.proj.NewTempReference(constructs.TempReferenceArgs{
 			RealType:      t,
 			PackagePath:   pkgPath,
 			Name:          name,
-			Nest:          c.nest,
-			ImplicitTypes: c.implicitTypes,
+			Nest:          nest,
+			ImplicitTypes: implicitTypes,
 			InstanceTypes: instanceTypes,
 			Package:       c.curPkg.Source(),
 		})

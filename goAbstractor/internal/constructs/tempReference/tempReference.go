@@ -44,7 +44,6 @@ func newTempReference(args constructs.TempReferenceArgs) constructs.TempReferenc
 			With("Name", args.Name))
 	}
 	assert.ArgNotNil(`real type`, args.RealType)
-
 	return &tempReferenceImp{
 		realType:      args.RealType,
 		pkgPath:       args.PackagePath,

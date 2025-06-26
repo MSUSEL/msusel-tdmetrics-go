@@ -1,6 +1,8 @@
 package tempDeclRef
 
 import (
+	"go/types"
+
 	"github.com/Snow-Gremlin/goToolbox/comp"
 	"github.com/Snow-Gremlin/goToolbox/utils"
 
@@ -20,6 +22,7 @@ type tempDeclRefImp struct {
 	instanceTypes []constructs.TypeDesc
 	nest          constructs.NestType
 	con           constructs.Construct
+	funcType      *types.Func
 }
 
 func newTempDeclRef(args constructs.TempDeclRefArgs) constructs.TempDeclRef {
@@ -37,6 +40,7 @@ func newTempDeclRef(args constructs.TempDeclRefArgs) constructs.TempDeclRef {
 		instanceTypes: args.InstanceTypes,
 		nest:          args.Nest,
 		name:          args.Name,
+		funcType:      args.FuncType,
 	}
 }
 
@@ -50,6 +54,7 @@ func (r *tempDeclRefImp) SetAlive(alive bool) { r.alive = alive }
 func (r *tempDeclRefImp) PackagePath() string { return r.pkgPath }
 func (r *tempDeclRefImp) Name() string        { return r.name }
 
+func (r *tempDeclRefImp) FuncType() *types.Func                { return r.funcType }
 func (r *tempDeclRefImp) ImplicitTypes() []constructs.TypeDesc { return r.implicitTypes }
 func (r *tempDeclRefImp) InstanceTypes() []constructs.TypeDesc { return r.instanceTypes }
 func (r *tempDeclRefImp) Nest() constructs.NestType            { return r.nest }

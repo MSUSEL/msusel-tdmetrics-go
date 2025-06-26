@@ -1,6 +1,8 @@
 package methodInst
 
 import (
+	"go/types"
+
 	"github.com/Snow-Gremlin/goToolbox/comp"
 
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/assert"
@@ -44,6 +46,7 @@ func (i *instanceImp) Alive() bool         { return i.alive }
 func (i *instanceImp) SetAlive(alive bool) { i.alive = alive }
 func (i *instanceImp) Name() string        { return i.generic.Name() }
 
+func (i *instanceImp) FuncType() *types.Func                 { return i.generic.FuncType() }
 func (i *instanceImp) SetMetrics(metrics constructs.Metrics) { i.metrics = metrics }
 func (i *instanceImp) Metrics() constructs.Metrics           { return i.metrics }
 func (i *instanceImp) Generic() constructs.Method            { return i.generic }

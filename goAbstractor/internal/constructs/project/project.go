@@ -174,7 +174,6 @@ func (p *projectImp) FindType(pkgPath, name string, nest constructs.NestType,
 		if !panicOnNotFound {
 			return nil, false
 		}
-
 		panic(terror.New(`failed to find type for type reference`).
 			With(`type name`, name).
 			With(`nest`, nest).

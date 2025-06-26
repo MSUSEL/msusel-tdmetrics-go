@@ -17,8 +17,8 @@ type Querier struct {
 	fnScopes map[*types.Scope]*types.Func
 }
 
-func New(packages []*packages.Package) *Querier {
-	if len(packages) == 0 {
+func New(pkgs []*packages.Package) *Querier {
+	if len(pkgs) == 0 {
 		panic(terror.New(`no packages provided`))
 	}
 
@@ -32,16 +32,14 @@ func New(packages []*packages.Package) *Querier {
 		Types:        map[ast.Expr]types.TypeAndValue{},
 		Uses:         map[*ast.Ident]types.Object{},
 	}
-	for _, p := range packages {
-		joinInfo(info, p.TypesInfo)
-	}
 
 	q := &Querier{
-		packages: packages,
+		packages: pkgs,
 		info:     info,
-		fSet:     packages[0].Fset,
+		fSet:     pkgs[0].Fset,
 		fnScopes: map[*types.Scope]*types.Func{},
 	}
+	q.ForeachPackage(q.joinInfo)
 	for _, obj := range q.info.Defs {
 		if fn, ok := obj.(*types.Func); ok {
 			q.fnScopes[fn.Scope()] = fn
@@ -57,19 +55,19 @@ func NewSimple(info *types.Info, fSet *token.FileSet) *Querier {
 	}
 }
 
-func joinInfo(info, src *types.Info) {
-	maps.Insert(info.Defs, maps.All(src.Defs))
-	maps.Insert(info.FileVersions, maps.All(src.FileVersions))
-	maps.Insert(info.Implicits, maps.All(src.Implicits))
+func (q *Querier) joinInfo(p *packages.Package) {
+	src := p.TypesInfo
+	maps.Insert(q.info.Defs, maps.All(src.Defs))
+	maps.Insert(q.info.FileVersions, maps.All(src.FileVersions))
+	maps.Insert(q.info.Implicits, maps.All(src.Implicits))
 	// info.InitOrder isn't used
-	maps.Insert(info.Instances, maps.All(src.Instances))
-	maps.Insert(info.Scopes, maps.All(src.Scopes))
-	maps.Insert(info.Selections, maps.All(src.Selections))
-	maps.Insert(info.Types, maps.All(src.Types))
-	maps.Insert(info.Uses, maps.All(src.Uses))
+	maps.Insert(q.info.Instances, maps.All(src.Instances))
+	maps.Insert(q.info.Scopes, maps.All(src.Scopes))
+	maps.Insert(q.info.Selections, maps.All(src.Selections))
+	maps.Insert(q.info.Types, maps.All(src.Types))
+	maps.Insert(q.info.Uses, maps.All(src.Uses))
 }
 
-func (q *Querier) Packages() []*packages.Package    { return q.packages }
 func (q *Querier) Info() *types.Info                { return q.info }
 func (q *Querier) FileSet() *token.FileSet          { return q.fSet }
 func (q *Querier) Pos(pos token.Pos) token.Position { return q.fSet.Position(pos) }

@@ -40,7 +40,8 @@ type Method interface {
 }
 
 type MethodArgs struct {
-	RealType *types.Signature
+	FuncType *types.Func
+	SigType  *types.Signature
 	Package  Package
 	Name     string
 	Exported bool

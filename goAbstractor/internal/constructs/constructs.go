@@ -1,6 +1,7 @@
 package constructs
 
 import (
+	"go/types"
 	"slices"
 	"strings"
 
@@ -65,6 +66,7 @@ type TempDeclRefContainer interface {
 type NestType interface {
 	Construct
 	Name() string
+	FuncType() *types.Func
 }
 
 // Nestable is a construct that can be nested inside another construct.

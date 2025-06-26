@@ -294,12 +294,16 @@ func (ab *abstractor) abstractReceiver(decl *ast.FuncDecl) (bool, string) {
 
 func (ab *abstractor) abstractFuncDecl(decl *ast.FuncDecl) {
 	info := ab.querier.Info()
-	obj := info.Defs[decl.Name]
+	obj := info.Defs[decl.Name].(*types.Func)
 	loc := ab.proj.Locs().NewLoc(decl.Pos())
-
 	ptrRecv, recvName := ab.abstractReceiver(decl)
-	sig := ab.converter().ConvertSignature(obj.Type().(*types.Signature), decl.Name.Name)
+	sigType := obj.Type().(*types.Signature)
+	sig := ab.converter().ConvertSignature(sigType, decl.Name.Name)
 	tp := ab.abstractTypeParams(decl.Type.TypeParams, decl.Name.Name)
+	name := decl.Name.Name
+	if name == `init` && len(recvName) <= 0 && sig.IsVacant() {
+		name = `init#` + strconv.Itoa(ab.curPkg.InitCount())
+	}
 
 	// Set the nest for this function. Use the type parameter as the implicit
 	// types for the nest to create a generic instances for nested types.
@@ -310,10 +314,17 @@ func (ab *abstractor) abstractFuncDecl(decl *ast.FuncDecl) {
 		ab.implicitTypes = prevImplicitTypes
 	}()
 	tempNest := ab.proj.NewTempDeclRef(constructs.TempDeclRefArgs{
+		FuncType:      obj,
 		PackagePath:   ab.curPkg.Path(),
-		Name:          decl.Name.Name,
+		Name:          name,
 		ImplicitTypes: ab.implicitTypes,
 	})
+	if tempNest.Resolved() {
+		// The reference has been resolved so this declaration
+		// has been already been processed.
+		return
+	}
+
 	ab.curNest = tempNest
 	ab.implicitTypes = make([]constructs.TypeDesc, len(tp))
 	for i, t := range tp {
@@ -324,12 +335,9 @@ func (ab *abstractor) abstractFuncDecl(decl *ast.FuncDecl) {
 	ab.clearTypeParamOverrides()
 
 	exported := decl.Name.IsExported()
-	name := decl.Name.Name
-	if name == `init` && len(recvName) <= 0 && sig.IsVacant() {
-		name = `init#` + strconv.Itoa(ab.curPkg.InitCount())
-	}
-
 	method := ab.proj.NewMethod(constructs.MethodArgs{
+		FuncType:    obj,
+		SigType:     sigType,
 		Package:     ab.curPkg,
 		Name:        name,
 		Exported:    exported,

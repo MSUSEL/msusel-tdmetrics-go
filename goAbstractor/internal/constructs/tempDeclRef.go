@@ -1,6 +1,8 @@
 package constructs
 
 import (
+	"go/types"
+
 	"github.com/Snow-Gremlin/goToolbox/collections"
 )
 
@@ -11,6 +13,7 @@ import (
 type TempDeclRef interface {
 	Construct
 	Nestable
+	NestType
 	IsTempDeclRef()
 
 	PackagePath() string
@@ -29,6 +32,9 @@ type TempDeclRefArgs struct {
 	ImplicitTypes []TypeDesc
 	InstanceTypes []TypeDesc
 	Nest          NestType
+
+	// FuncType is an optional type used when this decl ref is for a nest.
+	FuncType *types.Func
 }
 
 type TempDeclRefFactory interface {
