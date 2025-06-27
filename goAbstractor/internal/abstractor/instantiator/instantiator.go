@@ -16,6 +16,16 @@ import (
 func InterfaceDecl(log *logger.Logger, proj constructs.Project, realType types.Type, decl constructs.InterfaceDecl,
 	implicitTypes, instanceTypes []constructs.TypeDesc) constructs.TypeDesc {
 
+	defer func() {
+		if r := recover(); r != nil {
+			panic(terror.New(`error in instantiator.InterfaceDecl`, terror.RecoveredPanic(r)).
+				With(`realType`, realType).
+				With(`decl`, decl).
+				With(`implicitTypes`, implicitTypes).
+				With(`instanceTypes`, instanceTypes))
+		}
+	}()
+
 	assert.ArgNotNil(`project`, proj)
 	assert.ArgNotNil(`interface decl`, decl)
 	assert.ArgHasNoNils(`implicit types`, implicitTypes)
@@ -43,6 +53,16 @@ func InterfaceDecl(log *logger.Logger, proj constructs.Project, realType types.T
 
 func Object(log *logger.Logger, proj constructs.Project, realType types.Type, decl constructs.Object,
 	implicitTypes, instanceTypes []constructs.TypeDesc) constructs.TypeDesc {
+
+	defer func() {
+		if r := recover(); r != nil {
+			panic(terror.New(`error in instantiator.Object`, terror.RecoveredPanic(r)).
+				With(`realType`, realType).
+				With(`decl`, decl).
+				With(`implicitTypes`, implicitTypes).
+				With(`instanceTypes`, instanceTypes))
+		}
+	}()
 
 	assert.ArgNotNil(`project`, proj)
 	assert.ArgNotNil(`object`, decl)

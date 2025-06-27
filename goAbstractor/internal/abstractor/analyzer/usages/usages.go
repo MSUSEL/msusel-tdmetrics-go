@@ -225,7 +225,7 @@ func (ui *usagesImp) setPendingObject(o types.Object, instanceType []constructs.
 	if v, ok := o.(*types.Var); ok {
 		ui.log.Logf(`    - type var: %v`, v)
 		if v.IsField() {
-			if compLit := ui.compLits.Peek(); !utils.IsNil(compLit) {
+			if compLit := ui.compLits.Peek(); !utils.IsNil(compLit) && !utils.IsNil(compLit.Type) {
 				compType := ui.querier.GetType(compLit.Type)
 				ui.log.Logf(`      - field sel: %v => %v`, compType, v.Name())
 				ui.setPendingType(compType)
@@ -263,8 +263,14 @@ func (ui *usagesImp) setPendingObject(o types.Object, instanceType []constructs.
 		return
 	}
 
+	var funcType *types.Func
+	if f, ok := o.(*types.Func); ok {
+		funcType = f
+	}
+
 	ui.log.Logf(`    - temp decl ref: %v`, o)
 	ui.pending = ui.proj.NewTempDeclRef(constructs.TempDeclRefArgs{
+		FuncType:      funcType,
 		PackagePath:   pkgPath,
 		Name:          o.Name(),
 		Nest:          nest,

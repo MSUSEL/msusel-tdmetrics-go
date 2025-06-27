@@ -72,6 +72,13 @@ func (q *Querier) Info() *types.Info                { return q.info }
 func (q *Querier) FileSet() *token.FileSet          { return q.fSet }
 func (q *Querier) Pos(pos token.Pos) token.Position { return q.fSet.Position(pos) }
 
+func getPos(p any) token.Pos {
+	if pp, ok := p.(interface{ Pos() token.Pos }); ok {
+		return pp.Pos()
+	}
+	return token.NoPos
+}
+
 func (q *Querier) ForeachPackage(handle func(*packages.Package)) {
 	packages.Visit(q.packages, func(pkg *packages.Package) bool {
 		handle(pkg)
@@ -85,7 +92,7 @@ func (q *Querier) GetType(e ast.Expr) types.Type {
 	}
 	panic(terror.New(`type expression not found in types info`).
 		WithType(`expression`, e).
-		With(`pos`, q.Pos(e.Pos())))
+		With(`pos`, q.Pos(getPos(e))))
 }
 
 func (q *Querier) GetDef(id *ast.Ident) types.Object {
@@ -94,7 +101,7 @@ func (q *Querier) GetDef(id *ast.Ident) types.Object {
 	}
 	panic(terror.New(`type declaration not found in types info`).
 		WithType(`identifier`, id.Name).
-		With(`pos`, q.Pos(id.Pos())))
+		With(`pos`, q.Pos(getPos(id))))
 }
 
 func (q *Querier) NestingFunc(obj types.Object) *types.Func {

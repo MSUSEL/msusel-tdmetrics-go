@@ -33,6 +33,10 @@ type Substituter interface {
 // The given curPkg is the current package that is used when a package
 // is needed but can't be determined from the construct itself.
 func New(log *logger.Logger, proj constructs.Project, curPkg constructs.Package, replacements map[constructs.Construct]constructs.Construct) Substituter {
+	if true {
+		panic(`NOT USED?`)
+	}
+
 	assert.ArgNotNil(`project`, proj)
 	assert.ArgNotNil(`current package`, curPkg)
 

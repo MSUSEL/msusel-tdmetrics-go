@@ -16,6 +16,7 @@ import (
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/abstractor/converter"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/abstractor/querier"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/abstractor/resolver"
+	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/assert"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs/innate"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs/project"
@@ -304,6 +305,8 @@ func (ab *abstractor) abstractFuncDecl(decl *ast.FuncDecl) {
 	if name == `init` && len(recvName) <= 0 && sig.IsVacant() {
 		name = `init#` + strconv.Itoa(ab.curPkg.InitCount())
 	}
+
+	assert.ArgNotNil(`abstractFuncDecl's obj`, obj)
 
 	// Set the nest for this function. Use the type parameter as the implicit
 	// types for the nest to create a generic instances for nested types.
