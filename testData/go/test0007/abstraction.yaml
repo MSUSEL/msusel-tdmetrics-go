@@ -1,39 +1,43 @@
 {
   language: go,
   abstracts: [
-    { vis: exported, name: $deref, signature:  2 }, # 1. func $deref() Foo[string]
-    { vis: exported, name: $deref, signature:  3 }, # 2. func $deref() Foo[T <string|int>]
-    { vis: exported, name: $deref, signature:  4 }, # 3. func $deref() Foo[T <string|int|uint>]
-    { vis: exported, name: $deref, signature:  5 }, # 4. func $deref() T <any>
-    { vis: exported, name: Add,    signature:  6 }, # 5. func Add(v string) string
-    { vis: exported, name: Add,    signature:  9 }, # 6. func Add(v T <string|int>) T
-    { vis: exported, name: Add,    signature: 10 }  # 7. func Add(v T <string|int|uint>) T
+    { vis: exported, name: $deref, signature:  2 }, #  1. func $deref() Foo[string]
+    { vis: exported, name: $deref, signature:  3 }, #  2. func $deref() Foo[T <string|int>]
+    { vis: exported, name: $deref, signature:  4 }, #  3. func $deref() Foo[T <string|int|uint>]
+    { vis: exported, name: $deref, signature:  5 }, #  4. func $deref() T <any> ???
+    { vis: exported, name: $deref, signature:  6 }, #  5. func $deref() T <any> ???
+    { vis: exported, name: $deref, signature:  7 }, #  6. func $deref() T <any> ???
+    { vis: exported, name: Add,    signature:  8 }, #  7. func Add(v string) string ???
+    { vis: exported, name: Add,    signature: 11 }, #  8. func Add(v T <string|int>) T ???
+    { vis: exported, name: Add,    signature: 12 }, #  9. func Add(v T <string|int|uint>) T ???
   ],
   arguments: [
     {          type: basic3 },         #  1. <unnamed> string
-    {          type: interfaceInst1 }, #  2. <unnamed> Pointer[Foo[string]]
-    {          type: interfaceInst2 }, #  3. <unnamed> Pointer[Foo[T <string|int>]]
-    {          type: objectInst1 },    #  4. <unnamed> Foo[string]
-    {          type: objectInst2 },    #  5. <unnamed> Foo[T <string|int>]
-    {          type: object1 },        #  6. <unnamed> Foo[T <string|int|uint>]
-    {          type: typeParam1 },     #  7. <unnamed> T <any>
-    {          type: typeParam2 },     #  8. <unnamed> T <string|int>
-    {          type: typeParam3 },     #  9. <unnamed> T <string|int|uint>
-    { name: v, type: basic3 },         # 10. v string
-    { name: v, type: typeParam2 },     # 11. v T <string|int>
-    { name: v, type: typeParam3 }      # 12. v T <string|int|uint>
+    {          type: interfaceInst2 }, #  2. <unnamed> Pointer[Foo[string]] ???
+    {          type: interfaceInst3 }, #  3. <unnamed> Pointer[Foo[T <string|int>]] ???
+    {          type: object1 },        #  4. <unnamed> Foo[T <string|int|uint>] ???
+    {          type: objectInst1 },    #  5. <unnamed> Foo[string]
+    {          type: objectInst2 },    #  6. <unnamed> Foo[T <string|int>]
+    {          type: objectInst3 },    #  7. <unnamed> Foo[T <string|int>] ???
+    {          type: objectInst3 },    #  8. <unnamed> Foo[T <string|int>] ???
+    {          type: typeParam1 },     #  9. <unnamed> T <any>
+    {          type: typeParam2 },     # 10. <unnamed> T <string|int>
+    {          type: typeParam3 },     # 11. <unnamed> T <string|int|uint>
+    { name: v, type: basic3 },         # 12. v string
+    { name: v, type: typeParam2 },     # 13. v T <string|int>
+    { name: v, type: typeParam3 },     # 14. v T <string|int|uint>
   ],
   basics: [ int, uint, string ],
   fields: [
     { name: value, type: basic3 },     # 1. value string
     { name: value, type: typeParam2 }, # 2. value T <string|int>
-    { name: value, type: typeParam3 }  # 3. value T <string|int|uint>
+    { name: value, type: typeParam3 }, # 3. value T <string|int|uint>
   ],
   interfaceDecls: [
-    { # 1. Pointer[T any] { $deref() T <any> }
-      name: Pointer, package: 1, interface: 7, vis: exported,
-      instances: [ 1, 2, 3 ], typeParams: [ 1 ]
-    }
+    { # 1. Pointer[T any] { $deref() T <any> } ???
+      name: Pointer, package: 1, interface: 9, vis: exported,
+      instances: [ 1, 2, 3, 4, 5 ], typeParams: [ 1 ],
+    },
   ],
   interfaceDescs: [
     {}, # 1. any
@@ -41,37 +45,43 @@
       exact: [ basic3, basic1 ],
       # Inherits 3 because 2 is more restrictive and can be used anywhere 3 can be,
       # but 3 can't be used anywhere 2 can be since 3 might be an uint instance.
-      inherits: [ 3 ]
+      inherits: [ 3 ],
     },
     { # 3. string|int|uint
-      exact: [ basic3, basic1, basic2 ], inherits: [ 1 ]
+      exact: [ basic3, basic1, basic2 ], inherits: [ 1 ],
     },
-    { # 4. interface { $deref() Foo[string]; Add(v string) string }
-      abstracts: [ 1, 5 ], inherits: [ 1 ], hint: pointer
+    { # 4. interface { $deref() Foo[string]; Add(v string) string } ???
+      abstracts: [ 1, 9 ], inherits: [ 1 ], hint: pointer,
     },
-    { # 5. interface { $deref() Foo[T <string|int>]; Add(v T) T }
-      abstracts: [ 2, 6 ], inherits: [ 1 ], hint: pointer
+    { # 5. interface { $deref() Foo[T <string|int>]; Add(v T) T } ???
+      abstracts: [ 2, 7 ], inherits: [ 1 ], hint: pointer,
     },
-    { # 6. interface { $deref() Foo[T <string|int|uint>]; Add(v T) T }
-      abstracts: [ 3, 7 ], inherits: [ 1 ], hint: pointer
+    { # 6. interface { $deref() Foo[T <string|int|uint>]; Add(v T) T } ???
+      abstracts: [ 3, 8 ], inherits: [ 1 ], hint: pointer,
     },
-    { # 7. interface { $deref() T <any> }
-      abstracts: [ 4 ], inherits: [ 1 ], hint: pointer,
-    }
+    { # 7. interface { $deref() Foo[T <string|int|uint>]; Add(v T) T } ???
+      abstracts: [ 4, 9 ], inherits: [ 1 ], hint: pointer,
+    },
+    { # 8. interface { $deref() Foo[T <string|int|uint>]; Add(v T) T } ???
+      abstracts: [ 5, 9 ], inherits: [ 1 ], hint: pointer,
+    },
+    { # 9. interface { $deref() T <any> } ???
+      abstracts: [ 6 ], inherits: [ 1 ], hint: pointer,
+    },
   ],
   interfaceInsts: [
     { # 1. Pointer[Foo[string]] { $deref() Foo[string]; Add(v string) string }
       generic: 1, resolved: 4,
-      instanceTypes: [ objectInst1 ]
+      instanceTypes: [ objectInst1 ],
     },
     { # 2. Pointer[Foo[T <string|int>]] { $deref() Foo[T]; Add(v T) T }
       generic: 1, resolved: 5,
-      instanceTypes: [ objectInst2 ]
+      instanceTypes: [ objectInst2 ],
     },
     { # 3. Pointer[Foo[T <string|int|uint>]] { $deref() Foo[T]; Add(v T) T }
       generic: 1, resolved: 6,
-      instanceTypes: [ object1 ]
-    }
+      instanceTypes: [ object1 ],
+    },
   ],
   methods: [
     { # 1. func (Foo[T string|int|uint]) Add(v T) T
@@ -82,64 +92,64 @@
     { # 2. func New(v T <sting|int>) Pointer[Foo[T]]
       name: New, package: 2, signature: 8, vis: exported,
       loc: 14, metrics: 2,
-      instances: [ 2 ], typeParams: [ 2 ]
+      instances: [ 2 ], typeParams: [ 2 ],
     },
     { # 3. func main()
       name: main, package: 2, signature: 1,
-      loc: 18, metrics: 3
-    }
+      loc: 18, metrics: 3,
+    },
   ],
   methodInsts: [
     { # 1. func (Foo[string]) Add(v string) string
       generic: 1, receiver: 1, resolved: 6,
-      instanceTypes: [ basic3 ]
+      instanceTypes: [ basic3 ],
     },
     { # 2. func New(v sting) Pointer[Foo[string]]
       generic: 2, resolved: 7,
-      instanceTypes: [ basic3 ]
+      instanceTypes: [ basic3 ],
     },
     { # 3. func (Foo[T <string|int>]) Add(v T) T
       generic: 1, receiver: 2, resolved: 9,
-      instanceTypes: [ typeParam2 ]
-    }
+      instanceTypes: [ typeParam2 ],
+    },
   ],
   metrics: [
     { # 1. Foo.Add metrics
       codeCount: 4, complexity: 1, indents: 2, lineCount: 4, loc: 9,
       reads: [
         interfaceInst3, # Pointer[Foo[T <string|int|uint>]]
-        selection2      # Pointer[Foo[T <string|int|uint>]].value
+        selection2,     # Pointer[Foo[T <string|int|uint>]].value
       ],
-      writes: [ selection2 ] # Pointer[Foo[T <string|int|uint>]].value
+      writes: [ selection2 ], # Pointer[Foo[T <string|int|uint>]].value
     },
     { # 2. New metrics
       codeCount: 3, complexity: 1, indents: 1, lineCount: 3, loc: 14,
       reads: [ objectInst2 ], # Foo[T <string|int>]
       writes: [
         objectInst2, # Foo[T <string|int>]
-        selection3   # Foo[T <string|int>].value
-      ]
+        selection3,  # Foo[T <string|int>].value
+      ],
     },
     { # 3. main metrics
       codeCount: 4, complexity: 1, indents: 2, lineCount: 4, loc: 18,
       invokes: [
         methodInst2, # func New(v sting) Pointer[Foo[string]]
-        selection1   # Pointer[Foo[string]].Add
+        selection1,  # Pointer[Foo[string]].Add
       ],
       reads:  [ interfaceInst1 ], # Pointer[Foo[string]]
-      writes: [ interfaceInst1 ]  # Pointer[Foo[string]]
-    }
+      writes: [ interfaceInst1 ], # Pointer[Foo[string]]
+    },
   ],
   objectInsts: [
     { # 1. main.Foo[string]{ value string }{}
       # This object have `any`` interface
       generic: 1, resData: 1, resInterface: 1,
-      instanceTypes: [ basic3 ], methods: [ 1 ]
+      instanceTypes: [ basic3 ], methods: [ 1 ],
     },
     { # 2. main.Foo[T <string|int>]{ value T }{}
       generic: 1, resData: 2, resInterface: 1,
-      instanceTypes: [ typeParam2 ], methods: [ 3 ]
-    }
+      instanceTypes: [ typeParam2 ], methods: [ 3 ],
+    },
   ],
   objects: [
     { # 1. main.Foo[T <string|int|uint>]{ value T }{}
@@ -147,26 +157,26 @@
       vis: exported, data: 3, interface: 1,
       instances:  [ 1, 2 ],
       methods:    [ 1 ],
-      typeParams: [ 3 ]
-    }
+      typeParams: [ 3 ],
+    },
   ],
   packages: [
     { # 1. $builtin package
       name: $builtin,
       path: $builtin,
-      interfaces: [ 1 ]
+      interfaces: [ 1 ],
     },
     { # 2. main package
       name: main,
       path: command-line-arguments,
       methods: [ 1, 2, 3 ],
-      objects: [ 1 ]
-    }
+      objects: [ 1 ],
+    },
   ],
   selections: [
     { name: Add,   origin: interfaceInst1 }, # 1. Pointer[Foo[string]].Add
     { name: value, origin: interfaceInst3 }, # 2. Pointer[Foo[T <string|int|uint>]].value
-    { name: value, origin: objectInst2 }     # 3. Foo[T <string|int>].value
+    { name: value, origin: objectInst2 },    # 3. Foo[T <string|int>].value
   ],
   signatures: [
     {},                                 #  1. func()()
@@ -178,19 +188,19 @@
     { params: [ 10 ], results: [ 2 ] }, #  7. func(v string) Pointer[Foo[string]]
     { params: [ 11 ], results: [ 3 ] }, #  8. func(v T <string|int>) Pointer[Foo[T]]
     { params: [ 11 ], results: [ 8 ] }, #  9. func(v T <string|int>) T
-    { params: [ 12 ], results: [ 9 ] }  # 10. func(v T <string|int|uint>) T
+    { params: [ 12 ], results: [ 9 ] }, # 10. func(v T <string|int|uint>) T
   ],
   structDescs: [
     { fields: [ 1 ] }, # 1. struct { value string }
     { fields: [ 2 ] }, # 2. struct { value T <string|int> }
-    { fields: [ 3 ] }  # 3. struct { value T <string|int|uint> }
+    { fields: [ 3 ] }, # 3. struct { value T <string|int|uint> }
   ],
   typeParams: [
     { name: T, type: interfaceDesc1 }, # 1. T any
     { name: T, type: interfaceDesc2 }, # 2. T string|int
-    { name: T, type: interfaceDesc3 }  # 3. T string|int|uint
+    { name: T, type: interfaceDesc3 }, # 3. T string|int|uint
   ],
   locs: {
-    '1': main.go
-  }
+    '1': main.go,
+  },
 }

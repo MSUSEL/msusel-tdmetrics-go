@@ -294,9 +294,9 @@ func (c *convImp) convertNamed(t *types.Named) constructs.TypeDesc {
 	case kind.TempReference, kind.InterfaceInst, kind.ObjectInst:
 		return typ
 	case kind.InterfaceDecl:
-		return instantiator.InterfaceDecl(c.log, c.proj, t.Underlying(), typ.(constructs.InterfaceDecl), c.implicitTypes, instanceTypes)
+		return instantiator.InterfaceDecl(c.log, c.proj, t.Underlying(), typ.(constructs.InterfaceDecl), implicitTypes, instanceTypes)
 	case kind.Object:
-		return instantiator.Object(c.log, c.proj, t.Underlying(), typ.(constructs.Object), c.implicitTypes, instanceTypes)
+		return instantiator.Object(c.log, c.proj, t.Underlying(), typ.(constructs.Object), implicitTypes, instanceTypes)
 	default:
 		panic(terror.New(`unexpected declaration type`).
 			With(`kind`, typ.Kind()).
