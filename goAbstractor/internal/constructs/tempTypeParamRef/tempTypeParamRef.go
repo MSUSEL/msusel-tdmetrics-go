@@ -14,11 +14,10 @@ import (
 )
 
 type tempTypeParamRefImp struct {
+	constructs.ConstructCore
 	realType types.Type
 	context  string
 	name     string
-	index    int
-	alive    bool
 	resolved constructs.TypeDesc
 }
 
@@ -37,14 +36,10 @@ func newTempTypeParamRef(args constructs.TempTypeParamRefArgs) constructs.TempTy
 func (r *tempTypeParamRefImp) IsTypeDesc()         {}
 func (r *tempTypeParamRefImp) IsTypeTypeParamRef() {}
 
-func (r *tempTypeParamRefImp) Kind() kind.Kind     { return kind.TempTypeParamRef }
-func (r *tempTypeParamRefImp) Index() int          { return r.index }
-func (r *tempTypeParamRefImp) SetIndex(index int)  { r.index = index }
-func (r *tempTypeParamRefImp) Alive() bool         { return r.alive }
-func (r *tempTypeParamRefImp) SetAlive(alive bool) { r.alive = alive }
-func (r *tempTypeParamRefImp) GoType() types.Type  { return r.realType }
-func (r *tempTypeParamRefImp) Context() string     { return r.context }
-func (r *tempTypeParamRefImp) Name() string        { return r.name }
+func (r *tempTypeParamRefImp) Kind() kind.Kind    { return kind.TempTypeParamRef }
+func (r *tempTypeParamRefImp) GoType() types.Type { return r.realType }
+func (r *tempTypeParamRefImp) Context() string    { return r.context }
+func (r *tempTypeParamRefImp) Name() string       { return r.name }
 
 func (r *tempTypeParamRefImp) ResolvedType() constructs.TypeDesc { return r.resolved }
 
@@ -80,14 +75,17 @@ func Comparer() comp.Comparer[constructs.TempTypeParamRef] {
 
 func (r *tempTypeParamRefImp) ToJson(ctx *jsonify.Context) jsonify.Datum {
 	if ctx.IsOnlyIndex() {
-		return jsonify.New(ctx, r.index)
+		return jsonify.New(ctx, r.Index())
 	}
 	if ctx.IsShort() {
-		return jsonify.NewSprintf(`%s%d`, r.Kind(), r.index)
+		return jsonify.NewSprintf(`%s%d`, r.Kind(), r.Index())
+	}
+	if ctx.SkipDuplicates() && r.Duplicate() {
+		return nil
 	}
 	return jsonify.NewMap().
 		AddIf(ctx, ctx.IsDebugKindIncluded(), `kind`, r.Kind()).
-		AddIf(ctx, ctx.IsDebugIndexIncluded(), `index`, r.index).
+		AddIf(ctx, ctx.IsDebugIndexIncluded(), `index`, r.Index()).
 		AddNonZero(ctx.Short(), `context`, r.context).
 		AddNonZero(ctx.Short(), `name`, r.name).
 		AddNonZero(ctx.Short(), `type`, r.resolved)

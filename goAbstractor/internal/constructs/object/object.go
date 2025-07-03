@@ -20,13 +20,12 @@ import (
 )
 
 type objectImp struct {
+	constructs.ConstructCore
 	realType types.Type
 	pkg      constructs.Package
 	name     string
 	exported bool
 	loc      locs.Loc
-	index    int
-	alive    bool
 
 	typeParams []constructs.TypeParam
 	data       constructs.StructDesc
@@ -62,15 +61,11 @@ func (d *objectImp) IsDeclaration() {}
 func (d *objectImp) IsTypeDesc()    {}
 func (d *objectImp) IsObject()      {}
 
-func (d *objectImp) Kind() kind.Kind     { return kind.Object }
-func (d *objectImp) Index() int          { return d.index }
-func (d *objectImp) SetIndex(index int)  { d.index = index }
-func (d *objectImp) Alive() bool         { return d.alive }
-func (d *objectImp) SetAlive(alive bool) { d.alive = alive }
-func (d *objectImp) GoType() types.Type  { return d.realType }
-func (d *objectImp) Name() string        { return d.name }
-func (d *objectImp) Exported() bool      { return d.exported }
-func (d *objectImp) Location() locs.Loc  { return d.loc }
+func (d *objectImp) Kind() kind.Kind    { return kind.Object }
+func (d *objectImp) GoType() types.Type { return d.realType }
+func (d *objectImp) Name() string       { return d.name }
+func (d *objectImp) Exported() bool     { return d.exported }
+func (d *objectImp) Location() locs.Loc { return d.loc }
 
 func (d *objectImp) Package() constructs.Package        { return d.pkg }
 func (d *objectImp) Type() constructs.TypeDesc          { return d.data }
@@ -154,14 +149,17 @@ func Comparer() comp.Comparer[constructs.Object] {
 
 func (d *objectImp) ToJson(ctx *jsonify.Context) jsonify.Datum {
 	if ctx.IsOnlyIndex() {
-		return jsonify.New(ctx, d.index)
+		return jsonify.New(ctx, d.Index())
 	}
 	if ctx.IsShort() {
-		return jsonify.NewSprintf(`%s%d`, d.Kind(), d.index)
+		return jsonify.NewSprintf(`%s%d`, d.Kind(), d.Index())
+	}
+	if ctx.SkipDuplicates() && d.Duplicate() {
+		return nil
 	}
 	return jsonify.NewMap().
 		AddIf(ctx, ctx.IsDebugKindIncluded(), `kind`, d.Kind()).
-		AddIf(ctx, ctx.IsDebugIndexIncluded(), `index`, d.index).
+		AddIf(ctx, ctx.IsDebugIndexIncluded(), `index`, d.Index()).
 		Add(ctx.OnlyIndex(), `package`, d.pkg).
 		Add(ctx, `name`, d.name).
 		AddNonZero(ctx, `loc`, d.loc).

@@ -321,13 +321,20 @@ func (p *projectImp) FindDecl(pkgPath, name string, nest constructs.NestType,
 func (p *projectImp) UpdateIndices() {
 	var index int
 	var kind kind.Kind
+	var prev constructs.Construct
 	p.AllConstructs().Foreach(func(c constructs.Construct) {
 		if cKind := c.Kind(); kind != cKind {
 			kind = cKind
 			index = 0
+			prev = nil
 		}
-		index++
-		c.SetIndex(index)
+		if constructs.ComparerPend(prev, c)() == 0 {
+			c.SetIndex(index, true)
+		} else {
+			index++
+			c.SetIndex(index, false)
+		}
+		prev = c
 	})
 }
 

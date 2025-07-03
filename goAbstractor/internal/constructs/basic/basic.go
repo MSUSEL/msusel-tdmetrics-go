@@ -15,9 +15,8 @@ import (
 )
 
 type basicImp struct {
+	constructs.ConstructCore
 	realType *types.Basic
-	index    int
-	alive    bool
 }
 
 func newBasic(args constructs.BasicArgs) constructs.Basic {
@@ -43,12 +42,8 @@ func newBasic(args constructs.BasicArgs) constructs.Basic {
 func (t *basicImp) IsTypeDesc() {}
 func (t *basicImp) IsBasic()    {}
 
-func (t *basicImp) Kind() kind.Kind     { return kind.Basic }
-func (t *basicImp) Index() int          { return t.index }
-func (t *basicImp) SetIndex(index int)  { t.index = index }
-func (t *basicImp) Alive() bool         { return t.alive }
-func (t *basicImp) SetAlive(alive bool) { t.alive = alive }
-func (t *basicImp) GoType() types.Type  { return t.realType }
+func (t *basicImp) Kind() kind.Kind    { return kind.Basic }
+func (t *basicImp) GoType() types.Type { return t.realType }
 
 func (t *basicImp) basicKind() int {
 	return int(t.realType.Kind())
@@ -67,15 +62,18 @@ func Comparer() comp.Comparer[constructs.Basic] {
 
 func (t *basicImp) ToJson(ctx *jsonify.Context) jsonify.Datum {
 	if ctx.IsOnlyIndex() {
-		return jsonify.New(ctx, t.index)
+		return jsonify.New(ctx, t.Index())
 	}
 	if ctx.IsShort() {
-		return jsonify.NewSprintf(`%s%d`, t.Kind(), t.index)
+		return jsonify.NewSprintf(`%s%d`, t.Kind(), t.Index())
+	}
+	if ctx.SkipDuplicates() && t.Duplicate() {
+		return nil
 	}
 	if ctx.IsDebugKindIncluded() || ctx.IsDebugIndexIncluded() {
 		return jsonify.NewMap().
 			AddIf(ctx, ctx.IsDebugKindIncluded(), `kind`, t.Kind()).
-			AddIf(ctx, ctx.IsDebugIndexIncluded(), `index`, t.index).
+			AddIf(ctx, ctx.IsDebugIndexIncluded(), `index`, t.Index()).
 			Add(ctx, `name`, t.realType.Name())
 	}
 	return jsonify.New(ctx, t.realType.Name())

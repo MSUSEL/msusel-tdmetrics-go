@@ -13,6 +13,7 @@ import (
 )
 
 type valueImp struct {
+	constructs.ConstructCore
 	pkg      constructs.Package
 	name     string
 	exported bool
@@ -20,8 +21,6 @@ type valueImp struct {
 	typ      constructs.TypeDesc
 	isConst  bool
 	metrics  constructs.Metrics
-	index    int
-	alive    bool
 }
 
 func newValue(args constructs.ValueArgs) constructs.Value {
@@ -47,15 +46,11 @@ func newValue(args constructs.ValueArgs) constructs.Value {
 func (v *valueImp) IsDeclaration() {}
 func (v *valueImp) IsValue()       {}
 
-func (v *valueImp) Kind() kind.Kind     { return kind.Value }
-func (v *valueImp) Index() int          { return v.index }
-func (v *valueImp) SetIndex(index int)  { v.index = index }
-func (v *valueImp) Alive() bool         { return v.alive }
-func (v *valueImp) SetAlive(alive bool) { v.alive = alive }
-func (v *valueImp) Const() bool         { return v.isConst }
-func (v *valueImp) Name() string        { return v.name }
-func (v *valueImp) Exported() bool      { return v.exported }
-func (v *valueImp) Location() locs.Loc  { return v.loc }
+func (v *valueImp) Kind() kind.Kind    { return kind.Value }
+func (v *valueImp) Const() bool        { return v.isConst }
+func (v *valueImp) Name() string       { return v.name }
+func (v *valueImp) Exported() bool     { return v.exported }
+func (v *valueImp) Location() locs.Loc { return v.loc }
 
 func (v *valueImp) Package() constructs.Package        { return v.pkg }
 func (v *valueImp) Type() constructs.TypeDesc          { return v.typ }
@@ -92,14 +87,17 @@ func (v *valueImp) RemoveTempReferences(required bool) (changed bool) {
 
 func (v *valueImp) ToJson(ctx *jsonify.Context) jsonify.Datum {
 	if ctx.IsOnlyIndex() {
-		return jsonify.New(ctx, v.index)
+		return jsonify.New(ctx, v.Index())
 	}
 	if ctx.IsShort() {
-		return jsonify.NewSprintf(`%s%d`, v.Kind(), v.index)
+		return jsonify.NewSprintf(`%s%d`, v.Kind(), v.Index())
+	}
+	if ctx.SkipDuplicates() && v.Duplicate() {
+		return nil
 	}
 	return jsonify.NewMap().
 		AddIf(ctx, ctx.IsDebugKindIncluded(), `kind`, v.Kind()).
-		AddIf(ctx, ctx.IsDebugIndexIncluded(), `index`, v.index).
+		AddIf(ctx, ctx.IsDebugIndexIncluded(), `index`, v.Index()).
 		Add(ctx.OnlyIndex(), `package`, v.pkg).
 		Add(ctx, `name`, v.name).
 		Add(ctx.Short(), `type`, v.typ).

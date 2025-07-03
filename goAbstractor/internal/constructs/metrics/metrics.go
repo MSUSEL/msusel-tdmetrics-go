@@ -16,9 +16,8 @@ import (
 )
 
 type metricsImp struct {
-	loc   locs.Loc
-	index int
-	alive bool
+	constructs.ConstructCore
+	loc locs.Loc
 
 	complexity int
 	lineCount  int
@@ -63,19 +62,15 @@ func newMetrics(args constructs.MetricsArgs) constructs.Metrics {
 
 func (m *metricsImp) IsMetrics() {}
 
-func (m *metricsImp) Kind() kind.Kind     { return kind.Metrics }
-func (m *metricsImp) Index() int          { return m.index }
-func (m *metricsImp) SetIndex(index int)  { m.index = index }
-func (m *metricsImp) Alive() bool         { return m.alive }
-func (m *metricsImp) SetAlive(alive bool) { m.alive = alive }
-func (m *metricsImp) Location() locs.Loc  { return m.loc }
-func (m *metricsImp) Complexity() int     { return m.complexity }
-func (m *metricsImp) LineCount() int      { return m.lineCount }
-func (m *metricsImp) CodeCount() int      { return m.codeCount }
-func (m *metricsImp) Indents() int        { return m.indents }
-func (m *metricsImp) Getter() bool        { return m.getter }
-func (m *metricsImp) Setter() bool        { return m.setter }
-func (m *metricsImp) SideEffect() bool    { return m.sideEffect }
+func (m *metricsImp) Kind() kind.Kind    { return kind.Metrics }
+func (m *metricsImp) Location() locs.Loc { return m.loc }
+func (m *metricsImp) Complexity() int    { return m.complexity }
+func (m *metricsImp) LineCount() int     { return m.lineCount }
+func (m *metricsImp) CodeCount() int     { return m.codeCount }
+func (m *metricsImp) Indents() int       { return m.indents }
+func (m *metricsImp) Getter() bool       { return m.getter }
+func (m *metricsImp) Setter() bool       { return m.setter }
+func (m *metricsImp) SideEffect() bool   { return m.sideEffect }
 
 func (m *metricsImp) Node() ast.Node                                    { return m.node }
 func (m *metricsImp) TpReplacer() map[*types.TypeParam]*types.TypeParam { return m.tpReplacer }
@@ -118,14 +113,17 @@ func Comparer() comp.Comparer[constructs.Metrics] {
 
 func (m *metricsImp) ToJson(ctx *jsonify.Context) jsonify.Datum {
 	if ctx.IsOnlyIndex() {
-		return jsonify.New(ctx, m.index)
+		return jsonify.New(ctx, m.Index())
 	}
 	if ctx.IsShort() {
-		return jsonify.NewSprintf(`%s%d`, m.Kind(), m.index)
+		return jsonify.NewSprintf(`%s%d`, m.Kind(), m.Index())
+	}
+	if ctx.SkipDuplicates() && m.Duplicate() {
+		return nil
 	}
 	return jsonify.NewMap().
 		AddIf(ctx, ctx.IsDebugKindIncluded(), `kind`, m.Kind()).
-		AddIf(ctx, ctx.IsDebugIndexIncluded(), `index`, m.index).
+		AddIf(ctx, ctx.IsDebugIndexIncluded(), `index`, m.Index()).
 		AddNonZero(ctx, `loc`, m.loc). // Should only be zero for unit-tests.
 		AddNonZero(ctx, `complexity`, m.complexity).
 		AddNonZero(ctx, `lineCount`, m.lineCount).

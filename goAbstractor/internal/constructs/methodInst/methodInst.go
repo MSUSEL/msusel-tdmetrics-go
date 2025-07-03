@@ -13,13 +13,12 @@ import (
 )
 
 type instanceImp struct {
+	constructs.ConstructCore
 	generic       constructs.Method
 	resolved      constructs.Signature
 	instanceTypes []constructs.TypeDesc
 	metrics       constructs.Metrics
 	receiver      constructs.ObjectInst
-	index         int
-	alive         bool
 }
 
 func newInstance(args constructs.MethodInstArgs) constructs.MethodInst {
@@ -39,12 +38,8 @@ func newInstance(args constructs.MethodInstArgs) constructs.MethodInst {
 
 func (i *instanceImp) IsMethodInst() {}
 
-func (i *instanceImp) Kind() kind.Kind     { return kind.MethodInst }
-func (i *instanceImp) Index() int          { return i.index }
-func (i *instanceImp) SetIndex(index int)  { i.index = index }
-func (i *instanceImp) Alive() bool         { return i.alive }
-func (i *instanceImp) SetAlive(alive bool) { i.alive = alive }
-func (i *instanceImp) Name() string        { return i.generic.Name() }
+func (i *instanceImp) Kind() kind.Kind { return kind.MethodInst }
+func (i *instanceImp) Name() string    { return i.generic.Name() }
 
 func (i *instanceImp) FuncType() *types.Func                 { return i.generic.FuncType() }
 func (i *instanceImp) SetMetrics(metrics constructs.Metrics) { i.metrics = metrics }
@@ -86,14 +81,17 @@ func (i *instanceImp) RemoveTempReferences(required bool) bool {
 
 func (i *instanceImp) ToJson(ctx *jsonify.Context) jsonify.Datum {
 	if ctx.IsOnlyIndex() {
-		return jsonify.New(ctx, i.index)
+		return jsonify.New(ctx, i.Index())
 	}
 	if ctx.IsShort() {
-		return jsonify.NewSprintf(`%s%d`, i.Kind(), i.index)
+		return jsonify.NewSprintf(`%s%d`, i.Kind(), i.Index())
+	}
+	if ctx.SkipDuplicates() && i.Duplicate() {
+		return nil
 	}
 	return jsonify.NewMap().
 		AddIf(ctx, ctx.IsDebugKindIncluded(), `kind`, i.Kind()).
-		AddIf(ctx, ctx.IsDebugIndexIncluded(), `index`, i.index).
+		AddIf(ctx, ctx.IsDebugIndexIncluded(), `index`, i.Index()).
 		Add(ctx.OnlyIndex(), `generic`, i.generic).
 		Add(ctx.OnlyIndex(), `resolved`, i.resolved).
 		Add(ctx.Short(), `instanceTypes`, i.instanceTypes).

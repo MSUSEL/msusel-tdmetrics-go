@@ -16,13 +16,12 @@ import (
 )
 
 type instanceImp struct {
+	constructs.ConstructCore
 	realType      types.Type
 	generic       constructs.InterfaceDecl
 	resolved      constructs.InterfaceDesc
 	implicitTypes []constructs.TypeDesc
 	instanceTypes []constructs.TypeDesc
-	index         int
-	alive         bool
 }
 
 func newInstance(args constructs.InterfaceInstArgs) constructs.InterfaceInst {
@@ -116,12 +115,8 @@ func newInstance(args constructs.InterfaceInstArgs) constructs.InterfaceInst {
 func (i *instanceImp) IsInterfaceInst() {}
 func (i *instanceImp) IsTypeDesc()      {}
 
-func (i *instanceImp) Kind() kind.Kind     { return kind.InterfaceInst }
-func (i *instanceImp) Index() int          { return i.index }
-func (i *instanceImp) SetIndex(index int)  { i.index = index }
-func (i *instanceImp) Alive() bool         { return i.alive }
-func (i *instanceImp) SetAlive(alive bool) { i.alive = alive }
-func (m *instanceImp) GoType() types.Type  { return m.realType }
+func (i *instanceImp) Kind() kind.Kind    { return kind.InterfaceInst }
+func (m *instanceImp) GoType() types.Type { return m.realType }
 
 func (m *instanceImp) Generic() constructs.InterfaceDecl    { return m.generic }
 func (m *instanceImp) Resolved() constructs.InterfaceDesc   { return m.resolved }
@@ -163,14 +158,17 @@ func (i *instanceImp) RemoveTempReferences(required bool) bool {
 
 func (i *instanceImp) ToJson(ctx *jsonify.Context) jsonify.Datum {
 	if ctx.IsOnlyIndex() {
-		return jsonify.New(ctx, i.index)
+		return jsonify.New(ctx, i.Index())
 	}
 	if ctx.IsShort() {
-		return jsonify.NewSprintf(`%s%d`, i.Kind(), i.index)
+		return jsonify.NewSprintf(`%s%d`, i.Kind(), i.Index())
+	}
+	if ctx.SkipDuplicates() && i.Duplicate() {
+		return nil
 	}
 	return jsonify.NewMap().
 		AddIf(ctx, ctx.IsDebugKindIncluded(), `kind`, i.Kind()).
-		AddIf(ctx, ctx.IsDebugIndexIncluded(), `index`, i.index).
+		AddIf(ctx, ctx.IsDebugIndexIncluded(), `index`, i.Index()).
 		Add(ctx.OnlyIndex(), `generic`, i.generic).
 		Add(ctx.OnlyIndex(), `resolved`, i.resolved).
 		AddNonZero(ctx.Short(), `implicitTypes`, i.implicitTypes).

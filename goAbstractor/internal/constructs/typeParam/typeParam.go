@@ -14,10 +14,9 @@ import (
 )
 
 type typeParamImp struct {
-	name  string
-	typ   constructs.TypeDesc
-	index int
-	alive bool
+	constructs.ConstructCore
+	name string
+	typ  constructs.TypeDesc
 
 	loopPrevention bool
 }
@@ -43,12 +42,8 @@ func newTypeParam(args constructs.TypeParamArgs) constructs.TypeParam {
 func (t *typeParamImp) IsTypeDesc()  {}
 func (t *typeParamImp) IsTypeParam() {}
 
-func (t *typeParamImp) Kind() kind.Kind     { return kind.TypeParam }
-func (t *typeParamImp) Index() int          { return t.index }
-func (t *typeParamImp) SetIndex(index int)  { t.index = index }
-func (t *typeParamImp) Alive() bool         { return t.alive }
-func (t *typeParamImp) SetAlive(alive bool) { t.alive = alive }
-func (t *typeParamImp) GoType() types.Type  { return t.typ.GoType() }
+func (t *typeParamImp) Kind() kind.Kind    { return kind.TypeParam }
+func (t *typeParamImp) GoType() types.Type { return t.typ.GoType() }
 
 func (t *typeParamImp) Name() string              { return t.name }
 func (t *typeParamImp) Type() constructs.TypeDesc { return t.typ }
@@ -82,14 +77,17 @@ func (t *typeParamImp) RemoveTempReferences(required bool) (changed bool) {
 
 func (t *typeParamImp) ToJson(ctx *jsonify.Context) jsonify.Datum {
 	if ctx.IsOnlyIndex() {
-		return jsonify.New(ctx, t.index)
+		return jsonify.New(ctx, t.Index())
 	}
 	if ctx.IsShort() {
-		return jsonify.NewSprintf(`%s%d`, t.Kind(), t.index)
+		return jsonify.NewSprintf(`%s%d`, t.Kind(), t.Index())
+	}
+	if ctx.SkipDuplicates() && t.Duplicate() {
+		return nil
 	}
 	return jsonify.NewMap().
 		AddIf(ctx, ctx.IsDebugKindIncluded(), `kind`, t.Kind()).
-		AddIf(ctx, ctx.IsDebugIndexIncluded(), `index`, t.index).
+		AddIf(ctx, ctx.IsDebugIndexIncluded(), `index`, t.Index()).
 		Add(ctx, `name`, t.name).
 		Add(ctx.Short(), `type`, t.typ)
 }

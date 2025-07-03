@@ -21,12 +21,11 @@ import (
 )
 
 type packageImp struct {
+	constructs.ConstructCore
 	pkg *packages.Package
 
 	path        string
 	name        string
-	index       int
-	alive       bool
 	importPaths []string
 
 	imports    collections.SortedSet[constructs.Package]
@@ -56,13 +55,9 @@ func newPackage(args constructs.PackageArgs) constructs.Package {
 
 func (p *packageImp) IsPackage() {}
 
-func (p *packageImp) Kind() kind.Kind     { return kind.Package }
-func (p *packageImp) Index() int          { return p.index }
-func (p *packageImp) SetIndex(index int)  { p.index = index }
-func (p *packageImp) Alive() bool         { return p.alive }
-func (p *packageImp) SetAlive(alive bool) { p.alive = alive }
-func (p *packageImp) Path() string        { return p.path }
-func (p *packageImp) Name() string        { return p.name }
+func (p *packageImp) Kind() kind.Kind { return kind.Package }
+func (p *packageImp) Path() string    { return p.path }
+func (p *packageImp) Name() string    { return p.name }
 
 func (p *packageImp) Source() *packages.Package { return p.pkg }
 
@@ -227,14 +222,17 @@ func Comparer() comp.Comparer[constructs.Package] {
 
 func (p *packageImp) ToJson(ctx *jsonify.Context) jsonify.Datum {
 	if ctx.IsOnlyIndex() {
-		return jsonify.New(ctx, p.index)
+		return jsonify.New(ctx, p.Index())
 	}
 	if ctx.IsShort() {
-		return jsonify.NewSprintf(`%s%d`, p.Kind(), p.index)
+		return jsonify.NewSprintf(`%s%d`, p.Kind(), p.Index())
+	}
+	if ctx.SkipDuplicates() && p.Duplicate() {
+		return nil
 	}
 	return jsonify.NewMap().
 		AddIf(ctx, ctx.IsDebugKindIncluded(), `kind`, p.Kind()).
-		AddIf(ctx, ctx.IsDebugIndexIncluded(), `index`, p.index).
+		AddIf(ctx, ctx.IsDebugIndexIncluded(), `index`, p.Index()).
 		Add(ctx, `path`, p.path).
 		Add(ctx, `name`, p.name).
 		AddNonZero(ctx.OnlyIndex(), `imports`, p.imports.ToSlice()).

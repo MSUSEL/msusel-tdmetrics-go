@@ -11,12 +11,11 @@ import (
 )
 
 type fieldImp struct {
+	constructs.ConstructCore
 	name     string
 	exported bool
 	typ      constructs.TypeDesc
 	embedded bool
-	index    int
-	alive    bool
 }
 
 func newField(args constructs.FieldArgs) constructs.Field {
@@ -34,14 +33,10 @@ func newField(args constructs.FieldArgs) constructs.Field {
 
 func (f *fieldImp) IsField() {}
 
-func (f *fieldImp) Kind() kind.Kind     { return kind.Field }
-func (f *fieldImp) Index() int          { return f.index }
-func (f *fieldImp) SetIndex(index int)  { f.index = index }
-func (f *fieldImp) Alive() bool         { return f.alive }
-func (f *fieldImp) SetAlive(alive bool) { f.alive = alive }
-func (f *fieldImp) Name() string        { return f.name }
-func (f *fieldImp) Exported() bool      { return f.exported }
-func (f *fieldImp) Embedded() bool      { return f.embedded }
+func (f *fieldImp) Kind() kind.Kind { return kind.Field }
+func (f *fieldImp) Name() string    { return f.name }
+func (f *fieldImp) Exported() bool  { return f.exported }
+func (f *fieldImp) Embedded() bool  { return f.embedded }
 
 func (f *fieldImp) Type() constructs.TypeDesc { return f.typ }
 
@@ -70,14 +65,17 @@ func (f *fieldImp) RemoveTempReferences(required bool) (changed bool) {
 
 func (f *fieldImp) ToJson(ctx *jsonify.Context) jsonify.Datum {
 	if ctx.IsOnlyIndex() {
-		return jsonify.New(ctx, f.index)
+		return jsonify.New(ctx, f.Index())
 	}
 	if ctx.IsShort() {
-		return jsonify.NewSprintf(`%s%d`, f.Kind(), f.index)
+		return jsonify.NewSprintf(`%s%d`, f.Kind(), f.Index())
+	}
+	if ctx.SkipDuplicates() && f.Duplicate() {
+		return nil
 	}
 	return jsonify.NewMap().
 		AddIf(ctx, ctx.IsDebugKindIncluded(), `kind`, f.Kind()).
-		AddIf(ctx, ctx.IsDebugIndexIncluded(), `index`, f.index).
+		AddIf(ctx, ctx.IsDebugIndexIncluded(), `index`, f.Index()).
 		Add(ctx, `name`, f.name).
 		Add(ctx.Short(), `type`, f.typ).
 		AddNonZeroIf(ctx, f.exported, `vis`, `exported`).

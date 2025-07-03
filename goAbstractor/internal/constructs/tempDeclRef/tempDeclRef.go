@@ -14,10 +14,9 @@ import (
 )
 
 type tempDeclRefImp struct {
+	constructs.ConstructCore
 	pkgPath       string
 	name          string
-	index         int
-	alive         bool
 	implicitTypes []constructs.TypeDesc
 	instanceTypes []constructs.TypeDesc
 	nest          constructs.NestType
@@ -47,10 +46,6 @@ func newTempDeclRef(args constructs.TempDeclRefArgs) constructs.TempDeclRef {
 func (r *tempDeclRefImp) IsTempDeclRef() {}
 
 func (r *tempDeclRefImp) Kind() kind.Kind     { return kind.TempDeclRef }
-func (r *tempDeclRefImp) Index() int          { return r.index }
-func (r *tempDeclRefImp) SetIndex(index int)  { r.index = index }
-func (r *tempDeclRefImp) Alive() bool         { return r.alive }
-func (r *tempDeclRefImp) SetAlive(alive bool) { r.alive = alive }
 func (r *tempDeclRefImp) PackagePath() string { return r.pkgPath }
 func (r *tempDeclRefImp) Name() string        { return r.name }
 
@@ -104,14 +99,17 @@ func Comparer() comp.Comparer[constructs.TempDeclRef] {
 
 func (r *tempDeclRefImp) ToJson(ctx *jsonify.Context) jsonify.Datum {
 	if ctx.IsOnlyIndex() {
-		return jsonify.New(ctx, r.index)
+		return jsonify.New(ctx, r.Index())
 	}
 	if ctx.IsShort() {
-		return jsonify.NewSprintf(`%s%d`, r.Kind(), r.index)
+		return jsonify.NewSprintf(`%s%d`, r.Kind(), r.Index())
+	}
+	if ctx.SkipDuplicates() && r.Duplicate() {
+		return nil
 	}
 	return jsonify.NewMap().
 		AddIf(ctx, ctx.IsDebugKindIncluded(), `kind`, r.Kind()).
-		AddIf(ctx, ctx.IsDebugIndexIncluded(), `index`, r.index).
+		AddIf(ctx, ctx.IsDebugIndexIncluded(), `index`, r.Index()).
 		AddNonZero(ctx, `packagePath`, r.pkgPath).
 		Add(ctx, `name`, r.name).
 		AddNonZero(ctx.Short(), `resolved`, r.con).

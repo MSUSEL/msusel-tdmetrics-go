@@ -18,6 +18,7 @@ import (
 )
 
 type instanceImp struct {
+	constructs.ConstructCore
 	realType          types.Type
 	generic           constructs.Object
 	resolvedData      constructs.StructDesc
@@ -25,8 +26,6 @@ type instanceImp struct {
 	implicitTypes     []constructs.TypeDesc
 	instanceTypes     []constructs.TypeDesc
 	methods           collections.SortedSet[constructs.MethodInst]
-	index             int
-	alive             bool
 }
 
 func newInstance(args constructs.ObjectInstArgs) constructs.ObjectInst {
@@ -58,12 +57,8 @@ func newInstance(args constructs.ObjectInstArgs) constructs.ObjectInst {
 func (i *instanceImp) IsObjectInst() {}
 func (i *instanceImp) IsTypeDesc()   {}
 
-func (i *instanceImp) Kind() kind.Kind     { return kind.ObjectInst }
-func (i *instanceImp) Index() int          { return i.index }
-func (i *instanceImp) SetIndex(index int)  { i.index = index }
-func (i *instanceImp) Alive() bool         { return i.alive }
-func (i *instanceImp) SetAlive(alive bool) { i.alive = alive }
-func (m *instanceImp) GoType() types.Type  { return m.realType }
+func (i *instanceImp) Kind() kind.Kind    { return kind.ObjectInst }
+func (m *instanceImp) GoType() types.Type { return m.realType }
 
 func (m *instanceImp) Generic() constructs.Object                  { return m.generic }
 func (m *instanceImp) ResolvedData() constructs.StructDesc         { return m.resolvedData }
@@ -119,14 +114,17 @@ func (i *instanceImp) RemoveTempReferences(required bool) bool {
 
 func (i *instanceImp) ToJson(ctx *jsonify.Context) jsonify.Datum {
 	if ctx.IsOnlyIndex() {
-		return jsonify.New(ctx, i.index)
+		return jsonify.New(ctx, i.Index())
 	}
 	if ctx.IsShort() {
-		return jsonify.NewSprintf(`%s%d`, i.Kind(), i.index)
+		return jsonify.NewSprintf(`%s%d`, i.Kind(), i.Index())
+	}
+	if ctx.SkipDuplicates() && i.Duplicate() {
+		return nil
 	}
 	return jsonify.NewMap().
 		AddIf(ctx, ctx.IsDebugKindIncluded(), `kind`, i.Kind()).
-		AddIf(ctx, ctx.IsDebugIndexIncluded(), `index`, i.index).
+		AddIf(ctx, ctx.IsDebugIndexIncluded(), `index`, i.Index()).
 		Add(ctx.OnlyIndex(), `generic`, i.generic).
 		Add(ctx.OnlyIndex(), `resData`, i.resolvedData).
 		Add(ctx.OnlyIndex(), `resInterface`, i.resolvedInterface).

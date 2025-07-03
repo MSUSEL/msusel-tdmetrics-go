@@ -16,10 +16,9 @@ import (
 )
 
 type structDescImp struct {
+	constructs.ConstructCore
 	realType types.Type
 	fields   []constructs.Field
-	index    int
-	alive    bool
 }
 
 func newStructDesc(args constructs.StructDescArgs) constructs.StructDesc {
@@ -46,12 +45,8 @@ func newStructDesc(args constructs.StructDescArgs) constructs.StructDesc {
 func (d *structDescImp) IsTypeDesc()   {}
 func (d *structDescImp) IsStructDesc() {}
 
-func (d *structDescImp) Kind() kind.Kind     { return kind.StructDesc }
-func (d *structDescImp) Index() int          { return d.index }
-func (d *structDescImp) SetIndex(index int)  { d.index = index }
-func (d *structDescImp) Alive() bool         { return d.alive }
-func (d *structDescImp) SetAlive(alive bool) { d.alive = alive }
-func (d *structDescImp) GoType() types.Type  { return d.realType }
+func (d *structDescImp) Kind() kind.Kind    { return kind.StructDesc }
+func (d *structDescImp) GoType() types.Type { return d.realType }
 
 func (d *structDescImp) Fields() []constructs.Field { return d.fields }
 
@@ -78,14 +73,17 @@ func Comparer() comp.Comparer[constructs.StructDesc] {
 
 func (d *structDescImp) ToJson(ctx *jsonify.Context) jsonify.Datum {
 	if ctx.IsOnlyIndex() {
-		return jsonify.New(ctx, d.index)
+		return jsonify.New(ctx, d.Index())
 	}
 	if ctx.IsShort() {
-		return jsonify.NewSprintf(`%s%d`, d.Kind(), d.index)
+		return jsonify.NewSprintf(`%s%d`, d.Kind(), d.Index())
+	}
+	if ctx.SkipDuplicates() && d.Duplicate() {
+		return nil
 	}
 	return jsonify.NewMap().
 		AddIf(ctx, ctx.IsDebugKindIncluded(), `kind`, d.Kind()).
-		AddIf(ctx, ctx.IsDebugIndexIncluded(), `index`, d.index).
+		AddIf(ctx, ctx.IsDebugIndexIncluded(), `index`, d.Index()).
 		AddNonZero(ctx, `synthetic`, d.Synthetic()).
 		AddNonZero(ctx.OnlyIndex(), `fields`, d.fields)
 }

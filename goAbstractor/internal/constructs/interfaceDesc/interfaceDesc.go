@@ -20,6 +20,7 @@ import (
 )
 
 type interfaceDescImp struct {
+	constructs.ConstructCore
 	hint     hint.Hint
 	realType types.Type
 
@@ -30,9 +31,6 @@ type interfaceDescImp struct {
 	additions []constructs.Abstract
 
 	inherits collections.SortedSet[constructs.InterfaceDesc]
-
-	index int
-	alive bool
 }
 
 func newInterfaceDesc(args constructs.InterfaceDescArgs) constructs.InterfaceDesc {
@@ -119,13 +117,9 @@ func newInterfaceDesc(args constructs.InterfaceDescArgs) constructs.InterfaceDes
 func (id *interfaceDescImp) IsTypeDesc()      {}
 func (id *interfaceDescImp) IsInterfaceDesc() {}
 
-func (id *interfaceDescImp) Kind() kind.Kind     { return kind.InterfaceDesc }
-func (id *interfaceDescImp) Index() int          { return id.index }
-func (id *interfaceDescImp) SetIndex(index int)  { id.index = index }
-func (id *interfaceDescImp) Alive() bool         { return id.alive }
-func (id *interfaceDescImp) SetAlive(alive bool) { id.alive = alive }
-func (id *interfaceDescImp) Hint() hint.Hint     { return id.hint }
-func (id *interfaceDescImp) GoType() types.Type  { return id.realType }
+func (id *interfaceDescImp) Kind() kind.Kind    { return kind.InterfaceDesc }
+func (id *interfaceDescImp) Hint() hint.Hint    { return id.hint }
+func (id *interfaceDescImp) GoType() types.Type { return id.realType }
 
 func (id *interfaceDescImp) Abstracts() []constructs.Abstract  { return id.abstracts }
 func (id *interfaceDescImp) Exact() []constructs.TypeDesc      { return id.exact }
@@ -198,15 +192,18 @@ func (id *interfaceDescImp) RemoveTempReferences(required bool) bool {
 
 func (id *interfaceDescImp) ToJson(ctx *jsonify.Context) jsonify.Datum {
 	if ctx.IsOnlyIndex() {
-		return jsonify.New(ctx, id.index)
+		return jsonify.New(ctx, id.Index())
 	}
 	if ctx.IsShort() {
-		return jsonify.NewSprintf(`%s%d`, id.Kind(), id.index)
+		return jsonify.NewSprintf(`%s%d`, id.Kind(), id.Index())
+	}
+	if ctx.SkipDuplicates() && id.Duplicate() {
+		return nil
 	}
 	ab := append(append([]constructs.Abstract{}, id.abstracts...), id.additions...)
 	return jsonify.NewMap().
 		AddIf(ctx, ctx.IsDebugKindIncluded(), `kind`, id.Kind()).
-		AddIf(ctx, ctx.IsDebugIndexIncluded(), `index`, id.index).
+		AddIf(ctx, ctx.IsDebugIndexIncluded(), `index`, id.Index()).
 		AddNonZero(ctx.Short(), `pin`, id.pinnedPkg).
 		AddNonZero(ctx.OnlyIndex(), `abstracts`, ab).
 		AddNonZero(ctx.Short(), `approx`, id.approx).

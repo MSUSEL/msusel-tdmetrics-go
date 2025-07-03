@@ -11,10 +11,9 @@ import (
 )
 
 type selectionImp struct {
+	constructs.ConstructCore
 	name   string
 	origin constructs.Construct
-	index  int
-	alive  bool
 }
 
 func newSelection(args constructs.SelectionArgs) constructs.Selection {
@@ -28,12 +27,8 @@ func newSelection(args constructs.SelectionArgs) constructs.Selection {
 
 func (s *selectionImp) IsSelection() {}
 
-func (s *selectionImp) Kind() kind.Kind     { return kind.Selection }
-func (s *selectionImp) Index() int          { return s.index }
-func (s *selectionImp) SetIndex(index int)  { s.index = index }
-func (s *selectionImp) Alive() bool         { return s.alive }
-func (s *selectionImp) SetAlive(alive bool) { s.alive = alive }
-func (s *selectionImp) Name() string        { return s.name }
+func (s *selectionImp) Kind() kind.Kind { return kind.Selection }
+func (s *selectionImp) Name() string    { return s.name }
 
 func (s *selectionImp) Origin() constructs.Construct { return s.origin }
 
@@ -64,14 +59,17 @@ func Comparer() comp.Comparer[constructs.Selection] {
 
 func (s *selectionImp) ToJson(ctx *jsonify.Context) jsonify.Datum {
 	if ctx.IsOnlyIndex() {
-		return jsonify.New(ctx, s.index)
+		return jsonify.New(ctx, s.Index())
 	}
 	if ctx.IsShort() {
-		return jsonify.NewSprintf(`%s%d`, s.Kind(), s.index)
+		return jsonify.NewSprintf(`%s%d`, s.Kind(), s.Index())
+	}
+	if ctx.SkipDuplicates() && s.Duplicate() {
+		return nil
 	}
 	return jsonify.NewMap().
 		AddIf(ctx, ctx.IsDebugKindIncluded(), `kind`, s.Kind()).
-		AddIf(ctx, ctx.IsDebugIndexIncluded(), `index`, s.index).
+		AddIf(ctx, ctx.IsDebugIndexIncluded(), `index`, s.Index()).
 		Add(ctx, `name`, s.name).
 		Add(ctx.Short(), `origin`, s.origin)
 }
