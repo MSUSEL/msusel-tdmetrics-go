@@ -8,6 +8,7 @@ const (
 	keyMinimized contextKey = iota
 	keyShort
 	keyOnlyIndex
+	keySkipDuplicates
 	keyDebugKind
 	keyDebugIndex
 	keyDebugReceiver
@@ -72,6 +73,18 @@ func (c *Context) IsShort() bool {
 // as a reference to the whole object defined elsewhere.
 func (c *Context) IsOnlyIndex() bool {
 	return c.state[keyOnlyIndex]
+}
+
+// SetSkipDuplicates sets the skip duplicate flag.
+func (c *Context) SetSkipDuplicates(skip bool) *Context {
+	return c.copyAndSet(keySkipDuplicates, skip)
+}
+
+// SkipDuplicates indicates that any object marked as a duplicate should
+// return a null JSON node instead of a full output, so that the object is
+// not outputted when full. The index and short should still output.
+func (c *Context) SkipDuplicates() bool {
+	return c.state[keySkipDuplicates]
 }
 
 // IncludeDebugKind indicates that the kind field should be included

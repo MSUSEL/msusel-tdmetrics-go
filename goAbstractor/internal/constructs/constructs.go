@@ -30,8 +30,15 @@ type Construct interface {
 	// The index will be set to the top level factory sorted set.
 	Index() int
 
-	// SetIndex sets the index of construct.
-	SetIndex(index int)
+	// Duplicate is a flag set when this construct is identical to another
+	// existing construct (one of the identical ones will not be marked as
+	// a duplicate). Duplicates happen when one of the duplicates had a
+	// reference, originally making it different, but once the reference was
+	// replaced, the constraints were identical.
+	Duplicate() bool
+
+	// SetIndex sets the index of construct and indicates if it was a duplicate.
+	SetIndex(index int, duplicate bool)
 
 	// Alive indicates that this construct is reachable
 	// from any entry point in the compiled project.
@@ -269,3 +276,22 @@ func Cast[TOut, TIn Construct, S ~[]TIn](s S) []TOut {
 	}
 	return tps
 }
+
+// ConstructCore is a shared data and methods for all constructs that
+// may be embedded into a construct to quickly implement this data.
+type ConstructCore struct {
+	index     int
+	duplicate bool
+	alive     bool
+}
+
+func (c *ConstructCore) Index() int      { return c.index }
+func (c *ConstructCore) Duplicate() bool { return c.duplicate }
+func (c *ConstructCore) Alive() bool     { return c.alive }
+
+func (c *ConstructCore) SetIndex(index int, duplicate bool) {
+	c.index = index
+	c.duplicate = duplicate
+}
+
+func (c *ConstructCore) SetAlive(alive bool) { c.alive = alive }

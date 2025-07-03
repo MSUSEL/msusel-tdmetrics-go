@@ -11,11 +11,10 @@ import (
 )
 
 type abstractImp struct {
+	constructs.ConstructCore
 	name      string
 	exported  bool
 	signature constructs.Signature
-	index     int
-	alive     bool
 }
 
 func newAbstract(args constructs.AbstractArgs) constructs.Abstract {
@@ -30,13 +29,9 @@ func newAbstract(args constructs.AbstractArgs) constructs.Abstract {
 
 func (a *abstractImp) IsAbstract() {}
 
-func (a *abstractImp) Kind() kind.Kind     { return kind.Abstract }
-func (a *abstractImp) Index() int          { return a.index }
-func (a *abstractImp) SetIndex(index int)  { a.index = index }
-func (a *abstractImp) Alive() bool         { return a.alive }
-func (a *abstractImp) SetAlive(alive bool) { a.alive = alive }
-func (a *abstractImp) Name() string        { return a.name }
-func (a *abstractImp) Exported() bool      { return a.exported }
+func (a *abstractImp) Kind() kind.Kind { return kind.Abstract }
+func (a *abstractImp) Name() string    { return a.name }
+func (a *abstractImp) Exported() bool  { return a.exported }
 
 func (a *abstractImp) Signature() constructs.Signature { return a.signature }
 
@@ -59,14 +54,17 @@ func Comparer() comp.Comparer[constructs.Abstract] {
 
 func (a *abstractImp) ToJson(ctx *jsonify.Context) jsonify.Datum {
 	if ctx.IsOnlyIndex() {
-		return jsonify.New(ctx, a.index)
+		return jsonify.New(ctx, a.Index())
 	}
 	if ctx.IsShort() {
-		return jsonify.NewSprintf(`%s%d`, a.Kind(), a.index)
+		return jsonify.NewSprintf(`%s%d`, a.Kind(), a.Index())
+	}
+	if ctx.SkipDuplicates() && a.Duplicate() {
+		return nil
 	}
 	return jsonify.NewMap().
 		AddIf(ctx, ctx.IsDebugKindIncluded(), `kind`, a.Kind()).
-		AddIf(ctx, ctx.IsDebugIndexIncluded(), `index`, a.index).
+		AddIf(ctx, ctx.IsDebugIndexIncluded(), `index`, a.Index()).
 		Add(ctx, `name`, a.name).
 		AddNonZeroIf(ctx, a.exported, `vis`, `exported`).
 		Add(ctx.OnlyIndex(), `signature`, a.signature)
