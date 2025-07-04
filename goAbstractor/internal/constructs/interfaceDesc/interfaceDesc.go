@@ -197,13 +197,17 @@ func (id *interfaceDescImp) ToJson(ctx *jsonify.Context) jsonify.Datum {
 	if ctx.IsShort() {
 		return jsonify.NewSprintf(`%s%d`, id.Kind(), id.Index())
 	}
-	if ctx.SkipDuplicates() && id.Duplicate() {
+	if ctx.SkipDead() && !id.Alive() {
+		return nil
+	}
+	if !ctx.KeepDuplicates() && id.Duplicate() {
 		return nil
 	}
 	ab := append(append([]constructs.Abstract{}, id.abstracts...), id.additions...)
 	return jsonify.NewMap().
 		AddIf(ctx, ctx.IsDebugKindIncluded(), `kind`, id.Kind()).
 		AddIf(ctx, ctx.IsDebugIndexIncluded(), `index`, id.Index()).
+		AddIf(ctx, ctx.IsDebugAliveIncluded(), `alive`, id.Alive()).
 		AddNonZero(ctx.Short(), `pin`, id.pinnedPkg).
 		AddNonZero(ctx.OnlyIndex(), `abstracts`, ab).
 		AddNonZero(ctx.Short(), `approx`, id.approx).

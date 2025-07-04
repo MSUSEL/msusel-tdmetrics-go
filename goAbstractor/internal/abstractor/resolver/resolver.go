@@ -22,7 +22,7 @@ type resolverImp struct {
 	is      instantiations.Instantiations
 }
 
-func Resolve(proj constructs.Project, querier *querier.Querier, log *logger.Logger) {
+func Resolve(proj constructs.Project, querier *querier.Querier, log *logger.Logger, skipDead bool) {
 	resolve := &resolverImp{
 		log:     log,
 		querier: querier,
@@ -72,7 +72,7 @@ func Resolve(proj constructs.Project, querier *querier.Querier, log *logger.Logg
 
 	// Update the locations and indices to prepare for outputting.
 	resolve.Locations()
-	resolve.Indices()
+	resolve.Indices(skipDead)
 }
 
 func (r *resolverImp) Imports() {
@@ -143,7 +143,7 @@ func flagList[T constructs.Declaration](c collections.ReadonlySortedSet[T]) {
 // Indices should be called after all types have been registered
 // and all packages have been processed. This will update all the indices
 // that will be used as references in the output models.
-func (r *resolverImp) Indices() {
+func (r *resolverImp) Indices(skipDead bool) {
 	r.log.Log(`resolve indices`)
-	r.proj.UpdateIndices()
+	r.proj.UpdateIndices(skipDead)
 }

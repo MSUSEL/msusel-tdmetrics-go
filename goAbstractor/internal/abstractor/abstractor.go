@@ -27,6 +27,7 @@ import (
 type Config struct {
 	Packages []*packages.Package
 	Log      *logger.Logger
+	SkipDead bool
 }
 
 func Abstract(cfg Config) constructs.Project {
@@ -47,7 +48,7 @@ func Abstract(cfg Config) constructs.Project {
 	}
 	ab.abstractProject()
 
-	resolver.Resolve(proj, querier, log)
+	resolver.Resolve(proj, querier, log, cfg.SkipDead)
 
 	log.Log(`done`)
 	return proj

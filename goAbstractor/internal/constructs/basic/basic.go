@@ -67,13 +67,17 @@ func (t *basicImp) ToJson(ctx *jsonify.Context) jsonify.Datum {
 	if ctx.IsShort() {
 		return jsonify.NewSprintf(`%s%d`, t.Kind(), t.Index())
 	}
-	if ctx.SkipDuplicates() && t.Duplicate() {
+	if ctx.SkipDead() && !t.Alive() {
+		return nil
+	}
+	if !ctx.KeepDuplicates() && t.Duplicate() {
 		return nil
 	}
 	if ctx.IsDebugKindIncluded() || ctx.IsDebugIndexIncluded() {
 		return jsonify.NewMap().
 			AddIf(ctx, ctx.IsDebugKindIncluded(), `kind`, t.Kind()).
 			AddIf(ctx, ctx.IsDebugIndexIncluded(), `index`, t.Index()).
+			AddIf(ctx, ctx.IsDebugAliveIncluded(), `alive`, t.Alive()).
 			Add(ctx, `name`, t.realType.Name())
 	}
 	return jsonify.New(ctx, t.realType.Name())

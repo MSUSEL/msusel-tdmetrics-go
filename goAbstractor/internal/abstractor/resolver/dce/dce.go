@@ -11,8 +11,6 @@ import (
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs/kind"
 )
 
-// TODO: Check if imported packages that aren't used still have inits called.
-
 func DeadCodeElimination(proj constructs.Project) {
 	d := &dce{
 		proj:    proj,
@@ -34,6 +32,13 @@ type dce struct {
 	pending collections.SortedSet[constructs.Construct]
 }
 
+func (d *dce) forcePend(c constructs.Construct) {
+	if !utils.IsNil(c) {
+		c.SetAlive(true)
+		d.pending.Add(c)
+	}
+}
+
 func (d *dce) pend(c constructs.Construct) {
 	if !utils.IsNil(c) && !c.Alive() {
 		c.SetAlive(true)
@@ -47,10 +52,16 @@ func pendSlice[T constructs.Construct](d *dce, cs []T) {
 	}
 }
 
+func pendSet[T constructs.Construct](d *dce, c collections.ReadonlySortedSet[T]) {
+	for i := range c.Count() {
+		d.pend(c.Get(i))
+	}
+}
+
 func (d *dce) primeAlive() {
 	entryPkg := d.proj.EntryPoint()
 	assert.ArgNotNil(`entry point package`, entryPkg)
-	d.pend(entryPkg)
+	d.forcePend(entryPkg)
 
 	// Check if the entry package has the main method.
 	// This abstractor will not include tests so the packages
@@ -68,31 +79,34 @@ func (d *dce) primeAlive() {
 }
 
 func (d *dce) primeAliveWithMain(entryPkg constructs.Package, main constructs.Method) {
-	d.pend(main)
+	d.forcePend(main)
 
 	entryPkg.Methods().Enumerate().
 		Where(func(m constructs.Method) bool { return m.IsInit() }).
-		Foreach(func(m constructs.Method) { d.pend(m) })
+		Foreach(func(m constructs.Method) { d.forcePend(m) })
+
+	entryPkg.Values().Enumerate().
+		Where(func(v constructs.Value) bool { return v.HasSideEffect() }).
+		Foreach(func(v constructs.Value) { d.forcePend(v) })
 }
 
 func (d *dce) primeAliveWithLibrary(entryPkg constructs.Package) {
 	entryPkg.InterfaceDecls().Enumerate().
 		Where(func(it constructs.InterfaceDecl) bool { return it.Exported() }).
-		Foreach(func(it constructs.InterfaceDecl) { d.pend(it) })
+		Foreach(func(it constructs.InterfaceDecl) { d.forcePend(it) })
 
 	entryPkg.Methods().Enumerate().
 		Where(func(m constructs.Method) bool {
 			return (!m.HasReceiver() && m.Exported()) || m.IsInit()
-		}).Foreach(func(m constructs.Method) { d.pend(m) })
+		}).Foreach(func(m constructs.Method) { d.forcePend(m) })
 
 	entryPkg.Objects().Enumerate().
 		Where(func(obj constructs.Object) bool { return obj.Exported() }).
-		Foreach(func(obj constructs.Object) { d.pend(obj) })
+		Foreach(func(obj constructs.Object) { d.forcePend(obj) })
 
 	entryPkg.Values().Enumerate().
-		Where(func(v constructs.Value) bool {
-			return v.Exported() || v.HasSideEffect()
-		}).Foreach(func(v constructs.Value) { d.pend(v) })
+		Where(func(v constructs.Value) bool { return v.Exported() || v.HasSideEffect() }).
+		Foreach(func(v constructs.Value) { d.forcePend(v) })
 }
 
 func (d *dce) updateAlive(c constructs.Construct) {
@@ -150,6 +164,8 @@ func (d *dce) updateArgument(c constructs.Argument)   { d.pend(c.Type()) }
 func (d *dce) updateField(c constructs.Field)         { d.pend(c.Type()) }
 func (d *dce) updateTypeParam(c constructs.TypeParam) { d.pend(c.Type()) }
 
+func (d *dce) updateStructDesc(c constructs.StructDesc) { pendSlice(d, c.Fields()) }
+
 func (d *dce) updateTempDeclRef(c constructs.TempDeclRef)           { d.pend(c.ResolvedType()) }
 func (d *dce) updateTempReference(c constructs.TempReference)       { d.pend(c.ResolvedType()) }
 func (d *dce) updateTempTypeParamRef(c constructs.TempTypeParamRef) { d.pend(c.ResolvedType()) }
@@ -160,7 +176,7 @@ func (d *dce) updateInterfaceDecl(c constructs.InterfaceDecl) {
 	d.pend(c.Nest())
 	pendSlice(d, c.TypeParams())
 	pendSlice(d, c.ImplicitTypeParams())
-	// Do not make instances alive for the alive generics.
+	// Do not automatically make instances alive for the alive generics.
 }
 
 func (d *dce) updateMethod(c constructs.Method) {
@@ -168,7 +184,7 @@ func (d *dce) updateMethod(c constructs.Method) {
 	d.pend(c.Receiver())
 	d.pend(c.Signature())
 	pendSlice(d, c.TypeParams())
-	// Do not make instances alive for the alive generics.
+	// Do not automatically make instances alive for the alive generics.
 }
 
 func (d *dce) updateObject(c constructs.Object) {
@@ -177,7 +193,7 @@ func (d *dce) updateObject(c constructs.Object) {
 	d.pend(c.Nest())
 	pendSlice(d, c.TypeParams())
 	pendSlice(d, c.ImplicitTypeParams())
-	// Do not make instances alive for the alive generics.
+	// Do not automatically make instances alive for the alive generics.
 }
 
 func (d *dce) updateInterfaceInst(c constructs.InterfaceInst) {
@@ -202,25 +218,30 @@ func (d *dce) updateObjectInst(c constructs.ObjectInst) {
 }
 
 func (d *dce) updateInterfaceDesc(c constructs.InterfaceDesc) {
-	// TODO: Implement
+	d.pend(c.PinnedPackage())
+	pendSlice(d, c.Abstracts())
+	pendSlice(d, c.Approx())
+	pendSlice(d, c.Exact())
 }
 
 func (d *dce) updateMetrics(c constructs.Metrics) {
-	// TODO: Implement
+	pendSet(d, c.Invokes())
+	pendSet(d, c.Reads())
+	pendSet(d, c.Writes())
 }
 
 func (d *dce) updateSelection(c constructs.Selection) {
-	// TODO: Implement
+	d.pend(c.Origin())
+	d.pend(c.Target())
 }
 
 func (d *dce) updateSignature(c constructs.Signature) {
-	// TODO: Implement
-}
-
-func (d *dce) updateStructDesc(c constructs.StructDesc) {
-	// TODO: Implement
+	pendSlice(d, c.Params())
+	pendSlice(d, c.Results())
 }
 
 func (d *dce) updateValue(c constructs.Value) {
-	// TODO: Implement
+	d.pend(c.Package())
+	d.pend(c.Metrics())
+	d.pend(c.Type())
 }

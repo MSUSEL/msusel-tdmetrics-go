@@ -82,12 +82,16 @@ func (t *typeParamImp) ToJson(ctx *jsonify.Context) jsonify.Datum {
 	if ctx.IsShort() {
 		return jsonify.NewSprintf(`%s%d`, t.Kind(), t.Index())
 	}
-	if ctx.SkipDuplicates() && t.Duplicate() {
+	if ctx.SkipDead() && !t.Alive() {
+		return nil
+	}
+	if !ctx.KeepDuplicates() && t.Duplicate() {
 		return nil
 	}
 	return jsonify.NewMap().
 		AddIf(ctx, ctx.IsDebugKindIncluded(), `kind`, t.Kind()).
 		AddIf(ctx, ctx.IsDebugIndexIncluded(), `index`, t.Index()).
+		AddIf(ctx, ctx.IsDebugAliveIncluded(), `alive`, t.Alive()).
 		Add(ctx, `name`, t.name).
 		Add(ctx.Short(), `type`, t.typ)
 }

@@ -42,6 +42,6 @@ type Project interface {
 	EntryPoint() Package
 	FindType(pkgPath, name string, nest NestType, implicitTypes, instanceTypes []TypeDesc, allowRef, panicOnNotFound bool) (TypeDesc, bool)
 	FindDecl(pkgPath, name string, nest NestType, implicitTypes, instanceTypes []TypeDesc, allowRef, panicOnNotFound bool) (Construct, bool)
-	UpdateIndices()
+	UpdateIndices(skipDead bool)
 	String() string
 }

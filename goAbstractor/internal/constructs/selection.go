@@ -26,6 +26,7 @@ type SelectionArgs struct {
 
 	// Target is the construct by the given name in the given origin.
 	// This may be a field, method, variable, constant, etc.
+	// This may be nil if it can't be found.
 	Target Construct
 }
 

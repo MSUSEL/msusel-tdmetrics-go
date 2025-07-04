@@ -8,7 +8,9 @@ const (
 	keyMinimized contextKey = iota
 	keyShort
 	keyOnlyIndex
-	keySkipDuplicates
+	keyKeepDuplicates
+	keySkipDead
+	keyDebugAlive
 	keyDebugKind
 	keyDebugIndex
 	keyDebugReceiver
@@ -75,16 +77,39 @@ func (c *Context) IsOnlyIndex() bool {
 	return c.state[keyOnlyIndex]
 }
 
-// SetSkipDuplicates sets the skip duplicate flag.
-func (c *Context) SetSkipDuplicates(skip bool) *Context {
-	return c.copyAndSet(keySkipDuplicates, skip)
+// SetKeepDuplicates sets the keep duplicate flag.
+func (c *Context) SetKeepDuplicates(skip bool) *Context {
+	return c.copyAndSet(keyKeepDuplicates, skip)
 }
 
-// SkipDuplicates indicates that any object marked as a duplicate should
-// return a null JSON node instead of a full output, so that the object is
-// not outputted when full. The index and short should still output.
-func (c *Context) SkipDuplicates() bool {
-	return c.state[keySkipDuplicates]
+// KeepDuplicates indicates that any object marked as a duplicate should
+// output full objects instead of returning a null JSON node.
+func (c *Context) KeepDuplicates() bool {
+	return c.state[keyKeepDuplicates]
+}
+
+// SetSkipDead sets the skip dead flag.
+func (c *Context) SetSkipDead(skip bool) *Context {
+	return c.copyAndSet(keySkipDead, skip)
+}
+
+// SkipDead indicates that any object marked as a dead (alive == false)
+// should return a null JSON node instead of a full output,
+// so that the object is not outputted when full.
+func (c *Context) SkipDead() bool {
+	return c.state[keySkipDead]
+}
+
+// IncludeDebugAlive indicates that the alive flag should be included
+// to the output model for debugging.
+func (c *Context) IncludeDebugAlive(include bool) *Context {
+	return c.copyAndSet(keyDebugAlive, include)
+}
+
+// IsDebugAliveIncluded indicates that the alive flag should be included
+// to the output model for debugging.
+func (c *Context) IsDebugAliveIncluded() bool {
+	return c.state[keyDebugAlive]
 }
 
 // IncludeDebugKind indicates that the kind field should be included

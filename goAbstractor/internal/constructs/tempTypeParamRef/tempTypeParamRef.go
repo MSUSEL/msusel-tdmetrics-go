@@ -80,12 +80,16 @@ func (r *tempTypeParamRefImp) ToJson(ctx *jsonify.Context) jsonify.Datum {
 	if ctx.IsShort() {
 		return jsonify.NewSprintf(`%s%d`, r.Kind(), r.Index())
 	}
-	if ctx.SkipDuplicates() && r.Duplicate() {
+	if ctx.SkipDead() && !r.Alive() {
+		return nil
+	}
+	if !ctx.KeepDuplicates() && r.Duplicate() {
 		return nil
 	}
 	return jsonify.NewMap().
 		AddIf(ctx, ctx.IsDebugKindIncluded(), `kind`, r.Kind()).
 		AddIf(ctx, ctx.IsDebugIndexIncluded(), `index`, r.Index()).
+		AddIf(ctx, ctx.IsDebugAliveIncluded(), `alive`, r.Alive()).
 		AddNonZero(ctx.Short(), `context`, r.context).
 		AddNonZero(ctx.Short(), `name`, r.name).
 		AddNonZero(ctx.Short(), `type`, r.resolved)

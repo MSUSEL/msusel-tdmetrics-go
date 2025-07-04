@@ -318,7 +318,7 @@ func (p *projectImp) FindDecl(pkgPath, name string, nest constructs.NestType,
 	return decl, true
 }
 
-func (p *projectImp) UpdateIndices() {
+func (p *projectImp) UpdateIndices(skipDead bool) {
 	var index int
 	var kind kind.Kind
 	var prev constructs.Construct
@@ -328,12 +328,19 @@ func (p *projectImp) UpdateIndices() {
 			index = 0
 			prev = nil
 		}
+		alive := skipDead && !c.Alive()
 		duplicate := true
 		if constructs.ComparerPend(prev, c)() != 0 {
-			index++
+			if alive {
+				index++
+			}
 			duplicate = false
 		}
-		c.SetIndex(index, duplicate)
+		if alive {
+			c.SetIndex(index, duplicate)
+		} else {
+			c.SetIndex(0, duplicate)
+		}
 		prev = c
 	})
 }

@@ -70,12 +70,16 @@ func (f *fieldImp) ToJson(ctx *jsonify.Context) jsonify.Datum {
 	if ctx.IsShort() {
 		return jsonify.NewSprintf(`%s%d`, f.Kind(), f.Index())
 	}
-	if ctx.SkipDuplicates() && f.Duplicate() {
+	if ctx.SkipDead() && !f.Alive() {
+		return nil
+	}
+	if !ctx.KeepDuplicates() && f.Duplicate() {
 		return nil
 	}
 	return jsonify.NewMap().
 		AddIf(ctx, ctx.IsDebugKindIncluded(), `kind`, f.Kind()).
 		AddIf(ctx, ctx.IsDebugIndexIncluded(), `index`, f.Index()).
+		AddIf(ctx, ctx.IsDebugAliveIncluded(), `alive`, f.Alive()).
 		Add(ctx, `name`, f.name).
 		Add(ctx.Short(), `type`, f.typ).
 		AddNonZeroIf(ctx, f.exported, `vis`, `exported`).

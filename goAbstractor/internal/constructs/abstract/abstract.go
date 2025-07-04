@@ -59,12 +59,16 @@ func (a *abstractImp) ToJson(ctx *jsonify.Context) jsonify.Datum {
 	if ctx.IsShort() {
 		return jsonify.NewSprintf(`%s%d`, a.Kind(), a.Index())
 	}
-	if ctx.SkipDuplicates() && a.Duplicate() {
+	if ctx.SkipDead() && !a.Alive() {
+		return nil
+	}
+	if !ctx.KeepDuplicates() && a.Duplicate() {
 		return nil
 	}
 	return jsonify.NewMap().
 		AddIf(ctx, ctx.IsDebugKindIncluded(), `kind`, a.Kind()).
 		AddIf(ctx, ctx.IsDebugIndexIncluded(), `index`, a.Index()).
+		AddIf(ctx, ctx.IsDebugAliveIncluded(), `alive`, a.Alive()).
 		Add(ctx, `name`, a.name).
 		AddNonZeroIf(ctx, a.exported, `vis`, `exported`).
 		Add(ctx.OnlyIndex(), `signature`, a.signature)

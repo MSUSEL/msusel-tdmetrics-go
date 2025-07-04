@@ -2256,7 +2256,7 @@ func parseExpr(t *testing.T, lines ...string) *testTool {
 
 	querier := querier.NewSimple(tt.info, tt.fSet)
 	tt.m = Analyze(logger.New(), querier, tt.proj, tt.curPkg, tt.baker, tt.conv, expr)
-	tt.proj.UpdateIndices()
+	tt.proj.UpdateIndices(true)
 	return tt
 }
 
@@ -2276,7 +2276,7 @@ func parseDecl(t *testing.T, name string, lines ...string) *testTool {
 
 	querier := querier.NewSimple(tt.info, tt.fSet)
 	tt.m = Analyze(logger.New(), querier, tt.proj, tt.curPkg, tt.baker, tt.conv, target)
-	tt.proj.UpdateIndices()
+	tt.proj.UpdateIndices(true)
 	return tt
 }
 

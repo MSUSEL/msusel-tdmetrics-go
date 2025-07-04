@@ -144,12 +144,16 @@ func (d *interfaceDeclImp) ToJson(ctx *jsonify.Context) jsonify.Datum {
 	if ctx.IsShort() {
 		return jsonify.NewSprintf(`%s%d`, d.Kind(), d.Index())
 	}
-	if ctx.SkipDuplicates() && d.Duplicate() {
+	if ctx.SkipDead() && !d.Alive() {
+		return nil
+	}
+	if !ctx.KeepDuplicates() && d.Duplicate() {
 		return nil
 	}
 	return jsonify.NewMap().
 		AddIf(ctx, ctx.IsDebugKindIncluded(), `kind`, d.Kind()).
 		AddIf(ctx, ctx.IsDebugIndexIncluded(), `index`, d.Index()).
+		AddIf(ctx, ctx.IsDebugAliveIncluded(), `alive`, d.Alive()).
 		Add(ctx.OnlyIndex(), `package`, d.pkg).
 		Add(ctx, `name`, d.name).
 		Add(ctx.OnlyIndex(), `interface`, d.inter).
