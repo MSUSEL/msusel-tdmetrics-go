@@ -13,6 +13,7 @@ type Selection interface {
 
 	Name() string
 	Origin() Construct
+	Target() Construct
 }
 
 type SelectionArgs struct {
@@ -22,6 +23,10 @@ type SelectionArgs struct {
 
 	// Origin is the construct that is being selected from.
 	Origin Construct
+
+	// Target is the construct by the given name in the given origin.
+	// This may be a field, method, variable, constant, etc.
+	Target Construct
 }
 
 type SelectionFactory interface {

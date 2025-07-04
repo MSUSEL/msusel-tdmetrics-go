@@ -4,9 +4,11 @@ import (
 	"github.com/Snow-Gremlin/goToolbox/collections"
 	"github.com/Snow-Gremlin/goToolbox/collections/sortedSet"
 	"github.com/Snow-Gremlin/goToolbox/comp"
+	"github.com/Snow-Gremlin/goToolbox/utils"
 
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/assert"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs"
+	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs/kind"
 )
 
 // TODO: Check if imported packages that aren't used still have inits called.
@@ -33,8 +35,15 @@ type dce struct {
 }
 
 func (d *dce) pend(c constructs.Construct) {
-	if !c.Alive() {
+	if !utils.IsNil(c) && !c.Alive() {
+		c.SetAlive(true)
 		d.pending.Add(c)
+	}
+}
+
+func pendSlice[T constructs.Construct](d *dce, cs []T) {
+	for _, c := range cs {
+		d.pend(c)
 	}
 }
 
@@ -87,5 +96,131 @@ func (d *dce) primeAliveWithLibrary(entryPkg constructs.Package) {
 }
 
 func (d *dce) updateAlive(c constructs.Construct) {
-	// TODO: Finish
+	switch c.Kind() {
+	case kind.Abstract:
+		d.updateAbstract(c.(constructs.Abstract))
+	case kind.Argument:
+		d.updateArgument(c.(constructs.Argument))
+	case kind.Basic:
+		d.updateBasic(c.(constructs.Basic))
+	case kind.Field:
+		d.updateField(c.(constructs.Field))
+	case kind.InterfaceDecl:
+		d.updateInterfaceDecl(c.(constructs.InterfaceDecl))
+	case kind.InterfaceDesc:
+		d.updateInterfaceDesc(c.(constructs.InterfaceDesc))
+	case kind.InterfaceInst:
+		d.updateInterfaceInst(c.(constructs.InterfaceInst))
+	case kind.Method:
+		d.updateMethod(c.(constructs.Method))
+	case kind.MethodInst:
+		d.updateMethodInst(c.(constructs.MethodInst))
+	case kind.Metrics:
+		d.updateMetrics(c.(constructs.Metrics))
+	case kind.Object:
+		d.updateObject(c.(constructs.Object))
+	case kind.ObjectInst:
+		d.updateObjectInst(c.(constructs.ObjectInst))
+	case kind.Package:
+		d.updatePackage(c.(constructs.Package))
+	case kind.Selection:
+		d.updateSelection(c.(constructs.Selection))
+	case kind.Signature:
+		d.updateSignature(c.(constructs.Signature))
+	case kind.StructDesc:
+		d.updateStructDesc(c.(constructs.StructDesc))
+	case kind.TempDeclRef:
+		d.updateTempDeclRef(c.(constructs.TempDeclRef))
+	case kind.TempReference:
+		d.updateTempReference(c.(constructs.TempReference))
+	case kind.TempTypeParamRef:
+		d.updateTempTypeParamRef(c.(constructs.TempTypeParamRef))
+	case kind.TypeParam:
+		d.updateTypeParam(c.(constructs.TypeParam))
+	case kind.Value:
+		d.updateValue(c.(constructs.Value))
+	}
+}
+
+func (d *dce) updateBasic(c constructs.Basic)     {}
+func (d *dce) updatePackage(c constructs.Package) {}
+
+func (d *dce) updateAbstract(c constructs.Abstract)   { d.pend(c.Signature()) }
+func (d *dce) updateArgument(c constructs.Argument)   { d.pend(c.Type()) }
+func (d *dce) updateField(c constructs.Field)         { d.pend(c.Type()) }
+func (d *dce) updateTypeParam(c constructs.TypeParam) { d.pend(c.Type()) }
+
+func (d *dce) updateTempDeclRef(c constructs.TempDeclRef)           { d.pend(c.ResolvedType()) }
+func (d *dce) updateTempReference(c constructs.TempReference)       { d.pend(c.ResolvedType()) }
+func (d *dce) updateTempTypeParamRef(c constructs.TempTypeParamRef) { d.pend(c.ResolvedType()) }
+
+func (d *dce) updateInterfaceDecl(c constructs.InterfaceDecl) {
+	d.pend(c.Package())
+	d.pend(c.Interface())
+	d.pend(c.Nest())
+	pendSlice(d, c.TypeParams())
+	pendSlice(d, c.ImplicitTypeParams())
+	// Do not make instances alive for the alive generics.
+}
+
+func (d *dce) updateMethod(c constructs.Method) {
+	d.pend(c.Package())
+	d.pend(c.Receiver())
+	d.pend(c.Signature())
+	pendSlice(d, c.TypeParams())
+	// Do not make instances alive for the alive generics.
+}
+
+func (d *dce) updateObject(c constructs.Object) {
+	d.pend(c.Package())
+	d.pend(c.Interface())
+	d.pend(c.Nest())
+	pendSlice(d, c.TypeParams())
+	pendSlice(d, c.ImplicitTypeParams())
+	// Do not make instances alive for the alive generics.
+}
+
+func (d *dce) updateInterfaceInst(c constructs.InterfaceInst) {
+	d.pend(c.Generic())
+	d.pend(c.Resolved())
+	pendSlice(d, c.InstanceTypes())
+	pendSlice(d, c.ImplicitTypes())
+}
+
+func (d *dce) updateMethodInst(c constructs.MethodInst) {
+	d.pend(c.Generic())
+	d.pend(c.Resolved())
+	pendSlice(d, c.InstanceTypes())
+}
+
+func (d *dce) updateObjectInst(c constructs.ObjectInst) {
+	d.pend(c.Generic())
+	d.pend(c.ResolvedData())
+	d.pend(c.ResolvedInterface())
+	pendSlice(d, c.InstanceTypes())
+	pendSlice(d, c.ImplicitTypes())
+}
+
+func (d *dce) updateInterfaceDesc(c constructs.InterfaceDesc) {
+	// TODO: Implement
+}
+
+func (d *dce) updateMetrics(c constructs.Metrics) {
+	// TODO: Implement
+}
+
+func (d *dce) updateSelection(c constructs.Selection) {
+	// TODO: Implement
+}
+
+func (d *dce) updateSignature(c constructs.Signature) {
+	// TODO: Implement
+}
+
+func (d *dce) updateStructDesc(c constructs.StructDesc) {
+	// TODO: Implement
+}
+
+func (d *dce) updateValue(c constructs.Value) {
+	// TODO: Implement
 }

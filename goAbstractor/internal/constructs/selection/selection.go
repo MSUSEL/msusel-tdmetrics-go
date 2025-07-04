@@ -14,14 +14,17 @@ type selectionImp struct {
 	constructs.ConstructCore
 	name   string
 	origin constructs.Construct
+	target constructs.Construct
 }
 
 func newSelection(args constructs.SelectionArgs) constructs.Selection {
 	assert.ArgValidId(`name`, args.Name)
 	assert.ArgNotNil(`origin`, args.Origin)
+	assert.ArgNotNil(`target`, args.Target)
 	return &selectionImp{
 		name:   args.Name,
 		origin: args.Origin,
+		target: args.Target,
 	}
 }
 
@@ -31,6 +34,7 @@ func (s *selectionImp) Kind() kind.Kind { return kind.Selection }
 func (s *selectionImp) Name() string    { return s.name }
 
 func (s *selectionImp) Origin() constructs.Construct { return s.origin }
+func (s *selectionImp) Target() constructs.Construct { return s.target }
 
 func (s *selectionImp) RemoveTempReferences(required bool) bool {
 	changed := false

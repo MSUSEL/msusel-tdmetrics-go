@@ -328,12 +328,12 @@ func (p *projectImp) UpdateIndices() {
 			index = 0
 			prev = nil
 		}
-		if constructs.ComparerPend(prev, c)() == 0 {
-			c.SetIndex(index, true)
-		} else {
+		duplicate := true
+		if constructs.ComparerPend(prev, c)() != 0 {
 			index++
-			c.SetIndex(index, false)
+			duplicate = false
 		}
+		c.SetIndex(index, duplicate)
 		prev = c
 	})
 }

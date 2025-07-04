@@ -28,11 +28,55 @@ type Method interface {
 	Receiver() Object
 	PointerRecv() bool
 
+	// IsInit indicates this method is an init function,
+	// i.e `func init() { ... }`.
 	IsInit() bool
+
+	// IsMain indicates this method is the main function,
+	// i.e `func main() { ... }` in `main` package.
 	IsMain() bool
+
+	// IsTester indicates this method is a test, benchmark test, fuzzy test,
+	// or example function.
+	IsTester() bool
+
+	// IsTest indicates this method is a test function,
+	// i.e `func TestXxx(*testing.T) { ... }`.
+	// See https://pkg.go.dev/testing
+	IsTest() bool
+
+	// IsBenchmark indicates this method is a benchmark test function,
+	// i.e `func BenchmarkXxx(*testing.B) { ... }`.
+	// See https://pkg.go.dev/testing
+	IsBenchmark() bool
+
+	// IsFuzz indicates this method is a fuzzy test function,
+	// i.e `func FuzzXxx(*testing.F) { ... }`.
+	// See https://pkg.go.dev/testing
+	IsFuzz() bool
+
+	// IsExample indicates this method is an example function,
+	// i.e `func ExampleXxx() { ... }`.
+	// See https://pkg.go.dev/testing
+	IsExample() bool
+
+	// IsConcreteFunc indicates this is a top-level function,
+	// without a receiver, and the function is not generic.
+	IsConcreteFunc() bool
+
+	// IsNamed indicates this method is a method declared with a name,
+	// otherwise it is a function literal without a name.
 	IsNamed() bool
+
+	// HasReceiver indicates this method has a receiver object and
+	// is a member of that object.
 	HasReceiver() bool
+
+	// IsGeneric indicates this method is a generic method with zero or more
+	// instances. If there are zero instances, then the generic function
+	// hasn't been used and instantiated with a concrete type.
 	IsGeneric() bool
+
 	TypeParams() []TypeParam
 	AddInstance(inst MethodInst) MethodInst
 	Instances() collections.ReadonlySortedSet[MethodInst]

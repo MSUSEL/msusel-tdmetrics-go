@@ -12,6 +12,7 @@ import (
 
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/assert"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs"
+	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs/hint"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs/kind"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs/methodInst"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/jsonify"
@@ -120,17 +121,81 @@ func (m *methodImp) NeedsReceiver() bool {
 
 func (m *methodImp) IsInit() bool {
 	return strings.HasPrefix(m.name, `init#`) &&
-		m.HasReceiver() &&
-		m.IsGeneric() &&
+		m.IsConcreteFunc() &&
 		m.signature.IsVacant()
 }
 
 func (m *methodImp) IsMain() bool {
 	return m.name == `main` &&
 		m.pkg.Name() == `main` &&
-		m.HasReceiver() &&
-		m.IsGeneric() &&
+		m.IsConcreteFunc() &&
 		m.signature.IsVacant()
+}
+
+func (m *methodImp) IsTester() bool {
+	return m.IsTest() ||
+		m.IsBenchmark() ||
+		m.IsFuzz() ||
+		m.IsExample()
+}
+
+// hasTestParam determines if this method follows the pattern
+// `func(*testing.<name>)` such as `func(*testing.T)`.
+func (m *methodImp) hasTestParam(name string) bool {
+	s := m.signature
+	if utils.IsNil(s) || len(s.Results()) != 0 || len(s.Params()) != 1 {
+		return false
+	}
+	p := s.Params()[0]
+	if utils.IsNil(p) {
+		return false
+	}
+	t := p.Type()
+	if utils.IsNil(t) || t.Kind() != kind.InterfaceInst {
+		return false
+	}
+	i, ok := t.(constructs.InterfaceInst)
+	if !ok || i.Resolved().Hint() != hint.Pointer || len(i.ImplicitTypes()) != 1 {
+		return false
+	}
+	ta := i.ImplicitTypes()[0]
+	if utils.IsNil(ta) || ta.Kind() != kind.Object {
+		return false
+	}
+	o, ok := ta.(constructs.Object)
+	return ok &&
+		!utils.IsNil(o.Package()) &&
+		o.Package().Path() == `testing` &&
+		o.Name() == name
+}
+
+func (m *methodImp) IsTest() bool {
+	return strings.HasPrefix(m.name, `Test`) &&
+		m.IsConcreteFunc() &&
+		m.hasTestParam(`T`)
+}
+
+func (m *methodImp) IsBenchmark() bool {
+	return strings.HasPrefix(m.name, `Benchmark`) &&
+		m.IsConcreteFunc() &&
+		m.hasTestParam(`B`)
+}
+
+func (m *methodImp) IsFuzz() bool {
+	return strings.HasPrefix(m.name, `Fuzz`) &&
+		m.IsConcreteFunc() &&
+		m.hasTestParam(`F`)
+}
+
+func (m *methodImp) IsExample() bool {
+	return strings.HasPrefix(m.name, `Example`) &&
+		m.IsConcreteFunc() &&
+		m.signature.IsVacant()
+}
+
+func (m *methodImp) IsConcreteFunc() bool {
+	return !m.HasReceiver() &&
+		!m.IsGeneric()
 }
 
 func (m *methodImp) IsNamed() bool {
