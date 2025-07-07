@@ -7,12 +7,13 @@ import (
 	"github.com/Snow-Gremlin/goToolbox/utils"
 
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/abstractor/instantiator"
+	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/abstractor/querier"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs/kind"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/logger"
 )
 
-func References(log *logger.Logger, proj constructs.Project, required bool) bool {
+func References(log *logger.Logger, querier *querier.Querier, proj constructs.Project, required bool) bool {
 	defer func() {
 		if rex := recover(); rex != nil {
 			fmt.Println("\n" + proj.String())
@@ -22,6 +23,7 @@ func References(log *logger.Logger, proj constructs.Project, required bool) bool
 
 	r := &ref{
 		log:      log,
+		querier:  querier,
 		proj:     proj,
 		required: required,
 		changed:  false,
@@ -36,6 +38,7 @@ func References(log *logger.Logger, proj constructs.Project, required bool) bool
 
 type ref struct {
 	log      *logger.Logger
+	querier  *querier.Querier
 	proj     constructs.Project
 	required bool
 	changed  bool
@@ -117,7 +120,7 @@ func (r *ref) resolveTempRef(ref constructs.TempReference) {
 
 	switch typ.Kind() {
 	case kind.Object:
-		res := instantiator.Object(r.log, r.proj, ref.GoType(), typ.(constructs.Object), ref.ImplicitTypes(), ref.InstanceTypes())
+		res := instantiator.Object(r.log, r.querier, r.proj, ref.GoType(), typ.(constructs.Object), ref.ImplicitTypes(), ref.InstanceTypes())
 		if utils.IsNil(res) {
 			panic(terror.New(`failed to resolve object type reference`).
 				With(`package path`, ref.PackagePath()).
@@ -129,7 +132,7 @@ func (r *ref) resolveTempRef(ref constructs.TempReference) {
 		return
 
 	case kind.InterfaceDecl:
-		res := instantiator.InterfaceDecl(r.log, r.proj, ref.GoType(), typ.(constructs.InterfaceDecl), ref.ImplicitTypes(), ref.InstanceTypes())
+		res := instantiator.InterfaceDecl(r.log, r.querier, r.proj, ref.GoType(), typ.(constructs.InterfaceDecl), ref.ImplicitTypes(), ref.InstanceTypes())
 		if utils.IsNil(res) {
 			panic(terror.New(`failed to resolve interface type reference`).
 				With(`package path`, ref.PackagePath()).
@@ -179,7 +182,7 @@ func (r *ref) resolveTempDeclRef(ref constructs.TempDeclRef) {
 
 	switch decl.Kind() {
 	case kind.Object:
-		res := instantiator.Object(r.log, r.proj, nil, decl.(constructs.Object), nil, ref.InstanceTypes())
+		res := instantiator.Object(r.log, r.querier, r.proj, nil, decl.(constructs.Object), nil, ref.InstanceTypes())
 		if utils.IsNil(res) {
 			panic(terror.New(`failed to resolve object declaration reference`).
 				With(`package path`, ref.PackagePath()).
@@ -191,7 +194,7 @@ func (r *ref) resolveTempDeclRef(ref constructs.TempDeclRef) {
 		return
 
 	case kind.InterfaceDecl:
-		res := instantiator.InterfaceDecl(r.log, r.proj, nil, decl.(constructs.InterfaceDecl), nil, ref.InstanceTypes())
+		res := instantiator.InterfaceDecl(r.log, r.querier, r.proj, nil, decl.(constructs.InterfaceDecl), nil, ref.InstanceTypes())
 		if utils.IsNil(res) {
 			panic(terror.New(`failed to resolve interface declaration reference`).
 				With(`package path`, ref.PackagePath()).
@@ -203,7 +206,7 @@ func (r *ref) resolveTempDeclRef(ref constructs.TempDeclRef) {
 		return
 
 	case kind.Method:
-		res := instantiator.Method(r.log, r.proj, decl.(constructs.Method), ref.InstanceTypes())
+		res := instantiator.Method(r.log, r.querier, r.proj, decl.(constructs.Method), ref.InstanceTypes())
 		if utils.IsNil(res) {
 			panic(terror.New(`failed to resolve method declaration reference`).
 				With(`package path`, ref.PackagePath()).

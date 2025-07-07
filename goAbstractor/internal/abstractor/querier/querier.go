@@ -14,6 +14,7 @@ type Querier struct {
 	packages []*packages.Package
 	info     *types.Info
 	fSet     *token.FileSet
+	ctx      *types.Context
 	fnScopes map[*types.Scope]*types.Func
 }
 
@@ -37,6 +38,7 @@ func New(pkgs []*packages.Package) *Querier {
 		packages: pkgs,
 		info:     info,
 		fSet:     pkgs[0].Fset,
+		ctx:      types.NewContext(),
 		fnScopes: map[*types.Scope]*types.Func{},
 	}
 	q.ForeachPackage(q.joinInfo)
@@ -52,6 +54,7 @@ func NewSimple(info *types.Info, fSet *token.FileSet) *Querier {
 	return &Querier{
 		info: info,
 		fSet: fSet,
+		ctx:  types.NewContext(),
 	}
 }
 
@@ -71,6 +74,7 @@ func (q *Querier) joinInfo(p *packages.Package) {
 func (q *Querier) Info() *types.Info                { return q.info }
 func (q *Querier) FileSet() *token.FileSet          { return q.fSet }
 func (q *Querier) Pos(pos token.Pos) token.Position { return q.fSet.Position(pos) }
+func (q *Querier) Context() *types.Context          { return q.ctx }
 
 func getPos(p any) token.Pos {
 	if pp, ok := p.(interface{ Pos() token.Pos }); ok {

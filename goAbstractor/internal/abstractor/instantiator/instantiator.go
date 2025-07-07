@@ -7,14 +7,15 @@ import (
 	"github.com/Snow-Gremlin/goToolbox/terrors/terror"
 	"github.com/Snow-Gremlin/goToolbox/utils"
 
+	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/abstractor/querier"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/assert"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs/kind"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/logger"
 )
 
-func InterfaceDecl(log *logger.Logger, proj constructs.Project, realType types.Type, decl constructs.InterfaceDecl,
-	implicitTypes, instanceTypes []constructs.TypeDesc) constructs.TypeDesc {
+func InterfaceDecl(log *logger.Logger, querier *querier.Querier, proj constructs.Project, realType types.Type,
+	decl constructs.InterfaceDecl, implicitTypes, instanceTypes []constructs.TypeDesc) constructs.TypeDesc {
 
 	defer func() {
 		if r := recover(); r != nil {
@@ -37,7 +38,7 @@ func InterfaceDecl(log *logger.Logger, proj constructs.Project, realType types.T
 	assert.ArgsHaveSameLength(`instance types`, instanceTypes, tp)
 
 	log2 := log.Group(`instantiator`).Prefix(`|  `)
-	i, existing, needsInstance := newInstantiator(log2, proj, decl, itp, tp, implicitTypes, instanceTypes)
+	i, existing, needsInstance := newInstantiator(log2, querier, proj, decl, itp, tp, implicitTypes, instanceTypes)
 	if !needsInstance {
 		return decl
 	}
@@ -51,8 +52,8 @@ func InterfaceDecl(log *logger.Logger, proj constructs.Project, realType types.T
 	return i.createInstance(realType).(constructs.InterfaceInst)
 }
 
-func Object(log *logger.Logger, proj constructs.Project, realType types.Type, decl constructs.Object,
-	implicitTypes, instanceTypes []constructs.TypeDesc) constructs.TypeDesc {
+func Object(log *logger.Logger, querier *querier.Querier, proj constructs.Project, realType types.Type,
+	decl constructs.Object, implicitTypes, instanceTypes []constructs.TypeDesc) constructs.TypeDesc {
 
 	defer func() {
 		if r := recover(); r != nil {
@@ -75,7 +76,7 @@ func Object(log *logger.Logger, proj constructs.Project, realType types.Type, de
 	assert.ArgsHaveSameLength(`instance types`, instanceTypes, tp)
 
 	log2 := log.Group(`instantiator`).Prefix(`|  `)
-	i, existing, needsInstance := newInstantiator(log2, proj, decl, itp, tp, implicitTypes, instanceTypes)
+	i, existing, needsInstance := newInstantiator(log2, querier, proj, decl, itp, tp, implicitTypes, instanceTypes)
 	if !needsInstance {
 		return decl
 	}
@@ -89,8 +90,8 @@ func Object(log *logger.Logger, proj constructs.Project, realType types.Type, de
 	return i.createInstance(realType).(constructs.ObjectInst)
 }
 
-func Method(log *logger.Logger, proj constructs.Project, decl constructs.Method,
-	instanceTypes []constructs.TypeDesc) constructs.Construct {
+func Method(log *logger.Logger, querier *querier.Querier, proj constructs.Project,
+	decl constructs.Method, instanceTypes []constructs.TypeDesc) constructs.Construct {
 
 	assert.ArgNotNil(`project`, proj)
 	assert.ArgNotNil(`method`, decl)
@@ -101,7 +102,7 @@ func Method(log *logger.Logger, proj constructs.Project, decl constructs.Method,
 		typeParams = decl.Receiver().TypeParams()
 	}
 
-	i, existing, needsInstance := newInstantiator(log2, proj, decl, nil, typeParams, nil, instanceTypes)
+	i, existing, needsInstance := newInstantiator(log2, querier, proj, decl, nil, typeParams, nil, instanceTypes)
 	if !needsInstance {
 		return decl
 	}
@@ -116,6 +117,7 @@ func Method(log *logger.Logger, proj constructs.Project, decl constructs.Method,
 
 type instantiator struct {
 	log           *logger.Logger
+	querier       *querier.Querier
 	prior         *instantiator
 	proj          constructs.Project
 	decl          constructs.Declaration
@@ -124,8 +126,8 @@ type instantiator struct {
 	conversion    map[constructs.TypeParam]constructs.TypeDesc
 }
 
-func newInstantiator(log *logger.Logger, proj constructs.Project, decl constructs.Declaration,
-	nestTypeParams, typeParams []constructs.TypeParam,
+func newInstantiator(log *logger.Logger, querier *querier.Querier, proj constructs.Project,
+	decl constructs.Declaration, nestTypeParams, typeParams []constructs.TypeParam,
 	implicitTypes, instanceTypes []constructs.TypeDesc) (*instantiator, constructs.Construct, bool) {
 
 	if len(nestTypeParams) != len(implicitTypes) {
@@ -197,6 +199,7 @@ func newInstantiator(log *logger.Logger, proj constructs.Project, decl construct
 	log.Logf(`|- instantiation needed`)
 	return &instantiator{
 		log:           log,
+		querier:       querier,
 		proj:          proj,
 		decl:          decl,
 		implicitTypes: implicitTypes,
@@ -348,8 +351,11 @@ func (i *instantiator) typeDecl(decl constructs.TypeDecl,
 		if found {
 			return typ
 		}
+
+		realTyp := i.goType(decl, instanceTypes)
 		return i.proj.NewTempReference(constructs.TempReferenceArgs{
 			PackagePath:   decl.Package().Path(),
+			RealType:      realTyp,
 			Name:          decl.Name(),
 			ImplicitTypes: implicitTypes,
 			InstanceTypes: instanceTypes,
@@ -358,12 +364,13 @@ func (i *instantiator) typeDecl(decl constructs.TypeDecl,
 		})
 	}
 
-	i2, existing, _ := newInstantiator(i.log, i.proj, decl, nestTypeParams, typeParams, implicitTypes, instanceTypes)
+	i2, existing, _ := newInstantiator(i.log, i.querier, i.proj, decl, nestTypeParams, typeParams, implicitTypes, instanceTypes)
 	if !utils.IsNil(existing) {
 		return existing.(constructs.TypeDesc)
 	}
 	i2.prior = i
-	return i2.createInstance(nil).(constructs.TypeDesc)
+	realTyp := i.goType(decl, instanceTypes)
+	return i2.createInstance(realTyp).(constructs.TypeDesc)
 }
 
 func (i *instantiator) createInstance(realType types.Type) constructs.Construct {
@@ -422,6 +429,31 @@ func (i *instantiator) InterfaceDesc(it constructs.InterfaceDesc) constructs.Int
 	return it2
 }
 
+func (i *instantiator) goType(desc constructs.TypeDesc, instanceTypes []constructs.TypeDesc) types.Type {
+	origin := desc.GoType()
+	if origin == nil {
+		return nil
+	}
+	rtp, ok := origin.(interface {
+		types.Type
+		TypeParams() *types.TypeParamList
+	})
+	if !ok || rtp.TypeParams().Len() <= 0 {
+		return origin
+	}
+
+	tArgs := make([]types.Type, len(instanceTypes))
+	for i, ta := range instanceTypes {
+		tArgs[i] = ta.GoType()
+	}
+
+	realTyp, err := types.Instantiate(i.querier.Context(), rtp, tArgs, true)
+	if err != nil {
+		panic(terror.New(`failed to instantiate declaration Go type`, err))
+	}
+	return realTyp
+}
+
 func (i *instantiator) TempReference(r constructs.TempReference) constructs.TypeDesc {
 	if r.Resolved() {
 		// The reference will probably not be resolved, but just in case
@@ -437,8 +469,10 @@ func (i *instantiator) TempReference(r constructs.TempReference) constructs.Type
 		return typ
 	}
 
+	realTyp := i.goType(r, instanceTypes)
 	r2 := i.proj.NewTempReference(constructs.TempReferenceArgs{
 		PackagePath:   r.PackagePath(),
+		RealType:      realTyp,
 		Name:          r.Name(),
 		Nest:          r.Nest(),
 		ImplicitTypes: implicitTypes,

@@ -53,7 +53,11 @@ func New(ctx *Context, value any) Datum {
 	case Datum:
 		return v
 	case Jsonable:
-		return v.ToJson(ctx)
+		d := v.ToJson(ctx)
+		if utils.IsNil(d) {
+			return NewNull()
+		}
+		return d
 	}
 
 	f := reflect.ValueOf(value)

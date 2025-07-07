@@ -38,9 +38,12 @@ func newTempReference(args constructs.TempReferenceArgs) constructs.TempReferenc
 		assert.ArgNotNil(`package`, args.Package)
 
 		// Implement if needed.
-		panic(terror.New(`not implemented`).
+		panic(terror.New(`creating real type for TempReference not implemented`).
 			With("Package Path", args.PackagePath).
-			With("Name", args.Name))
+			With("Name", args.Name).
+			With("Nest", args.Nest).
+			With("Instance Types", args.InstanceTypes).
+			With("Implicit Types", args.ImplicitTypes))
 	}
 	assert.ArgNotNil(`real type`, args.RealType)
 	return &tempReferenceImp{

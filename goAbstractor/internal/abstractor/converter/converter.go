@@ -156,7 +156,7 @@ func (c *convImp) convertAlias(t *types.Alias) constructs.TypeDesc {
 func (c *convImp) convertArray(t *types.Array) constructs.TypeDesc {
 	elem := cache(c, t.Elem(), c.convertType)
 	generic := c.baker.BakeList()
-	return instantiator.InterfaceDecl(c.log, c.proj, t.Underlying(), generic, nil, []constructs.TypeDesc{elem})
+	return instantiator.InterfaceDecl(c.log, c.querier, c.proj, t.Underlying(), generic, nil, []constructs.TypeDesc{elem})
 }
 
 func (c *convImp) convertBasic(t *types.Basic) constructs.TypeDesc {
@@ -175,7 +175,7 @@ func (c *convImp) convertBasic(t *types.Basic) constructs.TypeDesc {
 func (c *convImp) convertChan(t *types.Chan) constructs.TypeDesc {
 	elem := cache(c, t.Elem(), c.convertType)
 	generic := c.baker.BakeChan()
-	return instantiator.InterfaceDecl(c.log, c.proj, t.Underlying(), generic, nil, []constructs.TypeDesc{elem})
+	return instantiator.InterfaceDecl(c.log, c.querier, c.proj, t.Underlying(), generic, nil, []constructs.TypeDesc{elem})
 }
 
 func (c *convImp) convertInterface(t *types.Interface) constructs.InterfaceDesc {
@@ -241,7 +241,7 @@ func (c *convImp) convertMap(t *types.Map) constructs.TypeDesc {
 	key := cache(c, t.Key(), c.convertType)
 	value := cache(c, t.Elem(), c.convertType)
 	generic := c.baker.BakeMap()
-	return instantiator.InterfaceDecl(c.log, c.proj, t.Underlying(), generic, nil, []constructs.TypeDesc{key, value})
+	return instantiator.InterfaceDecl(c.log, c.querier, c.proj, t.Underlying(), generic, nil, []constructs.TypeDesc{key, value})
 }
 
 func (c *convImp) convertNamed(t *types.Named) constructs.TypeDesc {
@@ -294,9 +294,9 @@ func (c *convImp) convertNamed(t *types.Named) constructs.TypeDesc {
 	case kind.TempReference, kind.InterfaceInst, kind.ObjectInst:
 		return typ
 	case kind.InterfaceDecl:
-		return instantiator.InterfaceDecl(c.log, c.proj, t.Underlying(), typ.(constructs.InterfaceDecl), implicitTypes, instanceTypes)
+		return instantiator.InterfaceDecl(c.log, c.querier, c.proj, t.Underlying(), typ.(constructs.InterfaceDecl), implicitTypes, instanceTypes)
 	case kind.Object:
-		return instantiator.Object(c.log, c.proj, t.Underlying(), typ.(constructs.Object), implicitTypes, instanceTypes)
+		return instantiator.Object(c.log, c.querier, c.proj, t.Underlying(), typ.(constructs.Object), implicitTypes, instanceTypes)
 	default:
 		panic(terror.New(`unexpected declaration type`).
 			With(`kind`, typ.Kind()).
@@ -307,7 +307,7 @@ func (c *convImp) convertNamed(t *types.Named) constructs.TypeDesc {
 func (c *convImp) convertPointer(t *types.Pointer) constructs.TypeDesc {
 	elem := cache(c, t.Elem(), c.convertType)
 	generic := c.baker.BakePointer()
-	return instantiator.InterfaceDecl(c.log, c.proj, t.Underlying(), generic, nil, []constructs.TypeDesc{elem})
+	return instantiator.InterfaceDecl(c.log, c.querier, c.proj, t.Underlying(), generic, nil, []constructs.TypeDesc{elem})
 }
 
 func (c *convImp) convertSignature(t *types.Signature) constructs.Signature {
@@ -326,7 +326,7 @@ func (c *convImp) convertSignature(t *types.Signature) constructs.Signature {
 func (c *convImp) convertSlice(t *types.Slice) constructs.TypeDesc {
 	elem := cache(c, t.Elem(), c.convertType)
 	generic := c.baker.BakeList()
-	return instantiator.InterfaceDecl(c.log, c.proj, t.Underlying(), generic, nil, []constructs.TypeDesc{elem})
+	return instantiator.InterfaceDecl(c.log, c.querier, c.proj, t.Underlying(), generic, nil, []constructs.TypeDesc{elem})
 }
 
 func (c *convImp) convertStruct(t *types.Struct) constructs.StructDesc {

@@ -6,10 +6,9 @@
     { vis: exported, name: $deref, signature:  4 }, #  3. func $deref() Foo[T <string|int|uint>]
     { vis: exported, name: $deref, signature:  5 }, #  4. func $deref() T <any> ???
     { vis: exported, name: $deref, signature:  6 }, #  5. func $deref() T <any> ???
-    { vis: exported, name: $deref, signature:  7 }, #  6. func $deref() T <any> ???
-    { vis: exported, name: Add,    signature:  8 }, #  7. func Add(v string) string ???
-    { vis: exported, name: Add,    signature: 11 }, #  8. func Add(v T <string|int>) T ???
-    { vis: exported, name: Add,    signature: 12 }, #  9. func Add(v T <string|int|uint>) T ???
+    { vis: exported, name: Add,    signature:  7 }, #  6. func Add(v string) string ???
+    { vis: exported, name: Add,    signature: 10 }, #  7. func Add(v T <string|int>) T ???
+    { vis: exported, name: Add,    signature: 11 }, #  8. func Add(v T <string|int|uint>) T ???
   ],
   arguments: [
     {          type: basic3 },         #  1. <unnamed> string
@@ -19,7 +18,6 @@
     {          type: objectInst1 },    #  5. <unnamed> Foo[string]
     {          type: objectInst2 },    #  6. <unnamed> Foo[T <string|int>]
     {          type: objectInst3 },    #  7. <unnamed> Foo[T <string|int>] ???
-    {          type: objectInst3 },    #  8. <unnamed> Foo[T <string|int>] ???
     {          type: typeParam1 },     #  9. <unnamed> T <any>
     {          type: typeParam2 },     # 10. <unnamed> T <string|int>
     {          type: typeParam3 },     # 11. <unnamed> T <string|int|uint>
@@ -36,7 +34,7 @@
   interfaceDecls: [
     { # 1. Pointer[T any] { $deref() T <any> } ???
       name: Pointer, package: 1, interface: 9, vis: exported,
-      instances: [ 1, 2, 3, 4, 5 ], typeParams: [ 1 ],
+      instances: [ 1, 2, 3, 4 ], typeParams: [ 1 ],
     },
   ],
   interfaceDescs: [

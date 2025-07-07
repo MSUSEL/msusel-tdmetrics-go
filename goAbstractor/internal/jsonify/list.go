@@ -15,6 +15,26 @@ func NewList() *List {
 	return &List{}
 }
 
+func NewListWith[T any, S ~[]T](ctx *Context, s S) *List {
+	list := &List{
+		data: make([]Datum, 0, len(s)),
+	}
+	for _, t := range s {
+		list = list.Append(ctx, t)
+	}
+	return list
+}
+
+func NewListWithNonZero[T any, S ~[]T](ctx *Context, s S) *List {
+	list := &List{
+		data: make([]Datum, 0, len(s)),
+	}
+	for _, t := range s {
+		list = list.AppendNonZero(ctx, t)
+	}
+	return list
+}
+
 func (l *List) _jsonData() {}
 
 func (l *List) isZero() bool {

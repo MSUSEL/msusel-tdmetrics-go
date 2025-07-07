@@ -117,7 +117,7 @@ func (r *resolverImp) Inheritance() {
 
 func (r *resolverImp) References(required bool) bool {
 	r.log.Log(`resolve references`)
-	return references.References(r.log, r.proj, required)
+	return references.References(r.log, r.querier, r.proj, required)
 }
 
 func (r *resolverImp) DeadCodeElimination() {

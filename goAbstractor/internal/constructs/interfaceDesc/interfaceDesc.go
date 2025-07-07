@@ -95,6 +95,8 @@ func newInterfaceDesc(args constructs.InterfaceDescArgs) constructs.InterfaceDes
 			if args.Hint == hint.Comparable && len(methods) <= 0 && len(embedded) <= 0 {
 				args.RealType = types.Universe.Lookup("comparable").Type().Underlying()
 			} else {
+				assert.ArgHasNoNils(`methods`, methods)
+				assert.ArgHasNoNils(`embedded`, embedded)
 				args.RealType = types.NewInterfaceType(methods, embedded).Complete()
 			}
 		}
@@ -134,10 +136,24 @@ func (id *interfaceDescImp) IsGeneral() bool {
 	return len(id.approx)+len(id.exact) >= 2
 }
 
-func (id *interfaceDescImp) Implements(other constructs.InterfaceDesc) bool {
+func (id *interfaceDescImp) Implements(other constructs.InterfaceDesc) (result bool) {
 	thisIt := id.realType
 	otherIt, ok := other.GoType().(*types.Interface)
-	return ok && types.Implements(thisIt, otherIt)
+	if !ok {
+		return false
+	}
+	assert.ArgNotNil(`thisIt`, thisIt)
+	assert.ArgNotNil(`otherIt`, otherIt)
+
+	defer func() {
+		if r := recover(); r != nil {
+			// Not sure why types.Implements occasionally fails with a nil method
+			// inside a type nor where that nil method is being created,
+			// but if there is a failure, just return false.
+			result = false
+		}
+	}()
+	return types.Implements(thisIt, otherIt)
 }
 
 func (id *interfaceDescImp) AdditionalAbstracts() []constructs.Abstract {

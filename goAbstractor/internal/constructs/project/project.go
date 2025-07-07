@@ -328,7 +328,7 @@ func (p *projectImp) UpdateIndices(skipDead bool) {
 			index = 0
 			prev = nil
 		}
-		alive := skipDead && !c.Alive()
+		alive := c.Alive() || !skipDead
 		duplicate := true
 		if constructs.ComparerPend(prev, c)() != 0 {
 			if alive {
@@ -353,34 +353,39 @@ func pl(k kind.Kind) string {
 	return s
 }
 
+func jsonList[T any](m *jsonify.Map, ctx *jsonify.Context, k kind.Kind, s collections.ReadonlySortedSet[T]) *jsonify.Map {
+	list := jsonify.NewListWithNonZero(ctx, s.ToSlice())
+	return m.AddNonZero(ctx, pl(k), list)
+}
+
 func (p *projectImp) ToJson(ctx *jsonify.Context) jsonify.Datum {
 	m := jsonify.NewMap().
 		Add(ctx, `language`, `go`).
 		AddNonZero(ctx, `locs`, p.locations)
 
-	m.AddNonZero(ctx, pl(kind.Abstract), p.Abstracts().ToSlice()).
-		AddNonZero(ctx, pl(kind.Argument), p.Arguments().ToSlice()).
-		AddNonZero(ctx, pl(kind.Field), p.Fields().ToSlice()).
-		AddNonZero(ctx, pl(kind.Package), p.Packages().ToSlice()).
-		AddNonZero(ctx, pl(kind.Metrics), p.Metrics().ToSlice()).
-		AddNonZero(ctx, pl(kind.Selection), p.Selections().ToSlice()).
-		AddNonZero(ctx, pl(kind.TempDeclRef), p.TempDeclRefs().ToSlice())
+	jsonList(m, ctx, kind.Abstract, p.Abstracts())
+	jsonList(m, ctx, kind.Argument, p.Arguments())
+	jsonList(m, ctx, kind.Field, p.Fields())
+	jsonList(m, ctx, kind.Package, p.Packages())
+	jsonList(m, ctx, kind.Metrics, p.Metrics())
+	jsonList(m, ctx, kind.Selection, p.Selections())
+	jsonList(m, ctx, kind.TempDeclRef, p.TempDeclRefs())
 
-	m.AddNonZero(ctx, pl(kind.InterfaceDecl), p.InterfaceDecls().ToSlice()).
-		AddNonZero(ctx, pl(kind.Method), p.Methods().ToSlice()).
-		AddNonZero(ctx, pl(kind.Object), p.Objects().ToSlice()).
-		AddNonZero(ctx, pl(kind.Value), p.Values().ToSlice())
+	jsonList(m, ctx, kind.InterfaceDecl, p.InterfaceDecls())
+	jsonList(m, ctx, kind.Method, p.Methods())
+	jsonList(m, ctx, kind.Object, p.Objects())
+	jsonList(m, ctx, kind.Value, p.Values())
 
-	m.AddNonZero(ctx, pl(kind.Basic), p.Basics().ToSlice()).
-		AddNonZero(ctx, pl(kind.InterfaceDesc), p.InterfaceDescs().ToSlice()).
-		AddNonZero(ctx, pl(kind.InterfaceInst), p.InterfaceInsts().ToSlice()).
-		AddNonZero(ctx, pl(kind.MethodInst), p.MethodInsts().ToSlice()).
-		AddNonZero(ctx, pl(kind.ObjectInst), p.ObjectInsts().ToSlice()).
-		AddNonZero(ctx, pl(kind.TempReference), p.TempReferences().ToSlice()).
-		AddNonZero(ctx, pl(kind.TempTypeParamRef), p.TempTypeParamRefs().ToSlice()).
-		AddNonZero(ctx, pl(kind.Signature), p.Signatures().ToSlice()).
-		AddNonZero(ctx, pl(kind.StructDesc), p.StructDescs().ToSlice()).
-		AddNonZero(ctx, pl(kind.TypeParam), p.TypeParams().ToSlice())
+	jsonList(m, ctx, kind.Basic, p.Basics())
+	jsonList(m, ctx, kind.InterfaceDesc, p.InterfaceDescs())
+	jsonList(m, ctx, kind.InterfaceInst, p.InterfaceInsts())
+	jsonList(m, ctx, kind.MethodInst, p.MethodInsts())
+	jsonList(m, ctx, kind.ObjectInst, p.ObjectInsts())
+	jsonList(m, ctx, kind.TempReference, p.TempReferences())
+	jsonList(m, ctx, kind.TempTypeParamRef, p.TempTypeParamRefs())
+	jsonList(m, ctx, kind.Signature, p.Signatures())
+	jsonList(m, ctx, kind.StructDesc, p.StructDescs())
+	jsonList(m, ctx, kind.TypeParam, p.TypeParams())
 
 	return m
 }

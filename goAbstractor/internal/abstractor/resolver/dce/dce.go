@@ -62,50 +62,63 @@ func (d *dce) primeAlive() {
 	entryPkg := d.proj.EntryPoint()
 	assert.ArgNotNil(`entry point package`, entryPkg)
 	d.forcePend(entryPkg)
+	d.primeAliveGeneral()
+
+	// Since this abstractor doesn't currently specify for tests,
+	// if there are any tester functions, just make them alive.
+	d.primeAliveForTests()
 
 	// Check if the entry package has the main method.
-	// This abstractor will not include tests so the packages
-	// are either for a main method or for a library.
 	if entryPkg.Name() == `main` {
 		main, ok := entryPkg.Methods().Enumerate().
 			Where(func(m constructs.Method) bool { return m.IsMain() }).
 			First()
 		if ok {
-			d.primeAliveWithMain(entryPkg, main)
+			d.primeAliveForMain(main)
 			return
 		}
 	}
-	d.primeAliveWithLibrary(entryPkg)
+
+	// If no main has been found, treat this like a library.
+	d.primeAliveForLibrary(entryPkg)
 }
 
-func (d *dce) primeAliveWithMain(entryPkg constructs.Package, main constructs.Method) {
-	d.forcePend(main)
-
-	entryPkg.Methods().Enumerate().
+func (d *dce) primeAliveGeneral() {
+	d.proj.Methods().Enumerate().
 		Where(func(m constructs.Method) bool { return m.IsInit() }).
 		Foreach(func(m constructs.Method) { d.forcePend(m) })
 
-	entryPkg.Values().Enumerate().
+	d.proj.Values().Enumerate().
 		Where(func(v constructs.Value) bool { return v.HasSideEffect() }).
 		Foreach(func(v constructs.Value) { d.forcePend(v) })
 }
 
-func (d *dce) primeAliveWithLibrary(entryPkg constructs.Package) {
+func (d *dce) primeAliveForTests() {
+	d.proj.Methods().Enumerate().
+		Where(func(m constructs.Method) bool { return m.IsTester() }).
+		Foreach(func(m constructs.Method) { d.forcePend(m) })
+}
+
+func (d *dce) primeAliveForMain(main constructs.Method) {
+	d.forcePend(main)
+}
+
+func (d *dce) primeAliveForLibrary(entryPkg constructs.Package) {
+	d.primeAliveGeneral()
 	entryPkg.InterfaceDecls().Enumerate().
 		Where(func(it constructs.InterfaceDecl) bool { return it.Exported() }).
 		Foreach(func(it constructs.InterfaceDecl) { d.forcePend(it) })
 
 	entryPkg.Methods().Enumerate().
-		Where(func(m constructs.Method) bool {
-			return (!m.HasReceiver() && m.Exported()) || m.IsInit()
-		}).Foreach(func(m constructs.Method) { d.forcePend(m) })
+		Where(func(m constructs.Method) bool { return !m.HasReceiver() && m.Exported() }).
+		Foreach(func(m constructs.Method) { d.forcePend(m) })
 
 	entryPkg.Objects().Enumerate().
 		Where(func(obj constructs.Object) bool { return obj.Exported() }).
 		Foreach(func(obj constructs.Object) { d.forcePend(obj) })
 
 	entryPkg.Values().Enumerate().
-		Where(func(v constructs.Value) bool { return v.Exported() || v.HasSideEffect() }).
+		Where(func(v constructs.Value) bool { return v.Exported() }).
 		Foreach(func(v constructs.Value) { d.forcePend(v) })
 }
 

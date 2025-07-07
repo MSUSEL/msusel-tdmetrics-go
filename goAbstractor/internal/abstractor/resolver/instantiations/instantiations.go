@@ -102,7 +102,7 @@ func (in *instantiationsImp) expandInstantiations(obj constructs.Object) {
 			// Create an object instance using the type argument for this
 			// method instance so that the method has a receiver for it.
 			it := mIts.Get(j).InstanceTypes()
-			instantiator.Object(in.log, in.proj, nil, obj, nil, it)
+			instantiator.Object(in.log, in.querier, in.proj, nil, obj, nil, it)
 		}
 	}
 
@@ -121,7 +121,7 @@ func (in *instantiationsImp) expandObjectInst(obj constructs.Object, instance co
 	methods := obj.Methods()
 	for i := range methods.Count() {
 		method := methods.Get(i)
-		con := instantiator.Method(in.log, in.proj, method, instance.InstanceTypes())
+		con := instantiator.Method(in.log, in.querier, in.proj, method, instance.InstanceTypes())
 		if utils.IsNil(con) {
 			panic(terror.New(`unable to instantiate method while expanding object`).
 				With(`method`, method).
@@ -150,14 +150,14 @@ func (in *instantiationsImp) fillOutPointerReceivers(obj constructs.Object) {
 		ptr := in.bk.BakePointer()
 		// create a pointer for the generic object.
 		rt := types.NewPointer(obj.GoType())
-		instantiator.InterfaceDecl(in.log, in.proj, rt, ptr, nil, []constructs.TypeDesc{obj})
+		instantiator.InterfaceDecl(in.log, in.querier, in.proj, rt, ptr, nil, []constructs.TypeDesc{obj})
 
 		oIts := obj.Instances()
 		for i := range oIts.Count() {
 			oIt := oIts.Get(i)
 			// create a pointer for the object interface.
 			rt := types.NewPointer(oIt.GoType())
-			instantiator.InterfaceDecl(in.log, in.proj, rt, ptr, nil, []constructs.TypeDesc{oIt})
+			instantiator.InterfaceDecl(in.log, in.querier, in.proj, rt, ptr, nil, []constructs.TypeDesc{oIt})
 		}
 	}
 }
@@ -196,23 +196,23 @@ func (in *instantiationsImp) expandNestedTypes(method constructs.Method) {
 
 func (in *instantiationsImp) expandNestedObject(implicitTypes []constructs.TypeDesc, obj constructs.Object) {
 	it := constructs.Cast[constructs.TypeDesc](obj.TypeParams())
-	instantiator.Object(in.log, in.proj, obj.GoType(), obj, implicitTypes, it)
+	instantiator.Object(in.log, in.querier, in.proj, obj.GoType(), obj, implicitTypes, it)
 
 	instances := obj.Instances()
 	for j := range instances.Count() {
 		inst := instances.Get(j)
-		instantiator.Object(in.log, in.proj, inst.GoType(), obj, implicitTypes, inst.InstanceTypes())
+		instantiator.Object(in.log, in.querier, in.proj, inst.GoType(), obj, implicitTypes, inst.InstanceTypes())
 	}
 }
 
 func (in *instantiationsImp) expandNestedInterface(implicitTypes []constructs.TypeDesc, it constructs.InterfaceDecl) {
 	tp := constructs.Cast[constructs.TypeDesc](it.TypeParams())
-	instantiator.InterfaceDecl(in.log, in.proj, it.GoType(), it, implicitTypes, tp)
+	instantiator.InterfaceDecl(in.log, in.querier, in.proj, it.GoType(), it, implicitTypes, tp)
 
 	instances := it.Instances()
 	for j := range instances.Count() {
 		inst := instances.Get(j)
-		instantiator.InterfaceDecl(in.log, in.proj, inst.GoType(), it, implicitTypes, inst.InstanceTypes())
+		instantiator.InterfaceDecl(in.log, in.querier, in.proj, inst.GoType(), it, implicitTypes, inst.InstanceTypes())
 	}
 }
 
