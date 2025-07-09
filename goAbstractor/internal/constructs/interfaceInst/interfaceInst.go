@@ -28,10 +28,33 @@ func newInstance(args constructs.InterfaceInstArgs) constructs.InterfaceInst {
 	assert.ArgNotNil(`generic`, args.Generic)
 	assert.ArgNotNil(`resolved`, args.Resolved)
 	assert.AnyArgNotEmpty(`implicit & instance types`, args.ImplicitTypes, args.InstanceTypes)
+	assert.ArgHasNoNils(`implicit types`, args.ImplicitTypes)
 	assert.ArgHasNoNils(`instance types`, args.InstanceTypes)
 	if !args.Generic.IsGeneric() {
 		panic(terror.New(`may not create an instance on a non-generic interface`).
 			With(`interface`, args.Generic))
+	}
+	assert.ArgsHaveSameLength(`implicit lengths`, args.Generic.ImplicitTypeParams(), args.ImplicitTypes)
+	assert.ArgsHaveSameLength(`instance lengths`, args.Generic.TypeParams(), args.InstanceTypes)
+
+	diff := false
+	cmp := constructs.Comparer[constructs.TypeDesc]()
+	for i := len(args.ImplicitTypes) - 1; i >= 0; i-- {
+		if cmp(args.Generic.ImplicitTypeParams()[i], args.ImplicitTypes[i]) != 0 {
+			diff = true
+			break
+		}
+	}
+	if !diff {
+		for i := len(args.InstanceTypes) - 1; i >= 0; i-- {
+			if cmp(args.Generic.TypeParams()[i], args.InstanceTypes[i]) != 0 {
+				diff = true
+				break
+			}
+		}
+	}
+	if !diff {
+		panic(terror.New(`attempted to make an interface instance with the general interface's type parameters`))
 	}
 
 	if utils.IsNil(args.RealType) {

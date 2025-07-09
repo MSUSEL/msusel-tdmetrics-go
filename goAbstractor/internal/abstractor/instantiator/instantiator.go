@@ -152,6 +152,27 @@ func newInstantiator(log *logger.Logger, querier *querier.Querier, proj construc
 			With(`instance types`, instanceTypes))
 	}
 
+	diff := false
+	cmp := constructs.Comparer[constructs.TypeDesc]()
+	for i := len(implicitTypes) - 1; i >= 0; i-- {
+		if cmp(nestTypeParams[i], implicitTypes[i]) != 0 {
+			diff = true
+			break
+		}
+	}
+	if !diff {
+		for i := len(instanceTypes) - 1; i >= 0; i-- {
+			if cmp(typeParams[i], instanceTypes[i]) != 0 {
+				diff = true
+				break
+			}
+		}
+	}
+	if !diff {
+		panic(terror.New(`attempted to make an instance with the general's type parameters`))
+		// TODO: Add more info
+	}
+
 	log.Logf(`instantiating %v`, decl)
 	log.Logf(`|- with %v`, instanceTypes)
 

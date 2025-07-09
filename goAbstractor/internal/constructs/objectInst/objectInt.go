@@ -32,7 +32,30 @@ func newInstance(args constructs.ObjectInstArgs) constructs.ObjectInst {
 	assert.ArgNotNil(`generic`, args.Generic)
 	assert.ArgNotNil(`resolved data`, args.ResolvedData)
 	assert.AnyArgNotEmpty(`implicit & instance types`, args.ImplicitTypes, args.InstanceTypes)
+	assert.ArgHasNoNils(`implicit types`, args.ImplicitTypes)
 	assert.ArgHasNoNils(`instance types`, args.InstanceTypes)
+	assert.ArgsHaveSameLength(`implicit lengths`, args.Generic.ImplicitTypeParams(), args.ImplicitTypes)
+	assert.ArgsHaveSameLength(`instance lengths`, args.Generic.TypeParams(), args.InstanceTypes)
+
+	diff := false
+	cmp := constructs.Comparer[constructs.TypeDesc]()
+	for i := len(args.ImplicitTypes) - 1; i >= 0; i-- {
+		if cmp(args.Generic.ImplicitTypeParams()[i], args.ImplicitTypes[i]) != 0 {
+			diff = true
+			break
+		}
+	}
+	if !diff {
+		for i := len(args.InstanceTypes) - 1; i >= 0; i-- {
+			if cmp(args.Generic.TypeParams()[i], args.InstanceTypes[i]) != 0 {
+				diff = true
+				break
+			}
+		}
+	}
+	if !diff {
+		panic(terror.New(`attempted to make an object instance with the general object's type parameters`))
+	}
 
 	if utils.IsNil(args.RealType) {
 		pkg := args.Generic.Package()

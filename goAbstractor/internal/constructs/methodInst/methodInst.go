@@ -4,6 +4,7 @@ import (
 	"go/types"
 
 	"github.com/Snow-Gremlin/goToolbox/comp"
+	"github.com/Snow-Gremlin/goToolbox/terrors/terror"
 
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/assert"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs"
@@ -26,6 +27,18 @@ func newInstance(args constructs.MethodInstArgs) constructs.MethodInst {
 	assert.ArgNotNil(`resolved`, args.Resolved)
 	assert.ArgNotEmpty(`instance types`, args.InstanceTypes)
 	assert.ArgHasNoNils(`instance types`, args.InstanceTypes)
+
+	diff := false
+	cmp := constructs.Comparer[constructs.TypeDesc]()
+	for i := len(args.InstanceTypes) - 1; i >= 0; i-- {
+		if cmp(args.Generic.TypeParams()[i], args.InstanceTypes[i]) != 0 {
+			diff = true
+			break
+		}
+	}
+	if !diff {
+		panic(terror.New(`attempted to make an method instance with the general method's type parameters`))
+	}
 
 	inst := &instanceImp{
 		generic:       args.Generic,

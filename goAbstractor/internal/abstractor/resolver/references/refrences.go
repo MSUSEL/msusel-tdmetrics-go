@@ -118,6 +118,8 @@ func (r *ref) resolveTempRef(ref constructs.TempReference) {
 		return
 	}
 
+	// TODO: Check if the type args match the type params of the generic.
+
 	switch typ.Kind() {
 	case kind.Object:
 		res := instantiator.Object(r.log, r.querier, r.proj, ref.GoType(), typ.(constructs.Object), ref.ImplicitTypes(), ref.InstanceTypes())

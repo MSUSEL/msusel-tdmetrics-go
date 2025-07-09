@@ -183,6 +183,9 @@ func (p *projectImp) FindType(pkgPath, name string, nest constructs.NestType,
 	}
 
 	if len(implicitTypes) > 0 || len(instanceTypes) > 0 {
+
+		// TODO: Need to check if the generic type args match the type params.
+
 		switch t := decl.(type) {
 		case constructs.InterfaceDecl:
 			if inst, ok := t.FindInstance(implicitTypes, instanceTypes); ok {
