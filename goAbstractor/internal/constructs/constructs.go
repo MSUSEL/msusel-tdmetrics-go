@@ -12,6 +12,7 @@ import (
 
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/assert"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs/kind"
+	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/jsonify"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/stringer"
 )
 
@@ -156,6 +157,10 @@ func CompareTo[T Construct](a T, b Construct, cmp comp.Comparer[T]) int {
 		return c
 	}
 	return cmp(a, b.(T))
+}
+
+func JsonSet[T Construct, S ~[]T](ctx *jsonify.Context, values S) *jsonify.List {
+	return jsonify.NewSortedSetNonZero(ctx, values, Comparer[T]())
 }
 
 func ResolvedTempReference(td TypeDesc, required bool) (TypeDesc, bool) {

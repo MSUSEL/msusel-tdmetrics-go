@@ -26,12 +26,12 @@
   interfaceDescs: [
     {}, # 1. any
     {   # 2. interface{ $len()int; $get(int)int; $set(int,int) }
-      abstracts: [ 3, 1, 4 ],
+      abstracts: [ 1, 3, 4 ],
       inherits:  [ 1 ],
       hint: list
     }, 
     { # 3. interface{ $len()int; $get(int)T; $set(int,T) }
-      abstracts: [ 3, 2, 5 ],
+      abstracts: [ 2, 3, 5 ],
       inherits:  [ 1 ],
       hint: list
     }

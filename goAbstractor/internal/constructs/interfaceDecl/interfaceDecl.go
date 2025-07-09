@@ -161,7 +161,7 @@ func (d *interfaceDeclImp) ToJson(ctx *jsonify.Context) jsonify.Datum {
 		AddNonZeroIf(ctx, d.exported, `vis`, `exported`).
 		AddNonZero(ctx.OnlyIndex(), `typeParams`, d.typeParams).
 		AddNonZero(ctx.OnlyIndex(), `nest`, d.nest).
-		AddNonZero(ctx.OnlyIndex(), `instances`, d.instances.ToSlice())
+		AddNonZero(ctx.OnlyIndex(), `instances`, constructs.JsonSet(ctx.OnlyIndex(), d.instances.ToSlice()))
 }
 
 func (d *interfaceDeclImp) ToStringer(s stringer.Stringer) {

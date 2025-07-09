@@ -239,11 +239,11 @@ func (p *packageImp) ToJson(ctx *jsonify.Context) jsonify.Datum {
 		AddIf(ctx, ctx.IsDebugAliveIncluded(), `alive`, p.Alive()).
 		Add(ctx, `path`, p.path).
 		Add(ctx, `name`, p.name).
-		AddNonZero(ctx.OnlyIndex(), `imports`, p.imports.ToSlice()).
-		AddNonZero(ctx.OnlyIndex(), `interfaces`, p.interfaces.ToSlice()).
-		AddNonZero(ctx.OnlyIndex(), `methods`, p.methods.ToSlice()).
-		AddNonZero(ctx.OnlyIndex(), `objects`, p.objects.ToSlice()).
-		AddNonZero(ctx.OnlyIndex(), `values`, p.values.ToSlice())
+		AddNonZero(ctx.OnlyIndex(), `imports`, constructs.JsonSet(ctx.OnlyIndex(), p.imports.ToSlice())).
+		AddNonZero(ctx.OnlyIndex(), `interfaces`, constructs.JsonSet(ctx.OnlyIndex(), p.interfaces.ToSlice())).
+		AddNonZero(ctx.OnlyIndex(), `methods`, constructs.JsonSet(ctx.OnlyIndex(), p.methods.ToSlice())).
+		AddNonZero(ctx.OnlyIndex(), `objects`, constructs.JsonSet(ctx.OnlyIndex(), p.objects.ToSlice())).
+		AddNonZero(ctx.OnlyIndex(), `values`, constructs.JsonSet(ctx.OnlyIndex(), p.values.ToSlice()))
 }
 
 func (p *packageImp) ResolveReceivers() {

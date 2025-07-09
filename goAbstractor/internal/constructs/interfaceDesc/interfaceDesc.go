@@ -225,10 +225,10 @@ func (id *interfaceDescImp) ToJson(ctx *jsonify.Context) jsonify.Datum {
 		AddIf(ctx, ctx.IsDebugIndexIncluded(), `index`, id.Index()).
 		AddIf(ctx, ctx.IsDebugAliveIncluded(), `alive`, id.Alive()).
 		AddNonZero(ctx.Short(), `pin`, id.pinnedPkg).
-		AddNonZero(ctx.OnlyIndex(), `abstracts`, ab).
-		AddNonZero(ctx.Short(), `approx`, id.approx).
-		AddNonZero(ctx.Short(), `exact`, id.exact).
-		AddNonZero(ctx.OnlyIndex(), `inherits`, id.inherits.ToSlice()).
+		AddNonZero(ctx.OnlyIndex(), `abstracts`, constructs.JsonSet(ctx.OnlyIndex(), ab)).
+		AddNonZero(ctx.Short(), `approx`, constructs.JsonSet(ctx.Short(), id.approx)).
+		AddNonZero(ctx.Short(), `exact`, constructs.JsonSet(ctx.Short(), id.exact)).
+		AddNonZero(ctx.OnlyIndex(), `inherits`, constructs.JsonSet(ctx.OnlyIndex(), id.inherits.ToSlice())).
 		AddNonZero(ctx, `hint`, string(id.hint))
 }
 

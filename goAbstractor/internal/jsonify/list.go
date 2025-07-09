@@ -4,6 +4,8 @@ import (
 	"encoding/json"
 	"fmt"
 
+	"github.com/Snow-Gremlin/goToolbox/collections/sortedSet"
+	"github.com/Snow-Gremlin/goToolbox/comp"
 	"github.com/Snow-Gremlin/goToolbox/utils"
 )
 
@@ -15,24 +17,36 @@ func NewList() *List {
 	return &List{}
 }
 
-func NewListWith[T any, S ~[]T](ctx *Context, s S) *List {
-	list := &List{
-		data: make([]Datum, 0, len(s)),
+func NewListWith[T any, S ~[]T](ctx *Context, values S) *List {
+	l := &List{}
+	if count := len(values); count > 0 {
+		l.data = make([]Datum, count)
+		for i, value := range values {
+			l.data[i] = New(ctx, value)
+		}
 	}
-	for _, t := range s {
-		list = list.Append(ctx, t)
-	}
-	return list
+	return l
 }
 
-func NewListWithNonZero[T any, S ~[]T](ctx *Context, s S) *List {
-	list := &List{
-		data: make([]Datum, 0, len(s)),
+func NewListWithNonZero[T any, S ~[]T](ctx *Context, values S) *List {
+	l := &List{}
+	if count := len(values); count > 0 {
+		l.data = make([]Datum, 0, count)
+		for _, value := range values {
+			if d := New(ctx, value); !d.isZero() {
+				l.data = append(l.data, d)
+			}
+		}
 	}
-	for _, t := range s {
-		list = list.AppendNonZero(ctx, t)
-	}
-	return list
+	return l
+}
+
+func NewSortedSet[T any, S ~[]T](ctx *Context, values S, c comp.Comparer[T]) *List {
+	return NewListWith(ctx, sortedSet.With(values, c).ToSlice())
+}
+
+func NewSortedSetNonZero[T any, S ~[]T](ctx *Context, values S, c comp.Comparer[T]) *List {
+	return NewListWithNonZero(ctx, sortedSet.With(values, c).ToSlice())
 }
 
 func (l *List) _jsonData() {}

@@ -353,8 +353,8 @@ func pl(k kind.Kind) string {
 	return s
 }
 
-func jsonList[T any](m *jsonify.Map, ctx *jsonify.Context, k kind.Kind, s collections.ReadonlySortedSet[T]) *jsonify.Map {
-	list := jsonify.NewListWithNonZero(ctx, s.ToSlice())
+func jsonList[T constructs.Construct](m *jsonify.Map, ctx *jsonify.Context, k kind.Kind, s collections.ReadonlySortedSet[T]) *jsonify.Map {
+	list := s.Enumerate().Where(func(c T) bool { return !c.Duplicate() }).ToSlice()
 	return m.AddNonZero(ctx, pl(k), list)
 }
 

@@ -134,7 +134,7 @@ func (i *instanceImp) ToJson(ctx *jsonify.Context) jsonify.Datum {
 		Add(ctx.OnlyIndex(), `resInterface`, i.resolvedInterface).
 		AddNonZero(ctx.Short(), `implicitTypes`, i.implicitTypes).
 		AddNonZero(ctx.Short(), `instanceTypes`, i.instanceTypes).
-		AddNonZero(ctx.OnlyIndex(), `methods`, i.methods.ToSlice())
+		AddNonZero(ctx.OnlyIndex(), `methods`, constructs.JsonSet(ctx.OnlyIndex(), i.methods.ToSlice()))
 }
 
 func (i *instanceImp) ToStringer(s stringer.Stringer) {

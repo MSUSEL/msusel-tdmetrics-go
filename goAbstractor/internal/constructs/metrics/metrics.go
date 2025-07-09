@@ -135,9 +135,9 @@ func (m *metricsImp) ToJson(ctx *jsonify.Context) jsonify.Datum {
 		AddNonZero(ctx, `indents`, m.indents).
 		AddNonZero(ctx, `getter`, m.getter).
 		AddNonZero(ctx, `setter`, m.setter).
-		AddNonZero(ctx.Short(), `reads`, m.reads.ToSlice()).
-		AddNonZero(ctx.Short(), `writes`, m.writes.ToSlice()).
-		AddNonZero(ctx.Short(), `invokes`, m.invokes.ToSlice()).
+		AddNonZero(ctx.Short(), `reads`, constructs.JsonSet(ctx.Short(), m.reads.ToSlice())).
+		AddNonZero(ctx.Short(), `writes`, constructs.JsonSet(ctx.Short(), m.writes.ToSlice())).
+		AddNonZero(ctx.Short(), `invokes`, constructs.JsonSet(ctx.Short(), m.invokes.ToSlice())).
 		AddNonZero(ctx, `sideEffect`, m.sideEffect)
 }
 

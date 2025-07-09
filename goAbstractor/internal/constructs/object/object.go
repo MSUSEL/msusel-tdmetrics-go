@@ -170,8 +170,8 @@ func (d *objectImp) ToJson(ctx *jsonify.Context) jsonify.Datum {
 		AddNonZeroIf(ctx, d.exported, `vis`, `exported`).
 		AddNonZero(ctx.OnlyIndex(), `typeParams`, d.typeParams).
 		Add(ctx.OnlyIndex(), `data`, d.data).
-		AddNonZero(ctx.OnlyIndex(), `instances`, d.instances.ToSlice()).
-		AddNonZero(ctx.OnlyIndex(), `methods`, d.methods.ToSlice()).
+		AddNonZero(ctx.OnlyIndex(), `instances`, constructs.JsonSet(ctx.OnlyIndex(), d.instances.ToSlice())).
+		AddNonZero(ctx.OnlyIndex(), `methods`, constructs.JsonSet(ctx.OnlyIndex(), d.methods.ToSlice())).
 		AddNonZero(ctx.OnlyIndex(), `nest`, d.nest).
 		Add(ctx.OnlyIndex(), `interface`, d.inter)
 }

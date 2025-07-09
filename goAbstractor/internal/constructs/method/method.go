@@ -254,7 +254,7 @@ func (m *methodImp) ToJson(ctx *jsonify.Context) jsonify.Datum {
 		AddNonZero(ctx.OnlyIndex(), `typeParams`, m.typeParams).
 		Add(ctx.OnlyIndex(), `signature`, m.signature).
 		AddNonZero(ctx.OnlyIndex(), `metrics`, m.metrics).
-		AddNonZero(ctx.OnlyIndex(), `instances`, m.instances.ToSlice()).
+		AddNonZero(ctx.OnlyIndex(), `instances`, constructs.JsonSet(ctx.OnlyIndex(), m.instances.ToSlice())).
 		AddNonZero(ctx.OnlyIndex(), `receiver`, m.receiver).
 		AddNonZero(ctx, `ptrRecv`, m.ptrRecv).
 		AddNonZeroIf(ctx, ctx.IsDebugReceiverIncluded(), `recvName`, m.recvName)
