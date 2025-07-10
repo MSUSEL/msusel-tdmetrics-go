@@ -37,7 +37,7 @@ type Object interface {
 	ImplicitTypeParams() []TypeParam
 	AddInstance(inst ObjectInst) ObjectInst
 	Instances() collections.ReadonlySortedSet[ObjectInst]
-	FindInstance(implicitTypes, instanceTypes []TypeDesc) (ObjectInst, bool)
+	FindInstance(implicitTypes, instanceTypes []TypeDesc) (TypeDesc, bool)
 }
 
 type ObjectArgs struct {

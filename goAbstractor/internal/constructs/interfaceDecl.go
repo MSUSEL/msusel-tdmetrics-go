@@ -31,7 +31,7 @@ type InterfaceDecl interface {
 	ImplicitTypeParams() []TypeParam
 	AddInstance(inst InterfaceInst) InterfaceInst
 	Instances() collections.ReadonlySortedSet[InterfaceInst]
-	FindInstance(implicitTypes, instanceTypes []TypeDesc) (InterfaceInst, bool)
+	FindInstance(implicitTypes, instanceTypes []TypeDesc) (TypeDesc, bool)
 }
 
 type InterfaceDeclArgs struct {

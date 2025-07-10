@@ -27,6 +27,11 @@ func newInstance(args constructs.MethodInstArgs) constructs.MethodInst {
 	assert.ArgNotNil(`resolved`, args.Resolved)
 	assert.ArgNotEmpty(`instance types`, args.InstanceTypes)
 	assert.ArgHasNoNils(`instance types`, args.InstanceTypes)
+	if !args.Generic.IsGeneric() {
+		panic(terror.New(`may not create an instance on a non-generic method`).
+			With(`method`, args.Generic))
+	}
+	assert.ArgsHaveSameLength(`instance lengths`, args.Generic.TypeParams(), args.InstanceTypes)
 
 	diff := false
 	cmp := constructs.Comparer[constructs.TypeDesc]()

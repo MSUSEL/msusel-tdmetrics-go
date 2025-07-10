@@ -104,7 +104,14 @@ func (d *interfaceDeclImp) RemoveTempDeclRefs(required bool) bool {
 	return false
 }
 
-func (d *interfaceDeclImp) FindInstance(implicitTypes, instanceTypes []constructs.TypeDesc) (constructs.InterfaceInst, bool) {
+func (d *interfaceDeclImp) FindInstance(implicitTypes, instanceTypes []constructs.TypeDesc) (constructs.TypeDesc, bool) {
+	if comp.Or(
+		constructs.SliceComparerPend(implicitTypes, constructs.Cast[constructs.TypeDesc](d.ImplicitTypeParams())),
+		constructs.SliceComparerPend(instanceTypes, constructs.Cast[constructs.TypeDesc](d.TypeParams())),
+	) == 0 {
+		return d, true
+	}
+
 	return d.instances.Enumerate().Where(func(i constructs.InterfaceInst) bool {
 		return comp.Or(
 			constructs.SliceComparerPend(implicitTypes, i.ImplicitTypes()),

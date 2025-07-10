@@ -4,6 +4,7 @@ import (
 	"go/types"
 	"slices"
 
+	"github.com/Snow-Gremlin/goToolbox/comp"
 	"github.com/Snow-Gremlin/goToolbox/terrors/terror"
 	"github.com/Snow-Gremlin/goToolbox/utils"
 
@@ -152,29 +153,18 @@ func newInstantiator(log *logger.Logger, querier *querier.Querier, proj construc
 			With(`instance types`, instanceTypes))
 	}
 
-	diff := false
-	cmp := constructs.Comparer[constructs.TypeDesc]()
-	for i := len(implicitTypes) - 1; i >= 0; i-- {
-		if cmp(nestTypeParams[i], implicitTypes[i]) != 0 {
-			diff = true
-			break
-		}
-	}
-	if !diff {
-		for i := len(instanceTypes) - 1; i >= 0; i-- {
-			if cmp(typeParams[i], instanceTypes[i]) != 0 {
-				diff = true
-				break
-			}
-		}
-	}
-	if !diff {
-		panic(terror.New(`attempted to make an instance with the general's type parameters`))
-		// TODO: Add more info
-	}
-
 	log.Logf(`instantiating %v`, decl)
-	log.Logf(`|- with %v`, instanceTypes)
+	log.Logf(`|- with implicits %v`, implicitTypes)
+	log.Logf(`|- with instances %v`, instanceTypes)
+
+	// Check if the type arguments match the type parameters.
+	if comp.Or(
+		constructs.SliceComparerPend(implicitTypes, constructs.Cast[constructs.TypeDesc](nestTypeParams)),
+		constructs.SliceComparerPend(instanceTypes, constructs.Cast[constructs.TypeDesc](typeParams)),
+	) == 0 {
+		log.Logf(`'- generic declaration`)
+		return nil, nil, false
+	}
 
 	// Check declaration is a generic type, leave otherwise.
 	if len(nestTypeParams) <= 0 && len(typeParams) <= 0 {
