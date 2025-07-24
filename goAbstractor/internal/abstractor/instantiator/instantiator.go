@@ -94,6 +94,14 @@ func Object(log *logger.Logger, querier *querier.Querier, proj constructs.Projec
 func Method(log *logger.Logger, querier *querier.Querier, proj constructs.Project,
 	decl constructs.Method, instanceTypes []constructs.TypeDesc) constructs.Construct {
 
+	defer func() {
+		if r := recover(); r != nil {
+			panic(terror.New(`error in instantiator.Method`, terror.RecoveredPanic(r)).
+				With(`decl`, decl).
+				With(`instanceTypes`, instanceTypes))
+		}
+	}()
+
 	assert.ArgNotNil(`project`, proj)
 	assert.ArgNotNil(`method`, decl)
 
@@ -355,7 +363,7 @@ func (i *instantiator) typeDecl(decl constructs.TypeDecl,
 	// If the declaration is the same as a declaration being instantiated,
 	// create a reference to avoid the cycle. Cycles are caused by the type
 	// being instantiated being used as part of the type definition
-	// directly, e.g. `type Foo[T any] interface { Get() Foo[T]  }` or
+	// directly, e.g. `type Foo[T any] interface { Get() Foo[T] }` or
 	// indirectly. e.g. `type Foo[T any] interface { Children() List[Foo[T]] }`
 	if i.inProgress(decl, implicitTypes, instanceTypes) {
 		typ, found := i.proj.FindType(decl.Package().Path(), decl.Name(), decl.Nest(), implicitTypes, instanceTypes, true, false)
@@ -387,45 +395,55 @@ func (i *instantiator) typeDecl(decl constructs.TypeDecl,
 func (i *instantiator) createInstance(realType types.Type) constructs.Construct {
 	switch i.decl.Kind() {
 	case kind.InterfaceDecl:
-		d := i.decl.(constructs.InterfaceDecl)
-		inst := i.proj.NewInterfaceInst(constructs.InterfaceInstArgs{
-			RealType:      realType,
-			Generic:       d,
-			Resolved:      i.InterfaceDesc(d.Interface()),
-			ImplicitTypes: i.implicitTypes,
-			InstanceTypes: i.instanceTypes,
-		})
-		i.log.Logf(`'- instantiated interface: %v`, inst)
-		return inst
-
+		return i.createInterfaceDeclInstance(realType)
 	case kind.Object:
-		d := i.decl.(constructs.Object)
-		obj := i.proj.NewObjectInst(constructs.ObjectInstArgs{
-			RealType:      realType,
-			Generic:       d,
-			ResolvedData:  i.StructDesc(d.Data()),
-			ImplicitTypes: i.implicitTypes,
-			InstanceTypes: i.instanceTypes,
-		})
-		i.log.Logf(`'- instantiated object: %v`, obj)
-		return obj
-
+		return i.createObjectInstance(realType)
 	case kind.Method:
-		d := i.decl.(constructs.Method)
-		md := i.proj.NewMethodInst(constructs.MethodInstArgs{
-			Generic:       d,
-			Resolved:      i.Signature(d.Signature()),
-			InstanceTypes: i.instanceTypes,
-			Metrics:       nil, // This needs to be set later
-		})
-		i.log.Logf(`'- instantiated method: %v`, md)
-		return md
-
+		return i.createMethodInstance(realType)
 	default:
 		panic(terror.New(`unexpected declaration type`).
 			With(`kind`, i.decl.Kind()).
 			With(`decl`, i.decl))
 	}
+}
+
+func (i *instantiator) createInterfaceDeclInstance(realType types.Type) constructs.Construct {
+	d := i.decl.(constructs.InterfaceDecl)
+	inst := i.proj.NewInterfaceInst(constructs.InterfaceInstArgs{
+		RealType:      realType,
+		Generic:       d,
+		Resolved:      i.InterfaceDesc(d.Interface()),
+		ImplicitTypes: i.implicitTypes,
+		InstanceTypes: i.instanceTypes,
+	})
+	i.log.Logf(`'- instantiated interface: %v`, inst)
+	return inst
+}
+
+func (i *instantiator) createObjectInstance(realType types.Type) constructs.Construct {
+	d := i.decl.(constructs.Object)
+	obj := i.proj.NewObjectInst(constructs.ObjectInstArgs{
+		RealType:      realType,
+		Generic:       d,
+		ResolvedData:  i.StructDesc(d.Data()),
+		ImplicitTypes: i.implicitTypes,
+		InstanceTypes: i.instanceTypes,
+	})
+	i.log.Logf(`'- instantiated object: %v`, obj)
+	return obj
+}
+
+func (i *instantiator) createMethodInstance(realType types.Type) constructs.Construct {
+	_ = realType
+	d := i.decl.(constructs.Method)
+	md := i.proj.NewMethodInst(constructs.MethodInstArgs{
+		Generic:       d,
+		Resolved:      i.Signature(d.Signature()),
+		InstanceTypes: i.instanceTypes,
+		Metrics:       nil, // This needs to be set later
+	})
+	i.log.Logf(`'- instantiated method: %v`, md)
+	return md
 }
 
 func (i *instantiator) InterfaceDesc(it constructs.InterfaceDesc) constructs.InterfaceDesc {

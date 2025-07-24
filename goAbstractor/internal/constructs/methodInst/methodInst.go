@@ -31,12 +31,17 @@ func newInstance(args constructs.MethodInstArgs) constructs.MethodInst {
 		panic(terror.New(`may not create an instance on a non-generic method`).
 			With(`method`, args.Generic))
 	}
-	assert.ArgsHaveSameLength(`instance lengths`, args.Generic.TypeParams(), args.InstanceTypes)
+
+	tp := args.Generic.TypeParams()
+	if args.Generic.HasReceiver() {
+		tp = args.Generic.Receiver().TypeParams()
+	}
+	assert.ArgsHaveSameLength(`instance lengths`, tp, args.InstanceTypes)
 
 	diff := false
 	cmp := constructs.Comparer[constructs.TypeDesc]()
 	for i := len(args.InstanceTypes) - 1; i >= 0; i-- {
-		if cmp(args.Generic.TypeParams()[i], args.InstanceTypes[i]) != 0 {
+		if cmp(tp[i], args.InstanceTypes[i]) != 0 {
 			diff = true
 			break
 		}

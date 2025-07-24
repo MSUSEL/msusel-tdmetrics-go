@@ -203,7 +203,7 @@ func (m *methodImp) IsNamed() bool {
 }
 
 func (m *methodImp) IsGeneric() bool {
-	return len(m.typeParams) > 0
+	return len(m.typeParams) > 0 || (!utils.IsNil(m.receiver) && m.receiver.IsGeneric())
 }
 
 func (m *methodImp) HasReceiver() bool {
