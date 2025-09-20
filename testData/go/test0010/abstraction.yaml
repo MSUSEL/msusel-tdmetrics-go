@@ -67,15 +67,15 @@
   ],
   methodInsts: [
     { # 1. func (A[int]) Mul(v int)
-      generic: 1, receiver: 1, resolved: 7,
+      generic: 1, receiver: 1, resolved: 7, metrics: 1,
       instanceTypes: [ basic1 ]
     },
     { # 2. func (A[float64]) Mul(v int)
-      generic: 1, receiver: 2, resolved: 7,
+      generic: 1, receiver: 2, resolved: 7, metrics: 1,
       instanceTypes: [ basic2 ]
     },
     { # 3. func (A[string]) Mul(v int)
-      generic: 1, receiver: 3, resolved: 7,
+      generic: 1, receiver: 3, resolved: 7, metrics: 1,
       instanceTypes: [ basic3 ]
     }
   ],

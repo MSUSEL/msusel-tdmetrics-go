@@ -391,6 +391,7 @@ func (c *convImp) convertTypeParam(t *types.TypeParam) constructs.TypeDesc {
 		t = tr
 	}
 
+	// Check if the current type already is being processed.
 	name := t.Obj().Name()
 	if ref, ok := c.tpSeen[name]; ok {
 		if ref == nil {
@@ -404,17 +405,24 @@ func (c *convImp) convertTypeParam(t *types.TypeParam) constructs.TypeDesc {
 		return ref
 	}
 
+	// Reserve the name as seen but don't make a reference yet.
 	c.tpSeen[name] = nil
+
+	// Convert the type parameter.
 	t2 := t.Obj().Type().Underlying()
 	tpDesc := c.proj.NewTypeParam(constructs.TypeParamArgs{
 		Name: name,
 		Type: cache(c, t2, c.convertType),
 	})
 
+	// If the name hasa reference attached to it, resolve that reference.
 	if ref, ok := c.tpSeen[name]; ok && ref != nil {
 		ref.SetResolution(tpDesc)
 	}
 
+	// Remove the seen since we're no longer inside of the name's type,
+	// so that if this name's type is seen again as a sibling.
+	delete(c.tpSeen, name)
 	return tpDesc
 }
 

@@ -57,16 +57,16 @@
       exact: [object4, object5], inherits: [1]
     },
     { # 3. interface{ $len() int; $get(index int)(value animals.Animal); $set(index int, value animals.Animal) }
-      abstracts: [3, 1, 4], hint: list, inherits: [1]
+      abstracts: [1, 3, 4], hint: list, inherits: [1]
     },
     { # 4. interface{ $len() int; $get(index int)(value T <any>); $set(index int, value T <any>) }
-      abstracts: [3, 2, 5], hint: list, inherits: [1]
+      abstracts: [2, 3, 5], hint: list, inherits: [1]
     },
     { # 5. interface{ Breed() enums.CatBreed; Kind() enums.AnimalKind; isAnimal(); isCat() }
       abstracts: [6, 8, 9, 10], inherits: [8, 10]
     },
-    { # 6. interface{ Breed() enums.DogBreed; Kind() enums.AnimalKind; isAnimal(); isDog() }
-      abstracts: [7, 8, 9, 11], inherits: [9, 10]
+    { # 6. ???
+      abstracts: [11], inherits: [1]
     },
     { # 7. interface{ valid() bool }
       abstracts: [12], inherits: [11]
@@ -74,8 +74,8 @@
     { # 8. animals.interface{ Breed() enums.CatBreed; isCat() }
       abstracts: [6, 10], inherits: [1], pin: package3
     },
-    { # 9. animals.interface{ Breed() enums.DogBreed; isDog() }
-      abstracts: [7, 11], inherits: [1], pin: package3
+    { # 9. animals.interface{ Breed() enums.DogBreed; isDog() } ???
+      abstracts: [7, 11], inherits: [1, 6], pin: package3
     },
     { # 10. animals.interface{ Kind() enums.AnimalKind; isAnimal() }
       abstracts: [8, 9], inherits: [1], pin: package3

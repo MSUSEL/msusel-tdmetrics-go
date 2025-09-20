@@ -94,28 +94,28 @@
       abstracts: [ 4 ], inherits: [ 1 ], hint: comparable
     },
     { # 8. interface{ $len() int; $get(index int)(value string); $set(index int, value string) }
-      abstracts: [ 13, 5, 14 ], inherits: [ 1 ], hint: list
+      abstracts: [ 5, 13, 14 ], inherits: [ 1 ], hint: list
     },
     { # 9. interface{ $len() int; $get(index int)(value Pointer[int]); $set(index int, value Pointer[int]) }
-      abstracts: [ 13, 6, 15 ], inherits: [ 1 ], hint: list
+      abstracts: [ 6, 13, 15 ], inherits: [ 1 ], hint: list
     },
     { # 10. interface{ $len() int; $get(index int)(value Pointer[V <any>]); $set(index int, value Pointer[V <any>]) }
-      abstracts: [ 13, 7, 16 ], inherits: [ 1 ], hint: list
+      abstracts: [ 7, 13, 16 ], inherits: [ 1 ], hint: list
     },
     { # 11. interface{ $len() int; $get(index int)(value K <comparable>); $set(index int, value K <comparable>) }
-      abstracts: [ 13, 8, 17 ], inherits: [ 1 ], hint: list
+      abstracts: [ 8, 13, 17 ], inherits: [ 1 ], hint: list
     },
     { # 12. interface{ $len() int; $get(index int)(value T <any>); $set(index int, value T <any>) }
-      abstracts: [ 13, 9, 18 ], inherits: [ 1 ], hint: list
+      abstracts: [ 9, 13, 18 ], inherits: [ 1 ], hint: list
     },
     { # 13. interface{ $len() int; $get(key string)(value Pointer[int], found bool); $set(key string, value Pointer[int]) }
-      abstracts: [ 13, 10, 19 ], inherits: [ 1 ], hint: map
+      abstracts: [ 10, 13, 19 ], inherits: [ 1 ], hint: map
     },
     { # 14. interface{ $len() int; $get(key K <comparable>)(value Pointer[V <any>], found bool); $set(key K <comparable>, value V <any>) }
-      abstracts: [ 13, 11, 20 ], inherits: [ 1 ], hint: map
+      abstracts: [ 11, 13, 20 ], inherits: [ 1 ], hint: map
     },
     { # 15. interface{ $len() int; $get(key TKey <comparable>)(value TValue <any>, found bool); $set(key TKey <comparable>, value TValue <any>) }
-      abstracts: [ 13, 12, 21 ], inherits: [ 1 ], hint: map
+      abstracts: [ 12, 13, 21 ], inherits: [ 1 ], hint: map
     },
     { # 16. interface{ AsSlices()(List[string], List[Pointer[int]]) }
       abstracts: [ 22 ], inherits: [ 1 ]
@@ -152,13 +152,13 @@
   ],
   methodInsts: [
     { # 1. (Set[string, int, Map[string, Pointer[int]]]) AsSlice()(List[string], List[Pointer[int]])
-      generic: 1, receiver: 1, resolved: 3, instanceTypes: [ basic3, basic2, interfaceInst7 ]
+      generic: 1, receiver: 1, resolved: 3, metrics: 1, instanceTypes: [ basic3, basic2, interfaceInst7 ]
     },
     { # 2. PrintSlice[string, List[string]](s S)
-      generic: 2, resolved: 24, instanceTypes: [ basic3, interfaceInst3 ]
+      generic: 2, resolved: 24, metrics: 2, instanceTypes: [ basic3, interfaceInst3 ]
     },
     { # 3. PrintSlice[Pointer[int], List[Pointer[int]]](s S)
-      generic: 2, resolved: 25, instanceTypes: [ interfaceInst1, interfaceInst4 ]
+      generic: 2, resolved: 25, metrics: 2, instanceTypes: [ interfaceInst1, interfaceInst4 ]
     }
   ],
   methods: [
@@ -180,7 +180,7 @@
   metrics: [
     { # 1. (Set) AsSlice metrics
       loc: 13, codeCount: 11, complexity: 2, indents: 12, lineCount: 11,
-      reads:  [ interfaceDecl4, object2, selection4 ],
+      reads:  [ interfaceDecl4, object2, selection3 ],
       writes: [ interfaceDecl4 ]
     },
     { # 2. PrintSlice metrics
@@ -192,7 +192,7 @@
       sideEffect: true,
       invokes: [ methodInst2, methodInst3, selection1 ],
       reads:   [ object1, objectInst1 ],
-      writes:  [ object1, objectInst1, selection2, selection3 ]
+      writes:  [ object1, objectInst1, selection2, selection4 ]
     }
   ],
   objectInsts: [
@@ -227,8 +227,8 @@
   selections: [
     { name: AsSlices, origin: object1 },     # 1. Bacon.AsSlices
     { name: Set,      origin: object1 },     # 2. Bacon.Set
-    { name: m,        origin: objectInst1 }, # 3. Set[string, int, Map[string, Pointer[int]]].m
-    { name: m,        origin: object2 }      # 4. Set[K comparable, V any, M ~Map[K comparable, Pointer[V any]]].m
+    { name: m,        origin: object2 },     # 3. Set[K comparable, V any, M ~Map[K comparable, Pointer[V any]]].m
+    { name: m,        origin: objectInst1 }, # 4. Set[string, int, Map[string, Pointer[int]]].m
   ],
   signatures: [
     {},                                     #  1. func()()

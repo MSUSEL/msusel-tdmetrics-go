@@ -37,7 +37,7 @@
   ],
   methodInsts: [
     { # 1. Z[Y](x Y)
-      generic: 2, resolved: 4, instanceTypes: [ object1 ]
+      generic: 2, resolved: 4, metrics: 2, instanceTypes: [ object1 ]
     }
   ],
   methods: [

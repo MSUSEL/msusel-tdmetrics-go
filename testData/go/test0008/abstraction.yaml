@@ -5,12 +5,12 @@
     { name: $deref, signature: 4, vis: exported }, # 2. $deref() Foo[T <any>]
     { name: $deref, signature: 5, vis: exported }, # 3. $deref() T <any>
     { name: Get,    signature: 2, vis: exported }, # 4. Get() int
-    { name: Get,    signature: 5, vis: exported }  # 5. Get() T <any>
+    { name: Get,    signature: 5, vis: exported }, # 5. Get() T <any>
   ],
   arguments: [
     { type: basic1 },      # 1. <unnamed> int
-    { type: objectInst1 }, # 2. <unnamed> Foo[int]
     { type: object1 },     # 3. <unnamed> Foo[T <any>]
+    { type: objectInst1 }, # 2. <unnamed> Foo[int]
     { type: typeParam1 },  # 4. <unnamed> T <any>
   ],
   basics: [ int ],
@@ -22,27 +22,27 @@
     { # 1. Pointer[T any]{ $deref() T <any> }
       name: Pointer, package: 1, interface: 4, vis: exported,
       instances: [ 1, 2 ], typeParams: [ 1 ]
-    }
+    },
   ],
   interfaceDescs: [
     {},                                                      # 1. any
-    { abstracts: [ 1, 4 ], inherits: [ 1 ], hint: pointer }, # 2. interface{ $deref() Foo[int]; Get() int }
-    { abstracts: [ 2, 5 ], inherits: [ 1 ], hint: pointer }, # 3. interface{ $deref() Foo[T <any>]; Get() T }
-    { abstracts: [ 3 ],    inherits: [ 1 ], hint: pointer }  # 4. interface{ $deref() T <any> }
+    { abstracts: [ 1, 5 ], inherits: [ 1 ], hint: pointer }, # 2. interface{ $deref() Foo[int]; Get() int }
+    { abstracts: [ 2, 4 ], inherits: [ 1 ], hint: pointer }, # 3. interface{ $deref() Foo[T <any>]; Get() T }
+    { abstracts: [ 3 ],    inherits: [ 1 ], hint: pointer }, # 4. interface{ $deref() T <any> }
   ],
   interfaceInsts: [
-    { # 1. Pointer[Foo[int]]{ $deref() Foo[int]; Get() int }
-      generic: 1, resolved: 2, instanceTypes: [ objectInst1 ]
+    { # 1. Pointer[Foo[T <any>]]{ $deref() Foo[T]; Get() T }
+      generic: 1, resolved: 2, instanceTypes: [ object1 ]
     },
-    { # 2. Pointer[Foo[T <any>]]{ $deref() Foo[T]; Get() T }
-      generic: 1, resolved: 3, instanceTypes: [ object1 ]
-    }
+    { # 2. Pointer[Foo[int]]{ $deref() Foo[int]; Get() int }
+      generic: 1, resolved: 3, instanceTypes: [ objectInst1 ]
+    },
   ],
   methodInsts: [
     { # 1. func (*Foo[int]) Get() int
-      generic: 1, receiver: 1, resolved: 2,
+      generic: 1, receiver: 1, resolved: 2, metrics: 1,
       instanceTypes: [ basic1 ]
-    }
+    },
   ],
   methods: [
     { # 1. func (*Foo[T <any>]) Get() T
@@ -52,14 +52,14 @@
     },
     { # 2. func main()
       name: main, loc: 13, metrics: 2, package: 2, signature: 1
-    }
+    },
   ],
   metrics: [
     { # 1. Foo[T <any>].Get() T metrics
       codeCount: 3, complexity: 1, indents: 1, lineCount: 3,
       loc: 9, getter: true,
       reads: [
-        interfaceInst2, # Pointer[Foo[T <any>]]
+        interfaceInst1, # Pointer[Foo[T <any>]]
         selection2      # Pointer[Foo[T <any>]].value X
       ]
     },
@@ -68,15 +68,15 @@
       loc: 13, sideEffect: true,
       invokes: [ selection1  ], # Foo[int].Get() int
       reads: [
-        interfaceInst1, # Pointer[Foo[int]]
+        interfaceInst2, # Pointer[Foo[int]]
         objectInst1     # Foo[int]
       ],
       writes: [
-        interfaceInst1, # Pointer[Foo[int]]
+        interfaceInst2, # Pointer[Foo[int]]
         objectInst1,    # Foo[int]
         selection3      # Foo[int].value int
       ]
-    }
+    },
   ],
   objectInsts: [
     { # 1. Foo[int]{ value int }{}
@@ -105,8 +105,8 @@
     }
   ],
   selections: [
-    { name: Get,   origin: interfaceInst1 }, # 1. Pointer[Foo[int]].Get() int
-    { name: value, origin: interfaceInst2 }, # 2. Pointer[Foo[X <any>]].value X
+    { name: Get,   origin: interfaceInst2 }, # 1. Pointer[Foo[int]].Get() int
+    { name: value, origin: interfaceInst1 }, # 2. Pointer[Foo[X <any>]].value X
     { name: value, origin: objectInst1 }     # 3. Foo[int].value int
   ],
   signatures: [

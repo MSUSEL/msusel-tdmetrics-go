@@ -29,15 +29,15 @@
   ],
   methodInsts: [
     { # 1. func (A[int]) Mul(v int) int
-      generic: 1, receiver: 1, resolved: 2,
+      generic: 1, receiver: 1, resolved: 2, metrics: 1,
       instanceTypes: [ basic1 ]
     },
     { # 2. func (A[float64]) Mul(v float64) float64
-      generic: 1, receiver: 2, resolved: 3,
+      generic: 1, receiver: 2, resolved: 3, metrics: 1,
       instanceTypes: [ basic2 ]
     },
     { # 3. func (A[string]) Mul(v string) string
-      generic: 1, receiver: 3, resolved: 4,
+      generic: 1, receiver: 3, resolved: 4, metrics: 1,
       instanceTypes: [ basic3 ]
     }
   ],
@@ -55,14 +55,14 @@
   metrics: [
     { # 1. (A[T int|float64|string]) Mul(v T) T metrics
       codeCount: 15, complexity: 5, indents: 21, lineCount: 15, loc: 12,
-      reads: [ object1, selection7 ]
+      reads: [ object1, selection4 ]
     },
     { # 2. main() metrics
       codeCount: 5, complexity: 1, indents: 3, lineCount: 5, loc: 28,
       sideEffect: true,
       invokes: [ selection1, selection2, selection3 ],
       reads:   [ objectInst1, objectInst2, objectInst3 ],
-      writes:  [ objectInst1, objectInst2, objectInst3, selection4, selection5, selection6 ]
+      writes:  [ objectInst1, objectInst2, objectInst3, selection5, selection6, selection7 ]
     }
   ],
   objectInsts: [
@@ -99,10 +99,10 @@
     { name: Mul,   origin: objectInst1 }, # 1. A[int].Mul
     { name: Mul,   origin: objectInst2 }, # 2. A[float64].Mul
     { name: Mul,   origin: objectInst3 }, # 3. A[string].Mul
-    { name: value, origin: objectInst1 }, # 4. A[int].value
-    { name: value, origin: objectInst2 }, # 5. A[float64].value
-    { name: value, origin: objectInst3 }, # 6. A[string].value
-    { name: value, origin: object1 }      # 7. A[T].value
+    { name: value, origin: object1     }, # 4. A[T].value
+    { name: value, origin: objectInst1 }, # 5. A[int].value
+    { name: value, origin: objectInst2 }, # 6. A[float64].value
+    { name: value, origin: objectInst3 }, # 7. A[string].value
   ],
   signatures: [
     {},                                # 1. func()()
