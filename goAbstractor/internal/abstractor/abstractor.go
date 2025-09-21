@@ -146,7 +146,7 @@ func (ab *abstractor) abstractTypeSpec(spec *ast.TypeSpec, log *logger.Logger) {
 	typ := ab.converter(log).ConvertType(t, context)
 
 	if it, ok := typ.(constructs.InterfaceDesc); ok {
-		log.Logf(`add interface: %s`, spec.Name.Name)
+		log.Logf(`add interface: %s @ %v`, spec.Name.Name, loc)
 		ab.proj.NewInterfaceDecl(constructs.InterfaceDeclArgs{
 			RealType:   t,
 			Package:    ab.curPkg,
@@ -162,9 +162,9 @@ func (ab *abstractor) abstractTypeSpec(spec *ast.TypeSpec, log *logger.Logger) {
 
 	st, ok := typ.(constructs.StructDesc)
 	if ok {
-		log.Logf(`add struct type: %s`, spec.Name.Name)
+		log.Logf(`add struct type: %s @ %v`, spec.Name.Name, loc)
 	} else {
-		log.Logf(`add value type: %s`, spec.Name.Name)
+		log.Logf(`add value type: %s @ %v`, spec.Name.Name, loc)
 		st = ab.proj.NewStructDesc(constructs.StructDescArgs{
 			Fields: []constructs.Field{
 				ab.proj.NewField(constructs.FieldArgs{
@@ -228,6 +228,12 @@ func (ab *abstractor) abstractValueSpec(spec *ast.ValueSpec, isConst bool, log *
 		if i < len(spec.Values) {
 			metrics = ab.analyze(spec.Values[i], log)
 		}
+		loc := ab.proj.Locs().NewLoc(name.Pos())
+		if isConst {
+			log.Logf(`add const: %s @ %v`, name.Name, loc)
+		} else {
+			log.Logf(`add var: %s @ %v`, name.Name, loc)
+		}
 
 		obj := ab.querier.GetDef(name)
 		typ := ab.converter(log).ConvertType(obj.Type(), name.Name)
@@ -238,7 +244,7 @@ func (ab *abstractor) abstractValueSpec(spec *ast.ValueSpec, isConst bool, log *
 			Const:    isConst,
 			Metrics:  metrics,
 			Type:     typ,
-			Location: ab.proj.Locs().NewLoc(spec.Pos()),
+			Location: loc,
 		})
 	}
 }
@@ -300,18 +306,23 @@ func (ab *abstractor) abstractReceiver(decl *ast.FuncDecl) (bool, string) {
 func (ab *abstractor) abstractFuncDecl(decl *ast.FuncDecl, log *logger.Logger) {
 	info := ab.querier.Info()
 	obj := info.Defs[decl.Name].(*types.Func)
+	assert.ArgNotNil(`abstractFuncDecl's obj`, obj)
+
 	loc := ab.proj.Locs().NewLoc(decl.Pos())
 	ptrRecv, recvName := ab.abstractReceiver(decl)
 	sigType := obj.Type().(*types.Signature)
 	sig := ab.converter(log).ConvertSignature(sigType, decl.Name.Name)
 	tp := ab.abstractTypeParams(decl.Type.TypeParams, decl.Name.Name, log)
+
 	name := decl.Name.Name
 	if name == `init` && len(recvName) <= 0 && sig.IsVacant() {
 		name = `init#` + strconv.Itoa(ab.curPkg.InitCount())
 	}
-	log.Logf(`add func: %s`, name)
-
-	assert.ArgNotNil(`abstractFuncDecl's obj`, obj)
+	if len(recvName) > 0 {
+		log.Logf(`add func: %s.%s @ %v`, recvName, name, loc)
+	} else {
+		log.Logf(`add func: %s @ %v`, name, loc)
+	}
 
 	// Set the nest for this function. Use the type parameter as the implicit
 	// types for the nest to create a generic instances for nested types.

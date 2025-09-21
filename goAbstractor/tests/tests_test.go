@@ -9,11 +9,11 @@ import (
 func configLogger(log *logger.Logger) *logger.Logger {
 	// Use the group filters to show specific algorithm logs while debugging.
 	//log = log.Show(`analyze`)
-	log = log.Show(`converter`)
+	//log = log.Show(`converter`)
 	log = log.Show(`files`)
 	//log = log.Show(`inheritance`)
-	log = log.Show(`instantiator`)
-	log = log.Show(`generateInterfaces`)
+	//log = log.Show(`instantiator`)
+	//log = log.Show(`generateInterfaces`)
 	log = log.Show(`packages`)
 	//log = log.Show(`usages`)
 	return log
@@ -36,7 +36,7 @@ func Test_T0011(t *testing.T) { newTest(t, `test0011`).abstract().full() }
 func Test_T0012(t *testing.T) { newTest(t, `test0012`).abstract().full() }
 
 func Test_T0013(t *testing.T) { newTest(t, `test0013`).abstract().full() }
-func Test_T0014(t *testing.T) { newTest(t, `test0014`).abstract().full() }
+func Test_T0014(t *testing.T) { newTest(t, `test0014`).abstract().dump().full() }
 func Test_T0015(t *testing.T) { newTest(t, `test0015`).abstract().full() }
 
 func Test_T0016(t *testing.T) { newTest(t, `test0016`).abstract().full() }

@@ -1,6 +1,7 @@
 package method
 
 import (
+	"fmt"
 	"go/types"
 	"strings"
 
@@ -55,6 +56,8 @@ func newMethod(args constructs.MethodArgs) constructs.Method {
 		}
 		args.RecvName = rName
 	}
+
+	fmt.Printf("METHOD ADDED: %s.%s\n", args.RecvName, args.Name) // TODO: REMOVE
 
 	met := &methodImp{
 		funcType:   args.FuncType,

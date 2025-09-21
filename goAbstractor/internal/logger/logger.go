@@ -62,12 +62,12 @@ type Logger struct {
 
 func simpleToFunc(out func(string)) func(entry LogEntry) {
 	return func(entry LogEntry) {
-		prefix := "\n" + strings.Repeat(indentText, entry.Indent)
+		prefix := strings.Repeat(indentText, entry.Indent)
 		if showGroups && len(entry.Group) > 0 {
 			prefix += `[` + entry.Group + `] `
 		}
 		for line := range strings.SplitSeq(entry.Message, "\n") {
-			out(prefix + line)
+			out(prefix + line + "\n")
 		}
 	}
 }
