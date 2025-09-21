@@ -1,7 +1,6 @@
 package converter
 
 import (
-	"fmt"
 	"go/types"
 
 	"github.com/Snow-Gremlin/goToolbox/terrors/terror"
@@ -38,7 +37,7 @@ func New(
 	tpReplacer map[*types.TypeParam]*types.TypeParam,
 	typeCache map[any]any,
 ) Converter {
-	log2 := log.Group(`converter`).Prefix(`|  `)
+	log2 := log.Group(`converter`).Indent()
 
 	return &convImp{
 		log:           log2,
@@ -73,32 +72,32 @@ func (c *convImp) ImplicitTypes() []constructs.TypeDesc { return c.implicitTypes
 func (c *convImp) TpReplacer() map[*types.TypeParam]*types.TypeParam { return c.tpReplacer }
 
 func (c *convImp) ConvertType(t types.Type, context string) constructs.TypeDesc {
-	c.log.Logf("convert type: %v", t)
+	c.log.Logf(`convert type: %v`, t)
 	c.tpSeen = map[string]constructs.TempTypeParamRef{}
 	c.context = context
 	t2 := cache(c, t, c.convertType)
 	c.tpSeen = nil
-	c.log.Logf("|  result: %v", t2)
+	c.log.Logf(`└─ result: %v`, t2)
 	return t2
 }
 
 func (c *convImp) ConvertSignature(t *types.Signature, context string) constructs.Signature {
-	c.log.Logf("convert signature: %v", t)
+	c.log.Logf(`convert signature: %v`, t)
 	c.tpSeen = map[string]constructs.TempTypeParamRef{}
 	c.context = context
 	t2 := cache(c, t, c.convertSignature)
 	c.tpSeen = nil
-	c.log.Logf("|  result: %v", t2)
+	c.log.Logf(`└─ result: %v`, t2)
 	return t2
 }
 
 func (c *convImp) ConvertInstanceTypes(t *types.TypeList, context string) []constructs.TypeDesc {
-	c.log.Logf("convert instance types: %v", t)
+	c.log.Logf(`convert instance types: %v`, t)
 	c.tpSeen = map[string]constructs.TempTypeParamRef{}
 	c.context = context
 	t2 := cache(c, t, c.convertInstanceTypes)
 	c.tpSeen = nil
-	c.log.Logf("|  result: %v", t2)
+	c.log.Logf(`└─ result: %v`, t2)
 	return t2
 }
 
@@ -107,7 +106,10 @@ func cache[T, R any](c *convImp, t T, handle func(T) R) R {
 		if v, ok := cached.(R); ok {
 			return v
 		}
-		panic(fmt.Errorf("expected cached value for %v to be %T but got %T", t, cached, utils.Zero[R]()))
+		panic(terror.New(`expected cached value was unexpected type`).
+			With(`value`, t).
+			WithType(`gotten`, cached).
+			WithType(`expected`, utils.Zero[R]()))
 	}
 	t2 := handle(t)
 	c.typeCache[t] = t2

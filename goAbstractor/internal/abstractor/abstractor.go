@@ -41,12 +41,11 @@ func Abstract(cfg Config) constructs.Project {
 
 	ab := &abstractor{
 		querier:   querier,
-		log:       log,
 		baker:     bk,
 		proj:      proj,
 		typeCache: map[any]any{},
 	}
-	ab.abstractProject()
+	ab.abstractProject(log)
 
 	resolver.Resolve(proj, querier, log, cfg.SkipDead)
 
@@ -56,7 +55,6 @@ func Abstract(cfg Config) constructs.Project {
 
 type abstractor struct {
 	querier       *querier.Querier
-	log           *logger.Logger
 	baker         baker.Baker
 	proj          constructs.Project
 	curPkg        constructs.Package
@@ -70,14 +68,14 @@ func (ab *abstractor) pos(pos token.Pos) token.Position {
 	return ab.querier.Pos(pos)
 }
 
-func (ab *abstractor) converter() converter.Converter {
-	return converter.New(ab.log, ab.querier, ab.baker, ab.proj,
+func (ab *abstractor) converter(log *logger.Logger) converter.Converter {
+	return converter.New(log, ab.querier, ab.baker, ab.proj,
 		ab.curPkg, ab.curNest, ab.implicitTypes, ab.tpReplacer, ab.typeCache)
 }
 
-func (ab *abstractor) abstractProject() {
-	ab.log.Log(`abstract project`)
-	log2 := ab.log.Group(`packages`).Prefix(`|  `)
+func (ab *abstractor) abstractProject(log *logger.Logger) {
+	log.Log(`abstract project`)
+	log2 := log.Group(`packages`).Indent()
 	ab.querier.ForeachPackage(func(src *packages.Package) {
 		ab.abstractPackage(src, log2)
 	})
@@ -91,7 +89,7 @@ func (ab *abstractor) abstractPackage(src *packages.Package, log *logger.Logger)
 		Name:        src.Name,
 		ImportPaths: utils.SortedKeys(src.Imports),
 	})
-	log2 := log.Group(`files`).Prefix(`|  `)
+	log2 := log.Group(`files`).Indent()
 	for _, f := range src.Syntax {
 		ab.abstractFile(f, log2)
 	}
@@ -109,12 +107,13 @@ func (ab *abstractor) abstractFile(f *ast.File, log *logger.Logger) {
 	}
 
 	log.Logf(`add file to package: %s`, basePath)
+	log2 := log.Indent()
 	for _, decl := range f.Decls {
 		switch d := decl.(type) {
 		case *ast.GenDecl:
-			ab.abstractGenDecl(d)
+			ab.abstractGenDecl(d, log2)
 		case *ast.FuncDecl:
-			ab.abstractFuncDecl(d)
+			ab.abstractFuncDecl(d, log2)
 		default:
 			panic(terror.New(`unexpected declaration`).
 				With(`pos`, ab.pos(decl.Pos())))
@@ -122,16 +121,16 @@ func (ab *abstractor) abstractFile(f *ast.File, log *logger.Logger) {
 	}
 }
 
-func (ab *abstractor) abstractGenDecl(decl *ast.GenDecl) {
+func (ab *abstractor) abstractGenDecl(decl *ast.GenDecl, log *logger.Logger) {
 	isConst := decl.Tok == token.CONST
 	for _, spec := range decl.Specs {
 		switch s := spec.(type) {
 		case *ast.ImportSpec:
 			// ignore
 		case *ast.TypeSpec:
-			ab.abstractTypeSpec(s)
+			ab.abstractTypeSpec(s, log)
 		case *ast.ValueSpec:
-			ab.abstractValueSpec(s, isConst)
+			ab.abstractValueSpec(s, isConst, log)
 		default:
 			panic(terror.New(`unexpected specification`).
 				With(`pos`, ab.pos(spec.Pos())))
@@ -139,14 +138,15 @@ func (ab *abstractor) abstractGenDecl(decl *ast.GenDecl) {
 	}
 }
 
-func (ab *abstractor) abstractTypeSpec(spec *ast.TypeSpec) {
+func (ab *abstractor) abstractTypeSpec(spec *ast.TypeSpec, log *logger.Logger) {
 	t := ab.querier.GetType(spec.Type)
 	context := t.String()
 	loc := ab.proj.Locs().NewLoc(spec.Pos())
-	tp := ab.abstractTypeParams(spec.TypeParams, context)
-	typ := ab.converter().ConvertType(t, context)
+	tp := ab.abstractTypeParams(spec.TypeParams, context, log)
+	typ := ab.converter(log).ConvertType(t, context)
 
 	if it, ok := typ.(constructs.InterfaceDesc); ok {
+		log.Logf(`add interface: %s`, spec.Name.Name)
 		ab.proj.NewInterfaceDecl(constructs.InterfaceDeclArgs{
 			RealType:   t,
 			Package:    ab.curPkg,
@@ -161,7 +161,10 @@ func (ab *abstractor) abstractTypeSpec(spec *ast.TypeSpec) {
 	}
 
 	st, ok := typ.(constructs.StructDesc)
-	if !ok {
+	if ok {
+		log.Logf(`add struct type: %s`, spec.Name.Name)
+	} else {
+		log.Logf(`add value type: %s`, spec.Name.Name)
 		st = ab.proj.NewStructDesc(constructs.StructDescArgs{
 			Fields: []constructs.Field{
 				ab.proj.NewField(constructs.FieldArgs{
@@ -187,24 +190,24 @@ func (ab *abstractor) abstractTypeSpec(spec *ast.TypeSpec) {
 	})
 }
 
-func (ab *abstractor) abstractTypeParams(fields *ast.FieldList, context string) []constructs.TypeParam {
+func (ab *abstractor) abstractTypeParams(fields *ast.FieldList, context string, log *logger.Logger) []constructs.TypeParam {
 	ns := []constructs.TypeParam{}
 	if !utils.IsNil(fields) {
 		for _, field := range fields.List {
-			ns = append(ns, ab.abstractTypeParam(field, context)...)
+			ns = append(ns, ab.abstractTypeParam(field, context, log)...)
 		}
 	}
 	return ns
 }
 
-func (ab *abstractor) abstractTypeParam(field *ast.Field, context string) []constructs.TypeParam {
+func (ab *abstractor) abstractTypeParam(field *ast.Field, context string, log *logger.Logger) []constructs.TypeParam {
 	ns := []constructs.TypeParam{}
 	if utils.IsNil(field) {
 		return ns
 	}
 
 	t := ab.querier.GetType(field.Type)
-	typ := ab.converter().ConvertType(t, context)
+	typ := ab.converter(log).ConvertType(t, context)
 	for _, name := range field.Names {
 		named := ab.proj.NewTypeParam(constructs.TypeParamArgs{
 			Name: name.Name,
@@ -215,19 +218,19 @@ func (ab *abstractor) abstractTypeParam(field *ast.Field, context string) []cons
 	return ns
 }
 
-func (ab *abstractor) analyze(node ast.Node) constructs.Metrics {
-	return analyzer.Analyze(ab.log, ab.querier, ab.proj, ab.curPkg, ab.baker, ab.converter(), node)
+func (ab *abstractor) analyze(node ast.Node, log *logger.Logger) constructs.Metrics {
+	return analyzer.Analyze(log, ab.querier, ab.proj, ab.curPkg, ab.baker, ab.converter(log), node)
 }
 
-func (ab *abstractor) abstractValueSpec(spec *ast.ValueSpec, isConst bool) {
+func (ab *abstractor) abstractValueSpec(spec *ast.ValueSpec, isConst bool, log *logger.Logger) {
 	var metrics constructs.Metrics
 	for i, name := range spec.Names {
 		if i < len(spec.Values) {
-			metrics = ab.analyze(spec.Values[i])
+			metrics = ab.analyze(spec.Values[i], log)
 		}
 
 		obj := ab.querier.GetDef(name)
-		typ := ab.converter().ConvertType(obj.Type(), name.Name)
+		typ := ab.converter(log).ConvertType(obj.Type(), name.Name)
 		ab.proj.NewValue(constructs.ValueArgs{
 			Package:  ab.curPkg,
 			Name:     name.Name,
@@ -294,18 +297,19 @@ func (ab *abstractor) abstractReceiver(decl *ast.FuncDecl) (bool, string) {
 	return ptrRecv, recvName
 }
 
-func (ab *abstractor) abstractFuncDecl(decl *ast.FuncDecl) {
+func (ab *abstractor) abstractFuncDecl(decl *ast.FuncDecl, log *logger.Logger) {
 	info := ab.querier.Info()
 	obj := info.Defs[decl.Name].(*types.Func)
 	loc := ab.proj.Locs().NewLoc(decl.Pos())
 	ptrRecv, recvName := ab.abstractReceiver(decl)
 	sigType := obj.Type().(*types.Signature)
-	sig := ab.converter().ConvertSignature(sigType, decl.Name.Name)
-	tp := ab.abstractTypeParams(decl.Type.TypeParams, decl.Name.Name)
+	sig := ab.converter(log).ConvertSignature(sigType, decl.Name.Name)
+	tp := ab.abstractTypeParams(decl.Type.TypeParams, decl.Name.Name, log)
 	name := decl.Name.Name
 	if name == `init` && len(recvName) <= 0 && sig.IsVacant() {
 		name = `init#` + strconv.Itoa(ab.curPkg.InitCount())
 	}
+	log.Logf(`add func: %s`, name)
 
 	assert.ArgNotNil(`abstractFuncDecl's obj`, obj)
 
@@ -335,7 +339,7 @@ func (ab *abstractor) abstractFuncDecl(decl *ast.FuncDecl) {
 		ab.implicitTypes[i] = t
 	}
 
-	metrics := ab.analyze(decl)
+	metrics := ab.analyze(decl, log)
 	ab.clearTypeParamOverrides()
 
 	exported := decl.Name.IsExported()
@@ -355,10 +359,10 @@ func (ab *abstractor) abstractFuncDecl(decl *ast.FuncDecl) {
 
 	tempNest.SetResolution(method)
 	ab.curNest = method
-	ab.abstractNestedTypes(decl.Body)
+	ab.abstractNestedTypes(decl.Body, log.Indent())
 }
 
-func (ab *abstractor) abstractNestedTypes(body *ast.BlockStmt) {
+func (ab *abstractor) abstractNestedTypes(body *ast.BlockStmt, log *logger.Logger) {
 	if body == nil {
 		return
 	}
@@ -368,7 +372,7 @@ func (ab *abstractor) abstractNestedTypes(body *ast.BlockStmt) {
 			if decl, ok := stmt.Decl.(*ast.GenDecl); ok {
 				for _, spec := range decl.Specs {
 					if typeSpec, ok := spec.(*ast.TypeSpec); ok {
-						ab.abstractTypeSpec(typeSpec)
+						ab.abstractTypeSpec(typeSpec, log)
 					}
 				}
 			}

@@ -398,7 +398,18 @@ func stringCon[T fmt.Stringer, S ~[]T](buf *strings.Builder, k kind.Kind, s S) {
 	}
 	buf.WriteString(" {\n")
 	for i, k := range s {
-		buf.WriteString(fmt.Sprintf("  %2d. %q\n", i+1, k.String()))
+		extra := ``
+		if c, ok := any(k).(constructs.Construct); ok {
+			state := ``
+			if !c.Alive() {
+				state += `X`
+			}
+			if c.Duplicate() {
+				state += `D`
+			}
+			extra = fmt.Sprintf(`[%s%2d]`, state, c.Index())
+		}
+		fmt.Fprintf(buf, "  %2d. %s%q\n", i+1, extra, k.String())
 	}
 	buf.WriteString("}\n")
 }

@@ -11,7 +11,7 @@ import (
 )
 
 func GenerateInterfaces(log *logger.Logger, proj constructs.Project) {
-	log = log.Group(`generateInterfaces`).Prefix(`  `)
+	log = log.Group(`generateInterfaces`).Indent()
 	objectInterfaces(log, proj)
 	extendPointers(proj)
 }
@@ -19,7 +19,7 @@ func GenerateInterfaces(log *logger.Logger, proj constructs.Project) {
 // objectInterfaces resolves all object interfaces
 // and the interfaces for object instances.
 func objectInterfaces(log *logger.Logger, proj constructs.Project) {
-	log2 := log.Prefix(`  `)
+	log2 := log.Indent()
 
 	// Resolve all objects interfaces
 	objects := proj.Objects()

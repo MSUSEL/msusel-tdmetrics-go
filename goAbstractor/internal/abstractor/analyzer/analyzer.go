@@ -26,9 +26,9 @@ func Analyze(
 
 	assert.ArgNotNil(`curPkg`, curPkg)
 
-	log = log.Group(`analyze`).Prefix(`|  `)
+	log = log.Group(`analyze`).Indent()
 	log.Logf(`analyze`)
-	log2 := log.Prefix(`|  `)
+	log2 := log.Indent()
 
 	switch curPkg.Path() {
 	case `runtime`, `unsafe`, `reflect`:

@@ -38,7 +38,7 @@ func InterfaceDecl(log *logger.Logger, querier *querier.Querier, proj constructs
 	assert.ArgsHaveSameLength(`implicit types`, implicitTypes, itp)
 	assert.ArgsHaveSameLength(`instance types`, instanceTypes, tp)
 
-	log2 := log.Group(`instantiator`).Prefix(`|  `)
+	log2 := log.Group(`instantiator`).Indent()
 	i, existing, needsInstance := newInstantiator(log2, querier, proj, decl, itp, tp, implicitTypes, instanceTypes)
 	if !needsInstance {
 		return decl
@@ -76,7 +76,7 @@ func Object(log *logger.Logger, querier *querier.Querier, proj constructs.Projec
 	assert.ArgsHaveSameLength(`implicit types`, implicitTypes, itp)
 	assert.ArgsHaveSameLength(`instance types`, instanceTypes, tp)
 
-	log2 := log.Group(`instantiator`).Prefix(`|  `)
+	log2 := log.Group(`instantiator`).Indent()
 	i, existing, needsInstance := newInstantiator(log2, querier, proj, decl, itp, tp, implicitTypes, instanceTypes)
 	if !needsInstance {
 		return decl
@@ -105,7 +105,7 @@ func Method(log *logger.Logger, querier *querier.Querier, proj constructs.Projec
 	assert.ArgNotNil(`project`, proj)
 	assert.ArgNotNil(`method`, decl)
 
-	log2 := log.Group(`instantiator`).Prefix(`|  `)
+	log2 := log.Group(`instantiator`).Indent()
 	typeParams := decl.TypeParams()
 	if decl.HasReceiver() {
 		typeParams = decl.Receiver().TypeParams()
@@ -162,21 +162,21 @@ func newInstantiator(log *logger.Logger, querier *querier.Querier, proj construc
 	}
 
 	log.Logf(`instantiating %v`, decl)
-	log.Logf(`|- with implicits %v`, implicitTypes)
-	log.Logf(`|- with instances %v`, instanceTypes)
+	log.Logf(`├─ with implicits %v`, implicitTypes)
+	log.Logf(`├─ with instances %v`, instanceTypes)
 
 	// Check if the type arguments match the type parameters.
 	if comp.Or(
 		constructs.SliceComparerPend(implicitTypes, constructs.Cast[constructs.TypeDesc](nestTypeParams)),
 		constructs.SliceComparerPend(instanceTypes, constructs.Cast[constructs.TypeDesc](typeParams)),
 	) == 0 {
-		log.Logf(`'- generic declaration`)
+		log.Logf(`└─ generic declaration`)
 		return nil, nil, false
 	}
 
 	// Check declaration is a generic type, leave otherwise.
 	if len(nestTypeParams) <= 0 && len(typeParams) <= 0 {
-		log.Logf(`'- not generic`)
+		log.Logf(`└─ not generic`)
 		return nil, nil, false
 	}
 
@@ -187,7 +187,7 @@ func newInstantiator(log *logger.Logger, querier *querier.Querier, proj construc
 	same := slices.EqualFunc(nestTypeParams, instanceTypes, tpSame) &&
 		slices.EqualFunc(typeParams, implicitTypes, tpSame)
 	if same {
-		log.Logf(`'- instantiation has same type arguments as type parameters`)
+		log.Logf(`└─ instantiation has same type arguments as type parameters`)
 		return nil, nil, false
 	}
 
@@ -203,7 +203,7 @@ func newInstantiator(log *logger.Logger, querier *querier.Querier, proj construc
 		instance, found = decl.(constructs.Method).FindInstance(instanceTypes)
 	}
 	if found {
-		log.Logf(`'- instantiation found`)
+		log.Logf(`└─ instantiation found`)
 		return nil, instance, true
 	}
 
@@ -215,7 +215,7 @@ func newInstantiator(log *logger.Logger, querier *querier.Querier, proj construc
 	for i, tp := range typeParams {
 		conversion[tp] = instanceTypes[i]
 	}
-	log.Logf(`|- instantiation needed`)
+	log.Logf(`├─ instantiation needed`)
 	return &instantiator{
 		log:           log,
 		querier:       querier,
@@ -270,7 +270,7 @@ func (i *instantiator) Abstract(a constructs.Abstract) constructs.Abstract {
 		Exported:  a.Exported(),
 		Signature: i.Signature(a.Signature()),
 	})
-	i.log.Logf(`|- create Abstract: %v`, a2)
+	i.log.Logf(`├─ create Abstract: %v`, a2)
 	return a2
 }
 
@@ -279,7 +279,7 @@ func (i *instantiator) Argument(a constructs.Argument) constructs.Argument {
 		Name: a.Name(),
 		Type: i.TypeDesc(a.Type()),
 	})
-	i.log.Logf(`|- create Argument: %v`, a2)
+	i.log.Logf(`├─ create Argument: %v`, a2)
 	return a2
 }
 
@@ -290,21 +290,21 @@ func (i *instantiator) Field(f constructs.Field) constructs.Field {
 		Type:     i.TypeDesc(f.Type()),
 		Embedded: f.Embedded(),
 	})
-	i.log.Logf(`|- create Field: %v`, f2)
+	i.log.Logf(`├─ create Field: %v`, f2)
 	return f2
 }
 
 func (i *instantiator) InterfaceInst(in constructs.InterfaceInst) constructs.TypeDesc {
 	decl := in.Generic()
 	in2 := i.typeDecl(decl, decl.ImplicitTypeParams(), decl.TypeParams(), in.ImplicitTypes(), in.InstanceTypes())
-	i.log.Logf(`|- create InterfaceInst: %v`, in2)
+	i.log.Logf(`├─ create InterfaceInst: %v`, in2)
 	return in2
 }
 
 func (i *instantiator) ObjectInst(in constructs.ObjectInst) constructs.TypeDesc {
 	decl := in.Generic()
 	in2 := i.typeDecl(decl, decl.ImplicitTypeParams(), decl.TypeParams(), in.ImplicitTypes(), in.InstanceTypes())
-	i.log.Logf(`|- create ObjectInst: %v`, in2)
+	i.log.Logf(`├─ create ObjectInst: %v`, in2)
 	return in2
 }
 
@@ -312,7 +312,7 @@ func (i *instantiator) InterfaceDecl(decl constructs.InterfaceDecl) constructs.T
 	implicitTypes := constructs.Cast[constructs.TypeDesc](decl.ImplicitTypeParams())
 	instanceTypes := constructs.Cast[constructs.TypeDesc](decl.TypeParams())
 	decl2 := i.typeDecl(decl, decl.ImplicitTypeParams(), decl.TypeParams(), implicitTypes, instanceTypes)
-	i.log.Logf(`|- create InterfaceDecl: %v`, decl2)
+	i.log.Logf(`├─ create InterfaceDecl: %v`, decl2)
 	return decl2
 }
 
@@ -320,7 +320,7 @@ func (i *instantiator) Object(decl constructs.Object) constructs.TypeDesc {
 	implicitTypes := constructs.Cast[constructs.TypeDesc](decl.ImplicitTypeParams())
 	instanceTypes := constructs.Cast[constructs.TypeDesc](decl.TypeParams())
 	decl2 := i.typeDecl(decl, decl.ImplicitTypeParams(), decl.TypeParams(), implicitTypes, instanceTypes)
-	i.log.Logf(`|- create Object: %v`, decl2)
+	i.log.Logf(`├─ create Object: %v`, decl2)
 	return decl2
 }
 
@@ -416,7 +416,7 @@ func (i *instantiator) createInterfaceDeclInstance(realType types.Type) construc
 		ImplicitTypes: i.implicitTypes,
 		InstanceTypes: i.instanceTypes,
 	})
-	i.log.Logf(`'- instantiated interface: %v`, inst)
+	i.log.Logf(`└─ instantiated interface: %v`, inst)
 	return inst
 }
 
@@ -429,7 +429,7 @@ func (i *instantiator) createObjectInstance(realType types.Type) constructs.Cons
 		ImplicitTypes: i.implicitTypes,
 		InstanceTypes: i.instanceTypes,
 	})
-	i.log.Logf(`'- instantiated object: %v`, obj)
+	i.log.Logf(`└─ instantiated object: %v`, obj)
 	return obj
 }
 
@@ -442,7 +442,7 @@ func (i *instantiator) createMethodInstance(realType types.Type) constructs.Cons
 		InstanceTypes: i.instanceTypes,
 		Metrics:       nil, // This needs to be set later
 	})
-	i.log.Logf(`'- instantiated method: %v`, md)
+	i.log.Logf(`└─ instantiated method: %v`, md)
 	return md
 }
 
@@ -454,7 +454,7 @@ func (i *instantiator) InterfaceDesc(it constructs.InterfaceDesc) constructs.Int
 		Approx:    applyToSlice(it.Approx(), i.TypeDesc),
 		Package:   i.decl.Package().Source(),
 	})
-	i.log.Logf(`|- create InterfaceDesc: %v`, it2)
+	i.log.Logf(`├─ create InterfaceDesc: %v`, it2)
 	return it2
 }
 
@@ -508,7 +508,7 @@ func (i *instantiator) TempReference(r constructs.TempReference) constructs.Type
 		InstanceTypes: instanceTypes,
 		Package:       i.decl.Package().Source(),
 	})
-	i.log.Logf(`|- create TempReference: %v`, r2)
+	i.log.Logf(`├─ create TempReference: %v`, r2)
 	return r2
 }
 
@@ -519,7 +519,7 @@ func (i *instantiator) Signature(s constructs.Signature) constructs.Signature {
 		Results:  applyToSlice(s.Results(), i.Argument),
 		Package:  i.decl.Package().Source(),
 	})
-	i.log.Logf(`|- create Signature: %v`, s2)
+	i.log.Logf(`├─ create Signature: %v`, s2)
 	return s2
 }
 
@@ -528,7 +528,7 @@ func (i *instantiator) StructDesc(s constructs.StructDesc) constructs.StructDesc
 		Fields:  applyToSlice(s.Fields(), i.Field),
 		Package: i.decl.Package().Source(),
 	})
-	i.log.Logf(`|- create StructDesc: %v`, s2)
+	i.log.Logf(`├─ create StructDesc: %v`, s2)
 	return s2
 }
 

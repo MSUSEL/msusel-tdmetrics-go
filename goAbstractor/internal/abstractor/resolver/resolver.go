@@ -144,6 +144,6 @@ func flagList[T constructs.Declaration](c collections.ReadonlySortedSet[T]) {
 // and all packages have been processed. This will update all the indices
 // that will be used as references in the output models.
 func (r *resolverImp) Indices(skipDead bool) {
-	r.log.Log(`resolve indices`)
+	r.log.Log(`resolve indices (skipDead=`, skipDead, `)`)
 	r.proj.UpdateIndices(skipDead)
 }

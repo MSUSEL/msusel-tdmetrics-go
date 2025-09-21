@@ -43,6 +43,7 @@ type testTool struct {
 }
 
 func (tt *testTool) abstract(patterns ...string) *testTool {
+	tt.t.Helper()
 	if len(patterns) <= 0 {
 		patterns = []string{`main.go`}
 	}
@@ -71,6 +72,7 @@ func (tt *testTool) abstract(patterns ...string) *testTool {
 }
 
 func (tt *testTool) readExp(expData any, file string) *testTool {
+	tt.t.Helper()
 	expFile, err := os.ReadFile(pathToTestData + tt.dir + file)
 	check.NoError(tt.t).
 		Name(`Read expected json`).
@@ -88,6 +90,7 @@ func (tt *testTool) readExp(expData any, file string) *testTool {
 }
 
 func (tt *testTool) full() *testTool {
+	tt.t.Helper()
 	var expData any
 	tt.readExp(&expData, expAbstraction)
 
@@ -114,6 +117,7 @@ func (tt *testTool) full() *testTool {
 }
 
 func (tt *testTool) dump() *testTool {
+	tt.t.Helper()
 	fmt.Println()
 	fmt.Println(tt.proj.String())
 	return tt
@@ -128,6 +132,7 @@ type partialTest struct {
 }
 
 func (tt *testTool) partial() *testTool {
+	tt.t.Helper()
 	var partialTests []partialTest
 	tt.readExp(&partialTests, expPartials)
 
@@ -138,6 +143,7 @@ func (tt *testTool) partial() *testTool {
 }
 
 func (tt *testTool) runPartialTest(pt partialTest) {
+	tt.t.Helper()
 	tt.t.Run(pt.Name, func(t *testing.T) {
 		if len(pt.OS) > 0 && runtime.GOOS != pt.OS {
 			t.Skip(`The OS changes the specific indices, this test is for ` + pt.OS + `.`)
@@ -173,6 +179,7 @@ func (tt *testTool) runPartialTest(pt partialTest) {
 }
 
 func (tt *testTool) save() *testTool {
+	tt.t.Helper()
 	ctx := jsonify.NewContext().IncludeDebugIndex(true)
 	gotten, err := jsonify.Marshal(ctx, tt.proj)
 	check.NoError(tt.t).

@@ -72,7 +72,7 @@ func Calculate(log *logger.Logger, querier *querier.Querier, proj constructs.Pro
 	assert.ArgNotNil(`curPkg`, curPkg)
 
 	log.Logf(`usages`)
-	log2 := log.Group(`usages`).Prefix(`|  `)
+	log2 := log.Group(`usages`).Indent()
 
 	fSet := querier.FileSet()
 	assert.ArgNotNil(`fSet`, fSet)

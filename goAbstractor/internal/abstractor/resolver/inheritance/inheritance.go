@@ -9,7 +9,7 @@ import (
 )
 
 func Resolve[T Node[T]](log *logger.Logger, cmp comp.Comparer[T], its collections.ReadonlySortedSet[T]) {
-	log2 := log.Group(`inheritance`).Prefix(`  `)
+	log2 := log.Group(`inheritance`).Indent()
 	in := New(cmp, log2)
 	for i := range its.Count() {
 		in.Process(its.Get(i))
@@ -64,7 +64,7 @@ func New[T Node[T]](comp comp.Comparer[T], log *logger.Logger) Inheritance[T] {
 func (in *inheritanceImp[T]) Process(node T) {
 	in.log.Logf(`╶─(%d) insert %v`, in.count, node)
 	relations := map[T]relationship{node: unknown}
-	in.addParent(in.roots, node, relations, in.log.Prefix(`  `))
+	in.addParent(in.roots, node, relations, in.log.Indent())
 	in.count++
 }
 
@@ -85,7 +85,7 @@ func (in *inheritanceImp[T]) getRelationship(n, a T, relations map[T]relationshi
 }
 
 func (in *inheritanceImp[T]) addParent(siblings collections.SortedSet[T], n T, relations map[T]relationship, log *logger.Logger) {
-	log2 := log.Prefix(` │ `)
+	log2 := log.Indent()
 	addedToSibling := false
 	parentedSiblings := false
 	for i := siblings.Count() - 1; i >= 0; i-- {
