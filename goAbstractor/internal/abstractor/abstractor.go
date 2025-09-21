@@ -336,12 +336,14 @@ func (ab *abstractor) abstractFuncDecl(decl *ast.FuncDecl, log *logger.Logger) {
 		FuncType:      obj,
 		PackagePath:   ab.curPkg.Path(),
 		Name:          name,
+		Receiver:      recvName,
 		ImplicitTypes: ab.implicitTypes,
 	})
 	if tempNest.Resolved() {
-		// The reference has been resolved so this declaration
-		// has been already been processed.
-		return
+		panic(terror.New(`the temporary nest placeholder has already resolved`).
+			With(`name`, name).
+			With(`receiver`, recvName).
+			With(`ref`, tempNest))
 	}
 
 	ab.curNest = tempNest

@@ -17,6 +17,7 @@ type tempDeclRefImp struct {
 	constructs.ConstructCore
 	pkgPath       string
 	name          string
+	receiver      string
 	implicitTypes []constructs.TypeDesc
 	instanceTypes []constructs.TypeDesc
 	nest          constructs.NestType
@@ -39,6 +40,7 @@ func newTempDeclRef(args constructs.TempDeclRefArgs) constructs.TempDeclRef {
 		instanceTypes: args.InstanceTypes,
 		nest:          args.Nest,
 		name:          args.Name,
+		receiver:      args.Receiver,
 		funcType:      args.FuncType,
 	}
 }
@@ -48,6 +50,7 @@ func (r *tempDeclRefImp) IsTempDeclRef() {}
 func (r *tempDeclRefImp) Kind() kind.Kind     { return kind.TempDeclRef }
 func (r *tempDeclRefImp) PackagePath() string { return r.pkgPath }
 func (r *tempDeclRefImp) Name() string        { return r.name }
+func (r *tempDeclRefImp) Receiver() string    { return r.receiver }
 
 func (r *tempDeclRefImp) FuncType() *types.Func                { return r.funcType }
 func (r *tempDeclRefImp) ImplicitTypes() []constructs.TypeDesc { return r.implicitTypes }
@@ -90,6 +93,7 @@ func Comparer() comp.Comparer[constructs.TempDeclRef] {
 		return comp.Or(
 			comp.DefaultPend(aImp.pkgPath, bImp.pkgPath),
 			comp.DefaultPend(aImp.name, bImp.name),
+			comp.DefaultPend(aImp.receiver, bImp.receiver),
 			constructs.SliceComparerPend(aImp.implicitTypes, bImp.implicitTypes),
 			constructs.SliceComparerPend(aImp.instanceTypes, bImp.instanceTypes),
 			constructs.ComparerPend(aImp.nest, bImp.nest),
@@ -116,6 +120,7 @@ func (r *tempDeclRefImp) ToJson(ctx *jsonify.Context) jsonify.Datum {
 		AddIf(ctx, ctx.IsDebugAliveIncluded(), `alive`, r.Alive()).
 		AddNonZero(ctx, `packagePath`, r.pkgPath).
 		Add(ctx, `name`, r.name).
+		AddNonZero(ctx, `receiver`, r.receiver).
 		AddNonZero(ctx.Short(), `resolved`, r.con).
 		AddNonZero(ctx.Short(), `implicitTypes`, r.implicitTypes).
 		AddNonZero(ctx.Short(), `instanceTypes`, r.instanceTypes).
@@ -126,6 +131,9 @@ func (r *tempDeclRefImp) ToStringer(s stringer.Stringer) {
 	s.Write(`decl ref `)
 	if len(r.pkgPath) > 0 {
 		s.Write(r.pkgPath, `.`)
+	}
+	if !utils.IsNil(r.receiver) {
+		s.Write(r.receiver, `.`)
 	}
 	if !utils.IsNil(r.nest) {
 		s.Write(r.nest.Name(), `:`)

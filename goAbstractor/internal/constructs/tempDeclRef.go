@@ -18,6 +18,7 @@ type TempDeclRef interface {
 
 	PackagePath() string
 	Name() string
+	Receiver() string
 	ImplicitTypes() []TypeDesc
 	InstanceTypes() []TypeDesc
 
@@ -29,6 +30,7 @@ type TempDeclRef interface {
 type TempDeclRefArgs struct {
 	PackagePath   string
 	Name          string
+	Receiver      string
 	ImplicitTypes []TypeDesc
 	InstanceTypes []TypeDesc
 	Nest          NestType
