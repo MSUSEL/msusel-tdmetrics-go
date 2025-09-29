@@ -2,30 +2,31 @@ package packageCon
 
 import (
 	"github.com/Snow-Gremlin/goToolbox/collections"
-	"github.com/Snow-Gremlin/goToolbox/collections/sortedSet"
 
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs"
+	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs/kind"
 )
 
 type factoryImp struct {
-	packages collections.SortedSet[constructs.Package]
+	constructs.FactoryCore[constructs.Package]
 }
 
+var _ constructs.Factory = (*factoryImp)(nil)
+
 func New() constructs.PackageFactory {
-	return &factoryImp{packages: sortedSet.New(Comparer())}
+	return &factoryImp{FactoryCore: *constructs.NewFactoryCore(kind.Package, Comparer())}
 }
 
 func (f *factoryImp) NewPackage(args constructs.PackageArgs) constructs.Package {
-	v, _ := f.packages.TryAdd(newPackage(args))
-	return v
+	return f.Add(newPackage(args))
 }
 
 func (f *factoryImp) Packages() collections.ReadonlySortedSet[constructs.Package] {
-	return f.packages.Readonly()
+	return f.Items().Readonly()
 }
 
 func (p *factoryImp) FindPackageByPath(path string) constructs.Package {
-	pkg, _ := p.packages.Enumerate().
+	pkg, _ := p.Items().Enumerate().
 		Where(func(pkg constructs.Package) bool { return pkg.Path() == path }).
 		First()
 	return pkg

@@ -134,6 +134,16 @@ func (d *objectImp) IsNamed() bool   { return len(d.name) > 0 }
 func (d *objectImp) IsGeneric() bool { return len(d.typeParams) > 0 }
 func (d *objectImp) IsNested() bool  { return d.nest != nil }
 
+func (d *objectImp) ReplaceDuplicate(m map[constructs.Construct]constructs.Construct) {
+	constructs.FindReplacement(m, &d.pkg)
+	constructs.FindReplacementElems(m, d.typeParams)
+	constructs.FindReplacement(m, &d.data)
+	constructs.FindReplacement(m, &d.inter)
+	constructs.FindReplacement(m, &d.nest)
+	constructs.FindReplacementInSet(m, d.methods)
+	constructs.FindReplacementInSet(m, d.instances)
+}
+
 func (d *objectImp) CompareTo(other constructs.Construct) int {
 	return constructs.CompareTo[constructs.Object](d, other, Comparer())
 }

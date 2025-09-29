@@ -24,7 +24,7 @@ type resolverImp struct {
 
 func Resolve(proj constructs.Project, querier *querier.Querier, log *logger.Logger, skipDead bool) {
 	resolve := &resolverImp{
-		log:     log,
+		log:     log.Group(`resolver`),
 		querier: querier,
 		proj:    proj,
 		is:      instantiations.New(log, querier, proj),

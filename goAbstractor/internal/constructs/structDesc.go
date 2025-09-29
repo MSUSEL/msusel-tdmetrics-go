@@ -31,6 +31,7 @@ type StructDescArgs struct {
 }
 
 type StructDescFactory interface {
+	Factory
 	NewStructDesc(args StructDescArgs) StructDesc
 	StructDescs() collections.ReadonlySortedSet[StructDesc]
 }

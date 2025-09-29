@@ -74,6 +74,14 @@ func (i *instanceImp) InstanceTypes() []constructs.TypeDesc  { return i.instance
 func (i *instanceImp) Receiver() constructs.ObjectInst       { return i.receiver }
 func (i *instanceImp) SetReceiver(obj constructs.ObjectInst) { i.receiver = obj }
 
+func (i *instanceImp) ReplaceDuplicate(m map[constructs.Construct]constructs.Construct) {
+	constructs.FindReplacement(m, &i.generic)
+	constructs.FindReplacement(m, &i.resolved)
+	constructs.FindReplacementElems(m, i.instanceTypes)
+	constructs.FindReplacement(m, &i.metrics)
+	constructs.FindReplacement(m, &i.receiver)
+}
+
 func (i *instanceImp) CompareTo(other constructs.Construct) int {
 	return constructs.CompareTo[constructs.MethodInst](i, other, Comparer())
 }

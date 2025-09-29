@@ -34,6 +34,7 @@ type MethodInstArgs struct {
 }
 
 type MethodInstFactory interface {
+	Factory
 	NewMethodInst(args MethodInstArgs) MethodInst
 	MethodInsts() collections.ReadonlySortedSet[MethodInst]
 }

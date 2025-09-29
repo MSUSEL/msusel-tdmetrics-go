@@ -31,6 +31,7 @@ type SelectionArgs struct {
 }
 
 type SelectionFactory interface {
+	Factory
 	NewSelection(args SelectionArgs) Selection
 	Selections() collections.ReadonlySortedSet[Selection]
 }

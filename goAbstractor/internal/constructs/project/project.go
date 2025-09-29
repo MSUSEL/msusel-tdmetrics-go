@@ -1,7 +1,6 @@
 package project
 
 import (
-	"fmt"
 	"strconv"
 	"strings"
 
@@ -96,32 +95,44 @@ func New(locs locs.Set) constructs.Project {
 	}
 }
 
+func (p *projectImp) Kind() kind.Kind { return kind.Project }
+
 func (p *projectImp) Locs() locs.Set { return p.locations }
 
-func (p *projectImp) AllConstructs() collections.Enumerator[constructs.Construct] {
-	return enumerator.Enumerate[constructs.Construct]().Concat(
-		enumerator.Cast[constructs.Construct](p.Abstracts().Enumerate()),
-		enumerator.Cast[constructs.Construct](p.Arguments().Enumerate()),
-		enumerator.Cast[constructs.Construct](p.Basics().Enumerate()),
-		enumerator.Cast[constructs.Construct](p.Fields().Enumerate()),
-		enumerator.Cast[constructs.Construct](p.InterfaceDecls().Enumerate()),
-		enumerator.Cast[constructs.Construct](p.InterfaceDescs().Enumerate()),
-		enumerator.Cast[constructs.Construct](p.InterfaceInsts().Enumerate()),
-		enumerator.Cast[constructs.Construct](p.Methods().Enumerate()),
-		enumerator.Cast[constructs.Construct](p.MethodInsts().Enumerate()),
-		enumerator.Cast[constructs.Construct](p.Metrics().Enumerate()),
-		enumerator.Cast[constructs.Construct](p.Objects().Enumerate()),
-		enumerator.Cast[constructs.Construct](p.ObjectInsts().Enumerate()),
-		enumerator.Cast[constructs.Construct](p.Packages().Enumerate()),
-		enumerator.Cast[constructs.Construct](p.Selections().Enumerate()),
-		enumerator.Cast[constructs.Construct](p.Signatures().Enumerate()),
-		enumerator.Cast[constructs.Construct](p.StructDescs().Enumerate()),
-		enumerator.Cast[constructs.Construct](p.TypeParams().Enumerate()),
-		enumerator.Cast[constructs.Construct](p.TempDeclRefs().Enumerate()),
-		enumerator.Cast[constructs.Construct](p.TempReferences().Enumerate()),
-		enumerator.Cast[constructs.Construct](p.TempTypeParamRefs().Enumerate()),
-		enumerator.Cast[constructs.Construct](p.Values().Enumerate()),
+func (p *projectImp) Factories() collections.Enumerator[constructs.Factory] {
+	return enumerator.Enumerate[constructs.Factory](
+		p.AbstractFactory,
+		p.ArgumentFactory,
+		p.BasicFactory,
+		p.FieldFactory,
+		p.InterfaceDeclFactory,
+		p.InterfaceDescFactory,
+		p.InterfaceInstFactory,
+		p.MethodFactory,
+		p.MethodInstFactory,
+		p.MetricsFactory,
+		p.ObjectFactory,
+		p.ObjectInstFactory,
+		p.PackageFactory,
+		p.SelectionFactory,
+		p.SignatureFactory,
+		p.StructDescFactory,
+		p.TypeParamFactory,
+		p.TempDeclRefFactory,
+		p.TempReferenceFactory,
+		p.TempTypeParamRefFactory,
+		p.ValueFactory,
 	)
+}
+
+func (p *projectImp) Enumerate() collections.Enumerator[constructs.Construct] {
+	return enumerator.Expand(p.Factories(), func(f constructs.Factory) collections.Iterable[constructs.Construct] {
+		return f.Enumerate().Iterate
+	})
+}
+
+func (p *projectImp) Refresh() {
+	p.Factories().Foreach(constructs.Factory.Refresh)
 }
 
 func (p *projectImp) EntryPoint() constructs.Package {
@@ -318,124 +329,66 @@ func (p *projectImp) FindDecl(pkgPath, name string, nest constructs.NestType,
 	return decl, true
 }
 
-func (p *projectImp) UpdateIndices(skipDead bool) {
-	var index int
-	var kind kind.Kind
-	var prev constructs.Construct
-	p.AllConstructs().Foreach(func(c constructs.Construct) {
-		if cKind := c.Kind(); kind != cKind {
-			kind = cKind
-			index = 0
-			prev = nil
-		}
-		alive := c.Alive() || !skipDead
-		duplicate := true
-		if constructs.ComparerPend(prev, c)() != 0 {
-			if alive {
-				index++
+func (p *projectImp) RemoveDuplicates() {
+	for {
+		m := map[constructs.Construct]constructs.Construct{}
+		var prev constructs.Construct
+		for c := range p.Enumerate().Seq() {
+			if c.Duplicate() {
+				// Skip over any constructs already labelled as duplicate.
+				continue
 			}
-			duplicate = false
-		}
-		if alive {
-			c.SetIndex(index, duplicate)
-		} else {
-			c.SetIndex(0, duplicate)
-		}
-		prev = c
-	})
-}
 
-func pl(k kind.Kind) string {
-	s := string(k)
-	if !strings.HasSuffix(s, `s`) {
-		s += `s`
+			if constructs.ComparerPend(prev, c)() == 0 {
+				c.SetDuplicate(true)
+				m[c] = prev
+				// Don't set `prev` so that we use the same construct for replacement.
+				continue
+			}
+
+			prev = c
+		}
+		if len(m) <= 0 {
+			// No new duplicates were found so exit.
+			break
+		}
+
+		// TODO: Use an any to find Constructs.
+
+		// TODO: Need the factories to resort and remove duplicates.
+
 	}
-	return s
 }
 
-func jsonList[T constructs.Construct](m *jsonify.Map, ctx *jsonify.Context, k kind.Kind, s collections.ReadonlySortedSet[T]) *jsonify.Map {
-	list := s.Enumerate().Where(func(c T) bool { return !c.Duplicate() }).ToSlice()
-	return m.AddNonZero(ctx, pl(k), list)
+func (p *projectImp) UpdateIndices(skipDead bool) {
+	for f := range p.Factories().Seq() {
+		index := 0
+		for c := range f.Enumerate().Seq() {
+			if !c.Duplicate() && (c.Alive() || !skipDead) {
+				index++
+				c.SetIndex(index)
+			} else {
+				c.SetIndex(0)
+			}
+		}
+	}
 }
 
 func (p *projectImp) ToJson(ctx *jsonify.Context) jsonify.Datum {
 	m := jsonify.NewMap().
 		Add(ctx, `language`, `go`).
 		AddNonZero(ctx, `locs`, p.locations)
-
-	jsonList(m, ctx, kind.Abstract, p.Abstracts())
-	jsonList(m, ctx, kind.Argument, p.Arguments())
-	jsonList(m, ctx, kind.Field, p.Fields())
-	jsonList(m, ctx, kind.Package, p.Packages())
-	jsonList(m, ctx, kind.Metrics, p.Metrics())
-	jsonList(m, ctx, kind.Selection, p.Selections())
-	jsonList(m, ctx, kind.TempDeclRef, p.TempDeclRefs())
-
-	jsonList(m, ctx, kind.InterfaceDecl, p.InterfaceDecls())
-	jsonList(m, ctx, kind.Method, p.Methods())
-	jsonList(m, ctx, kind.Object, p.Objects())
-	jsonList(m, ctx, kind.Value, p.Values())
-
-	jsonList(m, ctx, kind.Basic, p.Basics())
-	jsonList(m, ctx, kind.InterfaceDesc, p.InterfaceDescs())
-	jsonList(m, ctx, kind.InterfaceInst, p.InterfaceInsts())
-	jsonList(m, ctx, kind.MethodInst, p.MethodInsts())
-	jsonList(m, ctx, kind.ObjectInst, p.ObjectInsts())
-	jsonList(m, ctx, kind.TempReference, p.TempReferences())
-	jsonList(m, ctx, kind.TempTypeParamRef, p.TempTypeParamRefs())
-	jsonList(m, ctx, kind.Signature, p.Signatures())
-	jsonList(m, ctx, kind.StructDesc, p.StructDescs())
-	jsonList(m, ctx, kind.TypeParam, p.TypeParams())
-
+	for f := range p.Factories().Seq() {
+		list := f.Enumerate().WhereNot(constructs.Construct.Duplicate).ToSlice()
+		m.AddNonZero(ctx, f.Kind().Plural(), list)
+	}
 	return m
-}
-
-func stringCon[T fmt.Stringer, S ~[]T](buf *strings.Builder, k kind.Kind, s S) {
-	buf.WriteString(pl(k))
-	if len(s) <= 0 {
-		buf.WriteString(" { }\n")
-		return
-	}
-	buf.WriteString(" {\n")
-	for i, k := range s {
-		extra := ``
-		if c, ok := any(k).(constructs.Construct); ok {
-			state := ``
-			if !c.Alive() {
-				state += `X`
-			}
-			if c.Duplicate() {
-				state += `D`
-			}
-			extra = fmt.Sprintf(`[%s%2d]`, state, c.Index())
-		}
-		fmt.Fprintf(buf, "  %2d. %s%q\n", i+1, extra, k.String())
-	}
-	buf.WriteString("}\n")
 }
 
 func (p *projectImp) String() string {
 	buf := &strings.Builder{}
-	stringCon(buf, kind.Abstract, p.Abstracts().ToSlice())
-	stringCon(buf, kind.Argument, p.Arguments().ToSlice())
-	stringCon(buf, kind.Basic, p.Basics().ToSlice())
-	stringCon(buf, kind.Field, p.Fields().ToSlice())
-	stringCon(buf, kind.InterfaceDecl, p.InterfaceDecls().ToSlice())
-	stringCon(buf, kind.InterfaceDesc, p.InterfaceDescs().ToSlice())
-	stringCon(buf, kind.InterfaceInst, p.InterfaceInsts().ToSlice())
-	stringCon(buf, kind.MethodInst, p.MethodInsts().ToSlice())
-	stringCon(buf, kind.Method, p.Methods().ToSlice())
-	stringCon(buf, kind.Metrics, p.Metrics().ToSlice())
-	stringCon(buf, kind.ObjectInst, p.ObjectInsts().ToSlice())
-	stringCon(buf, kind.Object, p.Objects().ToSlice())
-	stringCon(buf, kind.Package, p.Packages().ToSlice())
-	stringCon(buf, kind.Selection, p.Selections().ToSlice())
-	stringCon(buf, kind.Signature, p.Signatures().ToSlice())
-	stringCon(buf, kind.StructDesc, p.StructDescs().ToSlice())
-	stringCon(buf, kind.TempDeclRef, p.TempDeclRefs().ToSlice())
-	stringCon(buf, kind.TempReference, p.TempReferences().ToSlice())
-	stringCon(buf, kind.TempTypeParamRef, p.TempTypeParamRefs().ToSlice())
-	stringCon(buf, kind.TypeParam, p.TypeParams().ToSlice())
-	stringCon(buf, kind.Value, p.Values().ToSlice())
+	for f := range p.Factories().Seq() {
+		buf.WriteString(f.String() + "\n")
+	}
 	return buf.String()
 }

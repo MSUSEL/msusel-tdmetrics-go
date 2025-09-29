@@ -21,6 +21,7 @@ type AbstractArgs struct {
 }
 
 type AbstractFactory interface {
+	Factory
 	NewAbstract(args AbstractArgs) Abstract
 	Abstracts() collections.ReadonlySortedSet[Abstract]
 }

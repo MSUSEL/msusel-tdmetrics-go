@@ -25,6 +25,7 @@ type FieldArgs struct {
 }
 
 type FieldFactory interface {
+	Factory
 	NewField(args FieldArgs) Field
 	Fields() collections.ReadonlySortedSet[Field]
 }

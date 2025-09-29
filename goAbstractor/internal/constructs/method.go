@@ -104,6 +104,7 @@ type MethodArgs struct {
 }
 
 type MethodFactory interface {
+	Factory
 	NewMethod(args MethodArgs) Method
 	Methods() collections.ReadonlySortedSet[Method]
 }

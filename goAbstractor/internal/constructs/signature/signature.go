@@ -66,6 +66,11 @@ func (m *signatureImp) IsVacant() bool {
 	return len(m.params) <= 0 && len(m.results) <= 0
 }
 
+func (s *signatureImp) ReplaceDuplicate(m map[constructs.Construct]constructs.Construct) {
+	constructs.FindReplacementElems(m, s.params)
+	constructs.FindReplacementElems(m, s.results)
+}
+
 func (s *signatureImp) CompareTo(other constructs.Construct) int {
 	return constructs.CompareTo[constructs.Signature](s, other, Comparer())
 }

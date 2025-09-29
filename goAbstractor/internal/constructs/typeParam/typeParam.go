@@ -48,6 +48,10 @@ func (t *typeParamImp) GoType() types.Type { return t.typ.GoType() }
 func (t *typeParamImp) Name() string              { return t.name }
 func (t *typeParamImp) Type() constructs.TypeDesc { return t.typ }
 
+func (t *typeParamImp) ReplaceDuplicate(m map[constructs.Construct]constructs.Construct) {
+	constructs.FindReplacement(m, &t.typ)
+}
+
 func (t *typeParamImp) CompareTo(other constructs.Construct) int {
 	return constructs.CompareTo[constructs.TypeParam](t, other, Comparer())
 }

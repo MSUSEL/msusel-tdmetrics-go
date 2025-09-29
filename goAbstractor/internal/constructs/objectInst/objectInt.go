@@ -72,25 +72,34 @@ func (i *instanceImp) IsObjectInst() {}
 func (i *instanceImp) IsTypeDesc()   {}
 
 func (i *instanceImp) Kind() kind.Kind    { return kind.ObjectInst }
-func (m *instanceImp) GoType() types.Type { return m.realType }
+func (i *instanceImp) GoType() types.Type { return i.realType }
 
-func (m *instanceImp) Generic() constructs.Object                  { return m.generic }
-func (m *instanceImp) ResolvedData() constructs.StructDesc         { return m.resolvedData }
-func (m *instanceImp) ResolvedInterface() constructs.InterfaceDesc { return m.resolvedInterface }
-func (m *instanceImp) ImplicitTypes() []constructs.TypeDesc        { return m.implicitTypes }
-func (m *instanceImp) InstanceTypes() []constructs.TypeDesc        { return m.instanceTypes }
+func (i *instanceImp) Generic() constructs.Object                  { return i.generic }
+func (i *instanceImp) ResolvedData() constructs.StructDesc         { return i.resolvedData }
+func (i *instanceImp) ResolvedInterface() constructs.InterfaceDesc { return i.resolvedInterface }
+func (i *instanceImp) ImplicitTypes() []constructs.TypeDesc        { return i.implicitTypes }
+func (i *instanceImp) InstanceTypes() []constructs.TypeDesc        { return i.instanceTypes }
 
-func (m *instanceImp) AddMethod(method constructs.MethodInst) constructs.MethodInst {
-	v, _ := m.methods.TryAdd(method)
+func (i *instanceImp) AddMethod(method constructs.MethodInst) constructs.MethodInst {
+	v, _ := i.methods.TryAdd(method)
 	return v
 }
 
-func (m *instanceImp) Methods() collections.ReadonlySortedSet[constructs.MethodInst] {
-	return m.methods.Readonly()
+func (i *instanceImp) Methods() collections.ReadonlySortedSet[constructs.MethodInst] {
+	return i.methods.Readonly()
 }
 
-func (m *instanceImp) SetResolvedInterface(it constructs.InterfaceDesc) {
-	m.resolvedInterface = it
+func (i *instanceImp) SetResolvedInterface(it constructs.InterfaceDesc) {
+	i.resolvedInterface = it
+}
+
+func (i *instanceImp) ReplaceDuplicate(m map[constructs.Construct]constructs.Construct) {
+	constructs.FindReplacement(m, &i.generic)
+	constructs.FindReplacement(m, &i.resolvedData)
+	constructs.FindReplacement(m, &i.resolvedInterface)
+	constructs.FindReplacementElems(m, i.implicitTypes)
+	constructs.FindReplacementElems(m, i.instanceTypes)
+	constructs.FindReplacementInSet(m, i.methods)
 }
 
 func (i *instanceImp) CompareTo(other constructs.Construct) int {

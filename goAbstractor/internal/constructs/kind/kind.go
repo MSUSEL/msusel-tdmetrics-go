@@ -1,5 +1,7 @@
 package kind
 
+import "strings"
+
 type Kind string
 
 const (
@@ -16,6 +18,7 @@ const (
 	Object           Kind = `object`
 	ObjectInst       Kind = `objectInst`
 	Package          Kind = `package`
+	Project          Kind = `project`
 	Selection        Kind = `selection`
 	Signature        Kind = `signature`
 	StructDesc       Kind = `structDesc`
@@ -25,3 +28,11 @@ const (
 	TypeParam        Kind = `typeParam`
 	Value            Kind = `value`
 )
+
+func (k Kind) Plural() string {
+	s := string(k)
+	if !strings.HasSuffix(s, `s`) {
+		s += `s`
+	}
+	return s
+}

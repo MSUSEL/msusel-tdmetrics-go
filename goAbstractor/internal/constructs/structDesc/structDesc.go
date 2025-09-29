@@ -57,6 +57,10 @@ func (d *structDescImp) Synthetic() bool {
 	return len(d.fields) == 1 && d.fields[0].Name() == innate.Data
 }
 
+func (d *structDescImp) ReplaceDuplicate(m map[constructs.Construct]constructs.Construct) {
+	constructs.FindReplacementElems(m, d.fields)
+}
+
 func (d *structDescImp) CompareTo(other constructs.Construct) int {
 	return constructs.CompareTo[constructs.StructDesc](d, other, Comparer())
 }

@@ -2,24 +2,26 @@ package object
 
 import (
 	"github.com/Snow-Gremlin/goToolbox/collections"
-	"github.com/Snow-Gremlin/goToolbox/collections/sortedSet"
 
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs"
+	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs/kind"
 )
 
 type factoryImp struct {
-	objects collections.SortedSet[constructs.Object]
+	constructs.FactoryCore[constructs.Object]
 }
 
+var _ constructs.Factory = (*factoryImp)(nil)
+
 func New() constructs.ObjectFactory {
-	return &factoryImp{objects: sortedSet.New(Comparer())}
+	return &factoryImp{FactoryCore: *constructs.NewFactoryCore(kind.Object, Comparer())}
 }
 
 func (f *factoryImp) NewObject(args constructs.ObjectArgs) constructs.Object {
-	v, _ := f.objects.TryAdd(newObject(args))
+	v := f.Add(newObject(args))
 	return args.Package.AddObject(v)
 }
 
 func (f *factoryImp) Objects() collections.ReadonlySortedSet[constructs.Object] {
-	return f.objects.Readonly()
+	return f.Items().Readonly()
 }

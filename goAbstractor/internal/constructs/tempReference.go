@@ -41,6 +41,7 @@ type TempReferenceArgs struct {
 }
 
 type TempReferenceFactory interface {
+	Factory
 	NewTempReference(args TempReferenceArgs) TempReference
 	TempReferences() collections.ReadonlySortedSet[TempReference]
 	ClearAllTempReferences()

@@ -2,12 +2,12 @@
   language: go,
   abstracts: [
     { vis: exported, name: $deref, signature: 3 }, # 1. $deref() nodeImp
-    { vis: exported, name: $deref, signature: 6 }, # 2. $deref() T any
+    { vis: exported, name: $deref, signature: 7 }, # 2. $deref() T any ???
     { vis: exported, name: $equal, signature: 8 }, # 3. $equal(other any) bool
     { vis: exported, name: Next,   signature: 2 }, # 4. Next() Pointer[nodeImp]
-    { vis: exported, name: Next,   signature: 5 }, # 5. Next() T <interface{ comparable; Next() T }>
-    { vis: exported, name: Next,   signature: 6 }, # 6. Next() T <any>
-    { vis: exported, name: Next,   signature: 7 }  # 7. Next() T <interface{ comparable; Next() T }> // TODO: Duplicates 5
+    { vis: exported, name: Next,   signature: 4 }, # 5. Next() T <interface{ comparable; Next() T }> ???
+    { vis: exported, name: Next,   signature: 7 }, # 6. Next() T <any> ???
+    { vis: exported, name: Next,   signature: 6 }  # 7. Next() T <interface{ comparable; Next() T }> // TODO: Duplicates 5
   ],
   arguments: [
     {              type: basic1 },         #  1. bool

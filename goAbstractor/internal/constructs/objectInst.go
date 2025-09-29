@@ -39,6 +39,7 @@ type ObjectInstArgs struct {
 }
 
 type ObjectInstFactory interface {
+	Factory
 	NewObjectInst(args ObjectInstArgs) ObjectInst
 	ObjectInsts() collections.ReadonlySortedSet[ObjectInst]
 }

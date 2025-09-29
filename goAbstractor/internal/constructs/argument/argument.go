@@ -35,6 +35,10 @@ func (a *argumentImp) Kind() kind.Kind           { return kind.Argument }
 func (a *argumentImp) Name() string              { return a.name }
 func (a *argumentImp) Type() constructs.TypeDesc { return a.typ }
 
+func (a *argumentImp) ReplaceDuplicate(m map[constructs.Construct]constructs.Construct) {
+	constructs.FindReplacement(m, &a.typ)
+}
+
 func (a *argumentImp) CompareTo(other constructs.Construct) int {
 	return constructs.CompareTo[constructs.Argument](a, other, Comparer())
 }

@@ -34,6 +34,7 @@ type SignatureArgs struct {
 }
 
 type SignatureFactory interface {
+	Factory
 	NewSignature(args SignatureArgs) Signature
 	Signatures() collections.ReadonlySortedSet[Signature]
 }

@@ -31,6 +31,9 @@ type Construct interface {
 	// The index will be set to the top level factory sorted set.
 	Index() int
 
+	// SetIndex sets the index of construct.
+	SetIndex(index int)
+
 	// Duplicate is a flag set when this construct is identical to another
 	// existing construct (one of the identical ones will not be marked as
 	// a duplicate). Duplicates happen when one of the duplicates had a
@@ -38,8 +41,8 @@ type Construct interface {
 	// replaced, the constraints were identical.
 	Duplicate() bool
 
-	// SetIndex sets the index of construct and indicates if it was a duplicate.
-	SetIndex(index int, duplicate bool)
+	// SetDuplicate sets if this construct is a duplicate.
+	SetDuplicate(duplicate bool)
 
 	// Alive indicates that this construct is reachable
 	// from any entry point in the compiled project.
@@ -68,6 +71,14 @@ type TempDeclRefContainer interface {
 	// method that was referenced. References will already be looked up.
 	// If required is true, then it will panic if a reference is not replicable.
 	RemoveTempDeclRefs(required bool) bool
+}
+
+// DuplicateReplacer is a parent of constructs that could ba a duplicate.
+type DuplicateReplacer interface {
+
+	// ReplaceDuplicate is called to replace duplicated constructs with the
+	// construct it duplicates. The implementations should use `FindReplacement`.
+	ReplaceDuplicate(m map[Construct]Construct)
 }
 
 // NestType is a type that can be nested inside another type.
@@ -274,6 +285,33 @@ func FindSigByName(abs []Abstract, name string) Signature {
 		With(`abs`, abs))
 }
 
+func FindReplacement[T Construct](m map[Construct]Construct, c *T) {
+	if rep, ok := m[*c]; ok {
+		// The replacement is expected to be the same time.
+		*c = rep.(T)
+	}
+}
+
+func FindReplacementElems[T Construct, S ~[]T](m map[Construct]Construct, s S) {
+	for i, c := range s {
+		if rep, ok := m[c]; ok {
+			s[i] = rep.(T)
+		}
+	}
+}
+
+func FindReplacementInSet[T Construct, S collections.SortedSet[T]](m map[Construct]Construct, s S) {
+	reps := []T{}
+	for c := range s.Enumerate().Seq() {
+		if rep, ok := m[c]; ok {
+			reps = append(reps, rep.(T))
+		}
+	}
+	if len(reps) > 0 {
+		s.Overwrite(reps...)
+	}
+}
+
 func Cast[TOut, TIn Construct, S ~[]TIn](s S) []TOut {
 	tps := make([]TOut, len(s))
 	for i, tp := range s {
@@ -294,9 +332,6 @@ func (c *ConstructCore) Index() int      { return c.index }
 func (c *ConstructCore) Duplicate() bool { return c.duplicate }
 func (c *ConstructCore) Alive() bool     { return c.alive }
 
-func (c *ConstructCore) SetIndex(index int, duplicate bool) {
-	c.index = index
-	c.duplicate = duplicate
-}
-
-func (c *ConstructCore) SetAlive(alive bool) { c.alive = alive }
+func (c *ConstructCore) SetIndex(index int)          { c.index = index }
+func (c *ConstructCore) SetDuplicate(duplicate bool) { c.duplicate = duplicate }
+func (c *ConstructCore) SetAlive(alive bool)         { c.alive = alive }

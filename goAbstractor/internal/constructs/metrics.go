@@ -131,6 +131,7 @@ type MetricsArgs struct {
 }
 
 type MetricsFactory interface {
+	Factory
 	NewMetrics(args MetricsArgs) Metrics
 	Metrics() collections.ReadonlySortedSet[Metrics]
 }

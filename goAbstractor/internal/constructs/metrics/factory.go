@@ -2,24 +2,25 @@ package metrics
 
 import (
 	"github.com/Snow-Gremlin/goToolbox/collections"
-	"github.com/Snow-Gremlin/goToolbox/collections/sortedSet"
 
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs"
+	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs/kind"
 )
 
 type factoryImp struct {
-	metrics collections.SortedSet[constructs.Metrics]
+	*constructs.FactoryCore[constructs.Metrics]
 }
 
+var _ constructs.Factory = (*factoryImp)(nil)
+
 func New() constructs.MetricsFactory {
-	return &factoryImp{metrics: sortedSet.New(Comparer())}
+	return &factoryImp{FactoryCore: constructs.NewFactoryCore(kind.Metrics, Comparer())}
 }
 
 func (f *factoryImp) NewMetrics(args constructs.MetricsArgs) constructs.Metrics {
-	v, _ := f.metrics.TryAdd(newMetrics(args))
-	return v
+	return f.Add(newMetrics(args))
 }
 
 func (f *factoryImp) Metrics() collections.ReadonlySortedSet[constructs.Metrics] {
-	return f.metrics.Readonly()
+	return f.Items().Readonly()
 }

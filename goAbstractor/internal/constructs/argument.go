@@ -20,6 +20,7 @@ type ArgumentArgs struct {
 }
 
 type ArgumentFactory interface {
+	Factory
 	NewArgument(args ArgumentArgs) Argument
 	Arguments() collections.ReadonlySortedSet[Argument]
 }

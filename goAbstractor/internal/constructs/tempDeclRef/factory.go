@@ -2,28 +2,29 @@ package tempDeclRef
 
 import (
 	"github.com/Snow-Gremlin/goToolbox/collections"
-	"github.com/Snow-Gremlin/goToolbox/collections/sortedSet"
 
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs"
+	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs/kind"
 )
 
 type factoryImp struct {
-	tempDeclRefs collections.SortedSet[constructs.TempDeclRef]
+	constructs.FactoryCore[constructs.TempDeclRef]
 }
 
+var _ constructs.Factory = (*factoryImp)(nil)
+
 func New() constructs.TempDeclRefFactory {
-	return &factoryImp{tempDeclRefs: sortedSet.New(Comparer())}
+	return &factoryImp{FactoryCore: *constructs.NewFactoryCore(kind.TempDeclRef, Comparer())}
 }
 
 func (f *factoryImp) NewTempDeclRef(args constructs.TempDeclRefArgs) constructs.TempDeclRef {
-	v, _ := f.tempDeclRefs.TryAdd(newTempDeclRef(args))
-	return v
+	return f.Add(newTempDeclRef(args))
 }
 
 func (f *factoryImp) TempDeclRefs() collections.ReadonlySortedSet[constructs.TempDeclRef] {
-	return f.tempDeclRefs.Readonly()
+	return f.Items().Readonly()
 }
 
 func (f *factoryImp) ClearAllTempDeclRefs() {
-	f.tempDeclRefs.Clear()
+	f.Items().Clear()
 }

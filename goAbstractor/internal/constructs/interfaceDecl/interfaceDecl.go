@@ -124,6 +124,14 @@ func (d *interfaceDeclImp) IsNamed() bool   { return len(d.name) > 0 }
 func (d *interfaceDeclImp) IsGeneric() bool { return len(d.typeParams) > 0 }
 func (d *interfaceDeclImp) IsNested() bool  { return d.nest != nil }
 
+func (d *interfaceDeclImp) ReplaceDuplicate(m map[constructs.Construct]constructs.Construct) {
+	constructs.FindReplacement(m, &d.pkg)
+	constructs.FindReplacement(m, &d.nest)
+	constructs.FindReplacementElems(m, d.typeParams)
+	constructs.FindReplacement(m, &d.inter)
+	constructs.FindReplacementInSet(m, d.instances)
+}
+
 func (d *interfaceDeclImp) CompareTo(other constructs.Construct) int {
 	return constructs.CompareTo[constructs.InterfaceDecl](d, other, Comparer())
 }

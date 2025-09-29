@@ -139,12 +139,19 @@ func (i *instanceImp) IsInterfaceInst() {}
 func (i *instanceImp) IsTypeDesc()      {}
 
 func (i *instanceImp) Kind() kind.Kind    { return kind.InterfaceInst }
-func (m *instanceImp) GoType() types.Type { return m.realType }
+func (i *instanceImp) GoType() types.Type { return i.realType }
 
-func (m *instanceImp) Generic() constructs.InterfaceDecl    { return m.generic }
-func (m *instanceImp) Resolved() constructs.InterfaceDesc   { return m.resolved }
-func (m *instanceImp) ImplicitTypes() []constructs.TypeDesc { return m.implicitTypes }
-func (m *instanceImp) InstanceTypes() []constructs.TypeDesc { return m.instanceTypes }
+func (i *instanceImp) Generic() constructs.InterfaceDecl    { return i.generic }
+func (i *instanceImp) Resolved() constructs.InterfaceDesc   { return i.resolved }
+func (i *instanceImp) ImplicitTypes() []constructs.TypeDesc { return i.implicitTypes }
+func (i *instanceImp) InstanceTypes() []constructs.TypeDesc { return i.instanceTypes }
+
+func (i *instanceImp) ReplaceDuplicate(m map[constructs.Construct]constructs.Construct) {
+	constructs.FindReplacement(m, &i.generic)
+	constructs.FindReplacement(m, &i.resolved)
+	constructs.FindReplacementElems(m, i.implicitTypes)
+	constructs.FindReplacementElems(m, i.instanceTypes)
+}
 
 func (i *instanceImp) CompareTo(other constructs.Construct) int {
 	return constructs.CompareTo[constructs.InterfaceInst](i, other, Comparer())

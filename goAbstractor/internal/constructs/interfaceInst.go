@@ -34,6 +34,7 @@ type InterfaceInstArgs struct {
 }
 
 type InterfaceInstFactory interface {
+	Factory
 	NewInterfaceInst(args InterfaceInstArgs) InterfaceInst
 	InterfaceInsts() collections.ReadonlySortedSet[InterfaceInst]
 }

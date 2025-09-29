@@ -1,7 +1,6 @@
 package method
 
 import (
-	"fmt"
 	"go/types"
 	"strings"
 
@@ -56,8 +55,6 @@ func newMethod(args constructs.MethodArgs) constructs.Method {
 		}
 		args.RecvName = rName
 	}
-
-	fmt.Printf("METHOD ADDED: %s.%s\n", args.RecvName, args.Name) // TODO: REMOVE
 
 	met := &methodImp{
 		funcType:   args.FuncType,
@@ -211,6 +208,15 @@ func (m *methodImp) IsGeneric() bool {
 
 func (m *methodImp) HasReceiver() bool {
 	return !utils.IsNil(m.receiver) || len(m.recvName) > 0
+}
+
+func (m *methodImp) ReplaceDuplicate(mp map[constructs.Construct]constructs.Construct) {
+	constructs.FindReplacement(mp, &m.pkg)
+	constructs.FindReplacementElems(mp, m.typeParams)
+	constructs.FindReplacement(mp, &m.signature)
+	constructs.FindReplacement(mp, &m.metrics)
+	constructs.FindReplacement(mp, &m.receiver)
+	constructs.FindReplacementInSet(mp, m.instances)
 }
 
 func (m *methodImp) CompareTo(other constructs.Construct) int {

@@ -56,6 +56,10 @@ func (r *tempTypeParamRefImp) SetResolution(typ constructs.TypeDesc) {
 	r.resolved = typ
 }
 
+func (r *tempTypeParamRefImp) ReplaceDuplicate(m map[constructs.Construct]constructs.Construct) {
+	constructs.FindReplacement(m, &r.resolved)
+}
+
 func (r *tempTypeParamRefImp) CompareTo(other constructs.Construct) int {
 	return constructs.CompareTo[constructs.TempTypeParamRef](r, other, Comparer())
 }

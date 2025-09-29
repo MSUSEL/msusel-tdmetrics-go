@@ -61,6 +61,12 @@ func (v *valueImp) HasSideEffect() bool {
 	return !utils.IsNil(v.metrics) && v.metrics.SideEffect()
 }
 
+func (v *valueImp) ReplaceDuplicate(m map[constructs.Construct]constructs.Construct) {
+	constructs.FindReplacement(m, &v.pkg)
+	constructs.FindReplacement(m, &v.typ)
+	constructs.FindReplacement(m, &v.metrics)
+}
+
 func (v *valueImp) CompareTo(other constructs.Construct) int {
 	return constructs.CompareTo[constructs.Value](v, other, Comparer())
 }

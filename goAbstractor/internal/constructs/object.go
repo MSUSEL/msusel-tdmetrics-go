@@ -53,6 +53,7 @@ type ObjectArgs struct {
 }
 
 type ObjectFactory interface {
+	Factory
 	NewObject(args ObjectArgs) Object
 	Objects() collections.ReadonlySortedSet[Object]
 }

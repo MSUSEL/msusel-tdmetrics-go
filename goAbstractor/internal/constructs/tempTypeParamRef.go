@@ -26,6 +26,7 @@ type TempTypeParamRefArgs struct {
 }
 
 type TempTypeParamRefFactory interface {
+	Factory
 	NewTempTypeParamRef(args TempTypeParamRefArgs) TempTypeParamRef
 	TempTypeParamRefs() collections.ReadonlySortedSet[TempTypeParamRef]
 	ClearAllTempTypeParamRefs()

@@ -40,15 +40,15 @@
       inherits: [ 1 ]
     },
     { # 3. [list] interface[int]{ $len; $get; $set }
-      abstracts: [ 5, 2, 6 ], hint: list,
+      abstracts: [ 2, 5, 6 ], hint: list,
       inherits: [ 1 ]
     },
     { # 4. [list] interface[T <any>]{ $len; $get; $set }
-      abstracts: [ 5, 3, 7 ], hint: list,
+      abstracts: [ 3, 5, 7 ], hint: list,
       inherits: [ 1 ]
     },
     { # 5. [list] interface[T <comparable>]{ $len; $get; $set }
-      abstracts: [ 5, 4, 8 ], hint: list,
+      abstracts: [ 4, 5, 8 ], hint: list,
       inherits: [ 1 ]
     }
   ],
@@ -62,7 +62,7 @@
   ],
   methodInsts: [
     { # 1. main.AsSlice[int](t List[int]) List[int]
-      generic: 1, instanceTypes: [ basic2 ], resolved: 10
+      generic: 1, instanceTypes: [ basic2 ], resolved: 10, metrics: 1,
     }
   ],
   methods: [

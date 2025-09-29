@@ -173,6 +173,15 @@ func (id *interfaceDescImp) Inherits() collections.SortedSet[constructs.Interfac
 	return id.inherits
 }
 
+func (id *interfaceDescImp) ReplaceDuplicate(m map[constructs.Construct]constructs.Construct) {
+	constructs.FindReplacement(m, &id.pinnedPkg)
+	constructs.FindReplacementElems(m, id.abstracts)
+	constructs.FindReplacementElems(m, id.exact)
+	constructs.FindReplacementElems(m, id.approx)
+	constructs.FindReplacementElems(m, id.additions)
+	constructs.FindReplacementInSet(m, id.inherits)
+}
+
 func (id *interfaceDescImp) CompareTo(other constructs.Construct) int {
 	return constructs.CompareTo[constructs.InterfaceDesc](id, other, Comparer())
 }

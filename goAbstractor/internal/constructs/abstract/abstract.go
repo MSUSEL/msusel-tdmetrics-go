@@ -35,6 +35,10 @@ func (a *abstractImp) Exported() bool  { return a.exported }
 
 func (a *abstractImp) Signature() constructs.Signature { return a.signature }
 
+func (a *abstractImp) ReplaceDuplicate(m map[constructs.Construct]constructs.Construct) {
+	constructs.FindReplacement(m, &a.signature)
+}
+
 func (a *abstractImp) CompareTo(other constructs.Construct) int {
 	return constructs.CompareTo[constructs.Abstract](a, other, Comparer())
 }

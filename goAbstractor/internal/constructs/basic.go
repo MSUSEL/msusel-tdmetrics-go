@@ -20,6 +20,7 @@ type BasicArgs struct {
 }
 
 type BasicFactory interface {
+	Factory
 	NewBasic(args BasicArgs) Basic
 	Basics() collections.ReadonlySortedSet[Basic]
 }

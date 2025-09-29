@@ -44,6 +44,7 @@ type PackageArgs struct {
 }
 
 type PackageFactory interface {
+	Factory
 	NewPackage(args PackageArgs) Package
 	Packages() collections.ReadonlySortedSet[Package]
 	FindPackageByPath(path string) Package

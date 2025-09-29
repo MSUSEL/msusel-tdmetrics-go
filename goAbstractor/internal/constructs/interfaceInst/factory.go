@@ -2,24 +2,25 @@ package interfaceInst
 
 import (
 	"github.com/Snow-Gremlin/goToolbox/collections"
-	"github.com/Snow-Gremlin/goToolbox/collections/sortedSet"
 
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs"
+	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs/kind"
 )
 
 type factoryImp struct {
-	instances collections.SortedSet[constructs.InterfaceInst]
+	*constructs.FactoryCore[constructs.InterfaceInst]
 }
 
+var _ constructs.Factory = (*factoryImp)(nil)
+
 func New() constructs.InterfaceInstFactory {
-	return &factoryImp{instances: sortedSet.New(Comparer())}
+	return &factoryImp{FactoryCore: constructs.NewFactoryCore(kind.InterfaceInst, Comparer())}
 }
 
 func (f *factoryImp) NewInterfaceInst(args constructs.InterfaceInstArgs) constructs.InterfaceInst {
-	v, _ := f.instances.TryAdd(newInstance(args))
-	return v
+	return f.Add(newInstance(args))
 }
 
 func (f *factoryImp) InterfaceInsts() collections.ReadonlySortedSet[constructs.InterfaceInst] {
-	return f.instances.Readonly()
+	return f.Items().Readonly()
 }

@@ -40,6 +40,7 @@ type TempDeclRefArgs struct {
 }
 
 type TempDeclRefFactory interface {
+	Factory
 	NewTempDeclRef(args TempDeclRefArgs) TempDeclRef
 	TempDeclRefs() collections.ReadonlySortedSet[TempDeclRef]
 	ClearAllTempDeclRefs()

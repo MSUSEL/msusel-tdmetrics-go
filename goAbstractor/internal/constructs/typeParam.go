@@ -17,6 +17,7 @@ type TypeParamArgs struct {
 }
 
 type TypeParamFactory interface {
+	Factory
 	NewTypeParam(args TypeParamArgs) TypeParam
 	TypeParams() collections.ReadonlySortedSet[TypeParam]
 }

@@ -135,6 +135,11 @@ func (s *selectionImp) RemoveTempReferences(required bool) bool {
 	return changed
 }
 
+func (s *selectionImp) ReplaceDuplicate(m map[constructs.Construct]constructs.Construct) {
+	constructs.FindReplacement(m, &s.origin)
+	constructs.FindReplacement(m, &s.target)
+}
+
 func (s *selectionImp) CompareTo(other constructs.Construct) int {
 	return constructs.CompareTo[constructs.Selection](s, other, Comparer())
 }

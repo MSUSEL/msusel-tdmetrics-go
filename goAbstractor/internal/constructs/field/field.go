@@ -40,6 +40,10 @@ func (f *fieldImp) Embedded() bool  { return f.embedded }
 
 func (f *fieldImp) Type() constructs.TypeDesc { return f.typ }
 
+func (f *fieldImp) ReplaceDuplicate(m map[constructs.Construct]constructs.Construct) {
+	constructs.FindReplacement(m, &f.typ)
+}
+
 func (f *fieldImp) CompareTo(other constructs.Construct) int {
 	return constructs.CompareTo[constructs.Field](f, other, Comparer())
 }

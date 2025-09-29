@@ -38,7 +38,7 @@ type Project interface {
 	TypeParamFactory
 
 	Locs() locs.Set
-	AllConstructs() collections.Enumerator[Construct]
+	Enumerate() collections.Enumerator[Construct]
 	EntryPoint() Package
 	FindType(pkgPath, name string, nest NestType, implicitTypes, instanceTypes []TypeDesc, allowRef, panicOnNotFound bool) (TypeDesc, bool)
 	FindDecl(pkgPath, name string, nest NestType, implicitTypes, instanceTypes []TypeDesc, allowRef, panicOnNotFound bool) (Construct, bool)

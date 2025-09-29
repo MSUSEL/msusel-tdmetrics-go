@@ -80,6 +80,13 @@ func (r *tempDeclRefImp) RemoveTempDeclRefs(required bool) bool {
 	return false
 }
 
+func (r *tempDeclRefImp) ReplaceDuplicate(m map[constructs.Construct]constructs.Construct) {
+	constructs.FindReplacementElems(m, r.implicitTypes)
+	constructs.FindReplacementElems(m, r.instanceTypes)
+	constructs.FindReplacement(m, &r.nest)
+	constructs.FindReplacement(m, &r.con)
+}
+
 func (r *tempDeclRefImp) CompareTo(other constructs.Construct) int {
 	return constructs.CompareTo[constructs.TempDeclRef](r, other, Comparer())
 }

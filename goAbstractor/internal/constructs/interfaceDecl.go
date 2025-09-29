@@ -47,6 +47,7 @@ type InterfaceDeclArgs struct {
 }
 
 type InterfaceDeclFactory interface {
+	Factory
 	NewInterfaceDecl(args InterfaceDeclArgs) InterfaceDecl
 	InterfaceDecls() collections.ReadonlySortedSet[InterfaceDecl]
 }

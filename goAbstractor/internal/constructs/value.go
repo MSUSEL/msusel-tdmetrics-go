@@ -50,6 +50,7 @@ type ValueArgs struct {
 }
 
 type ValueFactory interface {
+	Factory
 	NewValue(args ValueArgs) Value
 	Values() collections.ReadonlySortedSet[Value]
 }

@@ -94,6 +94,12 @@ func (m *metricsImp) RemoveTempDeclRefs(required bool) bool {
 	return changed
 }
 
+func (m *metricsImp) ReplaceDuplicate(mp map[constructs.Construct]constructs.Construct) {
+	constructs.FindReplacementInSet(mp, m.reads)
+	constructs.FindReplacementInSet(mp, m.writes)
+	constructs.FindReplacementInSet(mp, m.invokes)
+}
+
 func (m *metricsImp) CompareTo(other constructs.Construct) int {
 	return constructs.CompareTo[constructs.Metrics](m, other, Comparer())
 }

@@ -94,6 +94,7 @@ type InterfaceDescArgs struct {
 }
 
 type InterfaceDescFactory interface {
+	Factory
 	NewInterfaceDesc(args InterfaceDescArgs) InterfaceDesc
 	InterfaceDescs() collections.ReadonlySortedSet[InterfaceDesc]
 }

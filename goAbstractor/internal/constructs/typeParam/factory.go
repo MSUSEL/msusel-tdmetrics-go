@@ -2,24 +2,25 @@ package typeParam
 
 import (
 	"github.com/Snow-Gremlin/goToolbox/collections"
-	"github.com/Snow-Gremlin/goToolbox/collections/sortedSet"
 
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs"
+	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs/kind"
 )
 
 type factoryImp struct {
-	references collections.SortedSet[constructs.TypeParam]
+	constructs.FactoryCore[constructs.TypeParam]
 }
 
+var _ constructs.Factory = (*factoryImp)(nil)
+
 func New() constructs.TypeParamFactory {
-	return &factoryImp{references: sortedSet.New(Comparer())}
+	return &factoryImp{FactoryCore: *constructs.NewFactoryCore(kind.TypeParam, Comparer())}
 }
 
 func (f *factoryImp) NewTypeParam(args constructs.TypeParamArgs) constructs.TypeParam {
-	v, _ := f.references.TryAdd(newTypeParam(args))
-	return v
+	return f.Add(newTypeParam(args))
 }
 
 func (f *factoryImp) TypeParams() collections.ReadonlySortedSet[constructs.TypeParam] {
-	return f.references.Readonly()
+	return f.Items().Readonly()
 }

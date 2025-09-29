@@ -206,8 +206,16 @@ func (p *packageImp) DebugPrintDecl() {
 	}
 }
 
-func (d *packageImp) CompareTo(other constructs.Construct) int {
-	return constructs.CompareTo[constructs.Package](d, other, Comparer())
+func (p *packageImp) ReplaceDuplicate(m map[constructs.Construct]constructs.Construct) {
+	constructs.FindReplacementInSet(m, p.imports)
+	constructs.FindReplacementInSet(m, p.interfaces)
+	constructs.FindReplacementInSet(m, p.methods)
+	constructs.FindReplacementInSet(m, p.objects)
+	constructs.FindReplacementInSet(m, p.values)
+}
+
+func (p *packageImp) CompareTo(other constructs.Construct) int {
+	return constructs.CompareTo[constructs.Package](p, other, Comparer())
 }
 
 func Comparer() comp.Comparer[constructs.Package] {
