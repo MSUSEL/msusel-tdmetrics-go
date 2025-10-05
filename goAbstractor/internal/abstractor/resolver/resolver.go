@@ -60,6 +60,9 @@ func Resolve(proj constructs.Project, querier *querier.Querier, log *logger.Logg
 	// There should be none but doesn't hurt to check.
 	resolve.References(true)
 
+	// Remove any duplicates that were caused by references.
+	resolve.RemoveDuplicates()
+
 	// Determine interfaces for objects and object instances.
 	// Also extend the interfaces for pointers.
 	resolve.GenerateInterfaces()
@@ -138,6 +141,11 @@ func flagList[T constructs.Declaration](c collections.ReadonlySortedSet[T]) {
 	for i := range c.Count() {
 		c.Get(i).Location().Flag()
 	}
+}
+
+func (r *resolverImp) RemoveDuplicates() {
+	r.log.Log(`remove duplicates`)
+	r.proj.RemoveDuplicates()
 }
 
 // Indices should be called after all types have been registered

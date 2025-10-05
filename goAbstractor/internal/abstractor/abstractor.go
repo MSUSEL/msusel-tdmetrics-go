@@ -379,7 +379,6 @@ func (ab *abstractor) abstractNestedTypes(body *ast.BlockStmt, log *logger.Logge
 	if body == nil {
 		return
 	}
-	// TODO: Simplify the following to only look for type specs.
 	ast.Inspect(body, func(node ast.Node) bool {
 		if stmt, ok := node.(*ast.DeclStmt); ok {
 			if decl, ok := stmt.Decl.(*ast.GenDecl); ok {
@@ -389,6 +388,8 @@ func (ab *abstractor) abstractNestedTypes(body *ast.BlockStmt, log *logger.Logge
 					}
 				}
 			}
+			// TODO: Check if this escape works, if so, it should be faster.
+			//return false
 		}
 		return true
 	})

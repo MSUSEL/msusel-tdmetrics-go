@@ -53,23 +53,23 @@ func (r *ref) clearAllTemps() {
 }
 
 func (r *ref) removeTempReferences() {
-	r.proj.AllConstructs().Foreach(func(c constructs.Construct) {
+	for c := range r.proj.Enumerate().Seq() {
 		if trc, has := c.(constructs.TempReferenceContainer); has {
 			if trc.RemoveTempReferences(r.required) {
 				r.changed = true
 			}
 		}
-	})
+	}
 }
 
 func (r *ref) removeTempDeclRefs() {
-	r.proj.AllConstructs().Foreach(func(c constructs.Construct) {
+	for c := range r.proj.Enumerate().Seq() {
 		if trc, has := c.(constructs.TempDeclRefContainer); has {
 			if trc.RemoveTempDeclRefs(r.required) {
 				r.changed = true
 			}
 		}
-	})
+	}
 }
 
 func (r *ref) tempReferences() {

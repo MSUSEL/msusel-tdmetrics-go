@@ -198,6 +198,9 @@ func (b *bakerImp) BakeList() constructs.InterfaceDecl {
 			}),
 		})
 
+		// Real-Type for a list
+		rt := types.NewSlice(tp.GoType())
+
 		// List[T]
 		return b.proj.NewInterfaceDecl(constructs.InterfaceDeclArgs{
 			Package:    pkg,
@@ -205,8 +208,10 @@ func (b *bakerImp) BakeList() constructs.InterfaceDecl {
 			Exported:   true,
 			Location:   locs.NoLoc(),
 			TypeParams: tps,
+			RealType:   rt,
 			Interface: b.proj.NewInterfaceDesc(constructs.InterfaceDescArgs{
 				Hint:      hint.List,
+				RealType:  rt,
 				Abstracts: []constructs.Abstract{lenFunc, getFunc, setFunc},
 				Package:   pkg.Source(),
 			}),
@@ -283,6 +288,9 @@ func (b *bakerImp) BakeChan() constructs.InterfaceDecl {
 			}),
 		})
 
+		// Real-Type for a chan
+		rt := types.NewChan(types.SendRecv, tp.GoType())
+
 		// Chan[T]
 		return b.proj.NewInterfaceDecl(constructs.InterfaceDeclArgs{
 			Package:    pkg,
@@ -290,8 +298,10 @@ func (b *bakerImp) BakeChan() constructs.InterfaceDecl {
 			Exported:   true,
 			Location:   locs.NoLoc(),
 			TypeParams: tps,
+			RealType:   rt,
 			Interface: b.proj.NewInterfaceDesc(constructs.InterfaceDescArgs{
 				Hint:      hint.Chan,
+				RealType:  rt,
 				Abstracts: []constructs.Abstract{lenFunc, recvFunc, sendFunc},
 				Package:   pkg.Source(),
 			}),
@@ -380,6 +390,9 @@ func (b *bakerImp) BakeMap() constructs.InterfaceDecl {
 			}),
 		})
 
+		// Real-Type for a pointer
+		rt := types.NewMap(tpKey.GoType(), tpValue.GoType())
+
 		// Map[TKey, TValue]
 		return b.proj.NewInterfaceDecl(constructs.InterfaceDeclArgs{
 			Package:    pkg,
@@ -387,8 +400,10 @@ func (b *bakerImp) BakeMap() constructs.InterfaceDecl {
 			Exported:   true,
 			Location:   locs.NoLoc(),
 			TypeParams: tps,
+			RealType:   rt,
 			Interface: b.proj.NewInterfaceDesc(constructs.InterfaceDescArgs{
 				Hint:      hint.Map,
+				RealType:  rt,
 				Abstracts: []constructs.Abstract{lenFunc, getFunc, setFunc},
 				Package:   pkg.Source(),
 			}),
@@ -430,6 +445,9 @@ func (b *bakerImp) BakePointer() constructs.InterfaceDecl {
 			}),
 		})
 
+		// Real-Type for a pointer
+		rt := types.NewPointer(tp.GoType())
+
 		// Pointer[T]
 		return b.proj.NewInterfaceDecl(constructs.InterfaceDeclArgs{
 			Package:    pkg,
@@ -437,8 +455,10 @@ func (b *bakerImp) BakePointer() constructs.InterfaceDecl {
 			Exported:   true,
 			Location:   locs.NoLoc(),
 			TypeParams: tps,
+			RealType:   rt,
 			Interface: b.proj.NewInterfaceDesc(constructs.InterfaceDescArgs{
 				Hint:      hint.Pointer,
+				RealType:  rt,
 				Abstracts: []constructs.Abstract{derefFunc},
 				Package:   pkg.Source(),
 			}),
@@ -489,6 +509,7 @@ func (b *bakerImp) BakeComplex64() constructs.InterfaceDecl {
 			Name:     `complex64`,
 			Exported: true,
 			Location: locs.NoLoc(),
+			RealType: types.Typ[types.Complex64],
 			Interface: b.proj.NewInterfaceDesc(constructs.InterfaceDescArgs{
 				Hint:      hint.Complex64,
 				RealType:  types.Typ[types.Complex64],
@@ -542,6 +563,7 @@ func (b *bakerImp) BakeComplex128() constructs.InterfaceDecl {
 			Name:     `complex128`,
 			Exported: true,
 			Location: locs.NoLoc(),
+			RealType: types.Typ[types.Complex128],
 			Interface: b.proj.NewInterfaceDesc(constructs.InterfaceDescArgs{
 				Hint:      hint.Complex128,
 				RealType:  types.Typ[types.Complex128],
@@ -576,13 +598,18 @@ func (b *bakerImp) BakeError() constructs.InterfaceDecl {
 			}),
 		})
 
+		// Real-Type for an error
+		rt := types.Universe.Lookup(`error`).Type()
+
 		// error
 		return b.proj.NewInterfaceDecl(constructs.InterfaceDeclArgs{
 			Package:  pkg,
 			Name:     `error`,
 			Exported: true,
 			Location: locs.NoLoc(),
+			RealType: rt,
 			Interface: b.proj.NewInterfaceDesc(constructs.InterfaceDescArgs{
+				RealType:  rt,
 				Abstracts: []constructs.Abstract{errFunc},
 				Package:   pkg.Source(),
 			}),
@@ -641,14 +668,19 @@ func (b *bakerImp) BakeComparable() constructs.InterfaceDecl {
 			}),
 		})
 
+		// Real-Type for a comparable
+		rt := types.Universe.Lookup(`comparable`).Type()
+
 		// comparable
 		return b.proj.NewInterfaceDecl(constructs.InterfaceDeclArgs{
 			Package:  pkg,
 			Name:     `comparable`,
 			Exported: true,
 			Location: locs.NoLoc(),
+			RealType: rt,
 			Interface: b.proj.NewInterfaceDesc(constructs.InterfaceDescArgs{
 				Hint:      hint.Comparable,
+				RealType:  rt,
 				Abstracts: []constructs.Abstract{cmpFunc},
 				Package:   pkg.Source(),
 			}),

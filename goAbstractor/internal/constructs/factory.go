@@ -15,25 +15,27 @@ import (
 type Factory interface {
 	Kind() kind.Kind
 	Enumerate() collections.Enumerator[Construct]
-	Refresh()
+	Dedup(m map[Construct]Construct)
 	String() string
 }
 
 type FactoryCore[T Construct] struct {
-	kind  kind.Kind
-	items collections.SortedSet[T]
+	kind     kind.Kind
+	comparer comp.Comparer[T]
+	items    collections.SortedSet[T]
 }
 
 var _ Factory = (*FactoryCore[Abstract])(nil)
 
 func NewFactoryCore[T Construct](kind kind.Kind, comparer comp.Comparer[T]) *FactoryCore[T] {
 	return &FactoryCore[T]{
-		kind:  kind,
-		items: sortedSet.New(comparer),
+		kind:     kind,
+		comparer: comparer,
+		items:    sortedSet.New(comparer),
 	}
 }
 
-func (f *FactoryCore[T]) Kind() kind.Kind { return kind.Abstract }
+func (f *FactoryCore[T]) Kind() kind.Kind { return f.kind }
 
 func (f *FactoryCore[T]) Add(item T) T {
 	v, _ := f.items.TryAdd(item)
@@ -46,7 +48,23 @@ func (f *FactoryCore[T]) Enumerate() collections.Enumerator[Construct] {
 	return enumerator.Cast[Construct](f.items.Enumerate())
 }
 
-func (f *FactoryCore[T]) Refresh() { f.items.Refresh() }
+func (f *FactoryCore[T]) Dedup(m map[Construct]Construct) {
+	reduced := sortedSet.New(f.comparer)
+	dupFound := false
+	for c := range f.items.Enumerate().Seq() {
+		if kept, added := reduced.TryAdd(c); !added {
+			c.SetDuplicate(true)
+			dupFound = true
+			m[c] = kept
+		}
+	}
+	if !dupFound {
+		// No duplicates found
+		return
+	}
+	// Replace the items with the reduced set of items.
+	f.items = reduced
+}
 
 func (f *FactoryCore[T]) String() string {
 	buf := &strings.Builder{}

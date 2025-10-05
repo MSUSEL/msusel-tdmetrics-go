@@ -1,6 +1,7 @@
 package assert
 
 import (
+	"github.com/Snow-Gremlin/goToolbox/comp"
 	"github.com/Snow-Gremlin/goToolbox/terrors/terror"
 	"github.com/Snow-Gremlin/goToolbox/utils"
 )
@@ -12,6 +13,24 @@ func ArgValidId(name, value string) {
 		panic(terror.New(`argument must be a valid identifier`).
 			With(`name`, name).
 			With(`value`, value))
+	}
+}
+
+func ArgEqual(name string, value, exp any) {
+	if !comp.Equal(value, exp) {
+		panic(terror.New(`argument must be equal to given expected value`).
+			With(`name`, name).
+			With(`value`, value).
+			With(`exp`, exp))
+	}
+}
+
+func ArgNotEqual(name string, value, unExp any) {
+	if comp.Equal(value, unExp) {
+		panic(terror.New(`argument must not be equal to given unexpected value`).
+			With(`name`, name).
+			With(`value`, value).
+			With(`unExp`, unExp))
 	}
 }
 
@@ -81,4 +100,12 @@ func ArgHasNoNils[T any, S ~[]T](name string, values S) {
 				With(`name`, name))
 		}
 	}
+}
+
+func NotImplemented(details string) {
+	t := terror.New(`not implemented`)
+	if len(details) > 0 {
+		t = t.With(`details`, details)
+	}
+	panic(t)
 }

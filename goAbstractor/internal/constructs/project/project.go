@@ -131,8 +131,8 @@ func (p *projectImp) Enumerate() collections.Enumerator[constructs.Construct] {
 	})
 }
 
-func (p *projectImp) Refresh() {
-	p.Factories().Foreach(constructs.Factory.Refresh)
+func (p *projectImp) Dedup(m map[constructs.Construct]constructs.Construct) {
+	p.Factories().Foreach(func(f constructs.Factory) { f.Dedup(m) })
 }
 
 func (p *projectImp) EntryPoint() constructs.Package {
@@ -332,31 +332,18 @@ func (p *projectImp) FindDecl(pkgPath, name string, nest constructs.NestType,
 func (p *projectImp) RemoveDuplicates() {
 	for {
 		m := map[constructs.Construct]constructs.Construct{}
-		var prev constructs.Construct
-		for c := range p.Enumerate().Seq() {
-			if c.Duplicate() {
-				// Skip over any constructs already labelled as duplicate.
-				continue
-			}
-
-			if constructs.ComparerPend(prev, c)() == 0 {
-				c.SetDuplicate(true)
-				m[c] = prev
-				// Don't set `prev` so that we use the same construct for replacement.
-				continue
-			}
-
-			prev = c
-		}
+		p.Dedup(m)
 		if len(m) <= 0 {
 			// No new duplicates were found so exit.
 			break
 		}
 
-		// TODO: Use an any to find Constructs.
-
-		// TODO: Need the factories to resort and remove duplicates.
-
+		// Now with the replacement map, replace duplicates.
+		for c := range p.Enumerate().Seq() {
+			if dr, ok := c.(constructs.DuplicateReplacer); ok {
+				dr.ReplaceDuplicate(m)
+			}
+		}
 	}
 }
 

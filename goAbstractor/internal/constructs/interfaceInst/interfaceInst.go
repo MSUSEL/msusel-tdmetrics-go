@@ -61,7 +61,8 @@ func newInstance(args constructs.InterfaceInstArgs) constructs.InterfaceInst {
 		pkg := args.Generic.Package()
 		assert.ArgNotNil(`package`, pkg)
 
-		// TODO: Implement this for nested types.
+		// TODO: Implement real-type creating for nested types, if needed.
+		// Without nested type support the instance types are required and implicit types are not allowed.
 		assert.ArgNotEmpty(`instance types`, args.InstanceTypes)
 		assert.ArgIsEmpty(`implicit types`, args.ImplicitTypes)
 
@@ -100,6 +101,10 @@ func newInstance(args constructs.InterfaceInstArgs) constructs.InterfaceInst {
 			args.RealType = types.NewChan(types.SendRecv, tArgs[0])
 
 		default:
+			// The unhandled hint types, i.e. Complex64, Complex128, and Comparable,
+			// should never have an instance of them since they aren't generic.
+			assert.ArgEqual(`hint`, args.Generic.Interface().Hint, hint.None)
+
 			gt := args.Generic.GoType()
 			ggt, ok := gt.(interface {
 				types.Type

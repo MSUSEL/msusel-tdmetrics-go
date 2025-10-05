@@ -11,6 +11,7 @@ import (
 
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/assert"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs"
+	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs/hint"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs/interfaceInst"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/constructs/kind"
 	"github.com/MSUSEL/msusel-tdmetrics-go/goAbstractor/internal/jsonify"
@@ -41,6 +42,9 @@ func newInterfaceDecl(args constructs.InterfaceDeclArgs) constructs.InterfaceDec
 		pkg := args.Package.Source().Types
 		assert.ArgNotNil(`package`, pkg)
 
+		// Any hint other than None should not hit this point.
+		// The real-type should have been set in the baker near when the hint is set.
+		assert.ArgEqual(`hint`, args.Interface.Hint(), hint.None)
 		tn := types.NewTypeName(args.Location.Pos(), pkg, args.Name, nil)
 		args.RealType = types.NewNamed(tn, args.Interface.GoType(), nil)
 	}
