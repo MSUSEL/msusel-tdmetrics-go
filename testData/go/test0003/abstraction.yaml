@@ -26,7 +26,7 @@
   ],
   interfaceDescs: [
     {},                                                      # 1. any
-    { abstracts: [ 1, 3 ], inherits: [ 1 ], hint: pointer }, # 2. interface { $deref() Cat; Pat() }
+    { abstracts: [ 1, 3 ], inherits: [ 3 ], hint: pointer }, # 2. interface { $deref() Cat; Pat() }
     { abstracts: [ 2 ],    inherits: [ 1 ], hint: pointer }, # 3. interface { $deref() T <any> }
     { abstracts: [ 3 ],    inherits: [ 1 ] }                 # 4. interface { Pat() }
   ],

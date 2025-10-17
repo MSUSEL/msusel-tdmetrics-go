@@ -26,6 +26,15 @@ const (
 	supertype
 )
 
+const (
+	startGlyph  = `╶──`
+	branchGlyph = ` ├─`
+	endGlyph    = ` └─`
+	addGlyph    = ` + `
+	indentGlyph = ` │ `
+	blankGlyph  = `   `
+)
+
 type Node[T any] interface {
 	comparable
 	AddInherits(parent T) T
@@ -62,9 +71,28 @@ func New[T Node[T]](comp comp.Comparer[T], log *logger.Logger) Inheritance[T] {
 }
 
 func (in *inheritanceImp[T]) Process(node T) {
-	in.log.Logf(`╶─(%d) insert %v`, in.count, node)
 	relations := map[T]relationship{node: unknown}
-	in.addParent(in.roots, node, relations, in.log.Indent())
+
+	// pre-process all previously inherited nodes.
+	for p := range node.Inherits().Enumerate().Seq() {
+		in.Process(p)
+		relations[p] = supertype
+	}
+
+	in.log.Logf(startGlyph+`(%d) insert: %v`, in.count, node)
+	log2 := in.log.IndentWith(blankGlyph)
+	in.addParent(in.roots, node, relations, log2)
+
+	in.log.Logf(startGlyph+`(%d) done: %v`, in.count, node)
+	for i, count := 0, node.Inherits().Count(); i < count; i++ {
+		p := node.Inherits().Get(i)
+		if i < count-1 {
+			log2.Logf(branchGlyph+`(%d) %v`, i, p)
+		} else {
+			log2.Logf(endGlyph+`(%d) %v`, i, p)
+		}
+	}
+
 	in.count++
 }
 
@@ -85,7 +113,7 @@ func (in *inheritanceImp[T]) getRelationship(n, a T, relations map[T]relationshi
 }
 
 func (in *inheritanceImp[T]) addParent(siblings collections.SortedSet[T], n T, relations map[T]relationship, log *logger.Logger) {
-	log2 := log.Indent()
+	log2 := log.IndentWith(indentGlyph)
 	addedToSibling := false
 	parentedSiblings := false
 	for i := siblings.Count() - 1; i >= 0; i-- {
@@ -100,9 +128,9 @@ func (in *inheritanceImp[T]) addParent(siblings collections.SortedSet[T], n T, r
 			// For example: {A, B} is a parent of {A, B, C} but {A, B, C}
 			// may already have the parent {A} in it, so we have to recursively
 			// call addParent to re-parent {A} as a parent of {A, B}.
-			log.Logf(` ├─(%d) parent of %v`, i, a)
+			log.Logf(branchGlyph+`(%d) parent of %v`, i, a)
 			if touched {
-				log2.Log(` └─ skip: already checked`)
+				log2.Log(endGlyph + ` skip: already checked`)
 			} else {
 				in.addParent(a.Inherits(), n, relations, log2)
 			}
@@ -115,7 +143,7 @@ func (in *inheritanceImp[T]) addParent(siblings collections.SortedSet[T], n T, r
 			// `a` would have been a parent to another object in this set.
 			// We can simply add `a` to `n` since `a` has already been
 			// checked against the other parents, hence it was in this set.
-			log.Logf(` ├─(%d) child of %v`, i, a)
+			log.Logf(branchGlyph+`(%d) child of %v`, i, a)
 			n.AddInherits(a)
 			siblings.RemoveRange(i, 1)
 			parentedSiblings = true
@@ -128,21 +156,21 @@ func (in *inheritanceImp[T]) addParent(siblings collections.SortedSet[T], n T, r
 			// For example: {A, B, C} overlaps with {A, D} and {A, D} may
 			// have the parents {A} and {D} in it. We want to add {A} as
 			// a parent to {A, B, C}.
-			log.Logf(` ├─(%d) else %v`, i, a)
+			log.Logf(branchGlyph+`(%d) else %v`, i, a)
 			in.seekInherits(a.Inherits(), n, relations, log2)
 		}
 	}
 
 	switch {
 	case parentedSiblings:
-		log.Log(` └─ add: parented sibling`)
+		log.Log(endGlyph + ` add: parented sibling`)
 		siblings.Add(n)
 
 	case addedToSibling:
-		log.Log(` └─ no-op: added to sibling`)
+		log.Log(endGlyph + ` no-op: added to sibling`)
 
 	default:
-		log.Log(` └─ add: default`)
+		log.Log(endGlyph + ` add: default`)
 		siblings.Add(n)
 	}
 }
@@ -153,7 +181,7 @@ func (in *inheritanceImp[T]) seekInherits(siblings collections.SortedSet[T], n T
 
 		rel, _ := in.getRelationship(n, a, relations)
 		if rel == supertype {
-			log.Logf(` + %v`, a)
+			log.Logf(addGlyph+`%v`, a)
 			n.AddInherits(a)
 			continue
 		}

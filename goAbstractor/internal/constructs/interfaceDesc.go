@@ -64,8 +64,11 @@ type InterfaceDesc interface {
 	// the given set of abstracts.
 	SetAdditionalAbstracts(abstracts []Abstract)
 
+	// AddInherits tries to add an interface this interface inherits from.
+	// Returns the given interface or the equivalent interface that already existed.
 	AddInherits(it InterfaceDesc) InterfaceDesc
 
+	// Inherits is the set of interfaces this interface inherits from.
 	Inherits() collections.SortedSet[InterfaceDesc]
 }
 

@@ -11,18 +11,20 @@ import (
 	"github.com/Snow-Gremlin/goToolbox/utils"
 )
 
-const indentText = `|  `
-const showGroups = true
+const defaultIndentText = `┆  `
+const defaultShowGroups = false
 
 type LogEntry struct {
-	Indent  int
-	Group   string
-	Message string
+	Indent     int
+	Group      string
+	Message    string
+	IndentText string
+	ShowGroups bool
 }
 
 // New creates a new logger that writes to the standard out.
 func New() *Logger {
-	return &Logger{out: writerToFunc(os.Stdout)}
+	return NewFunc(writerToFunc(os.Stdout))
 }
 
 // NewWriter creates a logger that writes logs to the given writer.
@@ -33,7 +35,7 @@ func NewWriter(out io.Writer) *Logger {
 	if utils.IsNil(out) {
 		return nil
 	}
-	return &Logger{out: writerToFunc(out)}
+	return NewFunc(writerToFunc(out))
 }
 
 // NewFunc will create a logger that calls the given
@@ -42,7 +44,10 @@ func NewFunc(handle func(entry LogEntry)) *Logger {
 	if utils.IsNil(handle) {
 		return nil
 	}
-	return &Logger{out: handle}
+	return &Logger{
+		out:        handle,
+		showGroups: defaultShowGroups,
+	}
 }
 
 // Null is a nil logger that is always disabled.
@@ -53,17 +58,19 @@ func Null() *Logger {
 
 // Logger is a tool for optionally logging messages.
 type Logger struct {
-	out      func(entry LogEntry)
-	indent   int
-	show     map[string]struct{}
-	curGroup string
-	disabled bool
+	out        func(entry LogEntry)
+	indent     int
+	show       map[string]struct{}
+	curGroup   string
+	disabled   bool
+	indentText string
+	showGroups bool
 }
 
 func simpleToFunc(out func(string)) func(entry LogEntry) {
 	return func(entry LogEntry) {
-		prefix := strings.Repeat(indentText, entry.Indent)
-		if showGroups && len(entry.Group) > 0 {
+		prefix := entry.IndentText
+		if entry.ShowGroups && len(entry.Group) > 0 {
 			prefix += `[` + entry.Group + `] `
 		}
 		for line := range strings.SplitSeq(entry.Message, "\n") {
@@ -89,9 +96,11 @@ func (log *Logger) copy() *Logger {
 func (log *Logger) write(msg string) *Logger {
 	if log != nil && !log.disabled {
 		log.out(LogEntry{
-			Indent:  log.indent,
-			Group:   log.curGroup,
-			Message: msg,
+			Indent:     log.indent,
+			Group:      log.curGroup,
+			Message:    msg,
+			IndentText: log.indentText,
+			ShowGroups: log.showGroups,
 		})
 	}
 	return log
@@ -111,11 +120,20 @@ func (log *Logger) Logf(format string, args ...any) *Logger {
 // The returned logger will be further indented.
 // If the logger is disabled, this will have no effect.
 func (log *Logger) Indent() *Logger {
+	return log.IndentWith(defaultIndentText)
+}
+
+// IndentWith will add to the current indent for the message with
+// the given text to add at the rightmost part of the indent.
+// The returned logger will be further indented.
+// If the logger is disabled, this will have no effect.
+func (log *Logger) IndentWith(indent string) *Logger {
 	if log == nil || log.disabled {
 		return log
 	}
 	c := log.copy()
 	c.indent++
+	c.indentText += indent
 	return c
 }
 

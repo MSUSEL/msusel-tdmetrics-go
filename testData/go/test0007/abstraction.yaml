@@ -47,13 +47,13 @@
       exact: [ basic1, basic2, basic3 ], inherits: [ 1 ],
     },
     { # 4. interface { $deref() Foo[string]; Add(v string) string } ???
-      abstracts: [ 1, 7 ], inherits: [ 1 ], hint: pointer,
+      abstracts: [ 1, 7 ], inherits: [ 5 ], hint: pointer,
     },
     { # 5. interface { $deref() Foo[T <int|string>]; Add(v T) T } ???
-      abstracts: [ 2, 5 ], inherits: [ 1 ], hint: pointer,
+      abstracts: [ 2, 5 ], inherits: [ 6 ], hint: pointer,
     },
     { # 6. interface { $deref() Foo[T <int|uint|string>]; Add(v T) T } ???
-      abstracts: [ 3, 6 ], inherits: [ 1 ], hint: pointer,
+      abstracts: [ 3, 6 ], inherits: [ 7 ], hint: pointer,
     },
     { # 7. interface { $deref() T <any> } ???
       abstracts: [ 4 ], inherits: [ 1 ], hint: pointer,

@@ -62,9 +62,8 @@ func (in *instantiationsImp) ExpandInstantiations() bool {
 }
 
 func (in *instantiationsImp) fillOutAllMetrics() {
-	methodInsts := in.proj.MethodInsts()
-	for i := range methodInsts.Count() {
-		if mi := methodInsts.Get(i); !in.doneMetrics[mi] {
+	for mi := range in.proj.MethodInsts().Enumerate().Seq() {
+		if !in.doneMetrics[mi] {
 			in.doneMetrics[mi] = true
 			in.changed = true
 			in.fillOutMetrics(mi)
@@ -83,9 +82,8 @@ func (in *instantiationsImp) fillOutMetrics(mi constructs.MethodInst) {
 }
 
 func (in *instantiationsImp) expandAllInstantiations() {
-	objects := in.proj.Objects()
-	for i := range objects.Count() {
-		if obj := objects.Get(i); !in.doneExpandInst[obj] {
+	for obj := range in.proj.Objects().Enumerate().Seq() {
+		if !in.doneExpandInst[obj] {
 			in.doneExpandInst[obj] = true
 			in.changed = true
 			in.expandInstantiations(obj)
@@ -95,13 +93,11 @@ func (in *instantiationsImp) expandAllInstantiations() {
 
 func (in *instantiationsImp) expandInstantiations(obj constructs.Object) {
 	// Add the method instances to the object.
-	methods := obj.Methods()
-	for i := range methods.Count() {
-		mIts := methods.Get(i).Instances()
-		for j := range mIts.Count() {
+	for method := range obj.Methods().Enumerate().Seq() {
+		for mIt := range method.Instances().Enumerate().Seq() {
 			// Create an object instance using the type argument for this
 			// method instance so that the method has a receiver for it.
-			it := mIts.Get(j).InstanceTypes()
+			it := mIt.InstanceTypes()
 			instantiator.Object(in.log, in.querier, in.proj, nil, obj, nil, it)
 		}
 	}
@@ -109,18 +105,15 @@ func (in *instantiationsImp) expandInstantiations(obj constructs.Object) {
 	// Now that all the instances were collected, expand the instances
 	// by adding all the method instance for that object instance, creating
 	// any method instance that is missing.
-	its := obj.Instances()
-	for i := range its.Count() {
-		in.expandObjectInst(obj, its.Get(i))
+	for it := range obj.Instances().Enumerate().Seq() {
+		in.expandObjectInst(obj, it)
 	}
 }
 
 // expandObjectInst adds the given instance into each method if it doesn't
 // exist in that method. Then updates methods and receivers for the instance.
 func (in *instantiationsImp) expandObjectInst(obj constructs.Object, instance constructs.ObjectInst) {
-	methods := obj.Methods()
-	for i := range methods.Count() {
-		method := methods.Get(i)
+	for method := range obj.Methods().Enumerate().Seq() {
 		con := instantiator.Method(in.log, in.querier, in.proj, method, instance.InstanceTypes())
 		if utils.IsNil(con) {
 			panic(terror.New(`unable to instantiate method while expanding object`).
@@ -135,9 +128,8 @@ func (in *instantiationsImp) expandObjectInst(obj constructs.Object, instance co
 }
 
 func (in *instantiationsImp) fillOutAllPointerReceivers() {
-	objects := in.proj.Objects()
-	for i := range objects.Count() {
-		if obj := objects.Get(i); !in.donePointerRec[obj] {
+	for obj := range in.proj.Objects().Enumerate().Seq() {
+		if !in.donePointerRec[obj] {
 			in.donePointerRec[obj] = true
 			in.changed = true
 			in.fillOutPointerReceivers(obj)
@@ -150,14 +142,14 @@ func (in *instantiationsImp) fillOutPointerReceivers(obj constructs.Object) {
 		ptr := in.bk.BakePointer()
 		// create a pointer for the generic object.
 		rt := types.NewPointer(obj.GoType())
-		instantiator.InterfaceDecl(in.log, in.querier, in.proj, rt, ptr, nil, []constructs.TypeDesc{obj})
+		p := instantiator.InterfaceDecl(in.log, in.querier, in.proj, rt, ptr, nil, []constructs.TypeDesc{obj})
+		trySetInheritance(ptr, p)
 
-		oIts := obj.Instances()
-		for i := range oIts.Count() {
-			oIt := oIts.Get(i)
+		for oIt := range obj.Instances().Enumerate().Seq() {
 			// create a pointer for the object interface.
 			rt := types.NewPointer(oIt.GoType())
-			instantiator.InterfaceDecl(in.log, in.querier, in.proj, rt, ptr, nil, []constructs.TypeDesc{oIt})
+			c := instantiator.InterfaceDecl(in.log, in.querier, in.proj, rt, ptr, nil, []constructs.TypeDesc{oIt})
+			trySetInheritance(p, c)
 		}
 	}
 }
@@ -166,10 +158,28 @@ func hasPointerReceivers(obj constructs.Object) bool {
 	return obj.Methods().Enumerate().Any(constructs.Method.PointerRecv)
 }
 
+func getInterfaceDesc(td constructs.TypeDesc) (constructs.InterfaceDesc, bool) {
+	switch t := td.(type) {
+	case constructs.InterfaceDecl:
+		return t.Interface(), true
+	case constructs.InterfaceInst:
+		return t.Resolved(), true
+	default:
+		return nil, false
+	}
+}
+
+func trySetInheritance(parent, child constructs.TypeDesc) {
+	if dp, ok := getInterfaceDesc(parent); ok {
+		if dc, ok := getInterfaceDesc(child); ok {
+			dc.AddInherits(dp)
+		}
+	}
+}
+
 func (in *instantiationsImp) expandAllNestedTypes() {
-	methods := in.proj.Methods()
-	for i := range methods.Count() {
-		if m := methods.Get(i); !in.doneNestedType[m] {
+	for m := range in.proj.Methods().Enumerate().Seq() {
+		if !in.doneNestedType[m] {
 			in.doneNestedType[m] = true
 			in.changed = true
 			in.expandNestedTypes(m)
@@ -181,9 +191,7 @@ func (in *instantiationsImp) expandNestedTypes(method constructs.Method) {
 	nestedObjs := findNestedTypes(method, in.proj.Objects())
 	nestedIts := findNestedTypes(method, in.proj.InterfaceDecls())
 
-	mIts := method.Instances()
-	for i := range mIts.Count() {
-		mIt := mIts.Get(i)
+	for mIt := range method.Instances().Enumerate().Seq() {
 		implicitTypes := mIt.InstanceTypes()
 		for _, obj := range nestedObjs {
 			in.expandNestedObject(implicitTypes, obj)
@@ -198,21 +206,19 @@ func (in *instantiationsImp) expandNestedObject(implicitTypes []constructs.TypeD
 	it := constructs.Cast[constructs.TypeDesc](obj.TypeParams())
 	instantiator.Object(in.log, in.querier, in.proj, obj.GoType(), obj, implicitTypes, it)
 
-	instances := obj.Instances()
-	for j := range instances.Count() {
-		inst := instances.Get(j)
+	for inst := range obj.Instances().Enumerate().Seq() {
 		instantiator.Object(in.log, in.querier, in.proj, inst.GoType(), obj, implicitTypes, inst.InstanceTypes())
 	}
 }
 
 func (in *instantiationsImp) expandNestedInterface(implicitTypes []constructs.TypeDesc, it constructs.InterfaceDecl) {
 	tp := constructs.Cast[constructs.TypeDesc](it.TypeParams())
-	instantiator.InterfaceDecl(in.log, in.querier, in.proj, it.GoType(), it, implicitTypes, tp)
+	p := instantiator.InterfaceDecl(in.log, in.querier, in.proj, it.GoType(), it, implicitTypes, tp)
+	trySetInheritance(it, p)
 
-	instances := it.Instances()
-	for j := range instances.Count() {
-		inst := instances.Get(j)
-		instantiator.InterfaceDecl(in.log, in.querier, in.proj, inst.GoType(), it, implicitTypes, inst.InstanceTypes())
+	for inst := range it.Instances().Enumerate().Seq() {
+		c := instantiator.InterfaceDecl(in.log, in.querier, in.proj, inst.GoType(), it, implicitTypes, inst.InstanceTypes())
+		trySetInheritance(p, c)
 	}
 }
 
@@ -221,8 +227,7 @@ func findNestedTypes[T constructs.Nestable](nest constructs.NestType, ts collect
 		return nil
 	}
 	nested := []T{}
-	for i := range ts.Count() {
-		t := ts.Get(i)
+	for t := range ts.Enumerate().Seq() {
 		if constructs.ComparerPend(t.Nest(), nest)() == 0 {
 			nested = append(nested, t)
 		}
