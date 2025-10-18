@@ -2,6 +2,7 @@ package inheritance
 
 import (
 	"github.com/Snow-Gremlin/goToolbox/collections"
+	"github.com/Snow-Gremlin/goToolbox/collections/set"
 	"github.com/Snow-Gremlin/goToolbox/collections/sortedSet"
 	"github.com/Snow-Gremlin/goToolbox/comp"
 
@@ -14,6 +15,24 @@ func Resolve[T Node[T]](log *logger.Logger, cmp comp.Comparer[T], its collection
 	for i := range its.Count() {
 		in.Process(its.Get(i))
 	}
+
+	// Print results of this process
+	if !log2.Disabled() {
+		for i := range its.Count() {
+			node := its.Get(i)
+			log2.Logf(startGlyph+`(%d) finished: %v`, i, node)
+			log3 := log2.IndentWith(blankGlyph)
+			for j, count := 0, node.Inherits().Count(); j < count; j++ {
+				p := node.Inherits().Get(j)
+				if j < count-1 {
+					log3.Logf(branchGlyph+`(%d) %v`, j, p)
+				} else {
+					log3.Logf(endGlyph+`(%d) %v`, j, p)
+				}
+			}
+		}
+	}
+
 	log2.Log()
 }
 
@@ -31,6 +50,7 @@ const (
 	branchGlyph = ` ├─`
 	endGlyph    = ` └─`
 	addGlyph    = ` + `
+	subGlyph    = ` - `
 	indentGlyph = ` │ `
 	blankGlyph  = `   `
 )
@@ -56,21 +76,28 @@ type Inheritance[T Node[T]] interface {
 }
 
 type inheritanceImp[T Node[T]] struct {
-	roots collections.SortedSet[T]
-	comp  comp.Comparer[T]
-	log   *logger.Logger
-	count int
+	roots     collections.SortedSet[T]
+	processed collections.Set[T]
+	comp      comp.Comparer[T]
+	log       *logger.Logger
+	count     int
 }
 
 func New[T Node[T]](comp comp.Comparer[T], log *logger.Logger) Inheritance[T] {
 	return &inheritanceImp[T]{
-		roots: sortedSet.New(comp),
-		comp:  comp,
-		log:   log,
+		roots:     sortedSet.New(comp),
+		processed: set.New[T](),
+		comp:      comp,
+		log:       log,
 	}
 }
 
 func (in *inheritanceImp[T]) Process(node T) {
+	if !in.processed.Add(node) {
+		in.log.Logf(startGlyph+`already processed: %v`, node)
+		return
+	}
+
 	relations := map[T]relationship{node: unknown}
 
 	// pre-process all previously inherited nodes.
@@ -79,17 +106,27 @@ func (in *inheritanceImp[T]) Process(node T) {
 		relations[p] = supertype
 	}
 
-	in.log.Logf(startGlyph+`(%d) insert: %v`, in.count, node)
+	// Print startup information
 	log2 := in.log.IndentWith(blankGlyph)
+	if !in.log.Disabled() {
+		in.log.Logf(startGlyph+`(%d) insert: %v`, in.count, node)
+		for p := range node.Inherits().Enumerate().Seq() {
+			log2.Logf(branchGlyph+`pre: %v`, p)
+		}
+	}
+
 	in.addParent(in.roots, node, relations, log2)
 
-	in.log.Logf(startGlyph+`(%d) done: %v`, in.count, node)
-	for i, count := 0, node.Inherits().Count(); i < count; i++ {
-		p := node.Inherits().Get(i)
-		if i < count-1 {
-			log2.Logf(branchGlyph+`(%d) %v`, i, p)
-		} else {
-			log2.Logf(endGlyph+`(%d) %v`, i, p)
+	// Print results of this process
+	if !in.log.Disabled() {
+		in.log.Logf(blankGlyph+`(%d) done: %v`, in.count, node)
+		for i, count := 0, node.Inherits().Count(); i < count; i++ {
+			p := node.Inherits().Get(i)
+			if i < count-1 {
+				log2.Logf(branchGlyph+`(%d) %v`, i, p)
+			} else {
+				log2.Logf(endGlyph+`(%d) %v`, i, p)
+			}
 		}
 	}
 
@@ -143,14 +180,24 @@ func (in *inheritanceImp[T]) addParent(siblings collections.SortedSet[T], n T, r
 			// `a` would have been a parent to another object in this set.
 			// We can simply add `a` to `n` since `a` has already been
 			// checked against the other parents, hence it was in this set.
+			// Remove any inheritance that already exists in `n` that is
+			// a parent (sub-type) of `a` since it will be indirectly
+			// inherited via `a`.
 			log.Logf(branchGlyph+`(%d) child of %v`, i, a)
+			n.Inherits().RemoveIf(func(b T) bool {
+				if a.Implements(b) {
+					log2.Logf(subGlyph+`%v`, b)
+					return true
+				}
+				return false
+			})
 			n.AddInherits(a)
 			siblings.RemoveRange(i, 1)
 			parentedSiblings = true
 
 		default:
 			// Possible overlap, check for parents (sub-types) in subtree.
-			// Since we can't to overlaps in Go, just check any that aren't
+			// Since we can't do overlaps in Go, just check any that aren't
 			// specifically a super-type or sub-type.
 			//
 			// For example: {A, B, C} overlaps with {A, D} and {A, D} may
@@ -181,8 +228,13 @@ func (in *inheritanceImp[T]) seekInherits(siblings collections.SortedSet[T], n T
 
 		rel, _ := in.getRelationship(n, a, relations)
 		if rel == supertype {
-			log.Logf(addGlyph+`%v`, a)
-			n.AddInherits(a)
+			covered := n.Inherits().Enumerate().Any(func(n2 T) bool {
+				return n2.Implements(a)
+			})
+			if !covered {
+				log.Logf(addGlyph+`%v`, a)
+				n.AddInherits(a)
+			}
 			continue
 		}
 

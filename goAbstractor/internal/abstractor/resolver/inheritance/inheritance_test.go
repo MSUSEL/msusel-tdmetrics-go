@@ -216,6 +216,26 @@ func Test_InjectBetween(t *testing.T) {
 		`      └──{A}`)
 }
 
+func Test_OverlapInjunction(t *testing.T) {
+	in := newTest(t)
+	in.Process(`A`)
+	in.Process(`A`, `B`)
+	in.Process(`A`, `C`)
+	in.Check(
+		`┌──{A, B}`,
+		`│  └──{A}`,
+		`└──{A, C}`,
+		`   └──{A}`)
+
+	in.Process(`A`, `B`, `D`)
+	in.Check(
+		`┌──{A, B, D}`,
+		`│  └──{A, B}`,
+		`│     └──{A}`,
+		`└──{A, C}`,
+		`   └──{A}`)
+}
+
 func Test_TNodeTest(t *testing.T) {
 	n1 := newTNode(`A`, `B`, `C`)
 	n2 := newTNode(`A`, `B`)

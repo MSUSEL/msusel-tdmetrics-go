@@ -94,7 +94,8 @@ flowchart LR
     1. Initial state: $|Xp| = 0$ and $Y \supset X$.
     2. Assign $A = \{ Y_i \mid X \supset Y_i \}$.
        If $|A| > 0$, then remove $A$ from $Yp$, add $A$ to $Xp$, and
-       add $X$ as a parent of $Y$.
+       add $X$ as a parent of $Y$. Before adding $X$, remove any existing
+       parent of $Y$ that is a sub-type of $X$ from $Y$.
     3. For all $Y_i \supset X$, insert $X$ into $Y_i$.
     4. For all $\left( Y_i \cap X \right) \ne \emptyset$ (but not used in
        prior steps), check the subtree for any node that is a super-type.
@@ -104,7 +105,9 @@ flowchart LR
           just to check any subtree not used in a prior step.
        2. These subtrees can't contain sub-types, otherwise the root of the
           subtree would be a sub-type too. However, there may be super-types
-          deeper in the subtree.
+          deeper in the subtree. For any sub-types, $Z$, found in the subtree
+          that isn't a sub-type of any of $Y$'s parents, add $Z$ as a parent
+          of $Y$.
 
 ## Implementation
 
@@ -140,6 +143,9 @@ function AddNode:
          call AddNode with Yi.Parents and X
          set AddedToSibling to true
       else if Yi :> X:
+         foreach Xi in X:
+            if Xi <: Yi:
+               remove Xi
          add Yi to X.Parents
          remove Yi from Siblings
          set ParentedSiblings to true
@@ -154,7 +160,8 @@ function SeekParents:
       X: Node
    foreach Yi in Siblings:
       if Yi :> X:
-         add Yi to X.Parents
+         if there is no Yi <: Xi for all Xi in X:
+            add Yi to X.Parents
       else if Yi overlaps X:
          call SeekParents with Yi.Parents and X
 ```
