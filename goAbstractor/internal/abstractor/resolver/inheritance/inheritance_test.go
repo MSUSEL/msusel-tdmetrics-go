@@ -1,6 +1,8 @@
 package inheritance
 
 import (
+	"fmt"
+	"iter"
 	"sort"
 	"strings"
 	"testing"
@@ -234,6 +236,47 @@ func Test_OverlapInjunction(t *testing.T) {
 		`│     └──{A}`,
 		`└──{A, C}`,
 		`   └──{A}`)
+
+	in.Process(`C`)
+	in.Process(`D`)
+	in.Check(
+		`┌──{A, B, D}`,
+		`│  ├──{A, B}`,
+		`│  │  └──{A}`,
+		`│  └──{D}`,
+		`└──{A, C}`,
+		`   ├──{A}`,
+		`   └──{C}`)
+}
+
+func Test_Permutation(t *testing.T) {
+	parts := [][]string{
+		{`A`},
+		{`C`},
+		{`D`},
+		{`A`, `B`},
+		{`A`, `C`},
+		{`A`, `B`, `D`},
+	}
+	index := 0
+	for s := range permutate(parts) {
+		t.Run(fmt.Sprintf(`%d`, index), func(t *testing.T) {
+			in := newTest(t)
+			for _, p := range s {
+				in.Process(p...)
+			}
+			in.Check(
+				`┌──{A, B, D}`,
+				`│  ├──{A, B}`,
+				`│  │  └──{A}`,
+				`│  └──{D}`,
+				`└──{A, C}`,
+				`   ├──{A}`,
+				`   └──{C}`)
+		})
+		index++
+	}
+	t.Fail() // TODO: REMOVE
 }
 
 func Test_TNodeTest(t *testing.T) {
@@ -393,4 +436,40 @@ func (tn *tNode) Inherits() collections.SortedSet[*tNode] {
 
 func (tn *tNode) String() string {
 	return `{` + strings.Join(tn.parts, `, `) + `}`
+}
+
+func Test_Permutate(t *testing.T) {
+	buf := &strings.Builder{}
+	s := permutate([]int{1, 2, 3, 4})
+	for v := range s {
+		fmt.Fprintf(buf, "%v\n", v)
+	}
+	check.Equal(t, "[1 2 3 4]\n[1 2 4 3]\n[1 3 2 4]\n[1 4 2 3]\n[1 3 4 2]\n[1 4 3 2]\n"+
+		"[2 1 3 4]\n[2 1 4 3]\n[3 1 2 4]\n[4 1 2 3]\n[3 1 4 2]\n[4 1 3 2]\n"+
+		"[2 3 1 4]\n[2 4 1 3]\n[3 2 1 4]\n[4 2 1 3]\n[3 4 1 2]\n[4 3 1 2]\n"+
+		"[2 3 4 1]\n[2 4 3 1]\n[3 2 4 1]\n[4 2 3 1]\n[3 4 2 1]\n[4 3 2 1]\n").Assert(buf.String())
+}
+
+func permutate[T any, S ~[]T](s S) iter.Seq[S] {
+	return func(yield func(S) bool) {
+		count := len(s)
+		if count <= 0 {
+			return
+		}
+		if count == 1 {
+			yield(s)
+			return
+		}
+		temp := make(S, count)
+		for i := range len(s) {
+			temp[i] = s[0]
+			for sub := range permutate(s[1:]) {
+				copy(temp, sub[:i])
+				copy(temp[i+1:], sub[i:])
+				if !yield(temp) {
+					return
+				}
+			}
+		}
+	}
 }

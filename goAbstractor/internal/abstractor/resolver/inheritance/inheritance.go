@@ -50,7 +50,7 @@ const (
 	branchGlyph = ` ├─`
 	endGlyph    = ` └─`
 	addGlyph    = ` + `
-	subGlyph    = ` - `
+	remGlyph    = ` - `
 	indentGlyph = ` │ `
 	blankGlyph  = `   `
 )
@@ -186,7 +186,7 @@ func (in *inheritanceImp[T]) addParent(siblings collections.SortedSet[T], n T, r
 			log.Logf(branchGlyph+`(%d) child of %v`, i, a)
 			n.Inherits().RemoveIf(func(b T) bool {
 				if a.Implements(b) {
-					log2.Logf(subGlyph+`%v`, b)
+					log2.Logf(remGlyph+`%v`, b)
 					return true
 				}
 				return false
