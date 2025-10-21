@@ -31,9 +31,35 @@ func Resolve[T Node[T]](log *logger.Logger, cmp comp.Comparer[T], its collection
 				}
 			}
 		}
+		/*
+			log2.Log()
+			buf := &strings.Builder{}
+			buf.WriteString(`|   |`)
+			for i := range its.Count() {
+				fmt.Fprintf(buf, `%2d |`, i)
+			}
+			buf.WriteString("\n|---|")
+			for range its.Count() {
+				buf.WriteString(`---|`)
+			}
+			buf.WriteString("\n")
+			for i := range its.Count() {
+				fmt.Fprintf(buf, `|%2d |`, i)
+				a := its.Get(i)
+				for j := range its.Count() {
+					if i == j {
+						buf.WriteString(`   |`)
+					} else if b := its.Get(j); a.Implements(b) {
+						buf.WriteString(` X |`)
+					} else {
+						buf.WriteString(` - |`)
+					}
+				}
+				buf.WriteString("\n")
+			}
+			log2.Log(buf.String())
+		*/
 	}
-
-	log2.Log()
 }
 
 type relationship int
@@ -49,10 +75,10 @@ const (
 	startGlyph  = `╶──`
 	branchGlyph = ` ├─`
 	endGlyph    = ` └─`
-	addGlyph    = ` + `
-	remGlyph    = ` - `
 	indentGlyph = ` │ `
 	blankGlyph  = `   `
+	addGlyph    = ` + `
+	remGlyph    = ` - `
 )
 
 type Node[T any] interface {
@@ -81,6 +107,7 @@ type inheritanceImp[T Node[T]] struct {
 	comp      comp.Comparer[T]
 	log       *logger.Logger
 	count     int
+	implCalls int
 }
 
 func New[T Node[T]](comp comp.Comparer[T], log *logger.Logger) Inheritance[T] {
@@ -95,6 +122,7 @@ func New[T Node[T]](comp comp.Comparer[T], log *logger.Logger) Inheritance[T] {
 func (in *inheritanceImp[T]) Process(node T) {
 	if !in.processed.Add(node) {
 		in.log.Logf(startGlyph+`already processed: %v`, node)
+		in.log.Log()
 		return
 	}
 
@@ -131,16 +159,23 @@ func (in *inheritanceImp[T]) Process(node T) {
 	}
 
 	in.count++
+	log2.Logf(`implements calls = %d`, in.implCalls)
+	log2.Log()
+}
+
+func (in *inheritanceImp[T]) implements(a, b T) bool {
+	in.implCalls++
+	return a.Implements(b)
 }
 
 func (in *inheritanceImp[T]) getRelationship(n, a T, relations map[T]relationship) (relationship, bool) {
 	rel, touched := relations[a]
 	if !touched {
 		switch {
-		case a.Implements(n):
-			rel = subtype
-		case n.Implements(a):
+		case in.implements(n, a):
 			rel = supertype
+		case in.implements(a, n):
+			rel = subtype
 		default:
 			rel = unknown
 		}
@@ -185,7 +220,7 @@ func (in *inheritanceImp[T]) addParent(siblings collections.SortedSet[T], n T, r
 			// inherited via `a`.
 			log.Logf(branchGlyph+`(%d) child of %v`, i, a)
 			n.Inherits().RemoveIf(func(b T) bool {
-				if a.Implements(b) {
+				if in.implements(a, b) {
 					log2.Logf(remGlyph+`%v`, b)
 					return true
 				}
@@ -229,7 +264,7 @@ func (in *inheritanceImp[T]) seekInherits(siblings collections.SortedSet[T], n T
 		rel, _ := in.getRelationship(n, a, relations)
 		if rel == supertype {
 			covered := n.Inherits().Enumerate().Any(func(n2 T) bool {
-				return n2.Implements(a)
+				return in.implements(n2, a)
 			})
 			if !covered {
 				log.Logf(addGlyph+`%v`, a)

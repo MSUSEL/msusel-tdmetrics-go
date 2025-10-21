@@ -1,8 +1,10 @@
 package inheritance
 
 import (
+	"errors"
 	"fmt"
 	"iter"
+	"slices"
 	"sort"
 	"strings"
 	"testing"
@@ -276,7 +278,6 @@ func Test_Permutation(t *testing.T) {
 		})
 		index++
 	}
-	t.Fail() // TODO: REMOVE
 }
 
 func Test_TNodeTest(t *testing.T) {
@@ -439,15 +440,25 @@ func (tn *tNode) String() string {
 }
 
 func Test_Permutate(t *testing.T) {
-	buf := &strings.Builder{}
 	s := permutate([]int{1, 2, 3, 4})
+	touched := map[string]int{}
+	results := []string{}
+	index := 0
 	for v := range s {
-		fmt.Fprintf(buf, "%v\n", v)
+		str := fmt.Sprintf(`%v`, v)
+		if prev, has := touched[str]; has {
+			t.Errorf(`value %s was seen at %d and previously at %d`, str, index, prev)
+		}
+		touched[str] = index
+		results = append(results, str)
+		index++
 	}
-	check.Equal(t, "[1 2 3 4]\n[1 2 4 3]\n[1 3 2 4]\n[1 4 2 3]\n[1 3 4 2]\n[1 4 3 2]\n"+
-		"[2 1 3 4]\n[2 1 4 3]\n[3 1 2 4]\n[4 1 2 3]\n[3 1 4 2]\n[4 1 3 2]\n"+
-		"[2 3 1 4]\n[2 4 1 3]\n[3 2 1 4]\n[4 2 1 3]\n[3 4 1 2]\n[4 3 1 2]\n"+
-		"[2 3 4 1]\n[2 4 3 1]\n[3 2 4 1]\n[4 2 3 1]\n[3 4 2 1]\n[4 3 2 1]\n").Assert(buf.String())
+	check.EqualElems(t, []string{
+		`[1 2 3 4]`, `[1 2 4 3]`, `[1 3 2 4]`, `[1 4 2 3]`, `[1 3 4 2]`, `[1 4 3 2]`,
+		`[2 1 3 4]`, `[2 1 4 3]`, `[3 1 2 4]`, `[4 1 2 3]`, `[3 1 4 2]`, `[4 1 3 2]`,
+		`[2 3 1 4]`, `[2 4 1 3]`, `[3 2 1 4]`, `[4 2 1 3]`, `[3 4 1 2]`, `[4 3 1 2]`,
+		`[2 3 4 1]`, `[2 4 3 1]`, `[3 2 4 1]`, `[4 2 3 1]`, `[3 4 2 1]`, `[4 3 2 1]`,
+	}).Assert(results)
 }
 
 func permutate[T any, S ~[]T](s S) iter.Seq[S] {
@@ -456,19 +467,37 @@ func permutate[T any, S ~[]T](s S) iter.Seq[S] {
 		if count <= 0 {
 			return
 		}
-		if count == 1 {
-			yield(s)
+		if count > 12 {
+			panic(errors.New(`too many items to permutate all`))
+		}
+		perm := make(S, count)
+		copy(perm, s)
+
+		if !yield(slices.Clone(perm)) {
 			return
 		}
-		temp := make(S, count)
-		for i := range len(s) {
-			temp[i] = s[0]
-			for sub := range permutate(s[1:]) {
-				copy(temp, sub[:i])
-				copy(temp[i+1:], sub[i:])
-				if !yield(temp) {
+
+		indices := make([]int, count)
+		curIndex := 0
+		for curIndex < count {
+			if indices[curIndex] < curIndex {
+				var j int
+				if curIndex%2 == 0 {
+					j = 0
+				} else {
+					j = indices[curIndex]
+				}
+				perm[j], perm[curIndex] = perm[curIndex], perm[j]
+
+				if !yield(slices.Clone(perm)) {
 					return
 				}
+
+				indices[curIndex]++
+				curIndex = 0
+			} else {
+				indices[curIndex] = 0
+				curIndex++
 			}
 		}
 	}

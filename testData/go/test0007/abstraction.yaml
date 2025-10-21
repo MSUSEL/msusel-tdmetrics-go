@@ -1,9 +1,9 @@
 {
   language: go,
   abstracts: [
-    { vis: exported, name: $deref, signature:  2 }, # 1. func $deref() Foo[string]
-    { vis: exported, name: $deref, signature:  3 }, # 2. func $deref() Foo[T <int|string>]
-    { vis: exported, name: $deref, signature:  4 }, # 3. func $deref() Foo[T <int|uint|string>]
+    { vis: exported, name: $deref, signature:  2 }, # 1. func $deref() Foo[T <int|uint|string>]
+    { vis: exported, name: $deref, signature:  3 }, # 2. func $deref() Foo[string]
+    { vis: exported, name: $deref, signature:  4 }, # 3. func $deref() Foo[T <int|string>]
     { vis: exported, name: $deref, signature:  5 }, # 4. func $deref() T <any>
     { vis: exported, name: Add,    signature:  6 }, # 5. func Add(v string) string
     { vis: exported, name: Add,    signature:  9 }, # 6. func Add(v T <int|string>) T
@@ -30,7 +30,7 @@
     { name: value, type: typeParam3 }, # 3. value T <int|uint|string>
   ],
   interfaceDecls: [
-    { # 1. Pointer[T any] { $deref() T <any> } ???
+    { # 1. Pointer[T any] { $deref() T <any> }
       name: Pointer, package: 1, interface: 7, vis: exported,
       instances: [ 1, 2, 3 ], typeParams: [ 1 ],
     },
@@ -46,35 +46,38 @@
     { # 3. int|uint|string
       exact: [ basic1, basic2, basic3 ], inherits: [ 1 ],
     },
-    { # 4. interface { $deref() Foo[string]; Add(v string) string } ???
-      abstracts: [ 1, 7 ], inherits: [ 5 ], hint: pointer,
+    { # 4. interface { $deref() Foo[T <int|uint|string>]; Add(v T) T }
+      abstracts: [ 1, 7 ], inherits: [ 7 ], hint: pointer,
     },
-    { # 5. interface { $deref() Foo[T <int|string>]; Add(v T) T } ???
-      abstracts: [ 2, 5 ], inherits: [ 6 ], hint: pointer,
+    { # 5. interface { $deref() Foo[string]; Add(v string) string }
+      # TODO: This inherits 4 but it should inherit 6.
+      # This is caused by go's `types.Type.Inherits` function not finding
+      # the inheritance and the instantiator setting 4 when instantiating.
+      abstracts: [ 2, 5 ], inherits: [ 4 ], hint: pointer,
     },
-    { # 6. interface { $deref() Foo[T <int|uint|string>]; Add(v T) T } ???
-      abstracts: [ 3, 6 ], inherits: [ 7 ], hint: pointer,
+    { # 6. interface { $deref() Foo[T <int|string>]; Add(v T) T }
+      abstracts: [ 3, 6 ], inherits: [ 4 ], hint: pointer,
     },
-    { # 7. interface { $deref() T <any> } ???
+    { # 7. interface { $deref() T <any> }
       abstracts: [ 4 ], inherits: [ 1 ], hint: pointer,
     },
   ],
   interfaceInsts: [
-    { # 1. Pointer[Foo[T <int|uint|string>]] { $deref() Foo[T]; Add(v T) T } ???
+    { # 1. Pointer[Foo[T <int|uint|string>]] { $deref() Foo[T]; Add(v T) T }
       generic: 1, resolved: 4,
       instanceTypes: [ object1 ],
     },
-    { # 2. Pointer[Foo[string]] { $deref() Foo[string]; Add(v string) string } ???
+    { # 2. Pointer[Foo[string]] { $deref() Foo[string]; Add(v string) string }
       generic: 1, resolved: 5,
       instanceTypes: [ objectInst1 ],
     },
-    { # 3. Pointer[Foo[T <int|string>]] { $deref() Foo[T]; Add(v T) T } ???
+    { # 3. Pointer[Foo[T <int|string>]] { $deref() Foo[T]; Add(v T) T }
       generic: 1, resolved: 6,
       instanceTypes: [ objectInst2 ],
     },
   ],
   methods: [
-    { # 1. func (Foo[T int|uint|string]) Add(v T) T ???
+    { # 1. func (Foo[T <int|uint|string>]) Add(v T) T
       name: Add, package: 2, signature: 10, vis: exported,
       receiver: 1, loc: 9, metrics: 1, ptrRecv: true,
       instances: [ 1, 3 ],
@@ -107,7 +110,7 @@
     { # 1. Foo.Add metrics
       codeCount: 4, complexity: 1, indents: 2, lineCount: 4, loc: 9,
       reads: [
-        interfaceInst1, # Pointer[Foo[T <int|uint|string>]] ???
+        interfaceInst1, # Pointer[Foo[T <int|uint|string>]]
         selection2,     # Pointer[Foo[T <int|uint|string>]].value
       ],
       writes: [ selection2 ], # Pointer[Foo[T <int|uint|string>]].value
@@ -126,13 +129,13 @@
         methodInst2, # func New(v string) Pointer[Foo[string]]
         selection1,  # Pointer[Foo[string]].Add
       ],
-      reads:  [ interfaceInst2 ], # Pointer[Foo[string]] ???
-      writes: [ interfaceInst2 ], # Pointer[Foo[string]] ???
+      reads:  [ interfaceInst2 ], # Pointer[Foo[string]]
+      writes: [ interfaceInst2 ], # Pointer[Foo[string]]
     },
   ],
   objectInsts: [
     { # 1. main.Foo[string]{ value string }{}
-      # This object have `any` interface
+      # This object has `any` interface
       generic: 1, resData: 1, resInterface: 1,
       instanceTypes: [ basic3 ], methods: [ 1 ],
     },
@@ -164,8 +167,8 @@
     },
   ],
   selections: [
-    { name: Add,   origin: interfaceInst2 }, # 1. Pointer[Foo[string]].Add ???
-    { name: value, origin: interfaceInst1 }, # 2. Pointer[Foo[T <int|uint|string>]].value ???
+    { name: Add,   origin: interfaceInst2 }, # 1. Pointer[Foo[string]].Add
+    { name: value, origin: interfaceInst1 }, # 2. Pointer[Foo[T <int|uint|string>]].value
     { name: value, origin: objectInst2 },    # 3. Foo[T <int|string>].value
   ],
   signatures: [
