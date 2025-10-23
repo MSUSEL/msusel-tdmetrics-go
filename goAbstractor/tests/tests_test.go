@@ -40,6 +40,6 @@ func Test_T0013(t *testing.T) { newTest(t, `test0013`).abstract().full() }
 func Test_T0014(t *testing.T) { newTest(t, `test0014`).abstract().full() }
 func Test_T0015(t *testing.T) { newTest(t, `test0015`).abstract().full() }
 
-func Test_T0016(t *testing.T) { newTest(t, `test0016`).abstract().dump().full() }
+func Test_T0016(t *testing.T) { newTest(t, `test0016`).abstract().full() }
 func Test_T0017(t *testing.T) { newTest(t, `test0017`).abstract().full() }
 func Test_T0018(t *testing.T) { newTest(t, `test0018`).abstract().full() }

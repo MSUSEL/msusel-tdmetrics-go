@@ -69,7 +69,7 @@
       abstracts: [7, 8, 9, 11], inherits: [9, 10]
     },
     { # 7. interface{ valid() bool }
-      abstracts: [12], inherits: [11]
+      abstracts: [12], inherits: [1]
     },
     { # 8. animals.interface{ Breed() enums.CatBreed; isCat() }
       abstracts: [6, 10], inherits: [1], pin: package3
@@ -81,7 +81,7 @@
       abstracts: [8, 9], inherits: [1], pin: package3
     },
     { # 11. enums.interface{ valid() bool }
-      abstracts: [12], inherits: [1], pin: package4
+      abstracts: [12], inherits: [7], pin: package4
     }
   ],
   interfaceInsts: [

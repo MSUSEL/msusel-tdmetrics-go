@@ -1,44 +1,41 @@
 {
   language: go,
   abstracts: [
-    { vis: exported, name: $deref, signature: 3 }, # 1. $deref() nodeImp
-    { vis: exported, name: $deref, signature: 7 }, # 2. $deref() T any ???
-    { vis: exported, name: $equal, signature: 8 }, # 3. $equal(other any) bool
-    { vis: exported, name: Next,   signature: 2 }, # 4. Next() Pointer[nodeImp]
-    { vis: exported, name: Next,   signature: 4 }, # 5. Next() T <interface{ comparable; Next() T }> ???
-    { vis: exported, name: Next,   signature: 7 }, # 6. Next() T <any> ???
-    { vis: exported, name: Next,   signature: 6 }  # 7. Next() T <interface{ comparable; Next() T }> // TODO: Duplicates 5
+    { vis: exported, name: $deref, signature: 3 }, # 1. $deref() nodeImp ???
+    { vis: exported, name: $deref, signature: 4 }, # 2. $deref() T <any>
+    { vis: exported, name: $equal, signature: 6 }, # 3. $equal(other any) bool ???
+    { vis: exported, name: Next,   signature: 2 }, # 4. Next() Pointer[nodeImp] ???
+    { vis: exported, name: Next,   signature: 4 }, # 5. Next() T <any>
+    { vis: exported, name: Next,   signature: 5 }, # 6. Next() T <interface{ comparable; Next() T }> ???
   ],
   arguments: [
-    {              type: basic1 },         #  1. bool
-    {              type: basic2 },         #  2. int
-    {              type: interfaceInst1 }, #  3. Pointer[nodeImp]
-    {              type: object1 },        #  4. nodeImp
-    {              type: typeParam1 },     #  5. T <any>
-    {              type: typeParam2 },     #  6. T <interface{ comparable; Next() T }>
-    {              type: typeParam1 },     #  7. T <any>                               // TODO: Duplicates 5
-    {              type: typeParam2 },     #  8. T <interface{ comparable; Next() T }> // TODO: Duplicates 6
-    { name: other, type: interfaceDesc1 }, #  9. other any
-    { name: start, type: typeParam2 },     # 10. start T <interface{ comparable; Next() T }>
-    { name: stop,  type: typeParam2 }      # 11. stop T <interface{ comparable; Next() T }>
+    {              type: basic1 },         # 1. <unnamed> bool
+    {              type: basic2 },         # 2. <unnamed> int
+    {              type: interfaceInst1 }, # 3. <unnamed> Pointer[nodeImp] ???
+    {              type: object1 },        # 4. <unnamed> nodeImp ???
+    {              type: typeParam1 },     # 5. <unnamed> T <any>
+    {              type: typeParam2 },     # 6. <unnamed> T <interface{ comparable; Next() T }> ???
+    { name: other, type: interfaceDesc1 }, # 7. other any
+    { name: start, type: typeParam2 },     # 8. start T <interface{ comparable; Next() T }> ???
+    { name: stop,  type: typeParam2 },     # 9. stop T <interface{ comparable; Next() T }> ???
   ],
   basics: [ bool, int ],
   fields: [
-    { name: next, type: interfaceInst1 } # 1. next Pointer[nodeImp]
+    { name: next, type: interfaceInst1 } # 1. next Pointer[nodeImp] ???
   ],
   interfaceDecls: [
-    { # 1. Pointer[T any]
+    { # 1. Pointer[T any] ???
       name: Pointer, package: 1, interface: 3,
       vis: exported,
       typeParams: [ 1 ],
       instances:  [ 1 ]
     },
-    { # 2. comparable
+    { # 2. comparable ???
       name: comparable, package: 1, interface: 4,
       vis: exported
     },
-    { # 3. Node[T any]
-      name: Node, package: 2, interface: 6,
+    { # 3. Node[T any] ???
+      name: Node, package: 2, interface: 5,
       vis: exported, loc: 5,
       typeParams: [ 1 ],
       instances:  [ 2 ]
@@ -46,57 +43,54 @@
   ],
   interfaceDescs: [
     {}, # 1. any
-    {   # 2. interface{ $deref() nodeImp }
-      abstracts: [ 1, 4 ], inherits: [ 4 ], hint: pointer
+    {   # 2. interface{ $deref() nodeImp; Next() Pointer[nodeImp] } ???
+      abstracts: [ 1, 4 ], inherits: [ 3 ], hint: pointer
     },
     { # 3. interface{ $deref() T <any> }
-      abstracts: [ 2 ], inherits: [ 4 ], hint: pointer
+      abstracts: [ 2 ], inherits: [ 1 ], hint: pointer
     },
-    { # 4. comparable
+    { # 4. interface{ $equal(other any) bool } ???
       abstracts: [ 3 ], inherits: [ 1 ], hint: comparable
     },
-    { # 5. interface{ comparable; Next() T <interface{ comparable; Next() T }> }
-      abstracts: [ 3, 5 ], inherits: [ 4 ], hint: comparable
+    { # 5. interface{ $equal(other any) bool; Next() T <any> } ???
+      abstracts: [ 3, 5 ], inherits: [ 1 ], hint: comparable
     },
-    { # 6. interface{ comparable; Next() T <any> }
-      abstracts: [ 3, 6 ], inherits: [ 4 ], hint: comparable
+    { # 6. interface{ $equal(other any) bool; Next() T <any> } ???
+      abstracts: [ 3, 6 ], inherits: [ 1 ], hint: comparable
     },
-    { # 7. interface{ comparable; Next() T <interface{ comparable; Next() T }> } // TODO: Duplicates 5
-      abstracts: [ 3, 7 ], inherits: [ 1 ], hint: comparable
-    }
   ],
   interfaceInsts: [
-    { # 1. Pointer[nodeImp]
+    { # 1. Pointer[nodeImp] ???
       generic: 1, instanceTypes: [ object1 ], resolved: 2
     },
-    { # 2. Node[T <interface{ comparable; Next() T }> ]
-      generic: 3, instanceTypes: [ typeParam2 ], resolved: 7
+    { # 2. Node[T <interface{ comparable; Next() T }> ] ???
+      generic: 3, instanceTypes: [ typeParam2 ], resolved: 6
     }
   ],
   methodInsts: [
-    { # 1. Len[Pointer[nodeImp]]
-      generic: 1, resolved: 9,
+    { # 1. Len[Pointer[nodeImp]] ???
+      generic: 1, resolved: 7, metrics: 1,
       instanceTypes: [ interfaceInst1 ]
     }
   ],
   methods: [
-    { # 1. func Len[T Node[T <interface{ comparable; Next func() T }> ]](start T, stop T) int
-      name: Len, package: 2, signature: 9,
+    { # 1. func Len[T Node[T <interface{ comparable; Next func() T }> ]](start T, stop T) int ???
+      name: Len, package: 2, signature: 7,
       typeParams: [ 3 ],
       vis: exported, loc: 10, metrics: 1,
       instances: [ 1 ]
     },
-    { # 2. func nodeImp.Next() Pointer[nodeImp]
+    { # 2. func nodeImp.Next() Pointer[nodeImp] ???
       name: Next, package: 2, receiver: 1, signature: 2,
       vis: exported, loc: 22, metrics: 2, ptrRecv: true
     },
-    { # 3. func main()
+    { # 3. func main() ???
       name: main, package: 2, signature: 1,
       loc: 26, metrics: 3
     }
   ],
   metrics: [
-    { # 1. Len metrics
+    { # 1. Len metrics ???
       loc: 10,
       codeCount:  7,
       complexity: 2,
@@ -106,7 +100,7 @@
       reads:   [ interfaceInst2 ],
       writes:  [ interfaceInst2 ]
     },
-    { # 2. nodeImp.Next metrics
+    { # 2. nodeImp.Next metrics ???
       loc: 22,
       codeCount:  3,
       complexity: 1,
@@ -115,7 +109,7 @@
       getter: true,
       reads: [ interfaceInst1 ]
     },
-    { # 3. main metrics
+    { # 3. main metrics ???
       loc: 26,
       codeCount:  4,
       complexity: 1,
@@ -137,7 +131,7 @@
     }
   ],
   objects: [
-    { # 1. nodeImp struct{ next Pointer[nodeImp] }
+    { # 1. nodeImp struct{ next Pointer[nodeImp] } ???
       name: nodeImp, package: 2, data: 1, interface: 1, loc: 18,
       methods: [ 2 ]
     }
@@ -155,27 +149,25 @@
     }
   ],
   selections: [
-    { name: Next, origin: interfaceInst2 }, # 1. Node[T <interface{comparable; Next() T}].Next
-    { name: next, origin: object1 }         # 2. nodeImp.next
+    { name: Next, origin: interfaceInst2 }, # 1. Node[T <interface{comparable; Next() T}].Next ???
+    { name: next, origin: object1 }         # 2. nodeImp.next ???
   ],
   signatures: [
-    {},                 # 1. func()
-    { results: [ 3 ] }, # 2. func() Pointer[nodeImp]
-    { results: [ 4 ] }, # 3. func() nodeImp
+    {},                 # 1. func()()
+    { results: [ 3 ] }, # 2. func() Pointer[nodeImp] ???
+    { results: [ 4 ] }, # 3. func() nodeImp ???
     { results: [ 5 ] }, # 4. func() T <any>
-    { results: [ 6 ] }, # 5. func() T <interface{ comparable; Node() T}>
-    { results: [ 7 ] }, # 6. func() T <any>                              // TODO: Duplicates 4
-    { results: [ 8 ] }, # 7. func() T <interface{ comparable; Node() T}> // TODO: Duplicated 5
-    { params: [ 9 ],      results: [ 1 ] }, # 8. func(other any) bool
-    { params: [ 10, 11 ], results: [ 2 ] }  # 9. func(start T <interface{ comparable; Next() T }>, stop T <interface{ comparable; Next() T }>) int
+    { results: [ 6 ] }, # 5. func() T <interface{ comparable; Node() T}> ???
+    { params: [ 7 ],    results: [ 1 ] }, # 6. func(other any) bool
+    { params: [ 8, 9 ], results: [ 2 ] }, # 7. func(start T <interface{ comparable; Next() T }>, stop T <interface{ comparable; Next() T }>) int ???
   ],
   structDescs: [
-    { fields: [ 1 ] } # 1. struct{ next Pointer[nodeImp] }
+    { fields: [ 1 ] } # 1. struct{ next Pointer[nodeImp] } ???
   ],
   typeParams: [
     { name: T, type: interfaceDesc1 }, # 1. T any
-    { name: T, type: interfaceDesc5 }, # 2. T interface{ comparable; Next() T }
-    { name: T, type: interfaceInst2 }  # 3. T Node[T]
+    { name: T, type: interfaceDesc6 }, # 2. T interface{ comparable; Next() T } ???
+    { name: T, type: interfaceInst2 }  # 3. T Node[T] ???
   ],
   locs: {
     '1': main.go

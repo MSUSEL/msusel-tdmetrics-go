@@ -1,16 +1,16 @@
 {
   language: go,
   abstracts: [
-    { name: $deref, signature: 3, vis: exported }, # 1. $deref() Foo[int]
-    { name: $deref, signature: 4, vis: exported }, # 2. $deref() Foo[T <any>]
+    { name: $deref, signature: 3, vis: exported }, # 1. $deref() Foo[T <any>]
+    { name: $deref, signature: 4, vis: exported }, # 2. $deref() Foo[int]
     { name: $deref, signature: 5, vis: exported }, # 3. $deref() T <any>
     { name: Get,    signature: 2, vis: exported }, # 4. Get() int
     { name: Get,    signature: 5, vis: exported }, # 5. Get() T <any>
   ],
   arguments: [
     { type: basic1 },      # 1. <unnamed> int
-    { type: object1 },     # 3. <unnamed> Foo[T <any>]
-    { type: objectInst1 }, # 2. <unnamed> Foo[int]
+    { type: object1 },     # 2. <unnamed> Foo[T <any>]
+    { type: objectInst1 }, # 3. <unnamed> Foo[int]
     { type: typeParam1 },  # 4. <unnamed> T <any>
   ],
   basics: [ int ],
@@ -26,8 +26,8 @@
   ],
   interfaceDescs: [
     {},                                                      # 1. any
-    { abstracts: [ 1, 5 ], inherits: [ 1 ], hint: pointer }, # 2. interface{ $deref() Foo[int]; Get() int }
-    { abstracts: [ 2, 4 ], inherits: [ 1 ], hint: pointer }, # 3. interface{ $deref() Foo[T <any>]; Get() T }
+    { abstracts: [ 1, 5 ], inherits: [ 4 ], hint: pointer }, # 2. interface{ $deref() Foo[T <any>]; Get() T }
+    { abstracts: [ 2, 4 ], inherits: [ 2 ], hint: pointer }, # 3. interface{ $deref() Foo[int]; Get() int }
     { abstracts: [ 3 ],    inherits: [ 1 ], hint: pointer }, # 4. interface{ $deref() T <any> }
   ],
   interfaceInsts: [
@@ -66,7 +66,7 @@
     { # 2. main() metrics
       codeCount: 4, complexity: 1, indents: 2, lineCount: 4,
       loc: 13, sideEffect: true,
-      invokes: [ selection1  ], # Foo[int].Get() int
+      invokes: [ selection1 ], # Pointer[Foo[int]].Get() int
       reads: [
         interfaceInst2, # Pointer[Foo[int]]
         objectInst1     # Foo[int]
@@ -112,8 +112,8 @@
   signatures: [
     {},                 # 1. func()()
     { results: [ 1 ] }, # 2. func() int
-    { results: [ 2 ] }, # 3. func() Foo[int]
-    { results: [ 3 ] }, # 4. func() Foo[T <any>]
+    { results: [ 2 ] }, # 3. func() Foo[T <any>]
+    { results: [ 3 ] }, # 4. func() Foo[int]
     { results: [ 4 ] }  # 5. func() T <any>
   ],
   structDescs: [

@@ -50,7 +50,7 @@
       abstracts: [ 1, 7 ], inherits: [ 7 ], hint: pointer,
     },
     { # 5. interface { $deref() Foo[string]; Add(v string) string }
-      # TODO: This inherits 4 but it should inherit 6.
+      # Notice: This inherits 4 but it could inherit 6.
       # This is caused by go's `types.Type.Inherits` function not finding
       # the inheritance and the instantiator setting 4 when instantiating.
       abstracts: [ 2, 5 ], inherits: [ 4 ], hint: pointer,

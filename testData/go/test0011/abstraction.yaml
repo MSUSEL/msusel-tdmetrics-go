@@ -82,13 +82,13 @@
       approx: [ interfaceInst8 ], inherits: [ 1 ]
     },
     { # 4. interface{ $deref() int }
-      abstracts: [ 1 ], inherits: [ 7 ], hint: pointer
+      abstracts: [ 1 ], inherits: [ 1 ], hint: pointer
     },
     { # 5. interface{ $deref() T <any> }
-      abstracts: [ 2 ], inherits: [ 7 ], hint: pointer
+      abstracts: [ 2 ], inherits: [ 1 ], hint: pointer
     },
     { # 6. interface{ $deref() V <any> }
-      abstracts: [ 3 ], inherits: [ 7 ], hint: pointer
+      abstracts: [ 3 ], inherits: [ 1 ], hint: pointer
     },
     { # 7. interface{ $compare(other any) int }
       abstracts: [ 4 ], inherits: [ 1 ], hint: comparable

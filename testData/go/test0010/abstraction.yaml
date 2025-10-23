@@ -36,16 +36,16 @@
       exact: [ basic1, basic2, basic3 ], inherits: [ 1 ]
     },
     { # 3. interface{ $deref() A[T <int|float64|string>]; Mul(v int) }
-      abstracts: [ 1, 6 ], inherits: [ 1 ], hint: pointer
+      abstracts: [ 1, 6 ], inherits: [ 7 ], hint: pointer
     },
     { # 4. interface{ $deref() A[int]; Mul(v int) }
-      abstracts: [ 2, 6 ], inherits: [ 1 ], hint: pointer
+      abstracts: [ 2, 6 ], inherits: [ 3 ], hint: pointer
     },
     { # 5. interface{ $deref() A[float64]; Mul(v int) }
-      abstracts: [ 3, 6 ], inherits: [ 1 ], hint: pointer
+      abstracts: [ 3, 6 ], inherits: [ 3 ], hint: pointer
     },
     { # 6. interface{ $deref() A[string]; Mul(v int) }
-      abstracts: [ 4, 6 ], inherits: [ 1 ], hint: pointer
+      abstracts: [ 4, 6 ], inherits: [ 3 ], hint: pointer
     },
     { # 7. interface{ $deref() T <any> }
       abstracts: [ 5 ], inherits: [ 1 ], hint: pointer
