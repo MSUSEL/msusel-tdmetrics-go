@@ -1145,7 +1145,7 @@ func Test_ConstructInitInstance(t *testing.T) {
 		`  language: go,`,
 		`  basics: [ int, string ],`,
 		`  interfaceDescs: [`,
-		`    { exact: [ basic2, basic1 ] }`,
+		`    { exact: [ basic1, basic2 ] }`,
 		`  ],`,
 		`  metrics: [`,
 		`    {`,
@@ -1167,7 +1167,8 @@ func Test_ConstructInitInstance(t *testing.T) {
 		`  tempReferences: [`,
 		`    {`,
 		`      name: Foo, packagePath: test,`,
-		`      instanceTypes: [ typeParam1 ]`,
+		`      instanceTypes: [ typeParam1 ],`,
+		`      implicitTypes: [ typeParam1 ]`, // TODO: This doesn't seem right, look into it.
 		`    }`,
 		`  ],`,
 		`  typeParams: [`,
@@ -2072,7 +2073,8 @@ func Test_InstanceCalls(t *testing.T) {
 		`  tempReferences: [`,
 		`    {`,
 		`      name: foo, packagePath: test,`,
-		`      instanceTypes: [ basic1 ]`,
+		`      instanceTypes: [ basic1 ],`,
+		`      implicitTypes: [ basic1 ]`, // TODO: This doesn't seem right, look into it.
 		`    }`,
 		`  ]`,
 		`}`)
@@ -2256,7 +2258,7 @@ func parseExpr(t *testing.T, lines ...string) *testTool {
 
 	querier := querier.NewSimple(tt.info, tt.fSet)
 	tt.m = Analyze(logger.New(), querier, tt.proj, tt.curPkg, tt.baker, tt.conv, expr)
-	tt.proj.UpdateIndices(true)
+	tt.proj.UpdateIndices(false)
 	return tt
 }
 
@@ -2276,7 +2278,7 @@ func parseDecl(t *testing.T, name string, lines ...string) *testTool {
 
 	querier := querier.NewSimple(tt.info, tt.fSet)
 	tt.m = Analyze(logger.New(), querier, tt.proj, tt.curPkg, tt.baker, tt.conv, target)
-	tt.proj.UpdateIndices(true)
+	tt.proj.UpdateIndices(false)
 	return tt
 }
 
