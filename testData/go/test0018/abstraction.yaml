@@ -43,7 +43,7 @@
       name: foo, package: 2, signature: 6,
       loc: 13, metrics: 2,
       typeParams: [ 1 ],
-      instances: [ 2, 3 ],
+      instances: [ 3, 2 ],
     },
     { # 3. func main.main()
       name: main, package: 2, signature: 1,
