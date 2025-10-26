@@ -81,6 +81,7 @@
       abstracts: [8, 9], inherits: [1], pin: package3
     },
     { # 11. enums.interface{ valid() bool }
+      # TODO: Why is this separate from #7?
       abstracts: [12], inherits: [7], pin: package4
     }
   ],

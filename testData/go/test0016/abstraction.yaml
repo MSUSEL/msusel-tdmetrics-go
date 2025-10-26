@@ -53,9 +53,11 @@
       abstracts: [ 3 ], inherits: [ 1 ], hint: comparable
     },
     { # 5. interface{ $equal(other any) bool; Next() T <any> }
+      # TODO: Shouldn't this implement comparable instead of any?
       abstracts: [ 3, 5 ], inherits: [ 1 ], hint: comparable
     },
     { # 6. interface{ $equal(other any) bool; Next() T <<self>> }
+      # TODO: Shouldn't this implement comparable instead of any?
       abstracts: [ 3, 6 ], inherits: [ 1 ], hint: comparable
     },
   ],

@@ -46,8 +46,16 @@ public class ObjectDecl : IObject, IDeclaration, IInitializable {
     public IReadOnlyList<ObjectInst> Instances => this.inInstances.AsReadOnly();
     private readonly List<ObjectInst> inInstances = [];
 
+    /// <summary>Optional method this object was defined inside of.</summary>
+    public IMethod? Nest { get; private set; }
+
+    /// TODO: Get ImplicitTypeParams
+
     /// <summary>True if this object is generic, false otherwise.</summary>
     public bool Generic => this.TypeParams.Count > 0;
+
+    /// <summary>True if this object is nested, false otherwise.</summary>
+    public bool Nested => this.Nest != null;
 
     /// <summary>Enumerates all the constructs that are directly part of this construct.</summary>
     public IEnumerable<IConstruct> SubConstructs {

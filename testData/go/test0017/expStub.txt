@@ -1,2 +1,23 @@
+package $builtin {
+  path: $builtin;
+
+  interface Pointer<any T> {
+    implements: any;
+    $deref() T;
+  }
+  inst Pointer<Node<int>>
+}
+
 package main {
+  path: command-line-arguments;
+
+  class Node<any T> {
+    Pointer<Node> next;
+    T value;
+  }
+  inst Node<int>
+
+  Len<any T>(Pointer<Node> start, Pointer<Node> stop) int
+  inst Len<int>(Pointer<Node<int>> start, Pointer<Node<int>> stop) int;
+  main();
 }

@@ -3,8 +3,8 @@ package $builtin {
 
   interface List<any T> {
     implements: any;
-    $len() int;
     $get(int index) T;
+    $len() int;
     $set(int index, T value);
   }
   inst List<int>

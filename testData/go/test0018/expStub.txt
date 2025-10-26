@@ -1,2 +1,20 @@
+package $builtin {
+  path: $builtin;
+}
+
 package main {
+  path: command-line-arguments;
+
+  class nested<any T, any U> {
+    T X;
+    U Y;
+  }
+  inst nested<T, int>
+  inst nested<string, int>
+
+  dat<any T>(T x, int y)
+  inst dat<string>(string x, int y);
+  foo<any T>(T z)
+  inst foo<nested<int>>(nested<int> z);
+  main();
 }

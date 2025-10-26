@@ -623,6 +623,7 @@ type Baz struct { $data int }
 | `loc`        | ⬤ | ◯ | The [location](#locations) offset. |
 | `methods`    | ⬤ | ◯ | List of [indices](#indices) to [methods](#method) that have this object as a receiver. |
 | `name`       | ◯ | ◯ | The name of the declared object. |
+| `nest`       | ⬤ | ◯ | An optional [method](#method) or [method instance](#object-instance) that this object is nested inside of. |
 | `package`    | ◯ | ◯ | The [index](#indices) of the [package](#package) this object is declared in. |
 | `typeParams` | ⬤ | ◯ | List of [indices](#indices) to [type parameters](#type-parameter) if this object is generic. |
 | `interface`  | ◯ | ◯ | The [index](#indices) to the [interface description](#interface-description) that this object matches with. |

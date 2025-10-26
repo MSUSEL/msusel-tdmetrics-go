@@ -6,52 +6,24 @@ namespace UnitTests.ConstructTests;
 
 public class ConstructTests {
 
-    [Test]
-    public void StubTest0001() => runStubTest(testPath("go", 1));
-
-    [Test]
-    public void StubTest0002() => runStubTest(testPath("go", 2));
-
-    [Test]
-    public void StubTest0003() => runStubTest(testPath("go", 3));
-
-    [Test]
-    public void StubTest0004() => runStubTest(testPath("go", 4));
-
-    [Test]
-    public void StubTest0005() => runStubTest(testPath("go", 5));
-
+    [Test] public void StubTest0001() => runStubTest(testPath("go", 1));
+    [Test] public void StubTest0002() => runStubTest(testPath("go", 2));
+    [Test] public void StubTest0003() => runStubTest(testPath("go", 3));
+    [Test] public void StubTest0004() => runStubTest(testPath("go", 4));
+    [Test] public void StubTest0005() => runStubTest(testPath("go", 5));
     // Skip /go/test0006, or make a stub test able to pick one package.
-
-    [Test]
-    public void StubTest0007() => runStubTest(testPath("go", 7));
-
-    [Test]
-    public void StubTest0008() => runStubTest(testPath("go", 8));
-
-    [Test]
-    public void StubTest0009() => runStubTest(testPath("go", 9));
-
-    [Test]
-    public void StubTest0010() => runStubTest(testPath("go", 10));
-
-    [Test]
-    public void StubTest0011() => runStubTest(testPath("go", 11));
-
-    [Test]
-    public void StubTest0012() => runStubTest(testPath("go", 12));
-
-    [Test]
-    public void StubTest0013() => runStubTest(testPath("go", 13));
-
-    [Test]
-    public void StubTest0014() => runStubTest(testPath("go", 14));
-    
-    [Test]
-    public void StubTest0015() => runStubTest(testPath("go", 15));
-    
-    [Test]
-    public void StubTest0016() => runStubTest(testPath("go", 16));
+    [Test] public void StubTest0007() => runStubTest(testPath("go", 7));
+    [Test] public void StubTest0008() => runStubTest(testPath("go", 8));
+    [Test] public void StubTest0009() => runStubTest(testPath("go", 9));
+    [Test] public void StubTest0010() => runStubTest(testPath("go", 10));
+    [Test] public void StubTest0011() => runStubTest(testPath("go", 11));
+    [Test] public void StubTest0012() => runStubTest(testPath("go", 12));
+    [Test] public void StubTest0013() => runStubTest(testPath("go", 13));
+    [Test] public void StubTest0014() => runStubTest(testPath("go", 14));
+    [Test] public void StubTest0015() => runStubTest(testPath("go", 15));
+    [Test] public void StubTest0016() => runStubTest(testPath("go", 16));
+    [Test] public void StubTest0017() => runStubTest(testPath("go", 17));
+    [Test] public void StubTest0018() => runStubTest(testPath("go", 18));
 
     #region Test Tools...
 

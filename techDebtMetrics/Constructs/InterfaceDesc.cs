@@ -32,6 +32,10 @@ public class InterfaceDesc : ITypeDesc, IInitializable {
     private readonly List<IInterface> inUses = [];
     internal void AddUses(IInterface use) => this.inUses.Add(use);
 
+    /// <summary>Optional construct that this interface is pinned to.</summary>
+    /// <remarks>Interfaces can be pinned to a construct when they have non-exported methods.</remarks>
+    public IConstruct? Pin { get; private set; } = null;
+
     /// <summary>Indicates this interface is the base type of all other types.</summary>
     public bool IsEmpty =>
         this.Abstracts.Count <= 0 && this.Approx.Count <= 0 &&
@@ -53,6 +57,7 @@ public class InterfaceDesc : ITypeDesc, IInitializable {
         obj.TryReadKeyList("approx", this.inApprox, project);
         obj.TryReadKeyList("exact", this.inExact, project);
         obj.TryReadIndexList("inherits", this.inInherits, project.InterfaceDescs);
+        this.Pin = obj.TryReadKey<IConstruct>("pin", project);
     }
 
     public override string ToString() => Journal.ToString(this);

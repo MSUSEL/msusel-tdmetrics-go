@@ -11,7 +11,7 @@ package main {
   path: command-line-arguments;
 
   interface X {
-    implements: comparable, {
+    implements: {
       String() string;
     };
     ~int;

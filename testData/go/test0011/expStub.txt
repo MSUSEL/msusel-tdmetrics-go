@@ -3,8 +3,8 @@ package $builtin {
 
   interface List<any T> {
     implements: any;
-    $len() int;
     $get(int index) T;
+    $len() int;
     $set(int index, T value);
   }
   inst List<string>
@@ -12,14 +12,14 @@ package $builtin {
 
   interface Map<comparable TKey, any TValue> {
     implements: any;
-    $len() int;
     $get(TKey key)(TValue value, bool found);
+    $len() int;
     $set(TKey key, TValue value);
   }
   inst Map<string, Pointer<int>>
 
   interface Pointer<any T> {
-    implements: comparable;
+    implements: any;
     $deref() T;
   }
   inst Pointer<int>
