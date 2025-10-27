@@ -49,13 +49,15 @@ public class ObjectDecl : IObject, IDeclaration, IInitializable {
     /// <summary>Optional method this object was defined inside of.</summary>
     public IMethod? Nest { get; private set; }
 
-    /// TODO: Get ImplicitTypeParams
+    /// <summary>The implicit type parameters from the nest method for this object.</summary>
+    public IReadOnlyList<TypeParam> ImplicitTypeParams =>
+        this.Nest is MethodDecl decl ? decl.TypeParams : [];
 
     /// <summary>True if this object is generic, false otherwise.</summary>
     public bool Generic => this.TypeParams.Count > 0;
 
     /// <summary>True if this object is nested, false otherwise.</summary>
-    public bool Nested => this.Nest != null;
+    public bool Nested => this.Nest is not null;
 
     /// <summary>Enumerates all the constructs that are directly part of this construct.</summary>
     public IEnumerable<IConstruct> SubConstructs {
@@ -79,6 +81,7 @@ public class ObjectDecl : IObject, IDeclaration, IInitializable {
         obj.TryReadIndexList("typeParams", this.inTypeParams, project.TypeParams);
         obj.TryReadIndexList("methods", this.inMethods, project.MethodDecls);
         obj.TryReadIndexList("instances", this.inInstances, project.ObjectInsts);
+        this.Nest = obj.TryReadKey<IMethod>("nest", project);
         this.Data.AddUses(this);
     }
 
@@ -86,6 +89,12 @@ public class ObjectDecl : IObject, IDeclaration, IInitializable {
 
     public void ToStub(Journal j) {
         if (j.Long) j.Write("class ");
+        if (this.Nest is not null) {
+            j.Write(this.Nest.Name);
+            if (j.Long)
+                j.Write(this.ImplicitTypeParams, "<", ">");
+            j.Write(":");
+        }
         j.Write(this.Name);
         if (j.Long) {
             j.Write(this.TypeParams, "<", ">");

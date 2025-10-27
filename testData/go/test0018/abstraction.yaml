@@ -83,7 +83,8 @@
   ],
   objects: [
     { # 1. type main.nested[T any; U any] struct{ X T; Y U }
-      name: nested, package: 2, data: 4, interface: 1, loc: 6, nest: 1,
+      name: nested, package: 2, data: 4, interface: 1, loc: 6,
+      nest: method1,
       instances: [ 1, 2, 3 ],
       typeParams: [ 2 ],
     }

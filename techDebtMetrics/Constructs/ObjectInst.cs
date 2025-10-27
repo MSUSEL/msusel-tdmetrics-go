@@ -30,6 +30,10 @@ public class ObjectInst : IObject, IInitializable {
         throw new UninitializedException(nameof(this.Data));
     private StructDesc? inResolvedData;
 
+    /// <summary>The type argument put into the implicit type parameters for the next of this instance.</summary>
+    public IReadOnlyList<ITypeDesc> ImplicitTypes => this.inImplicitTypes.AsReadOnly();
+    private readonly List<ITypeDesc> inImplicitTypes = [];
+
     /// <summary>The type arguments put into the type parameters to create this instance.</summary>
     public IReadOnlyList<ITypeDesc> InstanceTypes => this.inInstanceTypes.AsReadOnly();
     private readonly List<ITypeDesc> inInstanceTypes = [];
@@ -54,6 +58,7 @@ public class ObjectInst : IObject, IInitializable {
         this.inGeneric = obj.ReadIndex("generic", project.ObjectDecls);
         this.inInterface = obj.ReadIndex("resInterface", project.InterfaceDescs);
         this.inResolvedData = obj.ReadIndex("resData", project.StructDescs);
+        obj.ReadKeyList("implicitTypes", this.inImplicitTypes, project);
         obj.ReadKeyList("instanceTypes", this.inInstanceTypes, project);
         obj.TryReadIndexList("methods", this.inMethods, project.MethodInsts);
         this.Data.AddUses(this);
@@ -62,6 +67,9 @@ public class ObjectInst : IObject, IInitializable {
     public override string ToString() => Journal.ToString(this);
 
     public void ToStub(Journal j) {
+        if (this.Generic.Nested)
+            j.AsShort.Write(this.Generic.Nest?.Name ?? "<nest>").
+                Write(this.ImplicitTypes, "<", ">").Write(":");
         j.AsShort.Write(this.Name).Write(this.InstanceTypes, "<", ">");
         if (j.Long) j.AsShort.Write(this.Data);
     }
