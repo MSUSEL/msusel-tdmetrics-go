@@ -61,7 +61,6 @@ jobs:
         with:
           version: latest
           working-directory: ./goAbstractor
-          args: --out-format=colored-line-number
 
   javaAbstractor:
     name: Java Abstractor Lint (Linux)
