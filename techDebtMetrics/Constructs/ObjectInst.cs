@@ -58,7 +58,7 @@ public class ObjectInst : IObject, IInitializable {
         this.inGeneric = obj.ReadIndex("generic", project.ObjectDecls);
         this.inInterface = obj.ReadIndex("resInterface", project.InterfaceDescs);
         this.inResolvedData = obj.ReadIndex("resData", project.StructDescs);
-        obj.ReadKeyList("implicitTypes", this.inImplicitTypes, project);
+        obj.TryReadKeyList("implicitTypes", this.inImplicitTypes, project);
         obj.ReadKeyList("instanceTypes", this.inInstanceTypes, project);
         obj.TryReadIndexList("methods", this.inMethods, project.MethodInsts);
         this.Data.AddUses(this);
