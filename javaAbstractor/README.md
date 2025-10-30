@@ -11,7 +11,8 @@
 1. Install OpenJDK 17.0.14 for Java 17.
    1. This project was built using
       [OpenLogic](https://www.openlogic.com/openjdk-downloads).
-   2. See the [Java 17 Almanac](https://javaalmanac.io/jdk/17/)  
+   2. See the [Java 17 Almanac](https://javaalmanac.io/jdk/17/)
+      for more information.
 
 2. Install Maven.
    1. This project was built using

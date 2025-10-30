@@ -286,19 +286,19 @@ public class Analyzer {
         if (elem instanceof CtFieldRead fr) {
 
             // TODO: Implement
-
+            System.out.println("CtFieldRead: " + fr);
             return;
         }
         if (elem instanceof CtTypeAccess ta) {
             
             // TODO: Implement
-
+            System.out.println("CtTypeAccess: " + ta);
             return;
         }
         if (elem instanceof CtAssignment as) {
 
             // TODO: Implement
-
+            System.out.println("CtAssignment: " + as);
             return;
         }
 
