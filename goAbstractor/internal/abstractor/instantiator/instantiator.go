@@ -356,7 +356,7 @@ func (i *instantiator) typeDecl(decl constructs.TypeDecl,
 
 	implicitTypes, anyImplicitReplaced := i.getInstanceTypeChange(implicitTypes)
 	instanceTypes, anyInstanceReplaced := i.getInstanceTypeChange(instanceTypes)
-	if !(anyImplicitReplaced || anyInstanceReplaced) {
+	if !anyImplicitReplaced && !anyInstanceReplaced {
 		return decl
 	}
 

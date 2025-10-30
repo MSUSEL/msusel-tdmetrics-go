@@ -76,7 +76,7 @@ func (f *FactoryCore[T]) String() string {
 	buf.WriteString(" {\n")
 	i := 0
 	for c := range f.Enumerate().Seq() {
-		extra, state := ``, ``
+		var extra, state string
 		if !c.Alive() {
 			state += `X`
 		}

@@ -116,6 +116,8 @@ func (tt *testTool) full() *testTool {
 	return tt
 }
 
+var _ = (*testTool).dump // ignore dump being unused.
+
 func (tt *testTool) dump() *testTool {
 	tt.t.Helper()
 	fmt.Println()
