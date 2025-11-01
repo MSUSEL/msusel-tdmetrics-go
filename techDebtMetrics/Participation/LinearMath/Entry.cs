@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 
-namespace Participation;
+namespace Participation.LinearMath;
 
 /// <summary>An entry in the matrix that is returned while enumerating.</summary>
 /// <param name="Row">The zero based row of the entry.</param>

@@ -1,5 +1,5 @@
 ﻿using Constructs;
-using Participation;
+using Participation.LinearMath;
 
 namespace DesignRecovery;
 

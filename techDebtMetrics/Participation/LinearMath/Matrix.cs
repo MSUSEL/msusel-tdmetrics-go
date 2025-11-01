@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Participation;
+namespace Participation.LinearMath;
 
 /// <summary>A 2D sparse matrix.</summary>
 /// <remarks>

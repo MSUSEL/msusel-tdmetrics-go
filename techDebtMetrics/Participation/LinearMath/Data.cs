@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace Participation;
+namespace Participation.LinearMath;
 
 /// <summary>This is the shared parts of a sparse matrix and vector.</summary>
 public abstract class Data : IEnumerable<Entry> {
@@ -213,9 +213,9 @@ public abstract class Data : IEnumerable<Entry> {
     public override bool Equals(object? obj) {
         if (obj is null) return false;
         if (ReferenceEquals(this, obj)) return true;
-        if ((obj is not Data other) ||
-            (this.Rows != other.Rows) ||
-            (this.Columns != other.Columns)) return false;
+        if (obj is not Data other ||
+            this.Rows != other.Rows ||
+            this.Columns != other.Columns) return false;
         return this.ShortEnumerate().SequenceEqual(other.ShortEnumerate(), new Entry.Comparer(this.Epsilon));
     }
 

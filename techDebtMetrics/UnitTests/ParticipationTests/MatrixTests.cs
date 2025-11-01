@@ -1,4 +1,4 @@
-﻿using Participation;
+﻿using Participation.LinearMath;
 using System;
 
 namespace UnitTests.ParticipationTests;
