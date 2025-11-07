@@ -1,4 +1,4 @@
-﻿using Constructs.Data;
+﻿using Commons.Data.Reader;
 using Constructs.Tooling;
 using System.Collections.Generic;
 
@@ -6,7 +6,7 @@ namespace Constructs;
 
 /// <summary>A signature type description for a method, function, or function literal.</summary>
 /// <see cref="../../docs/genFeatureDef.md#signature"/>
-public class Signature : ITypeDesc, IInitializable {
+public class Signature : ITypeDesc, IInitializable<Project> {
 
     /// <summary>Gets the index of this construct in the project list.</summary>
     public int Index { get; private set; } = 0;
@@ -38,7 +38,7 @@ public class Signature : ITypeDesc, IInitializable {
         }
     }
 
-    void IInitializable.Initialize(Project project, int index, Node node) {
+    void IInitializable<Project>.Initialize(Project project, int index, Node node) {
         this.Index = index;
         Object obj = node.AsObject();
         this.Variadic = obj.TryReadBool("variadic");

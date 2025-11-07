@@ -1,4 +1,5 @@
-﻿using Constructs.Data;
+﻿using Commons.Data.Locations;
+using Commons.Data.Reader;
 using Constructs.Exceptions;
 using Constructs.Tooling;
 using System.Collections.Generic;
@@ -7,7 +8,7 @@ namespace Constructs;
 
 /// <summary>A package level value or constant declaration.</summary>
 /// <see cref="../../docs/genFeatureDef.md#value"/>
-public class Value : IDeclaration, IInitializable {
+public class Value : IDeclaration, IInitializable<Project> {
 
     /// <summary>Gets the index of this construct in the project list.</summary>
     public int Index { get; private set; } = 0;
@@ -45,14 +46,14 @@ public class Value : IDeclaration, IInitializable {
         }
     }
 
-    void IInitializable.Initialize(Project project, int index, Node node) {
+    void IInitializable<Project>.Initialize(Project project, int index, Node node) {
         this.Index = index;
         Object obj = node.AsObject();
         this.Name = obj.ReadString("name");
-        this.Location = obj.TryReadLocation("loc", project);
+        this.Location = obj.TryReadLocation(project.Locations, "loc");
         this.Constant = obj.TryReadBool("const");
         this.Metrics = obj.TryReadIndex("metrics", project.Metrics);
-        this.inType = obj.ReadKey<ITypeDesc>("type", project);
+        this.inType = obj.ReadKey<ITypeDesc>(project, "type");
         this.inPackage = obj.ReadIndex("package", project.Packages);
     }
 

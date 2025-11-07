@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using YamlDotNet.RepresentationModel;
 
-namespace Constructs.Data;
+namespace Commons.Data.Reader;
 
 /// <summary>A node containing a fixed length linear list of nodes.</summary>
 /// <param name="source">The underlying data source.</param>
-internal class Array(YamlSequenceNode source) : Node(source) {
+public class Array(YamlSequenceNode source) : Node(source) {
     private readonly YamlSequenceNode source = source;
 
     /// <summary>The number of nodes in this node.</summary>
@@ -32,13 +32,14 @@ internal class Array(YamlSequenceNode source) : Node(source) {
 
     /// <summary>Initializes the given preallocated list with the nodes in this node.</summary>
     /// <typeparam name="T">The type to call Initialize on.</typeparam>
-    /// <param name="project">The project to help initialize with.</param>
+    /// <typeparam name="D">The type of data to pass along while initializing.</typeparam>
+    /// <param name="data">The data to to pass along while initializing.</param>
     /// <param name="list">The list of items to initialize.</param>
-    public void InitializeList<T>(Project project, IReadOnlyList<T> list)
-        where T : IInitializable {
+    public void InitializeList<T, D>(D data, IReadOnlyList<T> list)
+        where T : IInitializable<D> {
         for (int i = 0; i < this.Count; ++i) {
             try {
-                list[i].Initialize(project, i, this[i]);
+                list[i].Initialize(data, i, this[i]);
             } catch (Exception ex) {
                 throw new Exception("Failed to initialize #" + i + " in " + typeof(T).Name + " list:", ex);
             }
@@ -52,10 +53,11 @@ internal class Array(YamlSequenceNode source) : Node(source) {
     public void AsIndexList<T>(List<T> dest, IReadOnlyList<T> source) =>
         dest.AddRange(this.Items.Select(item => item.AsIndex(source)));
 
-    /// <summary>Reads this node as a list of keys into the given project.</summary>
+    /// <summary>Reads this node as a list of keys into the lookup.</summary>
+    /// <see cref="docs/genFeatureDef.md#keys"/>
     /// <typeparam name="T">The type of items to read.</typeparam>
-    /// <param name="dest">The list to add items read via keys from the project to.</param>
-    /// <param name="project">The project to get information from.</param>
-    public void AsKeyList<T>(List<T> dest, Project project) =>
-        dest.AddRange(this.Items.Select(item => item.AsKey<T>(project)));
+    /// <param name="res">The key resolver to lookup the value with the key.</param>
+    /// <param name="dest">The list to add items read via keys from the lookup to.</param>
+    public void AsKeyList<T>(IKeyResolver res, List<T> dest) =>
+        dest.AddRange(this.Items.Select(item => item.AsKey<T>(res)));
 }

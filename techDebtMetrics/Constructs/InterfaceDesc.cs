@@ -1,4 +1,4 @@
-﻿using Constructs.Data;
+﻿using Commons.Data.Reader;
 using Constructs.Tooling;
 using System.Collections.Generic;
 
@@ -6,7 +6,7 @@ namespace Constructs;
 
 /// <summary>An interface type description.</summary>
 /// <see cref="../../docs/genFeatureDef.md#interface-description"/>
-public class InterfaceDesc : ITypeDesc, IInitializable {
+public class InterfaceDesc : ITypeDesc, IInitializable<Project> {
 
     /// <summary>Gets the index of this construct in the project list.</summary>
     public int Index { get; private set; } = 0;
@@ -50,14 +50,14 @@ public class InterfaceDesc : ITypeDesc, IInitializable {
         }
     }
 
-    void IInitializable.Initialize(Project project, int index, Node node) {
+    void IInitializable<Project>.Initialize(Project project, int index, Node node) {
         this.Index = index;
         Object obj = node.AsObject();
         obj.TryReadIndexList("abstracts", this.inAbstracts, project.Abstracts);
-        obj.TryReadKeyList("approx", this.inApprox, project);
-        obj.TryReadKeyList("exact", this.inExact, project);
+        obj.TryReadKeyList(project, "approx", this.inApprox);
+        obj.TryReadKeyList(project, "exact", this.inExact);
         obj.TryReadIndexList("inherits", this.inInherits, project.InterfaceDescs);
-        this.Pin = obj.TryReadKey<IConstruct>("pin", project);
+        this.Pin = obj.TryReadKey<IConstruct>(project, "pin");
     }
 
     public override string ToString() => Journal.ToString(this);

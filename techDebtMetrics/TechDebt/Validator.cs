@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 
 namespace TechDebt;
 
@@ -10,29 +11,41 @@ public class Validator {
         Problem("Mathod's participation sum of " + Sum + " is invalid for " + Method);
 
     public record WrongParticipationMethod(Method Method, Participation Participation) :
-        Problem("Participation in the method " + Method + " was for method " + Participation.Method);
+        Problem("Participation in " + Method + " was for " + Participation.Method);
 
     public record WrongParticipationClass(Class Class, Participation Participation) :
-        Problem("Participation in the class " + Class + " was for class " + Participation.Class);
+        Problem("Participation in " + Class + " was for " + Participation.Class);
 
     public record ParticipationValue(Participation Participation) :
         Problem("Participation between " + Participation.Method + " and " + Participation.Class + " has the invalid value of " + Participation.Value);
-    
+
     public record MethodMissingFromProject(Participation Participation) :
-        Problem("Participation's method " + Participation.Method + " is not in the project");
+        Problem("Participation's " + Participation.Method + " is not in the project");
 
     public record ClassMissingFromProject(Participation Participation) :
-        Problem("Participation's class " + Participation.Class + " is not in the project");
+        Problem("Participation's " + Participation.Class + " is not in the project");
 
     public record MethodMissingParticipation(Participation Participation) :
-        Problem("Participation's method " + Participation.Method + " does not contain this participation");
+        Problem("Participation's " + Participation.Method + " does not contain this participation");
 
     public record ClassMissingParticipation(Participation Participation) :
-        Problem("Participation's class " + Participation.Class + " does not contain this participation");
+        Problem("Participation's " + Participation.Class + " does not contain this participation");
 
     public record DuplicateParticipation(Participation Participation1, Participation Participation2) :
         Problem("Multiple participations between " + Participation1.Method + " and " + Participation1.Class);
 
+    public record MethodReadNotInProject(Method Method, Class Read) :
+        Problem("The class read by " + Method + ", " + Read + ", is not in the project");
+
+    public record MethodWriteNotInProject(Method Method, Class Write) :
+        Problem("The class written by " + Method + ", " + Write + ", is not in the project");
+
+    public record MethodInvokeNotInProject(Method Method, Method Invoke) :
+        Problem("The method invoked by " + Method + ", " + Invoke + ", is not in the project");
+
+    /// <summary>This will validate the project to ensure all the data is setup correctly.</summary>
+    /// <param name="project">The project to validate.</param>
+    /// <returns>The set of problems that were found, or empty if valid.</returns>
     public static Problem[] Validate(Project project) => new Validator(project).validate();
 
     private readonly Project project;
@@ -41,8 +54,8 @@ public class Validator {
     private Validator(Project project) => this.project = project;
 
     private Problem[] validate() {
-        foreach (Method m in this.project.Methods) this.validate(m);
-        foreach (Class c in this.project.Classes) this.validate(c);
+        this.project.Methods.ForAll(this.validate);
+        this.project.Classes.ForAll(this.validate);
         return [.. this.problems];
     }
 
@@ -71,6 +84,10 @@ public class Validator {
         }
         if (!Math.IsOne(sum))
             this.log(new MethodParticipationSum(m, sum));
+
+        m.Reads.WhereNot(this.project.Classes.Contains).ForAll(r => this.log(new MethodReadNotInProject(m, r)));
+        m.Writes.WhereNot(this.project.Classes.Contains).ForAll(w => this.log(new MethodWriteNotInProject(m, w)));
+        m.Invokes.WhereNot(this.project.Methods.Contains).ForAll(i => this.log(new MethodInvokeNotInProject(m, i)));
     }
 
     private void validate(Class c) {

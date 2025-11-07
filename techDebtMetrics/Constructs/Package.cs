@@ -1,4 +1,4 @@
-﻿using Constructs.Data;
+﻿using Commons.Data.Reader;
 using Constructs.Tooling;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,7 +10,7 @@ namespace Constructs;
 /// A package may have imports, static methods, and global variables too.
 /// </summary>
 /// <see cref="../../docs/genFeatureDef.md#package"/>
-public class Package : IConstruct, IInitializable {
+public class Package : IConstruct, IInitializable<Project> {
 
     /// <summary>Gets the index of this construct in the project list.</summary>
     public int Index { get; private set; } = 0;
@@ -35,7 +35,7 @@ public class Package : IConstruct, IInitializable {
 
     /// <summary>The list of methods declared in this package and not part of an object.</summary>
     public IReadOnlyList<MethodDecl> StaticMethods =>
-        this.Methods.Where(m => m.Receiver is null).ToList();
+        [.. this.Methods.Where(m => m.Receiver is null)];
 
     /// <summary>The list of objects declared in this package.</summary>
     public IReadOnlyList<ObjectDecl> Objects => this.inObjects.AsReadOnly();
@@ -57,7 +57,7 @@ public class Package : IConstruct, IInitializable {
         }
     }
 
-    void IInitializable.Initialize(Project project, int index, Node node) {
+    void IInitializable<Project>.Initialize(Project project, int index, Node node) {
         this.Index = index;
         Object obj = node.AsObject();
         this.Path = obj.ReadString("path");

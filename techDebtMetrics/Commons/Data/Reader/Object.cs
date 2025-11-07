@@ -1,14 +1,14 @@
-﻿using Constructs.Exceptions;
-using Constructs.Tooling;
+﻿using Commons.Data.Locations;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using YamlDotNet.RepresentationModel;
 
-namespace Constructs.Data;
+namespace Commons.Data.Reader;
 
 /// <summary>An object with key/value pairs to read data from.</summary>
 /// <param name="source">The underlying data source.</param>
-internal class Object(YamlMappingNode source) : Node(source) {
+public class Object(YamlMappingNode source) : Node(source) {
     private readonly YamlMappingNode source = source;
 
     /// <summary>The number of key/value pairs in this node.</summary>
@@ -33,12 +33,13 @@ internal class Object(YamlMappingNode source) : Node(source) {
 
     /// <summary>Initializes the given preallocated list with the node at the given name.</summary>
     /// <typeparam name="T">The type to call Initialize on.</typeparam>
-    /// <param name="project">The project to help initialize with.</param>
+    /// <typeparam name="D">The type of data to pass along while initializing.</typeparam>
+    /// <param name="data">The data to to pass along while initializing.</param>
     /// <param name="name">The name for the node to initalize with.</param>
     /// <param name="list">The list of items to initialize.</param>
-    public void InitializeList<T>(Project project, string name, List<T> list)
-        where T : IInitializable =>
-        this.TryReadNode(name)?.AsArray().InitializeList<T>(project, list);
+    public void InitializeList<T, D>(D data, string name, List<T> list)
+        where T : IInitializable<D> =>
+        this.TryReadNode(name)?.AsArray().InitializeList(data, list);
 
     #region Must Reads
 
@@ -48,7 +49,7 @@ internal class Object(YamlMappingNode source) : Node(source) {
     public Node ReadNode(string name) =>
         this.source.Children.TryGetValue(new YamlScalarNode(name), out YamlNode? value) ?
             new Node(value) :
-            throw new MissingDataException("expected \"" + name + "\" in object at " + this.source.Start.ToString());
+            throw new Exception("Expected \"" + name + "\" in object at " + this.source.Start.ToString());
 
     /// <summary>Gets the node with the given name as a string.</summary>
     /// <param name="name">The name of the node to get the string from.</param>
@@ -83,28 +84,28 @@ internal class Object(YamlMappingNode source) : Node(source) {
         this.ReadNode(name).AsArray().AsIndexList(dest, source);
 
     /// <summary>Gets the item with the given key from the node with the given name.</summary>
-    /// <typeparam name="T">The type of item to get from the project.</typeparam>
+    /// <typeparam name="T">The type of item to get from the lookup.</typeparam>
+    /// <param name="res">The key resolver to lookup the value with the key.</param>
     /// <param name="name">The name of the node to get the key from.</param>
-    /// <param name="project">The project to read the given key from.</param>
     /// <returns>The value read from the key in the node with the given name.</returns>
-    public T ReadKey<T>(string name, Project project)
+    public T ReadKey<T>(IKeyResolver res, string name)
         where T : class =>
-        this.ReadNode(name).AsKey<T>(project);
+        this.ReadNode(name).AsKey<T>(res);
 
     /// <summary>Gets a list of values via an array of keys in the node with the given name.</summary>
     /// <typeparam name="T">The type of values to get.</typeparam>
+    /// <param name="res">The key resolver to lookup the value with the key.</param>
     /// <param name="name">The name of the node containing a list of keys.</param>
     /// <param name="dest">The list to write all the read values into.</param>
-    /// <param name="project">The project to read the values from with the keys.</param>
-    public void ReadKeyList<T>(string name, List<T> dest, Project project) =>
-        this.ReadNode(name).AsArray().AsKeyList(dest, project);
-
+    public void ReadKeyList<T>(IKeyResolver res, string name, List<T> dest) =>
+        this.ReadNode(name).AsArray().AsKeyList(res, dest);
+    
     /// <summary>Gets path and line number location from the node with the given name.</summary>
+    /// <param name="locs">The locations to read the location from.</param>
     /// <param name="name">The name of the node to get the location from.</param>
-    /// <param name="project">The project to read the location from.</param>
     /// <returns>The location read from the project with the node at the given name.</returns>
-    public Location ReadLocation(string name, Project project) =>
-        this.ReadNode(name).AsLocation(project);
+    public Location ReadLocation(Locations.Locations locs, string name) =>
+        this.ReadNode(name).AsLocation(locs);
 
     #endregion
     #region Optional Reads
@@ -155,28 +156,28 @@ internal class Object(YamlMappingNode source) : Node(source) {
         this.TryReadNode(name)?.AsArray()?.AsIndexList(dest, source);
 
     /// <summary>Tries to get the item with the given key from the node with the given name.</summary>
-    /// <typeparam name="T">The type of item to get from the project.</typeparam>
+    /// <typeparam name="T">The type of item to get from the lookup.</typeparam>
+    /// <param name="res">The key resolver to lookup the value with the key.</param>
     /// <param name="name">The name of the node to get the key from.</param>
-    /// <param name="project">The project to read the given key from.</param>
     /// <returns>The value read from the key in the node with the given name or null if it didn't exist.</returns>
-    public T? TryReadKey<T>(string name, Project project)
+    public T? TryReadKey<T>(IKeyResolver res, string name)
         where T : class =>
-        this.TryReadNode(name)?.AsKey<T>(project);
+        this.TryReadNode(name)?.AsKey<T>(res);
 
     /// <summary>Tries to get a list of values via an array of keys in the node with the given name.</summary>
     /// <typeparam name="T">The type of values to get.</typeparam>
+    /// <param name="res">The key resolver to lookup the value with the key.</param>
     /// <param name="name">The name of the node containing a list of keys.</param>
     /// <param name="dest">The list to write all the read values into.</param>
-    /// <param name="project">The project to read the values from with the keys.</param>
-    public void TryReadKeyList<T>(string name, List<T> dest, Project project) =>
-        this.TryReadNode(name)?.AsArray()?.AsKeyList(dest, project);
-
+    public void TryReadKeyList<T>(IKeyResolver res, string name, List<T> dest) =>
+        this.TryReadNode(name)?.AsArray()?.AsKeyList(res, dest);
+    
     /// <summary>Tries to get path and line number location from the node with the given name.</summary>
     /// <param name="name">The name of the node to get the location from.</param>
-    /// <param name="project">The project to read the location from.</param>
+    /// <param name="locs">The locations to read the location from.</param>
     /// <returns>The location read from the project with the node at the given name or the unknown location if it didn't exist..</returns>
-    public Location TryReadLocation(string name, Project project) =>
-        this.TryReadNode(name)?.AsLocation(project) ?? Locations.Unknown;
+    public Location TryReadLocation(Locations.Locations locs, string name) =>
+        this.TryReadNode(name)?.AsLocation(locs) ?? Locations.Locations.Unknown;
 
     #endregion
 }

@@ -1,4 +1,5 @@
-﻿using Constructs.Data;
+﻿using Commons.Data.Locations;
+using Commons.Data.Reader;
 using Constructs.Tooling;
 using System.Collections.Generic;
 
@@ -14,7 +15,7 @@ namespace Constructs;
 /// e.g. `var A, B = func() (int, int) { return 13, 45 }()`
 /// </remarks>
 /// <see cref="../../docs/genFeatureDef.md#metrics"/>
-public class Metrics : IConstruct, IInitializable {
+public class Metrics : IConstruct, IInitializable<Project> {
 
     /// <summary>Gets the index of this construct in the project list.</summary>
     public int Index { get; private set; } = 0;
@@ -55,19 +56,19 @@ public class Metrics : IConstruct, IInitializable {
     /// <summary>Enumerates all the constructs that are directly part of this construct.</summary>
     public IEnumerable<IConstruct> SubConstructs => [];
 
-    void IInitializable.Initialize(Project project, int index, Node node) {
+    void IInitializable<Project>.Initialize(Project project, int index, Node node) {
         this.Index = index;
         Object obj = node.AsObject();
-        this.Location = obj.ReadLocation("loc", project);
+        this.Location = obj.ReadLocation(project.Locations, "loc");
         this.CodeCount = obj.TryReadInt("codeCount");
         this.Complexity = obj.TryReadInt("complexity");
         this.Indents = obj.TryReadInt("indents");
         this.LineCount = obj.TryReadInt("lineCounr");
         this.Getter = obj.TryReadBool("getter");
         this.Setter = obj.TryReadBool("setter");
-        obj.TryReadKeyList("invokes", this.inInvokess, project);
-        obj.TryReadKeyList("reads", this.inReads, project);
-        obj.TryReadKeyList("writes", this.inWrites, project);
+        obj.TryReadKeyList(project, "invokes", this.inInvokess);
+        obj.TryReadKeyList(project, "reads", this.inReads);
+        obj.TryReadKeyList(project, "writes", this.inWrites);
     }
 
     public override string ToString() => Journal.ToString(this);

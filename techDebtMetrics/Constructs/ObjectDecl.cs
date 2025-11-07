@@ -1,4 +1,5 @@
-﻿using Constructs.Data;
+﻿using Commons.Data.Locations;
+using Commons.Data.Reader;
 using Constructs.Exceptions;
 using Constructs.Extensions;
 using Constructs.Tooling;
@@ -8,7 +9,7 @@ namespace Constructs;
 
 /// <summary>A declaration of an interface.</summary>
 /// <see cref="../../docs/genFeatureDef.md#object"/>
-public class ObjectDecl : IObject, IDeclaration, IInitializable {
+public class ObjectDecl : IObject, IDeclaration, IInitializable<Project> {
 
     /// <summary>Gets the index of this construct in the project list.</summary>
     public int Index { get; private set; } = 0;
@@ -70,18 +71,18 @@ public class ObjectDecl : IObject, IDeclaration, IInitializable {
         }
     }
 
-    void IInitializable.Initialize(Project project, int index, Node node) {
+    void IInitializable<Project>.Initialize(Project project, int index, Node node) {
         this.Index = index;
         Object obj = node.AsObject();
         this.Name = obj.ReadString("name");
-        this.Location = obj.TryReadLocation("loc", project);
+        this.Location = obj.TryReadLocation(project.Locations, "loc");
         this.inInterface = obj.ReadIndex("interface", project.InterfaceDescs);
         this.inData = obj.ReadIndex("data", project.StructDescs);
         this.inPackage = obj.ReadIndex("package", project.Packages);
         obj.TryReadIndexList("typeParams", this.inTypeParams, project.TypeParams);
         obj.TryReadIndexList("methods", this.inMethods, project.MethodDecls);
         obj.TryReadIndexList("instances", this.inInstances, project.ObjectInsts);
-        this.Nest = obj.TryReadKey<IMethod>("nest", project);
+        this.Nest = obj.TryReadKey<IMethod>(project, "nest");
         this.Data.AddUses(this);
     }
 

@@ -1,4 +1,4 @@
-using Constructs.Data;
+using Commons.Data.Reader;
 using Constructs.Tooling;
 using System.Collections.Generic;
 
@@ -9,7 +9,7 @@ namespace Constructs;
 /// These may be unique to a language.
 /// </summary>
 /// <see cref="../../docs/genFeatureDef.md#basic"/>
-public class Basic : ITypeDesc, IInitializable {
+public class Basic : ITypeDesc, IInitializable<Project> {
 
     /// <summary>Gets the index of this construct in the project list.</summary>
     public int Index { get; private set; } = 0;
@@ -20,7 +20,7 @@ public class Basic : ITypeDesc, IInitializable {
     /// <summary>Enumerates all the constructs that are directly part of this construct.</summary>
     public IEnumerable<IConstruct> SubConstructs => [];
 
-    void IInitializable.Initialize(Project project, int index, Node node) {
+    void IInitializable<Project>.Initialize(Project project, int index, Node node) {
         this.Index = index;
         this.Name = node.IsScalar ? node.AsString() : node.AsObject().ReadString("name");
     }

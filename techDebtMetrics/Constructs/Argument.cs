@@ -1,4 +1,4 @@
-﻿using Constructs.Data;
+﻿using Commons.Data.Reader;
 using Constructs.Exceptions;
 using Constructs.Tooling;
 using System.Collections.Generic;
@@ -7,7 +7,7 @@ namespace Constructs;
 
 /// <summary>An argument is a parameter or result value in a signature.</summary>
 /// <see cref="../../docs/genFeatureDef.md#argument"/>
-public class Argument : IConstruct, IInitializable {
+public class Argument : IConstruct, IInitializable<Project> {
 
     /// <summary>Gets the index of this construct in the project list.</summary>
     public int Index { get; private set; } = 0;
@@ -23,11 +23,11 @@ public class Argument : IConstruct, IInitializable {
     /// <summary>Enumerates all the constructs that are directly part of this construct.</summary>
     public IEnumerable<IConstruct> SubConstructs => [this.Type];
 
-    void IInitializable.Initialize(Project project, int index, Node node) {
+    void IInitializable<Project>.Initialize(Project project, int index, Node node) {
         this.Index = index;
         Object obj = node.AsObject();
         this.Name = obj.TryReadString("name");
-        this.inType = obj.ReadKey<ITypeDesc>("type", project);
+        this.inType = obj.ReadKey<ITypeDesc>(project, "type");
     }
 
     public override string ToString() => Journal.ToString(this);

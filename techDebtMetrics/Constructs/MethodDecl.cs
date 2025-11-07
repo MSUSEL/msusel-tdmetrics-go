@@ -1,4 +1,5 @@
-﻿using Constructs.Data;
+﻿using Commons.Data.Locations;
+using Commons.Data.Reader;
 using Constructs.Exceptions;
 using Constructs.Extensions;
 using Constructs.Tooling;
@@ -8,7 +9,7 @@ namespace Constructs;
 
 /// <summary>A declaration of a method or function.</summary>
 /// <see cref="../../docs/genFeatureDef.md#method"/>
-public class MethodDecl : IMethod, IDeclaration, IInitializable {
+public class MethodDecl : IMethod, IDeclaration, IInitializable<Project> {
 
     /// <summary>Gets the index of this construct in the project list.</summary>
     public int Index { get; private set; } = 0;
@@ -59,11 +60,11 @@ public class MethodDecl : IMethod, IDeclaration, IInitializable {
         }
     }
 
-    void IInitializable.Initialize(Project project, int index, Node node) {
+    void IInitializable<Project>.Initialize(Project project, int index, Node node) {
         this.Index = index;
         Object obj = node.AsObject();
         this.Name = obj.ReadString("name");
-        this.Location = obj.TryReadLocation("loc", project);
+        this.Location = obj.TryReadLocation(project.Locations, "loc");
         this.inSignature = obj.ReadIndex("signature", project.Signatures);
         this.Metrics = obj.TryReadIndex("metrics", project.Metrics);
         this.inPackage = obj.ReadIndex("package", project.Packages);

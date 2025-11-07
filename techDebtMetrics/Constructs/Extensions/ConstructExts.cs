@@ -13,6 +13,7 @@ static public class ConstructExts {
     /// This will not output the given construct even if it was a type.
     /// </remarks>
     /// <param name="con">The construct to enumerate the types from.</param>
+    /// <param name="show">Shows the types that have been reached.</param>
     /// <returns>The enumerator of all the reachable types.</returns>
     public static IEnumerable<ITypeDesc> AllSubTypeDecs(this IConstruct con, bool show = false) {
         HashSet<IConstruct> touched = [];
@@ -30,6 +31,8 @@ static public class ConstructExts {
             string indent = indents.Pop();
             if (!touched.Add(c)) continue;
 
+            if (show) Console.WriteLine(indent, c.ToString());
+
             if (c is ITypeDesc td) yield return td;
 
             foreach (IConstruct sub in c.SubConstructs) {
@@ -44,6 +47,7 @@ static public class ConstructExts {
     /// i.e. not generic and not containing any generic types.
     /// </summary>
     /// <param name="con">The construct to determine if concrete.</param>
+    /// <param name="show">Shows the types that have been reached.</param>
     /// <returns>True if concrete, false if genereic or containing a generic type.</returns>
     public static bool IsConcrete(this IConstruct con, bool show = false) =>
         !con.AllSubTypeDecs(show).OfType<TypeParam>().Any();

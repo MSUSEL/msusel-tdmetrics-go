@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Constructs.Tooling;
+namespace Commons.Data.Locations;
 
 /// <summary>The location in the source code that some construct came from.</summary>
 /// <param name="LineNo">The line number in the file the construct came from.</param>

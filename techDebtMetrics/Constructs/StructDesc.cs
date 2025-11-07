@@ -1,4 +1,4 @@
-﻿using Constructs.Data;
+﻿using Commons.Data.Reader;
 using Constructs.Tooling;
 using System.Collections.Generic;
 
@@ -6,7 +6,7 @@ namespace Constructs;
 
 /// <summary>A structure type description.</summary>
 /// <see cref="../../docs/genFeatureDef.md#structure-description"/>
-public class StructDesc : ITypeDesc, IInitializable {
+public class StructDesc : ITypeDesc, IInitializable<Project> {
 
     /// <summary>Gets the index of this construct in the project list.</summary>
     public int Index { get; private set; } = 0;
@@ -26,7 +26,7 @@ public class StructDesc : ITypeDesc, IInitializable {
     /// <summary>Enumerates all the constructs that are directly part of this construct.</summary>
     public IEnumerable<IConstruct> SubConstructs => this.Fields;
 
-    void IInitializable.Initialize(Project project, int index, Node node) {
+    void IInitializable<Project>.Initialize(Project project, int index, Node node) {
         this.Index = index;
         Object obj = node.AsObject();
         obj.TryReadIndexList("fields", this.inFields, project.Fields);

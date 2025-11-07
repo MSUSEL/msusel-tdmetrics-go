@@ -1,4 +1,4 @@
-﻿using Constructs.Data;
+﻿using Commons.Data.Reader;
 using Constructs.Exceptions;
 using Constructs.Tooling;
 using System.Collections.Generic;
@@ -7,7 +7,7 @@ namespace Constructs;
 
 /// <summary>A field is named types in a structure.</summary>
 /// <see cref="../../docs/genFeatureDef.md#field"/>
-public class Field : IConstruct, IInitializable {
+public class Field : IConstruct, IInitializable<Project> {
 
     /// <summary>Gets the index of this construct in the project list.</summary>
     public int Index { get; private set; } = 0;
@@ -23,11 +23,11 @@ public class Field : IConstruct, IInitializable {
     /// <summary>Enumerates all the constructs that are directly part of this construct.</summary>
     public IEnumerable<IConstruct> SubConstructs => [this.Type];
 
-    void IInitializable.Initialize(Project project, int index, Node node) {
+    void IInitializable<Project>.Initialize(Project project, int index, Node node) {
         this.Index = index;
         Object obj = node.AsObject();
         this.Name = obj.ReadString("name");
-        this.inType = obj.ReadKey<ITypeDesc>("type", project);
+        this.inType = obj.ReadKey<ITypeDesc>(project, "type");
     }
 
     public override string ToString() => Journal.ToString(this);

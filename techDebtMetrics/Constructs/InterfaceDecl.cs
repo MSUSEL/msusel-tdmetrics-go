@@ -1,4 +1,5 @@
-﻿using Constructs.Data;
+﻿using Commons.Data.Locations;
+using Commons.Data.Reader;
 using Constructs.Exceptions;
 using Constructs.Extensions;
 using Constructs.Tooling;
@@ -8,7 +9,7 @@ namespace Constructs;
 
 /// <summary>A declaration of an interface.</summary>
 /// <see cref="../../docs/genFeatureDef.md#interface-declaration"/>
-public class InterfaceDecl : IInterface, IDeclaration, IInitializable {
+public class InterfaceDecl : IInterface, IDeclaration, IInitializable<Project> {
 
     /// <summary>Gets the index of this construct in the project list.</summary>
     public int Index { get; private set; } = 0;
@@ -49,11 +50,11 @@ public class InterfaceDecl : IInterface, IDeclaration, IInitializable {
         }
     }
 
-    void IInitializable.Initialize(Project project, int index, Node node) {
+    void IInitializable<Project>.Initialize(Project project, int index, Node node) {
         this.Index = index;
         Object obj = node.AsObject();
         this.Name = obj.ReadString("name");
-        this.Location = obj.TryReadLocation("loc", project);
+        this.Location = obj.TryReadLocation(project.Locations, "loc");
         this.inInterface = obj.ReadIndex("interface", project.InterfaceDescs);
         this.inPackage = obj.ReadIndex("package", project.Packages);
         obj.TryReadIndexList("typeParams", this.inTypeParams, project.TypeParams);

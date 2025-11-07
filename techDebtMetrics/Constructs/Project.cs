@@ -1,5 +1,7 @@
-﻿using Constructs.Data;
+﻿using Commons.Data.Locations;
+using Commons.Data.Reader;
 using Constructs.Tooling;
+using System;
 using System.Collections.Generic;
 using System.IO;
 
@@ -7,7 +9,7 @@ namespace Constructs;
 
 /// <summary>A project represents all the packages to completely describe a program or a library.</summary>
 /// <see cref="../../docs/genFeatureDef.md#project"/>
-public class Project : IConstruct {
+public class Project : IConstruct, IKeyResolver {
 
     /// <summary>Returns 1 since there is only one project.</summary>
     public int Index => 1;
@@ -131,9 +133,9 @@ public class Project : IConstruct {
     /// <summary>Creates a new project.</summary>
     /// <param name="root">The YAML root node to load.</param>
     internal Project(Node root) {
-        Object obj = root.AsObject();
+        Commons.Data.Reader.Object obj = root.AsObject();
         this.Language = obj.ReadString("language");
-        this.Locations = new(obj.TryReadNode("locs"));
+        this.Locations = Locations.Read(obj.TryReadNode("locs"));
 
         obj.PreallocateList("abstracts", this.inAbstracts);
         obj.PreallocateList("arguments", this.inArguments);
@@ -178,4 +180,45 @@ public class Project : IConstruct {
 
     public void ToStub(Journal j) =>
         j.AsLong.Write(this.Packages, separator: "\n\n");
+
+    /// <summary>Reads the given index from the given source as part of reading the given key.</summary>
+    /// <typeparam name="T">The type of the list to read from.</typeparam>
+    /// <param name="key">The key that is being processed.</param>
+    /// <param name="index">The index from the key used to read a value from the given list.</param>
+    /// <param name="source">The list get an item at the given index from.</param>
+    /// <returns>The item from the given list at the given index.</returns>
+    static private T readKeyIndex<T>(string key, int index, IReadOnlyList<T> source) {
+        if (index < 0 || index >= source.Count)
+            throw new Exception("Key " + key + " out of range [0.." + source.Count + "): " + index);
+        return source[index];
+    }
+
+    /// <summary>Reads a single key from the given project.</summary>
+    /// <see cref="docs/genFeatureDef.md#keys"/>
+    /// <param name="key">The key of the value to read.</param>
+    /// <param name="project">The project to read a key from.</param>
+    /// <returns>The read key from the project.</returns>
+    public object FindData(string name, int index) {
+        return name switch {
+            "abstract" => readKeyIndex(name, index, this.Abstracts),
+            "argument" => readKeyIndex(name, index, this.Arguments),
+            "basic" => readKeyIndex(name, index, this.Basics),
+            "field" => readKeyIndex(name, index, this.Fields),
+            "interfaceDecl" => readKeyIndex(name, index, this.InterfaceDecls),
+            "interfaceDesc" => readKeyIndex(name, index, this.InterfaceDescs),
+            "interfaceInst" => readKeyIndex(name, index, this.InterfaceInsts),
+            "method" => readKeyIndex(name, index, this.MethodDecls),
+            "methodInst" => readKeyIndex(name, index, this.MethodInsts),
+            "metrics" => readKeyIndex(name, index, this.Metrics),
+            "object" => readKeyIndex(name, index, this.ObjectDecls),
+            "objectInst" => readKeyIndex(name, index, this.ObjectInsts),
+            "package" => readKeyIndex(name, index, this.Packages),
+            "selection" => readKeyIndex(name, index, this.Selections),
+            "signature" => readKeyIndex(name, index, this.Signatures),
+            "structDesc" => readKeyIndex(name, index, this.StructDescs),
+            "typeParam" => readKeyIndex(name, index, this.TypeParams),
+            "value" => readKeyIndex(name, index, this.Values),
+            _ => throw new InvalidDataException(name)
+        };
+    }
 }

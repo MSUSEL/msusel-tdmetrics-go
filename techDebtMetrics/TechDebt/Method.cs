@@ -1,5 +1,6 @@
 ﻿using System;
 using SCG = System.Collections.Generic;
+using System.Linq;
 
 namespace TechDebt;
 
@@ -12,6 +13,17 @@ public class Method(Source source) : IComparable<Method> {
     /// <summary>The set of class partitations and fuzzy estimates.</summary>
     public readonly SCG.SortedSet<Participation> Participation = [];
 
+    public bool TryFind(Class c, out Participation? p) {
+        foreach (Participation par in this.Participation) {
+            if (par.Class == c) {
+                p = par;
+                return true;
+            }
+        }
+        p = null;
+        return false;
+    }
+
     /// <summary>The McCabe Cyclomatic Complexity for this method.</summary>
     public double CyclomaticComplexity;
 
@@ -20,8 +32,6 @@ public class Method(Source source) : IComparable<Method> {
     public readonly SCG.SortedSet<Class> Writes = [];
 
     public readonly SCG.SortedSet<Method> Invokes = [];
-
-    // TODO: Add normalization of participation values.
 
     public override string ToString() => "method " + this.Source.ToString();
 

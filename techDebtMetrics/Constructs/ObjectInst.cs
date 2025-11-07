@@ -1,4 +1,4 @@
-﻿using Constructs.Data;
+﻿using Commons.Data.Reader;
 using Constructs.Exceptions;
 using Constructs.Tooling;
 using System.Collections.Generic;
@@ -7,7 +7,7 @@ namespace Constructs;
 
 /// <summary>An object instance of a generic object.</summary>
 /// <see cref="../../docs/genFeatureDef.md#object-instance"/>
-public class ObjectInst : IObject, IInitializable {
+public class ObjectInst : IObject, IInitializable<Project> {
 
     /// <summary>Gets the index of this construct in the project list.</summary>
     public int Index { get; private set; } = 0;
@@ -52,14 +52,14 @@ public class ObjectInst : IObject, IInitializable {
         }
     }
 
-    void IInitializable.Initialize(Project project, int index, Node node) {
+    void IInitializable<Project>.Initialize(Project project, int index, Node node) {
         this.Index = index;
         Object obj = node.AsObject();
         this.inGeneric = obj.ReadIndex("generic", project.ObjectDecls);
         this.inInterface = obj.ReadIndex("resInterface", project.InterfaceDescs);
         this.inResolvedData = obj.ReadIndex("resData", project.StructDescs);
-        obj.TryReadKeyList("implicitTypes", this.inImplicitTypes, project);
-        obj.ReadKeyList("instanceTypes", this.inInstanceTypes, project);
+        obj.TryReadKeyList(project, "implicitTypes", this.inImplicitTypes);
+        obj.ReadKeyList(project, "instanceTypes", this.inInstanceTypes);
         obj.TryReadIndexList("methods", this.inMethods, project.MethodInsts);
         this.Data.AddUses(this);
     }

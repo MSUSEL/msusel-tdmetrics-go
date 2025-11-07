@@ -1,4 +1,4 @@
-﻿using Constructs.Data;
+﻿using Commons.Data.Reader;
 using Constructs.Exceptions;
 using Constructs.Tooling;
 using System.Collections.Generic;
@@ -7,7 +7,7 @@ namespace Constructs;
 
 /// <summary>An interface instance of a generic interface.</summary>
 /// <see cref="../../docs/genFeatureDef.md#interface-instance"/>
-public class InterfaceInst : IInterface, IInitializable {
+public class InterfaceInst : IInterface, IInitializable<Project> {
 
     /// <summary>Gets the index of this construct in the project list.</summary>
     public int Index { get; private set; } = 0;
@@ -37,12 +37,12 @@ public class InterfaceInst : IInterface, IInitializable {
         }
     }
 
-    void IInitializable.Initialize(Project project, int index, Node node) {
+    void IInitializable<Project>.Initialize(Project project, int index, Node node) {
         this.Index = index;
         Object obj = node.AsObject();
         this.inGeneric = obj.ReadIndex("generic", project.InterfaceDecls);
         this.inInterface = obj.ReadIndex("resolved", project.InterfaceDescs);
-        obj.ReadKeyList("instanceTypes", this.inInstanceTypes, project);
+        obj.ReadKeyList(project, "instanceTypes", this.inInstanceTypes);
         this.Interface.AddUses(this);
     }
 

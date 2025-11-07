@@ -1,8 +1,8 @@
-﻿using Constructs.Data;
+﻿using Commons.Data.Reader;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Constructs.Tooling;
+namespace Commons.Data.Locations;
 
 /// <summary>A tool for looking up a file path and line number for source code.</summary>
 public class Locations {
@@ -10,20 +10,19 @@ public class Locations {
     /// <summary>The location returned for an unknown location.</summary>
     static public readonly Location Unknown = new(0, "<unknown>");
 
-    private readonly List<Location> offsets;
+    private readonly List<Location> offsets = [];
 
     /// <summary>Creates a new location lookup for the data in the given node.</summary>
-    /// <see cref="../../../docs/genFeatureDef.md#locations"/>
+    /// <see cref="docs/genFeatureDef.md#locations"/>
     /// <param name="node">The node to load the location data from.</param>
-    internal Locations(Node? node) {
-        if (node is null) {
-            this.offsets = [];
-            return;
-        }
+    static public Locations Read(Node? node) {
+        Locations loc = new();
+        if (node is null) return loc;
 
-        this.offsets = new(node.AsObject().Children.
+        loc.offsets.AddRange(node.AsObject().Children.
             Select(child => new Location(int.Parse(child.Key), child.Value.AsString())).
             Order());
+        return loc;
     }
 
     /// <summary>

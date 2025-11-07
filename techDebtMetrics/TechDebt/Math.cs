@@ -1,7 +1,4 @@
-﻿using System;
-using System.Linq;
-
-namespace TechDebt;
+﻿namespace TechDebt;
 
 public static class Math {
     public const double Epsilon = 1.0e-9;

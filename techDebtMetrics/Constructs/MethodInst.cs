@@ -1,4 +1,4 @@
-﻿using Constructs.Data;
+﻿using Commons.Data.Reader;
 using Constructs.Exceptions;
 using Constructs.Tooling;
 using System.Collections.Generic;
@@ -7,7 +7,7 @@ namespace Constructs;
 
 /// <summary>A method instance of a generic method.</summary>
 /// <see cref="../../docs/genFeatureDef.md#method-instance"/>
-public class MethodInst : IMethod, IConstruct, IInitializable {
+public class MethodInst : IMethod, IConstruct, IInitializable<Project> {
 
     /// <summary>Gets the index of this construct in the project list.</summary>
     public int Index { get; private set; } = 0;
@@ -43,13 +43,13 @@ public class MethodInst : IMethod, IConstruct, IInitializable {
         }
     }
 
-    void IInitializable.Initialize(Project project, int index, Node node) {
+    void IInitializable<Project>.Initialize(Project project, int index, Node node) {
         this.Index = index;
         Object obj = node.AsObject();
         this.inGeneric = obj.ReadIndex("generic", project.MethodDecls);
         this.Receiver = obj.TryReadIndex("receiver", project.ObjectInsts);
         this.inSignature = obj.ReadIndex("resolved", project.Signatures);
-        obj.ReadKeyList("instanceTypes", this.inInstanceTypes, project);
+        obj.ReadKeyList(project, "instanceTypes", this.inInstanceTypes);
         this.Signature.AddUses(this);
     }
 
