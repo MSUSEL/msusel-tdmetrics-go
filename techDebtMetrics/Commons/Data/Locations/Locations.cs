@@ -20,7 +20,7 @@ public class Locations {
         if (node is null) return loc;
 
         loc.offsets.AddRange(node.AsObject().Children.
-            Select(child => new Location(int.Parse(child.Key), child.Value.AsString())).
+            Select(child => new Location(child.Key.AsInt(), child.Value.AsString())).
             Order());
         return loc;
     }
@@ -35,7 +35,7 @@ public class Locations {
         int index = this.offsets.BinarySearch(new Location(offset, ""));
         return index switch {
             >= 0 => index,   // exact match
-            ~0 => -1,        // not found
+            ~0 => -1,        // not found (before first location)
             _ => ~index - 1, // nearest match
         };
     }

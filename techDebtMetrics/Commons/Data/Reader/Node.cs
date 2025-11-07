@@ -56,9 +56,13 @@ public class Node(YamlNode source) {
     /// <returns>The boolean value of this node.</returns>
     public bool AsBool() => bool.Parse(this.AsString());
 
-    /// <summary>Gets this node as a integer.</summary>
+    /// <summary>Gets this node as an integer.</summary>
     /// <returns>The integer value of this node.</returns>
     public int AsInt() => int.Parse(this.AsString());
+
+    /// <summary>Gets this node as a double.</summary>
+    /// <returns>The double value of this node.</returns>
+    public double AsDouble() => double.Parse(this.AsString());
 
     /// <summary>Gets this node as a file location.</summary>
     /// <param name="locs">The locations to resolve the file location with.</param>

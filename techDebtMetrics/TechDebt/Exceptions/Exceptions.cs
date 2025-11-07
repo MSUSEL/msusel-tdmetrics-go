@@ -1,4 +1,4 @@
-﻿namespace TechDebt;
+﻿namespace TechDebt.Exceptions;
 
 public class TechDebtException(string message) : System.Exception(message) { }
 

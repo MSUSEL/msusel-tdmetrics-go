@@ -20,8 +20,8 @@ public class Object(YamlMappingNode source) : Node(source) {
     public bool Contains(string name) => this.source.Children.ContainsKey(new YamlScalarNode(name));
 
     /// <summary>Enumerates all the key/value pairs in this node.</summary>
-    public IEnumerable<KeyValuePair<string, Node>> Children => this.source.Children.
-        Select(p => new KeyValuePair<string, Node>(new Node(p.Key).AsString(), new(p.Value)));
+    public IEnumerable<KeyValuePair<Node, Node>> Children => this.source.Children.
+        Select(p => new KeyValuePair<Node, Node>(new Node(p.Key), new(p.Value)));
 
     /// <summary>Adds a new item for the node at the given key into the given list.</summary>
     /// <typeparam name="T">The type to preallocate.</typeparam
@@ -30,6 +30,14 @@ public class Object(YamlMappingNode source) : Node(source) {
     public void PreallocateList<T>(string name, List<T> list)
         where T : new() =>
         this.TryReadNode(name)?.AsArray().PreallocateList(list);
+
+    /// <summary>Adds a new item for the node at the given key into the given list.</summary>
+    /// <typeparam name="T">The type to preallocate.</typeparam
+    /// <param name="name">The name for the node to preallocate for.</param>
+    /// <param name="list">The list to add to.</param>
+    /// <param name="constructor">The construtor used for preallocating the list.</param>
+    public void PreallocateList<T>(string name, List<T> list, Func<Node, T> constructor) =>
+        this.TryReadNode(name)?.AsArray().PreallocateList(list, constructor);
 
     /// <summary>Initializes the given preallocated list with the node at the given name.</summary>
     /// <typeparam name="T">The type to call Initialize on.</typeparam>
@@ -66,6 +74,11 @@ public class Object(YamlMappingNode source) : Node(source) {
     /// <returns>The integer from the node with the given name.</returns>
     public int ReadInt(string name) => this.ReadNode(name).AsInt();
 
+    /// <summary>Gets the node with the given name as a double.</summary>
+    /// <param name="name">The name of the node to get the double from.</param>
+    /// <returns>The double from the node with the given name.</returns>
+    public double ReadDouble(string name) => this.ReadNode(name).AsDouble();
+
     /// <summary>Gets the item at the index from the node with the given name.</summary>
     /// <typeparam name="T">The type of item to get from the list.</typeparam>
     /// <param name="name">The name of the node to get the index from.</param>
@@ -99,7 +112,7 @@ public class Object(YamlMappingNode source) : Node(source) {
     /// <param name="dest">The list to write all the read values into.</param>
     public void ReadKeyList<T>(IKeyResolver res, string name, List<T> dest) =>
         this.ReadNode(name).AsArray().AsKeyList(res, dest);
-    
+
     /// <summary>Gets path and line number location from the node with the given name.</summary>
     /// <param name="locs">The locations to read the location from.</param>
     /// <param name="name">The name of the node to get the location from.</param>
@@ -138,6 +151,13 @@ public class Object(YamlMappingNode source) : Node(source) {
     public int TryReadInt(string name, int defaultValue = 0) =>
         this.TryReadNode(name)?.AsInt() ?? defaultValue;
 
+    /// <summary>Tries to get the node with the given name as a double.</summary>
+    /// <param name="name">The name of the node to get the double from.</param>
+    /// <param name="defaultValue">The default value to return if no node exists by the given name.</param>
+    /// <returns>The double from the node with the given name or the default value if it didn't exist.</returns>
+    public double TryReadDouble(string name, double defaultValue = 0.0) =>
+        this.TryReadNode(name)?.AsDouble() ?? defaultValue;
+
     /// <summary>Tries to get the item at the index from the node with the given name.</summary>
     /// <typeparam name="T">The type of item to get from the list.</typeparam>
     /// <param name="name">The name of the node to get the index from.</param>
@@ -171,7 +191,7 @@ public class Object(YamlMappingNode source) : Node(source) {
     /// <param name="dest">The list to write all the read values into.</param>
     public void TryReadKeyList<T>(IKeyResolver res, string name, List<T> dest) =>
         this.TryReadNode(name)?.AsArray()?.AsKeyList(res, dest);
-    
+
     /// <summary>Tries to get path and line number location from the node with the given name.</summary>
     /// <param name="name">The name of the node to get the location from.</param>
     /// <param name="locs">The locations to read the location from.</param>

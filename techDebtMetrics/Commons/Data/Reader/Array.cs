@@ -24,10 +24,16 @@ public class Array(YamlSequenceNode source) : Node(source) {
     /// <summary>Adds a new item for each node in this array into the given list.</summary>
     /// <typeparam name="T">The type to preallocate.</typeparam>
     /// <param name="list">The list to add to.</param>
-    public void PreallocateList<T>(List<T> list)
-        where T : new() {
+    public void PreallocateList<T>(List<T> list) where T : new() =>
+        this.PreallocateList(list, _ => new T());
+
+    /// <summary>Adds a new item for each node in this array into the given list.</summary>
+    /// <typeparam name="T">The type to preallocate.</typeparam>
+    /// <param name="list">The list to add to.</param>
+    /// <param name="constructor">The construtor used for preallocating the list.</param>
+    public void PreallocateList<T>(List<T> list, Func<Node, T> constructor) {
         for (int i = this.Count - 1; i >= 0; --i)
-            list.Add(new T());
+            list.Add(constructor(this[i]));
     }
 
     /// <summary>Initializes the given preallocated list with the nodes in this node.</summary>

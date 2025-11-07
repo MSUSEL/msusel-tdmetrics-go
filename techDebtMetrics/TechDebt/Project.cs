@@ -1,15 +1,20 @@
-﻿using System;
+﻿using Commons.Data.Locations;
+using Commons.Data.Reader;
+using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using SCG = System.Collections.Generic;
+using TechDebt.Exceptions;
 
 namespace TechDebt;
 
 public class Project {
-
-    public readonly SCG.SortedSet<Class> Classes = [];
-
-    public readonly SCG.SortedSet<Method> Methods = [];
+    
+    /// <summary>The collection of all classes in this project.</summary>
+    public readonly SortedSet<Class> Classes = [];
+    
+    /// <summary>The collection of all methods in this project.</summary>
+    public readonly SortedSet<Method> Methods = [];
 
     public bool TryFind(Source source, out Class? c) => this.Classes.TryGetValue(new Class(source), out c);
 
@@ -32,7 +37,7 @@ public class Project {
     public static void Normalize(Method m) {
         if (m.Participation.Count <= 0) throw new NoParticipationException(m);
 
-        SCG.List<(Class Class, double Value)> entries = [.. m.Participation.Select(p => (p.Class, p.Value))];
+        List<(Class Class, double Value)> entries = [.. m.Participation.Select(p => (p.Class, p.Value))];
         entries.Sort((p1, p2) => p1.Value.CompareTo(p2.Value));
 
         void apply(Func<double, double> h) {
@@ -60,15 +65,72 @@ public class Project {
         entries.ForAll(e => Add(m, e.Value, e.Class));
     }
 
-    public void Save(string path) => File.WriteAllText(path, this.Serialize());
+    /// <summary>Loads a project from a YAML root node.</summary>
+    /// <param name="root">The YAML root node to load.</param>
+    public Project(Node root) {
+        Commons.Data.Reader.Object obj = root.AsObject();
+        Locations locs = Locations.Read(obj.TryReadNode("locs"));
+        LoaderHelper lh = new(locs);
 
-    public void Load(string path) => this.Deserialize(File.ReadAllText(path));
+        obj.PreallocateList("classes", lh.Classes, n => new Class(lh.ReadSource(n)));
+        obj.PreallocateList("methods", lh.Methods, n => new Method(lh.ReadSource(n)));
+        
+        obj.InitializeList(lh, "classes", lh.Classes);
+        obj.InitializeList(lh, "methods", lh.Methods);
+
+        foreach (Method m in lh.Methods) {
+            if (this.Methods.Contains(m))
+                throw new Exception("Method already exists in project: " + m);
+            this.Methods.Add(m);
+        }
+
+        foreach (Class c in lh.Classes) {
+            if (this.Classes.Contains(c))
+                throw new Exception("Class already exists in project: " + c);
+            this.Classes.Add(c);
+        }
+    }
+
+    internal class LoaderHelper(Locations locs): IKeyResolver {
+        public readonly Locations Locations = locs;
+        public List<Class> Classes = [];
+        public List<Method> Methods = [];
+
+        public Source ReadSource(Node node) {
+            Commons.Data.Reader.Object obj = node.AsObject();
+            Location loc = obj.ReadLocation(this.Locations, "loc");
+            string name = obj.ReadString("name");
+            return new Source(name, loc.Path, loc.LineNo);
+        }
+
+        /// <summary>Reads the given index from the given source as part of reading the given key.</summary>
+        /// <typeparam name="T">The type of the list to read from.</typeparam>
+        /// <param name="key">The key that is being processed.</param>
+        /// <param name="index">The index from the key used to read a value from the given list.</param>
+        /// <param name="source">The list get an item at the given index from.</param>
+        /// <returns>The item from the given list at the given index.</returns>
+        static private T readKeyIndex<T>(string key, int index, IReadOnlyList<T> source) {
+            if (index < 0 || index >= source.Count)
+                throw new Exception("Key " + key + " out of range [0.." + source.Count + "): " + index);
+            return source[index];
+        }
+
+        /// <summary>Reads a single key from the given project.</summary>
+        /// <see cref="docs/genFeatureDef.md#keys"/>
+        /// <param name="key">The key of the value to read.</param>
+        /// <param name="project">The project to read a key from.</param>
+        /// <returns>The read key from the project.</returns>
+        public object FindData(string name, int index) {
+            return name switch {
+                "class" => readKeyIndex(name, index, this.Classes),
+                "method" => readKeyIndex(name, index, this.Methods),
+                _ => throw new InvalidDataException(name)
+            };
+        }
+    }
 
     public string Serialize() {
 
         return "";
-    }
-
-    public void Deserialize(string text) {
     }
 }

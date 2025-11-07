@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 
-namespace Constructs.Extensions;
+namespace Commons.Extensions;
 
 /// <summary>A collection of enumerator extensions.</summary>
 internal static class GeneralExt {
