@@ -1,4 +1,5 @@
-﻿using Commons.Extensions;
+﻿using Commons.Data.Locations;
+using Commons.Extensions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -35,6 +36,8 @@ public class Array(YamlSequenceNode source) : Node(source) {
     /// <summary>Enumerates all the nodes in this node.</summary>
     public IEnumerable<Node> Items => this.source.Children.Select(x => new Node(x));
 
+    #region Writers
+
     /// <summary>Adds a new node to this sequence.</summary>
     /// <param name="value">The node to add to this sequence.</param>
     /// <returns>The node that was passed in.</returns>
@@ -62,6 +65,14 @@ public class Array(YamlSequenceNode source) : Node(source) {
     /// <param name="value">The value for the new node.</param>
     /// <returns>The new node that was created and added.</returns>
     public Node Add(double value) => this.Add(new Node(value));
+
+    /// <summary>Adds a new node with the given location.</summary>
+    /// <param name="locs">The location writer to use.</param>
+    /// <param name="loc">The location for the new node.</param>
+    /// <returns>The new node that was created and added.</returns>
+    public Node Add(Writer locs, Location loc) => this.Add(new Node(locs, loc));
+
+    #endregion
 
     /// <summary>Adds a new item for each node in this array into the given list.</summary>
     /// <typeparam name="T">The type to preallocate.</typeparam>

@@ -36,6 +36,11 @@ public class Node(YamlNode source) {
     /// <summary>Creates a new node with the given value.</summary>
     /// <param name="value">The value to create a node for.</param>
     public Node(double value) : this(new YamlScalarNode(value.ToString())) { }
+    
+    /// <summary>Creates a new node with the given location.</summary>
+    /// <param name="locs">The location writer to use.</param>
+    /// <param name="loc">The location to create a node for.</param>
+    public Node(Writer locs, Location loc) : this(locs.Offset(loc)) { }
 
     /// <summary>Indicates this node is null.</summary>
     public bool IsNull => this.Source is null;
