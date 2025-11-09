@@ -1,4 +1,4 @@
-﻿namespace Commons.Data.Reader;
+﻿namespace Commons.Data.Yaml;
 
 /// <summary>A type that can be initialized while loading.</summary>
 /// <typeparam name="D">The type of data to pass along when initializing.</typeparam>

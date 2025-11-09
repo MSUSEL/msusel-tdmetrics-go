@@ -4,12 +4,15 @@ using System.Collections.Generic;
 using System.Linq;
 using YamlDotNet.RepresentationModel;
 
-namespace Commons.Data.Reader;
+namespace Commons.Data.Yaml;
 
 /// <summary>An object with key/value pairs to read data from.</summary>
 /// <param name="source">The underlying data source.</param>
 public class Object(YamlMappingNode source) : Node(source) {
     private readonly YamlMappingNode source = source;
+
+    /// <summary>Creates a new empty object.</summary>
+    public Object() : this([]) { }
 
     /// <summary>The number of key/value pairs in this node.</summary>
     public int Count => this.source.Children.Count;
@@ -49,6 +52,20 @@ public class Object(YamlMappingNode source) : Node(source) {
         where T : IInitializable<D> =>
         this.TryReadNode(name)?.AsArray().InitializeList(data, list);
 
+    #region Writes
+    
+    public Node Add(Node key, Node value) {
+        this.source.Add()
+
+
+
+        return value;
+    }
+
+
+
+
+    #endregion
     #region Must Reads
 
     /// <summary>Gets the node with the given name that must exist.</summary>
@@ -117,7 +134,7 @@ public class Object(YamlMappingNode source) : Node(source) {
     /// <param name="locs">The locations to read the location from.</param>
     /// <param name="name">The name of the node to get the location from.</param>
     /// <returns>The location read from the project with the node at the given name.</returns>
-    public Location ReadLocation(Locations.Locations locs, string name) =>
+    public Location ReadLocation(Reader locs, string name) =>
         this.ReadNode(name).AsLocation(locs);
 
     #endregion
@@ -196,8 +213,8 @@ public class Object(YamlMappingNode source) : Node(source) {
     /// <param name="name">The name of the node to get the location from.</param>
     /// <param name="locs">The locations to read the location from.</param>
     /// <returns>The location read from the project with the node at the given name or the unknown location if it didn't exist..</returns>
-    public Location TryReadLocation(Locations.Locations locs, string name) =>
-        this.TryReadNode(name)?.AsLocation(locs) ?? Locations.Locations.Unknown;
+    public Location TryReadLocation(Reader locs, string name) =>
+        this.TryReadNode(name)?.AsLocation(locs) ?? Location.Unknown;
 
     #endregion
 }

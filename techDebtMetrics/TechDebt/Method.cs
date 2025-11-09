@@ -1,4 +1,5 @@
-﻿using Commons.Data.Reader;
+﻿using Commons.Data.Yaml;
+using Commons.Extensions;
 using System;
 using System.Collections.Generic;
 
@@ -42,7 +43,7 @@ public class Method(Source source) : IComparable<Method>, IInitializable<Project
     public int CompareTo(Method? other) => other is null ? 1 : this.Source.CompareTo(other.Source);
 
     void IInitializable<Project.LoaderHelper>.Initialize(Project.LoaderHelper lh, int index, Node node) {
-        Commons.Data.Reader.Object obj = node.AsObject();
+        Commons.Data.Yaml.Object obj = node.AsObject();
 
         Node? parNode = obj.TryReadNode("participation");
         if (parNode is not null) {

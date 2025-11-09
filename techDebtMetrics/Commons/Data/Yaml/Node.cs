@@ -4,12 +4,13 @@ using System.Collections.Generic;
 using System.IO;
 using YamlDotNet.RepresentationModel;
 
-namespace Commons.Data.Reader;
+namespace Commons.Data.Yaml;
 
 /// <summary>This is a node of data to read with.</summary>
 /// <param name="source">The underlying data source.</param>
 public class Node(YamlNode source) {
-    private readonly YamlNode source = source;
+    /// <summary>The underlying data source.</summary>
+    internal YamlNode Source { get; } = source;
 
     /// <summary>Reads a node and child nodes from the given input text.</summary>
     /// <param name="text">Text formatted as YAML or JSON to read from.</param>
@@ -20,32 +21,48 @@ public class Node(YamlNode source) {
         return new Node(yaml.Documents[0].RootNode);
     }
 
+    /// <summary>Creates a new node with the given value.</summary>
+    /// <param name="value">The value to create a node for.</param>
+    public Node(string value) : this(new YamlScalarNode(value)) { }
+    
+    /// <summary>Creates a new node with the given value.</summary>
+    /// <param name="value">The value to create a node for.</param>
+    public Node(bool value) : this(new YamlScalarNode(value.ToString())) { }
+    
+    /// <summary>Creates a new node with the given value.</summary>
+    /// <param name="value">The value to create a node for.</param>
+    public Node(int value) : this(new YamlScalarNode(value.ToString())) { }
+    
+    /// <summary>Creates a new node with the given value.</summary>
+    /// <param name="value">The value to create a node for.</param>
+    public Node(double value) : this(new YamlScalarNode(value.ToString())) { }
+
     /// <summary>Indicates this node is null.</summary>
-    public bool IsNull => this.source is null;
+    public bool IsNull => this.Source is null;
 
     /// <summary>Indicates this node contains key/value pairs.</summary>
-    public bool IsObject => this.source is YamlMappingNode;
+    public bool IsObject => this.Source is YamlMappingNode;
 
     /// <summary>Indicates this node contains a list of nodes.</summary>
-    public bool IsArray => this.source is YamlSequenceNode;
+    public bool IsArray => this.Source is YamlSequenceNode;
 
     /// <summary>Indicates this node is a single value, e.g. int, string.</summary>
-    public bool IsScalar => this.source is YamlScalarNode;
+    public bool IsScalar => this.Source is YamlScalarNode;
 
     /// <summary>Gets this node as an object with key/value pairs.</summary>
     /// <returns>The object node.</returns>
-    public Object AsObject() => new(this.source as YamlMappingNode ??
-        throw new InvalidCastException("Not an object node at " + this.source.End));
+    public Object AsObject() => new(this.Source as YamlMappingNode ??
+        throw new InvalidCastException("Not an object node at " + this.Source.End));
 
     /// <summary>Gets this node as an array with a list of nodes.</summary>
     /// <returns>The array node.</returns>
-    public Array AsArray() => new(this.source as YamlSequenceNode ??
-        throw new InvalidCastException("Not an array node at " + this.source.End));
+    public Array AsArray() => new(this.Source as YamlSequenceNode ??
+        throw new InvalidCastException("Not an array node at " + this.Source.End));
 
     /// <summary>Gets the underlying source as a scalar node.</summary>
     /// <returns>The scalar node source to read from.</returns>
-    private YamlScalarNode getScalar() => this.source as YamlScalarNode ??
-        throw new InvalidCastException("Not a value node at " + this.source.End);
+    private YamlScalarNode getScalar() => this.Source as YamlScalarNode ??
+        throw new InvalidCastException("Not a value node at " + this.Source.End);
 
     /// <summary>Gets this node as a string.</summary>
     /// <returns>The string value of this node.</returns>
@@ -67,7 +84,7 @@ public class Node(YamlNode source) {
     /// <summary>Gets this node as a file location.</summary>
     /// <param name="locs">The locations to resolve the file location with.</param>
     /// <returns>The read file location.</returns>
-    public Location AsLocation(Locations.Locations locs) => locs[this.AsInt()];
+    public Location AsLocation(Reader locs) => locs[this.AsInt()];
 
     /// <summary>Gets this node as an index lookup from the given source.</summary>
     /// <typeparam name="T">The type of item to lookup.</typeparam>

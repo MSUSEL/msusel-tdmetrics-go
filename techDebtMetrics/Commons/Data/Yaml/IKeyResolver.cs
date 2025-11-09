@@ -1,4 +1,4 @@
-﻿namespace Commons.Data.Reader;
+﻿namespace Commons.Data.Yaml;
 
 /// <summary>The interface used for resolving key values.</summary>
 public interface IKeyResolver {

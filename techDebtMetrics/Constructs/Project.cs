@@ -1,5 +1,5 @@
 ﻿using Commons.Data.Locations;
-using Commons.Data.Reader;
+using Commons.Data.Yaml;
 using Constructs.Tooling;
 using System;
 using System.Collections.Generic;
@@ -18,7 +18,7 @@ public class Project : IConstruct, IKeyResolver {
     public readonly string Language;
 
     /// <summary>The file paths and line numbers for the source code that created this package.</summary>
-    public readonly Locations Locations;
+    public readonly Reader Locations;
 
     /// <summary>The collection of all abstracts in this project.</summary>
     public IReadOnlyList<Abstract> Abstracts => this.inAbstracts.AsReadOnly();
@@ -133,9 +133,9 @@ public class Project : IConstruct, IKeyResolver {
     /// <summary>Creates a new project.</summary>
     /// <param name="root">The YAML root node to load.</param>
     internal Project(Node root) {
-        Commons.Data.Reader.Object obj = root.AsObject();
+        Commons.Data.Yaml.Object obj = root.AsObject();
         this.Language = obj.ReadString("language");
-        this.Locations = Locations.Read(obj.TryReadNode("locs"));
+        this.Locations = Reader.Read(obj.TryReadNode("locs"));
 
         obj.PreallocateList("abstracts", this.inAbstracts);
         obj.PreallocateList("arguments", this.inArguments);

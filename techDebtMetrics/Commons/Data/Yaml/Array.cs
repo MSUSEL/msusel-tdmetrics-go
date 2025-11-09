@@ -1,14 +1,28 @@
-﻿using System;
+﻿using Commons.Extensions;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using YamlDotNet.RepresentationModel;
 
-namespace Commons.Data.Reader;
+namespace Commons.Data.Yaml;
 
 /// <summary>A node containing a fixed length linear list of nodes.</summary>
 /// <param name="source">The underlying data source.</param>
 public class Array(YamlSequenceNode source) : Node(source) {
     private readonly YamlSequenceNode source = source;
+
+    /// <summary>Creates a new empty array.</summary>
+    public Array() : this(new YamlSequenceNode()) { }
+
+    /// <summary>Creates a new array with the given nodes.</summary>
+    /// <param name="nodes">The nodes to add to the array.</param>
+    public Array(params Node[] nodes) : this() {
+        foreach (Node n in nodes) this.Add(n);
+    }
+
+    /// <summary>Creates a new array with the given nodes.</summary>
+    /// <param name="nodes">The nodes to add to the array.</param>
+    public Array(IEnumerable<Node> nodes) : this() => nodes.ForAll(this.Add);
 
     /// <summary>The number of nodes in this node.</summary>
     public int Count => this.source.Children.Count;
@@ -21,6 +35,34 @@ public class Array(YamlSequenceNode source) : Node(source) {
     /// <summary>Enumerates all the nodes in this node.</summary>
     public IEnumerable<Node> Items => this.source.Children.Select(x => new Node(x));
 
+    /// <summary>Adds a new node to this sequence.</summary>
+    /// <param name="value">The node to add to this sequence.</param>
+    /// <returns>The node that was passed in.</returns>
+    public Node Add(Node value) {
+        this.source.Add(value.Source);
+        return value;
+    }
+
+    /// <summary>Adds a new node with the given value.</summary>
+    /// <param name="value">The value for the new node.</param>
+    /// <returns>The new node that was created and added.</returns>
+    public Node Add(string value) => this.Add(new Node(value));
+
+    /// <summary>Adds a new node with the given value.</summary>
+    /// <param name="value">The value for the new node.</param>
+    /// <returns>The new node that was created and added.</returns>
+    public Node Add(bool value) => this.Add(new Node(value));
+
+    /// <summary>Adds a new node with the given value.</summary>
+    /// <param name="value">The value for the new node.</param>
+    /// <returns>The new node that was created and added.</returns>
+    public Node Add(int value) => this.Add(new Node(value));
+
+    /// <summary>Adds a new node with the given value.</summary>
+    /// <param name="value">The value for the new node.</param>
+    /// <returns>The new node that was created and added.</returns>
+    public Node Add(double value) => this.Add(new Node(value));
+
     /// <summary>Adds a new item for each node in this array into the given list.</summary>
     /// <typeparam name="T">The type to preallocate.</typeparam>
     /// <param name="list">The list to add to.</param>
@@ -32,7 +74,7 @@ public class Array(YamlSequenceNode source) : Node(source) {
     /// <param name="list">The list to add to.</param>
     /// <param name="constructor">The construtor used for preallocating the list.</param>
     public void PreallocateList<T>(List<T> list, Func<Node, T> constructor) {
-        for (int i = this.Count - 1; i >= 0; --i)
+        for (int i = 0; i < this.Count; ++i)
             list.Add(constructor(this[i]));
     }
 

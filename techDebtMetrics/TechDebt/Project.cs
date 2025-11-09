@@ -1,5 +1,6 @@
 ﻿using Commons.Data.Locations;
-using Commons.Data.Reader;
+using Commons.Data.Yaml;
+using Commons.Extensions;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -68,8 +69,8 @@ public class Project {
     /// <summary>Loads a project from a YAML root node.</summary>
     /// <param name="root">The YAML root node to load.</param>
     public Project(Node root) {
-        Commons.Data.Reader.Object obj = root.AsObject();
-        Locations locs = Locations.Read(obj.TryReadNode("locs"));
+        Commons.Data.Yaml.Object obj = root.AsObject();
+        Reader locs = Reader.Read(obj.TryReadNode("locs"));
         LoaderHelper lh = new(locs);
 
         obj.PreallocateList("classes", lh.Classes, n => new Class(lh.ReadSource(n)));
@@ -91,13 +92,13 @@ public class Project {
         }
     }
 
-    internal class LoaderHelper(Locations locs): IKeyResolver {
-        public readonly Locations Locations = locs;
+    internal class LoaderHelper(Reader locs): IKeyResolver {
+        public readonly Reader Locations = locs;
         public List<Class> Classes = [];
         public List<Method> Methods = [];
 
         public Source ReadSource(Node node) {
-            Commons.Data.Reader.Object obj = node.AsObject();
+            Commons.Data.Yaml.Object obj = node.AsObject();
             Location loc = obj.ReadLocation(this.Locations, "loc");
             string name = obj.ReadString("name");
             return new Source(name, loc.Path, loc.LineNo);
