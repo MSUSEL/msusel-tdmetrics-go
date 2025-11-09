@@ -13,8 +13,12 @@ package $builtin {
 package main {
   path: command-line-arguments;
 
+  @ main.go:13
   first(List<int> values...) int;
+  @ main.go:17
   last(List<int> values...) int;
+  @ main.go:21
   main();
+  @ main.go:5
   sum(List<int> values...) int;
 }

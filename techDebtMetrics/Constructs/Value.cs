@@ -60,9 +60,12 @@ public class Value : IDeclaration, IInitializable<Project> {
     public override string ToString() => Journal.ToString(this);
 
     public void ToStub(Journal j) {
-        if (j.Long)
+        if (j.Long) {
+            if (this.Location.IsValid)
+                j.WriteLine("@ " + this.Location);
             j.Write(this.Constant ? "const " : "var ").
-                AsShort.Write(this.Type, suffix: " ");
+            AsShort.Write(this.Type, suffix: " ");
+        }
         j.Write(this.Name);
     }
 }

@@ -1,10 +1,12 @@
 package main {
   path: command-line-arguments;
 
+  @ main.go:6
   interface Animal {
     Age() int;
   }
 
+  @ main.go:20
   interface Bat {
     implements: Bird, Mammal;
     Age() int;
@@ -12,24 +14,30 @@ package main {
     Temp() float64;
   }
 
+  @ main.go:10
   interface Bird {
     implements: Animal, Flier;
     Age() int;
     Fly();
   }
 
+  @ main.go:25
   interface Flier {
     Fly();
   }
 
+  @ main.go:15
   interface Mammal {
     implements: Animal;
     Age() int;
     Temp() float64;
   }
 
+  @ main.go:35
   main();
 
+  @ main.go:31
   var Animal _;
+  @ main.go:32
   var Flier _;
 }

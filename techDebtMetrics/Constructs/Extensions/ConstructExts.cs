@@ -19,7 +19,16 @@ static public class ConstructExts {
         HashSet<IConstruct> touched = [];
         Stack<IConstruct> pending = [];
         Stack<string> indents = [];
+        string indent = ">> ";
+        
+        void print(IConstruct c) {
+            if (show) {
+                Console.WriteLine(indent + "> " + c.GetType() + " > " +
+                    (c.ToString() ?? "<null>").ReplaceLineEndings("\n" + indent + ": "));
+            }
+        }
 
+        print(con);
         foreach (IConstruct sub in con.SubConstructs) {
             if (touched.Contains(sub)) continue;
             pending.Push(sub);
@@ -28,11 +37,10 @@ static public class ConstructExts {
 
         while (pending.Count > 0) {
             IConstruct c = pending.Pop();
-            string indent = indents.Pop();
+            indent = indents.Pop();
             if (!touched.Add(c)) continue;
 
-            if (show) Console.WriteLine(indent, c.ToString());
-
+            print(c);
             if (c is ITypeDesc td) yield return td;
 
             foreach (IConstruct sub in c.SubConstructs) {

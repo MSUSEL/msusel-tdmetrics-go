@@ -36,7 +36,7 @@ public class Array(YamlSequenceNode source) : Node(source) {
     /// <summary>Enumerates all the nodes in this node.</summary>
     public IEnumerable<Node> Items => this.source.Children.Select(x => new Node(x));
 
-    #region Writers
+    #region Writes
 
     /// <summary>Adds a new node to this sequence.</summary>
     /// <param name="value">The node to add to this sequence.</param>

@@ -11,15 +11,19 @@ package $builtin {
 package main {
   path: command-line-arguments;
 
+  @ main.go:5
   interface Animal {
     implements: any;
     Pet();
   }
 
+  @ main.go:9
   class Cat {
     string Name;
+    @ main.go:13
     Pet();
   }
 
+  @ main.go:17
   main();
 }

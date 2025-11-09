@@ -129,4 +129,15 @@ public class Node(YamlNode source) {
         int index = int.Parse(key[split..]) - 1;
         return res.FindData(name, index);
     }
+
+    /// <summary>This creates a string for this node.</summary>
+    /// <returns>The string for this node.</returns>
+    public override string ToString() {
+        YamlStream yaml = [];
+        yaml.Add(new YamlDocument(this.Source));
+
+        StringWriter sout = new();
+        yaml.Save(sout, false);
+        return sout.ToString().ReplaceLineEndings("\n");
+    }
 }

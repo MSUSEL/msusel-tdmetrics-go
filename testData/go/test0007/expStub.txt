@@ -11,13 +11,17 @@ package $builtin {
 package main {
   path: command-line-arguments;
 
+  @ main.go:5
   class Foo<int|uint|string T> {
     T value;
+    @ main.go:9
     Add(T v) T;
   }
   inst Foo<string>
 
+  @ main.go:14
   New<int|string T>(T v) Pointer<Foo<T>>
   inst New<string>(string v) Pointer<Foo<string>>;
+  @ main.go:18
   main();
 }

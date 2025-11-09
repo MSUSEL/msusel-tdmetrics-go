@@ -32,7 +32,7 @@ public class Reader {
             (int index, bool _) = this.offsets.Keys.BinarySearch(offset.CompareTo);
             if (index < 0) return Location.Unknown;
             int start = this.offsets.GetKeyAtIndex(index);
-            string path = this.offsets[index];
+            string path = this.offsets.GetValueAtIndex(index);
             return new(offset - start + 1, path);
         }
     }

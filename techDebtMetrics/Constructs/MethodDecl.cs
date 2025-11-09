@@ -77,6 +77,8 @@ public class MethodDecl : IMethod, IDeclaration, IInitializable<Project> {
     public override string ToString() => Journal.ToString(this);
 
     public void ToStub(Journal j) {
+        if (j.Long && this.Location.IsValid)
+            j.WriteLine("@ " + this.Location);
         j.Write(this.Name).Write(this.TypeParams, "<", ">").Write(this.Signature);
         if (j.Long && this.Receiver is null) {
             foreach (MethodInst inst in this.Instances) {

@@ -65,7 +65,11 @@ public class InterfaceDecl : IInterface, IDeclaration, IInitializable<Project> {
     public override string ToString() => Journal.ToString(this);
 
     public void ToStub(Journal j) {
-        if (j.Long) j.Write("interface ");
+        if (j.Long) {
+            if (this.Location.IsValid)
+                j.WriteLine("@ " + this.Location);
+            j.Write("interface ");
+        }
         j.Write(this.Name).Write(this.TypeParams, "<", ">");
         if (j.Long) {
             j.Write(" ").Write(this.Interface);

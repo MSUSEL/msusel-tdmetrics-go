@@ -1,5 +1,6 @@
 package main {
   path: command-line-arguments;
 
+  @ main.go:5
   main();
 }

@@ -25,7 +25,7 @@ public class Writer(Dictionary<string, int> offsets) {
         Yaml.Object obj = new();
         foreach (string path in this.offsets.Keys.Order()) {
             int offset = this.offsets[path];
-            obj.Add(offset.ToString(), offset);
+            obj.Add(string.Format("{0:d}", offset), path);
         }
         return obj;
     }

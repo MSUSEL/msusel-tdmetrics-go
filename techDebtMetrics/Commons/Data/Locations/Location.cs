@@ -10,6 +10,12 @@ public readonly record struct Location(int LineNo, string Path) : IComparable<Lo
     /// <summary>The location returned for an unknown location.</summary>
     static public readonly Location Unknown = new(0, "<unknown>");
 
+    /// <summary>
+    /// Indicates if the location is valid,
+    /// i.e. if the location is not the Unknown location.
+    /// </summary>
+    public bool IsValid => this != Unknown;
+
     /// <summary>Compares this location with another location.</summary>
     /// <param name="other">The other location to compare against.</param>
     /// <returns>The comparison results.</returns>
@@ -18,4 +24,8 @@ public readonly record struct Location(int LineNo, string Path) : IComparable<Lo
         return cmp != 0 ? cmp :
             this.LineNo.CompareTo(other.LineNo);
     }
+
+    /// <summary>Gets the string for this location.</summary>
+    /// <returns>The location string.</returns>
+    public override string ToString() => this.Path + ":" + this.LineNo;
 }

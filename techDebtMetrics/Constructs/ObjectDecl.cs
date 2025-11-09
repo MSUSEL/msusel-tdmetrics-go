@@ -89,7 +89,11 @@ public class ObjectDecl : IObject, IDeclaration, IInitializable<Project> {
     public override string ToString() => Journal.ToString(this);
 
     public void ToStub(Journal j) {
-        if (j.Long) j.Write("class ");
+        if (j.Long) {
+            if (this.Location.IsValid)
+                j.WriteLine("@ " + this.Location);
+            j.Write("class ");
+        }
         if (this.Nest is not null) {
             j.Write(this.Nest.Name);
             if (j.Long)
@@ -104,7 +108,7 @@ public class ObjectDecl : IObject, IDeclaration, IInitializable<Project> {
             j.Indent.Write(this.Methods, suffix: ";\n", separator: ";\n");
             j.Write("}");
             foreach (ObjectInst inst in this.Instances) {
-                if (inst.IsConcrete(true))
+                if (inst.IsConcrete(true)) // TODO: Remove "true" once debugged.
                     j.WriteLine().AsShort.Write("inst ").Write(inst);
             }
         }

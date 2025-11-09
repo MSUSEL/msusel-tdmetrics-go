@@ -57,51 +57,38 @@ public class Object(YamlMappingNode source) : Node(source) {
     /// <summary>Adds a new key value pair to this object.</summary>
     /// <param name="key">The key to set the value to.</param>
     /// <param name="value">The value to set at the key.</param>
-    /// <returns>The node that was passed in as the value, is returned.</returns>
-    public Node Add(Node key, Node value) {
-        this.source.Add(key.Source, value.Source);
-        return value;
-    }
+    public void Add(Node key, Node value) => this.source.Add(key.Source, value.Source);
     
     /// <summary>Adds a new key value pair to this object.</summary>
     /// <param name="key">The key to set the value to.</param>
     /// <param name="value">The value to set at the key.</param>
-    /// <returns>The node that was passed in as the value, is returned.</returns>
-    public Node Add(string key, Node value) {
-        this.source.Add(key, value.Source);
-        return value;
-    }
+    public void Add(string key, Node value) => this.Add(new Node(key), value);
     
     /// <summary>Adds a new key value pair to this object.</summary>
     /// <param name="key">The key to set the value to.</param>
     /// <param name="value">The string value to set at the key.</param>
-    /// <returns>The node containing the value that was set.</returns>
-    public Node Add(string key, string value) => this.Add(key, new Node(value));
+    public void Add(string key, string value) => this.Add(key, new Node(value));
     
     /// <summary>Adds a new key value pair to this object.</summary>
     /// <param name="key">The key to set the value to.</param>
     /// <param name="value">The bool value to set at the key.</param>
-    /// <returns>The node containing the value that was set.</returns>
-    public Node Add(string key, bool value) => this.Add(key, new Node(value));
+    public void Add(string key, bool value) => this.Add(key, new Node(value));
     
     /// <summary>Adds a new key value pair to this object.</summary>
     /// <param name="key">The key to set the value to.</param>
     /// <param name="value">The int value to set at the key.</param>
-    /// <returns>The node containing the value that was set.</returns>
-    public Node Add(string key, int value) => this.Add(key, new Node(value));
+    public void Add(string key, int value) => this.Add(key, new Node(value));
     
     /// <summary>Adds a new key value pair to this object.</summary>
     /// <param name="key">The key to set the value to.</param>
     /// <param name="value">The double value to set at the key.</param>
-    /// <returns>The node containing the value that was set.</returns>
-    public Node Add(string key, double value) => this.Add(key, new Node(value));
+    public void Add(string key, double value) => this.Add(key, new Node(value));
     
     /// <summary>Adds a new key location pair to this object.</summary>
     /// <param name="key">The key to set the location to.</param>
     /// <param name="locs">The location writer to use.</param>
     /// <param name="loc">The location to set at the key.</param>
-    /// <returns>The node containing the location that was set.</returns>
-    public Node Add(string key, Writer locs, Location loc) => this.Add(key, new Node(locs, loc));
+    public void Add(string key, Writer locs, Location loc) => this.Add(key, new Node(locs, loc));
 
     #endregion
     #region Must Reads

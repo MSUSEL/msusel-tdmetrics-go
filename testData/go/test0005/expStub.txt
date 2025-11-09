@@ -19,26 +19,36 @@ package $builtin {
 package cats {
   path: command-line-arguments;
 
+  @ cats.go:13
   interface Toy {
     implements: any;
     Play(Pointer<Cat> c);
   }
 
+  @ cats.go:7
   class Cat {
     string Name;
     int Age;
+    @ cats.go:35
     Meow();
+    @ cats.go:40
     String() string;
   }
 
+  @ cats.go:19
   class Cats {
     List<Pointer<Cat>> $data;
+    @ cats.go:52
     Youngest() Pointer<Cat>;
   }
 
+  @ cats.go:26
   NewCat(string name, int age) Pointer<Cat>;
+  @ cats.go:45
   NextYear(List<Pointer<Cat>> cats...);
+  @ cats.go:64
   Pet(Pointer<Cat> c);
 
+  @ cats.go:23
   var (string value) log;
 }
