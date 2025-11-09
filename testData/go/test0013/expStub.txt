@@ -1,6 +1,7 @@
 package main {
   path: command-line-arguments;
 
+  @ main.go:27
   interface IPoint {
     implements: IXCoord, IYCoord, {
       Sum() int;
@@ -10,30 +11,40 @@ package main {
     Sum() int;
   }
 
+  @ main.go:23
   interface IXCoord {
     GetX() int;
   }
 
+  @ main.go:24
   interface IYCoord {
     GetY() int;
   }
 
+  @ main.go:15
   class Point {
     XCoord XCoord;
     YCoord YCoord;
+    @ main.go:20
     Sum() int;
   }
 
+  @ main.go:7
   class XCoord {
     int x;
+    @ main.go:9
     GetX() int;
   }
 
+  @ main.go:11
   class YCoord {
     int y;
+    @ main.go:13
     GetY() int;
   }
 
+  @ main.go:35
   PrintPoint(IPoint p);
+  @ main.go:39
   main();
 }

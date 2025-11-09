@@ -11,13 +11,16 @@ package $builtin {
 package main {
   path: command-line-arguments;
 
+  @ main.go:13
   class Node<any T> {
     Pointer<Node> next;
     T value;
   }
   inst Node<int>
 
+  @ main.go:5
   Len<any T>(Pointer<Node> start, Pointer<Node> stop) int
   inst Len<int>(Pointer<Node<int>> start, Pointer<Node<int>> stop) int;
+  @ main.go:18
   main();
 }

@@ -5,15 +5,19 @@ package $builtin {
 package main {
   path: command-line-arguments;
 
+  @ main.go:6
   class dat<any T>:nested<any U> {
     T X;
     U Y;
   }
   inst dat<string>:nested<int>
 
+  @ main.go:5
   dat<any T>(T x, int y)
   inst dat<string>(string x, int y);
+  @ main.go:13
   foo<any T>(T z)
   inst foo<dat<string>:nested<int>>(dat<string>:nested<int> z);
+  @ main.go:17
   main();
 }

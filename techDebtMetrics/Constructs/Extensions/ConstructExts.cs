@@ -20,7 +20,7 @@ static public class ConstructExts {
         Stack<IConstruct> pending = [];
         Stack<string> indents = [];
         string indent = ">> ";
-        
+
         void print(IConstruct c) {
             if (show) {
                 Console.WriteLine(indent + "> " + c.GetType() + " > " +
@@ -32,12 +32,12 @@ static public class ConstructExts {
         foreach (IConstruct sub in con.SubConstructs) {
             if (touched.Contains(sub)) continue;
             pending.Push(sub);
-            indents.Push(">> |  ");
+            if (show) indents.Push(">> |  ");
         }
 
         while (pending.Count > 0) {
             IConstruct c = pending.Pop();
-            indent = indents.Pop();
+            if (show) indent = indents.Pop();
             if (!touched.Add(c)) continue;
 
             print(c);
@@ -45,7 +45,7 @@ static public class ConstructExts {
 
             foreach (IConstruct sub in c.SubConstructs) {
                 pending.Push(sub);
-                indents.Push(indent + "|  ");
+                if (show) indents.Push(indent + "|  ");
             }
         }
     }

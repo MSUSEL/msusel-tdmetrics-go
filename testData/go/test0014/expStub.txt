@@ -14,8 +14,10 @@ package main {
   path: command-line-arguments;
   imports: package animals, package enums;
 
+  @ main.go:20
   main();
 
+  @ main.go:14
   var List<Animal> pets;
 }
 
@@ -23,46 +25,61 @@ package animals {
   path: test0014/animals;
   imports: package enums;
 
+  @ test0014/animals/animal.go:7
   interface Animal {
     implements: any;
     Kind() AnimalKind;
     isAnimal();
   }
 
+  @ test0014/animals/cat.go:7
   interface Cat {
     implements: any;
     Breed() CatBreed;
     isCat();
   }
 
+  @ test0014/animals/dog.go:7
   interface Dog {
     implements: any;
     Breed() DogBreed;
     isDog();
   }
 
+  @ test0014/animals/cat.go:12
   class cat {
     CatBreed breed;
+    @ test0014/animals/cat.go:17
     Breed() CatBreed;
+    @ test0014/animals/cat.go:16
     Kind() AnimalKind;
+    @ test0014/animals/cat.go:20
     isAnimal();
+    @ test0014/animals/cat.go:19
     isCat();
   }
 
+  @ test0014/animals/dog.go:12
   class dog {
     DogBreed breed;
+    @ test0014/animals/dog.go:17
     Breed() DogBreed;
+    @ test0014/animals/dog.go:16
     Kind() AnimalKind;
+    @ test0014/animals/dog.go:20
     isAnimal();
+    @ test0014/animals/dog.go:19
     isDog();
   }
 
+  @ test0014/animals/animal.go:12
   New<CatBreed|DogBreed B>(B breed) Animal;
 }
 
 package enums {
   path: test0014/enums;
 
+  @ test0014/enums/valid.go:5
   interface Enum {
     implements: {
       valid() bool;
@@ -70,29 +87,44 @@ package enums {
     valid() bool;
   }
 
+  @ test0014/enums/animal.go:5
   class AnimalKind {
     string $data;
+    @ test0014/enums/animal.go:12
     valid() bool;
   }
 
+  @ test0014/enums/cat.go:5
   class CatBreed {
     string $data;
+    @ test0014/enums/cat.go:13
     valid() bool;
   }
 
+  @ test0014/enums/dog.go:5
   class DogBreed {
     string $data;
+    @ test0014/enums/dog.go:13
     valid() bool;
   }
 
+  @ test0014/enums/valid.go:9
   Valid(Enum e) bool;
 
+  @ test0014/enums/animal.go:8
   const AnimalKind Cat;
+  @ test0014/enums/dog.go:9
   const DogBreed Chihuahua;
+  @ test0014/enums/animal.go:9
   const AnimalKind Dog;
+  @ test0014/enums/dog.go:10
   const DogBreed Husky;
+  @ test0014/enums/cat.go:9
   const CatBreed MaineCoon;
+  @ test0014/enums/cat.go:10
   const CatBreed Persian;
+  @ test0014/enums/dog.go:8
   const DogBreed Poodle;
+  @ test0014/enums/cat.go:8
   const CatBreed Siamese;
 }

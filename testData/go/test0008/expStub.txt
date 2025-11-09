@@ -11,11 +11,14 @@ package $builtin {
 package main {
   path: command-line-arguments;
 
+  @ main.go:5
   class Foo<any T> {
     T value;
+    @ main.go:9
     Get() T;
   }
   inst Foo<int>
 
+  @ main.go:13
   main();
 }

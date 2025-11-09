@@ -10,6 +10,7 @@ package $builtin {
 package main {
   path: command-line-arguments;
 
+  @ main.go:8
   interface X {
     implements: {
       String() string;
@@ -19,12 +20,16 @@ package main {
     String() string;
   }
 
+  @ main.go:13
   class Y {
     int $data;
+    @ main.go:15
     String() string;
   }
 
+  @ main.go:19
   Z<X T>(T x)
   inst Z<Y>(Y x);
+  @ main.go:23
   main();
 }

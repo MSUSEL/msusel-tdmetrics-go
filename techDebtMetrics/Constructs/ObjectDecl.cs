@@ -108,7 +108,7 @@ public class ObjectDecl : IObject, IDeclaration, IInitializable<Project> {
             j.Indent.Write(this.Methods, suffix: ";\n", separator: ";\n");
             j.Write("}");
             foreach (ObjectInst inst in this.Instances) {
-                if (inst.IsConcrete(true)) // TODO: Remove "true" once debugged.
+                if (inst.IsConcrete(false)) // TODO: Remove "true" or "false" once debugged.
                     j.WriteLine().AsShort.Write("inst ").Write(inst);
             }
         }

@@ -18,7 +18,9 @@ package $builtin {
 package main {
   path: command-line-arguments;
 
+  @ main.go:8
   AsSlice<comparable T>(List<T> t...) List<T>
   inst AsSlice<int>(List<int> t...) List<int>;
+  @ main.go:12
   main();
 }
