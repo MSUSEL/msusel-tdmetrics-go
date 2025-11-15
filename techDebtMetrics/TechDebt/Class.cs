@@ -6,7 +6,10 @@ using System.Collections.Generic;
 namespace TechDebt;
 
 /// <summary>Represents a class in technical debt analysis.</summary>
-public class Class(Source source): IComparable<Class>, IInitializable<Project.LoaderHelper>  {
+public class Class(Source source) :
+    IComparable<Class>,
+    IInitializable<Project.LoaderHelper>,
+    INodeable<Project.ToNodeHelper> {
 
     /// <summary>The name and location from the source code that this class came from.</summary>
     public readonly Source Source = source;
@@ -28,8 +31,15 @@ public class Class(Source source): IComparable<Class>, IInitializable<Project.Lo
     public override bool Equals(object? obj) => obj is Class m && this.Source == m.Source;
 
     public int CompareTo(Class? other) => other is null ? 1 : this.Source.CompareTo(other.Source);
-    
+
     void IInitializable<Project.LoaderHelper>.Initialize(Project.LoaderHelper lh, int index, Node node) {
         // Currently this does nothing since the source is loaded before and the participation comes from the methods.
+    }
+
+    Node INodeable<Project.ToNodeHelper>.ToNode(Project.ToNodeHelper data, int index) {
+        Commons.Data.Yaml.Object obj = new();
+        obj.Add("name", this.Source.Name);
+        obj.Add("loc", data.Locations, this.Source.Location);
+        return obj;
     }
 }

@@ -24,6 +24,24 @@ public class Array(YamlSequenceNode source) : Node(source) {
     /// <summary>Creates a new array with the given nodes.</summary>
     /// <param name="nodes">The nodes to add to the array.</param>
     public Array(IEnumerable<Node> nodes) : this() => nodes.ForAll(this.Add);
+    
+    /// <summary>Initializes the given preallocated list with the nodes in this node.</summary>
+    /// <typeparam name="T">The type to call Initialize on.</typeparam>
+    /// <typeparam name="D">The type of data to pass along while initializing.</typeparam>
+    /// <param name="data">The data to to pass along while initializing.</param>
+    /// <param name="list">The list of items to initialize.</param>
+    static public Array FromList<T, D>(D data, IReadOnlyList<T> list)
+        where T : INodeable<D> {
+        Array a = new();
+        for (int i = 0; i < list.Count; ++i) {
+            try {
+                a.Add(list[i].ToNode(data, i));
+            } catch (Exception ex) {
+                throw new Exception("Failed to create node for #" + i + " in " + typeof(T).Name + " list:", ex);
+            }
+        }
+        return a;
+    }
 
     /// <summary>The number of nodes in this node.</summary>
     public int Count => this.source.Children.Count;

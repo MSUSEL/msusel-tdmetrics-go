@@ -8,8 +8,9 @@
 	</PropertyGroup>
 
 	<ItemGroup>
+	  <ProjectReference Include="..\Commons\Commons.csproj" />
 	  <ProjectReference Include="..\Constructs\Constructs.csproj" />
-	  <ProjectReference Include="..\Participation\Participation.csproj" />
+	  <ProjectReference Include="..\TechDebt\TechDebt.csproj" />
 	</ItemGroup>
 
 </Project>

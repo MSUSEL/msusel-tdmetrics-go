@@ -90,6 +90,17 @@ public class Object(YamlMappingNode source) : Node(source) {
     /// <param name="loc">The location to set at the key.</param>
     public void Add(string key, Writer locs, Location loc) => this.Add(key, new Node(locs, loc));
 
+    /// <summary>Adds a list of indices to the given key.</summary>
+    /// <typeparam name="T">The types in the list to get the index of.</typeparam>
+    /// <param name="key">The key to write the list of indices to.</param>
+    /// <param name="list">The list of items to create the indices for.</param>
+    /// <param name="lookup">The lookup to find the index for an item.</param>
+    public void AddIndexList<T>(string key, IEnumerable<T> list, IReadOnlyDictionary<T, int> lookup) {
+        Array a = new();
+        foreach (T item in list) a.Add(lookup[item]);
+        this.Add(key, a);
+    }
+
     #endregion
     #region Must Reads
 
