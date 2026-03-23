@@ -21,12 +21,13 @@ public class Scanner implements Iterator<Char> {
 
     public Char next() {
         char cur = this.src.charAt(this.offset);
+        Location loc = new Location(this.offset, this.lineNo, this.column);
         this.offset++;
         this.column++;
         if (cur == '\n') {
             this.lineNo++;
             this.column = 1;
         }
-        return new Char(cur, new Location(this.offset, this.lineNo, this.column));
+        return new Char(cur, loc);
     }
 }

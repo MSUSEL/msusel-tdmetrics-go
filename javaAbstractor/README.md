@@ -11,6 +11,7 @@
 1. Install OpenJDK 17.0.14 for Java 17.
    1. This project was built using
       [OpenLogic](https://www.openlogic.com/openjdk-downloads).
+      - [Link to download MSI file](https://builds.openlogic.com/downloadJDK/openlogic-openjdk/17.0.14+7/openlogic-openjdk-17.0.14+7-windows-x64.msi)
    2. See the [Java 17 Almanac](https://javaalmanac.io/jdk/17/)
       for more information.
 
@@ -31,6 +32,9 @@
     Default locale: en_US, platform encoding: Cp1252
     OS name: "windows 11", version: "10.0", arch: "amd64", family: "windows"
     ```
+
+    - May need to set `JAVA_HOME` via `$env:JAVA_HOME = "C:\Program Files (x86)\OpenJDK\17.0.14"`
+      or set that environmental variable permanently.
 
 ## Running Abstractor
 

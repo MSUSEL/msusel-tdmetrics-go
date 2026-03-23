@@ -24,16 +24,22 @@ public class Manager {
             this.ToObject.Add(cIn, cOut);
         }
 
-        foreach(MethodDecl mIn in this.Project.MethodDecls) {
+        foreach (MethodDecl mIn in this.Project.MethodDecls) {
             Method mOut = new(new Source(mIn.Name, mIn.Location));
             this.Tech.Methods.Add(mOut);
             this.ToMethod.Add(mIn, mOut);
+        }
+        
+        foreach (MethodDecl mIn in this.Project.MethodDecls) {
             if (mIn.Metrics is not null) {
+                Method mOut = this.ToMethod[mIn];
                 Metrics met = mIn.Metrics;
                 mOut.CyclomaticComplexity = met.Complexity;
                 mOut.CodeCount = met.CodeCount;
 
                 foreach (IConstruct c in met.Reads) {
+
+
                     //mOut.Reads.Add(c);
 
 
