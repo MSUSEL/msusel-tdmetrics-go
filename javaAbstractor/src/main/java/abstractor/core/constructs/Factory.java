@@ -17,6 +17,7 @@ public class Factory<T extends Construct> implements Jsonable, Iterable<T> {
     private final TreeSet<T> set;
     private final Map<CtElement, T> byElem;
     public boolean inProgress;
+    public String progressTitle;
 
     public Factory(ConstructKind kind) {
         this.conKind = kind;

@@ -36,7 +36,6 @@ public class Abstractor {
         this.log.log("Reading " + mavenProject);
         final MavenLauncher launcher = new MavenLauncher(mavenProject,
             MavenLauncher.SOURCE_TYPE.APP_SOURCE);
-        launcher.addInputResource(mavenProject);
         this.addModel(launcher.buildModel());
     }
 
@@ -124,13 +123,15 @@ public class Abstractor {
                     log.log("Handling in progress: " + title);
                     return h.handle();
                 }
-                throw new Exception("Already in progress: " + title);
+                throw new Exception(factory.progressTitle + " is already in progress so cannot start " + title + " without a in progress handle.");
             }
 
             factory.inProgress = true;
+            factory.progressTitle = title;
             final U newCon = c.create();
             if (newCon == null) {
                 factory.inProgress = false;
+                factory.progressTitle = "";
                 return null;
             }
 
@@ -138,13 +139,15 @@ public class Abstractor {
             if (other != null) {
                 factory.addElemKey(elem, other);
                 factory.inProgress = false;
+                factory.progressTitle = "";
                 return other;
             }
             factory.add(elem, newCon);
+            factory.inProgress = false;
+            factory.progressTitle = "";
 
             this.resolveReferencesFor(elem, newCon);
             if (f != null) f.finish(newCon);
-            factory.inProgress = false;
             return newCon;
 
         } finally {
@@ -307,33 +310,25 @@ public class Abstractor {
     private Signature addConstructSignature(CtConstructor<?> m) throws Exception {
         return this.create(this.proj.signatures, m,
             "constructor signature " + m.getSignature(),
-            () -> {
+            () -> { return new Signature(); },
+            (Signature sig) -> {
                 List<CtParameter<?>> params = m.getParameters();
-                boolean variadic = params.size() > 0 && params.get(params.size()-1).isVarArgs();
-                List<Argument> inArgs = new ArrayList<Argument>();
-                for (CtParameter<?> p : params)  inArgs.add(this.addArgument(p));
-                    
-                List<Argument> outArgs = new ArrayList<Argument>();
-                outArgs.add(this.addUnnamedArgument(m.getType()));
-
-                return new Signature(variadic, inArgs, outArgs);
+                sig.variadic = params.size() > 0 && params.get(params.size()-1).isVarArgs();
+                for (CtParameter<?> p : params) sig.params.add(this.addArgument(p));
+                sig.results.add(this.addUnnamedArgument(m.getType()));
             });
     }
 
     private Signature addSignature(CtMethod<?> m) throws Exception {
         return this.create(this.proj.signatures, m,
             "signature " + m.getSignature(),
-            () -> {
+            () -> { return new Signature(); },
+            (Signature sig) -> {
                 List<CtParameter<?>> params = m.getParameters();
-                boolean variadic = params.size() > 0 && params.get(params.size()-1).isVarArgs();
-                List<Argument> inArgs = new ArrayList<Argument>();
-                for (CtParameter<?> p : params) inArgs.add(this.addArgument(p));
-        
+                sig.variadic = params.size() > 0 && params.get(params.size()-1).isVarArgs();
+                for (CtParameter<?> p : params) sig.params.add(this.addArgument(p));
                 CtTypeReference<?> res = m.getType();
-                List<Argument> outArgs = new ArrayList<Argument>();
-                if (!isVoid(res)) outArgs.add(this.addArgument(res));
-
-                return new Signature(variadic, inArgs, outArgs);
+                if (!isVoid(res)) sig.results.add(this.addArgument(res));
             });
     }
 
@@ -376,21 +371,21 @@ public class Abstractor {
                 ArrayList<Field> fields = new ArrayList<Field>();
                 for (CtFieldReference<?> fr : c.getAllFields())
                     fields.add(this.addField(fr.getFieldDeclaration()));
-
+                return new StructDesc(fields);
+            },
+            (StructDesc sd) -> {
                 // Add extended class as a "$super" field.
                 CtTypeReference<?> superFr = c.getSuperclass();
-                if (superFr != null) fields.add(this.addField("$super", superFr));
+                if (superFr != null) sd.fields.add(this.addField("$super", superFr));
 
                 // Add access to nesting class as a "$nest" field.
                 if (c.getRoleInParent() == CtRole.NESTED_TYPE) {
                     if (c.getParent() instanceof CtTypeReference<?> nest && nest != null) {
-                        fields.add(this.addField("$nest", nest));
+                        sd.fields.add(this.addField("$nest", nest));
                     } else {
                         this.log.error("Unhandled nested object decl "+ c.getQualifiedName() + " in " + c.getParent());
                     }
                 }
-
-                return new StructDesc(fields);
             });
     }
 

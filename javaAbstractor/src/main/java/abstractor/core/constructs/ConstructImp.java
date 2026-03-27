@@ -1,8 +1,5 @@
 package abstractor.core.constructs;
 
-import java.util.Collections;
-import java.util.List;
-import java.util.SortedSet;
 import java.util.TreeSet;
 
 import abstractor.core.json.*;
@@ -59,14 +56,6 @@ public abstract class ConstructImp implements Construct {
         JsonArray indices = new JsonArray();
         for (T s: set) indices.add(index(s));
         return indices;
-    }
-
-    static public <T> List<T> unmodifiableList(List<T> list) {
-        return list == null ? null : Collections.unmodifiableList(list);
-    }
-
-    static public <T> SortedSet<T> unmodifiableSortedSet(SortedSet<T> set) {
-        return set == null ? null : Collections.unmodifiableSortedSet(set);
     }
 
     private int index;

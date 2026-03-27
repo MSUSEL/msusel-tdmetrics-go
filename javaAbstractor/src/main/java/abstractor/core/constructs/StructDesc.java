@@ -8,9 +8,7 @@ import abstractor.core.json.*;
 public class StructDesc extends ConstructImp implements TypeDesc {
     public final List<Field> fields;
 
-    public StructDesc(List<Field> fields) {
-        this.fields = unmodifiableList(fields);
-    }
+    public StructDesc(List<Field> fields) { this.fields = fields; }
 
     public ConstructKind kind() { return ConstructKind.STRUCT_DESC; }
 

@@ -31,9 +31,9 @@ public class Metrics extends ConstructImp {
         this.lineCount  = lineCount;
         this.getter     = getter;
         this.setter     = setter;
-        this.invokes    = unmodifiableSortedSet(invokes);
-        this.reads      = unmodifiableSortedSet(reads);
-        this.writes     = unmodifiableSortedSet(writes);
+        this.invokes    = invokes;
+        this.reads      = reads;
+        this.writes     = writes;
     }
 
     public ConstructKind kind() { return ConstructKind.METRICS; }

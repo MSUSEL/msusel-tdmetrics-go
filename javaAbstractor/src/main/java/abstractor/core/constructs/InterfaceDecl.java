@@ -15,7 +15,7 @@ public class InterfaceDecl extends DeclarationImp implements TypeDeclaration {
         String name, InterfaceDesc inter, List<TypeParam> typeParams) {
         super(pkg, loc, name);
         this.inter = inter;
-        this.typeParams = unmodifiableList(typeParams);
+        this.typeParams = typeParams;
         this.instances = new TreeSet<InterfaceInst>();
     }
 

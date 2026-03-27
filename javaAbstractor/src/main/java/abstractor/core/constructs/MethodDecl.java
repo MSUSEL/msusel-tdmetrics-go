@@ -20,7 +20,7 @@ public class MethodDecl extends DeclarationImp implements Method {
         super(pkg, loc, name);
         this.receiver = receiver;
         this.signature = signature;
-        this.typeParams = unmodifiableList(typeParams);
+        this.typeParams = typeParams;
         this.instances = new TreeSet<MethodInst>();
     }
 

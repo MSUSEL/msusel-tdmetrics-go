@@ -15,7 +15,7 @@ public class MethodInst extends ConstructImp implements Method {
         List<TypeDesc> instanceTypes, Signature resolved) {
         this.generic = generic;
         this.receiver = receiver;
-        this.instanceTypes = unmodifiableList(instanceTypes);
+        this.instanceTypes = instanceTypes;
         this.resolved = resolved;
     }
 

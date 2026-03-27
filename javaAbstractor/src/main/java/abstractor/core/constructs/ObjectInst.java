@@ -16,7 +16,7 @@ public class ObjectInst extends ConstructImp implements TypeDesc {
     public ObjectInst(ObjectDecl generic, List<TypeDesc> instanceTypes,
         StructDesc resData, InterfaceDesc resInterface) {
         this.generic       = generic;
-        this.instanceTypes = unmodifiableList(instanceTypes);
+        this.instanceTypes = instanceTypes;
         this.methods       = new TreeSet<MethodInst>();
         this.resData       = resData;
         this.resInterface  = resInterface;

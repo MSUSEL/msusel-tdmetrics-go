@@ -19,7 +19,7 @@ public class ObjectDecl extends DeclarationImp implements TypeDeclaration {
         super(pkg, loc, name);
         this.struct = struct;
         this.methodDecls = new TreeSet<MethodDecl>();
-        this.typeParams = unmodifiableList(typeParams);
+        this.typeParams = typeParams;
         this.instances = new TreeSet<InterfaceInst>();
     }
 

@@ -286,23 +286,23 @@ public class Analyzer {
         if (elem instanceof CtFieldRead fr) {
 
             // TODO: Implement
-            this.log.log("addUsage.CtFieldRead: " + fr);
+            //this.log.warning("addUsage.CtFieldRead: " + fr);
             return;
         }
         if (elem instanceof CtTypeAccess ta) {
             
             // TODO: Implement
-            this.log.log("addUsage.CtTypeAccess: " + ta);
+            //this.log.warning("addUsage.CtTypeAccess: " + ta);
             return;
         }
         if (elem instanceof CtAssignment as) {
 
             // TODO: Implement
-            this.log.log("addUsage.CtAssignment: " + as);
+            //this.log.warning("addUsage.CtAssignment: " + as);
             return;
         }
 
         // TODO: Use to see elements.
-        this.log.log("addUsage: "+formatElem(elem));
+        //this.log.warning("addUsage: "+formatElem(elem));
     }
 }

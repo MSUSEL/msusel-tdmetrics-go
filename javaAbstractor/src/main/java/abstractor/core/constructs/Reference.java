@@ -21,7 +21,7 @@ public abstract class Reference<T extends Construct> extends ConstructImp {
         this.elem = elem;
         this.context = context;
         this.name = name;
-        this.typeArguments = unmodifiableList(typeArguments);
+        this.typeArguments = typeArguments;
     }
 
     public T getResolved() { return this.res; }

@@ -16,7 +16,7 @@ public class InterfaceDesc extends ConstructImp implements TypeDesc {
     }
 
     public InterfaceDesc(SortedSet<Abstract> abstracts, Construct pin) {
-        this.abstracts = unmodifiableSortedSet(abstracts);
+        this.abstracts = abstracts;
         this.inherits = new TreeSet<InterfaceDesc>();
         this.pin = pin;
     }
