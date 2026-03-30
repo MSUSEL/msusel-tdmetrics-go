@@ -2,12 +2,9 @@ package abstractor.core.json;
 
 public class JsonValue implements JsonNode, Comparable<JsonValue> {
 
-    public static JsonValue of(String value) { return new JsonValue(value); }
-
-    public static JsonValue of(int value) { return new JsonValue(value); }
-
-    public static JsonValue of(double value) { return new JsonValue(value); }
-
+    public static JsonValue of(String  value) { return new JsonValue(value); }
+    public static JsonValue of(int     value) { return new JsonValue(value); }
+    public static JsonValue of(double  value) { return new JsonValue(value); }
     public static JsonValue of(boolean value) { return new JsonValue(value); }
     
     private static final JsonValue nullSingleton = new JsonValue(null);
@@ -18,15 +15,11 @@ public class JsonValue implements JsonNode, Comparable<JsonValue> {
 
     private JsonValue(Object value) { this.value = value; }
 
-    public boolean isString() { return this.value instanceof String; }
-    
-    public boolean isInt() { return this.value instanceof Integer; }
-    
-    public boolean isDouble() { return this.value instanceof Double; }
-    
-    public boolean isBool() { return this.value instanceof Boolean; }
-    
-    public boolean isNull() { return this.value == null; }
+    public boolean isString() { return this.value instanceof String;  }
+    public boolean isInt()    { return this.value instanceof Integer; }
+    public boolean isDouble() { return this.value instanceof Double;  }
+    public boolean isBool()   { return this.value instanceof Boolean; }
+    public boolean isNull()   { return this.value == null; }
 
     public boolean isEmpty() {
         if (this.isBool())   return !(boolean)this.value;

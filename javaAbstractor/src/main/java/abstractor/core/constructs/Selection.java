@@ -4,8 +4,10 @@ import abstractor.core.cmp.Cmp;
 import abstractor.core.json.*;
 
 public class Selection extends ConstructImp {
-    public final String name;
-    public final Construct origin;
+    public String name;
+    public Construct origin;
+
+    public Selection() {}
 
     public Selection(String name, Construct origin) {
         this.name = name;

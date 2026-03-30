@@ -4,7 +4,6 @@ public enum ConstructKind {
     ABSTRACT        ("abstract"),
     ARGUMENT        ("argument"),
     BASIC           ("basic"),
-    DECLARATION_REF ("declarationRef"),
     FIELD           ("field"),
     INTERFACE_DECL  ("interfaceDecl"),
     INTERFACE_DESC  ("interfaceDesc"),
@@ -18,11 +17,8 @@ public enum ConstructKind {
     SELECTION       ("selection"),
     SIGNATURE       ("signature"),
     STRUCT_DESC     ("structDesc"),
-    TYPE_DESC_REF   ("typeDescRef"),
     TYPE_PARAM      ("typeParam"),
-    TYPE_PARAM_REF  ("typeParamRef"),
     VALUE           ("value");
-
 
     static public ConstructKind fromName(String name) {
         for (ConstructKind k : ConstructKind.values()) {

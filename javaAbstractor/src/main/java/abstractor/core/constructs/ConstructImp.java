@@ -7,17 +7,11 @@ import abstractor.core.json.*;
 public abstract class ConstructImp implements Construct {
 
     static public JsonValue key(Construct c) {
-        if (c == null) return JsonValue.ofNull();
-        if (c instanceof Reference ref && ref.isResolved())
-            return key(ref.getResolved());
-        return JsonValue.of(c.kind().toString() + c.getIndex());
+        return c == null ? JsonValue.ofNull() : JsonValue.of(c.kind().toString() + c.getIndex());
     }
     
     static public JsonValue index(Construct c) {
-        if (c == null) return JsonValue.ofNull();
-        if (c instanceof Reference ref && ref.isResolved())
-            return index(ref.getResolved());
-        return JsonValue.of(c.getIndex());
+        return c == null ? JsonValue.ofNull() : JsonValue.of(c.getIndex());
     }
 
     static public <T extends Construct> JsonNode keyList(Iterable<T> os) {
@@ -63,11 +57,11 @@ public abstract class ConstructImp implements Construct {
     protected ConstructImp() { }
 
     public void setIndex(int index) { this.index = index; }
-    public int getIndex() { return this.index; }
+    public int  getIndex()          { return this.index;  }
 
     public JsonNode toJson(JsonHelper h) {
         JsonObject obj = new JsonObject();
-        if (h.writeKinds) obj.put("kind", this.kind().toString());
+        if (h.writeKinds)   obj.put("kind",  this.kind().toString());
         if (h.writeIndices) obj.put("index", this.getIndex());
         return obj;
     }
@@ -86,7 +80,7 @@ public abstract class ConstructImp implements Construct {
     @Override
     public String toString() {
         JsonHelper jh = new JsonHelper();
-        jh.writeKinds = true;
+        jh.writeKinds   = true;
         jh.writeIndices = true;
         return JsonFormat.Relaxed().format(this.toJson(jh));
     }

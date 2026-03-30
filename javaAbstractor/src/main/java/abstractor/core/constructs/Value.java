@@ -4,9 +4,11 @@ import abstractor.core.cmp.Cmp;
 import abstractor.core.json.*;
 
 public class Value extends DeclarationImp {
-    public final boolean constant;
-    public final Metrics metrics;
-    public final TypeDesc type;
+    public boolean  constant;
+    public Metrics  metrics;
+    public TypeDesc type;
+
+    public Value() {}
 
     public Value(PackageCon pkg, Location loc,
         String name, boolean constant, Metrics metrics, TypeDesc type) {

@@ -6,16 +6,17 @@ import abstractor.core.cmp.Cmp;
 import abstractor.core.json.*;
 
 public abstract class DeclarationImp extends ConstructImp implements Declaration {
-    public final PackageCon pkg;
-    public final Location loc;
-    public final String name;
-    
-    public String visibility;
+    public Ref<PackageCon> pkg;
+    public Location        loc;
+    public String          name;
+    public String          visibility;
 
-    public DeclarationImp(PackageCon pkg, Location loc, String name) {
-        this.pkg = pkg;
-        this.loc = loc;
-        this.name = name;
+    public DeclarationImp() {}
+
+    public DeclarationImp(Ref<PackageCon> pkg, Location loc, String name) {
+        this.pkg        = pkg;
+        this.loc        = loc;
+        this.name       = name;
         this.visibility = "";
     }
 
@@ -29,7 +30,7 @@ public abstract class DeclarationImp extends ConstructImp implements Declaration
         if (this.pkg != null) obj.put("package", index(pkg));
         if (this.loc != null) obj.putNotEmpty("loc", this.loc.toJson(h));
         obj.putNotEmpty("name", this.name);
-        obj.putNotEmpty("vis", this.visibility);
+        obj.putNotEmpty("vis",  this.visibility);
         return obj;
     }
 
@@ -38,7 +39,7 @@ public abstract class DeclarationImp extends ConstructImp implements Declaration
         return Cmp.or(
             () -> super.compareTo(c),
             Cmp.defer(this.name, () -> ((DeclarationImp)c).name),
-            Cmp.defer(this.pkg, () -> ((DeclarationImp)c).pkg)
+            Cmp.defer(this.pkg,  () -> ((DeclarationImp)c).pkg)
         );
     }
 }

@@ -4,11 +4,13 @@ import abstractor.core.cmp.Cmp;
 import abstractor.core.json.*;
 
 public class Abstract extends ConstructImp {
-    public final String name;
-    public final Signature signature;
+    public String         name;
+    public Ref<Signature> signature;
 
-    public Abstract(String name, Signature signature) {
-        this.name = name;
+    public Abstract() {}
+
+    public Abstract(String name, Ref<Signature> signature) {
+        this.name      = name;
         this.signature = signature;
     }
 
@@ -17,7 +19,7 @@ public class Abstract extends ConstructImp {
     @Override
     public JsonNode toJson(JsonHelper h) {
         JsonObject obj = (JsonObject)super.toJson(h);
-        obj.put("name", this.name);
+        obj.put("name",      this.name);
         obj.put("signature", index(this.signature));
         return obj;
     }

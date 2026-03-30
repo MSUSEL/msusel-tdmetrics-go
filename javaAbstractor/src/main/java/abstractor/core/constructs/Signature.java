@@ -8,18 +8,15 @@ import abstractor.core.json.*;
 
 public class Signature extends ConstructImp implements TypeDesc {
     public boolean variadic;
-    public final List<Argument> params;
-    public final List<Argument> results;
+    public final ArrayList<Argument> params  = new ArrayList<Argument>();
+    public final ArrayList<Argument> results = new ArrayList<Argument>();
     
-    public Signature() {
-        this.params  = new ArrayList<Argument>();
-        this.results = new ArrayList<Argument>();
-    }
+    public Signature() {}
 
     public Signature(boolean variadic, List<Argument> params, List<Argument> results) {
         this.variadic = variadic;
-        this.params   = params;
-        this.results  = results;
+        this.params.addAll(params);
+        this.results.addAll(results);
     }
 
     public ConstructKind kind() { return ConstructKind.SIGNATURE; }

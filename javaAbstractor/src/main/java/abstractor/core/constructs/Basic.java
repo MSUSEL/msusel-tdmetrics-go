@@ -4,8 +4,9 @@ import abstractor.core.cmp.Cmp;
 import abstractor.core.json.*;
 
 public class Basic extends ConstructImp implements TypeDesc {
-    public final String name;
+    public String name;
 
+    public Basic()            { this.name = "undefined"; }
     public Basic(String name) { this.name = name; }
 
     public ConstructKind kind() { return ConstructKind.BASIC; }

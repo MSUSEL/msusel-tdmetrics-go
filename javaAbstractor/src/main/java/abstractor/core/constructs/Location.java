@@ -7,10 +7,17 @@ import abstractor.core.cmp.Cmp;
 import abstractor.core.json.*;
 
 public class Location implements Jsonable, Comparable<Location> {
-    public final String path;
-    public final int line;
-    public int offset;
+    public String path;
+    public int    line;
+    public int    offset;
 
+    public Location() {}
+
+    public Location(String path, int line) {
+       this.path = path;
+       this.line = line;
+    }
+    
     public Location(SourcePosition pos) {
         String path = "unknown";
         int line = 0;
@@ -21,11 +28,6 @@ public class Location implements Jsonable, Comparable<Location> {
             line = pos.getLine();
         }
 
-       this.path = path;
-       this.line = line;
-    }
-
-    public Location(String path, int line) {
        this.path = path;
        this.line = line;
     }

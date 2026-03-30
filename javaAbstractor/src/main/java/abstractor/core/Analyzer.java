@@ -116,16 +116,18 @@ public class Analyzer {
             this.addPosition(p.getPosition());
 
         final CtBlock<?> block = m.getBody();
-        this.addPosition(block.getPosition());
+        if (block != null) {
+            this.addPosition(block.getPosition());
 
-        final List<CtStatement> stmts = block.getStatements();
-        for (CtStatement st : stmts)
-            this.addElement(st);
+            final List<CtStatement> stmts = block.getStatements();
+            for (CtStatement st : stmts)
+                this.addElement(st);
 
-        if (stmts.size() == 1) {
-            final CtStatement onlySt = stmts.get(0);
-            if (detectGetter(m, onlySt)) this.getter = true;
-            else if (detectSetter(m, onlySt)) this.setter = true;
+            if (stmts.size() == 1) {
+                final CtStatement onlySt = stmts.get(0);
+                if (detectGetter(m, onlySt)) this.getter = true;
+                else if (detectSetter(m, onlySt)) this.setter = true;
+            }
         }
     }
 

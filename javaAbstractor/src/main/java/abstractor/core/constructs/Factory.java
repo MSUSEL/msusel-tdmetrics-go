@@ -5,28 +5,31 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 import java.util.TreeSet;
+import java.util.function.Supplier;
+import java.util.function.Consumer;
 
 import spoon.reflect.declaration.CtElement;
 
 import abstractor.core.json.*;
+import abstractor.core.log.*;
 
 public class Factory<T extends Construct> implements Jsonable, Iterable<T> {
-    private final ConstructKind conKind;
-    private final TreeSet<T> set;
-    private final Map<CtElement, T> byElem;
-    public boolean inProgress;
-    public String progressTitle;
+    static private final boolean logCreate = false;
 
-    public Factory(ConstructKind kind) {
+    private final ConstructKind conKind;
+    private final TreeSet<T>    set = new TreeSet<T>();
+    private final Supplier<T>   creator;
+    private final HashMap<CtElement, T> byElem = new HashMap<CtElement, T>();
+
+    public Factory(ConstructKind kind, Supplier<T> creator) {
         this.conKind = kind;
-        this.set = new TreeSet<T>();
-        this.byElem = new HashMap<CtElement, T>();
-        this.inProgress = false;
+        this.creator = creator;
     }
 
     public ConstructKind kind() { return this.conKind; }
+
+    public String toString() { return this.conKind.toString(); }
 
     public int size() { return this.set.size(); }
 
@@ -44,22 +47,38 @@ public class Factory<T extends Construct> implements Jsonable, Iterable<T> {
     }
 
     public T get(int index) {
-        int i = 0;
-        for (T value : this.set) {
-            if (i == index) return value;
-            i++;
-        }
-        return null;
+        return this.set.stream().skip(index).findFirst().orElse(null);
     }
 
-    public T get(CtElement elem) {
-        return this.byElem.get(elem);
-    }
+    public T get(CtElement elem) { return this.byElem.get(elem); }
     
     public T get(T c) {
         final T other = this.set.floor(c);
-        if (c.equals(other)) return other;
-        return null;
+        return c.equals(other) ? other : null;
+    }
+
+    public T create(Logger log, CtElement elem, String title, Consumer<T> loader) throws Exception {
+        if (elem == null) return null;
+        final T existing = this.get(elem);
+        if (existing != null) return existing;
+
+        try {
+            if (logCreate) {
+                log.log("Adding " + title);
+                log.push();
+            }
+
+            final T newCon = this.creator.get();
+            if (newCon == null)
+                throw new Exception("Factory creator for " + this.toString() + " returned null.");
+            this.add(elem, newCon);
+
+            loader.accept(newCon);
+
+            return newCon;
+        } finally {
+            if (logCreate) log.pop();
+        }
     }
 
     public T addOrGet(CtElement elem, T c) {

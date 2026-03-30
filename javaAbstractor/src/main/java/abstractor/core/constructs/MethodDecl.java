@@ -1,5 +1,6 @@
 package abstractor.core.constructs;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.TreeSet;
     
@@ -7,21 +8,27 @@ import abstractor.core.cmp.Cmp;
 import abstractor.core.json.*;
 
 public class MethodDecl extends DeclarationImp implements Method {
-    public final ObjectDecl receiver;
-    public final Signature signature;
+    public ObjectDecl receiver;
+    public Signature signature;
     public final List<TypeParam> typeParams;
     public final TreeSet<MethodInst> instances;
     // TODO: Add a flag to indicate if this method is a constructor or not.
     
     public Metrics metrics;
 
+    
+    public MethodDecl() {
+        this.typeParams = new ArrayList<TypeParam>();
+        this.instances = new TreeSet<MethodInst>();
+    }
+
     public MethodDecl(PackageCon pkg, ObjectDecl receiver, Location loc,
         String name, Signature signature, List<TypeParam> typeParams) {
         super(pkg, loc, name);
-        this.receiver = receiver;
-        this.signature = signature;
+        this.receiver   = receiver;
+        this.signature  = signature;
         this.typeParams = typeParams;
-        this.instances = new TreeSet<MethodInst>();
+        this.instances  = new TreeSet<MethodInst>();
     }
 
     public ConstructKind kind() { return ConstructKind.METHOD_DECL; }

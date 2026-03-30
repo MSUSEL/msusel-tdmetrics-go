@@ -1,25 +1,32 @@
 package abstractor.core.constructs;
 
 import java.util.SortedSet;
+import java.util.TreeSet;
 
 import abstractor.core.cmp.Cmp;
 import abstractor.core.json.*;
 
 public class Metrics extends ConstructImp {
-    public final Location loc;
+    public Location loc;
 
-    public final int codeCount;
-    public final int complexity;
-    public final int indents;
-    public final int lineCount;
+    public int codeCount;
+    public int complexity;
+    public int indents;
+    public int lineCount;
 
-    public final boolean getter;
-    public final boolean setter;
+    public boolean getter;
+    public boolean setter;
 
-    public final SortedSet<Construct> invokes;
-    public final SortedSet<Construct> reads;
-    public final SortedSet<Construct> writes;
-    
+    public SortedSet<Construct> invokes;
+    public SortedSet<Construct> reads;
+    public SortedSet<Construct> writes;
+
+    public Metrics() {
+        this.invokes = new TreeSet<Construct>();
+        this.reads   = new TreeSet<Construct>();
+        this.writes  = new TreeSet<Construct>();
+    }
+
     public Metrics(Location loc,
         int codeCount, int complexity, int indents, int lineCount,
         boolean getter, boolean setter,

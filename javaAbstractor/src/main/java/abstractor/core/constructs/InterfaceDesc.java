@@ -7,9 +7,13 @@ import abstractor.core.cmp.Cmp;
 import abstractor.core.json.*;
 
 public class InterfaceDesc extends ConstructImp implements TypeDesc {
-    public final SortedSet<Abstract> abstracts;
+    public final SortedSet<Abstract>      abstracts;
     public final SortedSet<InterfaceDesc> inherits;
-    public final Construct pin;  
+    public       Construct                pin;  
+    
+    public InterfaceDesc() {
+        this(new TreeSet<Abstract>(), null);
+    }
 
     public InterfaceDesc(SortedSet<Abstract> abstracts) {
         this(abstracts, null);
@@ -17,8 +21,8 @@ public class InterfaceDesc extends ConstructImp implements TypeDesc {
 
     public InterfaceDesc(SortedSet<Abstract> abstracts, Construct pin) {
         this.abstracts = abstracts;
-        this.inherits = new TreeSet<InterfaceDesc>();
-        this.pin = pin;
+        this.inherits  = new TreeSet<InterfaceDesc>();
+        this.pin       = pin;
     }
 
     public ConstructKind kind() { return ConstructKind.INTERFACE_DESC; }

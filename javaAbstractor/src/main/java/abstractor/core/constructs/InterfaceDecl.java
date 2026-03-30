@@ -1,5 +1,6 @@
 package abstractor.core.constructs;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.TreeSet;
 
@@ -7,16 +8,17 @@ import abstractor.core.cmp.Cmp;
 import abstractor.core.json.*;
 
 public class InterfaceDecl extends DeclarationImp implements TypeDeclaration {
-    public final InterfaceDesc inter;
-    public final List<TypeParam> typeParams;
-    public final TreeSet<InterfaceInst> instances;
+    public       InterfaceDesc          inter;
+    public final ArrayList<TypeParam>   typeParams = new ArrayList<TypeParam>();
+    public final TreeSet<InterfaceInst> instances  = new TreeSet<InterfaceInst>();
+
+    public InterfaceDecl() {}
 
     public InterfaceDecl(PackageCon pkg, Location loc,
         String name, InterfaceDesc inter, List<TypeParam> typeParams) {
         super(pkg, loc, name);
         this.inter = inter;
-        this.typeParams = typeParams;
-        this.instances = new TreeSet<InterfaceInst>();
+        this.typeParams.addAll(typeParams);
     }
 
     public ConstructKind kind() { return ConstructKind.INTERFACE_DECL; }

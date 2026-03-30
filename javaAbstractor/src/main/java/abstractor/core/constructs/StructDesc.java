@@ -1,14 +1,17 @@
 package abstractor.core.constructs;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import abstractor.core.cmp.Cmp;
 import abstractor.core.json.*;
 
 public class StructDesc extends ConstructImp implements TypeDesc {
-    public final List<Field> fields;
+    public final ArrayList<Field> fields = new ArrayList<Field>();
 
-    public StructDesc(List<Field> fields) { this.fields = fields; }
+    public StructDesc() {} 
+
+    public StructDesc(List<Field> fields) { this.fields.addAll(fields); }
 
     public ConstructKind kind() { return ConstructKind.STRUCT_DESC; }
 

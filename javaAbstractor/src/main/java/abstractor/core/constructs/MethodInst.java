@@ -1,22 +1,27 @@
 package abstractor.core.constructs;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import abstractor.core.cmp.Cmp;
 import abstractor.core.json.*;
 
 public class MethodInst extends ConstructImp implements Method {
-    public final MethodDecl generic;
-    public final ObjectInst receiver;
+    public MethodDecl generic;
+    public ObjectInst receiver;
     public final List<TypeDesc> instanceTypes;
-    public final Signature resolved;
+    public Signature resolved;
+
+    public MethodInst() {
+        this.instanceTypes = new ArrayList<TypeDesc>();
+    }
 
     public MethodInst(MethodDecl generic, ObjectInst receiver,
         List<TypeDesc> instanceTypes, Signature resolved) {
-        this.generic = generic;
-        this.receiver = receiver;
+        this.generic       = generic;
+        this.receiver      = receiver;
         this.instanceTypes = instanceTypes;
-        this.resolved = resolved;
+        this.resolved      = resolved;
     }
 
     public ConstructKind kind() { return ConstructKind.METHOD_INST; }

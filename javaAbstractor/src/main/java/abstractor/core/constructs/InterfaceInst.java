@@ -1,19 +1,24 @@
 package abstractor.core.constructs;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import abstractor.core.cmp.Cmp;
 import abstractor.core.json.*;
 
 public class InterfaceInst extends ConstructImp implements TypeDesc {
-    public final InterfaceDecl generic;
+    public       InterfaceDecl  generic;
     public final List<TypeDesc> instanceTypes;
-    public final InterfaceDesc resolved;
-    
+    public       InterfaceDesc  resolved;
+
+    public InterfaceInst() {
+        this.instanceTypes = new ArrayList<TypeDesc>();
+    }
+
     public InterfaceInst(InterfaceDecl generic, List<TypeDesc> instanceTypes, InterfaceDesc resolved) {
-        this.generic = generic;
+        this.generic       = generic;
         this.instanceTypes = instanceTypes;
-        this.resolved = resolved;
+        this.resolved      = resolved;
     }
 
     public ConstructKind kind() { return ConstructKind.INTERFACE_INST; }

@@ -1,17 +1,24 @@
 package abstractor.core.constructs;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.TreeSet;
+import java.util.SortedSet;
 
 import abstractor.core.cmp.Cmp;
 import abstractor.core.json.*;
 
 public class ObjectInst extends ConstructImp implements TypeDesc {
-    public final ObjectDecl generic;
+    public ObjectDecl generic;
     public final List<TypeDesc> instanceTypes;
-    public final TreeSet<MethodInst> methods;
-    public final StructDesc resData;
-    public final InterfaceDesc resInterface;
+    public final SortedSet<MethodInst> methods;
+    public StructDesc resData;
+    public InterfaceDesc resInterface;
+
+    public ObjectInst() {
+        this.instanceTypes = new ArrayList<TypeDesc>();
+        this.methods       = new TreeSet<MethodInst>();
+    }
 
     public ObjectInst(ObjectDecl generic, List<TypeDesc> instanceTypes,
         StructDesc resData, InterfaceDesc resInterface) {

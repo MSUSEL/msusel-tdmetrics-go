@@ -6,13 +6,15 @@ import abstractor.core.cmp.Cmp;
 import abstractor.core.json.*;
 
 public class Field extends ConstructImp {
-    public final String name;
-    public final TypeDesc type;
-    public String visibility;
+    public String   name;
+    public TypeDesc type;
+    public String   visibility;
+
+    public Field() {}
 
     public Field(String name, TypeDesc type) {
-        this.name = name;
-        this.type = type;
+        this.name       = name;
+        this.type       = type;
         this.visibility = "";
     }
 
@@ -25,8 +27,8 @@ public class Field extends ConstructImp {
     @Override
     public JsonNode toJson(JsonHelper h) {
         JsonObject obj = (JsonObject)super.toJson(h);
-        obj.put("name", this.name);
-        obj.put("type", key(this.type));
+        obj.put("name",        this.name);
+        obj.put("type",        key(this.type));
         obj.putNotEmpty("vis", this.visibility);
         return obj;
     }
