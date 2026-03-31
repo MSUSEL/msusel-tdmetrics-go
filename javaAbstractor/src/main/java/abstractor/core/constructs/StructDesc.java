@@ -7,11 +7,11 @@ import abstractor.core.cmp.Cmp;
 import abstractor.core.json.*;
 
 public class StructDesc extends ConstructImp implements TypeDesc {
-    public final ArrayList<Field> fields = new ArrayList<Field>();
+    public final ArrayList<Ref<Field>> fields = new ArrayList<Ref<Field>>();
 
     public StructDesc() {} 
 
-    public StructDesc(List<Field> fields) { this.fields.addAll(fields); }
+    public StructDesc(List<Ref<Field>> fields) { this.fields.addAll(fields); }
 
     public ConstructKind kind() { return ConstructKind.STRUCT_DESC; }
 

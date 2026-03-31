@@ -18,9 +18,12 @@ public class Factory<T extends Construct> implements Jsonable, Iterable<T> {
     static private final boolean logCreate = false;
 
     private final ConstructKind conKind;
-    private final TreeSet<T>    set = new TreeSet<T>();
     private final Supplier<T>   creator;
-    private final HashMap<CtElement, T> byElem = new HashMap<CtElement, T>();
+
+    private final TreeSet<Ref<T>>            refSet     = new TreeSet<Ref<T>>();
+    private final TreeSet<T>                 conSet     = new TreeSet<T>();
+    private final HashMap<CtElement, Ref<T>> byElem     = new HashMap<CtElement, Ref<T>>();
+    private final HashMap<T,         Ref<T>> nonElemRef = new HashMap<T, Ref<T>>();
 
     public Factory(ConstructKind kind, Supplier<T> creator) {
         this.conKind = kind;
@@ -29,84 +32,96 @@ public class Factory<T extends Construct> implements Jsonable, Iterable<T> {
 
     public ConstructKind kind() { return this.conKind; }
 
-    public String toString() { return this.conKind.toString(); }
+    public String toString() { return "factory " + this.conKind; }
 
-    public int size() { return this.set.size(); }
+    public int refSize() { return this.refSet.size(); }
+    public int size()    { return this.conSet.size(); }
 
     public void clear() {
-        this.set.clear();
+        this.refSet.clear();
+        this.conSet.clear();
         this.byElem.clear();
+        this.nonElemRef.clear();
     }
 
-    public Iterator<T> iterator() { return this.set.iterator(); }
+    public Iterator<Ref<T>> refIterator() { return this.refSet.iterator(); }
+    public Iterator<T>      iterator()    { return this.conSet.iterator(); }
 
     public List<T> toList() {
-        ArrayList<T> list = new ArrayList<>(this.set.size());
-        for (T value : this.set) list.add(value);
+        ArrayList<T> list = new ArrayList<>(this.conSet.size());
+        for (T value : this.conSet) list.add(value);
         return Collections.unmodifiableList(list);
     }
 
     public T get(int index) {
-        return this.set.stream().skip(index).findFirst().orElse(null);
+        return this.conSet.stream().skip(index).findFirst().orElse(null);
     }
 
-    public T get(CtElement elem) { return this.byElem.get(elem); }
+    public Ref<T> getRef(CtElement elem) { return this.byElem.get(elem); }
     
-    public T get(T c) {
-        final T other = this.set.floor(c);
+    public T getExisting(T c) {
+        final T other = this.conSet.floor(c);
         return c.equals(other) ? other : null;
     }
 
-    public T create(Logger log, CtElement elem, String title, Consumer<T> loader) throws Exception {
+    public Ref<T> create(Logger log, CtElement elem, String title, Consumer<T> loader) throws Exception {
         if (elem == null) return null;
-        final T existing = this.get(elem);
-        if (existing != null) return existing;
 
+        // Check if a resistance already exists.
+        final Ref<T> existing = this.getRef(elem);
+        if (existing != null) return existing;
+        
         try {
             if (logCreate) {
                 log.log("Adding " + title);
                 log.push();
             }
 
+            // First add a reference so that if a circular loop is hit when
+            // creating the new construct, the same reference will be picked up.
+            final Ref<T> newRef = new Ref<T>(this.conKind, elem, title);
+            this.refSet.add(newRef);
+            this.byElem.put(elem, newRef);
+
+            // Create a new construct for this data.
             final T newCon = this.creator.get();
             if (newCon == null)
                 throw new Exception("Factory creator for " + this.toString() + " returned null.");
-            this.add(elem, newCon);
+            loader.accept(newCon); 
 
-            loader.accept(newCon);
+            // If an existing construct matches the new one after the new one
+            // has been loaded, then there are two elements to get to the same
+            // value. Resolve the reference for the existing or new construct.
+            final T other = this.getExisting(newCon);
+            if (other != null) {
+                newRef.setResolved(other);
+            } else {
+                this.conSet.add(newCon);
+                newRef.setResolved(newCon);
+            }
 
-            return newCon;
+            return newRef;
         } finally {
             if (logCreate) log.pop();
         }
     }
 
-    public T addOrGet(CtElement elem, T c) {
-        final T other = this.get(c);
-        if (other != null) {
-            this.addElemKey(elem, other);
-            return other;
-        }
-        this.add(elem, c);
-        return c;
-    }
+    public Ref<T> addOrGetRef(T c) {
+        final T other = this.getExisting(c);
+        if (other != null) c = other;
 
-    public T addOrGet(T c) {
-        return this.addOrGet(null, c);
-    }
+        Ref<T> ref = this.nonElemRef.get(c);
+        if (ref != null) return ref;
 
-    public void addElemKey(CtElement elem, T c) {
-        if (elem != null) this.byElem.put(elem, c);
-    }
-    
-    public void add(CtElement elem, T c) {
-        this.set.add(c);
-        this.addElemKey(elem, c);
+        ref = new Ref<>(this.conKind, null, "No element ref");
+        this.conSet.add(c);
+        this.nonElemRef.put(c, ref);
+        return ref;
     }
 
     public void setIndices() {
         int index = 1;
-        for (Construct o : this.set) {
+        for (Construct o : this.conSet) {
             o.setIndex(index);
             index++;
         }
@@ -114,7 +129,7 @@ public class Factory<T extends Construct> implements Jsonable, Iterable<T> {
 
     public JsonNode toJson(JsonHelper h) {
         JsonArray array = new JsonArray();
-        for (T t : this.set) array.add(t.toJson(h));
+        for (T t : this.conSet) array.add(t.toJson(h));
         return array;
     }
 }

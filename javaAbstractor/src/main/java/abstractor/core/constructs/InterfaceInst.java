@@ -7,18 +7,16 @@ import abstractor.core.cmp.Cmp;
 import abstractor.core.json.*;
 
 public class InterfaceInst extends ConstructImp implements TypeDesc {
-    public       InterfaceDecl  generic;
-    public final List<TypeDesc> instanceTypes;
-    public       InterfaceDesc  resolved;
+    public Ref<InterfaceDecl> generic;
+    public final ArrayList<Ref<? extends TypeDesc>> instanceTypes = new ArrayList<Ref<? extends TypeDesc>>();
+    public Ref<InterfaceDesc> resolved;
 
-    public InterfaceInst() {
-        this.instanceTypes = new ArrayList<TypeDesc>();
-    }
+    public InterfaceInst() {}
 
-    public InterfaceInst(InterfaceDecl generic, List<TypeDesc> instanceTypes, InterfaceDesc resolved) {
-        this.generic       = generic;
-        this.instanceTypes = instanceTypes;
-        this.resolved      = resolved;
+    public InterfaceInst(Ref<InterfaceDecl> generic, List<Ref<? extends TypeDesc>> instanceTypes, Ref<InterfaceDesc> resolved) {
+        this.generic = generic;
+        this.instanceTypes.addAll(instanceTypes);
+        this.resolved = resolved;
     }
 
     public ConstructKind kind() { return ConstructKind.INTERFACE_INST; }
@@ -36,9 +34,9 @@ public class InterfaceInst extends ConstructImp implements TypeDesc {
     public int compareTo(Construct c) {
         return Cmp.or(
             () -> super.compareTo(c),
-            Cmp.defer(this.generic,           () -> ((InterfaceInst)c).generic),
+            Cmp.defer(    this.generic,       () -> ((InterfaceInst)c).generic),
             Cmp.deferList(this.instanceTypes, () -> ((InterfaceInst)c).instanceTypes),
-            Cmp.defer(this.resolved,          () -> ((InterfaceInst)c).resolved)
+            Cmp.defer(    this.resolved,      () -> ((InterfaceInst)c).resolved)
         );
     }   
 }

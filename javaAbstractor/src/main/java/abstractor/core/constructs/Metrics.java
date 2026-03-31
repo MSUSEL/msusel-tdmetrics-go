@@ -17,20 +17,15 @@ public class Metrics extends ConstructImp {
     public boolean getter;
     public boolean setter;
 
-    public SortedSet<Construct> invokes;
-    public SortedSet<Construct> reads;
-    public SortedSet<Construct> writes;
+    public TreeSet<Ref<? extends Construct>> invokes = new TreeSet<Ref<? extends Construct>>();
+    public TreeSet<Ref<? extends Construct>> reads   = new TreeSet<Ref<? extends Construct>>();
+    public TreeSet<Ref<? extends Construct>> writes  = new TreeSet<Ref<? extends Construct>>();
 
-    public Metrics() {
-        this.invokes = new TreeSet<Construct>();
-        this.reads   = new TreeSet<Construct>();
-        this.writes  = new TreeSet<Construct>();
-    }
+    public Metrics() {}
 
-    public Metrics(Location loc,
-        int codeCount, int complexity, int indents, int lineCount,
-        boolean getter, boolean setter,
-        SortedSet<Construct> invokes, SortedSet<Construct> reads, SortedSet<Construct> writes) {
+    public Metrics(Location loc, int codeCount, int complexity, int indents, int lineCount,
+        boolean getter, boolean setter, SortedSet<Ref<? extends Construct>> invokes,
+        SortedSet<Ref<? extends Construct>> reads, SortedSet<Ref<? extends Construct>> writes) {
         this.loc        = loc;
         this.codeCount  = codeCount;
         this.complexity = complexity;
@@ -38,9 +33,9 @@ public class Metrics extends ConstructImp {
         this.lineCount  = lineCount;
         this.getter     = getter;
         this.setter     = setter;
-        this.invokes    = invokes;
-        this.reads      = reads;
-        this.writes     = writes;
+        this.invokes.addAll(invokes);
+        this.reads  .addAll(reads);
+        this.writes .addAll(writes);
     }
 
     public ConstructKind kind() { return ConstructKind.METRICS; }

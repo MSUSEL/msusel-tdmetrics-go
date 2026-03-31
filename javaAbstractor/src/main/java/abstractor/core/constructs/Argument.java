@@ -5,16 +5,16 @@ import abstractor.core.json.*;
 
 public class Argument extends ConstructImp {
     public String        name;
-    public Ref<TypeDesc> type;
+    public Ref<? extends TypeDesc> type;
 
     public Argument() {}
 
-    public Argument(String name, Ref<TypeDesc> type) {
+    public Argument(String name, Ref<? extends TypeDesc> type) {
         this.name = name;
         this.type = type;
     }
     
-    public Argument(Ref<TypeDesc> type) {
+    public Argument(Ref<? extends TypeDesc> type) {
         this("", type);
     }
 

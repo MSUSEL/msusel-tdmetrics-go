@@ -8,27 +8,22 @@ import abstractor.core.cmp.Cmp;
 import abstractor.core.json.*;
 
 public class MethodDecl extends DeclarationImp implements Method {
-    public ObjectDecl receiver;
-    public Signature signature;
-    public final List<TypeParam> typeParams;
-    public final TreeSet<MethodInst> instances;
+    public Ref<ObjectDecl> receiver;
+    public Ref<Signature>  signature;
+    public final ArrayList<Ref<TypeParam>> typeParams = new ArrayList<Ref<TypeParam>>();
+    public final TreeSet<Ref<MethodInst>>  instances  = new TreeSet<Ref<MethodInst>>();
     // TODO: Add a flag to indicate if this method is a constructor or not.
     
-    public Metrics metrics;
+    public Ref<Metrics> metrics;
 
-    
-    public MethodDecl() {
-        this.typeParams = new ArrayList<TypeParam>();
-        this.instances = new TreeSet<MethodInst>();
-    }
+    public MethodDecl() {}
 
-    public MethodDecl(PackageCon pkg, ObjectDecl receiver, Location loc,
-        String name, Signature signature, List<TypeParam> typeParams) {
+    public MethodDecl(Ref<PackageCon> pkg, Ref<ObjectDecl> receiver, Location loc,
+        String name, Ref<Signature> signature, List<Ref<TypeParam>> typeParams) {
         super(pkg, loc, name);
-        this.receiver   = receiver;
-        this.signature  = signature;
-        this.typeParams = typeParams;
-        this.instances  = new TreeSet<MethodInst>();
+        this.receiver  = receiver;
+        this.signature = signature;
+        this.typeParams.addAll(typeParams);
     }
 
     public ConstructKind kind() { return ConstructKind.METHOD_DECL; }
@@ -48,8 +43,8 @@ public class MethodDecl extends DeclarationImp implements Method {
     public int compareTo(Construct c) {
         return Cmp.or(
             () -> super.compareTo(c),
-            Cmp.defer(this.receiver,       () -> ((MethodDecl)c).receiver),
-            Cmp.defer(this.signature,      () -> ((MethodDecl)c).signature),
+            Cmp.defer(    this.receiver,   () -> ((MethodDecl)c).receiver),
+            Cmp.defer(    this.signature,  () -> ((MethodDecl)c).signature),
             Cmp.deferList(this.typeParams, () -> ((MethodDecl)c).typeParams)
         );
     }

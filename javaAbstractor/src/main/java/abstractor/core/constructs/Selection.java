@@ -5,12 +5,12 @@ import abstractor.core.json.*;
 
 public class Selection extends ConstructImp {
     public String name;
-    public Construct origin;
+    public Ref<? extends Construct> origin;
 
     public Selection() {}
 
-    public Selection(String name, Construct origin) {
-        this.name = name;
+    public Selection(String name, Ref<? extends Construct> origin) {
+        this.name   = name;
         this.origin = origin;
     }
 
@@ -19,7 +19,7 @@ public class Selection extends ConstructImp {
     @Override
     public JsonNode toJson(JsonHelper h) {
         JsonObject obj = (JsonObject)super.toJson(h);
-        obj.put("name", this.name);
+        obj.put("name",   this.name);
         obj.put("origin", key(this.origin));
         return obj;
     }

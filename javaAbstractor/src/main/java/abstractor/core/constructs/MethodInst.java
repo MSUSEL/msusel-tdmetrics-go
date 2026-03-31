@@ -7,21 +7,19 @@ import abstractor.core.cmp.Cmp;
 import abstractor.core.json.*;
 
 public class MethodInst extends ConstructImp implements Method {
-    public MethodDecl generic;
-    public ObjectInst receiver;
-    public final List<TypeDesc> instanceTypes;
-    public Signature resolved;
+    public Ref<MethodDecl> generic;
+    public Ref<ObjectInst> receiver;
+    public final ArrayList<Ref<? extends TypeDesc>> instanceTypes = new ArrayList<Ref<? extends TypeDesc>>();
+    public Ref<Signature> resolved;
 
-    public MethodInst() {
-        this.instanceTypes = new ArrayList<TypeDesc>();
-    }
+    public MethodInst() {}
 
-    public MethodInst(MethodDecl generic, ObjectInst receiver,
-        List<TypeDesc> instanceTypes, Signature resolved) {
-        this.generic       = generic;
-        this.receiver      = receiver;
-        this.instanceTypes = instanceTypes;
-        this.resolved      = resolved;
+    public MethodInst(Ref<MethodDecl> generic, Ref<ObjectInst> receiver,
+        List<Ref<TypeDesc>> instanceTypes, Ref<Signature> resolved) {
+        this.generic  = generic;
+        this.receiver = receiver;
+        this.instanceTypes.addAll(instanceTypes);
+        this.resolved = resolved;
     }
 
     public ConstructKind kind() { return ConstructKind.METHOD_INST; }
@@ -40,9 +38,9 @@ public class MethodInst extends ConstructImp implements Method {
     public int compareTo(Construct c) {
         return Cmp.or(
             () -> super.compareTo(c),
-            Cmp.defer(this.generic,           () -> ((MethodInst)c).generic),
+            Cmp.defer(    this.generic,       () -> ((MethodInst)c).generic),
             Cmp.deferList(this.instanceTypes, () -> ((MethodInst)c).instanceTypes),
-            Cmp.defer(this.resolved,          () -> ((MethodInst)c).resolved)
+            Cmp.defer(    this.resolved,      () -> ((MethodInst)c).resolved)
         );
     }   
 }

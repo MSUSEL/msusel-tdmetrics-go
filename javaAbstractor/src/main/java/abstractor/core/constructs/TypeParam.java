@@ -4,12 +4,12 @@ import abstractor.core.cmp.Cmp;
 import abstractor.core.json.*;
 
 public class TypeParam extends ConstructImp implements TypeDesc {
-    public String name;
-    public TypeDesc type;
+    public String        name;
+    public Ref<? extends TypeDesc> type;
     
     public TypeParam() {}
 
-    public TypeParam(String name, TypeDesc type) {
+    public TypeParam(String name, Ref<? extends TypeDesc> type) {
         this.name = name;
         this.type = type;
     }

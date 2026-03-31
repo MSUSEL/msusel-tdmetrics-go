@@ -7,22 +7,19 @@ import abstractor.core.cmp.Cmp;
 import abstractor.core.json.*;
 
 public class InterfaceDesc extends ConstructImp implements TypeDesc {
-    public final SortedSet<Abstract>      abstracts;
-    public final SortedSet<InterfaceDesc> inherits;
-    public       Construct                pin;  
+    public final TreeSet<Ref<Abstract>>      abstracts = new TreeSet<Ref<Abstract>>();
+    public final TreeSet<Ref<InterfaceDesc>> inherits  = new TreeSet<Ref<InterfaceDesc>>();
+    public       Ref<Construct>              pin;  
     
-    public InterfaceDesc() {
-        this(new TreeSet<Abstract>(), null);
+    public InterfaceDesc() {}
+
+    public InterfaceDesc(SortedSet<Ref<Abstract>> abstracts) {
+        this.abstracts.addAll(abstracts);
     }
 
-    public InterfaceDesc(SortedSet<Abstract> abstracts) {
-        this(abstracts, null);
-    }
-
-    public InterfaceDesc(SortedSet<Abstract> abstracts, Construct pin) {
-        this.abstracts = abstracts;
-        this.inherits  = new TreeSet<InterfaceDesc>();
-        this.pin       = pin;
+    public InterfaceDesc(SortedSet<Ref<Abstract>> abstracts, Ref<Construct> pin) {
+        this.abstracts.addAll(abstracts);
+        this.pin = pin;
     }
 
     public ConstructKind kind() { return ConstructKind.INTERFACE_DESC; }
@@ -31,9 +28,9 @@ public class InterfaceDesc extends ConstructImp implements TypeDesc {
     public JsonNode toJson(JsonHelper h) {
         JsonObject obj = (JsonObject)super.toJson(h);
         // Not needed: `approx`, `exact`, `hint`
-        obj.put("abstracts",        indexSet(this.abstracts));
-        obj.putNotEmpty("inherits", indexSet(this.inherits));
-        obj.putNotEmpty("pin",      key(this.pin));
+        obj.put(        "abstracts", indexSet(this.abstracts));
+        obj.putNotEmpty("inherits",  indexSet(this.inherits));
+        obj.putNotEmpty("pin",       key(this.pin));
         return obj;
     }
 
@@ -42,7 +39,7 @@ public class InterfaceDesc extends ConstructImp implements TypeDesc {
         return Cmp.or(
             () -> super.compareTo(c),
             Cmp.deferSet(this.abstracts, () -> ((InterfaceDesc)c).abstracts),
-            Cmp.defer(this.pin,          () -> ((InterfaceDesc)c).pin)
+            Cmp.defer(   this.pin,       () -> ((InterfaceDesc)c).pin)
         );
     }   
 }

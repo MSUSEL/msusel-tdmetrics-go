@@ -8,14 +8,14 @@ import abstractor.core.cmp.Cmp;
 import abstractor.core.json.*;
 
 public class InterfaceDecl extends DeclarationImp implements TypeDeclaration {
-    public       InterfaceDesc          inter;
-    public final ArrayList<TypeParam>   typeParams = new ArrayList<TypeParam>();
-    public final TreeSet<InterfaceInst> instances  = new TreeSet<InterfaceInst>();
+    public       Ref<InterfaceDesc>          inter;
+    public final ArrayList<Ref<TypeParam>>   typeParams = new ArrayList<Ref<TypeParam>>();
+    public final TreeSet<Ref<InterfaceInst>> instances  = new TreeSet<Ref<InterfaceInst>>();
 
     public InterfaceDecl() {}
 
-    public InterfaceDecl(PackageCon pkg, Location loc,
-        String name, InterfaceDesc inter, List<TypeParam> typeParams) {
+    public InterfaceDecl(Ref<PackageCon> pkg, Location loc,
+        String name, Ref<InterfaceDesc> inter, List<Ref<TypeParam>> typeParams) {
         super(pkg, loc, name);
         this.inter = inter;
         this.typeParams.addAll(typeParams);
@@ -27,7 +27,7 @@ public class InterfaceDecl extends DeclarationImp implements TypeDeclaration {
     public JsonNode toJson(JsonHelper h) {
         JsonObject obj = (JsonObject)super.toJson(h);
         obj.putNotEmpty("instances",  indexSet(this.instances));
-        obj.put("interface",          index(this.inter));
+        obj.put(        "interface",  index(this.inter));
         obj.putNotEmpty("typeParams", indexList(this.typeParams));
         return obj;
     }
@@ -36,7 +36,7 @@ public class InterfaceDecl extends DeclarationImp implements TypeDeclaration {
     public int compareTo(Construct c) {
         return Cmp.or(
             () -> super.compareTo(c),
-            Cmp.defer(this.inter,          () -> ((InterfaceDecl)c).inter),
+            Cmp.defer(    this.inter,      () -> ((InterfaceDecl)c).inter),
             Cmp.deferList(this.typeParams, () -> ((InterfaceDecl)c).typeParams)
         );
     }

@@ -9,11 +9,11 @@ public class PackageCon extends ConstructImp {
     public String name;
     public String path;
 
-    public final TreeSet<PackageCon>    imports        = new TreeSet<PackageCon>();
-    public final TreeSet<InterfaceDecl> interfaceDecls = new TreeSet<InterfaceDecl>();
-    public final TreeSet<MethodDecl>    methodDecls    = new TreeSet<MethodDecl>();
-    public final TreeSet<ObjectDecl>    objectDecls    = new TreeSet<ObjectDecl>();
-    public final TreeSet<Value>         values         = new TreeSet<Value>();
+    public final TreeSet<Ref<PackageCon>>    imports        = new TreeSet<Ref<PackageCon>>();
+    public final TreeSet<Ref<InterfaceDecl>> interfaceDecls = new TreeSet<Ref<InterfaceDecl>>();
+    public final TreeSet<Ref<MethodDecl>>    methodDecls    = new TreeSet<Ref<MethodDecl>>();
+    public final TreeSet<Ref<ObjectDecl>>    objectDecls    = new TreeSet<Ref<ObjectDecl>>();
+    public final TreeSet<Ref<Value>>         values         = new TreeSet<Ref<Value>>();
 
     public PackageCon() {}
 

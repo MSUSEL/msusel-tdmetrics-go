@@ -3,11 +3,12 @@ package abstractor.core.cmp;
 import java.util.Iterator;
 import java.util.List;
 import java.util.SortedSet;
+import java.util.function.Supplier;
+
+import spoon.reflect.declaration.CtElement;
 
 public interface Cmp {
     int run();
-
-    public interface Fetch<T> { T run(); }
     
     static private <T> int compare(Comparable<T> a, T b) {
         if (a == null) return b == null ? 0 : -1;
@@ -15,13 +16,17 @@ public interface Cmp {
         return a.compareTo(b);
     }
 
-    static public <T> Cmp defer(Comparable<T> a, Fetch<T> fetch) {
-        return () -> compare(a, fetch.run());
+    static public <T> Cmp defer(CtElement a, Supplier<T> fetch) {
+        return () -> compare(a.hashCode(), fetch.get().hashCode());
     }
 
-    static public <T extends Comparable<T>> Cmp deferList(List<? extends T> a, Fetch<List<? extends T>> fetch) {
+    static public <T> Cmp defer(Comparable<T> a, Supplier<T> fetch) {
+        return () -> compare(a, fetch.get());
+    }
+
+    static public <T extends Comparable<T>> Cmp deferList(List<? extends T> a, Supplier<List<? extends T>> fetch) {
         return () -> {
-            final List<? extends T> b = fetch.run();
+            final List<? extends T> b = fetch.get();
             if (a == null) return b == null ? 0 : -1;
             if (b == null) return 1;
             final int aLen = a.size();
@@ -35,9 +40,9 @@ public interface Cmp {
         };
     }
 
-    static public <T extends Comparable<T>> Cmp deferSet(SortedSet<? extends T> a, Fetch<SortedSet<? extends T>> fetch) {
+    static public <T extends Comparable<T>> Cmp deferSet(SortedSet<? extends T> a, Supplier<SortedSet<? extends T>> fetch) {
         return () -> {
-            final SortedSet<? extends T> b = fetch.run();
+            final SortedSet<? extends T> b = fetch.get();
             if (a == null) return b == null ? 0 : -1;
             if (b == null) return 1; 
 

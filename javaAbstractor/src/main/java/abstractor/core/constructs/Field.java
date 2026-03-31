@@ -6,13 +6,13 @@ import abstractor.core.cmp.Cmp;
 import abstractor.core.json.*;
 
 public class Field extends ConstructImp {
-    public String   name;
-    public TypeDesc type;
-    public String   visibility;
+    public String name;
+    public Ref<? extends TypeDesc> type;
+    public String visibility;
 
     public Field() {}
 
-    public Field(String name, TypeDesc type) {
+    public Field(String name, Ref<? extends TypeDesc> type) {
         this.name       = name;
         this.type       = type;
         this.visibility = "";

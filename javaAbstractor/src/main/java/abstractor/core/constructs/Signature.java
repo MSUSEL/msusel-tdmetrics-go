@@ -8,14 +8,14 @@ import abstractor.core.json.*;
 
 public class Signature extends ConstructImp implements TypeDesc {
     public boolean variadic;
-    public final ArrayList<Argument> params  = new ArrayList<Argument>();
-    public final ArrayList<Argument> results = new ArrayList<Argument>();
+    public final ArrayList<Ref<Argument>> params  = new ArrayList<Ref<Argument>>();
+    public final ArrayList<Ref<Argument>> results = new ArrayList<Ref<Argument>>();
     
     public Signature() {}
 
-    public Signature(boolean variadic, List<Argument> params, List<Argument> results) {
+    public Signature(boolean variadic, List<Ref<Argument>> params, List<Ref<Argument>> results) {
         this.variadic = variadic;
-        this.params.addAll(params);
+        this.params .addAll(params);
         this.results.addAll(results);
     }
 
@@ -34,9 +34,9 @@ public class Signature extends ConstructImp implements TypeDesc {
     public int compareTo(Construct c) {
         return Cmp.or(
             () -> super.compareTo(c),
-            Cmp.defer(this.variadic,    () -> ((Signature)c).variadic),
-            Cmp.deferList(this.params,  () -> ((Signature)c).params),
-            Cmp.deferList(this.results, () -> ((Signature)c).results)
+            Cmp.defer(    this.variadic, () -> ((Signature)c).variadic),
+            Cmp.deferList(this.params,   () -> ((Signature)c).params),
+            Cmp.deferList(this.results,  () -> ((Signature)c).results)
         );
     }   
 }
