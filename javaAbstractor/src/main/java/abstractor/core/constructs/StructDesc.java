@@ -11,7 +11,9 @@ public class StructDesc extends ConstructImp implements TypeDesc {
 
     public StructDesc() {} 
 
-    public StructDesc(List<Ref<Field>> fields) { this.fields.addAll(fields); }
+    public StructDesc(List<Ref<Field>> fields) {
+        if (fields != null) this.fields.addAll(fields);
+    }
 
     public ConstructKind kind() { return ConstructKind.STRUCT_DESC; }
 

@@ -18,7 +18,7 @@ public class InterfaceDecl extends DeclarationImp implements TypeDeclaration {
         String name, Ref<InterfaceDesc> inter, List<Ref<TypeParam>> typeParams) {
         super(pkg, loc, name);
         this.inter = inter;
-        this.typeParams.addAll(typeParams);
+        if (typeParams != null) this.typeParams.addAll(typeParams);
     }
 
     public ConstructKind kind() { return ConstructKind.INTERFACE_DECL; }

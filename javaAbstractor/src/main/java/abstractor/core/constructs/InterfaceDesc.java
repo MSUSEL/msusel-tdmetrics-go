@@ -9,16 +9,16 @@ import abstractor.core.json.*;
 public class InterfaceDesc extends ConstructImp implements TypeDesc {
     public final TreeSet<Ref<Abstract>>      abstracts = new TreeSet<Ref<Abstract>>();
     public final TreeSet<Ref<InterfaceDesc>> inherits  = new TreeSet<Ref<InterfaceDesc>>();
-    public       Ref<Construct>              pin;  
+    public       Ref<? extends Construct>    pin;  
     
     public InterfaceDesc() {}
 
     public InterfaceDesc(SortedSet<Ref<Abstract>> abstracts) {
-        this.abstracts.addAll(abstracts);
+        this(abstracts, null);
     }
 
-    public InterfaceDesc(SortedSet<Ref<Abstract>> abstracts, Ref<Construct> pin) {
-        this.abstracts.addAll(abstracts);
+    public InterfaceDesc(SortedSet<Ref<Abstract>> abstracts, Ref<? extends Construct> pin) {
+        if (abstracts != null) this.abstracts.addAll(abstracts);
         this.pin = pin;
     }
 

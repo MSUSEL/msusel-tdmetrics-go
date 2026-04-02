@@ -23,6 +23,8 @@ public class Metrics extends ConstructImp {
 
     public Metrics() {}
 
+    public Metrics(Location loc) { this.loc = loc; }
+
     public Metrics(Location loc, int codeCount, int complexity, int indents, int lineCount,
         boolean getter, boolean setter, SortedSet<Ref<? extends Construct>> invokes,
         SortedSet<Ref<? extends Construct>> reads, SortedSet<Ref<? extends Construct>> writes) {
@@ -33,10 +35,12 @@ public class Metrics extends ConstructImp {
         this.lineCount  = lineCount;
         this.getter     = getter;
         this.setter     = setter;
-        this.invokes.addAll(invokes);
-        this.reads  .addAll(reads);
-        this.writes .addAll(writes);
+        if (invokes != null) this.invokes.addAll(invokes);
+        if (reads   != null) this.reads  .addAll(reads);
+        if (writes  != null) this.writes .addAll(writes);
     }
+
+    public boolean hasBody() { return this.lineCount > 0; }
 
     public ConstructKind kind() { return ConstructKind.METRICS; }
 

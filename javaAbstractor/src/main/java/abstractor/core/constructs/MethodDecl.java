@@ -23,7 +23,7 @@ public class MethodDecl extends DeclarationImp implements Method {
         super(pkg, loc, name);
         this.receiver  = receiver;
         this.signature = signature;
-        this.typeParams.addAll(typeParams);
+        if (typeParams != null) this.typeParams.addAll(typeParams);
     }
 
     public ConstructKind kind() { return ConstructKind.METHOD_DECL; }

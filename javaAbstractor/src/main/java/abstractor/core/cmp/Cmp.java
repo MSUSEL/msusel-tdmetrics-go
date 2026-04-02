@@ -15,9 +15,15 @@ public interface Cmp {
         if (b == null) return 1;
         return a.compareTo(b);
     }
+    
+    static private <T> int compareHash(T a, T b) {
+        if (a == null) return b == null ? 0 : -1;
+        if (b == null) return 1;
+        return Integer.compare(a.hashCode(), b.hashCode());
+    }
 
-    static public <T> Cmp defer(CtElement a, Supplier<T> fetch) {
-        return () -> compare(a.hashCode(), fetch.get().hashCode());
+    static public Cmp defer(CtElement a, Supplier<CtElement> fetch) {
+        return () -> compareHash(a, fetch.get());
     }
 
     static public <T> Cmp defer(Comparable<T> a, Supplier<T> fetch) {

@@ -8,12 +8,11 @@ import abstractor.core.cmp.Cmp;
 import abstractor.core.json.*;
 
 public class ObjectDecl extends DeclarationImp implements TypeDeclaration {
-    public Ref<StructDesc> struct;
+    public Ref<StructDesc>    struct;
+    public Ref<InterfaceDesc> inter;
     public final TreeSet<Ref<MethodDecl>>    methodDecls = new TreeSet<Ref<MethodDecl>>();
     public final ArrayList<Ref<TypeParam>>   typeParams  = new ArrayList<Ref<TypeParam>>();
     public final TreeSet<Ref<InterfaceInst>> instances   = new TreeSet<Ref<InterfaceInst>>();
-    
-    public InterfaceDesc inter;
 
     public ObjectDecl() {}
 
@@ -21,7 +20,7 @@ public class ObjectDecl extends DeclarationImp implements TypeDeclaration {
         String name, Ref<StructDesc> struct, List<Ref<TypeParam>> typeParams) {
         super(pkg, loc, name);
         this.struct = struct;
-        this.typeParams.addAll(typeParams);
+        if (typeParams != null) this.typeParams.addAll(typeParams);
     }
 
     public ConstructKind kind() { return ConstructKind.OBJECT_DECL; }
@@ -30,10 +29,10 @@ public class ObjectDecl extends DeclarationImp implements TypeDeclaration {
     public JsonNode toJson(JsonHelper h) {
         JsonObject obj = (JsonObject)super.toJson(h);
         obj.put(        "data",       index(this.struct));
+        obj.put(        "interface",  index(this.inter));
         obj.putNotEmpty("instances",  indexSet(this.instances));
         obj.putNotEmpty("methods",    indexSet(this.methodDecls));
         obj.putNotEmpty("typeParams", indexList(this.typeParams));
-        obj.put(        "interface",  index(this.inter));
         return obj;
     }
 

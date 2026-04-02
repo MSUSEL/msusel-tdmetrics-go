@@ -42,7 +42,7 @@ public class Analyzer {
     private final Logger log;
     public final Location loc;
 
-    private final Map<Integer, Integer> minColumn;
+    private final Map<Integer, Integer> minColumn = new TreeMap<Integer, Integer>();
     private int minLine;
     private int maxLine;
     
@@ -51,25 +51,21 @@ public class Analyzer {
     private boolean getter;
     private boolean setter;
 
-    private final SortedSet<Construct> invokes;
-    private final SortedSet<Construct> reads;
-    private final SortedSet<Construct> writes;
+    private final SortedSet<Ref<? extends Construct>> invokes = new TreeSet<Ref<? extends Construct>>();
+    private final SortedSet<Ref<? extends Construct>> reads   = new TreeSet<Ref<? extends Construct>>();
+    private final SortedSet<Ref<? extends Construct>> writes  = new TreeSet<Ref<? extends Construct>>();
 
     public Analyzer(Abstractor abs, Location loc) {
         this.abs        = abs;
         this.log        = abs.log;
         this.loc        = loc;
         this.minLine    = Integer.MAX_VALUE;
-        this.minColumn  = new TreeMap<Integer, Integer>();
-        this.invokes    = new TreeSet<Construct>();
-        this.reads      = new TreeSet<Construct>();
-        this.writes     = new TreeSet<Construct>();
         this.complexity = 1;
     }
 
     public Metrics getMetrics() {
         final int lineCount = this.maxLine - this.minLine + 1;
-        if (lineCount <= 0) return null;
+        if (lineCount <= 0) return new Metrics(this.loc);
 
         final int codeCount = this.minColumn.size();
         final int indents   = this.calcIndent();
@@ -273,15 +269,8 @@ public class Analyzer {
         if (elem instanceof CtInvocation inv) {
             final CtExecutable<?> ex = inv.getExecutable().getDeclaration();
             if (ex instanceof CtMethod<?> method) {
-                DeclarationRef ref = this.abs.create(this.abs.proj.declRefs, method,
-                    "add invocation " + method.getSimpleName(),
-                    ()-> {
-                        final String pkgPath = method.getClass().getName();
-                        final String name    = method.getSimpleName();
-                        final List<TypeDesc> tp = null; // TODO: Implement
-                        return new DeclarationRef(method, pkgPath, name, tp);
-                    });
-                this.invokes.add(ref);
+                // TODO: Maybe make a more specific call for a method
+                this.invokes.add(this.abs.addDeclaration(method));
             }
             return;
         }

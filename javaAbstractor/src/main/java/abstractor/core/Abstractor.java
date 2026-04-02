@@ -3,7 +3,6 @@ package abstractor.core;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.SortedSet;
 import java.util.TreeSet;
 
 import spoon.Launcher;
@@ -50,94 +49,6 @@ public class Abstractor {
         this.addObjectDecl(Launcher.parseClass(source));
     }
 
-    public void finish() throws Exception {
-        this.log.log("Finishing");
-        this.log.push();
-        this.resolveAllReferences();
-        this.clearAllReferences();
-        this.log.pop();
-        this.log.log("Finished");
-    }
-
-    private void resolveAllReferences() throws Exception  {
-        for (DeclarationRef ref : this.proj.declRefs) {
-            if (!ref.isResolved()) ref.setResolved(this.addDeclaration(ref.elem));
-        }
-
-        for (TypeDescRef ref : this.proj.typeDescRefs) {
-            if (!ref.isResolved()) ref.setResolved(this.addTypeDeclaration(ref.elem));
-        }
-
-        for (TypeParamRef ref : this.proj.typeParamRefs) {
-            if (!ref.isResolved()) ref.setResolved(this.addTypeParam((CtTypeParameter)ref.elem));
-        }
-    }
-
-    private void clearAllReferences() {
-        for (DeclarationRef ref : this.proj.declRefs)
-            this.log.errorIf(!ref.isResolved(), "Unresolved decl reference: " + ref.toString());
-        for (TypeDescRef ref : this.proj.typeDescRefs)
-            this.log.errorIf(!ref.isResolved(), "Unresolved type desc reference: " + ref.toString());
-        for (TypeParamRef ref : this.proj.typeParamRefs)
-            this.log.errorIf(!ref.isResolved(), "Unresolved type param reference: " + ref.toString());
-        this.proj.declRefs.clear();
-        this.proj.typeDescRefs.clear();
-        this.proj.typeParamRefs.clear();
-    }
-
-    private <T extends Construct> void resolveReferencesFor(CtElement elem, T con) {
-        if (con instanceof Ref<?>) return;
-        if (con instanceof Declaration decl) {
-            final DeclarationRef ref = this.proj.declRefs.get(elem);
-            if (ref != null) ref.setResolved(decl);
-        }
-        if (con instanceof TypeDesc td) {
-            final TypeDescRef ref = this.proj.typeDescRefs.get(elem);
-            if (ref != null) ref.setResolved(td);
-        }
-        if (con instanceof TypeParam tp) {
-            final TypeParamRef ref = this.proj.typeParamRefs.get(elem);
-            if (ref != null) ref.setResolved(tp);
-        }
-    }
-
-    public interface ConstructCreator<T extends Construct> { T create()         throws Exception; }
-    public interface FinishConstruct<T  extends Construct> { void finish(T con) throws Exception; }
-    public interface InProgressHandle<T extends Construct> { T handle()         throws Exception; }
-
-    public <T extends Construct, U extends T> T create(Factory<U> factory, CtElement elem,
-        String title, ConstructCreator<U> c, FinishConstruct<U> f, InProgressHandle<T> h) throws Exception {
-        if (elem == null) return null;
-        final T existing = factory.get(elem);
-        if (existing != null) return existing;
-
-
-        // TODO: MOVE OVER TO FACTORY
-
-        final U newCon = c.create();
-        if (newCon == null) {
-            return null;
-        }
-
-        final U other = factory.get(newCon);
-        if (other != null) {
-            factory.addElemKey(elem, other);
-            return other;
-        }
-        factory.add(elem, newCon);
-
-    }
-
-    public <T extends Construct, U extends T> T create(Factory<U> factory, CtElement elem,
-        String title, ConstructCreator<U> c, FinishConstruct<U> f) throws Exception {
-        return this.create(factory, elem, title, c, f, null);
-    }
-
-    public <T extends Construct, U extends T> T create(Factory<U> factory, CtElement elem,
-        String title, ConstructCreator<U> c) throws Exception{
-        return this.create(factory, elem, title, c, null, null);
-    }
-
     private void addModel(CtModel model) throws Exception {
         for (CtPackage pkg : model.getAllPackages())
             this.addPackage(pkg);
@@ -156,36 +67,35 @@ public class Abstractor {
         return path.substring(0, path.length()-tail.length());
     }
 
-    private PackageCon addPackage(CtPackage pkg) throws Exception {
-        return this.create(this.proj.packages, pkg,
+    private Ref<PackageCon> addPackage(CtPackage pkg) throws Exception {
+        return this.proj.packages.create(this.log, pkg,
             "package " + pkg.getQualifiedName(),
             () -> {
                 final String name = pkg.getQualifiedName();
                 final String path = packagePath(pkg);
-                return new PackageCon(name, path);
-            },
-            (PackageCon pkgCon) -> {
+                final PackageCon pkgCon = new PackageCon(name, path);
                 for (CtType<?> t : pkg.getTypes()) this.addDeclaration(t);
+                return pkgCon;
             });
     }
 
-    private Declaration addDeclaration(CtElement elem) throws Exception {
+    public Ref<? extends Declaration> addDeclaration(CtElement elem) throws Exception {
         if (elem instanceof CtTypeReference<?> tr) elem = tr.getTypeDeclaration();
 
-        if (elem instanceof CtClass<?> c) return this.addObjectDecl(c);
+        if (elem instanceof CtClass<?> c)     return this.addObjectDecl(c);
         if (elem instanceof CtInterface<?> i) return this.addInterfaceDecl(i);
         if (elem instanceof CtMethod<?> m) {
-            ObjectDecl obj = (ObjectDecl)this.addObjectDecl((CtClass<?>)m.getDeclaringType());
+            Ref<ObjectDecl> obj = (Ref<ObjectDecl>)this.addObjectDecl((CtClass<?>)m.getDeclaringType());
             return this.addMethod(obj, m);
         }
         this.log.error("Unhandled decl (" + elem.getClass().getName() + ") "+elem.toStringDebug());
         return null;
     }
 
-    private TypeDeclaration addTypeDeclaration(CtElement elem) throws Exception {
+    private Ref<? extends TypeDeclaration> addTypeDeclaration(CtElement elem) throws Exception {
         if (elem instanceof CtTypeReference<?> tr) elem = tr.getTypeDeclaration();
 
-        if (elem instanceof CtClass<?> c) return this.addObjectDecl(c);
+        if (elem instanceof CtClass<?> c)     return this.addObjectDecl(c);
         if (elem instanceof CtInterface<?> i) return this.addInterfaceDecl(i);
         this.log.error("Unhandled type decl (" + elem.getClass().getName() + ") "+elem.toStringDebug());
         return null;
@@ -195,82 +105,88 @@ public class Abstractor {
      * Handles adding and processing classes, enums, and records.
      * @param c The class to process.
      */
-    private TypeDeclaration addObjectDecl(CtClass<?> c) throws Exception {
-        return this.create(this.proj.objectDecls, c,
+    private Ref<ObjectDecl> addObjectDecl(CtClass<?> c) throws Exception {
+        return this.proj.objectDecls.create(this.log, c,
             "object decl " + c.getQualifiedName(),
             () -> {
-                final PackageCon      pkg        = this.addPackage(c.getPackage());
-                final Location        loc        = proj.locations.create(c.getPosition());
-                final String          name       = c.getSimpleName();
-                final StructDesc      struct     = this.addStruct(c);
-                final List<TypeParam> typeParams = this.addTypeParams(c.getFormalCtTypeParameters());
+                final Ref<PackageCon>      pkg        = this.addPackage(c.getPackage());
+                final Location             loc        = proj.locations.create(c.getPosition());
+                final String               name       = c.getSimpleName();
+                final Ref<StructDesc>      struct     = this.addStruct(c);
+                final List<Ref<TypeParam>> typeParams = this.addTypeParams(c.getFormalCtTypeParameters());
                 return new ObjectDecl(pkg, loc, name, struct, typeParams);
             },
-            (ObjectDecl obj) -> {
+            (Ref<ObjectDecl> ref, ObjectDecl obj) -> {
                 obj.setVisibility(c);
-                if (obj.pkg != null) obj.pkg.objectDecls.add(obj);
+                
+                //if (pkg != null) pkg.objectDecls.add(obj); // TODO: Move to a follow up when we know the package is done.
 
                 // Add constructors as (static) methods.
                 for (CtConstructor<?> ctor : c.getConstructors()) {
-                    if (ctor.getParent() == c) this.addConstructorMethod(obj, ctor);
+                    if (ctor.getParent() == c) this.addConstructorMethod(ref, ctor);
                 }
 
                 // Add methods for the class.
                 for (CtMethod<?> m : c.getAllMethods()) {
-                    if (m.getParent() == c) this.addMethod(obj, m);
+                    if (m.getParent() == c) this.addMethod(ref, m);
                 }
 
                 // Synthesize the interface description for the class.
-                SortedSet<Abstract> abstracts = new TreeSet<Abstract>();
+                TreeSet<Ref<Abstract>> abstracts = new TreeSet<Ref<Abstract>>();
                 for (CtMethod<?> m : c.getAllMethods()) {
                     if (!m.isStatic()) abstracts.add(this.addAbstract(m));
                 }
-                obj.inter = this.proj.interfaceDescs.addOrGet(new InterfaceDesc(abstracts, obj));
+                obj.inter = this.proj.interfaceDescs.addOrGetRef(new InterfaceDesc(abstracts, ref));
 
                 // TODO: Finish implementing
                 //System.out.println("1) >>> " + c.getSuperInterfaces());
 
                 // Add any nested types.
                 for (CtType<?> nt : c.getNestedTypes()) this.addTypeDesc(nt.getReference());
-            },
-            () -> {
-                return this.addTypeDescRef(c.getReference());
             });
     }
 
-    private MethodDecl addConstructorMethod(ObjectDecl receiver, CtConstructor<?> ctor) throws Exception {
-        return this.create(this.proj.methodDecls, ctor,
+    private Ref<MethodDecl> addConstructorMethod(Ref<ObjectDecl> receiver, CtConstructor<?> ctor) throws Exception {
+        if (!receiver.isResolved())
+            throw new Exception("Expected the receiver for a constructor method to be resolved: " + receiver.toString());
+        ObjectDecl recv = receiver.getResolved();
+
+        return this.proj.methodDecls.create(log, ctor,
             "constructor " + ctor.getSignature(),
             () -> {
-                final PackageCon      pkg        = receiver.pkg;
-                final Location        loc        = proj.locations.create(ctor.getPosition());
-                final String          name       = receiver.name;
-                final Signature       signature  = this.addConstructSignature(ctor);
-                final List<TypeParam> typeParams = this.addTypeParams(ctor.getFormalCtTypeParameters());
+                final Ref<PackageCon>      pkg        = recv.pkg;
+                final Location             loc        = proj.locations.create(ctor.getPosition());
+                final String               name       = recv.name;
+                final Ref<Signature>       signature  = this.addConstructSignature(ctor);
+                final List<Ref<TypeParam>> typeParams = this.addTypeParams(ctor.getFormalCtTypeParameters());
                 return new MethodDecl(pkg, receiver, loc, name, signature, typeParams);
             },
-            (MethodDecl md) -> {
+            (Ref<MethodDecl> ref, MethodDecl md) -> {
                 md.setVisibility(ctor);
-                if (receiver.pkg != null) receiver.pkg.methodDecls.add(md);
-                receiver.methodDecls.add(md);
+                //if (pkg != null) pkg.methodDecls.add(ref); // TODO: Move to a follow up when we know the package is done.
+                recv.methodDecls.add(ref);
             });
     }
 
-    private MethodDecl addMethod(ObjectDecl receiver, CtMethod<?> m) throws Exception {
-        return this.create(this.proj.methodDecls, m,
+    private Ref<MethodDecl> addMethod(Ref<ObjectDecl> receiver, CtMethod<?> m) throws Exception {
+        if (!receiver.isResolved())
+            throw new Exception("Expected the receiver for a method to be resolved: " + receiver.toString());
+        ObjectDecl recv = receiver.getResolved();
+
+        return this.proj.methodDecls.create(this.log, m,
             "method " + m.getSignature(),
             () -> {
-                final PackageCon      pkg        = receiver.pkg;
-                final Location        loc        = proj.locations.create(m.getPosition());
-                final String          name       = m.getSimpleName();
-                final Signature       signature  = this.addSignature(m);
-                final List<TypeParam> typeParams = this.addTypeParams(m.getFormalCtTypeParameters());
+                final Ref<PackageCon>      pkg        = recv.pkg;
+                final Location             loc        = proj.locations.create(m.getPosition());
+                final String               name       = m.getSimpleName();
+                final Ref<Signature>       signature  = this.addSignature(m);
+                final List<Ref<TypeParam>> typeParams = this.addTypeParams(m.getFormalCtTypeParameters());
                 return new MethodDecl(pkg, receiver, loc, name, signature, typeParams);
             },
-            (MethodDecl md) -> {
+            (Ref<MethodDecl> ref, MethodDecl md) -> {
                 md.setVisibility(m);
-                if (receiver.pkg != null) receiver.pkg.methodDecls.add(md);
-                receiver.methodDecls.add(md);
+                //if (pkg != null) pkg.methodDecls.add(md); // TODO: Move to a follow up when we know the package is done.
+                recv.methodDecls.add(ref);
                 md.metrics = this.addMetrics(m);
             });
     }
@@ -279,119 +195,120 @@ public class Abstractor {
         return tr.isPrimitive() && tr.getSimpleName().equals("void");
     }
 
-    private Signature addConstructSignature(CtConstructor<?> m) throws Exception {
-        return this.create(this.proj.signatures, m,
+    private Ref<Signature> addConstructSignature(CtConstructor<?> m) throws Exception {
+        return this.proj.signatures.create(this.log, m,
             "constructor signature " + m.getSignature(),
-            () -> { return new Signature(); },
-            (Signature sig) -> {
-                List<CtParameter<?>> params = m.getParameters();
-                sig.variadic = params.size() > 0 && params.get(params.size()-1).isVarArgs();
-                for (CtParameter<?> p : params) sig.params.add(this.addArgument(p));
-                sig.results.add(this.addUnnamedArgument(m.getType()));
+            () -> {
+                final List<CtParameter<?>> ps = m.getParameters();
+                final boolean variadic = ps.size() > 0 && ps.get(ps.size()-1).isVarArgs();
+
+                final ArrayList<Ref<Argument>> params = new ArrayList<Ref<Argument>>();
+                for (CtParameter<?> p : ps) params.add(this.addArgument(p));
+                
+                final ArrayList<Ref<Argument>> results = new ArrayList<Ref<Argument>>();
+                results.add(this.addArgument(m.getType()));
+
+                return new Signature(variadic, params, results);
             });
     }
 
-    private Signature addSignature(CtMethod<?> m) throws Exception {
-        return this.create(this.proj.signatures, m,
+    private Ref<Signature> addSignature(CtMethod<?> m) throws Exception {
+        return this.proj.signatures.create(this.log, m,
             "signature " + m.getSignature(),
-            () -> { return new Signature(); },
-            (Signature sig) -> {
-                List<CtParameter<?>> params = m.getParameters();
-                sig.variadic = params.size() > 0 && params.get(params.size()-1).isVarArgs();
-                for (CtParameter<?> p : params) sig.params.add(this.addArgument(p));
-                CtTypeReference<?> res = m.getType();
-                if (!isVoid(res)) sig.results.add(this.addArgument(res));
+            () -> {
+                final List<CtParameter<?>> ps = m.getParameters();
+                final boolean variadic = ps.size() > 0 && ps.get(ps.size()-1).isVarArgs();
+                
+                final ArrayList<Ref<Argument>> params = new ArrayList<Ref<Argument>>();
+                for (CtParameter<?> p : ps) params.add(this.addArgument(p));
+                
+                final ArrayList<Ref<Argument>> results = new ArrayList<Ref<Argument>>();
+                final CtTypeReference<?> res = m.getType();
+                if (!isVoid(res)) results.add(this.addArgument(res));
+                
+                return new Signature(variadic, params, results);
             });
     }
 
-    private Argument addArgument(CtParameter<?> p) throws Exception {
-        return this.create(this.proj.arguments, p,
+    private Ref<Argument> addArgument(CtParameter<?> p) throws Exception {
+        return this.proj.arguments.create(this.log, p,
             "parameter " + p.getSimpleName(),
             () -> {
-                final String   name = p.getSimpleName();
-                final TypeDesc type = this.addTypeDesc(p.getType());
+                final String name = p.getSimpleName();
+                final Ref<? extends TypeDesc> type = this.addTypeDesc(p.getType());
                 return new Argument(name, type);
             });
     }
     
-    private Argument addUnnamedArgument(CtTypeReference<?> p) throws Exception {
-        return this.create(this.proj.arguments, p,
-            "parameter unnamed " + p.getSimpleName(),
+    private Ref<Argument> addArgument(CtTypeReference<?> p) throws Exception {
+        return this.proj.arguments.create(this.log, p,
+            "parameter <unnamed> " + p.getSimpleName(),
             () -> {
-                final TypeDesc type = this.addTypeDesc(p);
+                final Ref<? extends TypeDesc> type = this.addTypeDesc(p);
                 return new Argument("", type);
             });
     }
     
-    private Argument addArgument(CtTypeReference<?> t) throws Exception {
-        return this.create(this.proj.arguments, t,
-            "parameter <unnamed> " + t.getSimpleName(),
-            () -> {
-                final TypeDesc type = this.addTypeDesc(t);
-                return new Argument("", type);
-            });
-    }
-
-    private StructDesc addStruct(CtClass<?> c) throws Exception {
-        return this.create(this.proj.structDescs, c,
+    private Ref<StructDesc> addStruct(CtClass<?> c) throws Exception {
+        return this.proj.structDescs.create(this.log, c,
             "struct " + c.getQualifiedName(),
             () -> {
                 // Handle enum?
                 //if (c instanceof CtEnum<?> e) {}
 
                 // Collect all fields.
-                ArrayList<Field> fields = new ArrayList<Field>();
+                final ArrayList<Ref<Field>> fields = new ArrayList<Ref<Field>>();
                 for (CtFieldReference<?> fr : c.getAllFields())
                     fields.add(this.addField(fr.getFieldDeclaration()));
-                return new StructDesc(fields);
-            },
-            (StructDesc sd) -> {
+
                 // Add extended class as a "$super" field.
                 CtTypeReference<?> superFr = c.getSuperclass();
-                if (superFr != null) sd.fields.add(this.addField("$super", superFr));
+                if (superFr != null) fields.add(this.addField("$super", superFr));
 
                 // Add access to nesting class as a "$nest" field.
                 if (c.getRoleInParent() == CtRole.NESTED_TYPE) {
                     if (c.getParent() instanceof CtTypeReference<?> nest && nest != null) {
-                        sd.fields.add(this.addField("$nest", nest));
+                        fields.add(this.addField("$nest", nest));
                     } else {
                         this.log.error("Unhandled nested object decl "+ c.getQualifiedName() + " in " + c.getParent());
                     }
                 }
+
+                return new StructDesc(fields);
             });
     }
 
-    private Field addField(CtField<?> f) throws Exception {
-        return this.create(this.proj.fields, f,
+    private Ref<Field> addField(CtField<?> f) throws Exception {
+        return this.proj.fields.create(this.log, f,
             "field " + f.getSimpleName(),
             () -> {
-                final String   name = f.getSimpleName();
-                final TypeDesc type = this.addTypeDesc(f.getType());
+                final String name = f.getSimpleName();
+                final Ref<? extends TypeDesc> type = this.addTypeDesc(f.getType());
                 return new Field(name, type);
             },
-            (Field field) -> {
+            (Ref<Field> ref, Field field) -> {
                 field.setVisibility(f);
             });
     }
 
-    private Field addField(String name, CtTypeReference<?> f) throws Exception {
-        return this.create(this.proj.fields, f,
+    private Ref<Field> addField(String name, CtTypeReference<?> f) throws Exception {
+        return this.proj.fields.create(this.log, f,
             "field " + name,
             () -> {
-                final TypeDesc type = this.addTypeDesc(f);
+                final Ref<? extends TypeDesc> type = this.addTypeDesc(f);
                 return new Field(name, type);
             });
     }
     
-    private TypeDeclaration addInterfaceDecl(CtInterface<?> i) throws Exception {
-        return this.create(this.proj.interfaceDecls, i,
+    private Ref<InterfaceDecl> addInterfaceDecl(CtInterface<?> i) throws Exception {
+        return this.proj.interfaceDecls.create(this.log, i,
             "interface decl " + i.getQualifiedName(),
             () -> {
-                final PackageCon      pkg        = this.addPackage(i.getPackage());
-                final Location        loc        = proj.locations.create(i.getPosition());
-                final String          name       = i.getSimpleName();
-                final InterfaceDesc   inter      = this.addInterfaceDesc(i);
-                final List<TypeParam> typeParams = this.addTypeParams(i.getFormalCtTypeParameters());
+                final Ref<PackageCon>    pkg   = this.addPackage(i.getPackage());
+                final Location           loc   = proj.locations.create(i.getPosition());
+                final String             name  = i.getSimpleName();
+                final Ref<InterfaceDesc> inter = this.addInterfaceDesc(i);
+                final ArrayList<Ref<TypeParam>> typeParams = this.addTypeParams(i.getFormalCtTypeParameters());
 
                 if (i.getRoleInParent() == CtRole.NESTED_TYPE) {
                     // TODO: Need to differentiate this from an interface by
@@ -401,36 +318,37 @@ public class Abstractor {
 
                 return new InterfaceDecl(pkg, loc, name, inter, typeParams);
             },
-            (InterfaceDecl id) -> {
+            (Ref<InterfaceDecl> ref, InterfaceDecl id) -> {
                 id.setVisibility(i);
-                if (id.pkg != null) id.pkg.interfaceDecls.add(id);                
-            },
-            () -> {
-                return this.addTypeDescRef(i.getReference());
+                //if (id.pkg != null) id.pkg.interfaceDecls.add(id); // TODO: Move to a follow up when we know the package is done.
             });
     }
 
-    private ObjectDecl addEnum(CtEnum<?> e) throws Exception {
-        return this.create(this.proj.objectDecls, e,
+    private Ref<ObjectDecl> addEnum(CtEnum<?> e) throws Exception {
+        return this.proj.objectDecls.create(this.log, e,
             "enum " + e.getQualifiedName(),
             () -> {
-                final PackageCon pkg  = this.addPackage(e.getPackage());
-                final Location   loc  = proj.locations.create(e.getPosition());
-                final String     name = e.getQualifiedName();
-                
-                CtTypeReference<?> tr = e.getSuperclass();
-                ArrayList<Field> fields = new ArrayList<Field>();
-                fields.add(this.addField("$value", tr));
-                StructDesc struct = new StructDesc(fields);
+                final Ref<PackageCon> pkg  = this.addPackage(e.getPackage());
+                final Location        loc  = proj.locations.create(e.getPosition());
+                final String          name = e.getQualifiedName();
+
+                final CtTypeReference<?> tr = e.getSuperclass();
+                Ref<StructDesc> struct = this.proj.structDescs.create(this.log, tr,
+                    "enum struct " + e.getQualifiedName(),
+                    () -> {
+                        final ArrayList<Ref<Field>> fields = new ArrayList<Ref<Field>>();
+                        fields.add(this.addField("$value", tr));
+                        return new StructDesc(fields);
+                    });
 
                 return new ObjectDecl(pkg, loc, name, struct, null);
             },
-            (ObjectDecl od) -> {
+            (Ref<ObjectDecl> ref, ObjectDecl od) -> {
                 // TODO: Finish by adding the "const values" to the package for each enumerator value.
             });
     }
 
-    private TypeDesc addTypeDesc(CtTypeReference<?> tr) throws Exception {
+    private Ref<? extends TypeDesc> addTypeDesc(CtTypeReference<?> tr) throws Exception {
         if (tr == null)       return this.proj.baker.objectDesc();
         if (tr.isPrimitive()) return this.addBasic(tr);
         if (tr.isArray())     return this.addArray((CtArrayTypeReference<?>)tr);
@@ -443,10 +361,11 @@ public class Abstractor {
         if (tr.isEnum())      return this.addEnum((CtEnum<?>)ty);
 
         // TODO: Finish implementing.
-        return this.unknownTypeDesc(tr);
+        this.unknownTypeDesc(tr);
+        return null;
     }
 
-    private TypeDesc unknownTypeDesc(CtTypeReference<?> tr) throws Exception {
+    private void unknownTypeDesc(CtTypeReference<?> tr) throws Exception {
         this.log.error("Unhandled (" + tr.getClass().getName() + "): "+tr.prettyprint());
         this.log.push();
         this.log.log("isAnnotationType:    " + tr.isAnnotationType());
@@ -465,35 +384,18 @@ public class Abstractor {
         this.log.log("isSimplyQualified:. ." + tr.isSimplyQualified());
         this.log.pop();
         throw new Exception("Unhandled Type"); // TODO: REMOVE to see multiple results.
-        //return null;
     }
 
-    private TypeDeclaration addTypeDescRef(CtTypeReference<?> tr) throws Exception {
-        return this.create(this.proj.typeDescRefs, tr,
-            "type decl ref "+ tr.getSimpleName(),
-            () -> {
-                final String name = tr.getSimpleName();
-                final CtPackageReference  pkg = tr.getPackage();
-                final String pkgPath = pkg != null ? pkg.toString() : "";
-                final List<TypeDesc> tps = this.addTypeArguments(tr.getActualTypeArguments());
-                return new TypeDescRef(tr, pkgPath, name, tps);
-            });
-    }
-
-    private InterfaceInst addArray(CtArrayTypeReference<?> tr) throws Exception {
-        return this.create(this.proj.interfaceInsts, tr,
-            "array instance " + tr.getSimpleName(),
-            () -> {
-                final TypeDesc elem = this.addTypeDesc(tr.getArrayType());
-                return this.proj.baker.arrayInst(tr.getQualifiedName(), elem);
-            },
-            (InterfaceInst inst) -> {
-                inst.generic.instances.add(inst);
-            });
+    private Ref<InterfaceInst> addArray(CtArrayTypeReference<?> tr) throws Exception {
+        final Ref<? extends TypeDesc> elem = this.addTypeDesc(tr.getArrayType());
+        Ref<InterfaceInst> ref = this.proj.baker.arrayInst(tr.getQualifiedName(), elem);
+        this.proj.interfaceInsts.setRefForElem(tr, ref);
+        //inst.generic.instances.add(inst); // TODO: Move to a follow up when we know the package is done.
+        return ref;
     }
     
-    private Basic addBasic(CtTypeReference<?> tr) throws Exception {
-        return this.create(this.proj.basics, tr,
+    private Ref<Basic> addBasic(CtTypeReference<?> tr) throws Exception {
+        return this.proj.basics.create(this.log, tr,
             "basic " + tr.getSimpleName(),
             () -> {
                 final String name = tr.getSimpleName();
@@ -502,46 +404,46 @@ public class Abstractor {
             });
     }
 
-    private InterfaceDesc addInterfaceDesc(CtInterface<?> i) throws Exception {
-        return this.create(this.proj.interfaceDescs, i,
+    private Ref<InterfaceDesc> addInterfaceDesc(CtInterface<?> i) throws Exception {
+        return this.proj.interfaceDescs.create(this.log, i,
             "interface description " + i.getSimpleName(),
             () -> {
-                final SortedSet<Abstract> abstracts = new TreeSet<Abstract>();
+                final TreeSet<Ref<Abstract>> abstracts = new TreeSet<Ref<Abstract>>();
                 for (CtMethod<?> m : i.getAllMethods())
                     abstracts.add(this.addAbstract(m));
 
                 // TODO: Determine how to pin this interface.
                 return new InterfaceDesc(abstracts);
             },
-            (InterfaceDesc id) -> {
+            (Ref<InterfaceDesc> ref, InterfaceDesc id) -> {
                 // TODO: Implement Inheritance
             });
     }
 
-    private Abstract addAbstract(CtMethod<?> m) throws Exception {
-        return this.create(this.proj.abstracts, m,
+    private Ref<Abstract> addAbstract(CtMethod<?> m) throws Exception {
+        return this.proj.abstracts.create(this.log, m,
             "abstract " + m.getSimpleName(),
             () -> {
                 final String name = m.getSimpleName();
-                final Signature signature = this.addSignature(m);
+                final Ref<Signature> signature = this.addSignature(m);
                 return new Abstract(name, signature);
             });
     }
 
-    private List<TypeDesc> addTypeArguments(List<CtTypeReference<?>> trs) throws Exception {
-        List<TypeDesc> result = new ArrayList<TypeDesc>(trs.size());
+    private ArrayList<Ref<? extends TypeDesc>> addTypeArguments(List<CtTypeReference<?>> trs) throws Exception {
+        ArrayList<Ref<? extends TypeDesc>> result = new ArrayList<Ref<? extends TypeDesc>>(trs.size());
         for (CtTypeReference<?> tr : trs) result.add(this.addTypeDesc(tr));
         return result;
     }
 
-    private List<TypeParam> addTypeParams(List<CtTypeParameter> tps) throws Exception {
-        List<TypeParam> result = new ArrayList<TypeParam>(tps.size());
+    private ArrayList<Ref<TypeParam>> addTypeParams(List<CtTypeParameter> tps) throws Exception {
+        ArrayList<Ref<TypeParam>> result = new ArrayList<Ref<TypeParam>>(tps.size());
         for (CtTypeParameter tp : tps) result.add(this.addTypeParam(tp));
         return result;
     }
 
-    private TypeParam addTypeParam(CtTypeParameter tp) throws Exception {
-        return this.create(this.proj.typeParams, tp,
+    private Ref<TypeParam> addTypeParam(CtTypeParameter tp) throws Exception {
+        return this.proj.typeParams.create(this.log, tp,
             "type params " + tp.getQualifiedName(),
             () -> {
                 final String name = tp.getQualifiedName();
@@ -553,21 +455,25 @@ public class Abstractor {
                 //    System.out.println(">>  >> " + tpr.getSimpleName() + " >> " + tpr.prettyprint());
 
                 CtTypeReference<?> tr = tp.getTypeErasure();
-                final TypeDesc type = this.addTypeDesc(tr);
+                final Ref<? extends TypeDesc> type = this.addTypeDesc(tr);
 
                 // TODO: Finish
                 return new TypeParam(name, type);
             });
     }
 
-    private Metrics addMetrics(CtMethod<?> m) throws Exception {
-        return this.create(this.proj.metrics, m,
-            "metrics",
+    private Ref<Metrics> addMetrics(CtMethod<?> m) throws Exception {
+        return this.proj.metrics.create(this.log, m,
+            "metrics " + m.getSimpleName(),
             () -> {
                 final Location loc = proj.locations.create(m.getPosition());
                 final Analyzer ana = new Analyzer(this, loc);
                 ana.addMethod(m);
                 return ana.getMetrics();
             });
+    }
+
+    public void finish() {
+        // TODO: Add a finish
     }
 }

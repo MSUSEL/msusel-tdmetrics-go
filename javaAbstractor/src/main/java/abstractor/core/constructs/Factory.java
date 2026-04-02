@@ -6,8 +6,6 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.TreeSet;
-import java.util.function.Supplier;
-import java.util.function.Consumer;
 
 import spoon.reflect.declaration.CtElement;
 
@@ -16,19 +14,14 @@ import abstractor.core.log.*;
 
 public class Factory<T extends Construct> implements Jsonable, Iterable<T> {
     static private final boolean logCreate = false;
-
-    private final ConstructKind conKind;
-    private final Supplier<T>   creator;
-
+    
+    private final ConstructKind              conKind;
     private final TreeSet<Ref<T>>            refSet     = new TreeSet<Ref<T>>();
     private final TreeSet<T>                 conSet     = new TreeSet<T>();
     private final HashMap<CtElement, Ref<T>> byElem     = new HashMap<CtElement, Ref<T>>();
     private final HashMap<T,         Ref<T>> nonElemRef = new HashMap<T, Ref<T>>();
 
-    public Factory(ConstructKind kind, Supplier<T> creator) {
-        this.conKind = kind;
-        this.creator = creator;
-    }
+    public Factory(ConstructKind kind) { this.conKind = kind; }
 
     public ConstructKind kind() { return this.conKind; }
 
@@ -64,7 +57,13 @@ public class Factory<T extends Construct> implements Jsonable, Iterable<T> {
         return c.equals(other) ? other : null;
     }
 
-    public Ref<T> create(Logger log, CtElement elem, String title, Consumer<T> loader) throws Exception {
+    @FunctionalInterface
+    public interface Creator<T extends Construct> { T create() throws Exception; }
+    
+    @FunctionalInterface
+    public interface Finisher<T extends Construct> { void finish(Ref<T> ref, T con) throws Exception; }
+
+    public Ref<T> create(Logger log, CtElement elem, String title, Creator<T> creator, Finisher<T> finisher) throws Exception {
         if (elem == null) return null;
 
         // Check if a resistance already exists.
@@ -84,10 +83,11 @@ public class Factory<T extends Construct> implements Jsonable, Iterable<T> {
             this.byElem.put(elem, newRef);
 
             // Create a new construct for this data.
-            final T newCon = this.creator.get();
+            final T newCon = creator.create();
             if (newCon == null)
                 throw new Exception("Factory creator for " + this.toString() + " returned null.");
-            loader.accept(newCon); 
+            if (newCon.kind() != this.conKind)
+                throw new Exception("Factory creator for " + this.toString() + " create a type with kind " + newCon.kind() + ".");
 
             // If an existing construct matches the new one after the new one
             // has been loaded, then there are two elements to get to the same
@@ -98,12 +98,37 @@ public class Factory<T extends Construct> implements Jsonable, Iterable<T> {
             } else {
                 this.conSet.add(newCon);
                 newRef.setResolved(newCon);
+                if (finisher != null) finisher.finish(newRef, newCon);
             }
 
             return newRef;
         } finally {
             if (logCreate) log.pop();
         }
+    }
+
+    public Ref<T> create(Logger log, CtElement elem, String title, Creator<T> creator) throws Exception {
+        return this.create(log, elem, title, creator, null);
+    }
+
+    public void setRefForElem(CtElement elem, Ref<T> ref) throws Exception {
+        final Ref<T> existing = this.getRef(elem);
+        if (existing != null) {
+            if (existing == ref) return;
+            throw new Exception("Ref already exists for element " + existing + " so cannot set " + ref);
+        }
+        this.refSet.add(ref);
+        this.byElem.put(elem, ref);
+    }
+
+    public Ref<T> addOfGetRefForElem(CtElement elem, String title) {
+        final Ref<T> existing = this.getRef(elem);
+        if (existing != null) return existing;
+
+        final Ref<T> newRef = new Ref<T>(this.conKind, elem, title);
+        this.refSet.add(newRef);
+        this.byElem.put(elem, newRef);
+        return newRef;
     }
 
     public Ref<T> addOrGetRef(T c) {
@@ -113,7 +138,7 @@ public class Factory<T extends Construct> implements Jsonable, Iterable<T> {
         Ref<T> ref = this.nonElemRef.get(c);
         if (ref != null) return ref;
 
-        ref = new Ref<>(this.conKind, null, "No element ref");
+        ref = new Ref<T>(this.conKind, null, "no element ref");
         this.conSet.add(c);
         this.nonElemRef.put(c, ref);
         return ref;

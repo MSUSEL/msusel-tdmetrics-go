@@ -15,8 +15,8 @@ public class Signature extends ConstructImp implements TypeDesc {
 
     public Signature(boolean variadic, List<Ref<Argument>> params, List<Ref<Argument>> results) {
         this.variadic = variadic;
-        this.params .addAll(params);
-        this.results.addAll(results);
+        if (params  != null) this.params .addAll(params);
+        if (results != null) this.results.addAll(results);
     }
 
     public ConstructKind kind() { return ConstructKind.SIGNATURE; }

@@ -15,7 +15,7 @@ public class InterfaceInst extends ConstructImp implements TypeDesc {
 
     public InterfaceInst(Ref<InterfaceDecl> generic, List<Ref<? extends TypeDesc>> instanceTypes, Ref<InterfaceDesc> resolved) {
         this.generic = generic;
-        this.instanceTypes.addAll(instanceTypes);
+        if (instanceTypes != null) this.instanceTypes.addAll(instanceTypes);
         this.resolved = resolved;
     }
 

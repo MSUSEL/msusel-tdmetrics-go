@@ -2,9 +2,7 @@ package abstractor.core.constructs;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.List;
 import java.util.Map;
-import java.util.SortedSet;
 import java.util.TreeMap;
 import java.util.TreeSet;
 
@@ -136,20 +134,20 @@ public class Baker {
 
     private Ref<InterfaceDecl> arrayDecl() {
         return this.getConstruct("arrayDecl", () -> {
-            final TypeParam tdT = this.genT();
+            final Ref<TypeParam> tdT = this.genT();
             final ArrayList<Ref<TypeParam>> tp = new ArrayList<Ref<TypeParam>>();
             tp.add(tdT);
-            final InterfaceDesc desc = this.arrayDesc("$T", tdT);
+            final Ref<InterfaceDesc> desc = this.arrayDesc("$T", tdT);
             final InterfaceDecl decl = new InterfaceDecl(null, null, "$Array", desc, tp);
             return this.proj.interfaceDecls.addOrGetRef(decl);
         });
     }
     
     public Ref<InterfaceInst> arrayInst(String tdName, Ref<? extends TypeDesc> td) {
-        final InterfaceDecl generic = this.arrayDecl();
+        final Ref<InterfaceDecl> generic = this.arrayDecl();
         final ArrayList<Ref<? extends TypeDesc>> its = new ArrayList<Ref<? extends TypeDesc>>();
         its.add(td);
-        final InterfaceDesc resolved = this.arrayDesc(tdName, td);
+        final Ref<InterfaceDesc> resolved = this.arrayDesc(tdName, td);
         final InterfaceInst inst = new InterfaceInst(generic, its, resolved);
         return this.proj.interfaceInsts.addOrGetRef(inst);
     }
