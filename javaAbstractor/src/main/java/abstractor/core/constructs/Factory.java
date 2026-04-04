@@ -86,7 +86,7 @@ public class Factory<T extends Construct> implements Jsonable, Iterable<T> {
             final T newCon = creator.create();
             if (newCon == null)
                 throw new Exception("Factory creator for " + this.toString() + " returned null.");
-            if (newCon.kind() != this.conKind)
+            if (!newCon.kind().equals(this.conKind))
                 throw new Exception("Factory creator for " + this.toString() + " create a type with kind " + newCon.kind() + ".");
 
             // If an existing construct matches the new one after the new one
@@ -114,8 +114,8 @@ public class Factory<T extends Construct> implements Jsonable, Iterable<T> {
     public void setRefForElem(CtElement elem, Ref<T> ref) throws Exception {
         final Ref<T> existing = this.getRef(elem);
         if (existing != null) {
-            if (existing == ref) return;
-            throw new Exception("Ref already exists for element " + existing + " so cannot set " + ref);
+            if (existing.equals(ref)) return;
+            throw new Exception("Ref already exists for element " + existing + " so cannot set " + ref + ".");
         }
         this.refSet.add(ref);
         this.byElem.put(elem, ref);

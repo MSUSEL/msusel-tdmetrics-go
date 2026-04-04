@@ -47,10 +47,7 @@ public class Location implements Jsonable, Comparable<Location> {
 
     @Override
     public boolean equals(Object o) {
-        return o != null &&
-            o instanceof Location lo &&
-            this.path.equals(lo.path) &&
-            this.line == lo.line;
+        return o != null && o instanceof Location lo && this.compareTo(lo) == 0;
     }
     
     @Override

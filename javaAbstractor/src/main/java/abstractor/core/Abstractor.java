@@ -4,6 +4,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.TreeSet;
+import java.util.HashSet;
 
 import spoon.Launcher;
 import spoon.MavenLauncher;
@@ -19,6 +20,8 @@ import abstractor.core.log.*;
 public class Abstractor {
     public final Logger log;
     public final Project proj;
+
+    public final HashSet<CtMethod<?>> pendingMetrics = new HashSet<CtMethod<?>>();
 
     public Abstractor(Logger log, Project proj) {
         this.log  = log;
@@ -79,15 +82,12 @@ public class Abstractor {
             });
     }
 
-    public Ref<? extends Declaration> addDeclaration(CtElement elem) throws Exception {
+    public Ref<? extends Construct> addDeclaration(CtElement elem) throws Exception {
         if (elem instanceof CtTypeReference<?> tr) elem = tr.getTypeDeclaration();
 
         if (elem instanceof CtClass<?> c)     return this.addObjectDecl(c);
         if (elem instanceof CtInterface<?> i) return this.addInterfaceDecl(i);
-        if (elem instanceof CtMethod<?> m) {
-            Ref<ObjectDecl> obj = (Ref<ObjectDecl>)this.addObjectDecl((CtClass<?>)m.getDeclaringType());
-            return this.addMethod(obj, m);
-        }
+        if (elem instanceof CtMethod<?> m)    return this.addGeneralMethod(m);
         this.log.error("Unhandled decl (" + elem.getClass().getName() + ") "+elem.toStringDebug());
         return null;
     }
@@ -123,12 +123,12 @@ public class Abstractor {
 
                 // Add constructors as (static) methods.
                 for (CtConstructor<?> ctor : c.getConstructors()) {
-                    if (ctor.getParent() == c) this.addConstructorMethod(ref, ctor);
+                    if (ctor.getParent().equals(c)) this.addConstructorMethod(ref, ctor);
                 }
 
                 // Add methods for the class.
                 for (CtMethod<?> m : c.getAllMethods()) {
-                    if (m.getParent() == c) this.addMethod(ref, m);
+                    if (m.getParent().equals(c)) this.addMethod(ref, m);
                 }
 
                 // Synthesize the interface description for the class.
@@ -168,9 +168,25 @@ public class Abstractor {
             });
     }
 
+    public Ref<? extends Construct> addGeneralMethod(CtMethod<?> m) throws Exception {
+        CtType<?> decl = m.getDeclaringType();
+        if (decl instanceof CtClass<?> c) {
+            Ref<ObjectDecl> obj = this.addObjectDecl(c);
+            return this.addMethod(obj, m);
+        }
+        if (decl instanceof CtInterface<?> i) {
+            //Ref<InterfaceDecl> it = this.addInterfaceDecl(i);
+            Ref<Abstract> ab = this.addAbstract(m);
+
+            // TODO: Finish interface
+            return ab;
+        }
+        throw new Exception("Unhandled general method declaring type (" + decl.getClass().getName() + ") "+decl.getQualifiedName());
+    }
+
     private Ref<MethodDecl> addMethod(Ref<ObjectDecl> receiver, CtMethod<?> m) throws Exception {
         if (!receiver.isResolved())
-            throw new Exception("Expected the receiver for a method to be resolved: " + receiver.toString());
+            throw new Exception("Expected the object receiver for a method to be resolved: " + receiver.toString());
         ObjectDecl recv = receiver.getResolved();
 
         return this.proj.methodDecls.create(this.log, m,
@@ -187,7 +203,7 @@ public class Abstractor {
                 md.setVisibility(m);
                 //if (pkg != null) pkg.methodDecls.add(md); // TODO: Move to a follow up when we know the package is done.
                 recv.methodDecls.add(ref);
-                md.metrics = this.addMetrics(m);
+                this.pendingMetrics.add(m);
             });
     }
 
@@ -462,6 +478,25 @@ public class Abstractor {
             });
     }
 
+    public void finish() throws Exception {
+       this.processPendingMetrics();
+
+
+        // TODO: Add a finish
+    }
+
+    private void processPendingMetrics() throws Exception {
+        for(CtMethod<?> m : this.pendingMetrics) {
+            Ref<MethodDecl> ref = this.proj.methodDecls.getRef(m);
+            if (!ref.isResolved())
+                throw new Exception("Expected " + ref + " to be resolved before processing pending metrics.");
+            MethodDecl md = ref.getResolved();
+            if (md.metrics != null)
+                throw new Exception("The metrics for " + md + " have already been processed before " + m.getSimpleName() + ".");
+            md.metrics = this.addMetrics(m);
+        }
+    }
+
     private Ref<Metrics> addMetrics(CtMethod<?> m) throws Exception {
         return this.proj.metrics.create(this.log, m,
             "metrics " + m.getSimpleName(),
@@ -471,9 +506,5 @@ public class Abstractor {
                 ana.addMethod(m);
                 return ana.getMetrics();
             });
-    }
-
-    public void finish() {
-        // TODO: Add a finish
     }
 }
