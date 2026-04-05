@@ -30,9 +30,8 @@ public class Value extends DeclarationImp {
     }
 
     @Override
-    public int compareTo(Construct c) {
-        return Cmp.or(
-            () -> super.compareTo(c),
+    public Cmp getCmp(Construct c) {
+        return Cmp.or(super.getCmp(c),
             Cmp.defer(this.constant, () -> ((Value)c).constant),
             Cmp.defer(this.metrics,  () -> ((Value)c).metrics),
             Cmp.defer(this.type,     () -> ((Value)c).type)

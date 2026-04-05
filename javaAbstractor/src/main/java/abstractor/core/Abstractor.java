@@ -57,6 +57,10 @@ public class Abstractor {
             this.addPackage(pkg);
     }
 
+    static private String normalizePath(String path) {
+        return path.replaceAll("\\\\", "/");
+    }
+
     static private String packagePath(CtPackage p) {
         SourcePosition pos = p.getPosition();
         if (!pos.isValidPosition()) return "";
@@ -64,8 +68,8 @@ public class Abstractor {
         final File file = pos.getFile();
         if (file == null) return "";
 
-        final String path = file.getPath();
-        final String tail = "package-info.java";
+        final String path = normalizePath(file.getPath());
+        final String tail = "/package-info.java";
         if (!path.endsWith(tail)) return path;
         return path.substring(0, path.length()-tail.length());
     }
@@ -76,9 +80,13 @@ public class Abstractor {
             () -> {
                 final String name = pkg.getQualifiedName();
                 final String path = packagePath(pkg);
-                final PackageCon pkgCon = new PackageCon(name, path);
-                for (CtType<?> t : pkg.getTypes()) this.addDeclaration(t);
-                return pkgCon;
+                return new PackageCon(name, path);
+            },
+            (Ref<PackageCon> ref, PackageCon pkgCon) ->{
+                for (CtType<?> t : pkg.getTypes()) {
+                    // TODO: Is added to package?
+                    this.addDeclaration(t);
+                }
             });
     }
 

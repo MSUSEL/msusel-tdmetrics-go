@@ -31,9 +31,8 @@ public class InterfaceInst extends ConstructImp implements TypeDesc {
     }
 
     @Override
-    public int compareTo(Construct c) {
-        return Cmp.or(
-            () -> super.compareTo(c),
+    public Cmp getCmp(Construct c) {
+        return Cmp.or(super.getCmp(c),
             Cmp.defer(    this.generic,       () -> ((InterfaceInst)c).generic),
             Cmp.deferList(this.instanceTypes, () -> ((InterfaceInst)c).instanceTypes),
             Cmp.defer(    this.resolved,      () -> ((InterfaceInst)c).resolved)

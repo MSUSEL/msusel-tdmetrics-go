@@ -15,8 +15,9 @@ public class Config {
     public boolean verbose;
     public boolean minimize;
 
-    public boolean writeKinds   = true;
-    public boolean writeIndices = true;
+    public boolean writeKinds;
+    public boolean writeIndices;
+    public boolean writeRefs;
 
     /**
      * The output to print to when output path is null.
@@ -60,6 +61,9 @@ public class Config {
         
         op.addOption("v", "verbose", false,
             "Indicates the abstraction process should output additional status information.");
+
+        op.addOption("e", "extra", false,
+            "Indicates that extra data like index and kind is added to the output.");
         return op;
     }
 
@@ -127,11 +131,16 @@ public class Config {
                 return false;
             }
 
+            boolean extra = cmd.hasOption("extra");
+
             // Write new values to config.
-            this.input    = input;
-            this.output   = output;
-            this.verbose  = cmd.hasOption("verbose");
-            this.minimize = cmd.hasOption("minimize");
+            this.input        = input;
+            this.output       = output;
+            this.verbose      = cmd.hasOption("verbose");
+            this.minimize     = cmd.hasOption("minimize");
+            this.writeIndices = extra;
+            this.writeKinds   = extra;
+            this.writeRefs    = extra;
             return true;
 
         } catch(ParseException ex) {
@@ -153,8 +162,9 @@ public class Config {
         ArrayList<String> flags = new ArrayList<String>();
         if (this.verbose)      flags.add("Verbose");
         if (this.minimize)     flags.add("Minimize");
-        if (this.writeKinds)   flags.add("Write Types");
+        if (this.writeKinds)   flags.add("Write Kinds");
         if (this.writeIndices) flags.add("Write Indices");
+        if (this.writeRefs)    flags.add("Write Refs");
     
         if (!flags.isEmpty()) {
             sb.append("\nFlags:  ");

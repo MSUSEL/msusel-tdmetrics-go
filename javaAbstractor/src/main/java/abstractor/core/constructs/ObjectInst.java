@@ -38,9 +38,8 @@ public class ObjectInst extends ConstructImp implements TypeDesc {
     }
 
     @Override
-    public int compareTo(Construct c) {
-        return Cmp.or(
-            () -> super.compareTo(c),
+    public Cmp getCmp(Construct c) {
+        return Cmp.or(super.getCmp(c),
             Cmp.defer(    this.generic,       () -> ((ObjectInst)c).generic),
             Cmp.deferList(this.instanceTypes, () -> ((ObjectInst)c).instanceTypes),
             Cmp.defer(    this.resData,       () -> ((ObjectInst)c).resData),

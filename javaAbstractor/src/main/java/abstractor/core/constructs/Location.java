@@ -4,12 +4,15 @@ import java.io.File;
 
 import spoon.reflect.cu.SourcePosition;
 import abstractor.core.cmp.Cmp;
+import abstractor.core.cmp.CmpGetter;
 import abstractor.core.json.*;
 
-public class Location implements Jsonable, Comparable<Location> {
+public class Location implements Jsonable, Comparable<Location>, CmpGetter<Location> {
     public String path;
     public int    line;
-    public int    offset;
+
+    // This is the accumulative offset this location exists relative to all locations.
+    public int offset;
 
     public Location() {}
 
@@ -36,9 +39,9 @@ public class Location implements Jsonable, Comparable<Location> {
 
     public boolean isValid() { return this.line > 0; }
 
-    @Override
-    public int compareTo(Location o) {
-        if (o == null) return 1;
+    public int compareTo(Location o) { return Cmp.compareTo(this, o); }
+
+    public Cmp getCmp(Location o) {
         return Cmp.or(
             Cmp.defer(this.path, () -> o.path),
             Cmp.defer(this.line, () -> o.line)

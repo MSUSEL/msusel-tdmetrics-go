@@ -25,9 +25,8 @@ public class StructDesc extends ConstructImp implements TypeDesc {
     }
 
     @Override
-    public int compareTo(Construct c) {
-        return Cmp.or(
-            () -> super.compareTo(c),
+    public Cmp getCmp(Construct c) {
+        return Cmp.or(super.getCmp(c),
             Cmp.deferList(this.fields, () -> ((StructDesc)c).fields)
         );
     }

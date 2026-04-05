@@ -3,26 +3,26 @@ package abstractor.core.constructs;
 import abstractor.core.json.*;
 
 public class Project implements Jsonable {
-    public final Baker                   baker          = new Baker(this);
-    public final Locations               locations      = new Locations();
-    public final Factory<Abstract>       abstracts      = new Factory<Abstract>      (ConstructKind.ABSTRACT);
-    public final Factory<Argument>       arguments      = new Factory<Argument>      (ConstructKind.ARGUMENT);
-    public final Factory<Basic>          basics         = new Factory<Basic>         (ConstructKind.BASIC);
-    public final Factory<Field>          fields         = new Factory<Field>         (ConstructKind.FIELD);
-    public final Factory<InterfaceDecl>  interfaceDecls = new Factory<InterfaceDecl> (ConstructKind.INTERFACE_DECL);
-    public final Factory<InterfaceDesc>  interfaceDescs = new Factory<InterfaceDesc> (ConstructKind.INTERFACE_DESC);
-    public final Factory<InterfaceInst>  interfaceInsts = new Factory<InterfaceInst> (ConstructKind.INTERFACE_INST);
-    public final Factory<MethodDecl>     methodDecls    = new Factory<MethodDecl>    (ConstructKind.METHOD_DECL);
-    public final Factory<MethodInst>     methodInsts    = new Factory<MethodInst>    (ConstructKind.METHOD_INST);
-    public final Factory<Metrics>        metrics        = new Factory<Metrics>       (ConstructKind.METRICS);
-    public final Factory<ObjectDecl>     objectDecls    = new Factory<ObjectDecl>    (ConstructKind.OBJECT_DECL);
-    public final Factory<ObjectInst>     objectInsts    = new Factory<ObjectInst>    (ConstructKind.OBJECT_INST);
-    public final Factory<PackageCon>     packages       = new Factory<PackageCon>    (ConstructKind.PACKAGE);
-    public final Factory<Selection>      selections     = new Factory<Selection>     (ConstructKind.SELECTION);
-    public final Factory<Signature>      signatures     = new Factory<Signature>     (ConstructKind.SIGNATURE);
-    public final Factory<StructDesc>     structDescs    = new Factory<StructDesc>    (ConstructKind.STRUCT_DESC);
-    public final Factory<TypeParam>      typeParams     = new Factory<TypeParam>     (ConstructKind.TYPE_PARAM);
-    public final Factory<Value>          values         = new Factory<Value>         (ConstructKind.VALUE);
+    public final Baker                  baker          = new Baker(this);
+    public final Locations              locations      = new Locations();
+    public final Factory<Abstract>      abstracts      = new Factory<Abstract>      (ConstructKind.ABSTRACT);
+    public final Factory<Argument>      arguments      = new Factory<Argument>      (ConstructKind.ARGUMENT);
+    public final Factory<Basic>         basics         = new Factory<Basic>         (ConstructKind.BASIC);
+    public final Factory<Field>         fields         = new Factory<Field>         (ConstructKind.FIELD);
+    public final Factory<InterfaceDecl> interfaceDecls = new Factory<InterfaceDecl> (ConstructKind.INTERFACE_DECL);
+    public final Factory<InterfaceDesc> interfaceDescs = new Factory<InterfaceDesc> (ConstructKind.INTERFACE_DESC);
+    public final Factory<InterfaceInst> interfaceInsts = new Factory<InterfaceInst> (ConstructKind.INTERFACE_INST);
+    public final Factory<MethodDecl>    methodDecls    = new Factory<MethodDecl>    (ConstructKind.METHOD_DECL);
+    public final Factory<MethodInst>    methodInsts    = new Factory<MethodInst>    (ConstructKind.METHOD_INST);
+    public final Factory<Metrics>       metrics        = new Factory<Metrics>       (ConstructKind.METRICS);
+    public final Factory<ObjectDecl>    objectDecls    = new Factory<ObjectDecl>    (ConstructKind.OBJECT_DECL);
+    public final Factory<ObjectInst>    objectInsts    = new Factory<ObjectInst>    (ConstructKind.OBJECT_INST);
+    public final Factory<PackageCon>    packages       = new Factory<PackageCon>    (ConstructKind.PACKAGE);
+    public final Factory<Selection>     selections     = new Factory<Selection>     (ConstructKind.SELECTION);
+    public final Factory<Signature>     signatures     = new Factory<Signature>     (ConstructKind.SIGNATURE);
+    public final Factory<StructDesc>    structDescs    = new Factory<StructDesc>    (ConstructKind.STRUCT_DESC);
+    public final Factory<TypeParam>     typeParams     = new Factory<TypeParam>     (ConstructKind.TYPE_PARAM);
+    public final Factory<Value>         values         = new Factory<Value>         (ConstructKind.VALUE);
 
     public final Factory<?>[] factories = new Factory<?>[] {
         this.abstracts,

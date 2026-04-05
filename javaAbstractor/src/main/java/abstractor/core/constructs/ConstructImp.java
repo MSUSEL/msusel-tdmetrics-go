@@ -2,9 +2,11 @@ package abstractor.core.constructs;
 
 import java.util.TreeSet;
 
+import abstractor.core.cmp.Cmp;
+import abstractor.core.cmp.CmpGetter;
 import abstractor.core.json.*;
 
-public abstract class ConstructImp implements Construct {
+public abstract class ConstructImp implements Construct, CmpGetter<Construct> {
 
     static public JsonValue key(Construct c) {
         return c == null ? JsonValue.ofNull() : JsonValue.of(c.kind().toString() + c.getIndex());
@@ -69,7 +71,11 @@ public abstract class ConstructImp implements Construct {
     public abstract ConstructKind kind();
 
     public int compareTo(Construct c) {
-        return this.kind().compareTo(c.kind());
+        return Cmp.compareTo(this, c);
+    }
+    
+    public Cmp getCmp(Construct c) {
+        return Cmp.defer(this.kind(), () -> c.kind());
     }
 
     @Override

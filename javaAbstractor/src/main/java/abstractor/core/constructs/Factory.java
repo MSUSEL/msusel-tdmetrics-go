@@ -96,6 +96,9 @@ public class Factory<T extends Construct> implements Jsonable, Iterable<T> {
             if (other != null) {
                 newRef.setResolved(other);
             } else {
+                this.validateAdd(newCon);
+
+
                 this.conSet.add(newCon);
                 newRef.setResolved(newCon);
                 if (finisher != null) finisher.finish(newRef, newCon);
@@ -106,6 +109,19 @@ public class Factory<T extends Construct> implements Jsonable, Iterable<T> {
             if (logCreate) log.pop();
         }
     }
+
+    private void validateAdd(T newCon) throws Exception {
+        // TODO: Disable when not testing. 
+
+        for(T old : this.conSet) {
+            if (newCon.equals(old)) {
+                throw new Exception("Found " + newCon + " and " + old + ".");
+            }
+        }
+
+
+
+    } 
 
     public Ref<T> create(Logger log, CtElement elem, String title, Creator<T> creator) throws Exception {
         return this.create(log, elem, title, creator, null);
@@ -154,7 +170,14 @@ public class Factory<T extends Construct> implements Jsonable, Iterable<T> {
 
     public JsonNode toJson(JsonHelper h) {
         JsonArray array = new JsonArray();
-        for (T t : this.conSet) array.add(t.toJson(h));
+        if (h.writeRefs) {
+
+            // TODO: Change how references are shown so that each resolved lists it's references.
+
+            for (Ref<T> r : this.refSet) array.add(r.toJson(h));
+        } else {
+            for (T t : this.conSet) array.add(t.toJson(h));
+        }
         return array;
     }
 }

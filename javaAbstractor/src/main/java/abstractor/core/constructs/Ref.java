@@ -57,20 +57,25 @@ public class Ref<T extends Construct> extends ConstructImp {
 
     @Override
     public JsonNode toJson(JsonHelper h) {
-        if (this.isResolved()) return this.res.toJson(h);
+        if (!h.writeRefs && this.isResolved()) return this.res.toJson(h);
 
         JsonObject obj = (JsonObject)super.toJson(h);
         obj.put(        "ref",      true);
         obj.putNotEmpty("context",  this.context);
         obj.putNotEmpty("typeArgs", keyList(this.typeArgs));
+        if (h.writeRefs) {
+            obj.put("context",  this.context);
+            obj.put("resHash",  this.res.hashCode());
+            obj.put("elemHash", this.elem.hashCode());
+            obj.put("elemType", this.elem.getClass().getSimpleName());
+        }
         return obj;
     }
 
     @Override
-    public int compareTo(Construct c) {
-        return Cmp.or(
-            () -> super.compareTo(c),
-            Cmp.defer(    this.elem,     () -> ((Ref<?>)c).elem),
+    public Cmp getCmp(Construct c) {
+        return Cmp.or(super.getCmp(c),
+            Cmp.deferHash(this.elem,     () -> ((Ref<?>)c).elem),
             Cmp.defer(    this.context,  () -> ((Ref<?>)c).context),
             Cmp.deferList(this.typeArgs, () -> ((Ref<?>)c).typeArgs)
         );

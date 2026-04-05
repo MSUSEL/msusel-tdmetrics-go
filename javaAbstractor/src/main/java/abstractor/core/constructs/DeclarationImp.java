@@ -35,9 +35,8 @@ public abstract class DeclarationImp extends ConstructImp implements Declaration
     }
 
     @Override
-    public int compareTo(Construct c) {
-        return Cmp.or(
-            () -> super.compareTo(c),
+    public Cmp getCmp(Construct c) {
+        return Cmp.or(super.getCmp(c),
             Cmp.defer(this.name, () -> ((DeclarationImp)c).name),
             Cmp.defer(this.pkg,  () -> ((DeclarationImp)c).pkg)
         );

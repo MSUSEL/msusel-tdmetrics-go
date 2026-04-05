@@ -35,9 +35,8 @@ public class MethodInst extends ConstructImp implements Method {
     }
 
     @Override
-    public int compareTo(Construct c) {
-        return Cmp.or(
-            () -> super.compareTo(c),
+    public Cmp getCmp(Construct c) {
+        return Cmp.or(super.getCmp(c),
             Cmp.defer(    this.generic,       () -> ((MethodInst)c).generic),
             Cmp.deferList(this.instanceTypes, () -> ((MethodInst)c).instanceTypes),
             Cmp.defer(    this.resolved,      () -> ((MethodInst)c).resolved)

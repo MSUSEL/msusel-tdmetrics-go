@@ -35,9 +35,8 @@ public class InterfaceDesc extends ConstructImp implements TypeDesc {
     }
 
     @Override
-    public int compareTo(Construct c) {
-        return Cmp.or(
-            () -> super.compareTo(c),
+    public Cmp getCmp(Construct c) {
+        return Cmp.or(super.getCmp(c),
             Cmp.deferSet(this.abstracts, () -> ((InterfaceDesc)c).abstracts),
             Cmp.defer(   this.pin,       () -> ((InterfaceDesc)c).pin)
         );

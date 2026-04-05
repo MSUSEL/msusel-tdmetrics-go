@@ -26,6 +26,7 @@ public class App {
         JsonHelper h = new JsonHelper();
         h.writeKinds   = cfg.writeKinds;
         h.writeIndices = cfg.writeIndices;
+        h.writeRefs    = cfg.writeRefs;
         h.rootPath     = cfg.input + "/";
         JsonNode node = proj.toJson(h);
 

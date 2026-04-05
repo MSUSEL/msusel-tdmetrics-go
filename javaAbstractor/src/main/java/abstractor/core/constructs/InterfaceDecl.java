@@ -33,9 +33,8 @@ public class InterfaceDecl extends DeclarationImp implements TypeDeclaration {
     }
 
     @Override
-    public int compareTo(Construct c) {
-        return Cmp.or(
-            () -> super.compareTo(c),
+    public Cmp getCmp(Construct c) {
+        return Cmp.or(super.getCmp(c),
             Cmp.defer(    this.inter,      () -> ((InterfaceDecl)c).inter),
             Cmp.deferList(this.typeParams, () -> ((InterfaceDecl)c).typeParams)
         );

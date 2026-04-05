@@ -34,9 +34,8 @@ public class Field extends ConstructImp {
     }
 
     @Override
-    public int compareTo(Construct c) {
-        return Cmp.or(
-            () -> super.compareTo(c),
+    public Cmp getCmp(Construct c) {
+        return Cmp.or(super.getCmp(c),
             Cmp.defer(this.name, () -> ((Field)c).name),
             Cmp.defer(this.type, () -> ((Field)c).type)
         );

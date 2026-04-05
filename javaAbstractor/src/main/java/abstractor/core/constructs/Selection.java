@@ -25,9 +25,8 @@ public class Selection extends ConstructImp {
     }
 
     @Override
-    public int compareTo(Construct c) {
-        return Cmp.or(
-            () -> super.compareTo(c),
+    public Cmp getCmp(Construct c) {
+        return Cmp.or(super.getCmp(c),
             Cmp.defer(this.name,   () -> ((Selection)c).name),
             Cmp.defer(this.origin, () -> ((Selection)c).origin)
         );

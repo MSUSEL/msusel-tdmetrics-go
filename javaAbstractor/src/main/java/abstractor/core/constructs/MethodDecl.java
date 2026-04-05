@@ -40,9 +40,8 @@ public class MethodDecl extends DeclarationImp implements Method {
     }
 
     @Override
-    public int compareTo(Construct c) {
-        return Cmp.or(
-            () -> super.compareTo(c),
+    public Cmp getCmp(Construct c) {
+        return Cmp.or(super.getCmp(c),
             Cmp.defer(    this.receiver,   () -> ((MethodDecl)c).receiver),
             Cmp.defer(    this.signature,  () -> ((MethodDecl)c).signature),
             Cmp.deferList(this.typeParams, () -> ((MethodDecl)c).typeParams)
