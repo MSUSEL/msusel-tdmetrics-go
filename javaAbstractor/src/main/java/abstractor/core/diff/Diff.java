@@ -51,15 +51,15 @@ public class Diff {
             return new Simplifier(new ExpandIterator<DiffStep>(parts.iterator()));
         });
     }
-    
+
     public Iterable<DiffStep> Path(String aSource, String bSource) {
         return Path(new StringComparator(aSource, bSource));
     }
-    
+
     public <T> Iterable<DiffStep> Path(List<T> aSource, List<T> bSource) {
         return Path(new ListComparator<T>(aSource, bSource));
     }
-    
+
     public <T> Iterable<DiffStep> Path(T[] aSource, T[] bSource) {
         return Path(new ArrayComparator<T>(aSource, bSource));
     }
@@ -137,7 +137,7 @@ public class Diff {
         return PlusMinus(aSource, bSource, defaultPlusMinusEqualPrefix,
             defaultPlusMinusAddedPrefix, defaultPlusMinusRemovedPrefix);
     }
-    
+
     public <T> Iterable<String> PlusMinusByChar(String aSource, String bSource,
         String equalPrefix, String addedPrefix, String removedPrefix) {
         return PlusMinus(this.Path(aSource, bSource),
@@ -150,7 +150,7 @@ public class Diff {
         return PlusMinusByChar(aSource, bSource, defaultPlusMinusEqualPrefix,
             defaultPlusMinusAddedPrefix, defaultPlusMinusRemovedPrefix);
     }
-    
+
     public <T> Iterable<String> PlusMinusByLine(String aSource, String bSource,
         String equalPrefix, String addedPrefix, String removedPrefix) {
         String[] aLines = aSource.split("\n");
@@ -200,7 +200,7 @@ public class Diff {
                                     n.bIndex++;
                                 }
                                 break;
-            
+
                             case added:
                                 switch (n.prevState) {
                                     case equal:
@@ -217,7 +217,7 @@ public class Diff {
                                     n.bIndex++;
                                 }
                                 break;
-            
+
                             case removed:
                                 switch (n.prevState) {
                                     case equal:
@@ -268,7 +268,7 @@ public class Diff {
         return Merge(aSource, bSource, defaultMergeStartChange,
             defaultMergeMiddleChange, defaultMergeEndChange);
     }
-    
+
     public <T> Iterable<String> Merge(T[] aSource, T[] bSource,
         String startChange, String middleChange, String endChange) {
         return Merge(this.Path(aSource, bSource),
@@ -281,7 +281,7 @@ public class Diff {
         return Merge(aSource, bSource, defaultMergeStartChange,
             defaultMergeMiddleChange, defaultMergeEndChange);
     }
-    
+
     public <T> Iterable<String> MergeByChar(String aSource, String bSource,
         String startChange, String middleChange, String endChange) {
         return Merge(this.Path(aSource, bSource),
@@ -294,7 +294,7 @@ public class Diff {
         return MergeByChar(aSource, bSource, defaultMergeStartChange,
             defaultMergeMiddleChange, defaultMergeEndChange);
     }
-    
+
     public <T> Iterable<String> MergeByLine(String aSource, String bSource,
         String startChange, String middleChange, String endChange) {
         String[] aLines = aSource.split("\n");

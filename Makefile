@@ -16,6 +16,7 @@ go-test:
 j-test:
 	cd ./javaAbstractor/ && mvn test
 # Add `-Dtest=TestClass#testMethod` before `test` to run specific tests
+# e.g `mvn -Dtest="abstractor.AppTests#test0001" test`
 
 td-test:
 	cd ./techDebtMetrics/ && dotnet test

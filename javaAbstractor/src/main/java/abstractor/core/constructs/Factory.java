@@ -96,9 +96,6 @@ public class Factory<T extends Construct> implements Jsonable, Iterable<T> {
             if (other != null) {
                 newRef.setResolved(other);
             } else {
-                this.validateAdd(newCon);
-
-
                 this.conSet.add(newCon);
                 newRef.setResolved(newCon);
                 if (finisher != null) finisher.finish(newRef, newCon);
@@ -110,18 +107,9 @@ public class Factory<T extends Construct> implements Jsonable, Iterable<T> {
         }
     }
 
-    private void validateAdd(T newCon) throws Exception {
-        // TODO: Disable when not testing. 
-
-        for(T old : this.conSet) {
-            if (newCon.equals(old)) {
-                throw new Exception("Found " + newCon + " and " + old + ".");
-            }
-        }
-
-
-
-    } 
+    private List<Ref<T>> findRefsForCon(T con) {
+        return this.refSet.stream().filter(r -> con.equals(r.getResolved())).toList();
+    }
 
     public Ref<T> create(Logger log, CtElement elem, String title, Creator<T> creator) throws Exception {
         return this.create(log, elem, title, creator, null);
@@ -171,10 +159,22 @@ public class Factory<T extends Construct> implements Jsonable, Iterable<T> {
     public JsonNode toJson(JsonHelper h) {
         JsonArray array = new JsonArray();
         if (h.writeRefs) {
+            for (T t : this.conSet) {
+                JsonNode node = t.toJson(h);
+                JsonObject obj;
+                if (node instanceof JsonObject o) obj = o;
+                else {
+                    obj = new JsonObject();
+                    obj.put("resolved", node);
+                }
 
-            // TODO: Change how references are shown so that each resolved lists it's references.
+                List<Ref<T>> refs = this.findRefsForCon(t);
+                JsonArray refList = new JsonArray();
+                for (Ref<T> r : refs) refList.add(r.toJson(h));
+                obj.put("refs", refList);
 
-            for (Ref<T> r : this.refSet) array.add(r.toJson(h));
+                array.add(obj);
+            }
         } else {
             for (T t : this.conSet) array.add(t.toJson(h));
         }

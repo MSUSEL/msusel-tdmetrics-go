@@ -63,12 +63,12 @@ public class Ref<T extends Construct> extends ConstructImp {
         obj.put(        "ref",      true);
         obj.putNotEmpty("context",  this.context);
         obj.putNotEmpty("typeArgs", keyList(this.typeArgs));
-        if (h.writeRefs) {
-            obj.put("context",  this.context);
-            obj.put("resHash",  this.res.hashCode());
-            obj.put("elemHash", this.elem.hashCode());
-            obj.put("elemType", this.elem.getClass().getSimpleName());
-        }
+        //if (h.writeRefs) {
+        //    obj.put("context",  this.context);
+        //    obj.put("resHash",  this.res.hashCode());
+        //    obj.put("elemHash", this.elem.hashCode());
+        //    obj.put("elemType", this.elem.getClass().getSimpleName());
+        //}
         return obj;
     }
 

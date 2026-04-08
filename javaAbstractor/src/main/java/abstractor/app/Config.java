@@ -140,7 +140,7 @@ public class Config {
             this.minimize     = cmd.hasOption("minimize");
             this.writeIndices = extra;
             this.writeKinds   = extra;
-            this.writeRefs    = extra;
+            this.writeRefs    = false; // extra;
             return true;
 
         } catch(ParseException ex) {

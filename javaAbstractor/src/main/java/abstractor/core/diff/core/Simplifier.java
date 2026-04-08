@@ -24,7 +24,7 @@ public class Simplifier implements Iterator<DiffStep> {
             this.equalRun = 0;
         }
     }
-   
+
     private void addRemoved() {
         if (this.removedRun > 0) {
             this.pending.addLast(DiffStep.Removed(this.removedRun));

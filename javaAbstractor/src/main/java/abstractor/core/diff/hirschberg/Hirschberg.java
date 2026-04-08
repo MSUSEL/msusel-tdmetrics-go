@@ -13,12 +13,12 @@ import abstractor.core.iter.*;
 public class Hirschberg implements Algorithm {
     private final HirschbergScores scores;
     private final Algorithm hybrid;
-    
+
     public Hirschberg(int length) {
         this.scores = new HirschbergScores(length);
         this.hybrid = null;
     }
-    
+
     public Hirschberg(int length, Algorithm hybrid) {
         this.scores = new HirschbergScores(length);
         this.hybrid = hybrid;
@@ -34,34 +34,34 @@ public class Hirschberg implements Algorithm {
         return new IterableWrapper<DiffStep>(() -> {
             Stack<SubRem> stack = new Stack<SubRem>();
             stack.push(new SubRem(new SubComparator(comp), 0));
-            
+
             return new YieldIterator<DiffStep>(
                 () -> !stack.isEmpty(),
                 (YieldIterator.Yield<DiffStep> y)-> {
                     final SubRem pair = stack.pop();
                     SubComparator cur = pair.sub;
                     final int remainder = pair.remainder;
-        
+
                     if (remainder > 0) y.yield(DiffStep.Equal(remainder));
                     if (cur == null) return;
-        
+
                     ReduceResult red = cur.reduce();
                     cur = red.sub();
                     if (red.back() > 0) y.yield(DiffStep.Equal(red.back()));
                     stack.push(new SubRem(null, red.front()));
-        
+
                     if (cur.isEndCase()) {
                         for (DiffStep step : cur.endCase())
                             y.yield(step);
-                            return;
+                        return;
                     }
-        
+
                     if (this.hybrid != null && this.hybrid.noResizeNeeded(cur)) {
                         for (DiffStep step : this.hybrid.diff(cur))
                             y.yield(step);
-                            return;
+                        return;
                     }
-        
+
                     final int aLen = cur.aLength();
                     final int bLen = cur.bLength();
                     SplitResult mid = this.scores.split(cur);

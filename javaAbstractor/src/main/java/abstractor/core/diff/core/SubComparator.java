@@ -101,7 +101,7 @@ public class SubComparator implements CostComparator {
         int split = -1;
         for (int i = 0, j = this.bOffset; i < this.bLen; i++, j++) {
             if (this.comp.equals(0, j)) {
-                split = j;
+                split = i;
                 break;
             }
         }
@@ -127,7 +127,7 @@ public class SubComparator implements CostComparator {
         int split = -1;
         for (int i = 0, j = this.aOffset; i < this.aLen; i++, j++) {
             if (this.comp.equals(j, 0)) {
-                split = j;
+                split = i;
                 break;
             }
         }
