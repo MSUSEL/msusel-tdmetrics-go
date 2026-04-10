@@ -13,7 +13,7 @@ import abstractor.core.json.*;
 import abstractor.core.log.*;
 
 public class Factory<T extends Construct> implements Jsonable, Iterable<T> {
-    static private final boolean logCreate = false;
+    static private final boolean logCreate = true;
     
     private final ConstructKind              conKind;
     private final TreeSet<Ref<T>>            refSet     = new TreeSet<Ref<T>>();
@@ -158,9 +158,9 @@ public class Factory<T extends Construct> implements Jsonable, Iterable<T> {
 
     public JsonNode toJson(JsonHelper h) {
         JsonArray array = new JsonArray();
-        if (h.writeRefs) {
-            for (T t : this.conSet) {
-                JsonNode node = t.toJson(h);
+        for (T t : this.conSet) {
+            JsonNode node = t.toJson(h);
+            if (h.writeRefs) {
                 JsonObject obj;
                 if (node instanceof JsonObject o) obj = o;
                 else {
@@ -170,13 +170,11 @@ public class Factory<T extends Construct> implements Jsonable, Iterable<T> {
 
                 List<Ref<T>> refs = this.findRefsForCon(t);
                 JsonArray refList = new JsonArray();
-                for (Ref<T> r : refs) refList.add(r.toJson(h));
+                for (Ref<T> r : refs) refList.add(r.refToJson(h));
                 obj.put("refs", refList);
-
-                array.add(obj);
+                node = obj;
             }
-        } else {
-            for (T t : this.conSet) array.add(t.toJson(h));
+            array.add(node);
         }
         return array;
     }

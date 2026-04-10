@@ -45,7 +45,7 @@ public class AppTests {
         cfg.verbose       = true;
         cfg.writeIndices  = false;
         cfg.writeKinds    = false;
-        cfg.writeRefs     = true;
+        cfg.writeRefs     = false;
         cfg.defaultOut    = new PrintStream(buffer);
         cfg.logOut        = new PrintStream(logBuf);
         cfg.logErr        = new PrintStream(logBuf);

@@ -2,6 +2,7 @@ package abstractor.core.constructs;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import spoon.reflect.declaration.CtElement;
 
@@ -55,21 +56,21 @@ public class Ref<T extends Construct> extends ConstructImp {
         this.res = res;
     }
 
-    @Override
-    public JsonNode toJson(JsonHelper h) {
-        if (!h.writeRefs && this.isResolved()) return this.res.toJson(h);
-
+    public JsonNode refToJson(JsonHelper h) {
         JsonObject obj = (JsonObject)super.toJson(h);
         obj.put(        "ref",      true);
         obj.putNotEmpty("context",  this.context);
         obj.putNotEmpty("typeArgs", keyList(this.typeArgs));
-        //if (h.writeRefs) {
-        //    obj.put("context",  this.context);
-        //    obj.put("resHash",  this.res.hashCode());
-        //    obj.put("elemHash", this.elem.hashCode());
-        //    obj.put("elemType", this.elem.getClass().getSimpleName());
-        //}
+        // obj.put("context",  this.context);
+        // obj.put("resHash",  this.res.hashCode());
+        // obj.put("elemHash", this.elem.hashCode());
+        // obj.put("elemType", this.elem.getClass().getSimpleName());
         return obj;
+    }
+
+    @Override
+    public JsonNode toJson(JsonHelper h) {
+        return this.isResolved() ? this.res.toJson(h) : this.refToJson(h);
     }
 
     @Override

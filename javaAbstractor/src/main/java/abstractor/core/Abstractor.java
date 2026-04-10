@@ -3,6 +3,7 @@ package abstractor.core;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 import java.util.TreeSet;
 import java.util.HashSet;
 
@@ -13,7 +14,6 @@ import spoon.reflect.cu.SourcePosition;
 import spoon.reflect.declaration.*;
 import spoon.reflect.path.CtRole;
 import spoon.reflect.reference.*;
-
 import abstractor.core.constructs.*;
 import abstractor.core.log.*;
 
@@ -34,9 +34,24 @@ public class Abstractor {
      */
     public void addMavenProject(String mavenProject) throws Exception {
         this.log.log("Reading " + mavenProject);
-        final MavenLauncher launcher = new MavenLauncher(mavenProject,
-            MavenLauncher.SOURCE_TYPE.APP_SOURCE);
-        this.addModel(launcher.buildModel());
+        MavenLauncher launcher = new MavenLauncher(mavenProject, MavenLauncher.SOURCE_TYPE.APP_SOURCE);
+        CtModel model = launcher.buildModel();
+        if (model.getAllTypes().size() > 0) {
+            this.addModel(model);
+            return;
+        }
+
+        // If the model couldn't be loaded (it has no types in it) from the app
+        // source alone then try again with the maven project path as an input
+        // resource. We can't always add the input resource otherwise it will
+        // cause duplicate identifiers in some projects. For the integration
+        // tests in testData/java, we do need the input resource. I have no clue
+        // what the difference is between the maven models to require this
+        // but if it works, I'm not going to fix it right now.
+        launcher = new MavenLauncher(mavenProject, MavenLauncher.SOURCE_TYPE.APP_SOURCE);
+        launcher.addInputResource(mavenProject);
+        model = launcher.buildModel();
+        this.addModel(model);
     }
 
     /**
@@ -61,8 +76,13 @@ public class Abstractor {
         return path.replaceAll("\\\\", "/");
     }
 
-    static private String packagePath(CtPackage p) {
-        SourcePosition pos = p.getPosition();
+    static private String packageName(CtPackage pkg) {
+        String name = pkg.getQualifiedName();
+        return name.isBlank() ? "<unnamed>" : name;
+    }
+
+    static private String packagePath(CtPackage pkg) {
+        SourcePosition pos = pkg.getPosition();
         if (!pos.isValidPosition()) return "";
         
         final File file = pos.getFile();
@@ -75,19 +95,38 @@ public class Abstractor {
     }
 
     private Ref<PackageCon> addPackage(CtPackage pkg) throws Exception {
+        final String name = packageName(pkg);
         return this.proj.packages.create(this.log, pkg,
-            "package " + pkg.getQualifiedName(),
+            "package " + name,
             () -> {
-                final String name = pkg.getQualifiedName();
                 final String path = packagePath(pkg);
                 return new PackageCon(name, path);
             },
             (Ref<PackageCon> ref, PackageCon pkgCon) ->{
                 for (CtType<?> t : pkg.getTypes()) {
-                    // TODO: Is added to package?
-                    this.addDeclaration(t);
+                    this.addDeclarationToPackage(pkgCon, this.addDeclaration(t));
                 }
+                // TODO: add Imports
             });
+    }
+
+    static private <T extends Construct> boolean tryToAdd(Set<Ref<T>> set, Ref<? extends Construct> e, ConstructKind kind) {
+        if (e.kind() == kind) {
+            @SuppressWarnings("unchecked")
+            Ref<T> cast = (Ref<T>)e;
+            set.add(cast);
+            return true;
+        }
+        return false;
+    }
+
+    public void addDeclarationToPackage(PackageCon pkg, Ref<? extends Construct> decl) {
+        if (tryToAdd(pkg.objectDecls, decl, ConstructKind.OBJECT_DECL)) return;
+        if (tryToAdd(pkg.interfaceDecls, decl, ConstructKind.INTERFACE_DECL)) return;
+        if (tryToAdd(pkg.methodDecls, decl, ConstructKind.METHOD_DECL)) return;
+        if (tryToAdd(pkg.values, decl, ConstructKind.VALUE)) return;
+        
+        this.log.error("Unhandled declaration type: " + decl.kind());
     }
 
     public Ref<? extends Construct> addDeclaration(CtElement elem) throws Exception {
@@ -277,7 +316,7 @@ public class Abstractor {
         return this.proj.structDescs.create(this.log, c,
             "struct " + c.getQualifiedName(),
             () -> {
-                // Handle enum?
+                // TODO: Handle enum?
                 //if (c instanceof CtEnum<?> e) {}
 
                 // Collect all fields.
@@ -384,7 +423,6 @@ public class Abstractor {
         if (tr.isGenerics())  return this.addTypeParam((CtTypeParameter)ty);
         if (tr.isEnum())      return this.addEnum((CtEnum<?>)ty);
 
-        // TODO: Finish implementing.
         this.unknownTypeDesc(tr);
         return null;
     }
@@ -407,7 +445,7 @@ public class Abstractor {
         this.log.log("isShadow:            " + tr.isShadow());
         this.log.log("isSimplyQualified:. ." + tr.isSimplyQualified());
         this.log.pop();
-        throw new Exception("Unhandled Type"); // TODO: REMOVE to see multiple results.
+        throw new Exception("Unhandled Type");
     }
 
     private Ref<InterfaceInst> addArray(CtArrayTypeReference<?> tr) throws Exception {
@@ -488,9 +526,8 @@ public class Abstractor {
 
     public void finish() throws Exception {
        this.processPendingMetrics();
-
-
-        // TODO: Add a finish
+       this.crossConnectConstructs();
+       this.joinAllEqualConstructs();
     }
 
     private void processPendingMetrics() throws Exception {
@@ -514,5 +551,17 @@ public class Abstractor {
                 ana.addMethod(m);
                 return ana.getMetrics();
             });
+    }
+
+    private void crossConnectConstructs() throws Exception {
+      
+
+
+        // TODO: Finish
+    }
+
+    private void joinAllEqualConstructs() throws Exception {
+
+        // TODO: Finish
     }
 }
