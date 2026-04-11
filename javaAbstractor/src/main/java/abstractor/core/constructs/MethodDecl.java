@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.TreeSet;
     
 import abstractor.core.cmp.Cmp;
+import abstractor.core.cmp.CmpOptions;
 import abstractor.core.json.*;
 
 public class MethodDecl extends DeclarationImp implements Method {
@@ -40,8 +41,8 @@ public class MethodDecl extends DeclarationImp implements Method {
     }
 
     @Override
-    public Cmp getCmp(Construct c) {
-        return Cmp.or(super.getCmp(c),
+    public Cmp getCmp(Construct c, CmpOptions options) {
+        return Cmp.or(super.getCmp(c, options),
             Cmp.defer(    this.receiver,   () -> ((MethodDecl)c).receiver),
             Cmp.defer(    this.signature,  () -> ((MethodDecl)c).signature),
             Cmp.deferList(this.typeParams, () -> ((MethodDecl)c).typeParams)

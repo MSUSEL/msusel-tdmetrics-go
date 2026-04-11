@@ -2,11 +2,11 @@ package abstractor.core.constructs;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 import spoon.reflect.declaration.CtElement;
 
 import abstractor.core.cmp.Cmp;
+import abstractor.core.cmp.CmpOptions;
 import abstractor.core.json.JsonHelper;
 import abstractor.core.json.JsonNode;
 import abstractor.core.json.JsonObject;
@@ -74,8 +74,14 @@ public class Ref<T extends Construct> extends ConstructImp {
     }
 
     @Override
-    public Cmp getCmp(Construct c) {
-        return Cmp.or(super.getCmp(c),
+    public Cmp getCmp(Construct c, CmpOptions options) {
+        if (options.useResolved) {
+            return Cmp.or(super.getCmp(c, options),
+                Cmp.defer(this.res, () -> ((Ref<?>)c).res)
+            );
+        }
+
+        return Cmp.or(super.getCmp(c, options),
             Cmp.deferHash(this.elem,     () -> ((Ref<?>)c).elem),
             Cmp.defer(    this.context,  () -> ((Ref<?>)c).context),
             Cmp.deferList(this.typeArgs, () -> ((Ref<?>)c).typeArgs)

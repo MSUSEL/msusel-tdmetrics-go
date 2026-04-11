@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import abstractor.core.cmp.Cmp;
+import abstractor.core.cmp.CmpOptions;
 import abstractor.core.json.*;
 
 public class MethodInst extends ConstructImp implements Method {
@@ -35,8 +36,8 @@ public class MethodInst extends ConstructImp implements Method {
     }
 
     @Override
-    public Cmp getCmp(Construct c) {
-        return Cmp.or(super.getCmp(c),
+    public Cmp getCmp(Construct c, CmpOptions options) {
+        return Cmp.or(super.getCmp(c, options),
             Cmp.defer(    this.generic,       () -> ((MethodInst)c).generic),
             Cmp.deferList(this.instanceTypes, () -> ((MethodInst)c).instanceTypes),
             Cmp.defer(    this.resolved,      () -> ((MethodInst)c).resolved)

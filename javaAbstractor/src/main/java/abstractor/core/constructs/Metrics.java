@@ -4,6 +4,7 @@ import java.util.SortedSet;
 import java.util.TreeSet;
 
 import abstractor.core.cmp.Cmp;
+import abstractor.core.cmp.CmpOptions;
 import abstractor.core.json.*;
 
 public class Metrics extends ConstructImp {
@@ -61,8 +62,8 @@ public class Metrics extends ConstructImp {
     }
 
     @Override
-    public Cmp getCmp(Construct c) {
-        return Cmp.or(super.getCmp(c),
+    public Cmp getCmp(Construct c, CmpOptions options) {
+        return Cmp.or(super.getCmp(c, options),
             Cmp.defer(this.loc, () -> ((Metrics)c).loc)
         );
     }   

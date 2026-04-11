@@ -8,8 +8,8 @@ import java.util.function.Supplier;
 public interface Cmp {
     int run(CmpContext context);
 
-    static public <T> int compareTo(T a, T b) {
-        return (new CmpContext()).compare(a, b);
+    static public <T> int compareTo(T a, T b, CmpOptions options) {
+        return (new CmpContext(options)).compare(a, b);
     }
     
     static public <T> Cmp deferHash(T a, Supplier<T> fetch) {

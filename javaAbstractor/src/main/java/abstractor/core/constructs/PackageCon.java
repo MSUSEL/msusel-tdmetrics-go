@@ -3,6 +3,7 @@ package abstractor.core.constructs;
 import java.util.TreeSet;
 
 import abstractor.core.cmp.Cmp;
+import abstractor.core.cmp.CmpOptions;
 import abstractor.core.json.*;
 
 public class PackageCon extends ConstructImp {
@@ -38,8 +39,8 @@ public class PackageCon extends ConstructImp {
     }
 
     @Override
-    public Cmp getCmp(Construct c) {
-        return Cmp.or(super.getCmp(c),
+    public Cmp getCmp(Construct c, CmpOptions options) {
+        return Cmp.or(super.getCmp(c, options),
             Cmp.defer(this.name, () -> ((PackageCon)c).name),
             Cmp.defer(this.path, () -> ((PackageCon)c).path)
         );

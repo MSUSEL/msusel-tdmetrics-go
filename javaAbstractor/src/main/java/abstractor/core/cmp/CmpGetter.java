@@ -1,5 +1,5 @@
 package abstractor.core.cmp;
 
 public interface CmpGetter<T> {
-    Cmp getCmp(T other);
+    Cmp getCmp(T other, CmpOptions options);
 }

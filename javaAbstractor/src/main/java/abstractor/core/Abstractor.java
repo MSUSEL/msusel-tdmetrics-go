@@ -526,8 +526,8 @@ public class Abstractor {
 
     public void finish() throws Exception {
        this.processPendingMetrics();
+       this.consolidateCons();
        this.crossConnectConstructs();
-       this.joinAllEqualConstructs();
     }
 
     private void processPendingMetrics() throws Exception {
@@ -553,15 +553,14 @@ public class Abstractor {
             });
     }
 
-    private void crossConnectConstructs() throws Exception {
-      
-
-
-        // TODO: Finish
+    private void consolidateCons() throws Exception {
+        this.proj.setAllIndices();
+        while (this.proj.consolidateCons())
+            this.proj.setAllIndices();
+        this.proj.setAllIndices();
     }
 
-    private void joinAllEqualConstructs() throws Exception {
-
+    private void crossConnectConstructs() throws Exception {
         // TODO: Finish
     }
 }

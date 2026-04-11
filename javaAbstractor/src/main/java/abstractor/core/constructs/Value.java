@@ -1,6 +1,7 @@
 package abstractor.core.constructs;
 
 import abstractor.core.cmp.Cmp;
+import abstractor.core.cmp.CmpOptions;
 import abstractor.core.json.*;
 
 public class Value extends DeclarationImp {
@@ -30,8 +31,8 @@ public class Value extends DeclarationImp {
     }
 
     @Override
-    public Cmp getCmp(Construct c) {
-        return Cmp.or(super.getCmp(c),
+    public Cmp getCmp(Construct c, CmpOptions options) {
+        return Cmp.or(super.getCmp(c, options),
             Cmp.defer(this.constant, () -> ((Value)c).constant),
             Cmp.defer(this.metrics,  () -> ((Value)c).metrics),
             Cmp.defer(this.type,     () -> ((Value)c).type)

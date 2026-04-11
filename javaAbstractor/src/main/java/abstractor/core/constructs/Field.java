@@ -3,6 +3,7 @@ package abstractor.core.constructs;
 import spoon.reflect.declaration.CtModifiable;
 
 import abstractor.core.cmp.Cmp;
+import abstractor.core.cmp.CmpOptions;
 import abstractor.core.json.*;
 
 public class Field extends ConstructImp {
@@ -34,8 +35,8 @@ public class Field extends ConstructImp {
     }
 
     @Override
-    public Cmp getCmp(Construct c) {
-        return Cmp.or(super.getCmp(c),
+    public Cmp getCmp(Construct c, CmpOptions options) {
+        return Cmp.or(super.getCmp(c, options),
             Cmp.defer(this.name, () -> ((Field)c).name),
             Cmp.defer(this.type, () -> ((Field)c).type)
         );

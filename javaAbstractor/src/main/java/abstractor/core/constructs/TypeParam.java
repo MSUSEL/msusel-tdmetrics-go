@@ -1,6 +1,7 @@
 package abstractor.core.constructs;
 
 import abstractor.core.cmp.Cmp;
+import abstractor.core.cmp.CmpOptions;
 import abstractor.core.json.*;
 
 public class TypeParam extends ConstructImp implements TypeDesc {
@@ -25,8 +26,8 @@ public class TypeParam extends ConstructImp implements TypeDesc {
     }
 
     @Override
-    public Cmp getCmp(Construct c) {
-        return Cmp.or(super.getCmp(c),
+    public Cmp getCmp(Construct c, CmpOptions options) {
+        return Cmp.or(super.getCmp(c, options),
             Cmp.defer(this.name, () -> ((TypeParam)c).name),
             Cmp.defer(this.type, () -> ((TypeParam)c).type)
         );

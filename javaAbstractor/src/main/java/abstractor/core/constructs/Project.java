@@ -52,7 +52,14 @@ public class Project implements Jsonable {
         this.values,
     };
 
-    private void setAllIndices() {
+    public boolean consolidateCons() throws Exception {
+        boolean collision = false;
+        for (Factory<? extends Construct> factory : this.factories)
+            collision = factory.consolidateCons() || collision;
+        return collision;
+    }
+
+    public void setAllIndices() {
         for (Factory<?> factory : this.factories)
             factory.setIndices();
     }

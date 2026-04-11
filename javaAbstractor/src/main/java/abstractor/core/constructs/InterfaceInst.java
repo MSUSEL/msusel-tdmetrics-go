@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import abstractor.core.cmp.Cmp;
+import abstractor.core.cmp.CmpOptions;
 import abstractor.core.json.*;
 
 public class InterfaceInst extends ConstructImp implements TypeDesc {
@@ -31,8 +32,8 @@ public class InterfaceInst extends ConstructImp implements TypeDesc {
     }
 
     @Override
-    public Cmp getCmp(Construct c) {
-        return Cmp.or(super.getCmp(c),
+    public Cmp getCmp(Construct c, CmpOptions options) {
+        return Cmp.or(super.getCmp(c, options),
             Cmp.defer(    this.generic,       () -> ((InterfaceInst)c).generic),
             Cmp.deferList(this.instanceTypes, () -> ((InterfaceInst)c).instanceTypes),
             Cmp.defer(    this.resolved,      () -> ((InterfaceInst)c).resolved)

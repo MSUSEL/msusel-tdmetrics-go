@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.TreeSet;
 
 import spoon.reflect.declaration.CtElement;
-
+import abstractor.core.cmp.CmpOptions;
 import abstractor.core.json.*;
 import abstractor.core.log.*;
 
@@ -146,6 +146,38 @@ public class Factory<T extends Construct> implements Jsonable, Iterable<T> {
         this.conSet.add(c);
         this.nonElemRef.put(c, ref);
         return ref;
+    }
+
+    public boolean consolidateCons() throws Exception {
+        // Copy all cons to a list and clear the set.
+        final ArrayList<T> conList = new ArrayList<>(this.conSet);
+        this.conSet.clear();
+
+        CmpOptions options = new CmpOptions();
+        options.useResolved = true;
+        for (T con : conList)
+            con.setCmpOptions(options);
+
+        boolean collision = false;
+        for (T con : conList) {
+            T existing = this.conSet.floor(con);
+            if (existing == null || !existing.equals(con)) {
+                this.conSet.add(con);
+                continue;
+            }
+
+            // Found another construct that is equal so move all references
+            // over to the existing construct since the duplicate is about to
+            // be removed.
+            collision = true;
+            List<Ref<T>> refs = this.findRefsForCon(con);
+            for (Ref<T> ref : refs)
+                ref.setResolved(existing);
+
+            // TODO: Need to handle any non-references that need
+            // to be moved over. There shouldn't be any, but double check.
+        }
+        return collision;
     }
 
     public void setIndices() {

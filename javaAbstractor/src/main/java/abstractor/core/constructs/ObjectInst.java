@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.TreeSet;
 
 import abstractor.core.cmp.Cmp;
+import abstractor.core.cmp.CmpOptions;
 import abstractor.core.json.*;
 
 public class ObjectInst extends ConstructImp implements TypeDesc {
@@ -38,8 +39,8 @@ public class ObjectInst extends ConstructImp implements TypeDesc {
     }
 
     @Override
-    public Cmp getCmp(Construct c) {
-        return Cmp.or(super.getCmp(c),
+    public Cmp getCmp(Construct c, CmpOptions options) {
+        return Cmp.or(super.getCmp(c, options),
             Cmp.defer(    this.generic,       () -> ((ObjectInst)c).generic),
             Cmp.deferList(this.instanceTypes, () -> ((ObjectInst)c).instanceTypes),
             Cmp.defer(    this.resData,       () -> ((ObjectInst)c).resData),
