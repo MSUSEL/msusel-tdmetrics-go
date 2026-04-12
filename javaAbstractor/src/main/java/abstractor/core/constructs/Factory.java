@@ -100,6 +100,21 @@ public class Factory<T extends Construct> implements Jsonable {
         return this.create(log, elem, title, creator, null);
     }
 
+    public void removeElem(Logger log, CtElement elem, String title) {
+        if (logCreate) log.log("Removing " + title);
+
+        final Ref<T> ref = this.getRef(elem);
+        this.byElem.remove(elem);
+
+        if (ref == null) return;
+        this.refSet.remove(ref);
+
+        if (!ref.isResolved()) return;
+        final T con = ref.getResolved();
+        this.conSet.remove(con);
+        this.nonElemRef.remove(con);
+    }
+
     private List<Ref<T>> findRefsForCon(T con) {
         return this.refSet.stream().filter(r -> con.equals(r.getResolved())).toList();
     }

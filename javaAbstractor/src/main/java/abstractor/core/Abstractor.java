@@ -108,7 +108,8 @@ public class Abstractor {
                 for (CtType<?> t : pkg.getTypes()) {
                     this.addDeclarationToPackage(pkgCon, this.addDeclaration(t));
                 }
-                // TODO: add Imports
+
+                // TODO: add Imports (pkg.getPackages()?)
             });
     }
 
@@ -548,10 +549,7 @@ public class Abstractor {
             if (met.hasBody()) md.metrics = metRef;
             else {
                 // remove the reference and metrics from factory since bodiless methods can be ignored.
-                this.proj.metrics.refSet.remove(metRef);
-                this.proj.metrics.conSet.remove(met);
-                this.proj.metrics.byElem.remove(m);
-                this.proj.metrics.nonElemRef.remove(met);
+                this.proj.metrics.removeElem(this.log, m, "metrics " + m.getSimpleName());
             }
         }
     }

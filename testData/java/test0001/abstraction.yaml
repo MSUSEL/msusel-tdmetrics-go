@@ -72,8 +72,8 @@
     }
   ],
   packages: [
-    { }, # 1. <unnamed> # TODO: Needs Imports to contained packages?
-    {    # 2. build-in package
+    { name: "<unnamed>" }, # 1. <unnamed> # TODO: Needs Imports to contained packages?
+    { # 2. build-in package
       name: java.lang,
       methods: [ 2, 3, 4, 5, 6, 7, 9, 10, 11, 12, 13, 14 ],
       objects: [ 2 ]

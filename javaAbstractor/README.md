@@ -47,7 +47,8 @@
 
 ## Running Tests
 
-Run the tests with `mvn test`.
+1. Run the tests with `mvn test`.
+    - e.g. `mvn clean compile assembly:single -Dtest="abstractor.AppTests#test0001" test`
 
 ## Resources
 
