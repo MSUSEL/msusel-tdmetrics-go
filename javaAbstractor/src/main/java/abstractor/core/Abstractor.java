@@ -14,8 +14,10 @@ import spoon.reflect.cu.SourcePosition;
 import spoon.reflect.declaration.*;
 import spoon.reflect.path.CtRole;
 import spoon.reflect.reference.*;
+
 import abstractor.core.constructs.*;
 import abstractor.core.log.*;
+import abstractor.core.validator.Validator;
 
 public class Abstractor {
     public final Logger log;
@@ -528,6 +530,7 @@ public class Abstractor {
        this.processPendingMetrics();
        this.consolidateCons();
        this.crossConnectConstructs();
+       this.validate();
     }
 
     private void processPendingMetrics() throws Exception {
@@ -555,12 +558,18 @@ public class Abstractor {
 
     private void consolidateCons() throws Exception {
         this.proj.setAllIndices();
-        while (this.proj.consolidateCons())
+        while (this.proj.consolidateCons(this.log))
             this.proj.setAllIndices();
         this.proj.setAllIndices();
     }
 
     private void crossConnectConstructs() throws Exception {
         // TODO: Finish
+    }
+
+    private void validate() throws Exception {
+        new Validator(this.log, this.proj).validate();
+        if (this.log.errorCount() > 0)
+            throw new Exception("Errors logged before or during validation.");
     }
 }

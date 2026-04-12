@@ -23,11 +23,13 @@ public class Ref<T extends Construct> extends ConstructImp {
 
     private T res;
     
-    public Ref(ConstructKind kind, CtElement elem, String context) {
+    public Ref(ConstructKind kind, CtElement elem, String context) throws Exception {
         this(kind, elem, context, null);
     }
 
-    public Ref(ConstructKind kind, CtElement elem, String context, List<TypeDesc> typeArgs) {
+    public Ref(ConstructKind kind, CtElement elem, String context, List<TypeDesc> typeArgs) throws Exception {
+        if (context.isBlank())
+            throw new Exception("May not have a blank reference context.");
         this.conKind = kind;
         this.elem    = elem;
         this.context = context;
@@ -47,30 +49,32 @@ public class Ref<T extends Construct> extends ConstructImp {
     public void setResolved(T res) throws Exception {
         if (res == null)
             throw new Exception("Attempted to write null as the resolved construct to the reference " + this);
-        if (this.isResolved()) {
-            if (this.res.equals(res)) return;
-            throw new Exception("Attempted to overwrite the resolved construct, " + this.res + ", with " + res + " for reference " + this);
-        }
         if (!res.kind().equals(this.conKind))
             throw new Exception("Attempted to write a resolved construct with the kind " + res.kind() + " for reference " + this + " with kind " + this.conKind);
+        if (this.isResolved() && !this.res.equals(res))
+            throw new Exception("Attempted to overwrite the resolved construct, " + this.res + ", with " + res + " for reference " + this);
         this.res = res;
     }
 
     public JsonNode refToJson(JsonHelper h) {
         JsonObject obj = (JsonObject)super.toJson(h);
-        obj.put(        "ref",      true);
-        obj.putNotEmpty("context",  this.context);
+        obj.put("ref",     true);
+        obj.put("context", this.context);
         obj.putNotEmpty("typeArgs", keyList(this.typeArgs));
-        // obj.put("context",  this.context);
-        // obj.put("resHash",  this.res.hashCode());
-        // obj.put("elemHash", this.elem.hashCode());
-        // obj.put("elemType", this.elem.getClass().getSimpleName());
+
+        //obj.put("refHash", this.hashCode());
+        //if (this.isResolved())
+        //    obj.put("resHash", this.res.hashCode());
+        //if (this.elem != null) {
+        //    obj.put("elemHash", this.elem.hashCode());
+        //    obj.put("elemType", this.elem.getClass().getSimpleName());
+        //}
         return obj;
     }
 
     @Override
     public JsonNode toJson(JsonHelper h) {
-        return this.isResolved() ? this.res.toJson(h) : this.refToJson(h);
+        return (!h.refSkipResolve && this.isResolved()) ? this.res.toJson(h) : this.refToJson(h);
     }
 
     @Override

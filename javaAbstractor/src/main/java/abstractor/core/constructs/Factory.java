@@ -3,7 +3,6 @@ package abstractor.core.constructs;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.TreeSet;
 
@@ -12,14 +11,14 @@ import abstractor.core.cmp.CmpOptions;
 import abstractor.core.json.*;
 import abstractor.core.log.*;
 
-public class Factory<T extends Construct> implements Jsonable, Iterable<T> {
+public class Factory<T extends Construct> implements Jsonable {
     static private final boolean logCreate = true;
     
     private final ConstructKind              conKind;
-    private final TreeSet<Ref<T>>            refSet     = new TreeSet<Ref<T>>();
-    private final TreeSet<T>                 conSet     = new TreeSet<T>();
     private final HashMap<CtElement, Ref<T>> byElem     = new HashMap<CtElement, Ref<T>>();
     private final HashMap<T,         Ref<T>> nonElemRef = new HashMap<T, Ref<T>>();
+    public  final TreeSet<Ref<T>>            refSet     = new TreeSet<Ref<T>>();
+    public  final TreeSet<T>                 conSet     = new TreeSet<T>();
 
     public Factory(ConstructKind kind) { this.conKind = kind; }
 
@@ -29,16 +28,6 @@ public class Factory<T extends Construct> implements Jsonable, Iterable<T> {
 
     public int refSize() { return this.refSet.size(); }
     public int size()    { return this.conSet.size(); }
-
-    public void clear() {
-        this.refSet.clear();
-        this.conSet.clear();
-        this.byElem.clear();
-        this.nonElemRef.clear();
-    }
-
-    public Iterator<Ref<T>> refIterator() { return this.refSet.iterator(); }
-    public Iterator<T>      iterator()    { return this.conSet.iterator(); }
 
     public List<T> toList() {
         ArrayList<T> list = new ArrayList<>(this.conSet.size());
@@ -125,7 +114,7 @@ public class Factory<T extends Construct> implements Jsonable, Iterable<T> {
         this.byElem.put(elem, ref);
     }
 
-    public Ref<T> addOfGetRefForElem(CtElement elem, String title) {
+    public Ref<T> addOfGetRefForElem(CtElement elem, String title) throws Exception {
         final Ref<T> existing = this.getRef(elem);
         if (existing != null) return existing;
 
@@ -135,7 +124,7 @@ public class Factory<T extends Construct> implements Jsonable, Iterable<T> {
         return newRef;
     }
 
-    public Ref<T> addOrGetRef(T c) {
+    public Ref<T> addOrGetRef(T c) throws Exception {
         final T other = this.getExisting(c);
         if (other != null) c = other;
 
@@ -143,12 +132,15 @@ public class Factory<T extends Construct> implements Jsonable, Iterable<T> {
         if (ref != null) return ref;
 
         ref = new Ref<T>(this.conKind, null, "no element ref");
+        ref.setResolved(c);
+
+        this.refSet.add(ref);
         this.conSet.add(c);
         this.nonElemRef.put(c, ref);
         return ref;
     }
 
-    public boolean consolidateCons() throws Exception {
+    public boolean consolidateCons(Logger log) throws Exception {
         // Copy all cons to a list and clear the set.
         final ArrayList<T> conList = new ArrayList<>(this.conSet);
         this.conSet.clear();
@@ -171,11 +163,14 @@ public class Factory<T extends Construct> implements Jsonable, Iterable<T> {
             // be removed.
             collision = true;
             List<Ref<T>> refs = this.findRefsForCon(con);
-            for (Ref<T> ref : refs)
-                ref.setResolved(existing);
+            for (Ref<T> ref : refs) ref.setResolved(existing);
+            // TODO: Update nonElemRef for constructs that is being removed.
+
+            con.setIndex(-100);
 
             // TODO: Need to handle any non-references that need
             // to be moved over. There shouldn't be any, but double check.
+
         }
         return collision;
     }

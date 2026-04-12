@@ -51,6 +51,8 @@ public abstract class ConstructImp implements Construct {
 
         JsonArray indices = new JsonArray();
         for (T s: set) indices.add(index(s));
+        indices.sort(null);
+
         return indices;
     }
 
@@ -90,8 +92,10 @@ public abstract class ConstructImp implements Construct {
     @Override
     public String toString() {
         JsonHelper jh = new JsonHelper();
-        jh.writeKinds   = true;
-        jh.writeIndices = true;
+        jh.writeKinds     = true;
+        jh.writeIndices   = true;
+        jh.writeRefs      = true;
+        jh.refSkipResolve = true;
         return JsonFormat.Relaxed().format(this.toJson(jh));
     }
 }

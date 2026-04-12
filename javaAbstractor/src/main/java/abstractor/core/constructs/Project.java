@@ -1,6 +1,7 @@
 package abstractor.core.constructs;
 
 import abstractor.core.json.*;
+import abstractor.core.log.*;
 
 public class Project implements Jsonable {
     public final Baker                  baker          = new Baker(this);
@@ -52,10 +53,10 @@ public class Project implements Jsonable {
         this.values,
     };
 
-    public boolean consolidateCons() throws Exception {
+    public boolean consolidateCons(Logger log) throws Exception {
         boolean collision = false;
         for (Factory<? extends Construct> factory : this.factories)
-            collision = factory.consolidateCons() || collision;
+            collision = factory.consolidateCons(log) || collision;
         return collision;
     }
 
@@ -77,7 +78,7 @@ public class Project implements Jsonable {
     }
 
     public Factory<?> getFactory(ConstructKind kind) {
-        for (Factory<?> factory : factories) {
+        for (Factory<?> factory : this.factories) {
             if (factory.kind().equals(kind)) return factory;
         }
         return null;
