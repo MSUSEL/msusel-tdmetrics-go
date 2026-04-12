@@ -15,8 +15,8 @@ public class Factory<T extends Construct> implements Jsonable {
     static private final boolean logCreate = true;
     
     private final ConstructKind              conKind;
-    private final HashMap<CtElement, Ref<T>> byElem     = new HashMap<CtElement, Ref<T>>();
-    private final HashMap<T,         Ref<T>> nonElemRef = new HashMap<T, Ref<T>>();
+    public  final HashMap<CtElement, Ref<T>> byElem     = new HashMap<CtElement, Ref<T>>();
+    public  final HashMap<T,         Ref<T>> nonElemRef = new HashMap<T, Ref<T>>();
     public  final TreeSet<Ref<T>>            refSet     = new TreeSet<Ref<T>>();
     public  final TreeSet<T>                 conSet     = new TreeSet<T>();
 
@@ -96,12 +96,12 @@ public class Factory<T extends Construct> implements Jsonable {
         }
     }
 
-    private List<Ref<T>> findRefsForCon(T con) {
-        return this.refSet.stream().filter(r -> con.equals(r.getResolved())).toList();
-    }
-
     public Ref<T> create(Logger log, CtElement elem, String title, Creator<T> creator) throws Exception {
         return this.create(log, elem, title, creator, null);
+    }
+
+    private List<Ref<T>> findRefsForCon(T con) {
+        return this.refSet.stream().filter(r -> con.equals(r.getResolved())).toList();
     }
 
     public void setRefForElem(CtElement elem, Ref<T> ref) throws Exception {

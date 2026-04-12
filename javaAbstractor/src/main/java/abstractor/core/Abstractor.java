@@ -538,10 +538,21 @@ public class Abstractor {
             Ref<MethodDecl> ref = this.proj.methodDecls.getRef(m);
             if (!ref.isResolved())
                 throw new Exception("Expected " + ref + " to be resolved before processing pending metrics.");
+
             MethodDecl md = ref.getResolved();
             if (md.metrics != null)
                 throw new Exception("The metrics for " + md + " have already been processed before " + m.getSimpleName() + ".");
-            md.metrics = this.addMetrics(m);
+
+            Ref<Metrics> metRef = this.addMetrics(m);
+            Metrics met = metRef.getResolved();
+            if (met.hasBody()) md.metrics = metRef;
+            else {
+                // remove the reference and metrics from factory since bodiless methods can be ignored.
+                this.proj.metrics.refSet.remove(metRef);
+                this.proj.metrics.conSet.remove(met);
+                this.proj.metrics.byElem.remove(m);
+                this.proj.metrics.nonElemRef.remove(met);
+            }
         }
     }
 
@@ -564,7 +575,11 @@ public class Abstractor {
     }
 
     private void crossConnectConstructs() throws Exception {
-        // TODO: Finish
+        for (MethodDecl m : this.proj.methodDecls.conSet)
+            m.pkg.getResolved().methodDecls.add(this.proj.methodDecls.addOrGetRef(m));
+
+
+        // TODO: Add Methods to packages and more
     }
 
     private void validate() throws Exception {
