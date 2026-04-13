@@ -96,6 +96,49 @@ public class Abstractor {
         return path.substring(0, path.length()-tail.length());
     }
 
+    private List<Ref<PackageCon>> getImports(CtPackage pkg) throws Exception {
+
+        // TODO: REWORK and FINISH
+        System.out.println("> imports for " + pkg); // TODO: REMOVE
+        
+        for (CtType<?> type : pkg.getTypes()) {
+            CtCompilationUnit cu = type.getPosition().getCompilationUnit();
+            if (cu != null) {
+                for (CtImport imp : cu.getImports()) {
+                    System.out.println("  a> "+imp);
+                }
+            }
+        }
+
+        // also check package-info.java if there is one
+        CtCompilationUnit pkgCu = pkg.getPosition().getCompilationUnit();
+        if (pkgCu != null) {
+            for (CtImport imp : pkgCu.getImports()) {
+                System.out.println("  b> "+imp);
+            }
+        }
+
+        /*
+        CtMethod<?> method = ...;
+
+        for (CtTypeAccess<?> typeAccess : method.getElements(new TypeFilter<>(CtTypeAccess.class))) {
+            CtTypeReference<?> tr = typeAccess.getType();
+            System.out.println("type access: " + tr.getQualifiedName());
+        }
+
+        for (CtFieldAccess<?> fa : method.getElements(new TypeFilter<>(CtFieldAccess.class))) {
+            CtFieldReference<?> fr = fa.getVariable();
+            System.out.println("field access: " + fr.getDeclaringType().getQualifiedName() + "." + fr.getSimpleName());
+        }
+
+        for (CtInvocation<?> inv : method.getElements(new TypeFilter<>(CtInvocation.class))) {
+            CtExecutableReference<?> exe = inv.getExecutable();
+            System.out.println("invocation: " + exe.getDeclaringType().getQualifiedName() + "." + exe.getSimpleName());
+        }
+        */
+        return null;
+    }
+
     private Ref<PackageCon> addPackage(CtPackage pkg) throws Exception {
         final String name = packageName(pkg);
         return this.proj.packages.create(this.log, pkg,
@@ -105,11 +148,13 @@ public class Abstractor {
                 return new PackageCon(name, path);
             },
             (Ref<PackageCon> ref, PackageCon pkgCon) ->{
-                for (CtType<?> t : pkg.getTypes()) {
+                for (CtType<?> t : pkg.getTypes())
                     this.addDeclarationToPackage(pkgCon, this.addDeclaration(t));
-                }
 
-                // TODO: add Imports (pkg.getPackages()?)
+                // TODO: add Imports
+                this.getImports(pkg);
+
+                // TODO: Finish
             });
     }
 
