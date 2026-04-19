@@ -10,11 +10,12 @@ import java.util.HashSet;
 import spoon.Launcher;
 import spoon.MavenLauncher;
 import spoon.reflect.*;
+import spoon.reflect.code.*;
 import spoon.reflect.cu.SourcePosition;
 import spoon.reflect.declaration.*;
 import spoon.reflect.path.CtRole;
 import spoon.reflect.reference.*;
-
+import spoon.reflect.visitor.filter.TypeFilter;
 import abstractor.core.constructs.*;
 import abstractor.core.log.*;
 import abstractor.core.validator.Validator;
@@ -118,24 +119,33 @@ public class Abstractor {
             }
         }
 
-        /*
-        CtMethod<?> method = ...;
+        // TODO: Printing call/executable/type information
+        class Temp {
+            void printTyp(CtType<?> typ) {
+                for (CtMethod<?> method : typ.getMethods()) {
+                    for (CtTypeAccess<?> typeAccess : method.getElements(new TypeFilter<>(CtTypeAccess.class))) {
+                        CtTypeReference<?> tr = typeAccess.getType();
+                        System.out.println("  c> type access: " + tr.getQualifiedName());
+                    }
 
-        for (CtTypeAccess<?> typeAccess : method.getElements(new TypeFilter<>(CtTypeAccess.class))) {
-            CtTypeReference<?> tr = typeAccess.getType();
-            System.out.println("type access: " + tr.getQualifiedName());
+                    for (CtFieldAccess<?> fa : method.getElements(new TypeFilter<>(CtFieldAccess.class))) {
+                        CtFieldReference<?> fr = fa.getVariable();
+                        System.out.println("  d> field access: " + fr.getDeclaringType().getQualifiedName() + "." + fr.getSimpleName());
+                    }
+
+                    for (CtInvocation<?> inv : method.getElements(new TypeFilter<>(CtInvocation.class))) {
+                        CtExecutableReference<?> exe = inv.getExecutable();
+                        System.out.println("  e> invocation: " + exe.getDeclaringType().getQualifiedName() + "." + exe.getSimpleName());
+                    }
+                }
+                
+                for (CtType<?> nestedTyp : typ.getNestedTypes()) printTyp(nestedTyp);
+            }
         }
 
-        for (CtFieldAccess<?> fa : method.getElements(new TypeFilter<>(CtFieldAccess.class))) {
-            CtFieldReference<?> fr = fa.getVariable();
-            System.out.println("field access: " + fr.getDeclaringType().getQualifiedName() + "." + fr.getSimpleName());
-        }
-
-        for (CtInvocation<?> inv : method.getElements(new TypeFilter<>(CtInvocation.class))) {
-            CtExecutableReference<?> exe = inv.getExecutable();
-            System.out.println("invocation: " + exe.getDeclaringType().getQualifiedName() + "." + exe.getSimpleName());
-        }
-        */
+        Temp tmp = new Temp();
+        for (CtType<?> typ : pkg.getTypes()) tmp.printTyp(typ);
+        System.out.println();
         return null;
     }
 
@@ -150,6 +160,8 @@ public class Abstractor {
             (Ref<PackageCon> ref, PackageCon pkgCon) ->{
                 for (CtType<?> t : pkg.getTypes())
                     this.addDeclarationToPackage(pkgCon, this.addDeclaration(t));
+
+
 
                 // TODO: add Imports
                 this.getImports(pkg);
@@ -214,8 +226,6 @@ public class Abstractor {
             (Ref<ObjectDecl> ref, ObjectDecl obj) -> {
                 obj.setVisibility(c);
                 
-                //if (pkg != null) pkg.objectDecls.add(obj); // TODO: Move to a follow up when we know the package is done.
-
                 // Add constructors as (static) methods.
                 for (CtConstructor<?> ctor : c.getConstructors()) {
                     if (ctor.getParent().equals(c)) this.addConstructorMethod(ref, ctor);
@@ -258,7 +268,6 @@ public class Abstractor {
             },
             (Ref<MethodDecl> ref, MethodDecl md) -> {
                 md.setVisibility(ctor);
-                //if (pkg != null) pkg.methodDecls.add(ref); // TODO: Move to a follow up when we know the package is done.
                 recv.methodDecls.add(ref);
             });
     }
@@ -621,6 +630,11 @@ public class Abstractor {
         for (MethodDecl m : this.proj.methodDecls.conSet)
             m.pkg.getResolved().methodDecls.add(this.proj.methodDecls.addOrGetRef(m));
 
+        for (ObjectDecl obj : this.proj.objectDecls.conSet) {
+            final PackageCon pkg = obj.pkg.getResolved();
+            for (Ref<MethodDecl> met : obj.methodDecls)
+                pkg.methodDecls.add(met);
+        }
 
         // TODO: Add Methods to packages and more
     }

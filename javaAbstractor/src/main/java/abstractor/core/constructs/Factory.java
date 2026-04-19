@@ -157,13 +157,13 @@ public class Factory<T extends Construct> implements Jsonable {
 
     public boolean consolidateCons(Logger log) throws Exception {
         // Copy all cons to a list and clear the set.
-        final ArrayList<T> conList = new ArrayList<>(this.conSet);
+        final ArrayList<T> conList = new ArrayList<T>(this.conSet);
         this.conSet.clear();
 
         CmpOptions options = new CmpOptions();
         options.useResolved = true;
-        for (T con : conList)
-            con.setCmpOptions(options);
+        for (T con : conList) con.setCmpOptions(options);
+        for (Ref<T> ref : this.refSet) ref.setCmpOptions(options);
 
         boolean collision = false;
         for (T con : conList) {
@@ -173,14 +173,11 @@ public class Factory<T extends Construct> implements Jsonable {
                 continue;
             }
 
-            // Found another construct that is equal so move all references
-            // over to the existing construct since the duplicate is about to
-            // be removed.
+            // Found another construct that is equal so move all references over
+            // to the existing construct since the duplicate is about to be removed.
             collision = true;
             List<Ref<T>> refs = this.findRefsForCon(con);
             for (Ref<T> ref : refs) ref.setResolved(existing);
-            // TODO: Update nonElemRef for constructs that is being removed.
-
             con.setIndex(-100);
 
             // TODO: Need to handle any non-references that need
