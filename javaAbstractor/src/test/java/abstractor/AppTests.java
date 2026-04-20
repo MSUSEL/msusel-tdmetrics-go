@@ -24,13 +24,13 @@ public class AppTests {
     public void test0002() { runApp("test0002"); }
 
     @Test
-    public void test1002() { testClass("test1001", "Foo"); }
+    public void test1001() { testClass("test1001", "Foo"); }
 
     @Test
-    public void test1003() { testClass("test1002", "Foo"); }
+    public void test1002() { testClass("test1002", "Foo"); }
 
     @Test
-    public void test1004() { testClass("test1003", "Foo"); }
+    public void test1003() { testClass("test1003", "Foo"); }
 
     static private void runApp(String testName) {
         final String testPath = "../testData/java/" + testName;

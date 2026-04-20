@@ -590,6 +590,9 @@ public class Abstractor {
 
     private void processPendingMetrics() throws Exception {
         for(CtMethod<?> m : this.pendingMetrics) {
+            if (m.getBody() == null) continue;
+            if (m.getBody().getStatements().isEmpty()) continue;
+
             Ref<MethodDecl> ref = this.proj.methodDecls.getRef(m);
             if (!ref.isResolved())
                 throw new Exception("Expected " + ref + " to be resolved before processing pending metrics.");
@@ -636,7 +639,7 @@ public class Abstractor {
                 pkg.methodDecls.add(met);
         }
 
-        // TODO: Add Methods to packages and more
+        // TODO: Add more to packages
     }
 
     private void validate() throws Exception {
