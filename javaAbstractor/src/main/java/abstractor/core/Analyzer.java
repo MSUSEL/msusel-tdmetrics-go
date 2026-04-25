@@ -36,7 +36,7 @@ import abstractor.core.log.Logger;
 
 public class Analyzer {
 
-    private static final boolean logElementTree = false;
+    private static final boolean logElementTree = true;//false;
 
     private final Abstractor abs;
     private final Logger log;
@@ -277,23 +277,23 @@ public class Analyzer {
         if (elem instanceof CtFieldRead fr) {
 
             // TODO: Implement
-            //this.log.warning("addUsage.CtFieldRead: " + fr);
+            this.log.warning("addUsage.CtFieldRead: " + fr);
             return;
         }
         if (elem instanceof CtTypeAccess ta) {
             
             // TODO: Implement
-            //this.log.warning("addUsage.CtTypeAccess: " + ta);
+            this.log.warning("addUsage.CtTypeAccess: " + ta);
             return;
         }
         if (elem instanceof CtAssignment as) {
 
             // TODO: Implement
-            //this.log.warning("addUsage.CtAssignment: " + as);
+            this.log.warning("addUsage.CtAssignment: " + as);
             return;
         }
 
         // TODO: Use to see elements.
-        //this.log.warning("addUsage: "+formatElem(elem));
+        this.log.warning("addUsage: "+formatElem(elem));
     }
 }

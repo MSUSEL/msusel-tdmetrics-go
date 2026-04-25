@@ -161,8 +161,6 @@ public class Abstractor {
                 for (CtType<?> t : pkg.getTypes())
                     this.addDeclarationToPackage(pkgCon, this.addDeclaration(t));
 
-
-
                 // TODO: add Imports
                 this.getImports(pkg);
 
@@ -208,6 +206,20 @@ public class Abstractor {
         return null;
     }
 
+    static private boolean isObjectMethod(CtMethod<?> m) {
+        if (m == null) return false;
+
+        final CtTypeReference<?> objectRef = m.getFactory().Type().objectType();
+        final CtType<?> objectDecl = objectRef.getTypeDeclaration();
+        if (objectDecl == null) return false;
+
+        final String sig = m.getSignature();
+        for (CtMethod<?> objectMethod : objectDecl.getMethods()) {
+            if (sig.equals(objectMethod.getSignature())) return true;
+        }
+        return false;
+    }
+
     /**
      * Handles adding and processing classes, enums, and records.
      * @param c The class to process.
@@ -233,13 +245,15 @@ public class Abstractor {
 
                 // Add methods for the class.
                 for (CtMethod<?> m : c.getAllMethods()) {
-                    if (m.getParent().equals(c)) this.addMethod(ref, m);
+                    if (m.getParent().equals(c) && !isObjectMethod(m))
+                        this.addMethod(ref, m);
                 }
 
                 // Synthesize the interface description for the class.
                 TreeSet<Ref<Abstract>> abstracts = new TreeSet<Ref<Abstract>>();
                 for (CtMethod<?> m : c.getAllMethods()) {
-                    if (!m.isStatic()) abstracts.add(this.addAbstract(m));
+                    if (!m.isStatic() && !isObjectMethod(m))
+                        abstracts.add(this.addAbstract(m));
                 }
                 obj.inter = this.proj.interfaceDescs.addOrGetRef(new InterfaceDesc(abstracts, ref));
 
@@ -333,6 +347,7 @@ public class Abstractor {
     }
 
     private Ref<Signature> addSignature(CtMethod<?> m) throws Exception {
+        assert(!isObjectMethod(m));
         return this.proj.signatures.create(this.log, m,
             "signature " + m.getSignature(),
             () -> {
@@ -528,8 +543,9 @@ public class Abstractor {
             "interface description " + i.getSimpleName(),
             () -> {
                 final TreeSet<Ref<Abstract>> abstracts = new TreeSet<Ref<Abstract>>();
-                for (CtMethod<?> m : i.getAllMethods())
-                    abstracts.add(this.addAbstract(m));
+                for (CtMethod<?> m : i.getAllMethods()) {
+                    if (!isObjectMethod(m)) abstracts.add(this.addAbstract(m));
+                }
 
                 // TODO: Determine how to pin this interface.
                 return new InterfaceDesc(abstracts);
@@ -540,6 +556,7 @@ public class Abstractor {
     }
 
     private Ref<Abstract> addAbstract(CtMethod<?> m) throws Exception {
+        assert(!isObjectMethod(m));
         return this.proj.abstracts.create(this.log, m,
             "abstract " + m.getSimpleName(),
             () -> {
