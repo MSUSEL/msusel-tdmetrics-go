@@ -65,6 +65,15 @@ public class Logger {
         if (condition) this.log(text);
     }
     
+    public void notice(String text) {
+        if (!this.verbose) return;
+        this.write(this.out, colorBlue, text);
+    }
+
+    public void noticeIf(boolean condition, String text) {
+        if (condition) this.notice(text);
+    }
+
     public void warning(String text) {
         if (!this.verbose) return;
         this.warnings++;

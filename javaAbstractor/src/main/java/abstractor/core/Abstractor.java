@@ -80,11 +80,13 @@ public class Abstractor {
     }
 
     static private String packageName(CtPackage pkg) {
+        if (pkg == null) return "<java.lang>";
         String name = pkg.getQualifiedName();
         return name.isBlank() ? "<unnamed>" : name;
     }
 
     static private String packagePath(CtPackage pkg) {
+        if (pkg == null) return "";
         SourcePosition pos = pkg.getPosition();
         if (!pos.isValidPosition()) return "";
         
@@ -149,7 +151,7 @@ public class Abstractor {
         return null;
     }
 
-    private Ref<PackageCon> addPackage(CtPackage pkg) throws Exception {
+    public Ref<PackageCon> addPackage(CtPackage pkg) throws Exception {
         final String name = packageName(pkg);
         return this.proj.packages.create(this.log, pkg,
             "package " + name,
@@ -197,7 +199,7 @@ public class Abstractor {
         return null;
     }
 
-    private Ref<? extends TypeDeclaration> addTypeDeclaration(CtElement elem) throws Exception {
+    public Ref<? extends TypeDeclaration> addTypeDeclaration(CtElement elem) throws Exception {
         if (elem instanceof CtTypeReference<?> tr) elem = tr.getTypeDeclaration();
 
         if (elem instanceof CtClass<?> c)     return this.addObjectDecl(c);
@@ -206,7 +208,7 @@ public class Abstractor {
         return null;
     }
 
-    static private boolean isObjectMethod(CtMethod<?> m) {
+    static public boolean isObjectMethod(CtMethod<?> m) {
         if (m == null) return false;
 
         final CtTypeReference<?> objectRef = m.getFactory().Type().objectType();
@@ -224,7 +226,7 @@ public class Abstractor {
      * Handles adding and processing classes, enums, and records.
      * @param c The class to process.
      */
-    private Ref<ObjectDecl> addObjectDecl(CtClass<?> c) throws Exception {
+    public Ref<ObjectDecl> addObjectDecl(CtClass<?> c) throws Exception {
         return this.proj.objectDecls.create(this.log, c,
             "object decl " + c.getQualifiedName(),
             () -> {
@@ -265,7 +267,7 @@ public class Abstractor {
             });
     }
 
-    private Ref<MethodDecl> addConstructorMethod(Ref<ObjectDecl> receiver, CtConstructor<?> ctor) throws Exception {
+    public Ref<MethodDecl> addConstructorMethod(Ref<ObjectDecl> receiver, CtConstructor<?> ctor) throws Exception {
         if (!receiver.isResolved())
             throw new Exception("Expected the receiver for a constructor method to be resolved: " + receiver.toString());
         ObjectDecl recv = receiver.getResolved();
@@ -302,7 +304,7 @@ public class Abstractor {
         throw new Exception("Unhandled general method declaring type (" + decl.getClass().getName() + ") "+decl.getQualifiedName());
     }
 
-    private Ref<MethodDecl> addMethod(Ref<ObjectDecl> receiver, CtMethod<?> m) throws Exception {
+    public Ref<MethodDecl> addMethod(Ref<ObjectDecl> receiver, CtMethod<?> m) throws Exception {
         if (!receiver.isResolved())
             throw new Exception("Expected the object receiver for a method to be resolved: " + receiver.toString());
         ObjectDecl recv = receiver.getResolved();
@@ -325,11 +327,11 @@ public class Abstractor {
             });
     }
 
-    static private boolean isVoid(CtTypeReference<?> tr) {
+    static public boolean isVoid(CtTypeReference<?> tr) {
         return tr.isPrimitive() && tr.getSimpleName().equals("void");
     }
 
-    private Ref<Signature> addConstructSignature(CtConstructor<?> m) throws Exception {
+    public Ref<Signature> addConstructSignature(CtConstructor<?> m) throws Exception {
         return this.proj.signatures.create(this.log, m,
             "constructor signature " + m.getSignature(),
             () -> {
@@ -346,7 +348,7 @@ public class Abstractor {
             });
     }
 
-    private Ref<Signature> addSignature(CtMethod<?> m) throws Exception {
+    public Ref<Signature> addSignature(CtMethod<?> m) throws Exception {
         assert(!isObjectMethod(m));
         return this.proj.signatures.create(this.log, m,
             "signature " + m.getSignature(),
@@ -365,7 +367,7 @@ public class Abstractor {
             });
     }
 
-    private Ref<Argument> addArgument(CtParameter<?> p) throws Exception {
+    public Ref<Argument> addArgument(CtParameter<?> p) throws Exception {
         return this.proj.arguments.create(this.log, p,
             "parameter " + p.getSimpleName(),
             () -> {
@@ -375,7 +377,7 @@ public class Abstractor {
             });
     }
     
-    private Ref<Argument> addArgument(CtTypeReference<?> p) throws Exception {
+    public Ref<Argument> addArgument(CtTypeReference<?> p) throws Exception {
         return this.proj.arguments.create(this.log, p,
             "parameter <unnamed> " + p.getSimpleName(),
             () -> {
@@ -384,7 +386,7 @@ public class Abstractor {
             });
     }
     
-    private Ref<StructDesc> addStruct(CtClass<?> c) throws Exception {
+    public Ref<StructDesc> addStruct(CtClass<?> c) throws Exception {
         return this.proj.structDescs.create(this.log, c,
             "struct " + c.getQualifiedName(),
             () -> {
@@ -434,8 +436,18 @@ public class Abstractor {
                 return new Field(name, type);
             });
     }
+
+    public Ref<Selection> addSelection(CtField<?> field) throws Exception {
+        final String name = field.getSimpleName();
+        return this.proj.selections.create(this.log, field,
+            "select field " + name,
+            () -> {
+                final Ref<? extends Construct> decl = this.addDeclaration(field.getDeclaringType());
+                return new Selection(name, decl);
+            });
+    }
     
-    private Ref<InterfaceDecl> addInterfaceDecl(CtInterface<?> i) throws Exception {
+    public Ref<InterfaceDecl> addInterfaceDecl(CtInterface<?> i) throws Exception {
         return this.proj.interfaceDecls.create(this.log, i,
             "interface decl " + i.getQualifiedName(),
             () -> {
@@ -459,7 +471,7 @@ public class Abstractor {
             });
     }
 
-    private Ref<ObjectDecl> addEnum(CtEnum<?> e) throws Exception {
+    public Ref<ObjectDecl> addEnum(CtEnum<?> e) throws Exception {
         return this.proj.objectDecls.create(this.log, e,
             "enum " + e.getQualifiedName(),
             () -> {
@@ -483,7 +495,7 @@ public class Abstractor {
             });
     }
 
-    private Ref<? extends TypeDesc> addTypeDesc(CtTypeReference<?> tr) throws Exception {
+    public Ref<? extends TypeDesc> addTypeDesc(CtTypeReference<?> tr) throws Exception {
         if (tr == null)       return this.proj.baker.objectDesc();
         if (tr.isPrimitive()) return this.addBasic(tr);
         if (tr.isArray())     return this.addArray((CtArrayTypeReference<?>)tr);
@@ -502,25 +514,25 @@ public class Abstractor {
     private void unknownTypeDesc(CtTypeReference<?> tr) throws Exception {
         this.log.error("Unhandled (" + tr.getClass().getName() + "): "+tr.prettyprint());
         this.log.push();
-        this.log.log("isAnnotationType:    " + tr.isAnnotationType());
-        this.log.log("isAnonymous:. . . . ." + tr.isAnonymous());
-        this.log.log("isArray:             " + tr.isArray());
-        this.log.log("isClass:. . . . . . ." + tr.isClass());
-        this.log.log("isEnum:              " + tr.isEnum());
-        this.log.log("isGenerics: . . . . ." + tr.isGenerics());
-        this.log.log("isImplicit:          " + tr.isImplicit());
-        this.log.log("isInterface:. . . . ." + tr.isInterface());
-        this.log.log("isLocalType:         " + tr.isLocalType());
-        this.log.log("isParameterized:. . ." + tr.isParameterized());
-        this.log.log("isParentInitialized: " + tr.isParentInitialized());
-        this.log.log("isPrimitive:. . . . ." + tr.isPrimitive());
-        this.log.log("isShadow:            " + tr.isShadow());
-        this.log.log("isSimplyQualified:. ." + tr.isSimplyQualified());
+        this.log.notice("isAnnotationType:    " + tr.isAnnotationType());
+        this.log.notice("isAnonymous:. . . . ." + tr.isAnonymous());
+        this.log.notice("isArray:             " + tr.isArray());
+        this.log.notice("isClass:. . . . . . ." + tr.isClass());
+        this.log.notice("isEnum:              " + tr.isEnum());
+        this.log.notice("isGenerics: . . . . ." + tr.isGenerics());
+        this.log.notice("isImplicit:          " + tr.isImplicit());
+        this.log.notice("isInterface:. . . . ." + tr.isInterface());
+        this.log.notice("isLocalType:         " + tr.isLocalType());
+        this.log.notice("isParameterized:. . ." + tr.isParameterized());
+        this.log.notice("isParentInitialized: " + tr.isParentInitialized());
+        this.log.notice("isPrimitive:. . . . ." + tr.isPrimitive());
+        this.log.notice("isShadow:            " + tr.isShadow());
+        this.log.notice("isSimplyQualified:. ." + tr.isSimplyQualified());
         this.log.pop();
         throw new Exception("Unhandled Type");
     }
 
-    private Ref<InterfaceInst> addArray(CtArrayTypeReference<?> tr) throws Exception {
+    public Ref<InterfaceInst> addArray(CtArrayTypeReference<?> tr) throws Exception {
         final Ref<? extends TypeDesc> elem = this.addTypeDesc(tr.getArrayType());
         Ref<InterfaceInst> ref = this.proj.baker.arrayInst(tr.getQualifiedName(), elem);
         this.proj.interfaceInsts.setRefForElem(tr, ref);
@@ -528,7 +540,7 @@ public class Abstractor {
         return ref;
     }
     
-    private Ref<Basic> addBasic(CtTypeReference<?> tr) throws Exception {
+    public Ref<Basic> addBasic(CtTypeReference<?> tr) throws Exception {
         return this.proj.basics.create(this.log, tr,
             "basic " + tr.getSimpleName(),
             () -> {
@@ -538,7 +550,7 @@ public class Abstractor {
             });
     }
 
-    private Ref<InterfaceDesc> addInterfaceDesc(CtInterface<?> i) throws Exception {
+    public Ref<InterfaceDesc> addInterfaceDesc(CtInterface<?> i) throws Exception {
         return this.proj.interfaceDescs.create(this.log, i,
             "interface description " + i.getSimpleName(),
             () -> {
@@ -555,7 +567,7 @@ public class Abstractor {
             });
     }
 
-    private Ref<Abstract> addAbstract(CtMethod<?> m) throws Exception {
+    public Ref<Abstract> addAbstract(CtMethod<?> m) throws Exception {
         assert(!isObjectMethod(m));
         return this.proj.abstracts.create(this.log, m,
             "abstract " + m.getSimpleName(),
@@ -566,19 +578,19 @@ public class Abstractor {
             });
     }
 
-    private ArrayList<Ref<? extends TypeDesc>> addTypeArguments(List<CtTypeReference<?>> trs) throws Exception {
+    public ArrayList<Ref<? extends TypeDesc>> addTypeArguments(List<CtTypeReference<?>> trs) throws Exception {
         ArrayList<Ref<? extends TypeDesc>> result = new ArrayList<Ref<? extends TypeDesc>>(trs.size());
         for (CtTypeReference<?> tr : trs) result.add(this.addTypeDesc(tr));
         return result;
     }
 
-    private ArrayList<Ref<TypeParam>> addTypeParams(List<CtTypeParameter> tps) throws Exception {
+    public ArrayList<Ref<TypeParam>> addTypeParams(List<CtTypeParameter> tps) throws Exception {
         ArrayList<Ref<TypeParam>> result = new ArrayList<Ref<TypeParam>>(tps.size());
         for (CtTypeParameter tp : tps) result.add(this.addTypeParam(tp));
         return result;
     }
 
-    private Ref<TypeParam> addTypeParam(CtTypeParameter tp) throws Exception {
+    public Ref<TypeParam> addTypeParam(CtTypeParameter tp) throws Exception {
         return this.proj.typeParams.create(this.log, tp,
             "type params " + tp.getQualifiedName(),
             () -> {
@@ -628,7 +640,7 @@ public class Abstractor {
         }
     }
 
-    private Ref<Metrics> addMetrics(CtMethod<?> m) throws Exception {
+    public Ref<Metrics> addMetrics(CtMethod<?> m) throws Exception {
         return this.proj.metrics.create(this.log, m,
             "metrics " + m.getSimpleName(),
             () -> {

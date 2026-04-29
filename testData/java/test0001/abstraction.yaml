@@ -23,6 +23,8 @@
   metrics: [
     { # 1. EntryPoint.main metrics
       loc: 4, codeCount: 3, complexity: 1, indents: 1, lineCount: 3,
+      # TODO: Remove "youShallNotPass", just keeping this from passing while I work on it.
+      youShallNotPass: true,
       # TODO: Missing println call
     }
   ],

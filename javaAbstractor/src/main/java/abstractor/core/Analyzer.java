@@ -6,37 +6,17 @@ import java.util.SortedSet;
 import java.util.TreeSet;
 import java.util.TreeMap;
 
-import spoon.reflect.code.BinaryOperatorKind;
-import spoon.reflect.code.CtAssignment;
-import spoon.reflect.code.CtBinaryOperator;
-import spoon.reflect.code.CtBlock;
-import spoon.reflect.code.CtCase;
-import spoon.reflect.code.CtComment;
-import spoon.reflect.code.CtConstructorCall;
-import spoon.reflect.code.CtFieldRead;
-import spoon.reflect.code.CtIf;
-import spoon.reflect.code.CtInvocation;
-import spoon.reflect.code.CtLocalVariable;
-import spoon.reflect.code.CtLoop;
-import spoon.reflect.code.CtReturn;
-import spoon.reflect.code.CtStatement;
-import spoon.reflect.code.CtTypeAccess;
-import spoon.reflect.code.CtUnaryOperator;
+import spoon.reflect.code.*;
 import spoon.reflect.cu.SourcePosition;
-import spoon.reflect.declaration.CtElement;
-import spoon.reflect.declaration.CtExecutable;
-import spoon.reflect.declaration.CtMethod;
-import spoon.reflect.declaration.CtParameter;
-import spoon.reflect.reference.CtParameterReference;
-import spoon.reflect.reference.CtTypeReference;
+import spoon.reflect.declaration.*;
+import spoon.reflect.reference.*;
 import spoon.support.reflect.CtExtendedModifier;
-
 import abstractor.core.constructs.*;
 import abstractor.core.log.Logger;
 
 public class Analyzer {
-
     private static final boolean logElementTree = true;//false;
+    private static final boolean logUsage = true;//false;
 
     private final Abstractor abs;
     private final Logger log;
@@ -274,26 +254,60 @@ public class Analyzer {
             }
             return;
         }
-        if (elem instanceof CtFieldRead fr) {
 
-            // TODO: Implement
-            this.log.warning("addUsage.CtFieldRead: " + fr);
-            return;
-        }
-        if (elem instanceof CtTypeAccess ta) {
-            
-            // TODO: Implement
-            this.log.warning("addUsage.CtTypeAccess: " + ta);
-            return;
-        }
-        if (elem instanceof CtAssignment as) {
-
-            // TODO: Implement
-            this.log.warning("addUsage.CtAssignment: " + as);
-            return;
-        }
+        if (elem instanceof CtFieldRead           fr) { this.addFieldReadUsage(fr);           return; }
+        if (elem instanceof CtTypeAccess          ta) { this.addTypeAccessUsage(ta);          return; }
+        if (elem instanceof CtAssignment          as) { this.addAssignmentUsage(as);          return; }
+        if (elem instanceof CtTypeReference       tr) { this.addTypeReferenceUsage(tr);       return; }
+        if (elem instanceof CtPackageReference    pr) { this.addPackageReferenceUsage(pr);    return; }
+        if (elem instanceof CtFieldReference      fr) { this.addFieldReferenceUsage(fr);      return; }
+        if (elem instanceof CtExecutableReference er) { this.addExecutableReferenceUsage(er); return; }
+        if (elem instanceof CtLiteral             lt) { this.addLiteralUsage(lt);             return; }
 
         // TODO: Use to see elements.
-        this.log.warning("addUsage: "+formatElem(elem));
+        this.log.notice("addUsage: "+formatElem(elem));
+    }
+
+    private void addFieldReadUsage(CtFieldRead<?> fr) throws Exception {
+        if (logUsage) this.log.log("addUsage.CtFieldRead: " + fr);
+        CtFieldReference<?> ref = fr.getVariable();
+        Ref<Selection> sel = this.abs.addSelection(ref.getFieldDeclaration());
+        this.reads.add(sel);
+    }
+
+    private void addTypeAccessUsage(CtTypeAccess<?> ta) throws Exception {
+        if (logUsage) this.log.log("addUsage.CtTypeAccess: " + ta);
+        Ref<? extends TypeDesc> acc = this.abs.addTypeDesc(ta.getAccessedType());
+        this.reads.add(acc);
+    }
+
+    private void addAssignmentUsage(CtAssignment<?,?> as) throws Exception {
+        // TODO: Implement
+        this.log.warning("addUsage.CtAssignment: " + as);
+    }
+
+    private void addTypeReferenceUsage(CtTypeReference<?> tr) throws Exception {
+        // TODO: Implement
+        this.log.warning("addUsage.CtTypeReference: " + tr);
+    }
+
+    private void addPackageReferenceUsage(CtPackageReference pr) throws Exception {
+        if (logUsage) this.log.log("addUsage.CtPackageReference: " + pr);
+        this.abs.addPackage(pr.getDeclaration());
+    }
+    
+    private void addFieldReferenceUsage(CtFieldReference<?> fr) throws Exception {
+        // TODO: Implement
+        this.log.warning("addUsage.CtFieldReference: " + fr);
+    }
+    
+    private void addExecutableReferenceUsage(CtExecutableReference<?> er) throws Exception {
+        // TODO: Implement
+        this.log.warning("addUsage.CtExecutableReference: " + er);
+    }
+
+    private void addLiteralUsage(CtLiteral<?> lt) throws Exception {
+        if (logUsage) this.log.log("addUsage.CtLiteral: " + lt);
+        this.abs.addTypeDesc(lt.getType());
     }
 }
