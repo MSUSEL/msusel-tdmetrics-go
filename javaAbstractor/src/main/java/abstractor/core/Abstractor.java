@@ -15,7 +15,6 @@ import spoon.reflect.cu.SourcePosition;
 import spoon.reflect.declaration.*;
 import spoon.reflect.path.CtRole;
 import spoon.reflect.reference.*;
-import spoon.reflect.visitor.filter.TypeFilter;
 import abstractor.core.constructs.*;
 import abstractor.core.log.*;
 import abstractor.core.validator.Validator;
@@ -99,57 +98,9 @@ public class Abstractor {
         return path.substring(0, path.length()-tail.length());
     }
 
-    private List<Ref<PackageCon>> getImports(CtPackage pkg) throws Exception {
-
-        // TODO: REWORK and FINISH
-        System.out.println("> imports for " + pkg); // TODO: REMOVE
-        
-        for (CtType<?> type : pkg.getTypes()) {
-            CtCompilationUnit cu = type.getPosition().getCompilationUnit();
-            if (cu != null) {
-                for (CtImport imp : cu.getImports()) {
-                    System.out.println("  a> "+imp);
-                }
-            }
-        }
-
-        // also check package-info.java if there is one
-        CtCompilationUnit pkgCu = pkg.getPosition().getCompilationUnit();
-        if (pkgCu != null) {
-            for (CtImport imp : pkgCu.getImports()) {
-                System.out.println("  b> "+imp);
-            }
-        }
-
-        // TODO: Printing call/executable/type information
-        class Temp {
-            void printTyp(CtType<?> typ) {
-                for (CtMethod<?> method : typ.getMethods()) {
-                    for (CtTypeAccess<?> typeAccess : method.getElements(new TypeFilter<>(CtTypeAccess.class))) {
-                        CtTypeReference<?> tr = typeAccess.getType();
-                        System.out.println("  c> type access: " + tr.getQualifiedName());
-                    }
-
-                    for (CtFieldAccess<?> fa : method.getElements(new TypeFilter<>(CtFieldAccess.class))) {
-                        CtFieldReference<?> fr = fa.getVariable();
-                        System.out.println("  d> field access: " + fr.getDeclaringType().getQualifiedName() + "." + fr.getSimpleName());
-                    }
-
-                    for (CtInvocation<?> inv : method.getElements(new TypeFilter<>(CtInvocation.class))) {
-                        CtExecutableReference<?> exe = inv.getExecutable();
-                        System.out.println("  e> invocation: " + exe.getDeclaringType().getQualifiedName() + "." + exe.getSimpleName());
-                    }
-                }
-                
-                for (CtType<?> nestedTyp : typ.getNestedTypes()) printTyp(nestedTyp);
-            }
-        }
-
-        Temp tmp = new Temp();
-        for (CtType<?> typ : pkg.getTypes()) tmp.printTyp(typ);
-        System.out.println();
-        return null;
-    }
+    // TODO: Implement package imports by deriving from actual type usage
+    //       rather than import statements. This will be done in a later step
+    //       when the Resolver pipeline is created.
 
     public Ref<PackageCon> addPackage(CtPackage pkg) throws Exception {
         final String name = packageName(pkg);
@@ -160,13 +111,11 @@ public class Abstractor {
                 return new PackageCon(name, path);
             },
             (Ref<PackageCon> ref, PackageCon pkgCon) ->{
-                for (CtType<?> t : pkg.getTypes())
-                    this.addDeclarationToPackage(pkgCon, this.addDeclaration(t));
-
-                // TODO: add Imports
-                this.getImports(pkg);
-
-                // TODO: Finish
+                for (CtType<?> t : pkg.getTypes()) {
+                    Ref<? extends Construct> decl = this.addDeclaration(t);
+                    if (decl != null)
+                        this.addDeclarationToPackage(pkgCon, decl);
+                }
             });
     }
 
@@ -190,21 +139,33 @@ public class Abstractor {
     }
 
     public Ref<? extends Construct> addDeclaration(CtElement elem) throws Exception {
+        if (elem == null) return null;
         if (elem instanceof CtTypeReference<?> tr) elem = tr.getTypeDeclaration();
+        if (elem == null) return null;
 
+        // Skip annotation types — they don't participate in data flow.
+        if (elem instanceof CtAnnotationType<?>) return null;
+
+        // Check CtEnum before CtClass since CtEnum extends CtClass.
+        if (elem instanceof CtEnum<?> e)      return this.addObjectDecl(e);
         if (elem instanceof CtClass<?> c)     return this.addObjectDecl(c);
         if (elem instanceof CtInterface<?> i) return this.addInterfaceDecl(i);
         if (elem instanceof CtMethod<?> m)    return this.addGeneralMethod(m);
-        this.log.error("Unhandled decl (" + elem.getClass().getName() + ") "+elem.toStringDebug());
+
+        this.log.warning("Skipping unhandled decl (" + elem.getClass().getName() + ")");
         return null;
     }
 
     public Ref<? extends TypeDeclaration> addTypeDeclaration(CtElement elem) throws Exception {
+        if (elem == null) return null;
         if (elem instanceof CtTypeReference<?> tr) elem = tr.getTypeDeclaration();
+        if (elem == null) return null;
 
+        if (elem instanceof CtEnum<?> e)      return this.addObjectDecl(e);
         if (elem instanceof CtClass<?> c)     return this.addObjectDecl(c);
         if (elem instanceof CtInterface<?> i) return this.addInterfaceDecl(i);
-        this.log.error("Unhandled type decl (" + elem.getClass().getName() + ") "+elem.toStringDebug());
+
+        this.log.warning("Skipping unhandled type decl (" + elem.getClass().getName() + ")");
         return null;
     }
 
@@ -290,18 +251,22 @@ public class Abstractor {
 
     public Ref<? extends Construct> addGeneralMethod(CtMethod<?> m) throws Exception {
         CtType<?> decl = m.getDeclaringType();
+        if (decl instanceof CtEnum<?> e) {
+            Ref<ObjectDecl> obj = this.addObjectDecl(e);
+            return this.addMethod(obj, m);
+        }
         if (decl instanceof CtClass<?> c) {
             Ref<ObjectDecl> obj = this.addObjectDecl(c);
             return this.addMethod(obj, m);
         }
         if (decl instanceof CtInterface<?> i) {
-            //Ref<InterfaceDecl> it = this.addInterfaceDecl(i);
             Ref<Abstract> ab = this.addAbstract(m);
-
-            // TODO: Finish interface
+            // TODO: Connect abstract to interface declaration
             return ab;
         }
-        throw new Exception("Unhandled general method declaring type (" + decl.getClass().getName() + ") "+decl.getQualifiedName());
+        this.log.warning("Skipping method with unhandled declaring type (" +
+            decl.getClass().getName() + ") " + decl.getQualifiedName());
+        return null;
     }
 
     public Ref<MethodDecl> addMethod(Ref<ObjectDecl> receiver, CtMethod<?> m) throws Exception {
@@ -390,9 +355,6 @@ public class Abstractor {
         return this.proj.structDescs.create(this.log, c,
             "struct " + c.getQualifiedName(),
             () -> {
-                // TODO: Handle enum?
-                //if (c instanceof CtEnum<?> e) {}
-
                 // Collect all fields.
                 final ArrayList<Ref<Field>> fields = new ArrayList<Ref<Field>>();
                 for (CtFieldReference<?> fr : c.getAllFields())
@@ -500,36 +462,70 @@ public class Abstractor {
         if (tr.isPrimitive()) return this.addBasic(tr);
         if (tr.isArray())     return this.addArray((CtArrayTypeReference<?>)tr);
 
-        CtType<?> ty = tr.getDeclaration();
-        if (ty == null)       return this.proj.baker.objectDesc();
-        if (tr.isClass())     return this.addObjectDecl((CtClass<?>)ty);
-        if (tr.isInterface()) return this.addInterfaceDecl((CtInterface<?>)ty);
-        if (tr.isGenerics())  return this.addTypeParam((CtTypeParameter)ty);
-        if (tr.isEnum())      return this.addEnum((CtEnum<?>)ty);
+        // Handle wildcard types (e.g., ?, ? extends Foo, ? super Bar).
+        if (tr instanceof CtWildcardReference wr)
+            return this.addWildcard(wr);
 
-        this.unknownTypeDesc(tr);
-        return null;
+        // Use getTypeDeclaration (not getDeclaration) to get shadow types
+        // for external/JDK types instead of null.
+        CtType<?> ty = null;
+        try {
+            ty = tr.getTypeDeclaration();
+        } catch (Exception ex) {
+            this.log.warning("Failed to get type declaration for " +
+                tr.getQualifiedName() + ": " + ex.getMessage());
+            return this.proj.baker.objectDesc();
+        }
+
+        // If still null, treat as external/unresolvable type.
+        if (ty == null) return this.proj.baker.objectDesc();
+
+        // Skip annotation types — they don't participate in data flow.
+        if (ty instanceof CtAnnotationType<?>)
+            return this.proj.baker.objectDesc();
+
+        // Skip anonymous and local types — their code is attributed
+        // to the enclosing method (handled in later steps).
+        if (tr.isAnonymous() || tr.isLocalType()) {
+            CtTypeReference<?> superRef = tr.getSuperclass();
+            if (superRef != null && !superRef.getQualifiedName().equals("java.lang.Object"))
+                return this.addTypeDesc(superRef);
+            var superIfaces = tr.getSuperInterfaces();
+            if (superIfaces != null && !superIfaces.isEmpty())
+                return this.addTypeDesc(superIfaces.iterator().next());
+            return this.proj.baker.objectDesc();
+        }
+
+        // Shadow types are external (JDK, third-party). Create a stub.
+        // For now, map to objectDesc(); Step 2 will add named stubs.
+        if (ty.isShadow()) return this.proj.baker.objectDesc();
+
+        try {
+            // Check type parameter first since it's the most specific.
+            if (tr.isGenerics())  return this.addTypeParam((CtTypeParameter)ty);
+
+            // Check CtEnum before CtClass since CtEnum extends CtClass.
+            if (ty instanceof CtEnum<?> e) return this.addObjectDecl(e);
+            if (ty instanceof CtClass<?>)  return this.addObjectDecl((CtClass<?>)ty);
+            if (ty instanceof CtInterface<?>) return this.addInterfaceDecl((CtInterface<?>)ty);
+        } catch (Exception ex) {
+            this.log.warning("Error processing type " +
+                tr.getQualifiedName() + ": " + ex.getMessage());
+            return this.proj.baker.objectDesc();
+        }
+
+        this.log.warning("Unhandled type (" + tr.getClass().getName() +
+            "): " + tr.getQualifiedName());
+        return this.proj.baker.objectDesc();
     }
 
-    private void unknownTypeDesc(CtTypeReference<?> tr) throws Exception {
-        this.log.error("Unhandled (" + tr.getClass().getName() + "): "+tr.prettyprint());
-        this.log.push();
-        this.log.notice("isAnnotationType:    " + tr.isAnnotationType());
-        this.log.notice("isAnonymous:. . . . ." + tr.isAnonymous());
-        this.log.notice("isArray:             " + tr.isArray());
-        this.log.notice("isClass:. . . . . . ." + tr.isClass());
-        this.log.notice("isEnum:              " + tr.isEnum());
-        this.log.notice("isGenerics: . . . . ." + tr.isGenerics());
-        this.log.notice("isImplicit:          " + tr.isImplicit());
-        this.log.notice("isInterface:. . . . ." + tr.isInterface());
-        this.log.notice("isLocalType:         " + tr.isLocalType());
-        this.log.notice("isParameterized:. . ." + tr.isParameterized());
-        this.log.notice("isParentInitialized: " + tr.isParentInitialized());
-        this.log.notice("isPrimitive:. . . . ." + tr.isPrimitive());
-        this.log.notice("isShadow:            " + tr.isShadow());
-        this.log.notice("isSimplyQualified:. ." + tr.isSimplyQualified());
-        this.log.pop();
-        throw new Exception("Unhandled Type");
+    private Ref<? extends TypeDesc> addWildcard(CtWildcardReference wr) throws Exception {
+        if (wr.isUpper()) {
+            CtTypeReference<?> bound = wr.getBoundingType();
+            if (bound != null && !(bound instanceof CtWildcardReference))
+                return this.addTypeDesc(bound);
+        }
+        return this.proj.baker.objectDesc();
     }
 
     public Ref<InterfaceInst> addArray(CtArrayTypeReference<?> tr) throws Exception {
@@ -595,17 +591,10 @@ public class Abstractor {
             "type params " + tp.getQualifiedName(),
             () -> {
                 final String name = tp.getQualifiedName();
-                
-                // TODO: Remove
-                //System.out.println(">> " + name + " >> " + tp.prettyprint());
-                //System.out.println(">> >> " + tp.getTypeErasure());
-                //for (CtTypeReference<?> tpr : tp.getSuperInterfaces())
-                //    System.out.println(">>  >> " + tpr.getSimpleName() + " >> " + tpr.prettyprint());
 
                 CtTypeReference<?> tr = tp.getTypeErasure();
                 final Ref<? extends TypeDesc> type = this.addTypeDesc(tr);
 
-                // TODO: Finish
                 return new TypeParam(name, type);
             });
     }
