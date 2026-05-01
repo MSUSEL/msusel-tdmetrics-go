@@ -270,25 +270,27 @@ public class Analyzer {
 
     private void addFieldReadUsage(CtFieldRead<?> fr) throws Exception {
         if (logUsage) this.log.log("addUsage.CtFieldRead: " + fr);
-        CtFieldReference<?> ref = fr.getVariable();
-        Ref<Selection> sel = this.abs.addSelection(ref.getFieldDeclaration());
+        final CtFieldReference<?> ref = fr.getVariable();
+        final Ref<Selection> sel = this.abs.addSelection(ref.getFieldDeclaration());
         this.reads.add(sel);
     }
 
     private void addTypeAccessUsage(CtTypeAccess<?> ta) throws Exception {
         if (logUsage) this.log.log("addUsage.CtTypeAccess: " + ta);
-        Ref<? extends TypeDesc> acc = this.abs.addTypeDesc(ta.getAccessedType());
+        final Ref<? extends TypeDesc> acc = this.abs.addTypeDesc(ta.getAccessedType());
         this.reads.add(acc);
     }
 
     private void addAssignmentUsage(CtAssignment<?,?> as) throws Exception {
         // TODO: Implement
         this.log.warning("addUsage.CtAssignment: " + as);
+        this.log.notice("> getType:     " + as.getType());
+        this.log.notice("> getAssigned: " + as.getAssigned());
     }
 
     private void addTypeReferenceUsage(CtTypeReference<?> tr) throws Exception {
-        // TODO: Implement
-        this.log.warning("addUsage.CtTypeReference: " + tr);
+        if (logUsage) this.log.log("addUsage.CtTypeReference: " + tr);
+        this.abs.addTypeDesc(tr);
     }
 
     private void addPackageReferenceUsage(CtPackageReference pr) throws Exception {
@@ -297,8 +299,9 @@ public class Analyzer {
     }
     
     private void addFieldReferenceUsage(CtFieldReference<?> fr) throws Exception {
-        // TODO: Implement
-        this.log.warning("addUsage.CtFieldReference: " + fr);
+        if (logUsage) this.log.log("addUsage.CtFieldReference: " + fr);
+        final Ref<Selection> sel = this.abs.addSelection(fr.getFieldDeclaration());
+        this.reads.add(sel);
     }
     
     private void addExecutableReferenceUsage(CtExecutableReference<?> er) throws Exception {
