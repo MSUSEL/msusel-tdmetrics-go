@@ -6,3 +6,7 @@ obj
 out*.json
 out*.yaml
 out*.yml
+
+javaAbstractor/tdd/td_V2.db
+
+.agents/scratchpad/
