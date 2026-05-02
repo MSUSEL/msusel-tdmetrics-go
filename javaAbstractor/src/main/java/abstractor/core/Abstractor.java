@@ -169,6 +169,9 @@ public class Abstractor {
         return null;
     }
 
+    // This determines if the given method is a method on the base Object.
+    // Since all Objects inherits the base Object, adding those methods are
+    // just additional unneeded noise in the abstraction.
     static public boolean isObjectMethod(CtMethod<?> m) {
         if (m == null) return false;
 
