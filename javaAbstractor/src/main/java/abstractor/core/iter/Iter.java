@@ -1,6 +1,7 @@
 package abstractor.core.iter;
 
 import java.util.Iterator;
+import java.util.NoSuchElementException;
 
 public class Iter {
     private Iter() { }
@@ -38,7 +39,7 @@ public class Iter {
             public boolean hasNext() { return false; }
         
             @Override
-            public T next() { return null; }
+            public T next() { throw new NoSuchElementException(); }
         }
         return new EmptyIter();
     }
