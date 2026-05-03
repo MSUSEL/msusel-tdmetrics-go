@@ -15,6 +15,7 @@ import spoon.reflect.cu.SourcePosition;
 import spoon.reflect.declaration.*;
 import spoon.reflect.path.CtRole;
 import spoon.reflect.reference.*;
+import spoon.support.compiler.VirtualFile;
 import abstractor.core.constructs.*;
 import abstractor.core.log.*;
 import abstractor.core.validator.Validator;
@@ -57,16 +58,20 @@ public class Abstractor {
     }
 
     /**
-     * Parses the source for a given class and adds it.
+     * Parses the source for one or more classes and adds it.
      * 
      * This is designed to test classes, records, and enumerators,
      * but will not work for interfaces.
      * @example parseClass("class C { void m() { System.out.println(\"hello\"); } }"); 
-     * @param source The class source code.
+     * @param source The source code containing one or more classes.
      */
-    public void addClassFromSource(String ...sourceLines) throws Exception {
-        String source = String.join("\n", sourceLines);
-        this.addObjectDecl(Launcher.parseClass(source));
+    public void addClassesFromSource(String ...sourceLines) throws Exception {
+        final String filename = "ClassesFromSource.java";
+        final String source = String.join("\n", sourceLines);
+        Launcher launcher = new Launcher();
+        launcher.addInputResource(new VirtualFile(source, filename));
+        launcher.buildModel();
+        this.addModel(launcher.getModel());
     }
 
     private void addModel(CtModel model) throws Exception {
@@ -169,9 +174,11 @@ public class Abstractor {
         return null;
     }
 
-    // This determines if the given method is a method on the base Object.
-    // Since all Objects inherits the base Object, adding those methods are
-    // just additional unneeded noise in the abstraction.
+    /**
+     * This determines if the given method is a method on the base Object.
+     * Since all Objects inherits the base Object, adding those methods are
+     * just additional unneeded noise in the abstraction.
+     */
     static public boolean isObjectMethod(CtMethod<?> m) {
         if (m == null) return false;
 
@@ -544,7 +551,10 @@ public class Abstractor {
             "basic " + tr.getSimpleName(),
             () -> {
                 final String name = tr.getSimpleName();
-                this.log.errorIf(name == "void", "A void was added as a basic.");
+                if (name == "void") {
+                    this.log.error("A void was added as a basic.");
+                    throw new Exception("A void was added as a basic");
+                }
                 return new Basic(name);
             });
     }

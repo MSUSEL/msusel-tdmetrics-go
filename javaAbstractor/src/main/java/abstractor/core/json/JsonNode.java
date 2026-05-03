@@ -2,11 +2,21 @@ package abstractor.core.json;
 
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
+import java.nio.file.NoSuchFileException;
 import java.nio.file.Paths;
 
 import abstractor.core.json.parser.*;
 
 public interface JsonNode {
+
+    static public JsonNode tryParseFile(String path) throws Exception {
+        try {
+            return parseFile(path);
+        } catch(NoSuchFileException ex) {
+            System.out.println("Failed to read JSON file to parse: " + path + " does not exist.");
+            return JsonValue.ofNull();
+        }
+    }
 
     static public JsonNode parseFile(String path) throws Exception {
         final byte[] data = Files.readAllBytes(Paths.get(path));

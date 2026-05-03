@@ -11,7 +11,7 @@ public class RobustnessTests {
 
     @Test
     public void AnnotationUsage() {
-        Tester.classFromSource(
+        Tester.classesFromSource(
             "import java.lang.annotation.*;",
             "@Retention(RetentionPolicy.RUNTIME)",
             "public class Foo {",
@@ -22,7 +22,7 @@ public class RobustnessTests {
 
     @Test
     public void WildcardParameter() {
-        Tester.classFromSource(
+        Tester.classesFromSource(
             "import java.util.*;",
             "public class Foo {",
             "  public void bar(List<?> items) { }",
@@ -31,7 +31,7 @@ public class RobustnessTests {
 
     @Test
     public void BoundedWildcard() {
-        Tester.classFromSource(
+        Tester.classesFromSource(
             "public class Foo {",
             "  public void bar(Comparable<? extends Number> comp) { }",
             "}");
@@ -39,7 +39,7 @@ public class RobustnessTests {
 
     @Test
     public void AnonymousClassInMethod() {
-        Tester.classFromSource(
+        Tester.classesFromSource(
             "public class Foo {",
             "  public void bar() {",
             "    Runnable r = new Runnable() {",
@@ -52,7 +52,7 @@ public class RobustnessTests {
 
     @Test
     public void LambdaInMethod() {
-        Tester.classFromSource(
+        Tester.classesFromSource(
             "public class Foo {",
             "  public void bar() {",
             "    Runnable r = () -> { };",
@@ -62,7 +62,7 @@ public class RobustnessTests {
 
     @Test
     public void ExternalTypeUsage() {
-        Tester.classFromSource(
+        Tester.classesFromSource(
             "import java.util.*;",
             "public class Foo {",
             "  public String name;",
@@ -73,7 +73,7 @@ public class RobustnessTests {
 
     @Test
     public void EnumDeclaration() {
-        Tester.classFromSource(
+        Tester.classesFromSource(
             "public class Foo {",
             "  public enum Color { RED, GREEN, BLUE }",
             "  public Color color;",
@@ -82,7 +82,7 @@ public class RobustnessTests {
 
     @Test
     public void GenericClass() {
-        Tester.classFromSource(
+        Tester.classesFromSource(
             "public class Foo<T> {",
             "  private T value;",
             "  public T getValue() { return value; }",
@@ -92,7 +92,7 @@ public class RobustnessTests {
 
     @Test
     public void NestedNamedClass() {
-        Tester.classFromSource(
+        Tester.classesFromSource(
             "public class Foo {",
             "  public static class Inner {",
             "    public int x;",

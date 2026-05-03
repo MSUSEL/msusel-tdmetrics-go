@@ -6,7 +6,7 @@ public class MetricsTests {
     
     @Test
     public void Empty() {
-        final Tester t = Tester.classFromSource(
+        final Tester t = Tester.classesFromSource(
             "public class Foo {",
             "  public void bar() { }",
             "}");
@@ -21,7 +21,7 @@ public class MetricsTests {
 
     @Test
     public void Simple() {
-        final Tester t = Tester.classFromSource(
+        final Tester t = Tester.classesFromSource(
             "public class Foo {",
             "  public int bar() {",
             "    return -1;",
@@ -38,7 +38,7 @@ public class MetricsTests {
     
     @Test
     public void SimpleWithExtraIndent() {
-        final Tester t = Tester.classFromSource(
+        final Tester t = Tester.classesFromSource(
             "  public class Foo {",
             "      public int bar() {",
             "             return -1;",
@@ -55,7 +55,7 @@ public class MetricsTests {
 
     @Test
     public void SimpleParams() {
-        final Tester t = Tester.classFromSource(
+        final Tester t = Tester.classesFromSource(
             "public class Foo {",
             "   public int bar(int a,",
             "                  int b,",
@@ -74,7 +74,7 @@ public class MetricsTests {
 
     @Test
     public void SimpleWithReturn() {
-        final Tester t = Tester.classFromSource(
+        final Tester t = Tester.classesFromSource(
             "public class Foo {",
             "   public int bar(int a) {",
             "      final int x = 4 * a + 1;",
@@ -92,7 +92,7 @@ public class MetricsTests {
 
     @Test
     public void SimpleWithSpace() {
-        final Tester t = Tester.classFromSource(
+        final Tester t = Tester.classesFromSource(
             "public class Foo {",
             "  public int bar(int a) {",
             "    // Bacon is tasty",
@@ -114,7 +114,7 @@ public class MetricsTests {
 
     @Test
     public void SimpleIf() {
-        final Tester t = Tester.classFromSource(
+        final Tester t = Tester.classesFromSource(
             "public class Foo {",
             "  public void bar() {",
             "    int x = 9;",
@@ -136,7 +136,7 @@ public class MetricsTests {
 
     @Test
     public void SimpleIfElse() {
-        final Tester t = Tester.classFromSource(
+        final Tester t = Tester.classesFromSource(
             "public class Foo {",
             "  public void bar() {",
             "    int x = 9;",
@@ -160,7 +160,7 @@ public class MetricsTests {
 
     @Test
     public void SimpleIfElseIf() {
-        final Tester t = Tester.classFromSource(
+        final Tester t = Tester.classesFromSource(
             "public class Foo {",
             "  public void bar() {",
             "    int x = 9;",
@@ -183,7 +183,7 @@ public class MetricsTests {
 
     @Test
     public void SimpleIfElseIfElse() {
-        final Tester t = Tester.classFromSource(
+        final Tester t = Tester.classesFromSource(
             "public class Foo {",
             "  public void bar() {",
             "    int x = 9;",
@@ -208,7 +208,7 @@ public class MetricsTests {
 
     @Test
     public void SimpleSwitch() {
-        final Tester t = Tester.classFromSource(
+        final Tester t = Tester.classesFromSource(
             "public class Foo {",
             "  public void bar() {",
             "    int x = 9;",
@@ -234,7 +234,7 @@ public class MetricsTests {
 
     @Test
     public void SimpleForLoop() {
-        final Tester t = Tester.classFromSource(
+        final Tester t = Tester.classesFromSource(
             "public class Foo {",
             "  public void bar() {",
             "    for (int i = 0; i < 10; i++) {",
@@ -253,7 +253,7 @@ public class MetricsTests {
 
     @Test
     public void SimpleLogicalOr() {
-        final Tester t = Tester.classFromSource(
+        final Tester t = Tester.classesFromSource(
             "public class Foo {",
             "  public int bar(int x) {",
             "    if (x < 0 || x > 10) {",
@@ -273,7 +273,7 @@ public class MetricsTests {
 
     @Test
     public void OneLineLogicalOr() {
-        final Tester t = Tester.classFromSource(
+        final Tester t = Tester.classesFromSource(
             "public class Foo {",
             "  public boolean bar(int x) {",
             "    return x < 0 || x > 10;",
@@ -290,7 +290,7 @@ public class MetricsTests {
 
     @Test
     public void SimpleLogicalAnd() {
-        final Tester t = Tester.classFromSource(
+        final Tester t = Tester.classesFromSource(
             "public class Foo {",
             "  public boolean bar(int x) {",
             "    if (x >= 0 && x < 10) {",
@@ -310,7 +310,7 @@ public class MetricsTests {
 
     @Test
     public void OneLineLogicalAnd() {
-        final Tester t = Tester.classFromSource(
+        final Tester t = Tester.classesFromSource(
             "public class Foo {",
             "  public boolean bar(int x) {",
             "    return x >= 0 && x < 10;",
@@ -327,7 +327,7 @@ public class MetricsTests {
 
     @Test
     public void OneLineBinaryOp() {
-        final Tester t = Tester.classFromSource(
+        final Tester t = Tester.classesFromSource(
             "public class Foo {",
             "  public boolean bar(int x) {",
             "    return x >= 0 & x < 10;",
@@ -344,7 +344,7 @@ public class MetricsTests {
 
     @Test
     public void GetterWithSelect() {
-        final Tester t = Tester.classFromSource(
+        final Tester t = Tester.classesFromSource(
             "public class Foo {",
             "  private int x;",
             "  public int bar() {",
@@ -363,7 +363,7 @@ public class MetricsTests {
     
     @Test
     public void GetterWithParenthesesAndCast() {
-        final Tester t = Tester.classFromSource(
+        final Tester t = Tester.classesFromSource(
             "public class Foo {",
             "  private double x;",
             "  public int bar() {",
@@ -382,7 +382,7 @@ public class MetricsTests {
 
     @Test
     public void SetterWithSelect() {
-        final Tester t = Tester.classFromSource(
+        final Tester t = Tester.classesFromSource(
             "public class Foo {",
             "  private int x;",
             "  public void bar(int x) {",
@@ -401,7 +401,7 @@ public class MetricsTests {
 
     @Test
     public void SetterWithParenthesesAndCast() {
-        final Tester t = Tester.classFromSource(
+        final Tester t = Tester.classesFromSource(
             "public class Foo {",
             "  private int x;",
             "  public void bar(double x) {",
@@ -420,7 +420,7 @@ public class MetricsTests {
 
     @Test
     public void SetterWithFieldValue() {
-        final Tester t = Tester.classFromSource(
+        final Tester t = Tester.classesFromSource(
             "public class Foo {",
             "  private int x;",
             "  public void bar(Foo other) {",
@@ -439,7 +439,7 @@ public class MetricsTests {
 
     @Test
     public void SetterNotReversed() {
-        final Tester t = Tester.classFromSource(
+        final Tester t = Tester.classesFromSource(
             "public class Foo {",
             "  private int x;",
             "  public void bar(Foo other) {",
@@ -457,7 +457,7 @@ public class MetricsTests {
 
     @Test
     public void LiteralSetter() {
-        final Tester t = Tester.classFromSource(
+        final Tester t = Tester.classesFromSource(
             "public class Foo {",
             "  private boolean visible;",
             "  public void hide() {",

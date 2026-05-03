@@ -290,7 +290,7 @@ public class Analyzer {
 
     private void addTypeReferenceUsage(CtTypeReference<?> tr) throws Exception {
         if (logUsage) this.log.log("addUsage.CtTypeReference: " + tr);
-        this.abs.addTypeDesc(tr);
+        if (!Abstractor.isVoid(tr)) this.abs.addTypeDesc(tr);
     }
 
     private void addPackageReferenceUsage(CtPackageReference pr) throws Exception {

@@ -20,9 +20,9 @@ import abstractor.core.log.Logger;
 
 public class Tester {
     
-    static public Tester classFromSource(String ...lines) {
+    static public Tester classesFromSource(String ...lines) {
         final Tester t = new Tester(4);
-        t.addClassFromSource(lines);
+        t.addClassesFromSource(lines);
         return t;
     }
 
@@ -55,16 +55,24 @@ public class Tester {
         this.buffer.reset();
     }
 
+    /**
+     * Adds a file containing one or more classes.
+     * @param path The path of to the file containing one or more classes.
+     */
     public void addClassFromFile(String path) {
         assertDoesNotThrow(() -> { 
             final byte[] data =  Files.readAllBytes(Paths.get(path));
-            this.addClassFromSource(new String(data, StandardCharsets.UTF_8));
+            this.addClassesFromSource(new String(data, StandardCharsets.UTF_8));
         });
     }
 
-    public void addClassFromSource(String ...lines) {
+    /**
+     * Adds one or more classes from the given lines of source code.
+     * @param lines The lines of code that contains one or more classes.
+     */
+    public void addClassesFromSource(String ...lines) {
         try {
-            this.ab.addClassFromSource(lines);
+            this.ab.addClassesFromSource(lines);
             this.ab.finish();
         } catch (Exception ex) {
             this.printLogs();
@@ -121,7 +129,7 @@ public class Tester {
 
     public String formatJsonFromFile(String path) {
         try {
-            return JsonFormat.Relaxed().format(JsonNode.parseFile(path));
+            return JsonFormat.Relaxed().format(JsonNode.tryParseFile(path));
         } catch(Exception ex) {
             this.printLogs();
             fail(ex);

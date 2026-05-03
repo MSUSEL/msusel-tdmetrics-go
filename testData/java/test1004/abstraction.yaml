@@ -1,0 +1,61 @@
+{
+  abstracts: [
+    { name: bar, signature: 3 }, # 1. bar(items any)
+    { name: baz, signature: 2 }, # 2. baz(comp any)
+  ],
+  arguments: [
+    {              type: object1        }, # 1. <unnamed> Foo
+    { name: comp,  type: interfaceDesc2 }, # 2. comp any
+    { name: items, type: interfaceDesc2 }, # 3. items any
+  ],
+  basics: [ int ],
+  fields: [
+    { name: x, type: basic1, vis: public }, # 1. public x int
+  ],
+  interfaceDescs: [
+    { abstracts: [ 1, 2 ], pin: object1 }, # 1. interface { bar(items any); baz(comp any) }
+    { abstracts: [ ] },                    # 2. any
+  ],
+  language: java,
+  methods: [
+    { # 1. Foo() Foo {}
+      name: Foo, package: 4, receiver: 1, signature: 1, vis: public,
+    },
+    { # 2. bar(items any) { ... }
+      name: bar, package: 4, receiver: 1, signature: 3, vis: public, loc: 15, metrics: 1,
+    },
+    { # 3. baz(comp any) {}
+      name: baz, package: 4, receiver: 1, signature: 2, vis: public, loc: 24,
+    },
+  ],
+  metrics: [
+    { codeCount: 8, complexity: 2, indents: 13, lineCount: 8, loc: 15 },
+  ],
+  objects: [
+    { # 1. Foo { public x int } { Foo() Foo; bar(items any); baz(comp any) }
+      name: Foo, data: 1, interface: 1, package: 4,
+      methods: [ 1, 2, 3 ], loc: 12, vis: public,
+    },
+  ],
+  packages: [
+    { name: "<unnamed>" },   # 1. <unnamed> package
+    { name: testData },      # 2. testData package
+    { name: testData.java }, # 3. testData.java package
+    {                        # 4. testData.java.test1004 package
+      methods: [ 1, 2, 3 ],
+      name: testData.java.test1004,
+      objects: [ 1 ],
+    },
+  ],
+  signatures: [
+    { results: [ 1 ] }, # 1. func() Foo
+    { params:  [ 2 ] }, # 2. func(comp any)
+    { params:  [ 3 ] }, # 3. func(items any)
+  ],
+  structDescs: [
+    { fields: [ 1 ] }, # 1. struct { public x int }
+  ],  
+  locs: {
+    1: ClassesFromSource.java,
+  },
+}
