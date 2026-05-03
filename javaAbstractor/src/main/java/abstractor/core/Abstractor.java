@@ -145,6 +145,15 @@ public class Abstractor {
 
     public Ref<? extends Construct> addDeclaration(CtElement elem) throws Exception {
         if (elem == null) return null;
+        try {
+            return this.addDeclarationImpl(elem);
+        } catch (Exception ex) {
+            this.log.warning("addDeclaration failed for " + this.describeElement(elem) + ": " + ex.getMessage());
+            return null;
+        }
+    }
+
+    private Ref<? extends Construct> addDeclarationImpl(CtElement elem) throws Exception {
         if (elem instanceof CtTypeReference<?> tr) elem = tr.getTypeDeclaration();
         if (elem == null) return null;
 
@@ -163,6 +172,15 @@ public class Abstractor {
 
     public Ref<? extends TypeDeclaration> addTypeDeclaration(CtElement elem) throws Exception {
         if (elem == null) return null;
+        try {
+            return this.addTypeDeclarationImpl(elem);
+        } catch (Exception ex) {
+            this.log.warning("addTypeDeclaration failed for " + this.describeElement(elem) + ": " + ex.getMessage());
+            return null;
+        }
+    }
+
+    private Ref<? extends TypeDeclaration> addTypeDeclarationImpl(CtElement elem) throws Exception {
         if (elem instanceof CtTypeReference<?> tr) elem = tr.getTypeDeclaration();
         if (elem == null) return null;
 
@@ -172,6 +190,22 @@ public class Abstractor {
 
         this.log.warning("Skipping unhandled type decl (" + elem.getClass().getName() + ")");
         return null;
+    }
+
+    /** Short description for logs (does not throw). */
+    private String describeElement(CtElement elem) {
+        if (elem == null) return "(null)";
+        try {
+            if (elem instanceof CtTypeReference<?> tr)
+                return tr.getQualifiedName();
+            if (elem instanceof CtType<?> ty)
+                return ty.getQualifiedName();
+            if (elem instanceof CtExecutable<?> ex)
+                return ex.getSignature();
+        } catch (Exception ignored) {
+            // fall through
+        }
+        return elem.getClass().getName();
     }
 
     /**
@@ -468,6 +502,24 @@ public class Abstractor {
     }
 
     public Ref<? extends TypeDesc> addTypeDesc(CtTypeReference<?> tr) throws Exception {
+        try {
+            return this.addTypeDescImpl(tr);
+        } catch (Exception ex) {
+            this.log.warning("addTypeDesc failed for " + this.safeTypeRefName(tr) + ": " + ex.getMessage());
+            return this.proj.baker.objectDesc();
+        }
+    }
+
+    private String safeTypeRefName(CtTypeReference<?> tr) {
+        if (tr == null) return "(null)";
+        try {
+            return tr.getQualifiedName();
+        } catch (Exception e) {
+            return String.valueOf(tr);
+        }
+    }
+
+    private Ref<? extends TypeDesc> addTypeDescImpl(CtTypeReference<?> tr) throws Exception {
         if (tr == null)       return this.proj.baker.objectDesc();
         if (tr.isPrimitive()) return this.addBasic(tr);
         if (tr.isArray())     return this.addArray((CtArrayTypeReference<?>)tr);
@@ -490,9 +542,11 @@ public class Abstractor {
         // If still null, treat as external/unresolvable type.
         if (ty == null) return this.proj.baker.objectDesc();
 
-        // Skip annotation types — they don't participate in data flow.
-        if (ty instanceof CtAnnotationType<?>)
+        // Annotation types don't participate in data flow; mapping to object is expected.
+        if (ty instanceof CtAnnotationType<?> ann) {
+            this.log.notice("Annotation type as type desc (using object): " + ann.getQualifiedName());
             return this.proj.baker.objectDesc();
+        }
 
         // Skip anonymous and local types — their code is attributed
         // to the enclosing method (handled in later steps).
@@ -510,19 +564,13 @@ public class Abstractor {
         // For now, map to objectDesc(); Step 2 will add named stubs.
         if (ty.isShadow()) return this.proj.baker.objectDesc();
 
-        try {
-            // Check type parameter first since it's the most specific.
-            if (tr.isGenerics())  return this.addTypeParam((CtTypeParameter)ty);
+        // Check type parameter first since it's the most specific.
+        if (tr.isGenerics())  return this.addTypeParam((CtTypeParameter)ty);
 
-            // Check CtEnum before CtClass since CtEnum extends CtClass.
-            if (ty instanceof CtEnum<?> e) return this.addObjectDecl(e);
-            if (ty instanceof CtClass<?>)  return this.addObjectDecl((CtClass<?>)ty);
-            if (ty instanceof CtInterface<?>) return this.addInterfaceDecl((CtInterface<?>)ty);
-        } catch (Exception ex) {
-            this.log.warning("Error processing type " +
-                tr.getQualifiedName() + ": " + ex.getMessage());
-            return this.proj.baker.objectDesc();
-        }
+        // Check CtEnum before CtClass since CtEnum extends CtClass.
+        if (ty instanceof CtEnum<?> e) return this.addObjectDecl(e);
+        if (ty instanceof CtClass<?>)  return this.addObjectDecl((CtClass<?>)ty);
+        if (ty instanceof CtInterface<?>) return this.addInterfaceDecl((CtInterface<?>)ty);
 
         this.log.warning("Unhandled type (" + tr.getClass().getName() +
             "): " + tr.getQualifiedName());
@@ -530,12 +578,18 @@ public class Abstractor {
     }
 
     private Ref<? extends TypeDesc> addWildcard(CtWildcardReference wr) throws Exception {
-        if (wr.isUpper()) {
-            CtTypeReference<?> bound = wr.getBoundingType();
-            if (bound != null && !(bound instanceof CtWildcardReference))
-                return this.addTypeDesc(bound);
+        CtTypeReference<?> bound = wr.getBoundingType();
+        if (bound == null || bound instanceof CtWildcardReference)
+            return this.proj.baker.objectDesc();
+        // Spoon often uses java.lang.Object as the synthetic bound for unbounded "?";
+        // resolving it would pull the entire JDK Object graph into the abstraction.
+        try {
+            if ("java.lang.Object".equals(bound.getQualifiedName()))
+                return this.proj.baker.objectDesc();
+        } catch (Exception ignored) {
+            return this.proj.baker.objectDesc();
         }
-        return this.proj.baker.objectDesc();
+        return this.addTypeDesc(bound);
     }
 
     public Ref<InterfaceInst> addArray(CtArrayTypeReference<?> tr) throws Exception {

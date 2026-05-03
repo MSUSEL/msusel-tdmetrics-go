@@ -250,7 +250,8 @@ public class Analyzer {
             final CtExecutable<?> ex = inv.getExecutable().getDeclaration();
             if (ex instanceof CtMethod<?> method) {
                 // TODO: Maybe make a more specific call for a method
-                this.invokes.add(this.abs.addDeclaration(method));
+                Ref<? extends Construct> decl = this.abs.addDeclaration(method);
+                if (decl != null) this.invokes.add(decl);
             }
             return;
         }

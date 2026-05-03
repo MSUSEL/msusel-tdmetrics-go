@@ -38,6 +38,15 @@ public class RobustnessTests {
     }
 
     @Test
+    public void LowerBoundedWildcard() {
+        Tester.classesFromSource(
+            "import java.util.*;",
+            "public class Foo {",
+            "  public void bar(List<? super Integer> items) { }",
+            "}");
+    }
+
+    @Test
     public void AnonymousClassInMethod() {
         Tester.classesFromSource(
             "public class Foo {",
