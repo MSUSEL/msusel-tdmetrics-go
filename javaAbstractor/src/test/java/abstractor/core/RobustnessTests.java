@@ -81,6 +81,16 @@ public class RobustnessTests {
     }
 
     @Test
+    public void BoxedPrimitivesAndStringFields() {
+        Tester.classesFromSource(
+            "public class Foo {",
+            "  public String s;",
+            "  public Integer i;",
+            "  public Boolean b;",
+            "}");
+    }
+
+    @Test
     public void EnumDeclaration() {
         Tester.classesFromSource(
             "public class Foo {",

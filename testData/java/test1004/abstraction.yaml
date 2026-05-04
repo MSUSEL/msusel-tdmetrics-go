@@ -1,61 +1,80 @@
 {
   abstracts: [
-    { name: bar, signature: 3 }, # 1. bar(items any)
-    { name: baz, signature: 2 }, # 2. baz(comp any)
+    { name: bar, signature: 3 },
+    { name: baz, signature: 2 },
   ],
   arguments: [
-    {              type: object1        }, # 1. <unnamed> Foo
-    { name: comp,  type: interfaceDesc2 }, # 2. comp any
-    { name: items, type: interfaceDesc2 }, # 3. items any
+    { type: object1 },
+    { name: comp, type: interfaceInst1 },
+    { name: items, type: interfaceInst2 },
   ],
   basics: [ int ],
   fields: [
-    { name: x, type: basic1, vis: public }, # 1. public x int
+    { name: x, type: basic1, vis: public },
+  ],
+  interfaceDecls: [
+    { interface: 2, name: Comparable, package: 2 },
+    { interface: 2, name: List, package: 3 },
+    { interface: 2, name: Number, package: 2 },
+    { interface: 2, name: Object, package: 2 },
+    { interface: 2, name: Runnable, package: 2 },
   ],
   interfaceDescs: [
-    { abstracts: [ 1, 2 ], pin: object1 }, # 1. interface { bar(items any); baz(comp any) }
-    { abstracts: [ ] },                    # 2. any
+    { abstracts: [ 1, 2 ], pin: object1 },
+    { abstracts: [ ] },
+  ],
+  interfaceInsts: [
+    {
+      generic: 1,
+      instanceTypes: [ interfaceDecl3 ],
+      resolved: 2,
+    },
+    {
+      generic: 2,
+      instanceTypes: [ interfaceDesc2 ],
+      resolved: 2,
+    },
   ],
   language: java,
+  locs: { 1: ClassesFromSource.java },
   methods: [
-    { # 1. Foo() Foo {}
-      name: Foo, package: 4, receiver: 1, signature: 1, vis: public,
-    },
-    { # 2. bar(items any) { ... }
-      name: bar, package: 4, receiver: 1, signature: 3, vis: public, loc: 15, metrics: 1,
-    },
-    { # 3. baz(comp any) {}
-      name: baz, package: 4, receiver: 1, signature: 2, vis: public, loc: 24,
-    },
+    { name: Foo, package: 6, receiver: 1, signature: 1, vis: public },
+    { name: bar, package: 6, receiver: 1, signature: 3, vis: public, loc: 15, metrics: 1 },
+    { name: baz, package: 6, receiver: 1, signature: 2, vis: public, loc: 24 },
   ],
   metrics: [
     { codeCount: 8, complexity: 2, indents: 13, lineCount: 8, loc: 15 },
   ],
   objects: [
-    { # 1. Foo { public x int } { Foo() Foo; bar(items any); baz(comp any) }
-      name: Foo, data: 1, interface: 1, package: 4,
+    {
+      name: Foo, data: 1, interface: 1, package: 6,
       methods: [ 1, 2, 3 ], loc: 12, vis: public,
     },
   ],
   packages: [
-    { name: "<unnamed>" },   # 1. <unnamed> package
-    { name: testData },      # 2. testData package
-    { name: testData.java }, # 3. testData.java package
-    {                        # 4. testData.java.test1004 package
+    { name: "<unnamed>" },
+    {
+      interfaces: [ 1 ],
+      name: java.lang,
+    },
+    {
+      interfaces: [ 2 ],
+      name: java.util,
+    },
+    { name: testData },
+    { name: testData.java },
+    {
       methods: [ 1, 2, 3 ],
       name: testData.java.test1004,
       objects: [ 1 ],
     },
   ],
   signatures: [
-    { results: [ 1 ] }, # 1. func() Foo
-    { params:  [ 2 ] }, # 2. func(comp any)
-    { params:  [ 3 ] }, # 3. func(items any)
+    { results: [ 1 ] },
+    { params: [ 2 ] },
+    { params: [ 3 ] },
   ],
   structDescs: [
-    { fields: [ 1 ] }, # 1. struct { public x int }
-  ],  
-  locs: {
-    1: ClassesFromSource.java,
-  },
+    { fields: [ 1 ] },
+  ],
 }

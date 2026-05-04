@@ -6,10 +6,10 @@ public class Foo {
   }
 
   void baz() {
-    System.out.println("Baz");
+    int a = 0;
   }
 
   void cat(int ...t) {
-    System.out.println(t);
+    int b = t.length;
   }
 }

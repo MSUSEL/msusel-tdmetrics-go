@@ -2,6 +2,7 @@ package abstractor.core;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
@@ -25,6 +26,9 @@ public class Abstractor {
     public final Project proj;
 
     public final HashSet<CtMethod<?>> pendingMetrics = new HashSet<CtMethod<?>>();
+
+    /** Type-erasure qualified name → stub {@link InterfaceDecl} for external (JDK / library) types. */
+    private final HashMap<String, Ref<InterfaceDecl>> externalInterfaceStubByErasure = new HashMap<>();
 
     public Abstractor(Logger log, Project proj) {
         this.log  = log;
@@ -206,6 +210,84 @@ public class Abstractor {
             // fall through
         }
         return elem.getClass().getName();
+    }
+
+    /**
+     * JDK / library types: boxed primitives and {@code String} become {@link Basic}s; other types
+     * become cached stub {@link InterfaceDecl}s, with {@link InterfaceInst} when parameterized.
+     */
+    public Ref<? extends TypeDesc> addExternalStub(CtTypeReference<?> tr) throws Exception {
+        if (tr == null) return this.proj.baker.objectDesc();
+        try {
+            if ("<nulltype>".equals(tr.getQualifiedName()))
+                return this.proj.baker.objectDesc();
+        } catch (Exception ignored) {
+            return this.proj.baker.objectDesc();
+        }
+
+        final CtTypeReference<?> erasure = tr.getTypeErasure();
+        final String erasureQn = erasure.getQualifiedName();
+
+        final Ref<Basic> boxed = this.proj.baker.basicForBoxedOrString(erasureQn);
+        if (boxed != null) return boxed;
+
+        final Ref<InterfaceDecl> decl = this.getOrCreateExternalInterfaceDecl(erasure);
+
+        final List<CtTypeReference<?>> typeArgs = tr.getActualTypeArguments();
+        if (typeArgs == null || typeArgs.isEmpty()) {
+            @SuppressWarnings("unchecked")
+            final Ref<? extends TypeDesc> asType = (Ref<? extends TypeDesc>) (Ref<?>) decl;
+            return asType;
+        }
+
+        final ArrayList<Ref<? extends TypeDesc>> instanceTypes = new ArrayList<>(typeArgs.size());
+        for (CtTypeReference<?> arg : typeArgs)
+            instanceTypes.add(this.addTypeDesc(arg));
+
+        final InterfaceInst inst = new InterfaceInst(decl, instanceTypes, decl.getResolved().inter);
+        final Ref<InterfaceInst> instRef = this.proj.interfaceInsts.addOrGetRef(inst);
+        this.proj.interfaceInsts.setRefForElem(tr, instRef);
+        return instRef;
+    }
+
+    private Ref<InterfaceDecl> getOrCreateExternalInterfaceDecl(CtTypeReference<?> erasureRef) throws Exception {
+        final String erasureQn = erasureRef.getQualifiedName();
+        final Ref<InterfaceDecl> cached = this.externalInterfaceStubByErasure.get(erasureQn);
+        if (cached != null) return cached;
+
+        final Ref<PackageCon> pkgRef = this.ensureStubPackage(this.stubPackageName(erasureQn));
+        final Location loc = this.proj.locations.create("<external-stub>", 0);
+        final String simple = this.stubSimpleName(erasureQn);
+        final Ref<InterfaceDesc> inter = this.proj.interfaceDescs.addOrGetRef(new InterfaceDesc(new TreeSet<>()));
+        final InterfaceDecl decl = new InterfaceDecl(pkgRef, loc, simple, inter, new ArrayList<>());
+        final Ref<InterfaceDecl> ref = this.proj.interfaceDecls.addOrGetRef(decl);
+        this.externalInterfaceStubByErasure.put(erasureQn, ref);
+        pkgRef.getResolved().interfaceDecls.add(ref);
+        return ref;
+    }
+
+    private Ref<PackageCon> ensureStubPackage(String packageName) throws Exception {
+        return this.proj.packages.addOrGetRef(new PackageCon(packageName, ""));
+    }
+
+    private String stubPackageName(String erasureQualifiedName) {
+        final int dollar = erasureQualifiedName.indexOf('$');
+        if (dollar > 0)
+            return erasureQualifiedName.substring(0, dollar);
+        final int dot = erasureQualifiedName.lastIndexOf('.');
+        if (dot <= 0)
+            return "<unnamed>";
+        return erasureQualifiedName.substring(0, dot);
+    }
+
+    private String stubSimpleName(String erasureQualifiedName) {
+        final int dollar = erasureQualifiedName.indexOf('$');
+        if (dollar > 0 && dollar + 1 < erasureQualifiedName.length())
+            return erasureQualifiedName.substring(dollar + 1);
+        final int dot = erasureQualifiedName.lastIndexOf('.');
+        if (dot < 0)
+            return erasureQualifiedName;
+        return erasureQualifiedName.substring(dot + 1);
     }
 
     /**
@@ -528,6 +610,14 @@ public class Abstractor {
         if (tr instanceof CtWildcardReference wr)
             return this.addWildcard(wr);
 
+        // Type of the `null` literal in Spoon — not a real external type.
+        try {
+            if ("<nulltype>".equals(tr.getQualifiedName()))
+                return this.proj.baker.objectDesc();
+        } catch (Exception ignored) {
+            // fall through
+        }
+
         // Use getTypeDeclaration (not getDeclaration) to get shadow types
         // for external/JDK types instead of null.
         CtType<?> ty = null;
@@ -536,11 +626,11 @@ public class Abstractor {
         } catch (Exception ex) {
             this.log.warning("Failed to get type declaration for " +
                 tr.getQualifiedName() + ": " + ex.getMessage());
-            return this.proj.baker.objectDesc();
+            return this.addExternalStub(tr);
         }
 
-        // If still null, treat as external/unresolvable type.
-        if (ty == null) return this.proj.baker.objectDesc();
+        // If still null, treat as external / unresolvable type.
+        if (ty == null) return this.addExternalStub(tr);
 
         // Annotation types don't participate in data flow; mapping to object is expected.
         if (ty instanceof CtAnnotationType<?> ann) {
@@ -560,9 +650,8 @@ public class Abstractor {
             return this.proj.baker.objectDesc();
         }
 
-        // Shadow types are external (JDK, third-party). Create a stub.
-        // For now, map to objectDesc(); Step 2 will add named stubs.
-        if (ty.isShadow()) return this.proj.baker.objectDesc();
+        // Shadow types are external (JDK, third-party): stubs + boxing (Step 2).
+        if (ty.isShadow()) return this.addExternalStub(tr);
 
         // Check type parameter first since it's the most specific.
         if (tr.isGenerics())  return this.addTypeParam((CtTypeParameter)ty);
@@ -674,24 +763,30 @@ public class Abstractor {
     }
 
     private void processPendingMetrics() throws Exception {
-        for(CtMethod<?> m : this.pendingMetrics) {
-            if (m.getBody() == null) continue;
-            if (m.getBody().getStatements().isEmpty()) continue;
+        // `addMetrics` may register more methods on `pendingMetrics`; iterate in batches to avoid
+        // ConcurrentModificationException on the HashSet.
+        while (!this.pendingMetrics.isEmpty()) {
+            final ArrayList<CtMethod<?>> batch = new ArrayList<>(this.pendingMetrics);
+            this.pendingMetrics.clear();
+            for (CtMethod<?> m : batch) {
+                if (m.getBody() == null) continue;
+                if (m.getBody().getStatements().isEmpty()) continue;
 
-            Ref<MethodDecl> ref = this.proj.methodDecls.getRef(m);
-            if (!ref.isResolved())
-                throw new Exception("Expected " + ref + " to be resolved before processing pending metrics.");
+                Ref<MethodDecl> ref = this.proj.methodDecls.getRef(m);
+                if (!ref.isResolved())
+                    throw new Exception("Expected " + ref + " to be resolved before processing pending metrics.");
 
-            MethodDecl md = ref.getResolved();
-            if (md.metrics != null)
-                throw new Exception("The metrics for " + md + " have already been processed before " + m.getSimpleName() + ".");
+                MethodDecl md = ref.getResolved();
+                if (md.metrics != null)
+                    throw new Exception("The metrics for " + md + " have already been processed before " + m.getSimpleName() + ".");
 
-            Ref<Metrics> metRef = this.addMetrics(m);
-            Metrics met = metRef.getResolved();
-            if (met.hasBody()) md.metrics = metRef;
-            else {
-                // remove the reference and metrics from factory since bodiless methods can be ignored.
-                this.proj.metrics.removeElem(this.log, m, "metrics " + m.getSimpleName());
+                Ref<Metrics> metRef = this.addMetrics(m);
+                Metrics met = metRef.getResolved();
+                if (met.hasBody()) md.metrics = metRef;
+                else {
+                    // remove the reference and metrics from factory since bodiless methods can be ignored.
+                    this.proj.metrics.removeElem(this.log, m, "metrics " + m.getSimpleName());
+                }
             }
         }
     }

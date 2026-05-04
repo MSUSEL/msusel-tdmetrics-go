@@ -272,7 +272,12 @@ public class Analyzer {
     private void addFieldReadUsage(CtFieldRead<?> fr) throws Exception {
         if (logUsage) this.log.log("addUsage.CtFieldRead: " + fr);
         final CtFieldReference<?> ref = fr.getVariable();
-        final Ref<Selection> sel = this.abs.addSelection(ref.getFieldDeclaration());
+        final CtField<?> field = ref.getFieldDeclaration();
+        if (field == null) {
+            this.log.warning("addUsage.CtFieldRead: no field declaration for " + ref);
+            return;
+        }
+        final Ref<Selection> sel = this.abs.addSelection(field);
         this.reads.add(sel);
     }
 
@@ -301,7 +306,12 @@ public class Analyzer {
     
     private void addFieldReferenceUsage(CtFieldReference<?> fr) throws Exception {
         if (logUsage) this.log.log("addUsage.CtFieldReference: " + fr);
-        final Ref<Selection> sel = this.abs.addSelection(fr.getFieldDeclaration());
+        final CtField<?> field = fr.getFieldDeclaration();
+        if (field == null) {
+            this.log.warning("addUsage.CtFieldReference: no field declaration for " + fr);
+            return;
+        }
+        final Ref<Selection> sel = this.abs.addSelection(field);
         this.reads.add(sel);
     }
     

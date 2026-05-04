@@ -1,0 +1,88 @@
+{
+  abstracts: [
+    { name: lookup, signature: 1 },
+  ],
+  arguments: [
+    { type: interfaceInst2 },
+    { type: object1 },
+  ],
+  basics: [ int, string ],
+  fields: [
+    { name: count, type: basic1, vis: public },
+    { name: items, type: interfaceInst1, vis: public },
+    { name: mapping, type: interfaceInst2, vis: public },
+    { name: name, type: basic2, vis: public },
+  ],
+  interfaceDecls: [
+    { interface: 2, name: List, package: 2 },
+    { interface: 2, name: Map, package: 2 },
+  ],
+  interfaceDescs: [
+    {
+      abstracts: [ 1 ],
+      pin: object1,
+    },
+    {
+      abstracts: [ ],
+    },
+  ],
+  interfaceInsts: [
+    {
+      generic: 1,
+      instanceTypes: [ basic2 ],
+      resolved: 2,
+    },
+    {
+      generic: 2,
+      instanceTypes: [ basic2, basic1 ],
+      resolved: 2,
+    },
+  ],
+  language: java,
+  locs: { 1: ClassesFromSource.java },
+  methods: [
+    { name: Foo, package: 5, receiver: 1, signature: 2, vis: public },
+    { loc: 12, metrics: 1, name: lookup, package: 5, receiver: 1, signature: 1, vis: public },
+  ],
+  metrics: [
+    { codeCount: 3, complexity: 1, getter: true, indents: 1, lineCount: 3, loc: 12 },
+  ],
+  objects: [
+    {
+      data: 1,
+      interface: 1,
+      loc: 6,
+      methods: [ 1, 2 ],
+      name: Foo,
+      package: 5,
+      vis: public,
+    },
+  ],
+  packages: [
+    { name: "<unnamed>" },
+    {
+      interfaces: [ 1 ],
+      name: java.util,
+    },
+    { name: testData },
+    { name: testData.java },
+    {
+      methods: [ 1, 2 ],
+      name: testData.java.test1005,
+      objects: [ 1 ],
+    },
+  ],
+  signatures: [
+    {
+      results: [ 1 ],
+    },
+    {
+      results: [ 2 ],
+    },
+  ],
+  structDescs: [
+    {
+      fields: [ 4, 1, 2, 3 ],
+    },
+  ],
+}
