@@ -14,6 +14,8 @@ functionality. The architecture follows the Go abstractor's two-phase approach:
 to resolve references, expand generics, generate interfaces, compute inheritance,
 and validate.
 
+**Implementation tracking:** Steps **1** (robust type dispatch) and **2** (external stubs + boxing) are implemented in `javaAbstractor/`; see **`../implementation/plan.md`** checklist and completion notes. **Step 3** (enums) is next.
+
 ## Detailed Requirements
 
 Consolidated from requirements clarification (idea-honing.md):

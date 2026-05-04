@@ -14,6 +14,9 @@ Feature Definition (`docs/genFeatureDef.md`).
 3. `Abstractor` orchestrates the parsing:
    - `addMavenProject(path)` uses Spoon's `MavenLauncher` to build a `CtModel`.
    - Iterates over all packages, types, and declarations.
+   - Type references: **`addTypeDesc`** resolves primitives, arrays, wildcards,
+     user types, and (Steps 1–2) shadow/JDK types via **`addExternalStub`** with
+     boxing for wrappers and `String`.
    - `finish()` runs: `processPendingMetrics()` → `consolidateCons()` →
      `crossConnectConstructs()` → `validate()`.
 4. `Analyzer` computes metrics (complexity, line counts, indents, getter/setter
@@ -32,9 +35,9 @@ All 18 construct types from `genFeatureDef.md` have corresponding Java classes:
 | Argument | `Argument.java` | Implemented |
 | Basic | `Basic.java` | Implemented |
 | Field | `Field.java` | Implemented |
-| InterfaceDecl | `InterfaceDecl.java` | Partial (nested interfaces, instances) |
+| InterfaceDecl | `InterfaceDecl.java` | Partial (nested interfaces; **Step 2:** JDK stubs) |
 | InterfaceDesc | `InterfaceDesc.java` | Partial (inheritance, pinning) |
-| InterfaceInst | `InterfaceInst.java` | Partial (only arrays use it currently) |
+| InterfaceInst | `InterfaceInst.java` | Partial (**Baker** arrays; **Step 2:** external `List<>` / `Map<>` etc.) |
 | Locations | `Location.java` / `Locations` | Implemented |
 | MethodDecl | `MethodDecl.java` | Implemented (TODO: constructor flag) |
 | MethodInst | `MethodInst.java` | Exists but not populated by Abstractor |
@@ -51,7 +54,8 @@ All 18 construct types from `genFeatureDef.md` have corresponding Java classes:
 ### Supporting Infrastructure
 
 - **Baker**: Pre-builds synthetic constructs (e.g., `$Array` interface with `$len`,
-  `$get`, `$set` abstracts for array types, `Object` as empty interface).
+  `$get`, `$set` abstracts for array types); **`basicForBoxedOrString`** (Step 2)
+  maps boxed JDK types and `java.lang.String` to shared **`Basic`** nodes.
 - **Validator**: Checks that all refs are resolved and point to constructs in factories.
 - **Diff**: Hirschberg & Wagner diff algorithms for test output comparison.
 - **JSON**: Custom JSON parser, formatter, and serialization (`Jsonable` interface).
@@ -62,7 +66,10 @@ All 18 construct types from `genFeatureDef.md` have corresponding Java classes:
 
 ### Critical / Functional Gaps
 
-1. **Package imports** (`Abstractor.java:104-151`): `getImports()` is stub code with
+*(Steps 1–2: robust `addTypeDesc` / `addDeclaration`, wildcard and anonymous/local
+handling, **`addExternalStub`** + boxing. Remaining gaps below.)*
+
+1. **Package imports** (`Abstractor` — package imports TODO near `addPackage`): `getImports()` is stub code with
    debug `println` statements. Returns `null`. This means package dependency tracking
    is completely missing.
 
@@ -85,9 +92,10 @@ All 18 construct types from `genFeatureDef.md` have corresponding Java classes:
 7. **Values (package-level variables/constants)** are not extracted from source code at
    all.
 
-8. **Generic instances** (`ObjectInst`, `MethodInst`, `InterfaceInst`): Only
-   `InterfaceInst` is used (for arrays via Baker). Real generic instantiations from
-   source code are not tracked.
+8. **Generic instances** (`ObjectInst`, `MethodInst`, `InterfaceInst`): **`InterfaceInst`**
+   is used for Baker arrays and **external** parameterized types (Step 2).
+   **`ObjectInst` / `MethodInst`** and rich user-side generic tracking are still open
+   (later steps).
 
 9. **Metrics usage tracking** (`Analyzer.java:285, 308`): `addAssignmentUsage` and
    `addExecutableReferenceUsage` are TODO stubs.
@@ -107,13 +115,13 @@ All 18 construct types from `genFeatureDef.md` have corresponding Java classes:
 
 ### Test Structure
 
-- **AppTests**: 5 tests total
-  - `test0001`, `test0002`: Full Maven project tests in `testData/java/test000N/`.
-    Runs the full abstractor pipeline and compares JSON output against
-    `abstraction.yaml` expected files.
-  - `test1001`, `test1002`, `test1003`: Single-class tests using `Tester.addClassFromFile()`.
-    Parses a `.java` file directly (not Maven) and compares output.
+- **AppTests**: Maven integration (`test0001`, `test0002`) plus single-file fixtures
+  **`test1001`–`test1005`** under `testData/java/test100N/` (`Foo.java` + `abstraction.yaml`).
+  `test1004` / `test1005` align with Steps 1–2. **`test1002`** avoids `System.out.println`
+  in the fixture (Spoon otherwise pulls a large JDK graph for `System`). Goldens may
+  still need updates per environment; **`MetricsTests`** may be out of sync until refreshed.
 
+- **RobustnessTests**: Smoke tests for Spoon edge cases (wildcards, annotations, boxing fields, etc.).
 - **MetricsTests**: Tests for metrics computation (complexity, indents, getter/setter detection).
 - **JsonTests**: Tests for JSON parser/formatter.
 - **IterTests**: Tests for iterator utilities.

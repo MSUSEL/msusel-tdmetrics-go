@@ -52,6 +52,7 @@ Never proceed to the next step without the user's explicit direction.
 
 ## Project Context
 
+- **Progress**: Steps **1–2** of `.agents/planning/2026-05-01-java-abstractor-completion/implementation/plan.md` are implemented; **Step 3** (enum completion) is next when tests are stable. See that file’s “Completion status” section and `.cursor/rules/java-abstractor-handoff.mdc` for a concise handoff.
 - **Goal**: Complete the Java Abstractor (`javaAbstractor/`) so it can
   process all 31 Apache Java projects in the Technical Debt Dataset (TDD).
 - **Output format**: JSON/YAML conforming to `docs/genFeatureDef.md`.

@@ -11,7 +11,6 @@ import java.util.HashSet;
 import spoon.Launcher;
 import spoon.MavenLauncher;
 import spoon.reflect.*;
-import spoon.reflect.code.*;
 import spoon.reflect.cu.SourcePosition;
 import spoon.reflect.declaration.*;
 import spoon.reflect.path.CtRole;
@@ -22,12 +21,17 @@ import abstractor.core.log.*;
 import abstractor.core.validator.Validator;
 
 public class Abstractor {
+    private final String nullName = "<nulltype>";
+    private final String objName = "java.lang.Object";
+
     public final Logger log;
     public final Project proj;
 
     public final HashSet<CtMethod<?>> pendingMetrics = new HashSet<CtMethod<?>>();
 
-    /** Type-erasure qualified name → stub {@link InterfaceDecl} for external (JDK / library) types. */
+    /**
+     * Type-erasure qualified name to stub InterfaceDecl for external Java library types. 
+     */
     private final HashMap<String, Ref<InterfaceDecl>> externalInterfaceStubByErasure = new HashMap<>();
 
     public Abstractor(Logger log, Project proj) {
@@ -114,7 +118,7 @@ public class Abstractor {
     public Ref<PackageCon> addPackage(CtPackage pkg) throws Exception {
         final String name = packageName(pkg);
         return this.proj.packages.create(this.log, pkg,
-            "package " + name,
+           "package " + name,
             () -> {
                 final String path = packagePath(pkg);
                 return new PackageCon(name, path);
@@ -139,10 +143,10 @@ public class Abstractor {
     }
 
     public void addDeclarationToPackage(PackageCon pkg, Ref<? extends Construct> decl) {
-        if (tryToAdd(pkg.objectDecls, decl, ConstructKind.OBJECT_DECL)) return;
+        if (tryToAdd(pkg.objectDecls,    decl, ConstructKind.OBJECT_DECL))    return;
         if (tryToAdd(pkg.interfaceDecls, decl, ConstructKind.INTERFACE_DECL)) return;
-        if (tryToAdd(pkg.methodDecls, decl, ConstructKind.METHOD_DECL)) return;
-        if (tryToAdd(pkg.values, decl, ConstructKind.VALUE)) return;
+        if (tryToAdd(pkg.methodDecls,    decl, ConstructKind.METHOD_DECL))    return;
+        if (tryToAdd(pkg.values,         decl, ConstructKind.VALUE))          return;
         
         this.log.error("Unhandled declaration type: " + decl.kind());
     }
@@ -200,12 +204,9 @@ public class Abstractor {
     private String describeElement(CtElement elem) {
         if (elem == null) return "(null)";
         try {
-            if (elem instanceof CtTypeReference<?> tr)
-                return tr.getQualifiedName();
-            if (elem instanceof CtType<?> ty)
-                return ty.getQualifiedName();
-            if (elem instanceof CtExecutable<?> ex)
-                return ex.getSignature();
+            if (elem instanceof CtTypeReference<?> tr) return tr.getQualifiedName();
+            if (elem instanceof CtType<?> ty)          return ty.getQualifiedName();
+            if (elem instanceof CtExecutable<?> ex)    return ex.getSignature();
         } catch (Exception ignored) {
             // fall through
         }
@@ -213,14 +214,18 @@ public class Abstractor {
     }
 
     /**
-     * JDK / library types: boxed primitives and {@code String} become {@link Basic}s; other types
-     * become cached stub {@link InterfaceDecl}s, with {@link InterfaceInst} when parameterized.
+     * Handle Java primitives and object equivalents to primitives (boxed primitives)
+     * such that the boxed primitives (e.g. Integer) and String become Basic's.
+     * Other types become cached stub InterfaceDecl's, with InterfaceInst
+     * when parameterized.
      */
     public Ref<? extends TypeDesc> addExternalStub(CtTypeReference<?> tr) throws Exception {
+        // If a type can not be resolved return an object (kind of like an `any` in Go).
         if (tr == null) return this.proj.baker.objectDesc();
         try {
-            if ("<nulltype>".equals(tr.getQualifiedName()))
-                return this.proj.baker.objectDesc();
+            // Unlike Go's nil that can carry the type, Java's null type has
+            // no type associated with it so instead use an object.
+            if (nullName.equals(tr.getQualifiedName())) return this.proj.baker.objectDesc();
         } catch (Exception ignored) {
             return this.proj.baker.objectDesc();
         }
@@ -241,27 +246,28 @@ public class Abstractor {
         }
 
         final ArrayList<Ref<? extends TypeDesc>> instanceTypes = new ArrayList<>(typeArgs.size());
-        for (CtTypeReference<?> arg : typeArgs)
-            instanceTypes.add(this.addTypeDesc(arg));
+        for (CtTypeReference<?> arg : typeArgs) instanceTypes.add(this.addTypeDesc(arg));
 
-        final InterfaceInst inst = new InterfaceInst(decl, instanceTypes, decl.getResolved().inter);
+        final InterfaceInst      inst    = new InterfaceInst(decl, instanceTypes, decl.getResolved().inter);
         final Ref<InterfaceInst> instRef = this.proj.interfaceInsts.addOrGetRef(inst);
         this.proj.interfaceInsts.setRefForElem(tr, instRef);
         return instRef;
     }
 
     private Ref<InterfaceDecl> getOrCreateExternalInterfaceDecl(CtTypeReference<?> erasureRef) throws Exception {
-        final String erasureQn = erasureRef.getQualifiedName();
-        final Ref<InterfaceDecl> cached = this.externalInterfaceStubByErasure.get(erasureQn);
+        final String erasureQualName = erasureRef.getQualifiedName();
+        final Ref<InterfaceDecl> cached = this.externalInterfaceStubByErasure.get(erasureQualName);
         if (cached != null) return cached;
 
-        final Ref<PackageCon> pkgRef = this.ensureStubPackage(this.stubPackageName(erasureQn));
-        final Location loc = this.proj.locations.create("<external-stub>", 0);
-        final String simple = this.stubSimpleName(erasureQn);
-        final Ref<InterfaceDesc> inter = this.proj.interfaceDescs.addOrGetRef(new InterfaceDesc(new TreeSet<>()));
-        final InterfaceDecl decl = new InterfaceDecl(pkgRef, loc, simple, inter, new ArrayList<>());
-        final Ref<InterfaceDecl> ref = this.proj.interfaceDecls.addOrGetRef(decl);
-        this.externalInterfaceStubByErasure.put(erasureQn, ref);
+        final Ref<PackageCon>    pkgRef = this.ensureStubPackage(this.stubPackageName(erasureQualName));
+        // TODO: Decide if I should use the declaration's actual location information or continue with a pseudo location.
+        final Location           loc    = this.proj.locations.create("<external-stub>", 0);
+        final String             simple = this.stubSimpleName(erasureQualName);
+        final Ref<InterfaceDesc> inter  = this.proj.interfaceDescs.addOrGetRef(new InterfaceDesc(new TreeSet<>()));
+
+        final InterfaceDecl      decl = new InterfaceDecl(pkgRef, loc, simple, inter, new ArrayList<>());
+        final Ref<InterfaceDecl> ref  = this.proj.interfaceDecls.addOrGetRef(decl);
+        this.externalInterfaceStubByErasure.put(erasureQualName, ref);
         pkgRef.getResolved().interfaceDecls.add(ref);
         return ref;
     }
@@ -272,11 +278,11 @@ public class Abstractor {
 
     private String stubPackageName(String erasureQualifiedName) {
         final int dollar = erasureQualifiedName.indexOf('$');
-        if (dollar > 0)
-            return erasureQualifiedName.substring(0, dollar);
+        if (dollar > 0) return erasureQualifiedName.substring(0, dollar);
+
         final int dot = erasureQualifiedName.lastIndexOf('.');
-        if (dot <= 0)
-            return "<unnamed>";
+        if (dot <= 0) return "<unnamed>";
+
         return erasureQualifiedName.substring(0, dot);
     }
 
@@ -284,9 +290,10 @@ public class Abstractor {
         final int dollar = erasureQualifiedName.indexOf('$');
         if (dollar > 0 && dollar + 1 < erasureQualifiedName.length())
             return erasureQualifiedName.substring(dollar + 1);
+
         final int dot = erasureQualifiedName.lastIndexOf('.');
-        if (dot < 0)
-            return erasureQualifiedName;
+        if (dot < 0) return erasureQualifiedName;
+
         return erasureQualifiedName.substring(dot + 1);
     }
 
@@ -298,8 +305,8 @@ public class Abstractor {
     static public boolean isObjectMethod(CtMethod<?> m) {
         if (m == null) return false;
 
-        final CtTypeReference<?> objectRef = m.getFactory().Type().objectType();
-        final CtType<?> objectDecl = objectRef.getTypeDeclaration();
+        final CtTypeReference<?> objectRef  = m.getFactory().Type().objectType();
+        final CtType<?>          objectDecl = objectRef.getTypeDeclaration();
         if (objectDecl == null) return false;
 
         final String sig = m.getSignature();
@@ -334,15 +341,13 @@ public class Abstractor {
 
                 // Add methods for the class.
                 for (CtMethod<?> m : c.getAllMethods()) {
-                    if (m.getParent().equals(c) && !isObjectMethod(m))
-                        this.addMethod(ref, m);
+                    if (m.getParent().equals(c) && !isObjectMethod(m)) this.addMethod(ref, m);
                 }
 
                 // Synthesize the interface description for the class.
                 TreeSet<Ref<Abstract>> abstracts = new TreeSet<Ref<Abstract>>();
                 for (CtMethod<?> m : c.getAllMethods()) {
-                    if (!m.isStatic() && !isObjectMethod(m))
-                        abstracts.add(this.addAbstract(m));
+                    if (!m.isStatic() && !isObjectMethod(m)) abstracts.add(this.addAbstract(m));
                 }
                 obj.inter = this.proj.interfaceDescs.addOrGetRef(new InterfaceDesc(abstracts, ref));
 
@@ -390,8 +395,7 @@ public class Abstractor {
             // TODO: Connect abstract to interface declaration
             return ab;
         }
-        this.log.warning("Skipping method with unhandled declaring type (" +
-            decl.getClass().getName() + ") " + decl.getQualifiedName());
+        this.log.warning("Skipping method with unhandled declaring type (" + decl.getClass().getName() + ") " + decl.getQualifiedName());
         return null;
     }
 
@@ -610,10 +614,9 @@ public class Abstractor {
         if (tr instanceof CtWildcardReference wr)
             return this.addWildcard(wr);
 
-        // Type of the `null` literal in Spoon — not a real external type.
+        // Type of the `null` literal in Spoon - not a real external type.
         try {
-            if ("<nulltype>".equals(tr.getQualifiedName()))
-                return this.proj.baker.objectDesc();
+            if (nullName.equals(tr.getQualifiedName())) return this.proj.baker.objectDesc();
         } catch (Exception ignored) {
             // fall through
         }
@@ -624,57 +627,56 @@ public class Abstractor {
         try {
             ty = tr.getTypeDeclaration();
         } catch (Exception ex) {
-            this.log.warning("Failed to get type declaration for " +
-                tr.getQualifiedName() + ": " + ex.getMessage());
+            this.log.warning("Failed to get type declaration for " + tr.getQualifiedName() + ": " + ex.getMessage());
             return this.addExternalStub(tr);
         }
 
         // If still null, treat as external / unresolvable type.
         if (ty == null) return this.addExternalStub(tr);
 
-        // Annotation types don't participate in data flow; mapping to object is expected.
+        // Annotation types don't participate in data flow. Use an object instead.
         if (ty instanceof CtAnnotationType<?> ann) {
             this.log.notice("Annotation type as type desc (using object): " + ann.getQualifiedName());
             return this.proj.baker.objectDesc();
         }
 
-        // Skip anonymous and local types — their code is attributed
+        // Skip anonymous and local types - their code is attributed
         // to the enclosing method (handled in later steps).
         if (tr.isAnonymous() || tr.isLocalType()) {
             CtTypeReference<?> superRef = tr.getSuperclass();
-            if (superRef != null && !superRef.getQualifiedName().equals("java.lang.Object"))
+            if (superRef != null && !superRef.getQualifiedName().equals(objName))
                 return this.addTypeDesc(superRef);
+
             var superIfaces = tr.getSuperInterfaces();
             if (superIfaces != null && !superIfaces.isEmpty())
                 return this.addTypeDesc(superIfaces.iterator().next());
+
             return this.proj.baker.objectDesc();
         }
 
-        // Shadow types are external (JDK, third-party): stubs + boxing (Step 2).
+        // Shadow types are external (JDK / third-party)
         if (ty.isShadow()) return this.addExternalStub(tr);
 
         // Check type parameter first since it's the most specific.
-        if (tr.isGenerics())  return this.addTypeParam((CtTypeParameter)ty);
+        if (tr.isGenerics()) return this.addTypeParam((CtTypeParameter)ty);
 
         // Check CtEnum before CtClass since CtEnum extends CtClass.
-        if (ty instanceof CtEnum<?> e) return this.addObjectDecl(e);
-        if (ty instanceof CtClass<?>)  return this.addObjectDecl((CtClass<?>)ty);
+        if (ty instanceof CtEnum<?> e)    return this.addObjectDecl(e);
+        if (ty instanceof CtClass<?>)     return this.addObjectDecl((CtClass<?>)ty);
         if (ty instanceof CtInterface<?>) return this.addInterfaceDecl((CtInterface<?>)ty);
 
-        this.log.warning("Unhandled type (" + tr.getClass().getName() +
-            "): " + tr.getQualifiedName());
+        this.log.warning("Unhandled type (" + tr.getClass().getName() + "): " + tr.getQualifiedName());
         return this.proj.baker.objectDesc();
     }
 
     private Ref<? extends TypeDesc> addWildcard(CtWildcardReference wr) throws Exception {
         CtTypeReference<?> bound = wr.getBoundingType();
-        if (bound == null || bound instanceof CtWildcardReference)
-            return this.proj.baker.objectDesc();
-        // Spoon often uses java.lang.Object as the synthetic bound for unbounded "?";
-        // resolving it would pull the entire JDK Object graph into the abstraction.
+        if (bound == null || bound instanceof CtWildcardReference) return this.proj.baker.objectDesc();
+
+        // Spoon often uses java.lang.Object as the synthetic bound for unbounded "?".
+        // Resolving it would pull the entire JDK Object graph into the abstraction.
         try {
-            if ("java.lang.Object".equals(bound.getQualifiedName()))
-                return this.proj.baker.objectDesc();
+            if (objName.equals(bound.getQualifiedName())) return this.proj.baker.objectDesc();
         } catch (Exception ignored) {
             return this.proj.baker.objectDesc();
         }
@@ -763,12 +765,12 @@ public class Abstractor {
     }
 
     private void processPendingMetrics() throws Exception {
-        // `addMetrics` may register more methods on `pendingMetrics`; iterate in batches to avoid
-        // ConcurrentModificationException on the HashSet.
+        // `addMetrics` may register more methods on `pendingMetrics`
+        // so add the current methods, then check if more are pending.
         while (!this.pendingMetrics.isEmpty()) {
-            final ArrayList<CtMethod<?>> batch = new ArrayList<>(this.pendingMetrics);
+            final ArrayList<CtMethod<?>> methods = new ArrayList<>(this.pendingMetrics);
             this.pendingMetrics.clear();
-            for (CtMethod<?> m : batch) {
+            for (CtMethod<?> m : methods) {
                 if (m.getBody() == null) continue;
                 if (m.getBody().getStatements().isEmpty()) continue;
 

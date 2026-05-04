@@ -10,9 +10,9 @@ Per `genFeatureDef.md`, a valid output JSON must contain:
 - `arguments`: method parameters/results ✅
 - `basics`: primitive types ✅
 - `fields`: struct/class fields ✅
-- `interfaceDecls`: named interface declarations ⚠️ Partial
+- `interfaceDecls`: named interface declarations ⚠️ Partial (Step 2 adds **JDK/library stubs**; user types still primary)
 - `interfaceDescs`: interface type descriptions ⚠️ Partial
-- `interfaceInsts`: generic interface instantiations ⚠️ Only arrays
+- `interfaceInsts`: generic interface instantiations ⚠️ Arrays + **external parameterized types** (Step 2); user generics still partial
 - `methods`: method declarations ✅
 - `methodInsts`: generic method instantiations ❌ Not populated
 - `metrics`: method metrics ⚠️ Partial (usage tracking incomplete)
@@ -31,11 +31,11 @@ Per `genFeatureDef.md`, a valid output JSON must contain:
 
 These will cause crashes or fundamentally incorrect output on real projects:
 
-1. **Error handling / robustness**: The abstractor throws exceptions on many
-   unhandled cases (unknown type descriptors, null declarations from shadow
-   types, etc.). Real projects will have annotation types, anonymous classes,
-   lambda expressions, and other constructs not currently handled in
-   `addTypeDesc()`. The abstractor needs to gracefully handle or skip these.
+1. **Error handling / robustness** — **largely addressed (Step 1):**
+   `addTypeDesc` / `addDeclaration` use guarded dispatch, logging, and fallbacks;
+   shadow / unresolved types go through **`addExternalStub`** (Step 2) instead of
+   throwing. Residual edge cases should still log warnings and continue; file
+   issues as you find them on TDD projects.
 
 2. **Package imports**: The `getImports()` method is a debug stub. Package
    import relationships are needed for the downstream metrics pipeline.
@@ -59,8 +59,9 @@ These will cause crashes or fundamentally incorrect output on real projects:
 8. **Nested type handling**: Both nested classes and nested interfaces need
    proper scoping (differentiating `Outer.Inner` from `Other.Inner`).
 
-9. **Generic instantiation tracking**: `ObjectInst`, `MethodInst`, and real
-   `InterfaceInst` (beyond arrays) are not populated.
+9. **Generic instantiation tracking**: `ObjectInst` and `MethodInst` are not populated.
+   **`InterfaceInst`** is used for Baker arrays and **external** parameterized types
+   (Step 2); user-declared generic instantiations remain incomplete.
 
 ### P2: Needed for Accurate Metrics
 

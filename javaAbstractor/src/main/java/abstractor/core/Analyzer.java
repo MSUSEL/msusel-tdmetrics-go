@@ -15,8 +15,8 @@ import abstractor.core.constructs.*;
 import abstractor.core.log.Logger;
 
 public class Analyzer {
-    private static final boolean logElementTree = true;//false;
-    private static final boolean logUsage = true;//false;
+    private static final boolean logElementTree = true; // TODO: Restore to false;
+    private static final boolean logUsage = true; // TODO: Restore to false;
 
     private final Abstractor abs;
     private final Logger log;
@@ -110,10 +110,10 @@ public class Analyzer {
     static private String formatElem(CtElement elem) {
         String head = elem.toStringDebug().replaceAll("\\s+", " ");
         if (head.length() > 40) head = head.substring(0, 36) + "...";
-        final SourcePosition pos = elem.getPosition();
-        final String tail = pos.isValidPosition() ?
-            " @ "+pos.getLine() + ":" + pos.getColumn() : "";
-        final String type = elem.getClass().getSimpleName();
+
+        final SourcePosition pos  = elem.getPosition();
+        final String         tail = pos.isValidPosition() ? " @ "+pos.getLine() + ":" + pos.getColumn() : "";
+        final String         type = elem.getClass().getSimpleName();
         return "(" + type + ") " + head + tail;
     }
 
@@ -135,16 +135,14 @@ public class Analyzer {
             this.log.push("|  ");
         }
 
-        for (CtElement child : elem.getDirectChildren())
-            this.addElement(child);
+        for (CtElement child : elem.getDirectChildren()) this.addElement(child);
 
         if (logElementTree) this.log.pop();
     }
 
     private void addPosition(SourcePosition pos) {
         if (!pos.isValidPosition()) return;
-        //this.log.log("  adding <"+pos.getLine()+", "+pos.getColumn()+
-        //    "> <"+pos.getEndLine()+", "+pos.getEndColumn()+">");
+        //this.log.log("  adding <"+pos.getLine()+", "+pos.getColumn()+ "> <"+pos.getEndLine()+", "+pos.getEndColumn()+">");
         this.addPosition(pos.getLine(), pos.getColumn());
         this.addPosition(pos.getEndLine(), pos.getEndColumn());
     }
@@ -165,9 +163,9 @@ public class Analyzer {
 
     static private boolean isSimpleFetch(CtElement elem) {
         if (elem instanceof CtConstructorCall) return false;
-        if (elem instanceof CtInvocation) return false;
-        if (elem instanceof CtBinaryOperator) return false;
-        if (elem instanceof CtUnaryOperator) return false;
+        if (elem instanceof CtInvocation)      return false;
+        if (elem instanceof CtBinaryOperator)  return false;
+        if (elem instanceof CtUnaryOperator)   return false;
         for (CtElement child : elem.getDirectChildren()) {
             if (!isSimpleFetch(child)) return false;
         }
@@ -184,17 +182,17 @@ public class Analyzer {
 
     static private boolean detectGetter(CtMethod<?> m, CtStatement st) {
         if (m.getParameters().size() != 0) return false;
-        if (isVoid(m.getType())) return false;
+        if (isVoid(m.getType()))           return false;
         if (!(st instanceof CtReturn ret)) return false;
-        if (!isSimpleFetch(ret)) return false;
+        if (!isSimpleFetch(ret))           return false;
         return true;
     }
     
     static private boolean detectSetter(CtMethod<?> m, CtStatement st) {
-        if (m.getParameters().size() > 1) return false;
-        if (!isVoid(m.getType())) return false;
-        if (!(st instanceof CtAssignment assign)) return false;
-        if (!isSimpleFetch(assign.getAssigned())) return false;
+        if (m.getParameters().size() > 1)           return false;
+        if (!isVoid(m.getType()))                   return false;
+        if (!(st instanceof CtAssignment assign))   return false;
+        if (!isSimpleFetch(assign.getAssigned()))   return false;
         if (!isSimpleFetch(assign.getAssignment())) return false;
 
         // Check for setters may have no parameters for assigning a

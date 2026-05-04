@@ -2,8 +2,8 @@
 
 ## Checklist
 
-- [ ] Step 1: Robustness — Type dispatch hardening
-- [ ] Step 2: External type stubs and boxing
+- [x] Step 1: Robustness — Type dispatch hardening
+- [x] Step 2: External type stubs and boxing
 - [ ] Step 3: Enum completion
 - [ ] Step 4: Values (package-level variables and constants)
 - [ ] Step 5: Named nested class support
@@ -17,6 +17,32 @@
 - [ ] Step 13: Package imports from type usage
 - [ ] Step 14: Cross-connection and cleanup
 - [ ] Step 15: TDD project validation script
+
+---
+
+## Completion status (Steps 1–2, 2026-05)
+
+Steps **1** and **2** are implemented in `javaAbstractor/` (confirm against your branch before relying on this list). **Next:** Step 3 below.
+
+### Step 1 (implemented)
+
+- **`Abstractor.addTypeDesc` / `addTypeDescImpl`:** `getTypeDeclaration()` (not `getDeclaration()`); try/catch fallback; wildcards including `? super` via bounding type (with `java.lang.Object` treated as unbounded); anonymous/local → superclass, else first super-interface, else `objectDesc`; `CtAnnotationType` → `Logger.notice` + `objectDesc`.
+- **`addDeclaration` / `addTypeDeclaration`:** try/catch with warning + `null` on failure; `describeElement()` for log context.
+- **`<nulltype>`:** ignored as a real external type (returns `objectDesc`) so null-literal usage does not create stubs.
+- **`Analyzer`:** skip `invokes.add` when `addDeclaration` returns `null`; field read/reference usage skips null `getFieldDeclaration()` (e.g. `t.length` on varargs) with a warning.
+- **`processPendingMetrics`:** drains `pendingMetrics` in batches (copy + clear + process) to avoid `ConcurrentModificationException` when metrics walk registers more methods.
+- **Tests:** `test1004`; `RobustnessTests` including `LowerBoundedWildcard`.
+
+### Step 2 (implemented)
+
+- **`Baker.basicForBoxedOrString(String qualifiedErasure)`:** maps `java.lang.{Byte,Short,Integer,Long,Float,Double,Character,Boolean}` and `java.lang.String` to shared **`Basic`** constructs (`byte` … `string`).
+- **`Abstractor.addExternalStub`:** boxed/string → basic; else cached stub **`InterfaceDecl`** per type-erasure qualified name (empty **`InterfaceDesc`**, package path from QN, `$` for nested names); parameterized references → **`InterfaceInst`** + `interfaceInsts.setRefForElem(tr, …)`; **`resolved`** on inst reuses the stub’s **`InterfaceDesc`**.
+- **`addTypeDescImpl`:** `ty == null`, `ty.isShadow()`, and `getTypeDeclaration` failure path → **`addExternalStub(tr)`** (instead of anonymous `objectDesc` for those cases).
+- **Tests / fixtures:** `test1005`; goldens updated for `test1001`–`test1004`. Prefer avoiding **`System.out.println`** in `Tester` / single-file fixtures when possible (Spoon pulls large JDK graphs for `System`).
+
+### Before Step 3 for agents
+
+The maintainer may still be updating **`MetricsTests`** expected YAML and **`AppTests.test0001` / `test0002`** Maven goldens. Read **`Abstractor.addEnum`** and **`addObjectDecl`** enum path; Step 3 spec unchanged below.
 
 ---
 

@@ -16,8 +16,8 @@
 ## Key Design Elements
 
 - Two-phase architecture: AST walk (Abstractor) then post-processing (Resolver)
-- External types as named stubs with boxing for Java primitives
-- Robust type dispatch handling all Spoon type cases
+- External types as **named stub `InterfaceDecl`s** plus **boxing** for wrappers / `String` (**Step 2**, `addExternalStub`, `Baker.basicForBoxedOrString`)
+- **Robust type dispatch** in `addTypeDesc` / `addDeclaration` with logging and fallbacks (**Step 1**)
 - Complete metrics tracking (reads, writes, invokes, complexity)
 - Generic instantiation tracking (ObjectInst, MethodInst, InterfaceInst)
 - Interface inheritance and pinning
@@ -32,7 +32,7 @@ review → implement → review.
 
 ## Next Steps
 
-1. Review the implementation plan at `implementation/plan.md`
-2. Begin Step 1: Type dispatch hardening
-3. Work through steps iteratively with user review at each stage
-4. Validate against small TDD projects at Step 15
+1. Review the implementation plan at `implementation/plan.md` (checklist: Steps **1–2** done).
+2. Stabilize remaining tests if needed (**`MetricsTests`**, Maven **`AppTests.test0001` / `test0002`**) before or in parallel with Step 3.
+3. **Step 3:** Enum completion (see `implementation/plan.md` § Step 3).
+4. Continue steps iteratively with researcher review; validate TDD projects at Step 15.

@@ -152,26 +152,29 @@ public class Baker {
         return this.proj.interfaceInsts.addOrGetRef(inst);
     }
 
-    /** Qualified erasure name (e.g. {@code java.lang.Integer}) → basic type name. */
+    /**
+     * Qualified erasure name (e.g. java.lang.Integer) to basic type name.
+     */
     private static final Map<String, String> BOXED_QUALIFIED_TO_BASIC = Map.of(
-        "java.lang.Byte", "byte",
-        "java.lang.Short", "short",
-        "java.lang.Integer", "int",
-        "java.lang.Long", "long",
-        "java.lang.Float", "float",
-        "java.lang.Double", "double",
+        "java.lang.Byte",      "byte",
+        "java.lang.Short",     "short",
+        "java.lang.Integer",   "int",
+        "java.lang.Long",      "long",
+        "java.lang.Float",     "float",
+        "java.lang.Double",    "double",
         "java.lang.Character", "char",
-        "java.lang.Boolean", "boolean",
-        "java.lang.String", "string"
+        "java.lang.Boolean",   "boolean",
+        "java.lang.String",    "string"
     );
 
     /**
-     * If {@code qualifiedErasureName} is a boxed primitive or {@code java.lang.String},
-     * returns the shared {@link Basic}; otherwise {@code null}.
+     * If qualifiedErasureName is a boxed primitive (e.g. java.lang.Integer)
+     * or java.lang.String, returns the shared Basic, otherwise null.
      */
     public Ref<Basic> basicForBoxedOrString(String qualifiedErasureName) throws Exception {
         final String basicName = BOXED_QUALIFIED_TO_BASIC.get(qualifiedErasureName);
         if (basicName == null) return null;
+
         return this.getConstruct("boxedBasic:" + qualifiedErasureName, () ->
             this.proj.basics.addOrGetRef(new Basic(basicName)));
     }
