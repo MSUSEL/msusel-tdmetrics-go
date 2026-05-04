@@ -1,35 +1,34 @@
 {
+  language: java,
   abstracts: [
-    { name: $get, signature: 3 },
-    { name: $len, signature: 1 },
-    { name: $set, signature: 4 },
+    { name: $get, signature: 3 }, # 1. ???
+    { name: $len, signature: 1 }, # 2. ???
+    { name: $set, signature: 4 }, # 3. ???
   ],
   arguments: [
-    { type: basic1 },
-    { type: object1 },
-    { type: typeParam1 },
-    { name: index, type: basic1 },
-    { name: value, type: basic1 },
-    { name: value, type: typeParam1 },
+    {              type: basic1     }, # 1. ???
+    {              type: object1    }, # 2. ???
+    {              type: typeParam1 }, # 3. ???
+    { name: index, type: basic1     }, # 4. ???
+    { name: value, type: basic1     }, # 5. ???
+    { name: value, type: typeParam1 }, # 6. ???
   ],
   basics: [ int ],
   fields: [
-    { name: bar, type: basic1, vis: public },
-    { name: baz, type: interfaceInst1, vis: public },
+    { name: bar, type: basic1,         vis: public }, # 1. ???
+    { name: baz, type: interfaceInst1, vis: public }, # 2. ???
   ],
   interfaceDecls: [
-    { interface: 1, name: $Array, typeParams: [ 1 ] },
+    { interface: 1, name: $Array, typeParams: [ 1 ] }, # 1. ???
   ],
   interfaceDescs: [
-    { abstracts: [ 2 ] },
-    { abstracts: [ ] },
-    { abstracts: [ ], pin: object1 },
+    { abstracts: [ 2 ] },             # 1. ???
+    { abstracts: [ ] },               # 2. ???
+    { abstracts: [ ], pin: object1 }, # 3. ???
   ],
   interfaceInsts: [
     { generic: 1, instanceTypes: [ basic1 ], resolved: 1 },
   ],
-  language: java,
-  locs: { 1: ClassesFromSource.java },
   methods: [
     { name: Foo, package: 4, receiver: 1, signature: 2, vis: public },
   ],
@@ -66,4 +65,7 @@
   typeParams: [
     { name: T, type: interfaceDesc2 },
   ],
+  locs: {
+    1: ClassesFromSource.java,
+  },
 }
