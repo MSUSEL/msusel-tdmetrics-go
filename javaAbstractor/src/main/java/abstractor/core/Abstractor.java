@@ -812,8 +812,10 @@ public class Abstractor {
     }
 
     private void crossConnectConstructs() throws Exception {
-        for (MethodDecl m : this.proj.methodDecls.conSet)
-            m.pkg.getResolved().methodDecls.add(this.proj.methodDecls.addOrGetRef(m, "method in package " + m.pkg));
+        for (MethodDecl m : this.proj.methodDecls.conSet) {
+            Ref<MethodDecl> decl = this.proj.methodDecls.addOrGetRef(m, "method in package " + m.pkg);
+            m.pkg.getResolved().methodDecls.add(decl);
+        }
 
         for (ObjectDecl obj : this.proj.objectDecls.conSet) {
             final PackageCon pkg = obj.pkg.getResolved();

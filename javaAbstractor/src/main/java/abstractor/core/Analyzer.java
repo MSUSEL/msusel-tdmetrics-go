@@ -240,10 +240,6 @@ public class Analyzer {
     }
 
     private void addUsage(CtElement elem) throws Exception {
-        // List<Method> invokes;
-        // List<TypeDesc> reads;
-        // List<TypeDesc> writes;
-
         if (elem instanceof CtInvocation inv) {
             final CtExecutable<?> ex = inv.getExecutable().getDeclaration();
             if (ex instanceof CtMethod<?> method) {
