@@ -249,7 +249,7 @@ public class Abstractor {
         for (CtTypeReference<?> arg : typeArgs) instanceTypes.add(this.addTypeDesc(arg));
 
         final InterfaceInst      inst    = new InterfaceInst(decl, instanceTypes, decl.getResolved().inter);
-        final Ref<InterfaceInst> instRef = this.proj.interfaceInsts.addOrGetRef(inst);
+        final Ref<InterfaceInst> instRef = this.proj.interfaceInsts.addOrGetRef(inst, "external stub interface instance");
         this.proj.interfaceInsts.setRefForElem(tr, instRef);
         return instRef;
     }
@@ -263,17 +263,17 @@ public class Abstractor {
         // TODO: Decide if I should use the declaration's actual location information or continue with a pseudo location.
         final Location           loc    = this.proj.locations.create("<external-stub>", 0);
         final String             simple = this.stubSimpleName(erasureQualName);
-        final Ref<InterfaceDesc> inter  = this.proj.interfaceDescs.addOrGetRef(new InterfaceDesc(new TreeSet<>()));
+        final Ref<InterfaceDesc> inter  = this.proj.interfaceDescs.addOrGetRef(new InterfaceDesc(new TreeSet<>()), "external interface decs");
 
         final InterfaceDecl      decl = new InterfaceDecl(pkgRef, loc, simple, inter, new ArrayList<>());
-        final Ref<InterfaceDecl> ref  = this.proj.interfaceDecls.addOrGetRef(decl);
+        final Ref<InterfaceDecl> ref  = this.proj.interfaceDecls.addOrGetRef(decl, "external interface decl");
         this.externalInterfaceStubByErasure.put(erasureQualName, ref);
         pkgRef.getResolved().interfaceDecls.add(ref);
         return ref;
     }
 
     private Ref<PackageCon> ensureStubPackage(String packageName) throws Exception {
-        return this.proj.packages.addOrGetRef(new PackageCon(packageName, ""));
+        return this.proj.packages.addOrGetRef(new PackageCon(packageName, ""), "ensure stub package for " + packageName);
     }
 
     private String stubPackageName(String erasureQualifiedName) {
@@ -349,7 +349,7 @@ public class Abstractor {
                 for (CtMethod<?> m : c.getAllMethods()) {
                     if (!m.isStatic() && !isObjectMethod(m)) abstracts.add(this.addAbstract(m));
                 }
-                obj.inter = this.proj.interfaceDescs.addOrGetRef(new InterfaceDesc(abstracts, ref));
+                obj.inter = this.proj.interfaceDescs.addOrGetRef(new InterfaceDesc(abstracts, ref), "interface for object");
 
                 // TODO: Finish implementing
                 //System.out.println("1) >>> " + c.getSuperInterfaces());
@@ -813,7 +813,7 @@ public class Abstractor {
 
     private void crossConnectConstructs() throws Exception {
         for (MethodDecl m : this.proj.methodDecls.conSet)
-            m.pkg.getResolved().methodDecls.add(this.proj.methodDecls.addOrGetRef(m));
+            m.pkg.getResolved().methodDecls.add(this.proj.methodDecls.addOrGetRef(m, "method in package " + m.pkg));
 
         for (ObjectDecl obj : this.proj.objectDecls.conSet) {
             final PackageCon pkg = obj.pkg.getResolved();

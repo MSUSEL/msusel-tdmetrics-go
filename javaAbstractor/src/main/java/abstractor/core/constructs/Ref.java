@@ -62,13 +62,16 @@ public class Ref<T extends Construct> extends ConstructImp {
         obj.put("context", this.context);
         obj.putNotEmpty("typeArgs", keyList(this.typeArgs));
 
-        //obj.put("refHash", this.hashCode());
-        //if (this.isResolved())
-        //    obj.put("resHash", this.res.hashCode());
-        //if (this.elem != null) {
-        //    obj.put("elemHash", this.elem.hashCode());
-        //    obj.put("elemType", this.elem.getClass().getSimpleName());
-        //}
+        final boolean showExtras = true;
+        if (showExtras) {
+            obj.put("refHash", this.hashCode());
+            if (this.isResolved())
+                obj.put("resHash", this.res.hashCode());
+            if (this.elem != null) {
+                obj.put("elemHash", this.elem.hashCode());
+                obj.put("elemType", this.elem.getClass().getSimpleName());
+            }
+        }
         return obj;
     }
 

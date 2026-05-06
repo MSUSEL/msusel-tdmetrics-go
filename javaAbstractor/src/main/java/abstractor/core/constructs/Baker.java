@@ -19,137 +19,123 @@ public class Baker {
 
     @SuppressWarnings("unchecked")
     private <T extends Construct> T getConstruct(String name, ConstructCreator<T> creator) throws Exception {
-        Construct existing = cache.get(name);
+        final Construct existing = cache.get(name);
         if (existing != null) return (T)existing;
-        T value = creator.create();
+
+        final T value = creator.create();
         cache.put(name, value);
         return value;
     }
 
+    private <T extends Construct> Ref<T> getConstruct(String name, Factory<T> factory, ConstructCreator<T> creator) throws Exception {
+        return this.getConstruct(name, () -> factory.addOrGetRef(creator.create(), "baker: " + name));
+    }
+
     public Ref<InterfaceDesc> objectDesc() throws Exception {
-        return this.getConstruct("objectInterfaceDesc", () -> {
-            final InterfaceDesc desc = new InterfaceDesc(Collections.emptySortedSet());
-            return this.proj.interfaceDescs.addOrGetRef(desc);
-        });
+        return this.getConstruct("objectInterfaceDesc", this.proj.interfaceDescs,
+            () -> new InterfaceDesc(Collections.emptySortedSet()));
     }
     
     private Ref<Basic> intBasic() throws Exception {
-        return this.getConstruct("intBasic", () -> {
-            return this.proj.basics.addOrGetRef(new Basic("int"));
-        });
+        return this.getConstruct("intBasic", this.proj.basics,
+            () -> new Basic("int"));
     }
 
     private Ref<TypeParam> genT() throws Exception {
-        return this.getConstruct("genT", () -> {
-            final TypeParam tp = new TypeParam("T", this.objectDesc());
-            return this.proj.typeParams.addOrGetRef(tp);
-        });
+        return this.getConstruct("genT", this.proj.typeParams,
+            () -> new TypeParam("T", this.objectDesc()));
     }
 
     private Ref<Argument> intReturn() throws Exception {
-        return this.getConstruct("intReturn", () -> {
-            return this.proj.arguments.addOrGetRef(new Argument(this.intBasic()));
-        });
+        return this.getConstruct("intReturn", this.proj.arguments,
+            () -> new Argument(this.intBasic()));
     }
 
     private Ref<Argument> intIndexParam() throws Exception {
-        return this.getConstruct("intIndexParam", () -> {
-            return this.proj.arguments.addOrGetRef(new Argument("index", this.intBasic()));
-        });
+        return this.getConstruct("intIndexParam", this.proj.arguments,
+            () -> new Argument("index", this.intBasic()));
     }
 
     private Ref<Argument> genReturn(String tdName, Ref<? extends TypeDesc> td) throws Exception {
-        return this.getConstruct("genReturn<" + tdName + ">", () -> {
-            return this.proj.arguments.addOrGetRef(new Argument(td));
-        });
+        return this.getConstruct("genReturn<" + tdName + ">", this.proj.arguments,
+            () -> new Argument(td));
     }
 
     private Ref<Argument> valueGenParam(String tdName, Ref<? extends TypeDesc> td) throws Exception {
-        return this.getConstruct("valueGenParam<" + tdName + ">", () -> {
-            return this.proj.arguments.addOrGetRef(new Argument("value", td));
-        });
+        return this.getConstruct("valueGenParam<" + tdName + ">", this.proj.arguments,
+            () -> new Argument("value", td));
     }
 
     private Ref<Signature> lenSignature() throws Exception {
-        return this.getConstruct("lenSignature", () -> {
+        return this.getConstruct("lenSignature", this.proj.signatures, () -> {
             final ArrayList<Ref<Argument>> results = new ArrayList<Ref<Argument>>();
             results.add(this.intReturn());
-            final Signature sig = new Signature(false, Collections.emptyList(), results);
-            return this.proj.signatures.addOrGetRef(sig);
+            return new Signature(false, Collections.emptyList(), results);
         });
     }
 
     private Ref<Signature> getSignature(String tdName, Ref<? extends TypeDesc> td) throws Exception {
-        return this.getConstruct("getSignature<" + tdName + ">", () -> {
+        return this.getConstruct("getSignature<" + tdName + ">", this.proj.signatures, () -> {
             final ArrayList<Ref<Argument>> params = new ArrayList<Ref<Argument>>();
             params.add(this.intIndexParam());
             final ArrayList<Ref<Argument>> results = new ArrayList<Ref<Argument>>();
             results.add(this.genReturn(tdName, td));
-            final Signature sig = new Signature(false, params, results);
-            return this.proj.signatures.addOrGetRef(sig);
+            return new Signature(false, params, results);
         });
     }
 
     private Ref<Signature> setSignature(String tdName, Ref<? extends TypeDesc> td) throws Exception {
-        return this.getConstruct("setSignature<" + tdName + ">", () -> {
+        return this.getConstruct("setSignature<" + tdName + ">", this.proj.signatures, () -> {
             final ArrayList<Ref<Argument>> params = new ArrayList<Ref<Argument>>();
             params.add(this.intIndexParam());
             params.add(this.valueGenParam(tdName, td));
-            final Signature sig = new Signature(false, params, Collections.emptyList());
-            return this.proj.signatures.addOrGetRef(sig);
+            return new Signature(false, params, Collections.emptyList());
         });
     }
 
     private Ref<Abstract> lenAbstract() throws Exception {
-        return this.getConstruct("lenAbstract", () -> {
-            final Abstract abs = new Abstract("$len", this.lenSignature());
-            return this.proj.abstracts.addOrGetRef(abs);
-        });
+        return this.getConstruct("lenAbstract", this.proj.abstracts,
+            () -> new Abstract("$len", this.lenSignature()));
     }
 
     private Ref<Abstract> getAbstract(String tdName, Ref<? extends TypeDesc> td) throws Exception {
-        return this.getConstruct("getAbstract<" + tdName + ">", () -> {
-            final Abstract abs = new Abstract("$get", this.getSignature(tdName, td));
-            return this.proj.abstracts.addOrGetRef(abs);
-        });
+        return this.getConstruct("getAbstract<" + tdName + ">", this.proj.abstracts,
+            () -> new Abstract("$get", this.getSignature(tdName, td)));
     }
 
     private Ref<Abstract> setAbstract(String tdName, Ref<? extends TypeDesc> td) throws Exception {
-        return this.getConstruct("setAbstract<" + tdName + ">", () -> {
-            final Abstract abs = new Abstract("$set", this.setSignature(tdName, td));
-            return this.proj.abstracts.addOrGetRef(abs);
-        });
+        return this.getConstruct("setAbstract<" + tdName + ">", this.proj.abstracts,
+            () -> new Abstract("$set", this.setSignature(tdName, td)));
     }
 
     private Ref<InterfaceDesc> arrayDesc(String tdName, Ref<? extends TypeDesc> td) throws Exception {
-        return this.getConstruct("arrayDesc<" + tdName + ">", () -> {
+        return this.getConstruct("arrayDesc<" + tdName + ">", this.proj.interfaceDescs, () -> {
             final TreeSet<Ref<Abstract>> abs = new TreeSet<Ref<Abstract>>();
             abs.add(this.lenAbstract());
             abs.add(this.getAbstract(tdName, td));
             abs.add(this.setAbstract(tdName, td));
-            final InterfaceDesc desc = new InterfaceDesc(abs);
-            return this.proj.interfaceDescs.addOrGetRef(desc);
+            return new InterfaceDesc(abs);
         });
     }
 
     private Ref<InterfaceDecl> arrayDecl() throws Exception {
-        return this.getConstruct("arrayDecl", () -> {
+        return this.getConstruct("arrayDecl", this.proj.interfaceDecls, () -> {
             final Ref<TypeParam> tdT = this.genT();
             final ArrayList<Ref<TypeParam>> tp = new ArrayList<Ref<TypeParam>>();
             tp.add(tdT);
             final Ref<InterfaceDesc> desc = this.arrayDesc("$T", tdT);
-            final InterfaceDecl decl = new InterfaceDecl(null, null, "$Array", desc, tp);
-            return this.proj.interfaceDecls.addOrGetRef(decl);
+            return new InterfaceDecl(null, null, "$Array", desc, tp);
         });
     }
     
     public Ref<InterfaceInst> arrayInst(String tdName, Ref<? extends TypeDesc> td) throws Exception {
-        final Ref<InterfaceDecl> generic = this.arrayDecl();
-        final ArrayList<Ref<? extends TypeDesc>> its = new ArrayList<Ref<? extends TypeDesc>>();
-        its.add(td);
-        final Ref<InterfaceDesc> resolved = this.arrayDesc(tdName, td);
-        final InterfaceInst inst = new InterfaceInst(generic, its, resolved);
-        return this.proj.interfaceInsts.addOrGetRef(inst);
+        return this.getConstruct("arrayInst<" + tdName + ">", this.proj.interfaceInsts, () -> {
+            final Ref<InterfaceDecl> generic = this.arrayDecl();
+            final ArrayList<Ref<? extends TypeDesc>> its = new ArrayList<Ref<? extends TypeDesc>>();
+            its.add(td);
+            final Ref<InterfaceDesc> resolved = this.arrayDesc(tdName, td);
+            return new InterfaceInst(generic, its, resolved);
+        });
     }
 
     /**
@@ -175,7 +161,7 @@ public class Baker {
         final String basicName = BOXED_QUALIFIED_TO_BASIC.get(qualifiedErasureName);
         if (basicName == null) return null;
 
-        return this.getConstruct("boxedBasic:" + qualifiedErasureName, () ->
-            this.proj.basics.addOrGetRef(new Basic(basicName)));
+        return this.getConstruct("boxedBasic:" + qualifiedErasureName, this.proj.basics,
+            () -> new Basic(basicName));
     }
 }

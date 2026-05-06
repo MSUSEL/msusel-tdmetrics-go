@@ -139,15 +139,26 @@ public class Factory<T extends Construct> implements Jsonable {
         return newRef;
     }
 
-    public Ref<T> addOrGetRef(T c) throws Exception {
+
+    static private CmpOptions resolvedCmpOptionsSingleton = null;
+    private CmpOptions resolvedCmpOptions() {
+        if (resolvedCmpOptionsSingleton != null) return resolvedCmpOptionsSingleton;
+        CmpOptions options = new CmpOptions();
+        options.useResolved = true;
+        resolvedCmpOptionsSingleton = options;
+        return options;
+    }
+
+    public Ref<T> addOrGetRef(T c, String context) throws Exception {
         final T other = this.getExisting(c);
         if (other != null) c = other;
 
         Ref<T> ref = this.nonElemRef.get(c);
         if (ref != null) return ref;
 
-        ref = new Ref<T>(this.conKind, null, "no element ref");
+        ref = new Ref<T>(this.conKind, null, "no element ref: " + context);
         ref.setResolved(c);
+        ref.setCmpOptions(resolvedCmpOptions());
 
         this.refSet.add(ref);
         this.conSet.add(c);
@@ -160,8 +171,7 @@ public class Factory<T extends Construct> implements Jsonable {
         final ArrayList<T> conList = new ArrayList<T>(this.conSet);
         this.conSet.clear();
 
-        CmpOptions options = new CmpOptions();
-        options.useResolved = true;
+        CmpOptions options = resolvedCmpOptions();
         for (T con : conList) con.setCmpOptions(options);
         for (Ref<T> ref : this.refSet) ref.setCmpOptions(options);
 
