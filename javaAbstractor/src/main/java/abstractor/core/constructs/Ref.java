@@ -62,7 +62,7 @@ public class Ref<T extends Construct> extends ConstructImp {
         obj.put("context", this.context);
         obj.putNotEmpty("typeArgs", keyList(this.typeArgs));
 
-        final boolean showExtras = true;
+        final boolean showExtras = false;
         if (showExtras) {
             obj.put("refHash", this.hashCode());
             if (this.isResolved())

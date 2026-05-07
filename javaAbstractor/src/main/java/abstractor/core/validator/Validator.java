@@ -2,9 +2,6 @@ package abstractor.core.validator;
 
 import abstractor.core.log.Logger;
 
-import java.util.ArrayList;
-import java.util.TreeSet;
-
 import abstractor.core.constructs.*;
 
 public class Validator {
@@ -22,30 +19,34 @@ public class Validator {
     }
 
     private void validate(Factory<? extends Construct> factory) {
-        for (Ref<? extends Construct> ref : factory.refSet) this.validateRef(factory, ref);
+        for (Ref<? extends Construct> ref : factory.refSet) this.validateRef(factory, ref, "factory ref");
         for (Construct con : factory.conSet) this.validateCon(factory, con);
     }
 
-    private void validateRef(Factory<? extends Construct> factory, Ref<? extends Construct> ref) {
+    private void validateRef(Factory<? extends Construct> factory, Ref<? extends Construct> ref, String usage) {
         if (ref.kind() != factory.kind())
             this.log.error("Expected all references to have the kind of the factory but " + ref +
-                " was " + ref.kind() + " in " + factory + " with the kind " + factory.kind() + ".");
+                " (" + usage + ") was " + ref.kind() + " in " + factory + " with the kind " + factory.kind() + ".");
+
+        if (!this.foundInFactory(ref))
+            this.log.error("Expected all references to exist in factory " +
+                "but " + ref + " (" + usage + ") was not in factory.");
 
         if (!ref.isResolved()) {
-            this.log.error("Expected all references to be resolved but " + ref + " was not resolved.");
+            this.log.error("Expected all references to be resolved but " + ref + " (" + usage + ") was not resolved.");
             return;
         }
 
         final Construct con = ref.getResolved();
-        if (!this.foundInFactory(con)) {
+        if (!this.foundInFactory(con))
             this.log.error("Expected all resolved references to exist in factory " +
-                "but " + ref + " resolved to " + con + " was not in factory.");
-        }
+                "but " + ref + " (" + usage + ") resolved to " + con + " was not in factory.");
     }
 
     private boolean foundInFactory(Construct con) {
-        final Factory<? extends Construct> conFactory = this.proj.getFactory(con.kind());
-        for (Construct other : conFactory.conSet) {
+        final Factory<? extends Construct> factory = this.proj.getFactory(con.kind());
+        final Iterable<? extends Construct> set = (con instanceof Ref<?>) ? factory.refSet : factory.conSet;
+        for (Construct other : set) {
             // Use `==` not `equals` to ensure exact reference.
             if (other == con) return true;
         }
@@ -208,8 +209,7 @@ public class Validator {
             return;
         }
 
-        
-
-        // TODO: Finish implementing
+        final Factory<? extends Construct> factory = this.proj.getFactory(child.kind());
+        this.validateRef(factory, child, parent + "." +usage);
     }
 }
