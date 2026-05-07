@@ -5,7 +5,7 @@ import abstractor.core.cmp.CmpOptions;
 import abstractor.core.json.*;
 
 public class Argument extends ConstructImp {
-    public String        name;
+    public String                  name;
     public Ref<? extends TypeDesc> type;
 
     public Argument() {}

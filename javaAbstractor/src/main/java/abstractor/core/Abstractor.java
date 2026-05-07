@@ -169,10 +169,10 @@ public class Abstractor {
         if (elem instanceof CtAnnotationType<?>) return null;
 
         // Check CtEnum before CtClass since CtEnum extends CtClass.
-        if (elem instanceof CtEnum<?> e)      return this.addObjectDecl(e);
-        if (elem instanceof CtClass<?> c)     return this.addObjectDecl(c);
+        if (elem instanceof CtEnum<?>      e) return this.addObjectDecl(e);
+        if (elem instanceof CtClass<?>     c) return this.addObjectDecl(c);
         if (elem instanceof CtInterface<?> i) return this.addInterfaceDecl(i);
-        if (elem instanceof CtMethod<?> m)    return this.addGeneralMethod(m);
+        if (elem instanceof CtMethod<?>    m) return this.addGeneralMethod(m);
 
         this.log.warning("Skipping unhandled decl (" + elem.getClass().getName() + ")");
         return null;
@@ -192,8 +192,8 @@ public class Abstractor {
         if (elem instanceof CtTypeReference<?> tr) elem = tr.getTypeDeclaration();
         if (elem == null) return null;
 
-        if (elem instanceof CtEnum<?> e)      return this.addObjectDecl(e);
-        if (elem instanceof CtClass<?> c)     return this.addObjectDecl(c);
+        if (elem instanceof CtEnum<?>      e) return this.addObjectDecl(e);
+        if (elem instanceof CtClass<?>     c) return this.addObjectDecl(c);
         if (elem instanceof CtInterface<?> i) return this.addInterfaceDecl(i);
 
         this.log.warning("Skipping unhandled type decl (" + elem.getClass().getName() + ")");
@@ -205,10 +205,11 @@ public class Abstractor {
         if (elem == null) return "(null)";
         try {
             if (elem instanceof CtTypeReference<?> tr) return tr.getQualifiedName();
-            if (elem instanceof CtType<?> ty)          return ty.getQualifiedName();
-            if (elem instanceof CtExecutable<?> ex)    return ex.getSignature();
-        } catch (Exception ignored) {
+            if (elem instanceof CtType<?>          ty) return ty.getQualifiedName();
+            if (elem instanceof CtExecutable<?>    ex) return ex.getSignature();
+        } catch (Exception ex) {
             // fall through
+            // TODO: DO NOT ignore all exceptions. Use a "logged Exception" to break early. Any other exception must be caught and dealt with.
         }
         return elem.getClass().getName();
     }
@@ -226,7 +227,8 @@ public class Abstractor {
             // Unlike Go's nil that can carry the type, Java's null type has
             // no type associated with it so instead use an object.
             if (nullName.equals(tr.getQualifiedName())) return this.proj.baker.objectDesc();
-        } catch (Exception ignored) {
+        } catch (Exception ex) {
+            // TODO: DO NOT ignore all exceptions. Use a "logged Exception" to break early. Any other exception must be caught and dealt with.
             return this.proj.baker.objectDesc();
         }
 
@@ -600,7 +602,9 @@ public class Abstractor {
         if (tr == null) return "(null)";
         try {
             return tr.getQualifiedName();
-        } catch (Exception e) {
+        } catch (Exception ignored) {
+            // Do not worry about the exception here because it is only from Spoon
+            // getting a qualified name and we can recover by using the toString via valueOf.
             return String.valueOf(tr);
         }
     }
@@ -617,8 +621,9 @@ public class Abstractor {
         // Type of the `null` literal in Spoon - not a real external type.
         try {
             if (nullName.equals(tr.getQualifiedName())) return this.proj.baker.objectDesc();
-        } catch (Exception ignored) {
+        } catch (Exception ex) {
             // fall through
+            // TODO: DO NOT ignore all exceptions. Use a "logged Exception" to break early. Any other exception must be caught and dealt with.
         }
 
         // Use getTypeDeclaration (not getDeclaration) to get shadow types
@@ -678,6 +683,8 @@ public class Abstractor {
         try {
             if (objName.equals(bound.getQualifiedName())) return this.proj.baker.objectDesc();
         } catch (Exception ignored) {
+            // The exception here can be ignored since it comes from Spoon
+            // failing to get the qualified name and it can be recovered from.
             return this.proj.baker.objectDesc();
         }
         return this.addTypeDesc(bound);
