@@ -338,7 +338,11 @@ public class Abstractor {
                 
                 // Add constructors as (static) methods.
                 for (CtConstructor<?> ctor : c.getConstructors()) {
-                    if (ctor.getParent().equals(c)) this.addConstructorMethod(ref, ctor);
+                    if (ctor.getParent().equals(c)) {
+                        // Skip default constructors
+                        if (this.isDefaultConstructor(ctor)) continue;
+                        this.addConstructorMethod(ref, ctor);
+                    }
                 }
 
                 // Add methods for the class.
@@ -361,11 +365,20 @@ public class Abstractor {
             });
     }
 
+    public boolean isDefaultConstructor(CtConstructor<?> ctor) throws Exception {
+        boolean skip = ctor.getBody() == null || ctor.getBody().getStatements().size() <= 0;
+
+        // TODO: Fix, make this work, then reduce logging. 
+        this.log.log("skip = " + skip + " for constructor " + ctor.getSignature());
+        
+        if (skip) this.log.notice("skipping default constructor: " + ctor.getSignature());
+        return skip;
+    }
+
     public Ref<MethodDecl> addConstructorMethod(Ref<ObjectDecl> receiver, CtConstructor<?> ctor) throws Exception {
         if (!receiver.isResolved())
             throw new Exception("Expected the receiver for a constructor method to be resolved: " + receiver.toString());
         ObjectDecl recv = receiver.getResolved();
-
         return this.proj.methodDecls.create(log, ctor,
             "constructor " + ctor.getSignature(),
             () -> {
@@ -374,7 +387,10 @@ public class Abstractor {
                 final String               name       = recv.name;
                 final Ref<Signature>       signature  = this.addConstructSignature(ctor);
                 final List<Ref<TypeParam>> typeParams = this.addTypeParams(ctor.getFormalCtTypeParameters());
-                return new MethodDecl(pkg, receiver, loc, name, signature, typeParams);
+                MethodDecl md = new MethodDecl(pkg, receiver, loc, name, signature, typeParams);
+                md.constructor = true;
+                md.isStatic = true;
+                return md;
             },
             (Ref<MethodDecl> ref, MethodDecl md) -> {
                 md.setVisibility(ctor);
@@ -414,7 +430,9 @@ public class Abstractor {
                 final String               name       = m.getSimpleName();
                 final Ref<Signature>       signature  = this.addSignature(m);
                 final List<Ref<TypeParam>> typeParams = this.addTypeParams(m.getFormalCtTypeParameters());
-                return new MethodDecl(pkg, receiver, loc, name, signature, typeParams);
+                MethodDecl md = new MethodDecl(pkg, receiver, loc, name, signature, typeParams);
+                md.isStatic = m.isStatic();
+                return md;
             },
             (Ref<MethodDecl> ref, MethodDecl md) -> {
                 md.setVisibility(m);

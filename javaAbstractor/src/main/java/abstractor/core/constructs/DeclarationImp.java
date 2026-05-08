@@ -11,6 +11,7 @@ public abstract class DeclarationImp extends ConstructImp implements Declaration
     public Location        loc;
     public String          name;
     public String          visibility;
+    public boolean         isStatic;
 
     public DeclarationImp() {}
 
@@ -19,6 +20,7 @@ public abstract class DeclarationImp extends ConstructImp implements Declaration
         this.loc        = loc;
         this.name       = name;
         this.visibility = "";
+        this.isStatic   = false;
     }
 
     public void setVisibility(CtModifiable mod) {
@@ -30,8 +32,9 @@ public abstract class DeclarationImp extends ConstructImp implements Declaration
         JsonObject obj = (JsonObject)super.toJson(h);
         if (this.pkg != null) obj.put("package", index(pkg));
         if (this.loc != null) obj.putNotEmpty("loc", this.loc.toJson(h));
-        obj.putNotEmpty("name", this.name);
-        obj.putNotEmpty("vis",  this.visibility);
+        obj.putNotEmpty("name",   this.name);
+        obj.putNotEmpty("vis",    this.visibility);
+        obj.putNotEmpty("static", this.isStatic);
         return obj;
     }
 

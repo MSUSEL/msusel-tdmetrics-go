@@ -13,8 +13,7 @@ public class MethodDecl extends DeclarationImp implements Method {
     public Ref<Signature>  signature;
     public final ArrayList<Ref<TypeParam>> typeParams = new ArrayList<Ref<TypeParam>>();
     public final TreeSet<Ref<MethodInst>>  instances  = new TreeSet<Ref<MethodInst>>();
-    // TODO: Add a flag to indicate if this method is a constructor or not.
-    
+    public boolean constructor;
     public Ref<Metrics> metrics;
 
     public MethodDecl() {}
@@ -32,20 +31,21 @@ public class MethodDecl extends DeclarationImp implements Method {
     @Override
     public JsonNode toJson(JsonHelper h) {
         JsonObject obj = (JsonObject)super.toJson(h);
-        obj.putNotEmpty("instances",  indexSet(this.instances));
-        obj.putNotEmpty("metrics",    index(this.metrics));
-        obj.putNotEmpty("receiver",   index(this.receiver));
-        obj.putNotEmpty("signature",  index(this.signature));
-        obj.putNotEmpty("typeParams", indexList(this.typeParams));
+        obj.putNotEmpty("instances",   indexSet(this.instances));
+        obj.putNotEmpty("metrics",     index(this.metrics));
+        obj.putNotEmpty("receiver",    index(this.receiver));
+        obj.putNotEmpty("signature",   index(this.signature));
+        obj.putNotEmpty("typeParams",  indexList(this.typeParams));
+        obj.putNotEmpty("constructor", this.constructor);
         return obj;
     }
 
     @Override
     public Cmp getCmp(Construct c, CmpOptions options) {
         return Cmp.or(super.getCmp(c, options),
-            Cmp.defer(    this.receiver,   () -> ((MethodDecl)c).receiver),
-            Cmp.defer(    this.signature,  () -> ((MethodDecl)c).signature),
-            Cmp.deferList(this.typeParams, () -> ((MethodDecl)c).typeParams)
+            Cmp.defer(    this.receiver,    () -> ((MethodDecl)c).receiver),
+            Cmp.defer(    this.signature,   () -> ((MethodDecl)c).signature),
+            Cmp.deferList(this.typeParams,  () -> ((MethodDecl)c).typeParams)
         );
     }
 }
