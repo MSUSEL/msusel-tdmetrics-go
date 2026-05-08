@@ -1,16 +1,129 @@
-# Agent Guidelines
+# AGENTS.md — msusel-tdmetrics-go
+
+PhD research pipeline for technical-debt analysis of procedural and OO languages. This file is the agent's starting map of the repo. For deeper context, see `.agents/summary/index.md`.
+
+## TL;DR
+
+- Three components, one shared schema:
+  - `goAbstractor/` (Go 1.25) and `javaAbstractor/` (Java 17 + Spoon 11.2.0) both emit JSON conforming to **`docs/genFeatureDef.md`**.
+  - `techDebtMetrics/` (.NET 8) consumes that JSON to compute design-recovery and technical-debt metrics.
+- Active workstream: **complete the Java abstractor** so it can process all 31 Apache projects in `javaAbstractor/tdd/td_V2.db`. Plan: `.agents/planning/2026-05-01-java-abstractor-completion/implementation/plan.md` (Steps 1–2 done; Step 3 = enums next).
+- Researcher controls all changes. Plan first, write only when asked, never run `git add` / `git commit` / `git push`. See **Custom Instructions** below.
+
+## Repository Layout
+
+| Path | What lives here |
+| --- | --- |
+| `goAbstractor/` | Go module. CLI: `main.go`. Library: `internal/abstractor/abstractor.go` (`Abstract(Config) Project`). |
+| `javaAbstractor/` | Maven project. CLI: `abstractor.app.App`. Core walk: `abstractor.core.Abstractor` over Spoon's `CtModel`. |
+| `techDebtMetrics/` | .NET 8 solution. `Constructs/` mirrors the schema 1:1; `DesignRecovery/` and `TechDebt/` consume it; `Runner/Program.cs` is **currently a `NotImplementedException` stub**. |
+| `docs/` | Schema (`genFeatureDef.md`) and design notes (`spoonNotes.md`, `ducktype.md`, `extendingPointers.md`, `participationMatrix.md`, `tdResults.md`). |
+| `testData/go/` , `testData/java/` | Integration fixtures with expected `abstraction.yaml` goldens. `testData/java/test10NN` are single-file Tester fixtures; lower numbers are full Maven projects. |
+| `.agents/planning/` | Multi-step plans. The currently-active plan is `2026-05-01-java-abstractor-completion/`. |
+| `.agents/summary/` | Generated knowledge base. Start at `index.md`. |
+| `.cursor/rules/java-abstractor-handoff.mdc` | Auto-loaded handoff rule when editing the Java abstractor. |
+| `.cursor/commands/*.sop.md` | SOP commands available via `/<name>` in Cursor (`code-assist`, `code-task-generator`, `codebase-summary`, `eval`, `pdd`). |
+| `.github/workflows/ci.yaml` | CI: Go tests on Linux/Win/macOS + golangci-lint, Java `mvn test`, `dotnet test`. |
+| `Makefile` | Aggregates per-component `*-test` and `*-clean` targets. |
+| `AGENTS.md` | This file. |
+
+## Component Map
+
+```mermaid
+flowchart LR
+    GoSrc[Go source] --> GA[goAbstractor]
+    JSrc[Java/Maven] --> JA[javaAbstractor]
+    GA --> Schema[(genFeatureDef.md JSON)]
+    JA --> Schema
+    Schema --> TDM[techDebtMetrics .NET]
+    TDM --> DR[DesignRecovery]
+    TDM --> TD[TechDebt metrics]
+```
+
+### goAbstractor key entry points
+
+- `goAbstractor/main.go` — CLI (`-i`, `-o`, `-v` verbose, `-m` minimize, `-h`).
+- `internal/abstractor/abstractor.go` — `Abstract(Config) constructs.Project`. Two-phase: walk (querier + baker + converter + analyzer + instantiator) then `resolver.Resolve` (`dce/`, `genInterfaces/`, `inheritance/`, `instantiations/`, `references/`).
+- `internal/constructs/` — one folder + `.go` per construct kind. `factory.go`, `project/`, `packageCon/`. Includes temp/reference constructs (`tempReference`, `tempDeclRef`, `tempTypeParamRef`) used during resolution.
+- `internal/jsonify/` — JSON tree builder + minimization.
+- `internal/logger/` — push/pop indented logger.
+
+### javaAbstractor key entry points
+
+- `abstractor.app.App` — CLI driver; reads `Config` (Apache Commons CLI), constructs `Logger` + `Project` + `Abstractor`, calls `addMavenProject` then `finish` then `Project.toJson(JsonHelper)`.
+- `abstractor.core.Abstractor` — Spoon walk. Notable state: `pendingMetrics` (drained in batches by `processPendingMetrics` to avoid `ConcurrentModificationException`); `externalInterfaceStubByErasure` (stub `InterfaceDecl` cache by erasure-qualified name).
+- `abstractor.core.constructs.*` — one class per construct, plus `Factory<T>` + `Ref<T>` infrastructure and `Baker` (well-known basics, `basicForBoxedOrString` for JDK boxed types and `String`).
+- `abstractor.core.json.*` — JSON build/parse/format with `JsonHelper` toggles (`writeKinds`, `writeIndices`, `writeRefs`).
+- The Java abstractor today is a single-phase walk + JSON. A separate resolver pass is planned (Step 12).
+
+### techDebtMetrics key entry points
+
+- `Runner/Program.cs` — **stub** (`throw new NotImplementedException`).
+- `Constructs/Project.cs` — root with `IReadOnlyList<...>` per construct. Implements `IConstruct`, `IKeyResolver`.
+- Construct interfaces: `IConstruct`, `IDeclaration`, `IInterface`, `IMethod`, `IObject`, `ITypeDesc`.
+- `DesignRecovery/DesignRecovery.cs` — analysis entry; participation/membership computation is **mostly commented out** (TODO: synthesised object for basics and projects).
+- `TechDebt/{Class,Method,Math,Participation,Project,Source,Validator}.cs` — TD metric computations.
+- Tests: `UnitTests/CommonsTests/`, `UnitTests/ConstructTests/`.
+
+## Repo-Specific Conventions
+
+These differ from defaults and matter when writing code:
+
+- **Cross-language pattern mirror**: Java loosely mirrors Go for maintainability — `Factory<T>` + `Ref<T>`, `Cmp`/`CmpOptions`, `Jsonable.toJson(JsonHelper)`, `Logger` with push/pop indentation. Use the existing pattern even when a more idiomatic per-language one exists.
+- **External JDK/library types (Java)**: emit **named stubs**, not collapsed-to-`Object`. Boxed primitives + `String` route through `Baker.basicForBoxedOrString` to shared `Basic`s; everything else through `Abstractor.addExternalStub` (cached by erasure-QN, parameterized refs become `InterfaceInst`).
+- **Annotations (Java)**: used to inform analysis; do **not** emit them as constructs. `CtAnnotationType` → `Logger.notice` + `objectDesc`.
+- **Anonymous classes and lambdas (Java)**: fold into the enclosing method's metrics. Named nested classes are separate objects with a `nest` field.
+- **Generic instantiations**: tracked as distinct constructs (`ObjectInst`, `MethodInst`, `InterfaceInst`).
+- **Package imports**: derive from actual type usage, **not** from `import` statements.
+- **Type dispatch (Java)**: use `tr.getTypeDeclaration()` (not `getDeclaration()`); wrap in try/catch and fall back to `objectDesc` (or `null` for declarations) with a logged warning.
+- **Null/unknown (Java)**: `<nulltype>` is a no-op so null-literal usage doesn't create stubs. `Analyzer` skips `invokes.add` when `addDeclaration` returns null and skips field reads when `getFieldDeclaration()` is null.
+- **Log-and-continue**: never crash on unhandled constructs. TD analysis tolerates imprecision.
+- **Spoon fixtures**: avoid `System.out.println` in single-file Tester fixtures — Spoon will pull large JDK graphs.
+
+## Test Layout (non-obvious bits)
+
+- `testData/go/test0001`–`test0018` and `testData/java/{test0001,test0002,test1001..test1005}`. Each fixture pairs source with an `abstraction.yaml` golden (some Go fixtures also carry `expStub.txt`).
+- Java tests under `javaAbstractor/src/test/java/abstractor/`:
+  - `AppTests` — full-Maven fixtures.
+  - `core.Tester` — single-file fixture harness.
+  - `core.RobustnessTests` (Step 1), `core.MetricsTests` (currently being stabilized), `core.JsonTests`, `core.DiffTests`, `core.IterTests`.
+- Run filters: `mvn -Dtest="abstractor.AppTests#test0001" test`, `dotnet test --filter <name>`.
+
+## Active Plan
+
+`.agents/planning/2026-05-01-java-abstractor-completion/` (15 steps, ordered). Status:
+
+- ✅ Step 1 — Robustness (type dispatch hardening).
+- ✅ Step 2 — External type stubs and boxing.
+- ▶️ Step 3 — Enum completion. Touchpoints: `Abstractor.addEnum` / `addObjectDecl` for `CtEnum` (constants as `Value` in package; struct + `$value` field; user methods only — skip `values()` / `valueOf()` noise). New fixture `test1006`.
+
+See `summary.md` and `.cursor/rules/java-abstractor-handoff.mdc` for the concise handoff.
+
+## Where to Look First
+
+- "Where is X implemented?" → `.agents/summary/components.md`.
+- "How does the pipeline run end-to-end?" → `.agents/summary/workflows.md`.
+- "What does construct Y mean / how is it represented?" → `docs/genFeatureDef.md` then `.agents/summary/data_models.md`.
+- "What CLI flags does each abstractor take?" → `.agents/summary/interfaces.md`.
+- "What's the next step in the active plan?" → `.agents/planning/2026-05-01-java-abstractor-completion/implementation/plan.md`.
+
+## Custom Instructions
+
+<!-- This section is maintained by developers and agents during day-to-day work.
+     It is NOT auto-generated by codebase-summary and MUST be preserved during refreshes.
+     Add project-specific conventions, gotchas, and workflow requirements here. -->
 
 This is a PhD research project for technical debt analysis of procedural and
-object-oriented languages. The researcher must remain in full control of all
+object-oriented languages. The researcher (user) must remain in full control of all
 code changes.
 
-## Git Restrictions
+### Git Restrictions
 
 - **NEVER** run `git add`, `git commit`, `git push`, or any destructive git command.
 - Only `git list`, `git fetch`, and `git diff` are permitted.
 - Do not create PRs or branches.
 
-## Interaction Model
+### Interaction Model
 
 Follow this strict iterative workflow for every code change:
 
@@ -22,24 +135,31 @@ Follow this strict iterative workflow for every code change:
 
 Never proceed to the next step without the user's explicit direction.
 
-## Code Changes
+### File-Modification Permissions
+
+- The agent may modify files in `.agents/`, `.cursor/`, and `AGENTS.md` without asking.
+- For any other path, the agent **must ask for permission** before modifying.
+- The agent must never stage, commit, or push changes; the researcher handles all revision control.
+
+### Code Changes
 
 - Each step should be roughly one feature/fix or a related set of changes.
 - Include unit tests alongside code changes (test files in `testData/java/`
   with expected YAML output).
 - The user may request an integration test first (with or without expected
   YAML) to understand the "shape of constructs" before implementation.
-- Clean up debug artifacts (`println` statements, hardcoded log flags) as
-  you encounter them.
+- Agent may clean up debug artifacts (`println` statements, hardcoded log flags)
+  if they are in the way of a change.
 - Add TODO comments for features known to be needed but not yet implemented.
 
-## Error Handling
+### Error Handling
 
-- Log warnings and continue; never crash on unhandled constructs.
+- Log warnings and continue; do not crash on unhandled constructs unless continuing
+  without handling a construct could cause a bigger problem.
 - Since technical debt analysis is estimation interpreted by humans, the
   results can tolerate some imprecision.
 
-## Code Quality
+### Code Quality
 
 - Follow good practices but do not over-engineer. This is a research tool
   with a finite lifetime, not a long-lived product.
@@ -50,9 +170,12 @@ Never proceed to the next step without the user's explicit direction.
 - Patterns loosely mirror the Go abstractor (`goAbstractor/`) for
   maintainability across both codebases.
 
-## Project Context
+### Project Context
 
-- **Progress**: Steps **1–2** of `.agents/planning/2026-05-01-java-abstractor-completion/implementation/plan.md` are implemented; **Step 3** (enum completion) is next when tests are stable. See that file’s “Completion status” section and `.cursor/rules/java-abstractor-handoff.mdc` for a concise handoff.
+- **Progress**: Steps **1–2** of `.agents/planning/2026-05-01-java-abstractor-completion/implementation/plan.md`
+  are implemented; **Step 3** (enum completion) is next when tests are stable.
+  See that file's "Completion status" section and `.cursor/rules/java-abstractor-handoff.mdc`
+  for a concise handoff.
 - **Goal**: Complete the Java Abstractor (`javaAbstractor/`) so it can
   process all 31 Apache Java projects in the Technical Debt Dataset (TDD).
 - **Output format**: JSON/YAML conforming to `docs/genFeatureDef.md`.
@@ -61,7 +184,7 @@ Never proceed to the next step without the user's explicit direction.
 - **TDD database**: `javaAbstractor/tdd/td_V2.db` (SQLite).
 - **Design docs**: `.agents/planning/2026-05-01-java-abstractor-completion/`.
 
-## Key Design Decisions
+### Key Design Decisions
 
 - External (JDK/library) types: named stubs, not collapsed to `Object`.
 - Annotations: use to inform analysis, do not output as constructs.
