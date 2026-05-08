@@ -160,7 +160,10 @@ public class Factory<T extends Construct> implements Jsonable {
         ref.setResolved(c);
         ref.setCmpOptions(resolvedCmpOptions());
 
-        this.refSet.add(ref);
+        final Ref<T> otherRef = this.refSet.floor(ref);
+        if (ref.equals(otherRef)) return otherRef;
+
+        assert(this.refSet.add(ref));
         this.conSet.add(c);
         this.nonElemRef.put(c, ref);
         return ref;
