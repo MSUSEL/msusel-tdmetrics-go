@@ -207,9 +207,10 @@ public class Abstractor {
             if (elem instanceof CtTypeReference<?> tr) return tr.getQualifiedName();
             if (elem instanceof CtType<?>          ty) return ty.getQualifiedName();
             if (elem instanceof CtExecutable<?>    ex) return ex.getSignature();
+        } catch (LoggedException ignored) {
+            // already logged; fall through to the class-name fallback.
         } catch (Exception ex) {
-            // fall through
-            // TODO: DO NOT ignore all exceptions. Use a "logged Exception" to break early. Any other exception must be caught and dealt with.
+            this.log.error("describeElement failed: " + ex.getMessage());
         }
         return elem.getClass().getName();
     }
@@ -227,8 +228,10 @@ public class Abstractor {
             // Unlike Go's nil that can carry the type, Java's null type has
             // no type associated with it so instead use an object.
             if (nullName.equals(tr.getQualifiedName())) return this.proj.baker.objectDesc();
+        } catch (LoggedException ignored) {
+            return this.proj.baker.objectDesc();
         } catch (Exception ex) {
-            // TODO: DO NOT ignore all exceptions. Use a "logged Exception" to break early. Any other exception must be caught and dealt with.
+            this.log.error("addExternalStub failed resolving qualified name: " + ex.getMessage());
             return this.proj.baker.objectDesc();
         }
 
@@ -377,7 +380,7 @@ public class Abstractor {
 
     public Ref<MethodDecl> addConstructorMethod(Ref<ObjectDecl> receiver, CtConstructor<?> ctor) throws Exception {
         if (!receiver.isResolved())
-            throw new Exception("Expected the receiver for a constructor method to be resolved: " + receiver.toString());
+            throw new AbstractorException("Expected the receiver for a constructor method to be resolved: " + receiver.toString());
         ObjectDecl recv = receiver.getResolved();
         return this.proj.methodDecls.create(log, ctor,
             "constructor " + ctor.getSignature(),
@@ -419,7 +422,7 @@ public class Abstractor {
 
     public Ref<MethodDecl> addMethod(Ref<ObjectDecl> receiver, CtMethod<?> m) throws Exception {
         if (!receiver.isResolved())
-            throw new Exception("Expected the object receiver for a method to be resolved: " + receiver.toString());
+            throw new AbstractorException("Expected the object receiver for a method to be resolved: " + receiver.toString());
         ObjectDecl recv = receiver.getResolved();
 
         return this.proj.methodDecls.create(this.log, m,
@@ -639,9 +642,11 @@ public class Abstractor {
         // Type of the `null` literal in Spoon - not a real external type.
         try {
             if (nullName.equals(tr.getQualifiedName())) return this.proj.baker.objectDesc();
+        } catch (LoggedException ignored) {
+            return this.proj.baker.objectDesc();
         } catch (Exception ex) {
-            // fall through
-            // TODO: DO NOT ignore all exceptions. Use a "logged Exception" to break early. Any other exception must be caught and dealt with.
+            this.log.error("addTypeDescImpl failed resolving qualified name: " + ex.getMessage());
+            return this.proj.baker.objectDesc();
         }
 
         // Use getTypeDeclaration (not getDeclaration) to get shadow types
@@ -723,7 +728,7 @@ public class Abstractor {
                 final String name = tr.getSimpleName();
                 if (name == "void") {
                     this.log.error("A void was added as a basic.");
-                    throw new Exception("A void was added as a basic");
+                    throw new AbstractorException("A void was added as a basic");
                 }
                 return new Basic(name);
             });
@@ -801,11 +806,11 @@ public class Abstractor {
 
                 Ref<MethodDecl> ref = this.proj.methodDecls.getRef(m);
                 if (!ref.isResolved())
-                    throw new Exception("Expected " + ref + " to be resolved before processing pending metrics.");
+                    throw new AbstractorException("Expected " + ref + " to be resolved before processing pending metrics.");
 
                 MethodDecl md = ref.getResolved();
                 if (md.metrics != null)
-                    throw new Exception("The metrics for " + md + " have already been processed before " + m.getSimpleName() + ".");
+                    throw new AbstractorException("The metrics for " + md + " have already been processed before " + m.getSimpleName() + ".");
 
                 Ref<Metrics> metRef = this.addMetrics(m);
                 Metrics met = metRef.getResolved();
@@ -854,6 +859,6 @@ public class Abstractor {
     private void validate() throws Exception {
         new Validator(this.log, this.proj).validate();
         if (this.log.errorCount() > 0)
-            throw new Exception("Errors logged before or during validation.");
+            throw new AbstractorException("Errors logged before or during validation.");
     }
 }
