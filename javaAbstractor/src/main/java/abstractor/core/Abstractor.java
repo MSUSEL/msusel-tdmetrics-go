@@ -366,11 +366,7 @@ public class Abstractor {
     }
 
     public boolean isDefaultConstructor(CtConstructor<?> ctor) throws Exception {
-        boolean skip = ctor.getBody() == null || ctor.getBody().getStatements().size() <= 0;
-
-        // TODO: Fix, make this work, then reduce logging. 
-        this.log.log("skip = " + skip + " for constructor " + ctor.getSignature());
-        
+        final boolean skip = ctor.isImplicit();
         if (skip) this.log.notice("skipping default constructor: " + ctor.getSignature());
         return skip;
     }
