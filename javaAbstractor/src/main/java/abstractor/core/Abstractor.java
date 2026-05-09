@@ -251,39 +251,14 @@ public class Abstractor {
         return instRef;
     }
 
-    private String stubPackageName(String erasureQualifiedName) {
-        final int dollar = erasureQualifiedName.indexOf('$');
-        if (dollar > 0) return erasureQualifiedName.substring(0, dollar);
-
-        final int dot = erasureQualifiedName.lastIndexOf('.');
-        if (dot <= 0) return "<unnamed>";
-
-        return erasureQualifiedName.substring(0, dot);
-    }
-
-    private String stubSimpleName(String erasureQualifiedName) {
-        final int dollar = erasureQualifiedName.indexOf('$');
-        if (dollar > 0 && dollar + 1 < erasureQualifiedName.length())
-            return erasureQualifiedName.substring(dollar + 1);
-
-        final int dot = erasureQualifiedName.lastIndexOf('.');
-        if (dot < 0) return erasureQualifiedName;
-
-        return erasureQualifiedName.substring(dot + 1);
-    }
-
     private Ref<InterfaceDecl> addErasureInterfaceDecl(CtTypeReference<?> typeErasure) throws Exception {
         final String erasureQualName = typeErasure.getQualifiedName();
         return this.proj.interfaceDecls.create(this.log, typeErasure,
             "type erasure interface decl " + erasureQualName,
             () -> {
-                // TODO: Determine if stubPackageName and stubSimpleName is needed.
-                final String pkgName = this.stubPackageName(erasureQualName);
-                final String name    = this.stubSimpleName(erasureQualName);
-                this.log.notice("adding erasure ["+pkgName+"]["+name+"]");
-
                 final Ref<PackageCon>    pkg    = this.addPackage(typeErasure.getPackage().getDeclaration());
                 final Location           loc    = this.proj.locations.create(typeErasure.getPosition());
+                final String             name   = typeErasure.getSimpleName();
                 final Ref<InterfaceDesc> inter  = this.proj.baker.anyDesc();
                 return new InterfaceDecl(pkg, loc, name, inter, new ArrayList<>());
             });
