@@ -29,11 +29,6 @@ public class Abstractor {
 
     public final HashSet<CtMethod<?>> pendingMetrics = new HashSet<CtMethod<?>>();
 
-    /**
-     * Type-erasure qualified name to stub InterfaceDecl for external Java library types. 
-     */
-    private final HashMap<String, Ref<InterfaceDecl>> externalInterfaceStubByErasure = new HashMap<>();
-
     public Abstractor(Logger log, Project proj) {
         this.log  = log;
         this.proj = proj;
@@ -207,8 +202,6 @@ public class Abstractor {
             if (elem instanceof CtTypeReference<?> tr) return tr.getQualifiedName();
             if (elem instanceof CtType<?>          ty) return ty.getQualifiedName();
             if (elem instanceof CtExecutable<?>    ex) return ex.getSignature();
-        } catch (LoggedException ignored) {
-            // already logged; fall through to the class-name fallback.
         } catch (Exception ex) {
             this.log.error("describeElement failed: " + ex.getMessage());
         }
@@ -228,8 +221,6 @@ public class Abstractor {
             // Unlike Go's nil that can carry the type, Java's null type has
             // no type associated with it so instead use an object.
             if (nullName.equals(tr.getQualifiedName())) return this.proj.baker.objectDesc();
-        } catch (LoggedException ignored) {
-            return this.proj.baker.objectDesc();
         } catch (Exception ex) {
             this.log.error("addExternalStub failed resolving qualified name: " + ex.getMessage());
             return this.proj.baker.objectDesc();
@@ -642,8 +633,6 @@ public class Abstractor {
         // Type of the `null` literal in Spoon - not a real external type.
         try {
             if (nullName.equals(tr.getQualifiedName())) return this.proj.baker.objectDesc();
-        } catch (LoggedException ignored) {
-            return this.proj.baker.objectDesc();
         } catch (Exception ex) {
             this.log.error("addTypeDescImpl failed resolving qualified name: " + ex.getMessage());
             return this.proj.baker.objectDesc();
