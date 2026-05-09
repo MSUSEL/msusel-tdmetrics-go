@@ -216,14 +216,14 @@ public class Abstractor {
      */
     public Ref<? extends TypeDesc> addExternalStub(CtTypeReference<?> tr) throws Exception {
         // If a type can not be resolved return an object (kind of like an `any` in Go).
-        if (tr == null) return this.proj.baker.objectDesc();
+        if (tr == null) return this.proj.baker.anyDesc();
         try {
             // Unlike Go's nil that can carry the type, Java's null type has
             // no type associated with it so instead use an object.
-            if (nullName.equals(tr.getQualifiedName())) return this.proj.baker.objectDesc();
+            if (nullName.equals(tr.getQualifiedName())) return this.proj.baker.anyDesc();
         } catch (Exception ex) {
             this.log.error("addExternalStub failed resolving qualified name: " + ex.getMessage());
-            return this.proj.baker.objectDesc();
+            return this.proj.baker.anyDesc();
         }
 
         final CtTypeReference<?> erasure = tr.getTypeErasure();
@@ -232,7 +232,7 @@ public class Abstractor {
         final Ref<Basic> boxed = this.proj.baker.basicForBoxedOrString(erasureQn);
         if (boxed != null) return boxed;
 
-        final Ref<InterfaceDecl> decl = this.getOrCreateExternalInterfaceDecl(erasure);
+        final Ref<InterfaceDecl> decl = this.addErasureInterfaceDecl(erasure);
 
         final List<CtTypeReference<?>> typeArgs = tr.getActualTypeArguments();
         if (typeArgs == null || typeArgs.isEmpty()) {
@@ -245,31 +245,10 @@ public class Abstractor {
         for (CtTypeReference<?> arg : typeArgs) instanceTypes.add(this.addTypeDesc(arg));
 
         final InterfaceInst      inst    = new InterfaceInst(decl, instanceTypes, decl.getResolved().inter);
+        // TODO: FIX BELOW
         final Ref<InterfaceInst> instRef = this.proj.interfaceInsts.addOrGetRef(inst, "external stub interface instance");
         this.proj.interfaceInsts.setRefForElem(tr, instRef);
         return instRef;
-    }
-
-    private Ref<InterfaceDecl> getOrCreateExternalInterfaceDecl(CtTypeReference<?> erasureRef) throws Exception {
-        final String erasureQualName = erasureRef.getQualifiedName();
-        final Ref<InterfaceDecl> cached = this.externalInterfaceStubByErasure.get(erasureQualName);
-        if (cached != null) return cached;
-
-        final Ref<PackageCon>    pkgRef = this.ensureStubPackage(this.stubPackageName(erasureQualName));
-        // TODO: Decide if I should use the declaration's actual location information or continue with a pseudo location.
-        final Location           loc    = this.proj.locations.create("<external-stub>", 0);
-        final String             simple = this.stubSimpleName(erasureQualName);
-        final Ref<InterfaceDesc> inter  = this.proj.interfaceDescs.addOrGetRef(new InterfaceDesc(new TreeSet<>()), "external interface decs");
-
-        final InterfaceDecl      decl = new InterfaceDecl(pkgRef, loc, simple, inter, new ArrayList<>());
-        final Ref<InterfaceDecl> ref  = this.proj.interfaceDecls.addOrGetRef(decl, "external interface decl");
-        this.externalInterfaceStubByErasure.put(erasureQualName, ref);
-        pkgRef.getResolved().interfaceDecls.add(ref);
-        return ref;
-    }
-
-    private Ref<PackageCon> ensureStubPackage(String packageName) throws Exception {
-        return this.proj.packages.addOrGetRef(new PackageCon(packageName, ""), "ensure stub package for " + packageName);
     }
 
     private String stubPackageName(String erasureQualifiedName) {
@@ -291,6 +270,23 @@ public class Abstractor {
         if (dot < 0) return erasureQualifiedName;
 
         return erasureQualifiedName.substring(dot + 1);
+    }
+
+    private Ref<InterfaceDecl> addErasureInterfaceDecl(CtTypeReference<?> typeErasure) throws Exception {
+        final String erasureQualName = typeErasure.getQualifiedName();
+        return this.proj.interfaceDecls.create(this.log, typeErasure,
+            "type erasure interface decl " + erasureQualName,
+            () -> {
+                // TODO: Determine if stubPackageName and stubSimpleName is needed.
+                final String pkgName = this.stubPackageName(erasureQualName);
+                final String name    = this.stubSimpleName(erasureQualName);
+                this.log.notice("adding erasure ["+pkgName+"]["+name+"]");
+
+                final Ref<PackageCon>    pkg    = this.addPackage(typeErasure.getPackage().getDeclaration());
+                final Location           loc    = this.proj.locations.create(typeErasure.getPosition());
+                final Ref<InterfaceDesc> inter  = this.proj.baker.anyDesc();
+                return new InterfaceDecl(pkg, loc, name, inter, new ArrayList<>());
+            });
     }
 
     /**
@@ -321,7 +317,7 @@ public class Abstractor {
             "object decl " + c.getQualifiedName(),
             () -> {
                 final Ref<PackageCon>      pkg        = this.addPackage(c.getPackage());
-                final Location             loc        = proj.locations.create(c.getPosition());
+                final Location             loc        = this.proj.locations.create(c.getPosition());
                 final String               name       = c.getSimpleName();
                 final Ref<StructDesc>      struct     = this.addStruct(c);
                 final List<Ref<TypeParam>> typeParams = this.addTypeParams(c.getFormalCtTypeParameters());
@@ -349,6 +345,7 @@ public class Abstractor {
                 for (CtMethod<?> m : c.getAllMethods()) {
                     if (!m.isStatic() && !isObjectMethod(m)) abstracts.add(this.addAbstract(m));
                 }
+                // TODO: FIX BELOW
                 obj.inter = this.proj.interfaceDescs.addOrGetRef(new InterfaceDesc(abstracts, ref), "interface for object");
 
                 // TODO: Finish implementing
@@ -373,7 +370,7 @@ public class Abstractor {
             "constructor " + ctor.getSignature(),
             () -> {
                 final Ref<PackageCon>      pkg        = recv.pkg;
-                final Location             loc        = proj.locations.create(ctor.getPosition());
+                final Location             loc        = this.proj.locations.create(ctor.getPosition());
                 final String               name       = recv.name;
                 final Ref<Signature>       signature  = this.addConstructSignature(ctor);
                 final List<Ref<TypeParam>> typeParams = this.addTypeParams(ctor.getFormalCtTypeParameters());
@@ -416,7 +413,7 @@ public class Abstractor {
             "method " + m.getSignature(),
             () -> {
                 final Ref<PackageCon>      pkg        = recv.pkg;
-                final Location             loc        = proj.locations.create(m.getPosition());
+                final Location             loc        = this.proj.locations.create(m.getPosition());
                 final String               name       = m.getSimpleName();
                 final Ref<Signature>       signature  = this.addSignature(m);
                 final List<Ref<TypeParam>> typeParams = this.addTypeParams(m.getFormalCtTypeParameters());
@@ -554,7 +551,7 @@ public class Abstractor {
             "interface decl " + i.getQualifiedName(),
             () -> {
                 final Ref<PackageCon>    pkg   = this.addPackage(i.getPackage());
-                final Location           loc   = proj.locations.create(i.getPosition());
+                final Location           loc   = this.proj.locations.create(i.getPosition());
                 final String             name  = i.getSimpleName();
                 final Ref<InterfaceDesc> inter = this.addInterfaceDesc(i);
                 final ArrayList<Ref<TypeParam>> typeParams = this.addTypeParams(i.getFormalCtTypeParameters());
@@ -578,7 +575,7 @@ public class Abstractor {
             "enum " + e.getQualifiedName(),
             () -> {
                 final Ref<PackageCon> pkg  = this.addPackage(e.getPackage());
-                final Location        loc  = proj.locations.create(e.getPosition());
+                final Location        loc  = this.proj.locations.create(e.getPosition());
                 final String          name = e.getQualifiedName();
 
                 final CtTypeReference<?> tr = e.getSuperclass();
@@ -602,7 +599,7 @@ public class Abstractor {
             return this.addTypeDescImpl(tr);
         } catch (Exception ex) {
             this.log.warning("addTypeDesc failed for " + this.safeTypeRefName(tr) + ": " + ex.getMessage());
-            return this.proj.baker.objectDesc();
+            return this.proj.baker.anyDesc();
         }
     }
 
@@ -618,7 +615,7 @@ public class Abstractor {
     }
 
     private Ref<? extends TypeDesc> addTypeDescImpl(CtTypeReference<?> tr) throws Exception {
-        if (tr == null)       return this.proj.baker.objectDesc();
+        if (tr == null)       return this.proj.baker.anyDesc();
         if (tr.isPrimitive()) return this.addBasic(tr);
         if (tr.isArray())     return this.addArray((CtArrayTypeReference<?>)tr);
 
@@ -628,10 +625,10 @@ public class Abstractor {
 
         // Type of the `null` literal in Spoon - not a real external type.
         try {
-            if (nullName.equals(tr.getQualifiedName())) return this.proj.baker.objectDesc();
+            if (nullName.equals(tr.getQualifiedName())) return this.proj.baker.anyDesc();
         } catch (Exception ex) {
             this.log.error("addTypeDescImpl failed resolving qualified name: " + ex.getMessage());
-            return this.proj.baker.objectDesc();
+            return this.proj.baker.anyDesc();
         }
 
         // Use getTypeDeclaration (not getDeclaration) to get shadow types
@@ -650,7 +647,7 @@ public class Abstractor {
         // Annotation types don't participate in data flow. Use an object instead.
         if (ty instanceof CtAnnotationType<?> ann) {
             this.log.notice("Annotation type as type desc (using object): " + ann.getQualifiedName());
-            return this.proj.baker.objectDesc();
+            return this.proj.baker.anyDesc();
         }
 
         // Skip anonymous and local types - their code is attributed
@@ -664,7 +661,7 @@ public class Abstractor {
             if (superIfaces != null && !superIfaces.isEmpty())
                 return this.addTypeDesc(superIfaces.iterator().next());
 
-            return this.proj.baker.objectDesc();
+            return this.proj.baker.anyDesc();
         }
 
         // Shadow types are external (JDK / third-party)
@@ -679,21 +676,21 @@ public class Abstractor {
         if (ty instanceof CtInterface<?>) return this.addInterfaceDecl((CtInterface<?>)ty);
 
         this.log.warning("Unhandled type (" + tr.getClass().getName() + "): " + tr.getQualifiedName());
-        return this.proj.baker.objectDesc();
+        return this.proj.baker.anyDesc();
     }
 
     private Ref<? extends TypeDesc> addWildcard(CtWildcardReference wr) throws Exception {
         CtTypeReference<?> bound = wr.getBoundingType();
-        if (bound == null || bound instanceof CtWildcardReference) return this.proj.baker.objectDesc();
+        if (bound == null || bound instanceof CtWildcardReference) return this.proj.baker.anyDesc();
 
         // Spoon often uses java.lang.Object as the synthetic bound for unbounded "?".
         // Resolving it would pull the entire JDK Object graph into the abstraction.
         try {
-            if (objName.equals(bound.getQualifiedName())) return this.proj.baker.objectDesc();
+            if (objName.equals(bound.getQualifiedName())) return this.proj.baker.anyDesc();
         } catch (Exception ignored) {
             // The exception here can be ignored since it comes from Spoon
             // failing to get the qualified name and it can be recovered from.
-            return this.proj.baker.objectDesc();
+            return this.proj.baker.anyDesc();
         }
         return this.addTypeDesc(bound);
     }
@@ -812,7 +809,7 @@ public class Abstractor {
         return this.proj.metrics.create(this.log, m,
             "metrics " + m.getSimpleName(),
             () -> {
-                final Location loc = proj.locations.create(m.getPosition());
+                final Location loc = this.proj.locations.create(m.getPosition());
                 final Analyzer ana = new Analyzer(this, loc);
                 ana.addMethod(m);
                 return ana.getMetrics();

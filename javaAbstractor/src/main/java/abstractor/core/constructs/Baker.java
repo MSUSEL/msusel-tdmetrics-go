@@ -31,7 +31,8 @@ public class Baker {
         return this.getConstruct(name, () -> factory.addOrGetRef(creator.create(), "baker: " + name));
     }
 
-    public Ref<InterfaceDesc> objectDesc() throws Exception {
+    // anyDesc creates a new empty interface (any) that is the base type of all non-basic types.
+    public Ref<InterfaceDesc> anyDesc() throws Exception {
         return this.getConstruct("objectInterfaceDesc", this.proj.interfaceDescs,
             () -> new InterfaceDesc(Collections.emptySortedSet()));
     }
@@ -43,7 +44,7 @@ public class Baker {
 
     private Ref<TypeParam> genT() throws Exception {
         return this.getConstruct("genT", this.proj.typeParams,
-            () -> new TypeParam("T", this.objectDesc()));
+            () -> new TypeParam("T", this.anyDesc()));
     }
 
     private Ref<Argument> intReturn() throws Exception {
