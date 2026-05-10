@@ -236,8 +236,8 @@ public class Abstractor {
         final List<CtTypeReference<?>> typeArgs = tr.getActualTypeArguments();
         if (typeArgs == null || typeArgs.isEmpty()) return decl;
 
-        return this.proj.interfaceInsts.create(this.log, tr, // TODO: UPDATE Spoon construct
-            "type erasure interface decl " + tr.getQualifiedName(),// TODO: UPDATE NAME
+        return this.proj.interfaceInsts.create(this.log, tr,
+            "type erasure interface instance " + tr.getQualifiedName(),
             () -> {
                 final ArrayList<Ref<? extends TypeDesc>> instanceTypes = new ArrayList<>(typeArgs.size());
                 for (CtTypeReference<?> arg : typeArgs) instanceTypes.add(this.addTypeDesc(arg));
