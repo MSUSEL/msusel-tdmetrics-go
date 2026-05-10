@@ -211,10 +211,11 @@ public class Abstractor {
     /**
      * Handle Java primitives and object equivalents to primitives (boxed primitives)
      * such that the boxed primitives (e.g. Integer) and String become Basic's.
-     * Other types become cached stub InterfaceDecl's, with InterfaceInst
-     * when parameterized.
+     * Other types become stub InterfaceDecl's, with InterfaceInst when parameterized.
      */
     public Ref<? extends TypeDesc> addExternalStub(CtTypeReference<?> tr) throws Exception {
+
+        // TODO: Why even pass in null?
         // If a type can not be resolved return an object (kind of like an `any` in Go).
         if (tr == null) return this.proj.baker.anyDesc();
         try {
@@ -227,34 +228,26 @@ public class Abstractor {
         }
 
         final CtTypeReference<?> erasure = tr.getTypeErasure();
-        final String erasureQn = erasure.getQualifiedName();
-
-        final Ref<Basic> boxed = this.proj.baker.basicForBoxedOrString(erasureQn);
+        final Ref<Basic> boxed = this.proj.baker.basicForBoxedOrString(erasure.getQualifiedName());
         if (boxed != null) return boxed;
 
         final Ref<InterfaceDecl> decl = this.addErasureInterfaceDecl(erasure);
-
+        // Check if the type is a generic instantiation.
         final List<CtTypeReference<?>> typeArgs = tr.getActualTypeArguments();
-        if (typeArgs == null || typeArgs.isEmpty()) {
-            @SuppressWarnings("unchecked")
-            final Ref<? extends TypeDesc> asType = (Ref<? extends TypeDesc>) (Ref<?>) decl;
-            return asType;
-        }
+        if (typeArgs == null || typeArgs.isEmpty()) return decl;
 
-        final ArrayList<Ref<? extends TypeDesc>> instanceTypes = new ArrayList<>(typeArgs.size());
-        for (CtTypeReference<?> arg : typeArgs) instanceTypes.add(this.addTypeDesc(arg));
-
-        final InterfaceInst      inst    = new InterfaceInst(decl, instanceTypes, decl.getResolved().inter);
-        // TODO: FIX BELOW
-        final Ref<InterfaceInst> instRef = this.proj.interfaceInsts.addOrGetRef(inst, "external stub interface instance");
-        this.proj.interfaceInsts.setRefForElem(tr, instRef);
-        return instRef;
+        return this.proj.interfaceInsts.create(this.log, tr, // TODO: UPDATE Spoon construct
+            "type erasure interface decl " + tr.getQualifiedName(),// TODO: UPDATE NAME
+            () -> {
+                final ArrayList<Ref<? extends TypeDesc>> instanceTypes = new ArrayList<>(typeArgs.size());
+                for (CtTypeReference<?> arg : typeArgs) instanceTypes.add(this.addTypeDesc(arg));
+                return new InterfaceInst(decl, instanceTypes, decl.getResolved().inter);
+            });
     }
 
     private Ref<InterfaceDecl> addErasureInterfaceDecl(CtTypeReference<?> typeErasure) throws Exception {
-        final String erasureQualName = typeErasure.getQualifiedName();
         return this.proj.interfaceDecls.create(this.log, typeErasure,
-            "type erasure interface decl " + erasureQualName,
+            "type erasure interface decl " + typeErasure.getQualifiedName(),
             () -> {
                 final Ref<PackageCon>    pkg    = this.addPackage(typeErasure.getPackage().getDeclaration());
                 final Location           loc    = this.proj.locations.create(typeErasure.getPosition());
@@ -597,6 +590,8 @@ public class Abstractor {
         // Handle wildcard types (e.g., ?, ? extends Foo, ? super Bar).
         if (tr instanceof CtWildcardReference wr)
             return this.addWildcard(wr);
+
+        // TODO: NEED TO REEVALUATE ALL OF THIS AI SLOP
 
         // Type of the `null` literal in Spoon - not a real external type.
         try {

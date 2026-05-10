@@ -140,9 +140,9 @@ public class Baker {
     }
 
     /**
-     * Qualified erasure name (e.g. java.lang.Integer) to basic type name.
+     * Qualified erasure name (e.g. java.lang.Integer) to basic type name (i.e. int).
      */
-    private static final Map<String, String> BOXED_QUALIFIED_TO_BASIC = Map.of(
+    private static final Map<String, String> boxedQualifiedNameToBasic = Map.of(
         "java.lang.Byte",      "byte",
         "java.lang.Short",     "short",
         "java.lang.Integer",   "int",
@@ -159,7 +159,7 @@ public class Baker {
      * or java.lang.String, returns the shared Basic, otherwise null.
      */
     public Ref<Basic> basicForBoxedOrString(String qualifiedErasureName) throws Exception {
-        final String basicName = BOXED_QUALIFIED_TO_BASIC.get(qualifiedErasureName);
+        final String basicName = boxedQualifiedNameToBasic.get(qualifiedErasureName);
         if (basicName == null) return null;
 
         return this.getConstruct("boxedBasic:" + qualifiedErasureName, this.proj.basics,
