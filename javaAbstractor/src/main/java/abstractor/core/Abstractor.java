@@ -126,6 +126,15 @@ public class Abstractor {
                 }
             });
     }
+    
+    // TODO: Use addPackageFor for more places.
+    public Ref<PackageCon> addPackageFor(CtType<?> t) throws Exception {
+        return this.addPackage(t.getTopLevelType().getPackage());
+    }
+
+    public Ref<PackageCon> addPackageFor(CtTypeReference<?> tr) throws Exception {
+        return this.addPackageFor(tr.getTypeDeclaration());
+    }
 
     static private <T extends Construct> boolean tryToAdd(Set<Ref<T>> set, Ref<? extends Construct> e, ConstructKind kind) {
         if (e.kind() == kind) {
@@ -244,6 +253,8 @@ public class Abstractor {
             () -> {
                 final ArrayList<Ref<? extends TypeDesc>> instanceTypes = new ArrayList<>(typeArgs.size());
                 for (CtTypeReference<?> arg : typeArgs) instanceTypes.add(this.addTypeDesc(arg));
+    
+                // TODO: decl.getResolved().inter can be null. Figue out another ady to do this!
                 return new InterfaceInst(decl, instanceTypes, decl.getResolved().inter);
             });
     }
@@ -252,7 +263,7 @@ public class Abstractor {
         return this.proj.interfaceDecls.create(this.log, typeErasure,
             "type erasure interface decl " + typeErasure.getQualifiedName(),
             () -> {
-                final Ref<PackageCon>    pkg    = this.addPackage(typeErasure.getPackage().getDeclaration());
+                final Ref<PackageCon>    pkg    = this.addPackageFor(typeErasure);
                 final Location           loc    = this.proj.locations.create(typeErasure.getPosition());
                 final String             name   = typeErasure.getSimpleName();
                 final Ref<InterfaceDesc> inter  = this.proj.baker.anyDesc();
