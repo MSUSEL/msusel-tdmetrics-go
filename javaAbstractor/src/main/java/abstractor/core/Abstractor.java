@@ -2,7 +2,6 @@ package abstractor.core;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
@@ -21,8 +20,9 @@ import abstractor.core.log.*;
 import abstractor.core.validator.Validator;
 
 public class Abstractor {
-    private final String nullName = "<nulltype>";
-    private final String objName = "java.lang.Object";
+    static private final String nullName = "<nulltype>";
+    static private final String objName = "java.lang.Object";
+    static private final boolean doNotCatch = true; // TODO: false;
 
     public final Logger log;
     public final Project proj;
@@ -148,6 +148,7 @@ public class Abstractor {
 
     public Ref<? extends Construct> addDeclaration(CtElement elem) throws Exception {
         if (elem == null) return null;
+        if (doNotCatch) return this.addDeclarationImpl(elem);
         try {
             return this.addDeclarationImpl(elem);
         } catch (Exception ex) {
@@ -175,6 +176,7 @@ public class Abstractor {
 
     public Ref<? extends TypeDeclaration> addTypeDeclaration(CtElement elem) throws Exception {
         if (elem == null) return null;
+        if (doNotCatch) return this.addTypeDeclarationImpl(elem);
         try {
             return this.addTypeDeclarationImpl(elem);
         } catch (Exception ex) {
@@ -203,7 +205,7 @@ public class Abstractor {
             if (elem instanceof CtType<?>          ty) return ty.getQualifiedName();
             if (elem instanceof CtExecutable<?>    ex) return ex.getSignature();
         } catch (Exception ex) {
-            this.log.error("describeElement failed: " + ex.getMessage());
+            this.log.error("describe element failed: " + ex.getMessage());
         }
         return elem.getClass().getName();
     }
@@ -216,6 +218,7 @@ public class Abstractor {
     public Ref<? extends TypeDesc> addExternalStub(CtTypeReference<?> tr) throws Exception {
 
         // TODO: Why even pass in null?
+        //
         // If a type can not be resolved return an object (kind of like an `any` in Go).
         if (tr == null) return this.proj.baker.anyDesc();
         try {
@@ -563,6 +566,7 @@ public class Abstractor {
     }
 
     public Ref<? extends TypeDesc> addTypeDesc(CtTypeReference<?> tr) throws Exception {
+        if (doNotCatch) return this.addTypeDescImpl(tr);
         try {
             return this.addTypeDescImpl(tr);
         } catch (Exception ex) {
