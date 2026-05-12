@@ -20,14 +20,15 @@ import abstractor.core.log.*;
 import abstractor.core.validator.Validator;
 
 public class Abstractor {
-    static private final String nullName = "<nulltype>";
-    static private final String objName = "java.lang.Object";
+    static private final String  nullName   = "<nulltype>";
+    static private final String  objName    = "java.lang.Object";
     static private final boolean doNotCatch = true; // TODO: false;
 
-    public final Logger log;
+    public final Logger  log;
     public final Project proj;
 
-    public final HashSet<CtMethod<?>> pendingMetrics = new HashSet<CtMethod<?>>();
+    public final HashSet<CtMethod<?>> pendingMetrics  = new HashSet<>();
+    public final HashSet<CtPackage>   pendingPackages = new HashSet<>();
 
     public Abstractor(Logger log, Project proj) {
         this.log  = log;
@@ -78,8 +79,7 @@ public class Abstractor {
     }
 
     private void addModel(CtModel model) throws Exception {
-        for (CtPackage pkg : model.getAllPackages())
-            this.addPackage(pkg);
+        this.pendingPackages.addAll(model.getAllPackages());
     }
 
     static private String normalizePath(String path) {
@@ -109,8 +109,8 @@ public class Abstractor {
     // TODO: Implement package imports by deriving from actual type usage
     //       rather than import statements. This will be done in a later step
     //       when the Resolver pipeline is created.
-
-    public Ref<PackageCon> addPackage(CtPackage pkg) throws Exception {
+    
+    public Ref<PackageCon> processPackage(CtPackage pkg) throws Exception {
         final String name = packageName(pkg);
         return this.proj.packages.create(this.log, pkg,
            "package " + name,
@@ -118,13 +118,18 @@ public class Abstractor {
                 final String path = packagePath(pkg);
                 return new PackageCon(name, path);
             },
-            (Ref<PackageCon> ref, PackageCon pkgCon) ->{
+            (Ref<PackageCon> ref, PackageCon pkgCon) -> {
                 for (CtType<?> t : pkg.getTypes()) {
                     Ref<? extends Construct> decl = this.addDeclaration(t);
                     if (decl != null)
                         this.addDeclarationToPackage(pkgCon, decl);
                 }
             });
+    }
+
+    public Ref<PackageCon> addPackage(CtPackage pkg) throws Exception {
+        this.pendingPackages.add(pkg);
+        return this.proj.packages.addOfGetRefForElem(pkg, "for pending package " + packageName(pkg));
     }
     
     // TODO: Use addPackageFor for more places.
@@ -249,12 +254,13 @@ public class Abstractor {
                 final Ref<PackageCon>    pkg    = this.addPackageFor(erasure);
                 final Location           loc    = this.proj.locations.create(erasure.getPosition());
                 final String             name   = erasure.getSimpleName();
-                final Ref<InterfaceDesc> inter  = this.proj.baker.anyDesc(); // TODO: ANY?
+                final Ref<InterfaceDesc> inter  = this.proj.baker.anyDesc(); // any, since this is a stub.
                 return new InterfaceDecl(pkg, loc, name, inter, new ArrayList<>());
             });
 
         // TODO: If we are using any for inter then the typeArgs aren't needed, right?
-
+        return decl;
+        /*
         // Check if the type is a generic instantiation.
         final List<CtTypeReference<?>> typeArgs = tr.getActualTypeArguments();
         if (typeArgs == null || typeArgs.isEmpty()) return decl;
@@ -268,6 +274,7 @@ public class Abstractor {
                 // TODO: decl.getResolved().inter can be null. Figue out another ady to do this!
                 return new InterfaceInst(decl, instanceTypes, decl.getResolved().inter);
             });
+        */
     }
 
     /**
@@ -753,11 +760,16 @@ public class Abstractor {
             });
     }
 
-    public void finish() throws Exception {
-       this.processPendingMetrics();
-       this.consolidateCons();
-       this.crossConnectConstructs();
-       this.validate();
+    public void performAbstraction() throws Exception {
+        while (!this.pendingPackages.isEmpty()) {
+            final CtPackage pkg = this.pendingPackages.iterator().next();
+            this.pendingPackages.remove(pkg);
+            this.processPackage(pkg);
+            this.processPendingMetrics();
+        }
+        this.consolidateCons();
+        this.crossConnectConstructs();
+        this.validate();
     }
 
     private void processPendingMetrics() throws Exception {

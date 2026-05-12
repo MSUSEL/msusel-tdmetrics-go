@@ -21,7 +21,7 @@ public class App {
         Project proj = new Project();
         Abstractor ab = new Abstractor(log, proj);
         ab.addMavenProject(cfg.input);
-        ab.finish();
+        ab.performAbstraction();
 
         JsonHelper h = new JsonHelper();
         h.writeKinds   = cfg.writeKinds;
