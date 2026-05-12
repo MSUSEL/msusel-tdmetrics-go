@@ -81,9 +81,12 @@ public class Factory<T extends Construct> implements Jsonable {
             // If an existing construct matches the new one after the new one
             // has been loaded, then there are two elements to get to the same
             // value. Resolve the reference for the existing or new construct.
+            // Run finisher on both since the element is different, it may have
+            // different finishing steps.
             final T other = this.getExisting(newCon);
             if (other != null) {
                 newRef.setResolved(other);
+                if (finisher != null) finisher.finish(newRef, other);
             } else {
                 this.conSet.add(newCon);
                 newRef.setResolved(newCon);

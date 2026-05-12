@@ -243,7 +243,18 @@ public class Abstractor {
         final Ref<Basic> boxed = this.proj.baker.basicForBoxedOrString(erasure.getQualifiedName());
         if (boxed != null) return boxed;
 
-        final Ref<InterfaceDecl> decl = this.addErasureInterfaceDecl(erasure);
+        final Ref<InterfaceDecl> decl = this.proj.interfaceDecls.create(this.log, erasure,
+            "type erasure interface decl " + erasure.getQualifiedName(),
+            () -> {
+                final Ref<PackageCon>    pkg    = this.addPackageFor(erasure);
+                final Location           loc    = this.proj.locations.create(erasure.getPosition());
+                final String             name   = erasure.getSimpleName();
+                final Ref<InterfaceDesc> inter  = this.proj.baker.anyDesc(); // TODO: ANY?
+                return new InterfaceDecl(pkg, loc, name, inter, new ArrayList<>());
+            });
+
+        // TODO: If we are using any for inter then the typeArgs aren't needed, right?
+
         // Check if the type is a generic instantiation.
         final List<CtTypeReference<?>> typeArgs = tr.getActualTypeArguments();
         if (typeArgs == null || typeArgs.isEmpty()) return decl;
@@ -256,18 +267,6 @@ public class Abstractor {
     
                 // TODO: decl.getResolved().inter can be null. Figue out another ady to do this!
                 return new InterfaceInst(decl, instanceTypes, decl.getResolved().inter);
-            });
-    }
-
-    private Ref<InterfaceDecl> addErasureInterfaceDecl(CtTypeReference<?> typeErasure) throws Exception {
-        return this.proj.interfaceDecls.create(this.log, typeErasure,
-            "type erasure interface decl " + typeErasure.getQualifiedName(),
-            () -> {
-                final Ref<PackageCon>    pkg    = this.addPackageFor(typeErasure);
-                final Location           loc    = this.proj.locations.create(typeErasure.getPosition());
-                final String             name   = typeErasure.getSimpleName();
-                final Ref<InterfaceDesc> inter  = this.proj.baker.anyDesc();
-                return new InterfaceDecl(pkg, loc, name, inter, new ArrayList<>());
             });
     }
 
@@ -377,7 +376,7 @@ public class Abstractor {
             Ref<ObjectDecl> obj = this.addObjectDecl(c);
             return this.addMethod(obj, m);
         }
-        if (decl instanceof CtInterface<?> i) {
+        if (decl instanceof CtInterface<?>) {
             Ref<Abstract> ab = this.addAbstract(m);
             // TODO: Connect abstract to interface declaration
             return ab;
