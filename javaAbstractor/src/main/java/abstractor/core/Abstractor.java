@@ -227,7 +227,7 @@ public class Abstractor {
     /**
      * Handle Java primitives and object equivalents to primitives (boxed primitives)
      * such that the boxed primitives (e.g. Integer) and String become Basic's.
-     * Other types become stub InterfaceDecl's, with InterfaceInst when parameterized.
+     * Other types become stub InterfaceDecl.
      */
     public Ref<? extends TypeDesc> addExternalStub(CtTypeReference<?> tr) throws Exception {
 
@@ -251,15 +251,19 @@ public class Abstractor {
         final Ref<InterfaceDecl> decl = this.proj.interfaceDecls.create(this.log, erasure,
             "type erasure interface decl " + erasure.getQualifiedName(),
             () -> {
-                final Ref<PackageCon>    pkg    = this.addPackageFor(erasure);
-                final Location           loc    = this.proj.locations.create(erasure.getPosition());
-                final String             name   = erasure.getSimpleName();
-                final Ref<InterfaceDesc> inter  = this.proj.baker.anyDesc(); // any, since this is a stub.
+                final Ref<PackageCon> pkg  = this.addPackageFor(erasure);
+                final Location        loc  = this.proj.locations.create(erasure.getPosition());
+                final String          name = erasure.getSimpleName();
+
+                // TODO: Should this be "any" since that means it has no methods,
+                // or should the stub have abstracts for the methods?
+                final Ref<InterfaceDesc> inter = this.proj.baker.anyDesc();
+
                 return new InterfaceDecl(pkg, loc, name, inter, new ArrayList<>());
             });
-
-        // TODO: If we are using any for inter then the typeArgs aren't needed, right?
-        return decl;
+        
+        // TODO: If the stub is not an "any", then the abstract methods may need to have
+        //       type parameters and arguments that need to be handled for an instantiation.
         /*
         // Check if the type is a generic instantiation.
         final List<CtTypeReference<?>> typeArgs = tr.getActualTypeArguments();
@@ -275,6 +279,7 @@ public class Abstractor {
                 return new InterfaceInst(decl, instanceTypes, decl.getResolved().inter);
             });
         */
+        return decl;
     }
 
     /**
@@ -760,6 +765,10 @@ public class Abstractor {
             });
     }
 
+    /**
+     * performAbstraction will process all the packages and metrics, and
+     * resolve anything else that needs to be done to finish the abstraction.
+     */
     public void performAbstraction() throws Exception {
         while (!this.pendingPackages.isEmpty()) {
             final CtPackage pkg = this.pendingPackages.iterator().next();
