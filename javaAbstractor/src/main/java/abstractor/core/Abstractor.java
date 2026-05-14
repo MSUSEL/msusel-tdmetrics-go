@@ -463,18 +463,19 @@ public class Abstractor {
     }
 
     public Ref<Argument> addArgument(CtParameter<?> p) throws Exception {
+        final String name = p.getSimpleName();
         return this.proj.arguments.create(this.log, p,
-            "parameter " + p.getSimpleName(),
+            "parameter " + name,
             () -> {
-                final String name = p.getSimpleName();
                 final Ref<? extends TypeDesc> type = this.addTypeDesc(p.getType());
                 return new Argument(name, type);
             });
     }
     
     public Ref<Argument> addArgument(CtTypeReference<?> p) throws Exception {
+        final String name = p.getSimpleName();
         return this.proj.arguments.create(this.log, p,
-            "parameter <unnamed> " + p.getSimpleName(),
+            "parameter <unnamed> " + name,
             () -> {
                 final Ref<? extends TypeDesc> type = this.addTypeDesc(p);
                 return new Argument("", type);
@@ -482,8 +483,9 @@ public class Abstractor {
     }
     
     public Ref<StructDesc> addStruct(CtClass<?> c) throws Exception {
+        final String name = safeQualifiedName(c);
         return this.proj.structDescs.create(this.log, c,
-            "struct " + c.getQualifiedName(),
+            "struct " + name,
             () -> {
                 // Collect all fields.
                 final ArrayList<Ref<Field>> fields = new ArrayList<Ref<Field>>();
@@ -499,7 +501,7 @@ public class Abstractor {
                     if (c.getParent() instanceof CtTypeReference<?> nest && nest != null) {
                         fields.add(this.addField("$nest", nest));
                     } else {
-                        this.log.error("Unhandled nested object decl "+ c.getQualifiedName() + " in " + c.getParent());
+                        this.log.error("Unhandled nested object decl " + name + " in " + c.getParent());
                     }
                 }
 
@@ -540,19 +542,19 @@ public class Abstractor {
     }
     
     public Ref<InterfaceDecl> addInterfaceDecl(CtInterface<?> i) throws Exception {
+        final String name = safeQualifiedName(i);
         return this.proj.interfaceDecls.create(this.log, i,
-            "interface decl " + i.getQualifiedName(),
+            "interface decl " + name,
             () -> {
                 final Ref<PackageCon>    pkg   = this.addPackage(i.getPackage());
                 final Location           loc   = this.proj.locations.create(i.getPosition());
-                final String             name  = i.getSimpleName();
                 final Ref<InterfaceDesc> inter = this.addInterfaceDesc(i);
                 final ArrayList<Ref<TypeParam>> typeParams = this.addTypeParams(i.getFormalCtTypeParameters());
 
                 if (i.getRoleInParent() == CtRole.NESTED_TYPE) {
                     // TODO: Need to differentiate this from an interface by
                     //       the same name nested in a different class or not nested in any class.
-                    this.log.error("Unhandled nested interface decl "+ i.getQualifiedName());
+                    this.log.error("Unhandled nested interface decl "+ name);
                 }
 
                 return new InterfaceDecl(pkg, loc, name, inter, typeParams);
@@ -564,16 +566,16 @@ public class Abstractor {
     }
 
     public Ref<ObjectDecl> addEnum(CtEnum<?> e) throws Exception {
+        final String name = safeQualifiedName(e);
         return this.proj.objectDecls.create(this.log, e,
-            "enum " + e.getQualifiedName(),
+            "enum " + name,
             () -> {
                 final Ref<PackageCon> pkg  = this.addPackage(e.getPackage());
                 final Location        loc  = this.proj.locations.create(e.getPosition());
-                final String          name = e.getQualifiedName();
 
                 final CtTypeReference<?> tr = e.getSuperclass();
                 Ref<StructDesc> struct = this.proj.structDescs.create(this.log, tr,
-                    "enum struct " + e.getQualifiedName(),
+                    "enum struct " + name,
                     () -> {
                         final ArrayList<Ref<Field>> fields = new ArrayList<Ref<Field>>();
                         fields.add(this.addField("$value", tr));
@@ -592,19 +594,19 @@ public class Abstractor {
         try {
             return this.addTypeDescImpl(tr);
         } catch (Exception ex) {
-            this.log.warning("addTypeDesc failed for " + this.safeTypeRefName(tr) + ": " + ex.getMessage());
+            this.log.warning("addTypeDesc failed for " + safeQualifiedName(tr) + ": " + ex.getMessage());
             return this.proj.baker.anyDesc();
         }
     }
 
-    private String safeTypeRefName(CtTypeReference<?> tr) {
-        if (tr == null) return "(null)";
+    static private String safeQualifiedName(CtTypeInformation type) {
+        if (type == null) return "(null)";
         try {
-            return tr.getQualifiedName();
-        } catch (Exception ignored) {
+            return type.getQualifiedName();
+        } catch (RuntimeException ignored) {
             // Do not worry about the exception here because it is only from Spoon
             // getting a qualified name and we can recover by using the toString via valueOf.
-            return String.valueOf(tr);
+            return String.valueOf(type);
         }
     }
 
@@ -614,18 +616,12 @@ public class Abstractor {
         if (tr.isArray())     return this.addArray((CtArrayTypeReference<?>)tr);
 
         // Handle wildcard types (e.g., ?, ? extends Foo, ? super Bar).
-        if (tr instanceof CtWildcardReference wr)
-            return this.addWildcard(wr);
-
-        // TODO: NEED TO REEVALUATE ALL OF THIS AI SLOP
+        if (tr instanceof CtWildcardReference wr) return this.addWildcard(wr);
 
         // Type of the `null` literal in Spoon - not a real external type.
-        try {
-            if (nullName.equals(tr.getQualifiedName())) return this.proj.baker.anyDesc();
-        } catch (Exception ex) {
-            this.log.error("addTypeDescImpl failed resolving qualified name: " + ex.getMessage());
-            return this.proj.baker.anyDesc();
-        }
+        if (nullName.equals(safeQualifiedName(tr))) return this.proj.baker.anyDesc();
+
+        // TODO: NEED TO REEVALUATE ALL OF THIS AI SLOP
 
         // Use getTypeDeclaration (not getDeclaration) to get shadow types
         // for external/JDK types instead of null.
@@ -633,7 +629,7 @@ public class Abstractor {
         try {
             ty = tr.getTypeDeclaration();
         } catch (Exception ex) {
-            this.log.warning("Failed to get type declaration for " + tr.getQualifiedName() + ": " + ex.getMessage());
+            this.log.warning("Failed to get type declaration for " + safeQualifiedName(tr) + ": " + ex.getMessage());
             return this.addExternalStub(tr);
         }
 
@@ -642,7 +638,7 @@ public class Abstractor {
 
         // Annotation types don't participate in data flow. Use an object instead.
         if (ty instanceof CtAnnotationType<?> ann) {
-            this.log.notice("Annotation type as type desc (using object): " + ann.getQualifiedName());
+            this.log.notice("Annotation type as type desc (using object): " + safeQualifiedName(ann));
             return this.proj.baker.anyDesc();
         }
 
@@ -650,7 +646,7 @@ public class Abstractor {
         // to the enclosing method (handled in later steps).
         if (tr.isAnonymous() || tr.isLocalType()) {
             CtTypeReference<?> superRef = tr.getSuperclass();
-            if (superRef != null && !superRef.getQualifiedName().equals(objName))
+            if (superRef != null && !safeQualifiedName(superRef).equals(objName))
                 return this.addTypeDesc(superRef);
 
             var superIfaces = tr.getSuperInterfaces();
@@ -671,7 +667,7 @@ public class Abstractor {
         if (ty instanceof CtClass<?>)     return this.addObjectDecl((CtClass<?>)ty);
         if (ty instanceof CtInterface<?>) return this.addInterfaceDecl((CtInterface<?>)ty);
 
-        this.log.warning("Unhandled type (" + tr.getClass().getName() + "): " + tr.getQualifiedName());
+        this.log.warning("Unhandled type (" + tr.getClass().getName() + "): " + safeQualifiedName(tr));
         return this.proj.baker.anyDesc();
     }
 
@@ -682,7 +678,7 @@ public class Abstractor {
         // Spoon often uses java.lang.Object as the synthetic bound for unbounded "?".
         // Resolving it would pull the entire JDK Object graph into the abstraction.
         try {
-            if (objName.equals(bound.getQualifiedName())) return this.proj.baker.anyDesc();
+            if (objName.equals(safeQualifiedName(bound))) return this.proj.baker.anyDesc();
         } catch (Exception ignored) {
             // The exception here can be ignored since it comes from Spoon
             // failing to get the qualified name and it can be recovered from.
