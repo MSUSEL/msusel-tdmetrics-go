@@ -72,7 +72,7 @@ public class Tester {
      */
     public void addClassesFromSource(String ...lines) {
         try {
-            this.ab.addClassesFromSource(lines);
+            this.ab.prepareClassesFromSource(lines);
             this.ab.performAbstraction();
         } catch (Exception ex) {
             this.printLogs();

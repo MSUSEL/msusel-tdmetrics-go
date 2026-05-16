@@ -20,7 +20,7 @@ public class App {
         Logger log = new Logger(cfg.verbose, cfg.logOut, cfg.logErr);
         Project proj = new Project();
         Abstractor ab = new Abstractor(log, proj);
-        ab.addMavenProject(cfg.input);
+        ab.prepareMavenProject(cfg.input);
         ab.performAbstraction();
 
         JsonHelper h = new JsonHelper();

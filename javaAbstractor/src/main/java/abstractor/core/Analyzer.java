@@ -13,16 +13,17 @@ import spoon.reflect.reference.*;
 import spoon.support.reflect.CtExtendedModifier;
 import abstractor.core.constructs.*;
 import abstractor.core.log.Logger;
+import abstractor.core.spoonUtils.SpoonUtils;
 
 public class Analyzer {
     private static final boolean logElementTree = true; // TODO: Restore to false;
-    private static final boolean logUsage = true; // TODO: Restore to false;
+    private static final boolean logUsage       = true; // TODO: Restore to false;
 
     private final Abstractor abs;
     private final Logger log;
     public final Location loc;
 
-    private final Map<Integer, Integer> minColumn = new TreeMap<Integer, Integer>();
+    private final Map<Integer, Integer> minColumn = new TreeMap<>();
     private int minLine;
     private int maxLine;
     
@@ -31,9 +32,9 @@ public class Analyzer {
     private boolean getter;
     private boolean setter;
 
-    private final SortedSet<Ref<? extends Construct>> invokes = new TreeSet<Ref<? extends Construct>>();
-    private final SortedSet<Ref<? extends Construct>> reads   = new TreeSet<Ref<? extends Construct>>();
-    private final SortedSet<Ref<? extends Construct>> writes  = new TreeSet<Ref<? extends Construct>>();
+    private final SortedSet<Ref<? extends Construct>> invokes = new TreeSet<>();
+    private final SortedSet<Ref<? extends Construct>> reads   = new TreeSet<>();
+    private final SortedSet<Ref<? extends Construct>> writes  = new TreeSet<>();
 
     public Analyzer(Abstractor abs, Location loc) {
         this.abs        = abs;
@@ -64,10 +65,10 @@ public class Analyzer {
     }
 
     private int calcIndent() {
-        final TreeSet<Integer> columns = new TreeSet<Integer>();
+        final TreeSet<Integer> columns = new TreeSet<>();
         columns.addAll(this.minColumn.values());
         
-        final TreeMap<Integer, Integer> indentMap = new TreeMap<Integer, Integer>();
+        final TreeMap<Integer, Integer> indentMap = new TreeMap<>();
         int index = 0;
         for (int col : columns) indentMap.put(col, index++);
 
@@ -157,10 +158,6 @@ public class Analyzer {
         this.maxLine = Integer.max(line, this.maxLine);
     }
 
-    static private boolean isVoid(CtTypeReference<?> tr) {
-        return tr.isPrimitive() && tr.getSimpleName().equals("void");
-    }
-
     static private boolean isSimpleFetch(CtElement elem) {
         if (elem instanceof CtConstructorCall) return false;
         if (elem instanceof CtInvocation)      return false;
@@ -181,16 +178,16 @@ public class Analyzer {
     }
 
     static private boolean detectGetter(CtMethod<?> m, CtStatement st) {
-        if (m.getParameters().size() != 0) return false;
-        if (isVoid(m.getType()))           return false;
-        if (!(st instanceof CtReturn ret)) return false;
-        if (!isSimpleFetch(ret))           return false;
+        if (m.getParameters().size() != 0)  return false;
+        if (SpoonUtils.isVoid(m.getType())) return false;
+        if (!(st instanceof CtReturn ret))  return false;
+        if (!isSimpleFetch(ret))            return false;
         return true;
     }
     
     static private boolean detectSetter(CtMethod<?> m, CtStatement st) {
         if (m.getParameters().size() > 1)           return false;
-        if (!isVoid(m.getType()))                   return false;
+        if (!SpoonUtils.isVoid(m.getType()))        return false;
         if (!(st instanceof CtAssignment assign))   return false;
         if (!isSimpleFetch(assign.getAssigned()))   return false;
         if (!isSimpleFetch(assign.getAssignment())) return false;
@@ -204,8 +201,8 @@ public class Analyzer {
         // The parameter may be used on the right hand side or not at all.
         // The parameter may not be used at all if the setter is part of an
         // interface requirement but the value assigned is to a default value.
-        final CtParameter<?> param = m.getParameters().get(0);
-        final CtParameterReference<?> ref = param.getReference();
+        final CtParameter<?>          param = m.getParameters().get(0);
+        final CtParameterReference<?> ref   = param.getReference();
         return !isObjectUsed(ref, assign.getAssigned());
     }
 
@@ -290,7 +287,7 @@ public class Analyzer {
 
     private void addTypeReferenceUsage(CtTypeReference<?> tr) throws Exception {
         if (logUsage) this.log.log("addUsage.CtTypeReference: " + tr);
-        if (!Abstractor.isVoid(tr)) this.abs.addTypeDesc(tr);
+        if (!SpoonUtils.isVoid(tr)) this.abs.addTypeDesc(tr);
     }
 
     private void addPackageReferenceUsage(CtPackageReference pr) throws Exception {

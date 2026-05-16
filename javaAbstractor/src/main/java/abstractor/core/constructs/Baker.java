@@ -6,6 +6,9 @@ import java.util.Map;
 import java.util.TreeMap;
 import java.util.TreeSet;
 
+import abstractor.core.spoonUtils.SpoonUtils;
+import spoon.reflect.reference.CtTypeReference;
+
 public class Baker {
     private final Project proj;
     private final Map<String, Construct> cache;
@@ -158,11 +161,11 @@ public class Baker {
      * If qualifiedErasureName is a boxed primitive (e.g. java.lang.Integer)
      * or java.lang.String, returns the shared Basic, otherwise null.
      */
-    public Ref<Basic> basicForBoxedOrString(String qualifiedErasureName) throws Exception {
-        final String basicName = boxedQualifiedNameToBasic.get(qualifiedErasureName);
+    public Ref<Basic> basicForBoxedOrString(CtTypeReference<?> tr) throws Exception {
+        final String name      = tr.getQualifiedName();
+        final String basicName = boxedQualifiedNameToBasic.get(name);
         if (basicName == null) return null;
-
-        return this.getConstruct("boxedBasic:" + qualifiedErasureName, this.proj.basics,
+        return this.getConstruct("boxedBasic: " + SpoonUtils.describeElem(tr), this.proj.basics,
             () -> new Basic(basicName));
     }
 }
