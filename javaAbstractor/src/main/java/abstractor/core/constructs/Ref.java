@@ -19,7 +19,7 @@ public class Ref<T extends Construct> extends ConstructImp {
     // TODO: Check if the typeArgs are needed. If the element is different based
     // on the typeArgs, this can be removed. However, if the element is the same
     // inside different typeArgs context, then this will have to be kept.
-    public final ArrayList<TypeDesc> typeArgs = new ArrayList<TypeDesc>();
+    public final ArrayList<TypeDesc> typeArgs = new ArrayList<>();
 
     private T res;
     

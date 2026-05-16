@@ -15,7 +15,7 @@ public class Baker {
 
     public Baker(Project proj) {
         this.proj  = proj;
-        this.cache = new TreeMap<String, Construct>();
+        this.cache = new TreeMap<>();
     }
 
     public interface ConstructCreator<T extends Construct> { T create() throws Exception; }

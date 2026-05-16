@@ -68,9 +68,9 @@ public class Abstractor {
      * @param source The source code containing one or more classes.
      */
     public void prepareClassesFromSource(String ...sourceLines) throws Exception {
-        final String filename = "ClassesFromSource.java";
-        final String source = String.join("\n", sourceLines);
-        Launcher launcher = new Launcher();
+        final String   filename = "ClassesFromSource.java";
+        final String   source   = String.join("\n", sourceLines);
+        final Launcher launcher = new Launcher();
         launcher.addInputResource(new VirtualFile(source, filename));
         launcher.buildModel();
         this.prepareModel(launcher.getModel());
@@ -78,17 +78,6 @@ public class Abstractor {
 
     private void prepareModel(CtModel model) throws Exception {
         this.pendingPackages.addAll(model.getAllPackages());
-    }
-
-    // TODO: MOVE SOMEWHERE?
-    static private <T extends Construct> boolean tryToAdd(Set<Ref<T>> set, Ref<? extends Construct> e, ConstructKind kind) {
-        if (e.kind() == kind) {
-            @SuppressWarnings("unchecked")
-            Ref<T> cast = (Ref<T>)e;
-            set.add(cast);
-            return true;
-        }
-        return false;
     }
 
     //===[ Construct Adders ]===================================================
@@ -106,15 +95,6 @@ public class Abstractor {
 
     public Ref<PackageCon> addPackageFor(CtTypeReference<?> tr) throws Exception {
         return this.addPackageFor(tr.getTypeDeclaration());
-    }
-
-    public void addDeclarationToPackage(PackageCon pkg, Ref<? extends Construct> decl) {
-        if (tryToAdd(pkg.objectDecls,    decl, ConstructKind.OBJECT_DECL))    return;
-        if (tryToAdd(pkg.interfaceDecls, decl, ConstructKind.INTERFACE_DECL)) return;
-        if (tryToAdd(pkg.methodDecls,    decl, ConstructKind.METHOD_DECL))    return;
-        if (tryToAdd(pkg.values,         decl, ConstructKind.VALUE))          return;
-        
-        this.log.error("Unhandled declaration type: " + decl.kind());
     }
 
     public Ref<? extends Construct> addDeclaration(CtElement elem) throws Exception {
@@ -703,10 +683,7 @@ public class Abstractor {
                 return new PackageCon(name, path);
             },
             (Ref<PackageCon> ref, PackageCon pkgCon) -> {
-                for (CtType<?> t : pkg.getTypes()) {
-                    Ref<? extends Construct> decl = this.addDeclaration(t);
-                    if (decl != null) this.addDeclarationToPackage(pkgCon, decl);
-                }
+                for (CtType<?> t : pkg.getTypes()) pkgCon.add(this.addDeclaration(t));
             });
     }
 

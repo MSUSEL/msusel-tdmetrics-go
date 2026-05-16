@@ -10,8 +10,8 @@ import spoon.reflect.cu.SourcePosition;
 import abstractor.core.json.*;
 
 public class Locations implements Jsonable {
-    private final TreeSet<Location>        locs    = new TreeSet<Location>();
-    private final TreeMap<String, Integer> offsets = new TreeMap<String, Integer>();
+    private final TreeSet<Location>        locs    = new TreeSet<>();
+    private final TreeMap<String, Integer> offsets = new TreeMap<>();
     
     public Location create(SourcePosition pos) {
         return this.create(new Location(pos));
@@ -29,7 +29,7 @@ public class Locations implements Jsonable {
     }
 
     private TreeMap<String, Integer> getMaximums() {
-        TreeMap<String, Integer> maximums = new TreeMap<String, Integer>();
+        TreeMap<String, Integer> maximums = new TreeMap<>();
         for (Location loc : this.locs) {
             if (!loc.isValid()) continue;
             final String  path = loc.path;

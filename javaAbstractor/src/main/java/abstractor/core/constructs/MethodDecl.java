@@ -11,8 +11,8 @@ import abstractor.core.json.*;
 public class MethodDecl extends DeclarationImp implements Method {
     public Ref<ObjectDecl> receiver;
     public Ref<Signature>  signature;
-    public final ArrayList<Ref<TypeParam>> typeParams = new ArrayList<Ref<TypeParam>>();
-    public final TreeSet<Ref<MethodInst>>  instances  = new TreeSet<Ref<MethodInst>>();
+    public final ArrayList<Ref<TypeParam>> typeParams = new ArrayList<>();
+    public final TreeSet<Ref<MethodInst>>  instances  = new TreeSet<>();
     public boolean constructor;
     public Ref<Metrics> metrics;
 

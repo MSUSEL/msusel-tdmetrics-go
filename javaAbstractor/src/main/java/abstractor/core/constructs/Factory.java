@@ -15,10 +15,10 @@ public class Factory<T extends Construct> implements Jsonable {
     static private final boolean logCreate = true;
     
     private final ConstructKind              conKind;
-    public  final HashMap<CtElement, Ref<T>> byElem     = new HashMap<CtElement, Ref<T>>();
-    public  final HashMap<T,         Ref<T>> nonElemRef = new HashMap<T, Ref<T>>();
-    public  final TreeSet<Ref<T>>            refSet     = new TreeSet<Ref<T>>();
-    public  final TreeSet<T>                 conSet     = new TreeSet<T>();
+    public  final HashMap<CtElement, Ref<T>> byElem     = new HashMap<>();
+    public  final HashMap<T,         Ref<T>> nonElemRef = new HashMap<>();
+    public  final TreeSet<Ref<T>>            refSet     = new TreeSet<>();
+    public  final TreeSet<T>                 conSet     = new TreeSet<>();
 
     public Factory(ConstructKind kind) { this.conKind = kind; }
 

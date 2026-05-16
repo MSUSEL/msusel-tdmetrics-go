@@ -10,8 +10,8 @@ import abstractor.core.json.*;
 
 public class InterfaceDecl extends DeclarationImp implements TypeDeclaration {
     public       Ref<InterfaceDesc>          inter;
-    public final ArrayList<Ref<TypeParam>>   typeParams = new ArrayList<Ref<TypeParam>>();
-    public final TreeSet<Ref<InterfaceInst>> instances  = new TreeSet<Ref<InterfaceInst>>();
+    public final ArrayList<Ref<TypeParam>>   typeParams = new ArrayList<>();
+    public final TreeSet<Ref<InterfaceInst>> instances  = new TreeSet<>();
 
     public InterfaceDecl() {}
 

@@ -11,9 +11,9 @@ import abstractor.core.json.*;
 public class ObjectDecl extends DeclarationImp implements TypeDeclaration {
     public Ref<StructDesc>    struct;
     public Ref<InterfaceDesc> inter;
-    public final TreeSet<Ref<MethodDecl>>    methodDecls = new TreeSet<Ref<MethodDecl>>();
-    public final ArrayList<Ref<TypeParam>>   typeParams  = new ArrayList<Ref<TypeParam>>();
-    public final TreeSet<Ref<InterfaceInst>> instances   = new TreeSet<Ref<InterfaceInst>>();
+    public final TreeSet<Ref<MethodDecl>>    methodDecls = new TreeSet<>();
+    public final ArrayList<Ref<TypeParam>>   typeParams  = new ArrayList<>();
+    public final TreeSet<Ref<InterfaceInst>> instances   = new TreeSet<>();
 
     public ObjectDecl() {}
 

@@ -1,7 +1,5 @@
 package abstractor.core.cmp;
 
-import abstractor.core.constructs.Construct;
-
 public class CmpOptions implements Comparable<CmpOptions>{
     public boolean useResolved;
 

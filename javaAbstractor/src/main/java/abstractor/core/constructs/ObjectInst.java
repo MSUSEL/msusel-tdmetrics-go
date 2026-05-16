@@ -10,8 +10,8 @@ import abstractor.core.json.*;
 
 public class ObjectInst extends ConstructImp implements TypeDesc {
     public Ref<ObjectDecl> generic;
-    public final ArrayList<Ref<? extends TypeDesc>> instanceTypes = new ArrayList<Ref<? extends TypeDesc>>();
-    public final TreeSet<Ref<MethodInst>> methods = new TreeSet<Ref<MethodInst>>();
+    public final ArrayList<Ref<? extends TypeDesc>> instanceTypes = new ArrayList<>();
+    public final TreeSet<Ref<MethodInst>>           methods       = new TreeSet<>();
     public Ref<StructDesc>    resData;
     public Ref<InterfaceDesc> resInterface;
 

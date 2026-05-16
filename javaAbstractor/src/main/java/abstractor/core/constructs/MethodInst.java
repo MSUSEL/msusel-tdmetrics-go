@@ -10,7 +10,7 @@ import abstractor.core.json.*;
 public class MethodInst extends ConstructImp implements Method {
     public Ref<MethodDecl> generic;
     public Ref<ObjectInst> receiver;
-    public final ArrayList<Ref<? extends TypeDesc>> instanceTypes = new ArrayList<Ref<? extends TypeDesc>>();
+    public final ArrayList<Ref<? extends TypeDesc>> instanceTypes = new ArrayList<>();
     public Ref<Signature> resolved;
 
     public MethodInst() {}

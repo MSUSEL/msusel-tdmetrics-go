@@ -18,9 +18,9 @@ public class Metrics extends ConstructImp {
     public boolean getter;
     public boolean setter;
 
-    public TreeSet<Ref<? extends Construct>> invokes = new TreeSet<Ref<? extends Construct>>();
-    public TreeSet<Ref<? extends Construct>> reads   = new TreeSet<Ref<? extends Construct>>();
-    public TreeSet<Ref<? extends Construct>> writes  = new TreeSet<Ref<? extends Construct>>();
+    public TreeSet<Ref<? extends Construct>> invokes = new TreeSet<>();
+    public TreeSet<Ref<? extends Construct>> reads   = new TreeSet<>();
+    public TreeSet<Ref<? extends Construct>> writes  = new TreeSet<>();
 
     public Metrics() {}
 

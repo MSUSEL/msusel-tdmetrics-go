@@ -56,7 +56,7 @@ public abstract class ConstructImp implements Construct {
         return indices;
     }
 
-    private int index = -1;
+    private int        index   = -1;
     private CmpOptions options = null;
 
     protected ConstructImp() { }

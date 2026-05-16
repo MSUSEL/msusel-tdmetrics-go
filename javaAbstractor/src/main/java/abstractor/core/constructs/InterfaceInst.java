@@ -9,7 +9,7 @@ import abstractor.core.json.*;
 
 public class InterfaceInst extends ConstructImp implements TypeDesc {
     public Ref<InterfaceDecl> generic;
-    public final ArrayList<Ref<? extends TypeDesc>> instanceTypes = new ArrayList<Ref<? extends TypeDesc>>();
+    public final ArrayList<Ref<? extends TypeDesc>> instanceTypes = new ArrayList<>();
     public Ref<InterfaceDesc> resolved;
 
     public InterfaceInst() {}
