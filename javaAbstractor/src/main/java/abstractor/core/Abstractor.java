@@ -1,10 +1,6 @@
 package abstractor.core;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
-import java.util.TreeSet;
-import java.util.HashSet;
+import java.util.*;
 
 import spoon.Launcher;
 import spoon.MavenLauncher;
@@ -20,8 +16,6 @@ import abstractor.core.validator.*;
 import abstractor.core.spoonUtils.*;
 
 public class Abstractor {
-    static private final boolean doNotCatch = true; // TODO: false;
-
     public final Logger  log;
     public final Project proj;
 
@@ -88,7 +82,6 @@ public class Abstractor {
             "for pending package " + SpoonUtils.describeElem(pkg));
     }
     
-    // TODO: Use addPackageFor for more places.
     public Ref<PackageCon> addPackageFor(CtType<?> t) throws Exception {
         return this.addPackage(t.getTopLevelType().getPackage());
     }
@@ -99,17 +92,9 @@ public class Abstractor {
 
     public Ref<? extends Construct> addDeclaration(CtElement elem) throws Exception {
         if (elem == null) return null;
-        if (doNotCatch) return this.addDeclarationImpl(elem);
-        try {
-            return this.addDeclarationImpl(elem);
-        } catch (Exception ex) {
-            this.log.error("addDeclaration failed for " + SpoonUtils.describeElem(elem) + ": " + ex.getMessage());
-            return null;
-        }
-    }
 
-    private Ref<? extends Construct> addDeclarationImpl(CtElement elem) throws Exception {
-        if (elem instanceof CtTypeReference<?> tr) elem = tr.getTypeDeclaration();
+        // If a reference, get the actual element.
+        if (elem instanceof CtReference ref) elem = ref.getDeclaration();
         if (elem == null) return null;
 
         // Skip annotation types — they don't participate in data flow.
@@ -121,32 +106,240 @@ public class Abstractor {
         if (elem instanceof CtInterface<?> i) return this.addInterfaceDecl(i);
         if (elem instanceof CtMethod<?>    m) return this.addGeneralMethod(m);
 
-        this.log.error("Skipping unhandled decl: " + SpoonUtils.describeElem(elem));
+        this.log.error("Unhandled decl: " + SpoonUtils.describeElem(elem));
         return null;
     }
 
-    public Ref<? extends TypeDeclaration> addTypeDeclaration(CtElement elem) throws Exception {
-        if (elem == null) return null;
-        if (doNotCatch) return this.addTypeDeclarationImpl(elem);
-        try {
-            return this.addTypeDeclarationImpl(elem);
-        } catch (Exception ex) {
-            this.log.error("addTypeDeclaration failed for " + SpoonUtils.describeElem(elem) + ": " + ex.getMessage());
-            return null;
-        }
+    public Ref<MethodDecl> addMethod(Ref<ObjectDecl> receiver, CtMethod<?> m) throws Exception {
+        if (!receiver.isResolved())
+            throw new AbstractorException("Expected the object receiver for a method to be resolved: " + receiver.toString());
+        final ObjectDecl recv = receiver.getResolved();
+
+        return this.proj.methodDecls.create(this.log, m,
+            "method " + SpoonUtils.describeElem(m),
+            () -> {
+                final Ref<PackageCon>      pkg        = recv.pkg;
+                final Location             loc        = this.proj.locations.create(m.getPosition());
+                final String               name       = m.getSimpleName();
+                final Ref<Signature>       signature  = this.addSignature(m);
+                final List<Ref<TypeParam>> typeParams = this.addTypeParams(m.getFormalCtTypeParameters());
+                final MethodDecl md = new MethodDecl(pkg, receiver, loc, name, signature, typeParams);
+                md.isStatic = m.isStatic();
+                return md;
+            },
+            (Ref<MethodDecl> ref, MethodDecl md) -> {
+                md.setVisibility(m);
+                recv.methodDecls.add(ref);
+                this.pendingMetrics.add(m);
+            });
     }
 
-    private Ref<? extends TypeDeclaration> addTypeDeclarationImpl(CtElement elem) throws Exception {
-        if (elem instanceof CtTypeReference<?> tr) elem = tr.getTypeDeclaration();
-        if (elem == null) return null;
-
-        if (elem instanceof CtEnum<?>      e) return this.addObjectDecl(e);
-        if (elem instanceof CtClass<?>     c) return this.addObjectDecl(c);
-        if (elem instanceof CtInterface<?> i) return this.addInterfaceDecl(i);
-
-        this.log.error("Skipping unhandled type decl: " + SpoonUtils.describeElem(elem));
-        return null;
+    public Ref<Signature> addSignature(CtMethod<?> m) throws Exception {
+        assert(!SpoonUtils.isObjectMethod(m));
+        return this.proj.signatures.create(this.log, m,
+            "signature " + SpoonUtils.describeElem(m),
+            () -> {
+                final List<CtParameter<?>> ps = m.getParameters();
+                final boolean variadic = ps.size() > 0 && ps.get(ps.size()-1).isVarArgs();
+                
+                final ArrayList<Ref<Argument>> params = new ArrayList<>();
+                for (CtParameter<?> p : ps) params.add(this.addArgument(p));
+                
+                final ArrayList<Ref<Argument>> results = new ArrayList<>();
+                final CtTypeReference<?> res = m.getType();
+                if (!SpoonUtils.isVoid(res)) results.add(this.addArgument(res));
+                
+                return new Signature(variadic, params, results);
+            });
     }
+
+    public Ref<MethodDecl> addConstructorMethod(Ref<ObjectDecl> receiver, CtConstructor<?> ctor) throws Exception {
+        if (!receiver.isResolved())
+            throw new AbstractorException("Expected the receiver for a constructor method to be resolved: " + receiver.toString());
+        final ObjectDecl recv = receiver.getResolved();
+
+        return this.proj.methodDecls.create(log, ctor,
+            "constructor " + ctor.getSignature(),
+            () -> {
+                final Ref<PackageCon>      pkg        = recv.pkg;
+                final Location             loc        = this.proj.locations.create(ctor.getPosition());
+                final String               name       = recv.name;
+                final Ref<Signature>       signature  = this.addConstructorSignature(ctor);
+                final List<Ref<TypeParam>> typeParams = this.addTypeParams(ctor.getFormalCtTypeParameters());
+                final MethodDecl md = new MethodDecl(pkg, receiver, loc, name, signature, typeParams);
+                md.constructor = true;
+                md.isStatic = true;
+                return md;
+            },
+            (Ref<MethodDecl> ref, MethodDecl md) -> {
+                md.setVisibility(ctor);
+                recv.methodDecls.add(ref);
+            });
+    }
+
+    public Ref<Signature> addConstructorSignature(CtConstructor<?> m) throws Exception {
+        return this.proj.signatures.create(this.log, m,
+            "constructor signature " + SpoonUtils.describeElem(m),
+            () -> {
+                final List<CtParameter<?>> ps = m.getParameters();
+                final boolean variadic = ps.size() > 0 && ps.get(ps.size()-1).isVarArgs();
+
+                final ArrayList<Ref<Argument>> params = new ArrayList<>();
+                for (CtParameter<?> p : ps) params.add(this.addArgument(p));
+                
+                final ArrayList<Ref<Argument>> results = new ArrayList<>();
+                results.add(this.addArgument(m.getType()));
+
+                return new Signature(variadic, params, results);
+            });
+    }
+
+    public Ref<Argument> addArgument(CtParameter<?> p) throws Exception {
+        return this.proj.arguments.create(this.log, p,
+            "parameter " + SpoonUtils.describeElem(p),
+            () -> {
+                final String                  name = p.getSimpleName();
+                final Ref<? extends TypeDesc> type = this.addTypeDesc(p.getType());
+                return new Argument(name, type);
+            });
+    }
+    
+    public Ref<Argument> addArgument(CtTypeReference<?> p) throws Exception {
+        return this.proj.arguments.create(this.log, p,
+            "parameter <unnamed> " + SpoonUtils.describeElem(p),
+            () -> {
+                final Ref<? extends TypeDesc> type = this.addTypeDesc(p);
+                return new Argument("", type);
+            });
+    }
+    
+    public Ref<StructDesc> addStruct(CtClass<?> c) throws Exception {
+        return this.proj.structDescs.create(this.log, c,
+            "struct " + SpoonUtils.describeElem(c),
+            () -> {
+                // Collect all fields.
+                final ArrayList<Ref<Field>> fields = new ArrayList<>();
+                for (CtFieldReference<?> fr : c.getAllFields())
+                    fields.add(this.addField(fr.getFieldDeclaration()));
+
+                // Add extended class as a "$super" field.
+                CtTypeReference<?> superFr = c.getSuperclass();
+                if (superFr != null) fields.add(this.addField("$super", superFr));
+
+                // Add access to nesting class as a "$nest" field.
+                if (c.getRoleInParent() == CtRole.NESTED_TYPE) {
+                    if (c.getParent() instanceof CtTypeReference<?> nest && nest != null) {
+                        fields.add(this.addField("$nest", nest));
+                    } else {
+                        this.log.error("Unhandled nested object decl " + SpoonUtils.describeElem(c) + " in " + c.getParent());
+                    }
+                }
+
+                return new StructDesc(fields);
+            });
+    }
+
+    public Ref<Field> addField(CtField<?> f) throws Exception {
+        return this.proj.fields.create(this.log, f,
+            "field " + SpoonUtils.describeElem(f),
+            () -> {
+                final String                  name = f.getSimpleName();
+                final Ref<? extends TypeDesc> type = this.addTypeDesc(f.getType());
+                return new Field(name, type);
+            },
+            (Ref<Field> ref, Field field) -> {
+                field.setVisibility(f);
+            });
+    }
+
+    public Ref<Field> addField(String name, CtTypeReference<?> f) throws Exception {
+        return this.proj.fields.create(this.log, f,
+            "field " + name,
+            () -> {
+                final Ref<? extends TypeDesc> type = this.addTypeDesc(f);
+                return new Field(name, type);
+            });
+    }
+
+    public Ref<Selection> addSelection(CtField<?> field) throws Exception {
+        return this.proj.selections.create(this.log, field,
+            "select field " + SpoonUtils.describeElem(field),
+            () -> {
+                final String                   name = field.getSimpleName();
+                final Ref<? extends Construct> decl = this.addDeclaration(field.getDeclaringType());
+                return new Selection(name, decl);
+            });
+    }
+
+    public Ref<InterfaceInst> addArray(CtArrayTypeReference<?> tr) throws Exception {
+        final Ref<? extends TypeDesc> elem = this.addTypeDesc(tr.getArrayType());
+        Ref<InterfaceInst> ref = this.proj.baker.arrayInst(tr.getSimpleName(), elem);
+        this.proj.interfaceInsts.setRefForElem(tr, ref);
+        return ref;
+    }
+    
+    public Ref<Basic> addBasic(CtTypeReference<?> tr) throws Exception {
+        return this.proj.basics.create(this.log, tr,
+            "basic " + SpoonUtils.describeElem(tr),
+            () -> {
+                if (SpoonUtils.isVoid(tr))
+                    throw new AbstractorException("A void was added as a basic");
+                return new Basic(tr.getSimpleName());
+            });
+    }
+    
+    public Ref<Abstract> addAbstract(CtMethod<?> m) throws Exception {
+        assert(!SpoonUtils.isObjectMethod(m));
+        return this.proj.abstracts.create(this.log, m,
+            "abstract " + SpoonUtils.describeElem(m),
+            () -> {
+                final String         name      = m.getSimpleName();
+                final Ref<Signature> signature = this.addSignature(m);
+                return new Abstract(name, signature);
+            });
+    }
+
+    public ArrayList<Ref<? extends TypeDesc>> addTypeArguments(List<CtTypeReference<?>> trs) throws Exception {
+        final ArrayList<Ref<? extends TypeDesc>> result = new ArrayList<>(trs.size());
+        for (CtTypeReference<?> tr : trs) result.add(this.addTypeDesc(tr));
+        return result;
+    }
+
+    public ArrayList<Ref<TypeParam>> addTypeParams(List<CtTypeParameter> tps) throws Exception {
+        final ArrayList<Ref<TypeParam>> result = new ArrayList<>(tps.size());
+        for (CtTypeParameter tp : tps) result.add(this.addTypeParam(tp));
+        return result;
+    }
+
+    public Ref<TypeParam> addTypeParam(CtTypeParameter tp) throws Exception {
+        return this.proj.typeParams.create(this.log, tp,
+            "type params " + SpoonUtils.describeElem(tp),
+            () -> {
+                final String                  name = tp.getSimpleName();
+                final CtTypeReference<?>      tr   = tp.getTypeErasure();
+                final Ref<? extends TypeDesc> type = this.addTypeDesc(tr);
+                return new TypeParam(name, type);
+            });
+    }
+    
+    public Ref<Metrics> addMetrics(CtMethod<?> m) throws Exception {
+        return this.proj.metrics.create(this.log, m,
+            "metrics " + SpoonUtils.describeElem(m),
+            () -> {
+                final Location loc = this.proj.locations.create(m.getPosition());
+                final Analyzer ana = new Analyzer(this, loc);
+                ana.addMethod(m);
+                return ana.getMetrics();
+            });
+    }
+
+
+
+
+
+
+
+    //===[ BELOW NEEDS SOME WORK ]==============================================
 
     /**
      * Handle Java primitives and object equivalents to primitives (boxed primitives)
@@ -154,7 +347,6 @@ public class Abstractor {
      * Other types become stub InterfaceDecl.
      */
     public Ref<? extends TypeDesc> addExternalStub(CtTypeReference<?> tr) throws Exception {
-        // TODO: Why even pass in null?
         // If a type can not be resolved return an object (kind of like an `any` in Go).
         if (tr == null) return this.proj.baker.anyDesc();
 
@@ -162,8 +354,9 @@ public class Abstractor {
         // no type associated with it so instead use an object.
         if (SpoonUtils.isNull(tr)) return this.proj.baker.anyDesc();
 
+        // TODO: WHY IS THIS ONLY DOING THE ERASURE?!
         final CtTypeReference<?> erasure = tr.getTypeErasure();
-        final Ref<Basic> boxed = this.proj.baker.basicForBoxedOrString(erasure);
+        final Ref<Basic>         boxed   = this.proj.baker.basicForBoxedOrString(erasure);
         if (boxed != null) return boxed;
 
         final Ref<InterfaceDecl> decl = this.proj.interfaceDecls.create(this.log, erasure,
@@ -208,7 +401,7 @@ public class Abstractor {
         return this.proj.objectDecls.create(this.log, c,
             "object decl " + SpoonUtils.describeElem(c),
             () -> {
-                final Ref<PackageCon>      pkg        = this.addPackage(c.getPackage());
+                final Ref<PackageCon>      pkg        = this.addPackageFor(c);
                 final Location             loc        = this.proj.locations.create(c.getPosition());
                 final String               name       = c.getSimpleName();
                 final Ref<StructDesc>      struct     = this.addStruct(c);
@@ -232,59 +425,34 @@ public class Abstractor {
 
                 // Add methods for the class.
                 for (CtMethod<?> m : c.getAllMethods()) {
-                    if (m.getParent().equals(c) && !SpoonUtils.isObjectMethod(m)) this.addMethod(ref, m);
+                    if (m.getParent().equals(c) && !SpoonUtils.isObjectMethod(m))
+                        this.addMethod(ref, m);
                 }
 
                 // Synthesize the interface description for the class.
                 final TreeSet<Ref<Abstract>> abstracts = new TreeSet<Ref<Abstract>>();
                 for (CtMethod<?> m : c.getAllMethods()) {
-                    if (!m.isStatic() && !SpoonUtils.isObjectMethod(m)) abstracts.add(this.addAbstract(m));
+                    if (!m.isStatic() && !SpoonUtils.isObjectMethod(m))
+                        abstracts.add(this.addAbstract(m));
                 }
-                // TODO: FIX BELOW
+
+                // TODO: FIX BELOW (ref is pin)
                 obj.inter = this.proj.interfaceDescs.addOrGetRef(new InterfaceDesc(abstracts, ref), "interface for object");
 
                 // TODO: Finish implementing
                 //System.out.println("1) >>> " + c.getSuperInterfaces());
 
                 // Add any nested types.
-                for (CtType<?> nt : c.getNestedTypes()) this.addTypeDesc(nt.getReference());
-            });
-    }
-
-    public Ref<MethodDecl> addConstructorMethod(Ref<ObjectDecl> receiver, CtConstructor<?> ctor) throws Exception {
-        if (!receiver.isResolved())
-            throw new AbstractorException("Expected the receiver for a constructor method to be resolved: " + receiver.toString());
-        final ObjectDecl recv = receiver.getResolved();
-
-        return this.proj.methodDecls.create(log, ctor,
-            "constructor " + ctor.getSignature(),
-            () -> {
-                final Ref<PackageCon>      pkg        = recv.pkg;
-                final Location             loc        = this.proj.locations.create(ctor.getPosition());
-                final String               name       = recv.name;
-                final Ref<Signature>       signature  = this.addConstructSignature(ctor);
-                final List<Ref<TypeParam>> typeParams = this.addTypeParams(ctor.getFormalCtTypeParameters());
-                final MethodDecl md = new MethodDecl(pkg, receiver, loc, name, signature, typeParams);
-                md.constructor = true;
-                md.isStatic = true;
-                return md;
-            },
-            (Ref<MethodDecl> ref, MethodDecl md) -> {
-                md.setVisibility(ctor);
-                recv.methodDecls.add(ref);
+                for (CtType<?> nt : c.getNestedTypes())
+                    this.addTypeDesc(nt.getReference());
             });
     }
 
     public Ref<? extends Construct> addGeneralMethod(CtMethod<?> m) throws Exception {
         final CtType<?> decl = m.getDeclaringType();
-        if (decl instanceof CtEnum<?> e) {
-            final Ref<ObjectDecl> obj = this.addObjectDecl(e);
-            return this.addMethod(obj, m);
-        }
-        if (decl instanceof CtClass<?> c) {
-            final Ref<ObjectDecl> obj = this.addObjectDecl(c);
-            return this.addMethod(obj, m);
-        }
+        if (decl instanceof CtEnum<?>  e) return this.addMethod(this.addObjectDecl(e), m);
+        if (decl instanceof CtClass<?> c) return this.addMethod(this.addObjectDecl(c), m);
+
         if (decl instanceof CtInterface<?>) {
             final Ref<Abstract> ab = this.addAbstract(m);
             // TODO: Connect abstract to interface declaration
@@ -293,152 +461,13 @@ public class Abstractor {
         this.log.error("Skipping method with unhandled declaring type: " + SpoonUtils.describeElem(decl));
         return null;
     }
-
-    public Ref<MethodDecl> addMethod(Ref<ObjectDecl> receiver, CtMethod<?> m) throws Exception {
-        if (!receiver.isResolved())
-            throw new AbstractorException("Expected the object receiver for a method to be resolved: " + receiver.toString());
-        final ObjectDecl recv = receiver.getResolved();
-
-        return this.proj.methodDecls.create(this.log, m,
-            "method " + SpoonUtils.describeElem(m),
-            () -> {
-                final Ref<PackageCon>      pkg        = recv.pkg;
-                final Location             loc        = this.proj.locations.create(m.getPosition());
-                final String               name       = m.getSimpleName();
-                final Ref<Signature>       signature  = this.addSignature(m);
-                final List<Ref<TypeParam>> typeParams = this.addTypeParams(m.getFormalCtTypeParameters());
-                final MethodDecl md = new MethodDecl(pkg, receiver, loc, name, signature, typeParams);
-                md.isStatic = m.isStatic();
-                return md;
-            },
-            (Ref<MethodDecl> ref, MethodDecl md) -> {
-                md.setVisibility(m);
-                //if (pkg != null) pkg.methodDecls.add(md); // TODO: Move to a follow up when we know the package is done.
-                recv.methodDecls.add(ref);
-                this.pendingMetrics.add(m);
-            });
-    }
-
-    public Ref<Signature> addConstructSignature(CtConstructor<?> m) throws Exception {
-        return this.proj.signatures.create(this.log, m,
-            "constructor signature " + SpoonUtils.describeElem(m),
-            () -> {
-                final List<CtParameter<?>> ps = m.getParameters();
-                final boolean variadic = ps.size() > 0 && ps.get(ps.size()-1).isVarArgs();
-
-                final ArrayList<Ref<Argument>> params = new ArrayList<>();
-                for (CtParameter<?> p : ps) params.add(this.addArgument(p));
-                
-                final ArrayList<Ref<Argument>> results = new ArrayList<>();
-                results.add(this.addArgument(m.getType()));
-
-                return new Signature(variadic, params, results);
-            });
-    }
-
-    public Ref<Signature> addSignature(CtMethod<?> m) throws Exception {
-        assert(!SpoonUtils.isObjectMethod(m));
-        return this.proj.signatures.create(this.log, m,
-            "signature " + SpoonUtils.describeElem(m),
-            () -> {
-                final List<CtParameter<?>> ps = m.getParameters();
-                final boolean variadic = ps.size() > 0 && ps.get(ps.size()-1).isVarArgs();
-                
-                final ArrayList<Ref<Argument>> params = new ArrayList<>();
-                for (CtParameter<?> p : ps) params.add(this.addArgument(p));
-                
-                final ArrayList<Ref<Argument>> results = new ArrayList<>();
-                final CtTypeReference<?> res = m.getType();
-                if (!SpoonUtils.isVoid(res)) results.add(this.addArgument(res));
-                
-                return new Signature(variadic, params, results);
-            });
-    }
-
-    public Ref<Argument> addArgument(CtParameter<?> p) throws Exception {
-        return this.proj.arguments.create(this.log, p,
-            "parameter " + SpoonUtils.describeElem(p),
-            () -> {
-                final String                  name = p.getSimpleName();
-                final Ref<? extends TypeDesc> type = this.addTypeDesc(p.getType());
-                return new Argument(name, type);
-            });
-    }
-    
-    public Ref<Argument> addArgument(CtTypeReference<?> p) throws Exception {
-        return this.proj.arguments.create(this.log, p,
-            "parameter <unnamed> " + SpoonUtils.describeElem(p),
-            () -> {
-                final String                  name = p.getSimpleName();
-                final Ref<? extends TypeDesc> type = this.addTypeDesc(p);
-                return new Argument("", type);
-            });
-    }
-    
-    public Ref<StructDesc> addStruct(CtClass<?> c) throws Exception {
-        return this.proj.structDescs.create(this.log, c,
-            "struct " + SpoonUtils.describeElem(c),
-            () -> {
-                // Collect all fields.
-                final ArrayList<Ref<Field>> fields = new ArrayList<>();
-                for (CtFieldReference<?> fr : c.getAllFields())
-                    fields.add(this.addField(fr.getFieldDeclaration()));
-
-                // Add extended class as a "$super" field.
-                CtTypeReference<?> superFr = c.getSuperclass();
-                if (superFr != null) fields.add(this.addField("$super", superFr));
-
-                // Add access to nesting class as a "$nest" field.
-                if (c.getRoleInParent() == CtRole.NESTED_TYPE) {
-                    if (c.getParent() instanceof CtTypeReference<?> nest && nest != null) {
-                        fields.add(this.addField("$nest", nest));
-                    } else {
-                        this.log.error("Unhandled nested object decl " + SpoonUtils.describeElem(c) + " in " + c.getParent());
-                    }
-                }
-
-                return new StructDesc(fields);
-            });
-    }
-
-    private Ref<Field> addField(CtField<?> f) throws Exception {
-        return this.proj.fields.create(this.log, f,
-            "field " + SpoonUtils.describeElem(f),
-            () -> {
-                final String                  name = f.getSimpleName();
-                final Ref<? extends TypeDesc> type = this.addTypeDesc(f.getType());
-                return new Field(name, type);
-            },
-            (Ref<Field> ref, Field field) -> {
-                field.setVisibility(f);
-            });
-    }
-
-    private Ref<Field> addField(String name, CtTypeReference<?> f) throws Exception {
-        return this.proj.fields.create(this.log, f,
-            "field " + name,
-            () -> {
-                final Ref<? extends TypeDesc> type = this.addTypeDesc(f);
-                return new Field(name, type);
-            });
-    }
-
-    public Ref<Selection> addSelection(CtField<?> field) throws Exception {
-        return this.proj.selections.create(this.log, field,
-            "select field " + SpoonUtils.describeElem(field),
-            () -> {
-                final String                   name = field.getSimpleName();
-                final Ref<? extends Construct> decl = this.addDeclaration(field.getDeclaringType());
-                return new Selection(name, decl);
-            });
-    }
     
     public Ref<InterfaceDecl> addInterfaceDecl(CtInterface<?> i) throws Exception {
         return this.proj.interfaceDecls.create(this.log, i,
             "interface decl " + SpoonUtils.describeElem(i),
             () -> {
                 final String             name  = i.getSimpleName();
-                final Ref<PackageCon>    pkg   = this.addPackage(i.getPackage());
+                final Ref<PackageCon>    pkg   = this.addPackageFor(i);
                 final Location           loc   = this.proj.locations.create(i.getPosition());
                 final Ref<InterfaceDesc> inter = this.addInterfaceDesc(i);
                 final ArrayList<Ref<TypeParam>> typeParams = this.addTypeParams(i.getFormalCtTypeParameters());
@@ -457,14 +486,12 @@ public class Abstractor {
             });
     }
 
-    //======================================================================================================================
-
     public Ref<ObjectDecl> addEnum(CtEnum<?> e) throws Exception {
         return this.proj.objectDecls.create(this.log, e,
             "enum " + SpoonUtils.describeElem(e),
             () -> {
                 final String          name = e.getSimpleName();
-                final Ref<PackageCon> pkg  = this.addPackage(e.getPackage());
+                final Ref<PackageCon> pkg  = this.addPackageFor(e);
                 final Location        loc  = this.proj.locations.create(e.getPosition());
 
                 final CtTypeReference<?> tr = e.getSuperclass();
@@ -485,16 +512,6 @@ public class Abstractor {
     }
 
     public Ref<? extends TypeDesc> addTypeDesc(CtTypeReference<?> tr) throws Exception {
-        if (doNotCatch) return this.addTypeDescImpl(tr);
-        try {
-            return this.addTypeDescImpl(tr);
-        } catch (Exception ex) {
-            this.log.warning("addTypeDesc failed for " + SpoonUtils.describeElem(tr) + ": " + ex.getMessage());
-            return this.proj.baker.anyDesc();
-        }
-    }
-
-    private Ref<? extends TypeDesc> addTypeDescImpl(CtTypeReference<?> tr) throws Exception {
         if (tr == null)       return this.proj.baker.anyDesc();
         if (tr.isPrimitive()) return this.addBasic(tr);
         if (tr.isArray())     return this.addArray((CtArrayTypeReference<?>)tr);
@@ -556,7 +573,7 @@ public class Abstractor {
         return this.proj.baker.anyDesc();
     }
 
-    private Ref<? extends TypeDesc> addWildcard(CtWildcardReference wr) throws Exception {
+    public Ref<? extends TypeDesc> addWildcard(CtWildcardReference wr) throws Exception {
         CtTypeReference<?> bound = wr.getBoundingType();
         if (bound == null || bound instanceof CtWildcardReference) return this.proj.baker.anyDesc();
 
@@ -570,24 +587,6 @@ public class Abstractor {
             return this.proj.baker.anyDesc();
         }
         return this.addTypeDesc(bound);
-    }
-
-    public Ref<InterfaceInst> addArray(CtArrayTypeReference<?> tr) throws Exception {
-        final Ref<? extends TypeDesc> elem = this.addTypeDesc(tr.getArrayType());
-        Ref<InterfaceInst> ref = this.proj.baker.arrayInst(tr.getSimpleName(), elem);
-        this.proj.interfaceInsts.setRefForElem(tr, ref);
-        //inst.generic.instances.add(inst); // TODO: Move to a follow up when we know the package is done.
-        return ref;
-    }
-    
-    public Ref<Basic> addBasic(CtTypeReference<?> tr) throws Exception {
-        return this.proj.basics.create(this.log, tr,
-            "basic " + SpoonUtils.describeElem(tr),
-            () -> {
-                if (SpoonUtils.isVoid(tr))
-                    throw new AbstractorException("A void was added as a basic");
-                return new Basic(tr.getSimpleName());
-            });
     }
 
     public Ref<InterfaceDesc> addInterfaceDesc(CtInterface<?> i) throws Exception {
@@ -607,50 +606,8 @@ public class Abstractor {
             });
     }
 
-    public Ref<Abstract> addAbstract(CtMethod<?> m) throws Exception {
-        assert(!SpoonUtils.isObjectMethod(m));
-        return this.proj.abstracts.create(this.log, m,
-            "abstract " + SpoonUtils.describeElem(m),
-            () -> {
-                final String         name      = m.getSimpleName();
-                final Ref<Signature> signature = this.addSignature(m);
-                return new Abstract(name, signature);
-            });
-    }
 
-    public ArrayList<Ref<? extends TypeDesc>> addTypeArguments(List<CtTypeReference<?>> trs) throws Exception {
-        final ArrayList<Ref<? extends TypeDesc>> result = new ArrayList<>(trs.size());
-        for (CtTypeReference<?> tr : trs) result.add(this.addTypeDesc(tr));
-        return result;
-    }
 
-    public ArrayList<Ref<TypeParam>> addTypeParams(List<CtTypeParameter> tps) throws Exception {
-        final ArrayList<Ref<TypeParam>> result = new ArrayList<>(tps.size());
-        for (CtTypeParameter tp : tps) result.add(this.addTypeParam(tp));
-        return result;
-    }
-
-    public Ref<TypeParam> addTypeParam(CtTypeParameter tp) throws Exception {
-        return this.proj.typeParams.create(this.log, tp,
-            "type params " + SpoonUtils.describeElem(tp),
-            () -> {
-                final String                  name = tp.getSimpleName();
-                final CtTypeReference<?>      tr   = tp.getTypeErasure();
-                final Ref<? extends TypeDesc> type = this.addTypeDesc(tr);
-                return new TypeParam(name, type);
-            });
-    }
-    
-    public Ref<Metrics> addMetrics(CtMethod<?> m) throws Exception {
-        return this.proj.metrics.create(this.log, m,
-            "metrics " + SpoonUtils.describeElem(m),
-            () -> {
-                final Location loc = this.proj.locations.create(m.getPosition());
-                final Analyzer ana = new Analyzer(this, loc);
-                ana.addMethod(m);
-                return ana.getMetrics();
-            });
-    }
 
     //===[ Processors ]=========================================================
 
