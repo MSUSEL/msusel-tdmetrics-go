@@ -104,17 +104,25 @@ public class Abstractor {
         if (elem instanceof CtEnum<?>      e) return this.addObjectDecl(e);
         if (elem instanceof CtClass<?>     c) return this.addObjectDecl(c);
         if (elem instanceof CtInterface<?> i) return this.addInterfaceDecl(i);
-        if (elem instanceof CtMethod<?>    m) return this.addGeneralMethod(m);
+        if (elem instanceof CtMethod<?>    m) return this.addMethodOrAbstract(m);
 
         this.log.error("Unhandled decl: " + SpoonUtils.describeElem(elem));
         return null;
     }
+    
+    public Ref<? extends Construct> addMethodOrAbstract(CtMethod<?> m) throws Exception {
+        final CtType<?> decl = m.getDeclaringType();
+        if (decl instanceof CtEnum<?>      e) return this.addMethod(this.addObjectDecl(e), m);
+        if (decl instanceof CtClass<?>     c) return this.addMethod(this.addObjectDecl(c), m);
+        if (decl instanceof CtInterface<?> i) return this.addAbstract(this.addInterfaceDecl(i), m);
+
+        this.log.error("method has unhandled declaring type: " + SpoonUtils.describeElem(decl));
+        return null;
+    }
 
     public Ref<MethodDecl> addMethod(Ref<ObjectDecl> receiver, CtMethod<?> m) throws Exception {
-        if (!receiver.isResolved())
-            throw new AbstractorException("Expected the object receiver for a method to be resolved: " + receiver.toString());
-        final ObjectDecl recv = receiver.getResolved();
-
+        assert(!SpoonUtils.isObjectMethod(m));
+        final ObjectDecl recv = receiver.mustGetResolved();
         return this.proj.methodDecls.create(this.log, m,
             "method " + SpoonUtils.describeElem(m),
             () -> {
@@ -131,6 +139,22 @@ public class Abstractor {
                 md.setVisibility(m);
                 recv.methodDecls.add(ref);
                 this.pendingMetrics.add(m);
+            });
+    }
+
+    public Ref<Abstract> addAbstract(Ref<InterfaceDecl> refRecv, CtMethod<?> m) throws Exception {
+        assert(!SpoonUtils.isObjectMethod(m));
+        return this.proj.abstracts.create(this.log, m,
+            "abstract " + SpoonUtils.describeElem(m),
+            () -> {
+                final String         name      = m.getSimpleName();
+                final Ref<Signature> signature = this.addSignature(m);
+                return new Abstract(name, signature);
+            },
+            (Ref<Abstract> ref, Abstract ab) -> {
+                final InterfaceDecl recv  = refRecv.mustGetResolved();
+                final InterfaceDesc inter = recv.inter.mustGetResolved();
+                inter.abstracts.add(ref);
             });
     }
 
@@ -154,13 +178,10 @@ public class Abstractor {
     }
 
     public Ref<MethodDecl> addConstructorMethod(Ref<ObjectDecl> receiver, CtConstructor<?> ctor) throws Exception {
-        if (!receiver.isResolved())
-            throw new AbstractorException("Expected the receiver for a constructor method to be resolved: " + receiver.toString());
-        final ObjectDecl recv = receiver.getResolved();
-
         return this.proj.methodDecls.create(log, ctor,
             "constructor " + ctor.getSignature(),
             () -> {
+                final ObjectDecl           recv       = receiver.mustGetResolved();
                 final Ref<PackageCon>      pkg        = recv.pkg;
                 final Location             loc        = this.proj.locations.create(ctor.getPosition());
                 final String               name       = recv.name;
@@ -173,6 +194,7 @@ public class Abstractor {
             },
             (Ref<MethodDecl> ref, MethodDecl md) -> {
                 md.setVisibility(ctor);
+                final ObjectDecl recv = receiver.mustGetResolved();
                 recv.methodDecls.add(ref);
             });
     }
@@ -285,17 +307,6 @@ public class Abstractor {
                 if (SpoonUtils.isVoid(tr))
                     throw new AbstractorException("A void was added as a basic");
                 return new Basic(tr.getSimpleName());
-            });
-    }
-    
-    public Ref<Abstract> addAbstract(CtMethod<?> m) throws Exception {
-        assert(!SpoonUtils.isObjectMethod(m));
-        return this.proj.abstracts.create(this.log, m,
-            "abstract " + SpoonUtils.describeElem(m),
-            () -> {
-                final String         name      = m.getSimpleName();
-                final Ref<Signature> signature = this.addSignature(m);
-                return new Abstract(name, signature);
             });
     }
 
@@ -446,20 +457,6 @@ public class Abstractor {
                 for (CtType<?> nt : c.getNestedTypes())
                     this.addTypeDesc(nt.getReference());
             });
-    }
-
-    public Ref<? extends Construct> addGeneralMethod(CtMethod<?> m) throws Exception {
-        final CtType<?> decl = m.getDeclaringType();
-        if (decl instanceof CtEnum<?>  e) return this.addMethod(this.addObjectDecl(e), m);
-        if (decl instanceof CtClass<?> c) return this.addMethod(this.addObjectDecl(c), m);
-
-        if (decl instanceof CtInterface<?>) {
-            final Ref<Abstract> ab = this.addAbstract(m);
-            // TODO: Connect abstract to interface declaration
-            return ab;
-        }
-        this.log.error("Skipping method with unhandled declaring type: " + SpoonUtils.describeElem(decl));
-        return null;
     }
     
     public Ref<InterfaceDecl> addInterfaceDecl(CtInterface<?> i) throws Exception {

@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import spoon.reflect.declaration.CtElement;
-
+import abstractor.core.AbstractorException;
 import abstractor.core.cmp.Cmp;
 import abstractor.core.cmp.CmpOptions;
 import abstractor.core.json.JsonHelper;
@@ -45,6 +45,12 @@ public class Ref<T extends Construct> extends ConstructImp {
 
     public T getResolved() { return this.res; }
     public boolean isResolved() { return this.res != null; }
+
+    public T mustGetResolved() throws Exception {
+        if (this.res == null)
+            throw new AbstractorException("Expected the " + this.kind() + " reference is resolved.");
+        return this.res;
+    }
 
     public void setResolved(T res) throws Exception {
         if (res == null)
