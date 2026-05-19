@@ -109,12 +109,63 @@ public class Abstractor {
         this.log.error("Unhandled decl: " + SpoonUtils.describeElem(elem));
         return null;
     }
-    
+
+    public Ref<InterfaceDecl> addInterfaceDecl(CtInterface<?> i) throws Exception {
+        return this.proj.interfaceDecls.create(this.log, i,
+            "interface decl " + SpoonUtils.describeElem(i),
+            () -> {
+                final String             name  = i.getSimpleName();
+                final Ref<PackageCon>    pkg   = this.addPackageFor(i);
+                final Location           loc   = this.proj.locations.create(i.getPosition());
+                final Ref<InterfaceDesc> inter = this.addInterfaceDesc(i);
+                final ArrayList<Ref<TypeParam>> typeParams = this.addTypeParams(i.getFormalCtTypeParameters());
+                return new InterfaceDecl(pkg, loc, name, inter, typeParams);
+            },
+            (Ref<InterfaceDecl> ref, InterfaceDecl id) -> {
+                id.setVisibility(i);
+            });
+    }
+
+    public Ref<InterfaceDesc> addInterfaceDesc(CtInterface<?> i) throws Exception {
+        return this.proj.interfaceDescs.create(this.log, i,
+            "interface description " + SpoonUtils.describeElem(i),
+            () -> {
+                final TreeSet<Ref<Abstract>> abstracts = new TreeSet<Ref<Abstract>>();
+                for (CtMethod<?> m : i.getAllMethods()) {
+                    if (!SpoonUtils.isObjectMethod(m)) abstracts.add(this.addAbstract(m));
+                }
+
+                Ref<? extends Construct> pin = null;
+                if (i.getRoleInParent() == CtRole.NESTED_TYPE) {
+                    CtElement parent = i.getParent();
+                    if (parent instanceof CtTypeReference<?> nest && nest != null) {
+                        pin = this.addDeclaration(nest);
+                    } else {
+                        this.log.error("Unhandled nested interface decl " + SpoonUtils.describeElem(i) + " in " + parent);
+                    }
+                }
+
+                return new InterfaceDesc(abstracts, pin);
+            },
+            (Ref<InterfaceDesc> ref, InterfaceDesc id) -> {
+                // Add direct super-interfaces this interface extends
+                for (CtTypeReference<?> supRef : i.getSuperInterfaces()) {
+                    CtType<?> supDecl = supRef.getTypeDeclaration(); // may be null for shadow/unresolved
+                    if (supDecl != null) {
+                        if (supDecl instanceof CtInterface<?> supId) {
+                            id.inherits.add(this.addInterfaceDesc(supId));
+                        }
+                        // TODO: Notify when not CtInterface
+                    }
+                }
+            });
+    }
+
     public Ref<? extends Construct> addMethodOrAbstract(CtMethod<?> m) throws Exception {
         final CtType<?> decl = m.getDeclaringType();
-        if (decl instanceof CtEnum<?>      e) return this.addMethod(this.addObjectDecl(e), m);
-        if (decl instanceof CtClass<?>     c) return this.addMethod(this.addObjectDecl(c), m);
-        if (decl instanceof CtInterface<?> i) return this.addAbstract(this.addInterfaceDecl(i), m);
+        if (decl instanceof CtEnum<?>    e) return this.addMethod(this.addObjectDecl(e), m);
+        if (decl instanceof CtClass<?>   c) return this.addMethod(this.addObjectDecl(c), m);
+        if (decl instanceof CtInterface<?>) return this.addAbstract(m);
 
         this.log.error("method has unhandled declaring type: " + SpoonUtils.describeElem(decl));
         return null;
@@ -142,7 +193,7 @@ public class Abstractor {
             });
     }
 
-    public Ref<Abstract> addAbstract(Ref<InterfaceDecl> refRecv, CtMethod<?> m) throws Exception {
+    public Ref<Abstract> addAbstract(CtMethod<?> m) throws Exception {
         assert(!SpoonUtils.isObjectMethod(m));
         return this.proj.abstracts.create(this.log, m,
             "abstract " + SpoonUtils.describeElem(m),
@@ -150,11 +201,6 @@ public class Abstractor {
                 final String         name      = m.getSimpleName();
                 final Ref<Signature> signature = this.addSignature(m);
                 return new Abstract(name, signature);
-            },
-            (Ref<Abstract> ref, Abstract ab) -> {
-                final InterfaceDecl recv  = refRecv.mustGetResolved();
-                final InterfaceDesc inter = recv.inter.mustGetResolved();
-                inter.abstracts.add(ref);
             });
     }
 
@@ -352,6 +398,11 @@ public class Abstractor {
 
     //===[ BELOW NEEDS SOME WORK ]==============================================
 
+
+
+
+
+
     /**
      * Handle Java primitives and object equivalents to primitives (boxed primitives)
      * such that the boxed primitives (e.g. Integer) and String become Basic's.
@@ -459,30 +510,6 @@ public class Abstractor {
             });
     }
     
-    public Ref<InterfaceDecl> addInterfaceDecl(CtInterface<?> i) throws Exception {
-        return this.proj.interfaceDecls.create(this.log, i,
-            "interface decl " + SpoonUtils.describeElem(i),
-            () -> {
-                final String             name  = i.getSimpleName();
-                final Ref<PackageCon>    pkg   = this.addPackageFor(i);
-                final Location           loc   = this.proj.locations.create(i.getPosition());
-                final Ref<InterfaceDesc> inter = this.addInterfaceDesc(i);
-                final ArrayList<Ref<TypeParam>> typeParams = this.addTypeParams(i.getFormalCtTypeParameters());
-
-                if (i.getRoleInParent() == CtRole.NESTED_TYPE) {
-                    // TODO: Need to differentiate this from an interface by
-                    //       the same name nested in a different class or not nested in any class.
-                    this.log.error("Unhandled nested interface decl " + SpoonUtils.describeElem(i));
-                }
-
-                return new InterfaceDecl(pkg, loc, name, inter, typeParams);
-            },
-            (Ref<InterfaceDecl> ref, InterfaceDecl id) -> {
-                id.setVisibility(i);
-                //if (id.pkg != null) id.pkg.interfaceDecls.add(id); // TODO: Move to a follow up when we know the package is done.
-            });
-    }
-
     public Ref<ObjectDecl> addEnum(CtEnum<?> e) throws Exception {
         return this.proj.objectDecls.create(this.log, e,
             "enum " + SpoonUtils.describeElem(e),
@@ -585,24 +612,6 @@ public class Abstractor {
         }
         return this.addTypeDesc(bound);
     }
-
-    public Ref<InterfaceDesc> addInterfaceDesc(CtInterface<?> i) throws Exception {
-        return this.proj.interfaceDescs.create(this.log, i,
-            "interface description " + SpoonUtils.describeElem(i),
-            () -> {
-                final TreeSet<Ref<Abstract>> abstracts = new TreeSet<Ref<Abstract>>();
-                for (CtMethod<?> m : i.getAllMethods()) {
-                    if (!SpoonUtils.isObjectMethod(m)) abstracts.add(this.addAbstract(m));
-                }
-
-                // TODO: Determine how to pin this interface.
-                return new InterfaceDesc(abstracts);
-            },
-            (Ref<InterfaceDesc> ref, InterfaceDesc id) -> {
-                // TODO: Implement Inheritance
-            });
-    }
-
 
 
 
