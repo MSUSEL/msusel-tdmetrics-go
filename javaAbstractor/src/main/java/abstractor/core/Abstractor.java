@@ -151,11 +151,10 @@ public class Abstractor {
                 // Add direct super-interfaces this interface extends
                 for (CtTypeReference<?> supRef : i.getSuperInterfaces()) {
                     CtType<?> supDecl = supRef.getTypeDeclaration(); // may be null for shadow/unresolved
-                    if (supDecl != null) {
-                        if (supDecl instanceof CtInterface<?> supId) {
-                            id.inherits.add(this.addInterfaceDesc(supId));
-                        }
-                        // TODO: Notify when not CtInterface
+                    if (supDecl != null && supDecl instanceof CtInterface<?> supId && supId != null) {
+                        id.inherits.add(this.addInterfaceDesc(supId));
+                    } else {
+                        this.log.error("Unhandled super-interface " + SpoonUtils.describeElem(supDecl) + " for " + id);
                     }
                 }
             });
