@@ -455,6 +455,76 @@ public class Abstractor {
 
     //===[ BELOW NEEDS SOME WORK ]==============================================
 
+
+    public Ref<? extends TypeDesc> addTypeDesc(CtTypeReference<?> tr) throws Exception {
+        if (tr == null)       return this.proj.baker.anyDesc();
+        if (tr.isPrimitive()) return this.addBasic(tr);
+        if (tr.isArray())     return this.addArray((CtArrayTypeReference<?>)tr);
+
+        // Handle wildcard types (e.g., ?, ? extends Foo, ? super Bar).
+        if (tr instanceof CtWildcardReference wr) return this.addWildcard(wr);
+
+        // Type of the `null` literal in Spoon - not a real external type.
+        if (SpoonUtils.isNull(tr)) return this.proj.baker.anyDesc();
+
+
+
+        
+        // TODO: NEED TO REEVALUATE ALL OF THIS AI SLOP
+
+        // Use getTypeDeclaration (not getDeclaration) to get shadow types
+        // for external/JDK types instead of null.
+        CtType<?> ty = null;
+        try {
+            ty = tr.getTypeDeclaration();
+        } catch (Exception ex) {
+            this.log.warning("Failed to get type declaration for " + SpoonUtils.describeElem(tr) + ": " + ex.getMessage());
+            return this.addExternalStub(tr);
+        }
+
+        // If still null, treat as external / unresolvable type.
+        if (ty == null) return this.addExternalStub(tr);
+
+        // Annotation types don't participate in data flow. Use an object instead.
+        if (ty instanceof CtAnnotationType<?> ann) {
+            this.log.notice("Annotation type as type desc (using object): " + SpoonUtils.describeElem(ann));
+            return this.proj.baker.anyDesc();
+        }
+
+        // Skip anonymous and local types - their code is attributed
+        // to the enclosing method (handled in later steps).
+        if (tr.isAnonymous() || tr.isLocalType()) {
+            // TODO: Fix
+            //CtTypeReference<?> superRef = tr.getSuperclass();
+            //if (superRef != null && !safeQualifiedName(superRef).equals(objName))
+            //    return this.addTypeDesc(superRef);
+
+            //var superIfaces = tr.getSuperInterfaces();
+            //if (superIfaces != null && !superIfaces.isEmpty())
+            //    return this.addTypeDesc(superIfaces.iterator().next());
+
+            return this.proj.baker.anyDesc();
+        }
+
+        // Shadow types are external (JDK / third-party)
+        if (ty.isShadow()) return this.addExternalStub(tr);
+
+        // Check type parameter first since it's the most specific.
+        if (tr.isGenerics()) return this.addTypeParam((CtTypeParameter)ty);
+
+        // Check CtEnum before CtClass since CtEnum extends CtClass.
+        if (ty instanceof CtEnum<?> e)    return this.addObjectDecl(e);
+        if (ty instanceof CtClass<?>)     return this.addObjectDecl((CtClass<?>)ty);
+        if (ty instanceof CtInterface<?>) return this.addInterfaceDecl((CtInterface<?>)ty);
+
+        this.log.warning("Unhandled type: " + SpoonUtils.describeElem(tr));
+        return this.proj.baker.anyDesc();
+    }
+
+
+
+    //===[ BELOW NEEDS SOME WORK ]==============================================
+
     /**
      * Handle Java primitives and object equivalents to primitives (boxed primitives)
      * such that the boxed primitives (e.g. Integer) and String become Basic's.
@@ -530,68 +600,6 @@ public class Abstractor {
             (Ref<ObjectDecl> ref, ObjectDecl od) -> {
                 // TODO: Finish by adding the "const values" to the package for each enumerator value.
             });
-    }
-
-    public Ref<? extends TypeDesc> addTypeDesc(CtTypeReference<?> tr) throws Exception {
-        if (tr == null)       return this.proj.baker.anyDesc();
-        if (tr.isPrimitive()) return this.addBasic(tr);
-        if (tr.isArray())     return this.addArray((CtArrayTypeReference<?>)tr);
-
-        // Handle wildcard types (e.g., ?, ? extends Foo, ? super Bar).
-        if (tr instanceof CtWildcardReference wr) return this.addWildcard(wr);
-
-        // Type of the `null` literal in Spoon - not a real external type.
-        if (SpoonUtils.isNull(tr)) return this.proj.baker.anyDesc();
-
-        // TODO: NEED TO REEVALUATE ALL OF THIS AI SLOP
-
-        // Use getTypeDeclaration (not getDeclaration) to get shadow types
-        // for external/JDK types instead of null.
-        CtType<?> ty = null;
-        try {
-            ty = tr.getTypeDeclaration();
-        } catch (Exception ex) {
-            this.log.warning("Failed to get type declaration for " + SpoonUtils.describeElem(tr) + ": " + ex.getMessage());
-            return this.addExternalStub(tr);
-        }
-
-        // If still null, treat as external / unresolvable type.
-        if (ty == null) return this.addExternalStub(tr);
-
-        // Annotation types don't participate in data flow. Use an object instead.
-        if (ty instanceof CtAnnotationType<?> ann) {
-            this.log.notice("Annotation type as type desc (using object): " + SpoonUtils.describeElem(ann));
-            return this.proj.baker.anyDesc();
-        }
-
-        // Skip anonymous and local types - their code is attributed
-        // to the enclosing method (handled in later steps).
-        if (tr.isAnonymous() || tr.isLocalType()) {
-            // TODO: Fix
-            //CtTypeReference<?> superRef = tr.getSuperclass();
-            //if (superRef != null && !safeQualifiedName(superRef).equals(objName))
-            //    return this.addTypeDesc(superRef);
-
-            //var superIfaces = tr.getSuperInterfaces();
-            //if (superIfaces != null && !superIfaces.isEmpty())
-            //    return this.addTypeDesc(superIfaces.iterator().next());
-
-            return this.proj.baker.anyDesc();
-        }
-
-        // Shadow types are external (JDK / third-party)
-        if (ty.isShadow()) return this.addExternalStub(tr);
-
-        // Check type parameter first since it's the most specific.
-        if (tr.isGenerics()) return this.addTypeParam((CtTypeParameter)ty);
-
-        // Check CtEnum before CtClass since CtEnum extends CtClass.
-        if (ty instanceof CtEnum<?> e)    return this.addObjectDecl(e);
-        if (ty instanceof CtClass<?>)     return this.addObjectDecl((CtClass<?>)ty);
-        if (ty instanceof CtInterface<?>) return this.addInterfaceDecl((CtInterface<?>)ty);
-
-        this.log.warning("Unhandled type: " + SpoonUtils.describeElem(tr));
-        return this.proj.baker.anyDesc();
     }
 
     public Ref<? extends TypeDesc> addWildcard(CtWildcardReference wr) throws Exception {
