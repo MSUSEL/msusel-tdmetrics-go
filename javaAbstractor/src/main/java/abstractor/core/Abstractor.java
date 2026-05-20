@@ -389,6 +389,64 @@ public class Abstractor {
             });
     }
 
+    public Ref<ObjectDecl> addObjectDecl(CtClass<?> c) throws Exception {
+        return this.proj.objectDecls.create(this.log, c,
+            "object decl " + SpoonUtils.describeElem(c),
+            () -> {
+                final Ref<PackageCon>      pkg        = this.addPackageFor(c);
+                final Location             loc        = this.proj.locations.create(c.getPosition());
+                final String               name       = c.getSimpleName();
+                final Ref<StructDesc>      struct     = this.addStruct(c);
+                final List<Ref<TypeParam>> typeParams = this.addTypeParams(c.getFormalCtTypeParameters());
+                return new ObjectDecl(pkg, loc, name, struct, typeParams);
+            },
+            (Ref<ObjectDecl> ref, ObjectDecl obj) -> {
+                obj.setVisibility(c);
+                
+                // Add constructors as (static) methods.
+                for (CtConstructor<?> ctor : c.getConstructors()) {
+                    if (ctor.getParent().equals(c)) {
+                        // Skip default constructors
+                        if (ctor.isImplicit()) {
+                            this.log.notice("skipping default constructor: " + ctor.getSignature());
+                            continue;
+                        }
+                        this.addConstructorMethod(ref, ctor);
+                    }
+                }
+
+                // Add methods for the class.
+                for (CtMethod<?> m : c.getAllMethods()) {
+                    if (m.getParent().equals(c) && !SpoonUtils.isObjectMethod(m))
+                        this.addMethod(ref, m);
+                }
+
+                // Synthesize the interface abstractions for the class.
+                final TreeSet<Ref<Abstract>> abstracts = new TreeSet<Ref<Abstract>>();
+                for (CtMethod<?> m : c.getAllMethods()) {
+                    if (!m.isStatic() && !SpoonUtils.isObjectMethod(m))
+                        abstracts.add(this.addAbstract(m));
+                }
+
+                // Synthesize the interface description for the class.                
+                final InterfaceDesc it = new InterfaceDesc(abstracts, ref);
+                obj.inter = this.proj.interfaceDescs.addOrGetRef(it, "interface for object");
+
+                // Add direct super-interfaces this object extends.
+                for (CtTypeReference<?> supRef : c.getSuperInterfaces()) {
+                    CtType<?> supDecl = supRef.getTypeDeclaration(); // may be null for shadow/unresolved
+                    if (supDecl != null && supDecl instanceof CtInterface<?> supId && supId != null) {
+                        it.inherits.add(this.addInterfaceDesc(supId));
+                    } else {
+                        this.log.error("Unhandled super-interface " + SpoonUtils.describeElem(supDecl) + " for " + obj);
+                    }
+                }
+
+                // Add any nested types.
+                for (CtType<?> nt : c.getNestedTypes())
+                    this.addTypeDesc(nt.getReference());
+            });
+    }
 
 
 
@@ -396,11 +454,6 @@ public class Abstractor {
 
 
     //===[ BELOW NEEDS SOME WORK ]==============================================
-
-
-
-
-
 
     /**
      * Handle Java primitives and object equivalents to primitives (boxed primitives)
@@ -454,61 +507,6 @@ public class Abstractor {
         return decl;
     }
 
-    /**
-     * Handles adding and processing classes, enums, and records.
-     * @param c The class to process.
-     */
-    public Ref<ObjectDecl> addObjectDecl(CtClass<?> c) throws Exception {
-        return this.proj.objectDecls.create(this.log, c,
-            "object decl " + SpoonUtils.describeElem(c),
-            () -> {
-                final Ref<PackageCon>      pkg        = this.addPackageFor(c);
-                final Location             loc        = this.proj.locations.create(c.getPosition());
-                final String               name       = c.getSimpleName();
-                final Ref<StructDesc>      struct     = this.addStruct(c);
-                final List<Ref<TypeParam>> typeParams = this.addTypeParams(c.getFormalCtTypeParameters());
-                return new ObjectDecl(pkg, loc, name, struct, typeParams);
-            },
-            (Ref<ObjectDecl> ref, ObjectDecl obj) -> {
-                obj.setVisibility(c);
-                
-                // Add constructors as (static) methods.
-                for (CtConstructor<?> ctor : c.getConstructors()) {
-                    if (ctor.getParent().equals(c)) {
-                        // Skip default constructors
-                        if (ctor.isImplicit()) {
-                            this.log.notice("skipping default constructor: " + ctor.getSignature());
-                            continue;
-                        }
-                        this.addConstructorMethod(ref, ctor);
-                    }
-                }
-
-                // Add methods for the class.
-                for (CtMethod<?> m : c.getAllMethods()) {
-                    if (m.getParent().equals(c) && !SpoonUtils.isObjectMethod(m))
-                        this.addMethod(ref, m);
-                }
-
-                // Synthesize the interface description for the class.
-                final TreeSet<Ref<Abstract>> abstracts = new TreeSet<Ref<Abstract>>();
-                for (CtMethod<?> m : c.getAllMethods()) {
-                    if (!m.isStatic() && !SpoonUtils.isObjectMethod(m))
-                        abstracts.add(this.addAbstract(m));
-                }
-
-                // TODO: FIX BELOW (ref is pin)
-                obj.inter = this.proj.interfaceDescs.addOrGetRef(new InterfaceDesc(abstracts, ref), "interface for object");
-
-                // TODO: Finish implementing
-                //System.out.println("1) >>> " + c.getSuperInterfaces());
-
-                // Add any nested types.
-                for (CtType<?> nt : c.getNestedTypes())
-                    this.addTypeDesc(nt.getReference());
-            });
-    }
-    
     public Ref<ObjectDecl> addEnum(CtEnum<?> e) throws Exception {
         return this.proj.objectDecls.create(this.log, e,
             "enum " + SpoonUtils.describeElem(e),
@@ -611,6 +609,8 @@ public class Abstractor {
         }
         return this.addTypeDesc(bound);
     }
+
+
 
 
 
