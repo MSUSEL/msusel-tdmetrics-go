@@ -480,6 +480,10 @@ public class Abstractor {
         // Type of the `null` literal in Spoon and not a real external type.
         if (SpoonUtils.isNull(tr)) return this.proj.baker.anyDesc();
 
+        // A boxed type (e.g. Integer, String) that we alias as a basic.
+        final Ref<Basic> boxed = this.proj.baker.basicForBoxedOrString(tr);
+        if (boxed != null) return boxed;
+
         // Shadow types are external (JDK / third-party) without a type declaration.
         if (tr.isShadow()) return this.addShadowTypeDesc(tr);
 
@@ -487,7 +491,8 @@ public class Abstractor {
         // for external/JDK types instead of null.
         CtType<?> ty = tr.getTypeDeclaration();
         if (ty == null) {
-            this.log.error("Type description did not have a declaration but was not labelled a anonymous: " + SpoonUtils.describeElem(tr));
+            this.log.error("Type description did not have a declaration but "+
+                "was not labelled a anonymous: " + SpoonUtils.describeElem(tr));
             return null;
         }
 
@@ -506,31 +511,60 @@ public class Abstractor {
         return null;
     }
 
+    public Ref<? extends TypeDesc> addWildcard(CtWildcardReference wr) throws Exception {
+        CtTypeReference<?> bound = wr.getBoundingType();
+        // Spoon often uses java.lang.Object as the synthetic bound for unbounded "?".
+        // Resolving it would pull the entire JDK Object graph into the abstraction.
+        if (bound == null || bound instanceof CtWildcardReference || SpoonUtils.isObject(bound))
+            return this.proj.baker.anyDesc();
+        return this.addTypeDesc(bound);
+    }
 
-    
+    public Ref<ObjectDecl> addEnum(CtEnum<?> e) throws Exception {
+        return this.proj.objectDecls.create(this.log, e,
+            "enum " + SpoonUtils.describeElem(e),
+            () -> {
+                final String          name = e.getSimpleName();
+                final Ref<PackageCon> pkg  = this.addPackageFor(e);
+                final Location        loc  = this.proj.locations.create(e.getPosition());
 
+                final CtTypeReference<?> tr = e.getSuperclass();
+                final Ref<StructDesc> struct = this.proj.structDescs.create(this.log, tr,
+                    "enum struct " + SpoonUtils.describeElem(tr),
+                    () -> {
+                        final ArrayList<Ref<Field>> fields = new ArrayList<>();
+                        fields.add(this.addField("$value", tr));
+                        return new StructDesc(fields);
+                    });
 
-    //===[ BELOW NEEDS SOME WORK ]==============================================
+                return new ObjectDecl(pkg, loc, name, struct, null);
+            },
+            (Ref<ObjectDecl> ref, ObjectDecl od) -> {
+                // Finish by adding the "const values" to the package for each enumerator value.
+                for (CtEnumValue<?> ev: e.getEnumValues()) {
+                    this.proj.values.create(this.log, e,
+                        "enum value "+ SpoonUtils.describeElem(ev),
+                        () -> {
+                            final String   name = ev.getSimpleName();
+                            final Location loc  = this.proj.locations.create(ev.getPosition());
+                            return new Value(od.pkg, loc, name, true, null, ref);
+                        });
+                }
+            });
+    }
 
     /**
-     * // TODO: Update this comment.
+     * // TODO: Update this method and comment.
      * Handle Java primitives and object equivalents to primitives (boxed primitives)
      * such that the boxed primitives (e.g. Integer) and String become Basic's.
      * Other types become stub InterfaceDecl.
      * Originally called: addExternalStub
      */
     public Ref<? extends TypeDesc> addShadowTypeDesc(CtTypeReference<?> tr) throws Exception {
-        // If a type can not be resolved return an object (kind of like an `any` in Go).
-        if (tr == null) return this.proj.baker.anyDesc();
-
-        // Unlike Go's nil that can carry the type, Java's null type has
-        // no type associated with it so instead use an object.
-        if (SpoonUtils.isNull(tr)) return this.proj.baker.anyDesc();
 
         // TODO: WHY IS THIS ONLY DOING THE ERASURE?!
+        /*
         final CtTypeReference<?> erasure = tr.getTypeErasure();
-        final Ref<Basic>         boxed   = this.proj.baker.basicForBoxedOrString(erasure);
-        if (boxed != null) return boxed;
 
         final Ref<InterfaceDecl> decl = this.proj.interfaceDecls.create(this.log, erasure,
             "type erasure interface decl " + SpoonUtils.describeElem(erasure),
@@ -545,6 +579,7 @@ public class Abstractor {
 
                 return new InterfaceDecl(pkg, loc, name, inter, new ArrayList<>());
             });
+        */
         
         // TODO: If the stub is not an "any", then the abstract methods may need to have
         //       type parameters and arguments that need to be handled for an instantiation.
@@ -563,53 +598,9 @@ public class Abstractor {
                 return new InterfaceInst(decl, instanceTypes, decl.getResolved().inter);
             });
         */
-        return decl;
+
+        return this.proj.baker.anyDesc();
     }
-
-    public Ref<ObjectDecl> addEnum(CtEnum<?> e) throws Exception {
-        return this.proj.objectDecls.create(this.log, e,
-            "enum " + SpoonUtils.describeElem(e),
-            () -> {
-                final String          name = e.getSimpleName();
-                final Ref<PackageCon> pkg  = this.addPackageFor(e);
-                final Location        loc  = this.proj.locations.create(e.getPosition());
-
-                final CtTypeReference<?> tr = e.getSuperclass();
-                // TODO: Move to its own method
-                final Ref<StructDesc> struct = this.proj.structDescs.create(this.log, tr,
-                    "enum struct " + SpoonUtils.describeElem(tr),
-                    () -> {
-                        final ArrayList<Ref<Field>> fields = new ArrayList<>();
-                        fields.add(this.addField("$value", tr));
-                        return new StructDesc(fields);
-                    });
-
-                return new ObjectDecl(pkg, loc, name, struct, null);
-            },
-            (Ref<ObjectDecl> ref, ObjectDecl od) -> {
-                // TODO: Finish by adding the "const values" to the package for each enumerator value.
-            });
-    }
-
-    public Ref<? extends TypeDesc> addWildcard(CtWildcardReference wr) throws Exception {
-        CtTypeReference<?> bound = wr.getBoundingType();
-        if (bound == null || bound instanceof CtWildcardReference) return this.proj.baker.anyDesc();
-
-        // Spoon often uses java.lang.Object as the synthetic bound for unbounded "?".
-        // Resolving it would pull the entire JDK Object graph into the abstraction.
-        try {
-            if (SpoonUtils.isObject(bound)) return this.proj.baker.anyDesc();
-        } catch (Exception ignored) {
-            // The exception here can be ignored since it comes from Spoon
-            // failing to get the qualified name and it can be recovered from.
-            return this.proj.baker.anyDesc();
-        }
-        return this.addTypeDesc(bound);
-    }
-
-
-
-
 
     //===[ Processors ]=========================================================
 
@@ -684,17 +675,27 @@ public class Abstractor {
 
     private void crossConnectConstructs() throws Exception {
         for (MethodDecl m : this.proj.methodDecls.conSet) {
-            final Ref<MethodDecl> decl = this.proj.methodDecls.addOrGetRef(m, "method in package " + m.pkg);
-            m.pkg.getResolved().methodDecls.add(decl);
+            final PackageCon pkg = m.pkg.getResolved();
+            final Ref<MethodDecl> decl = this.proj.methodDecls.addOrGetRef(m, "method in package " + pkg);
+            pkg.methodDecls.add(decl);
         }
 
         for (ObjectDecl obj : this.proj.objectDecls.conSet) {
             final PackageCon pkg = obj.pkg.getResolved();
+            pkg.objectDecls.add(this.proj.objectDecls.addOrGetRef(obj, "object in package " + pkg));
             for (Ref<MethodDecl> met : obj.methodDecls)
                 pkg.methodDecls.add(met);
         }
+        
+        for (InterfaceDecl it : this.proj.interfaceDecls.conSet) {
+            final PackageCon pkg = it.pkg.getResolved();
+            pkg.interfaceDecls.add(this.proj.interfaceDecls.addOrGetRef(it, "interface in package " + pkg));
+        }
 
-        // TODO: Add more to packages
+        for (Value v : this.proj.values.conSet) {
+            final PackageCon pkg = v.pkg.getResolved();
+            pkg.values.add(this.proj.values.addOrGetRef(v, "value in package " + pkg));
+        }
     }
 
     private void validate() throws Exception {
