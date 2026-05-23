@@ -16,6 +16,8 @@ public abstract class DeclarationImp extends ConstructImp implements Declaration
     public DeclarationImp() {}
 
     public DeclarationImp(Ref<PackageCon> pkg, Location loc, String name) {
+        assert(pkg != null);
+        assert(!name.isBlank());
         this.pkg        = pkg;
         this.loc        = loc;
         this.name       = name;

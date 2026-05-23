@@ -21,7 +21,7 @@
   ],
   interfaceDecls: [
     { # 1. $Array<T>{ $get(index int) <T>, $len() int, $set(index int, value <T>) }
-      name: $Array, interface: 2, typeParams: [ 1 ],
+      name: $Array, package: 1, interface: 2, typeParams: [ 1 ],
     },
   ],
   interfaceDescs: [
@@ -37,14 +37,18 @@
   ],
   objects: [
     { # 1. Foo{ bar int; baz $Array<int> }{ }
-      name: Foo, package: 4, data: 1, interface: 4, loc: 3, vis: public,
+      name: Foo, package: 5, data: 1, interface: 4, loc: 3, vis: public,
     },
   ],
   packages: [
-    { name: "<unnamed>" },   # 1. <unnamed> package
-    { name: testData },      # 2. testData package
-    { name: testData.java }, # 3. testData.java package
-    {                        # 4. testData.java.test1001 package
+    {                        # 1. $builtin package
+      name: $builtin,
+      interfaces: [ 1 ],
+    },
+    { name: "<unnamed>" },   # 2. <unnamed> package
+    { name: testData },      # 3. testData package
+    { name: testData.java }, # 4. testData.java package
+    {                        # 5. testData.java.test1001 package
       name: testData.java.test1001,
       objects: [ 1 ],
     },

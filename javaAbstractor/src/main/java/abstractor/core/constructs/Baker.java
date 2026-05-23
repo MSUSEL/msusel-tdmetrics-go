@@ -34,6 +34,11 @@ public class Baker {
         return this.getConstruct(name, () -> factory.addOrGetRef(creator.create(), "baker: " + name));
     }
 
+    public Ref<PackageCon> builtinPackage() throws Exception {
+        return this.getConstruct("builtinPackage", this.proj.packages,
+            () -> new PackageCon("$builtin", ""));
+    }
+
     // anyDesc creates a new empty interface (any) that is the base type of all non-basic types.
     public Ref<InterfaceDesc> anyDesc() throws Exception {
         return this.getConstruct("objectInterfaceDesc", this.proj.interfaceDescs,
@@ -124,11 +129,12 @@ public class Baker {
 
     private Ref<InterfaceDecl> arrayDecl() throws Exception {
         return this.getConstruct("arrayDecl", this.proj.interfaceDecls, () -> {
-            final Ref<TypeParam> tdT = this.genT();
+            final Ref<PackageCon> pkg = this.builtinPackage(); 
+            final Ref<TypeParam>  tdT = this.genT();
             final ArrayList<Ref<TypeParam>> tp = new ArrayList<Ref<TypeParam>>();
             tp.add(tdT);
             final Ref<InterfaceDesc> desc = this.arrayDesc("$T", tdT);
-            return new InterfaceDecl(null, null, "$Array", desc, tp);
+            return new InterfaceDecl(pkg, null, "$Array", desc, tp);
         });
     }
     

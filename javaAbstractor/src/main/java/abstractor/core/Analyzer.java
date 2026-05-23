@@ -256,7 +256,7 @@ public class Analyzer {
         if (elem instanceof CtExecutableReference er) { this.addExecutableReferenceUsage(er); return; }
         if (elem instanceof CtLiteral             lt) { this.addLiteralUsage(lt);             return; }
 
-        // TODO: Use to see elements.
+        // Use to see elements (may produce a lot of output).
         this.log.notice("addUsage: "+formatElem(elem));
     }
 

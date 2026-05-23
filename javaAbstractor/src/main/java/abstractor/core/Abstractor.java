@@ -644,8 +644,14 @@ public class Abstractor {
             final ArrayList<CtMethod<?>> methods = new ArrayList<>(this.pendingMetrics);
             this.pendingMetrics.clear();
             for (CtMethod<?> m : methods) {
-                if (m.getBody() == null) continue;
-                if (m.getBody().getStatements().isEmpty()) continue;
+                if (m.getBody() == null) {
+                    this.log.log("skipping metrics for " + SpoonUtils.describeElem(m) + ": null body");
+                    continue;
+                }
+                if (m.getBody().getStatements().isEmpty()) {
+                    this.log.log("skipping metrics for " + SpoonUtils.describeElem(m) + ": empty statement list");
+                    continue;
+                }
 
                 Ref<MethodDecl> ref = this.proj.methodDecls.getRef(m);
                 if (!ref.isResolved())
@@ -676,12 +682,14 @@ public class Abstractor {
     private void crossConnectConstructs() throws Exception {
         for (MethodDecl m : this.proj.methodDecls.conSet) {
             final PackageCon pkg = m.pkg.getResolved();
+            if (pkg == null) this.log.error("package for method is null: " + m);
             final Ref<MethodDecl> decl = this.proj.methodDecls.addOrGetRef(m, "method in package " + pkg);
             pkg.methodDecls.add(decl);
         }
 
         for (ObjectDecl obj : this.proj.objectDecls.conSet) {
             final PackageCon pkg = obj.pkg.getResolved();
+            if (pkg == null) this.log.error("package for object is null: " + obj);
             pkg.objectDecls.add(this.proj.objectDecls.addOrGetRef(obj, "object in package " + pkg));
             for (Ref<MethodDecl> met : obj.methodDecls)
                 pkg.methodDecls.add(met);
@@ -689,11 +697,13 @@ public class Abstractor {
         
         for (InterfaceDecl it : this.proj.interfaceDecls.conSet) {
             final PackageCon pkg = it.pkg.getResolved();
+            if (pkg == null) this.log.error("package for interface is null: " + it);
             pkg.interfaceDecls.add(this.proj.interfaceDecls.addOrGetRef(it, "interface in package " + pkg));
         }
 
         for (Value v : this.proj.values.conSet) {
             final PackageCon pkg = v.pkg.getResolved();
+            if (pkg == null) this.log.error("package for value is null: " + v);
             pkg.values.add(this.proj.values.addOrGetRef(v, "value in package " + pkg));
         }
     }
