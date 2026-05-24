@@ -14,11 +14,11 @@ public class InterfaceDesc extends ConstructImp implements TypeDesc {
     
     public InterfaceDesc() {}
 
-    public InterfaceDesc(SortedSet<Ref<Abstract>> abstracts) {
+    public InterfaceDesc(SortedSet<Ref<Abstract>> abstracts) throws Exception {
         this(abstracts, null);
     }
 
-    public InterfaceDesc(SortedSet<Ref<Abstract>> abstracts, Ref<? extends Construct> pin) {
+    public InterfaceDesc(SortedSet<Ref<Abstract>> abstracts, Ref<? extends Construct> pin) throws Exception {
         if (abstracts != null) this.abstracts.addAll(abstracts);
         this.pin = pin;
     }

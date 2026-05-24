@@ -1,0 +1,46 @@
+{
+  fields: [
+    { name: value, type: typeParam1, vis: public },
+  ],
+  interfaceDescs: [
+    { abstracts: [ ] },
+    { abstracts: [ ], pin: object1 },
+  ],
+  language: java,
+  locs: { 1: ClassesFromSource.java },
+  objects: [
+    {
+      data: 1,
+      interface: 2,
+      loc: 3,
+      methods: [ 1 ],
+      name: Foo,
+      package: 5,
+      typeParams: [ 1 ],
+      vis: public,
+    },
+  ],
+  packages: [
+    { name: "<unnamed>" },
+    {
+      interfaces: [ 1 ],
+      name: java.lang,
+    },
+    { name: testData },
+    { name: testData.java },
+    {
+      methods: [ 1 ],
+      name: testData.java.test1003,
+      objects: [ 1 ],
+    },
+  ],
+  signatures: [
+    { results: [ 1 ] },
+  ],
+  structDescs: [
+    { fields: [ 1 ] },
+  ],
+  typeParams: [
+    { name: T, type: interfaceDecl1 },
+  ],
+}

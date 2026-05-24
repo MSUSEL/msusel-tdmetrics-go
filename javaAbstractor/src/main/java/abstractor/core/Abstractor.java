@@ -9,7 +9,7 @@ import spoon.reflect.declaration.*;
 import spoon.reflect.path.CtRole;
 import spoon.reflect.reference.*;
 import spoon.support.compiler.VirtualFile;
-import spoon.support.reflect.declaration.CtTypeParameterImpl;
+
 import abstractor.core.constructs.*;
 import abstractor.core.log.*;
 import abstractor.core.require.Require;
@@ -436,18 +436,22 @@ public class Abstractor {
                         abstracts.add(this.addAbstract(m));
                 }
 
-                // Synthesize the interface description for the class.                
-                final InterfaceDesc it = new InterfaceDesc(abstracts, ref);
-                obj.inter = this.proj.interfaceDescs.addOrGetRef(it, "interface for object");
+                // Synthesize the interface description for the class.
+                if (abstracts.size() > 0 || c.getSuperInterfaces().size() > 0) {
+                    final InterfaceDesc it = new InterfaceDesc(abstracts, ref);
+                    obj.inter = this.proj.interfaceDescs.addOrGetRef(it, "interface for object");
 
-                // Add direct super-interfaces this object extends.
-                for (CtTypeReference<?> supRef : c.getSuperInterfaces()) {
-                    CtType<?> supDecl = supRef.getTypeDeclaration(); // may be null for shadow/unresolved
-                    if (supDecl != null && supDecl instanceof CtInterface<?> supId && supId != null) {
-                        it.inherits.add(this.addInterfaceDesc(supId));
-                    } else {
-                        this.log.error("Unhandled super-interface " + SpoonUtils.describeElem(supDecl) + " for " + obj);
+                    // Add direct super-interfaces this object extends.
+                    for (CtTypeReference<?> supRef : c.getSuperInterfaces()) {
+                        CtType<?> supDecl = supRef.getTypeDeclaration(); // may be null for shadow/unresolved
+                        if (supDecl != null && supDecl instanceof CtInterface<?> supId && supId != null) {
+                            it.inherits.add(this.addInterfaceDesc(supId));
+                        } else {
+                            this.log.error("Unhandled super-interface " + SpoonUtils.describeElem(supDecl) + " for " + obj);
+                        }
                     }
+                } else {
+                    obj.inter = this.proj.baker.anyDesc();
                 }
 
                 // Add any nested types.
