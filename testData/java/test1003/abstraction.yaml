@@ -1,44 +1,44 @@
 {
   language: java,
   abstracts: [
-    { name: getValue, signature: 1 },
-    { name: setValue, signature: 2 },
+    { name: getValue, signature: 1 }, # 1. getValue() T
+    { name: setValue, signature: 2 }, # 2. setValue(value T)
   ],
   arguments: [
-    {              type: typeParam1 },
-    { name: value, type: typeParam1 },
+    {              type: typeParam1 }, # 1. <unnamed> T
+    { name: value, type: typeParam1 }, # 2. value T
   ],
   fields: [
-    { name: value, type: typeParam1, vis: private },
+    { name: value, type: typeParam1, vis: private }, # 1. value T
   ],
   interfaceDescs: [
-    { abstracts: [ 1, 2 ], pin: object1 },
-    { abstracts: [ ] },
+    { abstracts: [ 1, 2 ], pin: object1 }, # 1. interface{ getValue() T; setValue(value T) }
+    { abstracts: [ ] },                    # 2. any
   ],
   methods: [
-    {
+    { # 1. getValue() T
       name: getValue, package: 4, receiver: 1, signature: 1,
       loc: 6, metrics: 1, vis: public,
     },
-    {
-      name: setValue, package: 4, receiver: 1, signature: 2, 
+    { # 2. setValue(value T)
+      name: setValue, package: 4, receiver: 1, signature: 2,
       loc: 7, metrics: 2, vis: public,
     },
   ],
   metrics: [
-    {
+    { # 1. getValue metrics
       loc: 6, codeCount: 1, complexity: 1, lineCount: 1,
       getter: true,
       reads: [ object1, selection1 ],
     },
-    {
+    { # 2. setValue metrics
       loc: 7, codeCount: 1, complexity: 1, lineCount: 1,
       setter: true,
       reads: [ object1, selection1 ],
     },
   ],
   objects: [
-    {
+    { # 1. Foo{ value T }{ getValue() T; setValue(value T) }
       name: Foo, package: 4, data: 1, interface: 1, loc: 3, vis: public,
       methods: [ 1, 2 ],
       typeParams: [ 1 ],
@@ -55,17 +55,17 @@
     },
   ],
   selections: [
-    { name: value, origin: object1 },
+    { name: value, origin: object1 }, # 1. Foo.value
   ],
   signatures: [
-    { results: [ 1 ] },
-    { params:  [ 2 ] },
+    { results: [ 1 ] }, # 1. func() T
+    { params:  [ 2 ] }, # 2. func(value T)
   ],
   structDescs: [
-    { fields: [ 1 ] },
+    { fields: [ 1 ] }, # 1. struct{ value T }
   ],
   typeParams: [
-    { name: T, type: interfaceDesc2 },
+    { name: T, type: interfaceDesc2 }, # 1. T any
   ],
   locs: { 1: ClassesFromSource.java },
 }
