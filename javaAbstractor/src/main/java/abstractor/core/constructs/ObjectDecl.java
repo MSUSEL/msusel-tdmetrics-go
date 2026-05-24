@@ -15,10 +15,8 @@ public class ObjectDecl extends DeclarationImp implements TypeDeclaration {
     public final ArrayList<Ref<TypeParam>>   typeParams  = new ArrayList<>();
     public final TreeSet<Ref<InterfaceInst>> instances   = new TreeSet<>();
 
-    public ObjectDecl() {}
-
     public ObjectDecl(Ref<PackageCon> pkg, Location loc,
-        String name, Ref<StructDesc> struct, List<Ref<TypeParam>> typeParams) {
+        String name, Ref<StructDesc> struct, List<Ref<TypeParam>> typeParams) throws Exception {
         super(pkg, loc, name);
         this.struct = struct;
         if (typeParams != null) this.typeParams.addAll(typeParams);

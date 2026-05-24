@@ -43,22 +43,23 @@ final public class SpoonUtils {
     /** Short description for logs (does not throw). */
     static public String describeElem(CtElement elem) {
         if (elem == null) return "(null)";
-        if (elem instanceof CtPackage pkg)
-           return packageName(pkg);
+        if (elem instanceof CtPackage pkg) return packageName(pkg);
+        
+        final String typeName = elem.getClass().getSimpleName();
         if (elem instanceof CtNamedElement ne) {
-            try { return ne.getSimpleName(); }
+            try { return "(" + typeName + ") " + ne.getSimpleName(); }
             catch (Exception ignore) { }
         }
         if (elem instanceof CtTypeInformation ti) {
-            try { return ti.getQualifiedName(); }
+            try { return "(" + typeName + ") " + ti.getQualifiedName(); }
             catch (Exception ignore) { }
         }
         if (elem instanceof CtExecutable<?> ex) {
-            try { return ex.getSignature(); }
+            try { return "(" + typeName + ") " + ex.getSignature(); }
             catch (Exception ignore) { }
         }
         if (elem instanceof CtReference ref) {
-            try { return ref.getSimpleName(); }
+            try { return "(" + typeName + ") " + ref.getSimpleName(); }
             catch (Exception ignore) { }
         }
         return elem.getClass().getName();
@@ -85,12 +86,14 @@ final public class SpoonUtils {
     static public boolean isObjectMethod(CtMethod<?> m) {
         if (m == null) return false;
 
-        // TODO: CHECK this
-        final CtTypeReference<?> objectRef  = m.getFactory().Type().objectType();
-        final CtType<?>          objectDecl = objectRef.getTypeDeclaration();
-        if (objectDecl == null) return false;
+        final CtTypeReference<?> objectRef = m.getFactory().Type().objectType();
+        assert(isObject(objectRef));
+
+        final CtType<?> objectDecl = objectRef.getTypeDeclaration();
+        assert(objectDecl != null);
 
         final String sig = m.getSignature();
+        assert(sig != null);
         for (CtMethod<?> objectMethod : objectDecl.getMethods()) {
             if (sig.equals(objectMethod.getSignature())) return true;
         }

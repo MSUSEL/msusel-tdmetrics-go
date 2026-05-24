@@ -1,7 +1,6 @@
 package abstractor.core;
 
-import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
-import static org.junit.jupiter.api.Assertions.fail;
+import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
@@ -51,7 +50,14 @@ public class Tester {
     }
 
     public void printLogs() {
+        if (this.buffer.size() <= 0) {
+            System.out.println("No logs");
+            return;
+        }
+        System.out.println("===[ Logs ]=======================");
         System.out.println(this.buffer.toString());
+        System.out.println("==================================");
+        System.out.flush();
         this.buffer.reset();
     }
 
@@ -60,10 +66,14 @@ public class Tester {
      * @param path The path of to the file containing one or more classes.
      */
     public void addClassFromFile(String path) {
-        assertDoesNotThrow(() -> { 
-            final byte[] data =  Files.readAllBytes(Paths.get(path));
-            this.addClassesFromSource(new String(data, StandardCharsets.UTF_8));
-        });
+        String source = "";
+        try {
+            final byte[] data = Files.readAllBytes(Paths.get(path));
+            source = new String(data, StandardCharsets.UTF_8);
+        } catch(Exception ex) {
+            System.out.println("failed to read path: " + path + ": " + ex);
+        }
+        this.addClassesFromSource(source);
     }
 
     /**

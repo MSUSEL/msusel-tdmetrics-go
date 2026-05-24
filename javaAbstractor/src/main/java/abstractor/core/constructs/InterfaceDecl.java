@@ -13,10 +13,8 @@ public class InterfaceDecl extends DeclarationImp implements TypeDeclaration {
     public final ArrayList<Ref<TypeParam>>   typeParams = new ArrayList<>();
     public final TreeSet<Ref<InterfaceInst>> instances  = new TreeSet<>();
 
-    public InterfaceDecl() {}
-
     public InterfaceDecl(Ref<PackageCon> pkg, Location loc,
-        String name, Ref<InterfaceDesc> inter, List<Ref<TypeParam>> typeParams) {
+        String name, Ref<InterfaceDesc> inter, List<Ref<TypeParam>> typeParams) throws Exception {
         super(pkg, loc, name);
         this.inter = inter;
         if (typeParams != null) this.typeParams.addAll(typeParams);

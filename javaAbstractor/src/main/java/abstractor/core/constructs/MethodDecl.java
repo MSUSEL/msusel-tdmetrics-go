@@ -16,10 +16,8 @@ public class MethodDecl extends DeclarationImp implements Method {
     public boolean constructor;
     public Ref<Metrics> metrics;
 
-    public MethodDecl() {}
-
     public MethodDecl(Ref<PackageCon> pkg, Ref<ObjectDecl> receiver, Location loc,
-        String name, Ref<Signature> signature, List<Ref<TypeParam>> typeParams) {
+        String name, Ref<Signature> signature, List<Ref<TypeParam>> typeParams) throws Exception {
         super(pkg, loc, name);
         this.receiver  = receiver;
         this.signature = signature;

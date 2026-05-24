@@ -9,10 +9,8 @@ public class Value extends DeclarationImp {
     public Ref<Metrics>  metrics;
     public Ref<? extends TypeDesc> type;
 
-    public Value() {}
-
     public Value(Ref<PackageCon> pkg, Location loc, String name,
-        boolean constant, Ref<Metrics> metrics, Ref<? extends TypeDesc> type) {
+        boolean constant, Ref<Metrics> metrics, Ref<? extends TypeDesc> type) throws Exception {
         super(pkg, loc, name);
         this.constant = constant;
         this.metrics  = metrics;

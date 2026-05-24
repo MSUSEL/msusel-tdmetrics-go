@@ -5,6 +5,7 @@ import spoon.reflect.declaration.CtModifiable;
 import abstractor.core.cmp.Cmp;
 import abstractor.core.cmp.CmpOptions;
 import abstractor.core.json.*;
+import abstractor.core.require.Require;
 
 public abstract class DeclarationImp extends ConstructImp implements Declaration {
     public Ref<PackageCon> pkg;
@@ -13,11 +14,9 @@ public abstract class DeclarationImp extends ConstructImp implements Declaration
     public String          visibility;
     public boolean         isStatic;
 
-    public DeclarationImp() {}
-
-    public DeclarationImp(Ref<PackageCon> pkg, Location loc, String name) {
-        assert(pkg != null);
-        assert(!name.isBlank());
+    public DeclarationImp(Ref<PackageCon> pkg, Location loc, String name) throws Exception {
+        Require.notNull(pkg, "a declaration may not have a null package");
+        Require.notBlank(name, "a declaration may not have a blank name");
         this.pkg        = pkg;
         this.loc        = loc;
         this.name       = name;

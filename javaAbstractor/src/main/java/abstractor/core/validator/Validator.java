@@ -104,66 +104,66 @@ public class Validator {
     private void validateInterfaceDecl(InterfaceDecl con) {
         this.validateChild(con, con.inter, "inter", false);
         this.validateChildren(con, con.typeParams, "typeParams", true);
-        this.validateChildren(con, con.instances, "instances", true);
+        this.validateChildren(con, con.instances,  "instances", true);
     }
 
     private void validateInterfaceDesc(InterfaceDesc con) {
         this.validateChildren(con, con.abstracts, "abstracts", true);
-        this.validateChildren(con, con.inherits, "inherits", true);
+        this.validateChildren(con, con.inherits,  "inherits", true);
         this.validateChild(con, con.pin, "pin", true);
     }
 
     private void validateInterfaceInst(InterfaceInst con) {
-        this.validateChild(con, con.generic, "generic", false);
+        this.validateChild(con, con.generic,  "generic", false);
         this.validateChild(con, con.resolved, "resolved", false);
         this.validateChildren(con, con.instanceTypes, "instanceTypes", false);
     }
 
     private void validateMethodDecl(MethodDecl con) {
         // Receiver maybe nil in Go, but Java should always have a receiver that is the containing class.
-        this.validateChild(con, con.receiver, "receiver", false);
+        this.validateChild(con, con.receiver,  "receiver", false);
         this.validateChild(con, con.signature, "signature", false);
         this.validateChildren(con, con.typeParams, "typeParams", true);
-        this.validateChildren(con, con.instances, "instances", true);
+        this.validateChildren(con, con.instances,  "instances", true);
         this.validateChild(con, con.metrics, "metrics", true);
     }
 
     private void validateMethodInst(MethodInst con) {
         // Receiver maybe nil in Go, but Java should always have a receiver that is the containing class.
         this.validateChild(con, con.receiver, "receiver", false);
-        this.validateChild(con, con.generic, "generic", false);
+        this.validateChild(con, con.generic,  "generic", false);
         this.validateChild(con, con.resolved, "resolved", false);
         this.validateChildren(con, con.instanceTypes, "instanceTypes", false);
     }
 
     private void validateMetrics(Metrics con) {
         this.validateChildren(con, con.invokes, "invokes", true);
-        this.validateChildren(con, con.reads, "reads", true);
-        this.validateChildren(con, con.writes, "writes", true);
+        this.validateChildren(con, con.reads,   "reads", true);
+        this.validateChildren(con, con.writes,  "writes", true);
     }
 
     private void validateObjectDecl(ObjectDecl con) {
         this.validateChild(con, con.struct, "struct", false);
-        this.validateChild(con, con.inter, "inter", false);
+        this.validateChild(con, con.inter,  "inter", false);
         this.validateChildren(con, con.methodDecls, "methodDecls", true);
-        this.validateChildren(con, con.typeParams, "typeParams", true);
-        this.validateChildren(con, con.instances, "instances", true);
+        this.validateChildren(con, con.typeParams,  "typeParams", true);
+        this.validateChildren(con, con.instances,   "instances", true);
     }
 
     private void validateObjectInst(ObjectInst con) {
-        this.validateChild(con, con.generic, "generic", false);
-        this.validateChild(con, con.resData, "resData", false);
+        this.validateChild(con, con.generic,      "generic", false);
+        this.validateChild(con, con.resData,      "resData", false);
         this.validateChild(con, con.resInterface, "resInterface", false);
         this.validateChildren(con, con.instanceTypes, "instanceTypes", false);
-        this.validateChildren(con, con.methods, "methods", true);
+        this.validateChildren(con, con.methods,       "methods", true);
     }
 
     private void validatePackageCon(PackageCon con) {
-        this.validateChildren(con, con.imports, "imports", true);
+        this.validateChildren(con, con.imports,        "imports", true);
         this.validateChildren(con, con.interfaceDecls, "interfaceDecls", true);
-        this.validateChildren(con, con.methodDecls, "methodDecls", true);
-        this.validateChildren(con, con.objectDecls, "objectDecls", true);
-        this.validateChildren(con, con.values, "values", true);
+        this.validateChildren(con, con.methodDecls,    "methodDecls", true);
+        this.validateChildren(con, con.objectDecls,    "objectDecls", true);
+        this.validateChildren(con, con.values,         "values", true);
     }
 
     private void validateSelection(Selection con) {
@@ -172,7 +172,7 @@ public class Validator {
     }
 
     private void validateSignature(Signature con) {
-        this.validateChildren(con, con.params, "params", true);
+        this.validateChildren(con, con.params,  "params", true);
         this.validateChildren(con, con.results, "results", true);
     }
 
@@ -186,7 +186,7 @@ public class Validator {
     }
 
     private void validateValue(Value con) {
-        this.validateChild(con, con.type, "type", false);
+        this.validateChild(con, con.type,    "type",    false);
         this.validateChild(con, con.metrics, "metrics", true);
     }
     
@@ -205,7 +205,7 @@ public class Validator {
     
     private void validateChild(Construct parent, Ref<? extends Construct> child, String usage, boolean maybeNull) {
         if (child == null) {
-            if (!maybeNull) this.log.error("the child (" + usage + ") in " + parent + " is null.");
+            if (!maybeNull) this.log.error("the child (" + usage + ") in a " + parent.kind() + " is null: " + parent);
             return;
         }
 

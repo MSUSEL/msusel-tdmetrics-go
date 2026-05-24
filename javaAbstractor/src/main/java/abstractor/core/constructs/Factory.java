@@ -10,6 +10,7 @@ import spoon.reflect.declaration.CtElement;
 import abstractor.core.cmp.CmpOptions;
 import abstractor.core.json.*;
 import abstractor.core.log.*;
+import abstractor.core.require.Require;
 
 public class Factory<T extends Construct> implements Jsonable {
     static private final boolean logCreate = true;
@@ -166,7 +167,8 @@ public class Factory<T extends Construct> implements Jsonable {
         final Ref<T> otherRef = this.refSet.floor(ref);
         if (ref.equals(otherRef)) return otherRef;
 
-        assert(this.refSet.add(ref));
+        Require.require(this.refSet.add(ref),
+            "reference must be added at this point since otherwise it should have exited earlier");
         this.conSet.add(c);
         this.nonElemRef.put(c, ref);
         return ref;

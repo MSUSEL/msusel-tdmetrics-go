@@ -1,8 +1,5 @@
 package abstractor;
 
-import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
-import static org.junit.jupiter.api.Assertions.fail;
-
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
 
@@ -11,6 +8,7 @@ import org.junit.jupiter.api.Test;
 import abstractor.app.App;
 import abstractor.app.Config;
 import abstractor.core.Tester;
+import abstractor.core.require.Require;
 import abstractor.core.diff.Diff;
 import abstractor.core.json.JsonFormat;
 import abstractor.core.json.JsonNode;
@@ -18,27 +16,27 @@ import abstractor.core.json.JsonNode;
 public class AppTests {
 
     @Test
-    public void test0001() { runApp("test0001"); }
+    public void test0001() throws Exception { runApp("test0001"); }
 
     @Test
-    public void test0002() { runApp("test0002"); }
+    public void test0002() throws Exception { runApp("test0002"); }
 
     @Test
-    public void test1001() { testClass("test1001", "Foo"); }
+    public void test1001() throws Exception { testClass("test1001", "Foo"); }
 
     @Test
-    public void test1002() { testClass("test1002", "Foo"); }
+    public void test1002() throws Exception { testClass("test1002", "Foo"); }
 
     @Test
-    public void test1003() { testClass("test1003", "Foo"); }
+    public void test1003() throws Exception { testClass("test1003", "Foo"); }
 
     @Test
-    public void test1004() { testClass("test1004", "Foo"); }
+    public void test1004() throws Exception { testClass("test1004", "Foo"); }
 
     @Test
-    public void test1005() { testClass("test1005", "Foo"); }
+    public void test1005() throws Exception { testClass("test1005", "Foo"); }
 
-    static private void runApp(String testName) {
+    static private void runApp(String testName) throws Exception {
         final String testPath = "../testData/java/" + testName;
         final String absFile  = testPath + "/abstraction.yaml";
 
@@ -61,25 +59,25 @@ public class AppTests {
             final boolean success = App.run(cfg);
             if (!success) {
                 System.out.println(logBuf.toString());
-                fail("App.run returned false.");
+                Require.failure("App.run returned false.");
             }
         } catch(Exception ex) {
             System.out.println(logBuf.toString());
-            fail(ex);
+            Require.failure(ex);
         }
 
-        final JsonNode expJson = assertDoesNotThrow(() -> JsonNode.parseFile(absFile));
+        final JsonNode expJson = JsonNode.parseFile(absFile);
         final String exp = format.format(expJson);
         final String result = buffer.toString().trim();
         if (!exp.equals(result)) {
             System.out.println(logBuf.toString());
             final String diff = String.join("\n\t", new Diff().PlusMinusByLine(exp, result));
             System.out.println("Error: unexpected lines\n\t" + diff);
-            fail("unexpected lines (see diff above)");
+            Require.failure("unexpected lines (see diff above)");
         }
     }
 
-    static private void testClass(String testName, String className) {
+    static private void testClass(String testName, String className) throws Exception {
         final String testPath = "../testData/java/" + testName;
         final String absFile  = testPath + "/abstraction.yaml";
 

@@ -9,9 +9,10 @@ import spoon.reflect.declaration.*;
 import spoon.reflect.path.CtRole;
 import spoon.reflect.reference.*;
 import spoon.support.compiler.VirtualFile;
-
+import spoon.support.reflect.declaration.CtTypeParameterImpl;
 import abstractor.core.constructs.*;
 import abstractor.core.log.*;
+import abstractor.core.require.Require;
 import abstractor.core.validator.*;
 import abstractor.core.spoonUtils.*;
 
@@ -174,7 +175,7 @@ public class Abstractor {
     }
 
     public Ref<MethodDecl> addMethod(Ref<ObjectDecl> receiver, CtMethod<?> m) throws Exception {
-        assert(!SpoonUtils.isObjectMethod(m));
+        Require.notObjectMethod(m);
         final ObjectDecl recv = receiver.mustGetResolved();
         return this.proj.methodDecls.create(this.log, m,
             "method " + SpoonUtils.describeElem(m),
@@ -196,7 +197,7 @@ public class Abstractor {
     }
 
     public Ref<Abstract> addAbstract(CtMethod<?> m) throws Exception {
-        assert(!SpoonUtils.isObjectMethod(m));
+        Require.notObjectMethod(m);
         return this.proj.abstracts.create(this.log, m,
             "abstract " + SpoonUtils.describeElem(m),
             () -> {
@@ -207,7 +208,7 @@ public class Abstractor {
     }
 
     public Ref<Signature> addSignature(CtMethod<?> m) throws Exception {
-        assert(!SpoonUtils.isObjectMethod(m));
+        Require.notObjectMethod(m);
         return this.proj.signatures.create(this.log, m,
             "signature " + SpoonUtils.describeElem(m),
             () -> {
@@ -393,6 +394,7 @@ public class Abstractor {
     }
 
     public Ref<ObjectDecl> addObjectDecl(CtClass<?> c) throws Exception {
+        Require.notObject(c.getReference());
         return this.proj.objectDecls.create(this.log, c,
             "object decl " + SpoonUtils.describeElem(c),
             () -> {
@@ -460,11 +462,11 @@ public class Abstractor {
         // Skip anonymous and local types since they can not escape the enclosing method.
         // (They still will contribute to metrics via super-interfaces and extends).
         if (tr.isAnonymous()) {
-            this.log.notice("Ignoring anonymous type: " + SpoonUtils.describeElem(tr));
+            this.log.error("Ignoring anonymous type: " + SpoonUtils.describeElem(tr));
             return null;
         }
         if (tr.isLocalType()) {
-            this.log.notice("Ignoring local type: " + SpoonUtils.describeElem(tr));
+            this.log.error("Ignoring local type: " + SpoonUtils.describeElem(tr));
             return null;
         }
 
@@ -486,6 +488,9 @@ public class Abstractor {
 
         // Shadow types are external (JDK / third-party) without a type declaration.
         if (tr.isShadow()) return this.addShadowTypeDesc(tr);
+        
+        // If the type is an Object, return an any for the Object.
+        if (SpoonUtils.isObject(tr)) return this.proj.baker.anyDesc();
 
         // Use getTypeDeclaration (not getDeclaration) to get shadow types
         // for external/JDK types instead of null.
@@ -503,9 +508,10 @@ public class Abstractor {
         }
 
         // Check CtEnum before CtClass since CtEnum extends CtClass.
-        if (ty instanceof CtEnum<?>      e) return this.addEnum(e);
-        if (ty instanceof CtClass<?>     c) return this.addObjectDecl(c);
-        if (ty instanceof CtInterface<?> i) return this.addInterfaceDecl(i);
+        if (ty instanceof CtEnum<?>        e) return this.addEnum(e);
+        if (ty instanceof CtClass<?>       c) return this.addObjectDecl(c);
+        if (ty instanceof CtInterface<?>   i) return this.addInterfaceDecl(i);
+        if (ty instanceof CtTypeParameter tp) return this.addTypeParam(tp);
 
         this.log.warning("Unhandled type description: " + SpoonUtils.describeElem(ty));
         return null;
@@ -681,14 +687,14 @@ public class Abstractor {
 
     private void crossConnectConstructs() throws Exception {
         for (MethodDecl m : this.proj.methodDecls.conSet) {
-            final PackageCon pkg = m.pkg.getResolved();
+            final PackageCon pkg = m.pkg.mustGetResolved();
             if (pkg == null) this.log.error("package for method is null: " + m);
             final Ref<MethodDecl> decl = this.proj.methodDecls.addOrGetRef(m, "method in package " + pkg);
             pkg.methodDecls.add(decl);
         }
 
         for (ObjectDecl obj : this.proj.objectDecls.conSet) {
-            final PackageCon pkg = obj.pkg.getResolved();
+            final PackageCon pkg = obj.pkg.mustGetResolved();
             if (pkg == null) this.log.error("package for object is null: " + obj);
             pkg.objectDecls.add(this.proj.objectDecls.addOrGetRef(obj, "object in package " + pkg));
             for (Ref<MethodDecl> met : obj.methodDecls)
@@ -696,13 +702,13 @@ public class Abstractor {
         }
         
         for (InterfaceDecl it : this.proj.interfaceDecls.conSet) {
-            final PackageCon pkg = it.pkg.getResolved();
+            final PackageCon pkg = it.pkg.mustGetResolved();
             if (pkg == null) this.log.error("package for interface is null: " + it);
             pkg.interfaceDecls.add(this.proj.interfaceDecls.addOrGetRef(it, "interface in package " + pkg));
         }
 
         for (Value v : this.proj.values.conSet) {
-            final PackageCon pkg = v.pkg.getResolved();
+            final PackageCon pkg = v.pkg.mustGetResolved();
             if (pkg == null) this.log.error("package for value is null: " + v);
             pkg.values.add(this.proj.values.addOrGetRef(v, "value in package " + pkg));
         }

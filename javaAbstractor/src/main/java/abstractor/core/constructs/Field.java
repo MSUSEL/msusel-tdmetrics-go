@@ -5,15 +5,16 @@ import spoon.reflect.declaration.CtModifiable;
 import abstractor.core.cmp.Cmp;
 import abstractor.core.cmp.CmpOptions;
 import abstractor.core.json.*;
+import abstractor.core.require.Require;
 
 public class Field extends ConstructImp {
     public String name;
     public Ref<? extends TypeDesc> type;
     public String visibility;
 
-    public Field() {}
-
-    public Field(String name, Ref<? extends TypeDesc> type) {
+    public Field(String name, Ref<? extends TypeDesc> type) throws Exception {
+        Require.notBlank(name, "a name for a field may not be blank");
+        Require.notNull(type, "a field must have a non-null type");
         this.name       = name;
         this.type       = type;
         this.visibility = "";

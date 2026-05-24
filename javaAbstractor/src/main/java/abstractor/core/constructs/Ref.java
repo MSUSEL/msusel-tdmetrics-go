@@ -48,7 +48,7 @@ public class Ref<T extends Construct> extends ConstructImp {
 
     public T mustGetResolved() throws Exception {
         if (this.res == null)
-            throw new AbstractorException("Expected the " + this.kind() + " reference is resolved.");
+            throw new AbstractorException("Expected the " + this.kind() + " reference is resolved for " + this);
         return this.res;
     }
 
