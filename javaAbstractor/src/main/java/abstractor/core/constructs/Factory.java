@@ -1,12 +1,9 @@
 package abstractor.core.constructs;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.TreeSet;
+import java.util.*;
 
 import spoon.reflect.declaration.CtElement;
+
 import abstractor.core.cmp.CmpOptions;
 import abstractor.core.json.*;
 import abstractor.core.log.*;
@@ -18,6 +15,7 @@ public class Factory<T extends Construct> implements Jsonable {
     private final ConstructKind              conKind;
     public  final HashMap<CtElement, Ref<T>> byElem     = new HashMap<>();
     public  final HashMap<T,         Ref<T>> nonElemRef = new HashMap<>();
+    public  final HashSet<CtElement>         elemInProg = new HashSet<>();
     public  final TreeSet<Ref<T>>            refSet     = new TreeSet<>();
     public  final TreeSet<T>                 conSet     = new TreeSet<>();
 
@@ -56,9 +54,13 @@ public class Factory<T extends Construct> implements Jsonable {
     public Ref<T> create(Logger log, CtElement elem, String title, Creator<T> creator, Finisher<T> finisher) throws Exception {
         if (elem == null) return null;
 
-        // Check if a resistance already exists.
+        // If already "in progress" then check for if a reference already exists
+        // so that we only create one and all others are references. However,
+        // since references can be created other ways, we need to skip checking
+        // for references if not "in progress" to start progress.
         final Ref<T> existing = this.getRef(elem);
-        if (existing != null) return existing;
+        final boolean inProgress = this.elemInProg.contains(elem);
+        if (inProgress && existing != null) return existing;
         
         try {
             if (logCreate) {
@@ -68,9 +70,18 @@ public class Factory<T extends Construct> implements Jsonable {
 
             // First add a reference so that if a circular loop is hit when
             // creating the new construct, the same reference will be picked up.
-            final Ref<T> newRef = new Ref<T>(this.conKind, elem, title);
-            this.refSet.add(newRef);
-            this.byElem.put(elem, newRef);
+            Ref<T> ref;
+            if (existing != null) ref = existing;
+            else {
+                final Ref<T> newRef = new Ref<T>(this.conKind, elem, title);
+                Require.require(this.refSet.add(newRef));
+                this.byElem.put(elem, newRef);
+                ref = newRef;
+            }
+
+            // Only set "in progress" to true here so that only we can differentiate
+            // from the methods that only create a temporary reference.
+            this.elemInProg.add(elem);
 
             // Create a new construct for this data.
             final T newCon = creator.create();
@@ -86,15 +97,15 @@ public class Factory<T extends Construct> implements Jsonable {
             // different finishing steps.
             final T other = this.getExisting(newCon);
             if (other != null) {
-                newRef.setResolved(other);
-                if (finisher != null) finisher.finish(newRef, other);
+                ref.setResolved(other);
+                if (finisher != null) finisher.finish(ref, other);
             } else {
                 this.conSet.add(newCon);
-                newRef.setResolved(newCon);
-                if (finisher != null) finisher.finish(newRef, newCon);
+                ref.setResolved(newCon);
+                if (finisher != null) finisher.finish(ref, newCon);
             }
 
-            return newRef;
+            return ref;
         } finally {
             if (logCreate) log.pop();
         }

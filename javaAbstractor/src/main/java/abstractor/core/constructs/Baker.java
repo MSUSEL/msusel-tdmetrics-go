@@ -1,13 +1,10 @@
 package abstractor.core.constructs;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Map;
-import java.util.TreeMap;
-import java.util.TreeSet;
+import java.util.*;
+
+import spoon.reflect.reference.CtTypeReference;
 
 import abstractor.core.spoonUtils.SpoonUtils;
-import spoon.reflect.reference.CtTypeReference;
 
 public class Baker {
     private final Project proj;
@@ -39,12 +36,12 @@ public class Baker {
             () -> new PackageCon("$builtin", ""));
     }
 
-    // anyDesc creates a new empty interface (any) that is the base type of all non-basic types.
+    // Creates a new empty interface (any) that is the base interface type of all non-basic types.
     public Ref<InterfaceDesc> anyDesc() throws Exception {
         return this.getConstruct("objectInterfaceDesc", this.proj.interfaceDescs,
             () -> new InterfaceDesc(Collections.emptySortedSet()));
     }
-    
+
     private Ref<Basic> intBasic() throws Exception {
         return this.getConstruct("intBasic", this.proj.basics,
             () -> new Basic("int"));

@@ -73,9 +73,9 @@ final public class SpoonUtils {
         return CtTypeReference.NULL_TYPE_NAME.equals(tr.getSimpleName());
     }
 
-    static public boolean isObject(CtTypeReference<?> tr) {
+    static public boolean isObject(CtTypeInformation ti) {
         final String objName = "java.lang.Object";
-        return objName.equals(tr.getQualifiedName());
+        return objName.equals(ti.getQualifiedName());
     }
 
     /**

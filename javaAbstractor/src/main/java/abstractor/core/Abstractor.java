@@ -72,12 +72,21 @@ public class Abstractor {
     }
 
     private void prepareModel(CtModel model) throws Exception {
-        this.pendingPackages.addAll(model.getAllPackages());
+        for (CtPackage pkg: model.getAllPackages()) {
+            this.log.log("Init pending package " + SpoonUtils.describeElem(pkg));
+            this.pendingPackages.add(pkg);
+        }
     }
 
     //===[ Construct Adders ]===================================================
 
     public Ref<PackageCon> addPackage(CtPackage pkg) throws Exception {
+        if (pkg == null) return this.proj.baker.builtinPackage();
+
+        Ref<PackageCon> pkgRef = this.proj.packages.getRef(pkg);
+        if (pkgRef != null) return pkgRef;
+
+        this.log.log("Pending package " + SpoonUtils.describeElem(pkg));
         this.pendingPackages.add(pkg);
         return this.proj.packages.addOfGetRefForElem(pkg,
             "for pending package " + SpoonUtils.describeElem(pkg));
@@ -466,11 +475,11 @@ public class Abstractor {
         // Skip anonymous and local types since they can not escape the enclosing method.
         // (They still will contribute to metrics via super-interfaces and extends).
         if (tr.isAnonymous()) {
-            this.log.error("Ignoring anonymous type: " + SpoonUtils.describeElem(tr));
+            this.log.notice("Ignoring anonymous type: " + SpoonUtils.describeElem(tr));
             return null;
         }
         if (tr.isLocalType()) {
-            this.log.error("Ignoring local type: " + SpoonUtils.describeElem(tr));
+            this.log.notice("Ignoring local type: " + SpoonUtils.describeElem(tr));
             return null;
         }
 
@@ -643,7 +652,9 @@ public class Abstractor {
                 return new PackageCon(name, path);
             },
             (Ref<PackageCon> ref, PackageCon pkgCon) -> {
-                for (CtType<?> t : pkg.getTypes()) pkgCon.add(this.addDeclaration(t));
+                for (CtType<?> t : pkg.getTypes()) {
+                    if (!SpoonUtils.isObject(t)) pkgCon.add(this.addDeclaration(t));
+                }
             });
     }
 
