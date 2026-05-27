@@ -351,9 +351,9 @@ public class Abstractor {
             });
     }
 
-    public Ref<InterfaceInst> addArray(CtArrayTypeReference<?> tr) throws Exception {
+    public Ref<? extends TypeDesc> addArray(CtArrayTypeReference<?> tr) throws Exception {
         final Ref<? extends TypeDesc> elem = this.addTypeDesc(tr.getArrayType());
-        Ref<InterfaceInst> ref = this.proj.baker.arrayInst(tr.getSimpleName(), elem);
+        final Ref<InterfaceInst> ref = this.proj.baker.arrayInst(tr.getSimpleName(), elem);
         this.proj.interfaceInsts.setRefForElem(tr, ref);
         return ref;
     }

@@ -2,6 +2,8 @@ package abstractor.core.validator;
 
 import abstractor.core.log.Logger;
 
+import java.util.ArrayList;
+
 import abstractor.core.constructs.*;
 
 public class Validator {
@@ -117,6 +119,7 @@ public class Validator {
         this.validateChild(con, con.generic,  "generic", false);
         this.validateChild(con, con.resolved, "resolved", false);
         this.validateChildren(con, con.instanceTypes, "instanceTypes", false);
+        // TODO: Validate that the instance type isn't the generic type parameter
     }
 
     private void validateMethodDecl(MethodDecl con) {
@@ -134,6 +137,7 @@ public class Validator {
         this.validateChild(con, con.generic,  "generic", false);
         this.validateChild(con, con.resolved, "resolved", false);
         this.validateChildren(con, con.instanceTypes, "instanceTypes", false);
+        // TODO: Validate that the instance type isn't the generic type parameter
     }
 
     private void validateMetrics(Metrics con) {
@@ -156,6 +160,11 @@ public class Validator {
         this.validateChild(con, con.resInterface, "resInterface", false);
         this.validateChildren(con, con.instanceTypes, "instanceTypes", false);
         this.validateChildren(con, con.methods,       "methods", true);
+
+        final ObjectDecl gen = con.generic.getResolved();
+        
+        this.validateInstantiation(gen, con, gen.typeParams, con.instanceTypes);
+        // TODO: Validate that the instance type isn't the generic type parameter
     }
 
     private void validatePackageCon(PackageCon con) {
@@ -188,6 +197,13 @@ public class Validator {
     private void validateValue(Value con) {
         this.validateChild(con, con.type,    "type",    false);
         this.validateChild(con, con.metrics, "metrics", true);
+    }
+
+    private void validateInstantiation(Construct decl, Construct inst, ArrayList<Ref<TypeParam>> typeParams, ArrayList<Ref<? extends TypeDesc>> instanceTypes) {
+
+        // TODO: Validate that the instance type isn't the generic type parameter
+
+
     }
     
     private void validateChildren(Construct parent, Iterable<? extends Ref<? extends Construct>> children, String usage, boolean maybeEmpty) {
