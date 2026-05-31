@@ -362,8 +362,7 @@ public class Abstractor {
         }
 
         final Ref<InterfaceInst> ref = this.proj.baker.arrayInst(tr.getSimpleName(), td);
-        this.proj.interfaceInsts.setRefForElem(tr, ref);
-        return ref;
+        return this.proj.interfaceInsts.setRefForElem(tr, ref);
     }
     
     public Ref<Basic> addBasic(CtTypeReference<?> tr) throws Exception {
@@ -702,6 +701,8 @@ public class Abstractor {
     }
 
     private void consolidateCons() throws Exception {
+        this.log.log("Consolidating all constructs");
+        this.proj.setToCompareResolved();
         this.proj.setAllIndices();
         while (this.proj.consolidateCons(this.log))
             this.proj.setAllIndices();

@@ -3,7 +3,7 @@ package abstractor.core.constructs;
 import java.util.*;
 
 import spoon.reflect.declaration.CtElement;
-
+import abstractor.core.cmp.CmpContext;
 import abstractor.core.cmp.CmpOptions;
 import abstractor.core.json.*;
 import abstractor.core.log.*;
@@ -138,7 +138,7 @@ public class Factory<T extends Construct> implements Jsonable {
                 ref.setResolved(other);
                 if (finisher != null) finisher.finish(ref, other);
             } else {
-                this.conSet.add(newCon);
+                Require.require(this.conSet.add(newCon));
                 ref.setResolved(newCon);
                 if (finisher != null) finisher.finish(ref, newCon);
             }
@@ -177,17 +177,7 @@ public class Factory<T extends Construct> implements Jsonable {
     private void addRefWithElem(Ref<T> ref) throws Exception {
         final CtElement elem = ref.elem;
         Require.notNull(elem, "element may not be null when adding the reference " + ref);
-        //Require.require(this.refSet.add(ref), "reference " + ref + " must be added at this point");
-        if (!this.refSet.add(ref)) { // TODO: FIX
-            final Ref<T> other = this.refSet.floor(ref);
-            System.out.println("new: " + ref);
-            System.out.println("existing: " + other);
-            //this.debugPrintRefSet();
-            System.out.println("new.elem: " + ref.elem);
-            System.out.println("existing.elem: " + other.elem);
-
-            Require.failure("reference " + ref + " must be added at this point");
-        }
+        Require.require(this.refSet.add(ref), "reference " + ref + " must be added at this point");
         Require.isNull(this.byElem.put(elem, ref));
     }
 
@@ -195,20 +185,30 @@ public class Factory<T extends Construct> implements Jsonable {
      * Sets an existing reference to an element this it doesn't have in it.
      * If an element already exists as a reference, this it will be checked
      * that the reference isn't changing instead.
+     * 
+     * This returns an existing equivalent reference set of that element or
+     * the given reference if it was added.
      *
      * For example, when an array is instantiated for a specific element type,
      * the instantiated array then has the element for the array set for it.
      */
-    public void setRefForElem(CtElement elem, Ref<T> ref) throws Exception {
+    public Ref<T> setRefForElem(CtElement elem, Ref<T> ref) throws Exception {
         final Ref<T> existing = this.getRefByElem(elem);
         if (existing != null) {
             Require.equal(existing, ref,
                 "reference already exists for element " + existing + " so cannot set " + ref);
-            return;
+            return existing;
         }
 
-        this.refSet.add(ref); // reference may already exist if added for a non-element reference.
+        final Ref<T> otherRef = this.refSet.floor(ref);
+        if (ref.equals(otherRef)) {
+            Require.isNull(this.byElem.put(elem, otherRef));
+            return otherRef;
+        }
+
+        Require.require(this.refSet.add(ref));
         Require.isNull(this.byElem.put(elem, ref));
+        return ref;
     }
 
     /**
@@ -250,7 +250,7 @@ public class Factory<T extends Construct> implements Jsonable {
         if (newRef.equals(otherRef)) return otherRef;
 
         // construct may already exist because it was added with an element,
-        // like what happens with adding an `int` from the AST and one from the backer.
+        // like what happens with adding an `int` from the AST and one from the baker.
         this.conSet.add(c);
 
         Require.require(this.refSet.add(newRef),
@@ -263,12 +263,25 @@ public class Factory<T extends Construct> implements Jsonable {
     //==========================================================================
 
     static private CmpOptions resolvedCmpOptionsSingleton = null;
-    private CmpOptions resolvedCmpOptions() {
+    static private CmpOptions resolvedCmpOptions() {
         if (resolvedCmpOptionsSingleton != null) return resolvedCmpOptionsSingleton;
         CmpOptions options = new CmpOptions();
         options.useResolved = true;
         resolvedCmpOptionsSingleton = options;
         return options;
+    }
+
+    /**
+     * Change all the comparison options to use the resolved.
+     */
+    public void setToCompareResolved() {
+        final CmpOptions options = resolvedCmpOptions();
+        for (T con : this.conSet) con.setCmpOptions(options);
+        for (Ref<T> ref : this.refSet) ref.setCmpOptions(options);
+        
+        // The non-element references is no longer useful but the changed comparisons
+        // could cause issues if someone tried to use it so just clear it out.
+        this.nonElemRef.clear();
     }
 
     public boolean consolidateCons(Logger log) throws Exception {
@@ -277,17 +290,12 @@ public class Factory<T extends Construct> implements Jsonable {
         final ArrayList<T> conList = new ArrayList<T>(this.conSet);
         this.conSet.clear();
 
-        // Change all the comparison options to use the resolved.
-        final CmpOptions options = resolvedCmpOptions();
-        for (T con : conList) con.setCmpOptions(options);
-        for (Ref<T> ref : this.refSet) ref.setCmpOptions(options);
-
         boolean collision = false;
         for (T con : conList) {
             T existing = this.conSet.floor(con);
             if (existing == null || !existing.equals(con)) {
                 // No conflict found, so add the construct into set.
-                this.conSet.add(con);
+                Require.require(this.conSet.add(con));
                 continue;
             }
 

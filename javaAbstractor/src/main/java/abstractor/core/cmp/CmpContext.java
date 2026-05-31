@@ -2,18 +2,31 @@ package abstractor.core.cmp;
 
 import java.util.HashMap;
 
+import abstractor.core.log.Logger;
+
 public class CmpContext {
     final private CmpOptions options;
     final private String prefix;
+    final private Logger log;
 
     public CmpContext(CmpOptions options) {
-        this(options, "");
+        this(options, "", null);
     }
 
     public CmpContext(CmpOptions options, String prefix) {
+        this(options, prefix, null);
+    }
+
+    public CmpContext(CmpOptions options, Logger log) {
+        this(options, "", log);
+    }
+
+    public CmpContext(CmpOptions options, String prefix,  Logger log) {
         this.options = options != null ? options : new CmpOptions();
         this.prefix = prefix;
+        this.log = log;
     }
+
 
     static private String join(String a, String b) {
         if (a.isBlank()) return b;
@@ -22,7 +35,7 @@ public class CmpContext {
     }
 
     public CmpContext subContext(String prefix) {
-        return new CmpContext(this.options, join(this.prefix, prefix));
+        return new CmpContext(this.options, join(this.prefix, prefix), this.log);
     }
 
     private final HashMap<String, Integer> cache = new HashMap<>();
@@ -40,10 +53,15 @@ public class CmpContext {
         if (this.options.debugPrint) {
             name = join(this.prefix, name);
             final String header = name.isBlank() ? "" : name+": ";
+
             String type = "unknown";
             if (a != null) type = a.getClass().getSimpleName();
             else if (b != null) type = b.getClass().getSimpleName();
-            System.out.println(header + "compare<"+type+">(" + a + ", " + b + ") => " + cmp);
+
+            final String msg = header + "compare<"+type+">(" + a + ", " + b + ") => " + cmp;
+
+            if (this.log != null) this.log.log(msg);
+            else System.out.println(msg);
         }
         return cmp;
     }

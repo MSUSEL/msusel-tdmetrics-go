@@ -52,6 +52,14 @@ public class Project implements Jsonable {
         this.objectDecls,
         this.values,
     };
+    
+    /**
+     * Change all the comparison options to use the resolved.
+     */
+    public void setToCompareResolved() {
+        for (Factory<? extends Construct> factory : this.factories)
+            factory.setToCompareResolved();
+    }
 
     public boolean consolidateCons(Logger log) throws Exception {
         boolean collision = false;
