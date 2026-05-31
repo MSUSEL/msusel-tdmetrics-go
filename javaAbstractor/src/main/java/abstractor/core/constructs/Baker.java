@@ -53,7 +53,7 @@ public class Baker {
             () -> new Basic("int"));
     }
 
-    private Ref<TypeParam> genT() throws Exception {
+    public Ref<TypeParam> genT() throws Exception {
         return this.getConstruct("genT", this.proj.typeParams,
             () -> new TypeParam("T", this.anyDesc()));
     }
@@ -130,7 +130,7 @@ public class Baker {
         });
     }
 
-    private Ref<InterfaceDecl> arrayDecl() throws Exception {
+    public Ref<InterfaceDecl> arrayDecl() throws Exception {
         return this.getConstruct("arrayDecl", this.proj.interfaceDecls, () -> {
             final Ref<PackageCon> pkg = this.builtinPackage();
             final Ref<TypeParam>  tdT = this.genT();

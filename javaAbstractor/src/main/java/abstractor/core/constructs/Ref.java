@@ -9,10 +9,17 @@ import abstractor.core.cmp.*;
 import abstractor.core.json.*;
 
 public class Ref<T extends Construct> extends ConstructImp {
-    static private HashMap<CtElement, Integer> elemOrder = new HashMap<>();
+    static private HashMap<CtElement, String> elemOrder = new HashMap<>();
 
-    static private int getElemOrderNumber(CtElement elem) {
-        return elemOrder.computeIfAbsent(elem, k -> elemOrder.size());
+    static private String getElemOrderKey(CtElement elem) {
+        if (elem == null) return "null";
+        return elemOrder.computeIfAbsent(elem, k -> {
+            // Use the hash and position to try to order the elements as consistently as possible.
+            // There shouldn't be randomness in how the AST is processed but I don't want
+            // to fighting bugs because of elements being added in random order.
+            final String pos = k.getPosition().toString();
+            return k.hashCode() + "-" + pos + "-" + elemOrder.size();
+        });
     }
 
     private final ConstructKind conKind;
@@ -106,7 +113,7 @@ public class Ref<T extends Construct> extends ConstructImp {
         }
 
         return Cmp.or("Ref", super.getCmp(c, options), opCmp,
-            Cmp.defer(getElemOrderNumber(this.elem), () -> getElemOrderNumber(((Ref<?>)c).elem), "elem"),
+            Cmp.defer(getElemOrderKey(this.elem), () -> getElemOrderKey(((Ref<?>)c).elem), "elem"),
             Cmp.defer(    this.context,  () -> ((Ref<?>)c).context,  "context"),
             Cmp.deferList(this.typeArgs, () -> ((Ref<?>)c).typeArgs, "typeArgs")
         );

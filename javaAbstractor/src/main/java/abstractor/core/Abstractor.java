@@ -352,11 +352,16 @@ public class Abstractor {
     }
 
     public Ref<? extends TypeDesc> addArray(CtArrayTypeReference<?> tr) throws Exception {
-        final Ref<? extends TypeDesc> elem = this.addTypeDesc(tr.getArrayType());
+        final Ref<? extends TypeDesc> td = this.addTypeDesc(tr.getArrayType());
 
-        // TODO: Figure out how to handle when `td` is `T` in `$Array<T>`.
+        // Check that `td` is not `T` to prevent $Array<T> being instantiated with T.
+        if (td.isResolved()) {
+            final Ref<TypeParam> tdT = this.proj.baker.genT();
+            if (td.getResolved().equals(tdT.getResolved()))
+                return this.proj.baker.arrayDecl();
+        }
 
-        final Ref<InterfaceInst> ref = this.proj.baker.arrayInst(tr.getSimpleName(), elem);
+        final Ref<InterfaceInst> ref = this.proj.baker.arrayInst(tr.getSimpleName(), td);
         this.proj.interfaceInsts.setRefForElem(tr, ref);
         return ref;
     }
