@@ -143,15 +143,8 @@ public class Baker {
     
     public Ref<InterfaceInst> arrayInst(String tdName, Ref<? extends TypeDesc> td) throws Exception {
         // Check that `td` is not `T` to prevent $Array<T> being instantiated with T.
-
-        // TODO: Figure this out
         if (td.isResolved()) {
             final Ref<TypeParam> tdT = this.genT();
-            //System.out.print(">> td:  " + td.getResolved() + "\n");
-            //System.out.print(">> tdT: " + tdT.getResolved() + "\n");
-            //CmpOptions o = new CmpOptions();
-            //o.debugPrint = true;
-            //(new CmpContext(o)).compare(td.getResolved(), tdT.getResolved(), "Debug");
             Require.notEqual(td.getResolved(), tdT.getResolved());
         }
 

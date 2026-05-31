@@ -1,7 +1,6 @@
 package abstractor.core.constructs;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 import spoon.reflect.declaration.CtElement;
 
@@ -10,6 +9,12 @@ import abstractor.core.cmp.*;
 import abstractor.core.json.*;
 
 public class Ref<T extends Construct> extends ConstructImp {
+    static private HashMap<CtElement, Integer> elemOrder = new HashMap<>();
+
+    static private int getElemOrderNumber(CtElement elem) {
+        return elemOrder.computeIfAbsent(elem, k -> elemOrder.size());
+    }
+
     private final ConstructKind conKind;
     public  final CtElement     elem;
     public  final String        context;
@@ -101,7 +106,7 @@ public class Ref<T extends Construct> extends ConstructImp {
         }
 
         return Cmp.or("Ref", super.getCmp(c, options), opCmp,
-            Cmp.defer(    this.elem,     () -> ((Ref<?>)c).elem,     "elem"),
+            Cmp.defer(getElemOrderNumber(this.elem), () -> getElemOrderNumber(((Ref<?>)c).elem), "elem"),
             Cmp.defer(    this.context,  () -> ((Ref<?>)c).context,  "context"),
             Cmp.deferList(this.typeArgs, () -> ((Ref<?>)c).typeArgs, "typeArgs")
         );
