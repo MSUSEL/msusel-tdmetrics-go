@@ -21,8 +21,10 @@ public class Validator {
     }
 
     private void validate(Factory<? extends Construct> factory) {
-        for (Ref<? extends Construct> ref : factory.refSet) this.validateRef(factory, ref, "factory ref");
-        for (Construct con : factory.conSet) this.validateCon(factory, con);
+        for (Ref<? extends Construct> ref : factory.getRefSet())
+            this.validateRef(factory, ref, "factory ref");
+        for (Construct con : factory.getConSet())
+            this.validateCon(factory, con);
     }
 
     private void validateRef(Factory<? extends Construct> factory, Ref<? extends Construct> ref, String usage) {
@@ -47,7 +49,7 @@ public class Validator {
 
     private boolean foundInFactory(Construct con) {
         final Factory<? extends Construct> factory = this.proj.getFactory(con.kind());
-        final Iterable<? extends Construct> set = (con instanceof Ref<?>) ? factory.refSet : factory.conSet;
+        final Iterable<? extends Construct> set = (con instanceof Ref<?>) ? factory.getRefSet() : factory.getConSet();
         for (Construct other : set) {
             // Use `==` not `equals` to ensure exact reference.
             if (other == con) return true;
@@ -97,6 +99,7 @@ public class Validator {
     private void validateBasic(Basic con) {
         if (con.name.isBlank())      this.log.error("basic name is black.");
         else if (con.name == "void") this.log.error("basic name is \"void\".");
+        else if (con.name == "null") this.log.error("basic name is \"null\".");
     }
 
     private void validateField(Field con) {
@@ -119,7 +122,9 @@ public class Validator {
         this.validateChild(con, con.generic,  "generic", false);
         this.validateChild(con, con.resolved, "resolved", false);
         this.validateChildren(con, con.instanceTypes, "instanceTypes", false);
-        // TODO: Validate that the instance type isn't the generic type parameter
+
+        final InterfaceDecl gen = con.generic.getResolved();
+        if (gen != null) this.validateInstantiation(gen, con, gen.typeParams, con.instanceTypes);
     }
 
     private void validateMethodDecl(MethodDecl con) {
@@ -137,7 +142,9 @@ public class Validator {
         this.validateChild(con, con.generic,  "generic", false);
         this.validateChild(con, con.resolved, "resolved", false);
         this.validateChildren(con, con.instanceTypes, "instanceTypes", false);
-        // TODO: Validate that the instance type isn't the generic type parameter
+
+        final MethodDecl gen = con.generic.getResolved();
+        if (gen != null) this.validateInstantiation(gen, con, gen.typeParams, con.instanceTypes);
     }
 
     private void validateMetrics(Metrics con) {
@@ -162,9 +169,7 @@ public class Validator {
         this.validateChildren(con, con.methods,       "methods", true);
 
         final ObjectDecl gen = con.generic.getResolved();
-        
-        this.validateInstantiation(gen, con, gen.typeParams, con.instanceTypes);
-        // TODO: Validate that the instance type isn't the generic type parameter
+        if (gen != null) this.validateInstantiation(gen, con, gen.typeParams, con.instanceTypes);
     }
 
     private void validatePackageCon(PackageCon con) {
@@ -200,10 +205,25 @@ public class Validator {
     }
 
     private void validateInstantiation(Construct decl, Construct inst, ArrayList<Ref<TypeParam>> typeParams, ArrayList<Ref<? extends TypeDesc>> instanceTypes) {
+        final int typeParamSize = typeParams.size();
+        if (typeParamSize <= 0)
+            this.log.error("the declaration " + decl + " had instances but has " + typeParamSize + " type parameters.");
 
-        // TODO: Validate that the instance type isn't the generic type parameter
+        final int instanceTypeSize = instanceTypes.size();
+        if (typeParamSize != instanceTypeSize)
+            this.log.error("the declaration " + decl + " had " + typeParamSize + " (" + typeParams + ") type parameters which did not match" +
+                "the instance " + inst + " that had " + instanceTypeSize + " (" + instanceTypes + ") instance types.");
 
-
+        final int count = Integer.min(typeParamSize, instanceTypeSize);
+        boolean match = true;
+        for (int i = 0; i < count; i++) {
+            if (!typeParams.get(i).equals(instanceTypes.get(i))) {
+                match = false;
+                break;
+            }
+        }
+        if (match)
+            this.log.error("the declaration " + decl + " and the instance " + inst + " had the same (" + count + ") type parameters.");
     }
     
     private void validateChildren(Construct parent, Iterable<? extends Ref<? extends Construct>> children, String usage, boolean maybeEmpty) {

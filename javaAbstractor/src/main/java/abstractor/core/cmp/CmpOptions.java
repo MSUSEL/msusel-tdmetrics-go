@@ -1,16 +1,20 @@
 package abstractor.core.cmp;
 
-public class CmpOptions implements Comparable<CmpOptions>{
-    public boolean useResolved;
+import java.util.ArrayList;
 
-    @Override
-    public String toString() { return "cmp: useResolved=" + this.useResolved; }
-    
-    public int compareTo(CmpOptions c) {
-        return Boolean.compare(this.useResolved, c.useResolved);
+public class CmpOptions{
+    static public boolean shouldUseResolved(CmpOptions op) {
+        return op != null? op.useResolved: false;
     }
 
-    public boolean equals(Object obj) {
-        return obj instanceof CmpOptions c && this.compareTo(c) == 0;
+    public boolean useResolved;
+    public boolean debugPrint;
+
+    @Override
+    public String toString() {
+        ArrayList<String> parts = new ArrayList<>();
+        if (this.useResolved) parts.add("useResolved");
+        if (this.debugPrint)  parts.add("debugPrint");
+        return "cmp:{" + String.join(", ", parts) + "}";
     }
 }

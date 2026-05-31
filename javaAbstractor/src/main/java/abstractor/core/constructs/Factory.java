@@ -13,11 +13,16 @@ public class Factory<T extends Construct> implements Jsonable {
     static private final boolean logCreate = true;
     
     private final ConstructKind              conKind;
-    public  final HashMap<CtElement, Ref<T>> byElem     = new HashMap<>();
-    public  final HashMap<T,         Ref<T>> nonElemRef = new HashMap<>();
-    public  final HashSet<CtElement>         elemInProg = new HashSet<>();
-    public  final TreeSet<Ref<T>>            refSet     = new TreeSet<>();
-    public  final TreeSet<T>                 conSet     = new TreeSet<>();
+
+    // TODO: HashMap and HashSet still check equal, so if two CtElements have
+    // the same hash, that doesn't mean the HashMap/Set will treat them as the same.
+
+    private final HashMap<Integer, CtElement> elemHash   = new HashMap<>();
+    private final HashMap<Integer, Ref<T>>    byElem     = new HashMap<>();
+    private final HashMap<T,       Ref<T>>    nonElemRef = new HashMap<>();
+    private final HashSet<Integer>            elemInProg = new HashSet<>();
+    private final TreeSet<Ref<T>>             refSet     = new TreeSet<>();
+    private final TreeSet<T>                  conSet     = new TreeSet<>();
 
     public Factory(ConstructKind kind) { this.conKind = kind; }
 
@@ -27,6 +32,9 @@ public class Factory<T extends Construct> implements Jsonable {
 
     public int refSize() { return this.refSet.size(); }
     public int size()    { return this.conSet.size(); }
+
+    public TreeSet<Ref<T>> getRefSet() { return this.refSet; }
+    public TreeSet<T>      getConSet() { return this.conSet; }
 
     public List<T> toList() {
         ArrayList<T> list = new ArrayList<>(this.conSet.size());
@@ -38,11 +46,61 @@ public class Factory<T extends Construct> implements Jsonable {
         return this.conSet.stream().skip(index).findFirst().orElse(null);
     }
 
-    public Ref<T> getRef(CtElement elem) { return this.byElem.get(elem); }
+    public Ref<T> getRef(CtElement elem) {
+        Ref<T> r = this.byElem.get(elem.hashCode());
+        if (elem.hashCode() == 3002523) { // TODO: REMOVE
+            System.out.println();
+            System.out.println(">>(getRef) " + elem.hashCode() + " => " + r); // TODO: REMOVE
+            this.printRefDebug(); // TODO: REMOVE
+        }
+        return r;
+    }
     
     public T getExisting(T c) {
         final T other = this.conSet.floor(c);
         return c.equals(other) ? other : null;
+    }
+
+    private List<Ref<T>> findRefsForCon(T con) {
+        return this.refSet.stream().filter(r -> con.equals(r.getResolved())).toList();
+    }
+
+    private void printRefDebug() {
+        System.out.println("===[byElem]=========================================");
+        int i = 0;
+        for (int hash: this.byElem.keySet()) {
+            CtElement e2 = this.elemHash.get(hash);
+            System.out.println("byElem: " + i + ". " + e2.hashCode() + " => " + this.byElem.get(hash));
+            i++;
+        }
+        System.out.println("===[refSet]=========================================");
+        i = 0;
+        for (Ref<?> r2: this.refSet) {
+            System.out.println("refSet: " + i + ". " + r2);
+            i++;
+        }
+        System.out.println("====================================================");
+    }
+
+    //==========================================================================
+
+    private void addRef(Ref<T> ref) throws Exception {   
+        Require.require(this.refSet.add(ref),
+            "reference " + ref + " must be added at this point");
+
+        final CtElement elem = ref.elem;
+        if (elem != null) {
+            Require.isNull(this.elemHash.put(elem.hashCode(), elem));
+            Require.isNull(this.byElem.put(elem.hashCode(), ref));
+        }
+
+        if (ref.isResolved()) {
+            final T c = ref.getResolved();
+            Require.require(this.conSet.add(c),
+                "resolved construct " + c + " must be added at this point");
+            Require.isNull(this.nonElemRef.put(c, ref),
+                "resolved construct " + c + " and reference " + ref + " must be added at this point for non-element ref");
+        }
     }
 
     @FunctionalInterface
@@ -59,7 +117,7 @@ public class Factory<T extends Construct> implements Jsonable {
         // since references can be created other ways, we need to skip checking
         // for references if not "in progress" to start progress.
         final Ref<T> existing = this.getRef(elem);
-        final boolean inProgress = this.elemInProg.contains(elem);
+        final boolean inProgress = this.elemInProg.contains(elem.hashCode());
         if (inProgress && existing != null) return existing;
         
         try {
@@ -74,14 +132,27 @@ public class Factory<T extends Construct> implements Jsonable {
             if (existing != null) ref = existing;
             else {
                 final Ref<T> newRef = new Ref<T>(this.conKind, elem, title);
-                Require.require(this.refSet.add(newRef));
-                this.byElem.put(elem, newRef);
+
+                // TODO: REMOVE THE FOLLOWING DEBUG PRINTS
+                if (elem.hashCode() == 3002523) {
+                    final Ref<T> oldRef = this.refSet.floor(newRef);
+                    System.out.println();
+                    System.out.println("===[create]===");
+                    System.out.println("newRef: " + newRef);
+                    System.out.println("oldRef: " + oldRef);
+                    System.out.println("existing: " + existing);
+                    this.printRefDebug();
+                    System.out.println(">>(create) " + elem.hashCode() + " => " + newRef);
+                    System.out.println();
+                } // TODO: REMOVE
+
+                this.addRef(newRef);
                 ref = newRef;
             }
 
             // Only set "in progress" to true here so that only we can differentiate
             // from the methods that only create a temporary reference.
-            this.elemInProg.add(elem);
+            this.elemInProg.add(elem.hashCode());
 
             // Create a new construct for this data.
             final T newCon = creator.create();
@@ -119,7 +190,7 @@ public class Factory<T extends Construct> implements Jsonable {
         if (logCreate) log.log("Removing " + title);
 
         final Ref<T> ref = this.getRef(elem);
-        this.byElem.remove(elem);
+        this.byElem.remove(elem.hashCode());
 
         if (ref == null) return;
         this.refSet.remove(ref);
@@ -130,30 +201,33 @@ public class Factory<T extends Construct> implements Jsonable {
         this.nonElemRef.remove(con);
     }
 
-    private List<Ref<T>> findRefsForCon(T con) {
-        return this.refSet.stream().filter(r -> con.equals(r.getResolved())).toList();
-    }
-
     public void setRefForElem(CtElement elem, Ref<T> ref) throws Exception {
         final Ref<T> existing = this.getRef(elem);
         if (existing != null) {
             if (existing.equals(ref)) return;
             throw new Exception("Ref already exists for element " + existing + " so cannot set " + ref + ".");
         }
-        this.refSet.add(ref);
-        this.byElem.put(elem, ref);
+
+        if (elem.hashCode() == 3002523) {
+            System.out.println(">>(setRefForElem) "+elem.hashCode() + " => " + ref); // TODO: REMOVE
+        }
+        
+        this.addRef(ref);
     }
 
     public Ref<T> addOfGetRefForElem(CtElement elem, String title) throws Exception {
         final Ref<T> existing = this.getRef(elem);
         if (existing != null) return existing;
 
-        final Ref<T> newRef = new Ref<T>(this.conKind, elem, title);
-        this.refSet.add(newRef);
-        this.byElem.put(elem, newRef);
-        return newRef;
-    }
+        final Ref<T> ref = new Ref<T>(this.conKind, elem, title);
 
+        if (elem.hashCode() == 3002523) {
+            System.out.println(">>(addOfGetRefForElem) " + elem.hashCode() + " => " + ref); // TODO: REMOVE
+        }
+
+        this.addRef(ref);
+        return ref;
+    }
 
     static private CmpOptions resolvedCmpOptionsSingleton = null;
     private CmpOptions resolvedCmpOptions() {
@@ -178,12 +252,11 @@ public class Factory<T extends Construct> implements Jsonable {
         final Ref<T> otherRef = this.refSet.floor(ref);
         if (ref.equals(otherRef)) return otherRef;
 
-        Require.require(this.refSet.add(ref),
-            "reference must be added at this point since otherwise it should have exited earlier");
-        this.conSet.add(c);
-        this.nonElemRef.put(c, ref);
+        this.addRef(ref);
         return ref;
     }
+
+    //==========================================================================
 
     public boolean consolidateCons(Logger log) throws Exception {
         // Copy all cons to a list and clear the set.

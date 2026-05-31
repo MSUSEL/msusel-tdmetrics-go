@@ -68,9 +68,10 @@ public class Ref<T extends Construct> extends ConstructImp {
         obj.put("context", this.context);
         obj.putNotEmpty("typeArgs", keyList(this.typeArgs));
 
-        final boolean showExtras = false;
+        final boolean showExtras = true; // TODO: set to false;
         if (showExtras) {
             obj.put("refHash", this.hashCode());
+            obj.put("cmpOptions", String.valueOf(this.getCmpOptions()));
             if (this.isResolved())
                 obj.put("resHash", this.res.hashCode());
             if (this.elem != null) {
@@ -88,13 +89,19 @@ public class Ref<T extends Construct> extends ConstructImp {
 
     @Override
     public Cmp getCmp(Construct c, CmpOptions options) {
+        // Check if both are using the same resolved comparison option since
+        // otherwise A.compareTo(B) will not be the negation of B.compareTo(A)
+        // because of which CmpOptions are being used.
+        Cmp opCmp = Cmp.defer(CmpOptions.shouldUseResolved(options),
+            () -> CmpOptions.shouldUseResolved(c.getCmpOptions()));
+
         if (options.useResolved) {
-            return Cmp.or(super.getCmp(c, options),
+            return Cmp.or(super.getCmp(c, options), opCmp,
                 Cmp.defer(this.res, () -> ((Ref<?>)c).res)
             );
         }
 
-        return Cmp.or(super.getCmp(c, options),
+        return Cmp.or(super.getCmp(c, options), opCmp,
             Cmp.deferHash(this.elem,     () -> ((Ref<?>)c).elem),
             Cmp.defer(    this.context,  () -> ((Ref<?>)c).context),
             Cmp.deferList(this.typeArgs, () -> ((Ref<?>)c).typeArgs)

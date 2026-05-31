@@ -81,13 +81,7 @@ public abstract class ConstructImp implements Construct {
     }
     
     public Cmp getCmp(Construct c, CmpOptions options) {
-        return Cmp.or(
-            // First check if both are using the same comparison options since
-            // otherwise A.compareTo(B) will not be the negation of B.compareTo(A)
-            // because of which CmpOptions are being used.
-            Cmp.defer(options, () -> c.getCmpOptions()),
-            Cmp.defer(this.kind(), () -> c.kind())
-        );
+        return Cmp.defer(this.kind(), () -> c.kind());
     }
 
     @Override

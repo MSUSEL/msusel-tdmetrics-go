@@ -353,6 +353,11 @@ public class Abstractor {
 
     public Ref<? extends TypeDesc> addArray(CtArrayTypeReference<?> tr) throws Exception {
         final Ref<? extends TypeDesc> elem = this.addTypeDesc(tr.getArrayType());
+
+        // TODO: Figure out how to handle when `td` is `T` in `$Array<T>`.
+        
+        //if (elem is )
+
         final Ref<InterfaceInst> ref = this.proj.baker.arrayInst(tr.getSimpleName(), elem);
         this.proj.interfaceInsts.setRefForElem(tr, ref);
         return ref;
@@ -701,14 +706,14 @@ public class Abstractor {
     }
 
     private void crossConnectConstructs() throws Exception {
-        for (MethodDecl m : this.proj.methodDecls.conSet) {
+        for (MethodDecl m : this.proj.methodDecls.getConSet()) {
             final PackageCon pkg = m.pkg.mustGetResolved();
             if (pkg == null) this.log.error("package for method is null: " + m);
             final Ref<MethodDecl> decl = this.proj.methodDecls.addOrGetRef(m, "method in package " + pkg);
             pkg.methodDecls.add(decl);
         }
 
-        for (ObjectDecl obj : this.proj.objectDecls.conSet) {
+        for (ObjectDecl obj : this.proj.objectDecls.getConSet()) {
             final PackageCon pkg = obj.pkg.mustGetResolved();
             if (pkg == null) this.log.error("package for object is null: " + obj);
             pkg.objectDecls.add(this.proj.objectDecls.addOrGetRef(obj, "object in package " + pkg));
@@ -716,13 +721,13 @@ public class Abstractor {
                 pkg.methodDecls.add(met);
         }
         
-        for (InterfaceDecl it : this.proj.interfaceDecls.conSet) {
+        for (InterfaceDecl it : this.proj.interfaceDecls.getConSet()) {
             final PackageCon pkg = it.pkg.mustGetResolved();
             if (pkg == null) this.log.error("package for interface is null: " + it);
             pkg.interfaceDecls.add(this.proj.interfaceDecls.addOrGetRef(it, "interface in package " + pkg));
         }
 
-        for (Value v : this.proj.values.conSet) {
+        for (Value v : this.proj.values.getConSet()) {
             final PackageCon pkg = v.pkg.mustGetResolved();
             if (pkg == null) this.log.error("package for value is null: " + v);
             pkg.values.add(this.proj.values.addOrGetRef(v, "value in package " + pkg));

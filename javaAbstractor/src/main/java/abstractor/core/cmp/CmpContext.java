@@ -14,8 +14,15 @@ public class CmpContext {
     private String key(Object a, Object b) {
         return System.identityHashCode(a) + ":" + System.identityHashCode(b);
     }
-    
+
     public <T> int compare(T a, T b) {
+        final int cmp = this.innerCompare(a, b);
+        if (this.options.debugPrint)
+            System.out.println("compar(" + a + ", " + b + ") => " + cmp);
+        return cmp;
+    }
+    
+    private <T> int innerCompare(T a, T b) {
         if (a == b) return 0;
         if (a == null) return b == null ? 0 : -1;
         if (b == null) return 1;

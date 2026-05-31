@@ -42,6 +42,18 @@ public class Require {
         }
     }
 
+    static public <T> void isNull(T value) throws Exception {
+        if (value != null) {
+            throw new AbstractorException("required a null value");
+        }
+    }
+
+    static public <T> void isNull(T value, String msg) throws Exception {
+        if (value != null) {
+            throw new AbstractorException(!msg.isBlank()? msg: "required a null value");
+        }
+    }
+
     static public void notBlank(String text) throws Exception {
         if (text.isBlank()) {
             throw new AbstractorException("required a string to not be blank");

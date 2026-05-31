@@ -3,7 +3,9 @@ package abstractor.core.constructs;
 import java.util.*;
 
 import spoon.reflect.reference.CtTypeReference;
-
+import abstractor.core.cmp.CmpContext;
+import abstractor.core.cmp.CmpOptions;
+import abstractor.core.require.Require;
 import abstractor.core.spoonUtils.SpoonUtils;
 
 public class Baker {
@@ -28,7 +30,12 @@ public class Baker {
     }
 
     private <T extends Construct> Ref<T> getConstruct(String name, Factory<T> factory, ConstructCreator<T> creator) throws Exception {
-        return this.getConstruct(name, () -> factory.addOrGetRef(creator.create(), "baker: " + name));
+        return this.getConstruct(name, () -> {
+            T con = creator.create();
+            final T other = factory.getExisting(con);
+            if (other != null) con = other;
+            return factory.addOrGetRef(con, "baker: " + name);
+        });
     }
 
     public Ref<PackageCon> builtinPackage() throws Exception {
@@ -136,8 +143,18 @@ public class Baker {
     }
     
     public Ref<InterfaceInst> arrayInst(String tdName, Ref<? extends TypeDesc> td) throws Exception {
-        // TODO: Figure out how to handle when `td` is `T` in `$Array<T>`.
+        // Check that `td` is not `T` to prevent $Array<T> being instantiated with T.
 
+        // TODO: Figure this out
+        if (td.isResolved()) {
+            final Ref<TypeParam> tdT = this.genT();
+            System.out.print(">> td:  " + td.getResolved() + "\n");
+            System.out.print(">> tdT: " + tdT.getResolved() + "\n");
+            CmpOptions o = new CmpOptions();
+            o.debugPrint = true;
+            (new CmpContext(o)).compare(td.getResolved(), tdT.getResolved());
+            Require.require(!td.getResolved().equals(tdT.getResolved()));
+        }
 
         return this.getConstruct("arrayInst<" + tdName + ">", this.proj.interfaceInsts, () -> {
             final Ref<InterfaceDecl> generic = this.arrayDecl();
