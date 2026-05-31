@@ -83,12 +83,12 @@ public class Abstractor {
     public Ref<PackageCon> addPackage(CtPackage pkg) throws Exception {
         if (pkg == null) return this.proj.baker.builtinPackage();
 
-        Ref<PackageCon> pkgRef = this.proj.packages.getRef(pkg);
+        Ref<PackageCon> pkgRef = this.proj.packages.getRefByElem(pkg);
         if (pkgRef != null) return pkgRef;
 
         this.log.log("Pending package " + SpoonUtils.describeElem(pkg));
         this.pendingPackages.add(pkg);
-        return this.proj.packages.addOfGetRefForElem(pkg,
+        return this.proj.packages.addOrGetRefForElem(pkg,
             "for pending package " + SpoonUtils.describeElem(pkg));
     }
     
@@ -355,8 +355,6 @@ public class Abstractor {
         final Ref<? extends TypeDesc> elem = this.addTypeDesc(tr.getArrayType());
 
         // TODO: Figure out how to handle when `td` is `T` in `$Array<T>`.
-        
-        //if (elem is )
 
         final Ref<InterfaceInst> ref = this.proj.baker.arrayInst(tr.getSimpleName(), elem);
         this.proj.interfaceInsts.setRefForElem(tr, ref);
@@ -679,7 +677,7 @@ public class Abstractor {
                     continue;
                 }
 
-                Ref<MethodDecl> ref = this.proj.methodDecls.getRef(m);
+                Ref<MethodDecl> ref = this.proj.methodDecls.getRefByElem(m);
                 if (!ref.isResolved())
                     throw new AbstractorException("Expected " + ref + " to be resolved before processing pending metrics.");
 

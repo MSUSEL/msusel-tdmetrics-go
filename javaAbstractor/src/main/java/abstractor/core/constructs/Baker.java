@@ -3,8 +3,7 @@ package abstractor.core.constructs;
 import java.util.*;
 
 import spoon.reflect.reference.CtTypeReference;
-import abstractor.core.cmp.CmpContext;
-import abstractor.core.cmp.CmpOptions;
+
 import abstractor.core.require.Require;
 import abstractor.core.spoonUtils.SpoonUtils;
 
@@ -148,12 +147,12 @@ public class Baker {
         // TODO: Figure this out
         if (td.isResolved()) {
             final Ref<TypeParam> tdT = this.genT();
-            System.out.print(">> td:  " + td.getResolved() + "\n");
-            System.out.print(">> tdT: " + tdT.getResolved() + "\n");
-            CmpOptions o = new CmpOptions();
-            o.debugPrint = true;
-            (new CmpContext(o)).compare(td.getResolved(), tdT.getResolved());
-            Require.require(!td.getResolved().equals(tdT.getResolved()));
+            //System.out.print(">> td:  " + td.getResolved() + "\n");
+            //System.out.print(">> tdT: " + tdT.getResolved() + "\n");
+            //CmpOptions o = new CmpOptions();
+            //o.debugPrint = true;
+            //(new CmpContext(o)).compare(td.getResolved(), tdT.getResolved(), "Debug");
+            Require.notEqual(td.getResolved(), tdT.getResolved());
         }
 
         return this.getConstruct("arrayInst<" + tdName + ">", this.proj.interfaceInsts, () -> {

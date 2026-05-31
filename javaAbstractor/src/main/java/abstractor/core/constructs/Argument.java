@@ -31,9 +31,9 @@ public class Argument extends ConstructImp {
 
     @Override
     public Cmp getCmp(Construct c, CmpOptions options) {
-        return Cmp.or(super.getCmp(c, options),
-            Cmp.defer(this.name, () -> ((Argument)c).name),
-            Cmp.defer(this.type, () -> ((Argument)c).type)
+        return Cmp.or("Argument", super.getCmp(c, options),
+            Cmp.defer(this.name, () -> ((Argument)c).name, "name"),
+            Cmp.defer(this.type, () -> ((Argument)c).type, "type")
         );
     }   
 }

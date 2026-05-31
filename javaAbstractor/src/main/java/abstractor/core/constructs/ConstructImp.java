@@ -81,7 +81,7 @@ public abstract class ConstructImp implements Construct {
     }
     
     public Cmp getCmp(Construct c, CmpOptions options) {
-        return Cmp.defer(this.kind(), () -> c.kind());
+        return Cmp.defer(this.kind(), () -> c.kind(), "kind");
     }
 
     @Override

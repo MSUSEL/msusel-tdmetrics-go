@@ -1,5 +1,7 @@
 package abstractor.core.require;
 
+import java.util.Objects;
+
 import abstractor.core.AbstractorException;
 import abstractor.core.spoonUtils.SpoonUtils;
 import spoon.reflect.declaration.CtMethod;
@@ -28,6 +30,30 @@ public class Require {
 
     static public void require(boolean test, String msg) throws Exception {
         if (!test) throw new AbstractorException(!msg.isBlank()? msg: "required test to be true");
+    }
+
+    static public <T> void equal(T value, T other) throws Exception {
+        if (!Objects.equals(value, other)) {
+            throw new AbstractorException("required " + value + " to be equal to " + other);
+        }
+    }
+
+    static public <T> void equal(T value, T other , String msg) throws Exception {
+        if (!Objects.equals(value, other)) {
+            throw new AbstractorException(!msg.isBlank()? msg: "required " + value + " to be equal to " + other);
+        }
+    }
+
+    static public <T> void notEqual(T value, T other) throws Exception {
+        if (Objects.equals(value, other)) {
+            throw new AbstractorException("required " + value + " to be not equal to " + other);
+        }
+    }
+
+    static public <T> void notEqual(T value, T other , String msg) throws Exception {
+        if (Objects.equals(value, other)) {
+            throw new AbstractorException(!msg.isBlank()? msg: "required " + value + " to be not equal to " + other);
+        }
     }
 
     static public <T> void notNull(T value) throws Exception {

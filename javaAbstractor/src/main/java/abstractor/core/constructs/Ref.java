@@ -4,12 +4,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import spoon.reflect.declaration.CtElement;
+
 import abstractor.core.AbstractorException;
-import abstractor.core.cmp.Cmp;
-import abstractor.core.cmp.CmpOptions;
-import abstractor.core.json.JsonHelper;
-import abstractor.core.json.JsonNode;
-import abstractor.core.json.JsonObject;
+import abstractor.core.cmp.*;
+import abstractor.core.json.*;
 
 public class Ref<T extends Construct> extends ConstructImp {
     private final ConstructKind conKind;
@@ -57,8 +55,9 @@ public class Ref<T extends Construct> extends ConstructImp {
             throw new Exception("Attempted to write null as the resolved construct to the reference " + this);
         if (!res.kind().equals(this.conKind))
             throw new Exception("Attempted to write a resolved construct with the kind " + res.kind() + " for reference " + this + " with kind " + this.conKind);
-        if (this.isResolved() && !this.res.equals(res))
+        if (this.isResolved() && !this.res.equals(res)) {
             throw new Exception("Attempted to overwrite the resolved construct, " + this.res + ", with " + res + " for reference " + this);
+        }
         this.res = res;
     }
 
@@ -92,19 +91,19 @@ public class Ref<T extends Construct> extends ConstructImp {
         // Check if both are using the same resolved comparison option since
         // otherwise A.compareTo(B) will not be the negation of B.compareTo(A)
         // because of which CmpOptions are being used.
-        Cmp opCmp = Cmp.defer(CmpOptions.shouldUseResolved(options),
-            () -> CmpOptions.shouldUseResolved(c.getCmpOptions()));
+        Cmp opCmp = Cmp.defer(CmpOptions.shouldUseResolved(this.getCmpOptions()),
+            () -> CmpOptions.shouldUseResolved(c.getCmpOptions()), "useResolved");
 
         if (options.useResolved) {
-            return Cmp.or(super.getCmp(c, options), opCmp,
-                Cmp.defer(this.res, () -> ((Ref<?>)c).res)
+            return Cmp.or("Ref", super.getCmp(c, options), opCmp,
+                Cmp.defer(this.res, () -> ((Ref<?>)c).res, "resolved")
             );
         }
 
-        return Cmp.or(super.getCmp(c, options), opCmp,
-            Cmp.deferHash(this.elem,     () -> ((Ref<?>)c).elem),
-            Cmp.defer(    this.context,  () -> ((Ref<?>)c).context),
-            Cmp.deferList(this.typeArgs, () -> ((Ref<?>)c).typeArgs)
+        return Cmp.or("Ref", super.getCmp(c, options), opCmp,
+            Cmp.defer(    this.elem,     () -> ((Ref<?>)c).elem,     "elem"),
+            Cmp.defer(    this.context,  () -> ((Ref<?>)c).context,  "context"),
+            Cmp.deferList(this.typeArgs, () -> ((Ref<?>)c).typeArgs, "typeArgs")
         );
     }
 }
