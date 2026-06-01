@@ -3,7 +3,6 @@ package abstractor.core.constructs;
 import java.util.*;
 
 import spoon.reflect.declaration.CtElement;
-import abstractor.core.cmp.CmpContext;
 import abstractor.core.cmp.CmpOptions;
 import abstractor.core.json.*;
 import abstractor.core.log.*;

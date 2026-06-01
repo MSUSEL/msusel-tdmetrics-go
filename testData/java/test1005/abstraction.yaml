@@ -1,88 +1,295 @@
 {
+  language: java,
   abstracts: [
-    { name: lookup, signature: 1 },
+    { name: $get,             signature: 22 }, #  1. $get(index int) any
+    { name: $get,             signature: 23 }, #  2. $get(index int) T
+    { name: $len,             signature:  3 }, #  3. $len() int
+    { name: $set,             signature: 24 }, #  4. $set(index int, value any)
+    { name: $set,             signature: 25 }, #  5. $set(index int, value T)
+    { name: add,              signature: 29 }, #  6. add(key string, value T)
+    { name: clear,            signature:  1 }, #  7. clear()
+    { name: compute,          signature: 10 }, #  8. compute(arg0 any, arg1 any) any
+    { name: computeIfAbsent,  signature: 10 }, #  9. computeIfAbsent(arg0 any, arg1 any) any
+    { name: computeIfPresent, signature: 10 }, # 10. computeIfPresent(arg0 any, arg1 any) any
+    { name: containsKey,      signature:  7 }, # 11. containsKey(arg0 any) boolean
+    { name: containsValue,    signature:  7 }, # 12. containsValue(arg0 any) boolean
+    { name: copyOf,           signature:  8 }, # 13. copyOf(arg0 any) any
+    { name: count,            signature:  3 }, # 14. count() int
+    { name: entry,            signature: 10 }, # 15. entry(arg0 any, arg1 any) any
+    { name: entrySet,         signature:  4 }, # 16. entrySet() any
+    { name: forEach,          signature:  6 }, # 17. forEach(arg0 any)
+    { name: get,              signature:  8 }, # 18. get(arg0 any) any
+    { name: getOrDefault,     signature: 10 }, # 19. getOrDefault(arg0 any, arg1 any) any
+    { name: isEmpty,          signature:  2 }, # 20. isEmpty() boolean
+    { name: keySet,           signature:  4 }, # 21. keySet() any
+    { name: lookup,           signature: 28 }, # 22. lookup(key string) S
+    { name: lookupInt,        signature: 26 }, # 23. lookupInt(key string) int
+    { name: lookupString,     signature: 27 }, # 24. lookupString(key string) string
+    { name: lookupT,          signature: 28 }, # 25. lookupT(key string) S
+    { name: merge,            signature: 12 }, # 26. merge(arg0 any, arg1 any, arg2 any) any
+    { name: of,               signature:  4 }, # 27. of() any
+    { name: of,               signature: 10 }, # 28. of(arg0 any, arg1 any) any
+    { name: of,               signature: 13 }, # 29. of(arg0 any, arg1 any, arg2 K, arg3 V) any
+    { name: of,               signature: 14 }, # 30. of(arg0 any, arg1 any, arg2 K, arg3 V, arg4 K, arg5 V) any
+    { name: of,               signature: 15 }, # 31. of(arg0 any, arg1 any, arg2 K, arg3 V, ..., arg6 K, arg7 V) any
+    { name: of,               signature: 16 }, # 32. of(arg0 any, arg1 any, arg2 K, arg3 V, ..., arg8 K, arg9 V) any
+    { name: of,               signature: 17 }, # 33. of(arg0 any, arg1 any, arg2 K, arg3 V, ..., arg10 K, arg11 V) any
+    { name: of,               signature: 18 }, # 34. of(arg0 any, arg1 any, arg2 K, arg3 V, ..., arg12 K, arg13 V) any
+    { name: of,               signature: 19 }, # 35. of(arg0 any, arg1 any, arg2 K, arg3 V, ..., arg14 K, arg15 V) any
+    { name: of,               signature: 20 }, # 36. of(arg0 any, arg1 any, arg2 K, arg3 V, ..., arg16 K, arg17 V) any
+    { name: of,               signature: 21 }, # 37. of(arg0 any, arg1 any, arg2 K, arg3 V, ..., arg18 K, arg19 V) any
+    { name: ofEntries,        signature: 31 }, # 38. ofEntries(arg0 ...$Array<any>) any
+    { name: put,              signature: 10 }, # 39. put(arg0 any, arg1 any) any
+    { name: putAll,           signature:  6 }, # 40. putAll(arg0 any)
+    { name: putIfAbsent,      signature: 10 }, # 41. putIfAbsent(arg0 any, arg1 any) any
+    { name: remove,           signature:  8 }, # 42. remove(arg0 any) any
+    { name: remove,           signature:  9 }, # 43. remove(arg0 any, arg1 any) boolean
+    { name: replace,          signature: 10 }, # 44. replace(arg0 any, arg1 any) any
+    { name: replace,          signature: 11 }, # 45. replace(arg0 any, arg1 any, arg2 any) boolean
+    { name: replaceAll,       signature:  6 }, # 46. replaceAll(arg0 any)
+    { name: size,             signature:  3 }, # 47. size() int
+    { name: values,           signature:  4 }, # 48. values() any
   ],
   arguments: [
-    { type: interfaceInst2 },
-    { type: object1 },
+    {              type: basic1         }, #  1. <unnamed> boolean
+    {              type: basic2         }, #  2. <unnamed> int
+    {              type: basic3         }, #  3. <unnamed> string
+    {              type: interfaceDesc5 }, #  4. <unnamed> any
+    {              type: object1        }, #  5. <unnamed> Foo<T>
+    {              type: typeParam2     }, #  6. <unnamed> S
+    {              type: typeParam3     }, #  7. <unnamed> T
+    { name: arg0,  type: interfaceDesc5 }, #  8. arg0 any
+    { name: arg0,  type: interfaceInst1 }, #  9. arg0 $Array<any>
+    { name: arg1,  type: interfaceDesc5 }, # 10. arg1 any
+    { name: arg10, type: typeParam1     }, # 11. arg10 K
+    { name: arg11, type: typeParam4     }, # 12. arg11 V
+    { name: arg12, type: typeParam1     }, # 13. arg12 K
+    { name: arg13, type: typeParam4     }, # 14. arg13 V
+    { name: arg14, type: typeParam1     }, # 15. arg14 K
+    { name: arg15, type: typeParam4     }, # 16. arg15 V
+    { name: arg16, type: typeParam1     }, # 17. arg16 K
+    { name: arg17, type: typeParam4     }, # 18. arg17 V
+    { name: arg18, type: typeParam1     }, # 19. arg18 K
+    { name: arg19, type: typeParam4     }, # 20. arg19 V
+    { name: arg2,  type: interfaceDesc5 }, # 21. arg2 any
+    { name: arg2,  type: typeParam1     }, # 22. arg2 K
+    { name: arg3,  type: typeParam4     }, # 23. arg3 V
+    { name: arg4,  type: typeParam1     }, # 24. arg4 K
+    { name: arg5,  type: typeParam4     }, # 25. arg5 V
+    { name: arg6,  type: typeParam1     }, # 26. arg6 K
+    { name: arg7,  type: typeParam4     }, # 27. arg7 V
+    { name: arg8,  type: typeParam1     }, # 28. arg8 K
+    { name: arg9,  type: typeParam4     }, # 29. arg9 V
+    { name: index, type: basic2         }, # 30. index int
+    { name: key,   type: basic3         }, # 31. key string
+    { name: name,  type: basic3         }, # 32. name string
+    { name: value, type: interfaceDesc5 }, # 33. value any
+    { name: value, type: typeParam3     }, # 34. value T
   ],
-  basics: [ int, string ],
+  basics: [ boolean, int, string ],
   fields: [
-    { name: count, type: basic1, vis: public },
-    { name: items, type: interfaceInst1, vis: public },
-    { name: mapping, type: interfaceInst2, vis: public },
-    { name: name, type: basic2, vis: public },
+    { name: mapping, type: interfaceDecl2, vis: public }, # 1. mapping Map<K, V>
+    { name: name,    type: basic3,         vis: public }, # 2. name string
   ],
   interfaceDecls: [
-    { interface: 2, name: List, package: 2 },
-    { interface: 2, name: Map, package: 2 },
+    { # 1. $Array<T>{ $get(index int) T; $len() int; $set(index int, value T) }
+      name: $Array, package: 1, interface: 2,
+      typeParams: [ 3 ],
+    },
+    { # 2. Map<K, V>{ clear(); compute(arg0 any, arg1 any) any; computeIfAbsent(arg0 any, arg1 any) any; ... }
+      name: Map, package: 3, interface: 3, vis: public,
+      typeParams: [ 1, 4 ],
+    },
   ],
   interfaceDescs: [
-    {
-      abstracts: [ 1 ],
+    { # 1. interface{ $get(index int) any; $len() int; $set(index int, value any) }
+      abstracts: [ 1, 3, 4 ],
+    },
+    { # 2. interface{ $get(index int) T; $len() int; $set(index int, value T) }
+      abstracts: [ 2, 3, 5 ],
+    },
+    { # 3. interface{ clear(); compute(arg0 any, arg1 any) any; computeIfAbsent(arg0 any, arg1 any) any; ... }
+      abstracts: [ 7, 8, 9, 10, 11, 12, 13, 15, 16, 17, 18, 19, 20, 21, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48 ],
+    },
+    { # 4. interface{ add(key string, value T); count() int; lookup(key string) S; lookupInt(key string) int; lookupString(key string) string; lookupT(key string) S }
+      abstracts: [ 6, 14, 22, 23, 24, 25 ],
       pin: object1,
     },
-    {
+    { # 5. any
       abstracts: [ ],
     },
   ],
   interfaceInsts: [
-    {
-      generic: 1,
-      instanceTypes: [ basic2 ],
-      resolved: 2,
-    },
-    {
-      generic: 2,
-      instanceTypes: [ basic2, basic1 ],
-      resolved: 2,
+    { # 1. $Array<any>{ $get(index int) any; $len() int; $set(index int, value any) }
+      generic: 1, resolved: 1, instanceTypes: [ interfaceDesc5 ],
     },
   ],
-  language: java,
-  locs: { 1: ClassesFromSource.java },
   methods: [
-    { name: Foo, package: 5, receiver: 1, signature: 2, vis: public },
-    { loc: 12, metrics: 1, name: lookup, package: 5, receiver: 1, signature: 1, vis: public },
+    { # 1. Foo<T>.Foo(name string) Foo<T>
+      name: Foo, package: 6, receiver: 1, signature: 30,
+      loc: 13, constructor: true, static: true, vis: public,
+      wrong: true, # TODO: Should have metrics?
+    },
+    { # 2. Foo<T>.FooInt() Foo<T>
+      name: FooInt, package: 6, receiver: 1, signature: 5,
+      loc: 6, metrics: 1, static: true,
+      wrong: true, # TODO: Should be `Foo<Integer>`
+    },
+    { # 3. Foo<T>.add(key string, value T)
+      name: add, package: 6, receiver: 1, signature: 29,
+      loc: 15, metrics: 2, vis: public,
+    },
+    { # 4. Foo<T>.count() int
+      name: count, package: 6, receiver: 1, signature: 3,
+      loc: 40, metrics: 7, vis: public,
+    },
+    { # 5. Foo<T>.lookup(key string) S
+      name: lookup, package: 6, receiver: 1, signature: 28,
+      loc: 19, metrics: 3, vis: public,
+      typeParams: [ 2 ],
+    },
+    { # 6. Foo<T>.lookupInt(key string) int
+      name: lookupInt, package: 6, receiver: 1, signature: 26,
+      loc: 28, metrics: 4, vis: public,
+    },
+    { # 7. Foo<T>.lookupString(key string) string
+       name: lookupString, package: 6, receiver: 1, signature: 27,
+      loc: 32, metrics: 5, vis: public,
+    },
+    { # 8. Foo<T>.lookupT<S>(key string) S
+      name: lookupT, package: 6, receiver: 1, signature: 28,
+      loc: 36, metrics: 6, vis: public,
+      typeParams: [ 2 ],
+    },
   ],
   metrics: [
-    { codeCount: 3, complexity: 1, getter: true, indents: 1, lineCount: 3, loc: 12 },
+    { # 1. Foo<T>.FooInt ???
+      codeCount: 3, complexity: 1, indents: 1, lineCount: 3, loc: 6,
+    },
+    { # 2. Foo<T>.add ???
+      codeCount: 3, complexity: 1, indents: 1, lineCount: 3, loc: 15,
+      reads: [ object1, selection1 ],
+    },
+    { # 3. Foo<T>.lookup ???
+      codeCount: 3, complexity: 1, indents: 1, lineCount: 8, loc: 19,
+      reads: [ object1, selection1 ],
+    },
+    { # 4. Foo<T>.lookupInt ???
+      codeCount: 3, complexity: 1, indents: 1, lineCount: 3, loc: 28,
+      invokes: [ method5 ],
+      reads: [ object1 ],
+    },
+    { # 5. Foo<T>.lookupString ???
+      codeCount: 3, complexity: 1, indents: 1, lineCount: 3, loc: 32,
+      invokes: [ method5 ],
+      reads: [ object1 ],
+    },
+    { # 6. Foo<T>.lookupT<S> ???
+      codeCount: 3, complexity: 1, indents: 1, lineCount: 3, loc: 36,
+      invokes: [ method5 ],
+      reads: [ object1 ],
+    },
+    { # 7. Foo<T>.count ???
+      codeCount: 3, complexity: 1, indents: 1, lineCount: 3, loc: 40,
+      reads: [ object1, selection1 ],
+    },
   ],
   objects: [
-    {
-      data: 1,
-      interface: 1,
-      loc: 6,
-      methods: [ 1, 2 ],
-      name: Foo,
-      package: 5,
-      vis: public,
+    { # 1. Foo<T>{ name string; mapping Map<K, V> }{ add; count; lookup; lookupInt; lookupString; lookupT }
+      name: Foo, package: 6, data: 1, interface: 4, loc: 5, vis: public,
+      typeParams: [ 3 ],
+      methods: [ 1, 2, 3, 4, 5, 6, 7, 8 ],
     },
   ],
   packages: [
+    {
+      name: $builtin,
+      interfaces: [ 1 ],
+    },
     { name: "<unnamed>" },
     {
-      interfaces: [ 1 ],
       name: java.util,
+      interfaces: [ 2 ],
     },
     { name: testData },
     { name: testData.java },
     {
-      methods: [ 1, 2 ],
       name: testData.java.test1005,
+      methods: [ 1, 2, 3, 4, 5, 6, 7, 8 ],
       objects: [ 1 ],
     },
   ],
+  selections: [
+    { name: mapping, origin: object1 }, # 1. ???
+  ],
   signatures: [
-    {
-      results: [ 1 ],
+    {                                       }, #  1. func()
+    {                        results: [ 1 ] }, #  2. func() boolean
+    {                        results: [ 2 ] }, #  3. func() int
+    {                        results: [ 4 ] }, #  4. func() any
+    {                        results: [ 5 ] }, #  5. func() Foo<T>
+    { params: [ 8 ]                         }, #  6. func(arg0 any)
+    { params: [ 8 ],         results: [ 1 ] }, #  7. func(arg0 any) boolean
+    { params: [ 8 ],         results: [ 4 ] }, #  8. func(arg0 any) any
+    { params: [ 8, 10 ],     results: [ 1 ] }, #  9. func(arg0 any, arg1 any) boolean
+    { params: [ 8, 10 ],     results: [ 4 ] }, # 10. func(arg0 any, arg1 any) any
+    { params: [ 8, 10, 21 ], results: [ 1 ] }, # 11. func(arg0 any, arg1 any, arg2 any) boolean
+    { params: [ 8, 10, 21 ], results: [ 4 ] }, # 12. func(arg0 any, arg1 any, arg2 any) any
+    { # 13. func(arg0 any, arg1 any, arg2 K, arg3 V) any
+      params: [ 8, 10, 22, 23 ],
+      results: [ 4 ],
     },
-    {
-      results: [ 2 ],
+    { # 14. func(arg0 any, arg1 any, arg2 K, arg3 V, arg4 K, arg5 V) any
+      params: [ 8, 10, 22, 23, 24, 25 ],
+      results: [ 4 ],
     },
+    { # 15. func(arg0 any, arg1 any, arg2 K, arg3 V, ..., arg6 K, arg7 V) any
+      params: [ 8, 10, 22, 23, 24, 25, 26, 27 ],
+      results: [ 4 ],
+    },
+    { # 16. func(arg0 any, arg1 any, arg2 K, arg3 V, ..., arg8 K, arg9 V) any
+      params: [ 8, 10, 22, 23, 24, 25, 26, 27, 28, 29 ],
+      results: [ 4 ],
+    },
+    { # 17. func(arg0 any, arg1 any, arg2 K, arg3 V, ..., arg10 K, arg11 V) any
+      params: [ 8, 10, 22, 23, 24, 25, 26, 27, 28, 29, 11, 12 ],
+      results: [ 4 ],
+    },
+    { # 18. func(arg0 any, arg1 any, arg2 K, arg3 V, ..., arg12 K, arg13 V) any
+      params: [ 8, 10, 22, 23, 24, 25, 26, 27, 28, 29, 11, 12, 13, 14 ],
+      results: [ 4 ],
+    },
+    { # 19. func(arg0 any, arg1 any, arg2 K, arg3 V, ..., arg14 K, arg15 V) any
+      params: [ 8, 10, 22, 23, 24, 25, 26, 27, 28, 29, 11, 12, 13, 14, 15, 16 ],
+      results: [ 4 ],
+    },
+    { # 20. func(arg0 any, arg1 any, arg2 K, arg3 V, ..., arg16 K, arg17 V) any
+      params: [ 8, 10, 22, 23, 24, 25, 26, 27, 28, 29, 11, 12, 13, 14, 15, 16, 17, 18 ],
+      results: [ 4 ],
+    },
+    { # 21. func(arg0 any, arg1 any, arg2 K, arg3 V, ..., arg18 K, arg19 V) any
+      params: [ 8, 10, 22, 23, 24, 25, 26, 27, 28, 29, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20 ],
+      results: [ 4 ],
+    },
+    { params: [ 30 ],    results: [ 4 ] }, # 22. func(index int) any
+    { params: [ 30 ],    results: [ 7 ] }, # 23. func(index int) T
+    { params: [ 30, 33 ]                }, # 24. func(index int, value any)
+    { params: [ 30, 34 ]                }, # 25. func(index int, value T)
+    { params: [ 31 ],    results: [ 2 ] }, # 26. func(key string) int
+    { params: [ 31 ],    results: [ 3 ] }, # 27. func(key string) string
+    { params: [ 31 ],    results: [ 6 ] }, # 28. func(key string) S
+    { params: [ 31, 34 ]                }, # 29. func(key string, value T)
+    { params: [ 32 ],    results: [ 5 ] }, # 30. func(name string) Foo<T>
+    { params: [ 9 ],     results: [ 4 ], variadic: true }, # 31. func(arg0 ...$Array<any>) any
   ],
   structDescs: [
-    {
-      fields: [ 4, 1, 2, 3 ],
-    },
+    { fields: [ 2, 1 ] }, # 1. struct{ name string; mapping Map<K, V> }
   ],
+  typeParams: [
+    { name: K, type: interfaceDesc5 }, # 1. K any
+    { name: S, type: interfaceDesc5 }, # 2. S any
+    { name: T, type: interfaceDesc5 }, # 3. T any
+    { name: V, type: interfaceDesc5 }, # 4. V any
+  ],
+  locs: { 1: ClassesFromSource.java },
 }
