@@ -20,8 +20,8 @@ public class Abstractor {
     public final Logger  log;
     public final Project proj;
 
-    public final HashSet<CtMethod<?>> pendingMetrics  = new HashSet<>();
-    public final HashSet<CtPackage>   pendingPackages = new HashSet<>();
+    public final HashSet<CtExecutable<?>> pendingMetrics  = new HashSet<>();
+    public final HashSet<CtPackage>       pendingPackages = new HashSet<>();
 
     public Abstractor(Logger log, Project proj) {
         this.log  = log;
@@ -254,6 +254,7 @@ public class Abstractor {
                 md.setVisibility(ctor);
                 final ObjectDecl recv = receiver.mustGetResolved();
                 recv.methodDecls.add(ref);
+                this.pendingMetrics.add(ctor);
             });
     }
 
@@ -398,7 +399,7 @@ public class Abstractor {
             });
     }
     
-    public Ref<Metrics> addMetrics(CtMethod<?> m) throws Exception {
+    public Ref<Metrics> addMetrics(CtExecutable<?> m) throws Exception {
         return this.proj.metrics.create(this.log, m,
             "metrics " + SpoonUtils.describeElem(m),
             () -> {
@@ -669,9 +670,9 @@ public class Abstractor {
         // `addMetrics` may register more methods on `pendingMetrics`
         // so add the current methods, then check if more are pending.
         while (!this.pendingMetrics.isEmpty()) {
-            final ArrayList<CtMethod<?>> methods = new ArrayList<>(this.pendingMetrics);
+            final ArrayList<CtExecutable<?>> methods = new ArrayList<>(this.pendingMetrics);
             this.pendingMetrics.clear();
-            for (CtMethod<?> m : methods) {
+            for (CtExecutable<?> m : methods) {
                 if (m.getBody() == null) {
                     this.log.log("skipping metrics for " + SpoonUtils.describeElem(m) + ": null body");
                     continue;

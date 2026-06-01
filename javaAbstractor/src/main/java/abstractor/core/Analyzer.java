@@ -83,11 +83,13 @@ public class Analyzer {
         return indentSum;
     }
 
-    public void addMethod(CtMethod<?> m) throws Exception {
+    public void addMethod(CtExecutable<?> m) throws Exception {
         this.addPosition(m.getPosition());
 
-        for (CtExtendedModifier em : m.getExtendedModifiers())
-            this.addPosition(em.getPosition());
+        if (m instanceof CtMethod<?> method) {
+            for (CtExtendedModifier em : method.getExtendedModifiers())
+                this.addPosition(em.getPosition());
+        }
 
         for (CtParameter<?> p : m.getParameters())
             this.addPosition(p.getPosition());
@@ -177,7 +179,7 @@ public class Analyzer {
         return false;
     }
 
-    static private boolean detectGetter(CtMethod<?> m, CtStatement st) {
+    static private boolean detectGetter(CtExecutable<?> m, CtStatement st) {
         if (m.getParameters().size() != 0)  return false;
         if (SpoonUtils.isVoid(m.getType())) return false;
         if (!(st instanceof CtReturn ret))  return false;
@@ -185,7 +187,7 @@ public class Analyzer {
         return true;
     }
     
-    static private boolean detectSetter(CtMethod<?> m, CtStatement st) {
+    static private boolean detectSetter(CtExecutable<?> m, CtStatement st) {
         if (m.getParameters().size() > 1)           return false;
         if (!SpoonUtils.isVoid(m.getType()))        return false;
         if (!(st instanceof CtAssignment assign))   return false;
@@ -257,7 +259,7 @@ public class Analyzer {
         if (elem instanceof CtLiteral             lt) { this.addLiteralUsage(lt);             return; }
 
         // Use to see elements (may produce a lot of output).
-        this.log.notice("addUsage: "+formatElem(elem));
+        this.log.notice("unimplemented addUsage: "+formatElem(elem));
     }
 
     private void addFieldReadUsage(CtFieldRead<?> fr) throws Exception {
@@ -279,10 +281,12 @@ public class Analyzer {
     }
 
     private void addAssignmentUsage(CtAssignment<?,?> as) throws Exception {
+        if (logUsage) this.log.log("addUsage.CtAssignment: " + as);
+
         // TODO: Implement
-        this.log.warning("addUsage.CtAssignment: " + as);
-        this.log.notice("> getType:     " + as.getType());
-        this.log.notice("> getAssigned: " + as.getAssigned());
+        this.log.warning("|  unimplemented CtAssignment: " + as);
+        this.log.notice("|  getType:     " + as.getType());
+        this.log.notice("|  getAssigned: " + as.getAssigned());
     }
 
     private void addTypeReferenceUsage(CtTypeReference<?> tr) throws Exception {
@@ -307,8 +311,10 @@ public class Analyzer {
     }
     
     private void addExecutableReferenceUsage(CtExecutableReference<?> er) throws Exception {
+        if (logUsage) this.log.log("addUsage.CtExecutableReference: " + er);
+
         // TODO: Implement
-        this.log.warning("addUsage.CtExecutableReference: " + er);
+        this.log.warning("|  unimplemented CtExecutableReference: " + er);
     }
 
     private void addLiteralUsage(CtLiteral<?> lt) throws Exception {

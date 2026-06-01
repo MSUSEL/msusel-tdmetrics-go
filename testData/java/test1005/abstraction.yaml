@@ -127,8 +127,7 @@
   methods: [
     { # 1. Foo<T>.Foo(name string) Foo<T>
       name: Foo, package: 6, receiver: 1, signature: 30,
-      loc: 13, constructor: true, static: true, vis: public,
-      wrong: true, # TODO: Should have metrics?
+      loc: 13, metrics: 2, constructor: true, static: true, vis: public,
     },
     { # 2. Foo<T>.FooInt() Foo<T>
       name: FooInt, package: 6, receiver: 1, signature: 5,
@@ -137,28 +136,28 @@
     },
     { # 3. Foo<T>.add(key string, value T)
       name: add, package: 6, receiver: 1, signature: 29,
-      loc: 15, metrics: 2, vis: public,
+      loc: 15, metrics: 3, vis: public,
     },
     { # 4. Foo<T>.count() int
       name: count, package: 6, receiver: 1, signature: 3,
-      loc: 40, metrics: 7, vis: public,
+      loc: 40, metrics: 8, vis: public,
     },
     { # 5. Foo<T>.lookup(key string) S
       name: lookup, package: 6, receiver: 1, signature: 28,
-      loc: 19, metrics: 3, vis: public,
+      loc: 19, metrics: 4, vis: public,
       typeParams: [ 2 ],
     },
     { # 6. Foo<T>.lookupInt(key string) int
       name: lookupInt, package: 6, receiver: 1, signature: 26,
-      loc: 28, metrics: 4, vis: public,
+      loc: 28, metrics: 5, vis: public,
     },
     { # 7. Foo<T>.lookupString(key string) string
        name: lookupString, package: 6, receiver: 1, signature: 27,
-      loc: 32, metrics: 5, vis: public,
+      loc: 32, metrics: 6, vis: public,
     },
     { # 8. Foo<T>.lookupT<S>(key string) S
       name: lookupT, package: 6, receiver: 1, signature: 28,
-      loc: 36, metrics: 6, vis: public,
+      loc: 36, metrics: 7, vis: public,
       typeParams: [ 2 ],
     },
   ],
@@ -166,30 +165,34 @@
     { # 1. Foo<T>.FooInt ???
       codeCount: 3, complexity: 1, indents: 1, lineCount: 3, loc: 6,
     },
-    { # 2. Foo<T>.add ???
+    { # 2. Foo<T>.Foo ???
+      codeCount: 1, complexity: 1, lineCount: 1, loc: 13,
+      reads: [ object1, selection2 ],
+    },
+    { # 3. Foo<T>.add ???
       codeCount: 3, complexity: 1, indents: 1, lineCount: 3, loc: 15,
       reads: [ object1, selection1 ],
     },
-    { # 3. Foo<T>.lookup ???
+    { # 4. Foo<T>.lookup ???
       codeCount: 3, complexity: 1, indents: 1, lineCount: 8, loc: 19,
       reads: [ object1, selection1 ],
     },
-    { # 4. Foo<T>.lookupInt ???
+    { # 5. Foo<T>.lookupInt ???
       codeCount: 3, complexity: 1, indents: 1, lineCount: 3, loc: 28,
       invokes: [ method5 ],
       reads: [ object1 ],
     },
-    { # 5. Foo<T>.lookupString ???
+    { # 6. Foo<T>.lookupString ???
       codeCount: 3, complexity: 1, indents: 1, lineCount: 3, loc: 32,
       invokes: [ method5 ],
       reads: [ object1 ],
     },
-    { # 6. Foo<T>.lookupT<S> ???
+    { # 7. Foo<T>.lookupT<S> ???
       codeCount: 3, complexity: 1, indents: 1, lineCount: 3, loc: 36,
       invokes: [ method5 ],
       reads: [ object1 ],
     },
-    { # 7. Foo<T>.count ???
+    { # 8. Foo<T>.count ???
       codeCount: 3, complexity: 1, indents: 1, lineCount: 3, loc: 40,
       reads: [ object1, selection1 ],
     },
@@ -221,6 +224,7 @@
   ],
   selections: [
     { name: mapping, origin: object1 }, # 1. ???
+    { name: name,    origin: object1 }, # 2. ???
   ],
   signatures: [
     {                                       }, #  1. func()
