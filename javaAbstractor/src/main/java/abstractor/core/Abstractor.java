@@ -5,9 +5,11 @@ import java.util.*;
 import spoon.Launcher;
 import spoon.MavenLauncher;
 import spoon.reflect.*;
+import spoon.reflect.code.CtConstructorCall;
 import spoon.reflect.declaration.*;
 import spoon.reflect.path.CtRole;
 import spoon.reflect.reference.*;
+import spoon.reflect.visitor.filter.TypeFilter;
 import spoon.support.compiler.VirtualFile;
 
 import abstractor.core.constructs.*;
@@ -23,9 +25,11 @@ public class Abstractor {
     public final HashSet<CtExecutable<?>> pendingMetrics  = new HashSet<>();
     public final HashSet<CtPackage>       pendingPackages = new HashSet<>();
 
+    public CtModel model;
+
     public Abstractor(Logger log, Project proj) {
-        this.log  = log;
-        this.proj = proj;
+        this.log   = log;
+        this.proj  = proj;
     }
 
     /**
@@ -72,6 +76,8 @@ public class Abstractor {
     }
 
     private void prepareModel(CtModel model) throws Exception {
+        Require.isNull(this.model, "currently this can only handle one model at a time");
+        this.model = model;
         for (CtPackage pkg: model.getAllPackages()) {
             this.log.log("Init pending package " + SpoonUtils.describeElem(pkg));
             this.pendingPackages.add(pkg);
@@ -424,9 +430,6 @@ public class Abstractor {
             },
             (Ref<ObjectDecl> ref, ObjectDecl obj) -> {
                 obj.setVisibility(c);
-
-                // TODO: Handle generic object declaration?
-                //if (tr.isGenerics()) ...;
                 
                 // Add constructors as (static) methods.
                 for (CtConstructor<?> ctor : c.getConstructors()) {
@@ -474,6 +477,10 @@ public class Abstractor {
                 // Add any nested types.
                 for (CtType<?> nt : c.getNestedTypes())
                     this.addTypeDesc(nt.getReference());
+
+                // Add any generic instances.
+                if (c.isGenerics())
+                    this.addObjectInstances(c, ref, obj);
             });
     }
 
@@ -628,6 +635,30 @@ public class Abstractor {
 
         return this.proj.baker.anyDesc();
     }
+
+
+
+
+    public void addObjectInstances(CtClass<?> c, Ref<ObjectDecl> ref, ObjectDecl obj) {
+        List<CtTypeReference<?>> refs = model.getElements(new TypeFilter<>(CtTypeReference.class));
+        for (CtTypeReference<?> tr : refs) {
+            if (Objects.equals(tr.getTypeDeclaration(), c)) {
+                // tr is a use/instantiation of myCtClass
+                List<CtTypeReference<?>> typeArgs = tr.getActualTypeArguments(); // non-empty => parameterized instantiation
+            }
+        }
+
+        // for "new" expressions:
+        List<CtConstructorCall<?>> news = model.getElements(new TypeFilter<>(CtConstructorCall.class));
+        for (CtConstructorCall<?> cc : news) {
+            CtTypeReference<?> tr = cc.getType();
+            if (Objects.equals(tr.getTypeDeclaration(), c)) { /* constructor instantiation */ }
+        }
+
+        // TODO: FINISH IMPLEMENTING
+    }
+
+
 
     //===[ Processors ]=========================================================
 
