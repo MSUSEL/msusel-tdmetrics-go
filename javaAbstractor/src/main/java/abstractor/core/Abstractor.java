@@ -587,78 +587,44 @@ public class Abstractor {
             });
     }
 
-    /**
-     * // TODO: Update this method and comment.
-     * Handle Java primitives and object equivalents to primitives (boxed primitives)
-     * such that the boxed primitives (e.g. Integer) and String become Basic's.
-     * Other types become stub InterfaceDecl.
-     * Originally called: addExternalStub
-     */
     public Ref<? extends TypeDesc> addShadowTypeDesc(CtTypeReference<?> tr) throws Exception {
-
-        // TODO: WHY IS THIS ONLY DOING THE ERASURE?!
-        /*
-        final CtTypeReference<?> erasure = tr.getTypeErasure();
-
-        final Ref<InterfaceDecl> decl = this.proj.interfaceDecls.create(this.log, erasure,
-            "type erasure interface decl " + SpoonUtils.describeElem(erasure),
-            () -> {
-                final Ref<PackageCon> pkg  = this.addPackageFor(erasure);
-                final Location        loc  = this.proj.locations.create(erasure.getPosition());
-                final String          name = erasure.getSimpleName();
-
-                // TODO: Should this be "any" since that means it has no methods,
-                // or should the stub have abstracts for the methods?
-                final Ref<InterfaceDesc> inter = this.proj.baker.anyDesc();
-
-                return new InterfaceDecl(pkg, loc, name, inter, new ArrayList<>());
-            });
-        */
-        
-        // TODO: If the stub is not an "any", then the abstract methods may need to have
-        //       type parameters and arguments that need to be handled for an instantiation.
-        /*
-        // Check if the type is a generic instantiation.
-        final List<CtTypeReference<?>> typeArgs = tr.getActualTypeArguments();
-        if (typeArgs == null || typeArgs.isEmpty()) return decl;
-
-        return this.proj.interfaceInsts.create(this.log, tr,
-            "type erasure interface instance " + SpoonUtils.describeElem(tr),
-            () -> {
-                final ArrayList<Ref<? extends TypeDesc>> instanceTypes = new ArrayList<>(typeArgs.size());
-                for (CtTypeReference<?> arg : typeArgs) instanceTypes.add(this.addTypeDesc(arg));
-    
-                // TODO: decl.getResolved().inter can be null. Figue out another ady to do this!
-                return new InterfaceInst(decl, instanceTypes, decl.getResolved().inter);
-            });
-        */
+        // from isShadow() method:
+        // > When an element isn't present in the factory (created in another factory),
+        // > this element is considered as "shadow". e.g., a shadow element can be a
+        // > CtType of java.lang.Class built when we call CtTypeReference.getTypeDeclaration()
+        // > on a reference of java.lang.Class."
 
         return this.proj.baker.anyDesc();
     }
 
-
-
-
     public void addObjectInstances(CtClass<?> c, Ref<ObjectDecl> ref, ObjectDecl obj) {
-        List<CtTypeReference<?>> refs = model.getElements(new TypeFilter<>(CtTypeReference.class));
+        final List<CtTypeReference<?>> refs = model.getElements(new TypeFilter<>(CtTypeReference.class));
         for (CtTypeReference<?> tr : refs) {
             if (Objects.equals(tr.getTypeDeclaration(), c)) {
-                // tr is a use/instantiation of myCtClass
-                List<CtTypeReference<?>> typeArgs = tr.getActualTypeArguments(); // non-empty => parameterized instantiation
+                // tr is a use/instantiation of class 'c'
+                this.addObjectInst(tr, ref, obj);
             }
         }
 
-        // for "new" expressions:
-        List<CtConstructorCall<?>> news = model.getElements(new TypeFilter<>(CtConstructorCall.class));
+        final List<CtConstructorCall<?>> news = model.getElements(new TypeFilter<>(CtConstructorCall.class));
         for (CtConstructorCall<?> cc : news) {
-            CtTypeReference<?> tr = cc.getType();
-            if (Objects.equals(tr.getTypeDeclaration(), c)) { /* constructor instantiation */ }
+            final CtTypeReference<?> tr = cc.getType();
+            if (Objects.equals(tr.getTypeDeclaration(), c)) {
+                // constructor instantiation
+                this.addObjectInst(tr, ref, obj);
+            }
         }
-
-        // TODO: FINISH IMPLEMENTING
     }
 
+    public Ref<ObjectInst> addObjectInst(CtTypeReference<?> tr, Ref<ObjectDecl> ref, ObjectDecl obj) {
+        // Check it tr is an instantiation or skip.
+        final List<CtTypeReference<?>> typeArgs = tr.getActualTypeArguments(); 
+        if (typeArgs.size() <= 0) return null;
 
+        // TODO: Implement
+
+        return null;
+    }
 
     //===[ Processors ]=========================================================
 
