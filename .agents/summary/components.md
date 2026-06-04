@@ -54,39 +54,40 @@ graph TB
 
 ## javaAbstractor
 
-- **Entry point**: `abstractor.app.App.main` (Maven assembly produces `target/abstractor-0.1-jar-with-dependencies.jar`).
-- **Library entry**: `new Abstractor(log, project).addMavenProject(path)` then `proj.toJson(JsonHelper)`.
-- **Parser**: Spoon 11.2.0 via `MavenLauncher`.
+- **Entry point**: `abstractor.app.App.main` (fat jar via `mvn clean compile assembly:single`).
+- **Library entry**: `prepareMavenProject(path)` → `performAbstraction()` → `proj.toJson(JsonHelper)`.
+- **Parser**: Spoon 11.2.0 via `MavenLauncher` (or `Launcher` + `VirtualFile` in tests).
 
 ### Sub-packages
 
 | Package | Key classes | Responsibility |
 | --- | --- | --- |
-| `abstractor.app` | `App`, `Config` | CLI entrypoint and argument parsing (Apache Commons CLI). |
-| `abstractor.core` | `Abstractor`, `Analyzer` | Spoon AST walk and per-method analysis. |
-| `abstractor.core.constructs` | `Project`, `PackageCon`, `Factory`, `Ref`, `Baker`, plus one class per construct kind (`Abstract`, `Argument`, `Basic`, `Field`, `InterfaceDecl/Desc/Inst`, `Method/Decl/Inst`, `Metrics`, `ObjectDecl/Inst`, `Selection`, `Signature`, `StructDesc`, `TypeParam`, `Value`, `Location/Locations`) | Construct types and factories. Mirrors `genFeatureDef.md`. |
-| `abstractor.core.json` | `JsonHelper`, `JsonNode`, `JsonFormat`, `parser/` | JSON output (build, parse, format with optional minimization). |
-| `abstractor.core.cmp` | `Cmp`, `CmpOptions` | Stable ordering and equality across constructs. |
-| `abstractor.core.iter` | – | Iterator helpers used widely. |
-| `abstractor.core.diff` | `core/`, `hirschberg/`, `wagner/`, `comparators/` | Diff algorithms (used by tests for YAML golden comparisons). |
-| `abstractor.core.log` | `Logger` | Indented logger mirroring the Go side. |
-| `abstractor.core.validator` | `Validator` | Post-walk sanity checks on the project graph. |
+| `abstractor.app` | `App`, `Config` | CLI and Apache Commons CLI parsing. |
+| `abstractor.core` | `Abstractor`, `Analyzer` | Spoon walk, metrics, finish pipeline. |
+| `abstractor.core.spoonUtils` | `SpoonUtils` | Element descriptions, package name/path, type guards. |
+| `abstractor.core.constructs` | `Project`, `PackageCon`, `Factory`, `Ref`, `Baker`, one class per construct kind | Schema mirrors `genFeatureDef.md`. |
+| `abstractor.core.json` | `JsonHelper`, `JsonNode`, `JsonFormat`, `parser/` | JSON build/parse/format. |
+| `abstractor.core.cmp` | `Cmp`, `CmpOptions` | Deduplication and golden comparison ordering. |
+| `abstractor.core.iter` | – | Iterator helpers. |
+| `abstractor.core.diff` | Hirschberg, Wagner, comparators | YAML golden diffs in tests. |
+| `abstractor.core.log` | `Logger` | Indented logging (mirrors Go). |
+| `abstractor.core.validator` | `Validator` | Post-walk validation; errors fail `performAbstraction`. |
 
 ### Notable state on `Abstractor`
 
-- `pendingMetrics: HashSet<CtMethod<?>>` — methods queued for body analysis. `processPendingMetrics` drains in batches (copy + clear + process) to avoid `ConcurrentModificationException` when metrics walk discovers more methods.
-- `externalInterfaceStubByErasure: HashMap<String, Ref<InterfaceDecl>>` — cache of external/JDK stub `InterfaceDecl`s keyed by erasure-qualified name. Used by `addExternalStub`.
+- `pendingPackages` — packages discovered during the walk; drained in `performAbstraction`.
+- `pendingMetrics` — executables awaiting `Analyzer`; batch drain avoids `ConcurrentModificationException`.
+- Shadow JDK types currently map to `Baker.anyDesc()` (`addShadowTypeDesc`); named stub cache is planned (plan Step 5).
 
 ### Tests (`javaAbstractor/src/test/java/abstractor/`)
 
 | Class | Purpose |
 | --- | --- |
-| `AppTests` | End-to-end runs of `testData/java/test*` fixtures vs `abstraction.yaml` goldens. |
-| `core.Tester` | Shared test harness for single-file fixtures. |
-| `core.RobustnessTests` | Step-1 regressions (wildcards, anonymous, annotations, lower-bounded wildcards). |
-| `core.MetricsTests` | Method-level metric assertions (currently being stabilized). |
-| `core.JsonTests` | JSON build/parse round-trips. |
-| `core.DiffTests`, `core.IterTests` | Utilities. |
+| `AppTests` | `test0001`–`test0002` (Maven), `test1001`–`test1006` (single-file) vs `abstraction.yaml`. |
+| `core.Tester` | `prepareClassesFromSource`, golden diff helpers. |
+| `core.RobustnessTests` | Smoke tests (wildcards, annotations, boxing, etc.). |
+| `core.MetricsTests` | Focused metric YAML fragments. |
+| `core.JsonTests`, `core.DiffTests`, `core.IterTests` | Infrastructure. |
 
 ## techDebtMetrics
 
@@ -104,7 +105,7 @@ graph TB
 ## Test Fixtures (`testData/`)
 
 - `testData/go/test0001` … `test0018` — Go projects, each with `main.go` and `abstraction.yaml` (and sometimes `expStub.txt`).
-- `testData/java/test0001`, `test0002`, `test1001`–`test1005` — Java fixtures; `test10NN` are single-file Tester fixtures used by Step-1/Step-2 work, while lower numbers are full Maven projects exercised by `AppTests`.
+- `testData/java/test0001`, `test0002`, `test1001`–`test1006` — Java fixtures; `test10NN` are single-file; `test000N` are full Maven projects.
 - `testData/todo.md` — running list of fixtures-to-add.
 
 ## Documentation (`docs/`)
@@ -122,7 +123,7 @@ graph TB
 
 ## Planning and Agent Context
 
-- `.agents/planning/2026-05-01-java-abstractor-completion/` — current 15-step plan with `rough-idea.md`, `idea-honing.md`, `design/`, `research/`, `implementation/plan.md`, `summary.md`.
+- `.agents/planning/2026-05-01-java-abstractor-completion/` — Java completion plan (11 remaining steps in `implementation/plan.md`).
 - `.cursor/rules/java-abstractor-handoff.mdc` — concise handoff rule loaded by Cursor when editing Java abstractor files.
 - `.cursor/commands/*.sop.md` — workflow SOP commands available in Cursor (`code-assist`, `code-task-generator`, `codebase-summary`, `eval`, `pdd`).
 - `AGENTS.md` — researcher's binding rules for AI agents (git restrictions, plan-first workflow, code quality).

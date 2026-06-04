@@ -2,142 +2,104 @@
 
 ## Architecture Overview
 
-The Java Abstractor uses **Spoon** (v11.2.0) to parse Java source code via Maven
-projects (`pom.xml`). It produces JSON/YAML output conforming to the Generalized
-Feature Definition (`docs/genFeatureDef.md`).
+The Java Abstractor uses **Spoon** (v11.2.0) to parse Java source via Maven
+(`MavenLauncher`) or inline source (`prepareClassesFromSource` for tests). Output
+conforms to `docs/genFeatureDef.md`.
 
 ### Entry Point & Flow
 
-1. `abstractor.app.App` is the main class.
-2. `abstractor.app.Config` parses CLI args: `-i` (input project path with pom.xml),
-   `-o` (output JSON/YAML), `-v` (verbose), `-m` (minimize), `-e` (extra debug info).
-3. `Abstractor` orchestrates the parsing:
-   - `addMavenProject(path)` uses Spoon's `MavenLauncher` to build a `CtModel`.
-   - Iterates over all packages, types, and declarations.
-   - Type references: **`addTypeDesc`** resolves primitives, arrays, wildcards,
-     user types, and (Steps 1–2) shadow/JDK types via **`addExternalStub`** with
-     boxing for wrappers and `String`.
-   - `finish()` runs: `processPendingMetrics()` → `consolidateCons()` →
-     `crossConnectConstructs()` → `validate()`.
-4. `Analyzer` computes metrics (complexity, line counts, indents, getter/setter
-   detection, invocations, reads, writes).
-5. `Project` holds all `Factory<T>` instances for each construct type.
-6. `Factory<T>` manages deduplication via `CtElement`-keyed maps and `TreeSet`-based
-   comparison/consolidation.
+1. `abstractor.app.App.main` → `Config.FromArgs` → `App.run`.
+2. `Abstractor.prepareMavenProject(path)` builds a `CtModel` (may retry with
+   `addInputResource` for small `testData/java` fixtures).
+3. `Abstractor.performAbstraction()`:
+   - Drains `pendingPackages` → `processPackage` (types per package).
+   - After each package pass, `processPendingMetrics()` (batch copy/clear/process).
+   - Then `consolidateCons()` → `crossConnectConstructs()` → `Validator.validate()`.
+4. `Project.toJson(JsonHelper)` — CLI toggles `writeKinds`, `writeIndices`, `writeRefs`.
 
-### Constructs Implemented (Data Model)
+There is **no** `Resolver` class yet; post-walk work lives on `Abstractor`.
 
-All 18 construct types from `genFeatureDef.md` have corresponding Java classes:
+### Key classes
 
-| Construct | Class | Status |
-|-----------|-------|--------|
-| Abstract | `Abstract.java` | Implemented |
-| Argument | `Argument.java` | Implemented |
-| Basic | `Basic.java` | Implemented |
-| Field | `Field.java` | Implemented |
-| InterfaceDecl | `InterfaceDecl.java` | Partial (nested interfaces; **Step 2:** JDK stubs) |
-| InterfaceDesc | `InterfaceDesc.java` | Partial (inheritance, pinning) |
-| InterfaceInst | `InterfaceInst.java` | Partial (**Baker** arrays; **Step 2:** external `List<>` / `Map<>` etc.) |
-| Locations | `Location.java` / `Locations` | Implemented |
-| MethodDecl | `MethodDecl.java` | Implemented (TODO: constructor flag) |
-| MethodInst | `MethodInst.java` | Exists but not populated by Abstractor |
-| Metrics | `Metrics.java` | Mostly implemented |
-| ObjectDecl | `ObjectDecl.java` | Implemented |
-| ObjectInst | `ObjectInst.java` | Exists but not populated by Abstractor |
-| Package | `PackageCon.java` | Partial (imports unfinished) |
-| Selection | `Selection.java` | Implemented |
-| Signature | `Signature.java` | Implemented |
-| StructDesc | `StructDesc.java` | Implemented |
-| TypeParam | `TypeParam.java` | Partial |
-| Value | `Value.java` | Exists but not populated by Abstractor |
+| Area | Class | Role |
+| --- | --- | --- |
+| Walk | `Abstractor` | Declarations, types, enums, objects, interfaces, metrics queue |
+| Bodies | `Analyzer` | Cyclomatic complexity, getter/setter, invokes/reads/writes |
+| Well-known | `Baker` | `anyDesc`, `$Array` + `InterfaceInst`, boxed → `Basic` |
+| Spoon | `SpoonUtils` | `describeElem`, package name/path, `isObject` / `isNull` helpers |
+| Validate | `Validator` | Resolved refs, construct graph sanity |
+| Model | `Project` + `Factory<T>` / `Ref<T>` | All construct kinds |
 
-### Supporting Infrastructure
+### Constructs (population status)
 
-- **Baker**: Pre-builds synthetic constructs (e.g., `$Array` interface with `$len`,
-  `$get`, `$set` abstracts for array types); **`basicForBoxedOrString`** (Step 2)
-  maps boxed JDK types and `java.lang.String` to shared **`Basic`** nodes.
-- **Validator**: Checks that all refs are resolved and point to constructs in factories.
-- **Diff**: Hirschberg & Wagner diff algorithms for test output comparison.
-- **JSON**: Custom JSON parser, formatter, and serialization (`Jsonable` interface).
-- **Comparison**: `Cmp`, `CmpOptions`, `CmpContext` for construct deduplication.
-- **Ref<T>**: Lazy-resolution references supporting circular dependencies.
+| Construct | Status |
+| --- | --- |
+| Abstract, Argument, Basic, Field, Signature, StructDesc, Selection | Populated |
+| MethodDecl | Populated (incl. constructors, `constructor` flag, `isStatic`) |
+| Metrics | Populated; writes / some invoke paths incomplete |
+| ObjectDecl, InterfaceDecl, InterfaceDesc | Populated; `inherits` wired |
+| Value | Enum constants only; package static fields not yet |
+| InterfaceInst | Baker arrays; user/external parameterized types partial |
+| ObjectInst | Created in skeleton form; finisher incomplete |
+| MethodInst | Class exists; not populated by walk |
+| PackageCon | Populated; **`imports` empty** (TODO in `performAbstraction`) |
 
-## Known TODOs and Gaps (from source code)
+## Type dispatch (`addTypeDesc`)
 
-### Critical / Functional Gaps
+- Primitives → `Basic`; arrays → Baker `arrayInst`.
+- Wildcards → bound type or `anyDesc` when unbounded (`Object` bound treated as unbounded).
+- Boxed / `String` → `basicForBoxedOrString`.
+- **`tr.isShadow()`** → `addShadowTypeDesc` → **`anyDesc`** (named JDK stubs planned — see plan Step 5).
+- Anonymous / local types → `null` (notice); they must not become separate declarations.
+- Annotation types → notice, `null`.
+- User `CtEnum` / `CtClass` / `CtInterface` / type parameters → respective adders.
 
-*(Steps 1–2: robust `addTypeDesc` / `addDeclaration`, wildcard and anonymous/local
-handling, **`addExternalStub`** + boxing. Remaining gaps below.)*
+`addDeclaration` skips annotation types; orders **`CtEnum` before `CtClass`**.
 
-1. **Package imports** (`Abstractor` — package imports TODO near `addPackage`): `getImports()` is stub code with
-   debug `println` statements. Returns `null`. This means package dependency tracking
-   is completely missing.
+## Enums (`addEnum`)
 
-2. **Interface inheritance** (`Abstractor.java:566`): `InterfaceDesc` finisher has
-   `// TODO: Implement Inheritance`. Super-interfaces are not connected.
+- `ObjectDecl` with struct containing only **`$value`** (enum superclass type).
+- Each `CtEnumValue` → package **`Value`** (`const: true`); **`Value.type` still null** in finisher.
+- User enum methods and super-interface wiring **not** in finisher yet.
 
-3. **Interface pinning** (`Abstractor.java:562`): `InterfaceDesc` doesn't set the `pin`
-   field linking the description back to its declaration.
+## Objects & interfaces
 
-4. **Super-interface connections on classes** (`Abstractor.java:262`): `addObjectDecl`
-   has `// TODO: Finish implementing` with commented-out code for
-   `c.getSuperInterfaces()`.
+- `addObjectDecl`: constructors (non-implicit), instance methods, synthesized
+  `InterfaceDesc` (non-static instance abstracts), **`inherits`** from
+  `getSuperInterfaces()`, nested type references, generic **`addObjectInstances`** hook.
+- `addInterfaceDecl`: abstracts, **`inherits`**, **`pin`** for nested interfaces.
+- Object synthesized interface uses **`pin`** = object ref.
 
-5. **Nested interface handling** (`Abstractor.java:461`): Nested interfaces log an error
-   but aren't properly differentiated.
+## Metrics (`Analyzer`)
 
-6. **Enum handling** (`Abstractor.java:393, 474-496`): `addEnum()` exists but is
-   incomplete. Enum values are not added as constants to packages.
+- **Implemented:** complexity, line/code counts, indents, getter/setter detection,
+  `CtInvocation` → invokes, field read/reference → reads.
+- **TODO:** `addAssignmentUsage` (writes), `addExecutableReferenceUsage`;
+  `logElementTree` / `logUsage` hardcoded `true`.
 
-7. **Values (package-level variables/constants)** are not extracted from source code at
-   all.
+## Cross-connect & validation
 
-8. **Generic instances** (`ObjectInst`, `MethodInst`, `InterfaceInst`): **`InterfaceInst`**
-   is used for Baker arrays and **external** parameterized types (Step 2).
-   **`ObjectInst` / `MethodInst`** and rich user-side generic tracking are still open
-   (later steps).
+- `crossConnectConstructs` adds method decls, object decls, interface decls, and
+  values to their `PackageCon`.
+- Validation throws if `log.errorCount() > 0` after `Validator.validate`.
 
-9. **Metrics usage tracking** (`Analyzer.java:285, 308`): `addAssignmentUsage` and
-   `addExecutableReferenceUsage` are TODO stubs.
+## Tests
 
-10. **Cross-connection** (`Abstractor.java:671`): `crossConnectConstructs()` has
-    `// TODO: Add more to packages` — interface declarations and values are not added
-    to packages.
+| Test class | Coverage |
+| --- | --- |
+| `AppTests` | `test0001`, `test0002` (Maven); `test1001`–`test1006` (single-file) |
+| `RobustnessTests` | Wildcards, annotations, boxing, etc. (no YAML) |
+| `MetricsTests` | Metric fragments via `Tester.checkConstruct` |
+| `JsonTests`, `DiffTests`, `IterTests` | Infrastructure |
 
-### Minor / Cleanup
-
-- Debug `println` statements throughout `getImports()`.
-- `logElementTree` and `logUsage` flags hardcoded to `true` in `Analyzer.java`.
-- Test file `test0001/abstraction.yaml` has `youShallNotPass: true` intentionally
-  preventing the test from passing.
-
-## Existing Tests
-
-### Test Structure
-
-- **AppTests**: Maven integration (`test0001`, `test0002`) plus single-file fixtures
-  **`test1001`–`test1005`** under `testData/java/test100N/` (`Foo.java` + `abstraction.yaml`).
-  `test1004` / `test1005` align with Steps 1–2. **`test1002`** avoids `System.out.println`
-  in the fixture (Spoon otherwise pulls a large JDK graph for `System`). Goldens may
-  still need updates per environment; **`MetricsTests`** may be out of sync until refreshed.
-
-- **RobustnessTests**: Smoke tests for Spoon edge cases (wildcards, annotations, boxing fields, etc.).
-- **MetricsTests**: Tests for metrics computation (complexity, indents, getter/setter detection).
-- **JsonTests**: Tests for JSON parser/formatter.
-- **IterTests**: Tests for iterator utilities.
-- **DiffTests**: Tests for diff algorithms.
-
-### Test Infrastructure
-
-- `Tester` class provides helpers: `addClassFromSource()`, `addClassFromFile()`,
-  `checkProjectWithFile()`, `checkProject()`, `checkConstruct()`.
-- Uses `Diff.PlusMinusByLine()` for readable failure output.
-- JSON comparison uses relaxed format (comments allowed in YAML/JSON files).
+**Note:** `test1006` source is nested generics, not an enum — plan Step 1 expects
+an enum fixture there.
 
 ## Build
 
-- Maven project, Java 17 (OpenJDK 17.0.14).
-- Spoon 11.2.0 for AST parsing.
-- `mvn clean compile assembly:single` to build.
-- `mvn test` to run tests.
-- Produces `abstractor-0.1-jar-with-dependencies.jar`.
+- Java 17, Maven; `mvn clean compile assembly:single` → fat jar.
+- `mvn test` — JUnit 5.
+
+## Active plan
+
+Remaining steps: `.agents/planning/2026-05-01-java-abstractor-completion/implementation/plan.md` (11 steps). **Next: Step 1 — enum completion.**

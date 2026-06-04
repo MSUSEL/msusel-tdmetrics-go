@@ -61,7 +61,7 @@ The Java abstractor loosely mirrors the Go abstractor (the older, more complete 
 - **Comparison**: `Cmp` / `CmpOptions` types for ordering and equality of constructs.
 - **JSON output**: `Jsonable` interface with `toJson(JsonHelper)` (Java); `Jsonify` package in Go (`internal/jsonify/`).
 - **Logging**: `Logger` with push/pop indentation in both languages.
-- **Two-phase architecture**: AST walk to populate constructs, then a resolver/post-processing phase. Go has this fully (`internal/abstractor/resolver/`); Java is on its way (Step 12 of the plan).
+- **Two-phase architecture**: AST walk then post-processing. Go: full `resolver/`. Java: `performAbstraction` (consolidate, cross-connect, validate); dedicated `Resolver` class is plan Step 8.
 
 ## Output Schema (Generalized Feature Definition)
 
@@ -76,5 +76,5 @@ The `techDebtMetrics/Constructs/` C# project is a one-to-one consumer of these c
 ## Current Research Status
 
 - The active workstream is **completing the Java abstractor** so it can process all 31 Apache Java projects in the Technical Debt Dataset (TDD) (`javaAbstractor/tdd/td_V2.db`, SQLite).
-- Plan: `.agents/planning/2026-05-01-java-abstractor-completion/implementation/plan.md` — 15 steps; **Steps 1–2 complete**; **Step 3 (enum completion) is next**.
-- Summary / handoff: `.agents/planning/2026-05-01-java-abstractor-completion/summary.md` and `.cursor/rules/java-abstractor-handoff.mdc`.
+- Plan: `.agents/planning/2026-05-01-java-abstractor-completion/implementation/plan.md` — **11 remaining steps**; **Step 1 (enum completion) is next**.
+- Handoff: `summary.md`, `.cursor/rules/java-abstractor-handoff.mdc`, `research/current-state.md`.

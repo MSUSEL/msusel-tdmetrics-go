@@ -1,5 +1,10 @@
 # Detailed Design: Java Abstractor Completion
 
+> **Note:** Target architecture and patterns here remain useful. Step numbering and
+> some APIs (e.g. `addExternalStub`, `finish()`) reflect the original plan.
+> **Authoritative remaining work:** `implementation/plan.md` (11 steps) and
+> `research/current-state.md` (what is already implemented).
+
 ## Overview
 
 This document describes the design for completing the Java Abstractor so that

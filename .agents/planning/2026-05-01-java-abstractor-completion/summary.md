@@ -1,38 +1,38 @@
 # Project Summary: Java Abstractor Completion
 
-## Artifacts Created
+## Artifacts
 
-- `rough-idea.md` — initial concept
-- `idea-honing.md` — 14 requirements Q&A
-- `research/current-state.md` — analysis of existing Java abstractor
-- `research/td-dataset.md` — TDD database schema and project list
-- `research/gap-analysis.md` — prioritized list of missing features
-- `research/spoon-api.md` — Spoon API patterns and pitfalls
-- `research/go-abstractor.md` — Go abstractor patterns for alignment
-- `design/detailed-design.md` — architecture, components, data models
-- `implementation/plan.md` — 15-step implementation checklist
-- `AGENTS.md` (repo root) — agent interaction guidelines
+- `rough-idea.md`, `idea-honing.md` — requirements
+- `research/` — Spoon API, TDD schema, gap analysis, Go alignment, **current-state.md**
+- `design/detailed-design.md` — target architecture (some details ahead of code)
+- `implementation/plan.md` — **11 remaining steps** (completed work removed from checklist)
+- Repo `AGENTS.md` and `.cursor/rules/java-abstractor-handoff.mdc`
 
-## Key Design Elements
+## Current codebase (high level)
 
-- Two-phase architecture: AST walk (Abstractor) then post-processing (Resolver)
-- External types as **named stub `InterfaceDecl`s** plus **boxing** for wrappers / `String` (**Step 2**, `addExternalStub`, `Baker.basicForBoxedOrString`)
-- **Robust type dispatch** in `addTypeDesc` / `addDeclaration` with logging and fallbacks (**Step 1**)
-- Complete metrics tracking (reads, writes, invokes, complexity)
-- Generic instantiation tracking (ObjectInst, MethodInst, InterfaceInst)
-- Interface inheritance and pinning
-- Named nested classes; anonymous/lambda folding into enclosing method
+- **Entry:** `abstractor.app.App` → `prepareMavenProject` → `performAbstraction()` → `Project.toJson`.
+- **Walk:** `Abstractor` over Spoon `CtModel`; `pendingPackages` + `pendingMetrics` queues;
+  `abstractor.core.spoonUtils.SpoonUtils` for descriptions and package paths.
+- **Finish:** `consolidateCons` → `crossConnectConstructs` (methods, objects, interfaces,
+  values) → `Validator.validate`.
+- **Types:** Primitives, Baker arrays (`$Array` / `InterfaceInst`), wildcards, boxed →
+  `Basic`, shadow → `anyDesc` (stub JDK types still planned), user classes/interfaces/enums.
+- **Enums:** Partial — constants as `Value`; methods and full typing still open (Step 1).
+- **Inheritance:** `InterfaceDesc.inherits` populated from `getSuperInterfaces()` on
+  classes and interfaces.
+- **Generics:** `addObjectInst` started; `MethodInst` not populated yet.
+- **Metrics:** Invokes and reads largely wired; assignment writes and executable
+  references still TODO in `Analyzer`.
+- **Tests:** `AppTests` `test0001`–`test0002`, `test1001`–`test1006`; `RobustnessTests`,
+  `MetricsTests`, `JsonTests`, `DiffTests`, `IterTests`.
 
-## Implementation Approach
+## Target outcomes (unchanged)
 
-The plan has 15 incremental steps, each producing working functionality with
-tests. Steps are ordered from foundational robustness through core features
-to polish and validation. Each step follows the iterative workflow: plan →
-review → implement → review.
+- JSON/YAML conforming to `docs/genFeatureDef.md`
+- Process all 31 Apache projects in `javaAbstractor/tdd/td_V2.db`
+- Two-phase design (walk + resolver) — resolver extraction is Step 8 of the remaining plan
 
-## Next Steps
+## Next step for agents
 
-1. Review the implementation plan at `implementation/plan.md` (checklist: Steps **1–2** done).
-2. Stabilize remaining tests if needed (**`MetricsTests`**, Maven **`AppTests.test0001` / `test0002`**) before or in parallel with Step 3.
-3. **Step 3:** Enum completion (see `implementation/plan.md` § Step 3).
-4. Continue steps iteratively with researcher review; validate TDD projects at Step 15.
+**Step 1 — Enum completion** in `implementation/plan.md`: finish `addEnum` finisher
+(methods, super-interfaces, `Value.type`), fix `test1006` to be an enum fixture.

@@ -1,5 +1,5 @@
 ---
-description: Java abstractor — Steps 1–2 done; Step 3 (enums) handoff and file pointers
+description: Java abstractor — current state, next steps, and file pointers
 globs: javaAbstractor/**/*,testData/java/**/*,.agents/planning/2026-05-01-java-abstractor-completion/**/*
 alwaysApply: false
 ---
@@ -8,30 +8,42 @@ alwaysApply: false
 
 PhD tooling: follow repo **`AGENTS.md`** (plan → review → implement; no `git add` unless the researcher asks).
 
-## Done: Steps 1 and 2
+## Pipeline (today)
 
-- **Step 1 — Robustness:** `Abstractor.addTypeDesc` / `addTypeDescImpl` and `addDeclaration` / `addTypeDeclaration` (try/catch, `getTypeDeclaration()`, wildcards incl. lower bounds w/ `Object` as unbounded, anonymous/local, annotation → `notice` + `objectDesc`, `<nulltype>` guard). `Analyzer` null-safe field usage and non-null `invokes`. `processPendingMetrics` batching to avoid `ConcurrentModificationException`.
-- **Step 2 — External types:** `Baker.basicForBoxedOrString`. `Abstractor.addExternalStub` (stub `InterfaceDecl` cache by erasure QN, `InterfaceInst` + `setRefForElem` for parameterized JDK types). Shadow / unresolved / failed resolution → `addExternalStub`, not raw `objectDesc` for those paths.
+- **CLI:** `abstractor.app.App` → `Abstractor.prepareMavenProject` → **`performAbstraction()`** → `Project.toJson(JsonHelper)`.
+- **Queues:** `pendingPackages`, `pendingMetrics` (batch drain in `processPendingMetrics`).
+- **Finish:** `consolidateCons` → `crossConnectConstructs` → `Validator.validate` (no separate `Resolver` class yet).
+- **Helpers:** `abstractor.core.spoonUtils.SpoonUtils`; post-walk checks in `abstractor.core.validator.Validator`.
 
-Canonical checklist and narrative: **`.agents/planning/2026-05-01-java-abstractor-completion/implementation/plan.md`** (“Completion status” at top).
+## Implemented (do not re-plan)
 
-## Next: Step 3 (enum completion)
+- Type dispatch: `getTypeDeclaration()`, wildcards (`?` / extends / super), `<nulltype>` → `anyDesc`, annotations skipped, anonymous/local types ignored in `addTypeDesc` (notice).
+- Boxing: `Baker.basicForBoxedOrString` for JDK wrappers + `String`.
+- Interface **`inherits`** on declared interfaces and object-synthesized interfaces.
+- Enum shell: `addEnum` → `ObjectDecl` + `$value` struct; enum constants → package **`Value`** (type ref still TODO).
+- Constructors as `MethodDecl` with `constructor` flag; explicit constructors only (implicit skipped).
+- Nested types: `$nest` / `$super` struct fields; nested type walk from outer class.
+- **`crossConnectConstructs`:** wires methods, objects, interface decls, and values into packages.
 
-Read **`implementation/plan.md` § Step 3** unchanged. Code touchpoints:
+## Next: Step 1 (enum completion)
 
-- **`Abstractor.addEnum`** / `addObjectDecl` for `CtEnum` — enum constants as **`Value`** in package; struct / `$value` field; user methods (not `values()` / `valueOf()` noise per plan).
-- **`addDeclaration`**: ensure **`CtEnum`** ordering vs **`CtClass`** remains correct.
-- Tests: plan calls for **`test1006`** (create under `testData/java/` + `AppTests` hook) with expected YAML per `genFeatureDef.md`.
+Canonical spec: **`.agents/planning/2026-05-01-java-abstractor-completion/implementation/plan.md`** Step 1.
+
+- **`Abstractor.addEnum` finisher:** user methods (not `values()` / `valueOf()`), super-interfaces, set `Value.type` to enum object ref.
+- **Fixture:** `testData/java/test1006` should be an enum test (source today is nested generics — fix when implementing).
+
+## Near-term backlog (plan Steps 2–11)
+
+Package static **values**, **`ObjectDecl.nest`**, anonymous/lambda **metrics** walk, **JDK stub** types (shadow → stub `InterfaceDecl`, not only `anyDesc`), **metrics** writes/method-refs, **`ObjectInst`/`MethodInst`**, **Resolver** extraction, **package imports** from usage, test/golden cleanup, **TDD run script**.
 
 ## Tests / hygiene
 
-- Prefer **no `System.out.println`** in small `Tester` / `test100N` fixtures (Spoon expands JDK).
-- Full **`mvn test`**: researcher may still be fixing **`MetricsTests`** YAML and Maven **`AppTests.test0001` / `test0002`** goldens.
-- Fixtures: **`test1004`** (Step 1), **`test1005`** (Step 2), **`RobustnessTests`**.
+- Prefer **no `System.out.println`** in `Tester` / single-file fixtures (Spoon pulls JDK `System`).
+- **`AppTests`:** `test0001`, `test0002`, `test1001`–`test1006`.
+- **`RobustnessTests`**, **`MetricsTests`** (metrics YAML may need refresh when Step 6 lands).
 
 ## Design references
 
-- Output schema: **`docs/genFeatureDef.md`**
-- Gap list (partially stale vs Steps 1–2): **`research/gap-analysis.md`**
-- Architecture snapshot: **`research/current-state.md`**
-- Summary: **`summary.md`**
+- Schema: **`docs/genFeatureDef.md`**
+- Gaps: **`research/gap-analysis.md`**, architecture snapshot: **`research/current-state.md`**
+- Plan summary: **`summary.md`**

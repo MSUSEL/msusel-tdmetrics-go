@@ -6,7 +6,7 @@ Findings from the consistency/completeness review of `.agents/summary/`.
 
 - **Pipeline framing is consistent** across `codebase_info.md`, `architecture.md`, and `workflows.md` (3-component pipeline communicating via `genFeatureDef.md`).
 - **Construct vocabulary** is used consistently in `data_models.md`, `interfaces.md`, and `components.md` and matches `docs/genFeatureDef.md`'s table of contents.
-- **Java-abstractor plan progress** (Steps 1–2 done, Step 3 next) is referenced consistently and matches `.agents/planning/2026-05-01-java-abstractor-completion/implementation/plan.md` and the existing `AGENTS.md`.
+- **Java-abstractor plan** trimmed to 11 remaining steps; docs aligned with `performAbstraction`, shadow→`anyDesc`, partial enums, and `test1006` fixture mismatch noted.
 - **Runner stub** is noted in `components.md`, `interfaces.md`, and the index. No drift.
 - **CLI flag descriptions** for goAbstractor were derived from `goAbstractor/main.go` (the `argObject` struct). For javaAbstractor, only the *runtime fields* on `Config` consumed in `App.java` are described — the literal flag names are owned by `Config` (not read in this analysis). If you want CLI-flag accuracy verified, ask for a follow-up that reads `Config.java`.
 
@@ -25,7 +25,7 @@ These are areas where the documentation is intentionally lighter than the source
 ## Recommendations
 
 - **Refresh after Step 3 lands** (enum completion). Update `data_models.md` and `workflows.md` to mention `Value` constructs being emitted for enum constants and any structural changes to `ObjectDecl` for `CtEnum`.
-- **Refresh when the Resolver pipeline is extracted** (Step 12). The current Java-abstractor flow diagram in `architecture.md` shows a single-phase walk; add the resolver sub-flow when it exists.
+- **Refresh when the Resolver pipeline is extracted** (plan Step 8). Update `architecture.md` / `workflows.md` with resolver sub-steps when `Resolver.java` exists.
 - **Re-run the SOP after the Runner is implemented**, replacing the "stub" notes in `components.md`, `interfaces.md`, and `index.md` with the real CLI surface.
 - **Consider a `glossary.md`** if more researchers join — terms like `participation`, `WMC`, `TCC`, `ATFD`, `Cmp`, `pinning`, and the construct names benefit from a single short reference.
 - **`AGENTS.md` will be reworked** by the researcher after this run (per the user message). When the new structure stabilizes, this index and `workflows.md` should be updated to reflect any new agent rules (e.g. file-modification scopes mentioned in chat: free-edit `.agents/`, `.cursor/`, `AGENTS.md`; ask-first elsewhere; never `git add`/`commit`/`push`).
@@ -34,7 +34,7 @@ These are areas where the documentation is intentionally lighter than the source
 
 The documents most likely to drift first:
 - **`workflows.md`** — Java-abstractor flow will change when the resolver phase is extracted.
-- **`components.md`** — Java construct list may grow (e.g. when `Value` work for Step 4 lands).
+- **`components.md`** — refresh when `ObjectDecl.nest`, package `Value`s, or JDK stub cache land.
 - **`interfaces.md`** — Runner CLI will replace the stub note.
 
 Auto-generated metrics (file counts, line counts) are intentionally avoided so they don't go stale.

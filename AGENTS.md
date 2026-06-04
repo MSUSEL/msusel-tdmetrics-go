@@ -7,7 +7,7 @@ PhD research pipeline for technical-debt analysis of procedural and OO languages
 - Three components, one shared schema:
   - `goAbstractor/` (Go 1.25) and `javaAbstractor/` (Java 17 + Spoon 11.2.0) both emit JSON conforming to **`docs/genFeatureDef.md`**.
   - `techDebtMetrics/` (.NET 8) consumes that JSON to compute design-recovery and technical-debt metrics.
-- Active workstream: **complete the Java abstractor** so it can process all 31 Apache projects in `javaAbstractor/tdd/td_V2.db`. Plan: `.agents/planning/2026-05-01-java-abstractor-completion/implementation/plan.md` (Steps 1–2 done; Step 3 = enums next).
+- Active workstream: **complete the Java abstractor** so it can process all 31 Apache projects in `javaAbstractor/tdd/td_V2.db`. Plan: `.agents/planning/2026-05-01-java-abstractor-completion/implementation/plan.md` (**11 remaining steps**; **Step 1 = enum completion** next).
 - Researcher controls all changes. Plan first, write only when asked, never run `git add` / `git commit` / `git push`. See **Custom Instructions** below.
 
 ## Repository Layout
@@ -50,11 +50,13 @@ flowchart LR
 
 ### javaAbstractor key entry points
 
-- `abstractor.app.App` — CLI driver; reads `Config` (Apache Commons CLI), constructs `Logger` + `Project` + `Abstractor`, calls `addMavenProject` then `finish` then `Project.toJson(JsonHelper)`.
-- `abstractor.core.Abstractor` — Spoon walk. Notable state: `pendingMetrics` (drained in batches by `processPendingMetrics` to avoid `ConcurrentModificationException`); `externalInterfaceStubByErasure` (stub `InterfaceDecl` cache by erasure-qualified name).
-- `abstractor.core.constructs.*` — one class per construct, plus `Factory<T>` + `Ref<T>` infrastructure and `Baker` (well-known basics, `basicForBoxedOrString` for JDK boxed types and `String`).
+- `abstractor.app.App` — CLI driver; `prepareMavenProject` → `performAbstraction()` → `Project.toJson(JsonHelper)`.
+- `abstractor.core.Abstractor` — Spoon walk + finish (`consolidateCons`, `crossConnectConstructs`, `validate`). Queues: `pendingPackages`, `pendingMetrics` (batch drain).
+- `abstractor.core.spoonUtils.SpoonUtils` — element descriptions, package paths, JDK shape helpers.
+- `abstractor.core.validator.Validator` — post-walk graph checks.
+- `abstractor.core.constructs.*` — one class per construct, `Factory<T>` + `Ref<T>`, `Baker` (`anyDesc`, `$Array`, `basicForBoxedOrString`).
 - `abstractor.core.json.*` — JSON build/parse/format with `JsonHelper` toggles (`writeKinds`, `writeIndices`, `writeRefs`).
-- The Java abstractor today is a single-phase walk + JSON. A separate resolver pass is planned (Step 12).
+- Resolver extraction is planned (implementation plan Step 8); finish logic still lives on `Abstractor`.
 
 ### techDebtMetrics key entry points
 
@@ -70,7 +72,7 @@ flowchart LR
 These differ from defaults and matter when writing code:
 
 - **Cross-language pattern mirror**: Java loosely mirrors Go for maintainability — `Factory<T>` + `Ref<T>`, `Cmp`/`CmpOptions`, `Jsonable.toJson(JsonHelper)`, `Logger` with push/pop indentation. Use the existing pattern even when a more idiomatic per-language one exists.
-- **External JDK/library types (Java)**: emit **named stubs**, not collapsed-to-`Object`. Boxed primitives + `String` route through `Baker.basicForBoxedOrString` to shared `Basic`s; everything else through `Abstractor.addExternalStub` (cached by erasure-QN, parameterized refs become `InterfaceInst`).
+- **External JDK/library types (Java)**: boxed primitives + `String` → `Baker.basicForBoxedOrString` → shared `Basic`s. Shadow types today → `Baker.anyDesc()`; **named stub `InterfaceDecl`s** are target behavior (plan Step 5).
 - **Annotations (Java)**: used to inform analysis; do **not** emit them as constructs. `CtAnnotationType` → `Logger.notice` + `objectDesc`.
 - **Anonymous classes and lambdas (Java)**: fold into the enclosing method's metrics. Named nested classes are separate objects with a `nest` field.
 - **Generic instantiations**: tracked as distinct constructs (`ObjectInst`, `MethodInst`, `InterfaceInst`).
@@ -82,20 +84,18 @@ These differ from defaults and matter when writing code:
 
 ## Test Layout (non-obvious bits)
 
-- `testData/go/test0001`–`test0018` and `testData/java/{test0001,test0002,test1001..test1005}`. Each fixture pairs source with an `abstraction.yaml` golden (some Go fixtures also carry `expStub.txt`).
+- `testData/go/test0001`–`test0018` and `testData/java/{test0001,test0002,test1001..test1006}`. Each fixture pairs source with an `abstraction.yaml` golden (some Go fixtures also carry `expStub.txt`).
 - Java tests under `javaAbstractor/src/test/java/abstractor/`:
   - `AppTests` — full-Maven fixtures.
   - `core.Tester` — single-file fixture harness.
-  - `core.RobustnessTests` (Step 1), `core.MetricsTests` (currently being stabilized), `core.JsonTests`, `core.DiffTests`, `core.IterTests`.
+  - `core.RobustnessTests`, `core.MetricsTests`, `core.JsonTests`, `core.DiffTests`, `core.IterTests`.
 - Run filters: `mvn -Dtest="abstractor.AppTests#test0001" test`, `dotnet test --filter <name>`.
 
 ## Active Plan
 
-`.agents/planning/2026-05-01-java-abstractor-completion/` (15 steps, ordered). Status:
+`.agents/planning/2026-05-01-java-abstractor-completion/` — **11 remaining steps** in `implementation/plan.md`.
 
-- ✅ Step 1 — Robustness (type dispatch hardening).
-- ✅ Step 2 — External type stubs and boxing.
-- ▶️ Step 3 — Enum completion. Touchpoints: `Abstractor.addEnum` / `addObjectDecl` for `CtEnum` (constants as `Value` in package; struct + `$value` field; user methods only — skip `values()` / `valueOf()` noise). New fixture `test1006`.
+- ▶️ **Step 1 — Enum completion:** finish `addEnum` (methods, super-interfaces, `Value.type`); align `test1006` with an enum fixture (source there today is nested generics).
 
 See `summary.md` and `.cursor/rules/java-abstractor-handoff.mdc` for the concise handoff.
 
@@ -172,10 +172,9 @@ Never proceed to the next step without the user's explicit direction.
 
 ### Project Context
 
-- **Progress**: Steps **1–2** of `.agents/planning/2026-05-01-java-abstractor-completion/implementation/plan.md`
-  are implemented; **Step 3** (enum completion) is next when tests are stable.
-  See that file's "Completion status" section and `.cursor/rules/java-abstractor-handoff.mdc`
-  for a concise handoff.
+- **Progress**: Robust dispatch, boxing, interface `inherits`, partial enums, and
+  cross-connect are in tree. **Next:** plan Step 1 (enum completion). See
+  `implementation/plan.md` and `.cursor/rules/java-abstractor-handoff.mdc`.
 - **Goal**: Complete the Java Abstractor (`javaAbstractor/`) so it can
   process all 31 Apache Java projects in the Technical Debt Dataset (TDD).
 - **Output format**: JSON/YAML conforming to `docs/genFeatureDef.md`.
@@ -186,7 +185,7 @@ Never proceed to the next step without the user's explicit direction.
 
 ### Key Design Decisions
 
-- External (JDK/library) types: named stubs, not collapsed to `Object`.
+- External (JDK/library) types: boxed/`String` → `Basic`; named stubs for other shadow types (planned — today often `anyDesc`).
 - Annotations: use to inform analysis, do not output as constructs.
 - Anonymous classes and lambdas: fold into enclosing method metrics.
 - Named nested classes: separate objects with `nest` field.

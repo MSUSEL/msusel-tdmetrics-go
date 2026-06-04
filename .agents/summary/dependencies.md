@@ -57,7 +57,7 @@ Solution: `techDebtMetrics/techDebtMetrics.sln`. Each project has its own `.cspr
 
 ## TDD Database
 
-`javaAbstractor/tdd/td_V2.db` (SQLite, gitignored) — Technical Debt Dataset enumeration of 31 Apache Java projects targeted for Step 15 validation. Schema described in `.agents/planning/2026-05-01-java-abstractor-completion/research/td-dataset.md`.
+`javaAbstractor/tdd/td_V2.db` (SQLite, gitignored) — 31 Apache Java projects for plan Step 11 validation. Schema: `research/td-dataset.md`.
 
 ## Developer Tooling
 

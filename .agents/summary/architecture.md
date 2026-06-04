@@ -39,7 +39,7 @@ Each abstractor is independently runnable and produces the same canonical output
 
 - **Pipeline-of-tools**: components communicate through files (JSON/YAML), not in-process.
 - **Schema-first**: the JSON schema (`docs/genFeatureDef.md`) is the contract. Adding a new construct requires changes in (a) at least one abstractor, (b) the schema doc, and (c) `techDebtMetrics/Constructs/`.
-- **Two-phase abstraction**: each abstractor walks the AST to populate raw constructs, then runs a resolver/post-processing pass to compute cross-references, instantiations, inheritance, and metrics. The Go abstractor implements this fully; the Java abstractor is migrating toward it (Step 12 of the active plan).
+- **Two-phase abstraction**: each abstractor walks the AST, then post-processes (consolidate, cross-connect, validate; Go adds a full resolver). Java finish is on `Abstractor.performAbstraction` today; a dedicated `Resolver` is plan Step 8.
 - **Mirror-but-don't-share**: Go and Java abstractors are written in their host languages and reuse patterns (Factory/Ref, Cmp, Jsonable, Logger) by convention rather than by code sharing.
 
 ## goAbstractor Architecture
@@ -102,10 +102,12 @@ flowchart LR
     Walk --> Baker[Baker<br/>basics, boxed, stubs]
     Walk --> Analyzer[Analyzer<br/>method body walk]
 
-    Ab --> Pending[pendingMetrics queue]
-    Pending --> Analyzer
+    Ab --> PendingPkg[pendingPackages]
+    Ab --> PendingMet[pendingMetrics]
+    PendingMet --> Analyzer
 
-    Ab --> Validator[Validator]
+    Ab --> Finish[consolidateCons<br/>crossConnectConstructs]
+    Finish --> Validator[Validator]
     Ab --> Project[Project]
     Project --> Json[Jsonable.toJson<br/>JsonHelper]
     Json --> Out[(out.json)]
@@ -116,8 +118,10 @@ Key packages under `javaAbstractor/src/main/java/abstractor/`:
 | Package | Responsibility |
 | --- | --- |
 | `app` | CLI entrypoint (`App`) and argument parsing (`Config`). |
-| `core` | `Abstractor` (AST walk), `Analyzer` (method bodies). |
-| `core.constructs` | All construct classes; `Factory<T>` / `Ref<T>` infrastructure; `Baker` for well-known types. |
+| `core` | `Abstractor` (walk + finish), `Analyzer` (method bodies). |
+| `core.spoonUtils` | `SpoonUtils` helpers for Spoon elements and packages. |
+| `core.constructs` | Construct classes; `Factory<T>` / `Ref<T>`; `Baker` (`anyDesc`, arrays, boxing). |
+| `core.validator` | `Validator` post-walk checks. |
 | `core.json` | JSON tree, formatter, parser, `JsonHelper` writer config. |
 | `core.cmp` | Comparison utilities (`Cmp`, `CmpOptions`). |
 | `core.iter` | Iterator helpers. |
@@ -125,7 +129,7 @@ Key packages under `javaAbstractor/src/main/java/abstractor/`:
 | `core.log` | `Logger` (mirrors Go's). |
 | `core.validator` | Post-walk validation pass. |
 
-The Java abstractor currently does the walk and emits JSON in a single phase; a separate resolver pass is planned (`implementation/plan.md` Step 12). Anonymous classes and lambdas are folded into the enclosing method's metrics; named nested classes become separate objects with a `nest` field.
+Java: walk plus inline finish (no `Resolver` class yet). Anonymous/local types are not emitted as declarations (`addTypeDesc` returns null); metrics folding for their bodies is plan Step 4. Named nested classes use `$nest` on structs; schema `nest` on `ObjectDecl` is plan Step 3. Interface `inherits` is populated during the walk.
 
 ## techDebtMetrics Architecture
 
@@ -159,4 +163,4 @@ Projects in the .NET solution (`techDebtMetrics/techDebtMetrics.sln`):
 - **Logging**: indented push/pop logger in both abstractors. The Go logger is `goAbstractor/internal/logger`; the Java mirror is `abstractor.core.log`.
 - **Locations**: source-position tracking is part of the schema (Go: `internal/locs/`; Java: `core.constructs.Location`/`Locations`; .NET: `Commons.Data.Locations`).
 - **Comparison/equality**: `Cmp`/`CmpOptions` pattern in both abstractors, used for deduplication and stable ordering.
-- **External types** (Java specifically): JDK/library types are emitted as named **stub `InterfaceDecl`s** (cached by erasure-qualified name), not collapsed to `Object`. Boxed primitives and `String` map to shared `Basic` constructs via `Baker.basicForBoxedOrString`.
+- **External types** (Java): boxed primitives and `String` → `Baker.basicForBoxedOrString`. Other shadow references currently → `anyDesc`; named stub `InterfaceDecl`s are the target (plan Step 5).

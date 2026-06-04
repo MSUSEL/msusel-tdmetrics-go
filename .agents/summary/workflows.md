@@ -65,13 +65,14 @@ sequenceDiagram
 
     App->>Cfg: FromArgs(args, null)
     App->>Ab: new Abstractor(log, proj)
-    App->>Ab: addMavenProject(cfg.input)
-    Ab->>Spoon: new MavenLauncher(...).buildModel()
+    App->>Ab: prepareMavenProject(cfg.input)
+    Ab->>Spoon: MavenLauncher.buildModel()
     Spoon-->>Ab: CtModel
-    Ab->>Ab: addModel → addType → addTypeDecl/addTypeDesc
-    Ab->>Ab: pendingMetrics queued; processPendingMetrics() drains
+    App->>Ab: performAbstraction()
+    Ab->>Ab: pendingPackages → processPackage
+    Ab->>Ab: processPendingMetrics() (batch drain)
+    Ab->>Ab: consolidateCons → crossConnectConstructs
     Ab->>Ab: Validator.validate
-    App->>Ab: finish()
     App->>Proj: toJson(JsonHelper)
     Proj-->>App: JsonNode
     App->>Json: format(stream, node, "")
@@ -79,11 +80,12 @@ sequenceDiagram
 
 Notable details:
 
-- `addTypeDesc` uses `tr.getTypeDeclaration()` (not `getDeclaration()`) so shadow types are visible.
-- Type-dispatch is wrapped in try/catch; on failure, log a warning and return `baker.objectDesc()` (or `null` for declarations) rather than crashing.
-- `<nulltype>` is treated as a no-op so null-literal usage does not create stubs.
-- `processPendingMetrics` drains the queue in batches (copy + clear + process) to avoid `ConcurrentModificationException` while walking metrics adds more methods.
-- External/JDK types route through `addExternalStub` rather than producing anonymous `objectDesc`.
+- `addTypeDesc` uses `getTypeDeclaration()`; anonymous/local types return `null` (notice); `<nulltype>` → `anyDesc`.
+- Wildcards map to bounds or `anyDesc` when unbounded (`Object` bound treated as unbounded).
+- Boxed / `String` → `Baker.basicForBoxedOrString`; **`tr.isShadow()`** → `addShadowTypeDesc` → **`anyDesc`** (stubs planned).
+- `InterfaceDesc.inherits` filled from `getSuperInterfaces()` on classes and interfaces.
+- `processPendingMetrics` batch-drains to avoid `ConcurrentModificationException`.
+- Enum constants become package `Value`s; full enum modeling is plan Step 1.
 
 ## Developer Workflow (per `AGENTS.md`)
 
@@ -127,4 +129,4 @@ For the Java side, `mvn clean compile assembly:single` builds the runnable jar. 
 
 ## Java Abstractor Plan Iteration
 
-Active plan: `.agents/planning/2026-05-01-java-abstractor-completion/implementation/plan.md`. The 15 steps progress from foundational robustness (Steps 1–2 done) through enums, values, nested classes, anonymous/lambda folding, inheritance, metrics completion, generic instantiations, resolver extraction, package import derivation, cross-connection cleanup, and finally TDD project validation (Step 15 — run on all 31 Apache projects in `td_V2.db`).
+Active plan: `.agents/planning/2026-05-01-java-abstractor-completion/implementation/plan.md` — **11 steps**: enum completion, package values, `nest`, anonymous/lambda metrics, JDK stubs, metrics writes/refs, generics, resolver, imports, cleanup, TDD script.

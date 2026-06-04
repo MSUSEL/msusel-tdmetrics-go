@@ -22,14 +22,14 @@
 - **What it is**: PhD research pipeline for technical-debt analysis of procedural and OO languages (Go + Java today).
 - **Three components**: `goAbstractor/` (Go 1.25), `javaAbstractor/` (Java 17 + Spoon), `techDebtMetrics/` (.NET 8).
 - **Shared contract**: `docs/genFeatureDef.md` — the JSON schema both abstractors emit and the .NET side consumes.
-- **Active workstream**: completing the Java abstractor against the 31-project TDD; Steps 1–2 of a 15-step plan are done; Step 3 (enums) is next.
+- **Active workstream**: completing the Java abstractor against the 31-project TDD; **11-step plan** — **Step 1 (enum completion)** is next.
 - **Researcher controls all changes**: agents plan first, write only when asked, and never run destructive git commands. See `AGENTS.md`.
 
 ## Documentation Files
 
 ### `codebase_info.md`
 **Use for**: first-look orientation, repo layout, languages/tooling table, current research status.
-**Summary**: Top-level identity of the project; high-level pipeline diagram; per-directory role; per-component language/build/test/dependency table; cross-component conventions (Factory/Ref, Cmp, Jsonable, Logger); pointer to the active 15-step plan.
+**Summary**: Top-level identity of the project; high-level pipeline diagram; per-directory role; per-component language/build/test/dependency table; cross-component conventions (Factory/Ref, Cmp, Jsonable, Logger); pointer to the active Java completion plan (11 steps).
 
 ### `architecture.md`
 **Use for**: how the components fit together, internal package layouts, two-phase abstraction story, cross-cutting concerns.
@@ -37,7 +37,7 @@
 
 ### `components.md`
 **Use for**: "where is X implemented?" — finds packages, classes, files for a given concern.
-**Summary**: Component map plus per-component sub-package tables. For goAbstractor: every `internal/*` package and what it does. For javaAbstractor: every `abstractor.*` package, plus notable state (`pendingMetrics`, `externalInterfaceStubByErasure`) and the test class catalog. For techDebtMetrics: each .NET project (Commons, Constructs, DesignRecovery, TechDebt, Runner, UnitTests) and its responsibilities, including the fact that `Runner/Program.cs` is currently a `NotImplementedException` stub. Also covers `testData/`, `docs/`, planning, and Cursor agent rules.
+**Summary**: Component map plus per-component sub-package tables. For goAbstractor: every `internal/*` package and what it does. For javaAbstractor: `Abstractor`/`Analyzer`/`Baker`/`SpoonUtils`/`Validator`, queues (`pendingPackages`, `pendingMetrics`), and test classes. For techDebtMetrics: each .NET project and responsibilities (`Runner` stubbed). Also `testData/`, `docs/`, planning, Cursor rules.
 
 ### `interfaces.md`
 **Use for**: CLI flag references, the file-format contract, in-process API entry points, CI integration.
@@ -49,7 +49,7 @@
 
 ### `workflows.md`
 **Use for**: end-to-end runtime sequences, the researcher-agent interaction loop, test commands, schema-change procedure.
-**Summary**: Sequence diagrams for end-to-end pipeline, goAbstractor internal flow, and javaAbstractor internal flow (with notes on `getTypeDeclaration` vs `getDeclaration`, try/catch dispatch, `<nulltype>` handling, batched `processPendingMetrics`, and `addExternalStub` routing). Developer workflow diagram of the plan-first loop from `AGENTS.md`. Test command table. Step-by-step procedure for adding a new construct or schema change. Pointer to the 15-step Java-abstractor completion plan.
+**Summary**: End-to-end pipeline, goAbstractor and javaAbstractor flows (`performAbstraction`, inheritance, shadow→`anyDesc`, enum values). Plan-first developer loop. Test commands. Schema-change procedure. Pointer to the **11-step** Java completion plan.
 
 ### `dependencies.md`
 **Use for**: dependency versions, build tooling, external-library usage notes.
@@ -77,8 +77,8 @@ When this knowledge base is insufficient, the canonical sources are:
 ## Example Queries
 
 - *"Where is cyclomatic complexity computed for Go methods?"* → `components.md` (analyzer table) → `goAbstractor/internal/abstractor/analyzer/complexity/`.
-- *"How are JDK types like `java.lang.String` represented in the JSON?"* → `data_models.md` (External/Stub Types) → `Baker.basicForBoxedOrString` and `Abstractor.addExternalStub`.
+- *"How are JDK types like `java.lang.String` represented?"* → `data_models.md` (External/Stub Types) → `Baker.basicForBoxedOrString`; other shadows → `anyDesc` until plan Step 5.
 - *"What CLI flags does the Go abstractor accept?"* → `interfaces.md` (goAbstractor table).
 - *"Which component owns the runner today?"* → `components.md` (techDebtMetrics row showing `Runner/Program.cs` is stubbed).
-- *"What's the next step in the Java abstractor plan?"* → `codebase_info.md` (Current Research Status) and `.agents/planning/.../implementation/plan.md` Step 3.
+- *"What's the next step in the Java abstractor plan?"* → `codebase_info.md` and `implementation/plan.md` **Step 1** (enum completion).
 - *"Can the agent commit changes for me?"* → `AGENTS.md` (Git Restrictions: never).

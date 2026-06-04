@@ -1,110 +1,56 @@
 # Research: Gap Analysis
 
-## What the Abstractor Needs to Produce
+Snapshot aligned with `javaAbstractor/` source and the **remaining** implementation plan.
 
-Per `genFeatureDef.md`, a valid output JSON must contain:
+## Schema coverage (`genFeatureDef.md`)
 
-- `language`: "java" ✅
-- `locs`: location map ✅
-- `abstracts`: interface method signatures ✅
-- `arguments`: method parameters/results ✅
-- `basics`: primitive types ✅
-- `fields`: struct/class fields ✅
-- `interfaceDecls`: named interface declarations ⚠️ Partial (Step 2 adds **JDK/library stubs**; user types still primary)
-- `interfaceDescs`: interface type descriptions ⚠️ Partial
-- `interfaceInsts`: generic interface instantiations ⚠️ Arrays + **external parameterized types** (Step 2); user generics still partial
-- `methods`: method declarations ✅
-- `methodInsts`: generic method instantiations ❌ Not populated
-- `metrics`: method metrics ⚠️ Partial (usage tracking incomplete)
-- `objects`: class/object declarations ✅
-- `objectInsts`: generic object instantiations ❌ Not populated
-- `packages`: package declarations ⚠️ Imports missing
-- `selections`: field/method selections ✅
-- `signatures`: method signatures ✅
-- `structDescs`: structure descriptions ✅
-- `typeParams`: type parameters ⚠️ Partial
-- `values`: package-level variables ❌ Not populated
+| Construct / field | Status |
+| --- | --- |
+| Core decls (objects, interfaces, methods, signatures, metrics skeleton) | ✅ Largely present |
+| `InterfaceDesc.inherits` | ✅ Wired for classes and interfaces |
+| `InterfaceDesc.pin` | ⚠️ Objects and nested interfaces; declared top-level interfaces partial |
+| `Value` (package constants) | ⚠️ Enum constants only; static fields missing |
+| `ObjectDecl.nest` | ❌ Not on declaration (only `$nest` struct field) |
+| `Package.imports` | ❌ TODO in `Abstractor` |
+| `objectInsts` / `methodInsts` | ⚠️ / ❌ Skeleton / empty |
+| Shadow JDK types as named stubs | ❌ Currently `anyDesc` via `addShadowTypeDesc` |
 
-## Priority-Ordered Gap List
+## Priority gaps (for TDD-scale runs)
 
-### P0: Must Fix for Basic Functionality
+### P0 — Correctness on real projects
 
-These will cause crashes or fundamentally incorrect output on real projects:
+1. **Enum completion** — methods, `Value.type`, super-interfaces; fix `test1006`.
+2. **Metrics writes & method references** — participation depends on `writes` and full `invokes`.
+3. **External type stubs** — bounded named stubs instead of collapsing shadow types to `anyDesc` only.
 
-1. **Error handling / robustness** — **largely addressed (Step 1):**
-   `addTypeDesc` / `addDeclaration` use guarded dispatch, logging, and fallbacks;
-   shadow / unresolved types go through **`addExternalStub`** (Step 2) instead of
-   throwing. Residual edge cases should still log warnings and continue; file
-   issues as you find them on TDD projects.
+### P1 — Schema completeness
 
-2. **Package imports**: The `getImports()` method is a debug stub. Package
-   import relationships are needed for the downstream metrics pipeline.
+4. **Package-level static values** — `public static final` / static fields as `Value`.
+5. **`ObjectDecl.nest`** — named nested classes distinct in Cmp/JSON.
+6. **Generic instances** — finish `ObjectInst`, then `MethodInst`.
+7. **Anonymous / lambda metrics** — ensure body walk under enclosing method.
 
-3. **Interface inheritance**: `getSuperInterfaces()` for both `CtClass` and
-   `CtInterface` are not connected. This means the `inherits` field on
-   `InterfaceDesc` is always empty.
+### P2 — Pipeline & polish
 
-4. **Class super-interfaces**: `addObjectDecl` doesn't connect
-   `c.getSuperInterfaces()` to the object's synthesized interface description.
+8. **Resolver extraction** — ordered post-walk phases (imports, interface generation timing).
+9. **Package imports** — derive from type usage in Resolver step.
+10. **Analyzer debug flags** — verbose-driven, not hardcoded `true`.
+11. **Goldens** — `test0001`/`test0002` and single-file fixtures as features land.
 
-5. **Enum completion**: Enums are partially handled but enum constant values
-   are not added to packages.
+### P3 — Validation
 
-### P1: Needed for Correct Output
+12. **TDD script** — run abstractor on cloned Apache projects from `td_V2.db`.
 
-6. **Values**: Package-level static fields and constants need to be extracted.
+## Research-critical metrics
 
-7. **Interface pinning**: `InterfaceDesc.pin` is not set for declared interfaces.
+| Need | Status |
+| --- | --- |
+| Method ↔ class membership | ✅ `ObjectDecl.methodDecls` |
+| Per-method complexity / size | ✅ Mostly |
+| Invocations | ⚠️ `CtInvocation` yes; method refs / constructors incomplete |
+| Reads / writes for participation | ⚠️ Reads yes; writes TODO |
+| Package dependency graph | ❌ `imports` empty |
 
-8. **Nested type handling**: Both nested classes and nested interfaces need
-   proper scoping (differentiating `Outer.Inner` from `Other.Inner`).
+## Suggested order
 
-9. **Generic instantiation tracking**: `ObjectInst` and `MethodInst` are not populated.
-   **`InterfaceInst`** is used for Baker arrays and **external** parameterized types
-   (Step 2); user-declared generic instantiations remain incomplete.
-
-### P2: Needed for Accurate Metrics
-
-10. **Metrics: assignment usage** (`addAssignmentUsage`): Writes are not tracked.
-
-11. **Metrics: executable reference usage** (`addExecutableReferenceUsage`):
-    Invocations through references not tracked.
-
-12. **Constructor flag**: MethodDecl doesn't distinguish constructors from methods.
-
-### P3: Cleanup
-
-13. Remove debug `println` statements from `getImports()`.
-14. Set `logElementTree` and `logUsage` to `false` or make configurable.
-15. Fix `test0001/abstraction.yaml` to remove `youShallNotPass`.
-16. Cross-connection: Add interface declarations and values to packages.
-
-## Research Context from Dissertation
-
-The dissertation focuses on **participation** as a fuzzy estimate of membership
-for TD analysis. The key metrics needed from the abstractor are:
-
-- **Membership**: Which methods belong to which classes (objects). ✅ Available
-  via `ObjectDecl.methods`.
-- **Metrics per method**: Complexity, line count, code count, indents. ⚠️ Partial.
-- **Invocations**: What methods call what other methods. ⚠️ Partial.
-- **Reads/Writes**: What types (fields) are accessed by each method. ⚠️ Partial.
-- **Package structure**: Import dependencies between packages. ❌ Missing.
-
-The participation matrix requires knowing which objects are **accessed** (read/written)
-by each method. This means the metrics reads/writes tracking is especially important
-for the research goals.
-
-## Suggested Implementation Order
-
-Given the research goals and the need to work on real TDD projects:
-
-1. **Robustness first**: Handle all type descriptor cases gracefully so the
-   abstractor doesn't crash on real projects (annotations, anonymous classes,
-   lambdas, shadow types, wildcards, etc.).
-2. **Package imports**: Complete import tracking.
-3. **Inheritance**: Connect interface/class inheritance chains.
-4. **Metrics completeness**: Finish reads/writes/invocations tracking.
-5. **Values and enums**: Extract package-level constants and enum values.
-6. **Generic instances**: Track real generic instantiations.
-7. **Cleanup**: Remove debug code, fix tests.
+Matches `implementation/plan.md` Steps 1–11: enums → values → nest → anonymous/lambda metrics → JDK stubs → metrics completion → generics → resolver → imports → cleanup → TDD script.

@@ -106,20 +106,21 @@ Generics produce three distinct **instance** constructs:
 - `ObjectInst` — instantiation of a generic class/struct.
 - `MethodInst` — instantiation of a generic method.
 
-In the Java abstractor, parameterized references to JDK types produce an `InterfaceInst` whose generic source is a stub `InterfaceDecl` cached by erasure-qualified name; non-parameterized JDK references reuse the stub directly.
+In the Java abstractor, Baker provides generic **`$Array`** / `InterfaceInst` for array types. User-side and JDK **`ObjectInst` / `MethodInst`** population is in progress (plan Step 7).
 
 ## External / Stub Types (Java)
 
-JDK and library types that are not part of the analyzed source are represented as:
+JDK and library types outside the analyzed compilation unit:
 
-- **Boxed primitives + `String`** → shared `Basic` constructs via `Baker.basicForBoxedOrString` (e.g. `java.lang.Integer` → `int`, `java.lang.String` → `string`).
-- **Other external types** → cached stub `InterfaceDecl` (empty `InterfaceDesc`, package path derived from the qualified name, `$` separating nested type names). Created by `Abstractor.addExternalStub`.
+- **Boxed primitives + `String`** → shared `Basic` via `Baker.basicForBoxedOrString`.
+- **Shadow types (today)** → `Abstractor.addShadowTypeDesc` returns `Baker.anyDesc()`.
+- **Target** → named stub `InterfaceDecl` per erasure-qualified name; parameterized refs → `InterfaceInst` (plan Step 5).
 
-This avoids collapsing all external usage to `Object` while keeping output bounded.
+Arrays use Baker’s synthetic `$Array` declaration, not JDK `java.lang` stubs.
 
 ## TDD Database (input metadata)
 
-`javaAbstractor/tdd/td_V2.db` (SQLite) is the Technical Debt Dataset. It enumerates 31 Apache Java projects that the Java abstractor must successfully process (Step 15 of the active plan). Schema notes are in `.agents/planning/2026-05-01-java-abstractor-completion/research/td-dataset.md`.
+`javaAbstractor/tdd/td_V2.db` (SQLite) enumerates 31 Apache Java projects for end-to-end validation (plan Step 11). Schema: `research/td-dataset.md`.
 
 ## Output Formats
 

@@ -45,7 +45,7 @@ Run example: `go run ./main.go -i <module path> -o out.json`.
 
 Defined in `abstractor.app.Config` (uses `commons-cli`). Exact flags are parsed by `Config.FromArgs(args, null)` in `App.java`. Notable runtime fields used by `App`:
 
-- `cfg.input` — Maven project path (passed to `MavenLauncher` via `Abstractor.addMavenProject`).
+- `cfg.input` — Maven project path (`Abstractor.prepareMavenProject`).
 - `cfg.output` — output JSON path (stdout if null).
 - `cfg.minimize` — toggles `JsonFormat.Minimize()` vs `cfg.defaultFormat`.
 - `cfg.writeKinds`, `cfg.writeIndices`, `cfg.writeRefs` — JSON verbosity toggles wired into `JsonHelper`.
@@ -91,10 +91,11 @@ The C# `Constructs` project (`techDebtMetrics/Constructs/`) is a one-to-one cons
 
 ### javaAbstractor
 
-- `abstractor.core.Abstractor` — `addMavenProject(String)`, `addModel(CtModel)`, `finish()`.
+- `abstractor.core.Abstractor` — `prepareMavenProject`, `prepareClassesFromSource`, `performAbstraction()`.
 - `abstractor.core.constructs.Project.toJson(JsonHelper)` — emits the JSON tree.
-- `abstractor.core.constructs.Factory<T>` + `Ref<T>` — uniform factory/lazy-resolution pattern (mirrors Go).
-- `abstractor.core.constructs.Baker` — lookup for shared basics, including `basicForBoxedOrString(qualifiedErasure)` for JDK boxed/String types.
+- `abstractor.core.constructs.Factory<T>` + `Ref<T>` — factory/lazy-resolution (mirrors Go).
+- `abstractor.core.constructs.Baker` — `anyDesc`, `$Array`, `basicForBoxedOrString`.
+- `abstractor.core.validator.Validator` — post-walk validation.
 - `abstractor.core.log.Logger` — `error`, `notice`, `warn`, push/pop indentation.
 
 ### techDebtMetrics
