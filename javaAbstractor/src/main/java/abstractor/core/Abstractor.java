@@ -584,6 +584,8 @@ public class Abstractor {
                             return new Value(od.pkg, loc, name, true, null, ref);
                         });
                 }
+
+                // TODO: Add methods that have been added to the enum?
             });
     }
 
@@ -619,17 +621,25 @@ public class Abstractor {
         // Check it tr is an instantiation or skip.
         final List<CtTypeReference<?>> typeArgs = tr.getActualTypeArguments(); 
         if (typeArgs.size() <= 0) return null;
-
-        final ArrayList<Ref<? extends TypeDesc>> instanceTypes = new ArrayList<>();
-        for (CtTypeReference<?> typeArg : typeArgs)
-            instanceTypes.add(this.addTypeDesc(typeArg));
+        boolean diffTypeArgs = false;
+        for (CtTypeReference<?> typeArg : typeArgs) {
+            final CtTypeParameter typeParam = typeArg.getTypeParameterDeclaration();
+            if (typeParam == null || typeParam == typeArg) {
+                System.out.println(">>"+typeParam+"<<"+typeArg); // TODO: REMOVE
+                diffTypeArgs = true;
+                break;
+            }
+        }
+        if (!diffTypeArgs) return null;
 
         // TODO: Implement
 
         return this.proj.objectInsts.create(this.log, tr,
             "object instance " + SpoonUtils.describeElem(tr),
             () -> {
-
+                final ArrayList<Ref<? extends TypeDesc>> instanceTypes = new ArrayList<>();
+                for (CtTypeReference<?> typeArg : typeArgs)
+                    instanceTypes.add(this.addTypeDesc(typeArg));
 
                 final Ref<StructDesc> resData = this.addStruct(tr.getTypeDeclaration());
                 final Ref<InterfaceDesc> resInterface = null; // TODO: Finish
