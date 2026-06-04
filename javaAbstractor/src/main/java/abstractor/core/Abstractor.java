@@ -742,11 +742,13 @@ public class Abstractor {
             this.pendingMetrics.clear();
             for (CtExecutable<?> m : methods) {
                 if (m.getBody() == null) {
-                    this.log.log("skipping metrics for " + SpoonUtils.describeElem(m) + ": null body");
+                    // Use the following for debugging, but it is commented out since it can be noisy.
+                    //this.log.log("skipping metrics for " + SpoonUtils.describeElem(m) + ": null body");
                     continue;
                 }
                 if (m.getBody().getStatements().isEmpty()) {
-                    this.log.log("skipping metrics for " + SpoonUtils.describeElem(m) + ": empty statement list");
+                    // Use the following for debugging, but it is commented out since it can be noisy.
+                    //this.log.log("skipping metrics for " + SpoonUtils.describeElem(m) + ": empty statement list");
                     continue;
                 }
 

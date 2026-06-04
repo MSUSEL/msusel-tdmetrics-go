@@ -1,2 +1,4 @@
 test*/target/
 test*/spoon.classpath-app.tmp
+test*/abstraction.diff
+test*/abstraction.log

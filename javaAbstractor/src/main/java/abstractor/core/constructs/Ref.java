@@ -86,7 +86,7 @@ public class Ref<T extends Construct> extends ConstructImp {
             if (this.isResolved())
                 obj.put("resHash", this.res.hashCode());
             if (this.elem != null) {
-                obj.put("elemHash", this.elem.hashCode());
+                obj.put("elemKey", getElemOrderKey(this.elem));
                 obj.put("elemType", this.elem.getClass().getSimpleName());
             }
         }

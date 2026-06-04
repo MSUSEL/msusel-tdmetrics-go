@@ -1,6 +1,8 @@
 package abstractor.core.iter;
 
+import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 import java.util.NoSuchElementException;
 
 public class Iter {
@@ -66,5 +68,11 @@ public class Iter {
             }
         }
         return new ArrayIter(values);
+    }
+
+    public static <T> List<T> ToList(Iterable<T> it) {
+        List<T> actualList = new ArrayList<T>();
+        it.forEach(actualList::add);
+        return actualList;
     }
 }

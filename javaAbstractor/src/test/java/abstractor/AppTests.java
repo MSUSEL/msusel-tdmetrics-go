@@ -1,15 +1,12 @@
 package abstractor;
 
-import java.io.ByteArrayOutputStream;
-import java.io.PrintStream;
+import java.io.*;
 
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 
 import abstractor.app.App;
 import abstractor.app.Config;
 import abstractor.core.Tester;
-import abstractor.core.require.Require;
-import abstractor.core.diff.Diff;
 import abstractor.core.json.JsonFormat;
 import abstractor.core.json.JsonNode;
 
@@ -42,6 +39,8 @@ public class AppTests {
     static private void runApp(String testName) throws Exception {
         final String testPath = "../testData/java/" + testName;
         final String absFile  = testPath + "/abstraction.yaml";
+        final String diffFile = testPath + "/abstraction.diff";
+        final String logFile  = testPath + "/abstraction.log";
 
         final ByteArrayOutputStream buffer = new ByteArrayOutputStream();
         final ByteArrayOutputStream logBuf = new ByteArrayOutputStream();
@@ -61,31 +60,32 @@ public class AppTests {
         try {
             final boolean success = App.run(cfg);
             if (!success) {
-                System.out.println(logBuf.toString());
-                Require.failure("App.run returned false.");
+                Tester.printLogs(logBuf, logFile);
+                Assertions.fail("App.run returned false.");
             }
         } catch(Exception ex) {
-            System.out.println(logBuf.toString());
-            Require.failure(ex);
+            Tester.printLogs(logBuf, logFile);
+            Assertions.fail(ex);
         }
 
         final JsonNode expJson = JsonNode.parseFile(absFile);
         final String exp = format.format(expJson);
         final String result = buffer.toString().trim();
         if (!exp.equals(result)) {
-            System.out.println(logBuf.toString());
-            final String diff = String.join("\n\t", new Diff().PlusMinusByLine(exp, result));
-            System.out.println("Error: unexpected lines\n\t" + diff);
-            Require.failure("unexpected lines (see diff above)");
+            Tester.printLogs(logBuf, logFile);
+            Tester.printDiff(exp, result, diffFile);
+            Assertions.fail("unexpected lines (see diff)");
         }
     }
 
     static private void testClass(String testName, String className) throws Exception {
         final String testPath = "../testData/java/" + testName;
         final String absFile  = testPath + "/abstraction.yaml";
+        final String diffFile = testPath + "/abstraction.diff";
+        final String logFile  = testPath + "/abstraction.log";
 
         final Tester t = new Tester(4);
         t.addClassFromFile(testPath+"/"+className+".java");
-        t.checkProjectWithFile(absFile);
+        t.checkProjectWithFile(absFile, diffFile, logFile);
     }
 }

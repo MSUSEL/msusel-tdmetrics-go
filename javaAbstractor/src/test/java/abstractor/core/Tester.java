@@ -1,16 +1,16 @@
 package abstractor.core;
 
-import static org.junit.jupiter.api.Assertions.*;
-
-import java.io.ByteArrayOutputStream;
-import java.io.PrintStream;
+import java.io.*;
 import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Paths;
+import java.nio.file.*;
+import java.util.List;
+
+import org.junit.jupiter.api.*;
 
 import abstractor.core.constructs.Construct;
 import abstractor.core.constructs.Project;
 import abstractor.core.diff.Diff;
+import abstractor.core.iter.Iter;
 import abstractor.core.json.JsonFormat;
 import abstractor.core.json.JsonHelper;
 import abstractor.core.json.JsonNode;
@@ -18,6 +18,8 @@ import abstractor.core.json.Jsonable;
 import abstractor.core.log.Logger;
 
 public class Tester {
+    static final int switchLogOutputLines = 2000;
+    static final int switchDiffOutputLines = 500;
     
     static public Tester classesFromSource(String ...lines) {
         final Tester t = new Tester(4);
@@ -50,15 +52,39 @@ public class Tester {
     }
 
     public void printLogs() {
-        if (this.buffer.size() <= 0) {
+        this.printLogs(null);
+    }
+
+    public void printLogs(String logFile) {
+        printLogs(this.buffer, logFile);
+    }
+
+    static public void printLogs(ByteArrayOutputStream logBuf, String logFile) {
+        if (logBuf.size() <= 0) {
             System.out.println("No logs");
             return;
         }
-        System.out.println("===[ Logs ]=======================");
-        System.out.println(this.buffer.toString());
-        System.out.println("==================================");
-        System.out.flush();
-        this.buffer.reset();
+
+        String logStr = logBuf.toString();
+        logBuf.reset();
+
+        if (logFile != null && !logFile.isBlank() && logStr.lines().count() > switchLogOutputLines) {
+            try {
+                BufferedWriter writer = new BufferedWriter(new FileWriter(logFile));
+                writer.append(logStr);
+                writer.flush();
+                writer.close();
+                System.out.println("Logs written to "+logFile);
+                System.out.flush();
+            } catch (Exception ex) {
+                Assertions.fail("Failed to write log file", ex);
+            }
+        } else {
+            System.out.println("===[ Logs ]=======================");
+            System.out.println(logStr);
+            System.out.println("==================================");
+            System.out.flush();
+        }
     }
 
     /**
@@ -86,31 +112,31 @@ public class Tester {
             this.ab.performAbstraction();
         } catch (Exception ex) {
             this.printLogs();
-            fail(ex);
+            Assertions.fail(ex);
         }
 
         if (this.log.errorCount() > 0) {
             this.printLogs();
-            fail("expected zero errors");
+            Assertions.fail("expected zero errors");
         }
     }
 
-    public void checkJsonWithFile(Jsonable j, String path) {
+    public void checkJsonWithFile(Jsonable j, String absFile, String diffFile, String logFile) {
         final JsonHelper jh = new JsonHelper();
         final String result = j == null ? "null" : JsonFormat.Relaxed().format(j.toJson(jh));
-        final String exp = this.formatJsonFromFile(path);
-        this.assertLines(exp, result);
+        final String exp = this.formatJsonFromFile(absFile);
+        this.assertLines(exp, result, diffFile, logFile);
     }
     
-    public void checkProjectWithFile(String path) {
-        this.checkJsonWithFile(this.proj, path);
+    public void checkProjectWithFile(String absFile, String diffFile, String logFile) {
+        this.checkJsonWithFile(this.proj, absFile, diffFile, logFile);
     }
 
     public void checkJson(Jsonable j, String ...lines) {
         final JsonHelper jh = new JsonHelper();
         final String result = j == null ? "null" : JsonFormat.Relaxed().format(j.toJson(jh));
         final String exp = this.formatJson(lines);
-        this.assertLines(exp, result);
+        this.assertLines(exp, result, null, null);
     }
     
     public void checkProject(String ...lines) {
@@ -121,7 +147,7 @@ public class Tester {
         final Construct con = this.proj.getConstructWithKey(key);
         if (con == null) {
             this.printLogs();
-            fail("unable to find "+key+" in given project");
+            Assertions.fail("unable to find "+key+" in given project");
             return;
         }
         this.checkJson(con, lines);
@@ -132,7 +158,7 @@ public class Tester {
             return JsonFormat.Relaxed().format(JsonNode.parse(lines));
         } catch(Exception ex) {
             this.printLogs();
-            fail(ex);
+            Assertions.fail(ex);
             return "This should be unreachable.";
         }
     }
@@ -142,17 +168,38 @@ public class Tester {
             return JsonFormat.Relaxed().format(JsonNode.tryParseFile(path));
         } catch(Exception ex) {
             this.printLogs();
-            fail(ex);
+            Assertions.fail(ex);
             return "This should be unreachable.";
         }
     }
 
-    public void assertLines(String exp, String result) {
+    public void assertLines(String exp, String result, String diffFile, String logFile) {
         if (!exp.equals(result)) {
-            this.printLogs();
-            final String diff = String.join("\n\t", new Diff().PlusMinusByLine(exp, result));
+            this.printLogs(logFile);
+            printDiff(exp, result, diffFile);
+            Assertions.fail("unexpected lines (see diff)");
+        }
+    }
+
+    static public void printDiff(String exp, String result, String diffFile) {
+        List<String> lines = Iter.ToList(new Diff().PlusMinusByLine(exp, result));
+        if (diffFile != null && !diffFile.isBlank() && lines.size() > switchDiffOutputLines) {
+            try {
+                BufferedWriter writer = new BufferedWriter(new FileWriter(diffFile));
+                for (String line : lines){
+                    writer.append(line);
+                    writer.append("\n");
+                }
+                writer.flush();
+                writer.close();
+                System.out.println("Unexpected lines diff written to "+diffFile);
+            } catch (Exception ex) {
+                Assertions.fail("Failed to write diff file", ex);
+            }
+        } else {
+            final String diff = String.join("\n\t", lines);
             System.out.println("Error: unexpected lines\n\t" + diff);
-            fail("unexpected lines (see diff above)");
+            System.out.flush();
         }
     }
 }
