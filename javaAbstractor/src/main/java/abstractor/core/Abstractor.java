@@ -600,8 +600,11 @@ public class Abstractor {
 
     public void addObjectInstances(CtClass<?> c, Ref<ObjectDecl> ref, ObjectDecl obj) throws Exception {
         final List<CtTypeReference<?>> refs = model.getElements(new TypeFilter<>(CtTypeReference.class));
+
+        // WARNING: getTypeDeclaration is not immutable, it will resolve lazy loaded shadow types.
+
         for (CtTypeReference<?> tr : refs) {
-            if (Objects.equals(tr.getTypeDeclaration(), c)) {
+            if (!tr.isShadow() && tr.getQualifiedName().equals(c.getQualifiedName())) {
                 // tr is a use/instantiation of class 'c'
                 this.addObjectInst(tr, ref, obj);
             }
@@ -610,7 +613,7 @@ public class Abstractor {
         final List<CtConstructorCall<?>> news = model.getElements(new TypeFilter<>(CtConstructorCall.class));
         for (CtConstructorCall<?> cc : news) {
             final CtTypeReference<?> tr = cc.getType();
-            if (Objects.equals(tr.getTypeDeclaration(), c)) {
+            if (!tr.isShadow() && tr.getQualifiedName().equals(c.getQualifiedName())) {
                 // constructor instantiation
                 this.addObjectInst(tr, ref, obj);
             }
@@ -621,6 +624,7 @@ public class Abstractor {
         // Check it tr is an instantiation or skip.
         final List<CtTypeReference<?>> typeArgs = tr.getActualTypeArguments(); 
         if (typeArgs.size() <= 0) return null;
+
         boolean diffTypeArgs = false;
         for (CtTypeReference<?> typeArg : typeArgs) {
             final CtTypeParameter typeParam = typeArg.getTypeParameterDeclaration();
@@ -651,7 +655,7 @@ public class Abstractor {
                 for (CtConstructor<?> ctor : c.getConstructors()) {
                     if (ctor.getParent().equals(c)) {
                         // Skip default constructors
-                        if (ctor.isImplicit()) {
+                        if (ctor.isImplicit()) {l
                             this.log.notice("skipping default constructor: " + ctor.getSignature());
                             continue;
                         }

@@ -60,31 +60,36 @@ public class Tester {
     }
 
     static public void printLogs(ByteArrayOutputStream logBuf, String logFile) {
-        if (logBuf.size() <= 0) {
+        String logStr = logBuf.toString();
+        logBuf.reset();
+
+        if (logFile != null && !logFile.isBlank()) {
+            if (logStr.lines().count() > switchLogOutputLines) {
+                try {
+                    BufferedWriter writer = new BufferedWriter(new FileWriter(logFile));
+                    writer.append(logStr);
+                    writer.flush();
+                    writer.close();
+                    System.out.println("Logs written to "+logFile);
+                    System.out.flush();
+                } catch (Exception ex) {
+                    Assertions.fail("Failed to write log file", ex);
+                }
+                return;
+            }
+            // clear out any old file
+            new File(logFile).delete();
+        }
+
+        if (logStr.isBlank()) {
             System.out.println("No logs");
             return;
         }
 
-        String logStr = logBuf.toString();
-        logBuf.reset();
-
-        if (logFile != null && !logFile.isBlank() && logStr.lines().count() > switchLogOutputLines) {
-            try {
-                BufferedWriter writer = new BufferedWriter(new FileWriter(logFile));
-                writer.append(logStr);
-                writer.flush();
-                writer.close();
-                System.out.println("Logs written to "+logFile);
-                System.out.flush();
-            } catch (Exception ex) {
-                Assertions.fail("Failed to write log file", ex);
-            }
-        } else {
-            System.out.println("===[ Logs ]=======================");
-            System.out.println(logStr);
-            System.out.println("==================================");
-            System.out.flush();
-        }
+        System.out.println("===[ Logs ]=======================");
+        System.out.println(logStr);
+        System.out.println("==================================");
+        System.out.flush();
     }
 
     /**
@@ -183,23 +188,29 @@ public class Tester {
 
     static public void printDiff(String exp, String result, String diffFile) {
         List<String> lines = Iter.ToList(new Diff().PlusMinusByLine(exp, result));
-        if (diffFile != null && !diffFile.isBlank() && lines.size() > switchDiffOutputLines) {
-            try {
-                BufferedWriter writer = new BufferedWriter(new FileWriter(diffFile));
-                for (String line : lines){
-                    writer.append(line);
-                    writer.append("\n");
+
+        if (diffFile != null && !diffFile.isBlank()) {
+            if (lines.size() > switchDiffOutputLines) {
+                try {
+                    BufferedWriter writer = new BufferedWriter(new FileWriter(diffFile));
+                    for (String line : lines){
+                        writer.append(line);
+                        writer.append("\n");
+                    }
+                    writer.flush();
+                    writer.close();
+                    System.out.println("Unexpected lines diff written to "+diffFile);
+                } catch (Exception ex) {
+                    Assertions.fail("Failed to write diff file", ex);
                 }
-                writer.flush();
-                writer.close();
-                System.out.println("Unexpected lines diff written to "+diffFile);
-            } catch (Exception ex) {
-                Assertions.fail("Failed to write diff file", ex);
+                return;
             }
-        } else {
-            final String diff = String.join("\n\t", lines);
-            System.out.println("Error: unexpected lines\n\t" + diff);
-            System.out.flush();
+            // clear out any old file
+            new File(diffFile).delete();
         }
+
+        final String diff = String.join("\n\t", lines);
+        System.out.println("Error: unexpected lines\n\t" + diff);
+        System.out.flush();
     }
 }
