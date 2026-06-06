@@ -622,31 +622,36 @@ public class Abstractor {
 
     public Ref<ObjectInst> addObjectInst(CtTypeReference<?> tr, Ref<ObjectDecl> ref, ObjectDecl obj) throws Exception {
         // Check it tr is an instantiation or skip.
-        final List<CtTypeReference<?>> typeArgs = tr.getActualTypeArguments(); 
-        if (typeArgs.size() <= 0) return null;
+        final List<CtTypeReference<?>> typeArgs = tr.getActualTypeArguments();
+        final int tpCount = typeArgs.size();
+        if (tpCount <= 0) return null;
+        if (tpCount != obj.typeParams.size()) return null;
 
-        boolean diffTypeArgs = false;
-        for (CtTypeReference<?> typeArg : typeArgs) {
-            final CtTypeParameter typeParam = typeArg.getTypeParameterDeclaration();
-            if (typeParam == null || typeParam == typeArg) {
-                System.out.println(">>"+typeParam+"<<"+typeArg); // TODO: REMOVE
-                diffTypeArgs = true;
+        final ArrayList<Ref<? extends TypeDesc>> instanceTypes = new ArrayList<>();
+        for (CtTypeReference<?> typeArg : typeArgs)
+            instanceTypes.add(this.addTypeDesc(typeArg));
+        boolean isInstantiation = false;
+        for (int i = 0; i < tpCount; i++) {
+            if (!instanceTypes.get(i).equals(obj.typeParams.get(i))) {
+                isInstantiation = true;
                 break;
             }
         }
-        if (!diffTypeArgs) return null;
-
-        // TODO: Implement
+        if (!isInstantiation) return null;
 
         return this.proj.objectInsts.create(this.log, tr,
             "object instance " + SpoonUtils.describeElem(tr),
             () -> {
-                final ArrayList<Ref<? extends TypeDesc>> instanceTypes = new ArrayList<>();
-                for (CtTypeReference<?> typeArg : typeArgs)
-                    instanceTypes.add(this.addTypeDesc(typeArg));
-
+                // TODO: Add a test where a field is instantiated
                 final Ref<StructDesc> resData = this.addStruct(tr.getTypeDeclaration());
+
+
+
                 final Ref<InterfaceDesc> resInterface = null; // TODO: Finish
+
+
+
+
                 return new ObjectInst(ref, instanceTypes, resData, resInterface);
             }, (Ref<ObjectInst> iRef, ObjectInst iObj) -> {
 

@@ -1,6 +1,7 @@
 package abstractor.core.spoonUtils;
 
 import java.io.File;
+import java.util.*;
 
 import spoon.reflect.cu.SourcePosition;
 import spoon.reflect.declaration.CtElement;
@@ -40,29 +41,53 @@ final public class SpoonUtils {
         return path.substring(0, path.length()-tail.length());
     }
 
-    /** Short description for logs (does not throw). */
+    /** Short description of an element that can be used for logs. */
     static public String describeElem(CtElement elem) {
+        return describeElem(elem, true);
+    }
+
+    /** Short description of an element that can be used for logs. */
+    static public String describeElem(CtElement elem, boolean showType) {
         if (elem == null) return "(null)";
         if (elem instanceof CtPackage pkg) return packageName(pkg);
         
-        final String typeName = elem.getClass().getSimpleName();
+        String header = "";
+        if (showType) {
+            header = "(" + elem.getClass().getSimpleName() + ") ";
+        }
         if (elem instanceof CtNamedElement ne) {
-            try { return "(" + typeName + ") " + ne.getSimpleName(); }
+            try { return header + ne.getSimpleName(); }
             catch (Exception ignore) { }
         }
         if (elem instanceof CtTypeInformation ti) {
-            try { return "(" + typeName + ") " + ti.getQualifiedName(); }
+            try { return header + ti.getQualifiedName(); }
             catch (Exception ignore) { }
         }
         if (elem instanceof CtExecutable<?> ex) {
-            try { return "(" + typeName + ") " + ex.getSignature(); }
+            try { return header + ex.getSignature(); }
             catch (Exception ignore) { }
         }
         if (elem instanceof CtReference ref) {
-            try { return "(" + typeName + ") " + ref.getSimpleName(); }
+            try { return header + ref.getSimpleName(); }
             catch (Exception ignore) { }
         }
         return elem.getClass().getName();
+    }
+
+    static public String describeElems(Iterable<? extends CtElement> elems) {
+        ArrayList<String> descs = new ArrayList<>();
+        for (CtElement elem : elems)
+            descs.add(describeElem(elem, false));
+        return String.join(", ",  descs);
+    }
+
+    static public String describeGeneric(CtTypeReference<?> tr) {
+        final List<CtTypeReference<?>> typeArgs = tr.getActualTypeArguments();
+        String tail = "";
+        if (typeArgs.size() > 0) {
+            tail = "<"+SpoonUtils.describeElems(typeArgs)+">";
+        }
+        return SpoonUtils.describeElem(tr, false) + tail;
     }
 
     static public boolean isVoid(CtTypeReference<?> tr) {
