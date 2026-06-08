@@ -3,6 +3,7 @@ package abstractor.core.constructs;
 import java.util.*;
 
 import spoon.reflect.declaration.CtElement;
+
 import abstractor.core.cmp.CmpOptions;
 import abstractor.core.json.*;
 import abstractor.core.log.*;
@@ -52,33 +53,6 @@ public class Factory<T extends Construct> implements Jsonable {
 
     private List<Ref<T>> findRefsForCon(T con) {
         return this.refSet.stream().filter(r -> con.equals(r.getResolved())).toList();
-    }
-
-    //==========================================================================
-
-    public void debugPrintByElem() {
-        int i = 0;
-        for (CtElement elem: this.byElem.keySet()) {
-            final Ref<T> ref = this.byElem.get(elem);
-            System.out.println(i + ". " + elem.hashCode() + " => " + ref);
-            i++;
-        }
-    }
-    
-    public void debugPrintRefSet() {
-        int i = 0;
-        for (Ref<T> ref: this.refSet) {
-            System.out.println(i + ". " + ref);
-            i++;
-        }
-    }
-    
-    public void debugPrintConSet() {
-        int i = 0;
-        for (T con: this.conSet) {
-            System.out.println(i + ". " + con);
-            i++;
-        }
     }
 
     //==========================================================================

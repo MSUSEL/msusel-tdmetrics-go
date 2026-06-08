@@ -7,6 +7,7 @@ import spoon.reflect.declaration.CtElement;
 import abstractor.core.AbstractorException;
 import abstractor.core.cmp.*;
 import abstractor.core.json.*;
+import abstractor.core.require.Require;
 
 public class Ref<T extends Construct> extends ConstructImp {
     static private HashMap<CtElement, String> elemOrder = new HashMap<>();
@@ -26,24 +27,13 @@ public class Ref<T extends Construct> extends ConstructImp {
     public  final CtElement     elem;
     public  final String        context;
 
-    // TODO: Check if the typeArgs are needed. If the element is different based
-    // on the typeArgs, this can be removed. However, if the element is the same
-    // inside different typeArgs context, then this will have to be kept.
-    public final ArrayList<TypeDesc> typeArgs = new ArrayList<>();
-
     private T res;
     
     public Ref(ConstructKind kind, CtElement elem, String context) throws Exception {
-        this(kind, elem, context, null);
-    }
-
-    public Ref(ConstructKind kind, CtElement elem, String context, List<TypeDesc> typeArgs) throws Exception {
-        if (context.isBlank())
-            throw new Exception("May not have a blank reference context.");
+        Require.notBlank(context, "may not have a blank reference context.");
         this.conKind = kind;
         this.elem    = elem;
         this.context = context;
-        if (typeArgs != null) this.typeArgs.addAll(typeArgs);
     }
 
     public ConstructKind kind() { return this.conKind; }
@@ -77,7 +67,6 @@ public class Ref<T extends Construct> extends ConstructImp {
         JsonObject obj = (JsonObject)super.toJson(h);
         obj.put("ref",     true);
         obj.put("context", this.context);
-        obj.putNotEmpty("typeArgs", keyList(this.typeArgs));
 
         final boolean showExtras = false;
         if (showExtras) {
@@ -114,8 +103,7 @@ public class Ref<T extends Construct> extends ConstructImp {
 
         return Cmp.or("Ref", super.getCmp(c, options), opCmp,
             Cmp.defer(getElemOrderKey(this.elem), () -> getElemOrderKey(((Ref<?>)c).elem), "elem"),
-            Cmp.defer(    this.context,  () -> ((Ref<?>)c).context,  "context"),
-            Cmp.deferList(this.typeArgs, () -> ((Ref<?>)c).typeArgs, "typeArgs")
+            Cmp.defer(this.context, () -> ((Ref<?>)c).context, "context")
         );
     }
 }
