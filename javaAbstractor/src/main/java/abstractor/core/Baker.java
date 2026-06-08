@@ -1,9 +1,22 @@
-package abstractor.core.constructs;
+package abstractor.core;
 
 import java.util.*;
 
 import spoon.reflect.reference.CtTypeReference;
-
+import abstractor.core.constructs.Abstract;
+import abstractor.core.constructs.Argument;
+import abstractor.core.constructs.Basic;
+import abstractor.core.constructs.Construct;
+import abstractor.core.constructs.Factory;
+import abstractor.core.constructs.InterfaceDecl;
+import abstractor.core.constructs.InterfaceDesc;
+import abstractor.core.constructs.InterfaceInst;
+import abstractor.core.constructs.PackageCon;
+import abstractor.core.constructs.Project;
+import abstractor.core.constructs.Ref;
+import abstractor.core.constructs.Signature;
+import abstractor.core.constructs.TypeDesc;
+import abstractor.core.constructs.TypeParam;
 import abstractor.core.require.Require;
 import abstractor.core.spoonUtils.SpoonUtils;
 

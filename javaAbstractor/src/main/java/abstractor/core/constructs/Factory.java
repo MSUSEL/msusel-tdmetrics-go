@@ -11,7 +11,7 @@ import abstractor.core.require.Require;
 
 public class Factory<T extends Construct> implements Jsonable {
     static private final boolean logCreate = true;
-    
+
     private final ConstructKind conKind;
 
     private final HashMap<CtElement, Ref<T>> byElem     = new HashMap<>();

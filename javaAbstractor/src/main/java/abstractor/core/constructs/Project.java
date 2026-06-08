@@ -1,5 +1,6 @@
 package abstractor.core.constructs;
 
+import abstractor.core.Baker;
 import abstractor.core.json.*;
 import abstractor.core.log.*;
 
