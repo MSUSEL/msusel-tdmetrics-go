@@ -25,14 +25,32 @@ public class Ref<T extends Construct> extends ConstructImp {
 
     private final ConstructKind conKind;
     public  final CtElement     elem;
+    public  final InstKey       instKey;
     public  final String        context;
 
     private T res;
     
+    public Ref(ConstructKind kind, String context) throws Exception {
+        Require.notBlank(context, "may not have a blank reference context.");
+        this.conKind = kind;
+        this.elem    = null;
+        this.instKey = null;
+        this.context = context;
+    }
+
     public Ref(ConstructKind kind, CtElement elem, String context) throws Exception {
         Require.notBlank(context, "may not have a blank reference context.");
         this.conKind = kind;
         this.elem    = elem;
+        this.instKey = null;
+        this.context = context;
+    }
+
+    public Ref(ConstructKind kind, InstKey key, String context) throws Exception {
+        Require.notBlank(context, "may not have a blank reference context.");
+        this.conKind = kind;
+        this.elem    = null;
+        this.instKey = key;
         this.context = context;
     }
 
@@ -78,6 +96,9 @@ public class Ref<T extends Construct> extends ConstructImp {
                 obj.put("elemKey", getElemOrderKey(this.elem));
                 obj.put("elemType", this.elem.getClass().getSimpleName());
             }
+            if (this.instKey != null) {
+                obj.put("instKey", this.instKey.toJson(h));
+            }
         }
         return obj;
     }
@@ -103,6 +124,7 @@ public class Ref<T extends Construct> extends ConstructImp {
 
         return Cmp.or("Ref", super.getCmp(c, options), opCmp,
             Cmp.defer(getElemOrderKey(this.elem), () -> getElemOrderKey(((Ref<?>)c).elem), "elem"),
+            Cmp.defer(this.instKey, () -> ((Ref<?>)c).instKey, "instKey"),
             Cmp.defer(this.context, () -> ((Ref<?>)c).context, "context")
         );
     }
