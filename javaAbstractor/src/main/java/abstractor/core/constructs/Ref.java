@@ -25,33 +25,17 @@ public class Ref<T extends Construct> extends ConstructImp {
 
     private final ConstructKind conKind;
     public  final CtElement     elem;
-    public  final InstKey       instKey;
     public  final String        context;
+    public  final ArrayList<Construct> typeArgs = new ArrayList<>();
 
     private T res;
-    
-    public Ref(ConstructKind kind, String context) throws Exception {
-        Require.notBlank(context, "may not have a blank reference context.");
-        this.conKind = kind;
-        this.elem    = null;
-        this.instKey = null;
-        this.context = context;
-    }
 
-    public Ref(ConstructKind kind, CtElement elem, String context) throws Exception {
+    public Ref(ConstructKind kind, CtElement elem, String context, List<Construct> typeArgs) throws Exception {
         Require.notBlank(context, "may not have a blank reference context.");
         this.conKind = kind;
         this.elem    = elem;
-        this.instKey = null;
         this.context = context;
-    }
-
-    public Ref(ConstructKind kind, InstKey key, String context) throws Exception {
-        Require.notBlank(context, "may not have a blank reference context.");
-        this.conKind = kind;
-        this.elem    = null;
-        this.instKey = key;
-        this.context = context;
+        if (typeArgs != null) this.typeArgs.addAll(typeArgs);
     }
 
     public ConstructKind kind() { return this.conKind; }
@@ -81,10 +65,15 @@ public class Ref<T extends Construct> extends ConstructImp {
         this.res = res;
     }
 
+    public boolean typeArgsMatch(ArrayList<Construct> typeArgs) {
+        return Cmp.run(Cmp.deferList(this.typeArgs, () -> typeArgs), this.getCmpOptions()) == 0;
+    }
+
     public JsonNode refToJson(JsonHelper h) {
         JsonObject obj = (JsonObject)super.toJson(h);
         obj.put("ref",     true);
-        obj.put("context", this.context);
+        obj.put("context", this.context); 
+        obj.putNotEmpty("typeArgs", keyList(this.typeArgs));
 
         final boolean showExtras = false;
         if (showExtras) {
@@ -95,9 +84,6 @@ public class Ref<T extends Construct> extends ConstructImp {
             if (this.elem != null) {
                 obj.put("elemKey", getElemOrderKey(this.elem));
                 obj.put("elemType", this.elem.getClass().getSimpleName());
-            }
-            if (this.instKey != null) {
-                obj.put("instKey", this.instKey.toJson(h));
             }
         }
         return obj;
@@ -124,8 +110,8 @@ public class Ref<T extends Construct> extends ConstructImp {
 
         return Cmp.or("Ref", super.getCmp(c, options), opCmp,
             Cmp.defer(getElemOrderKey(this.elem), () -> getElemOrderKey(((Ref<?>)c).elem), "elem"),
-            Cmp.defer(this.instKey, () -> ((Ref<?>)c).instKey, "instKey"),
-            Cmp.defer(this.context, () -> ((Ref<?>)c).context, "context")
+            Cmp.defer(    this.context,  () -> ((Ref<?>)c).context, "context"),
+            Cmp.deferList(this.typeArgs, () -> ((Ref<?>)c).typeArgs, "typeArgs")
         );
     }
 }

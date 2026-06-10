@@ -8,6 +8,14 @@ import java.util.function.Supplier;
 public interface Cmp {
     int run(CmpContext context);
 
+    static public int run(Cmp cmp) {
+        return cmp.run(new CmpContext(null));
+    }
+
+    static public int run(Cmp cmp, CmpOptions options) {
+        return cmp.run(new CmpContext(options));
+    }
+
     static public <T> int compareTo(T a, T b, CmpOptions options) {
         return compareTo(a, b, options, "");
     }

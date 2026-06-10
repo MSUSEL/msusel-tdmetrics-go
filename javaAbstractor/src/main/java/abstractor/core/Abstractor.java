@@ -21,6 +21,7 @@ import abstractor.core.spoonUtils.*;
 public class Abstractor {
     public final Logger  log;
     public final Project proj;
+    public final Instantiator instantiator;
 
     public final HashSet<CtExecutable<?>> pendingMetrics  = new HashSet<>();
     public final HashSet<CtPackage>       pendingPackages = new HashSet<>();
@@ -28,8 +29,9 @@ public class Abstractor {
     public CtModel model;
 
     public Abstractor(Logger log, Project proj) {
-        this.log   = log;
-        this.proj  = proj;
+        this.log          = log;
+        this.proj         = proj;
+        this.instantiator = new Instantiator();
     }
 
     /**
