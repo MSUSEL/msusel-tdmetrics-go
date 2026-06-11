@@ -41,7 +41,7 @@ public class Baker {
         return value;
     }
 
-    private <T extends Construct> Ref<T> getConstruct(String name, Factory<T> factory, List<Construct> typeArgs, ConstructCreator<T> creator) throws Exception {
+    private <T extends Construct> Ref<T> getConstruct(String name, Factory<T> factory, List<Ref<? extends TypeDesc>> typeArgs, ConstructCreator<T> creator) throws Exception {
         return this.getConstruct(name, () -> {
             T con = creator.create();
             final T other = factory.getExisting(con);

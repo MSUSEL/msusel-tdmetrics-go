@@ -63,7 +63,7 @@ public class Factory<T extends Construct> implements Jsonable {
     @FunctionalInterface
     public interface Finisher<T extends Construct> { void finish(Ref<T> ref, T con) throws Exception; }
 
-    public Ref<T> create(Logger log, CtElement elem, List<Construct> typeArgs, String title, Creator<T> creator, Finisher<T> finisher) throws Exception {
+    public Ref<T> create(Logger log, CtElement elem, List<Ref<? extends TypeDesc>> typeArgs, String title, Creator<T> creator, Finisher<T> finisher) throws Exception {
         if (elem == null) return null;
 
         // If already "in progress" then check for if a reference already exists
@@ -122,7 +122,7 @@ public class Factory<T extends Construct> implements Jsonable {
         }
     }
 
-    public Ref<T> create(Logger log, CtElement elem, List<Construct> typeArgs, String title, Creator<T> creator) throws Exception {
+    public Ref<T> create(Logger log, CtElement elem, List<Ref<? extends TypeDesc>> typeArgs, String title, Creator<T> creator) throws Exception {
         return this.create(log, elem, typeArgs, title, creator, null);
     }
 
@@ -191,7 +191,7 @@ public class Factory<T extends Construct> implements Jsonable {
      * This is used to create a reference before the actual creation of the construct is called.
      * For example when creating a reference for something pending to be created later, like a package.
      */
-    public Ref<T> addOrGetRefForElem(CtElement elem, List<Construct> typeArgs, String title) throws Exception {
+    public Ref<T> addOrGetRefForElem(CtElement elem, List<Ref<? extends TypeDesc>> typeArgs, String title) throws Exception {
         final Ref<T> existing = this.getRefByElem(elem);
         if (existing != null) return existing;
 
@@ -208,7 +208,7 @@ public class Factory<T extends Construct> implements Jsonable {
      * This is used when a construct is generated or baked such that there is
      * no element, or at least no element yet, for the construct.
      */
-    public Ref<T> addOrGetRef(T c,  List<Construct> typeArgs, String context) throws Exception {
+    public Ref<T> addOrGetRef(T c, List<Ref<? extends TypeDesc>> typeArgs, String context) throws Exception {
         final T other = this.getExisting(c);
         if (other != null) c = other;
 

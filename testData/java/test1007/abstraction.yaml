@@ -1,0 +1,57 @@
+{
+  language: java,
+  arguments: [
+    { type: object1 }, # 1. <unnamed> Foo<Integer> ???
+    { type: object1 }, # 2. <unnamed> Foo<String> ???
+  ],
+  basics: [ int, string ],
+  fields: [
+    { name: x, type: typeParam1, vis: public }, # 1. x T
+  ],
+  interfaceDescs: [
+    { abstracts: [ ] }, # 1. any
+  ],
+  methods: [
+    { # 1. Foo1() Foo<Integer> ???
+      name: Foo1, package: 5, receiver: 1, signature: 1,
+      loc: 6, metrics: 1, static: true, vis: public,
+    },
+    { # 2. Foo2() Foo<String> ???
+      name: Foo2, package: 5, receiver: 1, signature: 1,
+      loc: 7, metrics: 2, static: true, vis: public,
+    },
+  ],
+  metrics: [
+    { codeCount: 1, complexity: 1, lineCount: 1, loc: 6 },
+    { codeCount: 1, complexity: 1, lineCount: 1, loc: 7 },
+  ],
+  objects: [
+    { # 1. Foo<T> struct{ x T }{ ???  ??? }
+      name: Foo, package: 5, data: 1, interface: 1,
+      loc: 3, vis: public, typeParams: [ 1 ],
+      methods: [ 1, 2 ],
+    },
+  ],
+  packages: [
+    { name: $builtin },
+    { name: "<unnamed>" },
+    { name: testData },
+    { name: testData.java },
+    {
+      name: testData.java.test1007,
+      objects: [ 1 ],
+      methods: [ 1, 2 ],
+    },
+  ],
+  signatures: [
+    { results: [ 1 ] }, # 1. func() Foo<Integer> ???
+    { results: [ 2 ] }, # 1. func() Foo<String> ???
+  ],
+  structDescs: [
+    { fields: [ 1 ] }, # 1. struct{ x T }
+  ],
+  typeParams: [
+    { name: T, type: interfaceDesc1 }, # 1. T any
+  ],
+  locs: { 1: ClassesFromSource.java },
+}

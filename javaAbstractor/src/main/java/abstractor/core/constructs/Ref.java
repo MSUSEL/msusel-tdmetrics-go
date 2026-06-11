@@ -26,11 +26,11 @@ public class Ref<T extends Construct> extends ConstructImp {
     private final ConstructKind conKind;
     public  final CtElement     elem;
     public  final String        context;
-    public  final ArrayList<Construct> typeArgs = new ArrayList<>();
+    public  final ArrayList<Ref<? extends TypeDesc>> typeArgs = new ArrayList<>();
 
     private T res;
 
-    public Ref(ConstructKind kind, CtElement elem, String context, List<Construct> typeArgs) throws Exception {
+    public Ref(ConstructKind kind, CtElement elem, String context, List<Ref<? extends TypeDesc>> typeArgs) throws Exception {
         Require.notBlank(context, "may not have a blank reference context.");
         this.conKind = kind;
         this.elem    = elem;
