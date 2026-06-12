@@ -112,8 +112,17 @@ public class Abstractor {
         if (elem == null) return null;
 
         // If a reference, get the actual element.
-        if (elem instanceof CtReference ref) elem = ref.getDeclaration();
-        if (elem == null) return null;
+        if (elem instanceof CtReference ref) {
+            final CtElement decl = ref.getDeclaration();
+            if (decl == null) return null;
+
+            // TODO: need to handle when generic instantiation
+
+
+
+
+            elem = decl;
+        }
 
         // Skip annotation types — they don't participate in data flow.
         if (elem instanceof CtAnnotationType<?>) return null;
@@ -157,7 +166,7 @@ public class Abstractor {
                 if (i.getRoleInParent() == CtRole.NESTED_TYPE) {
                     CtElement parent = i.getParent();
                     if (parent instanceof CtTypeReference<?> nest && nest != null) {
-                        pin = this.addDeclaration(nest);
+                        pin = this.addTypeDesc(nest);
                     } else {
                         this.log.error("Unhandled nested interface decl " + SpoonUtils.describeElem(i) + " in " + parent);
                     }
@@ -354,7 +363,10 @@ public class Abstractor {
         return this.proj.selections.create(this.log, field, this.instantiator.typeArgs(),
             "select field " + SpoonUtils.describeElem(field),
             () -> {
-                final String                   name = field.getSimpleName();
+                final String name = field.getSimpleName();
+
+                // TODO: Is this the correct way to get the decl? Does it need to be the instantiated type?
+
                 final Ref<? extends Construct> decl = this.addDeclaration(field.getDeclaringType());
                 return new Selection(name, decl);
             });
@@ -482,10 +494,60 @@ public class Abstractor {
                 for (CtType<?> nt : c.getNestedTypes())
                     this.addTypeDesc(nt.getReference());
 
+                // TODO: Remove or update
                 // Add any generic instances.
-                if (c.isGenerics())
-                    this.addObjectInstances(c, ref, obj);
+                //if (c.isGenerics())
+                //    this.addObjectInstances(c, ref, obj);
             });
+    }
+    
+    public Ref<? extends TypeDesc> addObjectDeclOrInst(CtTypeReference<?> tr, CtClass<?> c) throws Exception {
+        Ref<ObjectDecl> decl = this.addObjectDecl(c);
+        if (!c.isGenerics()) return decl;
+
+
+        final List<Ref<TypeParam>> typeParams = this.addTypeParams(c.getFormalCtTypeParameters());
+        final ArrayList<Ref<? extends TypeDesc>> typeArgs = this.addTypeArguments(tr, typeParams);
+        if (typeArgs == null) return decl;
+
+        this.instantiator.pushFrame();
+
+
+        // TODO: Finish implementing
+
+
+        this.instantiator.popFrame();
+
+        // TODO: Finish
+
+        return null;
+    }
+
+    /**
+     * This adds the type arguments from the type reference.
+     * @param tr The type reference for the possible instantiation
+     * @param typeParams The type parameters from the interface, method, or object.
+     * @return The list of type arguments or null if there is no instantiation.
+     */
+    private ArrayList<Ref<? extends TypeDesc>> addTypeArguments(CtTypeReference<?> tr, List<Ref<TypeParam>> typeParams) throws Exception {
+        final List<CtTypeReference<?>> ctTypeArgs = tr.getActualTypeArguments();
+        if (ctTypeArgs == null) return null;
+        final int count = ctTypeArgs.size();
+        if (count <= 0) return null;
+        if (count != typeParams.size()) return null;
+
+        final ArrayList<Ref<? extends TypeDesc>> typeArgs = new ArrayList<>();
+        for (CtTypeReference<?> ctTypeArg : ctTypeArgs)
+            typeArgs.add(this.addTypeDesc(ctTypeArg));
+
+        for (int i = 0; i < count; i++) {
+            if (!typeArgs.get(i).equals(typeParams.get(i))) {
+                // There was a difference so there is an instantiation
+                return typeArgs;
+            }
+        }
+        // There was no difference so the instantiation is not useful.
+        return null;
     }
 
     public Ref<? extends TypeDesc> addTypeDesc(CtTypeReference<?> tr) throws Exception {
@@ -539,15 +601,19 @@ public class Abstractor {
             return null;
         }
 
-        // Check CtEnum before CtClass since CtEnum extends CtClass.
-        if (ty instanceof CtEnum<?>        e) return this.addEnum(e);
-        if (ty instanceof CtClass<?>       c) return this.addObjectDecl(c);
-        if (ty instanceof CtInterface<?>   i) return this.addInterfaceDecl(i);
-
         // Handle type parameters by checking if there is a type argument replacement
         // when defining an instantiation instead of a generic. 
         if (ty instanceof CtTypeParameter tp)
             return this.instantiator.replace(this.addTypeParam(tp));
+
+
+        // TODO: Handle generics instantitations.
+
+
+        // Check CtEnum before CtClass since CtEnum extends CtClass.
+        if (ty instanceof CtEnum<?>      e) return this.addEnum(e);
+        if (ty instanceof CtClass<?>     c) return this.addObjectDecl(c);
+        if (ty instanceof CtInterface<?> i) return this.addInterfaceDecl(i);
 
         this.log.warning("Unhandled type description: " + SpoonUtils.describeElem(ty));
         return null;
@@ -606,6 +672,7 @@ public class Abstractor {
         return this.proj.baker.anyDesc();
     }
 
+    /*
     public void addObjectInstances(CtClass<?> c, Ref<ObjectDecl> ref, ObjectDecl obj) throws Exception {
         final List<CtTypeReference<?>> refs = model.getElements(new TypeFilter<>(CtTypeReference.class));
 
@@ -668,6 +735,7 @@ public class Abstractor {
             this.instantiator.popFrame();
         }
     }
+    */
 
     //===[ Processors ]=========================================================
 
