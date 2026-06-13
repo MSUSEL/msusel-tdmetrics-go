@@ -5,11 +5,9 @@ import java.util.*;
 import spoon.Launcher;
 import spoon.MavenLauncher;
 import spoon.reflect.*;
-import spoon.reflect.code.CtConstructorCall;
 import spoon.reflect.declaration.*;
 import spoon.reflect.path.CtRole;
 import spoon.reflect.reference.*;
-import spoon.reflect.visitor.filter.TypeFilter;
 import spoon.support.compiler.VirtualFile;
 
 import abstractor.core.constructs.*;
@@ -115,12 +113,11 @@ public class Abstractor {
         if (elem instanceof CtReference ref) {
             final CtElement decl = ref.getDeclaration();
             if (decl == null) return null;
+            if (decl instanceof CtClass<?>     c) return this.addObjectDeclOrInst((CtTypeReference<?>)ref, c);
+            if (decl instanceof CtInterface<?> i) return this.addInterfaceDeclOrInst((CtTypeReference<?>)ref, i);
 
             // TODO: need to handle when generic instantiation
-
-
-
-
+            this.log.notice("addDeclaration with CtReference and no reference handler: using element");
             elem = decl;
         }
 
@@ -151,6 +148,13 @@ public class Abstractor {
             (Ref<InterfaceDecl> ref, InterfaceDecl id) -> {
                 id.setVisibility(i);
             });
+    }
+
+    public Ref<? extends TypeDesc> addInterfaceDeclOrInst(CtTypeReference<?> tr, CtInterface<?> i) throws Exception {
+
+        // TODO: Implement Instantiation
+
+        return this.addInterfaceDecl(i);
     }
 
     public Ref<InterfaceDesc> addInterfaceDesc(CtInterface<?> i) throws Exception {
@@ -219,6 +223,22 @@ public class Abstractor {
                 md.setVisibility(m);
                 recv.methodDecls.add(ref);
                 this.pendingMetrics.add(m);
+            });
+    }
+
+    public Ref<MethodInst> addMethodInst(Ref<ObjectInst> receiver, CtMethod<?> m) throws Exception {
+        Require.notObjectMethod(m);
+        final ObjectInst recv = receiver.mustGetResolved();
+        return this.proj.methodInsts.create(this.log, m, this.instantiator.typeArgs(),
+            "method instantiation " + SpoonUtils.describeElem(m),
+            () -> {
+                final Ref<MethodDecl>               generic       = this.addMethod(recv.generic, m);
+                final List<Ref<? extends TypeDesc>> instanceTypes = this.instantiator.typeArgs();
+                final Ref<Signature>                resolved      = this.addSignature(m);
+                return new MethodInst(generic, receiver, instanceTypes, resolved);
+            },
+            (Ref<MethodInst> ref, MethodInst mi) -> {
+                recv.methods.add(ref);
             });
     }
 
@@ -465,62 +485,75 @@ public class Abstractor {
                         this.addMethod(ref, m);
                 }
 
-                // Synthesize the interface abstractions for the class.
-                final TreeSet<Ref<Abstract>> abstracts = new TreeSet<Ref<Abstract>>();
-                for (CtMethod<?> m : c.getAllMethods()) {
-                    if (!m.isStatic() && !SpoonUtils.isObjectMethod(m))
-                        abstracts.add(this.addAbstract(m));
-                }
-
-                // Synthesize the interface description for the class.
-                if (abstracts.size() > 0 || c.getSuperInterfaces().size() > 0) {
-                    final InterfaceDesc it = new InterfaceDesc(abstracts, ref);
-                    obj.inter = this.proj.interfaceDescs.addOrGetRef(it, this.instantiator.typeArgs(), "interface for object");
-
-                    // Add direct super-interfaces this object extends.
-                    for (CtTypeReference<?> supRef : c.getSuperInterfaces()) {
-                        CtType<?> supDecl = supRef.getTypeDeclaration(); // may be null for shadow/unresolved
-                        if (supDecl != null && supDecl instanceof CtInterface<?> supId && supId != null) {
-                            it.inherits.add(this.addInterfaceDesc(supId));
-                        } else {
-                            this.log.error("Unhandled super-interface " + SpoonUtils.describeElem(supDecl) + " for " + obj);
-                        }
-                    }
-                } else {
-                    obj.inter = this.proj.baker.anyDesc();
-                }
+                obj.inter = this.synthesizeObjectInterface(c, ref);
 
                 // Add any nested types.
-                for (CtType<?> nt : c.getNestedTypes())
+                for (CtType<?> nt : c.getNestedTypes()) // TODO: Do we need more for nested types?
                     this.addTypeDesc(nt.getReference());
-
-                // TODO: Remove or update
-                // Add any generic instances.
-                //if (c.isGenerics())
-                //    this.addObjectInstances(c, ref, obj);
             });
     }
-    
+
+    private Ref<InterfaceDesc> synthesizeObjectInterface(CtClass<?> c, Ref<? extends Construct> ref) throws Exception {
+        // Synthesize the interface abstractions for the class.
+        final TreeSet<Ref<Abstract>> abstracts = new TreeSet<Ref<Abstract>>();
+        for (CtMethod<?> m : c.getAllMethods()) {
+            if (!m.isStatic() && !SpoonUtils.isObjectMethod(m))
+                abstracts.add(this.addAbstract(m));
+        }
+
+        // Synthesize the interface description for the class.
+        if (abstracts.size() > 0 || c.getSuperInterfaces().size() > 0) {
+            final InterfaceDesc it = new InterfaceDesc(abstracts, ref);
+            Ref<InterfaceDesc> inter = this.proj.interfaceDescs.addOrGetRef(it, this.instantiator.typeArgs(), "interface for object");
+
+            // Add direct super-interfaces this object extends.
+            for (CtTypeReference<?> supRef : c.getSuperInterfaces()) {
+                CtType<?> supDecl = supRef.getTypeDeclaration(); // may be null for shadow/unresolved
+                if (supDecl != null && supDecl instanceof CtInterface<?> supId && supId != null) {
+                    it.inherits.add(this.addInterfaceDesc(supId));
+                } else {
+                    this.log.error("Unhandled super-interface " + SpoonUtils.describeElem(supDecl) + " for " + ref);
+                }
+            }
+            return inter;
+        }
+        return this.proj.baker.anyDesc();
+    }
+
     public Ref<? extends TypeDesc> addObjectDeclOrInst(CtTypeReference<?> tr, CtClass<?> c) throws Exception {
         Ref<ObjectDecl> decl = this.addObjectDecl(c);
         if (!c.isGenerics()) return decl;
-
 
         final List<Ref<TypeParam>> typeParams = this.addTypeParams(c.getFormalCtTypeParameters());
         final ArrayList<Ref<? extends TypeDesc>> typeArgs = this.addTypeArguments(tr, typeParams);
         if (typeArgs == null) return decl;
 
         this.instantiator.pushFrame();
+        for (int i = 0; i < typeParams.size(); i++)
+            this.instantiator.add(typeParams.get(i), typeArgs.get(i));
 
+        try {
+            return this.proj.objectInsts.create(this.log, tr, this.instantiator.typeArgs(),
+                "object instantiation "+SpoonUtils.describeElem(tr),
+                () -> {                    
+                    final Ref<StructDesc> resData = this.addStruct(c);
+                    final Ref<InterfaceDesc> resInterface = this.synthesizeObjectInterface(c, null);
+                    return new ObjectInst(decl, this.instantiator.typeArgs(), resData, resInterface);
+                },
+                (Ref<ObjectInst> ref, ObjectInst obj) -> {
+                    // Add methods for the class instantiation.
+                    for (CtMethod<?> m : c.getAllMethods()) {
+                        if (m.getParent().equals(c) && !SpoonUtils.isObjectMethod(m))
+                            this.addMethodInst(ref, m);
+                    }
 
-        // TODO: Finish implementing
-
-
-        this.instantiator.popFrame();
-
-        // TODO: Finish
-
-        return null;
+                    // Add any nested types.
+                    for (CtType<?> nt : c.getNestedTypes()) // TODO: Do we need more for nested types?
+                        this.addTypeDesc(nt.getReference());
+                });
+        } finally {
+            this.instantiator.popFrame();
+        }
     }
 
     /**
@@ -606,14 +639,10 @@ public class Abstractor {
         if (ty instanceof CtTypeParameter tp)
             return this.instantiator.replace(this.addTypeParam(tp));
 
-
-        // TODO: Handle generics instantitations.
-
-
         // Check CtEnum before CtClass since CtEnum extends CtClass.
         if (ty instanceof CtEnum<?>      e) return this.addEnum(e);
-        if (ty instanceof CtClass<?>     c) return this.addObjectDecl(c);
-        if (ty instanceof CtInterface<?> i) return this.addInterfaceDecl(i);
+        if (ty instanceof CtClass<?>     c) return this.addObjectDeclOrInst(tr, c);
+        if (ty instanceof CtInterface<?> i) return this.addInterfaceDeclOrInst(tr, i);
 
         this.log.warning("Unhandled type description: " + SpoonUtils.describeElem(ty));
         return null;
@@ -671,71 +700,6 @@ public class Abstractor {
         // > on a reference of java.lang.Class."
         return this.proj.baker.anyDesc();
     }
-
-    /*
-    public void addObjectInstances(CtClass<?> c, Ref<ObjectDecl> ref, ObjectDecl obj) throws Exception {
-        final List<CtTypeReference<?>> refs = model.getElements(new TypeFilter<>(CtTypeReference.class));
-
-        // WARNING: getTypeDeclaration is not immutable, it will resolve lazy loaded shadow types.
-
-        for (CtTypeReference<?> tr : refs) {
-            if (!tr.isShadow() && tr.getQualifiedName().equals(c.getQualifiedName())) {
-                // tr is a use/instantiation of class 'c'
-                this.addObjectInst(tr, ref, obj);
-            }
-        }
-
-        final List<CtConstructorCall<?>> news = model.getElements(new TypeFilter<>(CtConstructorCall.class));
-        for (CtConstructorCall<?> cc : news) {
-            final CtTypeReference<?> tr = cc.getType();
-            if (!tr.isShadow() && tr.getQualifiedName().equals(c.getQualifiedName())) {
-                // constructor instantiation
-                this.addObjectInst(tr, ref, obj);
-            }
-        }
-    }
-
-    public Ref<ObjectInst> addObjectInst(CtTypeReference<?> tr, Ref<ObjectDecl> ref, ObjectDecl obj) throws Exception {
-        // Check it tr is an instantiation or skip.
-        final List<CtTypeReference<?>> typeArgs = tr.getActualTypeArguments();
-        final int tpCount = typeArgs.size();
-        if (tpCount <= 0) return null;
-        if (tpCount != obj.typeParams.size()) return null;
-
-        final ArrayList<Ref<? extends TypeDesc>> instanceTypes = new ArrayList<>();
-        for (CtTypeReference<?> typeArg : typeArgs)
-            instanceTypes.add(this.addTypeDesc(typeArg));
-        boolean isInstantiation = false;
-        for (int i = 0; i < tpCount; i++) {
-            if (!instanceTypes.get(i).equals(obj.typeParams.get(i))) {
-                isInstantiation = true;
-                break;
-            }
-        }
-        if (!isInstantiation) return null;
-
-        try {
-            this.instantiator.pushFrame();
-
-            // TODO: Finish implementing
-
-            return this.proj.objectInsts.create(this.log, tr, this.instantiator.typeArgs(),
-                "object instantiation " + SpoonUtils.describeElem(tr),
-                () -> {
-
-                    // TODO: Finish
-                    final Ref<StructDesc>    resData      = this.addStruct(null);
-        
-                    // TODO: Finish
-                    final Ref<InterfaceDesc> resInterface = this.addInterfaceDesc(null);
-
-                    return new ObjectInst(ref, instanceTypes, resData, resInterface);
-                });
-        } finally {
-            this.instantiator.popFrame();
-        }
-    }
-    */
 
     //===[ Processors ]=========================================================
 

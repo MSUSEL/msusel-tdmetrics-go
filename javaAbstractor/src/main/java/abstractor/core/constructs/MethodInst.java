@@ -16,7 +16,7 @@ public class MethodInst extends ConstructImp implements Method {
     public MethodInst() {}
 
     public MethodInst(Ref<MethodDecl> generic, Ref<ObjectInst> receiver,
-        List<Ref<TypeDesc>> instanceTypes, Ref<Signature> resolved) {
+        List<Ref<? extends TypeDesc>> instanceTypes, Ref<Signature> resolved) {
         this.generic  = generic;
         this.receiver = receiver;
         if (instanceTypes != null) this.instanceTypes.addAll(instanceTypes);

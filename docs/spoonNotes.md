@@ -33,3 +33,7 @@ To abstract Java I am using Spoon.
       and [Wikipedia](https://en.wikipedia.org/wiki/Type_signature)
 - [CtMethod Uses](https://spoon.gforge.inria.fr/mvnsites/spoon-core/apidocs/spoon/reflect/declaration/class-use/CtMethod.html)
 - [CtMethodImpl](https://github.com/INRIA/spoon/blob/master/src/main/java/spoon/support/reflect/declaration/CtMethodImpl.java)
+
+## About Shadows
+
+- TODO

@@ -205,13 +205,20 @@ public class Validator {
     }
 
     private void validateInstantiation(Construct decl, Construct inst, ArrayList<Ref<TypeParam>> typeParams, ArrayList<Ref<? extends TypeDesc>> instanceTypes) {
+        if (inst instanceof MethodInst) {
+
+            // TODO: Need to handle nested type parameters
+
+            return;
+        }
+
         final int typeParamSize = typeParams.size();
         if (typeParamSize <= 0)
             this.log.error("the declaration " + decl + " had instances but has " + typeParamSize + " type parameters.");
 
         final int instanceTypeSize = instanceTypes.size();
         if (typeParamSize != instanceTypeSize)
-            this.log.error("the declaration " + decl + " had " + typeParamSize + " (" + typeParams + ") type parameters which did not match" +
+            this.log.error("the declaration " + decl + " had " + typeParamSize + " (" + typeParams + ") type parameters which did not match " +
                 "the instance " + inst + " that had " + instanceTypeSize + " (" + instanceTypes + ") instance types.");
 
         final int count = Integer.min(typeParamSize, instanceTypeSize);

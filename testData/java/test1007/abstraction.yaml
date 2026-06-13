@@ -1,29 +1,53 @@
 {
   language: java,
   arguments: [
-    { type: object1 }, # 1. <unnamed> Foo<Integer> ???
-    { type: object1 }, # 2. <unnamed> Foo<String> ???
+    { type: objectInst1 }, # 1. <unnamed> Foo<int> ???
+    { type: objectInst2 }, # 2. <unnamed> Foo<string> ???
   ],
   basics: [ int, string ],
   fields: [
     { name: x, type: typeParam1, vis: public }, # 1. x T
+    { name: x, type: basic1,     vis: public }, # 1. x int
+    { name: x, type: basic2,     vis: public }, # 1. x string
   ],
   interfaceDescs: [
     { abstracts: [ ] }, # 1. any
   ],
+  methodInsts: [
+    { # 1. ????
+      generic: 1, receiver: 2, resolved: 1,
+      instanceTypes: [ basic2 ],
+    },
+    { # 2. ????
+      generic: 2, receiver: 2, resolved: 2,
+      instanceTypes: [ basic2 ],
+    },
+  ],
   methods: [
-    { # 1. Foo1() Foo<Integer> ???
+    { # 1. Foo1() Foo<int> ???
       name: Foo1, package: 5, receiver: 1, signature: 1,
       loc: 6, metrics: 1, static: true, vis: public,
     },
-    { # 2. Foo2() Foo<String> ???
-      name: Foo2, package: 5, receiver: 1, signature: 1,
+    { # 2. Foo2() Foo<string> ???
+      name: Foo2, package: 5, receiver: 1, signature: 2,
       loc: 7, metrics: 2, static: true, vis: public,
     },
   ],
   metrics: [
     { codeCount: 1, complexity: 1, lineCount: 1, loc: 6 },
     { codeCount: 1, complexity: 1, lineCount: 1, loc: 7 },
+  ],
+  objectInsts: [
+    { # 1. Foo<int> struct{ ??? }{ ??? }
+      generic: 1, resData: 1, resInterface: 1,
+      instanceTypes: [ basic1 ],
+      methods: [ 1, 2 ],
+    },
+    { # 2. Foo<string> struct{ ??? }{ ??? }
+      generic: 1, resData: 1, resInterface: 1,
+      instanceTypes: [ basic2 ],
+      methods: [ 1, 2 ],
+    },
   ],
   objects: [
     { # 1. Foo<T> struct{ x T }{ ???  ??? }
@@ -44,8 +68,8 @@
     },
   ],
   signatures: [
-    { results: [ 1 ] }, # 1. func() Foo<Integer> ???
-    { results: [ 2 ] }, # 1. func() Foo<String> ???
+    { results: [ 1 ] }, # 1. func() Foo<int> ???
+    { results: [ 2 ] }, # 1. func() Foo<string> ???
   ],
   structDescs: [
     { fields: [ 1 ] }, # 1. struct{ x T }
