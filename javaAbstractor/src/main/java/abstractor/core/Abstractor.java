@@ -160,6 +160,8 @@ public class Abstractor {
                 },
                 (Ref<InterfaceDecl> ref, InterfaceDecl id) -> {
                     id.setVisibility(i);
+
+                    // TODO: Handle nested
                 });
         } finally {
             this.instantiator.popFrame();
@@ -167,12 +169,32 @@ public class Abstractor {
     }
 
     public Ref<? extends TypeDesc> addInterfaceInst(CtTypeReference<?> tr, CtInterface<?> i) throws Exception {
+        final Ref<InterfaceDecl> decl = this.addInterfaceDecl(i);
+        if (!i.isGenerics()) return decl;
 
-        // TODO: Implement Instantiation
+        final List<Ref<TypeParam>> typeParams = this.addTypeParams(i.getFormalCtTypeParameters());
+        final ArrayList<Ref<? extends TypeDesc>> typeArgs = this.addTypeArguments(tr, typeParams);
+        if (typeArgs == null) return decl;
 
-        Require.failure("addInterfaceInst is unimplemented");
+        try {
+            this.instantiator.pushFrame();
+            for (int j = 0; j < typeParams.size(); j++)
+                this.instantiator.add(typeParams.get(j), typeArgs.get(j));
 
-        return this.addInterfaceDecl(i);
+            return this.proj.interfaceInsts.create(this.log, new ElementKey(tr, this.instantiator.typeArgs()),
+                "interface instantiation "+SpoonUtils.describeGeneric(tr),
+                () -> {
+                    final Ref<InterfaceDesc> resolved = this.addInterfaceDesc(i);
+                    return new InterfaceInst(decl, this.instantiator.typeArgs(), resolved);
+                },
+                (Ref<InterfaceInst> ref, InterfaceInst it) -> {
+                    // Add any nested types.
+                    for (CtType<?> nt : i.getNestedTypes()) // TODO: Do we need more for nested types?
+                        this.addTypeDesc(nt.getReference());
+                });
+        } finally {
+            this.instantiator.popFrame();
+        }
     }
 
     public Ref<InterfaceDesc> addInterfaceDesc(CtInterface<?> i) throws Exception {
@@ -186,7 +208,7 @@ public class Abstractor {
 
                 Ref<? extends Construct> pin = null;
                 if (i.getRoleInParent() == CtRole.NESTED_TYPE) {
-                    CtElement parent = i.getParent();
+                    final CtElement parent = i.getParent();
                     if (parent instanceof CtTypeReference<?> nest && nest != null) {
                         pin = this.addTypeDesc(nest);
                     } else {
@@ -199,7 +221,7 @@ public class Abstractor {
             (Ref<InterfaceDesc> ref, InterfaceDesc id) -> {
                 // Add direct super-interfaces this interface extends
                 for (CtTypeReference<?> supRef : i.getSuperInterfaces()) {
-                    CtType<?> supDecl = supRef.getTypeDeclaration(); // may be null for shadow/unresolved
+                    final CtType<?> supDecl = supRef.getTypeDeclaration(); // may be null for shadow/unresolved
                     if (supDecl != null && supDecl instanceof CtInterface<?> supId && supId != null) {
                         id.inherits.add(this.addInterfaceDesc(supId));
                     } else {
@@ -358,7 +380,7 @@ public class Abstractor {
                     fields.add(this.addField(fr.getFieldDeclaration()));
 
                 // Add extended class as a "$super" field.
-                CtTypeReference<?> superFr = c.getSuperclass();
+                final CtTypeReference<?> superFr = c.getSuperclass();
                 if (superFr != null) fields.add(this.addField("$super", superFr));
 
                 // Add access to nesting class as a "$nest" field.
@@ -530,11 +552,11 @@ public class Abstractor {
         // Synthesize the interface description for the class.
         if (abstracts.size() > 0 || c.getSuperInterfaces().size() > 0) {
             final InterfaceDesc it = new InterfaceDesc(abstracts, ref);
-            Ref<InterfaceDesc> inter = this.proj.interfaceDescs.addOrGetRef(it, this.instantiator.typeArgs(), "interface for object");
+            final Ref<InterfaceDesc> inter = this.proj.interfaceDescs.addOrGetRef(it, this.instantiator.typeArgs(), "interface for object");
 
             // Add direct super-interfaces this object extends.
             for (CtTypeReference<?> supRef : c.getSuperInterfaces()) {
-                CtType<?> supDecl = supRef.getTypeDeclaration(); // may be null for shadow/unresolved
+                final CtType<?> supDecl = supRef.getTypeDeclaration(); // may be null for shadow/unresolved
                 if (supDecl != null && supDecl instanceof CtInterface<?> supId && supId != null) {
                     it.inherits.add(this.addInterfaceDesc(supId));
                 } else {
@@ -547,7 +569,7 @@ public class Abstractor {
     }
 
     public Ref<? extends TypeDesc> addObjectInst(CtTypeReference<?> tr, CtClass<?> c) throws Exception {
-        Ref<ObjectDecl> decl = this.addObjectDecl(c);
+        final Ref<ObjectDecl> decl = this.addObjectDecl(c);
         if (!c.isGenerics()) return decl;
 
         final List<Ref<TypeParam>> typeParams = this.addTypeParams(c.getFormalCtTypeParameters());
@@ -591,6 +613,7 @@ public class Abstractor {
     private ArrayList<Ref<? extends TypeDesc>> addTypeArguments(CtTypeReference<?> tr, List<Ref<TypeParam>> typeParams) throws Exception {
         final List<CtTypeReference<?>> ctTypeArgs = tr.getActualTypeArguments();
         if (ctTypeArgs == null) return null;
+
         final int count = ctTypeArgs.size();
         if (count <= 0) return null;
         if (count != typeParams.size()) return null;
@@ -647,7 +670,7 @@ public class Abstractor {
 
         // Use getTypeDeclaration (not getDeclaration) to get shadow types
         // for external/JDK types instead of null.
-        CtType<?> ty = tr.getTypeDeclaration();
+        final CtType<?> ty = tr.getTypeDeclaration();
         if (ty == null) {
             this.log.error("Type description did not have a declaration but "+
                 "was not labelled a anonymous: " + SpoonUtils.describeElem(tr));
@@ -675,7 +698,7 @@ public class Abstractor {
     }
 
     public Ref<? extends TypeDesc> addWildcard(CtWildcardReference wr) throws Exception {
-        CtTypeReference<?> bound = wr.getBoundingType();
+        final CtTypeReference<?> bound = wr.getBoundingType();
         // Spoon often uses java.lang.Object as the synthetic bound for unbounded "?".
         // Resolving it would pull the entire JDK Object graph into the abstraction.
         if (bound == null || bound instanceof CtWildcardReference || SpoonUtils.isObject(bound))
