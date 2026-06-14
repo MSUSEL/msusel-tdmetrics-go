@@ -89,12 +89,13 @@ public class Abstractor {
     public Ref<PackageCon> addPackage(CtPackage pkg) throws Exception {
         if (pkg == null) return this.proj.baker.builtinPackage();
 
-        Ref<PackageCon> pkgRef = this.proj.packages.getRefByElem(pkg);
+        final ElementKey elemKey = new ElementKey(pkg);
+        final Ref<PackageCon> pkgRef = this.proj.packages.getRefByElem(elemKey);
         if (pkgRef != null) return pkgRef;
 
         this.log.log("Pending package " + SpoonUtils.describeElem(pkg));
         this.pendingPackages.add(pkg);
-        return this.proj.packages.addOrGetRefForElem(pkg, null,
+        return this.proj.packages.addOrGetRefForElem(elemKey,
             "for pending package " + SpoonUtils.describeElem(pkg));
     }
     
@@ -135,7 +136,7 @@ public class Abstractor {
     }
 
     public Ref<InterfaceDecl> addInterfaceDecl(CtInterface<?> i) throws Exception {
-        return this.proj.interfaceDecls.create(this.log, i, this.instantiator.typeArgs(),
+        return this.proj.interfaceDecls.create(this.log, new ElementKey(i, this.instantiator.typeArgs()),
             "interface decl " + SpoonUtils.describeElem(i),
             () -> {
                 final String             name  = i.getSimpleName();
@@ -158,7 +159,7 @@ public class Abstractor {
     }
 
     public Ref<InterfaceDesc> addInterfaceDesc(CtInterface<?> i) throws Exception {
-        return this.proj.interfaceDescs.create(this.log, i, this.instantiator.typeArgs(),
+        return this.proj.interfaceDescs.create(this.log, new ElementKey(i, this.instantiator.typeArgs()),
             "interface description " + SpoonUtils.describeElem(i),
             () -> {
                 final TreeSet<Ref<Abstract>> abstracts = new TreeSet<Ref<Abstract>>();
@@ -207,7 +208,7 @@ public class Abstractor {
     public Ref<MethodDecl> addMethod(Ref<ObjectDecl> receiver, CtMethod<?> m) throws Exception {
         Require.notObjectMethod(m);
         final ObjectDecl recv = receiver.mustGetResolved();
-        return this.proj.methodDecls.create(this.log, m, this.instantiator.typeArgs(),
+        return this.proj.methodDecls.create(this.log, new ElementKey(m, this.instantiator.typeArgs()),
             "method " + SpoonUtils.describeElem(m),
             () -> {
                 final Ref<PackageCon>      pkg        = recv.pkg;
@@ -229,7 +230,7 @@ public class Abstractor {
     public Ref<MethodInst> addMethodInst(Ref<ObjectInst> receiver, CtMethod<?> m) throws Exception {
         Require.notObjectMethod(m);
         final ObjectInst recv = receiver.mustGetResolved();
-        return this.proj.methodInsts.create(this.log, m, this.instantiator.typeArgs(),
+        return this.proj.methodInsts.create(this.log, new ElementKey(m, this.instantiator.typeArgs()),
             "method instantiation " + SpoonUtils.describeElem(m),
             () -> {
                 final Ref<MethodDecl>               generic       = this.addMethod(recv.generic, m);
@@ -244,7 +245,7 @@ public class Abstractor {
 
     public Ref<Abstract> addAbstract(CtMethod<?> m) throws Exception {
         Require.notObjectMethod(m);
-        return this.proj.abstracts.create(this.log, m, this.instantiator.typeArgs(),
+        return this.proj.abstracts.create(this.log, new ElementKey(m, this.instantiator.typeArgs()),
             "abstract " + SpoonUtils.describeElem(m),
             () -> {
                 final String         name      = m.getSimpleName();
@@ -255,7 +256,7 @@ public class Abstractor {
 
     public Ref<Signature> addSignature(CtMethod<?> m) throws Exception {
         Require.notObjectMethod(m);
-        return this.proj.signatures.create(this.log, m, this.instantiator.typeArgs(),
+        return this.proj.signatures.create(this.log, new ElementKey(m, this.instantiator.typeArgs()),
             "signature " + SpoonUtils.describeElem(m),
             () -> {
                 final List<CtParameter<?>> ps = m.getParameters();
@@ -273,7 +274,7 @@ public class Abstractor {
     }
 
     public Ref<MethodDecl> addConstructorMethod(Ref<ObjectDecl> receiver, CtConstructor<?> ctor) throws Exception {
-        return this.proj.methodDecls.create(log, ctor, this.instantiator.typeArgs(),
+        return this.proj.methodDecls.create(log, new ElementKey(ctor, this.instantiator.typeArgs()),
             "constructor " + ctor.getSignature(),
             () -> {
                 final ObjectDecl           recv       = receiver.mustGetResolved();
@@ -296,7 +297,7 @@ public class Abstractor {
     }
 
     public Ref<Signature> addConstructorSignature(CtConstructor<?> m) throws Exception {
-        return this.proj.signatures.create(this.log, m, this.instantiator.typeArgs(),
+        return this.proj.signatures.create(this.log, new ElementKey(m, this.instantiator.typeArgs()),
             "constructor signature " + SpoonUtils.describeElem(m),
             () -> {
                 final List<CtParameter<?>> ps = m.getParameters();
@@ -313,7 +314,7 @@ public class Abstractor {
     }
 
     public Ref<Argument> addArgument(CtParameter<?> p) throws Exception {
-        return this.proj.arguments.create(this.log, p, this.instantiator.typeArgs(),
+        return this.proj.arguments.create(this.log, new ElementKey(p, this.instantiator.typeArgs()),
             "parameter " + SpoonUtils.describeElem(p),
             () -> {
                 final String                  name = p.getSimpleName();
@@ -323,8 +324,8 @@ public class Abstractor {
     }
     
     public Ref<Argument> addArgument(CtTypeReference<?> p) throws Exception {
-        return this.proj.arguments.create(this.log, p, this.instantiator.typeArgs(),
-            "parameter <unnamed> " + SpoonUtils.describeElem(p),
+        return this.proj.arguments.create(this.log, new ElementKey(p, this.instantiator.typeArgs()),
+            "parameter <unnamed> " + SpoonUtils.describeGeneric(p),
             () -> {
                 final Ref<? extends TypeDesc> type = this.addTypeDesc(p);
                 return new Argument("", type);
@@ -332,7 +333,7 @@ public class Abstractor {
     }
     
     public Ref<StructDesc> addStruct(CtType<?> c) throws Exception {
-        return this.proj.structDescs.create(this.log, c, this.instantiator.typeArgs(),
+        return this.proj.structDescs.create(this.log, new ElementKey(c, this.instantiator.typeArgs()),
             "struct " + SpoonUtils.describeElem(c),
             () -> {
                 // Collect all fields.
@@ -358,7 +359,7 @@ public class Abstractor {
     }
 
     public Ref<Field> addField(CtField<?> f) throws Exception {
-        return this.proj.fields.create(this.log, f, this.instantiator.typeArgs(),
+        return this.proj.fields.create(this.log, new ElementKey(f, this.instantiator.typeArgs()),
             "field " + SpoonUtils.describeElem(f),
             () -> {
                 final String                  name = f.getSimpleName();
@@ -371,7 +372,7 @@ public class Abstractor {
     }
 
     public Ref<Field> addField(String name, CtTypeReference<?> f) throws Exception {
-        return this.proj.fields.create(this.log, f, this.instantiator.typeArgs(),
+        return this.proj.fields.create(this.log, new ElementKey(f, this.instantiator.typeArgs()),
             "field " + name,
             () -> {
                 final Ref<? extends TypeDesc> type = this.addTypeDesc(f);
@@ -380,7 +381,7 @@ public class Abstractor {
     }
 
     public Ref<Selection> addSelection(CtField<?> field) throws Exception {
-        return this.proj.selections.create(this.log, field, this.instantiator.typeArgs(),
+        return this.proj.selections.create(this.log, new ElementKey(field, this.instantiator.typeArgs()),
             "select field " + SpoonUtils.describeElem(field),
             () -> {
                 final String name = field.getSimpleName();
@@ -403,11 +404,12 @@ public class Abstractor {
         }
 
         final Ref<InterfaceInst> ref = this.proj.baker.arrayInst(tr.getSimpleName(), td);
-        return this.proj.interfaceInsts.setRefForElem(tr, ref);
+        final ElementKey elemKey = new ElementKey(tr);
+        return this.proj.interfaceInsts.setRefForElem(elemKey, ref);
     }
     
     public Ref<Basic> addBasic(CtTypeReference<?> tr) throws Exception {
-        return this.proj.basics.create(this.log, tr, this.instantiator.typeArgs(),
+        return this.proj.basics.create(this.log, new ElementKey(tr, this.instantiator.typeArgs()),
             "basic " + SpoonUtils.describeElem(tr),
             () -> {
                 if (SpoonUtils.isVoid(tr))
@@ -431,7 +433,7 @@ public class Abstractor {
     }
 
     public Ref<TypeParam> addTypeParam(CtTypeParameter tp) throws Exception {
-        return this.proj.typeParams.create(this.log, tp, this.instantiator.typeArgs(),
+        return this.proj.typeParams.create(this.log, new ElementKey(tp, this.instantiator.typeArgs()),
             "type params " + SpoonUtils.describeElem(tp),
             () -> {
                 final String                  name = tp.getSimpleName();
@@ -442,7 +444,7 @@ public class Abstractor {
     }
     
     public Ref<Metrics> addMetrics(CtExecutable<?> m) throws Exception {
-        return this.proj.metrics.create(this.log, m, this.instantiator.typeArgs(),
+        return this.proj.metrics.create(this.log, new ElementKey(m, this.instantiator.typeArgs()),
             "metrics " + SpoonUtils.describeElem(m),
             () -> {
                 final Location loc = this.proj.locations.create(m.getPosition());
@@ -454,7 +456,7 @@ public class Abstractor {
 
     public Ref<ObjectDecl> addObjectDecl(CtClass<?> c) throws Exception {
         Require.notObject(c.getReference());
-        return this.proj.objectDecls.create(this.log, c, this.instantiator.typeArgs(),
+        return this.proj.objectDecls.create(this.log, new ElementKey(c, this.instantiator.typeArgs()),
             "object decl " + SpoonUtils.describeElem(c),
             () -> {
                 final Ref<PackageCon>      pkg        = this.addPackageFor(c);
@@ -488,7 +490,7 @@ public class Abstractor {
                 obj.inter = this.synthesizeObjectInterface(c, ref);
 
                 // Add any nested types.
-                for (CtType<?> nt : c.getNestedTypes()) // TODO: Do we need more for nested types?
+                for (CtType<?> nt : c.getNestedTypes()) // TODO: Do we need more for nested types? Yes, nested types need to inherit nest's type parameters.
                     this.addTypeDesc(nt.getReference());
             });
     }
@@ -533,8 +535,8 @@ public class Abstractor {
             this.instantiator.add(typeParams.get(i), typeArgs.get(i));
 
         try {
-            return this.proj.objectInsts.create(this.log, tr, this.instantiator.typeArgs(),
-                "object instantiation "+SpoonUtils.describeElem(tr),
+            return this.proj.objectInsts.create(this.log, new ElementKey(tr, this.instantiator.typeArgs()),
+                "object instantiation "+SpoonUtils.describeGeneric(tr),
                 () -> {                    
                     final Ref<StructDesc> resData = this.addStruct(c);
                     final Ref<InterfaceDesc> resInterface = this.synthesizeObjectInterface(c, null);
@@ -658,7 +660,7 @@ public class Abstractor {
     }
 
     public Ref<ObjectDecl> addEnum(CtEnum<?> e) throws Exception {
-        return this.proj.objectDecls.create(this.log, e, this.instantiator.typeArgs(),
+        return this.proj.objectDecls.create(this.log, new ElementKey(e, this.instantiator.typeArgs()),
             "enum " + SpoonUtils.describeElem(e),
             () -> {
                 final String          name = e.getSimpleName();
@@ -666,7 +668,7 @@ public class Abstractor {
                 final Location        loc  = this.proj.locations.create(e.getPosition());
 
                 final CtTypeReference<?> tr = e.getSuperclass();
-                final Ref<StructDesc> struct = this.proj.structDescs.create(this.log, tr, this.instantiator.typeArgs(),
+                final Ref<StructDesc> struct = this.proj.structDescs.create(this.log, new ElementKey(tr, this.instantiator.typeArgs()),
                     "enum struct " + SpoonUtils.describeElem(tr),
                     () -> {
                         final ArrayList<Ref<Field>> fields = new ArrayList<>();
@@ -679,7 +681,7 @@ public class Abstractor {
             (Ref<ObjectDecl> ref, ObjectDecl od) -> {
                 // Finish by adding the "const values" to the package for each enumerator value.
                 for (CtEnumValue<?> ev: e.getEnumValues()) {
-                    this.proj.values.create(this.log, e, this.instantiator.typeArgs(),
+                    this.proj.values.create(this.log, new ElementKey(e, this.instantiator.typeArgs()),
                         "enum value "+ SpoonUtils.describeElem(ev),
                         () -> {
                             final String   name = ev.getSimpleName();
@@ -724,7 +726,7 @@ public class Abstractor {
     //       when the Resolver pipeline is created.
 
     public Ref<PackageCon> processPackage(CtPackage pkg) throws Exception {
-        return this.proj.packages.create(this.log, pkg, null,
+        return this.proj.packages.create(this.log, new ElementKey(pkg),
            "package " + SpoonUtils.describeElem(pkg),
             () -> {
                 final String name = SpoonUtils.packageName(pkg);
@@ -756,20 +758,21 @@ public class Abstractor {
                     continue;
                 }
 
-                Ref<MethodDecl> ref = this.proj.methodDecls.getRefByElem(m);
+                final ElementKey elemKey = new ElementKey(m);
+                final Ref<MethodDecl> ref = this.proj.methodDecls.getRefByElem(elemKey);
                 if (!ref.isResolved())
                     throw new AbstractorException("Expected " + ref + " to be resolved before processing pending metrics.");
 
-                MethodDecl md = ref.getResolved();
+                final MethodDecl md = ref.getResolved();
                 if (md.metrics != null)
                     throw new AbstractorException("The metrics for " + md + " have already been processed before " + m.getSimpleName() + ".");
 
-                Ref<Metrics> metRef = this.addMetrics(m);
-                Metrics met = metRef.getResolved();
+                final Ref<Metrics> metRef = this.addMetrics(m);
+                final Metrics met = metRef.getResolved();
                 if (met.hasBody()) md.metrics = metRef;
                 else {
                     // remove the reference and metrics from factory since bodiless methods can be ignored.
-                    this.proj.metrics.removeElem(this.log, m, "metrics " + m.getSimpleName());
+                    this.proj.metrics.removeElem(this.log, elemKey, "metrics " + m.getSimpleName());
                 }
             }
         }

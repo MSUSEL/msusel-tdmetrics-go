@@ -38,7 +38,7 @@ public class Require {
         }
     }
 
-    static public <T> void equal(T value, T other , String msg) throws Exception {
+    static public <T> void equal(T value, T other, String msg) throws Exception {
         if (!Objects.equals(value, other)) {
             throw new AbstractorException(!msg.isBlank()? msg: "required " + value + " to be equal to " + other);
         }
@@ -50,9 +50,57 @@ public class Require {
         }
     }
 
-    static public <T> void notEqual(T value, T other , String msg) throws Exception {
+    static public <T> void notEqual(T value, T other, String msg) throws Exception {
         if (Objects.equals(value, other)) {
             throw new AbstractorException(!msg.isBlank()? msg: "required " + value + " to be not equal to " + other);
+        }
+    }
+
+    static public <T extends Comparable<T>> void lessThan(T value, T other) throws Exception {
+        if (value.compareTo(other) < 0) {
+            throw new AbstractorException("required " + value + " to be less than " + other);
+        }
+    }
+
+    static public <T extends Comparable<T>> void lessThan(T value, T other, String msg) throws Exception {
+        if (value.compareTo(other) < 0) {
+            throw new AbstractorException(!msg.isBlank()? msg: "required " + value + " to be less than " + other);
+        }
+    }
+
+    static public <T extends Comparable<T>> void lessThanOrEqual(T value, T other) throws Exception {
+        if (value.compareTo(other) <= 0) {
+            throw new AbstractorException("required " + value + " to be less or equal than " + other);
+        }
+    }
+
+    static public <T extends Comparable<T>> void lessThanOrEqual(T value, T other, String msg) throws Exception {
+        if (value.compareTo(other) <= 0) {
+            throw new AbstractorException(!msg.isBlank()? msg: "required " + value + " to be less or equal than " + other);
+        }
+    }
+
+    static public <T extends Comparable<T>> void greaterThan(T value, T other) throws Exception {
+        if (value.compareTo(other) > 0) {
+            throw new AbstractorException("required " + value + " to be greater than " + other);
+        }
+    }
+
+    static public <T extends Comparable<T>> void greaterThan(T value, T other, String msg) throws Exception {
+        if (value.compareTo(other) > 0) {
+            throw new AbstractorException(!msg.isBlank()? msg: "required " + value + " to be greater than " + other);
+        }
+    }
+
+    static public <T extends Comparable<T>> void greaterThanOrEqual(T value, T other) throws Exception {
+        if (value.compareTo(other) >= 0) {
+            throw new AbstractorException("required " + value + " to be greater or equal than " + other);
+        }
+    }
+
+    static public <T extends Comparable<T>> void greaterThanOrEqual(T value, T other, String msg) throws Exception {
+        if (value.compareTo(other) >= 0) {
+            throw new AbstractorException(!msg.isBlank()? msg: "required " + value + " to be greater or equal than " + other);
         }
     }
 

@@ -1,41 +1,23 @@
 package abstractor.core.constructs;
 
-import java.util.*;
-
-import spoon.reflect.declaration.CtElement;
-
 import abstractor.core.AbstractorException;
+import abstractor.core.ElementKey;
 import abstractor.core.cmp.*;
 import abstractor.core.json.*;
 import abstractor.core.require.Require;
 
 public class Ref<T extends Construct> extends ConstructImp {
-    static private HashMap<CtElement, String> elemOrder = new HashMap<>();
-
-    static private String getElemOrderKey(CtElement elem) {
-        if (elem == null) return "null";
-        return elemOrder.computeIfAbsent(elem, k -> {
-            // Use the hash and position to try to order the elements as consistently as possible.
-            // There shouldn't be randomness in how the AST is processed but I don't want
-            // to fighting bugs because of elements being added in random order.
-            final String pos = k.getPosition().toString();
-            return k.hashCode() + "-" + pos + "-" + elemOrder.size();
-        });
-    }
-
     private final ConstructKind conKind;
-    public  final CtElement     elem;
+    public  final ElementKey    elemKey;
     public  final String        context;
-    public  final ArrayList<Ref<? extends TypeDesc>> typeArgs = new ArrayList<>();
 
     private T res;
 
-    public Ref(ConstructKind kind, CtElement elem, String context, List<Ref<? extends TypeDesc>> typeArgs) throws Exception {
+    public Ref(ConstructKind kind, ElementKey elemKey, String context) throws Exception {
         Require.notBlank(context, "may not have a blank reference context.");
         this.conKind = kind;
-        this.elem    = elem;
+        this.elemKey = elemKey;
         this.context = context;
-        if (typeArgs != null) this.typeArgs.addAll(typeArgs);
     }
 
     public ConstructKind kind() { return this.conKind; }
@@ -65,15 +47,10 @@ public class Ref<T extends Construct> extends ConstructImp {
         this.res = res;
     }
 
-    public boolean typeArgsMatch(ArrayList<Construct> typeArgs) {
-        return Cmp.run(Cmp.deferList(this.typeArgs, () -> typeArgs), this.getCmpOptions()) == 0;
-    }
-
     public JsonNode refToJson(JsonHelper h) {
         JsonObject obj = (JsonObject)super.toJson(h);
         obj.put("ref",     true);
-        obj.put("context", this.context); 
-        obj.putNotEmpty("typeArgs", keyList(this.typeArgs));
+        obj.put("context", this.context);
 
         final boolean showExtras = false;
         if (showExtras) {
@@ -81,10 +58,8 @@ public class Ref<T extends Construct> extends ConstructImp {
             obj.put("cmpOptions", String.valueOf(this.getCmpOptions()));
             if (this.isResolved())
                 obj.put("resHash", this.res.hashCode());
-            if (this.elem != null) {
-                obj.put("elemKey", getElemOrderKey(this.elem));
-                obj.put("elemType", this.elem.getClass().getSimpleName());
-            }
+            if (this.elemKey != null)
+                obj.put("elemKey", this.elemKey.toString());
         }
         return obj;
     }
@@ -109,9 +84,8 @@ public class Ref<T extends Construct> extends ConstructImp {
         }
 
         return Cmp.or("Ref", super.getCmp(c, options), opCmp,
-            Cmp.defer(getElemOrderKey(this.elem), () -> getElemOrderKey(((Ref<?>)c).elem), "elem"),
-            Cmp.defer(    this.context,  () -> ((Ref<?>)c).context, "context"),
-            Cmp.deferList(this.typeArgs, () -> ((Ref<?>)c).typeArgs, "typeArgs")
+            Cmp.defer(this.elemKey, () -> ((Ref<?>)c).elemKey, "elemKey"),
+            Cmp.defer(this.context, () -> ((Ref<?>)c).context, "context")
         );
     }
 }

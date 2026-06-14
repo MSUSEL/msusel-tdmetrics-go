@@ -2,8 +2,7 @@ package abstractor.core.constructs;
 
 import java.util.*;
 
-import spoon.reflect.declaration.CtElement;
-
+import abstractor.core.ElementKey;
 import abstractor.core.cmp.CmpOptions;
 import abstractor.core.json.*;
 import abstractor.core.log.*;
@@ -14,11 +13,11 @@ public class Factory<T extends Construct> implements Jsonable {
 
     private final ConstructKind conKind;
 
-    private final HashMap<CtElement, Ref<T>> byElem     = new HashMap<>();
-    private final HashMap<T,         Ref<T>> nonElemRef = new HashMap<>();
-    private final HashSet<CtElement>         elemInProg = new HashSet<>();
-    private final TreeSet<Ref<T>>            refSet     = new TreeSet<>();
-    private final TreeSet<T>                 conSet     = new TreeSet<>();
+    private final TreeMap<ElementKey, Ref<T>> byElem     = new TreeMap<>();
+    private final TreeMap<T,          Ref<T>> nonElemRef = new TreeMap<>();
+    private final TreeSet<ElementKey>         elemInProg = new TreeSet<>();
+    private final TreeSet<Ref<T>>             refSet     = new TreeSet<>();
+    private final TreeSet<T>                  conSet     = new TreeSet<>();
 
     public Factory(ConstructKind kind) { this.conKind = kind; }
 
@@ -42,7 +41,7 @@ public class Factory<T extends Construct> implements Jsonable {
         return this.conSet.stream().skip(index).findFirst().orElse(null);
     }
 
-    public Ref<T> getRefByElem(CtElement elem) {
+    public Ref<T> getRefByElem(ElementKey elem) {
         return this.byElem.get(elem);
     }
     
@@ -63,16 +62,19 @@ public class Factory<T extends Construct> implements Jsonable {
     @FunctionalInterface
     public interface Finisher<T extends Construct> { void finish(Ref<T> ref, T con) throws Exception; }
 
-    public Ref<T> create(Logger log, CtElement elem, List<Ref<? extends TypeDesc>> typeArgs, String title, Creator<T> creator, Finisher<T> finisher) throws Exception {
-        if (elem == null) return null;
+    public Ref<T> create(Logger log, ElementKey elemKey, String title, Creator<T> creator, Finisher<T> finisher) throws Exception {
+        Require.notNull(elemKey, "factories' create methods require non-null element keys");
 
         // If already "in progress" then check for if a reference already exists
         // so that we only create one and all others are references. However,
         // since references can be created other ways, we need to skip checking
         // for references if not "in progress" to start progress.
-        final Ref<T> existing = this.getRefByElem(elem);
-        final boolean inProgress = this.elemInProg.contains(elem);
-        if (inProgress && existing != null) return existing;
+        final Ref<T> existing = this.getRefByElem(elemKey);
+        final boolean inProgress = this.elemInProg.contains(elemKey);
+        if (inProgress && existing != null) {
+            //log.log("Got reference for " + title);
+            return existing;
+        }
         
         try {
             if (logCreate) {
@@ -85,14 +87,14 @@ public class Factory<T extends Construct> implements Jsonable {
             Ref<T> ref;
             if (existing != null) ref = existing;
             else {
-                final Ref<T> newRef = new Ref<T>(this.conKind, elem, title, typeArgs);
+                final Ref<T> newRef = new Ref<T>(this.conKind, elemKey, title);
                 this.addRefWithElem(newRef);
                 ref = newRef;
             }
 
             // Only set "in progress" to true here so that only we can differentiate
             // from the methods that only create a temporary reference.
-            this.elemInProg.add(elem);
+            this.elemInProg.add(elemKey);
 
             // Create a new construct for this data.
             final T newCon = creator.create();
@@ -122,15 +124,15 @@ public class Factory<T extends Construct> implements Jsonable {
         }
     }
 
-    public Ref<T> create(Logger log, CtElement elem, List<Ref<? extends TypeDesc>> typeArgs, String title, Creator<T> creator) throws Exception {
-        return this.create(log, elem, typeArgs, title, creator, null);
+    public Ref<T> create(Logger log, ElementKey elemKey, String title, Creator<T> creator) throws Exception {
+        return this.create(log, elemKey, title, creator, null);
     }
 
-    public void removeElem(Logger log, CtElement elem, String title) {
+    public void removeElem(Logger log, ElementKey elemKey, String title) {
         if (logCreate) log.log("Removing " + title);
 
-        final Ref<T> ref = this.getRefByElem(elem);
-        this.byElem.remove(elem);
+        final Ref<T> ref = this.getRefByElem(elemKey);
+        this.byElem.remove(elemKey);
 
         if (ref == null) return;
         this.refSet.remove(ref);
@@ -148,10 +150,10 @@ public class Factory<T extends Construct> implements Jsonable {
      * adding newly created references with elements.
      */
     private void addRefWithElem(Ref<T> ref) throws Exception {
-        final CtElement elem = ref.elem;
-        Require.notNull(elem, "element may not be null when adding the reference " + ref);
+        final ElementKey elemKey = ref.elemKey;
+        Require.notNull(elemKey, "element key may not be null when adding the reference " + ref);
         Require.require(this.refSet.add(ref), "reference " + ref + " must be added at this point");
-        Require.isNull(this.byElem.put(elem, ref));
+        Require.isNull(this.byElem.put(elemKey, ref));
     }
 
     /**
@@ -165,8 +167,8 @@ public class Factory<T extends Construct> implements Jsonable {
      * For example, when an array is instantiated for a specific element type,
      * the instantiated array then has the element for the array set for it.
      */
-    public Ref<T> setRefForElem(CtElement elem, Ref<T> ref) throws Exception {
-        final Ref<T> existing = this.getRefByElem(elem);
+    public Ref<T> setRefForElem(ElementKey elemKey, Ref<T> ref) throws Exception {
+        final Ref<T> existing = this.getRefByElem(elemKey);
         if (existing != null) {
             Require.equal(existing, ref,
                 "reference already exists for element " + existing + " so cannot set " + ref);
@@ -175,12 +177,12 @@ public class Factory<T extends Construct> implements Jsonable {
 
         final Ref<T> otherRef = this.refSet.floor(ref);
         if (ref.equals(otherRef)) {
-            Require.isNull(this.byElem.put(elem, otherRef));
+            Require.isNull(this.byElem.put(elemKey, otherRef));
             return otherRef;
         }
 
         Require.require(this.refSet.add(ref));
-        Require.isNull(this.byElem.put(elem, ref));
+        Require.isNull(this.byElem.put(elemKey, ref));
         return ref;
     }
 
@@ -191,11 +193,11 @@ public class Factory<T extends Construct> implements Jsonable {
      * This is used to create a reference before the actual creation of the construct is called.
      * For example when creating a reference for something pending to be created later, like a package.
      */
-    public Ref<T> addOrGetRefForElem(CtElement elem, List<Ref<? extends TypeDesc>> typeArgs, String title) throws Exception {
-        final Ref<T> existing = this.getRefByElem(elem);
+    public Ref<T> addOrGetRefForElem(ElementKey elemKey, String title) throws Exception {
+        final Ref<T> existing = this.getRefByElem(elemKey);
         if (existing != null) return existing;
 
-        final Ref<T> ref = new Ref<T>(this.conKind, elem, title, typeArgs);
+        final Ref<T> ref = new Ref<T>(this.conKind, elemKey, title);
         this.addRefWithElem(ref);
         return ref;
     }
@@ -215,7 +217,8 @@ public class Factory<T extends Construct> implements Jsonable {
         final Ref<T> ref = this.nonElemRef.get(c);
         if (ref != null) return ref;
 
-        final Ref<T> newRef = new Ref<T>(this.conKind, null, "no element ref: " + context, typeArgs);
+        final ElementKey elemKey = new ElementKey(null, typeArgs);
+        final Ref<T> newRef = new Ref<T>(this.conKind, elemKey, "no element ref: " + context);
         newRef.setResolved(c);
         newRef.setCmpOptions(resolvedCmpOptions());
 

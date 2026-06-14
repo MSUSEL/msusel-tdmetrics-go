@@ -1,8 +1,8 @@
 {
   language: java,
   arguments: [
-    { type: objectInst1 }, # 1. <unnamed> Foo<int> ???
-    { type: objectInst2 }, # 2. <unnamed> Foo<string> ???
+    { type: objectInst1 }, # 1. <unnamed> Foo<int>
+    { type: objectInst2 }, # 2. <unnamed> Foo<string>
   ],
   basics: [ int, string ],
   fields: [
