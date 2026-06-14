@@ -14,10 +14,6 @@ public class Instantiator {
 
         public Frame(Frame prior) {
             this.prior = prior;
-            if (this.prior != null) {
-                this.subst.putAll(this.prior.subst);
-                this.paramOrder.addAll(this.prior.paramOrder);
-            }
         }
 
         public void add(Ref<? extends TypeDesc> param, Ref<? extends TypeDesc> arg) throws Exception{
@@ -52,6 +48,17 @@ public class Instantiator {
     }
 
     public void pushFrame() {
+        final Frame prior = this.topFrame;
+        this.topFrame = new Frame(this.topFrame);
+
+        // Copy prior frames information.
+        if (prior != null) {
+            this.topFrame.subst.putAll(prior.subst);
+            this.topFrame.paramOrder.addAll(prior.paramOrder);
+        }
+    }
+
+    public void pushCleanFrame() {
         this.topFrame = new Frame(this.topFrame);
     }
 
