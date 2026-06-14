@@ -12,32 +12,19 @@ import abstractor.core.json.JsonNode;
 
 public class AppTests {
 
-    @Test
-    public void test0001() throws Exception { runApp("test0001"); }
+    // Tests similar to Go abstractor tests (abstraction is visually comparable)
+    @Test public void test0001() throws Exception { runApp("test0001"); }
+    @Test public void test0002() throws Exception { runApp("test0002"); }
 
-    @Test
-    public void test0002() throws Exception { runApp("test0002"); }
-
-    @Test
-    public void test1001() throws Exception { testClass("test1001", "Foo"); }
-
-    @Test
-    public void test1002() throws Exception { testClass("test1002", "Foo"); }
-
-    @Test
-    public void test1003() throws Exception { testClass("test1003", "Foo"); }
-
-    @Test
-    public void test1004() throws Exception { testClass("test1004", "Foo"); }
-
-    @Test
-    public void test1005() throws Exception { testClass("test1005", "Foo"); }
-
-    @Test
-    public void test1006() throws Exception { testClass("test1006", "Foo"); }
-
-    @Test
-    public void test1007() throws Exception { testClass("test1007", "Foo"); }
+    // Tests specific to Java abstractor
+    @Test public void test1001() throws Exception { testClass("test1001", "Foo"); }
+    @Test public void test1002() throws Exception { testClass("test1002", "Foo"); }
+    @Test public void test1003() throws Exception { testClass("test1003", "Foo"); }
+    @Test public void test1004() throws Exception { testClass("test1004", "Foo"); }
+    @Test public void test1005() throws Exception { testClass("test1005", "Foo"); }
+    @Test public void test1006() throws Exception { testClass("test1006", "Foo"); }
+    @Test public void test1007() throws Exception { testClass("test1007", "Foo"); }
+    @Test public void test1008() throws Exception { testClass("test1008", "Foo"); }
 
     static private void runApp(String testName) throws Exception {
         final String testPath = "../testData/java/" + testName;

@@ -130,7 +130,17 @@ public class Abstractor {
         if (elem instanceof CtInterface<?> i) return this.addInterfaceDecl(i);
         if (elem instanceof CtMethod<?>    m) return this.addMethodDeclOrAbstract(m);
 
-        this.log.error("Unhandled decl: " + SpoonUtils.describeElem(elem));
+        this.log.error("unhandled decl: " + SpoonUtils.describeElem(elem));
+        return null;
+    }
+
+    private Ref<? extends Construct> addMethodDeclOrAbstract(CtMethod<?> m) throws Exception {
+        final CtType<?> decl = m.getDeclaringType();
+        if (decl instanceof CtEnum<?>    e) return this.addMethodDecl(this.addEnum(e), m);
+        if (decl instanceof CtClass<?>   c) return this.addMethodDecl(this.addObjectDecl(c), m);
+        if (decl instanceof CtInterface<?>) return this.addAbstract(m);
+
+        this.log.error("method has unhandled declaring type: " + SpoonUtils.describeElem(decl));
         return null;
     }
 
@@ -187,9 +197,6 @@ public class Abstractor {
                 return new InterfaceDesc(abstracts, pin);
             },
             (Ref<InterfaceDesc> ref, InterfaceDesc id) -> {
-                // TODO: Handle interface object declaration?
-                //if (tr.isGenerics()) ...;
-
                 // Add direct super-interfaces this interface extends
                 for (CtTypeReference<?> supRef : i.getSuperInterfaces()) {
                     CtType<?> supDecl = supRef.getTypeDeclaration(); // may be null for shadow/unresolved
@@ -200,16 +207,6 @@ public class Abstractor {
                     }
                 }
             });
-    }
-
-    public Ref<? extends Construct> addMethodDeclOrAbstract(CtMethod<?> m) throws Exception { // TODO: Integrate this into calling locations if there aren't too many
-        final CtType<?> decl = m.getDeclaringType();
-        if (decl instanceof CtEnum<?>    e) return this.addMethodDecl(this.addEnum(e), m);
-        if (decl instanceof CtClass<?>   c) return this.addMethodDecl(this.addObjectDecl(c), m);
-        if (decl instanceof CtInterface<?>) return this.addAbstract(m);
-
-        this.log.error("method has unhandled declaring type: " + SpoonUtils.describeElem(decl));
-        return null;
     }
 
     public Ref<MethodDecl> addMethodDecl(Ref<ObjectDecl> receiver, CtMethod<?> m) throws Exception {

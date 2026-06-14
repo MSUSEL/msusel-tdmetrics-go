@@ -5,4 +5,5 @@ public class Foo<T extends Object> {
 
     static public Foo<Integer> Foo1() { return new Foo<>(); };
     static public Foo<String>  Foo2() { return new Foo<>(); };
+    static public <U> Foo<U>   Foo3() { return new Foo<>(); };
 }
