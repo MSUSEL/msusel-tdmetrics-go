@@ -433,7 +433,9 @@ public class Abstractor {
     }
 
     public Ref<TypeParam> addTypeParam(CtTypeParameter tp) throws Exception {
-        return this.proj.typeParams.create(this.log, new ElementKey(tp, this.instantiator.typeArgs()),
+        // Do not use type arguments in the ElementKey for typeParams.
+        // The typeParams will be replaced by the instantiator later.
+        return this.proj.typeParams.create(this.log, new ElementKey(tp, null),
             "type params " + SpoonUtils.describeElem(tp),
             () -> {
                 final String                  name = tp.getSimpleName();

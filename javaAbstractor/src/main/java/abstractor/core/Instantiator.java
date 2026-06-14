@@ -21,15 +21,10 @@ public class Instantiator {
         }
 
         public void add(Ref<? extends TypeDesc> param, Ref<? extends TypeDesc> arg) throws Exception{
-            System.out.println(">>   add(" + param + " => " + arg + ")"); // TODO: REMOVE
-
             if (this.prior != null) arg = this.prior.replace(arg);
             if (this.subst.put(param, arg) != null) this.paramOrder.remove(param);
             this.paramOrder.add(param);
             this.argOrder = null;
-
-
-            Require.lessThan(this.paramOrder.size(), 5); // TODO: REMOVE
         }
 
         public Ref<? extends TypeDesc> replace(Ref<? extends TypeDesc> con) {
@@ -57,13 +52,11 @@ public class Instantiator {
     }
 
     public void pushFrame() {
-            System.out.println(">> pushFrame"); // TODO: REMOVE
         this.topFrame = new Frame(this.topFrame);
     }
 
     public void popFrame() throws Exception {
         Require.notNull(this.topFrame, "instantiator has no frame to pop");
-            System.out.println(">> popFrame"); // TODO: REMOVE
         this.topFrame = this.topFrame.prior;
     }
 
