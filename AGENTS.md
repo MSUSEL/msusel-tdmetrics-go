@@ -1,14 +1,17 @@
 # AGENTS.md — msusel-tdmetrics-go
 
-PhD research pipeline for technical-debt analysis of procedural and OO languages. This file is the agent's starting map of the repo. For deeper context, see `.agents/summary/index.md`.
+PhD research pipeline for technical-debt analysis of procedural and OO languages.
+This file is the agent's starting map of the repo.
 
 ## TL;DR
 
 - Three components, one shared schema:
   - `goAbstractor/` (Go 1.25) and `javaAbstractor/` (Java 17 + Spoon 11.2.0) both emit JSON conforming to **`docs/genFeatureDef.md`**.
   - `techDebtMetrics/` (.NET 8) consumes that JSON to compute design-recovery and technical-debt metrics.
-- Active workstream: **complete the Java abstractor** so it can process all 31 Apache projects in `javaAbstractor/tdd/td_V2.db`. Plan: `.agents/planning/2026-05-01-java-abstractor-completion/implementation/plan.md` (**11 remaining steps**; **Step 1 = enum completion** next).
-- Researcher controls all changes. Plan first, write only when asked, never run `git add` / `git commit` / `git push`. See **Custom Instructions** below.
+  - Each component is encapsulated such that only one component should be worked
+    on at a time (unless otherwise specified by user).
+- Researcher controls all changes. Plan first, write only when asked,
+  never run `git add` / `git commit` / `git push`. See **Custom Instructions** below.
 
 ## Repository Layout
 
@@ -19,10 +22,6 @@ PhD research pipeline for technical-debt analysis of procedural and OO languages
 | `techDebtMetrics/` | .NET 8 solution. `Constructs/` mirrors the schema 1:1; `DesignRecovery/` and `TechDebt/` consume it; `Runner/Program.cs` is **currently a `NotImplementedException` stub**. |
 | `docs/` | Schema (`genFeatureDef.md`) and design notes (`spoonNotes.md`, `ducktype.md`, `extendingPointers.md`, `participationMatrix.md`, `tdResults.md`). |
 | `testData/go/` , `testData/java/` | Integration fixtures with expected `abstraction.yaml` goldens. `testData/java/test10NN` are single-file Tester fixtures; lower numbers are full Maven projects. |
-| `.agents/planning/` | Multi-step plans. The currently-active plan is `2026-05-01-java-abstractor-completion/`. |
-| `.agents/summary/` | Generated knowledge base. Start at `index.md`. |
-| `.cursor/rules/java-abstractor-handoff.mdc` | Auto-loaded handoff rule when editing the Java abstractor. |
-| `.cursor/commands/*.sop.md` | SOP commands available via `/<name>` in Cursor (`code-assist`, `code-task-generator`, `codebase-summary`, `eval`, `pdd`). |
 | `.github/workflows/ci.yaml` | CI: Go tests on Linux/Win/macOS + golangci-lint, Java `mvn test`, `dotnet test`. |
 | `Makefile` | Aggregates per-component `*-test` and `*-clean` targets. |
 | `AGENTS.md` | This file. |
@@ -80,7 +79,7 @@ These differ from defaults and matter when writing code:
 - **Type dispatch (Java)**: use `tr.getTypeDeclaration()` (not `getDeclaration()`); wrap in try/catch and fall back to `objectDesc` (or `null` for declarations) with a logged warning.
 - **Null/unknown (Java)**: `<nulltype>` is a no-op so null-literal usage doesn't create stubs. `Analyzer` skips `invokes.add` when `addDeclaration` returns null and skips field reads when `getFieldDeclaration()` is null.
 - **Log-and-continue**: never crash on unhandled constructs. TD analysis tolerates imprecision.
-- **Spoon fixtures**: avoid `System.out.println` in single-file Tester fixtures — Spoon will pull large JDK graphs.
+- **Spoon fixtures**: avoid `System.out.println` or other STL packages in single-file Tester fixtures — Spoon will pull large JDK graphs.
 
 ## Test Layout (non-obvious bits)
 
@@ -91,22 +90,6 @@ These differ from defaults and matter when writing code:
   - `core.RobustnessTests`, `core.MetricsTests`, `core.JsonTests`, `core.DiffTests`, `core.IterTests`.
 - Run filters: `mvn -Dtest="abstractor.AppTests#test0001" test`, `dotnet test --filter <name>`.
 
-## Active Plan
-
-`.agents/planning/2026-05-01-java-abstractor-completion/` — **11 remaining steps** in `implementation/plan.md`.
-
-- ▶️ **Step 1 — Enum completion:** finish `addEnum` (methods, super-interfaces, `Value.type`); align `test1006` with an enum fixture (source there today is nested generics).
-
-See `summary.md` and `.cursor/rules/java-abstractor-handoff.mdc` for the concise handoff.
-
-## Where to Look First
-
-- "Where is X implemented?" → `.agents/summary/components.md`.
-- "How does the pipeline run end-to-end?" → `.agents/summary/workflows.md`.
-- "What does construct Y mean / how is it represented?" → `docs/genFeatureDef.md` then `.agents/summary/data_models.md`.
-- "What CLI flags does each abstractor take?" → `.agents/summary/interfaces.md`.
-- "What's the next step in the active plan?" → `.agents/planning/2026-05-01-java-abstractor-completion/implementation/plan.md`.
-
 ## Custom Instructions
 
 <!-- This section is maintained by developers and agents during day-to-day work.
@@ -114,16 +97,35 @@ See `summary.md` and `.cursor/rules/java-abstractor-handoff.mdc` for the concise
      Add project-specific conventions, gotchas, and workflow requirements here. -->
 
 This is a PhD research project for technical debt analysis of procedural and
-object-oriented languages. The researcher (user) must remain in full control of all
-code changes.
+object-oriented languages. The researcher (i.e. user and developer) must remain
+in full control of all code changes.
 
 ### Git Restrictions
 
-- **NEVER** run `git add`, `git commit`, `git push`, or any destructive git command.
+- **NEVER** run `git add`, `git commit`, `git push`, `git checkout`, `git pull`, or any destructive git command.
 - Only `git list`, `git fetch`, and `git diff` are permitted.
 - Do not create PRs or branches.
 
 ### Interaction Model
+
+#### When in ask mode
+
+Only answer the question directly and do not try to use intuition to guess
+at how the question relates to the project overall. Answers should be short
+and to the point. When something can be demonstrated with a code snippet,
+use the code snippet to shorten the response.
+
+For example, if asked about nested Java classes, then answer the question based
+on the current version of Java for this project but do not attempt to find where
+in this project is the code for handling nested Java classes.
+
+If the user wants help with the project directly, they will explicitly
+state that this relates to part of the project. For example, if asked how to
+modify the abstractor in this project so that it can handle nested Java
+classes better, then answer with code snippets and line numbers for where
+and how to modify the project.
+
+#### When not in ask mode
 
 Follow this strict iterative workflow for every code change:
 
@@ -137,8 +139,7 @@ Never proceed to the next step without the user's explicit direction.
 
 ### File-Modification Permissions
 
-- The agent may modify files in `.agents/`, `.cursor/`, and `AGENTS.md` without asking.
-- For any other path, the agent **must ask for permission** before modifying.
+- The agent **must ask for permission** before modifying any file.
 - The agent must never stage, commit, or push changes; the researcher handles all revision control.
 
 ### Code Changes
@@ -150,7 +151,9 @@ Never proceed to the next step without the user's explicit direction.
   YAML) to understand the "shape of constructs" before implementation.
 - Agent may clean up debug artifacts (`println` statements, hardcoded log flags)
   if they are in the way of a change.
-- Add TODO comments for features known to be needed but not yet implemented.
+- Add TODO comments for features, issues, questions that the user is planning
+  on working on. TODO comments are not a request to an agent. The agent may
+  use them as a hint but should only try to address them when the user asks.
 
 ### Error Handling
 
@@ -170,19 +173,6 @@ Never proceed to the next step without the user's explicit direction.
 - Patterns loosely mirror the Go abstractor (`goAbstractor/`) for
   maintainability across both codebases.
 
-### Project Context
-
-- **Progress**: Robust dispatch, boxing, interface `inherits`, partial enums, and
-  cross-connect are in tree. **Next:** plan Step 1 (enum completion). See
-  `implementation/plan.md` and `.cursor/rules/java-abstractor-handoff.mdc`.
-- **Goal**: Complete the Java Abstractor (`javaAbstractor/`) so it can
-  process all 31 Apache Java projects in the Technical Debt Dataset (TDD).
-- **Output format**: JSON/YAML conforming to `docs/genFeatureDef.md`.
-- **Parser**: Spoon (v11.2.0) via `MavenLauncher` for Maven projects.
-- **Target**: Java 17, Maven build.
-- **TDD database**: `javaAbstractor/tdd/td_V2.db` (SQLite).
-- **Design docs**: `.agents/planning/2026-05-01-java-abstractor-completion/`.
-
 ### Key Design Decisions
 
 - External (JDK/library) types: boxed/`String` → `Basic`; named stubs for other shadow types (planned — today often `anyDesc`).
@@ -191,4 +181,3 @@ Never proceed to the next step without the user's explicit direction.
 - Named nested classes: separate objects with `nest` field.
 - Generic instantiations: track as distinct types (`ObjectInst`,
   `MethodInst`, `InterfaceInst`).
-- Package imports: derive from actual type usage, not `import` statements.

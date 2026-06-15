@@ -1,69 +1,74 @@
 {
   language: java,
   abstracts: [
-    { name: Foo1, signature: 2 }, # 1. ???
-    { name: Foo2, signature: 3 }, # 2. ???
-    { name: Foo3, signature: 1 }, # 3. ???
-    { name: Foo3, signature: 2 }, # 4. ???
-    { name: Foo3, signature: 3 }, # 5. ???
+    { name: Foo1, signature: 1 }, # 1. Foo1() Foo<int>
+    { name: Foo2, signature: 2 }, # 2. Foo2() Foo<string>
+    { name: Foo3, signature: 3 }, # 3. Foo3() Foo<U>
   ],
   arguments: [
-    { type: object1     }, # 1. <unnamed> ???
-    { type: objectInst1 }, # 2. <unnamed> Foo<int> ???
-    { type: objectInst2 }, # 3. <unnamed> Foo<string> ???
+    { type: objectInst1 }, # 1. <unnamed> Foo<int>
+    { type: objectInst2 }, # 2. <unnamed> Foo<string>
+    { type: objectInst3 }, # 3. <unnamed> Foo<U>
   ],
   basics: [ int, string ],
   fields: [
     { name: x, type: basic1,     vis: public }, # 1. x int
     { name: x, type: basic2,     vis: public }, # 2. x string
     { name: x, type: typeParam1, vis: public }, # 3. x T
+    { name: x, type: typeParam2, vis: public }, # 3. x U
   ],
   interfaceDescs: [
-    { # 1. ???
+    { # 1. interface{ Foo1() Foo<int>; Foo2() Foo<string>; Foo3() Foo<U> }
+      abstracts: [ 1, 2, 3 ],
+    },
+    { # 2. interface{ Foo1() Foo<int>; Foo2() Foo<string>; Foo3() Foo<U> }
       abstracts: [ 1, 2, 3 ], pin: object1,
     },
-    { # 2. ???
-      abstracts: [ 1, 2, 4 ],
-    },
-    { # 3. ???
-      abstracts: [ 1, 2, 5 ],
-    },
-    { # 4. any
+    { # 3. any
       abstracts: [ ],
     },
   ],
   methodInsts: [
-    { # 1. Foo<int>.Foo1() Foo<int> ???
-      generic: 1, receiver: 1, resolved: 2, instanceTypes: [ basic1 ],
+    { # 1. Foo<int>.Foo1() Foo<int>
+      generic: 1, receiver: 1, resolved: 1, instanceTypes: [ basic1 ],
     },
-    { # 2. Foo<string>.Foo1() Foo<int> ???
-      generic: 1, receiver: 2, resolved: 2, instanceTypes: [ basic2 ],
+    { # 2. Foo<string>.Foo1() Foo<int>
+      generic: 1, receiver: 2, resolved: 1, instanceTypes: [ basic2 ],
     },
-    { # 3. Foo<int>.Foo1() Foo<int> ???
-      generic: 2, receiver: 1, resolved: 3, instanceTypes: [ basic1 ],
+    { # 3. Foo<U>.Foo1() Foo<U>
+      generic: 1, receiver: 3, resolved: 1, instanceTypes: [ typeParam2 ],
     },
-    { # 4. Foo<string>.Foo1() Foo<int> ???
-      generic: 2, receiver: 2, resolved: 3, instanceTypes: [ basic2 ],
+    { # 4. Foo<int>.Foo2() Foo<string>
+      generic: 2, receiver: 1, resolved: 2, instanceTypes: [ basic1 ],
     },
-    { # 5. ???
-      generic: 3, receiver: 1, resolved: 2, instanceTypes: [ basic1 ],
+    { # 5. Foo<string>.Foo2() Foo<string>
+      generic: 2, receiver: 2, resolved: 2, instanceTypes: [ basic2 ],
     },
-    { # 6. ???
+    { # 6. Foo<U>.Foo2() Foo<string>
+      generic: 2, receiver: 3, resolved: 2, instanceTypes: [ typeParam2 ],
+    },
+    { # 7. Foo<int>.Foo3<U>() Foo<U>
+      generic: 3, receiver: 1, resolved: 3, instanceTypes: [ basic1 ],
+    },
+    { # 8. Foo<string>.Foo3<U>() Foo<U>
       generic: 3, receiver: 2, resolved: 3, instanceTypes: [ basic2 ],
+    },
+    { # 9. Foo<U>.Foo3<U>() Foo<U>
+      generic: 3, receiver: 3, resolved: 3, instanceTypes: [ typeParam2 ],
     },
   ],
   methods: [
-    { # 1. Foo<T>.Foo1() Foo<int> ???
-      name: Foo1, package: 5, receiver: 1, signature: 2,
+    { # 1. Foo<T>.Foo1() Foo<int>
+      name: Foo1, package: 5, receiver: 1, signature: 1,
       loc: 6, metrics: 1, vis: public,
     },
-    { # 2. Foo<T>.Foo2() Foo<string> ???
-      name: Foo2, package: 5, receiver: 1, signature: 3,
+    { # 2. Foo<T>.Foo2() Foo<string>
+      name: Foo2, package: 5, receiver: 1, signature: 2,
       loc: 7, metrics: 2, vis: public,
     },
-    { # 3. ???
-      name: Foo3, package: 5, receiver: 1, signature: 1,
-      loc: 8, metrics: 3, vis: public,
+    { # 3. Foo<T>.Foo3<U>() Foo<U>
+      name: Foo3, package: 5, receiver: 1, signature: 3,
+      loc: 8, metrics: 3, vis: public, typeParams: [ 2 ],
     },
   ],
   metrics: [
@@ -72,20 +77,22 @@
     { codeCount: 1, complexity: 1, lineCount: 1, loc: 8 },
   ],
   objectInsts: [
-    { # 1. Foo<int> struct{ x int }{ Foo1() Foo<int>; Foo2() Foo<string> } ???
-      generic: 1, resData: 1, resInterface: 2,
-      instanceTypes: [ basic1 ],
-      methods: [ 1, 3, 5 ],
+    { # 1. Foo<int> struct{ x int }{ Foo1() Foo<int>; Foo2() Foo<string>; Foo3<U>() Foo<U> }
+      generic: 1, resData: 1, resInterface: 1, instanceTypes: [ basic1 ],
+      methods: [ 1, 4, 7 ],
     },
-    { # 2. Foo<string> struct{ x string }{ Foo1() Foo<int>; Foo2() Foo<string> } ???
-      generic: 1, resData: 2, resInterface: 3,
-      instanceTypes: [ basic2 ],
-      methods: [ 2, 4, 6 ],
+    { # 2. Foo<string> struct{ x string }{ Foo1() Foo<int>; Foo2() Foo<string>; Foo3<U>() Foo<U> }
+      generic: 1, resData: 2, resInterface: 1, instanceTypes: [ basic2 ],
+      methods: [ 2, 5, 8 ],
+    },
+    { # 3. Foo<U> struct{ x U }{ Foo1() Foo<int>; Foo2() Foo<string>; Foo3<U>() Foo<U> }
+      generic: 1, resData: 4, resInterface: 1, instanceTypes: [ typeParam2 ],
+      methods: [ 3, 6, 9 ],
     },
   ],
   objects: [
-    { # 1. Foo<T> struct{ x T }{ Foo1() Foo<int>; Foo2() Foo<string> } ???
-      name: Foo, package: 5, data: 3, interface: 1,
+    { # 1. Foo<T> struct{ x T }{ Foo1() Foo<int>; Foo2() Foo<string>; Foo3<U>() Foo<U> }
+      name: Foo, package: 5, data: 3, interface: 2,
       loc: 3, vis: public, typeParams: [ 1 ],
       methods: [ 1, 2, 3 ],
     },
@@ -102,17 +109,19 @@
     },
   ],
   signatures: [
-    { results: [ 1 ] }, # 1. func() Foo<int> ???
-    { results: [ 2 ] }, # 2. func() Foo<string> ???
-    { results: [ 3 ] }, # 2. func() ???
+    { results: [ 1 ] }, # 1. func() Foo<int>
+    { results: [ 2 ] }, # 2. func() Foo<string>
+    { results: [ 3 ] }, # 2. func() Foo<U>
   ],
   structDescs: [
-    { fields: [ 1 ] }, # 1. struct{ x int } ???
-    { fields: [ 2 ] }, # 2. struct{ x string } ???
-    { fields: [ 3 ] }, # 3. struct{ x T } ???
+    { fields: [ 1 ] }, # 1. struct{ x int }
+    { fields: [ 2 ] }, # 2. struct{ x string }
+    { fields: [ 3 ] }, # 3. struct{ x T }
+    { fields: [ 4 ] }, # 4. struct{ x U }
   ],
   typeParams: [
-    { name: T, type: interfaceDesc4 }, # 1. T any
+    { name: T, type: interfaceDesc3 }, # 1. T any
+    { name: U, type: interfaceDesc3 }, # 2. U any
   ],
   locs: { 1: ClassesFromSource.java },
 }

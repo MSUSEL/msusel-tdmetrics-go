@@ -1,0 +1,126 @@
+{
+  language: java,
+  abstracts: [
+    { name: Boop, signature: 1 }, # 1. ???
+    { name: Moog, signature: 1 }, # 2. ???
+    { name: Run,  signature: 1 }, # 3. ???
+  ],
+  arguments: [
+    { type: basic1 }, # 1. <unnamed> bool
+  ],
+  basics: [ boolean ],
+  fields: [
+    { name: t, type: object4,    vis: public }, # 1. t Tak
+    { name: x, type: typeParam1, vis: public }, # 2. x T
+  ],
+  interfaceDecls: [
+    { # 1. ???
+      name: Bar, package: 5, interface: 2,
+      loc: 4, vis: public,
+    },
+  ],
+  interfaceDescs: [
+    { # 1. ???
+      abstracts: [ 1, 2 ], pin: object3,
+    },
+    { # 2. ???
+      abstracts: [ 3 ],
+    },
+    { # 3. ???
+      abstracts: [ 3 ], pin: object1,
+      inherits: [ 2 ],
+    },
+    { # 4. any
+      abstracts: [ ],
+    },
+  ],
+  methods: [
+    { # 1. ???.Boop() bool
+      name: Boop, package: 5, receiver: 3, signature: 1,
+      loc: 22, metrics: 2, vis: public,
+    },
+    { # 2. ???.Moog() bool
+      name: Moog, package: 5, receiver: 3, signature: 1,
+      loc: 28, metrics: 3, vis: public,
+    },
+    { # 3. ???.Run() bool
+      name: Run,  package: 5, receiver: 1, signature: 1,
+      loc: 17, metrics: 1, vis: public,
+    },
+  ],
+  metrics: [
+    { # 1. ???
+      loc: 17, codeCount: 3, complexity: 1, indents: 1, lineCount: 3,
+      getter: true,
+    },
+    { # 2. ???
+      loc: 22, codeCount: 5, complexity: 1, indents: 3, lineCount: 5,
+      invokes: [ method3 ],
+      reads: [ selection1, selection2 ],
+    },
+    { # 3. ???
+      loc: 28, codeCount: 9, complexity: 1, indents: 13, lineCount: 9,
+      invokes: [ abstract3 ],
+      reads: [ selection1, selection2 ],
+    },
+  ],
+  objectInsts: [
+    { # 1. ???
+      generic: 2, resData: 2, resInterface: 4, instanceTypes: [ interfaceDecl1 ],
+      methods: [ ],
+    },
+    { # 2. ???
+      generic: 2, resData: 2, resInterface: 4, instanceTypes: [ object1 ],
+      methods: [ ],
+    },
+  ],
+  objects: [
+    { # 1. Baz{}{ ??? }
+      name: Baz, package: 5, data: 1, interface: 3,
+      loc: 16, vis: public,
+      methods: [ 3 ],
+    },
+    { # 2. Bip<T>{ t Tak }{}
+      name: Bip, package: 5, data: 2, interface: 4,
+      loc: 8, vis: public,
+      typeParams: [ 1 ],
+    },
+    { # 3. Foo{}{ ??? }
+      name: Foo, package: 5, data: 1, interface: 1,
+      loc: 3, vis: public,
+      methods: [ 1, 2 ],
+    },
+    { # 4. Tak{ x T }{}
+      name: Tak, package: 5, data: 3, interface: 4,
+      loc: 9, vis: public,
+    },
+  ],
+  packages: [
+    { name: $builtin },
+    { name: "<unnamed>" },
+    { name: testData },
+    { name: testData.java },
+    {
+      name: testData.java.test1009,
+      interfaces: [ 1 ],
+      methods: [ 1, 2, 3 ],
+      objects: [ 1, 2, 3, 4 ],
+    },
+  ],
+  selections: [
+    { name: t, origin: object2 }, # 1. ???
+    { name: x, origin: object4 }, # 2. ???
+  ],
+  signatures: [
+    { results: [ 1 ] }, # 1. func() bool
+  ],
+  structDescs: [
+    {               }, # 1. struct{}
+    { fields: [ 1 ] }, # 2. struct{ t Tak }
+    { fields: [ 2 ] }, # 3. struct{ x T }
+  ],
+  typeParams: [
+    { name: T, type: interfaceDecl1 }, # 1. T ???
+  ],
+  locs: { 1: ClassesFromSource.java },
+}
