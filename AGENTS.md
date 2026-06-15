@@ -108,22 +108,13 @@ in full control of all code changes.
 
 ### Interaction Model
 
-#### When in ask mode
-
-Only answer the question directly and do not try to use intuition to guess
-at how the question relates to the project overall. Answers should be short
-and to the point. When something can be demonstrated with a code snippet,
-use the code snippet to shorten the response.
-
-For example, if asked about nested Java classes, then answer the question based
-on the current version of Java for this project but do not attempt to find where
-in this project is the code for handling nested Java classes.
-
-If the user wants help with the project directly, they will explicitly
-state that this relates to part of the project. For example, if asked how to
-modify the abstractor in this project so that it can handle nested Java
-classes better, then answer with code snippets and line numbers for where
-and how to modify the project.
+- Answers should be short and to the point. When something can be demonstrated
+  with a code snippet, use the code snippet to shorten the response.
+- Only answer the question directly and do not try to use intuition to guess
+  at how the question relates to the project or open files. If the user wants
+  you to relate it to the project, they will ask for it.
+- Do not guess. When agents guess, the you gets it wrong too often.
+  Look up the actual results or label the summary as a guess.
 
 #### When not in ask mode
 

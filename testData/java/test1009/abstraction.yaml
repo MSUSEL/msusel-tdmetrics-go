@@ -94,6 +94,9 @@
       name: Tak, package: 5, data: 3, interface: 4,
       loc: 9, vis: public,
     },
+    {
+      warning: "Fixing things, remove later",
+    },
   ],
   packages: [
     { name: $builtin },

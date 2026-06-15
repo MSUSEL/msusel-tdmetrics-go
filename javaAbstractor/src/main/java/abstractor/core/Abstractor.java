@@ -144,7 +144,22 @@ public class Abstractor {
         return null;
     }
 
+    public Ref<? extends TypeDesc> getParent(CtElement elem) throws Exception { // TODO: TEST
+        if (elem.getRoleInParent() == CtRole.NESTED_TYPE) {
+            final CtElement parent = elem.getParent();
+            if (parent instanceof CtTypeReference<?> nest && nest != null) {
+                return this.addTypeDesc(nest);
+            } else {
+                this.log.error("Unhandled nested interface decl " + SpoonUtils.describeElem(elem) + " in " + parent);
+            }
+        }
+        return null;
+    }
+
     public Ref<InterfaceDecl> addInterfaceDecl(CtInterface<?> i) throws Exception {
+
+        this.log.notice(i.getPath().toString()); // TODO: REMOVE
+
         try {
             // All declarations must be added without type arguments.
             this.instantiator.pushCleanFrame();
@@ -160,8 +175,9 @@ public class Abstractor {
                 },
                 (Ref<InterfaceDecl> ref, InterfaceDecl id) -> {
                     id.setVisibility(i);
-
-                    // TODO: Handle nested
+                    // Add any nested types.
+                    //for (CtType<?> nt : i.getNestedTypes()) // TODO: Do we need more for nested types?
+                    //    this.addTypeDesc(nt.getReference());
                 });
         } finally {
             this.instantiator.popFrame();
@@ -189,8 +205,8 @@ public class Abstractor {
                 },
                 (Ref<InterfaceInst> ref, InterfaceInst it) -> {
                     // Add any nested types.
-                    for (CtType<?> nt : i.getNestedTypes()) // TODO: Do we need more for nested types?
-                        this.addTypeDesc(nt.getReference());
+                    //for (CtType<?> nt : i.getNestedTypes()) // TODO: Do we need more for nested types?
+                    //    this.addTypeDesc(nt.getReference());
                 });
         } finally {
             this.instantiator.popFrame();
@@ -232,6 +248,9 @@ public class Abstractor {
     }
 
     public Ref<MethodDecl> addMethodDecl(Ref<ObjectDecl> receiver, CtMethod<?> m) throws Exception {
+        
+        this.log.notice(m.getPath().toString()); // TODO: REMOVE
+
         Require.notObjectMethod(m);
         final ObjectDecl recv = receiver.mustGetResolved();
         try {
@@ -495,6 +514,9 @@ public class Abstractor {
     }
 
     public Ref<ObjectDecl> addObjectDecl(CtClass<?> c) throws Exception {
+
+        this.log.notice(c.getPath().toString()); // TODO: REMOVE
+
         Require.notObject(c.getReference());
         try {
             // All declarations must be added without type arguments.
