@@ -173,6 +173,9 @@ public class Abstractor {
                     if (parent != null) {
                         this.log.notice(parent.toString()+" => "+SpoonUtils.describeElem(i)); // TODO: Finish
                     }
+                    // Add any nested types.
+                    for (CtType<?> nt : i.getNestedTypes())
+                        this.addTypeDesc(nt.getReference()); // TODO: Finish
                 });
         } finally {
             this.instantiator.popFrame();

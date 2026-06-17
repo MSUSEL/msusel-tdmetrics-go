@@ -10,8 +10,10 @@ import abstractor.core.json.*;
 
 public class InterfaceDecl extends DeclarationImp implements TypeDeclaration {
     public       Ref<InterfaceDesc>          inter;
-    public final ArrayList<Ref<TypeParam>>   typeParams = new ArrayList<>();
-    public final TreeSet<Ref<InterfaceInst>> instances  = new TreeSet<>();
+    public final ArrayList<Ref<TypeParam>>   typeParams  = new ArrayList<>();
+    public final TreeSet<Ref<InterfaceInst>> instances   = new TreeSet<>();
+    public       Ref<TypeDesc>               nest;                          // TODO: FINISH
+    public final TreeSet<Ref<TypeDesc>>      nestedTypes = new TreeSet<>(); // TODO: FINISH
 
     public InterfaceDecl(Ref<PackageCon> pkg, Location loc,
         String name, Ref<InterfaceDesc> inter, List<Ref<TypeParam>> typeParams) throws Exception {
