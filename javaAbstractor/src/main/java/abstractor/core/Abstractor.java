@@ -9,7 +9,6 @@ import spoon.reflect.declaration.*;
 import spoon.reflect.path.CtRole;
 import spoon.reflect.reference.*;
 import spoon.support.compiler.VirtualFile;
-
 import abstractor.core.constructs.*;
 import abstractor.core.log.*;
 import abstractor.core.require.Require;
@@ -130,7 +129,7 @@ public class Abstractor {
         if (elem instanceof CtInterface<?> i) return this.addInterfaceDecl(i);
         if (elem instanceof CtMethod<?>    m) return this.addMethodDeclOrAbstract(m);
 
-        this.log.error("unhandled decl: " + SpoonUtils.describeElem(elem));
+        this.log.error("Unhandled decl: " + SpoonUtils.describeElem(elem));
         return null;
     }
 
@@ -140,44 +139,40 @@ public class Abstractor {
         if (decl instanceof CtClass<?>   c) return this.addMethodDecl(this.addObjectDecl(c), m);
         if (decl instanceof CtInterface<?>) return this.addAbstract(m);
 
-        this.log.error("method has unhandled declaring type: " + SpoonUtils.describeElem(decl));
+        this.log.error("Method has unhandled declaring type: " + SpoonUtils.describeElem(decl));
         return null;
     }
 
-    public Ref<? extends TypeDesc> getParent(CtElement elem) throws Exception { // TODO: TEST
-        if (elem.getRoleInParent() == CtRole.NESTED_TYPE) {
-            final CtElement parent = elem.getParent();
-            if (parent instanceof CtTypeReference<?> nest && nest != null) {
-                return this.addTypeDesc(nest);
-            } else {
-                this.log.error("Unhandled nested interface decl " + SpoonUtils.describeElem(elem) + " in " + parent);
-            }
+    private Ref<? extends Construct> getParent(CtElement elem) throws Exception {
+        if (elem.getParent() instanceof CtType<?> parent && parent != null) {
+            this.log.log("getting parent type for " + SpoonUtils.describeElem(elem));
+            this.log.push();
+            try { return this.addDeclaration(parent); }
+            finally { this.log.pop(); }
         }
         return null;
     }
 
     public Ref<InterfaceDecl> addInterfaceDecl(CtInterface<?> i) throws Exception {
-
-        this.log.notice(i.getPath().toString()); // TODO: REMOVE
-
         try {
             // All declarations must be added without type arguments.
             this.instantiator.pushCleanFrame();
             return this.proj.interfaceDecls.create(this.log, new ElementKey(i),
                 "interface decl " + SpoonUtils.describeElem(i),
                 () -> {
-                    final String             name  = i.getSimpleName();
-                    final Ref<PackageCon>    pkg   = this.addPackageFor(i);
-                    final Location           loc   = this.proj.locations.create(i.getPosition());
-                    final Ref<InterfaceDesc> inter = this.addInterfaceDesc(i);
-                    final ArrayList<Ref<TypeParam>> typeParams = this.addTypeParams(i.getFormalCtTypeParameters());
+                    final String               name       = i.getSimpleName();
+                    final Ref<PackageCon>      pkg        = this.addPackageFor(i);
+                    final Location             loc        = this.proj.locations.create(i.getPosition());
+                    final Ref<InterfaceDesc>   inter      = this.addInterfaceDesc(i);
+                    final List<Ref<TypeParam>> typeParams = this.addTypeParams(i);
                     return new InterfaceDecl(pkg, loc, name, inter, typeParams);
                 },
                 (Ref<InterfaceDecl> ref, InterfaceDecl id) -> {
                     id.setVisibility(i);
-                    // Add any nested types.
-                    //for (CtType<?> nt : i.getNestedTypes()) // TODO: Do we need more for nested types?
-                    //    this.addTypeDesc(nt.getReference());
+                    final Ref<? extends Construct> parent = this.getParent(i);
+                    if (parent != null) {
+                        this.log.notice(parent.toString()+" => "+SpoonUtils.describeElem(i)); // TODO: Finish
+                    }
                 });
         } finally {
             this.instantiator.popFrame();
@@ -188,7 +183,7 @@ public class Abstractor {
         final Ref<InterfaceDecl> decl = this.addInterfaceDecl(i);
         if (!i.isGenerics()) return decl;
 
-        final List<Ref<TypeParam>> typeParams = this.addTypeParams(i.getFormalCtTypeParameters());
+        final List<Ref<TypeParam>> typeParams = this.addTypeParams(i);
         final ArrayList<Ref<? extends TypeDesc>> typeArgs = this.addTypeArguments(tr, typeParams);
         if (typeArgs == null) return decl;
 
@@ -202,11 +197,6 @@ public class Abstractor {
                 () -> {
                     final Ref<InterfaceDesc> resolved = this.addInterfaceDesc(i);
                     return new InterfaceInst(decl, this.instantiator.typeArgs(), resolved);
-                },
-                (Ref<InterfaceInst> ref, InterfaceInst it) -> {
-                    // Add any nested types.
-                    //for (CtType<?> nt : i.getNestedTypes()) // TODO: Do we need more for nested types?
-                    //    this.addTypeDesc(nt.getReference());
                 });
         } finally {
             this.instantiator.popFrame();
@@ -248,9 +238,6 @@ public class Abstractor {
     }
 
     public Ref<MethodDecl> addMethodDecl(Ref<ObjectDecl> receiver, CtMethod<?> m) throws Exception {
-        
-        this.log.notice(m.getPath().toString()); // TODO: REMOVE
-
         Require.notObjectMethod(m);
         final ObjectDecl recv = receiver.mustGetResolved();
         try {
@@ -263,7 +250,7 @@ public class Abstractor {
                     final Location             loc        = this.proj.locations.create(m.getPosition());
                     final String               name       = m.getSimpleName();
                     final Ref<Signature>       signature  = this.addSignature(m);
-                    final List<Ref<TypeParam>> typeParams = this.addTypeParams(m.getFormalCtTypeParameters());
+                    final List<Ref<TypeParam>> typeParams = this.addTypeParams(m);
                     final MethodDecl md = new MethodDecl(pkg, receiver, loc, name, signature, typeParams);
                     md.isStatic = m.isStatic();
                     return md;
@@ -272,6 +259,10 @@ public class Abstractor {
                     md.setVisibility(m);
                     recv.methodDecls.add(ref);
                     this.pendingMetrics.add(m);
+                    final Ref<? extends Construct> parent = this.getParent(m);
+                    if (parent != null) {
+                        this.log.notice(parent.toString()+" => "+SpoonUtils.describeElem(m)); // TODO: Finish
+                    }
                 });
         } finally {
             this.instantiator.popFrame();
@@ -336,7 +327,7 @@ public class Abstractor {
                     final Location             loc        = this.proj.locations.create(ctor.getPosition());
                     final String               name       = recv.name;
                     final Ref<Signature>       signature  = this.addSignatureForConstructor(ctor);
-                    final List<Ref<TypeParam>> typeParams = this.addTypeParams(ctor.getFormalCtTypeParameters());
+                    final List<Ref<TypeParam>> typeParams = this.addTypeParams(ctor);
                     final MethodDecl md = new MethodDecl(pkg, receiver, loc, name, signature, typeParams);
                     md.constructor = true;
                     md.isStatic = true;
@@ -481,10 +472,16 @@ public class Abstractor {
         return result;
     }
 
-    public ArrayList<Ref<TypeParam>> addTypeParams(List<CtTypeParameter> tps) throws Exception {
-        final ArrayList<Ref<TypeParam>> result = new ArrayList<>(tps.size());
-        for (CtTypeParameter tp : tps) {
-            result.add(this.addTypeParam(tp));
+    private List<Ref<TypeParam>> addTypeParams(CtElement elem) throws Exception {
+        final List<Ref<TypeParam>> result =
+            (elem.getParent() instanceof CtType<?> parent && parent != null)
+            ? this.addTypeParams(parent)
+            : new ArrayList<>();
+
+        if (elem instanceof CtFormalTypeDeclarer td) {
+            for (CtTypeParameter tp : td.getFormalCtTypeParameters()) {
+                result.add(this.addTypeParam(tp));
+            }
         }
         return result;
     }
@@ -514,9 +511,6 @@ public class Abstractor {
     }
 
     public Ref<ObjectDecl> addObjectDecl(CtClass<?> c) throws Exception {
-
-        this.log.notice(c.getPath().toString()); // TODO: REMOVE
-
         Require.notObject(c.getReference());
         try {
             // All declarations must be added without type arguments.
@@ -528,7 +522,7 @@ public class Abstractor {
                     final Location             loc        = this.proj.locations.create(c.getPosition());
                     final String               name       = c.getSimpleName();
                     final Ref<StructDesc>      struct     = this.addStructDesc(c);
-                    final List<Ref<TypeParam>> typeParams = this.addTypeParams(c.getFormalCtTypeParameters());
+                    final List<Ref<TypeParam>> typeParams = this.addTypeParams(c);
                     return new ObjectDecl(pkg, loc, name, struct, typeParams);
                 },
                 (Ref<ObjectDecl> ref, ObjectDecl obj) -> {
@@ -554,9 +548,14 @@ public class Abstractor {
 
                     obj.inter = this.synthesizeObjectInterface(c, ref);
 
+                    final Ref<? extends Construct> parent = this.getParent(c);
+                    if (parent != null) {
+                        this.log.notice(parent.toString()+" => "+SpoonUtils.describeElem(c)); // TODO: Finish
+                    }
+
                     // Add any nested types.
-                    for (CtType<?> nt : c.getNestedTypes()) // TODO: Do we need more for nested types? Yes, nested types need to inherit nest's type parameters.
-                        this.addTypeDesc(nt.getReference());
+                    //for (CtType<?> nt : c.getNestedTypes()) // TODO: Do we need more for nested types?
+                    //    this.addTypeDesc(nt.getReference());
                 });
         } finally {
             this.instantiator.popFrame();
@@ -594,7 +593,7 @@ public class Abstractor {
         final Ref<ObjectDecl> decl = this.addObjectDecl(c);
         if (!c.isGenerics()) return decl;
 
-        final List<Ref<TypeParam>> typeParams = this.addTypeParams(c.getFormalCtTypeParameters());
+        final List<Ref<TypeParam>> typeParams = this.addTypeParams(c);
         final ArrayList<Ref<? extends TypeDesc>> typeArgs = this.addTypeArguments(tr, typeParams);
         if (typeArgs == null) return decl;
 
