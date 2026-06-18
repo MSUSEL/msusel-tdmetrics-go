@@ -169,13 +169,9 @@ public class Abstractor {
                 },
                 (Ref<InterfaceDecl> ref, InterfaceDecl id) -> {
                     id.setVisibility(i);
-                    final Ref<? extends Construct> parent = this.getParent(i);
-                    if (parent != null) {
-                        this.log.notice(parent.toString()+" => "+SpoonUtils.describeElem(i)); // TODO: Finish
-                    }
-                    // Add any nested types.
+                    id.setNest(this.getParent(i));
                     for (CtType<?> nt : i.getNestedTypes())
-                        this.addTypeDesc(nt.getReference()); // TODO: Finish
+                        id.nestedTypes.add(this.addTypeDesc(nt.getReference()));
                 });
         } finally {
             this.instantiator.popFrame();
@@ -262,10 +258,7 @@ public class Abstractor {
                     md.setVisibility(m);
                     recv.methodDecls.add(ref);
                     this.pendingMetrics.add(m);
-                    final Ref<? extends Construct> parent = this.getParent(m);
-                    if (parent != null) {
-                        this.log.notice(parent.toString()+" => "+SpoonUtils.describeElem(m)); // TODO: Finish
-                    }
+                    //md.setNest(this.getParent(m)); // Not needed because of receiver
                 });
         } finally {
             this.instantiator.popFrame();
@@ -338,6 +331,7 @@ public class Abstractor {
                 },
                 (Ref<MethodDecl> ref, MethodDecl md) -> {
                     md.setVisibility(ctor);
+                    //md.setNest(this.getParent(ctor)); // Not needed because of receiver
                     final ObjectDecl recv = receiver.mustGetResolved();
                     recv.methodDecls.add(ref);
                     this.pendingMetrics.add(ctor);
@@ -530,6 +524,9 @@ public class Abstractor {
                 },
                 (Ref<ObjectDecl> ref, ObjectDecl obj) -> {
                     obj.setVisibility(c);
+                    obj.setNest(this.getParent(c));
+                    for (CtType<?> nt : c.getNestedTypes())
+                        obj.nestedTypes.add(this.addTypeDesc(nt.getReference()));
                     
                     // Add constructors as (static) methods.
                     for (CtConstructor<?> ctor : c.getConstructors()) {
@@ -550,15 +547,6 @@ public class Abstractor {
                     }
 
                     obj.inter = this.synthesizeObjectInterface(c, ref);
-
-                    final Ref<? extends Construct> parent = this.getParent(c);
-                    if (parent != null) {
-                        this.log.notice(parent.toString()+" => "+SpoonUtils.describeElem(c)); // TODO: Finish
-                    }
-
-                    // Add any nested types.
-                    //for (CtType<?> nt : c.getNestedTypes()) // TODO: Do we need more for nested types?
-                    //    this.addTypeDesc(nt.getReference());
                 });
         } finally {
             this.instantiator.popFrame();
@@ -618,10 +606,6 @@ public class Abstractor {
                         if (m.getParent().equals(c) && !SpoonUtils.isObjectMethod(m))
                             this.addMethodInst(ref, m);
                     }
-
-                    // Add any nested types.
-                    for (CtType<?> nt : c.getNestedTypes()) // TODO: Do we need more for nested types?
-                        this.addTypeDesc(nt.getReference());
                 });
         } finally {
             this.instantiator.popFrame();
@@ -752,6 +736,11 @@ public class Abstractor {
                     return new ObjectDecl(pkg, loc, name, struct, null);
                 },
                 (Ref<ObjectDecl> ref, ObjectDecl od) -> {
+                    od.setVisibility(e);
+                    od.setNest(this.getParent(e));
+                    for (CtType<?> nt : e.getNestedTypes())
+                        od.nestedTypes.add(this.addTypeDesc(nt.getReference()));
+
                     // Finish by adding the "const values" to the package for each enumerator value.
                     for (CtEnumValue<?> ev: e.getEnumValues()) {
                         this.proj.values.create(this.log, new ElementKey(e),
@@ -763,7 +752,13 @@ public class Abstractor {
                             });
                     }
 
-                    // TODO: Add methods that have been added to the enum?
+                    // Add methods for the enum.
+                    for (CtMethod<?> m : e.getAllMethods()) {
+                        if (m.getParent().equals(e) && !SpoonUtils.isObjectMethod(m))
+                            this.addMethodDecl(ref, m);
+                    }
+
+                    od.inter = this.synthesizeObjectInterface(e, ref);
                 });
         } finally {
             this.instantiator.popFrame();

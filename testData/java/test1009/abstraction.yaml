@@ -16,7 +16,7 @@
   interfaceDecls: [
     { # 1. ???
       name: Bar, package: 5, interface: 2,
-      loc: 4, vis: public,
+      loc: 4, vis: public, nest: object3,
     },
   ],
   interfaceDescs: [
@@ -77,25 +77,25 @@
   objects: [
     { # 1. Baz{}{ ??? }
       name: Baz, package: 5, data: 1, interface: 3,
-      loc: 16, vis: public,
+      loc: 16, vis: public, nest: object3,
       methods: [ 3 ],
     },
     { # 2. Bip<T>{ t Tak }{}
       name: Bip, package: 5, data: 2, interface: 4,
-      loc: 8, vis: public,
+      loc: 8, vis: public, nest: object3,
+      nested: [ object4 ],
       typeParams: [ 1 ],
     },
     { # 3. Foo{}{ ??? }
       name: Foo, package: 5, data: 1, interface: 1,
       loc: 3, vis: public,
+      nested: [ interfaceDecl1, object1, object2 ],
       methods: [ 1, 2 ],
     },
     { # 4. Tak{ x T }{}
       name: Tak, package: 5, data: 3, interface: 4,
-      loc: 9, vis: public,
-    },
-    {
-      warning: "Fixing things, remove later",
+      loc: 9, vis: public, nest: object2,
+      typeParams: [ 1 ],
     },
   ],
   packages: [
