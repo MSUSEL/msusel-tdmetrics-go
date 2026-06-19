@@ -2,22 +2,53 @@ package abstractor.core.validator;
 
 import abstractor.core.log.Logger;
 
-import java.util.ArrayList;
+import java.util.*;
 
 import abstractor.core.constructs.*;
+import abstractor.core.json.JsonFormat;
+import abstractor.core.json.JsonHelper;
 
 public class Validator {
     final public Logger log;
     final public Project proj;
+    private int errCount;
 
     public Validator(Logger log, Project proj) {
-        this.log = log;
+        this.log  = log;
         this.proj = proj;
+        this.errCount = 0;
     }
 
     public void validate() {
         for (Factory<? extends Construct> f : proj.factories)
             this.validate(f);
+    }
+
+    public int errorCount() { return this.errCount; }
+
+    private void error(String text) {
+        this.errCount++;
+        String prefix = "Validation Error " + this.errCount + ". ";
+        if (this.errCount > 1) prefix = "\n" + prefix;
+        this.log.error(prefix + text);
+    }
+
+    private String conToString(Construct con) {
+        JsonHelper jh = new JsonHelper();
+        jh.writeKinds     = true;
+        jh.writeIndices   = true;
+        jh.writeRefs      = true;
+        jh.refSkipResolve = false;
+        return JsonFormat.Inline().format(con.toJson(jh));
+    }
+    
+    private String conToString(List<? extends Construct> cons) {
+        List<String> parts = new ArrayList<>(cons.size());
+        for (Construct con : cons) {
+            parts.add(this.conToString(con));
+        }
+        final String indent = "  ";
+        return "[\n" + indent + String.join(",\n" + indent, parts) + "\n]";
     }
 
     private void validate(Factory<? extends Construct> factory) {
@@ -29,22 +60,24 @@ public class Validator {
 
     private void validateRef(Factory<? extends Construct> factory, Ref<? extends Construct> ref, String usage) {
         if (ref.kind() != factory.kind())
-            this.log.error("Expected all references to have the kind of the factory but " + ref +
+            this.error("Expected all references to have the kind of the factory but " + this.conToString(ref) +
                 " (" + usage + ") was " + ref.kind() + " in " + factory + " with the kind " + factory.kind() + ".");
 
         if (!this.foundInFactory(ref))
-            this.log.error("Expected all references to exist in factory " +
-                "but " + ref + " (" + usage + ") was not in factory.");
+            this.error("Expected all references to exist in factory but " +
+                this.conToString(ref) + " (" + usage + ") was not in factory.");
 
         if (!ref.isResolved()) {
-            this.log.error("Expected all references to be resolved but " + ref + " (" + usage + ") was not resolved.");
+            this.error("Expected all references to be resolved but " +
+                this.conToString(ref) + " (" + usage + ") was not resolved.");
             return;
         }
 
         final Construct con = ref.getResolved();
         if (!this.foundInFactory(con))
-            this.log.error("Expected all resolved references to exist in factory " +
-                "but " + ref + " (" + usage + ") resolved to " + con + " was not in factory.");
+            this.error("Expected all resolved references to exist in factory but " +
+                this.conToString(ref) + " (" + usage + ") resolved to " + this.conToString(con) +
+                " was not in factory.");
     }
 
     private boolean foundInFactory(Construct con) {
@@ -59,13 +92,15 @@ public class Validator {
 
     private void validateCon(Factory<? extends Construct> factory, Construct con) {
         if (con.kind() != factory.kind())
-            this.log.error("Expected all constructs to have the kind of the factory but " + con +
-                " was " + con.kind() + " in " + factory + " with the kind " + factory.kind() + ".");
+            this.error("Expected all constructs to have the kind of the factory but " +
+                this.conToString(con) + " was " + con.kind() + " in " + factory +
+                " with the kind " + factory.kind() + ".");
 
         final int index = con.getIndex();
         final int count = factory.size();
         if (index <= 0 || index > count)
-            this.log.error(con + " has invalid index " + index + " should be [1.." + count + "].");
+            this.error("The construct " + this.conToString(con) + " has invalid index " +
+                index + " should be [1.." + count + "].");
 
         if (con instanceof Abstract      a) { this.validateAbstract(a);      return; } 
         if (con instanceof Argument      a) { this.validateArgument(a);      return; }
@@ -85,7 +120,8 @@ public class Validator {
         if (con instanceof StructDesc    a) { this.validateStructDesc(a);    return; }
         if (con instanceof TypeParam     a) { this.validateTypeParam(a);     return; }
         if (con instanceof Value         a) { this.validateValue(a);         return; }
-        this.log.error(con + " did not have a specific type validation method.");
+        this.error("The construct " + this.conToString(con) +
+            " did not have a specific type validation method.");
     }
 
     private void validateAbstract(Abstract con) {
@@ -97,9 +133,9 @@ public class Validator {
     }
 
     private void validateBasic(Basic con) {
-        if (con.name.isBlank())      this.log.error("basic name is black.");
-        else if (con.name == "void") this.log.error("basic name is \"void\".");
-        else if (con.name == "null") this.log.error("basic name is \"null\".");
+        if (con.name.isBlank())      this.error("Basic name is black.");
+        else if (con.name == "void") this.error("Basic name is \"void\".");
+        else if (con.name == "null") this.error("Basic name is \"null\".");
     }
 
     private void validateField(Field con) {
@@ -181,7 +217,8 @@ public class Validator {
     }
 
     private void validateSelection(Selection con) {
-        if (con.name.isBlank()) this.log.error("selection name is black in " + con + ".");
+        if (con.name.isBlank())
+            this.error("Selection name is blank in " + this.conToString(con) + ".");
         this.validateChild(con, con.origin, "origin", false);
     }
 
@@ -195,7 +232,8 @@ public class Validator {
     }
 
     private void validateTypeParam(TypeParam con) {
-        if (con.name.isBlank()) this.log.error("type param name is black in " + con + ".");
+        if (con.name.isBlank())
+            this.error("Type param name is blank in " + this.conToString(con) + ".");
         this.validateChild(con, con.type, "type", false);
     }
 
@@ -204,15 +242,18 @@ public class Validator {
         this.validateChild(con, con.metrics, "metrics", true);
     }
 
-    private void validateInstantiation(Construct decl, Construct inst, ArrayList<Ref<TypeParam>> typeParams, ArrayList<Ref<? extends TypeDesc>> instanceTypes) {
+    private void validateInstantiation(Construct decl, Construct inst, List<Ref<TypeParam>> typeParams, List<Ref<? extends TypeDesc>> instanceTypes) {
         final int typeParamSize = typeParams.size();
         if (typeParamSize <= 0)
-            this.log.error("the declaration " + decl + " had instances but has " + typeParamSize + " type parameters.");
+            this.error("The declaration " + this.conToString(decl) + " had instances but has " +
+                typeParamSize + " type parameters.");
 
         final int instanceTypeSize = instanceTypes.size();
         if (typeParamSize != instanceTypeSize)
-            this.log.error("the declaration " + decl + " had " + typeParamSize + " (" + typeParams + ") type parameters which did not match " +
-                "the instance " + inst + " that had " + instanceTypeSize + " (" + instanceTypes + ") instance types.");
+            this.error("The declaration " + this.conToString(decl) + " had " + typeParamSize +
+                " (" + this.conToString(typeParams) + ") type parameters which did not match the instance " +
+                this.conToString(inst) + " that had " + instanceTypeSize + " (" +
+                this.conToString(instanceTypes) + ") instance types.");
 
         final int count = Integer.min(typeParamSize, instanceTypeSize);
         boolean match = true;
@@ -223,12 +264,13 @@ public class Validator {
             }
         }
         if (match)
-            this.log.error("the declaration " + decl + " and the instance " + inst + " had the same (" + count + ") type parameters.");
+            this.error("The declaration " + this.conToString(decl) + " and the instance " +
+                this.conToString(inst) + " had the same (" + count + ") type parameters.");
     }
     
     private void validateChildren(Construct parent, Iterable<? extends Ref<? extends Construct>> children, String usage, boolean maybeEmpty) {
         if (children == null) {
-            this.log.error("the collection of children (" + usage + ") in " + parent + " is null.");
+            this.error("The collection of children (" + usage + ") in " + this.conToString(parent) + " is null.");
             return;
         }
         int index = 0;
@@ -236,12 +278,14 @@ public class Validator {
             this.validateChild(parent, child, usage + "[" + index + "]", false);
             index++;
         }
-        if (!maybeEmpty && index == 0) this.log.error("the collection of children (" + usage + ") in " + parent + " is empty.");
+        if (!maybeEmpty && index == 0)
+            this.error("The collection of children (" + usage + ") in " + this.conToString(parent) + " is empty.");
     }
     
     private void validateChild(Construct parent, Ref<? extends Construct> child, String usage, boolean maybeNull) {
         if (child == null) {
-            if (!maybeNull) this.log.error("the child (" + usage + ") in a " + parent.kind() + " is null: " + parent);
+            if (!maybeNull)
+                this.error("The child (" + usage + ") in a " + parent.kind() + " is null: " + this.conToString(parent));
             return;
         }
 

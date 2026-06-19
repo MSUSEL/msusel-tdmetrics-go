@@ -4,10 +4,11 @@ import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
 
 public class JsonFormat {
-    static public JsonFormat Minimize() { return new JsonFormat( true, false, false); }
-    static public JsonFormat Expand()   { return new JsonFormat(false,  true, false); }
-    static public JsonFormat Relaxed()  { return new JsonFormat(false, false,  true); }
-    static public JsonFormat Normal()   { return new JsonFormat(false, false, false); }
+    static public JsonFormat Minimize() { return new JsonFormat(Format.minimize); }
+    static public JsonFormat Expand()   { return new JsonFormat(Format.expand); }
+    static public JsonFormat Relaxed()  { return new JsonFormat(Format.relaxed); }
+    static public JsonFormat Inline()   { return new JsonFormat(Format.inline); }
+    static public JsonFormat Normal()   { return new JsonFormat(Format.normal); }
 
     static private boolean needsEscape(String text) {
         if (text.equalsIgnoreCase("null") ||
@@ -46,15 +47,17 @@ public class JsonFormat {
         return sb.toString();
     }
 
-    private final boolean minimize;
-    private final boolean expand;
-    private final boolean relaxed;
-
-    private JsonFormat(boolean minimize, boolean expand, boolean relaxed) {
-        this.minimize = minimize;
-        this.expand   = expand;
-        this.relaxed  = relaxed;
+    private enum Format {
+        minimize,
+        expand,
+        relaxed,
+        inline,
+        normal,
     }
+
+    private final Format format;
+
+    private JsonFormat(Format format) { this.format = format; }
     
     public String format(JsonNode j) {
         return this.format(j, "");
@@ -82,38 +85,43 @@ public class JsonFormat {
         else sb.append("unknown_node");
     }
 
-    private boolean simplify(int depth) {
-        return !this.expand && (depth != 0 || !this.relaxed);
+    private boolean canSimplify(int depth) {
+        return (this.format != Format.expand) &&
+            (depth != 0 || this.format != Format.relaxed);
+    }
+
+    private boolean mustEscape() {
+        return this.format != Format.relaxed && this.format != Format.inline;
     }
 
     private void format(PrintStream sb, JsonValue j, String indent, int depth) {
         String str = j.asString();
-        if (j.isString() && (!this.relaxed || needsEscape(str)))
+        if (j.isString() && (this.mustEscape() || needsEscape(str)))
             str = escape(str);
         sb.append(str);
     }
 
     private void format(PrintStream sb, JsonArray j, String indent, int depth) {
         if (j.isEmpty()) {
-            sb.append(this.minimize? "[]": "[ ]");
+            sb.append(this.format == Format.minimize ? "[]" : "[ ]");
             return;
         }
 
         sb.append("[");
         boolean first = true;
-        final boolean simple = this.simplify(depth) && j.isSimple();
+        final boolean simple = this.format == Format.inline || (this.canSimplify(depth) && j.isSimple());
         final String indent2 = indent + "  ";
         final String separator = simple ? " " : "\n" + indent2;
         for (JsonNode elem : j) {
             if (first) first = false;
             else sb.append(",");
-            if (!this.minimize) sb.append(separator);
+            if (this.format != Format.minimize) sb.append(separator);
             
             this.format(sb, elem, indent2, depth + 1);
         }
-        if (!this.minimize) {
+        if (this.format != Format.minimize) {
             if (simple) sb.append(" ");
-            else if (this.relaxed) sb.append(",\n" + indent);
+            else if (this.format == Format.relaxed) sb.append(",\n" + indent);
             else sb.append("\n" + indent);
         }
         sb.append("]");
@@ -121,33 +129,35 @@ public class JsonFormat {
     
     private void format(PrintStream sb, JsonObject j, String indent, int depth) {
         if (j.isEmpty()) {
-            sb.append(this.minimize? "{}": "{ }");
+            sb.append(this.format == Format.minimize ? "{}" : "{ }");
             return;
         }
 
         sb.append("{");
         boolean first = true;
-        final boolean simple = this.simplify(depth) && j.isSimple();
+        final boolean simple = this.format == Format.inline || (this.canSimplify(depth) && j.isSimple());
         final String indent2 = indent + "  ";
         final String separator = simple ? " " : "\n" + indent2;
         for (Object key : j.keySet()) {
+            final JsonNode node = j.get(key);
+
             if (first) first = false;
             else sb.append(",");
-            if (!this.minimize) sb.append(separator);
+            if (this.format != Format.minimize) sb.append(separator);
 
             String keyStr = (String)key;
-            if (!this.relaxed || needsEscape(keyStr)) {
+            if (!(this.format == Format.relaxed || this.format == Format.inline) || needsEscape(keyStr)) {
                 keyStr = escape(keyStr);
             }
             sb.append(keyStr);
 
             sb.append(":");
-            if (!this.minimize) sb.append(" ");
-            this.format(sb, j.get(key), indent2, depth + 1);         
+            if (this.format != Format.minimize) sb.append(" ");
+            this.format(sb, node, indent2, depth + 1);
         }
-        if (!this.minimize) {
+        if (this.format != Format.minimize) {
             if (simple) sb.append(" ");
-            else if (this.relaxed) sb.append(",\n" + indent);
+            else if (this.format == Format.relaxed) sb.append(",\n" + indent);
             else sb.append("\n" + indent);
         }
         sb.append("}");

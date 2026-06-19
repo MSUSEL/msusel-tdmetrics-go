@@ -9,8 +9,10 @@ import spoon.reflect.declaration.*;
 import spoon.reflect.path.CtRole;
 import spoon.reflect.reference.*;
 import spoon.support.compiler.VirtualFile;
+
 import abstractor.core.constructs.*;
 import abstractor.core.log.*;
+import abstractor.core.json.*;
 import abstractor.core.require.Require;
 import abstractor.core.validator.*;
 import abstractor.core.spoonUtils.*;
@@ -180,7 +182,7 @@ public class Abstractor {
 
     public Ref<? extends TypeDesc> addInterfaceInst(CtTypeReference<?> tr, CtInterface<?> i) throws Exception {
         final Ref<InterfaceDecl> decl = this.addInterfaceDecl(i);
-        if (!i.isGenerics()) return decl;
+        if (!this.isGenerics(i)) return decl;
 
         final List<Ref<TypeParam>> typeParams = this.addTypeParams(i);
         final ArrayList<Ref<? extends TypeDesc>> typeArgs = this.addTypeArguments(tr, typeParams);
@@ -196,6 +198,11 @@ public class Abstractor {
                 () -> {
                     final Ref<InterfaceDesc> resolved = this.addInterfaceDesc(i);
                     return new InterfaceInst(decl, this.instantiator.typeArgs(), resolved);
+                }, 
+                (Ref<InterfaceInst> ref, InterfaceInst it) -> {
+                    // Create instances for all nested types too.
+                    for (CtType<?> nt : i.getNestedTypes())
+                        this.addTypeDesc(nt.getReference());
                 });
         } finally {
             this.instantiator.popFrame();
@@ -264,6 +271,8 @@ public class Abstractor {
             this.instantiator.popFrame();
         }
     }
+
+    // TODO: Need to test a method only instantiation: class{ M<T>(){ }; B() { M<int>(); }}
 
     public Ref<MethodInst> addMethodInst(Ref<ObjectInst> receiver, CtMethod<?> m) throws Exception {
         Require.notObjectMethod(m);
@@ -433,8 +442,8 @@ public class Abstractor {
 
                 // TODO: Is this the correct way to get the decl? Does it need to be the instantiated type?
 
-                final Ref<? extends Construct> decl = this.addDeclaration(field.getDeclaringType());
-                return new Selection(name, decl);
+                final Ref<? extends Construct> origin = this.addDeclaration(field.getDeclaringType());
+                return new Selection(name, origin);
             });
     }
 
@@ -481,6 +490,11 @@ public class Abstractor {
             }
         }
         return result;
+    }
+
+    private boolean isGenerics(CtElement elem) {
+        return elem instanceof CtType<?> t && t != null &&
+            (t.isGenerics() || this.isGenerics(t.getParent()));
     }
 
     public Ref<TypeParam> addTypeParam(CtTypeParameter tp) throws Exception {
@@ -582,7 +596,7 @@ public class Abstractor {
 
     public Ref<? extends TypeDesc> addObjectInst(CtTypeReference<?> tr, CtClass<?> c) throws Exception {
         final Ref<ObjectDecl> decl = this.addObjectDecl(c);
-        if (!c.isGenerics()) return decl;
+        if (!this.isGenerics(c)) return decl;
 
         final List<Ref<TypeParam>> typeParams = this.addTypeParams(c);
         final ArrayList<Ref<? extends TypeDesc>> typeArgs = this.addTypeArguments(tr, typeParams);
@@ -606,6 +620,9 @@ public class Abstractor {
                         if (m.getParent().equals(c) && !SpoonUtils.isObjectMethod(m))
                             this.addMethodInst(ref, m);
                     }
+                    // Create instances for all nested types too.
+                    for (CtType<?> nt : c.getNestedTypes())
+                        this.addTypeDesc(nt.getReference());
                 });
         } finally {
             this.instantiator.popFrame();
@@ -888,8 +905,15 @@ public class Abstractor {
     }
 
     private void validate() throws Exception {
+        final boolean hadErrors = this.log.errorCount() > 0;
         new Validator(this.log, this.proj).validate();
-        if (this.log.errorCount() > 0)
-            throw new AbstractorException("Errors logged before or during validation.");
+        if (this.log.errorCount() > 0) {
+            if (hadErrors)
+                throw new AbstractorException("Errors logged before validation.");
+
+            JsonHelper h = new JsonHelper();
+            this.log.notice("\n" + JsonFormat.Relaxed().format(this.proj.toJson(h)));
+            throw new AbstractorException("Errors logged during validation.");
+        }
     }
 }
