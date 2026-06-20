@@ -34,7 +34,7 @@ public class Validator {
     }
 
     private String conToString(Construct con) {
-        JsonHelper jh = new JsonHelper();
+        final JsonHelper jh = new JsonHelper();
         jh.writeKinds     = true;
         jh.writeIndices   = true;
         jh.writeRefs      = true;
@@ -42,11 +42,14 @@ public class Validator {
         return JsonFormat.Inline().format(con.toJson(jh));
     }
     
-    private String conToString(List<? extends Construct> cons) {
-        List<String> parts = new ArrayList<>(cons.size());
-        for (Construct con : cons) {
-            parts.add(this.conToString(con));
-        }
+    private String consToString(List<? extends Construct> cons) {
+        final int consSize = cons.size();
+        if (consSize <= 0) return "[ ]";
+        //if (consSize == 1) return "[ " + this.conToString(cons.get(0)) + " ]";
+
+        List<String> parts = new ArrayList<>(consSize);
+        for (Construct con : cons) parts.add(this.conToString(con));
+
         final String indent = "  ";
         return "[\n" + indent + String.join(",\n" + indent, parts) + "\n]";
     }
@@ -249,11 +252,13 @@ public class Validator {
                 typeParamSize + " type parameters.");
 
         final int instanceTypeSize = instanceTypes.size();
-        if (typeParamSize != instanceTypeSize)
+        // Must be partially of fully implemented instance. Partially implemented
+        // occurs when the nest is an instance but the method is still generic.
+        if (typeParamSize < instanceTypeSize)
             this.error("The declaration " + this.conToString(decl) + " had " + typeParamSize +
-                " (" + this.conToString(typeParams) + ") type parameters which did not match the instance " +
+                " (" + this.consToString(typeParams) + ") type parameters which must be greater than or equal to the instance " +
                 this.conToString(inst) + " that had " + instanceTypeSize + " (" +
-                this.conToString(instanceTypes) + ") instance types.");
+                this.consToString(instanceTypes) + ") type arguments.");
 
         final int count = Integer.min(typeParamSize, instanceTypeSize);
         boolean match = true;

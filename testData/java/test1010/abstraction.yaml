@@ -1,1 +1,51 @@
-{}
+{
+  language: java,
+  abstracts: [
+    { name: Run, signature: 1 }, # 1. Run() boolean
+  ],
+  arguments: [
+    { type: basic1 }, # 1. <unnamed> boolean
+  ],
+  basics: [ boolean ],
+  fields: [
+    { name: x, type: typeParam1, vis: public }, # 1. x T
+  ],
+  interfaceDecls: [
+    { # 1. Foo<T>.Bar{ ??? }
+      name: Bar, package: 4,interface: 1,
+      nest: object1, loc: 4, vis: public,
+      typeParams: [ 1 ],
+    },
+  ],
+  interfaceDescs: [
+    { abstracts: [ 1 ] }, # 1. interface{ ??? }
+    { abstracts: [ ]   }, # 2. any
+  ],
+  objects: [
+    { # 1. Foo<T>{ ??? }{ ??? }
+      name: Foo, package: 4, data: 1, interface: 2,
+      loc: 3, vis: public, typeParams: [ 1 ],
+      nested: [ interfaceDecl1 ],
+    },
+  ],
+  packages: [
+    { name: "<unnamed>" },
+    { name: testData },
+    { name: testData.java },
+    {
+      name: testData.java.test1010,
+      objects: [ 1 ],
+      interfaces: [ 1 ],
+    },
+  ],
+  signatures: [
+    { results: [ 1 ] }, # 1. func() boolean 
+  ],
+  structDescs: [
+    { fields: [ 1 ] }, # 1. struct{ x T }
+  ],
+  typeParams: [
+    { name: T, type: interfaceDecl1 }, # 1. T Foo<T>.Bar
+  ],
+  locs: { 1: ClassesFromSource.java },
+}

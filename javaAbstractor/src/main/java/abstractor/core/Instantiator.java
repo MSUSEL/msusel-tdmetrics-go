@@ -3,6 +3,7 @@ package abstractor.core;
 import java.util.*;
 
 import abstractor.core.constructs.*;
+import abstractor.core.json.*;
 import abstractor.core.require.Require;
 
 public class Instantiator {
@@ -16,7 +17,7 @@ public class Instantiator {
             this.prior = prior;
         }
 
-        public void add(Ref<? extends TypeDesc> param, Ref<? extends TypeDesc> arg) throws Exception{
+        public void add(Ref<? extends TypeDesc> param, Ref<? extends TypeDesc> arg) throws Exception {
             if (this.prior != null) arg = this.prior.replace(arg);
             if (this.subst.put(param, arg) != null) this.paramOrder.remove(param);
             this.paramOrder.add(param);
@@ -38,6 +39,24 @@ public class Instantiator {
                 }
             }
             return this.argOrder;
+        }
+
+        @Override
+        public String toString() {
+            final JsonHelper jh = new JsonHelper();
+            jh.writeKinds     = true;
+            jh.writeIndices   = true;
+            jh.writeRefs      = true;
+            jh.refSkipResolve = false;
+            List<String> parts = new ArrayList<>(this.paramOrder.size());
+            for (int i = 0; i < this.paramOrder.size(); i++) {
+                final Ref<? extends TypeDesc> param = this.paramOrder.get(i);
+                final Ref<? extends TypeDesc> arg   = this.subst.get(param);
+                final String paramStr = JsonFormat.Inline().format(param.toJson(jh));
+                final String argStr   = JsonFormat.Inline().format(arg.toJson(jh));
+                parts.add(i + ". " + paramStr + " => " + argStr);    
+            }
+            return "[\n\t" + String.join("\n\t", parts) + "\n]";
         }
     }
     
@@ -67,18 +86,24 @@ public class Instantiator {
         this.topFrame = this.topFrame.prior;
     }
 
-    public void add(Ref<? extends TypeDesc> param, Ref<? extends TypeDesc> value) throws Exception {
+    public void add(Ref<? extends TypeDesc> param, Ref<? extends TypeDesc> arg) throws Exception {
         Require.notNull(this.topFrame, "cannot add to an empty instantiator");
-        Require.notNull(param, "can not have a null key in an instantiator frame");
-        Require.notNull(value, "can not have a null value in an instantiator frame");
-        this.topFrame.add(param, value);
+        Require.notNull(param, "can not have a null type parameter in an instantiator frame");
+        Require.notNull(arg, "can not have a null the argument in an instantiator frame");
+        this.topFrame.add(param, arg);
     }
-    
+
     public Ref<? extends TypeDesc> replace(Ref<? extends TypeDesc> con) {
         return this.topFrame == null ? con : this.topFrame.replace(con);
     }
     
     public List<Ref<? extends TypeDesc>> typeArgs() throws Exception {
         return this.topFrame == null ? Collections.emptyList() : this.topFrame.typeArgs();
+    }
+
+    @Override
+    public String toString() {
+        if (this.topFrame == null) return "<null>";
+        return this.topFrame.toString();
     }
 }

@@ -274,11 +274,11 @@ public class Abstractor {
 
     // TODO: Need to test a method only instantiation: class{ M<T>(){ }; B() { M<int>(); }}
 
-    public Ref<MethodInst> addMethodInst(Ref<ObjectInst> receiver, CtMethod<?> m) throws Exception {
+    public Ref<MethodInst> addMethodInstForObjectInst(Ref<ObjectInst> receiver, CtMethod<?> m) throws Exception {
         Require.notObjectMethod(m);
         final ObjectInst recv = receiver.mustGetResolved();
         return this.proj.methodInsts.create(this.log, new ElementKey(m, this.instantiator.typeArgs()),
-            "method instantiation " + SpoonUtils.describeElem(m),
+            "method for object instantiation " + SpoonUtils.describeElem(m),
             () -> {
                 final Ref<MethodDecl>               generic       = this.addMethodDecl(recv.generic, m);
                 final List<Ref<? extends TypeDesc>> instanceTypes = this.instantiator.typeArgs();
@@ -567,7 +567,7 @@ public class Abstractor {
         }
     }
 
-    private Ref<InterfaceDesc> synthesizeObjectInterface(CtClass<?> c, Ref<? extends Construct> ref) throws Exception {
+    private Ref<InterfaceDesc> synthesizeObjectInterface(CtClass<?> c, Ref<? extends Construct> pin) throws Exception {
         // Synthesize the interface abstractions for the class.
         final TreeSet<Ref<Abstract>> abstracts = new TreeSet<Ref<Abstract>>();
         for (CtMethod<?> m : c.getAllMethods()) {
@@ -577,7 +577,7 @@ public class Abstractor {
 
         // Synthesize the interface description for the class.
         if (abstracts.size() > 0 || c.getSuperInterfaces().size() > 0) {
-            final InterfaceDesc it = new InterfaceDesc(abstracts, ref);
+            final InterfaceDesc it = new InterfaceDesc(abstracts, pin);
             final Ref<InterfaceDesc> inter = this.proj.interfaceDescs.addOrGetRef(it, this.instantiator.typeArgs(), "interface for object");
 
             // Add direct super-interfaces this object extends.
@@ -586,7 +586,7 @@ public class Abstractor {
                 if (supDecl != null && supDecl instanceof CtInterface<?> supId && supId != null) {
                     it.inherits.add(this.addInterfaceDesc(supId));
                 } else {
-                    this.log.error("Unhandled super-interface " + SpoonUtils.describeElem(supDecl) + " for " + ref);
+                    this.log.error("Unhandled super-interface " + SpoonUtils.describeElem(supDecl) + " for " + pin);
                 }
             }
             return inter;
@@ -602,11 +602,11 @@ public class Abstractor {
         final ArrayList<Ref<? extends TypeDesc>> typeArgs = this.addTypeArguments(tr, typeParams);
         if (typeArgs == null) return decl;
 
-        this.instantiator.pushFrame();
-        for (int i = 0; i < typeParams.size(); i++)
-            this.instantiator.add(typeParams.get(i), typeArgs.get(i));
-
         try {
+            this.instantiator.pushFrame();
+            for (int i = 0; i < typeParams.size(); i++)
+                this.instantiator.add(typeParams.get(i), typeArgs.get(i));
+
             return this.proj.objectInsts.create(this.log, new ElementKey(tr, this.instantiator.typeArgs()),
                 "object instantiation "+SpoonUtils.describeGeneric(tr),
                 () -> {                    
@@ -618,8 +618,9 @@ public class Abstractor {
                     // Add methods for the class instantiation.
                     for (CtMethod<?> m : c.getAllMethods()) {
                         if (m.getParent().equals(c) && !SpoonUtils.isObjectMethod(m))
-                            this.addMethodInst(ref, m);
+                            this.addMethodInstForObjectInst(ref, m);
                     }
+
                     // Create instances for all nested types too.
                     for (CtType<?> nt : c.getNestedTypes())
                         this.addTypeDesc(nt.getReference());
@@ -911,8 +912,11 @@ public class Abstractor {
             if (hadErrors)
                 throw new AbstractorException("Errors logged before validation.");
 
-            JsonHelper h = new JsonHelper();
-            this.log.notice("\n" + JsonFormat.Relaxed().format(this.proj.toJson(h)));
+            final boolean showAbstract = false;
+            if (showAbstract) {
+                JsonHelper h = new JsonHelper();
+                this.log.notice("\n" + JsonFormat.Relaxed().format(this.proj.toJson(h)));
+            }
             throw new AbstractorException("Errors logged during validation.");
         }
     }
