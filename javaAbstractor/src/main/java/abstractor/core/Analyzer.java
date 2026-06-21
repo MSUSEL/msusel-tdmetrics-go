@@ -21,8 +21,8 @@ public class Analyzer {
     private static final boolean logUsage       = true; // TODO: Restore to false;
 
     private final Abstractor abs;
-    private final Logger log;
-    public final Location loc;
+    private final Logger     log;
+    public  final Location   loc;
 
     private final Map<Integer, Integer> minColumn = new TreeMap<>();
     private int minLine;
@@ -239,6 +239,10 @@ public class Analyzer {
         if (elem instanceof CtFieldReference      fr) { this.addFieldReferenceUsage(fr);      return; }
         if (elem instanceof CtExecutableReference er) { this.addExecutableReferenceUsage(er); return; }
         if (elem instanceof CtLiteral             lt) { this.addLiteralUsage(lt);             return; }
+        if (elem instanceof CtThisAccess          ta) { this.addThisAccess(ta);               return; }
+        if (elem instanceof CtVariableRead        vr) { this.addVariableRead(vr);             return; }
+        if (elem instanceof CtParameterReference  pr) { this.addParameterReference(pr);       return; }
+        if (elem instanceof CtConstructorCall     cc) { this.addConstructorCall(cc);          return; }
 
         // Use to see elements (may produce a lot of output).
         this.log.notice("unimplemented addUsage: " + SpoonUtils.describeElem(elem));
@@ -330,6 +334,38 @@ public class Analyzer {
 
     private void addLiteralUsage(CtLiteral<?> lt) throws Exception {
         if (logUsage) this.log.log("addUsage.CtLiteral: " + SpoonUtils.describeElem(lt));
-        this.abs.addTypeDesc(lt.getType());
+        this.reads.add(this.abs.addTypeDesc(lt.getType()));
+    }
+
+    private void addThisAccess(CtThisAccess<?> ta) throws Exception {
+        if (logUsage) this.log.log("addUsage.CtThisAccess: " + SpoonUtils.describeElem(ta));
+
+        // TODO: Implement
+
+        this.log.warning("unimplemented addUsage for CtThisAccess: " + SpoonUtils.describeElem(ta));
+    }
+
+    private void addVariableRead(CtVariableRead<?> vr) throws Exception {
+        if (logUsage) this.log.log("addUsage.CtVariableRead: " + SpoonUtils.describeElem(vr));
+
+        // TODO: Implement
+
+        this.log.warning("unimplemented addUsage for CtVariableRead: " + SpoonUtils.describeElem(vr));
+    }
+
+    private void addParameterReference(CtParameterReference<?> pr) throws Exception {
+        if (logUsage) this.log.log("addUsage.CtParameterReference: " + SpoonUtils.describeElem(pr));
+
+        // TODO: Implement
+
+        this.log.warning("unimplemented addUsage for CtParameterReference: " + SpoonUtils.describeElem(pr));
+    }
+
+    private void addConstructorCall(CtConstructorCall<?> cc) {
+        if (logUsage) this.log.log("addUsage.CtConstructorCall: " + SpoonUtils.describeElem(cc));
+
+        // TODO: Implement
+
+        this.log.warning("unimplemented addUsage for CtConstructorCall: " + SpoonUtils.describeElem(cc));
     }
 }
