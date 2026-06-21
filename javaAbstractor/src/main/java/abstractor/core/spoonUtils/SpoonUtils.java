@@ -43,11 +43,16 @@ final public class SpoonUtils {
 
     /** Short description of an element that can be used for logs. */
     static public String describeElem(CtElement elem) {
-        return describeElem(elem, true);
+        return describeElem(elem, true, true);
     }
 
     /** Short description of an element that can be used for logs. */
     static public String describeElem(CtElement elem, boolean showType) {
+        return describeElem(elem, showType, true);
+    }
+
+    /** Short description of an element that can be used for logs. */
+    static public String describeElem(CtElement elem, boolean showType, boolean showPos) {
         if (elem == null) return "(null)";
         if (elem instanceof CtPackage pkg) return packageName(pkg);
         
@@ -55,23 +60,30 @@ final public class SpoonUtils {
         if (showType) {
             header = "(" + elem.getClass().getSimpleName() + ") ";
         }
+
+        String tail = "";
+        if (showPos) {
+            final SourcePosition pos = elem.getPosition();
+            if (pos.isValidPosition()) tail = " @ "+pos.getLine() + ":" + pos.getColumn();
+        }
+
         if (elem instanceof CtNamedElement ne) {
-            try { return header + ne.getSimpleName(); }
+            try { return header + ne.getSimpleName() + tail; }
             catch (Exception ignore) { }
         }
         if (elem instanceof CtTypeInformation ti) {
-            try { return header + ti.getQualifiedName(); }
+            try { return header + ti.getQualifiedName() + tail; }
             catch (Exception ignore) { }
         }
         if (elem instanceof CtExecutable<?> ex) {
-            try { return header + ex.getSignature(); }
+            try { return header + ex.getSignature() + tail; }
             catch (Exception ignore) { }
         }
         if (elem instanceof CtReference ref) {
-            try { return header + ref.getSimpleName(); }
+            try { return header + ref.getSimpleName() + tail; }
             catch (Exception ignore) { }
         }
-        return elem.getClass().getName();
+        return elem.getClass().getName() + tail;
     }
 
     static public String describeElems(Iterable<? extends CtElement> elems) {

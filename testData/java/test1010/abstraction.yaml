@@ -1,51 +1,121 @@
 {
   language: java,
   abstracts: [
-    { name: Run, signature: 1 }, # 1. Run() boolean
+    { name: Bar, signature: 2 }, # 1. Bar(value int)
+    { name: Bar, signature: 3 }, # 2. Bar(value string)
+    { name: Bar, signature: 4 }, # 3. Bar(value T)
+    { name: Baz, signature: 5 }, # 4. Baz(value U)
   ],
   arguments: [
-    { type: basic1 }, # 1. <unnamed> boolean
+    { name: value, type: basic1     }, # 1. value int
+    { name: value, type: basic2     }, # 2. value string
+    { name: value, type: typeParam1 }, # 3. value T
+    { name: value, type: typeParam2 }, # 4. value U
   ],
-  basics: [ boolean ],
-  fields: [
-    { name: x, type: typeParam1, vis: public }, # 1. x T
-  ],
-  interfaceDecls: [
-    { # 1. Foo<T>.Bar{ ??? }
-      name: Bar, package: 4,interface: 1,
-      nest: object1, loc: 4, vis: public,
-      typeParams: [ 1 ],
+  basics: [ int, string ],
+  interfaceDescs: [
+    { # 1. interface{Bar(value int); Bar(value string); Baz(value U)}
+      abstracts: [ 1, 2, 4 ],
+    },
+    { # 2. interface{Bar(value int); Bar(value T); Baz(value U)}
+      abstracts: [ 1, 3, 4 ],
+      pin: object1,
+    },
+    { # 3. any
+      abstracts: [ ],
     },
   ],
-  interfaceDescs: [
-    { abstracts: [ 1 ] }, # 1. interface{ ??? }
-    { abstracts: [ ]   }, # 2. any
+  methodInsts: [
+    { # 1. Foo<string>.Bar(value int)
+      generic: 1, receiver: 1, resolved: 2,
+      instanceTypes: [ basic2 ],
+    },
+    { # 2. Foo<string>.Bar(value string)
+      generic: 2, receiver: 1, resolved: 3,
+      instanceTypes: [ basic2 ],
+    },
+    { # 3. Foo<string>.Baz<U>(value U)
+      generic: 3, receiver: 1, resolved: 5,
+      instanceTypes: [ basic2 ],
+    },
+    { # 4. Foo<string>.Do()
+      generic: 4, receiver: 1, resolved: 1,
+      instanceTypes: [ basic2 ],
+    },
+  ],
+  methods: [
+    { # 1. Foo<T>.Bar(value int)
+      name: Bar, package: 5, receiver: 1, signature: 2,
+      loc: 5, metrics: 2, vis: public, typeParams: [ 1 ],
+    },
+    { # 2. Foo<T>.Bar(value T)
+      name: Bar, package: 5, receiver: 1, signature: 4,
+      loc: 4, metrics: 1, vis: public, typeParams: [ 1 ],
+    },
+    { # 3. Foo<T>.Baz<U>(value U)
+      name: Baz, package: 5, receiver: 1, signature: 5,
+      loc: 6, vis: public, typeParams: [ 1, 2 ],
+    },
+    { # 4. Foo<T>.Do()
+      name: Do, package: 5, receiver: 1, signature: 1,
+      loc: 8, metrics: 3, static: true, vis: public, typeParams: [ 1 ],
+    },
+  ],
+  metrics: [
+    { # 1. Foo<T>.Bar(value T)
+      codeCount: 1, complexity: 1, lineCount: 1, loc: 4,
+      invokes: [ method3 ], # Foo<T>.Baz<U>(value U)
+      reads: [ object1 ], # Foo<T>
+      remove: me, # REMOVE after adding more of the analyzer
+    },
+    { # 2. Foo<T>.Bar(value int)
+      codeCount: 1, complexity: 1, lineCount: 1, loc: 5,
+      invokes: [ method3 ], # Foo<T>.Baz<U>(value U)
+      reads: [ object1 ], # Foo<T>
+    },
+    { # 3. Foo<T>.Do()
+      codeCount: 3, complexity: 1, indents: 1, lineCount: 3, loc: 8,
+      invokes: [ method2 ], # Foo<T>.Bar(value T)
+    },
+  ],
+  objectInsts: [
+    { # 1. Foo<string>{}{ Bar(value int); Bar(value string); Baz<U>(value U); Do() }
+      generic: 1, resData: 1, resInterface: 1,
+      instanceTypes: [ basic2 ],
+      methods: [ 1, 2, 3, 4 ],
+    },
   ],
   objects: [
-    { # 1. Foo<T>{ ??? }{ ??? }
-      name: Foo, package: 4, data: 1, interface: 2,
+    { # 1. Foo<T>{}{ Bar(value int); Bar(value T); Baz<U>(value U); Do() }
+      name: Foo, package: 5, data: 1, interface: 2,
       loc: 3, vis: public, typeParams: [ 1 ],
-      nested: [ interfaceDecl1 ],
+      methods: [ 1, 2, 3, 4 ],
     },
   ],
   packages: [
+    { name: $builtin },
     { name: "<unnamed>" },
     { name: testData },
     { name: testData.java },
     {
       name: testData.java.test1010,
+      methods: [ 1, 2, 3, 4 ],
       objects: [ 1 ],
-      interfaces: [ 1 ],
     },
   ],
   signatures: [
-    { results: [ 1 ] }, # 1. func() boolean 
+    {               }, # 1. func()
+    { params: [ 1 ] }, # 2. func(value int)
+    { params: [ 2 ] }, # 3. func(value string)
+    { params: [ 3 ] }, # 4. func(value T)
+    { params: [ 4 ] }, # 5. func(value U)
   ],
   structDescs: [
-    { fields: [ 1 ] }, # 1. struct{ x T }
+    { }, # 1. struct{}
   ],
   typeParams: [
-    { name: T, type: interfaceDecl1 }, # 1. T Foo<T>.Bar
+    { name: T, type: interfaceDesc3 }, # 1. T any
+    { name: U, type: interfaceDesc3 }, # 2. U any
   ],
   locs: { 1: ClassesFromSource.java },
 }

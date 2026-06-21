@@ -126,10 +126,11 @@ public class Abstractor {
         if (elem instanceof CtAnnotationType<?>) return null;
 
         // Check CtEnum before CtClass since CtEnum extends CtClass.
-        if (elem instanceof CtEnum<?>      e) return this.addEnum(e);
-        if (elem instanceof CtClass<?>     c) return this.addObjectDecl(c);
-        if (elem instanceof CtInterface<?> i) return this.addInterfaceDecl(i);
-        if (elem instanceof CtMethod<?>    m) return this.addMethodDeclOrAbstract(m);
+        if (elem instanceof CtEnum<?>        e) return this.addEnum(e);
+        if (elem instanceof CtClass<?>       c) return this.addObjectDecl(c);
+        if (elem instanceof CtInterface<?>   i) return this.addInterfaceDecl(i);
+        if (elem instanceof CtMethod<?>      m) return this.addMethodDeclOrAbstract(m);
+        if (elem instanceof CtConstructor<?> c) return this.addMethodDeclForConstructor(c);
 
         this.log.error("Unhandled decl: " + SpoonUtils.describeElem(elem));
         return null;
@@ -219,7 +220,7 @@ public class Abstractor {
                 }
 
                 Ref<? extends Construct> pin = null;
-                if (i.getRoleInParent() == CtRole.NESTED_TYPE) {
+                if (i.getRoleInParent() == CtRole.NESTED_TYPE) { // TODO: Does this work?
                     final CtElement parent = i.getParent();
                     if (parent instanceof CtTypeReference<?> nest && nest != null) {
                         pin = this.addTypeDesc(nest);
@@ -320,6 +321,17 @@ public class Abstractor {
             });
     }
 
+    public Ref<MethodDecl> addMethodDeclForConstructor(CtConstructor<?> ctor) throws Exception {
+        if (ctor.isImplicit()) return null;
+        if (ctor.getParent() instanceof CtClass c) {
+            final Ref<ObjectDecl> receiver = this.addObjectDecl(c);
+            return this.addMethodDeclForConstructor(receiver, ctor);
+        }
+        this.log.warning("failed to constructor: unknown parent " +
+            SpoonUtils.describeElem(ctor.getParent()) + " for " + SpoonUtils.describeElem(ctor));
+        return null;
+    }
+
     public Ref<MethodDecl> addMethodDeclForConstructor(Ref<ObjectDecl> receiver, CtConstructor<?> ctor) throws Exception {
         try {
             // All declarations must be added without type arguments.
@@ -400,7 +412,7 @@ public class Abstractor {
                 if (superFr != null) fields.add(this.addField("$super", superFr));
 
                 // Add access to nesting class as a "$nest" field.
-                if (c.getRoleInParent() == CtRole.NESTED_TYPE) {
+                if (c.getRoleInParent() == CtRole.NESTED_TYPE) { // TODO: Does this work?
                     if (c.getParent() instanceof CtTypeReference<?> nest && nest != null) {
                         fields.add(this.addField("$nest", nest));
                     } else {
@@ -497,6 +509,14 @@ public class Abstractor {
             (t.isGenerics() || this.isGenerics(t.getParent()));
     }
 
+    private CtTypeReference<?> extractBoundTypeFromParameter(CtTypeParameter tp) throws Exception {
+        final CtTypeReference<?> e = tp.getTypeErasure();
+        // TODO: This does not work for test1010. It gets the wrong type for
+        //      `T extends X<>.Y` (returns just `X<T>`) and doesn't handle
+        //      several bounds like `T extends A & B` (returns just `A`).
+        return e;
+    }
+
     public Ref<TypeParam> addTypeParam(CtTypeParameter tp) throws Exception {
         // Do not use type arguments in the ElementKey for typeParams.
         // The typeParams will be replaced by the instantiator later.
@@ -504,7 +524,7 @@ public class Abstractor {
             "type params " + SpoonUtils.describeElem(tp),
             () -> {
                 final String                  name = tp.getSimpleName();
-                final CtTypeReference<?>      tr   = tp.getTypeErasure();
+                final CtTypeReference<?>      tr   = extractBoundTypeFromParameter(tp); // tp.getTypeErasure();
                 final Ref<? extends TypeDesc> type = this.addTypeDesc(tr);
                 return new TypeParam(name, type);
             });
