@@ -339,10 +339,7 @@ public class Analyzer {
 
     private void addThisAccess(CtThisAccess<?> ta) throws Exception {
         if (logUsage) this.log.log("addUsage.CtThisAccess: " + SpoonUtils.describeElem(ta));
-
-        // TODO: Implement
-
-        this.log.warning("unimplemented addUsage for CtThisAccess: " + SpoonUtils.describeElem(ta));
+        // Ignore since this will continue onto the type for "this".
     }
 
     private void addVariableRead(CtVariableRead<?> vr) throws Exception {
