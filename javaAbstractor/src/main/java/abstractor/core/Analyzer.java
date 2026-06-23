@@ -13,6 +13,8 @@ import spoon.reflect.reference.*;
 import spoon.support.reflect.CtExtendedModifier;
 
 import abstractor.core.constructs.*;
+import abstractor.core.json.JsonFormat;
+import abstractor.core.json.JsonHelper;
 import abstractor.core.log.Logger;
 import abstractor.core.spoonUtils.SpoonUtils;
 
@@ -229,7 +231,37 @@ public class Analyzer {
         return 0;
     }
 
+    public String conString(Ref<? extends Construct> c) {
+        JsonHelper jh = new JsonHelper();
+        jh.writeKinds     = true;
+        jh.writeIndices   = true;
+        jh.writeRefs      = true;
+        jh.refSkipResolve = false;
+        return JsonFormat.Inline().format(c.refToJson(jh));
+    }
+
+    private void addInvoke(Ref<? extends Construct> c) {
+        if (c == null)  return;
+        this.log.log("Adding invocation: " + this.conString(c));
+        this.invokes.add(c);
+    }
+
+    private void addRead(Ref<? extends Construct> c) {
+        if (c == null) return;
+        this.log.log("Adding read: " + this.conString(c));
+        this.reads.add(c);
+    }
+
+    private void addWrites(Ref<? extends Construct> c) {
+        if (c == null) return;
+        this.log.log("Adding write: " + this.conString(c));
+        this.writes.add(c);
+    }
+
     private void addUsage(CtElement elem) throws Exception {
+        // Skip these but their children will still be checked.
+        if (elem instanceof CtThisAccess) return;
+
         if (elem instanceof CtInvocation          in) { this.addInvocationUsage(in);          return; }
         if (elem instanceof CtFieldRead           fr) { this.addFieldReadUsage(fr);           return; }
         if (elem instanceof CtTypeAccess          ta) { this.addTypeAccessUsage(ta);          return; }
@@ -239,7 +271,6 @@ public class Analyzer {
         if (elem instanceof CtFieldReference      fr) { this.addFieldReferenceUsage(fr);      return; }
         if (elem instanceof CtExecutableReference er) { this.addExecutableReferenceUsage(er); return; }
         if (elem instanceof CtLiteral             lt) { this.addLiteralUsage(lt);             return; }
-        if (elem instanceof CtThisAccess          ta) { this.addThisAccess(ta);               return; }
         if (elem instanceof CtVariableRead        vr) { this.addVariableRead(vr);             return; }
         if (elem instanceof CtParameterReference  pr) { this.addParameterReference(pr);       return; }
         if (elem instanceof CtConstructorCall     cc) { this.addConstructorCall(cc);          return; }
@@ -261,14 +292,12 @@ public class Analyzer {
             this.log.warning("addUsage.CtFieldRead: no field declaration for " + SpoonUtils.describeElem(ref));
             return;
         }
-        final Ref<Selection> sel = this.abs.addSelection(field);
-        this.reads.add(sel);
+        this.addRead(this.abs.addSelection(field));
     }
 
     private void addTypeAccessUsage(CtTypeAccess<?> ta) throws Exception {
         if (logUsage) this.log.log("addUsage.CtTypeAccess: " + SpoonUtils.describeElem(ta));
-        final Ref<? extends TypeDesc> acc = this.abs.addTypeDesc(ta.getAccessedType());
-        this.reads.add(acc);
+        this.addRead(this.abs.addTypeDesc(ta.getAccessedType()));
     }
 
     private void addAssignmentUsage(CtAssignment<?,?> as) throws Exception {
@@ -302,8 +331,7 @@ public class Analyzer {
             this.log.warning("addUsage.CtFieldReference: no field declaration for " + SpoonUtils.describeElem(fr));
             return;
         }
-        final Ref<Selection> sel = this.abs.addSelection(field);
-        this.reads.add(sel);
+        this.addRead(this.abs.addSelection(field));
     }
     
     private void addExecutableReferenceUsage(CtExecutableReference<?> er) throws Exception {
@@ -322,47 +350,37 @@ public class Analyzer {
 
     private void addMethodUsage(CtMethod<?> mt) throws Exception {
         if (logUsage) this.log.log("addUsage.CtMethod: " + SpoonUtils.describeElem(mt));
-        final Ref<? extends Construct> decl = this.abs.addDeclaration(mt);
-        if (decl != null) this.invokes.add(decl);
+        this.addInvoke(this.abs.addDeclaration(mt));
     }
 
     private void addConstructorUsage(CtConstructor<?> ct) throws Exception {
         if (logUsage) this.log.log("addUsage.CtConstructor: " + SpoonUtils.describeElem(ct));
-        final Ref<? extends Construct> decl = this.abs.addDeclaration(ct);
-        if (decl != null) this.invokes.add(decl);
+        this.addInvoke(this.abs.addDeclaration(ct));
     }
 
     private void addLiteralUsage(CtLiteral<?> lt) throws Exception {
         if (logUsage) this.log.log("addUsage.CtLiteral: " + SpoonUtils.describeElem(lt));
-        this.reads.add(this.abs.addTypeDesc(lt.getType()));
-    }
-
-    private void addThisAccess(CtThisAccess<?> ta) throws Exception {
-        if (logUsage) this.log.log("addUsage.CtThisAccess: " + SpoonUtils.describeElem(ta));
-        // Ignore since this will continue onto the type for "this".
+        this.addRead(this.abs.addTypeDesc(lt.getType()));
     }
 
     private void addVariableRead(CtVariableRead<?> vr) throws Exception {
         if (logUsage) this.log.log("addUsage.CtVariableRead: " + SpoonUtils.describeElem(vr));
-
-        // TODO: Implement
-
-        this.log.warning("unimplemented addUsage for CtVariableRead: " + SpoonUtils.describeElem(vr));
+        this.addRead(this.abs.addTypeDesc(vr.getType()));
     }
 
     private void addParameterReference(CtParameterReference<?> pr) throws Exception {
         if (logUsage) this.log.log("addUsage.CtParameterReference: " + SpoonUtils.describeElem(pr));
-
-        // TODO: Implement
-
-        this.log.warning("unimplemented addUsage for CtParameterReference: " + SpoonUtils.describeElem(pr));
+        this.addRead(this.abs.addTypeDesc(pr.getType()));
     }
 
     private void addConstructorCall(CtConstructorCall<?> cc) {
         if (logUsage) this.log.log("addUsage.CtConstructorCall: " + SpoonUtils.describeElem(cc));
 
+        //this.abs.addMethodDeclForConstructor(cc.getExecutable());
         // TODO: Implement
 
         this.log.warning("unimplemented addUsage for CtConstructorCall: " + SpoonUtils.describeElem(cc));
     }
+
+    // TODO: Add a test with assignment.
 }
