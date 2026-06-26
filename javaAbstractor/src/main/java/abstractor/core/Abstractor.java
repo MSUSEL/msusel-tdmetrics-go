@@ -415,8 +415,14 @@ public class Abstractor {
                 if (c.getRoleInParent() == CtRole.NESTED_TYPE) { // TODO: Does this work?
                     if (c.getParent() instanceof CtTypeReference<?> nest && nest != null) {
                         fields.add(this.addField("$nest", nest));
+                    } else if (c.getParent() instanceof CtClass<?> cl && cl != null) {
+
+                        // TODO: Implement
+                        Require.failure("Unimplemented");
+
                     } else {
-                        this.log.error("Unhandled nested object decl " + SpoonUtils.describeElem(c) + " in " + c.getParent());
+                        this.log.error("Unhandled nested object decl " + SpoonUtils.describeElem(c) +
+                            " in " + SpoonUtils.describeElem(c.getParent()));
                     }
                 }
 
@@ -679,17 +685,23 @@ public class Abstractor {
     }
 
     public Ref<? extends TypeDesc> addTypeDesc(CtTypeReference<?> tr) throws Exception {
+        return this.addTypeDesc(tr, false);
+    }
+        
+    public Ref<? extends TypeDesc> addTypeDesc(CtTypeReference<?> tr, boolean allowLocal) throws Exception {
         if (tr == null) return null;
 
-        // Skip anonymous and local types since they can not escape the enclosing method.
+        // By default skip anonymous and local types since they can not escape the enclosing method.
         // (They still will contribute to metrics via super-interfaces and extends).
-        if (tr.isAnonymous()) {
-            this.log.notice("Ignoring anonymous type: " + SpoonUtils.describeElem(tr));
-            return null;
-        }
-        if (tr.isLocalType()) {
-            this.log.notice("Ignoring local type: " + SpoonUtils.describeElem(tr));
-            return null;
+        if (!allowLocal) {
+            if (tr.isAnonymous()) {
+                this.log.notice("Ignoring anonymous type: " + SpoonUtils.describeElem(tr));
+                return null;
+            }
+            if (tr.isLocalType()) {
+                this.log.notice("Ignoring local type: " + SpoonUtils.describeElem(tr));
+                return null;
+            }
         }
 
         // Handle primitive types (i.e. `int` but not `String` nor `Integer`).

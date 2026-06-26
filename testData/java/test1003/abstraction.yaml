@@ -16,29 +16,43 @@
     { abstracts: [ ] },                    # 2. any
   ],
   methods: [
-    { # 1. getValue() T
+    { # 1. Foo<T>.getValue() T
       name: getValue, package: 4, receiver: 1, signature: 1,
       loc: 6, metrics: 1, vis: public,
+      typeParams: [ 1 ],
     },
-    { # 2. setValue(value T)
+    { # 2. Foo<T>.setValue(value T)
       name: setValue, package: 4, receiver: 1, signature: 2,
       loc: 7, metrics: 2, vis: public,
+      typeParams: [ 1 ],
     },
   ],
   metrics: [
-    { # 1. getValue metrics
+    { # 1. Foo<T>.getValue metrics
       loc: 6, codeCount: 1, complexity: 1, lineCount: 1,
       getter: true,
-      reads: [ object1, selection1 ],
+      reads: [
+        object1,    # Foo<T>
+        selection1, # Foo<T>.value
+        typeParam1, # T
+      ],
     },
-    { # 2. setValue metrics
+    { # 2. Foo<T>.setValue metrics
       loc: 7, codeCount: 1, complexity: 1, lineCount: 1,
       setter: true,
-      reads: [ object1, selection1 ],
+      reads: [
+        object1,    # Foo<T>
+        selection1, # Foo<T>.value
+        typeParam1, # T
+      ],
+      writes: [
+        selection1, # Foo<T>.value
+        typeParam1, # T
+      ],
     },
   ],
   objects: [
-    { # 1. Foo{ value T }{ getValue() T; setValue(value T) }
+    { # 1. Foo<T>{ value T }{ getValue() T; setValue(value T) }
       name: Foo, package: 4, data: 1, interface: 1, loc: 3, vis: public,
       methods: [ 1, 2 ],
       typeParams: [ 1 ],
@@ -55,7 +69,7 @@
     },
   ],
   selections: [
-    { name: value, origin: object1 }, # 1. Foo.value
+    { name: value, origin: object1 }, # 1. Foo<T>.value
   ],
   signatures: [
     { results: [ 1 ] }, # 1. func() T

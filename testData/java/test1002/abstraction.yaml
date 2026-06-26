@@ -61,9 +61,23 @@
     },
   ],
   metrics: [
-    { loc:  4, codeCount: 3, complexity: 1, indents: 3, lineCount: 3 },
-    { loc:  8, codeCount: 3, complexity: 1, indents: 3, lineCount: 3 },
-    { loc: 12, codeCount: 3, complexity: 1, indents: 3, lineCount: 3 },
+    {
+      loc:  4, codeCount: 3, complexity: 1, indents: 3, lineCount: 3,
+      reads: [ basic1 ], # int
+    },
+    {
+      loc:  8, codeCount: 3, complexity: 1, indents: 3, lineCount: 3,
+      reads:  [ basic1 ], # int
+      writes: [ basic1 ], # int
+    },
+    {
+      loc: 12, codeCount: 3, complexity: 1, indents: 3, lineCount: 3,
+      reads: [
+        basic1, # int
+        interfaceInst1, #$Array<int>
+      ],
+      writes: [ basic1 ], # int
+    },
   ],
   objects: [
     { # 1. Foo{}{ bar(x int, y int) int; baz(); cat(t $Array<int> ...) }

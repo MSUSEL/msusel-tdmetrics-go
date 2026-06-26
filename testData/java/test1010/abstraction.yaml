@@ -13,6 +13,9 @@
     { name: value, type: typeParam2 }, # 4. value U
   ],
   basics: [ int, string ],
+  fields: [
+      { name: value, type: interfaceDesc3, vis: public }, # 1. value any
+  ],
   interfaceDescs: [
     { # 1. interface{Bar(value int); Bar(value string); Baz(value U)}
       abstracts: [ 1, 2, 4 ],
@@ -54,28 +57,57 @@
     },
     { # 3. Foo<T>.Baz<U>(value U)
       name: Baz, package: 5, receiver: 1, signature: 5,
-      loc: 6, vis: public, typeParams: [ 1, 2 ],
+      loc: 6, metrics: 3, vis: public, typeParams: [ 1, 2 ],
     },
     { # 4. Foo<T>.Do()
       name: Do, package: 5, receiver: 1, signature: 1,
-      loc: 8, metrics: 3, static: true, vis: public, typeParams: [ 1 ],
+      loc: 8, metrics: 4, static: true, vis: public, typeParams: [ 1 ],
     },
   ],
   metrics: [
     { # 1. Foo<T>.Bar(value T)
       codeCount: 1, complexity: 1, lineCount: 1, loc: 4,
       invokes: [ method3 ], # Foo<T>.Baz<U>(value U)
-      reads: [ object1 ], # Foo<T>
-      remove: me, # REMOVE after adding more of the analyzer
+      reads: [
+        interfaceDesc3, # any
+        object1,        # Foo<T>
+        typeParam1,     # T any
+      ],
     },
     { # 2. Foo<T>.Bar(value int)
       codeCount: 1, complexity: 1, lineCount: 1, loc: 5,
       invokes: [ method3 ], # Foo<T>.Baz<U>(value U)
-      reads: [ object1 ], # Foo<T>
+      reads: [
+        basic1,         # int
+        interfaceDesc3, # any
+        object1,        # Foo<T>
+        typeParam1,     # T any
+      ],
     },
-    { # 3. Foo<T>.Do()
+    { # 3. Foo<T>.Baz<U>(value U)
+      codeCount: 1, complexity: 1, lineCount: 1, loc: 6, setter: true,
+      writes: [
+        interfaceDesc3, # any
+        selection1,     # Foo<T>.value
+      ],
+      reads: [
+        interfaceDesc3, # any
+        object1,        # Foo<T>
+        selection1,     # Foo<T>.value
+        typeParam1,     # T any
+        typeParam2,     # U any
+      ],
+    },
+    { # 4. Foo<T>.Do()
       codeCount: 3, complexity: 1, indents: 1, lineCount: 3, loc: 8,
       invokes: [ method2 ], # Foo<T>.Bar(value T)
+      reads: [
+        basic2,         # string
+        interfaceDesc3, # any
+        object1,        # Foo<T>
+        objectInst1,    # Foo<string>
+      ],
+      writes: [ object1 ], # Foo<T>
     },
   ],
   objectInsts: [
@@ -103,6 +135,9 @@
       objects: [ 1 ],
     },
   ],
+  selections: [
+    { name: value, origin: object1 }, # 1. Foo<T>.value
+  ],
   signatures: [
     {               }, # 1. func()
     { params: [ 1 ] }, # 2. func(value int)
@@ -111,7 +146,7 @@
     { params: [ 4 ] }, # 5. func(value U)
   ],
   structDescs: [
-    { }, # 1. struct{}
+    { fields: [ 1 ] }, # 1. struct{ value any }
   ],
   typeParams: [
     { name: T, type: interfaceDesc3 }, # 1. T any
