@@ -1,4 +1,5 @@
 test*/target/
 test*/spoon.classpath-app.tmp
+test*/abstraction_got.yaml
 test*/abstraction.diff
 test*/abstraction.log

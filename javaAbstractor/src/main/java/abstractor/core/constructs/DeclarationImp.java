@@ -22,6 +22,7 @@ public abstract class DeclarationImp extends ConstructImp implements Declaration
     public DeclarationImp(Ref<PackageCon> pkg, Location loc, String name) throws Exception {
         Require.notNull(pkg, "a declaration may not have a null package");
         Require.notBlank(name, "a declaration may not have a blank name");
+        Require.isIdentifier(name, "a declaration name must be an identifier. (" + name + ") was not.");
         this.pkg        = pkg;
         this.loc        = loc;
         this.name       = name;
@@ -41,7 +42,7 @@ public abstract class DeclarationImp extends ConstructImp implements Declaration
 
     @Override
     public JsonNode toJson(JsonHelper h) {
-        JsonObject obj = (JsonObject)super.toJson(h);
+        final JsonObject obj = (JsonObject)super.toJson(h);
         if (this.loc != null) obj.putNotEmpty("loc", this.loc.toJson(h));
         obj.putNotEmpty("package", index(pkg));
         obj.putNotEmpty("name",    this.name);

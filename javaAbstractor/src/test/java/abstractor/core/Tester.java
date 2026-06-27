@@ -126,22 +126,22 @@ public class Tester {
         }
     }
 
-    public void checkJsonWithFile(Jsonable j, String absFile, String diffFile, String logFile) {
+    public void checkJsonWithFile(Jsonable j, String absFile, String diffFile, String gotFile, String logFile) {
         final JsonHelper jh = new JsonHelper();
         final String result = j == null ? "null" : JsonFormat.Relaxed().format(j.toJson(jh));
         final String exp = this.formatJsonFromFile(absFile);
-        this.assertLines(exp, result, diffFile, logFile);
+        this.assertLines(exp, result, diffFile, gotFile, logFile);
     }
     
-    public void checkProjectWithFile(String absFile, String diffFile, String logFile) {
-        this.checkJsonWithFile(this.proj, absFile, diffFile, logFile);
+    public void checkProjectWithFile(String absFile, String diffFile, String gotFile, String logFile) {
+        this.checkJsonWithFile(this.proj, absFile, diffFile, gotFile, logFile);
     }
 
     public void checkJson(Jsonable j, String ...lines) {
         final JsonHelper jh = new JsonHelper();
         final String result = j == null ? "null" : JsonFormat.Relaxed().format(j.toJson(jh));
         final String exp = this.formatJson(lines);
-        this.assertLines(exp, result, null, null);
+        this.assertLines(exp, result, null, null, null);
     }
     
     public void checkProject(String ...lines) {
@@ -178,18 +178,36 @@ public class Tester {
         }
     }
 
-    public void assertLines(String exp, String result, String diffFile, String logFile) {
+    public void assertLines(String exp, String result, String diffFile, String gotFile, String logFile) {
         if (!exp.equals(result)) {
             this.printLogs(logFile);
-            printDiff(exp, result, diffFile);
+            printDiff(exp, result, diffFile, gotFile);
             Assertions.fail("unexpected lines (see diff)");
         }
     }
 
-    static public void printDiff(String exp, String result, String diffFile) {
-        List<String> lines = Iter.ToList(new Diff().PlusMinusByLine(exp, result));
+    static public void printDiff(String exp, String result, String diffFile, String gotFile) {
+        final List<String> lines = Iter.ToList(new Diff().PlusMinusByLine(exp, result));
+
+        if (gotFile != null && !gotFile.isBlank()) {
+            // clear out any old file
+            new File(gotFile).delete();
+            if (lines.size() > switchDiffOutputLines) {
+                try {
+                    BufferedWriter writer = new BufferedWriter(new FileWriter(gotFile));
+                    writer.append(result);
+                    writer.flush();
+                    writer.close();
+                    System.out.println("Unexpected \"got\" lines written to "+gotFile);
+                } catch (Exception ex) {
+                    Assertions.fail("Failed to write \"got\" file", ex);
+                }
+            }
+        }
 
         if (diffFile != null && !diffFile.isBlank()) {
+            // clear out any old file
+            new File(diffFile).delete();
             if (lines.size() > switchDiffOutputLines) {
                 try {
                     BufferedWriter writer = new BufferedWriter(new FileWriter(diffFile));
@@ -203,10 +221,9 @@ public class Tester {
                 } catch (Exception ex) {
                     Assertions.fail("Failed to write diff file", ex);
                 }
+                // Wrote diff to file so leave.
                 return;
             }
-            // clear out any old file
-            new File(diffFile).delete();
         }
 
         final String diff = String.join("\n\t", lines);

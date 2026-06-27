@@ -1,9 +1,11 @@
 package abstractor.core.require;
 
 import java.util.Objects;
+import java.util.regex.Pattern;
 
 import abstractor.core.AbstractorException;
 import abstractor.core.spoonUtils.SpoonUtils;
+
 import spoon.reflect.declaration.CtMethod;
 import spoon.reflect.reference.CtTypeReference;
 
@@ -161,6 +163,26 @@ public class Require {
     static public void notObject(CtTypeReference<?> tr, String msg) throws Exception {
         if (SpoonUtils.isObject(tr)) {
             throw new AbstractorException(!msg.isBlank()? msg: "required a type to not be the default Object: " + SpoonUtils.describeElem(tr));
+        }
+    }
+
+    static private Pattern idPattern;
+    static private boolean idMatch(String s) {
+        if (idPattern == null) {
+            idPattern = Pattern.compile("^[a-zA-Z_$][a-zA-Z0-9_$]*$");
+        }
+        return idPattern.matcher(s).find();
+    }
+    
+    static public void isIdentifier(String s) throws Exception {
+        if (!idMatch(s)) {
+            throw new AbstractorException("required an identifier: " + s);
+        }
+    }
+
+    static public void isIdentifier(String s, String msg) throws Exception {
+        if (!idMatch(s)) {
+            throw new AbstractorException(!msg.isBlank()? msg: "required an identifier: " + s);
         }
     }
 }

@@ -6,7 +6,6 @@ import spoon.Launcher;
 import spoon.MavenLauncher;
 import spoon.reflect.*;
 import spoon.reflect.declaration.*;
-import spoon.reflect.path.CtRole;
 import spoon.reflect.reference.*;
 import spoon.support.compiler.VirtualFile;
 
@@ -138,6 +137,15 @@ public class Abstractor {
 
     private Ref<? extends Construct> addMethodDeclOrAbstract(CtMethod<?> m) throws Exception {
         final CtType<?> decl = m.getDeclaringType();
+        if (decl.isAnonymous()) {
+            this.log.notice("Ignoring method of an anonymous declaring type: " + SpoonUtils.describeElem(m) + " in " + SpoonUtils.describeElem(decl));
+            return null;
+        }
+        if (decl.isLocalType()) {
+            this.log.notice("Ignoring method of a local declaring type: " + SpoonUtils.describeElem(m) + " in " + SpoonUtils.describeElem(decl));
+            return null;
+        }
+
         if (decl instanceof CtEnum<?>    e) return this.addMethodDecl(this.addEnum(e), m);
         if (decl instanceof CtClass<?>   c) return this.addMethodDecl(this.addObjectDecl(c), m);
         if (decl instanceof CtInterface<?>) return this.addAbstract(m);
@@ -210,6 +218,10 @@ public class Abstractor {
         }
     }
 
+    private boolean isNested(CtType<?> t) {
+        return t.getParent() instanceof CtType<?>;
+    }
+
     public Ref<InterfaceDesc> addInterfaceDesc(CtInterface<?> i) throws Exception {
         return this.proj.interfaceDescs.create(this.log, new ElementKey(i, this.instantiator.typeArgs()),
             "interface description " + SpoonUtils.describeElem(i),
@@ -220,7 +232,7 @@ public class Abstractor {
                 }
 
                 Ref<? extends Construct> pin = null;
-                if (i.getRoleInParent() == CtRole.NESTED_TYPE) { // TODO: Does this work?
+                if (this.isNested(i)) {
                     final CtElement parent = i.getParent();
                     if (parent instanceof CtTypeReference<?> nest && nest != null) {
                         pin = this.addTypeDesc(nest);
@@ -412,14 +424,9 @@ public class Abstractor {
                 if (superFr != null) fields.add(this.addField("$super", superFr));
 
                 // Add access to nesting class as a "$nest" field.
-                if (c.getRoleInParent() == CtRole.NESTED_TYPE) { // TODO: Does this work?
+                if (this.isNested(c)) {
                     if (c.getParent() instanceof CtTypeReference<?> nest && nest != null) {
                         fields.add(this.addField("$nest", nest));
-                    } else if (c.getParent() instanceof CtClass<?> cl && cl != null) {
-
-                        // TODO: Implement
-                        Require.failure("Unimplemented");
-
                     } else {
                         this.log.error("Unhandled nested object decl " + SpoonUtils.describeElem(c) +
                             " in " + SpoonUtils.describeElem(c.getParent()));
@@ -549,6 +556,14 @@ public class Abstractor {
 
     public Ref<ObjectDecl> addObjectDecl(CtClass<?> c) throws Exception {
         Require.notObject(c.getReference());
+        if (c.isAnonymous()) {
+            this.log.notice("Ignoring anonymous object declaration: " + SpoonUtils.describeElem(c));
+            return null;
+        }
+        if (c.isLocalType()) {
+            this.log.notice("Ignoring local object declaration: " + SpoonUtils.describeElem(c));
+            return null;
+        }
         try {
             // All declarations must be added without type arguments.
             this.instantiator.pushCleanFrame();
@@ -560,6 +575,7 @@ public class Abstractor {
                     final String               name       = c.getSimpleName();
                     final Ref<StructDesc>      struct     = this.addStructDesc(c);
                     final List<Ref<TypeParam>> typeParams = this.addTypeParams(c);
+                    Require.isIdentifier(name, "object decl name (" + name + ") was not an identifier: " + SpoonUtils.describeElem(c));
                     return new ObjectDecl(pkg, loc, name, struct, typeParams);
                 },
                 (Ref<ObjectDecl> ref, ObjectDecl obj) -> {
@@ -683,31 +699,26 @@ public class Abstractor {
         // There was no difference so the instantiation is not useful.
         return null;
     }
-
-    public Ref<? extends TypeDesc> addTypeDesc(CtTypeReference<?> tr) throws Exception {
-        return this.addTypeDesc(tr, false);
-    }
         
-    public Ref<? extends TypeDesc> addTypeDesc(CtTypeReference<?> tr, boolean allowLocal) throws Exception {
+    public Ref<? extends TypeDesc> addTypeDesc(CtTypeReference<?> tr) throws Exception {
         if (tr == null) return null;
 
-        // By default skip anonymous and local types since they can not escape the enclosing method.
-        // (They still will contribute to metrics via super-interfaces and extends).
-        if (!allowLocal) {
-            if (tr.isAnonymous()) {
-                this.log.notice("Ignoring anonymous type: " + SpoonUtils.describeElem(tr));
-                return null;
-            }
-            if (tr.isLocalType()) {
-                this.log.notice("Ignoring local type: " + SpoonUtils.describeElem(tr));
-                return null;
-            }
+        // By default skip anonymous and local types since they can not escape the enclosing method,
+        // e.g. `testData.java.test1004.Foo$1` is anonymous with `1` as the name.
+        // They still will contribute to metrics via super-interfaces and extends.
+        if (tr.isAnonymous()) {
+            this.log.notice("Ignoring anonymous type: " + SpoonUtils.describeElem(tr));
+            return null;
+        }
+        if (tr.isLocalType()) {
+            this.log.notice("Ignoring local type: " + SpoonUtils.describeElem(tr));
+            return null;
         }
 
-        // Handle primitive types (i.e. `int` but not `String` nor `Integer`).
+        // Handle primitive types (e.g. `int` but not `String` nor `Integer`).
         if (tr.isPrimitive()) return this.addBasic(tr);
         
-        // Handle an array (i.e. `T[]` not `List<T>`) type.
+        // Handle an array (e.g. `T[]` not `List<T>`) type.
         if (tr.isArray()) return this.addArray((CtArrayTypeReference<?>)tr);
 
         // Handle wildcard types (e.g., `?`, `? extends Foo`, `? super Bar`).
@@ -765,6 +776,14 @@ public class Abstractor {
     }
 
     public Ref<ObjectDecl> addEnum(CtEnum<?> e) throws Exception {
+        if (e.isAnonymous()) {
+            this.log.notice("Ignoring anonymous enumerator: " + SpoonUtils.describeElem(e));
+            return null;
+        }
+        if (e.isLocalType()) {
+            this.log.notice("Ignoring local enumerator: " + SpoonUtils.describeElem(e));
+            return null;
+        }
         try {
             // All declarations must be added without type arguments.
             this.instantiator.pushCleanFrame();

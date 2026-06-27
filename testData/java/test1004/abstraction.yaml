@@ -1,242 +1,537 @@
 {
   language: java,
   abstracts: [
-    { name: $get,           signature: 29 }, #  1. $get(index int) any
-    { name: $get,           signature: 30 }, #  2. $get(index int) E
-    { name: $get,           signature: 31 }, #  3. $get(index int) T
-    { name: $len,           signature:  3 }, #  4. $len() int
-    { name: $set,           signature: 32 }, #  5. $set(index int, value any)
-    { name: $set,           signature: 33 }, #  6. $set(index int, value E)
-    { name: $set,           signature: 34 }, #  7. $set(index int, value T)
-    { name: add,            signature:  9 }, #  8. add(arg0 int, arg1 E)
-    { name: add,            signature: 17 }, #  9. add(arg0 E) bool
-    { name: addAll,         signature:  8 }, # 10. addAll(arg0 int, arg1 any) bool
-    { name: addAll,         signature: 13 }, # 11. addAll(arg0 any) bool
-    { name: bar,            signature: 35 }, # 12. bar(items List<E>)
-    { name: baz,            signature: 28 }, # 13. baz(comp Comparable<T>)
-    { name: clear,          signature:  1 }, # 14. clear()
-    { name: compareTo,      signature: 14 }, # 15. compareTo(arg0 any) int
-    { name: contains,       signature: 13 }, # 16. contains(arg0 any) bool
-    { name: containsAll,    signature: 13 }, # 17. containsAll(arg0 any) bool
-    { name: copyOf,         signature: 16 }, # 18. copyOf(arg0 any) any
-    { name: forEach,        signature: 12 }, # 19. forEach(arg0 any)
-    { name: get,            signature:  6 }, # 20. get(arg0 int) any
-    { name: indexOf,        signature: 14 }, # 21. indexOf(arg0 any) int
-    { name: isEmpty,        signature:  2 }, # 22. isEmpty() bool
-    { name: iterator,       signature:  4 }, # 23. iterator() any
-    { name: lastIndexOf,    signature: 14 }, # 24. lastIndexOf(arg0 any) int
-    { name: listIterator,   signature:  4 }, # 25. listIterator() any
-    { name: listIterator,   signature:  6 }, # 26. listIterator(arg0 int) any
-    { name: of,             signature:  4 }, # 27. of() any
-    { name: of,             signature: 18 }, # 28. of(arg0 E) any
-    { name: of,             signature: 19 }, # 29. of(arg0 E, arg1 E) any
-    { name: of,             signature: 20 }, # 30. of(arg0 E, arg1 E, arg2 E) any
-    { name: of,             signature: 21 }, # 31. of(arg0 E, arg1 E, arg2 E, arg3 E) any
-    { name: of,             signature: 22 }, # 32. of(arg0 E, arg1 E, arg2 E, arg3 E, arg4 E) any
-    { name: of,             signature: 23 }, # 33. of(arg0 E, arg1 E, arg2 E, arg3 E, arg4 E, arg5 E) any
-    { name: of,             signature: 24 }, # 34. of(arg0 E, arg1 E, arg2 E, arg3 E, arg4 E, arg5 E, arg6 E) any
-    { name: of,             signature: 25 }, # 35. of(arg0 E, arg1 E, arg2 E, arg3 E, arg4 E, arg5 E, arg6 E, arg7 E) any
-    { name: of,             signature: 26 }, # 36. of(arg0 E, arg1 E, arg2 E, arg3 E, arg4 E, arg5 E, arg6 E, arg7 E, arg8 E) any
-    { name: of,             signature: 27 }, # 37. of(arg0 E, arg1 E, arg2 E, arg3 E, arg4 E, arg5 E, arg6 E, arg7 E, arg8 E, arg9 E) any
-    { name: of,             signature: 36 }, # 38. of(arg0 ...$Array<E>) any
-    { name: parallelStream, signature:  4 }, # 39. parallelStream() any
-    { name: remove,         signature:  6 }, # 40. remove(arg0 int) any
-    { name: remove,         signature: 13 }, # 41. remove(arg0 any) bool
-    { name: removeAll,      signature: 13 }, # 42. removeAll(arg0 any) bool
-    { name: removeIf,       signature: 13 }, # 43. removeIf(arg0 any) bool
-    { name: replaceAll,     signature: 12 }, # 44. replaceAll(arg0 any)
-    { name: retainAll,      signature: 13 }, # 45. retainAll(arg0 any) bool
-    { name: run,            signature:  1 }, # 46. run()
-    { name: set,            signature: 10 }, # 47. set(arg0 int, arg1 E) any
-    { name: size,           signature:  3 }, # 48. size() int
-    { name: sort,           signature: 12 }, # 49. sort(arg0 any)
-    { name: spliterator,    signature:  4 }, # 50. spliterator() any
-    { name: stream,         signature:  4 }, # 51. stream() any
-    { name: subList,        signature:  7 }, # 52. subList(arg0 int, arg1 int) any
-    { name: toArray,        signature:  5 }, # 53. toArray() $Array<any>
-    { name: toArray,        signature: 11 }, # 54. toArray(arg0 $Array<T>) $Array<T>
-    { name: toArray,        signature: 15 }, # 55. toArray(arg0 any) $Array<T>
+    { name: $get,           signature: 46 }, #  1. ???
+    { name: $get,           signature: 47 }, #  2. ???
+    { name: $get,           signature: 48 }, #  3. ???
+    { name: $len,           signature:  6 }, #  4. ???
+    { name: $set,           signature: 49 }, #  5. ???
+    { name: $set,           signature: 50 }, #  6. ???
+    { name: $set,           signature: 51 }, #  7. ???
+    { name: add,            signature: 14 }, #  8. ???
+    { name: add,            signature: 17 }, #  9. ???
+    { name: add,            signature: 21 }, # 10. ???
+    { name: add,            signature: 34 }, # 11. ???
+    { name: addAll,         signature: 15 }, # 12. ???
+    { name: addAll,         signature: 21 }, # 13. ???
+    { name: bar,            signature: 52 }, # 14. ???
+    { name: baz,            signature: 45 }, # 15. ???
+    { name: byteValue,      signature:  3 }, # 16. ???
+    { name: clear,          signature:  1 }, # 17. ???
+    { name: compareTo,      signature: 22 }, # 18. ???
+    { name: contains,       signature: 21 }, # 19. ???
+    { name: containsAll,    signature: 21 }, # 20. ???
+    { name: copyOf,         signature: 24 }, # 21. ???
+    { name: doubleValue,    signature:  4 }, # 22. ???
+    { name: floatValue,     signature:  5 }, # 23. ???
+    { name: forEach,        signature: 20 }, # 24. ???
+    { name: get,            signature: 12 }, # 25. ???
+    { name: indexOf,        signature: 22 }, # 26. ???
+    { name: intValue,       signature:  6 }, # 27. ???
+    { name: isEmpty,        signature:  2 }, # 28. ???
+    { name: iterator,       signature:  9 }, # 29. ???
+    { name: lastIndexOf,    signature: 22 }, # 30. ???
+    { name: listIterator,   signature:  9 }, # 31. ???
+    { name: listIterator,   signature: 12 }, # 32. ???
+    { name: longValue,      signature:  7 }, # 33. ???
+    { name: of,             signature:  9 }, # 34. ???
+    { name: of,             signature: 24 }, # 35. ???
+    { name: of,             signature: 25 }, # 36. ???
+    { name: of,             signature: 26 }, # 37. ???
+    { name: of,             signature: 27 }, # 38. ???
+    { name: of,             signature: 28 }, # 39. ???
+    { name: of,             signature: 29 }, # 40. ???
+    { name: of,             signature: 30 }, # 11. ???
+    { name: of,             signature: 31 }, # 12. ???
+    { name: of,             signature: 32 }, # 13. ???
+    { name: of,             signature: 33 }, # 14. ???
+    { name: of,             signature: 35 }, # 15. ???
+    { name: of,             signature: 36 }, # 16. ???
+    { name: of,             signature: 37 }, # 17. ???
+    { name: of,             signature: 38 }, # 18. ???
+    { name: of,             signature: 39 }, # 19. ???
+    { name: of,             signature: 40 }, # 50. ???
+    { name: of,             signature: 41 }, # 51. ???
+    { name: of,             signature: 42 }, # 52. ???
+    { name: of,             signature: 43 }, # 53. ???
+    { name: of,             signature: 44 }, # 54. ???
+    { name: of,             signature: 53 }, # 55. ???
+    { name: parallelStream, signature:  9 }, # 56. ???
+    { name: remove,         signature: 12 }, # 57. ???
+    { name: remove,         signature: 21 }, # 58. ???
+    { name: removeAll,      signature: 21 }, # 59. ???
+    { name: removeIf,       signature: 21 }, # 60. ???
+    { name: replaceAll,     signature: 20 }, # 61. ???
+    { name: retainAll,      signature: 21 }, # 62. ???
+    { name: run,            signature:  1 }, # 63. ???
+    { name: set,            signature: 16 }, # 64. ???
+    { name: set,            signature: 18 }, # 65. ???
+    { name: shortValue,     signature:  8 }, # 66. ???
+    { name: size,           signature:  6 }, # 67. ???
+    { name: sort,           signature: 20 }, # 68. ???
+    { name: spliterator,    signature:  9 }, # 69. ???
+    { name: stream,         signature:  9 }, # 70. ???
+    { name: subList,        signature: 13 }, # 71. ???
+    { name: toArray,        signature: 10 }, # 72. ???
+    { name: toArray,        signature: 19 }, # 73. ???
+    { name: toArray,        signature: 23 }, # 74. ???
   ],
   arguments: [
-    {              type: basic1          }, #  1. <unnamed> bool
-    {              type: basic2          }, #  2. <unnamed> int
-    {              type: interfaceDecl1  }, #  3. <unnamed> $Array<T>
-    {              type: interfaceDesc10 }, #  4. <unnamed> any
-    {              type: interfaceInst1  }, #  5. <unnamed> $Array<any>
-    {              type: typeParam1      }, #  6. <unnamed> E
-    {              type: typeParam2      }, #  7. <unnamed> T
-    { name: arg0,  type: basic2          }, #  8. arg0 int
-    { name: arg0,  type: interfaceDecl1  }, #  9. arg0 $Array<T>
-    { name: arg0,  type: interfaceDesc10 }, # 10. arg0 any
-    { name: arg0,  type: interfaceInst2  }, # 11. arg0 $Array<E>
-    { name: arg0,  type: typeParam1      }, # 12. arg0 E
-    { name: arg1,  type: basic2          }, # 13. arg1 int
-    { name: arg1,  type: interfaceDesc10 }, # 14. arg1 any
-    { name: arg1,  type: typeParam1      }, # 15. arg1 E
-    { name: arg2,  type: typeParam1      }, # 16. arg2 E
-    { name: arg3,  type: typeParam1      }, # 17. arg3 E
-    { name: arg4,  type: typeParam1      }, # 18. arg4 E
-    { name: arg5,  type: typeParam1      }, # 19. arg5 E
-    { name: arg6,  type: typeParam1      }, # 20. arg6 E
-    { name: arg7,  type: typeParam1      }, # 21. arg7 E
-    { name: arg8,  type: typeParam1      }, # 22. arg8 E
-    { name: arg9,  type: typeParam1      }, # 23. arg9 E
-    { name: comp,  type: interfaceDecl3  }, # 24. comp Comparable<T>
-    { name: index, type: basic2          }, # 25. index int
-    { name: items, type: interfaceDecl5  }, # 26. items List<E>
-    { name: value, type: interfaceDesc10 }, # 27. value any
-    { name: value, type: typeParam1      }, # 28. value E
-    { name: value, type: typeParam2      }, # 29. value T
+    {              type: basic1          }, #  1. ???
+    {              type: basic2          }, #  2. ???
+    {              type: basic3          }, #  3. ???
+    {              type: basic4          }, #  4. ???
+    {              type: basic5          }, #  5. ???
+    {              type: basic6          }, #  6. ???
+    {              type: basic7          }, #  7. ???
+    {              type: interfaceDecl1  }, #  8. ???
+    {              type: interfaceDesc14 }, #  9. ???
+    {              type: interfaceInst1  }, # 20. ???
+    {              type: object3         }, # 11. ???
+    {              type: typeParam1      }, # 12. ???
+    {              type: typeParam2      }, # 13. ???
+    { name: arg0,  type: basic5          }, # 14. ???
+    { name: arg0,  type: interfaceDecl1  }, # 15. ???
+    { name: arg0,  type: interfaceDesc14 }, # 16. ???
+    { name: arg0,  type: interfaceInst2  }, # 17. ???
+    { name: arg0,  type: typeParam1      }, # 18. ???
+    { name: arg1,  type: basic5          }, # 19. ???
+    { name: arg1,  type: interfaceDesc14 }, # 20. ???
+    { name: arg1,  type: typeParam1      }, # 21. ???
+    { name: arg2,  type: interfaceDesc14 }, # 22. ???
+    { name: arg2,  type: typeParam1      }, # 23. ???
+    { name: arg3,  type: interfaceDesc14 }, # 24. ???
+    { name: arg3,  type: typeParam1      }, # 25. ???
+    { name: arg4,  type: interfaceDesc14 }, # 26. ???
+    { name: arg4,  type: typeParam1      }, # 27. ???
+    { name: arg5,  type: interfaceDesc14 }, # 28. ???
+    { name: arg5,  type: typeParam1      }, # 29. ???
+    { name: arg6,  type: interfaceDesc14 }, # 30. ???
+    { name: arg6,  type: typeParam1      }, # 31. ???
+    { name: arg7,  type: interfaceDesc14 }, # 32. ???
+    { name: arg7,  type: typeParam1      }, # 33. ???
+    { name: arg8,  type: interfaceDesc14 }, # 34. ???
+    { name: arg8,  type: typeParam1      }, # 35. ???
+    { name: arg9,  type: interfaceDesc14 }, # 36. ???
+    { name: arg9,  type: typeParam1      }, # 37. ???
+    { name: comp,  type: interfaceInst3  }, # 38. ???
+    { name: index, type: basic5          }, # 39. ???
+    { name: items, type: interfaceInst4  }, # 40. ???
+    { name: value, type: interfaceDesc14 }, # 41. ???
+    { name: value, type: typeParam1      }, # 42. ???
+    { name: value, type: typeParam2      }, # 43. ???
   ],
-  basics: [ boolean, int ],
+  basics: [
+    boolean, # 1
+    byte,    # 2
+    double,  # 3
+    float,   # 4
+    int,     # 5
+    long,    # 6
+    short,   # 7
+  ],
   fields: [
-    { name: x, type: basic2, vis: public }, # 1. x int
+    { # 1. ???
+      name: serialVersionUID, type: basic6, vis: private,
+    },
+    { # 2. ???
+      name: x, type: basic5, vis: public,
+    },
   ],
   interfaceDecls: [
-    { # 1. $Array<T>{ $get(index int) T; $len() int; $set(index int, value T) }
+    { # 1. ???
       name: $Array, package: 1, interface: 3,
       typeParams: [ 2 ],
     },
-    { # 2. Collection<E>{ add(arg0 E) bool; addAll(arg0 any) bool; clear(); ... }
-      name: Collection, package: 4, interface: 8, vis: public,
+    { # 2. ???
+      name: Collection, package: 4, interface: 11, vis: public,
       typeParams: [ 1 ],
     },
-    { # 3. Comparable<T>{ compareTo(arg0 any) int }
+    { # 3. ???
       name: Comparable, package: 3, interface: 5, vis: public,
       typeParams: [ 2 ],
     },
-    { # 4. Iterable<E>{ forEach(arg0 any); iterator() any; spliterator() any }
-      name: Iterable, package: 3, interface: 7, vis: public,
+    { # 4. ???
+      name: Iterable, package: 3, interface: 9, vis: public,
       typeParams: [ 2 ],
     },
-    { # 5. List<E>{ add(arg0 int, arg1 E); add(arg0 E) bool; addAll(arg0 int, arg1 any) bool; ... }
-      name: List, package: 4, interface: 9, vis: public,
+    { # 5. ???
+      name: List, package: 4, interface: 13, vis: public,
       typeParams: [ 1 ],
     },
-    { # 6. Runnable{ run() }
-      name: Runnable, package: 3, interface: 6, vis: public,
+    { # 6. ???
+      name: Runnable, package: 3, interface: 7, vis: public,
     },
   ],
   interfaceDescs: [
-    { abstracts: [ 1, 4, 5 ] }, # 1. interface{ $get(index int) any; $len() int; $set(index int, value any) }
-    { abstracts: [ 2, 4, 6 ] }, # 2. interface{ $get(index int) E; $len() int; $set(index int, value E) }
-    { abstracts: [ 3, 4, 7 ] }, # 3. interface{ $get(index int) T; $len() int; $set(index int, value T) }
-    {                           # 4. interface{ bar(items List<E>); baz(comp Comparable<T>) }
-      abstracts: [ 12, 13 ],
-      pin: object1,
+    { # 1. ???
+      abstracts: [ 1, 4, 5 ],
     },
-    { abstracts: [ 15 ]         }, # 5. interface{ compareTo(arg0 any) int }
-    { abstracts: [ 46 ]         }, # 6. interface{ run() }
-    { abstracts: [ 19, 23, 50 ] }, # 7. interface{ forEach(arg0 any); iterator() any; spliterator() any }
-    {                              # 8. interface{ add(arg0 E) bool; addAll(arg0 any) bool; clear(); ... }
-      abstracts: [ 9, 11, 14, 16, 17, 19, 22, 23, 39, 41, 42, 43, 45, 48, 50, 51, 53, 54, 55 ],
-      inherits: [ 7 ],
+    { # 2. ???
+      abstracts: [ 2, 4, 6 ],
     },
-    { # 9. interface{ add(arg0 int, arg1 E); add(arg0 E) bool; addAll(arg0 int, arg1 any) bool; ... }
-      abstracts: [ 8, 9, 10, 11, 14, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 47, 48, 49, 50, 51, 52, 53, 54, 55 ],
-      inherits: [ 8 ],
+    { # 3. ???
+      abstracts: [ 3, 4, 7 ],
     },
-    { abstracts: [ ] }, # 10. any
+    { # 4. ???
+      abstracts: [ 14, 15 ], pin: object2,
+    },
+    { # 5. ???
+      abstracts: [ 18 ],
+    },
+    { # 6. ???
+      abstracts: [ 16, 22, 23, 27, 33, 66 ], inherits: [ 14 ], pin: object3,
+    },
+    { # 7. ???
+      abstracts: [ 63 ],
+    },
+    { # 8. ???
+      abstracts: [ 63 ], inherits: [ 7 ], pin: object1,
+    },
+    { # 9. ???
+      abstracts: [ 24, 29, 69 ],
+    },
+    { # 10. ???
+      abstracts: [ 10, 13, 17, 19, 20, 24, 28, 29, 56, 58, 59, 60, 62, 67, 69, 70, 72, 73, 74 ],
+      inherits: [ 9 ],
+    },
+    { # 11. ???
+      abstracts: [ 11, 13, 17, 19, 20, 24, 28, 29, 56, 58, 59, 60, 62, 67, 69, 70, 72, 73, 74 ],
+      inherits: [ 9 ],
+    },
+    { # 12. ???
+      abstracts: [ 8, 10, 12, 13, 17, 19, 20, 21, 24, 25, 26, 28, 29, 30, 31, 32, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 55, 56, 57, 58, 59, 60, 61, 62, 64, 67, 68, 69, 70, 71, 72, 73, 74 ],
+      inherits: [ 10 ],
+    },
+    { # 13. ???
+      abstracts: [ 9, 11, 12, 13, 17, 19, 20, 21, 24, 25, 26, 28, 29, 30, 31, 32, 34, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 65, 67, 68, 69, 70, 71, 72, 73, 74 ],
+      inherits: [ 11 ],
+    },
+    { # 14. ???
+      abstracts: [ ],
+    },
   ],
   interfaceInsts: [
-    { # 1. $Array<any>{ $get(index int) any; $len() int; $set(index int, value any) }
-      generic: 1, resolved: 1, instanceTypes: [ interfaceDesc10 ],
+    { # 1. ???
+      generic: 1, resolved: 1, instanceTypes: [ interfaceDesc14 ],
     },
-    { # 2. $Array<E>{ $get(index int) E; $len() int; $set(index int, val9ue E) }
+    { # 2. ???
       generic: 1, resolved: 2, instanceTypes: [ typeParam1 ],
+    },
+    { # 3. ???
+      generic: 3, resolved: 5, instanceTypes: [ object3 ],
+    },
+    { # 4. ???
+      generic: 5, resolved: 12, instanceTypes: [ interfaceDesc14 ],
     },
   ],
   methods: [
-    { # 1. bar(items List<E>)
-      name: bar, package: 7, receiver: 1, signature: 35,
+    { # 1. ???
+      name: Number, package: 3, receiver: 3, signature: 11,
+      constructor: true, static: true, vis: public,
+    },
+    { # 2. ???
+      name: bar, package: 7, receiver: 2, signature: 52,
       loc: 15, metrics: 1, vis: public,
     },
-    { # 2. baz(comp Comparable<T>)
-      name: baz, package: 7, receiver: 1, signature: 28,
+    { # 3. ???
+      name: baz, package: 7, receiver: 2, signature: 45,
       loc: 24, vis: public,
+    },
+    { # 4. ???
+      name: byteValue, package: 3, receiver: 3, signature: 3,
+      vis: public,
+    },
+    { # 5. ???
+      name: doubleValue, package: 3, receiver: 3, signature: 4,
+      vis: public,
+    },
+    { # 6. ???
+      name: floatValue, package: 3, receiver: 3, signature: 5,
+      vis: public,
+    },
+    { # 7. ???
+      name: intValue, package: 3, receiver: 3, signature: 6,
+      vis: public,
+    },
+    { # 8. ???
+      name: longValue, package: 3, receiver: 3, signature: 7,
+      vis: public,
+    },
+    { # 9. ???
+      name: run, package: 7, receiver: 1, signature: 1,
+      loc: 19, vis: public,
+    },
+    { # 10. ???
+      name: shortValue, package: 3, receiver: 3, signature: 8,
+      vis: public,
     },
   ],
   metrics: [
-    { loc: 15, codeCount: 8, complexity: 2, indents: 13, lineCount: 8 },
+    { # 1. ???
+      loc: 15, codeCount: 8, complexity: 2, indents: 13, lineCount: 8,
+      reads: [
+        interfaceDecl6,  # ???
+        interfaceDesc14, # ???
+        interfaceInst4,  # ???
+        object1,         # ???
+        object2,         # ???
+      ],
+      writes: [
+        interfaceDecl6,  # ???
+        interfaceDesc14, # ???
+        object1,         # ???
+      ],
+    },
   ],
   objects: [
-    { # 1. Foo{ x int }{ bar(items List<E>); baz(comp Comparable<T>) }
-      name: Foo, package: 7, data: 1, interface: 4,
+    {
+      name: wrongId_1, # TODO: FIX
+      package: 7, data: 1, interface: 8,
+      loc: 17,
+      methods: [ 9 ],
+    },
+    {
+      name: Foo, package: 7, data: 3, interface: 4,
       loc: 12, vis: public,
-      methods: [ 1, 2 ],
+      methods: [ 2, 3 ],
+    },
+    {
+      name: Number, package: 3, data: 2, interface: 6,
+      vis: public,
+      methods: [ 1, 4, 5, 6, 7, 8, 10 ],
     },
   ],
   packages: [
-    { name: $builtin, interfaces: [ 1 ] },
+    {
+      interfaces: [ 1 ],
+      name: $builtin,
+    },
     { name: "<unnamed>" },
-    { name: java.lang, interfaces: [ 3, 4, 6 ] },
-    { name: java.util, interfaces: [ 2, 5 ] },
+    {
+      interfaces: [ 3, 4, 6 ],
+      methods: [ 1, 4, 5, 6, 7, 8, 10 ],
+      name: java.lang,
+      objects: [ 3 ],
+    },
+    {
+      interfaces: [ 2, 5 ],
+      name: java.util,
+    },
     { name: testData },
     { name: testData.java },
-    { name: testData.java.test1004, objects: [ 1 ], methods: [ 1, 2 ] },
+    {
+      methods: [ 2, 3, 9 ],
+      name: testData.java.test1004,
+      objects: [ 1, 2 ],
+    },
   ],
   signatures: [
-    {                                    }, #  1. func()
-    {                     results: [ 1 ] }, #  2. func() bool
-    {                     results: [ 2 ] }, #  3. func() int
-    {                     results: [ 4 ] }, #  4. func() any
-    {                     results: [ 5 ] }, #  5. func() $Array<any>
-    { params: [  8 ],     results: [ 4 ] }, #  6. func(arg0 int) any
-    { params: [  8, 13 ], results: [ 4 ] }, #  7. func(arg0 int, arg1 int) any
-    { params: [  8, 14 ], results: [ 1 ] }, #  8. func(arg0 int, arg1 any) bool
-    { params: [  8, 15 ]                 }, #  9. func(arg0 int, arg1 E)
-    { params: [  8, 15 ], results: [ 4 ] }, # 10. func(arg0 int, arg1 E) any
-    { params: [  9 ],     results: [ 3 ] }, # 11. func(arg0 $Array<T>) $Array<T>
-    { params: [ 10 ]                     }, # 12. func(arg0 any)
-    { params: [ 10 ],     results: [ 1 ] }, # 13. func(arg0 any) bool
-    { params: [ 10 ],     results: [ 2 ] }, # 14. func(arg0 any) int
-    { params: [ 10 ],     results: [ 3 ] }, # 15. func(arg0 any) $Array<T>
-    { params: [ 10 ],     results: [ 4 ] }, # 16. func(arg0 any) any
-    { params: [ 12 ],     results: [ 1 ] }, # 17. func(arg0 E) bool
-    { params: [ 12 ],     results: [ 4 ] }, # 18. func(arg0 E) any
-    { params: [ 12, 15 ], results: [ 4 ] }, # 19. func(arg0 E, arg1 E) any
-    { # 20. func(arg0 E, arg1 E, arg2 E) any
-      params: [ 12, 15, 16 ], results: [ 4 ],
+    { },
+    {
+      results: [ 1 ],
     },
-    { # 21. func(arg0 E, arg1 E, arg2 E, arg3 E) any
-      params: [ 12, 15, 16, 17 ], results: [ 4 ],
+    {
+      results: [ 2 ],
     },
-    { # 22. func(arg0 E, arg1 E, arg2 E, arg3 E, arg4 E) any
-      params: [ 12, 15, 16, 17, 18 ], results: [ 4 ],
+    {
+      results: [ 3 ],
     },
-    { # 23. func(arg0 E, arg1 E, arg2 E, arg3 E, arg4 E, arg5 E) any
-      params: [ 12, 15, 16, 17, 18, 19 ], results: [ 4 ],
+    {
+      results: [ 4 ],
     },
-    { # 24. func(arg0 E, arg1 E, arg2 E, arg3 E, arg4 E, arg5 E, arg6 E) any
-      params: [ 12, 15, 16, 17, 18, 19, 20 ], results: [ 4 ],
+    {
+      results: [ 5 ],
     },
-    { # 25. func(arg0 E, arg1 E, arg2 E, arg3 E, arg4 E, arg5 E, arg6 E, arg7 E) any
-      params: [ 12, 15, 16, 17, 18, 19, 20, 21 ], results: [ 4 ],
+    {
+      results: [ 6 ],
     },
-    { # 26. func(arg0 E, arg1 E, arg2 E, arg3 E, arg4 E, arg5 E, arg6 E, arg7 E, arg8 E) any
-      params: [ 12, 15, 16, 17, 18, 19, 20, 21, 22 ], results: [ 4 ],
+    {
+      results: [ 7 ],
     },
-    { # 27. func(arg0 E, arg1 E, arg2 E, arg3 E, arg4 E, arg5 E, arg6 E, arg7 E, arg8 E, arg9 E) any
-      params: [ 12, 15, 16, 17, 18, 19, 20, 21, 22, 23 ], results: [ 4 ],
+    {
+      results: [ 9 ],
     },
-    { params: [ 24 ]                 }, # 28. func(comp Comparable<T>)
-    { params: [ 25 ], results: [ 4 ] }, # 29. func(index int) any
-    { params: [ 25 ], results: [ 6 ] }, # 30. func(index int) E
-    { params: [ 25 ], results: [ 7 ] }, # 31. func(index int) T
-    { params: [ 25, 27 ]             }, # 32. func(index int, value any)
-    { params: [ 25, 28 ]             }, # 33. func(index int, value E)
-    { params: [ 25, 29 ]             }, # 34. func(index int, value T)
-    { params: [ 26 ]                 }, # 35. func(items List<E>)
-    {                                   # 36. func(arg0 ...$Array<E>) any
-      params: [ 11 ], results: [ 4 ], variadic: true
+    {
+      results: [ 10 ],
+    },
+    {
+      results: [ 11 ],
+    },
+    {
+      params: [ 14 ],
+      results: [ 9 ],
+    },
+    {
+      params: [ 14, 19 ],
+      results: [ 9 ],
+    },
+    {
+      params: [ 14, 20 ],
+    },
+    {
+      params: [ 14, 20 ],
+      results: [ 1 ],
+    },
+    {
+      params: [ 14, 20 ],
+      results: [ 9 ],
+    },
+    {
+      params: [ 14, 21 ],
+    },
+    {
+      params: [ 14, 21 ],
+      results: [ 9 ],
+    },
+    {
+      params: [ 15 ],
+      results: [ 8 ],
+    },
+    {
+      params: [ 16 ],
+    },
+    {
+      params: [ 16 ],
+      results: [ 1 ],
+    },
+    {
+      params: [ 16 ],
+      results: [ 5 ],
+    },
+    {
+      params: [ 16 ],
+      results: [ 8 ],
+    },
+    {
+      params: [ 16 ],
+      results: [ 9 ],
+    },
+    {
+      params: [ 16, 20 ],
+      results: [ 9 ],
+    },
+    {
+      params: [ 16, 20, 22 ],
+      results: [ 9 ],
+    },
+    {
+      params: [ 16, 20, 22, 24 ],
+      results: [ 9 ],
+    },
+    {
+      params: [ 16, 20, 22, 24, 26 ],
+      results: [ 9 ],
+    },
+    {
+      params: [ 16, 20, 22, 24, 26, 28 ],
+      results: [ 9 ],
+    },
+    {
+      params: [ 16, 20, 22, 24, 26, 28, 30 ],
+      results: [ 9 ],
+    },
+    {
+      params: [ 16, 20, 22, 24, 26, 28, 30, 32 ],
+      results: [ 9 ],
+    },
+    {
+      params: [ 16, 20, 22, 24, 26, 28, 30, 32, 34 ],
+      results: [ 9 ],
+    },
+    {
+      params: [ 16, 20, 22, 24, 26, 28, 30, 32, 34, 36 ],
+      results: [ 9 ],
+    },
+    {
+      params: [ 18 ],
+      results: [ 1 ],
+    },
+    {
+      params: [ 18 ],
+      results: [ 9 ],
+    },
+    {
+      params: [ 18, 21 ],
+      results: [ 9 ],
+    },
+    {
+      params: [ 18, 21, 23 ],
+      results: [ 9 ],
+    },
+    {
+      params: [ 18, 21, 23, 25 ],
+      results: [ 9 ],
+    },
+    {
+      params: [ 18, 21, 23, 25, 27 ],
+      results: [ 9 ],
+    },
+    {
+      params: [ 18, 21, 23, 25, 27, 29 ],
+      results: [ 9 ],
+    },
+    {
+      params: [ 18, 21, 23, 25, 27, 29, 31 ],
+      results: [ 9 ],
+    },
+    {
+      params: [ 18, 21, 23, 25, 27, 29, 31, 33 ],
+      results: [ 9 ],
+    },
+    {
+      params: [ 18, 21, 23, 25, 27, 29, 31, 33, 35 ],
+      results: [ 9 ],
+    },
+    {
+      params: [ 18, 21, 23, 25, 27, 29, 31, 33, 35, 37 ],
+      results: [ 9 ],
+    },
+    {
+      params: [ 38 ],
+    },
+    {
+      params: [ 39 ],
+      results: [ 9 ],
+    },
+    {
+      params: [ 39 ],
+      results: [ 12 ],
+    },
+    {
+      params: [ 39 ],
+      results: [ 13 ],
+    },
+    {
+      params: [ 39, 41 ],
+    },
+    {
+      params: [ 39, 42 ],
+    },
+    {
+      params: [ 39, 43 ],
+    },
+    {
+      params: [ 40 ],
+    },
+    {
+      params: [ 17 ],
+      results: [ 9 ],
+      variadic: true,
     },
   ],
   structDescs: [
-    { fields: [ 1 ] }, # 1. struct{ x int }
+    { },
+    {
+      fields: [ 1 ],
+    },
+    {
+      fields: [ 2 ],
+    },
   ],
   typeParams: [
-    { name: E, type: interfaceDesc10 }, # 1. E any
-    { name: T, type: interfaceDesc10 }, # 2. T any
+    { name: E, type: interfaceDesc14 },
+    { name: T, type: interfaceDesc14 },
   ],
   locs: { 1: ClassesFromSource.java },
 }

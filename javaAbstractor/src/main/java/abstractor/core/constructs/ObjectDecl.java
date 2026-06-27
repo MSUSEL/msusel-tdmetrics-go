@@ -26,7 +26,7 @@ public class ObjectDecl extends DeclarationImp implements TypeDeclaration {
     
     @Override
     public JsonNode toJson(JsonHelper h) {
-        JsonObject obj = (JsonObject)super.toJson(h);
+        final JsonObject obj = (JsonObject)super.toJson(h);
         obj.put(        "data",       index(this.struct));
         obj.put(        "interface",  index(this.inter));
         obj.putNotEmpty("instances",  indexSet(this.instances));

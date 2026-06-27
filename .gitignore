@@ -10,7 +10,7 @@ out*.yml
 # The TDD database file is large so do not push it to repo.
 javaAbstractor/tdd/td_V2.db
 
-# Ignore AI agents scartchpad files.
+# Ignore AI agents scratchpad files.
 .agents/scratchpad/
 
 # Ignore VS code files

@@ -32,6 +32,7 @@ public class AppTests {
         final String testPath = "../testData/java/" + testName;
         final String absFile  = testPath + "/abstraction.yaml";
         final String diffFile = testPath + "/abstraction.diff";
+        final String gotFile  = testPath + "/abstraction_got.yaml";
         final String logFile  = testPath + "/abstraction.log";
 
         final ByteArrayOutputStream buffer = new ByteArrayOutputStream();
@@ -65,7 +66,7 @@ public class AppTests {
         final String result = buffer.toString().trim();
         if (!exp.equals(result)) {
             Tester.printLogs(logBuf, logFile);
-            Tester.printDiff(exp, result, diffFile);
+            Tester.printDiff(exp, result, diffFile, gotFile);
             Assertions.fail("unexpected lines (see diff)");
         }
     }
@@ -74,10 +75,11 @@ public class AppTests {
         final String testPath = "../testData/java/" + testName;
         final String absFile  = testPath + "/abstraction.yaml";
         final String diffFile = testPath + "/abstraction.diff";
+        final String gotFile  = testPath + "/abstraction_got.yaml";
         final String logFile  = testPath + "/abstraction.log";
 
         final Tester t = new Tester(4);
         t.addClassFromFile(testPath+"/"+className+".java");
-        t.checkProjectWithFile(absFile, diffFile, logFile);
+        t.checkProjectWithFile(absFile, diffFile, gotFile, logFile);
     }
 }

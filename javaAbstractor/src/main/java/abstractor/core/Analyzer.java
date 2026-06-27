@@ -11,6 +11,7 @@ import spoon.reflect.cu.SourcePosition;
 import spoon.reflect.declaration.*;
 import spoon.reflect.reference.*;
 import spoon.support.reflect.CtExtendedModifier;
+
 import abstractor.core.constructs.*;
 import abstractor.core.json.JsonFormat;
 import abstractor.core.json.JsonHelper;
@@ -261,9 +262,12 @@ public class Analyzer {
 
     private boolean addUsage(CtElement elem) throws Exception {
         // Skip these but their children will still be checked.
+        if (elem instanceof CtAnnotation    ) return false;
         if (elem instanceof CtThisAccess    ) return true;
         if (elem instanceof CtReturn        ) return true;
         if (elem instanceof CtBinaryOperator) return true;
+        if (elem instanceof CtForEach       ) return true;
+        if (elem instanceof CtBlock         ) return true;
 
         // Process these and their children.
         if (elem instanceof CtInvocation          in) { this.addInvocationUsage(in);          return true; }
@@ -279,7 +283,10 @@ public class Analyzer {
         if (elem instanceof CtVariableRead        vr) { this.addVariableReadUsage(vr);        return true; }
         if (elem instanceof CtParameterReference  pr) { this.addParameterReferenceUsage(pr);  return true; }
         if (elem instanceof CtConstructorCall     cc) { this.addConstructorCallUsage(cc);     return true; }
-        if (elem instanceof CtLocalVariable       lv) { this.addCtLocalVariableUsage(lv);     return true; }
+        if (elem instanceof CtLocalVariable       lv) { this.addLocalVariableUsage(lv);       return true; }
+        if (elem instanceof CtClass                c) { this.addClassUsage(c);                return true; }
+        if (elem instanceof CtMethod              mt) { this.addMethodUsage(mt);              return true; }
+        if (elem instanceof CtConstructor          c) { this.addConstructorUsage(c);          return true; }
 
         // Use to see elements (may produce a lot of output).
         this.log.notice("unimplemented addUsage: " + SpoonUtils.describeElem(elem));
@@ -310,23 +317,19 @@ public class Analyzer {
 
     private void addTypeAccessUsage(CtTypeAccess<?> ta) throws Exception {
         if (logUsage) this.log.log("addUsage.CtTypeAccess: " + SpoonUtils.describeElem(ta));
-        this.addRead(this.abs.addTypeDesc(ta.getAccessedType(), true));
+        this.addRead(this.abs.addTypeDesc(ta.getAccessedType()));
     }
 
     private void addAssignmentUsage(CtAssignment<?,?> as) throws Exception {
         if (logUsage) this.log.log("addUsage.CtAssignment: " + SpoonUtils.describeElem(as));
         final CtTypeReference<?> tr = as.getType();
-        if (!SpoonUtils.isVoid(tr)) this.addWrite(this.abs.addTypeDesc(tr, true));
+        if (!SpoonUtils.isVoid(tr)) this.addWrite(this.abs.addTypeDesc(tr));
     }
 
     private void addTypeReferenceUsage(CtTypeReference<?> tr) throws Exception {
         if (logUsage) this.log.log("addUsage.CtTypeReference: " + SpoonUtils.describeElem(tr));
-
-        // TODO: Should we create a reference?
-        List<CtTypeReference<?>> typeArgs = tr.getActualTypeArguments();
-        if (typeArgs.size() > 0) this.log.notice("addUsage.CtTypeReference: unused type args: [" + SpoonUtils.describeElems(typeArgs) + "]");
-
-        if (!SpoonUtils.isVoid(tr)) this.addRead(this.abs.addTypeDesc(tr, true));
+        this.addListOfTypeArgsUsages(tr.getActualTypeArguments());
+        if (!SpoonUtils.isVoid(tr)) this.addRead(this.abs.addTypeDesc(tr));
     }
 
     private void addPackageReferenceUsage(CtPackageReference pr) throws Exception {
@@ -359,18 +362,22 @@ public class Analyzer {
         }
         this.addRead(this.abs.addSelection(field));
     }
+
+    private void addListOfTypeArgsUsages(List<CtTypeReference<?>> typeArgs) throws Exception {
+        // TODO: Should we create a reference?
+        if (typeArgs.size() > 0) this.log.notice("Unused type args: [" + SpoonUtils.describeElems(typeArgs) + "]");
+    }
     
     private void addExecutableReferenceUsage(CtExecutableReference<?> er) throws Exception {
         if (logUsage) this.log.log("addUsage.CtExecutableReference: " + SpoonUtils.describeElem(er));
-        
-        // TODO: Should we create a reference?
-        List<CtTypeReference<?>> typeArgs = er.getActualTypeArguments();
-        if (typeArgs.size() > 0) this.log.notice("addUsage.CtExecutableReference: unused type args: [" + SpoonUtils.describeElems(typeArgs) + "]");
+        this.addListOfTypeArgsUsages(er.getActualTypeArguments());
 
         final CtExecutable<?> ex = er.getDeclaration();
+        Require.notNull(ex, "executable target was null for " + SpoonUtils.describeElem(er));
+
         if (ex instanceof CtMethod      mt) { this.addMethodUsage(mt);      return; }
         if (ex instanceof CtConstructor ct) { this.addConstructorUsage(ct); return; }
-        
+
         this.log.warning("addUsage.CtExecutableReference: expected method for " + SpoonUtils.describeElem(er) + " and "+ SpoonUtils.describeElem(ex));
     }
 
@@ -386,17 +393,17 @@ public class Analyzer {
 
     private void addLiteralUsage(CtLiteral<?> lt) throws Exception {
         if (logUsage) this.log.log("addUsage.CtLiteral: " + SpoonUtils.describeElem(lt));
-        this.addRead(this.abs.addTypeDesc(lt.getType(), true));
+        this.addRead(this.abs.addTypeDesc(lt.getType()));
     }
 
     private void addVariableReadUsage(CtVariableRead<?> vr) throws Exception {
         if (logUsage) this.log.log("addUsage.CtVariableRead: " + SpoonUtils.describeElem(vr));
-        this.addRead(this.abs.addTypeDesc(vr.getType(), true));
+        this.addRead(this.abs.addTypeDesc(vr.getType()));
     }
 
     private void addParameterReferenceUsage(CtParameterReference<?> pr) throws Exception {
         if (logUsage) this.log.log("addUsage.CtParameterReference: " + SpoonUtils.describeElem(pr));
-        this.addRead(this.abs.addTypeDesc(pr.getType(), true));
+        this.addRead(this.abs.addTypeDesc(pr.getType()));
     }
 
     private void addConstructorCallUsage(CtConstructorCall<?> cc) throws Exception {
@@ -407,8 +414,7 @@ public class Analyzer {
         if (exec instanceof CtConstructor<?> ctor) {
             if (ctor.isImplicit()) { // default constructor called.
                 final CtTypeReference<?> dt = execRef.getDeclaringType();
-                final Ref<? extends TypeDesc> td = this.abs.addTypeDesc(dt, true);
-                // Require.notNull(td, "TypeDesc: "+SpoonUtils.describeElem(dt));
+                final Ref<? extends TypeDesc> td = this.abs.addTypeDesc(dt);
                 if (td != null) this.writes.add(td);
             } else {
                 this.invokes.add(this.abs.addMethodDeclForConstructor(ctor));
@@ -419,8 +425,13 @@ public class Analyzer {
         }
     }
 
-    private void addCtLocalVariableUsage(CtLocalVariable<?> lv) throws Exception {
+    private void addLocalVariableUsage(CtLocalVariable<?> lv) throws Exception {
         if (logUsage) this.log.log("addUsage.CtLocalVariable: " + SpoonUtils.describeElem(lv));
-        this.addWrite(this.abs.addTypeDesc(lv.getType(), true));
+        this.addWrite(this.abs.addTypeDesc(lv.getType()));
+    }
+
+    private void addClassUsage(CtClass<?> c) throws Exception {
+        if (logUsage) this.log.log("addUsage.CtClass: " + SpoonUtils.describeElem(c));
+        this.addRead(this.abs.addObjectDecl(c));
     }
 }

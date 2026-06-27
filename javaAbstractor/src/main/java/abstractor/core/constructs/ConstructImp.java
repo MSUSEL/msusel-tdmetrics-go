@@ -19,7 +19,7 @@ public abstract class ConstructImp implements Construct {
     static public <T extends Construct> JsonNode keyList(Iterable<T> os) {
         if (os == null) return JsonValue.ofNull();
 
-        JsonArray indices = new JsonArray();
+        final JsonArray indices = new JsonArray();
         for (Construct o: os) indices.add(key(o));
         return indices;
     }
@@ -27,7 +27,7 @@ public abstract class ConstructImp implements Construct {
     static public <T extends Construct> JsonNode indexList(Iterable<T> os) {
         if (os == null) return JsonValue.ofNull();
 
-        JsonArray indices = new JsonArray();
+        final JsonArray indices = new JsonArray();
         for (Construct o: os) indices.add(index(o));
         return indices;
     }
@@ -35,10 +35,10 @@ public abstract class ConstructImp implements Construct {
     static public <T extends Construct> JsonNode keySet(Iterable<T> os) {
         if (os == null) return JsonValue.ofNull();
 
-        TreeSet<T> set = new TreeSet<T>();
+        final TreeSet<T> set = new TreeSet<T>();
         for (T o: os) set.add(o);
 
-        JsonArray indices = new JsonArray();
+        final JsonArray indices = new JsonArray();
         for (T s: set) indices.add(key(s));
         return indices;
     }
@@ -46,10 +46,10 @@ public abstract class ConstructImp implements Construct {
     static public <T extends Construct> JsonNode indexSet(Iterable<T> os) {
         if (os == null) return JsonValue.ofNull();
 
-        TreeSet<T> set = new TreeSet<T>();
+        final TreeSet<T> set = new TreeSet<T>();
         for (T o: os) set.add(o);
 
-        JsonArray indices = new JsonArray();
+        final JsonArray indices = new JsonArray();
         for (T s: set) indices.add(index(s));
         indices.sort(null);
 
@@ -67,7 +67,7 @@ public abstract class ConstructImp implements Construct {
     public abstract ConstructKind kind();
 
     public JsonNode toJson(JsonHelper h) {
-        JsonObject obj = new JsonObject();
+        final JsonObject obj = new JsonObject();
         if (h.writeKinds)   obj.put("kind",  this.kind().toString());
         if (h.writeIndices) obj.put("index", this.getIndex());
         return obj;
@@ -91,7 +91,7 @@ public abstract class ConstructImp implements Construct {
 
     @Override
     public String toString() {
-        JsonHelper jh = new JsonHelper();
+        final JsonHelper jh = new JsonHelper();
         jh.writeKinds     = true;
         jh.writeIndices   = true;
         jh.writeRefs      = true;
