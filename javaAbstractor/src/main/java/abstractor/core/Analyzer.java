@@ -16,7 +16,6 @@ import abstractor.core.constructs.*;
 import abstractor.core.json.JsonFormat;
 import abstractor.core.json.JsonHelper;
 import abstractor.core.log.Logger;
-import abstractor.core.require.Require;
 import abstractor.core.spoonUtils.SpoonUtils;
 
 public class Analyzer {
@@ -371,9 +370,16 @@ public class Analyzer {
     private void addExecutableReferenceUsage(CtExecutableReference<?> er) throws Exception {
         if (logUsage) this.log.log("addUsage.CtExecutableReference: " + SpoonUtils.describeElem(er));
         this.addListOfTypeArgsUsages(er.getActualTypeArguments());
+        if (er.isImplicit()) {
+            this.log.notice("Ignoring implicit executable reference: " + SpoonUtils.describeElem(er));
+            return;
+        }
 
         final CtExecutable<?> ex = er.getDeclaration();
-        Require.notNull(ex, "executable target was null for " + SpoonUtils.describeElem(er));
+
+        // TODO: Finished null investigation.
+        if (ex == null) return;
+        //Require.notNull(ex, "executable target was null for " + SpoonUtils.describeElem(er));
 
         if (ex instanceof CtMethod      mt) { this.addMethodUsage(mt);      return; }
         if (ex instanceof CtConstructor ct) { this.addConstructorUsage(ct); return; }

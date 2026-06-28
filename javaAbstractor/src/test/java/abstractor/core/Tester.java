@@ -183,16 +183,30 @@ public class Tester {
             this.printLogs(logFile);
             printDiff(exp, result, diffFile, gotFile);
             Assertions.fail("unexpected lines (see diff)");
+        } else {
+            // clear out any old file
+            deleteFile(gotFile);
+            deleteFile(diffFile);
         }
+    }
+
+    static private boolean hasFilePath(String file) {
+        return file != null && !file.isBlank();
+    }
+
+    static private void deleteFile(String file) {
+         if (hasFilePath(file)) new File(file).delete();
     }
 
     static public void printDiff(String exp, String result, String diffFile, String gotFile) {
         final List<String> lines = Iter.ToList(new Diff().PlusMinusByLine(exp, result));
 
-        if (gotFile != null && !gotFile.isBlank()) {
-            // clear out any old file
-            new File(gotFile).delete();
-            if (lines.size() > switchDiffOutputLines) {
+        // clear out any old file
+        deleteFile(gotFile);
+        deleteFile(diffFile);
+
+        if (lines.size() > switchDiffOutputLines) {
+            if (hasFilePath(gotFile)) {
                 try {
                     BufferedWriter writer = new BufferedWriter(new FileWriter(gotFile));
                     writer.append(result);
@@ -203,12 +217,7 @@ public class Tester {
                     Assertions.fail("Failed to write \"got\" file", ex);
                 }
             }
-        }
-
-        if (diffFile != null && !diffFile.isBlank()) {
-            // clear out any old file
-            new File(diffFile).delete();
-            if (lines.size() > switchDiffOutputLines) {
+            if (hasFilePath(diffFile)) {
                 try {
                     BufferedWriter writer = new BufferedWriter(new FileWriter(diffFile));
                     for (String line : lines){
@@ -221,6 +230,7 @@ public class Tester {
                 } catch (Exception ex) {
                     Assertions.fail("Failed to write diff file", ex);
                 }
+
                 // Wrote diff to file so leave.
                 return;
             }

@@ -12,14 +12,28 @@ public class Instantiator {
         final private TreeMap<Ref<? extends TypeDesc>, Ref<? extends TypeDesc>> subst = new TreeMap<>();
         final private ArrayList<Ref<? extends TypeDesc>> paramOrder = new ArrayList<>();
         private ArrayList<Ref<? extends TypeDesc>> argOrder = null;
+        private int nestCount;
 
         public Frame(Frame prior) {
             this.prior = prior;
         }
 
+        public void copyFromPrior() {
+            if (prior == null) return;
+            this.subst.putAll(prior.subst);
+            this.paramOrder.addAll(prior.paramOrder);
+            this.nestCount = this.paramOrder.size();
+        }
+
         public void add(Ref<? extends TypeDesc> param, Ref<? extends TypeDesc> arg) throws Exception {
             if (this.prior != null) arg = this.prior.replace(arg);
-            if (this.subst.put(param, arg) != null) this.paramOrder.remove(param);
+            if (this.subst.put(param, arg) != null) {
+                final int index = this.paramOrder.indexOf(param);
+                if (index >= 0) {
+                    this.paramOrder.remove(index);
+                    if (index < this.nestCount) this.nestCount--;
+                }
+            }
             this.paramOrder.add(param);
             this.argOrder = null;
         }
@@ -29,16 +43,21 @@ public class Instantiator {
             return other != null ? other : con;
         }
 
-        public List<Ref<? extends TypeDesc>> typeArgs() throws Exception {
-            if (this.argOrder == null) {
-                this.argOrder = new ArrayList<>(this.paramOrder.size());
-                for (Ref<? extends TypeDesc> param : this.paramOrder) {
-                    final Ref<? extends TypeDesc> arg = this.subst.get(param);
-                    Require.notNull(arg, "can not have a null argument for type parameter " + param);
-                    this.argOrder.add(arg);
-                }
+        public List<Ref<? extends TypeDesc>> typeArgsWithNest() throws Exception {
+            if (this.argOrder != null) return this.argOrder;
+
+            this.argOrder = new ArrayList<>(this.paramOrder.size());
+            for (Ref<? extends TypeDesc> param : this.paramOrder) {
+                final Ref<? extends TypeDesc> arg = this.subst.get(param);
+                Require.notNull(arg, "can not have a null argument for type parameter " + param);
+                this.argOrder.add(arg);
             }
             return this.argOrder;
+        }
+        
+        public List<Ref<? extends TypeDesc>> immediateTypeArgs() throws Exception {
+            final List<Ref<? extends TypeDesc>> full = this.typeArgsWithNest();
+            return full.subList(this.nestCount, full.size());
         }
 
         @Override
@@ -54,7 +73,10 @@ public class Instantiator {
                 final Ref<? extends TypeDesc> arg   = this.subst.get(param);
                 final String paramStr = JsonFormat.Inline().format(param.toJson(jh));
                 final String argStr   = JsonFormat.Inline().format(arg.toJson(jh));
-                parts.add(i + ". " + paramStr + " => " + argStr);    
+                final String header   = i < this.nestCount
+                    ? "nest." + i + ". "
+                    : (i - this.nestCount) + ". ";
+                parts.add(header + paramStr + " => " + argStr);    
             }
             return "[\n\t" + String.join("\n\t", parts) + "\n]";
         }
@@ -67,14 +89,8 @@ public class Instantiator {
     }
 
     public void pushFrame() {
-        final Frame prior = this.topFrame;
         this.topFrame = new Frame(this.topFrame);
-
-        // Copy prior frames information.
-        if (prior != null) {
-            this.topFrame.subst.putAll(prior.subst);
-            this.topFrame.paramOrder.addAll(prior.paramOrder);
-        }
+        this.topFrame.copyFromPrior();
     }
 
     public void pushCleanFrame() {
@@ -96,9 +112,11 @@ public class Instantiator {
     public Ref<? extends TypeDesc> replace(Ref<? extends TypeDesc> con) {
         return this.topFrame == null ? con : this.topFrame.replace(con);
     }
-    
-    public List<Ref<? extends TypeDesc>> typeArgs() throws Exception {
-        return this.topFrame == null ? Collections.emptyList() : this.topFrame.typeArgs();
+
+    public List<Ref<? extends TypeDesc>> typeArgs(boolean withNest) throws Exception {
+        if (this.topFrame == null) return Collections.emptyList();
+        if (withNest) return this.topFrame.typeArgsWithNest();
+        return this.topFrame.immediateTypeArgs();
     }
 
     @Override

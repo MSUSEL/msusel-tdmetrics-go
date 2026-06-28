@@ -19,7 +19,6 @@ public class Foo<T> {
     public <S> S lookup(String key) {
         final T value = this.mapping.get(key);
         if (value instanceof S) {
-            @SuppressWarnings("unchecked")
             return (S)value;
         }
         return null;
