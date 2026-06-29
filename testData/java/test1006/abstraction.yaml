@@ -1,46 +1,84 @@
 {
+  language: java,
+  arguments: [
+    {          type: object1    }, # 1. <unnamed> Bar<T1; T2>
+    { name: x, type: typeParam1 }, # 2. x T1
+    { name: y, type: typeParam2 }, # 3. y T2
+  ],
   fields: [
-    { name: value, type: typeParam1, vis: public },
+    { name: $nest,  type: object2                 }, # 1. $nest Foo<T1>
+    { name: value1, type: object1,    vis: public }, # 2. value1 Bar<T1; T2> # TODO: should be Bar<T1; Integer>
+    { name: value2, type: object1,    vis: public }, # 3. value2 Bar<T1; T2> # TODO: should be Bar<T1; String>
+    { name: x,      type: typeParam1, vis: public }, # 4. x T1
+    { name: y,      type: typeParam2, vis: public }, # 5. y T2
   ],
   interfaceDescs: [
-    { abstracts: [ ] },
-    { abstracts: [ ], pin: object1 },
+    { abstracts: [ ] }, # 1. any
   ],
-  language: java,
-  locs: { 1: ClassesFromSource.java },
+  methods: [
+    { # 1. static Bar<T1; T2>.Bar(x T1, y T2) Bar<T1; T2>
+      name: Bar, package: 5, receiver: 1, signature: 1,
+      constructor: true, loc: 5, metrics: 1, static: true, vis: public,
+      typeParams: [ 1, 2 ],
+    },
+  ],
+  metrics: [
+    { # 1. Bar<T1; T2>.Bar(x T1, y T2) Bar<T1; T2>
+      codeCount: 4, complexity: 1, indents: 4, lineCount: 4, loc: 5,
+      reads: [
+        interfaceDesc1, # any
+        object1,        # Bar<T1; T2>
+        object2,        # Foo<T1>
+        selection1,     # Bar<T1; T2>.x
+        selection2,     # Bar<T1; T2>.y
+        typeParam1,     # T1
+        typeParam2,     # T2
+      ],
+      writes: [
+        selection1, # Bar<T1; T2>.x
+        selection2, # Bar<T1; T2>.y
+        typeParam1, # T1
+        typeParam2, # T2
+      ],
+    },
+  ],
   objects: [
-    {
-      data: 1,
-      interface: 2,
-      loc: 3,
+    { # 1. Bar<T1; T2>{ x T1; y T2; $nest Foo<T1> }{}
+      name: Bar, package: 5, data: 2, interface: 1,
+      loc: 4, nest: object2, vis: public, typeParams: [ 1, 2 ],
       methods: [ 1 ],
-      name: Foo,
-      package: 5,
-      typeParams: [ 1 ],
-      vis: public,
+    },
+    { # 2. Foo<T1>{ value1 Bar<T1; T2>; value2 Bar<T1; T2> }{}
+      name: Foo, package: 5, data: 1, interface: 1,
+      loc: 3, vis: public, typeParams: [ 1 ],
+      nested: [ object1 ],
     },
   ],
   packages: [
+    { name: $builtin },
     { name: "<unnamed>" },
-    {
-      interfaces: [ 1 ],
-      name: java.lang,
-    },
     { name: testData },
     { name: testData.java },
     {
+      name: testData.java.test1006,
       methods: [ 1 ],
-      name: testData.java.test1003,
-      objects: [ 1 ],
+      objects: [ 1, 2 ],
     },
   ],
+  selections: [
+    { name: x, origin: object1 }, # 1. Bar<T1; T2>.x
+    { name: y, origin: object1 }, # 2. Bar<T1; T2>.y
+  ],
   signatures: [
-    { results: [ 1 ] },
+    { params: [ 2, 3 ], results: [ 1 ] }, # 1. func(x T1, y T2) Bar<T1; T2>
   ],
   structDescs: [
-    { fields: [ 1 ] },
+    { fields: [ 2, 3 ]    }, # 1. struct{ value1 Bar<T1; T2>; value2 Bar<T1; T2> }
+    { fields: [ 4, 5, 1 ] }, # 2. struct{ x T1; y T2; $nest Foo<T1> }
   ],
   typeParams: [
-    { name: T, type: interfaceDecl1 },
+    { name: T1, type: interfaceDesc1 }, # 1. T1 any
+    { name: T2, type: interfaceDesc1 }, # 2. T2 any
   ],
+  locs: { 1: ClassesFromSource.java },
 }

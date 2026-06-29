@@ -9,6 +9,7 @@ import spoon.reflect.declaration.*;
 import spoon.reflect.reference.*;
 import spoon.support.compiler.VirtualFile;
 
+import abstractor.core.cmp.*;
 import abstractor.core.constructs.*;
 import abstractor.core.log.*;
 import abstractor.core.json.*;
@@ -194,7 +195,7 @@ public class Abstractor {
         if (!this.isGenerics(i)) return decl;
 
         final List<Ref<TypeParam>> typeParams = this.addTypeParams(i);
-        final ArrayList<Ref<? extends TypeDesc>> typeArgs = this.addTypeArguments(tr, typeParams);
+        final List<Ref<? extends TypeDesc>> typeArgs = this.addTypeArguments(tr, typeParams);
         if (typeArgs == null) return decl;
 
         try {
@@ -430,7 +431,7 @@ public class Abstractor {
                 // Collect all fields.
                 final ArrayList<Ref<Field>> fields = new ArrayList<>();
                 for (CtFieldReference<?> fr : c.getAllFields())
-                    fields.add(this.addField(fr.getFieldDeclaration()));
+                    fields.add(this.addField(fr));
 
                 // Add extended class as a "$super" field.
                 final CtTypeReference<?> superFr = c.getSuperclass();
@@ -438,16 +439,22 @@ public class Abstractor {
 
                 // Add access to nesting class as a "$nest" field.
                 if (this.isNested(c)) {
-                    if (c.getParent() instanceof CtTypeReference<?> nest && nest != null) {
+                    if (c.getParent() instanceof CtTypeReference<?> nest) {
                         fields.add(this.addField("$nest", nest));
+                    } else if (c.getParent() instanceof CtType<?> nest) {
+                        fields.add(this.addField("$nest", nest.getReference()));
                     } else {
-                        this.log.error("Unhandled nested object decl " + SpoonUtils.describeElem(c) +
+                        this.log.warning("Unhandled nested object decl " + SpoonUtils.describeElem(c) +
                             " in " + SpoonUtils.describeElem(c.getParent()));
                     }
                 }
 
                 return new StructDesc(fields);
             });
+    }
+
+    public Ref<Field> addField(CtFieldReference<?> f) throws Exception {
+        return this.addField(f.getFieldDeclaration());
     }
 
     public Ref<Field> addField(CtField<?> f) throws Exception {
@@ -538,14 +545,6 @@ public class Abstractor {
             (t.isGenerics() || this.isGenerics(t.getParent()));
     }
 
-    private CtTypeReference<?> extractBoundTypeFromParameter(CtTypeParameter tp) throws Exception {
-        final CtTypeReference<?> e = tp.getTypeErasure();
-        // TODO: This does not work for test1010. It gets the wrong type for
-        //      `T extends X<>.Y` (returns just `X<T>`) and doesn't handle
-        //      several bounds like `T extends A & B` (returns just `A`).
-        return e;
-    }
-
     public Ref<TypeParam> addTypeParam(CtTypeParameter tp) throws Exception {
         // Do not use type arguments in the ElementKey for typeParams.
         // The typeParams will be replaced by the instantiator later.
@@ -553,7 +552,21 @@ public class Abstractor {
             "type params " + SpoonUtils.describeElem(tp),
             () -> {
                 final String                  name = tp.getSimpleName();
-                final CtTypeReference<?>      tr   = extractBoundTypeFromParameter(tp); // tp.getTypeErasure();
+                // TODO: This does not work for test1010. It doesn't handle several bounds like `T extends A & B` (returns just `A`).
+                final CtTypeReference<?>      tr   = tp.getTypeErasure();
+                final Ref<? extends TypeDesc> type = this.addTypeDesc(tr);
+                return new TypeParam(name, type);
+            });
+    }
+
+    public Ref<TypeParam> addTypeParam(CtTypeParameterReference tp) throws Exception {
+        // Do not use type arguments in the ElementKey for typeParams.
+        // The typeParams will be replaced by the instantiator later.
+        return this.proj.typeParams.create(this.log, new ElementKey(tp, null),
+            "type params " + SpoonUtils.describeElem(tp),
+            () -> {
+                final String                  name = tp.getSimpleName();
+                final CtTypeReference<?>      tr   = tp.getBoundingType();
                 final Ref<? extends TypeDesc> type = this.addTypeDesc(tr);
                 return new TypeParam(name, type);
             });
@@ -659,7 +672,7 @@ public class Abstractor {
         if (!this.isGenerics(c)) return decl;
 
         final List<Ref<TypeParam>> typeParams = this.addTypeParams(c);
-        final ArrayList<Ref<? extends TypeDesc>> typeArgs = this.addTypeArguments(tr, typeParams);
+        final List<Ref<? extends TypeDesc>> typeArgs = this.addTypeArguments(tr, typeParams);
         if (typeArgs == null) return decl;
 
         try {
@@ -698,7 +711,7 @@ public class Abstractor {
      * @param typeParams The type parameters from the interface, method, or object.
      * @return The list of type arguments or null if there is no instantiation.
      */
-    private ArrayList<Ref<? extends TypeDesc>> addTypeArguments(CtTypeReference<?> tr, List<Ref<TypeParam>> typeParams) throws Exception {
+    private List<Ref<? extends TypeDesc>> addTypeArguments(CtTypeReference<?> tr, List<Ref<TypeParam>> typeParams) throws Exception {
         final List<CtTypeReference<?>> ctTypeArgs = tr.getActualTypeArguments();
         if (ctTypeArgs == null) return null;
 
@@ -709,9 +722,14 @@ public class Abstractor {
         final ArrayList<Ref<? extends TypeDesc>> typeArgs = new ArrayList<>();
         for (CtTypeReference<?> ctTypeArg : ctTypeArgs)
             typeArgs.add(this.addTypeDesc(ctTypeArg));
-
+        
+        final CmpOptions options = new CmpOptions();
+        options.useResolved = true;
         for (int i = 0; i < count; i++) {
-            if (!typeArgs.get(i).equals(typeParams.get(i))) {
+            final Ref<? extends TypeDesc> ta = typeArgs.get(i);
+            final Ref<? extends TypeDesc> tp = typeParams.get(i);
+            final boolean isNotEq = Cmp.run(ta.getCmp(tp, options)) != 0;
+            if (isNotEq) {
                 // There was a difference so there is an instantiation
                 return typeArgs;
             }
@@ -756,6 +774,10 @@ public class Abstractor {
         
         // If the type is an Object, return an any for the Object.
         if (SpoonUtils.isObject(tr)) return this.proj.baker.anyDesc();
+
+        // If the type is a type parameter (reference), return a new type parameter.
+        if (tr instanceof CtTypeParameterReference tpr) return this.instantiator.replace(this.addTypeParam(tpr));
+        if (tr instanceof CtTypeParameter           tp) return this.instantiator.replace(this.addTypeParam(tp));
 
         // Use getTypeDeclaration (not getDeclaration) to get shadow types
         // for external/JDK types instead of null.
