@@ -5,12 +5,13 @@
     { name: x, type: typeParam1 }, # 2. x T1
     { name: y, type: typeParam2 }, # 3. y T2
   ],
+  basics: [ int, string ],
   fields: [
-    { name: $nest,  type: object2                 }, # 1. $nest Foo<T1>
-    { name: value1, type: object1,    vis: public }, # 2. value1 Bar<T1; T2> # TODO: should be Bar<T1; Integer>
-    { name: value2, type: object1,    vis: public }, # 3. value2 Bar<T1; T2> # TODO: should be Bar<T1; String>
-    { name: x,      type: typeParam1, vis: public }, # 4. x T1
-    { name: y,      type: typeParam2, vis: public }, # 5. y T2
+    { name: $nest,  type: object2                  }, # 1. $nest Foo<T1>
+    { name: value1, type: objectInst1, vis: public }, # 2. value1 Bar<T1; int>
+    { name: value2, type: objectInst2, vis: public }, # 3. value2 Bar<T1; string>
+    { name: x,      type: typeParam1,  vis: public }, # 4. x T1
+    { name: y,      type: typeParam2,  vis: public }, # 5. y T2
   ],
   interfaceDescs: [
     { abstracts: [ ] }, # 1. any
@@ -40,6 +41,16 @@
         typeParam1, # T1
         typeParam2, # T2
       ],
+    },
+  ],
+  objectInsts: [
+    { # 1. Bar<T1; int>
+      generic: 1, resData: 2, resInterface: 1, instanceTypes: [ typeParam1, basic1 ],
+      methods: [ ],
+    },
+    { # 2. Bar<T1; string>
+      generic: 1, resData: 2, resInterface: 1, instanceTypes: [ typeParam1, basic2 ],
+      methods: [ ],
     },
   ],
   objects: [

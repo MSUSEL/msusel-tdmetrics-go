@@ -712,8 +712,8 @@ public class Abstractor {
      * @return The list of type arguments or null if there is no instantiation.
      */
     private List<Ref<? extends TypeDesc>> addTypeArguments(CtTypeReference<?> tr, List<Ref<TypeParam>> typeParams) throws Exception {
-        final List<CtTypeReference<?>> ctTypeArgs = tr.getActualTypeArguments();
-        if (ctTypeArgs == null) return null;
+        final ArrayList<CtTypeReference<?>> ctTypeArgs = new ArrayList<>();
+        this.collectActualTypeArgs(tr, ctTypeArgs);
 
         final int count = ctTypeArgs.size();
         if (count <= 0) return null;
@@ -737,7 +737,20 @@ public class Abstractor {
         // There was no difference so the instantiation is not useful.
         return null;
     }
-        
+
+    /**
+     * Collects the actual type arguments from a type reference's declaring chain,
+     * outer-most first then the immediate arguments. This mirrors how
+     * {@link #addTypeParams(CtElement)} walks the enclosing-type chain so that
+     * nested generics (e.g. {@code Foo<T1>.Bar<Integer>}) line up by index.
+     */
+    private void collectActualTypeArgs(CtTypeReference<?> tr, List<CtTypeReference<?>> out) {
+        if (tr == null) return;
+        this.collectActualTypeArgs(tr.getDeclaringType(), out);
+        final List<CtTypeReference<?>> args = tr.getActualTypeArguments();
+        if (args != null) out.addAll(args);
+    }
+
     public Ref<? extends TypeDesc> addTypeDesc(CtTypeReference<?> tr) throws Exception {
         if (tr == null) return null;
 
