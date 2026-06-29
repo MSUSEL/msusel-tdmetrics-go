@@ -297,13 +297,30 @@ public class Abstractor {
     public Ref<MethodInst> addMethodInstForObjectInst(Ref<ObjectInst> receiver, CtMethod<?> m, boolean objDefinedInNest) throws Exception {
         Require.notObjectMethod(m);
         final ObjectInst recv = receiver.mustGetResolved();
-        final ElementKey key = new ElementKey(m, this.instantiator.typeArgs(objDefinedInNest));
+        final ElementKey key  = new ElementKey(m, this.instantiator.typeArgs(objDefinedInNest));
         return this.proj.methodInsts.create(this.log, key,
             "method for object instantiation " + SpoonUtils.describeElem(m),
             () -> {
                 final Ref<MethodDecl>               generic       = this.addMethodDecl(recv.generic, m);
                 final List<Ref<? extends TypeDesc>> instanceTypes = this.instantiator.typeArgs(objDefinedInNest);
                 final Ref<Signature>                resolved      = this.addSignature(m);
+                return new MethodInst(generic, receiver, instanceTypes, resolved);
+            },
+            (Ref<MethodInst> ref, MethodInst mi) -> {
+                recv.methods.add(ref);
+            });
+    }
+
+    public Ref<MethodInst> addMethodInstForObjectInst(Ref<ObjectInst> receiver, CtConstructor<?> ctor, boolean objDefinedInNest) throws Exception {
+        if (ctor.isImplicit()) return null;
+        final ObjectInst recv = receiver.mustGetResolved();
+        final ElementKey key  = new ElementKey(ctor, this.instantiator.typeArgs(objDefinedInNest));
+        return this.proj.methodInsts.create(this.log, key,
+            "constructor for object instantiation " + ctor.getSignature(),
+            () -> {
+                final Ref<MethodDecl>               generic       = this.addMethodDeclForConstructor(recv.generic, ctor);
+                final List<Ref<? extends TypeDesc>> instanceTypes = this.instantiator.typeArgs(objDefinedInNest);
+                final Ref<Signature>                resolved      = this.addSignatureForConstructor(ctor);
                 return new MethodInst(generic, receiver, instanceTypes, resolved);
             },
             (Ref<MethodInst> ref, MethodInst mi) -> {
@@ -690,6 +707,17 @@ public class Abstractor {
                     return new ObjectInst(decl, this.instantiator.typeArgs(definedInNest), resData, resInterface);
                 },
                 (Ref<ObjectInst> ref, ObjectInst obj) -> {
+                    // Add constructors as (static) methods for the class instantiation.
+                    for (CtConstructor<?> ctor : c.getConstructors()) {
+                        if (ctor.getParent().equals(c)) {
+                            if (ctor.isImplicit()) {
+                                this.log.notice("skipping default constructor: " + ctor.getSignature());
+                                continue;
+                            }
+                            this.addMethodInstForObjectInst(ref, ctor, definedInNest);
+                        }
+                    }
+
                     // Add methods for the class instantiation.
                     for (CtMethod<?> m : c.getAllMethods()) {
                         if (m.getParent().equals(c) && !SpoonUtils.isObjectMethod(m))
