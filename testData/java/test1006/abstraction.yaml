@@ -1,9 +1,13 @@
 {
   language: java,
   arguments: [
-    {          type: object1    }, # 1. <unnamed> Bar<T1; T2>
-    { name: x, type: typeParam1 }, # 2. x T1
-    { name: y, type: typeParam2 }, # 3. y T2
+    {          type: object1     }, # 1. <unnamed> Bar<T1; T2>
+    {          type: objectInst1 }, # 2. <unnamed> Bar<T1; int> # TODO: Why isn't this being added?
+    {          type: objectInst2 }, # 3. <unnamed> Bar<T1; string> # TODO: Why isn't this being added?
+    { name: x, type: typeParam1  }, # 4. x T1
+    { name: y, type: basic1      }, # 5. y int  # TODO: Why isn't this being added?
+    { name: y, type: basic2      }, # 6. y string # TODO: Why isn't this being added?
+    { name: y, type: typeParam2  }, # 7. y T2
   ],
   basics: [ int, string ],
   fields: [
