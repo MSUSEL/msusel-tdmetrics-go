@@ -413,7 +413,7 @@ public class Abstractor {
                 for (CtParameter<?> p : ps) params.add(this.addArgument(p));
                 
                 final ArrayList<Ref<Argument>> results = new ArrayList<>();
-                results.add(this.addArgument(m.getType()));
+                results.add(this.addArgument(SpoonUtils.parameterizedRef(m.getDeclaringType())));
 
                 return new Signature(variadic, params, results);
             });
@@ -576,14 +576,15 @@ public class Abstractor {
             });
     }
 
-    public Ref<TypeParam> addTypeParam(CtTypeParameterReference tp) throws Exception {
+    public Ref<TypeParam> addTypeParam(CtTypeParameterReference tpr) throws Exception {
         // Do not use type arguments in the ElementKey for typeParams.
         // The typeParams will be replaced by the instantiator later.
-        return this.proj.typeParams.create(this.log, new ElementKey(tp, null),
-            "type params " + SpoonUtils.describeElem(tp),
+        final CtTypeParameter tp = tpr.getDeclaration();
+        return this.proj.typeParams.create(this.log, new ElementKey(tp != null ? tp : tpr, null),
+            "type params reference " + SpoonUtils.describeElem(tpr),
             () -> {
-                final String                  name = tp.getSimpleName();
-                final CtTypeReference<?>      tr   = tp.getBoundingType();
+                final String                  name = tpr.getSimpleName();
+                final CtTypeReference<?>      tr   = tpr.getBoundingType();
                 final Ref<? extends TypeDesc> type = this.addTypeDesc(tr);
                 return new TypeParam(name, type);
             });

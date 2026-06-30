@@ -11,6 +11,7 @@ import spoon.reflect.declaration.CtNamedElement;
 import spoon.reflect.declaration.CtPackage;
 import spoon.reflect.declaration.CtType;
 import spoon.reflect.declaration.CtTypeInformation;
+import spoon.reflect.declaration.CtTypeParameter;
 import spoon.reflect.reference.CtReference;
 import spoon.reflect.reference.CtTypeReference;
 
@@ -91,6 +92,23 @@ final public class SpoonUtils {
         for (CtElement elem : elems)
             descs.add(describeElem(elem, false));
         return String.join(", ",  descs);
+    }
+
+    /**
+     * Returns a CtTypeReference for the given type populated with the formal
+     * type parameters of the type and its declaring-type chain. Spoon's
+     * {@code CtType.getReference()} returns a raw reference (empty
+     * actualTypeArguments), which is unsuitable for callers that need to walk
+     * the type-parameter chain (e.g. constructor result types).
+     */
+    static public CtTypeReference<?> parameterizedRef(CtType<?> type) {
+        if (type == null) return null;
+        final CtTypeReference<?> ref = type.getReference();
+        for (CtTypeParameter tp : type.getFormalCtTypeParameters())
+            ref.addActualTypeArgument(tp.getReference());
+        final CtType<?> declaring = type.getDeclaringType();
+        if (declaring != null) ref.setDeclaringType(parameterizedRef(declaring));
+        return ref;
     }
 
     static public String describeGeneric(CtTypeReference<?> tr) {
