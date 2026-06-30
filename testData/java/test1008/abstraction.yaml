@@ -72,9 +72,39 @@
     },
   ],
   metrics: [
-    { codeCount: 1, complexity: 1, lineCount: 1, loc: 6 },
-    { codeCount: 1, complexity: 1, lineCount: 1, loc: 7 },
-    { codeCount: 1, complexity: 1, lineCount: 1, loc: 8 },
+    { # 1. Foo<T>.Foo1() Foo<int>
+      codeCount: 1, complexity: 1, lineCount: 1, loc: 6,
+      reads: [
+        basic1,      # int
+        object1,     # Foo<T>
+        objectInst1, # Foo<int>
+      ],
+      writes: [
+        object1, # Foo<T>
+      ],
+    },
+    { # 2. Foo<T>.Foo2() Foo<string>
+      codeCount: 1, complexity: 1, lineCount: 1, loc: 7,
+      reads: [
+        basic2,      # string
+        object1,     # Foo<T>
+        objectInst2, # Foo<string>
+      ],
+      writes: [
+        object1, # Foo<T>
+      ],
+    },
+    { # 3. Foo<T>.Foo3<U>() Foo<U>
+      codeCount: 1, complexity: 1, lineCount: 1, loc: 8,
+      reads: [
+        object1,     # Foo<T>
+        objectInst3, # Foo<U>
+        typeParam2,  # U
+      ],
+      writes: [
+        object1, # Foo<T>
+      ],
+    },
   ],
   objectInsts: [
     { # 1. Foo<int> struct{ x int }{ Foo1() Foo<int>; Foo2() Foo<string>; Foo3<U>() Foo<U> }

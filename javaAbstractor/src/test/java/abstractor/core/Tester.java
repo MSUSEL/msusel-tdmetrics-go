@@ -18,8 +18,8 @@ import abstractor.core.json.Jsonable;
 import abstractor.core.log.Logger;
 
 public class Tester {
-    static final int switchLogOutputLines = 2000;
-    static final int switchDiffOutputLines = 500;
+    static final int logOutputLinesMax = 2000;
+    static final int diffOutputLinesMax = 500;
     
     static public Tester classesFromSource(String ...lines) {
         final Tester t = new Tester(4);
@@ -59,36 +59,47 @@ public class Tester {
         printLogs(this.buffer, logFile);
     }
 
+    static private boolean hasFilePath(String file) {
+        return file != null && !file.isBlank();
+    }
+
+    static private void deleteFile(String file) {
+         if (hasFilePath(file)) new File(file).delete();
+    }
+
     static public void printLogs(ByteArrayOutputStream logBuf, String logFile) {
         String logStr = logBuf.toString();
         logBuf.reset();
 
-        if (logFile != null && !logFile.isBlank()) {
-            if (logStr.lines().count() > switchLogOutputLines) {
-                try {
-                    BufferedWriter writer = new BufferedWriter(new FileWriter(logFile));
-                    writer.append(logStr);
-                    writer.flush();
-                    writer.close();
-                    System.out.println("Logs written to "+logFile);
-                    System.out.flush();
-                } catch (Exception ex) {
-                    Assertions.fail("Failed to write log file", ex);
-                }
-                return;
-            }
-            // clear out any old file
-            new File(logFile).delete();
-        }
-
+        // clear out old log file
+        deleteFile(logFile);
+        
         if (logStr.isBlank()) {
             System.out.println("No logs");
+            System.out.flush();
             return;
         }
 
-        System.out.println("===[ Logs ]=======================");
-        System.out.println(logStr);
-        System.out.println("==================================");
+        if (hasFilePath(logFile)) {
+            try {
+                BufferedWriter writer = new BufferedWriter(new FileWriter(logFile));
+                writer.append(logStr);
+                writer.flush();
+                writer.close();
+                System.out.println("Logs written to "+logFile);
+            } catch (Exception ex) {
+                Assertions.fail("Failed to write log file", ex);
+            }
+            return;
+        }
+
+        if (logStr.lines().count() < logOutputLinesMax) {
+            System.out.println("===[ Logs ]=======================");
+            System.out.println(logStr);
+            System.out.println("==================================");
+        } else {
+            System.out.println("Logs too large, check files");
+        }
         System.out.flush();
     }
 
@@ -126,9 +137,14 @@ public class Tester {
         }
     }
 
-    public void checkJsonWithFile(Jsonable j, String absFile, String diffFile, String gotFile, String logFile) {
+    static private String genJson(Jsonable j) {
+        if (j == null) return "null";
         final JsonHelper jh = new JsonHelper();
-        final String result = j == null ? "null" : JsonFormat.Relaxed().format(j.toJson(jh));
+        return JsonFormat.Relaxed().format(j.toJson(jh));
+    }
+
+    public void checkJsonWithFile(Jsonable j, String absFile, String diffFile, String gotFile, String logFile) {
+        final String result = genJson(j);
         final String exp = this.formatJsonFromFile(absFile);
         this.assertLines(exp, result, diffFile, gotFile, logFile);
     }
@@ -138,8 +154,7 @@ public class Tester {
     }
 
     public void checkJson(Jsonable j, String ...lines) {
-        final JsonHelper jh = new JsonHelper();
-        final String result = j == null ? "null" : JsonFormat.Relaxed().format(j.toJson(jh));
+        final String result = genJson(j);
         final String exp = this.formatJson(lines);
         this.assertLines(exp, result, null, null, null);
     }
@@ -185,17 +200,10 @@ public class Tester {
             Assertions.fail("unexpected lines (see diff)");
         } else {
             // clear out any old file
+            deleteFile(logFile);
             deleteFile(gotFile);
             deleteFile(diffFile);
         }
-    }
-
-    static private boolean hasFilePath(String file) {
-        return file != null && !file.isBlank();
-    }
-
-    static private void deleteFile(String file) {
-         if (hasFilePath(file)) new File(file).delete();
     }
 
     static public void printDiff(String exp, String result, String diffFile, String gotFile) {
@@ -205,39 +213,43 @@ public class Tester {
         deleteFile(gotFile);
         deleteFile(diffFile);
 
-        if (lines.size() > switchDiffOutputLines) {
-            if (hasFilePath(gotFile)) {
-                try {
-                    BufferedWriter writer = new BufferedWriter(new FileWriter(gotFile));
-                    writer.append(result);
-                    writer.flush();
-                    writer.close();
-                    System.out.println("Unexpected \"got\" lines written to "+gotFile);
-                } catch (Exception ex) {
-                    Assertions.fail("Failed to write \"got\" file", ex);
-                }
-            }
-            if (hasFilePath(diffFile)) {
-                try {
-                    BufferedWriter writer = new BufferedWriter(new FileWriter(diffFile));
-                    for (String line : lines){
-                        writer.append(line);
-                        writer.append("\n");
-                    }
-                    writer.flush();
-                    writer.close();
-                    System.out.println("Unexpected lines diff written to "+diffFile);
-                } catch (Exception ex) {
-                    Assertions.fail("Failed to write diff file", ex);
-                }
-
-                // Wrote diff to file so leave.
-                return;
+        if (hasFilePath(gotFile)) {
+            try {
+                BufferedWriter writer = new BufferedWriter(new FileWriter(gotFile));
+                writer.append(result);
+                writer.flush();
+                writer.close();
+                System.out.println("Unexpected \"got\" lines written to "+gotFile);
+            } catch (Exception ex) {
+                Assertions.fail("Failed to write \"got\" file", ex);
             }
         }
 
-        final String diff = String.join("\n\t", lines);
-        System.out.println("Error: unexpected lines\n\t" + diff);
+        if (hasFilePath(diffFile)) {
+            try {
+                BufferedWriter writer = new BufferedWriter(new FileWriter(diffFile));
+                for (String line : lines){
+                    writer.append(line);
+                    writer.append("\n");
+                }
+                writer.flush();
+                writer.close();
+                System.out.println("Unexpected lines diff written to "+diffFile);
+            } catch (Exception ex) {
+                Assertions.fail("Failed to write diff file", ex);
+            }
+        }
+
+        if (lines.size() < diffOutputLinesMax) {
+            System.out.print("Error: unexpected lines (-exp, +got):");
+            for (String line : lines) {
+                System.out.print("\n\t");
+                System.out.print(line);
+            }
+            System.out.println();
+        } else {
+            System.out.println("Error: unexpected lines are too large, check files");
+        }
         System.out.flush();
     }
 }

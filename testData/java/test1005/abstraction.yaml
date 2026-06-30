@@ -63,7 +63,7 @@
     { name: of,               signature: 37 }, # 60. of(arg0 any, arg1 any, ... arg14 K, arg15 V) any
     { name: of,               signature: 38 }, # 61. of(arg0 any, arg1 any, ... arg16 K, arg17 V) any
     { name: of,               signature: 39 }, # 62. of(arg0 any, arg1 any, ... arg18 K, arg19 V) any
-    { name: ofEntries,        signature: 50 }, # 63. ofEntries(arg0 $Array<any>) any
+    { name: ofEntries,        signature: 51 }, # 63. ofEntries(arg0 $Array<any>) any
     { name: put,              signature: 10 }, # 64. put(arg0 any, arg1 any) any
     { name: putAll,           signature:  6 }, # 65. putAll(arg0 any)
     { name: putIfAbsent,      signature: 10 }, # 66. putIfAbsent(arg0 any, arg1 any) any
@@ -205,25 +205,28 @@
     },
   ],
   methodInsts: [
-    { # 1. Foo<int>.FooInt() Foo<int>
+    { # 1. static Foo<int>.Foo(name string) Foo<int>
+      generic: 1, receiver: 1, resolved: 50, instanceTypes: [ basic2 ],
+    },
+    { # 2. Foo<int>.FooInt() Foo<int>
       generic: 2, receiver: 1, resolved: 5, instanceTypes: [ basic2 ],
     },
-    { # 2. Foo<int>.add(key string, value int)
+    { # 3. Foo<int>.add(key string, value int)
       generic: 3, receiver: 1, resolved: 47, instanceTypes: [ basic2 ],
     },
-    { # 3. Foo<int>.count() int
+    { # 4. Foo<int>.count() int
       generic: 4, receiver: 1, resolved: 3, instanceTypes: [ basic2 ],
     },
-    { # 4. Foo<int>.lookup(key string) S
+    { # 5. Foo<int>.lookup(key string) S
       generic: 5, receiver: 1, resolved: 46, instanceTypes: [ basic2 ],
     },
-    { # 5. Foo<int>.lookupInt(key string) int
+    { # 6. Foo<int>.lookupInt(key string) int
       generic: 6, receiver: 1, resolved: 44, instanceTypes: [ basic2 ],
     },
-    { # 6. Foo<int>.lookupString(key string) string
+    { # 7. Foo<int>.lookupString(key string) string
       generic: 7, receiver: 1, resolved: 45, instanceTypes: [ basic2 ],
     },
-    { # 7. Foo<int>.lookupT(key string) S
+    { # 8. Foo<int>.lookupT(key string) S
       generic: 8, receiver: 1, resolved: 46, instanceTypes: [ basic2 ],
     },
   ],
@@ -369,7 +372,7 @@
   objectInsts: [
     { # 1. Foo<int>{ name string; mapping Map<string, int> }{ add(key string, value int); count() int; ... lookupT(key string) S  }
       generic: 1, resData: 1, resInterface: 7, instanceTypes: [ basic2 ],
-      methods: [ 1, 2, 3, 4, 5, 6, 7 ],
+      methods: [ 1, 2, 3, 4, 5, 6, 7, 8 ],
     },
   ],
   objects: [
@@ -509,7 +512,8 @@
     { params: [ 59, 61 ]                }, # 47. func(key string, value int)
     { params: [ 59, 63 ]                }, # 48. func(key string, value T)
     { params: [ 60 ],    results: [ 5 ] }, # 49. func(name string) Foo<T>
-    { params: [ 10 ],    results: [ 4 ], variadic: true }, # 50. func(arg0 $Array<any>) any
+    { params: [ 60 ],    results: [ 6 ] }, # 50. func(name string) Foo<int>
+    { params: [ 10 ],    results: [ 4 ], variadic: true }, # 51. func(arg0 $Array<any>) any
   ],
   structDescs: [
     { fields: [ 3, 1 ] }, # 1. struct{ name string; mapping Map<string, int> }

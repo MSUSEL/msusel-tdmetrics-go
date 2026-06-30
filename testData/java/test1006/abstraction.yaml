@@ -2,11 +2,11 @@
   language: java,
   arguments: [
     {          type: object1     }, # 1. <unnamed> Bar<T1; T2>
-    {          type: objectInst1 }, # 2. <unnamed> Bar<T1; int> # TODO: Why isn't this being added?
-    {          type: objectInst2 }, # 3. <unnamed> Bar<T1; string> # TODO: Why isn't this being added?
+    {          type: objectInst1 }, # 2. <unnamed> Bar<T1; int>
+    {          type: objectInst2 }, # 3. <unnamed> Bar<T1; string>
     { name: x, type: typeParam1  }, # 4. x T1
-    { name: y, type: basic1      }, # 5. y int  # TODO: Why isn't this being added?
-    { name: y, type: basic2      }, # 6. y string # TODO: Why isn't this being added?
+    { name: y, type: basic1      }, # 5. y int
+    { name: y, type: basic2      }, # 6. y string
     { name: y, type: typeParam2  }, # 7. y T2
   ],
   basics: [ int, string ],
@@ -15,6 +15,8 @@
     { name: value1, type: objectInst1, vis: public }, # 2. value1 Bar<T1; int>
     { name: value2, type: objectInst2, vis: public }, # 3. value2 Bar<T1; string>
     { name: x,      type: typeParam1,  vis: public }, # 4. x T1
+    { name: y,      type: basic1,      vis: public }, # 5. y int
+    { name: y,      type: basic2,      vis: public }, # 6. y string
     { name: y,      type: typeParam2,  vis: public }, # 5. y T2
   ],
   interfaceDescs: [
@@ -25,12 +27,12 @@
       generic: 1, receiver: 1, resolved: 1, instanceTypes: [ typeParam1, basic1 ],
     },
     { # 2. static Bar<T1; string>.Bar(x T1, y string) Bar<T1; string>
-      generic: 1, receiver: 2, resolved: 1, instanceTypes: [ typeParam1, basic2 ],
+      generic: 1, receiver: 2, resolved: 2, instanceTypes: [ typeParam1, basic2 ],
     },
   ],
   methods: [
     { # 1. static Bar<T1; T2>.Bar(x T1, y T2) Bar<T1; T2>
-      name: Bar, package: 5, receiver: 1, signature: 1,
+      name: Bar, package: 5, receiver: 1, signature: 3,
       constructor: true, loc: 5, metrics: 1, static: true, vis: public,
       typeParams: [ 1, 2 ],
     },
@@ -61,13 +63,13 @@
       methods: [ 1 ],
     },
     { # 2. Bar<T1; string>
-      generic: 1, resData: 2, resInterface: 1, instanceTypes: [ typeParam1, basic2 ],
+      generic: 1, resData: 3, resInterface: 1, instanceTypes: [ typeParam1, basic2 ],
       methods: [ 2 ],
     },
   ],
   objects: [
     { # 1. Bar<T1; T2>{ x T1; y T2; $nest Foo<T1> }{}
-      name: Bar, package: 5, data: 2, interface: 1,
+      name: Bar, package: 5, data: 4, interface: 1,
       loc: 4, nest: object2, vis: public, typeParams: [ 1, 2 ],
       methods: [ 1 ],
     },
@@ -93,11 +95,15 @@
     { name: y, origin: object1 }, # 2. Bar<T1; T2>.y
   ],
   signatures: [
-    { params: [ 2, 3 ], results: [ 1 ] }, # 1. func(x T1, y T2) Bar<T1; T2>
+    { params: [ 4, 5 ], results: [ 2 ] }, # 1. func(x T1, y int) Bar<T1; int>
+    { params: [ 4, 6 ], results: [ 3 ] }, # 2. func(x T1, y string) Bar<T1; string>
+    { params: [ 4, 7 ], results: [ 1 ] }, # 3. func(x T1, y T2) Bar<T1; T2>
   ],
   structDescs: [
     { fields: [ 2, 3 ]    }, # 1. struct{ value1 Bar<T1; T2>; value2 Bar<T1; T2> }
     { fields: [ 4, 5, 1 ] }, # 2. struct{ x T1; y T2; $nest Foo<T1> }
+    { fields: [ 4, 6, 1 ] }, # 3. struct{ x T1; y int; $nest Foo<T1> }
+    { fields: [ 4, 7, 1 ] }, # 4. struct{ x T1; y string; $nest Foo<T1> }
   ],
   typeParams: [
     { name: T1, type: interfaceDesc1 }, # 1. T1 any
