@@ -5,9 +5,9 @@ package testData.java.test0002;
 public class EntryPoint {
     public static void main(String[] args) {
         final int[] data = {32, 54, 8, 133, 75};
-        System.out.println("sum:   " + sum(data));   // sum:   302
-        System.out.println("first: " + first(data)); // first: 32
-        System.out.println("last:  " + last(data));  // last:  75
+        println("sum:   " + sum(data));   // sum:   302
+        println("first: " + first(data)); // first: 32
+        println("last:  " + last(data));  // last:  75
     }
 
     public static int sum(int... values) {
@@ -22,5 +22,9 @@ public class EntryPoint {
 
     public static int last(int... values) {
         return values[values.length - 1];
+    }
+
+    static public void println(String s) {
+        // Skip bringing in System.out.println(s);
     }
 }

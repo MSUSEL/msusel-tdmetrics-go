@@ -569,7 +569,7 @@ public class Abstractor {
             "type params " + SpoonUtils.describeElem(tp),
             () -> {
                 final String                  name = tp.getSimpleName();
-                // TODO: This does not work for test1010. It doesn't handle several bounds like `T extends A & B` (returns just `A`).
+                // TODO: This does not work. It doesn't handle several bounds like `T extends A & B` (returns just `A`).
                 final CtTypeReference<?>      tr   = tp.getTypeErasure();
                 final Ref<? extends TypeDesc> type = this.addTypeDesc(tr);
                 return new TypeParam(name, type);

@@ -102,6 +102,17 @@ public class Instantiator {
         this.topFrame = this.topFrame.prior;
     }
 
+    /**
+     * Adds a parameter to argument map to the current frame. The argument
+     * is automatically updates with prior matching parameters. If there are
+     * matching parameters in the current frame, the older one is removed and
+     * the new parameter is added to the end.
+     * 
+     * This is designed so that if <T> is nested inside of a <T, U>, the new T
+     * overrides the older T, so we then are left with <U> from the nest and <T>
+     * for the current type params, shown like <U; T>, where `;` separates
+     * the nest from the current.
+     */
     public void add(Ref<? extends TypeDesc> param, Ref<? extends TypeDesc> arg) throws Exception {
         Require.notNull(this.topFrame, "cannot add to an empty instantiator");
         Require.notNull(param, "can not have a null type parameter in an instantiator frame");

@@ -69,6 +69,13 @@ public class Factory<T extends Construct> implements Jsonable {
         // so that we only create one and all others are references. However,
         // since references can be created other ways, we need to skip checking
         // for references if not "in progress" to start progress.
+        //
+        // `elemInProg` is set when "create" is called to differentiate between
+        // just creating references and creating the actual construct. It is set
+        // then never cleared so that this method will only let one in then continue
+        // to use the reference correctly. It is "in progress" since if the construct is
+        // recursive it will be in progress when the same construct calls "create" from
+        // inside the creator function.
         final Ref<T> existing = this.getRefByElem(elemKey);
         final boolean inProgress = this.elemInProg.contains(elemKey);
         if (inProgress && existing != null) {
@@ -248,7 +255,11 @@ public class Factory<T extends Construct> implements Jsonable {
     }
 
     /**
-     * Change all the comparison options to use the resolved.
+     * Change all the comparison options to use the resolved. This should only
+     * be called once all constructs have been added to the factory and
+     * the code is transitioning from reading in the source to prepare to write
+     * the abstraction results. This also clears out sets that may become a
+     * problem once the references are resolved.
      */
     public void setToCompareResolved() {
         final CmpOptions options = resolvedCmpOptions();
@@ -256,7 +267,8 @@ public class Factory<T extends Construct> implements Jsonable {
         for (Ref<T> ref : this.refSet) ref.setCmpOptions(options);
         
         // The non-element references is no longer useful but the changed comparisons
-        // could cause issues if someone tried to use it so just clear it out.
+        // could cause issues if someone tried to use that set since it is no longer
+        // in sorted order, so just clear it out.
         this.nonElemRef.clear();
     }
 

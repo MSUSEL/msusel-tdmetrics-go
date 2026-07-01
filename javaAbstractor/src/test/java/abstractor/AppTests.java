@@ -27,6 +27,7 @@ public class AppTests {
     @Test public void test1008() throws Exception { testClass("test1008", "Foo"); }
     @Test public void test1009() throws Exception { testClass("test1009", "Foo"); }
     @Test public void test1010() throws Exception { testClass("test1010", "Foo"); }
+    @Test public void test1011() throws Exception { testClass("test1011", "Foo"); }
 
     static private void runApp(String testName) throws Exception {
         final String testPath = "../testData/java/" + testName;
@@ -68,6 +69,11 @@ public class AppTests {
             Tester.printLogs(logBuf, logFile);
             Tester.printDiff(exp, result, diffFile, gotFile);
             Assertions.fail("unexpected lines (see diff)");
+        } else {
+            // clear our any old files
+            Tester.deleteFile(logFile);
+            Tester.deleteFile(gotFile);
+            Tester.deleteFile(diffFile);
         }
     }
 

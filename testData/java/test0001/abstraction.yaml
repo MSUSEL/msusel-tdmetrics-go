@@ -1,57 +1,56 @@
 {
   language: java,
   arguments: [
-    { type: object1 }, # 1. <unnamed> EntryPoint
+    { name: s, type: basic1 }, # 1. s string
   ],
+  basics: [ string ],
   interfaceDescs: [
-    { # 1. interface for EntryPoint
-      abstracts: [ ],
-      pin: object1,
-    },
+    { abstracts: [ ] }, # 1. any
   ],
   methods: [
-    # TODO: Missing information about the println
-    { # 1. EntryPoint() EntryPoint
-      name: EntryPoint, package: 4, receiver: 1, signature: 2,
-      vis: public,
+    { # 1. EntryPoint.main()
+      name: main, package: 5, receiver: 1, signature: 1,
+      loc: 4, metrics: 1, static: true, vis: public,
     },
-    { # 2. main()
-      name: main, package: 4, receiver: 1, signature: 1,
-      metrics: 1, loc: 4, vis: public,
+    { # 2. EntryPoint.println(s string)
+      name: println, package: 5, receiver: 1, signature: 2, 
+      loc: 8, metrics: 2, static: true, vis: public,
     },
   ],
   metrics: [
-    { # 1. EntryPoint.main metrics
+    { # 1. EntryPoint.main()
       loc: 4, codeCount: 3, complexity: 1, indents: 1, lineCount: 3,
-      # TODO: Remove "youShallNotPass", just keeping this from passing while I work on it.
-      youShallNotPass: true,
-      # TODO: Missing println call
-    }
+      invokes: [ method2 ],
+      reads: [ basic1, object1 ],
+    },
+    { # 2. EntryPoint.println(s string)
+      loc: 8, codeCount: 2, complexity: 1, lineCount: 3,
+    },
   ],
   objects: [
-    { # 1. EntryPoint
-      name: EntryPoint, package: 4, data: 1, interface: 1, loc: 3, vis: public,
-      methods: [ 1, 2 ]
+    { # 1. EntryPoint{}{}
+      name: EntryPoint, package: 5, data: 1, interface: 1,
+      loc: 3, vis: public,
+      methods: [ 1, 2 ],
     },
   ],
   packages: [
-    { name: "<unnamed>"   }, # 1. <unnamed> # TODO: Needs Imports to contained packages?
-    { name: testData      }, # 2. testData
-    { name: testData.java }, # 3. testData.java
-    { # 4. testData.java.test0001
+    { name: $builtin },
+    { name: "<unnamed>" },
+    { name: testData },
+    { name: testData.java },
+    {
       name: testData.java.test0001,
-      methods: [ 1, 2 ],
       objects: [ 1 ],
-    }
+      methods: [ 1, 2 ],
+    },
   ],
   signatures: [
-    {                }, # 1. func()
-    { results: [ 1 ] }, # 2. func() EntryPoint
+    {               }, # 1. func()
+    { params: [ 1 ] }, # 2. func(s string)
   ],
   structDescs: [
-    {}, # 1. struct{}
+    { }, # 1. struct{}
   ],
-  locs: {
-    1: EntryPoint.java
-  }
+  locs: { 1: EntryPoint.java },
 }

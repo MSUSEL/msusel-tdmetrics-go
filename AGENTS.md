@@ -11,7 +11,7 @@ This file is the agent's starting map of the repo.
   - Each component is encapsulated such that only one component should be worked
     on at a time (unless otherwise specified by user).
 - Researcher controls all changes. Plan first, write only when asked,
-  never run `git add` / `git commit` / `git push`. See **Custom Instructions** below.
+  never run `git add` / `git commit` / `git push` / `git stash`. See **Custom Instructions** below.
 
 ## Repository Layout
 
@@ -42,27 +42,32 @@ flowchart LR
 ### goAbstractor key entry points
 
 - `goAbstractor/main.go` — CLI (`-i`, `-o`, `-v` verbose, `-m` minimize, `-h`).
-- `internal/abstractor/abstractor.go` — `Abstract(Config) constructs.Project`. Two-phase: walk (querier + baker + converter + analyzer + instantiator) then `resolver.Resolve` (`dce/`, `genInterfaces/`, `inheritance/`, `instantiations/`, `references/`).
-- `internal/constructs/` — one folder + `.go` per construct kind. `factory.go`, `project/`, `packageCon/`. Includes temp/reference constructs (`tempReference`, `tempDeclRef`, `tempTypeParamRef`) used during resolution.
+- `internal/abstractor/abstractor.go` — `Abstract(Config) constructs.Project`.
+  Two-phase: walk (querier + baker + converter + analyzer + instantiator) then
+  `resolver.Resolve` (`dce/`, `genInterfaces/`, `inheritance/`, `instantiations/`, `references/`).
+- `internal/constructs/` — one folder + `.go` per construct kind.
+  `factory.go`, `project/`, `packageCon/`. Includes temp/reference constructs
+  (`tempReference`, `tempDeclRef`, `tempTypeParamRef`) used during resolution.
 - `internal/jsonify/` — JSON tree builder + minimization.
 - `internal/logger/` — push/pop indented logger.
 
 ### javaAbstractor key entry points
 
 - `abstractor.app.App` — CLI driver; `prepareMavenProject` → `performAbstraction()` → `Project.toJson(JsonHelper)`.
-- `abstractor.core.Abstractor` — Spoon walk + finish (`consolidateCons`, `crossConnectConstructs`, `validate`). Queues: `pendingPackages`, `pendingMetrics` (batch drain).
+- `abstractor.core.Abstractor` — Spoon walk + finish (`consolidateCons`, `crossConnectConstructs`, `validate`).
+  Queues: `pendingPackages`, `pendingMetrics` (batch drain).
 - `abstractor.core.spoonUtils.SpoonUtils` — element descriptions, package paths, JDK shape helpers.
 - `abstractor.core.validator.Validator` — post-walk graph checks.
 - `abstractor.core.constructs.*` — one class per construct, `Factory<T>` + `Ref<T>`, `Baker` (`anyDesc`, `$Array`, `basicForBoxedOrString`).
 - `abstractor.core.json.*` — JSON build/parse/format with `JsonHelper` toggles (`writeKinds`, `writeIndices`, `writeRefs`).
-- Resolver extraction is planned (implementation plan Step 8); finish logic still lives on `Abstractor`.
 
 ### techDebtMetrics key entry points
 
 - `Runner/Program.cs` — **stub** (`throw new NotImplementedException`).
 - `Constructs/Project.cs` — root with `IReadOnlyList<...>` per construct. Implements `IConstruct`, `IKeyResolver`.
 - Construct interfaces: `IConstruct`, `IDeclaration`, `IInterface`, `IMethod`, `IObject`, `ITypeDesc`.
-- `DesignRecovery/DesignRecovery.cs` — analysis entry; participation/membership computation is **mostly commented out** (TODO: synthesised object for basics and projects).
+- `DesignRecovery/DesignRecovery.cs` — analysis entry; participation/membership computation
+  is **mostly commented out** (TODO: synthesised object for basics and projects).
 - `TechDebt/{Class,Method,Math,Participation,Project,Source,Validator}.cs` — TD metric computations.
 - Tests: `UnitTests/CommonsTests/`, `UnitTests/ConstructTests/`.
 
@@ -70,20 +75,27 @@ flowchart LR
 
 These differ from defaults and matter when writing code:
 
-- **Cross-language pattern mirror**: Java loosely mirrors Go for maintainability — `Factory<T>` + `Ref<T>`, `Cmp`/`CmpOptions`, `Jsonable.toJson(JsonHelper)`, `Logger` with push/pop indentation. Use the existing pattern even when a more idiomatic per-language one exists.
-- **External JDK/library types (Java)**: boxed primitives + `String` → `Baker.basicForBoxedOrString` → shared `Basic`s. Shadow types today → `Baker.anyDesc()`; **named stub `InterfaceDecl`s** are target behavior (plan Step 5).
-- **Annotations (Java)**: used to inform analysis; do **not** emit them as constructs. `CtAnnotationType` → `Logger.notice` + `objectDesc`.
-- **Anonymous classes and lambdas (Java)**: fold into the enclosing method's metrics. Named nested classes are separate objects with a `nest` field.
+- **Cross-language pattern mirror**: Java loosely mirrors Go for maintainability — `Factory<T>` + `Ref<T>`,
+  `Cmp`/`CmpOptions`, `Jsonable.toJson(JsonHelper)`, `Logger` with push/pop indentation.
+  Use the existing pattern even when a more idiomatic per-language one exists.
+- **External JDK/library types (Java)**: boxed primitives + `String` → `Baker.basicForBoxedOrString` → shared `Basic`s.
+  Shadow types today → `Baker.anyDesc()`; **named stub `InterfaceDecl`s** are target behavior (plan Step 5).
+- **Annotations (Java)**: used to inform analysis; do **not** emit them as constructs.
+  `CtAnnotationType` → `Logger.notice` + `objectDesc`.
+- **Anonymous classes and lambdas (Java)**: fold into the enclosing method's metrics.
+  Named nested classes are separate objects with a field named `nest` or similar.
 - **Generic instantiations**: tracked as distinct constructs (`ObjectInst`, `MethodInst`, `InterfaceInst`).
 - **Package imports**: derive from actual type usage, **not** from `import` statements.
-- **Type dispatch (Java)**: use `tr.getTypeDeclaration()` (not `getDeclaration()`); wrap in try/catch and fall back to `objectDesc` (or `null` for declarations) with a logged warning.
-- **Null/unknown (Java)**: `<nulltype>` is a no-op so null-literal usage doesn't create stubs. `Analyzer` skips `invokes.add` when `addDeclaration` returns null and skips field reads when `getFieldDeclaration()` is null.
+- **Null/unknown (Java)**: `<nulltype>` is a no-op so null-literal usage doesn't create stubs.
+  `Analyzer` skips `invokes.add` when `addDeclaration` returns null and skips field reads when `getFieldDeclaration()` is null.
 - **Log-and-continue**: never crash on unhandled constructs. TD analysis tolerates imprecision.
-- **Spoon fixtures**: avoid `System.out.println` or other STL packages in single-file Tester fixtures — Spoon will pull large JDK graphs.
+- **Spoon fixtures**: avoid `System.out.println` or other STL packages in single-file
+  Tester fixtures unless needed or already exists — Spoon will pull large JDK graphs.
 
 ## Test Layout (non-obvious bits)
 
-- `testData/go/test0001`–`test0018` and `testData/java/{test0001,test0002,test1001..test1006}`. Each fixture pairs source with an `abstraction.yaml` golden (some Go fixtures also carry `expStub.txt`).
+- `testData/go/test0001`–`test0018` and `testData/java/{test0001,test0002,test1001..test1006}`.
+  Each fixture pairs source with an `abstraction.yaml` golden (some Go fixtures also carry `expStub.txt`).
 - Java tests under `javaAbstractor/src/test/java/abstractor/`:
   - `AppTests` — full-Maven fixtures.
   - `core.Tester` — single-file fixture harness.
@@ -92,7 +104,7 @@ These differ from defaults and matter when writing code:
 
 ## Custom Instructions
 
-<!-- This section is maintained by developers and agents during day-to-day work.
+<!-- This section is maintained by developers and describes how agents should perform work.
      It is NOT auto-generated by codebase-summary and MUST be preserved during refreshes.
      Add project-specific conventions, gotchas, and workflow requirements here. -->
 
@@ -102,9 +114,10 @@ in full control of all code changes.
 
 ### Git Restrictions
 
-- **NEVER** run `git add`, `git commit`, `git push`, `git checkout`, `git pull`, or any destructive git command.
+- **NEVER** run `git add`, `git commit`, `git push`, `git checkout`, `git pull`,
+  or any other possibly destructive git command.
 - Only `git list`, `git fetch`, and `git diff` are permitted.
-- Do not create PRs or branches.
+- Do not create PRs nor branches.
 
 ### Interaction Model
 
@@ -166,7 +179,8 @@ Never proceed to the next step without the user's explicit direction.
 
 ### Key Design Decisions
 
-- External (JDK/library) types: boxed/`String` → `Basic`; named stubs for other shadow types (planned — today often `anyDesc`).
+- External (JDK/library) types: boxed/`String` → `Basic`; named stubs for
+  other shadow types (planned — today often `anyDesc`).
 - Annotations: use to inform analysis, do not output as constructs.
 - Anonymous classes and lambdas: fold into enclosing method metrics.
 - Named nested classes: separate objects with `nest` field.

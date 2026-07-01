@@ -1,106 +1,153 @@
 {
+  language: java,
   abstracts: [
-    { name: $get, signature: 4 }, # 1. $get(index int) int
-    { name: $len, signature: 1 }, # 2. $len() int
-    { name: $set, signature: 5 }, # 3. $set(index int, value int)
+    { name: $get, signature: 3 }, # 1. $get() int
+    { name: $get, signature: 4 }, # 2. $get() string
+    { name: $get, signature: 5 }, # 3. $get() T
+    { name: $len, signature: 1 }, # 4. $len() int
+    { name: $set, signature: 6 }, # 5. $set(index int, value int)
+    { name: $set, signature: 7 }, # 6. $set(index int, value string)
+    { name: $set, signature: 8 }, # 7. $set(index int, value T)
   ],
   arguments: [
-    {               type: basic1         }, #  1.??? <unnamed> int
-    {               type: interfaceDesc2 }, #  2.??? <unnamed> EntryPoint
-    {               type: object1        }, #  3.??? <unnamed> EntryPoint
-    {               type: typeParam1     }, #  4.??? arg1   int
-    { name: args,   type: interfaceInst2 }, #  5.??? args   $Array[any]
-    { name: index,  type: basic1         }, #  6.??? index  int
-    { name: value,  type: basic1         }, #  7.??? value  int
-    { name: value,  type: interfaceDesc2 }, #  8.??? value  any
-    { name: value,  type: typeParam1     }, #  9.??? value  T
-    { name: values, type: interfaceInst1 }  # 10.??? values $Array[int]
+    {               type: basic1         }, #  1. <unnamed> int
+    {               type: basic2         }, #  2. <unnamed> string
+    {               type: typeParam1     }, #  3. <unnamed> T
+    { name: args,   type: interfaceInst2 }, #  4. args $Array<string>
+    { name: index,  type: basic1         }, #  5. index int
+    { name: s,      type: basic2         }, #  6. s string
+    { name: value,  type: basic1         }, #  7. value int
+    { name: value,  type: basic2         }, #  8. value string
+    { name: value,  type: typeParam1     }, #  9. value T
+    { name: values, type: interfaceInst1 }, # 10. values $Array<int>
   ],
-  basics: [ int ],
+  basics: [ int, string ],
   interfaceDecls: [
-    { # 1. $Array[T any]
-      name: $Array, interface: 1,
-      typeParams: [ 1 ]
-    }
+    { # 1. $Array<T>{ $get() T; $len() int; $set(index int, value T) }
+      name: $Array, package: 1, interface: 3, typeParams: [ 1 ],
+    },
   ],
   interfaceDescs: [
-    { # 1. interface{ $get(index int) int, $len() int, $set(index int, value int) }
-      abstracts: [ 1, 4, 5 ]
-    },
-    { # 4. interface for EntryPoint
-      abstracts: [ 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18 ],
-      pin: object1
-    },
-    { # 5. interface for Object
-      abstracts: [ 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18 ],
-      pin: object2
-    },
-    { # 6. any
-      abstracts: [ ]
-    },
+    { abstracts: [ 1, 4, 5 ] }, # 1. interface{ $get() int; $len() int; $set(index int, value int) }
+    { abstracts: [ 2, 4, 6 ] }, # 2. interface{ $get() string; $len() int; $set(index int, value string) }
+    { abstracts: [ 3, 4, 7 ] }, # 3. interface{ $get() T; $len() int; $set(index int, value T) }
+    { abstracts: [ ]         }, # 4. any
   ],
   interfaceInsts: [
-    { # 1. $Array[int]
-      generic: 1, resolved: 1,
-      instanceTypes: [ basic1 ]
+    { # 1. $Array<int>{ $get() int; $len() int; $set(index int, value int) }
+      generic: 1, resolved: 1, instanceTypes: [ basic1 ],
     },
-    { # 2. $Array[any]
-      generic: 1, resolved: 1,
-      instanceTypes: [ interfaceDesc2 ]
+    { # 2. $Array<string>{ $get() string; $len() int; $set(index int, value string) }
+      generic: 1, resolved: 2, instanceTypes: [ basic2 ],
     },
   ],
-  language: java,
-  locs: { 1: EntryPoint.java },
   methods: [
-    { name: EntryPoint, package: 4, receiver: 1, signature: 2, vis: public                      }, #  1. EntryPoint.EntryPoint() EntryPoint
-    { name: first,      package: 4, receiver: 1, signature: 6, vis: public, loc: 19, metrics: 3 }, #  6. EntryPoint.first(values $Array[int]) int
-    { name: last,       package: 4, receiver: 1, signature: 6, vis: public, loc: 23, metrics: 4 }, #  9. EntryPoint.last(values $Array[int]) int
-    { name: main,       package: 4, receiver: 1, signature: 3, vis: public, loc:  6, metrics: 1 }, # 10. EntryPoint.main(args $Array[any])
-    { name: sum,        package: 4, receiver: 1, signature: 6, vis: public, loc: 13, metrics: 2 }, # 13. EntryPoint.sum(values $Array[int]) int
+    { # 1. first(values ...$Array<int>) int
+      name: first, package: 5, receiver: 1, signature: 10,
+      loc: 19, metrics: 3, static: true, vis: public,
+    },
+    { # 2. last(values ...$Array<int>) int
+      name: last, package: 5, receiver: 1, signature: 10,
+      loc: 23, metrics: 4, static: true, vis: public,
+    },
+    { # 3. main(args $Array<string>)
+      name: main, package: 5, receiver: 1, signature: 2,
+      loc: 6, metrics: 1, static: true, vis: public,
+    },
+    { # 4. println(s string)
+      name: println, package: 5, receiver: 1, signature: 9,
+      loc: 27, metrics: 5, static: true, vis: public,
+    },
+    { # 5. sum(values ...$Array<int>) int
+      name: sum, package: 5, receiver: 1, signature: 10,
+      loc: 13, metrics: 2, static: true, vis: public,
+    },
   ],
   metrics: [
-    { # 1. EntryPoint.main(args $Array[any])
-      codeCount: 6, complexity: 1, indents: 4, lineCount: 6, loc: 6,
-      invokes: [ method2, method3, method5 ]
+    { # 1. main(args $Array<string>)
+      loc: 6, codeCount: 6, complexity: 1, indents: 4, lineCount: 6,
+      invokes: [
+        method1, # first(values ...$Array<int>) int
+        method2, # last(values ...$Array<int>) int
+        method4, # println(s string)
+        method5, # sum(values ...$Array<int>) int
+      ],
+      reads: [
+        basic1,         # int
+        basic2,         # string
+        interfaceInst1, # $Array<int>
+        object1,        # EntryPoint
+      ],
+      writes: [
+        interfaceInst1, # $Array<int>
+      ],
     },
-    { # 2. EntryPoint.sum(values $Array[int]) int
-      codeCount: 5, complexity: 2, indents: 3, lineCount: 5, loc: 13
+    { # 2. sum(values ...$Array<int>) int
+      loc: 13, codeCount: 5, complexity: 2, indents: 3, lineCount: 5,
+      reads: [
+        basic1,         # int
+        interfaceInst1, # $Array<int>
+      ],
+      writes: [
+        basic1, # int
+      ],
     },
-    { # 3. EntryPoint.first(values $Array[int]) int
-      codeCount: 3, complexity: 1, indents: 1, lineCount: 3, loc: 19
+    { # 3. first(values ...$Array<int>) int
+      loc: 19, codeCount: 3, complexity: 1, indents: 1, lineCount: 3,
+      reads: [
+        basic1,         # int
+        interfaceInst1, # $Array<int>
+      ],
     },
-    { # 4. EntryPoint.last(values $Array[int]) int
-      codeCount: 3, complexity: 1, indents: 1, lineCount: 3, loc: 23
-    }
+    { # 4. last(values ...$Array<int>) int
+      loc: 23, codeCount: 3, complexity: 1, indents: 1, lineCount: 3,
+      reads: [
+        basic1,         # int
+        interfaceInst1, # $Array<int>
+      ],
+    },
+    { # 5. println(s string)
+      loc: 27, codeCount: 2, complexity: 1, lineCount: 3,
+    },
   ],
   objects: [
-    { # 1. EntryPoint
-      name: EntryPoint, package: 4, data: 1, interface: 3, loc: 5, vis: public,
-      methods: [ 1, 2, 3, 4, 5 ]
+    { # 1. EntryPoint{}{}
+      name: EntryPoint, package: 5, data: 1, interface: 4,
+      loc: 5, vis: public,
+      methods: [ 1, 2, 3, 4, 5 ],
     },
   ],
   packages: [
-    { name: "<unnamed>"   }, # 1. <unnamed> package
-    { name: testData      }, # 2. testData package
-    { name: testData.java }, # 3. testData.java package
-    {                        # 4. testData.java.test0002 package
+    {
+      name: $builtin,
+      interfaces: [ 1 ],
+    },
+    { name: "<unnamed>" },
+    { name: testData },
+    { name: testData.java },
+    {
       name: testData.java.test0002,
+      objects: [ 1 ],
       methods: [ 1, 2, 3, 4, 5 ],
-      objects: [ 1 ]
     },
   ],
   signatures: [
-    {                 results: [ 1 ]                 }, #  2.??? func() int
-    {                 results: [ 3 ]                 }, #  4.??? func() EntryPoint
-    { params: [  5 ]                                 }, #  4.??? func() EntryPoint
-    { params: [  6 ], results: [ 4 ]                 }, # 10.??? func(index int) int
-    { params: [  6, 9 ]                              }, # 13.??? func(index int, value int)
-    { params: [ 10 ], results: [ 1 ], variadic: true }, # 16.??? func(values $Array[int]) int
+    {                    results: [ 1 ] }, # 1. func() int
+    { params: [  4 ]                    }, # 2. func(args $Array<string>)
+    { params: [  5 ],    results: [ 1 ] }, # 3. func() int
+    { params: [  5 ],    results: [ 2 ] }, # 4. func() string
+    { params: [  5 ],    results: [ 3 ] }, # 5. func() T
+    { params: [  5, 7 ]                 }, # 6. func(index int, value int)
+    { params: [  5, 8 ]                 }, # 7. func(index int, value string)
+    { params: [  5, 9 ]                 }, # 8. func(index int, value T)
+    { params: [  6 ]                    }, # 9. func(s string)
+    { params: [ 10 ],    results: [ 1 ], variadic: true }, # 10. func(values ...$Array<int>) int
   ],
   structDescs: [
-    { } # 1. struct{}
+    { }, # 1. struct{}
   ],
   typeParams: [
-    { name: T, type: interfaceDesc2 } # 1.??? T any
+    { name: T, type: interfaceDesc4 }, # 1. T any
   ],
+  locs: { 1: EntryPoint.java },
 }

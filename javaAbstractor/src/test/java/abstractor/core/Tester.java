@@ -55,11 +55,11 @@ public class Tester {
         printLogs(this.buffer, logFile);
     }
 
-    static private boolean hasFilePath(String file) {
+    static public boolean hasFilePath(String file) {
         return file != null && !file.isBlank();
     }
 
-    static private void deleteFile(String file) {
+    static public void deleteFile(String file) {
          if (hasFilePath(file)) new File(file).delete();
     }
 
