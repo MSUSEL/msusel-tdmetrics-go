@@ -111,6 +111,92 @@ public class MetricsTests {
             "  reads: [ basic1 ],",
             "}");
     }
+    
+    @Test
+    public void SimpleSiblingInvoke() {
+        final Tester t = Tester.classesFromSource(
+            "public class Foo {",
+            "  public void bar(int x) {",
+            "    this.tak(x);",
+            "  }",
+            "  public void tak(int x) { }",
+            "}");
+        t.checkConstruct("metrics1",
+            "{",
+            "  codeCount:  3,",
+            "  complexity: 1,",
+            "  indents:    1,",
+            "  lineCount:  3,",
+            "  invokes: [ method2 ],",
+            "  reads:   [ basic1, object1 ],",
+            "}");
+    }
+    
+    @Test
+    public void SimpleNeighborInvoke() {
+        final Tester t = Tester.classesFromSource(
+            "public class Foo {",
+            "  public void bar(int x) {",
+            "    Boop.tak(x);",
+            "  }",
+            "  public class Boop {",
+            "    static public void tak(int x) { }",
+            "  }",
+            "}");
+        t.checkConstruct("metrics1",
+            "{",
+            "  codeCount:  3,",
+            "  complexity: 1,",
+            "  indents:    1,",
+            "  lineCount:  3,",
+            "  invokes: [ method2 ],",
+            "  reads:   [ basic1, object1, object2 ],",
+            "}");
+    }
+    
+    @Test
+    public void SimpleDoubleSelectInvoke() {
+        final Tester t = Tester.classesFromSource(
+            "public class Foo {",
+            "  public void bar(int x) {",
+            "    Boop.baz.tak(x);",
+            "  }",
+            "  public class Boop {",
+            "    public class Baz {",
+            "      static public void tak(int x) { }",
+            "    }",
+            "    static public Baz baz;",
+            "  }",
+            "}");
+        t.checkConstruct("metrics1",
+            "{",
+            "  codeCount:  3,",
+            "  complexity: 1,",
+            "  indents:    1,",
+            "  lineCount:  3,",
+            "  invokes: [ method2 ],",
+            "  reads:   [ basic1, object1, object2, object3, selection1 ],",
+            "}");
+    }
+    
+    @Test
+    public void SimpleSystemPrint() {
+        final Tester t = Tester.classesFromSource(
+            "public class Foo {",
+            "  public void bar(int x) {",
+            "    System.out.println(x);",
+            "  }",
+            "}");
+        t.checkConstruct("metrics1",
+            "{",
+            "  codeCount:  3,",
+            "  complexity: 1,",
+            "  indents:    1,",
+            "  lineCount:  3,",
+            "  reads: [ basic6, object9, object10, selection1 ],",
+            // TODO: Add invokes for println (for this and other tests with println)
+            "}");
+    }
 
     @Test
     public void SimpleIf() {
@@ -159,6 +245,7 @@ public class MetricsTests {
             "  lineCount:  10,",
             "  reads:  [ basic1, basic6, basic8, object9, object10, selection1 ],",
             "  writes: [ basic6 ],",
+            // TODO: Add invokes for println (for this and other tests with println)
             "}");
     }
 
@@ -184,6 +271,7 @@ public class MetricsTests {
             "  lineCount:  9,",
             "  reads:  [ basic1, basic6, object9, object10, selection1 ],",
             "  writes: [ basic6 ],",
+            // TODO: Add invokes for println (for this and other tests with println)
             "}");
     }
 
@@ -211,6 +299,7 @@ public class MetricsTests {
             "  lineCount:  11,",
             "  reads:  [ basic1, basic6, object9, object10, selection1 ],",
             "  writes: [ basic6 ],",
+            // TODO: Add invokes for println (for this and other tests with println)
             "}");
     }
 
@@ -239,6 +328,7 @@ public class MetricsTests {
             "  lineCount:  12,",
             "  reads: [ basic6, object9, object10, selection1 ],",
             "  writes: [ basic6 ],",
+            // TODO: Add invokes for println (for this and other tests with println)
             "}");
     }
 
@@ -260,6 +350,7 @@ public class MetricsTests {
             "  lineCount:  5,",
             "  reads:  [ basic1, basic6, object9, object10, selection1 ],",
             "  writes: [ basic6 ],",
+            // TODO: Add invokes for println (for this and other tests with println)
             "}");
     }
 
