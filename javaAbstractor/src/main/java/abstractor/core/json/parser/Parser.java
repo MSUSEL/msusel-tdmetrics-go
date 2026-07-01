@@ -56,7 +56,7 @@ public class Parser {
                     if (sep.token() == TokenType.error) throw this.convertError(token);
                     if (sep.token() == TokenType.comma) continue;
                     if (sep.token() == TokenType.closeCurl) return obj;
-                    throw new JsonException("unexpected character after value in object, got " + token.value() + token.loc());
+                    throw new JsonException("unexpected character after value in object, got " + token.value() + " " + token.loc());
                 default: throw new JsonException("unexpected characters (" + token.value() + ") in an object " + token.loc());
             }
         }

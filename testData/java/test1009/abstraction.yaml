@@ -13,8 +13,8 @@
     { name: $nest, type: object2                     }, # 1. $nest Bip<T>
     { name: $nest, type: object3                     }, # 2. $nest Foo
     { name: t,     type: object4,        vis: public }, # 3. t Tak<T>
-    { name: t,     type: objectInst3,    vis: public }, # 4. t Bip<Bar>
-    { name: t,     type: objectInst4,    vis: public }, # 5. t Bip<Baz>
+    { name: t,     type: objectInst3,    vis: public }, # 4. t Tak<Bar>
+    { name: t,     type: objectInst4,    vis: public }, # 5. t Tak<Baz>
     { name: x,     type: interfaceDecl1, vis: public }, # 6. x Bar
     { name: x,     type: object1,        vis: public }, # 7. x Baz
     { name: x,     type: typeParam1,     vis: public }, # 8. x T
@@ -29,11 +29,11 @@
     { # 1. interface{ Boop() bool; Moog() bool }
       abstracts: [ 1, 2 ], pin: object3,
     },
-    { # 2. interface{ Run() bool } ???
+    { # 2. interface{ Run() bool }
       abstracts: [ 3 ], pin: object1,
       inherits: [ 3 ],
     },
-    { # 3. interface{ Run() bool } ???
+    { # 3. interface{ Run() bool }
       abstracts: [ 3 ], pin: object3,
     },
     { # 4. any
@@ -69,77 +69,77 @@
       ],
       reads: [
         basic1,      # bool
-        object1,     # ???
-        object2,     # ???
-        object3,     # ???
-        objectInst2, # ???
-        objectInst4, # ???
-        selection1,  # Bip<T>.t # TODO: Why not Bip<Baz>.t?
-        selection2,  # Tak<T>.x # TODO: Why not Tak<Baz>.x?
+        object1,     # Baz
+        object2,     # Bip<T>
+        object3,     # Foo
+        objectInst2, # Bip<Baz>
+        objectInst4, # Tak<Baz>
+        selection1,  # Bip<T>.t
+        selection2,  # Tak<T>.x
       ],
       writes: [
-        object1,     # ???
-        object2,     # ???
-        objectInst2, # ???
-        selection2,  # ???
+        object1,     # Baz
+        object2,     # Bip<T>
+        objectInst2, # Bip<Baz>
+        selection2,  # Tak<T>.x
       ],
     },
     { # 3. Foo.Moog() bool
       loc: 28, codeCount: 9, complexity: 1, indents: 13, lineCount: 9,
       invokes: [
-        abstract3, # ???
+        abstract3, # Run() bool
       ],
       reads: [
         basic1,         # bool
-        interfaceDecl1, # ???
-        interfaceDesc4, # ???
-        object2,        # ???
-        object3,        # ???
-        objectInst1,    # ???
-        objectInst3,    # ???
-        selection1,     # Bip<T>.t # TODO: Why not Bip<Bar>.t?
-        selection2,     # Tak<T>.x # TODO: Why not Tak<Bar>.x?
+        interfaceDecl1, # Bar
+        interfaceDesc4, # any
+        object2,        # Bip<T>
+        object3,        # Foo
+        objectInst1,    # Bip<Bar>
+        objectInst3,    # Tak<Bar>
+        selection1,     # Bip<T>.t
+        selection2,     # Tak<T>.x
       ],
       writes: [
-        interfaceDecl1, # ???
-        object2,        # ???
-        objectInst1,    # ???
-        selection2,     # ???
+        interfaceDecl1, # Bar
+        object2,        # Bip<T>
+        objectInst1,    # Bip<Bar>
+        selection2,     # Tak<T>.x
       ],
     },
   ],
   objectInsts: [
-    { # 1. Bip<Bar>{ t Tak }{} ???
+    { # 1. Bip<Bar>{ t Tak<Bar>; $nest Foo }{}
       generic: 2, resData: 4, resInterface: 4, instanceTypes: [ interfaceDecl1 ],
     },
-    { # 2. Bip<Baz>{ t Tak }{} ???
+    { # 2. Bip<Baz>{ t Tak<Baz>; $nest Foo }{}
       generic: 2, resData: 5, resInterface: 4, instanceTypes: [ object1 ],
     },
-    { # 3. Bip<Bar>{ t Tak }{} ???
+    { # 3. Tak<Bar>{ x Bar; $nest Bip<T> }{}
       generic: 4, resData: 6, resInterface: 4, instanceTypes: [ interfaceDecl1 ],
     },
-    { # 4. Bip<Baz>{ t Tak }{} ???
+    { # 4. Tak<Baz>{ x Baz; $nest Bip<T> }{}
       generic: 4, resData: 7, resInterface: 4, instanceTypes: [ object1 ],
     },
   ],
   objects: [
-    { # 1. Baz{}{ Run() bool } ???
+    { # 1. Foo.Baz{ $nest Foo }{ Run() bool }
       name: Baz, package: 5, data: 2, interface: 2,
       loc: 16, vis: public, nest: object3,
       methods: [ 3 ],
     },
-    { # 2. Bip<T>{ t Tak }{} ???
+    { # 2. Foo.Bip<T>{ t Tak<T>; $nest Foo }{}
       name: Bip, package: 5, data: 3, interface: 4,
       loc: 8, vis: public, nest: object3, typeParams: [ 1 ],
       nested: [ object4 ], # Tak<T>
     },
-    { # 3. Foo{}{ Boop() bool; Moog() bool } ???
+    { # 3. Foo{}{ Boop() bool; Moog() bool }
       name: Foo, package: 5, data: 1, interface: 1,
       loc: 3, vis: public,
       nested: [ interfaceDecl1, object1, object2 ], # Bar, Baz, Bip<T>
       methods: [ 1, 2 ],
     },
-    { # 4. Tak<T>{ x T }{} ???
+    { # 4. Bip<T>.Tak<T>{ x T; $nest Bip<T> }{}
       name: Tak, package: 5, data: 8, interface: 4,
       loc: 9, vis: public, typeParams: [ 1 ],
       nest: object2, # Bip<T>
@@ -158,8 +158,8 @@
     },
   ],
   selections: [
-    { name: t, origin: object2 }, # 1. Bip<T>.t # TODO: Why not Bip<Baz> and Bip<Bar> ???
-    { name: x, origin: object4 }, # 2. Tak<T>.x # TODO: Why not Tak<Baz> and Tak<Bar> ???
+    { name: t, origin: object2 }, # 1. Bip<T>.t
+    { name: x, origin: object4 }, # 2. Tak<T>.x
   ],
   signatures: [
     { results: [ 1 ] }, # 1. func() bool
@@ -168,8 +168,8 @@
     {                  }, # 1. struct{}
     { fields: [ 2 ]    }, # 2. struct{             $nest Foo }
     { fields: [ 3, 2 ] }, # 3. struct{ t Tak<T>;   $nest Foo }
-    { fields: [ 4, 2 ] }, # 4. struct{ t Bip<Bar>; $nest Foo }
-    { fields: [ 5, 2 ] }, # 5. struct{ t Bip<Baz>; $nest Foo }
+    { fields: [ 4, 2 ] }, # 4. struct{ t Tak<Bar>; $nest Foo }
+    { fields: [ 5, 2 ] }, # 5. struct{ t Tak<Baz>; $nest Foo }
     { fields: [ 6, 1 ] }, # 6. struct{ x Bar;      $nest Bip<T> }
     { fields: [ 7, 1 ] }, # 7. struct{ x Baz;      $nest Bip<T> }
     { fields: [ 8, 1 ] }, # 8. struct{ x T;        $nest Bip<T> }

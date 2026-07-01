@@ -7,14 +7,10 @@ import java.util.List;
 
 import org.junit.jupiter.api.*;
 
-import abstractor.core.constructs.Construct;
-import abstractor.core.constructs.Project;
+import abstractor.core.constructs.*;
 import abstractor.core.diff.Diff;
 import abstractor.core.iter.Iter;
-import abstractor.core.json.JsonFormat;
-import abstractor.core.json.JsonHelper;
-import abstractor.core.json.JsonNode;
-import abstractor.core.json.Jsonable;
+import abstractor.core.json.*;
 import abstractor.core.log.Logger;
 
 public class Tester {
@@ -163,11 +159,24 @@ public class Tester {
         this.checkJson(this.proj, lines);
     }
 
+    public void checkConstructCount(String kind, int expCount) {
+        final Factory<?> factory = this.proj.getFactory(kind);
+        if (factory == null) {
+            this.printLogs();
+            Assertions.fail("Unable to find kind, " + kind + ", in given project.");
+            return;
+        }
+        if (expCount != factory.size()) {
+            Assertions.fail("Factory expected to have " + expCount + " construct(s), but it has " + factory.size() + ".");
+            return;
+        }
+    }
+
     public void checkConstruct(String key, String ...lines) {
         final Construct con = this.proj.getConstructWithKey(key);
         if (con == null) {
             this.printLogs();
-            Assertions.fail("unable to find "+key+" in given project");
+            Assertions.fail("unable to find key, " + key + ", in given project");
             return;
         }
         this.checkJson(con, lines);

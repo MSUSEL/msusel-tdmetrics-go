@@ -93,6 +93,22 @@ public class Project implements Jsonable {
         return null;
     }
 
+    public Factory<?> getFactory(String kindStr) {
+        final ConstructKind kind = ConstructKind.fromName(kindStr);
+        if (kind == null) {
+            System.out.println("Failed to find kind with " + kindStr + ".");
+            return null;
+        }
+
+        final Factory<?> factory = this.getFactory(kind);
+        if (factory == null) {
+            System.out.println("Failed to find factory of kind " + kind + ".");
+            return null;
+        }
+
+        return factory;
+    }
+
     public Construct getConstructWithKey(String key) {
         int split = -1;
         for (int i = 0; i < key.length(); i++) {
@@ -108,20 +124,9 @@ public class Project implements Jsonable {
             return null;
         }
 
-        final String kindStr = key.substring(0, split);
-        final String indStr  = key.substring(split);
-
-        final ConstructKind kind = ConstructKind.fromName(kindStr);
-        if (kind == null) {
-            System.out.println("Failed to find kind with " + kindStr + " for " + key + ".");
-            return null;
-        }
-
-        final Factory<?> factory = getFactory(kind);
-        if (factory == null) {
-            System.out.println("Failed to find factory of kind " + kind + " for " + key + ".");
-            return null;
-        }
+        final String     kindStr = key.substring(0, split);
+        final String     indStr  = key.substring(split);
+        final Factory<?> factory = this.getFactory(kindStr);
 
         int index = 0;
         try {

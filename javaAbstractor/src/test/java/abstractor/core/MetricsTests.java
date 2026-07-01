@@ -10,13 +10,7 @@ public class MetricsTests {
             "public class Foo {",
             "  public void bar() { }",
             "}");
-        t.checkConstruct("metrics1",
-            "{",
-            "  codeCount:  1,",
-            "  complexity: 1,",
-            "  #indents:   0,",
-            "  lineCount:  1",
-            "}");
+        t.checkConstructCount("metrics", 0);
     }
 
     @Test
@@ -32,7 +26,8 @@ public class MetricsTests {
             "  codeCount:  3,",
             "  complexity: 1,",
             "  indents:    1,",
-            "  lineCount:  3",
+            "  lineCount:  3,",
+            "  reads: [ basic1 ],",
             "}");
     }
     
@@ -49,7 +44,8 @@ public class MetricsTests {
             "  codeCount:  3,",
             "  complexity: 1,",
             "  indents:    1,",
-            "  lineCount:  3",
+            "  lineCount:  3,",
+            "  reads: [ basic1 ],",
             "}");
     }
 
@@ -68,7 +64,8 @@ public class MetricsTests {
             "  codeCount:  5,",
             "  complexity: 1,",
             "  indents:    5,",
-            "  lineCount:  5",
+            "  lineCount:  5,",
+            "  reads: [ basic1 ],",
             "}");
     }
 
@@ -86,7 +83,9 @@ public class MetricsTests {
             "  codeCount:  4,",
             "  complexity: 1,",
             "  indents:    2,",
-            "  lineCount:  4",
+            "  lineCount:  4,",
+            "  reads:  [ basic1 ],",
+            "  writes: [ basic1 ],",
             "}");
     }
 
@@ -108,7 +107,8 @@ public class MetricsTests {
             "  codeCount:  3,",
             "  complexity: 1,",
             "  indents:    1,",
-            "  lineCount:  8",
+            "  lineCount:  8,",
+            "  reads: [ basic1 ],",
             "}");
     }
 
@@ -130,7 +130,9 @@ public class MetricsTests {
             "  complexity: 2,",
             "  indents:    6,",
             "  lineCount:  7,",
-            // TODO: Add invokes
+            "  reads:  [ basic1, basic6, object9, object10, selection1 ],",
+            "  writes: [ basic6 ],",
+            // TODO: Add invokes for println (for this and other tests with println)
             "}");
     }
 
@@ -154,7 +156,9 @@ public class MetricsTests {
             "  codeCount:  10,",
             "  complexity:  2,",
             "  indents:    11,",
-            "  lineCount:  10",
+            "  lineCount:  10,",
+            "  reads:  [ basic1, basic6, basic8, object9, object10, selection1 ],",
+            "  writes: [ basic6 ],",
             "}");
     }
 
@@ -177,7 +181,9 @@ public class MetricsTests {
             "  codeCount:  9,",
             "  complexity: 3,",
             "  indents:    9,",
-            "  lineCount:  9",
+            "  lineCount:  9,",
+            "  reads:  [ basic1, basic6, object9, object10, selection1 ],",
+            "  writes: [ basic6 ],",
             "}");
     }
 
@@ -202,7 +208,9 @@ public class MetricsTests {
             "  codeCount:  11,",
             "  complexity:  3,",
             "  indents:    12,",
-            "  lineCount:  11",
+            "  lineCount:  11,",
+            "  reads:  [ basic1, basic6, object9, object10, selection1 ],",
+            "  writes: [ basic6 ],",
             "}");
     }
 
@@ -228,7 +236,9 @@ public class MetricsTests {
             "  codeCount:  12,",
             "  complexity:  3,",
             "  indents:    13,",
-            "  lineCount:  12",
+            "  lineCount:  12,",
+            "  reads: [ basic6, object9, object10, selection1 ],",
+            "  writes: [ basic6 ],",
             "}");
     }
 
@@ -247,7 +257,9 @@ public class MetricsTests {
             "  codeCount:  5,",
             "  complexity: 2,",
             "  indents:    4,",
-            "  lineCount:  5",
+            "  lineCount:  5,",
+            "  reads:  [ basic1, basic6, object9, object10, selection1 ],",
+            "  writes: [ basic6 ],",
             "}");
     }
 
@@ -267,7 +279,9 @@ public class MetricsTests {
             "  codeCount:  6,",
             "  complexity: 3,",
             "  indents:    5,",
-            "  lineCount:  6",
+            "  lineCount:  6,",
+            "  reads:  [ basic1, basic2 ],",
+            "  writes: [ basic2 ],",
             "}");
     }
 
@@ -284,7 +298,8 @@ public class MetricsTests {
             "  codeCount:  3,",
             "  complexity: 2,",
             "  indents:    1,",
-            "  lineCount:  3",
+            "  lineCount:  3,",
+            "  reads: [ basic1, basic2 ],",
             "}");
     }
 
@@ -304,7 +319,9 @@ public class MetricsTests {
             "  codeCount:  6,",
             "  complexity: 3,",
             "  indents:    5,",
-            "  lineCount:  6",
+            "  lineCount:  6,",
+            "  reads:  [ basic1, basic2 ],",
+            "  writes: [ basic2 ],",
             "}");
     }
 
@@ -321,7 +338,8 @@ public class MetricsTests {
             "  codeCount:  3,",
             "  complexity: 2,",
             "  indents:    1,",
-            "  lineCount:  3",
+            "  lineCount:  3,",
+            "  reads: [ basic1, basic2 ],",
             "}");
     }
 
@@ -338,7 +356,8 @@ public class MetricsTests {
             "  codeCount:  3,",
             "  complexity: 1,",
             "  indents:    1,",
-            "  lineCount:  3",
+            "  lineCount:  3,",
+            "  reads: [ basic1, basic2 ],",
             "}");
     }
 
@@ -357,7 +376,8 @@ public class MetricsTests {
             "  complexity: 1,",
             "  indents:    1,",
             "  lineCount:  3,",
-            "  getter:     true",
+            "  getter:     true,",
+            "  reads: [ basic1, object1, selection1 ],",
             "}");
     }
     
@@ -376,7 +396,8 @@ public class MetricsTests {
             "  complexity: 1,",
             "  indents:    1,",
             "  lineCount:  3,",
-            "  getter:     true",
+            "  getter:     true,",
+            "  reads: [ basic1, basic2, object1, selection1 ],",
             "}");
     }
 
@@ -395,7 +416,9 @@ public class MetricsTests {
             "  complexity: 1,",
             "  indents:    1,",
             "  lineCount:  3,",
-            "  setter:     true",
+            "  setter:     true,",
+            "  reads:  [ basic1, object1, selection1 ],",
+            "  writes: [ basic1, selection1 ],",
             "}");
     }
 
@@ -414,7 +437,9 @@ public class MetricsTests {
             "  complexity: 1,",
             "  indents:    1,",
             "  lineCount:  3,",
-            "  setter:     true",
+            "  setter:     true,",
+            "  reads:  [ basic1, basic2, object1, selection1 ],",
+            "  writes: [ basic2, selection1 ],",
             "}");
     }
 
@@ -433,7 +458,9 @@ public class MetricsTests {
             "  complexity: 1,",
             "  indents:    1,",
             "  lineCount:  3,",
-            "  setter:     true",
+            "  setter:     true,",
+            "  reads:  [ basic1, object1, selection1 ],",
+            "  writes: [ basic1, selection1 ],",
             "}");
     }
 
@@ -452,6 +479,8 @@ public class MetricsTests {
             "  complexity: 1,",
             "  indents:    1,",
             "  lineCount:  3,",
+            "  reads:  [ basic1, object1, selection1 ],",
+            "  writes: [ basic1, selection1 ],",
             "}");
     }
 
@@ -470,7 +499,9 @@ public class MetricsTests {
             "  complexity: 1,",
             "  indents:    1,",
             "  lineCount:  3,",
-            "  setter:     true",
+            "  setter:     true,",
+            "  reads:  [ basic1, object1, selection1 ],",
+            "  writes: [ basic1, selection1 ],",
             "}");
     }
 }
