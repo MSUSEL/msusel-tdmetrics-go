@@ -52,7 +52,13 @@ final public class SpoonUtils {
         return describeElem(elem, showType, true);
     }
 
-    /** Short description of an element that can be used for logs. */
+    /**
+     * Short description of an element that can be used for logs.
+     *
+     * Since describing an element is used for debugging and for logging,
+     * this is designed to ignore errors and exceptions while trying to describe
+     * the element and will fall back as needed to get any description possible. 
+     */
     static public String describeElem(CtElement elem, boolean showType, boolean showPos) {
         if (elem == null) return "(null)";
         if (elem instanceof CtPackage pkg) return packageName(pkg);
@@ -65,7 +71,10 @@ final public class SpoonUtils {
         String tail = "";
         if (showPos) {
             final SourcePosition pos = elem.getPosition();
-            if (pos.isValidPosition()) tail = " @ "+pos.getLine() + ":" + pos.getColumn();
+            if (pos.isValidPosition()) {
+                final String file = pos.getFile().getPath();
+                tail = " @ " + file +  ":" + pos.getLine() + ":" + pos.getColumn();
+            }
         }
 
         if (elem instanceof CtNamedElement ne) {
@@ -141,17 +150,21 @@ final public class SpoonUtils {
     static public boolean isObjectMethod(CtMethod<?> m) {
         if (m == null) return false;
 
-        final CtTypeReference<?> objectRef = m.getFactory().Type().objectType();
-        assert(isObject(objectRef));
+        if (objSigs.isEmpty()) {
+            final CtTypeReference<?> objectRef = m.getFactory().Type().objectType();
+            assert(isObject(objectRef));
 
-        final CtType<?> objectDecl = objectRef.getTypeDeclaration();
-        assert(objectDecl != null);
+            final CtType<?> objectDecl = objectRef.getTypeDeclaration();
+            assert(objectDecl != null);
+
+            for (CtMethod<?> objectMethod : objectDecl.getMethods())
+                objSigs.add(objectMethod.getSignature());
+        }
 
         final String sig = m.getSignature();
         assert(sig != null);
-        for (CtMethod<?> objectMethod : objectDecl.getMethods()) {
-            if (sig.equals(objectMethod.getSignature())) return true;
-        }
-        return false;
+        return objSigs.contains(sig);
     }
+
+    static private final Set<String> objSigs = new HashSet<>();
 }

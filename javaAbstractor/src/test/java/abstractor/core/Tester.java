@@ -122,6 +122,7 @@ public class Tester {
         try {
             this.ab.prepareClassesFromSource(lines);
             this.ab.performAbstraction();
+            this.ab.validate();
         } catch (Exception ex) {
             this.printLogs();
             Assertions.fail(ex);

@@ -136,7 +136,9 @@ public class Abstractor {
         return null;
     }
 
-    private Ref<? extends Construct> addMethodDeclOrAbstract(CtMethod<?> m) throws Exception {
+    private Ref<? extends Construct> addMethodDeclOrAbstract(CtMethod<?> m) throws Exception {        
+        if (SpoonUtils.isObjectMethod(m)) return null;
+
         final CtType<?> decl = m.getDeclaringType();
         if (decl.isAnonymous()) {
             this.log.notice("Ignoring method of an anonymous declaring type: " + SpoonUtils.describeElem(m) + " in " + SpoonUtils.describeElem(decl));
@@ -292,8 +294,6 @@ public class Abstractor {
         }
     }
 
-    // TODO: Need to test a method only instantiation: class{ M<T>(){ }; B() { M<int>(); }}
-
     public Ref<MethodInst> addMethodInstForObjectInst(Ref<ObjectInst> receiver, CtMethod<?> m, boolean objDefinedInNest) throws Exception {
         Require.notObjectMethod(m);
         final ObjectInst recv = receiver.mustGetResolved();
@@ -316,7 +316,7 @@ public class Abstractor {
         final ObjectInst recv = receiver.mustGetResolved();
         final ElementKey key  = new ElementKey(ctor, this.instantiator.typeArgs(objDefinedInNest));
         return this.proj.methodInsts.create(this.log, key,
-            "constructor for object instantiation " + ctor.getSignature(),
+            "constructor for object instantiation " + SpoonUtils.describeElem(ctor),
             () -> {
                 final Ref<MethodDecl>               generic       = this.addMethodDeclForConstructor(recv.generic, ctor);
                 final List<Ref<? extends TypeDesc>> instanceTypes = this.instantiator.typeArgs(objDefinedInNest);
@@ -376,7 +376,7 @@ public class Abstractor {
             // All declarations must be added without type arguments.
             this.instantiator.pushCleanFrame();
             return this.proj.methodDecls.create(log, new ElementKey(ctor),
-                "constructor " + ctor.getSignature(),
+                "constructor " + SpoonUtils.describeElem(ctor),
                 () -> {
                     final ObjectDecl           recv       = receiver.mustGetResolved();
                     final Ref<PackageCon>      pkg        = recv.pkg;
@@ -940,9 +940,10 @@ public class Abstractor {
             this.processPackage(pkg);
             this.processPendingMetrics();
         }
+
         this.consolidateCons();
+
         this.crossConnectConstructs();
-        this.validate();
     }
 
     // TODO: Implement package imports by deriving from actual type usage
@@ -1040,7 +1041,7 @@ public class Abstractor {
         }
     }
 
-    private void validate() throws Exception {
+    public void validate() throws Exception {
         final boolean hadErrors = this.log.errorCount() > 0;
         new Validator(this.log, this.proj).validate();
         if (this.log.errorCount() > 0) {

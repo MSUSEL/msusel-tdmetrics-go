@@ -43,6 +43,8 @@ public class App {
                 log.error("Error creating or writing to file: " + e.getMessage());
             }
         }
+
+        ab.validate();
  
         if (log.errorCount() > 0) {
             final PrintStream errOut = cfg.logErr != null ? cfg.logErr : System.err;

@@ -4,9 +4,10 @@ help:
 	@echo Help for MSU SEL TD Metrics - Go!
 	@echo.
 	@echo `make clean` will clean all the parts. To run individual parts use go-clean, j-clean, or td-clean.
-	@echo.
 	@echo `make test` will run all the tests for all parts. To run individual parts use go-test, j-test, or td-test.
 	@echo.
+
+#===[ Test ]====================================================================
 
 test: go-test j-test td-test
 
@@ -22,6 +23,8 @@ td-test:
 	cd ./techDebtMetrics/ && dotnet test
 # Add `--filter StubTest0007` to run specific tests
 
+#===[ Clean ]===================================================================
+
 clean: go-clean j-clean td-clean
 
 go-clean:
@@ -32,3 +35,12 @@ j-clean:
 
 td-clean:
 	cd ./techDebtMetrics/ && dotnet clean
+
+#===[ Build ]===================================================================
+
+j-build:
+	cd ./javaAbstractor/ && mvn clean compile assembly:single
+
+
+
+

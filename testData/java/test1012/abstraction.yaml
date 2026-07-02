@@ -1,0 +1,140 @@
+{
+  language: java,
+  abstracts: [
+    { name: baz, signature: 1 }, # 1. ???
+    { name: tak, signature: 2 }, # 2. ???
+  ],
+  arguments: [
+    {          type: basic3      }, # 1. ???
+    {          type: object1     }, # 2. ???
+    {          type: objectInst1 }, # 3. ???
+    { name: p, type: typeParam1  }, # 4. ???
+    { name: s, type: typeParam2  }, # 5. ???
+    { name: t, type: typeParam2  }, # 6. ???
+    { name: t, type: typeParam3  }, # 7. ???
+    { name: u, type: typeParam4  }, # 8. ???
+  ],
+  basics: [ double, int, string ],
+  fields: [
+    { name: $nest, type: object2             }, # 1. ???
+    { name: str,   type: basic3, vis: public }, # 2. ???
+  ],
+  interfaceDescs: [
+    { abstracts: [ 1, 2 ], pin: object2 }, # 1. ???
+    { abstracts: [ ]                    }, # 2. ???
+  ],
+  methodInsts: [
+    { # 1. ???
+      generic: 1, receiver: 1, resolved: 3, instanceTypes: [ typeParam2 ],
+    },
+  ],
+  methods: [
+    { # 1. ???
+      name: Bar, package: 2, receiver: 1, signature: 4,
+      loc: 3, metrics: 1, constructor: true, static: true, vis: public,
+      typeParams: [ 3, 4 ],
+    },
+    { # 2. ???
+      name: baz, package: 2, receiver: 2, signature: 1,
+      loc: 13, metrics: 3, vis: public,
+    },
+    { # 3. ???
+      name: tak, package: 2, receiver: 2, signature: 2,
+      loc: 9, metrics: 2, vis: public,
+      typeParams: [ 2, 1 ],
+    },
+  ],
+  metrics: [
+    { # 1. ???
+      loc: 3, codeCount: 3, complexity: 1, indents: 3, lineCount: 3,
+      reads: [
+        basic3,
+        interfaceDesc2,
+        object1,
+        object2,
+        selection1,
+        typeParam3,
+        typeParam4,
+      ],
+      writes: [
+        basic3,
+        selection1,
+      ],
+    },
+    { # 2. ???
+      loc: 9, codeCount: 3, complexity: 1, indents: 1, lineCount: 3,
+      invokes: [
+        method1,
+      ],
+      reads: [
+        basic3,
+        interfaceDesc2,
+        object1,
+        object2,
+        objectInst1,
+        selection1,
+        typeParam1,
+        typeParam2,
+      ],
+    },
+    { # 3. ???
+      loc: 13, codeCount: 3, complexity: 1, indents: 1, lineCount: 3,
+      invokes: [
+        method3,
+      ],
+      reads: [
+        basic1,
+        basic2,
+        basic3,
+        interfaceDesc2,
+        object2,
+      ],
+    },
+  ],
+  objectInsts: [
+    { # 1.???
+      generic: 1, resData: 2, resInterface: 2, instanceTypes: [ typeParam2 ],
+      methods: [ 1 ],
+    },
+  ],
+  objects: [
+    { # 1. ???
+      name: Bar, package: 2, data: 2, interface: 2,
+      loc: 2, vis: public, typeParams: [ 3 ], nest: object2,
+      methods: [ 1 ],
+    },
+    { # 2. ???
+      name: Foo, package: 2, data: 1, interface: 1,
+      loc: 1, vis: public, nested: [ object1 ],
+      methods: [ 2, 3 ],
+    },
+  ],
+  packages: [
+    { name: $builtin },
+    {
+      name: "<unnamed>",
+      objects: [ 1, 2 ],
+      methods: [ 1, 2, 3 ],
+    },
+  ],
+  selections: [
+    { name: str, origin: object1 }, # 1. ???
+  ],
+  signatures: [
+    {                   results: [ 1 ] }, # 1. ???
+    { params: [ 5, 4 ], results: [ 1 ] }, # 2. ???
+    { params: [ 6, 8 ], results: [ 3 ] }, # 3. ???
+    { params: [ 7, 8 ], results: [ 2 ] }, # 4. ???
+  ],
+  structDescs: [
+    {                  }, # 1. ???
+    { fields: [ 2, 1 ] }, # 2. ???
+  ],
+  typeParams: [
+    { name: P, type: interfaceDesc2 }, # 1. ???
+    { name: S, type: interfaceDesc2 }, # 2. ???
+    { name: T, type: interfaceDesc2 }, # 3. ???
+    { name: U, type: interfaceDesc2 }, # 4. ???
+  ],
+  locs: { 1: ClassesFromSource.java },
+}

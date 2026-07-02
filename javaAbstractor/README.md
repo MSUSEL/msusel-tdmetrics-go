@@ -41,7 +41,7 @@
 1. Compile with `mvn clean compile assembly:single`.
 
 2. Run with `java -jar .\target\abstractor-0.1-jar-with-dependencies.jar <options>`.
-   - e.g. `java -jar .\target\abstractor-0.1-jar-with-dependencies.jar -i C:\Data\Code\Apache\commons-bcel\ -o temp.json`
+   - e.g. `java -jar .\target\abstractor-0.1-jar-with-dependencies.jar -i C:\Data\Code\Apache\commons-bcel\ -o temp.json -v`
 
 3. For help with the `<options>` use `-help`.
 
