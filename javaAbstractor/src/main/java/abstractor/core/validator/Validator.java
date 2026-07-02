@@ -184,8 +184,9 @@ public class Validator {
     }
 
     private void validateMethodInst(MethodInst con) {
-        // Receiver maybe nil in Go, but Java should always have a receiver that is the containing class.
-        this.validateChild(con, con.receiver, "receiver", false);
+        // Receiver may be null when the method's declaring class is not generic
+        // (e.g. Foo.<S,P>tak(...) on a non-generic Foo). See MethodInst.receiver.
+        this.validateChild(con, con.receiver, "receiver", true);
         this.validateChild(con, con.generic,  "generic", false);
         this.validateChild(con, con.resolved, "resolved", false);
         this.validateChildren(con, con.instanceTypes, "instanceTypes", false);

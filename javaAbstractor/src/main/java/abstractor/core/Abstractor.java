@@ -5,6 +5,7 @@ import java.util.*;
 import spoon.Launcher;
 import spoon.MavenLauncher;
 import spoon.reflect.*;
+import spoon.reflect.code.*;
 import spoon.reflect.declaration.*;
 import spoon.reflect.reference.*;
 import spoon.support.compiler.VirtualFile;
@@ -326,6 +327,204 @@ public class Abstractor {
             (Ref<MethodInst> ref, MethodInst mi) -> {
                 recv.methods.add(ref);
             });
+    }
+
+    /**
+     * addMethodInstForCall creates or fetches a MethodInst that captures the
+     * actual type arguments at a call site. Falls back to returning the
+     * generic MethodDecl (or Abstract) when the call cannot be narrowed to a
+     * useful instantiation (no generics at all, missing/inferred type info,
+     * interface-declared method, etc).
+     *
+     * The returned ref is what the caller should use as the invocation edge.
+     */
+    public Ref<? extends Construct> addMethodInstForCall(CtInvocation<?> in) throws Exception {
+        final CtExecutableReference<?> er = in.getExecutable();
+        if (er == null) return null;
+        if (er.isImplicit()) return null;
+
+        final CtExecutable<?> ex = er.getDeclaration();
+        if (!(ex instanceof CtMethod<?> m)) return null; // caller handles ctors / others
+
+        // Fall back to the plain decl path when the receiver is anything other
+        // than a class we track (interfaces produce Abstracts, not MethodInsts).
+        // TODO-QUESTION: Why use `addDeclaration` when it might be able to be `addMethodDeclOrAbstract`?
+        // TODO-QUESTION: Why not do `isObjectMethod` above this point?
+        final CtType<?> declType = m.getDeclaringType();
+        if (!(declType instanceof CtClass<?> declClass)) return this.addDeclaration(m);
+        if (SpoonUtils.isObjectMethod(m)) return null;
+
+        // Collect class-level and method-level actual type args from Spoon.
+        final CtTypeReference<?> receiverRef = getCallReceiverTypeRef(in, declClass);
+        final ArrayList<CtTypeReference<?>> classArgs = new ArrayList<>();
+        this.collectActualTypeArgs(receiverRef, classArgs);
+        final List<CtTypeReference<?>> methodArgs = in.getActualTypeArguments();
+
+        // If neither the class nor the method are generic, no MethodInst is useful.
+        final List<Ref<TypeParam>> classParams  = this.addTypeParams(declClass);
+        final List<Ref<TypeParam>> methodParams = new ArrayList<>();
+        for (CtTypeParameter tp : m.getFormalCtTypeParameters())
+            methodParams.add(this.addTypeParam(tp));
+        if (classParams.isEmpty() && methodParams.isEmpty()) return this.addDeclaration(m);
+
+        // Spoon didn't hand us enough info to bind every param — fall back.
+        if (!classParams.isEmpty()  && classArgs.size()  != classParams.size())  return this.addDeclaration(m);
+        if (!methodParams.isEmpty() && methodArgs.size() != methodParams.size()) return this.addDeclaration(m);
+
+        // Resolve args to type descriptors in the ambient frame (so a call-site
+        // arg that is itself a type-param `S` resolves to the TypeParam ref for `S`).
+        final List<Ref<? extends TypeDesc>> classArgDescs  = this.addTypeArguments(classArgs);
+        final List<Ref<? extends TypeDesc>> methodArgDescs = this.addTypeArguments(methodArgs);
+
+        // Only build an instantiation if at least one binding differs from its
+        // formal type parameter; otherwise the "instance" is just the decl.
+        final boolean classUseful  = isUsefulInstantiation(classParams,  classArgDescs);
+        final boolean methodUseful = isUsefulInstantiation(methodParams, methodArgDescs);
+        if (!classUseful && !methodUseful) return this.addDeclaration(m);
+
+        // Look up (or create) the receiver ObjectInst BEFORE pushing our frame.
+        // addObjectInst pushes its own frame that copies from prior; if we
+        // pushed first, its typeArgs would inherit our method-level bindings
+        // and the ObjectInst would end up with the wrong instanceTypes.
+        final Ref<ObjectInst> receiver = classUseful
+            ? this.getObjectInstForReceiver(receiverRef, declClass)
+            : null;
+
+        try {
+            this.instantiator.pushFrame();
+            for (int i = 0; i < classParams.size();  i++) this.instantiator.add(classParams.get(i),  classArgDescs.get(i));
+            for (int i = 0; i < methodParams.size(); i++) this.instantiator.add(methodParams.get(i), methodArgDescs.get(i));
+
+            final ElementKey key = new ElementKey(m, this.instantiator.typeArgs(true));
+            return this.proj.methodInsts.create(this.log, key,
+                "method for call site " + SpoonUtils.describeElem(m),
+                () -> {
+                    final Ref<ObjectDecl>               recvDecl      = this.addObjectDecl(declClass);
+                    final Ref<MethodDecl>               generic       = this.addMethodDecl(recvDecl, m);
+                    final List<Ref<? extends TypeDesc>> instanceTypes = this.instantiator.typeArgs(true);
+                    final Ref<Signature>                resolved      = this.addSignature(m);
+                    return new MethodInst(generic, receiver, instanceTypes, resolved);
+                },
+                (Ref<MethodInst> ref, MethodInst mi) -> {
+                    if (receiver != null) receiver.mustGetResolved().methods.add(ref);
+                });
+        } finally {
+            this.instantiator.popFrame();
+        }
+    }
+
+    /**
+     * addMethodInstForCall (constructor overload) creates or fetches a
+     * MethodInst that captures both the constructed class's type args and
+     * the constructor's own type args at the call site. Falls back to the
+     * generic MethodDecl when narrowing is not useful or possible.
+     */
+    public Ref<? extends Construct> addMethodInstForCall(CtConstructorCall<?> cc) throws Exception {
+        final CtExecutableReference<?> er = cc.getExecutable();
+        if (er == null) return null;
+        // Note: er.isImplicit() is usually true for ctor calls (you don't write
+        // <init> in source), so we do NOT gate on it here. The Analyzer's
+        // addConstructorCallUsage already filters synthetic default ctors via
+        // ctor.isImplicit() before delegating to us.
+
+        final CtExecutable<?> ex = er.getDeclaration();
+        if (!(ex instanceof CtConstructor<?> ctor)) return null;
+
+        // Constructor's declaring class.
+        final CtType<?> declType = ctor.getDeclaringType();
+        if (!(declType instanceof CtClass<?> declClass))
+            return this.addMethodDeclForConstructor(ctor);
+
+        // Class-level actual type args come from the constructed type (Bar<S>).
+        // Note: er.getDeclaringType() drops the args (Spoon caveat), so use cc.getType().
+        final CtTypeReference<?> receiverRef = cc.getType();
+        final ArrayList<CtTypeReference<?>> classArgs = new ArrayList<>();
+        this.collectActualTypeArgs(receiverRef, classArgs);
+        // Constructor's own type args are on the CtConstructorCall itself (`new <P>Bar<S>()`).
+        final List<CtTypeReference<?>> ctorArgs = cc.getActualTypeArguments();
+
+        final List<Ref<TypeParam>> classParams = this.addTypeParams(declClass);
+        final List<Ref<TypeParam>> ctorParams  = new ArrayList<>();
+        for (CtTypeParameter tp : ctor.getFormalCtTypeParameters())
+            ctorParams.add(this.addTypeParam(tp));
+        if (classParams.isEmpty() && ctorParams.isEmpty()) return this.addMethodDeclForConstructor(ctor);
+
+        if (!classParams.isEmpty() && classArgs.size() != classParams.size()) return this.addMethodDeclForConstructor(ctor);
+        if (!ctorParams.isEmpty()  && ctorArgs.size()  != ctorParams.size())  return this.addMethodDeclForConstructor(ctor);
+
+        final List<Ref<? extends TypeDesc>> classArgDescs = this.addTypeArguments(classArgs);
+        final List<Ref<? extends TypeDesc>> ctorArgDescs  = this.addTypeArguments(ctorArgs);
+
+        final boolean classUseful = isUsefulInstantiation(classParams, classArgDescs);
+        final boolean ctorUseful  = isUsefulInstantiation(ctorParams,  ctorArgDescs);
+        if (!classUseful && !ctorUseful) return this.addMethodDeclForConstructor(ctor);
+
+        // Look up (or create) the receiver ObjectInst BEFORE pushing our frame,
+        // otherwise addObjectInst's own frame would inherit our ctor bindings
+        // and produce an ObjectInst with too many instanceTypes.
+        final Ref<ObjectInst> receiver = classUseful
+            ? this.getObjectInstForReceiver(receiverRef, declClass)
+            : null;
+
+        try {
+            this.instantiator.pushFrame();
+            for (int i = 0; i < classParams.size(); i++) this.instantiator.add(classParams.get(i), classArgDescs.get(i));
+            for (int i = 0; i < ctorParams.size();  i++) this.instantiator.add(ctorParams.get(i),  ctorArgDescs.get(i));
+
+            final ElementKey key = new ElementKey(ctor, this.instantiator.typeArgs(true));
+            return this.proj.methodInsts.create(this.log, key,
+                "constructor for call site " + SpoonUtils.describeElem(ctor),
+                () -> {
+                    final Ref<ObjectDecl>               recvDecl      = this.addObjectDecl(declClass);
+                    final Ref<MethodDecl>               generic       = this.addMethodDeclForConstructor(recvDecl, ctor);
+                    final List<Ref<? extends TypeDesc>> instanceTypes = this.instantiator.typeArgs(true);
+                    final Ref<Signature>                resolved      = this.addSignatureForConstructor(ctor);
+                    return new MethodInst(generic, receiver, instanceTypes, resolved);
+                },
+                (Ref<MethodInst> ref, MethodInst mi) -> {
+                    if (receiver != null) receiver.mustGetResolved().methods.add(ref);
+                });
+        } finally {
+            this.instantiator.popFrame();
+        }
+    }
+
+    /**
+     * Get the receiver type reference for a method invocation. Prefer the
+     * target's declared type (which carries actual type args like `Foo<Bar>`);
+     * fall back to a parameterized reference of the declaring class so the
+     * class-level type-param count still lines up.
+     */
+    private CtTypeReference<?> getCallReceiverTypeRef(CtInvocation<?> in, CtType<?> declType) {
+        final CtExpression<?> target = in.getTarget();
+        if (target != null) {
+            final CtTypeReference<?> tt = target.getType();
+            if (tt != null) return tt;
+        }
+        return SpoonUtils.parameterizedRef(declType);
+    }
+
+    /**
+     * If the receiver type is a genuine instantiation of a generic class,
+     * return (or create) the corresponding ObjectInst. Returns null when the
+     * result is only an ObjectDecl.
+     */
+    @SuppressWarnings("unchecked")
+    private Ref<ObjectInst> getObjectInstForReceiver(CtTypeReference<?> receiverRef, CtClass<?> declClass) throws Exception {
+        final Ref<? extends TypeDesc> td = this.addObjectInst(receiverRef, declClass);
+        if (td == null) return null;
+        if (td.kind() == ConstructKind.OBJECT_INST) return (Ref<ObjectInst>)td;
+        return null;
+    }
+
+    private boolean isUsefulInstantiation(List<Ref<TypeParam>> params, List<Ref<? extends TypeDesc>> args) throws Exception {
+        if (params.size() != args.size()) return false;
+        final CmpOptions options = new CmpOptions();
+        options.useResolved = true;
+        for (int i = 0; i < params.size(); i++) {
+            if (Cmp.run(args.get(i).getCmp(params.get(i), options)) != 0) return true;
+        }
+        return false;
     }
 
     public Ref<Abstract> addAbstract(CtMethod<?> m) throws Exception {

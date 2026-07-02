@@ -303,6 +303,14 @@ public class Analyzer {
 
     private void addInvocationUsage(CtInvocation<?> in) throws Exception {
         if (logUsage) this.log.log("addUsage.CtInvocation: " + SpoonUtils.describeElem(in));
+        // Try to narrow the invocation edge to a per-call MethodInst using the
+        // actual type arguments visible at this call site. Falls back to the
+        // generic MethodDecl when no narrowing is possible.
+        final Ref<? extends Construct> narrowed = this.abs.addMethodInstForCall(in);
+        if (narrowed != null) {
+            this.addInvoke(narrowed);
+            return;
+        }
         this.addExecutableReferenceUsage(in.getExecutable());
     }
 
@@ -384,6 +392,13 @@ public class Analyzer {
             return;
         }
 
+        // When this reference is the executable of a call, the parent handler
+        // (addInvocationUsage / addConstructorCallUsage) has already added the
+        // right invocation edge (a narrowed MethodInst when possible). Skip
+        // here to avoid also adding the generic decl as a duplicate edge.
+        final CtElement parent = er.getParent();
+        if (parent instanceof CtAbstractInvocation) return;
+
         final CtExecutable<?> ex = er.getDeclaration();
 
         // TODO: Finished null investigation.
@@ -432,7 +447,10 @@ public class Analyzer {
                 final Ref<? extends TypeDesc> td = this.abs.addTypeDesc(dt);
                 if (td != null) this.writes.add(td);
             } else {
-                this.invokes.add(this.abs.addMethodDeclForConstructor(ctor));
+                // Narrow the ctor call to a MethodInst using the call's actual
+                // type arguments; falls back to the generic MethodDecl.
+                final Ref<? extends Construct> narrowed = this.abs.addMethodInstForCall(cc);
+                this.addInvoke(narrowed != null ? narrowed : this.abs.addMethodDeclForConstructor(ctor));
             }
         } else {
             this.log.warning("addUsage.CtConstructorCall: expected constructor for " +

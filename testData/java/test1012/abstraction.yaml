@@ -1,4 +1,5 @@
 {
+  FIX: "this has issues in it around the number of methodInsts at minimum. This string is to make the test not pass while I'm fixing the problem.",
   language: java,
   abstracts: [
     { name: baz, signature: 1 }, # 1. baz ???
