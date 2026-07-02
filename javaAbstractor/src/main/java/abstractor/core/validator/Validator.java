@@ -184,8 +184,9 @@ public class Validator {
     }
 
     private void validateMethodInst(MethodInst con) {
-        // Receiver may be null when the method's declaring class is not generic
-        // (e.g. Foo.<S,P>tak(...) on a non-generic Foo). See MethodInst.receiver.
+        // Receiver is either an ObjectInst (when the class is instantiated at
+        // the call site) or an ObjectDecl (when it isn't); it's null only when
+        // the declaring class produced neither. See MethodInst.receiver.
         this.validateChild(con, con.receiver, "receiver", true);
         this.validateChild(con, con.generic,  "generic", false);
         this.validateChild(con, con.resolved, "resolved", false);

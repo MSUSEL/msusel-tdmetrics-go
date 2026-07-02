@@ -539,8 +539,10 @@ func (b *Bar[int]) Foo(value int) { }
 | `index`         | ◯ | ⬤ | The [index](#indices) of this method instance in the projects' `methodInsts` list. |
 | `instanceTypes` | ◯ | ◯ | List of [keys](#keys) to any [type description](#type-descriptions) for type arguments. |
 | `kind`          | ◯ | ⬤ | `methodInst` |
-| `receiver`      | ⬤ | ◯ | The [index](#indices) of the [object instance](#object-instance) for the receiver of this method, if it has one. |
+| `receiver`      | ⬤ | ◯ | The [key](#keys) of the [object instance](#object-instance) or [object](#object) for the receiver of this method, if it has one. |
 | `resolved`      | ◯ | ◯ | The [index](#indices) to the resolved [signature](#signature) this instance defines. |
+
+*TODO:* The change in the receiver from index to key has not been implemented in the Go abstractor nor the C# reader, both need to be updated.
 
 ### Metrics
 

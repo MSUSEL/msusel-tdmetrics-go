@@ -382,13 +382,13 @@ public class Abstractor {
         final boolean methodUseful = isUsefulInstantiation(methodParams, methodArgDescs);
         if (!classUseful && !methodUseful) return this.addDeclaration(m);
 
-        // Look up (or create) the receiver ObjectInst BEFORE pushing our frame.
+        // Look up (or create) the receiver BEFORE pushing our frame.
         // addObjectInst pushes its own frame that copies from prior; if we
         // pushed first, its typeArgs would inherit our method-level bindings
         // and the ObjectInst would end up with the wrong instanceTypes.
-        final Ref<ObjectInst> receiver = classUseful
-            ? this.getObjectInstForReceiver(receiverRef, declClass)
-            : null;
+        // When classUseful is false we still prefer the generic's ObjectDecl
+        // as the receiver so the MethodInst points back at its class.
+        final Ref<? extends TypeDesc> receiver = this.getReceiverForCall(receiverRef, declClass, classUseful);
 
         try {
             this.instantiator.pushFrame();
@@ -406,7 +406,8 @@ public class Abstractor {
                     return new MethodInst(generic, receiver, instanceTypes, resolved);
                 },
                 (Ref<MethodInst> ref, MethodInst mi) -> {
-                    if (receiver != null) receiver.mustGetResolved().methods.add(ref);
+                    if (receiver != null && receiver.getResolved() instanceof ObjectInst recvInst)
+                        recvInst.methods.add(ref);
                 });
         } finally {
             this.instantiator.popFrame();
@@ -459,12 +460,12 @@ public class Abstractor {
         final boolean ctorUseful  = isUsefulInstantiation(ctorParams,  ctorArgDescs);
         if (!classUseful && !ctorUseful) return this.addMethodDeclForConstructor(ctor);
 
-        // Look up (or create) the receiver ObjectInst BEFORE pushing our frame,
+        // Look up (or create) the receiver BEFORE pushing our frame,
         // otherwise addObjectInst's own frame would inherit our ctor bindings
         // and produce an ObjectInst with too many instanceTypes.
-        final Ref<ObjectInst> receiver = classUseful
-            ? this.getObjectInstForReceiver(receiverRef, declClass)
-            : null;
+        // When classUseful is false we still prefer the generic's ObjectDecl
+        // as the receiver so the MethodInst points back at its class.
+        final Ref<? extends TypeDesc> receiver = this.getReceiverForCall(receiverRef, declClass, classUseful);
 
         try {
             this.instantiator.pushFrame();
@@ -482,7 +483,8 @@ public class Abstractor {
                     return new MethodInst(generic, receiver, instanceTypes, resolved);
                 },
                 (Ref<MethodInst> ref, MethodInst mi) -> {
-                    if (receiver != null) receiver.mustGetResolved().methods.add(ref);
+                    if (receiver != null && receiver.getResolved() instanceof ObjectInst recvInst)
+                        recvInst.methods.add(ref);
                 });
         } finally {
             this.instantiator.popFrame();
@@ -505,16 +507,15 @@ public class Abstractor {
     }
 
     /**
-     * If the receiver type is a genuine instantiation of a generic class,
-     * return (or create) the corresponding ObjectInst. Returns null when the
-     * result is only an ObjectDecl.
+     * Resolve the receiver ref for a call-site MethodInst. When the class is
+     * meaningfully instantiated (preferInst==true), returns an ObjectInst ref;
+     * otherwise falls back to the generic ObjectDecl so the MethodInst still
+     * points at its declaring class. Returns null only when neither can be
+     * resolved (e.g. addObjectDecl couldn't produce anything).
      */
-    @SuppressWarnings("unchecked")
-    private Ref<ObjectInst> getObjectInstForReceiver(CtTypeReference<?> receiverRef, CtClass<?> declClass) throws Exception {
-        final Ref<? extends TypeDesc> td = this.addObjectInst(receiverRef, declClass);
-        if (td == null) return null;
-        if (td.kind() == ConstructKind.OBJECT_INST) return (Ref<ObjectInst>)td;
-        return null;
+    private Ref<? extends TypeDesc> getReceiverForCall(CtTypeReference<?> receiverRef, CtClass<?> declClass, boolean preferInst) throws Exception {
+        if (preferInst) return this.addObjectInst(receiverRef, declClass);
+        return this.addObjectDecl(declClass);
     }
 
     private boolean isUsefulInstantiation(List<Ref<TypeParam>> params, List<Ref<? extends TypeDesc>> args) throws Exception {
@@ -705,7 +706,6 @@ public class Abstractor {
                 final String name = field.getSimpleName();
 
                 // TODO: Is this the correct way to get the decl? Does it need to be the instantiated type?
-
                 final Ref<? extends Construct> origin = this.addDeclaration(field.getDeclaringType());
                 return new Selection(name, origin);
             });
@@ -768,7 +768,7 @@ public class Abstractor {
             "type params " + SpoonUtils.describeElem(tp),
             () -> {
                 final String                  name = tp.getSimpleName();
-                // TODO: This does not work. It doesn't handle several bounds like `T extends A & B` (returns just `A`).
+                // TODO: This does not seem to work. Does not seem to handle several bounds like `T extends A & B` (returns just `A`).
                 final CtTypeReference<?>      tr   = tp.getTypeErasure();
                 final Ref<? extends TypeDesc> type = this.addTypeDesc(tr);
                 return new TypeParam(name, type);

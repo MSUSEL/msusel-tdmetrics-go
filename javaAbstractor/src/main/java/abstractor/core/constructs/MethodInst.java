@@ -9,18 +9,18 @@ import abstractor.core.json.*;
 
 public class MethodInst extends ConstructImp implements Method {
     public Ref<MethodDecl> generic;
-    // receiver may be null when the method's declaring class is not itself
-    // instantiated (e.g. calling <S,P> Foo.tak(...) on a non-generic Foo).
-    public Ref<ObjectInst> receiver;
-    // TODO: Consider making this receiver able to be ObjectInst or ObjectDecl
-    // but that would require updating the features in Go, C#, and definition too.
+    // receiver is either the generic's ObjectDecl (when the class isn't
+    // instantiated at this call site) or an ObjectInst (when it is), or
+    // null only when the declaring class produced neither decl nor inst.
+    // Serialized as a key so consumers can tell ObjectDecl from ObjectInst.
+    public Ref<? extends TypeDesc> receiver;
 
     public final ArrayList<Ref<? extends TypeDesc>> instanceTypes = new ArrayList<>();
     public Ref<Signature> resolved;
 
     public MethodInst() {}
 
-    public MethodInst(Ref<MethodDecl> generic, Ref<ObjectInst> receiver,
+    public MethodInst(Ref<MethodDecl> generic, Ref<? extends TypeDesc> receiver,
         List<Ref<? extends TypeDesc>> instanceTypes, Ref<Signature> resolved) {
         this.generic  = generic;
         this.receiver = receiver;
@@ -35,7 +35,7 @@ public class MethodInst extends ConstructImp implements Method {
         JsonObject obj = (JsonObject)super.toJson(h);
         obj.put(        "generic",       index(this.generic));
         obj.put(        "instanceTypes", keyList(this.instanceTypes));
-        obj.putNotEmpty("receiver",      index(this.receiver));
+        obj.putNotEmpty("receiver",      key(this.receiver));
         obj.put(        "resolved",      index(this.resolved));
         return obj;
     }
