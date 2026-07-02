@@ -1,27 +1,27 @@
 {
   language: java,
   abstracts: [
-    { name: baz, signature: 1 }, # 1. ???
-    { name: tak, signature: 2 }, # 2. ???
+    { name: baz, signature: 1 }, # 1. baz ???
+    { name: tak, signature: 2 }, # 2. tak ???
   ],
   arguments: [
-    {          type: basic3      }, # 1. ???
-    {          type: object1     }, # 2. ???
-    {          type: objectInst1 }, # 3. ???
-    { name: p, type: typeParam1  }, # 4. ???
-    { name: s, type: typeParam2  }, # 5. ???
-    { name: t, type: typeParam2  }, # 6. ???
-    { name: t, type: typeParam3  }, # 7. ???
-    { name: u, type: typeParam4  }, # 8. ???
+    {          type: basic3      }, # 1. <unnamed> string
+    {          type: object1     }, # 2. <unnamed> ???
+    {          type: objectInst1 }, # 3. <unnamed> ???
+    { name: p, type: typeParam1  }, # 4. p ???
+    { name: s, type: typeParam2  }, # 5. s ???
+    { name: t, type: typeParam2  }, # 6. t ???
+    { name: t, type: typeParam3  }, # 7. t ???
+    { name: u, type: typeParam4  }, # 8. u ???
   ],
   basics: [ double, int, string ],
   fields: [
-    { name: $nest, type: object2             }, # 1. ???
-    { name: str,   type: basic3, vis: public }, # 2. ???
+    { name: $nest, type: object2             }, # 1. $nest ???
+    { name: str,   type: basic3, vis: public }, # 2. str string
   ],
   interfaceDescs: [
     { abstracts: [ 1, 2 ], pin: object2 }, # 1. ???
-    { abstracts: [ ]                    }, # 2. ???
+    { abstracts: [ ]                    }, # 2. any
   ],
   methodInsts: [
     { # 1. ???
@@ -48,46 +48,46 @@
     { # 1. ???
       loc: 3, codeCount: 3, complexity: 1, indents: 3, lineCount: 3,
       reads: [
-        basic3,
-        interfaceDesc2,
-        object1,
-        object2,
-        selection1,
-        typeParam3,
-        typeParam4,
+        basic3,         # string
+        interfaceDesc2, #
+        object1,        #
+        object2,        #
+        selection1,     #
+        typeParam3,     #
+        typeParam4,     #
       ],
       writes: [
-        basic3,
-        selection1,
+        basic3,     # string
+        selection1, #
       ],
     },
     { # 2. ???
       loc: 9, codeCount: 3, complexity: 1, indents: 1, lineCount: 3,
       invokes: [
-        method1,
+        method1, #
       ],
       reads: [
-        basic3,
-        interfaceDesc2,
-        object1,
-        object2,
-        objectInst1,
-        selection1,
-        typeParam1,
-        typeParam2,
+        basic3,         # string
+        interfaceDesc2, #
+        object1,        #
+        object2,        #
+        objectInst1,    #
+        selection1,     #
+        typeParam1,     #
+        typeParam2,     #
       ],
     },
     { # 3. ???
       loc: 13, codeCount: 3, complexity: 1, indents: 1, lineCount: 3,
       invokes: [
-        method3,
+        method3, #
       ],
       reads: [
-        basic1,
-        basic2,
-        basic3,
-        interfaceDesc2,
-        object2,
+        basic1,         # double
+        basic2,         # int
+        basic3,         # string
+        interfaceDesc2, #
+        object2,        #
       ],
     },
   ],
@@ -127,14 +127,14 @@
     { params: [ 7, 8 ], results: [ 2 ] }, # 4. ???
   ],
   structDescs: [
-    {                  }, # 1. ???
-    { fields: [ 2, 1 ] }, # 2. ???
+    {                  }, # 1. struct{}
+    { fields: [ 2, 1 ] }, # 2. struct{ ??? }
   ],
   typeParams: [
-    { name: P, type: interfaceDesc2 }, # 1. ???
-    { name: S, type: interfaceDesc2 }, # 2. ???
-    { name: T, type: interfaceDesc2 }, # 3. ???
-    { name: U, type: interfaceDesc2 }, # 4. ???
+    { name: P, type: interfaceDesc2 }, # 1. P any
+    { name: S, type: interfaceDesc2 }, # 2. S any
+    { name: T, type: interfaceDesc2 }, # 3. T any
+    { name: U, type: interfaceDesc2 }, # 4. U any
   ],
   locs: { 1: ClassesFromSource.java },
 }

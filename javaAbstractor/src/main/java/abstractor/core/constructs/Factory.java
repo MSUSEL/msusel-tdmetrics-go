@@ -50,10 +50,6 @@ public class Factory<T extends Construct> implements Jsonable {
         return c.equals(other) ? other : null;
     }
 
-    private List<Ref<T>> findRefsForCon(T con) {
-        return this.refSet.stream().filter(r -> con.equals(r.getResolved())).toList();
-    }
-
     //==========================================================================
 
     @FunctionalInterface
@@ -290,8 +286,10 @@ public class Factory<T extends Construct> implements Jsonable {
             // Found another construct that is equal so move all references over
             // to the existing construct since the duplicate is about to be removed.
             collision = true;
-            List<Ref<T>> refs = this.findRefsForCon(con);
-            for (Ref<T> ref : refs) ref.setResolved(existing);
+            for (Ref<T> ref : this.refSet) {
+                if (con.equals(ref.getResolved()))
+                    ref.setResolved(existing);
+            }
             con.setIndex(-100);
         }
         return collision;
@@ -317,9 +315,11 @@ public class Factory<T extends Construct> implements Jsonable {
                     obj.put("resolved", node);
                 }
 
-                List<Ref<T>> refs = this.findRefsForCon(t);
                 JsonArray refList = new JsonArray();
-                for (Ref<T> r : refs) refList.add(r.refToJson(h));
+                for (Ref<T> ref : this.refSet) {
+                    if (t.equals(ref.getResolved()))
+                        refList.add(ref.refToJson(h));
+                }
                 obj.put("refs", refList);
                 node = obj;
             }

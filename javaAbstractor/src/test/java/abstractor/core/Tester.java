@@ -11,7 +11,7 @@ import abstractor.core.constructs.*;
 import abstractor.core.diff.Diff;
 import abstractor.core.iter.Iter;
 import abstractor.core.json.*;
-import abstractor.core.log.Logger;
+import abstractor.core.log.*;
 
 public class Tester {
     static final int logOutputLinesMax = 2000;
@@ -38,7 +38,7 @@ public class Tester {
     public Tester(int depth) {
         this.buffer = new ByteArrayOutputStream();
         PrintStream ps = new PrintStream(buffer);
-        this.log = new Logger(true, ps, ps);
+        this.log = new Logger(Level.All, ps, ps);
 
         this.log.log("");
         this.log.log("Testing " + getTestMethodName(depth) + "...");

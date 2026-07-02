@@ -940,9 +940,7 @@ public class Abstractor {
             this.processPackage(pkg);
             this.processPendingMetrics();
         }
-
         this.consolidateCons();
-
         this.crossConnectConstructs();
     }
 
@@ -1012,7 +1010,14 @@ public class Abstractor {
         this.proj.setAllIndices();
     }
 
+    /**
+     * Cross connect currently only adds all the declarations into the lists
+     * in the packages for the type of declaration in the package.
+     */
     private void crossConnectConstructs() throws Exception {
+        this.log.log("cross connect constructs");
+
+
         for (MethodDecl m : this.proj.methodDecls.getConSet()) {
             final PackageCon pkg = m.pkg.mustGetResolved();
             if (pkg == null) this.log.error("package for method is null: " + m);

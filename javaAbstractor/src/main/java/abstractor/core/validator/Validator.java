@@ -1,14 +1,14 @@
 package abstractor.core.validator;
 
-import abstractor.core.log.Logger;
-
 import java.util.*;
 
 import abstractor.core.constructs.*;
-import abstractor.core.json.JsonFormat;
-import abstractor.core.json.JsonHelper;
+import abstractor.core.json.*;
+import abstractor.core.log.*;
 
 public class Validator {
+    static private boolean addBlackLineBetweenErrors = false;
+
     final public Logger log;
     final public Project proj;
     private int errCount;
@@ -26,10 +26,16 @@ public class Validator {
 
     public int errorCount() { return this.errCount; }
 
-    private void error(String text) {
+    /**
+     * Outputs a validation error.
+     * @param id A unique identifier for the specific of error
+     *           kind to help group similar issues.
+     * @param text The text of the error to write.
+     */
+    private void error(String id, String text) {
         this.errCount++;
-        String prefix = "Validation Error " + this.errCount + ". ";
-        if (this.errCount > 1) prefix = "\n" + prefix;
+        String prefix = "Validation Error " + this.errCount + ". [" + id + "] ";
+        if (addBlackLineBetweenErrors && this.errCount > 1) prefix = "\n" + prefix;
         this.log.error(prefix + text);
     }
 
@@ -45,7 +51,7 @@ public class Validator {
     private String consToString(List<? extends Construct> cons) {
         final int consSize = cons.size();
         if (consSize <= 0) return "[ ]";
-        //if (consSize == 1) return "[ " + this.conToString(cons.get(0)) + " ]";
+        if (consSize == 1) return "[ " + this.conToString(cons.get(0)) + " ]";
 
         List<String> parts = new ArrayList<>(consSize);
         for (Construct con : cons) parts.add(this.conToString(con));
@@ -63,22 +69,22 @@ public class Validator {
 
     private void validateRef(Factory<? extends Construct> factory, Ref<? extends Construct> ref, String usage) {
         if (ref.kind() != factory.kind())
-            this.error("Expected all references to have the kind of the factory but " + this.conToString(ref) +
+            this.error("0100", "Expected all references to have the kind of the factory but " + this.conToString(ref) +
                 " (" + usage + ") was " + ref.kind() + " in " + factory + " with the kind " + factory.kind() + ".");
 
         if (!this.foundInFactory(ref))
-            this.error("Expected all references to exist in factory but " +
+            this.error("0110", "Expected all references to exist in factory but " +
                 this.conToString(ref) + " (" + usage + ") was not in factory.");
 
         if (!ref.isResolved()) {
-            this.error("Expected all references to be resolved but " +
+            this.error("0120", "Expected all references to be resolved but " +
                 this.conToString(ref) + " (" + usage + ") was not resolved.");
             return;
         }
 
         final Construct con = ref.getResolved();
         if (!this.foundInFactory(con))
-            this.error("Expected all resolved references to exist in factory but " +
+            this.error("0130", "Expected all resolved references to exist in factory but " +
                 this.conToString(ref) + " (" + usage + ") resolved to " + this.conToString(con) +
                 " was not in factory.");
     }
@@ -95,14 +101,14 @@ public class Validator {
 
     private void validateCon(Factory<? extends Construct> factory, Construct con) {
         if (con.kind() != factory.kind())
-            this.error("Expected all constructs to have the kind of the factory but " +
+            this.error("0200", "Expected all constructs to have the kind of the factory but " +
                 this.conToString(con) + " was " + con.kind() + " in " + factory +
                 " with the kind " + factory.kind() + ".");
 
         final int index = con.getIndex();
         final int count = factory.size();
         if (index <= 0 || index > count)
-            this.error("The construct " + this.conToString(con) + " has invalid index " +
+            this.error("0210", "The construct " + this.conToString(con) + " has invalid index " +
                 index + " should be [1.." + count + "].");
 
         if (con instanceof Abstract      a) { this.validateAbstract(a);      return; } 
@@ -123,7 +129,7 @@ public class Validator {
         if (con instanceof StructDesc    a) { this.validateStructDesc(a);    return; }
         if (con instanceof TypeParam     a) { this.validateTypeParam(a);     return; }
         if (con instanceof Value         a) { this.validateValue(a);         return; }
-        this.error("The construct " + this.conToString(con) +
+        this.error("0220", "The construct " + this.conToString(con) +
             " did not have a specific type validation method.");
     }
 
@@ -136,9 +142,9 @@ public class Validator {
     }
 
     private void validateBasic(Basic con) {
-        if (con.name.isBlank())      this.error("Basic name is black.");
-        else if (con.name == "void") this.error("Basic name is \"void\".");
-        else if (con.name == "null") this.error("Basic name is \"null\".");
+        if (con.name.isBlank())      this.error("0300", "Basic name is black.");
+        else if (con.name == "void") this.error("0310", "Basic name is \"void\".");
+        else if (con.name == "null") this.error("0320", "Basic name is \"null\".");
     }
 
     private void validateField(Field con) {
@@ -149,6 +155,7 @@ public class Validator {
         this.validateChild(con, con.inter, "inter", false);
         this.validateChildren(con, con.typeParams, "typeParams", true);
         this.validateChildren(con, con.instances,  "instances", true);
+        this.validateNests(con);
     }
 
     private void validateInterfaceDesc(InterfaceDesc con) {
@@ -173,6 +180,7 @@ public class Validator {
         this.validateChildren(con, con.typeParams, "typeParams", true);
         this.validateChildren(con, con.instances,  "instances", true);
         this.validateChild(con, con.metrics, "metrics", true);
+        this.validateNests(con);
     }
 
     private void validateMethodInst(MethodInst con) {
@@ -198,6 +206,7 @@ public class Validator {
         this.validateChildren(con, con.methodDecls, "methodDecls", true);
         this.validateChildren(con, con.typeParams,  "typeParams", true);
         this.validateChildren(con, con.instances,   "instances", true);
+        this.validateNests(con);
     }
 
     private void validateObjectInst(ObjectInst con) {
@@ -221,7 +230,7 @@ public class Validator {
 
     private void validateSelection(Selection con) {
         if (con.name.isBlank())
-            this.error("Selection name is blank in " + this.conToString(con) + ".");
+            this.error("0400", "Selection name is blank in " + this.conToString(con) + ".");
         this.validateChild(con, con.origin, "origin", false);
     }
 
@@ -236,26 +245,27 @@ public class Validator {
 
     private void validateTypeParam(TypeParam con) {
         if (con.name.isBlank())
-            this.error("Type param name is blank in " + this.conToString(con) + ".");
+            this.error("0500", "Type param name is blank in " + this.conToString(con) + ".");
         this.validateChild(con, con.type, "type", false);
     }
 
     private void validateValue(Value con) {
         this.validateChild(con, con.type,    "type",    false);
         this.validateChild(con, con.metrics, "metrics", true);
+        this.validateNests(con);
     }
 
     private void validateInstantiation(Construct decl, Construct inst, List<Ref<TypeParam>> typeParams, List<Ref<? extends TypeDesc>> instanceTypes) {
         final int typeParamSize = typeParams.size();
         if (typeParamSize <= 0)
-            this.error("The declaration " + this.conToString(decl) + " had instances but has " +
+            this.error("0600", "The declaration " + this.conToString(decl) + " had instances but has " +
                 typeParamSize + " type parameters.");
 
         final int instanceTypeSize = instanceTypes.size();
         // Must be partially of fully implemented instance. Partially implemented
         // occurs when the nest is an instance but the method is still generic.
         if (typeParamSize < instanceTypeSize)
-            this.error("The declaration " + this.conToString(decl) + " had " + typeParamSize +
+            this.error("0610", "The declaration " + this.conToString(decl) + " had " + typeParamSize +
                 " (" + this.consToString(typeParams) + ") type parameters which must be greater than or equal to the instance " +
                 this.conToString(inst) + " that had " + instanceTypeSize + " (" +
                 this.consToString(instanceTypes) + ") type arguments.");
@@ -269,13 +279,13 @@ public class Validator {
             }
         }
         if (match)
-            this.error("The declaration " + this.conToString(decl) + " and the instance " +
+            this.error("0620", "The declaration " + this.conToString(decl) + " and the instance " +
                 this.conToString(inst) + " had the same (" + count + ") type parameters.");
     }
     
     private void validateChildren(Construct parent, Iterable<? extends Ref<? extends Construct>> children, String usage, boolean maybeEmpty) {
         if (children == null) {
-            this.error("The collection of children (" + usage + ") in " + this.conToString(parent) + " is null.");
+            this.error("0700", "The collection of children (" + usage + ") in " + this.conToString(parent) + " is null.");
             return;
         }
         int index = 0;
@@ -284,17 +294,28 @@ public class Validator {
             index++;
         }
         if (!maybeEmpty && index == 0)
-            this.error("The collection of children (" + usage + ") in " + this.conToString(parent) + " is empty.");
+            this.error("0710", "The collection of children (" + usage + ") in " + this.conToString(parent) + " is empty.");
     }
     
     private void validateChild(Construct parent, Ref<? extends Construct> child, String usage, boolean maybeNull) {
         if (child == null) {
             if (!maybeNull)
-                this.error("The child (" + usage + ") in a " + parent.kind() + " is null: " + this.conToString(parent));
+                this.error("0800", "The child (" + usage + ") in a " + parent.kind() + " is null: " + this.conToString(parent));
             return;
         }
 
         final Factory<? extends Construct> factory = this.proj.getFactory(child.kind());
         this.validateRef(factory, child, parent + "." +usage);
+    }
+
+    /**
+     * This will check that the nests are connected correctly.
+     *
+     * This will not perform a cycle check on nests to determine if there is a loop
+     * since that is very unlikely but a loop check could be very slow.
+     */
+    private void validateNests(DeclarationImp decl) {
+        // TODO: Implement check that each nest has an entry in "decl"'s nest's nestedTypes
+        //       and that each nestedType has it's nest pointed back at "decl".
     }
 }

@@ -7,23 +7,12 @@
   Print a short summary of the sizes before consolidation and some logs
   during so that we can see the progress.
 
-2. [ ] **Try to do post write validation and/or validation of yaml.**
-   The validation is failing on the target projects but it would be better
-   to be able to review the yaml when trying to handle the validation problems.
-
-3. [ ] **Improve logs during normal runs.**
+2. [ ] **Improve logs during normal runs.**
    Add an config options to write the logs to a file. Allow simplified output
    to help us determine how much longer it will take to finish some work and
    limit the noise. This means we might have a mode where it shows percentage
    complete. Select message level to output and to push/pop at.
    Also add timing output that tells how long something took.
-
-4. [ ] **Add better file/line outputs for debugging.** It appears some of the
-   output isn't showing the file path but only the line numbers.
-
-5. [ ] **Improve validation errors output.** Add an optional limit to the number
-   of errors. Add a unique number for the different types of checks so that they
-   can be laster grouped by how many of one type is failing.
 
 ## Spoon usage caveats / corrections
 
@@ -85,8 +74,3 @@
 
 4. [ ] **Package imports are not derived yet.** Already noted in `Abstractor.performAbstraction`'s
   comment; agree it's still pending and ties into the planned Resolver pipeline.
-
-5. [ ] **`Validator` runs after `crossConnectConstructs`, but `crossConnectConstructs`**
-  **itself does no nesting checks.** If `obj.setNest(...)` was missed for a nested type,
-  the validator may not catch it. Worth adding a validator pass that confirms
-  every `obj.nest != null` iff `obj.getDeclaringType() instanceof CtType`.

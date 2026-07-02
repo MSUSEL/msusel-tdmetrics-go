@@ -4,10 +4,13 @@ import java.io.PrintStream;
 import java.util.Stack;
 
 public class Logger {
-    public final boolean verbose;
+    final static private String defaultIndent = "  ";
+
+    public final Level level;
     private final PrintStream out;
     private final PrintStream err;
     private final Stack<String> indents;
+    private int notices;
     private int warnings;
     private int errors;
 
@@ -22,10 +25,10 @@ public class Logger {
     static public final String colorWhite   = "\u001b[37m";
     static public final String colorReset   = "\u001b[0m";
     
-    public Logger(boolean verbose) { this(verbose, null, null); }
+    public Logger(Level level) { this(level, null, null); }
 
-    public Logger(boolean verbose, PrintStream out, PrintStream err) {
-        this.verbose = verbose;
+    public Logger(Level level, PrintStream out, PrintStream err) {
+        this.level = level;
         this.out = out != null ? out : System.out;
         this.err = err != null ? err : System.err;
         this.indents = new Stack<String>();
@@ -37,7 +40,13 @@ public class Logger {
         return this.indents.empty() ? "" : this.indents.peek();
     }
 
-    private void write(PrintStream out, String color, String text) {
+    public boolean writesLevel(Level level) {
+        return this.level.Contains(level);
+    }
+
+    private void write(PrintStream out, Level level, String color, String text) {
+        if (!this.writesLevel(level)) return;
+
         final String indent = this.indent();
         String head = indent;
         String tail = "";
@@ -48,13 +57,14 @@ public class Logger {
         out.println(head + text.replace("\n", "\n"+indent) + tail);
     }
     
+    public int noticeCount() { return this.notices; }
+
     public int warningCount() { return this.warnings; }
 
     public int errorCount() { return this.errors; }
     
     public void logWithColor(String ansiColor, String text) {
-        if (!this.verbose) return;
-        this.write(this.out, ansiColor, text);
+        this.write(this.out, Level.Normal, ansiColor, text);
     }
 
     public void log(String text) {
@@ -66,8 +76,8 @@ public class Logger {
     }
     
     public void notice(String text) {
-        if (!this.verbose) return;
-        this.write(this.out, colorBlue, text);
+        this.notices++;
+        this.write(this.out, Level.Notice, colorBlue, text);
     }
 
     public void noticeIf(boolean condition, String text) {
@@ -75,9 +85,8 @@ public class Logger {
     }
 
     public void warning(String text) {
-        if (!this.verbose) return;
         this.warnings++;
-        this.write(this.out, colorYellow, text);
+        this.write(this.out, Level.Warning, colorYellow, text);
     }
 
     public void warningIf(boolean condition, String text) {
@@ -86,20 +95,28 @@ public class Logger {
 
     public void error(String text) {
         this.errors++;
-        this.write(this.err, colorRed, text);
+        this.write(this.err, Level.Error, colorRed, text);
     }
 
     public void errorIf(boolean condition, String text) {
         if (condition) this.error(text);
     }
     
-    public void push() { this.push("  "); }
+    public void push() { this.push(Level.Normal, defaultIndent); }
     
-    public void push(String indent) {
+    public void push(Level level) { this.push(level, defaultIndent); }
+
+    public void push(String indent) { this.push(Level.Normal, indent); }
+    
+    public void push(Level level, String indent) {
+        if (!this.writesLevel(level)) return;
         this.indents.push(this.indent() + indent);
     }
 
-    public void pop() {
+    public void pop() { this.pop(Level.Normal); }
+    
+    public void pop(Level level) {
+        if (!this.writesLevel(level)) return;
         if (!this.indents.empty()) this.indents.pop();
     }
 }
