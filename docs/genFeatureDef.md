@@ -542,8 +542,6 @@ func (b *Bar[int]) Foo(value int) { }
 | `receiver`      | ⬤ | ◯ | The [key](#keys) of the [object instance](#object-instance) or [object](#object) for the receiver of this method, if it has one. |
 | `resolved`      | ◯ | ◯ | The [index](#indices) to the resolved [signature](#signature) this instance defines. |
 
-*TODO:* The change in the receiver from index to key has not been implemented in the Go abstractor nor the C# reader, both need to be updated.
-
 ### Metrics
 
 A metrics (`metrics`) is measurements done to a set of expressions.

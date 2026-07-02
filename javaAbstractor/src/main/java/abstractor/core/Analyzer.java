@@ -323,12 +323,7 @@ public class Analyzer {
             if (tr.isArray()) return;
         }
 
-        final CtField<?> field = ref.getFieldDeclaration();
-        if (field == null) {
-            this.log.warning("addUsage.CtFieldRead: no field declaration for " + SpoonUtils.describeElem(ref));
-            return;
-        }
-        this.addRead(this.abs.addSelection(field));
+        this.addRead(this.abs.addSelection(ref));
     }
 
     private void addTypeAccessUsage(CtTypeAccess<?> ta) throws Exception {
@@ -355,12 +350,7 @@ public class Analyzer {
 
     private void addFieldWriteUsage(CtFieldWrite<?> fw) throws Exception {
         if (logUsage) this.log.log("addUsage.CtFieldWrite: " + SpoonUtils.describeElem(fw));
-        final CtField<?> field = fw.getVariable().getFieldDeclaration();
-        if (field == null) {
-            this.log.warning("addUsage.CtFieldWrite: no field declaration for " + SpoonUtils.describeElem(fw));
-            return;
-        }
-        this.addWrite(this.abs.addSelection(field));
+        this.addWrite(this.abs.addSelection(fw.getVariable()));
     }
     
     private void addFieldReferenceUsage(CtFieldReference<?> fr) throws Exception {
@@ -371,12 +361,7 @@ public class Analyzer {
             if (tr.isArray()) return;
         }
 
-        final CtField<?> field = fr.getFieldDeclaration();
-        if (field == null) {
-            this.log.warning("addUsage.CtFieldReference: no field declaration for " + SpoonUtils.describeElem(fr));
-            return;
-        }
-        this.addRead(this.abs.addSelection(field));
+        this.addRead(this.abs.addSelection(fr));
     }
 
     private void addListOfTypeArgsUsages(List<CtTypeReference<?>> typeArgs) throws Exception {

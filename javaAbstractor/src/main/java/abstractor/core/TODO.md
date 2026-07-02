@@ -92,3 +92,14 @@
   returns `null` (with a `Logger.notice`) when the declaring type can't be
   tracked. `Analyzer.addRead` / `addWrite` are null-safe. Was responsible for
   1 of the 1047 validation errors on `commons-bcel`.
+
+7. [x] **`addSelection` used `field.getDeclaringType()`, so `origin` was always
+  a decl even when the call site had enough info to bind an instantiation** —
+  `Selection.origin` is now serialized as a polymorphic key (same schema shift
+  as `MethodInst.receiver`), so it can hold ObjectDecl / ObjectInst /
+  InterfaceDecl / InterfaceInst. `addSelection` now takes a `CtFieldReference`,
+  routes the reference's declaring type through `addTypeDesc` (which returns
+  an ObjectInst / InterfaceInst when the ref carries type args), and keys the
+  cache on `(field, receiver-type-args)` so different instantiations of the
+  same field yield distinct Selections. Falls back to the plain declaration
+  when the receiver ref has no args or Spoon can't resolve them.

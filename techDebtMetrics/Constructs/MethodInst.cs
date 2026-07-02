@@ -25,10 +25,10 @@ public class MethodInst : IMethod, IConstruct, IInitializable<Project> {
     private readonly List<ITypeDesc> inInstanceTypes = [];
 
     /// <summary>
-    /// This the optional object instance this method instance is defined as a member of
+    /// This the optional object or object instance this method instance is defined as a member of
     /// or null if the method is a function instance on it's own in the package.
     /// </summary>
-    public ObjectInst? Receiver { get; private set; }
+    public IObject? Receiver { get; private set; }
 
     /// <summary>The method signature type description for this instance.</summary>
     public Signature Signature => this.inSignature ??
@@ -47,7 +47,7 @@ public class MethodInst : IMethod, IConstruct, IInitializable<Project> {
         this.Index = index;
         Object obj = node.AsObject();
         this.inGeneric = obj.ReadIndex("generic", project.MethodDecls);
-        this.Receiver = obj.TryReadIndex("receiver", project.ObjectInsts);
+        this.Receiver = obj.TryReadKey(project, "receiver");
         this.inSignature = obj.ReadIndex("resolved", project.Signatures);
         obj.ReadKeyList(project, "instanceTypes", this.inInstanceTypes);
         this.Signature.AddUses(this);

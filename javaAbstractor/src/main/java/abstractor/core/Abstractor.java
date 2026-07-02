@@ -710,25 +710,42 @@ public class Abstractor {
             });
     }
 
-    public Ref<Selection> addSelection(CtField<?> field) throws Exception {
-        // TODO: Is this the correct way to get the decl? Does it need to be the instantiated type?
-
-        // Resolve the origin up front: if the declaring type isn't trackable
-        // (unresolvable shadow, unhandled kind, etc.) the Selection would have
-        // a null origin (which is not useful and rejected by the validator).
-        final Ref<? extends Construct> origin = this.addDeclaration(field.getDeclaringType());
-        if (origin == null) {
-            this.log.notice("Skipping selection with no resolvable origin: " + SpoonUtils.describeElem(field));
+    public Ref<Selection> addSelection(CtFieldReference<?> ref) throws Exception {
+        if (ref == null) return null;
+        final CtField<?> field = ref.getFieldDeclaration();
+        if (field == null) {
+            this.log.notice("Skipping selection with no field declaration: " + SpoonUtils.describeElem(ref));
             return null;
         }
 
-        final ElementKey key = new ElementKey(field, this.instantiator.typeArgs(true));
+        // Resolve the origin from the reference's declaring type first so we
+        // capture the actual instantiation at the call site (e.g. Foo<Integer>
+        // yields an ObjectInst, plain Foo yields an ObjectDecl). Fall back to
+        // the field's declaring type if the reference doesn't carry one. If
+        // neither is trackable the Selection would have a null origin (which
+        // is not useful and rejected by the validator) so skip the Selection;
+        // Analyzer callers (addRead / addWrite) are null-safe.
+        final CtTypeReference<?> receiverRef = ref.getDeclaringType();
+        Ref<? extends Construct> originResolved = null;
+        if (receiverRef != null) originResolved = this.addTypeDesc(receiverRef);
+        if (originResolved == null) originResolved = this.addDeclaration(field.getDeclaringType());
+        if (originResolved == null) {
+            this.log.notice("Skipping selection with no resolvable origin: " + SpoonUtils.describeElem(field));
+            return null;
+        }
+        final Ref<? extends Construct> origin = originResolved;
+
+        // Key on the field plus the receiver's actual type args so different
+        // instantiations of the same field (Foo<Integer>.x vs Foo<String>.x)
+        // produce distinct Selections.
+        final ArrayList<CtTypeReference<?>> receiverArgs = new ArrayList<>();
+        this.collectActualTypeArgs(receiverRef, receiverArgs);
+        final List<Ref<? extends TypeDesc>> keyArgs = this.addTypeArguments(receiverArgs);
+
+        final ElementKey key = new ElementKey(field, keyArgs);
         return this.proj.selections.create(this.log, key,
             "select field " + SpoonUtils.describeElem(field),
-            () -> {
-                final String name = field.getSimpleName();
-                return new Selection(name, origin);
-            });
+            () -> new Selection(field.getSimpleName(), origin));
     }
 
     public Ref<? extends TypeDesc> addArray(CtArrayTypeReference<?> tr) throws Exception {
