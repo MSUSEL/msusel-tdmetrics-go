@@ -317,7 +317,28 @@ public class Validator {
      * since that is very unlikely but a loop check could be very slow.
      */
     private void validateNests(DeclarationImp decl) {
-        // TODO: Implement check that each nest has an entry in "decl"'s nest's nestedTypes
-        //       and that each nestedType has it's nest pointed back at "decl".
+        // Down-link: if decl has a nest, that nest's nestedTypes must
+        // contain a ref that resolves back to decl.
+        if (decl.nest != null && decl.nest.isResolved() &&
+            decl.nest.getResolved() instanceof DeclarationImp pd) {
+            boolean found = false;
+            for (Ref<? extends TypeDesc> nt : pd.nestedTypes) {
+                if (nt != null && nt.getResolved() == decl) { found = true; break; }
+            }
+            if (!found)
+                this.error("0900", "The declaration " + this.conToString(decl) +
+                    " has nest " + this.conToString(pd) +
+                    " but that nest's nestedTypes does not contain a back reference.");
+        }
+
+        // Up-link: each nested type's .nest must resolve back to decl.
+        for (Ref<? extends TypeDesc> nt : decl.nestedTypes) {
+            if (nt == null || !nt.isResolved()) continue;
+            if (!(nt.getResolved() instanceof DeclarationImp cd)) continue;
+            if (cd.nest == null || cd.nest.getResolved() != decl)
+                this.error("0910", "The declaration " + this.conToString(decl) +
+                    " lists " + this.conToString(cd) +
+                    " as nested but that nested's nest does not point back to it.");
+        }
     }
 }

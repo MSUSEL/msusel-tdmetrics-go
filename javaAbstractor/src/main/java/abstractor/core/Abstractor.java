@@ -1181,8 +1181,7 @@ public class Abstractor {
     }
 
     // TODO: Implement package imports by deriving from actual type usage
-    //       rather than import statements. This will be done in a later step
-    //       when the Resolver pipeline is created.
+    //       rather than import statements.
 
     public Ref<PackageCon> processPackage(CtPackage pkg) throws Exception {
         return this.proj.packages.create(this.log, new ElementKey(pkg),
@@ -1252,7 +1251,6 @@ public class Abstractor {
      */
     private void crossConnectConstructs() throws Exception {
         this.log.log("cross connect constructs");
-
 
         for (MethodDecl m : this.proj.methodDecls.getConSet()) {
             final PackageCon pkg = m.pkg.mustGetResolved();

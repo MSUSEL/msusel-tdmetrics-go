@@ -74,9 +74,9 @@
   alone will miss inherited fields. Possibly intentional; document if so.
 
 4. [ ] **Package imports are not derived yet.** Already noted in `Abstractor.performAbstraction`'s
-  comment; agree it's still pending and ties into the planned Resolver pipeline.
+  comment; agree it's still pending.
 
-5. [x] **`addMethodDeclOrAbstract` / `addMethodDeclForConstructor` don't gate on shadow types** —
+1. [x] **`addMethodDeclOrAbstract` / `addMethodDeclForConstructor` don't gate on shadow types** —
   both single-arg overloads now bail out with a `Logger.notice` when
   `decl.isShadow()` (methods) or `c.isShadow()` (constructors), so the
   `addDeclaration` path no longer materializes shadow JDK/library methods into
@@ -87,13 +87,13 @@
   errors on `commons-bcel`; longer-term the named-stub-`InterfaceDecl` plan
   (Step 5 in Behavior gaps) will replace `null` with real stubs.
 
-6. [x] **`addSelection` creates a Selection with `origin = null` when the field's declaring
+1. [x] **`addSelection` creates a Selection with `origin = null` when the field's declaring
   type can't be resolved** — `addSelection` now resolves `origin` up front and
   returns `null` (with a `Logger.notice`) when the declaring type can't be
   tracked. `Analyzer.addRead` / `addWrite` are null-safe. Was responsible for
   1 of the 1047 validation errors on `commons-bcel`.
 
-7. [x] **`addSelection` used `field.getDeclaringType()`, so `origin` was always
+1. [x] **`addSelection` used `field.getDeclaringType()`, so `origin` was always
   a decl even when the call site had enough info to bind an instantiation** —
   `Selection.origin` is now serialized as a polymorphic key (same schema shift
   as `MethodInst.receiver`), so it can hold ObjectDecl / ObjectInst /
