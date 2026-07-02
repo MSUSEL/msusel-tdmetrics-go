@@ -46,9 +46,10 @@ func (c Config) toParseConfig() *packages.Config {
 		Mode:       allNeeds,
 	}
 
-	if c.Verbose {
+	logPackages := false
+	if c.Verbose && logPackages {
 		cfg.Logf = func(format string, args ...any) {
-			fmt.Printf(format+"\n", args...)
+			fmt.Printf("golang.org/x/tools/go/packages > "+format+"\n", args...)
 		}
 	}
 

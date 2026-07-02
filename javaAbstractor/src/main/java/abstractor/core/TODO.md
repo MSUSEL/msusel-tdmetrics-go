@@ -76,27 +76,19 @@
 4. [ ] **Package imports are not derived yet.** Already noted in `Abstractor.performAbstraction`'s
   comment; agree it's still pending and ties into the planned Resolver pipeline.
 
-5. [ ] **`addMethodDeclOrAbstract` / `addMethodDeclForConstructor` don't gate on shadow types.**
-  When analyzer sees a call to a JDK / third-party method (e.g. `x.getClass().getName()`,
-  `throw new RuntimeException(...)`), `addDeclaration` routes through
-  `addMethodDeclOrAbstract` which unconditionally does `addObjectDecl((CtClass<?>)decl)` for
-  the shadow declaring class, then builds a `MethodDecl` for the shadow method. Shadow decls
-  loaded from `.class` reflectively have `getFormalCtTypeParameters()` return an empty list
-  even when the source declares type params (e.g. `Class<T>`), so the resulting `MethodDecl`
-  has `typeParams: []`. When any generic instantiation of that class walks its methods, the
-  produced `MethodInst` carries the class-level `instanceTypes`, and the validator rejects it
-  (`[0600]`/`[0610]`/`[0620]`). Simplest fix: bail out to `anyDesc()` (or `null`) in both
-  methods when `decl.isShadow()`; longer-term this ties into Step 5's named-stub-`InterfaceDecl`s
-  target. Was responsible for ~1046 of the 1047 validation errors on `commons-bcel`.
-  Note: three attempts to reproduce with a small single-file test (`this.getClass().getName()`,
-  `throw new RuntimeException` inside `<T>` method, generic wrapper class using `ArrayList<T>` +
-  `IndexOutOfBoundsException`) all produced clean runs after the call-site MethodInst work,
-  so the specific bcel repro pattern isn't obvious. Keeping the guard planned since the code
-  path that made the bad `MethodDecl`s is still reachable and bcel exercises it.
+5. [x] **`addMethodDeclOrAbstract` / `addMethodDeclForConstructor` don't gate on shadow types** —
+  both single-arg overloads now bail out with a `Logger.notice` when
+  `decl.isShadow()` (methods) or `c.isShadow()` (constructors), so the
+  `addDeclaration` path no longer materializes shadow JDK/library methods into
+  `MethodDecl`s whose typeParams (stripped by Spoon at shadow load) mismatch
+  their `MethodInst`'s instanceTypes. The two-arg overloads are unchanged
+  because their callers (e.g. `addObjectInst`'s ctor loop) have already
+  committed to the receiver. Was responsible for ~1046 of the 1047 validation
+  errors on `commons-bcel`; longer-term the named-stub-`InterfaceDecl` plan
+  (Step 5 in Behavior gaps) will replace `null` with real stubs.
 
-6. [ ] **`addSelection` creates a Selection with `origin = null` when the field's declaring
-  type can't be resolved.** `addDeclaration(field.getDeclaringType())` legitimately returns
-  `null` for cross-artifact refs. The current code stores that null and the validator flags it
-  (`[0800]`). Simplest fix: have `addSelection` return `null` when `origin` is null; callers
-  already handle null refs via `addRead`/`addWrite`. Was responsible for 1 of the 1047
-  validation errors on `commons-bcel`.
+6. [x] **`addSelection` creates a Selection with `origin = null` when the field's declaring
+  type can't be resolved** — `addSelection` now resolves `origin` up front and
+  returns `null` (with a `Logger.notice`) when the declaring type can't be
+  tracked. `Analyzer.addRead` / `addWrite` are null-safe. Was responsible for
+  1 of the 1047 validation errors on `commons-bcel`.

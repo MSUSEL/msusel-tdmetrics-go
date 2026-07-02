@@ -149,6 +149,13 @@ public class Abstractor {
             this.log.notice("Ignoring method of a local declaring type: " + SpoonUtils.describeElem(m) + " in " + SpoonUtils.describeElem(decl));
             return null;
         }
+        // Skip shadow (JDK/library) declaring types: Spoon strips their generics,
+        // which produces MethodDecls with typeParams=[] that then fail validation
+        // when their instantiations carry the receiver's type args.
+        if (decl.isShadow()) {
+            this.log.notice("Ignoring method of a shadow declaring type: " + SpoonUtils.describeElem(m) + " in " + SpoonUtils.describeElem(decl));
+            return null;
+        }
 
         if (decl instanceof CtEnum<?>    e) return this.addMethodDecl(this.addEnum(e), m);
         if (decl instanceof CtClass<?>   c) return this.addMethodDecl(this.addObjectDecl(c), m);
@@ -563,6 +570,11 @@ public class Abstractor {
     public Ref<MethodDecl> addMethodDeclForConstructor(CtConstructor<?> ctor) throws Exception {
         if (ctor.isImplicit()) return null;
         if (ctor.getParent() instanceof CtClass c) {
+            // Skip shadow (JDK/library) declaring types for the same reason as in addMethodDeclOrAbstract.
+            if (c.isShadow()) {
+                this.log.notice("Ignoring constructor of a shadow declaring type: " + SpoonUtils.describeElem(ctor) + " in " + SpoonUtils.describeElem(c));
+                return null;
+            }
             final Ref<ObjectDecl> receiver = this.addObjectDecl(c);
             return this.addMethodDeclForConstructor(receiver, ctor);
         }
@@ -699,14 +711,22 @@ public class Abstractor {
     }
 
     public Ref<Selection> addSelection(CtField<?> field) throws Exception {
+        // TODO: Is this the correct way to get the decl? Does it need to be the instantiated type?
+
+        // Resolve the origin up front: if the declaring type isn't trackable
+        // (unresolvable shadow, unhandled kind, etc.) the Selection would have
+        // a null origin (which is not useful and rejected by the validator).
+        final Ref<? extends Construct> origin = this.addDeclaration(field.getDeclaringType());
+        if (origin == null) {
+            this.log.notice("Skipping selection with no resolvable origin: " + SpoonUtils.describeElem(field));
+            return null;
+        }
+
         final ElementKey key = new ElementKey(field, this.instantiator.typeArgs(true));
         return this.proj.selections.create(this.log, key,
             "select field " + SpoonUtils.describeElem(field),
             () -> {
                 final String name = field.getSimpleName();
-
-                // TODO: Is this the correct way to get the decl? Does it need to be the instantiated type?
-                final Ref<? extends Construct> origin = this.addDeclaration(field.getDeclaringType());
                 return new Selection(name, origin);
             });
     }

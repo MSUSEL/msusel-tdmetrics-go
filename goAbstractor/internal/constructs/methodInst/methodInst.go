@@ -19,7 +19,7 @@ type instanceImp struct {
 	resolved      constructs.Signature
 	instanceTypes []constructs.TypeDesc
 	metrics       constructs.Metrics
-	receiver      constructs.ObjectInst
+	receiver      constructs.ObjectInst // may also be an Object but currently we only support ObjectInst
 }
 
 func newInstance(args constructs.MethodInstArgs) constructs.MethodInst {
@@ -131,7 +131,7 @@ func (i *instanceImp) ToJson(ctx *jsonify.Context) jsonify.Datum {
 		Add(ctx.OnlyIndex(), `resolved`, i.resolved).
 		Add(ctx.Short(), `instanceTypes`, i.instanceTypes).
 		AddNonZero(ctx.OnlyIndex(), `metrics`, i.metrics).
-		AddNonZero(ctx.OnlyIndex(), `receiver`, i.receiver)
+		AddNonZero(ctx.Short(), `receiver`, i.receiver)
 }
 
 func (i *instanceImp) ToStringer(s stringer.Stringer) {

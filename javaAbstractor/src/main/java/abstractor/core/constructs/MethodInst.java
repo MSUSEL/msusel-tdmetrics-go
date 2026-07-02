@@ -14,7 +14,6 @@ public class MethodInst extends ConstructImp implements Method {
     // null only when the declaring class produced neither decl nor inst.
     // Serialized as a key so consumers can tell ObjectDecl from ObjectInst.
     public Ref<? extends TypeDesc> receiver;
-
     public final ArrayList<Ref<? extends TypeDesc>> instanceTypes = new ArrayList<>();
     public Ref<Signature> resolved;
 

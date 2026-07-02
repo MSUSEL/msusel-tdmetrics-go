@@ -152,7 +152,7 @@
   ],
   methodInsts: [
     { # 1. (Set[string, int, Map[string, Pointer[int]]]) AsSlice()(List[string], List[Pointer[int]])
-      generic: 1, receiver: 1, resolved: 3, metrics: 1, instanceTypes: [ basic3, basic2, interfaceInst7 ]
+      generic: 1, receiver: objectInst1, resolved: 3, metrics: 1, instanceTypes: [ basic3, basic2, interfaceInst7 ]
     },
     { # 2. PrintSlice[string, List[string]](s S)
       generic: 2, resolved: 24, metrics: 2, instanceTypes: [ basic3, interfaceInst3 ]
