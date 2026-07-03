@@ -1,12 +1,14 @@
 package abstractor.core.iter;
 
-import java.util.Iterator;
-import java.util.LinkedList;
+import java.util.*;
 
 public class YieldIterator<T> implements Iterator<T> {
     public interface Yield<T> {
         void yield(T value);
+        void yield(Iterable<? extends T> values);
         void stop();
+        void yieldStop(T value);
+        void yieldStop(Iterable<? extends T> values);
     }
 
     public interface HasNextFn { boolean hasNext(); }
@@ -14,7 +16,10 @@ public class YieldIterator<T> implements Iterator<T> {
 
     private class YieldImp implements Yield<T> {
         public void yield(T value) { addPending(value); }
+        public void yield(Iterable<? extends T> values) { addPending(values); }
         public void stop() { callStop(); }
+        public void yieldStop(T value) { addPending(value); callStop(); }
+        public void yieldStop(Iterable<? extends T> values) { addPending(values); callStop(); }
     }
 
     private final YieldImp yielder;
@@ -39,6 +44,10 @@ public class YieldIterator<T> implements Iterator<T> {
     
     private void addPending(T value) {
         if (!this.stopped) this.pending.addLast(value);
+    }
+
+    private void addPending(Iterable<? extends T> values) {
+        if (!this.stopped) values.forEach((T value) -> this.pending.addLast(value));
     }
     
     private void callStop() {

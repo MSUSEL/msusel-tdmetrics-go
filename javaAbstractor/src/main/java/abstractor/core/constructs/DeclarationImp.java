@@ -29,6 +29,10 @@ public abstract class DeclarationImp extends ConstructImp implements Declaration
         this.visibility = "";
         this.isStatic   = false;
     }
+    
+    public Ref<PackageCon> pkgRef() {
+        return this.pkg;
+    }
 
     public void setNest(Ref<? extends Construct> nest) throws Exception {
         if (nest == null) return;

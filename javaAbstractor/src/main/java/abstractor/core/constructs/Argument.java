@@ -1,7 +1,10 @@
 package abstractor.core.constructs;
 
+import java.util.Iterator;
+
 import abstractor.core.cmp.Cmp;
 import abstractor.core.cmp.CmpOptions;
+import abstractor.core.iter.Iter;
 import abstractor.core.json.*;
 
 public class Argument extends ConstructImp {
@@ -35,5 +38,10 @@ public class Argument extends ConstructImp {
             Cmp.defer(this.name, () -> ((Argument)c).name, "name"),
             Cmp.defer(this.type, () -> ((Argument)c).type, "type")
         );
-    }   
+    }
+
+    @Override
+    public Iterator<Construct> subConstructs() {
+        return Iter.SingleIterator(this.type);
+    }
 }

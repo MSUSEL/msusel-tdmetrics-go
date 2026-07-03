@@ -1,10 +1,9 @@
 package abstractor.core.constructs;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
-import abstractor.core.cmp.Cmp;
-import abstractor.core.cmp.CmpOptions;
+import abstractor.core.cmp.*;
+import abstractor.core.iter.*;
 import abstractor.core.json.*;
 
 public class InterfaceInst extends ConstructImp implements TypeDesc {
@@ -38,5 +37,13 @@ public class InterfaceInst extends ConstructImp implements TypeDesc {
             Cmp.deferList(this.instanceTypes, () -> ((InterfaceInst)c).instanceTypes),
             Cmp.defer(    this.resolved,      () -> ((InterfaceInst)c).resolved)
         );
-    }   
+    }
+
+    @Override
+    public Iterator<Construct> subConstructs() {
+        return new Bundle<Construct>().
+            add(this.generic).
+            add(this.instanceTypes).
+            add(this.resolved);
+    }
 }

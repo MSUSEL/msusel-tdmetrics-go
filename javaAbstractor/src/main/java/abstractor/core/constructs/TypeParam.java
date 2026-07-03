@@ -1,7 +1,9 @@
 package abstractor.core.constructs;
 
-import abstractor.core.cmp.Cmp;
-import abstractor.core.cmp.CmpOptions;
+import java.util.*;
+
+import abstractor.core.cmp.*;
+import abstractor.core.iter.*;
 import abstractor.core.json.*;
 
 public class TypeParam extends ConstructImp implements TypeDesc {
@@ -31,5 +33,10 @@ public class TypeParam extends ConstructImp implements TypeDesc {
             Cmp.defer(this.name, () -> ((TypeParam)c).name),
             Cmp.defer(this.type, () -> ((TypeParam)c).type)
         );
+    }
+
+    @Override
+    public Iterator<Construct> subConstructs() {
+        return Iter.SingleIterator(this.type);
     }
 }

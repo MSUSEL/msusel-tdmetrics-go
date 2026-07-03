@@ -1,7 +1,9 @@
 package abstractor.core.constructs;
 
-import abstractor.core.cmp.Cmp;
-import abstractor.core.cmp.CmpOptions;
+import java.util.*;
+
+import abstractor.core.cmp.*;
+import abstractor.core.iter.*;
 import abstractor.core.json.*;
 
 public class Selection extends ConstructImp {
@@ -31,5 +33,10 @@ public class Selection extends ConstructImp {
             Cmp.defer(this.name,   () -> ((Selection)c).name),
             Cmp.defer(this.origin, () -> ((Selection)c).origin)
         );
-    }   
+    }
+
+    @Override
+    public Iterator<Construct> subConstructs() {
+        return Iter.SingleIterator(this.origin);
+    } 
 }

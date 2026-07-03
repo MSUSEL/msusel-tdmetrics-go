@@ -1,7 +1,9 @@
 package abstractor.core.constructs;
 
-import abstractor.core.cmp.Cmp;
-import abstractor.core.cmp.CmpOptions;
+import java.util.*;
+
+import abstractor.core.cmp.*;
+import abstractor.core.iter.*;
 import abstractor.core.json.*;
 
 public class Value extends DeclarationImp {
@@ -35,5 +37,12 @@ public class Value extends DeclarationImp {
             Cmp.defer(this.metrics,  () -> ((Value)c).metrics),
             Cmp.defer(this.type,     () -> ((Value)c).type)
         );
-    }   
+    }
+
+    @Override
+    public Iterator<Construct> subConstructs() {
+        return new Bundle<Construct>().
+            add(this.metrics).
+            add(this.type);
+    }
 }

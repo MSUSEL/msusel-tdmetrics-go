@@ -1,8 +1,11 @@
 package abstractor.core.constructs;
 
+import java.util.*;
+
 import abstractor.core.AbstractorException;
 import abstractor.core.ElementKey;
 import abstractor.core.cmp.*;
+import abstractor.core.iter.*;
 import abstractor.core.json.*;
 import abstractor.core.require.Require;
 
@@ -87,5 +90,10 @@ public class Ref<T extends Construct> extends ConstructImp {
             Cmp.defer(this.elemKey, () -> ((Ref<?>)c).elemKey, "elemKey"),
             Cmp.defer(this.context, () -> ((Ref<?>)c).context, "context")
         );
+    }
+
+    @Override
+    public Iterator<Construct> subConstructs() {
+        return Iter.SingleIterator(this.res);
     }
 }

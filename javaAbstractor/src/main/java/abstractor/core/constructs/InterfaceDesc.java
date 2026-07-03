@@ -1,10 +1,9 @@
 package abstractor.core.constructs;
 
-import java.util.SortedSet;
-import java.util.TreeSet;
+import java.util.*;
 
-import abstractor.core.cmp.Cmp;
-import abstractor.core.cmp.CmpOptions;
+import abstractor.core.cmp.*;
+import abstractor.core.iter.*;
 import abstractor.core.json.*;
 
 public class InterfaceDesc extends ConstructImp implements TypeDesc {
@@ -41,5 +40,13 @@ public class InterfaceDesc extends ConstructImp implements TypeDesc {
             Cmp.deferSet(this.abstracts, () -> ((InterfaceDesc)c).abstracts),
             Cmp.defer(   this.pin,       () -> ((InterfaceDesc)c).pin)
         );
-    }   
+    }
+
+    @Override
+    public Iterator<Construct> subConstructs() {
+        return new Bundle<Construct>().
+            add(this.abstracts).
+            add(this.inherits).
+            add(this.pin);
+    }
 }

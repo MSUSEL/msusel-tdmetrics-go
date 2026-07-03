@@ -1,12 +1,16 @@
 package abstractor.core.iter;
 
-import java.util.Iterator;
+import java.util.*;
 
 public class ExpandIterator<T> implements Iterator<T> {
     private final Iterator<Iterator<T>> src;
     private Iterator<T> current;
     private boolean hasNextValue;
     private T nextValue;
+
+    public ExpandIterator(Iterable<Iterator<T>> src) {
+        this.src = src.iterator();
+    }
 
     public ExpandIterator(Iterator<Iterator<T>> src) {
         this.src = src;

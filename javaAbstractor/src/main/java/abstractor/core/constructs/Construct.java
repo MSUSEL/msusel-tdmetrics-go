@@ -1,5 +1,7 @@
 package abstractor.core.constructs;
 
+import java.util.Iterator;
+
 import abstractor.core.cmp.CmpGetter;
 import abstractor.core.cmp.CmpOptions;
 import abstractor.core.json.Jsonable;
@@ -10,4 +12,5 @@ public interface Construct extends Comparable<Construct>, CmpGetter<Construct>, 
     public void setIndex(int index);
     public int getIndex();
     public ConstructKind kind();
+    public Iterator<Construct> subConstructs();
 }

@@ -48,7 +48,7 @@ public class Diff {
                     DiffStep.Equal(red.front())
                 ));
 
-            return new Simplifier(new ExpandIterator<DiffStep>(parts.iterator()));
+            return new Simplifier(new ExpandIterator<DiffStep>(parts));
         });
     }
 

@@ -1,11 +1,9 @@
 package abstractor.core.constructs;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.TreeSet;
+import java.util.*;
 
-import abstractor.core.cmp.Cmp;
-import abstractor.core.cmp.CmpOptions;
+import abstractor.core.cmp.*;
+import abstractor.core.iter.*;
 import abstractor.core.json.*;
 
 public class ObjectInst extends ConstructImp implements TypeDesc {
@@ -46,5 +44,15 @@ public class ObjectInst extends ConstructImp implements TypeDesc {
             Cmp.defer(    this.resData,       () -> ((ObjectInst)c).resData),
             Cmp.defer(    this.resInterface,  () -> ((ObjectInst)c).resInterface)
         );
-    }   
+    }
+
+    @Override
+    public Iterator<Construct> subConstructs() {
+        return new Bundle<Construct>().
+            add(this.generic).
+            add(this.instanceTypes).
+            add(this.methods).
+            add(this.resData).
+            add(this.resInterface);
+    }
 }

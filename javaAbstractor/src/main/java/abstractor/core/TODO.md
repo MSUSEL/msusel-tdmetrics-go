@@ -54,52 +54,15 @@
 
 ## Behavior gaps
 
-1. [x] **Constructor type parameters are ignored at the instance level** — resolved by the
-  call-site `addMethodInstForCall(CtConstructorCall)` path in `Abstractor`. The object-walk
-  `addMethodInstForObjectInst(CtConstructor, ...)` intentionally still leaves the ctor's own
-  type params generic in the resolved signature (baseline coverage); call-site MethodInsts
-  bind them with the actual arguments from `cc.getActualTypeArguments()`.
-
-2. [ ] **`addObjectInst` calls `synthesizeObjectInterface(c, null)` in its supplier.**
+1. [ ] **`addObjectInst` calls `synthesizeObjectInterface(c, null)` in its supplier.**
   That passes `null` for the pin, so the InterfaceDesc has no `pin`, while the
   ObjectDecl path passes the decl ref. After consolidation these will collapse
   to the same InterfaceDesc only if the abstracts match exactly.
   Inconsistent — either both should pin, or the comment in `synthesizeObjectInterface`
   should explain why ObjectInsts intentionally lose the pin.
 
-3. [ ] **`addStructDesc` doesn't include `$super` chain types.** Only `getSuperclass()`
+2. [ ] **`addStructDesc` doesn't include `$super` chain types.** Only `getSuperclass()`
   is added as a single `$super` field. A class with both `extends` and `implements`
   ignores the interface side here (those are handled via `synthesizeObjectInterface.inherits`),
   but the lack of any link in the data view means TD metrics computed from struct data
   alone will miss inherited fields. Possibly intentional; document if so.
-
-4. [ ] **Package imports are not derived yet.** Already noted in `Abstractor.performAbstraction`'s
-  comment; agree it's still pending.
-
-1. [x] **`addMethodDeclOrAbstract` / `addMethodDeclForConstructor` don't gate on shadow types** —
-  both single-arg overloads now bail out with a `Logger.notice` when
-  `decl.isShadow()` (methods) or `c.isShadow()` (constructors), so the
-  `addDeclaration` path no longer materializes shadow JDK/library methods into
-  `MethodDecl`s whose typeParams (stripped by Spoon at shadow load) mismatch
-  their `MethodInst`'s instanceTypes. The two-arg overloads are unchanged
-  because their callers (e.g. `addObjectInst`'s ctor loop) have already
-  committed to the receiver. Was responsible for ~1046 of the 1047 validation
-  errors on `commons-bcel`; longer-term the named-stub-`InterfaceDecl` plan
-  (Step 5 in Behavior gaps) will replace `null` with real stubs.
-
-1. [x] **`addSelection` creates a Selection with `origin = null` when the field's declaring
-  type can't be resolved** — `addSelection` now resolves `origin` up front and
-  returns `null` (with a `Logger.notice`) when the declaring type can't be
-  tracked. `Analyzer.addRead` / `addWrite` are null-safe. Was responsible for
-  1 of the 1047 validation errors on `commons-bcel`.
-
-1. [x] **`addSelection` used `field.getDeclaringType()`, so `origin` was always
-  a decl even when the call site had enough info to bind an instantiation** —
-  `Selection.origin` is now serialized as a polymorphic key (same schema shift
-  as `MethodInst.receiver`), so it can hold ObjectDecl / ObjectInst /
-  InterfaceDecl / InterfaceInst. `addSelection` now takes a `CtFieldReference`,
-  routes the reference's declaring type through `addTypeDesc` (which returns
-  an ObjectInst / InterfaceInst when the ref carries type args), and keys the
-  cache on `(field, receiver-type-args)` so different instantiations of the
-  same field yield distinct Selections. Falls back to the plain declaration
-  when the receiver ref has no args or Spoon can't resolve them.

@@ -1,10 +1,9 @@
 package abstractor.core.constructs;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
-import abstractor.core.cmp.Cmp;
-import abstractor.core.cmp.CmpOptions;
+import abstractor.core.cmp.*;
+import abstractor.core.iter.*;
 import abstractor.core.json.*;
 
 public class StructDesc extends ConstructImp implements TypeDesc {
@@ -28,5 +27,10 @@ public class StructDesc extends ConstructImp implements TypeDesc {
         return Cmp.or(super.getCmp(c, options),
             Cmp.deferList(this.fields, () -> ((StructDesc)c).fields)
         );
+    }
+
+    @Override
+    public Iterator<Construct> subConstructs() {
+        return new Bundle<Construct>(this.fields);
     }
 }

@@ -1,7 +1,10 @@
 package abstractor.core.constructs;
 
+import java.util.Iterator;
+
 import abstractor.core.cmp.Cmp;
 import abstractor.core.cmp.CmpOptions;
+import abstractor.core.iter.Iter;
 import abstractor.core.json.*;
 
 public class Basic extends ConstructImp implements TypeDesc {
@@ -25,5 +28,10 @@ public class Basic extends ConstructImp implements TypeDesc {
         return Cmp.or(super.getCmp(c, options),
             Cmp.defer(this.name, () -> ((Basic)c).name)
         );
-    }   
+    }
+
+    @Override
+    public Iterator<Construct> subConstructs() {
+        return Iter.EmptyIterator();
+    }
 }

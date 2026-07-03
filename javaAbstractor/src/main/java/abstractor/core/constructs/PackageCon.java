@@ -1,11 +1,10 @@
 package abstractor.core.constructs;
 
-import java.util.Set;
-import java.util.TreeSet;
+import java.util.*;
 
 import abstractor.core.AbstractorException;
-import abstractor.core.cmp.Cmp;
-import abstractor.core.cmp.CmpOptions;
+import abstractor.core.cmp.*;
+import abstractor.core.iter.*;
 import abstractor.core.json.*;
 
 public class PackageCon extends ConstructImp {
@@ -46,6 +45,16 @@ public class PackageCon extends ConstructImp {
             Cmp.defer(this.name, () -> ((PackageCon)c).name),
             Cmp.defer(this.path, () -> ((PackageCon)c).path)
         );
+    }
+
+    @Override
+    public Iterator<Construct> subConstructs() {
+        return new Bundle<Construct>().
+            add(this.imports).
+            add(this.interfaceDecls).
+            add(this.methodDecls).
+            add(this.objectDecls).
+            add(this.values);
     }
 
     static private <T extends Construct> boolean tryToAdd(Set<Ref<T>> set, Ref<? extends Construct> ref, ConstructKind kind) {

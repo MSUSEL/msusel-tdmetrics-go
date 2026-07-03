@@ -1,10 +1,9 @@
 package abstractor.core.constructs;
 
-import java.util.SortedSet;
-import java.util.TreeSet;
+import java.util.*;
 
-import abstractor.core.cmp.Cmp;
-import abstractor.core.cmp.CmpOptions;
+import abstractor.core.cmp.*;
+import abstractor.core.iter.*;
 import abstractor.core.json.*;
 
 public class Metrics extends ConstructImp {
@@ -66,5 +65,13 @@ public class Metrics extends ConstructImp {
         return Cmp.or(super.getCmp(c, options),
             Cmp.defer(this.loc, () -> ((Metrics)c).loc)
         );
-    }   
+    }
+
+    @Override
+    public Iterator<Construct> subConstructs() {
+        return new Bundle<Construct>().
+            add(this.invokes).
+            add(this.reads).
+            add(this.writes);
+    }
 }

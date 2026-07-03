@@ -1,9 +1,12 @@
 package abstractor.core.constructs;
 
+import java.util.Iterator;
+
 import spoon.reflect.declaration.CtModifiable;
 
 import abstractor.core.cmp.Cmp;
 import abstractor.core.cmp.CmpOptions;
+import abstractor.core.iter.Iter;
 import abstractor.core.json.*;
 import abstractor.core.require.Require;
 
@@ -41,5 +44,10 @@ public class Field extends ConstructImp {
             Cmp.defer(this.name, () -> ((Field)c).name),
             Cmp.defer(this.type, () -> ((Field)c).type)
         );
-    }   
+    }
+
+    @Override
+    public Iterator<Construct> subConstructs() {
+        return Iter.SingleIterator(this.type);
+    }
 }

@@ -1,11 +1,9 @@
 package abstractor.core.constructs;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.TreeSet;
+import java.util.*;
     
-import abstractor.core.cmp.Cmp;
-import abstractor.core.cmp.CmpOptions;
+import abstractor.core.cmp.*;
+import abstractor.core.iter.*;
 import abstractor.core.json.*;
 
 public class MethodDecl extends DeclarationImp implements Method {
@@ -45,5 +43,15 @@ public class MethodDecl extends DeclarationImp implements Method {
             Cmp.defer(    this.signature,   () -> ((MethodDecl)c).signature),
             Cmp.deferList(this.typeParams,  () -> ((MethodDecl)c).typeParams)
         );
+    }
+
+    @Override
+    public Iterator<Construct> subConstructs() {
+        return new Bundle<Construct>().
+            add(this.receiver).
+            add(this.signature).
+            add(this.typeParams).
+            add(this.instances).
+            add(this.metrics);
     }
 }
