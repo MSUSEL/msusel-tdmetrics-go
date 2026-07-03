@@ -93,7 +93,7 @@ public class Ref<T extends Construct> extends ConstructImp {
     }
 
     @Override
-    public Iterator<Construct> subConstructs() {
-        return Iter.SingleIterator(this.res);
+    public Iterator<Ref<? extends Construct>> subConstructs() {
+        return Iter.EmptyIterator();
     }
 }

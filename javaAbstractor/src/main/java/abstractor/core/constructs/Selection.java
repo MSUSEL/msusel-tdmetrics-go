@@ -36,7 +36,7 @@ public class Selection extends ConstructImp {
     }
 
     @Override
-    public Iterator<Construct> subConstructs() {
+    public Iterator<Ref<? extends Construct>> subConstructs() {
         return Iter.SingleIterator(this.origin);
     } 
 }

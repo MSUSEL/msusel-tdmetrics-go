@@ -30,7 +30,7 @@ public class StructDesc extends ConstructImp implements TypeDesc {
     }
 
     @Override
-    public Iterator<Construct> subConstructs() {
-        return new Bundle<Construct>(this.fields);
+    public Iterator<Ref<? extends Construct>> subConstructs() {
+        return new Bundle<Ref<? extends Construct>>(this.fields);
     }
 }

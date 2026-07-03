@@ -12,5 +12,5 @@ public interface Construct extends Comparable<Construct>, CmpGetter<Construct>, 
     public void setIndex(int index);
     public int getIndex();
     public ConstructKind kind();
-    public Iterator<Construct> subConstructs();
+    public Iterator<Ref<? extends Construct>> subConstructs();
 }

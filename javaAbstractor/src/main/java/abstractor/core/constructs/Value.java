@@ -40,8 +40,8 @@ public class Value extends DeclarationImp {
     }
 
     @Override
-    public Iterator<Construct> subConstructs() {
-        return new Bundle<Construct>().
+    public Iterator<Ref<? extends Construct>> subConstructs() {
+        return new Bundle<Ref<? extends Construct>>().
             add(this.metrics).
             add(this.type);
     }

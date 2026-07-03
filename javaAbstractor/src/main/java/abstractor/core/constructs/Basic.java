@@ -31,7 +31,7 @@ public class Basic extends ConstructImp implements TypeDesc {
     }
 
     @Override
-    public Iterator<Construct> subConstructs() {
+    public Iterator<Ref<? extends Construct>> subConstructs() {
         return Iter.EmptyIterator();
     }
 }

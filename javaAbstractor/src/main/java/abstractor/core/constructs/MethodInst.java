@@ -48,8 +48,8 @@ public class MethodInst extends ConstructImp implements Method {
     }
 
     @Override
-    public Iterator<Construct> subConstructs() {
-        return new Bundle<Construct>().
+    public Iterator<Ref<? extends Construct>> subConstructs() {
+        return new Bundle<Ref<? extends Construct>>().
             add(this.generic).
             add(this.receiver).
             add(this.instanceTypes).

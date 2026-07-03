@@ -40,8 +40,8 @@ public class InterfaceInst extends ConstructImp implements TypeDesc {
     }
 
     @Override
-    public Iterator<Construct> subConstructs() {
-        return new Bundle<Construct>().
+    public Iterator<Ref<? extends Construct>> subConstructs() {
+        return new Bundle<Ref<? extends Construct>>().
             add(this.generic).
             add(this.instanceTypes).
             add(this.resolved);

@@ -68,8 +68,8 @@ public class Metrics extends ConstructImp {
     }
 
     @Override
-    public Iterator<Construct> subConstructs() {
-        return new Bundle<Construct>().
+    public Iterator<Ref<? extends Construct>> subConstructs() {
+        return new Bundle<Ref<? extends Construct>>().
             add(this.invokes).
             add(this.reads).
             add(this.writes);

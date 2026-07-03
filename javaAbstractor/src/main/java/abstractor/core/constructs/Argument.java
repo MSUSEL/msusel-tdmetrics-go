@@ -41,7 +41,7 @@ public class Argument extends ConstructImp {
     }
 
     @Override
-    public Iterator<Construct> subConstructs() {
+    public Iterator<Ref<? extends Construct>> subConstructs() {
         return Iter.SingleIterator(this.type);
     }
 }

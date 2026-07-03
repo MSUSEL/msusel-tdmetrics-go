@@ -38,8 +38,8 @@ public class InterfaceDecl extends DeclarationImp implements TypeDeclaration {
     }
 
     @Override
-    public Iterator<Construct> subConstructs() {
-        return new Bundle<Construct>().
+    public Iterator<Ref<? extends Construct>> subConstructs() {
+        return new Bundle<Ref<? extends Construct>>().
             add(this.inter).
             add(this.typeParams).
             add(this.instances);

@@ -48,8 +48,8 @@ public class PackageCon extends ConstructImp {
     }
 
     @Override
-    public Iterator<Construct> subConstructs() {
-        return new Bundle<Construct>().
+    public Iterator<Ref<? extends Construct>> subConstructs() {
+        return new Bundle<Ref<? extends Construct>>().
             add(this.imports).
             add(this.interfaceDecls).
             add(this.methodDecls).

@@ -3,9 +3,11 @@ package abstractor.core.iter;
 import java.util.*;
 
 public class Bundle<T> implements Iterator<T> {
-    final private List<Iterator<? extends T>> src = new LinkedList<>();
-    final private ExpandIterator<T> expander = new ExpandIterator<T>(src.iterator());
-    
+    final private LinkedList<Iterator<? extends T>> src = new LinkedList<>();
+    private Iterator<? extends T> current;
+    private boolean hasNextValue;
+    private T nextValue;
+
     public Bundle() { }
     public Bundle(Iterator<? extends T> values) { this.add(values); }
     public Bundle(Iterable<? extends T> values) { this.add(values); }
@@ -31,7 +33,38 @@ public class Bundle<T> implements Iterator<T> {
         if (value == null) return this;
         return this.add(Iter.SingleIterator(value));
     }
+    
+    private void seekNext() {
+        if (this.hasNextValue) return;
+        while (true) {
+            if (this.current != null) {
+                if (this.current.hasNext()) {
+                    this.nextValue = this.current.next();
+                    this.hasNextValue = true;
+                    return;
+                }
+                this.current = null;
+            }
+            if (!this.src.isEmpty()) {
+                this.current = this.src.pollFirst();
+                continue;
+            }
+            return;
+        }
+    }
 
-    @Override public boolean hasNext() { return this.expander.hasNext(); }
-    @Override public T next() { return this.expander.next(); }
+    @Override
+    public boolean hasNext() {
+        this.seekNext();
+        return this.hasNextValue;
+    }
+
+    @Override
+    public T next() {
+        this.seekNext();
+        T result = this.nextValue;
+        this.nextValue = null;
+        this.hasNextValue = false;
+        return result;
+    }
 }

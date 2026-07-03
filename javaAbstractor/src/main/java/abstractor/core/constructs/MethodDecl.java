@@ -46,8 +46,8 @@ public class MethodDecl extends DeclarationImp implements Method {
     }
 
     @Override
-    public Iterator<Construct> subConstructs() {
-        return new Bundle<Construct>().
+    public Iterator<Ref<? extends Construct>> subConstructs() {
+        return new Bundle<Ref<? extends Construct>>().
             add(this.receiver).
             add(this.signature).
             add(this.typeParams).
