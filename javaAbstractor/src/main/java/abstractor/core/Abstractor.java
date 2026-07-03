@@ -1176,12 +1176,11 @@ public class Abstractor {
             this.processPackage(pkg);
             this.processPendingMetrics();
         }
+
         this.consolidateCons();
         this.crossConnectConstructs();
+        this.addImportsFromUsage();
     }
-
-    // TODO: Implement package imports by deriving from actual type usage
-    //       rather than import statements.
 
     public Ref<PackageCon> processPackage(CtPackage pkg) throws Exception {
         return this.proj.packages.create(this.log, new ElementKey(pkg),
@@ -1246,8 +1245,8 @@ public class Abstractor {
     }
 
     /**
-     * Cross connect currently only adds all the declarations into the lists
-     * in the packages for the type of declaration in the package.
+     * This adds all the declarations into the lists in the packages for the 
+     * ype of declaration in the package.
      */
     private void crossConnectConstructs() throws Exception {
         this.log.log("cross connect constructs");
@@ -1278,6 +1277,128 @@ public class Abstractor {
             if (pkg == null) this.log.error("package for value is null: " + v);
             pkg.values.add(this.proj.values.addOrGetRef(v, null, "value in package " + pkg));
         }
+    }
+
+    /**
+     * Populate each PackageCon.imports with references to every OTHER package
+     * whose declarations are transitively referenced by this package's own
+     * decls. Instantiations move up to their generic decl to find the package;
+     * intermediate descs (StructDesc, InterfaceDesc's pin, Signature, ...)
+     * are walked through so their embedded refs contribute too. Runs after
+     * consolidation, so every ref is expected to be resolved (mustGetResolved).
+     */
+    private void addImportsFromUsage() throws Exception {
+        for (PackageCon pkg : this.proj.packages.getConSet()) {
+            final HashSet<Construct> visited = new HashSet<>();
+            for (Ref<ObjectDecl>    r : pkg.objectDecls)    this.collectImports(pkg, r, visited);
+            for (Ref<InterfaceDecl> r : pkg.interfaceDecls) this.collectImports(pkg, r, visited);
+            for (Ref<MethodDecl>    r : pkg.methodDecls)    this.collectImports(pkg, r, visited);
+            for (Ref<Value>         r : pkg.values)         this.collectImports(pkg, r, visited);
+        }
+    }
+
+    /**
+     * Resolve ref, record its package (if any and if not self) as an import
+     * of self, then recurse into every ref the resolved construct exposes.
+     */
+    private void collectImports(PackageCon self, Ref<? extends Construct> ref, HashSet<Construct> visited) throws Exception {
+        if (ref == null) return;
+        final Construct c = ref.mustGetResolved();
+        if (!visited.add(c)) return;
+
+        final PackageCon other = this.pkgOf(c);
+        if (other != null && other != self) {
+            self.imports.add(this.proj.packages.addOrGetRef(other, null, "import for " + self.name));
+        }
+
+        this.visitRefs(self, c, visited);
+    }
+
+    /**
+     * Return the package that owns the given construct's declaration.
+     * Instantiations move up through their `generic` link to find the decl,
+     * mirroring the "move up to the declaration to find the package" rule.
+     * Descs, helpers, Basics, TypeParams, and PackageCon itself have no
+     * owning package (their children get walked by visitRefs instead).
+     */
+    private PackageCon pkgOf(Construct c) throws Exception {
+        if (c instanceof ObjectDecl    d) return d.pkg == null ? null : d.pkg.mustGetResolved();
+        if (c instanceof InterfaceDecl d) return d.pkg == null ? null : d.pkg.mustGetResolved();
+        if (c instanceof MethodDecl    d) return d.pkg == null ? null : d.pkg.mustGetResolved();
+        if (c instanceof Value         d) return d.pkg == null ? null : d.pkg.mustGetResolved();
+        if (c instanceof ObjectInst    i) return this.pkgOf(i.generic.mustGetResolved());
+        if (c instanceof InterfaceInst i) return this.pkgOf(i.generic.mustGetResolved());
+        if (c instanceof MethodInst    i) return this.pkgOf(i.generic.mustGetResolved());
+        return null;
+    }
+
+    /** Recurse into every Ref field of a resolved construct. */
+    private void visitRefs(PackageCon self, Construct c, HashSet<Construct> visited) throws Exception {
+        if (c instanceof ObjectDecl d) {
+            this.collectImports(self, d.struct, visited);
+            this.collectImports(self, d.inter,  visited);
+            for (Ref<MethodDecl>       r : d.methodDecls) this.collectImports(self, r, visited);
+            for (Ref<TypeParam>        r : d.typeParams)  this.collectImports(self, r, visited);
+            for (Ref<InterfaceInst>    r : d.instances)   this.collectImports(self, r, visited);
+            for (Ref<? extends TypeDesc> r : d.nestedTypes) this.collectImports(self, r, visited);
+            this.collectImports(self, d.nest, visited);
+        } else if (c instanceof InterfaceDecl d) {
+            this.collectImports(self, d.inter, visited);
+            for (Ref<TypeParam>        r : d.typeParams) this.collectImports(self, r, visited);
+            for (Ref<InterfaceInst>    r : d.instances)  this.collectImports(self, r, visited);
+            for (Ref<? extends TypeDesc> r : d.nestedTypes) this.collectImports(self, r, visited);
+            this.collectImports(self, d.nest, visited);
+        } else if (c instanceof MethodDecl d) {
+            this.collectImports(self, d.receiver,  visited);
+            this.collectImports(self, d.signature, visited);
+            this.collectImports(self, d.metrics,   visited);
+            for (Ref<TypeParam>  r : d.typeParams) this.collectImports(self, r, visited);
+            for (Ref<MethodInst> r : d.instances)  this.collectImports(self, r, visited);
+            this.collectImports(self, d.nest, visited);
+        } else if (c instanceof Value d) {
+            this.collectImports(self, d.type,    visited);
+            this.collectImports(self, d.metrics, visited);
+            this.collectImports(self, d.nest,    visited);
+        } else if (c instanceof ObjectInst i) {
+            this.collectImports(self, i.generic,      visited);
+            this.collectImports(self, i.resData,      visited);
+            this.collectImports(self, i.resInterface, visited);
+            for (Ref<? extends TypeDesc> r : i.instanceTypes) this.collectImports(self, r, visited);
+            for (Ref<MethodInst>         r : i.methods)       this.collectImports(self, r, visited);
+        } else if (c instanceof InterfaceInst i) {
+            this.collectImports(self, i.generic,  visited);
+            this.collectImports(self, i.resolved, visited);
+            for (Ref<? extends TypeDesc> r : i.instanceTypes) this.collectImports(self, r, visited);
+        } else if (c instanceof MethodInst i) {
+            this.collectImports(self, i.generic,  visited);
+            this.collectImports(self, i.receiver, visited);
+            this.collectImports(self, i.resolved, visited);
+            for (Ref<? extends TypeDesc> r : i.instanceTypes) this.collectImports(self, r, visited);
+        } else if (c instanceof InterfaceDesc d) {
+            this.collectImports(self, d.pin, visited);
+            for (Ref<Abstract>      r : d.abstracts) this.collectImports(self, r, visited);
+            for (Ref<InterfaceDesc> r : d.inherits)  this.collectImports(self, r, visited);
+        } else if (c instanceof StructDesc d) {
+            for (Ref<Field> r : d.fields) this.collectImports(self, r, visited);
+        } else if (c instanceof Signature s) {
+            for (Ref<Argument> r : s.params)  this.collectImports(self, r, visited);
+            for (Ref<Argument> r : s.results) this.collectImports(self, r, visited);
+        } else if (c instanceof Metrics m) {
+            for (Ref<? extends Construct> r : m.invokes) this.collectImports(self, r, visited);
+            for (Ref<? extends Construct> r : m.reads)   this.collectImports(self, r, visited);
+            for (Ref<? extends Construct> r : m.writes)  this.collectImports(self, r, visited);
+        } else if (c instanceof Abstract a) {
+            this.collectImports(self, a.signature, visited);
+        } else if (c instanceof Selection s) {
+            this.collectImports(self, s.origin, visited);
+        } else if (c instanceof Field f) {
+            this.collectImports(self, f.type, visited);
+        } else if (c instanceof Argument a) {
+            this.collectImports(self, a.type, visited);
+        } else if (c instanceof TypeParam tp) {
+            this.collectImports(self, tp.type, visited);
+        }
+        // Basic and PackageCon are leaves — no refs to walk.
     }
 
     public void validate() throws Exception {
