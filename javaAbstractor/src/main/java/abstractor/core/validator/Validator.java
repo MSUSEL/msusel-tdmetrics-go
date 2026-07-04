@@ -266,7 +266,7 @@ public class Validator {
         final int instanceTypeSize = instanceTypes.size();
         if (typeParamSize != instanceTypeSize)
             this.error("0610", "The declaration " + this.conToString(decl) + " had " + typeParamSize +
-                " (" + this.consToString(typeParams) + ") type parameters which must be equal to the instance " +
+                " (" + this.consToString(typeParams) + ") type parameters which must be equal to the instantiation " +
                 this.conToString(inst) + " that had " + instanceTypeSize + " (" +
                 this.consToString(instanceTypes) + ") type arguments.");
 

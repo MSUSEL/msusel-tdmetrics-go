@@ -239,7 +239,9 @@ public class Abstractor {
     }
     
     private boolean inSameNested(CtTypeReference<?> tr, CtType<?> t) {
-        return tr.hasParent(t.getParent());
+        final CtElement par = t.getParent();
+        if (par instanceof CtPackage) return false;
+        return tr.hasParent(par);
     }
 
     public Ref<InterfaceDesc> addInterfaceDesc(CtInterface<?> i) throws Exception {
@@ -322,7 +324,6 @@ public class Abstractor {
             return this.proj.methodInsts.create(this.log, key,
                 "method for object instantiation " + SpoonUtils.describeElem(m),
                 () -> {
-                    // TODO: Need to pad instanceTypes correctly.
                     final List<Ref<? extends TypeDesc>> instanceTypes = this.instantiator.typeArgs();
                     final Ref<Signature>                resolved      = this.addSignature(m);
                     return new MethodInst(generic, receiver, instanceTypes, resolved);
@@ -377,14 +378,13 @@ public class Abstractor {
 
         final CtExecutable<?> ex = er.getDeclaration();
         if (!(ex instanceof CtMethod<?> m)) return null; // caller handles ctors / others
+        if (SpoonUtils.isObjectMethod(m)) return null;
 
         // Fall back to the plain decl path when the receiver is anything other
-        // than a class we track (interfaces produce Abstracts, not MethodInsts).
-        // TODO-QUESTION: Why use `addDeclaration` when it might be able to be `addMethodDeclOrAbstract`?
-        // TODO-QUESTION: Why not do `isObjectMethod` above this point?
+        // than a class we track (interfaces produce Abstracts, not method instances).
         final CtType<?> declType = m.getDeclaringType();
-        if (!(declType instanceof CtClass<?> declClass)) return this.addDeclaration(m);
-        if (SpoonUtils.isObjectMethod(m)) return null;
+        if (!(declType instanceof CtClass<?> declClass))
+            return this.addMethodDeclOrAbstract(m);
 
         // Collect class-level and method-level actual type args from Spoon.
         final CtTypeReference<?> receiverRef = getCallReceiverTypeRef(in, declClass);
@@ -405,13 +405,13 @@ public class Abstractor {
 
         // Resolve args to type descriptors in the ambient frame (so a call-site
         // arg that is itself a type-param `S` resolves to the TypeParam ref for `S`).
-        final List<Ref<? extends TypeDesc>> classArgDescs  = this.addTypeArguments(classArgs);
-        final List<Ref<? extends TypeDesc>> methodArgDescs = this.addTypeArguments(methodArgs);
+        final List<Ref<? extends TypeDesc>> tdClassArgs  = this.addTypeArguments(classArgs);
+        final List<Ref<? extends TypeDesc>> tdMethodArgs = this.addTypeArguments(methodArgs);
 
         // Only build an instantiation if at least one binding differs from its
         // formal type parameter; otherwise the "instance" is just the decl.
-        final boolean classUseful  = isUsefulInstantiation(classParams,  classArgDescs);
-        final boolean methodUseful = isUsefulInstantiation(methodParams, methodArgDescs);
+        final boolean classUseful  = isUsefulInstantiation(classParams,  tdClassArgs);
+        final boolean methodUseful = isUsefulInstantiation(methodParams, tdMethodArgs);
         if (!classUseful && !methodUseful) return this.addDeclaration(m);
 
         // Look up (or create) the receiver BEFORE pushing our frame.
@@ -424,8 +424,8 @@ public class Abstractor {
 
         try {
             this.instantiator.pushFrame();
-            for (int i = 0; i < classParams.size();  i++) this.instantiator.add(classParams.get(i),  classArgDescs.get(i));
-            for (int i = 0; i < methodParams.size(); i++) this.instantiator.add(methodParams.get(i), methodArgDescs.get(i));
+            for (int i = 0; i < classParams.size();  i++) this.instantiator.add(classParams.get(i),  tdClassArgs.get(i));
+            for (int i = 0; i < methodParams.size(); i++) this.instantiator.add(methodParams.get(i), tdMethodArgs.get(i));
 
             final ElementKey key = new ElementKey(m, this.instantiator.typeArgs());
             return this.proj.methodInsts.create(this.log, key,
@@ -485,11 +485,11 @@ public class Abstractor {
         if (!classParams.isEmpty() && classArgs.size() != classParams.size()) return this.addMethodDeclForConstructor(ctor);
         if (!ctorParams.isEmpty()  && ctorArgs.size()  != ctorParams.size())  return this.addMethodDeclForConstructor(ctor);
 
-        final List<Ref<? extends TypeDesc>> classArgDescs = this.addTypeArguments(classArgs);
-        final List<Ref<? extends TypeDesc>> ctorArgDescs  = this.addTypeArguments(ctorArgs);
+        final List<Ref<? extends TypeDesc>> tdClassArgs = this.addTypeArguments(classArgs);
+        final List<Ref<? extends TypeDesc>> tdCtorArgs  = this.addTypeArguments(ctorArgs);
 
-        final boolean classUseful = isUsefulInstantiation(classParams, classArgDescs);
-        final boolean ctorUseful  = isUsefulInstantiation(ctorParams,  ctorArgDescs);
+        final boolean classUseful = isUsefulInstantiation(classParams, tdClassArgs);
+        final boolean ctorUseful  = isUsefulInstantiation(ctorParams,  tdCtorArgs);
         if (!classUseful && !ctorUseful) return this.addMethodDeclForConstructor(ctor);
 
         // Look up (or create) the receiver BEFORE pushing our frame,
@@ -501,8 +501,8 @@ public class Abstractor {
 
         try {
             this.instantiator.pushFrame();
-            for (int i = 0; i < classParams.size(); i++) this.instantiator.add(classParams.get(i), classArgDescs.get(i));
-            for (int i = 0; i < ctorParams.size();  i++) this.instantiator.add(ctorParams.get(i),  ctorArgDescs.get(i));
+            for (int i = 0; i < classParams.size(); i++) this.instantiator.add(classParams.get(i), tdClassArgs.get(i));
+            for (int i = 0; i < ctorParams.size();  i++) this.instantiator.add(ctorParams.get(i),  tdCtorArgs.get(i));
 
             final ElementKey key = new ElementKey(ctor, this.instantiator.typeArgs());
             return this.proj.methodInsts.create(this.log, key,
@@ -830,7 +830,7 @@ public class Abstractor {
             "type params " + SpoonUtils.describeElem(tp),
             () -> {
                 final String                  name = tp.getSimpleName();
-                // TODO: This does not seem to work. Does not seem to handle several bounds like `T extends A & B` (returns just `A`).
+                // TODO: This does not seem to handle several bounds like `T extends A & B` (returns just `A`).
                 final CtTypeReference<?>      tr   = tp.getTypeErasure();
                 final Ref<? extends TypeDesc> type = this.addTypeDesc(tr);
                 return new TypeParam(name, type);
@@ -964,8 +964,26 @@ public class Abstractor {
             final ElementKey key = new ElementKey(tr, this.instantiator.typeArgs());
             return this.proj.objectInsts.create(this.log, key,
                 "object instantiation "+SpoonUtils.describeGeneric(tr),
-                () -> {                    
-                    final Ref<StructDesc> resData = this.addStructDesc(c);
+                () -> {
+
+                    /*
+                    // TODO: =====[ REMOVE ]=====
+                    final int tpSize = typeParams.size();
+                    final int taSize = typeArgs.size();
+                    this.log.warning(">>> +-- definedInNest: " +  definedInNest);
+                    this.log.warning(">>> |   Type params (" + tpSize + "): " + typeParams);
+                    this.log.warning(">>> |   Type arguments (" + taSize + "): " + typeArgs);
+                    this.log.warning(">>> |   type ref: " + SpoonUtils.describeElem(tr));
+                    this.log.warning(">>> |   class:    " + SpoonUtils.describeElem(c));
+                    this.log.warning(">>> |   parent:   " + SpoonUtils.describeElem(c.getParent()));
+                    this.log.warning(">>> +-- parent (type): " + c.getParent().getClass().getName());
+                    Require.equal(tpSize, taSize, "The type params count, " + tpSize + ", (" + typeParams + ") " +
+                        "must match the type arguments, " + taSize + " (" + typeArgs + ") " +
+                        "for " + SpoonUtils.describeElem(tr) + " from " + SpoonUtils.describeElem(c) + ".");
+                    // TODO: =====[ REMOVE ]=====
+                    */
+
+                    final Ref<StructDesc>    resData      = this.addStructDesc(c);
                     final Ref<InterfaceDesc> resInterface = this.synthesizeObjectInterface(c, null);
                     return new ObjectInst(decl, this.instantiator.typeArgs(), resData, resInterface);
                 },
@@ -1196,20 +1214,20 @@ public class Abstractor {
      * resolve anything else that needs to be done to finish the abstraction.
      */
     public void performAbstraction() throws Exception {
+        this.log.measure("processPendingPackages",     () -> this.processPendingPackages());
+        this.log.measure("consolidateCons",            () -> this.consolidateCons());
+        this.log.measure("collectPackageDeclarations", () -> this.collectPackageDeclarations());
+        this.log.measure("addImportsFromUsage",        () -> this.addImportsFromUsage());
+        this.log.measure("removeEmptyPackages",        () -> this.removeEmptyPackages());
+    }
+
+    private void processPendingPackages() throws Exception {
         while (!this.pendingPackages.isEmpty()) {
             final CtPackage pkg = this.pendingPackages.iterator().next();
             this.pendingPackages.remove(pkg);
             this.processPackage(pkg);
             this.processPendingMetrics();
         }
-
-        this.consolidateCons();
-        this.collectPackageDeclarations();
-        this.addImportsFromUsage();
-
-        // Drop any packages that are empty.
-        this.proj.packages.removeIf(log, (PackageCon pc) -> pc.isEmpty());
-        this.proj.packages.setIndices();
     }
 
     public Ref<PackageCon> processPackage(CtPackage pkg) throws Exception {
@@ -1310,7 +1328,7 @@ public class Abstractor {
      * Populate each PackageCon.imports with references to every OTHER package
      * whose declarations are transitively referenced by this package's own
      * decls. Instantiations move up to their generic decl to find the package;
-     * intermediate descs (StructDesc, InterfaceDesc's pin, Signature, ...)
+     * intermediate descriptions (StructDesc, InterfaceDesc's pin, Signature, ...)
      * are walked through so their embedded refs contribute too. Runs after
      * consolidation, so every ref is expected to be resolved (mustGetResolved).
      */
@@ -1342,7 +1360,16 @@ public class Abstractor {
         }
     }
 
+    private void removeEmptyPackages() {
+        this.proj.packages.removeIf(log, (PackageCon pc) -> pc.isEmpty());
+        this.proj.packages.setIndices();
+    }
+
     public void validate() throws Exception {
+        this.log.measure("performValidation", () -> this.performValidation());
+    }
+
+    private void performValidation() throws Exception {
         final boolean hadErrors = this.log.errorCount() > 0;
         new Validator(this.log, this.proj).validate();
         if (this.log.errorCount() > 0) {

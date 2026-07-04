@@ -1,19 +1,10 @@
 package abstractor.core.log;
 
 import java.io.PrintStream;
+import java.time.Duration;
 import java.util.Stack;
 
 public class Logger {
-    final static private String defaultIndent = "  ";
-
-    public final Level level;
-    private final PrintStream out;
-    private final PrintStream err;
-    private final Stack<String> indents;
-    private int notices;
-    private int warnings;
-    private int errors;
-
     // See https://j8ahmed.com/2021/09/13/day-37-learning-ansi-escape-codes/
     static public final String colorBlack   = "\u001b[30m";
     static public final String colorRed     = "\u001b[31m";
@@ -24,6 +15,19 @@ public class Logger {
     static public final String colorCyan    = "\u001b[36m";
     static public final String colorWhite   = "\u001b[37m";
     static public final String colorReset   = "\u001b[0m";
+
+    static private final String noticeColor   = colorBlue;
+    static private final String warningColor  = colorYellow;
+    static private final String errorColor    = colorRed;
+    static private final String defaultIndent = "  ";
+
+    public final Level level;
+    private final PrintStream out;
+    private final PrintStream err;
+    private final Stack<String> indents;
+    private int notices;
+    private int warnings;
+    private int errors;
     
     public Logger(Level level) { this(level, null, null); }
 
@@ -77,7 +81,7 @@ public class Logger {
     
     public void notice(String text) {
         this.notices++;
-        this.write(this.out, Level.Notice, colorBlue, text);
+        this.write(this.out, Level.Notice, noticeColor, text);
     }
 
     public void noticeIf(boolean condition, String text) {
@@ -86,7 +90,7 @@ public class Logger {
 
     public void warning(String text) {
         this.warnings++;
-        this.write(this.out, Level.Warning, colorYellow, text);
+        this.write(this.out, Level.Warning, warningColor, text);
     }
 
     public void warningIf(boolean condition, String text) {
@@ -95,7 +99,7 @@ public class Logger {
 
     public void error(String text) {
         this.errors++;
-        this.write(this.err, Level.Error, colorRed, text);
+        this.write(this.err, Level.Error, errorColor, text);
     }
 
     public void errorIf(boolean condition, String text) {
@@ -118,5 +122,16 @@ public class Logger {
     public void pop(Level level) {
         if (!this.writesLevel(level)) return;
         if (!this.indents.empty()) this.indents.pop();
+    }
+
+    @FunctionalInterface public interface ThrowingRunnable { void run() throws Exception; }
+
+    public void measure(String label, ThrowingRunnable func) throws Exception {
+        final long start = System.nanoTime();
+        this.log("Starting " + label + "...");
+        func.run();
+        final long stop = System.nanoTime();
+        Duration elapsed = Duration.ofNanos(stop - start);
+        this.log("Finished " + label + " (" + elapsed + ")");
     }
 }

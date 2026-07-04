@@ -220,10 +220,10 @@
     { # 5. Foo<int>.lookup(key string) S
       generic: 5, receiver: objectInst1, resolved: 46, instanceTypes: [ basic2, typeParam2 ],
     },
-    { # 6. ???
+    { # 6. Foo<T>.lookup(key string) int
       generic: 5, receiver: object1, resolved: 44, instanceTypes: [ typeParam3, basic2 ],
     },
-    { # 7. ???
+    { # 7. Foo<T>.lookup(key string) string
       generic: 5, receiver: object1, resolved: 45, instanceTypes: [ typeParam3, basic3 ],
     },
     { # 8. Foo<int>.lookupInt(key string) int
@@ -274,7 +274,7 @@
     { # 1. static Foo<T>.FooInt() Foo<int>
       loc: 6, codeCount: 3, complexity: 1, indents: 1, lineCount: 3,
       invokes: [
-        methodInst1, # ??? Foo<T>.Foo(name string) Foo<T>
+        methodInst1, # Foo<int>.Foo(name string) Foo<int>
       ],
       reads: [
         basic2,      # int
@@ -329,7 +329,7 @@
     { # 5. Foo<T>.lookupInt(key string) int
       loc: 27, codeCount: 3, complexity: 1, indents: 1, lineCount: 3,
       invokes: [
-        methodInst6, # ??? Foo<T>.lookup(key string) S
+        methodInst6, # Foo<T>.lookup(key string) int
       ],
       reads: [
         basic2,     # int
@@ -341,7 +341,7 @@
     { # 6. Foo<T>.lookupString(key string) string
       loc: 31, codeCount: 3, complexity: 1, indents: 1, lineCount: 3,
       invokes: [
-        methodInst7, # ??? Foo<T>.lookup(key string) S
+        methodInst7, # Foo<T>.lookup(key string) string
       ],
       reads: [
         basic3,     # string

@@ -1,19 +1,5 @@
 # TODO
 
-## Features and debugging
-
-1. [ ] **Add more logs before and during consolidation.**
-  The consolidation phase takes a very long time with the target projects.
-  Print a short summary of the sizes before consolidation and some logs
-  during so that we can see the progress.
-
-2. [ ] **Improve logs during normal runs.**
-   Add an config options to write the logs to a file. Allow simplified output
-   to help us determine how much longer it will take to finish some work and
-   limit the noise. This means we might have a mode where it shows percentage
-   complete. Select message level to output and to push/pop at.
-   Also add timing output that tells how long something took.
-
 ## Spoon usage caveats / corrections
 
 1. [ ] **`CtType.getReference()` strips formal type parameters.** Discovered while
