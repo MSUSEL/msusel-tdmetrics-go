@@ -21,7 +21,7 @@
   ],
   interfaceDecls: [
     { # 1. Bar{ Run() bool }
-      name: Bar, package: 5, interface: 3,
+      name: Bar, package: 1, interface: 3,
       loc: 4, vis: public, nest: object3,
     },
   ],
@@ -42,15 +42,15 @@
   ],
   methods: [
     { # 1. Foo.Boop() bool
-      name: Boop, package: 5, receiver: 3, signature: 1,
+      name: Boop, package: 1, receiver: 3, signature: 1,
       loc: 22, metrics: 2, vis: public,
     },
     { # 2. Foo.Moog() bool
-      name: Moog, package: 5, receiver: 3, signature: 1,
+      name: Moog, package: 1, receiver: 3, signature: 1,
       loc: 28, metrics: 3, vis: public,
     },
     { # 3. Baz.Run() bool
-      name: Run,  package: 5, receiver: 1, signature: 1,
+      name: Run,  package: 1, receiver: 1, signature: 1,
       loc: 17, metrics: 1, vis: public,
     },
   ],
@@ -74,14 +74,14 @@
         object3,     # Foo
         objectInst2, # Bip<Baz>
         objectInst4, # Tak<Baz>
-        selection1,  # Bip<T>.t
-        selection2,  # Tak<T>.x
+        selection2,  # Bip<Baz>.t
+        selection4,  # Tak<Baz>.x
       ],
       writes: [
         object1,     # Baz
         object2,     # Bip<T>
         objectInst2, # Bip<Baz>
-        selection2,  # Tak<T>.x
+        selection4,  # Tak<Baz>.x
       ],
     },
     { # 3. Foo.Moog() bool
@@ -97,14 +97,14 @@
         object3,        # Foo
         objectInst1,    # Bip<Bar>
         objectInst3,    # Tak<Bar>
-        selection1,     # Bip<T>.t
-        selection2,     # Tak<T>.x
+        selection1,     # Bip<Bar>.t
+        selection3,     # Tak<Bar>.x
       ],
       writes: [
         interfaceDecl1, # Bar
         object2,        # Bip<T>
         objectInst1,    # Bip<Bar>
-        selection2,     # Tak<T>.x
+        selection3,     # Tak<Bar>.x
       ],
     },
   ],
@@ -124,32 +124,28 @@
   ],
   objects: [
     { # 1. Foo.Baz{ $nest Foo }{ Run() bool }
-      name: Baz, package: 5, data: 2, interface: 2,
+      name: Baz, package: 1, data: 2, interface: 2,
       loc: 16, vis: public, nest: object3,
       methods: [ 3 ],
     },
     { # 2. Foo.Bip<T>{ t Tak<T>; $nest Foo }{}
-      name: Bip, package: 5, data: 3, interface: 4,
+      name: Bip, package: 1, data: 3, interface: 4,
       loc: 8, vis: public, nest: object3, typeParams: [ 1 ],
       nested: [ object4 ], # Tak<T>
     },
     { # 3. Foo{}{ Boop() bool; Moog() bool }
-      name: Foo, package: 5, data: 1, interface: 1,
+      name: Foo, package: 1, data: 1, interface: 1,
       loc: 3, vis: public,
       nested: [ interfaceDecl1, object1, object2 ], # Bar, Baz, Bip<T>
       methods: [ 1, 2 ],
     },
     { # 4. Bip<T>.Tak<T>{ x T; $nest Bip<T> }{}
-      name: Tak, package: 5, data: 8, interface: 4,
+      name: Tak, package: 1, data: 8, interface: 4,
       loc: 9, vis: public, typeParams: [ 1 ],
       nest: object2, # Bip<T>
     },
   ],
   packages: [
-    { name: $builtin },
-    { name: "<unnamed>" },
-    { name: testData },
-    { name: testData.java },
     {
       name: testData.java.test1009,
       interfaces: [ 1 ],
@@ -158,8 +154,10 @@
     },
   ],
   selections: [
-    { name: t, origin: object2 }, # 1. Bip<T>.t
-    { name: x, origin: object4 }, # 2. Tak<T>.x
+    { name: t, origin: objectInst1 }, # 1. Bip<Bar>.t
+    { name: t, origin: objectInst2 }, # 2. Bip<Baz>.t
+    { name: x, origin: objectInst3 }, # 3. Tak<Bar>.x
+    { name: x, origin: objectInst4 }, # 4. Tak<Baz>.x
   ],
   signatures: [
     { results: [ 1 ] }, # 1. func() bool

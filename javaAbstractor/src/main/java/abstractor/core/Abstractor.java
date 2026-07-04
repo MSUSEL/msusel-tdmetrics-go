@@ -965,24 +965,6 @@ public class Abstractor {
             return this.proj.objectInsts.create(this.log, key,
                 "object instantiation "+SpoonUtils.describeGeneric(tr),
                 () -> {
-
-                    /*
-                    // TODO: =====[ REMOVE ]=====
-                    final int tpSize = typeParams.size();
-                    final int taSize = typeArgs.size();
-                    this.log.warning(">>> +-- definedInNest: " +  definedInNest);
-                    this.log.warning(">>> |   Type params (" + tpSize + "): " + typeParams);
-                    this.log.warning(">>> |   Type arguments (" + taSize + "): " + typeArgs);
-                    this.log.warning(">>> |   type ref: " + SpoonUtils.describeElem(tr));
-                    this.log.warning(">>> |   class:    " + SpoonUtils.describeElem(c));
-                    this.log.warning(">>> |   parent:   " + SpoonUtils.describeElem(c.getParent()));
-                    this.log.warning(">>> +-- parent (type): " + c.getParent().getClass().getName());
-                    Require.equal(tpSize, taSize, "The type params count, " + tpSize + ", (" + typeParams + ") " +
-                        "must match the type arguments, " + taSize + " (" + typeArgs + ") " +
-                        "for " + SpoonUtils.describeElem(tr) + " from " + SpoonUtils.describeElem(c) + ".");
-                    // TODO: =====[ REMOVE ]=====
-                    */
-
                     final Ref<StructDesc>    resData      = this.addStructDesc(c);
                     final Ref<InterfaceDesc> resInterface = this.synthesizeObjectInterface(c, null);
                     return new ObjectInst(decl, this.instantiator.typeArgs(), resData, resInterface);
