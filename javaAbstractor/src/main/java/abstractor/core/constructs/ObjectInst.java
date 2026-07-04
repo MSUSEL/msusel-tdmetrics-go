@@ -5,6 +5,7 @@ import java.util.*;
 import abstractor.core.cmp.*;
 import abstractor.core.iter.*;
 import abstractor.core.json.*;
+import abstractor.core.require.Require;
 
 public class ObjectInst extends ConstructImp implements TypeDesc {
     public Ref<ObjectDecl> generic;
@@ -16,11 +17,17 @@ public class ObjectInst extends ConstructImp implements TypeDesc {
     public ObjectInst() {}
 
     public ObjectInst(Ref<ObjectDecl> generic, List<Ref<? extends TypeDesc>> instanceTypes,
-        Ref<StructDesc> resData, Ref<InterfaceDesc> resInterface) {
+        Ref<StructDesc> resData, Ref<InterfaceDesc> resInterface) throws Exception {
         this.generic = generic;
         if (instanceTypes != null) this.instanceTypes.addAll(instanceTypes);
         this.resData      = resData;
         this.resInterface = resInterface;
+    
+        if (generic.isResolved()) {
+            final int tpSize = generic.getResolved().typeParams.size();
+            final int taSize = instanceTypes != null ? instanceTypes.size() : 0;
+            Require.equal(tpSize, taSize, "The type params count (" + tpSize + ") must match the type arguments (" + taSize + "): " + this);
+        }
     }
 
     public ConstructKind kind() { return ConstructKind.OBJECT_INST; }

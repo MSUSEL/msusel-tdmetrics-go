@@ -5,6 +5,7 @@ import java.util.*;
 import abstractor.core.cmp.*;
 import abstractor.core.iter.*;
 import abstractor.core.json.*;
+import abstractor.core.require.Require;
 
 public class MethodInst extends ConstructImp implements Method {
     public Ref<MethodDecl> generic;
@@ -19,11 +20,17 @@ public class MethodInst extends ConstructImp implements Method {
     public MethodInst() {}
 
     public MethodInst(Ref<MethodDecl> generic, Ref<? extends TypeDesc> receiver,
-        List<Ref<? extends TypeDesc>> instanceTypes, Ref<Signature> resolved) {
+        List<Ref<? extends TypeDesc>> instanceTypes, Ref<Signature> resolved) throws Exception {
         this.generic  = generic;
         this.receiver = receiver;
         if (instanceTypes != null) this.instanceTypes.addAll(instanceTypes);
         this.resolved = resolved;
+
+        if (generic.isResolved()) {
+            final int tpSize = generic.getResolved().typeParams.size();
+            final int taSize = instanceTypes != null ? instanceTypes.size() : 0;
+            Require.equal(tpSize, taSize, "The type params count (" + tpSize + ") must match the type arguments (" + taSize + "): " + this);
+        }
     }
 
     public ConstructKind kind() { return ConstructKind.METHOD_INST; }

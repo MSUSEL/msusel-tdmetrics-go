@@ -17,12 +17,12 @@
   ],
   methods: [
     { # 1. Foo<T>.getValue() T
-      name: getValue, package: 4, receiver: 1, signature: 1,
+      name: getValue, package: 1, receiver: 1, signature: 1,
       loc: 6, metrics: 1, vis: public,
       typeParams: [ 1 ],
     },
     { # 2. Foo<T>.setValue(value T)
-      name: setValue, package: 4, receiver: 1, signature: 2,
+      name: setValue, package: 1, receiver: 1, signature: 2,
       loc: 7, metrics: 2, vis: public,
       typeParams: [ 1 ],
     },
@@ -53,15 +53,12 @@
   ],
   objects: [
     { # 1. Foo<T>{ value T }{ getValue() T; setValue(value T) }
-      name: Foo, package: 4, data: 1, interface: 1, loc: 3, vis: public,
+      name: Foo, package: 1, data: 1, interface: 1, loc: 3, vis: public,
       methods: [ 1, 2 ],
       typeParams: [ 1 ],
     },
   ],
   packages: [
-    { name: "<unnamed>" },
-    { name: testData },
-    { name: testData.java },
     {
       name: testData.java.test1003,
       objects: [ 1 ],

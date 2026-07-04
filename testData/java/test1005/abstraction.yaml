@@ -153,11 +153,11 @@
       typeParams: [ 3 ],
     },
     { # 2. Entity<K, V, K, V>{ ... copyOf(arg0 any) any; getKey() any; getValue() any; setValue(arg0 any) any }
-      name: Entry, package: 3, interface: 3, vis: public, nest: interfaceDecl3,
+      name: Entry, package: 2, interface: 3, vis: public, nest: interfaceDecl3,
       typeParams: [ 1, 4, 1, 4 ],
     },
     { # 3. Map<K, V>{ clear(); ... of(arg0 any, arg1 any) any; of(arg0 any, arg1 any, arg2 K, arg3 V) any; ... }
-      name: Map, package: 3, interface: 6, vis: public,
+      name: Map, package: 2, interface: 6, vis: public,
       typeParams: [ 1, 4 ],
       nested: [ interfaceDecl2 ],
     },
@@ -206,61 +206,67 @@
   ],
   methodInsts: [
     { # 1. static Foo<int>.Foo(name string) Foo<int>
-      generic: 1, receiver: 1, resolved: 50, instanceTypes: [ basic2 ],
+      generic: 1, receiver: objectInst1, resolved: 50, instanceTypes: [ basic2 ],
     },
     { # 2. Foo<int>.FooInt() Foo<int>
-      generic: 2, receiver: 1, resolved: 5, instanceTypes: [ basic2 ],
+      generic: 2, receiver: objectInst1, resolved: 5, instanceTypes: [ basic2 ],
     },
     { # 3. Foo<int>.add(key string, value int)
-      generic: 3, receiver: 1, resolved: 47, instanceTypes: [ basic2 ],
+      generic: 3, receiver: objectInst1, resolved: 47, instanceTypes: [ basic2 ],
     },
     { # 4. Foo<int>.count() int
-      generic: 4, receiver: 1, resolved: 3, instanceTypes: [ basic2 ],
+      generic: 4, receiver: objectInst1, resolved: 3, instanceTypes: [ basic2 ],
     },
     { # 5. Foo<int>.lookup(key string) S
-      generic: 5, receiver: 1, resolved: 46, instanceTypes: [ basic2 ],
+      generic: 5, receiver: objectInst1, resolved: 46, instanceTypes: [ basic2, typeParam2 ],
     },
-    { # 6. Foo<int>.lookupInt(key string) int
-      generic: 6, receiver: 1, resolved: 44, instanceTypes: [ basic2 ],
+    { # 6. ???
+      generic: 5, receiver: object1, resolved: 44, instanceTypes: [ typeParam3, basic2 ],
     },
-    { # 7. Foo<int>.lookupString(key string) string
-      generic: 7, receiver: 1, resolved: 45, instanceTypes: [ basic2 ],
+    { # 7. ???
+      generic: 5, receiver: object1, resolved: 45, instanceTypes: [ typeParam3, basic3 ],
     },
-    { # 8. Foo<int>.lookupT(key string) S
-      generic: 8, receiver: 1, resolved: 46, instanceTypes: [ basic2 ],
+    { # 8. Foo<int>.lookupInt(key string) int
+      generic: 6, receiver: objectInst1, resolved: 44, instanceTypes: [ basic2 ],
+    },
+    { # 9. Foo<int>.lookupString(key string) string
+      generic: 7, receiver: objectInst1, resolved: 45, instanceTypes: [ basic2 ],
+    },
+    { # 10. Foo<int>.lookupT<S>(key string) S
+      generic: 8, receiver: objectInst1, resolved: 46, instanceTypes: [ basic2, typeParam2 ],
     },
   ],
   methods: [
     { # 1. static Foo<T>.Foo(name string) Foo<T>
-      name: Foo, package: 6, receiver: 1, signature: 49, constructor: true,
+      name: Foo, package: 3, receiver: 1, signature: 49, constructor: true,
       loc: 13, metrics: 2, static: true, vis: public, typeParams: [ 3 ],
     },
     { # 2. static Foo<T>.FooInt() Foo<int>
-      name: FooInt, package: 6, receiver: 1, signature: 5,
+      name: FooInt, package: 3, receiver: 1, signature: 5,
       loc: 6, metrics: 1, static: true, typeParams: [ 3 ],
     },
     { # 3. Foo<T>.add(key string, value T)
-      name: add, package: 6, receiver: 1, signature: 48,
+      name: add, package: 3, receiver: 1, signature: 48,
       loc: 15, metrics: 3, vis: public, typeParams: [ 3 ],
     },
     { # 4. Foo<T>.count() int
-      name: count, package: 6, receiver: 1, signature: 3,
+      name: count, package: 3, receiver: 1, signature: 3,
       loc: 39, metrics: 8, vis: public, typeParams: [ 3 ],
     },
-    { # 5. Foo<T>.lookup(key string) S
-      name: lookup, package: 6, receiver: 1, signature: 46,
+    { # 5. Foo<T>.lookup<S>(key string) S
+      name: lookup, package: 3, receiver: 1, signature: 46,
       loc: 19, metrics: 4, vis: public, typeParams: [ 3, 2 ],
     },
     { # 6. Foo<T>.lookupInt(key string) int
-      name: lookupInt, package: 6, receiver: 1, signature: 44,
+      name: lookupInt, package: 3, receiver: 1, signature: 44,
       loc: 27, metrics: 5, vis: public, typeParams: [ 3 ],
     },
     { # 7. Foo<T>.lookupString(key string) string
-      name: lookupString, package: 6, receiver: 1, signature: 45,
+      name: lookupString, package: 3, receiver: 1, signature: 45,
       loc: 31, metrics: 6, vis: public, typeParams: [ 3 ],
     },
-    { # 8. Foo<T>.lookupT(key string) S
-      name: lookupT, package: 6, receiver: 1, signature: 46,
+    { # 8. Foo<T>.lookupT<S>(key string) S
+      name: lookupT, package: 3, receiver: 1, signature: 46,
       loc: 35, metrics: 7, vis: public, typeParams: [ 3, 2 ],
     },
   ],
@@ -268,7 +274,7 @@
     { # 1. static Foo<T>.FooInt() Foo<int>
       loc: 6, codeCount: 3, complexity: 1, indents: 1, lineCount: 3,
       invokes: [
-        method1, # Foo<T>.Foo(name string) Foo<T>
+        methodInst1, # ??? Foo<T>.Foo(name string) Foo<T>
       ],
       reads: [
         basic2,      # int
@@ -323,7 +329,7 @@
     { # 5. Foo<T>.lookupInt(key string) int
       loc: 27, codeCount: 3, complexity: 1, indents: 1, lineCount: 3,
       invokes: [
-        method5, # Foo<T>.lookup(key string) S
+        methodInst6, # ??? Foo<T>.lookup(key string) S
       ],
       reads: [
         basic2,     # int
@@ -335,7 +341,7 @@
     { # 6. Foo<T>.lookupString(key string) string
       loc: 31, codeCount: 3, complexity: 1, indents: 1, lineCount: 3,
       invokes: [
-        method5, # Foo<T>.lookup(key string) S
+        methodInst7, # ??? Foo<T>.lookup(key string) S
       ],
       reads: [
         basic3,     # string
@@ -372,12 +378,12 @@
   objectInsts: [
     { # 1. Foo<int>{ name string; mapping Map<string, int> }{ add(key string, value int); count() int; ... lookupT(key string) S  }
       generic: 1, resData: 1, resInterface: 7, instanceTypes: [ basic2 ],
-      methods: [ 1, 2, 3, 4, 5, 6, 7, 8 ],
+      methods: [ 1, 2, 3, 4, 5, 8, 9, 10 ],
     },
   ],
   objects: [
     { # 1. Foo<T>{ name string; mapping Map<string, T> }{ add(key string, value T); count() int; ... lookupT(key string) S }
-      name: Foo, package: 6, data: 2, interface: 8,
+      name: Foo, package: 3, data: 2, interface: 8,
       loc: 5, vis: public, typeParams: [ 3 ],
       methods: [ 1, 2, 3, 4, 5, 6, 7, 8 ],
     },
@@ -387,13 +393,10 @@
       name: $builtin,
       interfaces: [ 1 ],
     },
-    { name: "<unnamed>" },
     {
       name: java.util,
       interfaces: [ 2, 3 ],
     },
-    { name: testData },
-    { name: testData.java },
     {
       name: testData.java.test1005,
       methods: [ 1, 2, 3, 4, 5, 6, 7, 8 ],

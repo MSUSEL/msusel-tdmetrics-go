@@ -5,6 +5,7 @@ import java.util.*;
 import abstractor.core.cmp.*;
 import abstractor.core.iter.*;
 import abstractor.core.json.*;
+import abstractor.core.require.Require;
 
 public class InterfaceInst extends ConstructImp implements TypeDesc {
     public Ref<InterfaceDecl> generic;
@@ -13,10 +14,16 @@ public class InterfaceInst extends ConstructImp implements TypeDesc {
 
     public InterfaceInst() {}
 
-    public InterfaceInst(Ref<InterfaceDecl> generic, List<Ref<? extends TypeDesc>> instanceTypes, Ref<InterfaceDesc> resolved) {
+    public InterfaceInst(Ref<InterfaceDecl> generic, List<Ref<? extends TypeDesc>> instanceTypes, Ref<InterfaceDesc> resolved) throws Exception {
         this.generic = generic;
         if (instanceTypes != null) this.instanceTypes.addAll(instanceTypes);
         this.resolved = resolved;
+        
+        if (generic.isResolved()) {
+            final int tpSize = generic.getResolved().typeParams.size();
+            final int taSize = instanceTypes != null ? instanceTypes.size() : 0;
+            Require.equal(tpSize, taSize, "The type params count (" + tpSize + ") must match the type arguments (" + taSize + "): " + this);
+        }
     }
 
     public ConstructKind kind() { return ConstructKind.INTERFACE_INST; }

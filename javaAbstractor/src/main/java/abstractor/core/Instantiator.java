@@ -19,9 +19,21 @@ public class Instantiator {
         }
 
         public void copyFromPrior() {
-            if (prior == null) return;
-            this.subst.putAll(prior.subst);
-            this.paramOrder.addAll(prior.paramOrder);
+            if (this.prior == null) return;
+            this.subst.putAll(this.prior.subst);
+            this.paramOrder.addAll(this.prior.paramOrder);
+            this.nestCount = this.paramOrder.size();
+        }
+
+        public void copyImmediateFromPrior() {
+            if (this.prior == null) return;
+            final int fullCount = this.prior.paramOrder.size();
+            for (int i = this.prior.nestCount; i < fullCount; i++) {
+                final Ref<? extends TypeDesc> param = this.prior.paramOrder.get(i);
+                this.paramOrder.add(param);
+                final Ref<? extends TypeDesc> sub = this.prior.subst.get(param);
+                this.subst.put(param, sub);
+            }
             this.nestCount = this.paramOrder.size();
         }
 
@@ -97,6 +109,11 @@ public class Instantiator {
         this.topFrame = new Frame(this.topFrame);
     }
 
+    public void pushImmediateFrame() {
+        this.topFrame = new Frame(this.topFrame);
+        this.topFrame.copyImmediateFromPrior();
+    }
+
     public void popFrame() throws Exception {
         Require.notNull(this.topFrame, "instantiator has no frame to pop");
         this.topFrame = this.topFrame.prior;
@@ -122,6 +139,10 @@ public class Instantiator {
 
     public Ref<? extends TypeDesc> replace(Ref<? extends TypeDesc> con) {
         return this.topFrame == null ? con : this.topFrame.replace(con);
+    }
+
+    public List<Ref<? extends TypeDesc>> typeArgs() throws Exception {
+        return this.typeArgs(true);
     }
 
     public List<Ref<? extends TypeDesc>> typeArgs(boolean withNest) throws Exception {

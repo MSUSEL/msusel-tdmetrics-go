@@ -12,177 +12,81 @@ import spoon.reflect.reference.CtTypeReference;
 public class Require {
     private Require() {}
     
-    static public void fail() throws Exception {
-        throw new AbstractorException("failure: no message");
+    static public boolean enabled = true;
+
+    static public void fail() throws Exception { fail(""); }
+    static public void fail(String msg) throws Exception {
+        if (enabled) throw new AbstractorException(!msg.isBlank()? msg: "failure: no message");
     }
 
-    static public void failure(String msg) throws Exception {
-        throw new AbstractorException(!msg.isBlank()? msg: "failure: no message");
-    }
-    
-    static public void failure(Exception ex) throws Exception {
-        if (ex == null) return;
-        if (ex instanceof AbstractorException ae) throw ae;
-        throw new AbstractorException(ex);
-    }
-
-    static public void require(boolean test) throws Exception {
-        if (!test) throw new AbstractorException("required test to be true");
-    }
-
+    static public void require(boolean test) throws Exception { require(test, ""); }
     static public void require(boolean test, String msg) throws Exception {
-        if (!test) throw new AbstractorException(!msg.isBlank()? msg: "required test to be true");
+        if (!test) fail(!msg.isBlank()? msg: "required test to be true");
     }
 
-    static public <T> void equal(T value, T other) throws Exception {
-        if (!Objects.equals(value, other)) {
-            throw new AbstractorException("required " + value + " to be equal to " + other);
-        }
-    }
-
+    static public <T> void equal(T value, T other) throws Exception { equal(value, other, ""); }
     static public <T> void equal(T value, T other, String msg) throws Exception {
-        if (!Objects.equals(value, other)) {
-            throw new AbstractorException(!msg.isBlank()? msg: "required " + value + " to be equal to " + other);
-        }
+        require(Objects.equals(value, other), !msg.isBlank()? msg: "required " + value + " to be equal to " + other);
     }
 
-    static public <T> void notEqual(T value, T other) throws Exception {
-        if (Objects.equals(value, other)) {
-            throw new AbstractorException("required " + value + " to be not equal to " + other);
-        }
-    }
-
+    static public <T> void notEqual(T value, T other) throws Exception { notEqual(value, other, ""); }
     static public <T> void notEqual(T value, T other, String msg) throws Exception {
-        if (Objects.equals(value, other)) {
-            throw new AbstractorException(!msg.isBlank()? msg: "required " + value + " to be not equal to " + other);
-        }
+        require(!Objects.equals(value, other), !msg.isBlank()? msg: "required " + value + " to be not equal to " + other);
     }
 
-    static public <T extends Comparable<T>> void lessThan(T value, T other) throws Exception {
-        if (value.compareTo(other) >= 0) {
-            throw new AbstractorException("required " + value + " to be less than " + other);
-        }
-    }
-
+    static public <T extends Comparable<T>> void lessThan(T value, T other) throws Exception { lessThan(value, other, ""); }
     static public <T extends Comparable<T>> void lessThan(T value, T other, String msg) throws Exception {
-        if (value.compareTo(other) >= 0) {
-            throw new AbstractorException(!msg.isBlank()? msg: "required " + value + " to be less than " + other);
-        }
+        require(value.compareTo(other) < 0, !msg.isBlank()? msg: "required " + value + " to be less than " + other);
     }
 
-    static public <T extends Comparable<T>> void lessThanOrEqual(T value, T other) throws Exception {
-        if (value.compareTo(other) > 0) {
-            throw new AbstractorException("required " + value + " to be less or equal than " + other);
-        }
-    }
-
+    static public <T extends Comparable<T>> void lessThanOrEqual(T value, T other) throws Exception { lessThanOrEqual(value, other, ""); }
     static public <T extends Comparable<T>> void lessThanOrEqual(T value, T other, String msg) throws Exception {
-        if (value.compareTo(other) > 0) {
-            throw new AbstractorException(!msg.isBlank()? msg: "required " + value + " to be less or equal than " + other);
-        }
+        require(value.compareTo(other) <= 0, !msg.isBlank()? msg: "required " + value + " to be less or equal than " + other);
     }
 
-    static public <T extends Comparable<T>> void greaterThan(T value, T other) throws Exception {
-        if (value.compareTo(other) <= 0) {
-            throw new AbstractorException("required " + value + " to be greater than " + other);
-        }
-    }
-
+    static public <T extends Comparable<T>> void greaterThan(T value, T other) throws Exception { greaterThan(value, other, ""); }
     static public <T extends Comparable<T>> void greaterThan(T value, T other, String msg) throws Exception {
-        if (value.compareTo(other) <= 0) {
-            throw new AbstractorException(!msg.isBlank()? msg: "required " + value + " to be greater than " + other);
-        }
+        require(value.compareTo(other) > 0, !msg.isBlank()? msg: "required " + value + " to be greater than " + other);
     }
 
-    static public <T extends Comparable<T>> void greaterThanOrEqual(T value, T other) throws Exception {
-        if (value.compareTo(other) < 0) {
-            throw new AbstractorException("required " + value + " to be greater or equal than " + other);
-        }
-    }
-
+    static public <T extends Comparable<T>> void greaterThanOrEqual(T value, T other) throws Exception { greaterThanOrEqual(value, other, ""); }
     static public <T extends Comparable<T>> void greaterThanOrEqual(T value, T other, String msg) throws Exception {
-        if (value.compareTo(other) < 0) {
-            throw new AbstractorException(!msg.isBlank()? msg: "required " + value + " to be greater or equal than " + other);
-        }
+        require(value.compareTo(other) >= 0, !msg.isBlank()? msg: "required " + value + " to be greater or equal than " + other);
     }
 
-    static public <T> void notNull(T value) throws Exception {
-        if (value == null) {
-            throw new AbstractorException("required a not null value");
-        }
-    }
-
+    static public <T> void notNull(T value) throws Exception { notNull(value, ""); }
     static public <T> void notNull(T value, String msg) throws Exception {
-        if (value == null) {
-            throw new AbstractorException(!msg.isBlank()? msg: "required a not null value");
-        }
+        require(value != null, !msg.isBlank()? msg: "required a not null value");
     }
 
-    static public <T> void isNull(T value) throws Exception {
-        if (value != null) {
-            throw new AbstractorException("required a null value");
-        }
-    }
-
+    static public <T> void isNull(T value) throws Exception { isNull(value, ""); }
     static public <T> void isNull(T value, String msg) throws Exception {
-        if (value != null) {
-            throw new AbstractorException(!msg.isBlank()? msg: "required a null value");
-        }
+        require(value == null, !msg.isBlank()? msg: "required a null value");
     }
 
-    static public void notBlank(String text) throws Exception {
-        if (text.isBlank()) {
-            throw new AbstractorException("required a string to not be blank");
-        }
-    }
-
+    static public void notBlank(String text) throws Exception { notBlank(text, ""); }
     static public void notBlank(String text, String msg) throws Exception {
-        if (text.isBlank()) {
-            throw new AbstractorException(!msg.isBlank()? msg: "required a string to not be blank");
-        }
+        require(!text.isBlank(), !msg.isBlank()? msg: "required a string to not be blank");
     }
 
-    static public void notObjectMethod(CtMethod<?> m) throws Exception {
-        if (SpoonUtils.isObjectMethod(m)) {
-            throw new AbstractorException("required a method not to be a default Object method: " + SpoonUtils.describeElem(m));
-        }
-    }
-
+    static public void notObjectMethod(CtMethod<?> m) throws Exception { notObjectMethod(m, ""); }
     static public void notObjectMethod(CtMethod<?> m, String msg) throws Exception {
-        if (SpoonUtils.isObjectMethod(m)) {
-            throw new AbstractorException(!msg.isBlank()? msg: "required a method not to be a default Object method: " + SpoonUtils.describeElem(m));
-        }
+        require(!SpoonUtils.isObjectMethod(m), !msg.isBlank()? msg: "required a method not to be a default Object method: " + SpoonUtils.describeElem(m));
     }
 
-    static public void notObject(CtTypeReference<?> tr) throws Exception {
-        if (SpoonUtils.isObject(tr)) {
-            throw new AbstractorException("required a type to not be the default Object: " + SpoonUtils.describeElem(tr));
-        }
-    }
-
+    static public void notObject(CtTypeReference<?> tr) throws Exception { notObject(tr, ""); }
     static public void notObject(CtTypeReference<?> tr, String msg) throws Exception {
-        if (SpoonUtils.isObject(tr)) {
-            throw new AbstractorException(!msg.isBlank()? msg: "required a type to not be the default Object: " + SpoonUtils.describeElem(tr));
-        }
+        require(!SpoonUtils.isObject(tr), !msg.isBlank()? msg: "required a type to not be the default Object: " + SpoonUtils.describeElem(tr));
     }
 
     static private Pattern idPattern;
     static private boolean idMatch(String s) {
-        if (idPattern == null) {
-            idPattern = Pattern.compile("^[a-zA-Z_$][a-zA-Z0-9_$]*$");
-        }
+        if (idPattern == null) idPattern = Pattern.compile("^[a-zA-Z_$][a-zA-Z0-9_$]*$");
         return idPattern.matcher(s).find();
     }
     
-    static public void isIdentifier(String s) throws Exception {
-        if (!idMatch(s)) {
-            throw new AbstractorException("required an identifier: " + s);
-        }
-    }
-
+    static public void isIdentifier(String s) throws Exception { isIdentifier(s, ""); }
     static public void isIdentifier(String s, String msg) throws Exception {
-        if (!idMatch(s)) {
-            throw new AbstractorException(!msg.isBlank()? msg: "required an identifier: " + s);
-        }
+        require(idMatch(s), !msg.isBlank()? msg: "required an identifier: " + s);
     }
 }

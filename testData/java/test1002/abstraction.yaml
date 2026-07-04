@@ -48,15 +48,15 @@
   ],
   methods: [
     { # 1. bar(x int, y int) int
-      name: bar, package: 5, receiver: 1, signature: 7,
+      name: bar, package: 2, receiver: 1, signature: 7,
       loc:  4, metrics: 1,
     },
     { # 2. baz()
-      name: baz, package: 5, receiver: 1, signature: 1,
+      name: baz, package: 2, receiver: 1, signature: 1,
       loc:  8, metrics: 2,
     },
     { # 3. cat(t $Array<int> ...)
-      name: cat, package: 5, receiver: 1, signature: 8,
+      name: cat, package: 2, receiver: 1, signature: 8,
       loc: 12, metrics: 3,
     },
   ],
@@ -81,7 +81,7 @@
   ],
   objects: [
     { # 1. Foo{}{ bar(x int, y int) int; baz(); cat(t $Array<int> ...) }
-      name: Foo, package: 5, data: 1, interface: 3,
+      name: Foo, package: 2, data: 1, interface: 3,
       methods: [ 1, 2, 3 ],
       loc: 3, vis: public,
     },
@@ -91,9 +91,6 @@
       name: $builtin,
       interfaces: [ 1 ],
     },
-    { name: "<unnamed>" },
-    { name: testData },
-    { name: testData.java },
     {
       name: testData.java.test1002,
       objects: [ 1 ],

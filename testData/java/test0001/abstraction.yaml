@@ -9,11 +9,11 @@
   ],
   methods: [
     { # 1. EntryPoint.main()
-      name: main, package: 5, receiver: 1, signature: 1,
+      name: main, package: 1, receiver: 1, signature: 1,
       loc: 4, metrics: 1, static: true, vis: public,
     },
     { # 2. EntryPoint.println(s string)
-      name: println, package: 5, receiver: 1, signature: 2, 
+      name: println, package: 1, receiver: 1, signature: 2, 
       loc: 8, metrics: 2, static: true, vis: public,
     },
   ],
@@ -29,16 +29,12 @@
   ],
   objects: [
     { # 1. EntryPoint{}{}
-      name: EntryPoint, package: 5, data: 1, interface: 1,
+      name: EntryPoint, package: 1, data: 1, interface: 1,
       loc: 3, vis: public,
       methods: [ 1, 2 ],
     },
   ],
   packages: [
-    { name: $builtin },
-    { name: "<unnamed>" },
-    { name: testData },
-    { name: testData.java },
     {
       name: testData.java.test0001,
       objects: [ 1 ],

@@ -43,23 +43,23 @@
   ],
   methods: [
     { # 1. first(values ...$Array<int>) int
-      name: first, package: 5, receiver: 1, signature: 10,
+      name: first, package: 2, receiver: 1, signature: 10,
       loc: 19, metrics: 3, static: true, vis: public,
     },
     { # 2. last(values ...$Array<int>) int
-      name: last, package: 5, receiver: 1, signature: 10,
+      name: last, package: 2, receiver: 1, signature: 10,
       loc: 23, metrics: 4, static: true, vis: public,
     },
     { # 3. main(args $Array<string>)
-      name: main, package: 5, receiver: 1, signature: 2,
+      name: main, package: 2, receiver: 1, signature: 2,
       loc: 6, metrics: 1, static: true, vis: public,
     },
     { # 4. println(s string)
-      name: println, package: 5, receiver: 1, signature: 9,
+      name: println, package: 2, receiver: 1, signature: 9,
       loc: 27, metrics: 5, static: true, vis: public,
     },
     { # 5. sum(values ...$Array<int>) int
-      name: sum, package: 5, receiver: 1, signature: 10,
+      name: sum, package: 2, receiver: 1, signature: 10,
       loc: 13, metrics: 2, static: true, vis: public,
     },
   ],
@@ -112,7 +112,7 @@
   ],
   objects: [
     { # 1. EntryPoint{}{}
-      name: EntryPoint, package: 5, data: 1, interface: 4,
+      name: EntryPoint, package: 2, data: 1, interface: 4,
       loc: 5, vis: public,
       methods: [ 1, 2, 3, 4, 5 ],
     },
@@ -122,9 +122,6 @@
       name: $builtin,
       interfaces: [ 1 ],
     },
-    { name: "<unnamed>" },
-    { name: testData },
-    { name: testData.java },
     {
       name: testData.java.test0002,
       objects: [ 1 ],

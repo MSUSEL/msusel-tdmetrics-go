@@ -210,17 +210,18 @@ public class Abstractor {
         if (typeArgs == null) return decl;
 
         try {
-            this.instantiator.pushFrame();
+            final boolean definedInNest = inSameNested(tr, i);
+            if (definedInNest) this.instantiator.pushFrame();
+            else this.instantiator.pushCleanFrame();
             for (int j = 0; j < typeParams.size(); j++)
                 this.instantiator.add(typeParams.get(j), typeArgs.get(j));
 
-            final boolean definedInNest = tr.hasParent(i.getParent());
-            final ElementKey key = new ElementKey(tr, this.instantiator.typeArgs(definedInNest));
+            final ElementKey key = new ElementKey(tr, this.instantiator.typeArgs());
             return this.proj.interfaceInsts.create(this.log, key,
                 "interface instantiation "+SpoonUtils.describeGeneric(tr),
                 () -> {
                     final Ref<InterfaceDesc> resolved = this.addInterfaceDesc(i);
-                    final List<Ref<? extends TypeDesc>> argTypes = this.instantiator.typeArgs(definedInNest);
+                    final List<Ref<? extends TypeDesc>> argTypes = this.instantiator.typeArgs();
                     return new InterfaceInst(decl, argTypes, resolved);
                 }, 
                 (Ref<InterfaceInst> ref, InterfaceInst it) -> {
@@ -236,9 +237,13 @@ public class Abstractor {
     private boolean isNested(CtType<?> t) {
         return t.getParent() instanceof CtType<?>;
     }
+    
+    private boolean inSameNested(CtTypeReference<?> tr, CtType<?> t) {
+        return tr.hasParent(t.getParent());
+    }
 
     public Ref<InterfaceDesc> addInterfaceDesc(CtInterface<?> i) throws Exception {
-        final ElementKey key = new ElementKey(i, this.instantiator.typeArgs(true));
+        final ElementKey key = new ElementKey(i, this.instantiator.typeArgs());
         return this.proj.interfaceDescs.create(this.log, key,
             "interface description " + SpoonUtils.describeElem(i),
             () -> {
@@ -303,38 +308,57 @@ public class Abstractor {
         }
     }
 
-    public Ref<MethodInst> addMethodInstForObjectInst(Ref<ObjectInst> receiver, CtMethod<?> m, boolean objDefinedInNest) throws Exception {
+    public Ref<MethodInst> addMethodInstForObjectInst(Ref<ObjectInst> receiver, CtMethod<?> m) throws Exception {
         Require.notObjectMethod(m);
-        final ObjectInst recv = receiver.mustGetResolved();
-        final ElementKey key  = new ElementKey(m, this.instantiator.typeArgs(objDefinedInNest));
-        return this.proj.methodInsts.create(this.log, key,
-            "method for object instantiation " + SpoonUtils.describeElem(m),
-            () -> {
-                final Ref<MethodDecl>               generic       = this.addMethodDecl(recv.generic, m);
-                final List<Ref<? extends TypeDesc>> instanceTypes = this.instantiator.typeArgs(objDefinedInNest);
-                final Ref<Signature>                resolved      = this.addSignature(m);
-                return new MethodInst(generic, receiver, instanceTypes, resolved);
-            },
-            (Ref<MethodInst> ref, MethodInst mi) -> {
-                recv.methods.add(ref);
-            });
+        try {
+            this.instantiator.pushFrame();
+            final ObjectInst recv = receiver.mustGetResolved();
+            final Ref<MethodDecl> generic = this.addMethodDecl(recv.generic, m);
+            final List<Ref<TypeParam>> typeParams = this.addTypeParams(m);
+            for (int i = 0; i < typeParams.size(); i++)
+                this.instantiator.add(typeParams.get(i), typeParams.get(i));
+
+            final ElementKey key = new ElementKey(m, this.instantiator.typeArgs());
+            return this.proj.methodInsts.create(this.log, key,
+                "method for object instantiation " + SpoonUtils.describeElem(m),
+                () -> {
+                    // TODO: Need to pad instanceTypes correctly.
+                    final List<Ref<? extends TypeDesc>> instanceTypes = this.instantiator.typeArgs();
+                    final Ref<Signature>                resolved      = this.addSignature(m);
+                    return new MethodInst(generic, receiver, instanceTypes, resolved);
+                },
+                (Ref<MethodInst> ref, MethodInst mi) -> {
+                    recv.methods.add(ref);
+                });
+        } finally {
+            this.instantiator.popFrame();
+        }
     }
 
-    public Ref<MethodInst> addMethodInstForObjectInst(Ref<ObjectInst> receiver, CtConstructor<?> ctor, boolean objDefinedInNest) throws Exception {
+    public Ref<MethodInst> addMethodInstForObjectInst(Ref<ObjectInst> receiver, CtConstructor<?> ctor) throws Exception {
         if (ctor.isImplicit()) return null;
-        final ObjectInst recv = receiver.mustGetResolved();
-        final ElementKey key  = new ElementKey(ctor, this.instantiator.typeArgs(objDefinedInNest));
-        return this.proj.methodInsts.create(this.log, key,
-            "constructor for object instantiation " + SpoonUtils.describeElem(ctor),
-            () -> {
-                final Ref<MethodDecl>               generic       = this.addMethodDeclForConstructor(recv.generic, ctor);
-                final List<Ref<? extends TypeDesc>> instanceTypes = this.instantiator.typeArgs(objDefinedInNest);
-                final Ref<Signature>                resolved      = this.addSignatureForConstructor(ctor);
-                return new MethodInst(generic, receiver, instanceTypes, resolved);
-            },
-            (Ref<MethodInst> ref, MethodInst mi) -> {
-                recv.methods.add(ref);
-            });
+        try {
+            this.instantiator.pushFrame();
+            final ObjectInst recv = receiver.mustGetResolved();
+            final Ref<MethodDecl> generic = this.addMethodDeclForConstructor(recv.generic, ctor);
+            final List<Ref<TypeParam>> typeParams = this.addTypeParams(ctor);
+            for (int i = 0; i < typeParams.size(); i++)
+                this.instantiator.add(typeParams.get(i), typeParams.get(i));
+
+            final ElementKey key = new ElementKey(ctor, this.instantiator.typeArgs());
+            return this.proj.methodInsts.create(this.log, key,
+                "constructor for object instantiation " + SpoonUtils.describeElem(ctor),
+                () -> {
+                    final List<Ref<? extends TypeDesc>> instanceTypes = this.instantiator.typeArgs();
+                    final Ref<Signature>                resolved      = this.addSignatureForConstructor(ctor);
+                    return new MethodInst(generic, receiver, instanceTypes, resolved);
+                },
+                (Ref<MethodInst> ref, MethodInst mi) -> {
+                    recv.methods.add(ref);
+                });
+        } finally {
+            this.instantiator.popFrame();
+        }
     }
 
     /**
@@ -403,13 +427,13 @@ public class Abstractor {
             for (int i = 0; i < classParams.size();  i++) this.instantiator.add(classParams.get(i),  classArgDescs.get(i));
             for (int i = 0; i < methodParams.size(); i++) this.instantiator.add(methodParams.get(i), methodArgDescs.get(i));
 
-            final ElementKey key = new ElementKey(m, this.instantiator.typeArgs(true));
+            final ElementKey key = new ElementKey(m, this.instantiator.typeArgs());
             return this.proj.methodInsts.create(this.log, key,
                 "method for call site " + SpoonUtils.describeElem(m),
                 () -> {
                     final Ref<ObjectDecl>               recvDecl      = this.addObjectDecl(declClass);
                     final Ref<MethodDecl>               generic       = this.addMethodDecl(recvDecl, m);
-                    final List<Ref<? extends TypeDesc>> instanceTypes = this.instantiator.typeArgs(true);
+                    final List<Ref<? extends TypeDesc>> instanceTypes = this.instantiator.typeArgs();
                     final Ref<Signature>                resolved      = this.addSignature(m);
                     return new MethodInst(generic, receiver, instanceTypes, resolved);
                 },
@@ -480,13 +504,13 @@ public class Abstractor {
             for (int i = 0; i < classParams.size(); i++) this.instantiator.add(classParams.get(i), classArgDescs.get(i));
             for (int i = 0; i < ctorParams.size();  i++) this.instantiator.add(ctorParams.get(i),  ctorArgDescs.get(i));
 
-            final ElementKey key = new ElementKey(ctor, this.instantiator.typeArgs(true));
+            final ElementKey key = new ElementKey(ctor, this.instantiator.typeArgs());
             return this.proj.methodInsts.create(this.log, key,
                 "constructor for call site " + SpoonUtils.describeElem(ctor),
                 () -> {
                     final Ref<ObjectDecl>               recvDecl      = this.addObjectDecl(declClass);
                     final Ref<MethodDecl>               generic       = this.addMethodDeclForConstructor(recvDecl, ctor);
-                    final List<Ref<? extends TypeDesc>> instanceTypes = this.instantiator.typeArgs(true);
+                    final List<Ref<? extends TypeDesc>> instanceTypes = this.instantiator.typeArgs();
                     final Ref<Signature>                resolved      = this.addSignatureForConstructor(ctor);
                     return new MethodInst(generic, receiver, instanceTypes, resolved);
                 },
@@ -538,7 +562,7 @@ public class Abstractor {
 
     public Ref<Abstract> addAbstract(CtMethod<?> m) throws Exception {
         Require.notObjectMethod(m);
-        final ElementKey key = new ElementKey(m, this.instantiator.typeArgs(true));
+        final ElementKey key = new ElementKey(m, this.instantiator.typeArgs());
         return this.proj.abstracts.create(this.log, key,
             "abstract " + SpoonUtils.describeElem(m),
             () -> {
@@ -550,7 +574,7 @@ public class Abstractor {
 
     public Ref<Signature> addSignature(CtMethod<?> m) throws Exception {
         Require.notObjectMethod(m);
-        final ElementKey key = new ElementKey(m, this.instantiator.typeArgs(true));
+        final ElementKey key = new ElementKey(m, this.instantiator.typeArgs());
         return this.proj.signatures.create(this.log, key,
             "signature " + SpoonUtils.describeElem(m),
             () -> {
@@ -615,7 +639,7 @@ public class Abstractor {
     }
 
     public Ref<Signature> addSignatureForConstructor(CtConstructor<?> m) throws Exception {
-        final ElementKey key = new ElementKey(m, this.instantiator.typeArgs(true));
+        final ElementKey key = new ElementKey(m, this.instantiator.typeArgs());
         return this.proj.signatures.create(this.log, key,
             "constructor signature " + SpoonUtils.describeElem(m),
             () -> {
@@ -633,7 +657,7 @@ public class Abstractor {
     }
 
     public Ref<Argument> addArgument(CtParameter<?> p) throws Exception {
-        final ElementKey key = new ElementKey(p, this.instantiator.typeArgs(true));
+        final ElementKey key = new ElementKey(p, this.instantiator.typeArgs());
         return this.proj.arguments.create(this.log, key,
             "parameter " + SpoonUtils.describeElem(p),
             () -> {
@@ -644,7 +668,7 @@ public class Abstractor {
     }
     
     public Ref<Argument> addArgument(CtTypeReference<?> p) throws Exception {
-        final ElementKey key = new ElementKey(p, this.instantiator.typeArgs(true));
+        final ElementKey key = new ElementKey(p, this.instantiator.typeArgs());
         return this.proj.arguments.create(this.log, key,
             "parameter <unnamed> " + SpoonUtils.describeGeneric(p),
             () -> {
@@ -654,7 +678,7 @@ public class Abstractor {
     }
     
     public Ref<StructDesc> addStructDesc(CtType<?> c) throws Exception {
-        final ElementKey key = new ElementKey(c, this.instantiator.typeArgs(true));
+        final ElementKey key = new ElementKey(c, this.instantiator.typeArgs());
         return this.proj.structDescs.create(this.log, key,
             "struct " + SpoonUtils.describeElem(c),
             () -> {
@@ -688,7 +712,7 @@ public class Abstractor {
     }
 
     public Ref<Field> addField(CtField<?> f) throws Exception {
-        final ElementKey key = new ElementKey(f, this.instantiator.typeArgs(true));
+        final ElementKey key = new ElementKey(f, this.instantiator.typeArgs());
         return this.proj.fields.create(this.log, key,
             "field " + SpoonUtils.describeElem(f),
             () -> {
@@ -702,7 +726,7 @@ public class Abstractor {
     }
 
     public Ref<Field> addField(String name, CtTypeReference<?> f) throws Exception {
-        final ElementKey key = new ElementKey(f, this.instantiator.typeArgs(true));
+        final ElementKey key = new ElementKey(f, this.instantiator.typeArgs());
         return this.proj.fields.create(this.log, key,
             "field " + name,
             () -> {
@@ -828,7 +852,7 @@ public class Abstractor {
     }
     
     public Ref<Metrics> addMetrics(CtExecutable<?> m) throws Exception {
-        final ElementKey key = new ElementKey(m, this.instantiator.typeArgs(true));
+        final ElementKey key = new ElementKey(m, this.instantiator.typeArgs());
         return this.proj.metrics.create(this.log, key,
             "metrics " + SpoonUtils.describeElem(m),
             () -> {
@@ -905,7 +929,7 @@ public class Abstractor {
         // Synthesize the interface description for the class.
         if (abstracts.size() > 0 || c.getSuperInterfaces().size() > 0) {
             final InterfaceDesc it = new InterfaceDesc(abstracts, pin);
-            final List<Ref<? extends TypeDesc>> typeArgs = this.instantiator.typeArgs(true);
+            final List<Ref<? extends TypeDesc>> typeArgs = this.instantiator.typeArgs();
             final Ref<InterfaceDesc> inter = this.proj.interfaceDescs.addOrGetRef(it, typeArgs, "interface for object");
 
             // Add direct super-interfaces this object extends.
@@ -931,18 +955,19 @@ public class Abstractor {
         if (typeArgs == null) return decl;
 
         try {
-            this.instantiator.pushFrame();
+            final boolean definedInNest = inSameNested(tr, c);
+            if (definedInNest) this.instantiator.pushFrame();
+            else this.instantiator.pushCleanFrame();
             for (int i = 0; i < typeParams.size(); i++)
                 this.instantiator.add(typeParams.get(i), typeArgs.get(i));
 
-            final boolean definedInNest = tr.hasParent(c.getParent());
-            final ElementKey key = new ElementKey(tr, this.instantiator.typeArgs(definedInNest));
+            final ElementKey key = new ElementKey(tr, this.instantiator.typeArgs());
             return this.proj.objectInsts.create(this.log, key,
                 "object instantiation "+SpoonUtils.describeGeneric(tr),
                 () -> {                    
                     final Ref<StructDesc> resData = this.addStructDesc(c);
                     final Ref<InterfaceDesc> resInterface = this.synthesizeObjectInterface(c, null);
-                    return new ObjectInst(decl, this.instantiator.typeArgs(definedInNest), resData, resInterface);
+                    return new ObjectInst(decl, this.instantiator.typeArgs(), resData, resInterface);
                 },
                 (Ref<ObjectInst> ref, ObjectInst obj) -> {
                     // Add constructors as (static) methods for the class instantiation.
@@ -952,14 +977,14 @@ public class Abstractor {
                                 this.log.notice("skipping default constructor: " + ctor.getSignature());
                                 continue;
                             }
-                            this.addMethodInstForObjectInst(ref, ctor, definedInNest);
+                            this.addMethodInstForObjectInst(ref, ctor);
                         }
                     }
 
                     // Add methods for the class instantiation.
                     for (CtMethod<?> m : c.getAllMethods()) {
                         if (m.getParent().equals(c) && !SpoonUtils.isObjectMethod(m))
-                            this.addMethodInstForObjectInst(ref, m, definedInNest);
+                            this.addMethodInstForObjectInst(ref, m);
                     }
 
                     // Create instances for all nested types too.
@@ -1179,8 +1204,12 @@ public class Abstractor {
         }
 
         this.consolidateCons();
-        this.crossConnectConstructs();
+        this.collectPackageDeclarations();
         this.addImportsFromUsage();
+
+        // Drop any packages that are empty.
+        this.proj.packages.removeIf(log, (PackageCon pc) -> pc.isEmpty());
+        this.proj.packages.setIndices();
     }
 
     public Ref<PackageCon> processPackage(CtPackage pkg) throws Exception {
@@ -1230,7 +1259,7 @@ public class Abstractor {
                 if (met.hasBody()) md.metrics = metRef;
                 else {
                     // remove the reference and metrics from factory since bodiless methods can be ignored.
-                    this.proj.metrics.removeElem(this.log, elemKey, "metrics " + m.getSimpleName());
+                    this.proj.metrics.remove(this.log, met);
                 }
             }
         }
@@ -1249,22 +1278,19 @@ public class Abstractor {
      * This adds all the declarations into the lists in the packages for the 
      * ype of declaration in the package.
      */
-    private void crossConnectConstructs() throws Exception {
+    private void collectPackageDeclarations() throws Exception {
         this.log.log("cross connect constructs");
 
         for (MethodDecl m : this.proj.methodDecls.getConSet()) {
             final PackageCon pkg = m.pkg.mustGetResolved();
             if (pkg == null) this.log.error("package for method is null: " + m);
-            final Ref<MethodDecl> decl = this.proj.methodDecls.addOrGetRef(m, null, "method in package " + pkg);
-            pkg.methodDecls.add(decl);
+            pkg.methodDecls.add(this.proj.methodDecls.addOrGetRef(m, null, "method in package " + pkg));
         }
 
         for (ObjectDecl obj : this.proj.objectDecls.getConSet()) {
             final PackageCon pkg = obj.pkg.mustGetResolved();
             if (pkg == null) this.log.error("package for object is null: " + obj);
             pkg.objectDecls.add(this.proj.objectDecls.addOrGetRef(obj, null, "object in package " + pkg));
-            for (Ref<MethodDecl> met : obj.methodDecls)
-                pkg.methodDecls.add(met);
         }
         
         for (InterfaceDecl it : this.proj.interfaceDecls.getConSet()) {

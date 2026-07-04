@@ -23,8 +23,16 @@ public class PackageCon extends ConstructImp {
         this.name = name;
         this.path = path;
     }
-    
+
     public ConstructKind kind() { return ConstructKind.PACKAGE; }
+
+    public boolean isEmpty() {
+        return this.imports.isEmpty() &&
+            this.interfaceDecls.isEmpty() &&
+            this.methodDecls.isEmpty() &&
+            this.objectDecls.isEmpty() &&
+            this.values.isEmpty();
+    }
 
     @Override
     public JsonNode toJson(JsonHelper h) {

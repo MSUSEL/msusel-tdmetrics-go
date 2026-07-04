@@ -36,19 +36,17 @@
   ],
   objects: [
     { # 1. Foo{ bar int; baz $Array<int> }{ }
-      name: Foo, package: 5, data: 1, interface: 3, loc: 3, vis: public,
+      name: Foo, package: 2, data: 1, interface: 3, loc: 3, vis: public,
     },
   ],
   packages: [
-    {                        # 1. $builtin package
+    { # 1. $builtin package
       name: $builtin,
       interfaces: [ 1 ],
     },
-    { name: "<unnamed>" },   # 2. <unnamed> package
-    { name: testData },      # 3. testData package
-    { name: testData.java }, # 4. testData.java package
-    {                        # 5. testData.java.test1001 package
+    { # 2. testData.java.test1001 package
       name: testData.java.test1001,
+      imports: [ 1 ], # $builtin
       objects: [ 1 ],
     },
   ],

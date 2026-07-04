@@ -1,6 +1,7 @@
 package abstractor.core.constructs;
 
 import java.util.*;
+import java.util.function.Predicate;
 
 import abstractor.core.ElementKey;
 import abstractor.core.cmp.CmpOptions;
@@ -131,19 +132,33 @@ public class Factory<T extends Construct> implements Jsonable {
         return this.create(log, elemKey, title, creator, null);
     }
 
-    public void removeElem(Logger log, ElementKey elemKey, String title) {
-        if (logCreate) log.log("Removing " + title);
+    public void removeIf(Logger log, Predicate<T> predicate) {
+        if (predicate == null) return;
+        List<T> toRemove = new LinkedList<>();
+        for (T con : this.conSet) {
+            if (predicate.test(con)) toRemove.add(con);
+        }
+        for (T con : toRemove) this.remove(log, con);
+    }
 
-        final Ref<T> ref = this.getRefByElem(elemKey);
-        this.byElem.remove(elemKey);
+    public void remove(Logger log, T con) {
+        if (con == null) return;
+        if (logCreate) log.log("Removing " + con);
 
-        if (ref == null) return;
-        this.refSet.remove(ref);
-
-        if (!ref.isResolved()) return;
-        final T con = ref.getResolved();
+        con.setIndex(-100);
         this.conSet.remove(con);
         this.nonElemRef.remove(con);
+
+        Predicate<Ref<T>> refRemover = (Ref<T> ref) -> {
+            return ref != null && ref.isResolved() && ref.getResolved().equals(con);
+        };
+
+        this.refSet.removeIf(refRemover);
+
+        final Iterator<Map.Entry<ElementKey, Ref<T>>> it = this.byElem.entrySet().iterator();
+        while (it.hasNext()) {
+            if (refRemover.test(it.next().getValue())) it.remove();
+        }
     }
 
     /**

@@ -264,11 +264,9 @@ public class Validator {
                 typeParamSize + " type parameters.");
 
         final int instanceTypeSize = instanceTypes.size();
-        // Must be partially of fully implemented instance. Partially implemented
-        // occurs when the nest is an instance but the method is still generic.
-        if (typeParamSize < instanceTypeSize)
+        if (typeParamSize != instanceTypeSize)
             this.error("0610", "The declaration " + this.conToString(decl) + " had " + typeParamSize +
-                " (" + this.consToString(typeParams) + ") type parameters which must be greater than or equal to the instance " +
+                " (" + this.consToString(typeParams) + ") type parameters which must be equal to the instance " +
                 this.conToString(inst) + " that had " + instanceTypeSize + " (" +
                 this.consToString(instanceTypes) + ") type arguments.");
 
@@ -313,32 +311,39 @@ public class Validator {
     /**
      * This will check that the nests are connected correctly.
      *
-     * This will not perform a cycle check on nests to determine if there is a loop
-     * since that is very unlikely but a loop check could be very slow.
+     * This will not perform a cycle check on nests to determine if there is
+     * a loop since that is very unlikely but a loop check could be very slow.
+     * 
+     * This will not check nesting in any other case than a declaration nested
+     * in another declaration.
      */
-    private void validateNests(DeclarationImp decl) {
-        // Down-link: if decl has a nest, that nest's nestedTypes must
-        // contain a ref that resolves back to decl.
-        if (decl.nest != null && decl.nest.isResolved() &&
-            decl.nest.getResolved() instanceof DeclarationImp pd) {
-            boolean found = false;
-            for (Ref<? extends TypeDesc> nt : pd.nestedTypes) {
-                if (nt != null && nt.getResolved() == decl) { found = true; break; }
-            }
-            if (!found)
-                this.error("0900", "The declaration " + this.conToString(decl) +
-                    " has nest " + this.conToString(pd) +
-                    " but that nest's nestedTypes does not contain a back reference.");
+    private void validateNests(Declaration decl) {
+        this.validateParentNest(decl);
+        for (Ref<? extends TypeDesc> nt : decl.getNestedTypes())
+           this.validateChildNest(decl, nt);
+    }
+
+    private void validateParentNest(Declaration decl) {
+        final Ref<? extends Construct> nest = decl.getNest();
+        if (nest == null || !(nest.getResolved() instanceof Declaration pd)) return;
+
+        for (Ref<? extends TypeDesc> nt : pd.getNestedTypes()) {
+            if (nt != null && nt.getResolved() == decl) return;
         }
 
-        // Up-link: each nested type's .nest must resolve back to decl.
-        for (Ref<? extends TypeDesc> nt : decl.nestedTypes) {
-            if (nt == null || !nt.isResolved()) continue;
-            if (!(nt.getResolved() instanceof DeclarationImp cd)) continue;
-            if (cd.nest == null || cd.nest.getResolved() != decl)
-                this.error("0910", "The declaration " + this.conToString(decl) +
-                    " lists " + this.conToString(cd) +
-                    " as nested but that nested's nest does not point back to it.");
-        }
+        this.error("0900", "The declaration " + this.conToString(decl) +
+            " has nest " + this.conToString(pd) +
+            " but that nest's nestedTypes does not contain a back reference.");
+    }
+
+    private void validateChildNest(Declaration decl, Ref<? extends TypeDesc> nt) {
+        if (nt == null || !(nt.getResolved() instanceof Declaration cd)) return;
+
+        final Ref<? extends Construct> nest = cd.getNest();
+        if (nest != null && nest.getResolved() == decl) return;
+
+        this.error("0910", "The declaration " + this.conToString(decl) +
+            " lists " + this.conToString(cd) +
+            " as nested but that nested's nest does not point back to it.");
     }
 }

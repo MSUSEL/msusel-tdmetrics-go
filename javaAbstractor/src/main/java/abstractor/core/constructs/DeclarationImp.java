@@ -30,15 +30,17 @@ public abstract class DeclarationImp extends ConstructImp implements Declaration
         this.isStatic   = false;
     }
     
-    public Ref<PackageCon> pkgRef() {
-        return this.pkg;
-    }
+    public Ref<PackageCon> pkgRef() { return this.pkg; }
+
+    public Ref<? extends Construct> getNest() { return this.nest; }
 
     public void setNest(Ref<? extends Construct> nest) throws Exception {
         if (nest == null) return;
         Require.isNull(this.nest);
         this.nest = nest;
     }
+
+    public TreeSet<Ref<? extends TypeDesc>> getNestedTypes() { return this.nestedTypes; }
 
     public void setVisibility(CtModifiable mod) {
         this.visibility = mod.getVisibility() == null ? "" : mod.getVisibility().toString();

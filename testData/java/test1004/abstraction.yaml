@@ -144,23 +144,23 @@
       typeParams: [ 2 ],
     },
     { # 2. Collection<E>{add(arg0 E) bool; addAll(arg0 any) bool; clear(); contains(arg0 any) bool; ...}
-      name: Collection, package: 4, interface: 10, vis: public,
+      name: Collection, package: 3, interface: 10, vis: public,
       typeParams: [ 1 ],
     },
     { # 3. Comparable<T>{compareTo(arg0 any) int}
-      name: Comparable, package: 3, interface: 5, vis: public,
+      name: Comparable, package: 2, interface: 5, vis: public,
       typeParams: [ 2 ],
     },
     { # 4. Iterable<T>{forEach(arg0 any); iterator() any; spliterator() any}
-      name: Iterable, package: 3, interface: 8, vis: public,
+      name: Iterable, package: 2, interface: 8, vis: public,
       typeParams: [ 2 ],
     },
     { # 5. List<E>{compareTo(arg0 any) int}
-      name: List, package: 4, interface: 12, vis: public,
+      name: List, package: 3, interface: 12, vis: public,
       typeParams: [ 1 ],
     },
     { # 6. Runnable{run()}
-      name: Runnable, package: 3, interface: 7, vis: public,
+      name: Runnable, package: 2, interface: 7, vis: public,
     },
   ],
   interfaceDescs: [
@@ -224,39 +224,39 @@
   ],
   methods: [
     { # 1. Number.Number() Comparable<Number>
-      name: Number, package: 3, receiver: 2, signature: 11,
+      name: Number, package: 2, receiver: 2, signature: 11,
       constructor: true, static: true, vis: public,
     },
     { # 2. Foo.bar(items List<any>)
-      name: bar, package: 7, receiver: 1, signature: 52,
+      name: bar, package: 4, receiver: 1, signature: 52,
       loc: 15, metrics: 1, vis: public,
     },
     { # 3. Foo.baz(comp Comparable<Number>)
-      name: baz, package: 7, receiver: 1, signature: 45,
+      name: baz, package: 4, receiver: 1, signature: 45,
       loc: 24, vis: public,
     },
     { # 4. Number.byteValue() byte
-      name: byteValue, package: 3, receiver: 2, signature: 3,
+      name: byteValue, package: 2, receiver: 2, signature: 3,
       vis: public,
     },
     { # 5. Number.doubleValue() double
-      name: doubleValue, package: 3, receiver: 2, signature: 4,
+      name: doubleValue, package: 2, receiver: 2, signature: 4,
       vis: public,
     },
     { # 6. Number.floatValue() float
-      name: floatValue, package: 3, receiver: 2, signature: 5,
+      name: floatValue, package: 2, receiver: 2, signature: 5,
       vis: public,
     },
     { # 7. Number.intValue() int
-      name: intValue, package: 3, receiver: 2, signature: 6,
+      name: intValue, package: 2, receiver: 2, signature: 6,
       vis: public,
     },
     { # 8. Number.longValue() long
-      name: longValue, package: 3, receiver: 2, signature: 7,
+      name: longValue, package: 2, receiver: 2, signature: 7,
       vis: public,
     },
     { # 9. Number.shortValue() short
-      name: shortValue, package: 3, receiver: 2, signature: 8,
+      name: shortValue, package: 2, receiver: 2, signature: 8,
       vis: public,
     },
   ],
@@ -277,12 +277,12 @@
   ],
   objects: [
     { # 1. Foo{ x int }{bar(items List<any>); baz(comp Comparable<Number>)}
-      name: Foo, package: 7, data: 2, interface: 4,
+      name: Foo, package: 4, data: 2, interface: 4,
       loc: 12, vis: public,
       methods: [ 2, 3 ],
     },
     { # 2. Number{ serialVersionUID long }{byteValue() byte; doubleValue() double; floatValue() float; intValue() int; longValue() long; shortValue() short}
-      name: Number, package: 3, data: 1, interface: 6,
+      name: Number, package: 2, data: 1, interface: 6,
       vis: public,
       methods: [ 1, 4, 5, 6, 7, 8, 9 ],
     },
@@ -292,7 +292,6 @@
       name: $builtin,
       interfaces: [ 1 ],
     },
-    { name: "<unnamed>" },
     {
       name: java.lang,
       interfaces: [ 3, 4, 6 ],
@@ -303,8 +302,6 @@
       interfaces: [ 2, 5 ],
       name: java.util,
     },
-    { name: testData },
-    { name: testData.java },
     {
       name: testData.java.test1004,
       methods: [ 2, 3 ],
