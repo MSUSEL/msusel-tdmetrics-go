@@ -21,15 +21,22 @@ public class MethodInst extends ConstructImp implements Method {
 
     public MethodInst(Ref<MethodDecl> generic, Ref<? extends TypeDesc> receiver,
         List<Ref<? extends TypeDesc>> instanceTypes, Ref<Signature> resolved) throws Exception {
+        Require.notNull(generic,       "MethodInst: generic");
+        Require.notNull(instanceTypes, "MethodInst: instance Types");
+        Require.notNull(resolved,      "MethodInst: resolved");
+
         this.generic  = generic;
         this.receiver = receiver;
-        if (instanceTypes != null) this.instanceTypes.addAll(instanceTypes);
+        this.instanceTypes.addAll(instanceTypes);
         this.resolved = resolved;
 
-        if (generic.isResolved()) {
+        boolean checkParams = false; // TODO: REMOVE
+        if (checkParams && generic.isResolved()) {
+            final ArrayList<Ref<TypeParam>> tp = generic.getResolved().typeParams;
             final int tpSize = generic.getResolved().typeParams.size();
-            final int taSize = instanceTypes != null ? instanceTypes.size() : 0;
-            Require.equal(tpSize, taSize, "The type params count (" + tpSize + ") must match the type arguments (" + taSize + "): " + this);
+            final int taSize = instanceTypes.size();
+            Require.equal(tpSize, taSize, "The type params count, " + tpSize + ", (" + tp + ") " +
+                "must match the type arguments, " + taSize + ", (" + instanceTypes + "): " + this.generic);
         }
     }
 

@@ -1,19 +1,23 @@
 {
-  FIX: "this has issues in it around the number of methodInsts at minimum. This string is to make the test not pass while I'm fixing the problem.",
   language: java,
   abstracts: [
     { name: baz, signature: 1 }, # 1. baz ???
-    { name: tak, signature: 2 }, # 2. tak ???
+    { name: tak, signature: 4 }, # 2. tak ???
   ],
   arguments: [
-    {          type: basic3      }, # 1. <unnamed> string
-    {          type: object1     }, # 2. <unnamed> ???
-    {          type: objectInst1 }, # 3. <unnamed> ???
-    { name: p, type: typeParam1  }, # 4. p ???
-    { name: s, type: typeParam2  }, # 5. s ???
-    { name: t, type: typeParam2  }, # 6. t ???
-    { name: t, type: typeParam3  }, # 7. t ???
-    { name: u, type: typeParam4  }, # 8. u ???
+    {          type: basic3      }, #  1. <unnamed> string
+    {          type: object1     }, #  2. <unnamed> ???
+    {          type: objectInst1 }, #  3. <unnamed> ???
+    { name: p, type: basic1      }, #  4. p double
+    { name: p, type: basic3      }, #  5. p string
+    { name: p, type: typeParam1  }, #  6. p P
+    { name: s, type: basic2      }, #  7. s int
+    { name: s, type: basic3      }, #  8. s string
+    { name: s, type: typeParam2  }, #  9. s S
+    { name: t, type: typeParam2  }, # 10. t S
+    { name: t, type: typeParam3  }, # 11. t T
+    { name: u, type: typeParam1  }, # 12. u P
+    { name: u, type: typeParam4  }, # 13. u U
   ],
   basics: [ double, int, string ],
   fields: [
@@ -26,23 +30,31 @@
   ],
   methodInsts: [
     { # 1. ???
-      generic: 1, receiver: 1, resolved: 3, instanceTypes: [ typeParam2 ],
+      generic: 1, receiver: objectInst1, resolved: 5, instanceTypes: [ typeParam2, typeParam1 ],
+    },
+    { # 2. ???
+      generic: 1, receiver: objectInst1, resolved: 6, instanceTypes: [ typeParam2, typeParam4 ],
+    },
+    { # 3. ???
+      generic: 3, receiver: object2, resolved: 2, instanceTypes: [ basic2, basic3 ],
+    },
+    { # 4. ???
+      generic: 3, receiver: object2, resolved: 3, instanceTypes: [ basic3, basic1 ],
     },
   ],
   methods: [
     { # 1. ???
-      name: Bar, package: 2, receiver: 1, signature: 4,
-      loc: 3, metrics: 1, constructor: true, static: true, vis: public,
-      typeParams: [ 3, 4 ],
+      name: Bar, package: 1, receiver: 1, signature: 7,
+      loc: 3, metrics: 1, typeParams: [ 3, 4 ], vis: public,
+      static: true, constructor: true,
     },
     { # 2. ???
-      name: baz, package: 2, receiver: 2, signature: 1,
+      name: baz, package: 1, receiver: 2, signature: 1,
       loc: 13, metrics: 3, vis: public,
     },
     { # 3. ???
-      name: tak, package: 2, receiver: 2, signature: 2,
-      loc: 9, metrics: 2, vis: public,
-      typeParams: [ 2, 1 ],
+      name: tak, package: 1, receiver: 2, signature: 4,
+      loc: 9, metrics: 2, typeParams: [ 2, 1 ], vis: public,
     },
   ],
   metrics: [
@@ -50,86 +62,90 @@
       loc: 3, codeCount: 3, complexity: 1, indents: 3, lineCount: 3,
       reads: [
         basic3,         # string
-        interfaceDesc2, #
-        object1,        #
-        object2,        #
-        selection1,     #
-        typeParam3,     #
-        typeParam4,     #
+        interfaceDesc2, # any
+        object1,        # ???
+        object2,        # ???
+        selection1,     # ???
+        typeParam3,     # T
+        typeParam4,     # U
       ],
       writes: [
         basic3,     # string
-        selection1, #
+        selection1, # ???
       ],
     },
     { # 2. ???
       loc: 9, codeCount: 3, complexity: 1, indents: 1, lineCount: 3,
       invokes: [
-        method1, #
+        methodInst1, # ???
       ],
       reads: [
         basic3,         # string
-        interfaceDesc2, #
-        object1,        #
-        object2,        #
-        objectInst1,    #
-        selection1,     #
-        typeParam1,     #
-        typeParam2,     #
+        interfaceDesc2, # any
+        object1,        # ???
+        object2,        # ???
+        objectInst1,    # ???
+        selection2,     # ???
+        typeParam1,     # P
+        typeParam2,     # S
       ],
     },
     { # 3. ???
       loc: 13, codeCount: 3, complexity: 1, indents: 1, lineCount: 3,
       invokes: [
-        method3, #
+        methodInst3, # ???
+        methodInst4, # ???
       ],
       reads: [
         basic1,         # double
         basic2,         # int
         basic3,         # string
-        interfaceDesc2, #
-        object2,        #
+        interfaceDesc2, # any
+        object2,        # ???
       ],
     },
   ],
   objectInsts: [
-    { # 1.???
+    { # 1. ???
       generic: 1, resData: 2, resInterface: 2, instanceTypes: [ typeParam2 ],
-      methods: [ 1 ],
+      methods: [ 1, 2 ],
     },
   ],
   objects: [
     { # 1. ???
-      name: Bar, package: 2, data: 2, interface: 2,
-      loc: 2, vis: public, typeParams: [ 3 ], nest: object2,
+      name: Bar, package: 1, data: 2, interface: 2,
+      loc: 2, nest: object2, vis: public, typeParams: [ 3 ],
       methods: [ 1 ],
     },
     { # 2. ???
-      name: Foo, package: 2, data: 1, interface: 1,
-      loc: 1, vis: public, nested: [ object1 ],
+      name: Foo, package: 1, data: 1, interface: 1,
+      loc: 1, nested: [ object1 ], vis: public,
       methods: [ 2, 3 ],
     },
   ],
   packages: [
-    { name: $builtin },
-    {
+    { # 1. ???
       name: "<unnamed>",
-      objects: [ 1, 2 ],
       methods: [ 1, 2, 3 ],
+      objects: [ 1, 2 ],
     },
   ],
   selections: [
-    { name: str, origin: object1 }, # 1. ???
+    { name: str, origin: object1     }, # 1. ??? .str
+    { name: str, origin: objectInst1 }, # 2. ??? .str
   ],
   signatures: [
-    {                   results: [ 1 ] }, # 1. ???
-    { params: [ 5, 4 ], results: [ 1 ] }, # 2. ???
-    { params: [ 6, 8 ], results: [ 3 ] }, # 3. ???
-    { params: [ 7, 8 ], results: [ 2 ] }, # 4. ???
+    {                     results: [ 1 ] }, # 1. ???
+    { params: [  7,  5 ], results: [ 1 ] }, # 2. ???
+    { params: [  8,  4 ], results: [ 1 ] }, # 3. ???
+    { params: [  9,  6 ], results: [ 1 ] }, # 4. ???
+    { params: [ 10, 12 ], results: [ 3 ] }, # 5. ???
+    { params: [ 10, 13 ], results: [ 3 ] }, # 6. ???
+    { params: [ 11, 13 ], results: [ 2 ] }, # 7. ???
   ],
   structDescs: [
     {                  }, # 1. struct{}
-    { fields: [ 2, 1 ] }, # 2. struct{ ??? }
+    { fields: [ 2, 1 ] }, # 2. ???
   ],
   typeParams: [
     { name: P, type: interfaceDesc2 }, # 1. P any
