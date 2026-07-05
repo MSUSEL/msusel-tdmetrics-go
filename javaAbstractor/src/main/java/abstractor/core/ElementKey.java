@@ -9,16 +9,16 @@ import abstractor.core.constructs.*;
 import abstractor.core.json.*;
 
 public class ElementKey implements Comparable<ElementKey>, CmpGetter<ElementKey>, Jsonable {
-    static private HashMap<CtElement, String> elemOrder = new HashMap<>();
+    static private IdentityHashMap<CtElement, String> elemOrder = new IdentityHashMap<>();
 
-    static private String getElemOrderKey(CtElement elem) {
+    static public String getElemOrderKey(CtElement elem) {
         if (elem == null) return "null";
-        return elemOrder.computeIfAbsent(elem, k -> {
+        return elemOrder.computeIfAbsent(elem, e -> {
             // Use the hash and position to try to order the elements as consistently as possible.
             // There shouldn't be randomness in how the AST is processed but I don't want
             // to fighting bugs because of elements being added in random order.
-            final String pos = k.getPosition().toString();
-            return k.hashCode() + "-" + pos + "-" + elemOrder.size();
+            final String pos = e.getPosition().toString();
+            return e.hashCode() + "-" + pos + "-" + elemOrder.size();
         });
     }
 

@@ -22,6 +22,21 @@ final public class SpoonUtils {
         return path.replaceAll("\\\\", "/");
     }
 
+    static public final TreeSet<String> knownPathRoots = new TreeSet<>();
+
+    static public void addKnownPathRoot(String path) {
+        knownPathRoots.add(normalizePath(path));
+    }
+
+    static public String trimPath(String path) {
+        for (String root : knownPathRoots) {
+            if (path.startsWith(root)) {
+                return path.substring(root.length());
+            }
+        }
+        return path;
+    }
+
     static public String packageName(CtPackage pkg) {
         if (pkg == null) return "<java.lang>";
         final String name = pkg.getQualifiedName();
@@ -72,7 +87,9 @@ final public class SpoonUtils {
         if (showPos) {
             final SourcePosition pos = elem.getPosition();
             if (pos.isValidPosition()) {
-                final String file = pos.getFile().getPath();
+                String file = "<unknown>";
+                if (pos.getFile() != null)
+                    file = trimPath(normalizePath(pos.getFile().getPath()));
                 tail = " @ " + file +  ":" + pos.getLine() + ":" + pos.getColumn();
             }
         }

@@ -74,13 +74,16 @@ public class Instantiator {
 
         @Override
         public String toString() {
+            final int size = this.paramOrder.size();
+            if (size <= 0) return "[ ]";
+
             final JsonHelper jh = new JsonHelper();
             jh.writeKinds     = true;
             jh.writeIndices   = true;
             jh.writeRefs      = true;
             jh.refSkipResolve = false;
-            List<String> parts = new ArrayList<>(this.paramOrder.size());
-            for (int i = 0; i < this.paramOrder.size(); i++) {
+            List<String> parts = new ArrayList<>(size);
+            for (int i = 0; i < size; i++) {
                 final Ref<? extends TypeDesc> param = this.paramOrder.get(i);
                 final Ref<? extends TypeDesc> arg   = this.subst.get(param);
                 final String paramStr = JsonFormat.Inline().format(param.toJson(jh));

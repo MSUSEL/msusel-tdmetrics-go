@@ -30,13 +30,13 @@ public class MethodInst extends ConstructImp implements Method {
         this.instanceTypes.addAll(instanceTypes);
         this.resolved = resolved;
 
-        boolean checkParams = false; // TODO: REMOVE
-        if (checkParams && generic.isResolved()) {
+        if (generic.isResolved()) {
             final ArrayList<Ref<TypeParam>> tp = generic.getResolved().typeParams;
             final int tpSize = generic.getResolved().typeParams.size();
             final int taSize = instanceTypes.size();
             Require.equal(tpSize, taSize, "The type params count, " + tpSize + ", (" + tp + ") " +
-                "must match the type arguments, " + taSize + ", (" + instanceTypes + "): " + this.generic);
+                "must match the type arguments, " + taSize + ", (" + instanceTypes + "): " +
+                this + ": " + this.generic);
         }
     }
 

@@ -5,20 +5,9 @@ import java.time.Duration;
 import java.util.Stack;
 
 public class Logger {
-    // See https://j8ahmed.com/2021/09/13/day-37-learning-ansi-escape-codes/
-    static public final String colorBlack   = "\u001b[30m";
-    static public final String colorRed     = "\u001b[31m";
-    static public final String colorGreen   = "\u001b[32m";
-    static public final String colorYellow  = "\u001b[33m";
-    static public final String colorBlue    = "\u001b[34m";
-    static public final String colorMagenta = "\u001b[35m";
-    static public final String colorCyan    = "\u001b[36m";
-    static public final String colorWhite   = "\u001b[37m";
-    static public final String colorReset   = "\u001b[0m";
-
-    static private final String noticeColor   = colorBlue;
-    static private final String warningColor  = colorYellow;
-    static private final String errorColor    = colorRed;
+    static public final LogColor noticeColor  = LogColor.blue;
+    static public final LogColor warningColor = LogColor.yellow;
+    static public final LogColor errorColor   = LogColor.red;
     static private final String defaultIndent = "  ";
 
     public final Level level;
@@ -48,15 +37,15 @@ public class Logger {
         return this.level.Contains(level);
     }
 
-    private void write(PrintStream out, Level level, String color, String text) {
+    private void write(PrintStream out, Level level, LogColor color, String text) {
         if (!this.writesLevel(level)) return;
 
         final String indent = this.indent();
         String head = indent;
         String tail = "";
-        if (color != colorReset) {
+        if (color != LogColor.reset) {
             head += color;
-            tail += colorReset;
+            tail += LogColor.reset;
         }
         out.println(head + text.replace("\n", "\n"+indent) + tail);
     }
@@ -67,12 +56,12 @@ public class Logger {
 
     public int errorCount() { return this.errors; }
     
-    public void logWithColor(String ansiColor, String text) {
-        this.write(this.out, Level.Normal, ansiColor, text);
+    public void logWithColor(LogColor color, String text) {
+        this.write(this.out, Level.Normal, color, text);
     }
 
     public void log(String text) {
-        this.logWithColor(colorReset, text);
+        this.logWithColor(LogColor.reset, text);
     }
 
     public void logIf(boolean condition, String text) {
