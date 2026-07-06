@@ -1,11 +1,11 @@
 package abstractor.core;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
-import abstractor.core.cmp.CmpOptions;
+import abstractor.core.cmp.*;
 import abstractor.core.constructs.*;
-import abstractor.core.log.Logger;
+import abstractor.core.log.*;
+import abstractor.core.require.Require;
 
 public class Consolidator {
     final public Logger log;
@@ -20,40 +20,27 @@ public class Consolidator {
         this.log.log("Consolidating all constructs");
         this.log.push();
 
-        this.proj.setToCompareResolved();
+        this.setToCompareResolved();
         this.proj.setAllIndices();
-        int collisions = 0;
+
+        int collisions;
         do {
-            collisions = this.proj.consolidateCons(this.log);
+            collisions = 0;
+            for (Factory<? extends Construct> factory : this.proj.factories)
+                collisions += this.consolidate(factory);
             this.log.log("Removed " + collisions + " collisions");
         } while(collisions > 0);
         this.proj.setAllIndices();
         this.log.pop();
     }
 
-
-    
-
     /**
      * Performs change all the comparison options to use the resolved.
      */
-    public void setToCompareResolved() {
-        for (Factory<? extends Construct> factory : this.factories)
-            factory.setToCompareResolved();
+    private void setToCompareResolved() {
+        for (Factory<? extends Construct> factory : this.proj.factories)
+            this.setToCompareResolved(factory);
     }
-
-    public int consolidateCons(Logger log) throws Exception {
-        int collisions = 0;
-        for (Factory<? extends Construct> factory : this.factories)
-            collisions += factory.consolidateCons(log);
-        return collisions;
-    }
-
-
-
-
-
-
 
     /**
      * Change all the comparison options to use the resolved. This should only
@@ -64,70 +51,82 @@ public class Consolidator {
      */
     public <T extends Construct> void setToCompareResolved(Factory<T> factory) {
         final CmpOptions options = CmpOptions.resolvedCmp();
-        for (T con : this.conSet) con.setCmpOptions(options);
-        for (Ref<T> ref : this.refSet) ref.setCmpOptions(options);
+        for (T con : factory.getConSet()) con.setCmpOptions(options);
+        for (Ref<T> ref : factory.getRefSet()) ref.setCmpOptions(options);
         
         // The non-element references is no longer useful but the changed comparisons
         // could cause issues if someone tried to use that set since it is no longer
         // in sorted order, so just clear it out.
-        this.nonElemRef.clear();
+        factory.getNonElemRefSet().clear();
     }
 
-    public int consolidateCons(Logger log) throws Exception {
-        final int size = this.conSet.size();
-        if (size <= 1) return 0; // Nothing to consolidate
+    public <T extends Construct> int consolidate(Factory<T> factory) throws Exception {
+        final TreeSet<T> conSet = factory.getConSet();
+        final int origSize = conSet.size();
+        if (origSize <= 1) return 0; // Nothing to consolidate
 
         // Copy all cons to a list and clear the set so that only
         // the unique cons can be re-added in the new sort order.
-        final List<T> conList = new ArrayList<T>(this.conSet);
-        if (this.isSorted(conList)) return 0;
+        final List<T> conList = new ArrayList<T>(conSet);
+        if (isSorted(conList)) return 0;
         conList.sort(Comparator.naturalOrder()); 
+        final List<T> squeezedList = this.squeeze(conList);
 
-        // Perform the in-place "squeeze" to remove duplicates.
-        int collisions = 0;
+        // Rebuild the TreeSet using the squeezed sub-list.
+        conSet.clear();
+        conSet.addAll(squeezedList);
+        final int collisions = origSize - conSet.size();
+
+        // If there were collsisions (not just sorting), update all the references
+        // so they use the unique values. The non-unique values are already be
+        // equal to the unique ones so we can just affirm they are using the unique ones.
+        if (collisions > 0) {
+            for (Ref<T> ref : factory.getRefSet()) {
+                final T oldRes = ref.getResolved();
+                final T unique = conSet.floor(oldRes);
+                Require.equal(oldRes, unique, "expected all constructs to be found in conSet");
+                ref.setResolved(unique);
+            }
+        }
+        return collisions;
+    }
+
+    /**
+     * Performs an in-place "squeeze" to remove duplicates from given list.
+     */
+    private <T extends Construct> List<T> squeeze(List<T> conList) {
+        final int size = conList.size();
         int uniqueCount = 1;
         T unique = conList.get(0);
         for (int i = 1; i < size; i++) {
             final T con = conList.get(i);
             // Compare against the last confirmed unique node.
-            if (!unique.equals(con)) {
-                // No conflict found, so shift the construct up in the set.
-                if (uniqueCount != i) {
-                    conList.set(uniqueCount, con);
-                    con.setIndex(uniqueCount);
-                }
-                unique = conList.get(uniqueCount);
-                uniqueCount++;
+            if (unique.equals(con)) {
+                // Found another construct that is equal.
+                con.setIndex(-100);
                 continue;
             }
 
-            // Found another construct that is equal so move all references over
-            // to the existing construct since the duplicate is about to be removed.
-            collisions++;
-            for (Ref<T> ref : this.refSet) {
-                if (con.equals(ref.getResolved()))
-                    ref.setResolved(unique);
+            // No duplicate found, so shift the construct up in the list.
+            if (uniqueCount != i) {
+                conList.set(uniqueCount, con);
+                con.setIndex(uniqueCount);
             }
-            con.setIndex(-100);
+            unique = conList.get(uniqueCount);
+            uniqueCount++;
         }
-
-        // Rebuild the TreeSet using the squeezed sub-list.
-        this.conSet.clear();
-        this.conSet.addAll(conList.subList(0, uniqueCount));
-        return collisions;
+        return conList.subList(0, uniqueCount);
     }
 
-    private boolean isSorted(List<T> list) {
+    static private <T extends Construct> boolean isSorted(List<T> list) {
         if (list.size() <= 1) return true;
         Iterator<T> iter = list.iterator();
         T cur, prev = iter.next();
         while (iter.hasNext()) {
             cur = iter.next();
-            if (prev.compareTo(cur) > 0) return false;
+            if (prev.compareTo(cur) < 0) return false;
             prev = cur;
         }
         return true;
     }
-
-
 }

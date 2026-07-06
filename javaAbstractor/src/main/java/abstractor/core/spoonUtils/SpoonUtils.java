@@ -120,6 +120,8 @@ final public class SpoonUtils {
         return String.join(", ",  descs);
     }
 
+    static private IdentityHashMap<CtType<?>, CtTypeReference<?>> parameterizedRefCache = new IdentityHashMap<>();
+
     /**
      * Returns a CtTypeReference for the given type populated with the formal
      * type parameters of the type and its declaring-type chain. Spoon's
@@ -129,11 +131,17 @@ final public class SpoonUtils {
      */
     static public CtTypeReference<?> parameterizedRef(CtType<?> type) {
         if (type == null) return null;
+
+        final CtTypeReference<?> existing = parameterizedRefCache.getOrDefault(type, null);
+        if (existing != null) return existing;
+
         final CtTypeReference<?> ref = type.getReference();
         for (CtTypeParameter tp : type.getFormalCtTypeParameters())
             ref.addActualTypeArgument(tp.getReference());
         final CtType<?> declaring = type.getDeclaringType();
         if (declaring != null) ref.setDeclaringType(parameterizedRef(declaring));
+
+        parameterizedRefCache.put(type, ref);
         return ref;
     }
 

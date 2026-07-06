@@ -29,8 +29,9 @@ public class Factory<T extends Construct> implements Jsonable {
     public int refSize() { return this.refSet.size(); }
     public int size()    { return this.conSet.size(); }
 
-    public TreeSet<Ref<T>> getRefSet() { return this.refSet; }
-    public TreeSet<T>      getConSet() { return this.conSet; }
+    public TreeSet<Ref<T>>    getRefSet()        { return this.refSet; }
+    public TreeSet<T>         getConSet()        { return this.conSet; }
+    public TreeMap<T, Ref<T>> getNonElemRefSet() { return this.nonElemRef; }
 
     public List<T> toList() {
         ArrayList<T> list = new ArrayList<>(this.conSet.size());
