@@ -2,7 +2,6 @@ package abstractor.core.constructs;
 
 import abstractor.core.Baker;
 import abstractor.core.json.*;
-import abstractor.core.log.*;
 
 public class Project implements Jsonable {
     public final Baker                  baker          = new Baker(this);
@@ -53,21 +52,6 @@ public class Project implements Jsonable {
         this.objectDecls,
         this.values,
     };
-    
-    /**
-     * Change all the comparison options to use the resolved.
-     */
-    public void setToCompareResolved() {
-        for (Factory<? extends Construct> factory : this.factories)
-            factory.setToCompareResolved();
-    }
-
-    public int consolidateCons(Logger log) throws Exception {
-        int collisions = 0;
-        for (Factory<? extends Construct> factory : this.factories)
-            collisions += factory.consolidateCons(log);
-        return collisions;
-    }
 
     public void setAllIndices() {
         for (Factory<?> factory : this.factories)

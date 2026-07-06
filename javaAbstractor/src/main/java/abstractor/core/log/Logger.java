@@ -118,22 +118,23 @@ public class Logger {
     public void measure(String label, ThrowingRunnable func) throws Exception {
         final long start = System.nanoTime();
         this.notice("Starting " + label + "...");
-        func.run();
-        final long stop = System.nanoTime();
-        Duration elapsed = Duration.ofNanos(stop - start);
-        this.notice("Finished " + label + " (" + format(elapsed) + ")");
+        this.push(Level.Notice);
+        try {
+            func.run();
+        } finally {
+            this.pop(Level.Notice);
+            final long stop = System.nanoTime();
+            Duration elapsed = Duration.ofNanos(stop - start);
+            this.notice("Finished " + label + " (" + format(elapsed) + ")");
+        }
     }
 
     private String format(Duration d) {
-        final long hours = d.toHours();
-        final long minutes = d.toMinutesPart();
+        final long   hours   = d.toHours();
+        final long   minutes = d.toMinutesPart();
         final double seconds = d.toSecondsPart() + (d.toNanosPart() / 1_000_000_000.0);
-        if (hours > 0) {
-            return String.format("%dh %dm %.2fs", hours, minutes, seconds);
-        } else if (minutes > 0) {
-            return String.format("%dm %.2fs", minutes, seconds);
-        } else {
-            return String.format("%.2fs", seconds);
-        }
+        if (hours   > 0) return String.format("%dh %dm %.2fs", hours, minutes, seconds);
+        if (minutes > 0) return String.format("%dm %.2fs", minutes, seconds);
+        return String.format("%.6fs", seconds);
     }
 }

@@ -238,7 +238,7 @@ public class Factory<T extends Construct> implements Jsonable {
         final ElementKey elemKey = new ElementKey(null, typeArgs);
         final Ref<T> newRef = new Ref<T>(this.conKind, elemKey, "no element ref: " + context);
         newRef.setResolved(c);
-        newRef.setCmpOptions(resolvedCmpOptions());
+        newRef.setCmpOptions(CmpOptions.resolvedCmp());
 
         final Ref<T> otherRef = this.refSet.floor(newRef);
         if (newRef.equals(otherRef)) return otherRef;
@@ -255,60 +255,6 @@ public class Factory<T extends Construct> implements Jsonable {
     }
 
     //==========================================================================
-
-    static private CmpOptions resolvedCmpOptionsSingleton = null;
-    static private CmpOptions resolvedCmpOptions() {
-        if (resolvedCmpOptionsSingleton != null) return resolvedCmpOptionsSingleton;
-        CmpOptions options = new CmpOptions();
-        options.useResolved = true;
-        resolvedCmpOptionsSingleton = options;
-        return options;
-    }
-
-    /**
-     * Change all the comparison options to use the resolved. This should only
-     * be called once all constructs have been added to the factory and
-     * the code is transitioning from reading in the source to prepare to write
-     * the abstraction results. This also clears out sets that may become a
-     * problem once the references are resolved.
-     */
-    public void setToCompareResolved() {
-        final CmpOptions options = resolvedCmpOptions();
-        for (T con : this.conSet) con.setCmpOptions(options);
-        for (Ref<T> ref : this.refSet) ref.setCmpOptions(options);
-        
-        // The non-element references is no longer useful but the changed comparisons
-        // could cause issues if someone tried to use that set since it is no longer
-        // in sorted order, so just clear it out.
-        this.nonElemRef.clear();
-    }
-
-    public int consolidateCons(Logger log) throws Exception {
-        // Copy all cons to a list and clear the set so that only
-        // the unique cons can be re-added in the new sort order.
-        final ArrayList<T> conList = new ArrayList<T>(this.conSet);
-        this.conSet.clear();
-
-        int collisions = 0;
-        for (T con : conList) {
-            T existing = this.conSet.floor(con);
-            if (existing == null || !existing.equals(con)) {
-                // No conflict found, so add the construct into set.
-                Require.require(this.conSet.add(con));
-                continue;
-            }
-
-            // Found another construct that is equal so move all references over
-            // to the existing construct since the duplicate is about to be removed.
-            collisions++;
-            for (Ref<T> ref : this.refSet) {
-                if (con.equals(ref.getResolved()))
-                    ref.setResolved(existing);
-            }
-            con.setIndex(-100);
-        }
-        return collisions;
-    }
 
     public void setIndices() {
         int index = 1;

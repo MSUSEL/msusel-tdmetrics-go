@@ -1343,16 +1343,7 @@ public class Abstractor {
     }
 
     private void consolidateCons() throws Exception {
-        this.log.log("Consolidating all constructs");
-        this.proj.setToCompareResolved();
-        this.proj.setAllIndices();
-        while (true) {
-            int collisions = this.proj.consolidateCons(this.log);
-            if (collisions <= 0) break;
-            this.log.log("Removed " + collisions + " collisions");
-            this.proj.setAllIndices();
-        }
-        this.proj.setAllIndices();
+        new Consolidator(this.log, this.proj).consolidate();
     }
 
     /**
@@ -1360,8 +1351,6 @@ public class Abstractor {
      * ype of declaration in the package.
      */
     private void collectPackageDeclarations() throws Exception {
-        this.log.log("cross connect constructs");
-
         for (MethodDecl m : this.proj.methodDecls.getConSet()) {
             final PackageCon pkg = m.pkg.mustGetResolved();
             if (pkg == null) this.log.error("package for method is null: " + m);

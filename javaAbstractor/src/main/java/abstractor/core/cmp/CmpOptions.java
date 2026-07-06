@@ -3,6 +3,15 @@ package abstractor.core.cmp;
 import java.util.ArrayList;
 
 public class CmpOptions{
+    static private CmpOptions resolvedCmpSingleton = null;
+    static public CmpOptions resolvedCmp() {
+        if (resolvedCmpSingleton != null) return resolvedCmpSingleton;
+        CmpOptions options = new CmpOptions();
+        options.useResolved = true;
+        resolvedCmpSingleton = options;
+        return options;
+    }
+
     static public boolean shouldUseResolved(CmpOptions op) {
         return op != null? op.useResolved: false;
     }
