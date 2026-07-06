@@ -56,12 +56,12 @@ public class Logger {
 
     public int errorCount() { return this.errors; }
     
-    public void logWithColor(LogColor color, String text) {
+    public void log(LogColor color, String text) {
         this.write(this.out, Level.Normal, color, text);
     }
 
     public void log(String text) {
-        this.logWithColor(LogColor.reset, text);
+        this.log(LogColor.reset, text);
     }
 
     public void logIf(boolean condition, String text) {
@@ -117,10 +117,23 @@ public class Logger {
 
     public void measure(String label, ThrowingRunnable func) throws Exception {
         final long start = System.nanoTime();
-        this.log("Starting " + label + "...");
+        this.notice("Starting " + label + "...");
         func.run();
         final long stop = System.nanoTime();
         Duration elapsed = Duration.ofNanos(stop - start);
-        this.log("Finished " + label + " (" + elapsed + ")");
+        this.notice("Finished " + label + " (" + format(elapsed) + ")");
+    }
+
+    private String format(Duration d) {
+        final long hours = d.toHours();
+        final long minutes = d.toMinutesPart();
+        final double seconds = d.toSecondsPart() + (d.toNanosPart() / 1_000_000_000.0);
+        if (hours > 0) {
+            return String.format("%dh %dm %.2fs", hours, minutes, seconds);
+        } else if (minutes > 0) {
+            return String.format("%dm %.2fs", minutes, seconds);
+        } else {
+            return String.format("%.2fs", seconds);
+        }
     }
 }

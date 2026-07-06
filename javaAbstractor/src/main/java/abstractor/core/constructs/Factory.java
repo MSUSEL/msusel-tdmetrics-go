@@ -283,13 +283,13 @@ public class Factory<T extends Construct> implements Jsonable {
         this.nonElemRef.clear();
     }
 
-    public boolean consolidateCons(Logger log) throws Exception {
+    public int consolidateCons(Logger log) throws Exception {
         // Copy all cons to a list and clear the set so that only
         // the unique cons can be re-added in the new sort order.
         final ArrayList<T> conList = new ArrayList<T>(this.conSet);
         this.conSet.clear();
 
-        boolean collision = false;
+        int collisions = 0;
         for (T con : conList) {
             T existing = this.conSet.floor(con);
             if (existing == null || !existing.equals(con)) {
@@ -300,14 +300,14 @@ public class Factory<T extends Construct> implements Jsonable {
 
             // Found another construct that is equal so move all references over
             // to the existing construct since the duplicate is about to be removed.
-            collision = true;
+            collisions++;
             for (Ref<T> ref : this.refSet) {
                 if (con.equals(ref.getResolved()))
                     ref.setResolved(existing);
             }
             con.setIndex(-100);
         }
-        return collision;
+        return collisions;
     }
 
     public void setIndices() {

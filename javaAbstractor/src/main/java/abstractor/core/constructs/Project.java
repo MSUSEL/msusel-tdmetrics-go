@@ -62,11 +62,11 @@ public class Project implements Jsonable {
             factory.setToCompareResolved();
     }
 
-    public boolean consolidateCons(Logger log) throws Exception {
-        boolean collision = false;
+    public int consolidateCons(Logger log) throws Exception {
+        int collisions = 0;
         for (Factory<? extends Construct> factory : this.factories)
-            collision = factory.consolidateCons(log) || collision;
-        return collision;
+            collisions += factory.consolidateCons(log);
+        return collisions;
     }
 
     public void setAllIndices() {

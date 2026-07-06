@@ -303,14 +303,14 @@ public class Abstractor {
                     /*
                     // TODO: REMOVE
                     if (name.equals("RuntimeException")) {
-                        this.log.logWithColor(LogColor.brightBlue, ">>>(1) +-- loc: " + loc.toString());
-                        this.log.logWithColor(LogColor.brightBlue, ">>>(1) |   name: " + name);
-                        this.log.logWithColor(LogColor.brightBlue, ">>>(1) |   m: " + SpoonUtils.describeElem(m));
-                        this.log.logWithColor(LogColor.brightBlue, ">>>(1) |   instantiator: " + this.instantiator);
-                        this.log.logWithColor(LogColor.brightBlue, ">>>(1) |   typeParams: " + typeParams);
-                        this.log.logWithColor(LogColor.brightBlue, ">>>(1) |   recv: " + recv);
-                        this.log.logWithColor(LogColor.brightBlue, ">>>(1) |   receiver: " + receiver);
-                        this.log.logWithColor(LogColor.brightBlue, ">>>(1) +-- md: " + md);
+                        this.log.log(LogColor.brightBlue, ">>>(1) +-- loc: " + loc.toString());
+                        this.log.log(LogColor.brightBlue, ">>>(1) |   name: " + name);
+                        this.log.log(LogColor.brightBlue, ">>>(1) |   m: " + SpoonUtils.describeElem(m));
+                        this.log.log(LogColor.brightBlue, ">>>(1) |   instantiator: " + this.instantiator);
+                        this.log.log(LogColor.brightBlue, ">>>(1) |   typeParams: " + typeParams);
+                        this.log.log(LogColor.brightBlue, ">>>(1) |   recv: " + recv);
+                        this.log.log(LogColor.brightBlue, ">>>(1) |   receiver: " + receiver);
+                        this.log.log(LogColor.brightBlue, ">>>(1) +-- md: " + md);
                     }
                     */
 
@@ -1028,14 +1028,14 @@ public class Abstractor {
 
             /*
             // TODO: REMOVE
-            this.log.logWithColor(LogColor.green, ">>>(8) +-- tr: " + SpoonUtils.describeElem(tr));
-            this.log.logWithColor(LogColor.green, ">>>(8) |   tr.par.init?: " + tr.isParentInitialized());
-            this.log.logWithColor(LogColor.green, ">>>(8) |   c: " + SpoonUtils.describeElem(c));
-            this.log.logWithColor(LogColor.green, ">>>(8) |   c.par: " + SpoonUtils.describeElem(c.getParent()));
-            this.log.logWithColor(LogColor.green, ">>>(8) |   definedInNest: " + definedInNest);
-            this.log.logWithColor(LogColor.green, ">>>(8) |   typeParams: " + typeParams);
-            this.log.logWithColor(LogColor.green, ">>>(8) |   typeArgs: " + typeArgs);
-            this.log.logWithColor(LogColor.green, ">>>(8) +-- instantiator: " + this.instantiator);
+            this.log.log(LogColor.green, ">>>(8) +-- tr: " + SpoonUtils.describeElem(tr));
+            this.log.log(LogColor.green, ">>>(8) |   tr.par.init?: " + tr.isParentInitialized());
+            this.log.log(LogColor.green, ">>>(8) |   c: " + SpoonUtils.describeElem(c));
+            this.log.log(LogColor.green, ">>>(8) |   c.par: " + SpoonUtils.describeElem(c.getParent()));
+            this.log.log(LogColor.green, ">>>(8) |   definedInNest: " + definedInNest);
+            this.log.log(LogColor.green, ">>>(8) |   typeParams: " + typeParams);
+            this.log.log(LogColor.green, ">>>(8) |   typeArgs: " + typeArgs);
+            this.log.log(LogColor.green, ">>>(8) +-- instantiator: " + this.instantiator);
             */
 
             final ElementKey key = new ElementKey(tr, this.instantiator.typeArgs());
@@ -1346,8 +1346,12 @@ public class Abstractor {
         this.log.log("Consolidating all constructs");
         this.proj.setToCompareResolved();
         this.proj.setAllIndices();
-        while (this.proj.consolidateCons(this.log))
+        while (true) {
+            int collisions = this.proj.consolidateCons(this.log);
+            if (collisions <= 0) break;
+            this.log.log("Removed " + collisions + " collisions");
             this.proj.setAllIndices();
+        }
         this.proj.setAllIndices();
     }
 
