@@ -1,10 +1,6 @@
 package abstractor.core;
 
-import java.util.List;
-import java.util.Map;
-import java.util.SortedSet;
-import java.util.TreeSet;
-import java.util.TreeMap;
+import java.util.*;
 
 import spoon.reflect.code.*;
 import spoon.reflect.cu.SourcePosition;
@@ -12,9 +8,9 @@ import spoon.reflect.declaration.*;
 import spoon.reflect.reference.*;
 import spoon.support.reflect.CtExtendedModifier;
 import spoon.support.reflect.code.CtIfImpl;
+
 import abstractor.core.constructs.*;
-import abstractor.core.json.JsonFormat;
-import abstractor.core.json.JsonHelper;
+import abstractor.core.json.*;
 import abstractor.core.log.Logger;
 import abstractor.core.spoonUtils.SpoonUtils;
 

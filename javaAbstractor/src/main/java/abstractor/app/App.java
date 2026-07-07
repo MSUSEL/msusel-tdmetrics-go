@@ -3,6 +3,7 @@ package abstractor.app;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.PrintStream;
+import java.time.Duration;
 
 import abstractor.core.*;
 import abstractor.core.constructs.Project;
@@ -17,6 +18,7 @@ public class App {
     }
 
     static public boolean run(Config cfg) throws Exception {
+        final long start = System.nanoTime();
         Logger log = new Logger(cfg.verbose ? Level.All: Level.Warning, cfg.logOut, cfg.logErr);
         Project proj = new Project();
         Abstractor ab = new Abstractor(log, proj);
@@ -45,7 +47,11 @@ public class App {
         }
 
         ab.validate();
- 
+
+        final long stop = System.nanoTime();
+        Duration elapsed = Duration.ofNanos(stop - start);
+        log.notice("Finished Abstraction (" + Logger.format(elapsed) + ")");
+
         if (log.errorCount() > 0) {
             final PrintStream errOut = cfg.logErr != null ? cfg.logErr : System.err;
             errOut.println("Had " + log.errorCount() + " errors");

@@ -129,7 +129,7 @@ public class Logger {
         }
     }
 
-    private String format(Duration d) {
+    static public String format(Duration d) {
         final long   hours   = d.toHours();
         final long   minutes = d.toMinutesPart();
         final double seconds = d.toSecondsPart() + (d.toNanosPart() / 1_000_000_000.0);

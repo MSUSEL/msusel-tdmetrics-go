@@ -24,8 +24,8 @@ public class Abstractor {
     public final Project proj;
     public final Instantiator instantiator;
 
-    public final HashSet<CtExecutable<?>> pendingMetrics  = new HashSet<>();
-    public final HashSet<CtPackage>       pendingPackages = new HashSet<>();
+    public final Set<CtExecutable<?>> pendingMetrics  = Collections.newSetFromMap(new IdentityHashMap<>());
+    public final Set<CtPackage>       pendingPackages = Collections.newSetFromMap(new IdentityHashMap<>());
 
     public CtModel model;
 
