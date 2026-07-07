@@ -16,8 +16,8 @@ import abstractor.core.iter.Bundle;
 import abstractor.core.log.*;
 import abstractor.core.json.*;
 import abstractor.core.require.Require;
-import abstractor.core.validator.*;
 import abstractor.core.spoonUtils.*;
+import abstractor.core.tools.*;
 
 public class Abstractor {
     public final Logger  log;
@@ -299,21 +299,6 @@ public class Abstractor {
                     final List<Ref<TypeParam>> typeParams = this.addTypeParams(m);
                     final MethodDecl md = new MethodDecl(pkg, receiver, loc, name, signature, typeParams);
                     md.isStatic = m.isStatic();
-
-                    /*
-                    // TODO: REMOVE
-                    if (name.equals("RuntimeException")) {
-                        this.log.log(LogColor.brightBlue, ">>>(1) +-- loc: " + loc.toString());
-                        this.log.log(LogColor.brightBlue, ">>>(1) |   name: " + name);
-                        this.log.log(LogColor.brightBlue, ">>>(1) |   m: " + SpoonUtils.describeElem(m));
-                        this.log.log(LogColor.brightBlue, ">>>(1) |   instantiator: " + this.instantiator);
-                        this.log.log(LogColor.brightBlue, ">>>(1) |   typeParams: " + typeParams);
-                        this.log.log(LogColor.brightBlue, ">>>(1) |   recv: " + recv);
-                        this.log.log(LogColor.brightBlue, ">>>(1) |   receiver: " + receiver);
-                        this.log.log(LogColor.brightBlue, ">>>(1) +-- md: " + md);
-                    }
-                    */
-
                     return md;
                 },
                 (Ref<MethodDecl> ref, MethodDecl md) -> {
@@ -343,21 +328,6 @@ public class Abstractor {
                 () -> {
                     final List<Ref<? extends TypeDesc>> instanceTypes = this.instantiator.typeArgs();
                     final Ref<Signature>                resolved      = this.addSignature(m);
-
-                    /*
-                    // TODO: REMOVE
-                    if (generic.getResolved().name.equals("RuntimeException")) {
-                        this.log.notice(">>>(2) +-- receiver: " + receiver);
-                        this.log.notice(">>>(2) |   recv: " + recv);
-                        this.log.notice(">>>(2) |   recv.gen: " + recv.generic);
-                        this.log.notice(">>>(2) |   method: " + m);
-                        this.log.notice(">>>(2) |   generic: " + generic);
-                        this.log.notice(">>>(2) |   resolved: " + resolved);
-                        this.log.notice(">>>(2) |   typeParams: " + typeParams);
-                        this.log.notice(">>>(2) +-- instantiator: " + this.instantiator);
-                    }
-                    */
-
                     return new MethodInst(generic, receiver, instanceTypes, resolved);
                 },
                 (Ref<MethodInst> ref, MethodInst mi) -> {
@@ -384,37 +354,6 @@ public class Abstractor {
                 () -> {
                     final List<Ref<? extends TypeDesc>> instanceTypes = this.instantiator.typeArgs();
                     final Ref<Signature>                resolved      = this.addSignatureForConstructor(ctor);
-
-                    /*
-                    // TODO: REMOVE
-                    if (generic.isResolved()) {
-                        final MethodDecl gen = generic.mustGetResolved();
-                        if (gen.name.equals("RuntimeException")) {
-                            this.log.notice(">>>(3) +-- receiver: " + receiver);
-                            this.log.notice(">>>(3) |   recv: " + recv);
-                            this.log.notice(">>>(3) |   recv.gen: " + recv.generic);
-                            if (recv.generic.isResolved()) {
-                                final ObjectDecl objRes = recv.generic.mustGetResolved();
-                                this.log.notice(">>>(3) |   recv.gen.res: " + objRes);
-                            }
-                            this.log.notice(">>>(3) |   ctor: " + SpoonUtils.describeElem(ctor));
-                            this.log.notice(">>>(3) |   generic: " + generic);
-                            if (generic.isResolved()) {
-                                final MethodDecl metRes = generic.mustGetResolved();
-                                this.log.notice(">>>(3) |   generic.res: " + metRes);
-                            }
-                            this.log.notice(">>>(3) |   resolved: " + resolved);
-                            this.log.notice(">>>(3) |   typeParams: " + typeParams);
-                            this.log.notice(">>>(3) +-- instantiator: " + this.instantiator);
-                        }
-                        final ArrayList<Ref<TypeParam>> tp = gen.typeParams;
-                        final int tpSize = gen.typeParams.size();
-                        final int taSize = instanceTypes.size();
-                        Require.equal(tpSize, taSize, "The type params count, " + tpSize + ", (" + tp + ") " +
-                            "must match the type arguments, " + taSize + ", (" + instanceTypes + ")");
-                    }
-                    */
-
                     return new MethodInst(generic, receiver, instanceTypes, resolved);
                 },
                 (Ref<MethodInst> ref, MethodInst mi) -> {
@@ -1025,18 +964,6 @@ public class Abstractor {
             else this.instantiator.pushCleanFrame();
             for (int i = 0; i < typeParams.size(); i++)
                 this.instantiator.add(typeParams.get(i), typeArgs.get(i));
-
-            /*
-            // TODO: REMOVE
-            this.log.log(LogColor.green, ">>>(8) +-- tr: " + SpoonUtils.describeElem(tr));
-            this.log.log(LogColor.green, ">>>(8) |   tr.par.init?: " + tr.isParentInitialized());
-            this.log.log(LogColor.green, ">>>(8) |   c: " + SpoonUtils.describeElem(c));
-            this.log.log(LogColor.green, ">>>(8) |   c.par: " + SpoonUtils.describeElem(c.getParent()));
-            this.log.log(LogColor.green, ">>>(8) |   definedInNest: " + definedInNest);
-            this.log.log(LogColor.green, ">>>(8) |   typeParams: " + typeParams);
-            this.log.log(LogColor.green, ">>>(8) |   typeArgs: " + typeArgs);
-            this.log.log(LogColor.green, ">>>(8) +-- instantiator: " + this.instantiator);
-            */
 
             final ElementKey key = new ElementKey(tr, this.instantiator.typeArgs());
             return this.proj.objectInsts.create(this.log, key,

@@ -1,4 +1,4 @@
-package abstractor.core;
+package abstractor.core.tools;
 
 import java.util.*;
 

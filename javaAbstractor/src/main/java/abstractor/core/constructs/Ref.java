@@ -3,11 +3,11 @@ package abstractor.core.constructs;
 import java.util.*;
 
 import abstractor.core.AbstractorException;
-import abstractor.core.ElementKey;
 import abstractor.core.cmp.*;
 import abstractor.core.iter.*;
 import abstractor.core.json.*;
 import abstractor.core.require.Require;
+import abstractor.core.tools.ElementKey;
 
 public class Ref<T extends Construct> extends ConstructImp {
     private final ConstructKind conKind;

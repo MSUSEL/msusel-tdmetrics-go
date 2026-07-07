@@ -1,7 +1,7 @@
 package abstractor.core.constructs;
 
-import abstractor.core.Baker;
 import abstractor.core.json.*;
+import abstractor.core.tools.Baker;
 
 public class Project implements Jsonable {
     public final Baker                  baker          = new Baker(this);

@@ -1,4 +1,4 @@
-package abstractor.core;
+package abstractor.core.tools;
 
 import java.util.*;
 
@@ -9,6 +9,7 @@ import spoon.reflect.reference.*;
 import spoon.support.reflect.CtExtendedModifier;
 import spoon.support.reflect.code.CtIfImpl;
 
+import abstractor.core.Abstractor;
 import abstractor.core.constructs.*;
 import abstractor.core.json.*;
 import abstractor.core.log.Logger;

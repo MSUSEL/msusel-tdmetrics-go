@@ -1,5 +1,7 @@
 package abstractor.core;
 
+import abstractor.core.tools.Analyzer;
+
 /**
  * Marker exception type thrown by the {@link Abstractor} and {@link Analyzer}
  * to differentiate failures originating inside the abstractor from exceptions

@@ -3,11 +3,11 @@ package abstractor.core.constructs;
 import java.util.*;
 import java.util.function.Predicate;
 
-import abstractor.core.ElementKey;
 import abstractor.core.cmp.CmpOptions;
 import abstractor.core.json.*;
 import abstractor.core.log.*;
 import abstractor.core.require.Require;
+import abstractor.core.tools.ElementKey;
 
 public class Factory<T extends Construct> implements Jsonable {
     static private final boolean logCreate = true;
