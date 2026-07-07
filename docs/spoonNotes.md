@@ -36,4 +36,10 @@ To abstract Java I am using Spoon.
 
 ## About Shadows
 
-- TODO
+What Spoon means by "shadow". A CtType/CtElement is shadow when Spoon built it
+from bytecode/reflection instead of source. It's not a value judgment — it just
+means "this type is visible in the classpath but wasn't compiled from the sources
+we handed to the model". In practice for BCEL: everything under `java.*`, `javax.*`,
+everything from Maven-transitive jars, and anything else outside the -i root
+all comes back as shadow. Project types, even ones in different packages under
+the same source tree, are non-shadow.
