@@ -5,43 +5,55 @@
 1. [ ] **`CtType.getReference()` strips formal type parameters.** Discovered while
   fixing test1006: the returned reference has empty `getActualTypeArguments()` and
   a `getDeclaringType()` that itself has no type args. Anywhere that needs the
-  formal chain must use `SpoonUtils.parameterizedRef(type)`. Candidates worth auditing
-  for the same trap: `addStructDesc` (when constructing references for `$super`/`$nest`),
-  and any future code that walks `getNestedTypes()` and calls `nt.getReference()`.
-  Update: nt.getReference() still appears at lines 199, 232, 265, 701, 898, 996, 1161.
-  See "Problematic" below for which of those actually matter.
+  formal chain must use `SpoonUtils.parameterizedRef(type)`.
+  Triage of the current `nt.getReference()` / `nest.getReference()` call sites:
+    - Lines 199, 232, 898, 996, 1161 (the nested-type registration loops):
+      benign. They pass the raw ref through `addTypeDesc` → `addObjectInst`,
+      which hits the "no actual type args" branch and returns the generic
+      decl. Storing the decl in `nestedTypes` is what we want here.
+    - Line 265 (`addInterfaceDesc` pin when the parent is a `CtType<?>`) and
+      line 701 (`addStructDesc`'s `$nest` field): these DO care about the
+      formal chain. A nested type inside `Outer<T>` currently gets a raw
+      `Outer` reference instead of `Outer<T>`. Switch these two to
+      `SpoonUtils.parameterizedRef(nest)`.
+    - `addStructDesc`'s `$super` (line 693) uses `c.getSuperclass()`, which
+      is a real Spoon API returning the parameterized ref directly — fine.
 
 2. [ ] **Synthetic references built by `parameterizedRef` have no AST parent.**
   That means `tr.hasParent(c.getParent())` (the `definedInNest` check in
-  `addObjectInst`/`addInterfaceInst`) will return `false` for them. Today this is
-  benign because the frame `nestCount` ends up at 0 in the cases we hit, but a
-  future caller that depends on `definedInNest` being correct for a synthetic ref
-  will be surprised. Consider deriving `definedInNest` from
-  `c.getDeclaringType() != null && c.isStatic() == false` instead of `tr.hasParent(...)`.
-  Before doing this change, ensure that `getDeclaringType` doesn't cause any lazy loading.
-  Also, determine if this is actually a problem since `parameterizedRef` may carry some
-  parent information (I don't know how the reference is created and what it carries
-  prior to me adjusting it).
+  `addObjectInst`/`addInterfaceInst`) will return `false` for them.
+  Verification: Spoon's `CtType.getReference()` returns a fresh reference
+  via `getFactory().Type().createReference(this)` whose parent is
+  UNINITIALIZED (reads as null). `parameterizedRef` then only wires up
+  `setDeclaringType` (a synthetic ref chain), never the real AST parent —
+  so the concern is real for any synthetic ref, not just after our
+  adjustments.
+  The only known caller that hands a synthetic ref to `inSameNested` today
+  is `getReceiverForCall`'s fallback branch (`in.getTarget() == null`),
+  which fires in static-like call sites where outer type-param bindings
+  don't apply, so the practical impact is limited right now. Still,
+  `pushFrame` vs `pushCleanFrame` will silently pick the wrong one for any
+  future caller that hands a synthetic ref in from a generic nested
+  context. Cheapest replacement is
+  `t.getDeclaringType() != null && !t.isStatic()` (interfaces are
+  implicitly static so they always pick `pushCleanFrame`, which is correct
+  because a nested interface never inherits the outer type's parameters).
 
-3. [ ] **`CtTypeParameter.getTypeErasure()` only returns the first bound** for multi-bounded
-  type params (`T extends A & B` → just `A`). Already noted in code; agree it's a real
-  correctness gap. Spoon does not expose multi-bound directly
-  here; `tp.getSuperclass()` plus `tp.getSuperInterfaces()` (or
-  `tp.getReference().getBoundingType()` after walking) gives the full list.
-  Update:  addTypeParam still uses tp.getTypeErasure() at
-  line 838 (the inline TODO on line 837 is still there).
+3. [ ] **`CtTypeParameter.getTypeErasure()` only returns the first bound** for
+  multi-bounded type params (`T extends A & B` → just `A`). Already noted
+  inline at `addTypeParam` line 837–838. Spoon does not expose multi-bound
+  directly here; `tp.getSuperclass()` plus `tp.getSuperInterfaces()` (or
+  walking `tp.getReference().getBoundingType()`) gives the full list.
 
-4. [ ] **`CtWildcardReference.getBoundingType()` has the same single-bound limitation**
-  as `getTypeErasure`. `addWildcard` seems to currently only handle `? extends Foo` / `? super Bar`
-  with a single bound. `? extends A & B` will silently drop `B`. Re-evaluate and
-  determine how to use spoon to fix the issue if it still exists.
-
-5. [ ] **`getAllMethods()` pulls inherited methods from JDK shadow super-interfaces.**
-  `addInterfaceDesc` iterates `i.getAllMethods()` and then filters via `isObjectMethod`;
-  for any interface that extends `java.util.Map` (or similar) this pulls dozens of abstracts
-  and signatures into the project, as seen in test1005. The cheapest mitigation is
-  `i.getMethods()` for the declared set plus an explicit walk of declared `getSuperInterfaces()`.
-  The current approach is workable but produces noisy output and slow tests.
+4. [ ] **`getAllMethods()` pulls inherited methods from JDK shadow super-interfaces.**
+  `addInterfaceDesc` iterates `i.getAllMethods()` and then filters via
+  `isObjectMethod`; for any interface that extends `java.util.Map` (or
+  similar) this pulls dozens of abstracts and signatures into the project,
+  as seen in test1005. The cheapest mitigation is `i.getMethods()` for the
+  declared set plus an explicit walk of declared `getSuperInterfaces()` —
+  which is exactly the walk the `inherits` post-hook already does, so the
+  two can share one traversal that stops at shadow interfaces. The current
+  approach is workable but produces noisy output and slow tests.
 
 ## Behavior gaps
 
@@ -62,3 +74,24 @@
   ignores the interface side here (those are handled via `synthesizeObjectInterface.inherits`),
   but the lack of any link in the data view means TD metrics computed from struct data
   alone will miss inherited fields. Possibly intentional; document if so.
+
+## Additional cleanup candidates
+
+1. [ ] **`SpoonUtils.parameterizedRefCache` is a JVM-lifetime static.** It's a
+  `static IdentityHashMap<CtType<?>, CtTypeReference<?>>`. Single abstraction
+  runs are fine, but tests that share a JVM (Surefire without
+  `forkPerTest`/`reuseForks=false`) accumulate entries across runs and pin
+  the `CtType`s from prior models. If cross-test flakiness ever appears,
+  clear it in `prepareModel` or make the cache a per-`Abstractor` field.
+  NOTE: This may not be replaced with HashMap since Spoon has several CtElements
+  that are equal under `equal` since they have no position and the same name
+  (e.g. `<inital>` for two different classes both in the STL).
+
+2. [ ] **`addDeclaration` unchecked `(CtTypeReference<?>)ref` cast.** Lines
+  122–123 narrow with `elem instanceof CtReference ref` and then blind-cast
+  to `CtTypeReference<?>` inside the CtClass / CtInterface branches. In
+  practice only type references resolve to class/interface declarations, but
+  a rogue `CtExecutableReference` or `CtFieldReference` reaching this point
+  would throw `ClassCastException` instead of hitting the "unhandled decl"
+  log. Narrow with `ref instanceof CtTypeReference<?> tr` for defensive
+  parity with the rest of the file.
