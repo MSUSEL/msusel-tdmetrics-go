@@ -7,6 +7,9 @@ import abstractor.core.iter.*;
 import abstractor.core.json.*;
 
 public class Selection extends ConstructImp {
+    // Note: a Selection name may refer to a member (field or method) that
+    // came from a shadow ancestor and won't be present in the InterfaceDesc's 
+    // abstracts or the StructDesc's fields
     public String name;
     public Ref<? extends Construct> origin;
 

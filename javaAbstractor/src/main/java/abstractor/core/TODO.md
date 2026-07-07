@@ -45,7 +45,7 @@
   directly here; `tp.getSuperclass()` plus `tp.getSuperInterfaces()` (or
   walking `tp.getReference().getBoundingType()`) gives the full list.
 
-4. [ ] **`getAllMethods()` pulls inherited methods from JDK shadow super-interfaces.**
+4. [x] **`getAllMethods()` pulls inherited methods from JDK shadow super-interfaces.**
   `addInterfaceDesc` iterates `i.getAllMethods()` and then filters via
   `isObjectMethod`; for any interface that extends `java.util.Map` (or
   similar) this pulls dozens of abstracts and signatures into the project,
