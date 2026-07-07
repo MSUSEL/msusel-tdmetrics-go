@@ -3,6 +3,7 @@ package abstractor.core.constructs;
 import java.util.*;
 import java.util.function.Predicate;
 
+import abstractor.core.AbstractorException;
 import abstractor.core.cmp.CmpOptions;
 import abstractor.core.json.*;
 import abstractor.core.log.*;
@@ -104,9 +105,9 @@ public class Factory<T extends Construct> implements Jsonable {
             // Create a new construct for this data.
             final T newCon = creator.create();
             if (newCon == null)
-                throw new Exception("Factory creator for " + this.toString() + " returned null.");
+                throw new AbstractorException("Factory creator for " + this.toString() + " returned null.");
             if (!newCon.kind().equals(this.conKind))
-                throw new Exception("Factory creator for " + this.toString() + " create a type with kind " + newCon.kind() + ".");
+                throw new AbstractorException("Factory creator for " + this.toString() + " create a type with kind " + newCon.kind() + ".");
 
             // If an existing construct matches the new one after the new one
             // has been loaded, then there are two elements to get to the same
@@ -144,7 +145,12 @@ public class Factory<T extends Construct> implements Jsonable {
 
     public void remove(Logger log, T con) {
         if (con == null) return;
-        if (logCreate) log.log("Removing " + con);
+
+        if (logCreate) {
+            JsonHelper jh = new JsonHelper();
+            jh.writeKinds = true;
+            log.log("Removing " + JsonFormat.Inline().format(con.toJson(jh)));
+        }
 
         con.setIndex(-100);
         this.conSet.remove(con);

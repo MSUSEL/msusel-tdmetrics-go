@@ -41,11 +41,11 @@ public class Ref<T extends Construct> extends ConstructImp {
 
     public void setResolved(T res) throws Exception {
         if (res == null)
-            throw new Exception("Attempted to write null as the resolved construct to the reference " + this);
+            throw new AbstractorException("Attempted to write null as the resolved construct to the reference " + this);
         if (!res.kind().equals(this.conKind))
-            throw new Exception("Attempted to write a resolved construct with the kind " + res.kind() + " for reference " + this + " with kind " + this.conKind);
+            throw new AbstractorException("Attempted to write a resolved construct with the kind " + res.kind() + " for reference " + this + " with kind " + this.conKind);
         if (this.isResolved() && !this.res.equals(res)) {
-            throw new Exception("Attempted to overwrite the resolved construct, " + this.res + ", with " + res + " for reference " + this);
+            throw new AbstractorException("Attempted to overwrite the resolved construct, " + this.res + ", with " + res + " for reference " + this);
         }
         this.res = res;
     }
