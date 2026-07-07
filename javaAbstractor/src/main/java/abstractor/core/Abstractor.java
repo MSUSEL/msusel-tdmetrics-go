@@ -1274,6 +1274,7 @@ public class Abstractor {
      */
     public void performAbstraction() throws Exception {
         this.log.measure("processPendingPackages",     () -> this.processPendingPackages());
+        this.log.measure("shortValidate",              () -> this.shortValidate());
         this.log.measure("consolidateCons",            () -> this.consolidateCons());
         this.log.measure("collectPackageDeclarations", () -> this.collectPackageDeclarations());
         this.log.measure("addImportsFromUsage",        () -> this.addImportsFromUsage());
@@ -1361,7 +1362,7 @@ public class Abstractor {
             final PackageCon pkg = obj.pkg.mustGetResolved();
             if (pkg == null) this.log.error("package for object is null: " + obj);
             pkg.objectDecls.add(this.proj.objectDecls.addOrGetRef(obj, null, "object in package " + pkg));
-        }
+        } 
         
         for (InterfaceDecl it : this.proj.interfaceDecls.getConSet()) {
             final PackageCon pkg = it.pkg.mustGetResolved();
@@ -1415,6 +1416,20 @@ public class Abstractor {
     private void removeEmptyPackages() {
         this.proj.packages.removeIf(log, (PackageCon pc) -> pc.isEmpty());
         this.proj.packages.setIndices();
+    }
+
+    public void shortValidate() throws Exception {
+        this.log.measure("performShortValidation", () -> this.performShortValidation());
+    }
+
+    private void performShortValidation() throws Exception {
+        final boolean hadErrors = this.log.errorCount() > 0;
+        new Validator(this.log, this.proj).shortValidate();
+        if (this.log.errorCount() > 0) {
+            if (hadErrors)
+                throw new AbstractorException("Errors logged before short validation.");
+            throw new AbstractorException("Errors logged during short validation.");
+        }
     }
 
     public void validate() throws Exception {

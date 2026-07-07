@@ -19,6 +19,11 @@ public class Validator {
         this.errCount = 0;
     }
 
+    public void shortValidate() {
+        for (Factory<? extends Construct> f : proj.factories)
+            this.shortValidate(f);
+    }
+
     public void validate() {
         for (Factory<? extends Construct> f : proj.factories)
             this.validate(f);
@@ -58,6 +63,16 @@ public class Validator {
 
         final String indent = "  ";
         return "[\n" + indent + String.join(",\n" + indent, parts) + "\n]";
+    }
+
+    private void shortValidate(Factory<? extends Construct> factory) {
+        for (Ref<? extends Construct> ref : factory.getRefSet()) {    
+            if (!ref.isResolved()) {
+                this.error("0000", "Expected all references to be resolved but " +
+                    this.conToString(ref) + " was not resolved.");
+                return;
+            }
+        }
     }
 
     private void validate(Factory<? extends Construct> factory) {
