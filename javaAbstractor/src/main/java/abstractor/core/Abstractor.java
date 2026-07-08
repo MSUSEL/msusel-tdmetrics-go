@@ -251,14 +251,10 @@ public class Abstractor {
         return this.proj.interfaceDescs.create(this.log, key,
             "interface description " + SpoonUtils.describeElem(i),
             () -> {
-                // Include the full callable set (self + inherited from
-                // non-shadow ancestors) so the InterfaceDesc mirrors the
-                // shape the Go abstractor produces via ducktyping. The
-                // helper stops at shadow boundaries so JDK ancestors like
-                // java.util.Map don't dump their methods here.
                 final TreeSet<Ref<Abstract>> abstracts = new TreeSet<Ref<Abstract>>();
-                for (CtMethod<?> m : SpoonUtils.collectNonShadowMethods(i)) {
-                    abstracts.add(this.addAbstract(m));
+                for (CtMethod<?> m : i.getAllMethods()) {
+                    if (!m.isStatic() && !SpoonUtils.isObjectMethod(m))
+                        abstracts.add(this.addAbstract(m));
                 }
 
                 Ref<? extends Construct> pin = null;
@@ -276,21 +272,14 @@ public class Abstractor {
                 return new InterfaceDesc(abstracts, pin);
             },
             (Ref<InterfaceDesc> ref, InterfaceDesc id) -> {
-                // Add direct super-interfaces this interface extends. Shadow
-                // supers (JDK / third-party) are skipped so we don't recurse
-                // into their declared methods; the inheritance link is
-                // intentionally dropped since we don't model those types.
+                // Add direct super-interfaces this interface extends.
                 for (CtTypeReference<?> supRef : i.getSuperInterfaces()) {
                     final CtType<?> supDecl = supRef.getTypeDeclaration(); // may be null for shadow/unresolved
-                    if (supDecl == null || !(supDecl instanceof CtInterface<?> supId)) {
+                    if (supDecl == null || !(supDecl instanceof CtInterface<?> supIt)) {
                         this.log.error("Unhandled super-interface " + SpoonUtils.describeElem(supDecl) + " for " + id);
                         continue;
                     }
-                    if (supDecl.isShadow()) {
-                        this.log.notice("Skipping shadow super-interface " + SpoonUtils.describeElem(supDecl) + " for " + id);
-                        continue;
-                    }
-                    id.inherits.add(this.addInterfaceDesc(supId));
+                    id.inherits.add(this.addInterfaceDesc(supIt));
                 }
             });
     }
@@ -935,13 +924,11 @@ public class Abstractor {
     }
 
     private Ref<InterfaceDesc> synthesizeObjectInterface(CtClass<?> c, Ref<? extends Construct> pin) throws Exception {
-        // Synthesize the interface abstractions for the class. Full callable
-        // set from non-shadow ancestors (matches the interface-side policy in
-        // addInterfaceDesc); static methods aren't part of the object's
-        // callable surface so they're filtered here.
+        // Synthesize the interface abstractions for the class.
         final TreeSet<Ref<Abstract>> abstracts = new TreeSet<Ref<Abstract>>();
-        for (CtMethod<?> m : SpoonUtils.collectNonShadowMethods(c)) {
-            if (!m.isStatic()) abstracts.add(this.addAbstract(m));
+         for (CtMethod<?> m : c.getAllMethods()) {
+            if (!m.isStatic() && !SpoonUtils.isObjectMethod(m))
+                abstracts.add(this.addAbstract(m));
         }
 
         // Synthesize the interface description for the class.
@@ -950,18 +937,11 @@ public class Abstractor {
             final List<Ref<? extends TypeDesc>> typeArgs = this.instantiator.typeArgs();
             final Ref<InterfaceDesc> inter = this.proj.interfaceDescs.addOrGetRef(it, typeArgs, "interface for object");
 
-            // Add direct super-interfaces this object extends. Shadow supers
-            // are skipped for the same reason as in addInterfaceDesc: we
-            // don't model JDK/library types and the abstracts already omit
-            // methods declared past a shadow boundary.
+            // Add direct super-interfaces this object extends.
             for (CtTypeReference<?> supRef : c.getSuperInterfaces()) {
                 final CtType<?> supDecl = supRef.getTypeDeclaration(); // may be null for shadow/unresolved
                 if (supDecl == null || !(supDecl instanceof CtInterface<?> supId)) {
                     this.log.error("Unhandled super-interface " + SpoonUtils.describeElem(supDecl) + " for " + pin);
-                    continue;
-                }
-                if (supDecl.isShadow()) {
-                    this.log.notice("Skipping shadow super-interface " + SpoonUtils.describeElem(supDecl) + " for " + pin);
                     continue;
                 }
                 it.inherits.add(this.addInterfaceDesc(supId));
@@ -1108,8 +1088,7 @@ public class Abstractor {
         if (tr instanceof CtTypeParameterReference tpr) return this.instantiator.replace(this.addTypeParam(tpr));
         if (tr instanceof CtTypeParameter           tp) return this.instantiator.replace(this.addTypeParam(tp));
 
-        // Use getTypeDeclaration (not getDeclaration) to get shadow types
-        // for external/JDK types instead of null.
+        // Get the actual type declaration that is being referenced.
         final CtType<?> ty = tr.getTypeDeclaration();
         if (ty == null) {
             this.log.error("Type description did not have a declaration but "+

@@ -71,36 +71,45 @@ flowchart LR
 - `TechDebt/{Class,Method,Math,Participation,Project,Source,Validator}.cs` — TD metric computations.
 - Tests: `UnitTests/CommonsTests/`, `UnitTests/ConstructTests/`.
 
-## Repo-Specific Conventions
+## Repo-Specific Conventions for Java
 
 These differ from defaults and matter when writing code:
 
-- **Cross-language pattern mirror**: Java loosely mirrors Go for maintainability — `Factory<T>` + `Ref<T>`,
+- **Cross-language pattern mirror**: Java abstractor and Go abstractor have a
+  lot of similarities for maintainability — `Factory<T>` + `Ref<T>`,
   `Cmp`/`CmpOptions`, `Jsonable.toJson(JsonHelper)`, `Logger` with push/pop indentation.
   Use the existing pattern even when a more idiomatic per-language one exists.
-- **External JDK/library types (Java)**: boxed primitives + `String` → `Baker.basicForBoxedOrString` → shared `Basic`s.
-  Shadow types today → `Baker.anyDesc()`; **named stub `InterfaceDecl`s** are target behavior (plan Step 5).
+- **External JDK/library types (Java)**:
+  - boxed primitives + `String` → `Baker.basicForBoxedOrString` → shared `Basic`s.
+  - Shadow types → **named stubs / shells**. Shadow objects or interfaces but they
+    are only populated with method stubs (no metrics) or abstracts, and fields
+    that are used by non-shadow constructs.
 - **Annotations (Java)**: used to inform analysis; do **not** emit them as constructs.
-  `CtAnnotationType` → `Logger.notice` + `objectDesc`.
-- **Anonymous classes and lambdas (Java)**: fold into the enclosing method's metrics.
+- **Anonymous classes and lambdas (Java)**: are not specifically abstracted but
+  included into the enclosing method's metrics.
   Named nested classes are separate objects with a field named `nest` or similar.
 - **Generic instantiations**: tracked as distinct constructs (`ObjectInst`, `MethodInst`, `InterfaceInst`).
 - **Package imports**: derive from actual type usage, **not** from `import` statements.
 - **Null/unknown (Java)**: `<nulltype>` is a no-op so null-literal usage doesn't create stubs.
   `Analyzer` skips `invokes.add` when `addDeclaration` returns null and skips field reads when `getFieldDeclaration()` is null.
-- **Log-and-continue**: never crash on unhandled constructs. TD analysis tolerates imprecision.
+- **(raw) Object**: The Java `Object` and builtin default methods (e.g. `notify` and `notifyAll`)
+  are not added unless overwritten or redefined in another type objct.
+- **Log-and-continue**: never crash on unhandled constructs.
 - **Spoon fixtures**: avoid `System.out.println` or other STL packages in single-file
   Tester fixtures unless needed or already exists — Spoon will pull large JDK graphs.
 
 ## Test Layout (non-obvious bits)
 
 - `testData/go/test0001`–`test0018` and `testData/java/{test0001,test0002,test1001..test1006}`.
-  Each fixture pairs source with an `abstraction.yaml` golden (some Go fixtures also carry `expStub.txt`).
+  Each fixture pairs source with an `abstraction.yaml` golden.
+- If an `abstraction.yaml` is used as the input too test the techDebtMetrics,
+  then the fixture may also carry `expStub.txt` as the golden file for techDebtMetrics.
 - Java tests under `javaAbstractor/src/test/java/abstractor/`:
   - `AppTests` — full-Maven fixtures.
   - `core.Tester` — single-file fixture harness.
   - `core.RobustnessTests`, `core.MetricsTests`, `core.JsonTests`, `core.DiffTests`, `core.IterTests`.
-- Run filters: `mvn -Dtest="abstractor.AppTests#test0001" test`, `dotnet test --filter <name>`.
+- Run filters: `mvn -Dtest="abstractor.AppTests#test0001" test`, `dotnet test --filter <name>`,
+  or use `Makefile` at root to run batches of tests.
 
 ## Custom Instructions
 
@@ -144,7 +153,9 @@ Never proceed to the next step without the user's explicit direction.
 ### File-Modification Permissions
 
 - The agent **must ask for permission** before modifying any file.
-- The agent must never stage, commit, or push changes; the researcher handles all revision control.
+- The agent must never stage, commit, stash, stash pop, or push changes;
+  the researcher handles all revision control.
+- Never change non-revisioned files unless specifically told to by researcher.
 
 ### Code Changes
 
@@ -171,18 +182,6 @@ Never proceed to the next step without the user's explicit direction.
 - Follow good practices but do not over-engineer. This is a research tool
   with a finite lifetime, not a long-lived product.
 - Code must be debuggable and readable by other researchers.
-- Follow existing patterns: `Factory<T>` + `Ref<T>`, `Cmp`/`CmpOptions`,
-  `Jsonable` with `toJson(JsonHelper)`, `Logger` with push/pop indentation.
-- New patterns are welcome where they make the code cleaner.
-- Patterns loosely mirror the Go abstractor (`goAbstractor/`) for
-  maintainability across both codebases.
-
-### Key Design Decisions
-
-- External (JDK/library) types: boxed/`String` → `Basic`; named stubs for
-  other shadow types (planned — today often `anyDesc`).
-- Annotations: use to inform analysis, do not output as constructs.
-- Anonymous classes and lambdas: fold into enclosing method metrics.
-- Named nested classes: separate objects with `nest` field.
-- Generic instantiations: track as distinct types (`ObjectInst`,
-  `MethodInst`, `InterfaceInst`).
+- Follow existing patterns since this code is mostly maintained and developed
+  by the researcher, not by agents, therefore agents are only to fill in
+  gaps in the code and not to refactor.

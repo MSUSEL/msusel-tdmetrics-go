@@ -4,17 +4,8 @@ import java.io.File;
 import java.util.*;
 
 import spoon.reflect.cu.SourcePosition;
-import spoon.reflect.declaration.CtClass;
-import spoon.reflect.declaration.CtElement;
-import spoon.reflect.declaration.CtExecutable;
-import spoon.reflect.declaration.CtMethod;
-import spoon.reflect.declaration.CtNamedElement;
-import spoon.reflect.declaration.CtPackage;
-import spoon.reflect.declaration.CtType;
-import spoon.reflect.declaration.CtTypeInformation;
-import spoon.reflect.declaration.CtTypeParameter;
-import spoon.reflect.reference.CtReference;
-import spoon.reflect.reference.CtTypeReference;
+import spoon.reflect.declaration.*;
+import spoon.reflect.reference.*;
 
 final public class SpoonUtils {
     private SpoonUtils() { }
@@ -193,39 +184,4 @@ final public class SpoonUtils {
     }
 
     static private final Set<String> objSigs = new HashSet<>();
-
-    /**
-     * Collects the non-static-agnostic set of methods reachable on {@code t}
-     * from source-visible declarations only. The walk descends into {@code t}'s
-     * declared methods, then recurses into non-shadow super-interfaces and
-     * (for classes) the non-shadow superclass. It stops at any shadow
-     * boundary so JDK/library ancestors like {@code java.util.Map} do not
-     * contribute methods.
-     *
-     * Deduplicated by method signature with self-first precedence: if the
-     * same signature appears at multiple depths (an override) the most
-     * derived declaration wins. {@code Object} methods are filtered.
-     * Static and other caller-specific filters are the caller's job.
-     */
-    static public Collection<CtMethod<?>> collectNonShadowMethods(CtType<?> t) {
-        final LinkedHashMap<String, CtMethod<?>> bySig = new LinkedHashMap<>();
-        collectNonShadowMethodsRec(t, bySig);
-        return bySig.values();
-    }
-
-    static private void collectNonShadowMethodsRec(CtType<?> t, LinkedHashMap<String, CtMethod<?>> bySig) {
-        if (t == null || t.isShadow()) return;
-        for (CtMethod<?> m : t.getMethods()) {
-            if (isObjectMethod(m)) continue;
-            bySig.putIfAbsent(m.getSignature(), m);
-        }
-        for (CtTypeReference<?> supRef : t.getSuperInterfaces()) {
-            if (supRef == null) continue;
-            collectNonShadowMethodsRec(supRef.getTypeDeclaration(), bySig);
-        }
-        if (t instanceof CtClass<?>) {
-            final CtTypeReference<?> superRef = t.getSuperclass();
-            if (superRef != null) collectNonShadowMethodsRec(superRef.getTypeDeclaration(), bySig);
-        }
-    }
 }
