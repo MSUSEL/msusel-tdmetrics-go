@@ -152,13 +152,6 @@ public class Abstractor {
             this.log.notice("Ignoring method of a local declaring type: " + SpoonUtils.describeElem(m) + " in " + SpoonUtils.describeElem(decl));
             return null;
         }
-        // Skip shadow (JDK/library) declaring types: Spoon strips their generics,
-        // which produces MethodDecls with typeParams=[] that then fail validation
-        // when their instantiations carry the receiver's type args.
-        if (decl.isShadow()) {
-            this.log.notice("Ignoring method of a shadow declaring type: " + SpoonUtils.describeElem(m) + " in " + SpoonUtils.describeElem(decl));
-            return null;
-        }
 
         if (decl instanceof CtEnum<?>    e) return this.addMethodDecl(this.addEnum(e), m);
         if (decl instanceof CtClass<?>   c) return this.addMethodDecl(this.addObjectDecl(c), m);
@@ -205,14 +198,14 @@ public class Abstractor {
 
     public Ref<? extends TypeDesc> addInterfaceInst(CtTypeReference<?> tr, CtInterface<?> i) throws Exception {
         final Ref<InterfaceDecl> decl = this.addInterfaceDecl(i);
-        if (!this.isGenerics(i)) return decl;
+        if (!SpoonUtils.isGenerics(i)) return decl;
 
         final List<Ref<TypeParam>> typeParams = this.addTypeParams(i);
         final List<Ref<? extends TypeDesc>> typeArgs = this.addTypeArguments(tr, typeParams);
         if (typeArgs == null) return decl;
 
         try {
-            final boolean definedInNest = inSameNested(tr, i);
+            final boolean definedInNest = SpoonUtils.inSameNested(tr, i);
             if (definedInNest) this.instantiator.pushFrame();
             else this.instantiator.pushCleanFrame();
             for (int j = 0; j < typeParams.size(); j++)
@@ -236,16 +229,6 @@ public class Abstractor {
         }
     }
 
-    private boolean isNested(CtType<?> t) {
-        return t.getParent() instanceof CtType<?>;
-    }
-    
-    private boolean inSameNested(CtTypeReference<?> tr, CtType<?> t) {
-        final CtElement par = t.getParent();
-        if (par instanceof CtPackage) return false;
-        return tr.hasParent(par);
-    }
-
     public Ref<InterfaceDesc> addInterfaceDesc(CtInterface<?> i) throws Exception {
         final ElementKey key = new ElementKey(i, this.instantiator.typeArgs());
         return this.proj.interfaceDescs.create(this.log, key,
@@ -258,7 +241,7 @@ public class Abstractor {
                 }
 
                 Ref<? extends Construct> pin = null;
-                if (this.isNested(i)) {
+                if (SpoonUtils.isNested(i)) {
                     final CtElement parent = i.getParent();
                     if (parent instanceof CtTypeReference<?> nest) {
                         pin = this.addTypeDesc(nest);
@@ -491,8 +474,8 @@ public class Abstractor {
         final List<Ref<? extends TypeDesc>> tdClassArgs = this.addTypeArguments(classArgs);
         final List<Ref<? extends TypeDesc>> tdCtorArgs  = this.addTypeArguments(ctorArgs);
 
-        final boolean classUseful = isUsefulInstantiation(classParams, tdClassArgs);
-        final boolean ctorUseful  = isUsefulInstantiation(ctorParams,  tdCtorArgs);
+        final boolean classUseful = this.isUsefulInstantiation(classParams, tdClassArgs);
+        final boolean ctorUseful  = this.isUsefulInstantiation(ctorParams,  tdCtorArgs);
         if (!classUseful && !ctorUseful) return this.addMethodDeclForConstructor(ctor);
 
         // Look up (or create) the receiver BEFORE pushing our frame,
@@ -598,11 +581,6 @@ public class Abstractor {
     public Ref<MethodDecl> addMethodDeclForConstructor(CtConstructor<?> ctor) throws Exception {
         if (ctor.isImplicit()) return null;
         if (ctor.getParent() instanceof CtClass c) {
-            // Skip shadow (JDK/library) declaring types for the same reason as in addMethodDeclOrAbstract.
-            if (c.isShadow()) {
-                this.log.notice("Ignoring constructor of a shadow declaring type: " + SpoonUtils.describeElem(ctor) + " in " + SpoonUtils.describeElem(c));
-                return null;
-            }
             final Ref<ObjectDecl> receiver = this.addObjectDecl(c);
             return this.addMethodDeclForConstructor(receiver, ctor);
         }
@@ -695,7 +673,7 @@ public class Abstractor {
                 if (superFr != null) fields.add(this.addField("$super", superFr));
 
                 // Add access to nesting class as a "$nest" field.
-                if (this.isNested(c)) {
+                if (SpoonUtils.isNested(c)) {
                     if (c.getParent() instanceof CtTypeReference<?> nest) {
                         fields.add(this.addField("$nest", nest));
                     } else if (c.getParent() instanceof CtType<?> nest) {
@@ -823,11 +801,6 @@ public class Abstractor {
         return result;
     }
 
-    private boolean isGenerics(CtElement elem) {
-        return elem instanceof CtType<?> t && t != null &&
-            (t.isGenerics() || this.isGenerics(t.getParent()));
-    }
-
     public Ref<TypeParam> addTypeParam(CtTypeParameter tp) throws Exception {
         // Do not use type arguments in the ElementKey for typeParams.
         // The typeParams will be replaced by the instantiator later.
@@ -895,6 +868,14 @@ public class Abstractor {
                 (Ref<ObjectDecl> ref, ObjectDecl obj) -> {
                     obj.setVisibility(c);
                     obj.setNest(this.getParent(c));
+
+                    if (c.isShadow()) {
+                        // Shadow object, so don't add fields and methods proactively,
+                        // they will be added as needed.
+                        obj.isShadow = true;
+                        return;
+                    }
+
                     for (CtType<?> nt : c.getNestedTypes())
                         obj.nestedTypes.add(this.addTypeDesc(nt.getReference()));
                     
@@ -916,6 +897,7 @@ public class Abstractor {
                             this.addMethodDecl(ref, m);
                     }
 
+                    // TODO: Need to move synthesizing until after the rest of the load.
                     obj.inter = this.synthesizeObjectInterface(c, ref);
                 });
         } finally {
@@ -953,14 +935,14 @@ public class Abstractor {
 
     public Ref<? extends TypeDesc> addObjectInst(CtTypeReference<?> tr, CtClass<?> c) throws Exception {
         final Ref<ObjectDecl> decl = this.addObjectDecl(c);
-        if (!this.isGenerics(c)) return decl;
+        if (!SpoonUtils.isGenerics(c)) return decl;
 
         final List<Ref<TypeParam>> typeParams = this.addTypeParams(c);
         final List<Ref<? extends TypeDesc>> typeArgs = this.addTypeArguments(tr, typeParams);
         if (typeArgs == null) return decl;
 
         try {
-            final boolean definedInNest = inSameNested(tr, c);
+            final boolean definedInNest = SpoonUtils.inSameNested(tr, c);
             if (definedInNest) this.instantiator.pushFrame();
             else this.instantiator.pushCleanFrame();
             for (int i = 0; i < typeParams.size(); i++)
@@ -975,6 +957,8 @@ public class Abstractor {
                     return new ObjectInst(decl, this.instantiator.typeArgs(), resData, resInterface);
                 },
                 (Ref<ObjectInst> ref, ObjectInst obj) -> {
+                    // TODO: Handle shadows
+
                     // Add constructors as (static) methods for the class instantiation.
                     for (CtConstructor<?> ctor : c.getConstructors()) {
                         if (ctor.getParent().equals(c)) {
@@ -1077,9 +1061,6 @@ public class Abstractor {
         // A boxed type (e.g. Integer, String) that we alias as a basic.
         final Ref<Basic> boxed = this.proj.baker.basicForBoxedOrString(tr);
         if (boxed != null) return boxed;
-
-        // Shadow types are external (JDK / third-party) without a type declaration.
-        if (tr.isShadow()) return this.addShadowTypeDesc(tr);
         
         // If the type is an Object, return an any for the Object.
         if (SpoonUtils.isObject(tr)) return this.proj.baker.anyDesc();
@@ -1157,6 +1138,14 @@ public class Abstractor {
                 (Ref<ObjectDecl> ref, ObjectDecl od) -> {
                     od.setVisibility(e);
                     od.setNest(this.getParent(e));
+
+                    if (e.isShadow()) {
+                        // Shadow enum, so don't add fields and methods proactively,
+                        // they will be added as needed.
+                        od.isShadow = true;
+                        return;
+                    }
+
                     for (CtType<?> nt : e.getNestedTypes())
                         od.nestedTypes.add(this.addTypeDesc(nt.getReference()));
 
@@ -1177,20 +1166,12 @@ public class Abstractor {
                             this.addMethodDecl(ref, m);
                     }
 
+                    // TODO: Need to move synthesizing until after the rest of the load.
                     od.inter = this.synthesizeObjectInterface(e, ref);
                 });
         } finally {
             this.instantiator.popFrame();
         }
-    }
-
-    public Ref<? extends TypeDesc> addShadowTypeDesc(CtTypeReference<?> tr) throws Exception {
-        // from isShadow() method:
-        // > When an element isn't present in the factory (created in another factory),
-        // > this element is considered as "shadow". e.g., a shadow element can be a
-        // > CtType of java.lang.Class built when we call CtTypeReference.getTypeDeclaration()
-        // > on a reference of java.lang.Class."
-        return this.proj.baker.anyDesc();
     }
 
     //===[ Processors ]=========================================================

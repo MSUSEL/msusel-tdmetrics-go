@@ -4,8 +4,7 @@ import spoon.reflect.declaration.CtModifiable;
 
 import java.util.TreeSet;
 
-import abstractor.core.cmp.Cmp;
-import abstractor.core.cmp.CmpOptions;
+import abstractor.core.cmp.*;
 import abstractor.core.json.*;
 import abstractor.core.require.Require;
 
@@ -15,6 +14,7 @@ public abstract class DeclarationImp extends ConstructImp implements Declaration
     public String          name;
     public String          visibility;
     public boolean         isStatic;
+    public boolean         isShadow;
 
     public Ref<? extends Construct> nest;
     public final TreeSet<Ref<? extends TypeDesc>> nestedTypes = new TreeSet<>();
@@ -28,6 +28,7 @@ public abstract class DeclarationImp extends ConstructImp implements Declaration
         this.name       = name;
         this.visibility = "";
         this.isStatic   = false;
+        this.isShadow   = false;
     }
     
     public Ref<PackageCon> pkgRef() { return this.pkg; }
@@ -54,6 +55,7 @@ public abstract class DeclarationImp extends ConstructImp implements Declaration
         obj.putNotEmpty("name",    this.name);
         obj.putNotEmpty("vis",     this.visibility);
         obj.putNotEmpty("static",  this.isStatic);
+        obj.putNotEmpty("shadow",  this.isShadow);
         obj.putNotEmpty("nest",    key(this.nest));
         obj.putNotEmpty("nested",  keySet(this.nestedTypes));
         return obj;

@@ -145,6 +145,21 @@ final public class SpoonUtils {
         }
         return SpoonUtils.describeElem(tr, false) + tail;
     }
+    
+    static public boolean isGenerics(CtElement elem) {
+        return elem instanceof CtType<?> t && t != null &&
+            (t.isGenerics() || isGenerics(t.getParent()));
+    }
+
+    static public boolean isNested(CtType<?> t) {
+        return t.getParent() instanceof CtType<?>;
+    }
+    
+    static public boolean inSameNested(CtTypeReference<?> tr, CtType<?> t) {
+        final CtElement par = t.getParent();
+        if (par instanceof CtPackage) return false;
+        return tr.hasParent(par);
+    }
 
     static public boolean isVoid(CtTypeReference<?> tr) {
         return tr.isPrimitive() && tr.getSimpleName().equals("void");
