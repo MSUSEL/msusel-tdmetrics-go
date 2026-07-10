@@ -188,6 +188,14 @@ public class Abstractor {
                 (Ref<InterfaceDecl> ref, InterfaceDecl id) -> {
                     id.setVisibility(i);
                     id.setNest(this.getParent(i));
+
+                    if (i.isShadow()) {
+                        // Shadow interface: only expose members that are actually used;
+                        // nested types are pulled in on demand via addTypeDesc.
+                        id.isShadow = true;
+                        return;
+                    }
+
                     for (CtType<?> nt : i.getNestedTypes())
                         id.nestedTypes.add(this.addTypeDesc(nt.getReference()));
                 });
@@ -220,6 +228,7 @@ public class Abstractor {
                     return new InterfaceInst(decl, argTypes, resolved);
                 }, 
                 (Ref<InterfaceInst> ref, InterfaceInst it) -> {
+                    if (i.isShadow()) return; // shadows: nested types are pulled in on demand
                     // Create instances for all nested types too.
                     for (CtType<?> nt : i.getNestedTypes())
                         this.addTypeDesc(nt.getReference());
@@ -235,9 +244,12 @@ public class Abstractor {
             "interface description " + SpoonUtils.describeElem(i),
             () -> {
                 final TreeSet<Ref<Abstract>> abstracts = new TreeSet<Ref<Abstract>>();
-                for (CtMethod<?> m : i.getAllMethods()) {
-                    if (!m.isStatic() && !SpoonUtils.isObjectMethod(m))
-                        abstracts.add(this.addAbstract(m));
+                if (!i.isShadow()) {
+                    // Shadow interfaces: abstracts are attached on demand from addAbstract.
+                    for (CtMethod<?> m : i.getAllMethods()) {
+                        if (!m.isStatic() && !SpoonUtils.isObjectMethod(m))
+                            abstracts.add(this.addAbstract(m));
+                    }
                 }
 
                 Ref<? extends Construct> pin = null;
@@ -255,6 +267,7 @@ public class Abstractor {
                 return new InterfaceDesc(abstracts, pin);
             },
             (Ref<InterfaceDesc> ref, InterfaceDesc id) -> {
+                if (i.isShadow()) return; // shadows: super-interfaces are not proactively walked
                 // Add direct super-interfaces this interface extends.
                 for (CtTypeReference<?> supRef : i.getSuperInterfaces()) {
                     final CtType<?> supDecl = supRef.getTypeDeclaration(); // may be null for shadow/unresolved
@@ -549,13 +562,27 @@ public class Abstractor {
     public Ref<Abstract> addAbstract(CtMethod<?> m) throws Exception {
         Require.notObjectMethod(m);
         final ElementKey key = new ElementKey(m, this.instantiator.typeArgs());
-        return this.proj.abstracts.create(this.log, key,
+        final Ref<Abstract> ref = this.proj.abstracts.create(this.log, key,
             "abstract " + SpoonUtils.describeElem(m),
             () -> {
                 final String         name      = m.getSimpleName();
                 final Ref<Signature> signature = this.addSignature(m);
                 return new Abstract(name, signature);
             });
+
+        // On-demand: if the declaring interface is a shadow, attach this abstract
+        // to its InterfaceDesc.abstracts so the stub grows only with used methods.
+        // TODO: Two empty shadow InterfaceDescs currently dedup to the same
+        // construct in the factory (getExisting), so attaches can leak between
+        // unrelated shadow interfaces. Needs a per-owner discriminator (e.g. use
+        // InterfaceDesc.pin, or a new marker) so empty stubs stay distinct.
+        final CtType<?> declType = m.getDeclaringType();
+        if (declType instanceof CtInterface<?> declInter && declInter.isShadow()) {
+            final Ref<InterfaceDesc> descRef = this.addInterfaceDesc(declInter);
+            if (descRef != null && descRef.isResolved())
+                descRef.getResolved().abstracts.add(ref);
+        }
+        return ref;
     }
 
     public Ref<Signature> addSignature(CtMethod<?> m) throws Exception {
@@ -663,8 +690,17 @@ public class Abstractor {
         return this.proj.structDescs.create(this.log, key,
             "struct " + SpoonUtils.describeElem(c),
             () -> {
-                // Collect all fields.
                 final ArrayList<Ref<Field>> fields = new ArrayList<>();
+
+                // Shadow types: fields (including $super/$nest) are attached on demand
+                // by addSelection so we only track what's actually referenced.
+                // TODO: Two shadow classes with empty struct fields will currently
+                // collapse in the factory (getExisting) and share the same StructDesc,
+                // meaning on-demand attaches would leak between them. Needs a
+                // per-owner discriminator (e.g. a StructDesc.pin field) to fix.
+                if (c.isShadow()) return new StructDesc(fields);
+
+                // Collect all fields.
                 for (CtFieldReference<?> fr : c.getAllFields())
                     fields.add(this.addField(fr));
 
@@ -749,9 +785,33 @@ public class Abstractor {
         final List<Ref<? extends TypeDesc>> keyArgs = this.addTypeArguments(receiverArgs);
 
         final ElementKey key = new ElementKey(field, keyArgs);
-        return this.proj.selections.create(this.log, key,
+        final Ref<Selection> selRef = this.proj.selections.create(this.log, key,
             "select field " + SpoonUtils.describeElem(field),
             () -> new Selection(field.getSimpleName(), origin));
+
+        // On-demand: if the origin is a shadow object (decl or inst), attach the
+        // field to its StructDesc so the stub grows only with used fields.
+        // TODO: Two empty shadow StructDescs currently dedup to the same construct
+        // in the factory (getExisting), so attaches can leak between unrelated
+        // shadow objects. Needs a per-owner discriminator on StructDesc (e.g. a
+        // pin field) so empty stubs stay distinct.
+        final Construct originCon = origin.isResolved() ? origin.getResolved() : null;
+        if (originCon instanceof ObjectDecl od && od.isShadow) {
+            this.attachShadowField(od.struct, field);
+        } else if (originCon instanceof ObjectInst oi &&
+                   oi.generic != null && oi.generic.isResolved() &&
+                   oi.generic.getResolved().isShadow) {
+            this.attachShadowField(oi.resData, field);
+        }
+        return selRef;
+    }
+
+    private void attachShadowField(Ref<StructDesc> structRef, CtField<?> field) throws Exception {
+        if (structRef == null || !structRef.isResolved()) return;
+        final StructDesc sd = structRef.getResolved();
+        if (sd == null) return;
+        final Ref<Field> fRef = this.addField(field);
+        if (fRef != null && !sd.fields.contains(fRef)) sd.fields.add(fRef);
     }
 
     public Ref<? extends TypeDesc> addArray(CtArrayTypeReference<?> tr) throws Exception {
@@ -897,8 +957,9 @@ public class Abstractor {
                             this.addMethodDecl(ref, m);
                     }
 
-                    // TODO: Need to move synthesizing until after the rest of the load.
-                    obj.inter = this.synthesizeObjectInterface(c, ref);
+                    // TODO: Synthesize the object's interface in a post-abstraction pass
+                    // so shadow objects only expose the methods that were actually used.
+                    //obj.inter = this.synthesizeObjectInterface(c, ref);
                 });
         } finally {
             this.instantiator.popFrame();
@@ -953,11 +1014,18 @@ public class Abstractor {
                 "object instantiation "+SpoonUtils.describeGeneric(tr),
                 () -> {
                     final Ref<StructDesc>    resData      = this.addStructDesc(c);
-                    final Ref<InterfaceDesc> resInterface = this.synthesizeObjectInterface(c, null);
+                    // TODO: Synthesize resInterface in a post-abstraction pass so shadow
+                    // instantiations only expose the methods actually used.
+                    //final Ref<InterfaceDesc> resInterface = this.synthesizeObjectInterface(c, null);
+                    final Ref<InterfaceDesc> resInterface = null;
                     return new ObjectInst(decl, this.instantiator.typeArgs(), resData, resInterface);
                 },
                 (Ref<ObjectInst> ref, ObjectInst obj) -> {
-                    // TODO: Handle shadows
+                    if (c.isShadow()) {
+                        // Shadow object instantiation: methods and nested types are
+                        // pulled in on demand via addMethodInstForCall / addTypeDesc.
+                        return;
+                    }
 
                     // Add constructors as (static) methods for the class instantiation.
                     for (CtConstructor<?> ctor : c.getConstructors()) {
@@ -1166,8 +1234,9 @@ public class Abstractor {
                             this.addMethodDecl(ref, m);
                     }
 
-                    // TODO: Need to move synthesizing until after the rest of the load.
-                    od.inter = this.synthesizeObjectInterface(e, ref);
+                    // TODO: Synthesize the enum's interface in a post-abstraction pass
+                    // so shadow enums only expose the methods that were actually used.
+                    //od.inter = this.synthesizeObjectInterface(e, ref);
                 });
         } finally {
             this.instantiator.popFrame();
