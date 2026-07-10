@@ -52,9 +52,9 @@ public class Abstractor {
 
         // If the model couldn't be loaded (it has no types in it) from the app
         // source alone then try again with the maven project path as an input
-        // resource. We can't always add the input resource otherwise it will
+        // resource. The input resource can't always be add, otherwise it will
         // cause duplicate identifiers in some projects. For the integration
-        // tests in testData/java, we do need the input resource. I have no clue
+        // tests in testData/java, the input resource is not needed. I have no clue
         // what the difference is between the maven models to require this
         // but if it works, I'm not going to fix it right now.
         launcher = new MavenLauncher(mavenProject, MavenLauncher.SOURCE_TYPE.APP_SOURCE);
@@ -229,6 +229,7 @@ public class Abstractor {
                 }, 
                 (Ref<InterfaceInst> ref, InterfaceInst it) -> {
                     if (i.isShadow()) return; // shadows: nested types are pulled in on demand
+
                     // Create instances for all nested types too.
                     for (CtType<?> nt : i.getNestedTypes())
                         this.addTypeDesc(nt.getReference());
@@ -263,6 +264,8 @@ public class Abstractor {
                         this.log.warning("Unhandled nested interface decl " + SpoonUtils.describeElem(i) + " in " + SpoonUtils.describeElem(parent));
                     }
                 }
+
+                // TODO: Add pin when a shadow to the InterfaceDecl or something to keep unique
 
                 return new InterfaceDesc(abstracts, pin);
             },
@@ -380,7 +383,7 @@ public class Abstractor {
         if (SpoonUtils.isObjectMethod(m)) return null;
 
         // Fall back to the plain decl path when the receiver is anything other
-        // than a class we track (interfaces produce Abstracts, not method instances).
+        // than a tracked class (interfaces produce Abstracts, not method instances).
         final CtType<?> declType = m.getDeclaringType();
         if (!(declType instanceof CtClass<?> declClass))
             return this.addMethodDeclOrAbstract(m);
@@ -413,11 +416,11 @@ public class Abstractor {
         final boolean methodUseful = isUsefulInstantiation(methodParams, tdMethodArgs);
         if (!classUseful && !methodUseful) return this.addDeclaration(m);
 
-        // Look up (or create) the receiver BEFORE pushing our frame.
-        // addObjectInst pushes its own frame that copies from prior; if we
-        // pushed first, its typeArgs would inherit our method-level bindings
-        // and the ObjectInst would end up with the wrong instanceTypes.
-        // When classUseful is false we still prefer the generic's ObjectDecl
+        // Look up (or create) the receiver BEFORE pushing the frame.
+        // addObjectInst pushes its own frame that copies from prior;
+        // if the frame was pushed first, its typeArgs would inherit the method-level
+        // bindings and the ObjectInst would end up with the wrong instanceTypes.
+        // When classUseful is false, still prefer the generic's ObjectDecl
         // as the receiver so the MethodInst points back at its class.
         final Ref<? extends TypeDesc> receiver = this.getReceiverForCall(receiverRef, declClass, classUseful);
 
@@ -455,7 +458,7 @@ public class Abstractor {
         final CtExecutableReference<?> er = cc.getExecutable();
         if (er == null) return null;
         // Note: er.isImplicit() is usually true for ctor calls (you don't write
-        // <init> in source), so we do NOT gate on it here. The Analyzer's
+        // <init> in source), so do NOT gate on it here. The Analyzer's
         // addConstructorCallUsage already filters synthetic default ctors via
         // ctor.isImplicit() before delegating to us.
 
@@ -491,10 +494,10 @@ public class Abstractor {
         final boolean ctorUseful  = this.isUsefulInstantiation(ctorParams,  tdCtorArgs);
         if (!classUseful && !ctorUseful) return this.addMethodDeclForConstructor(ctor);
 
-        // Look up (or create) the receiver BEFORE pushing our frame,
-        // otherwise addObjectInst's own frame would inherit our ctor bindings
+        // Look up (or create) the receiver BEFORE pushing the frame,
+        // otherwise addObjectInst's own frame would inherit the ctor bindings
         // and produce an ObjectInst with too many instanceTypes.
-        // When classUseful is false we still prefer the generic's ObjectDecl
+        // When classUseful is false, still prefer the generic's ObjectDecl
         // as the receiver so the MethodInst points back at its class.
         final Ref<? extends TypeDesc> receiver = this.getReceiverForCall(receiverRef, declClass, classUseful);
 
@@ -693,7 +696,7 @@ public class Abstractor {
                 final ArrayList<Ref<Field>> fields = new ArrayList<>();
 
                 // Shadow types: fields (including $super/$nest) are attached on demand
-                // by addSelection so we only track what's actually referenced.
+                // by addSelection so only track what's actually referenced.
                 // TODO: Two shadow classes with empty struct fields will currently
                 // collapse in the factory (getExisting) and share the same StructDesc,
                 // meaning on-demand attaches would leak between them. Needs a
@@ -760,7 +763,7 @@ public class Abstractor {
             return null;
         }
 
-        // Resolve the origin from the reference's declaring type first so we
+        // Resolve the origin from the reference's declaring type first so
         // capture the actual instantiation at the call site (e.g. Foo<Integer>
         // yields an ObjectInst, plain Foo yields an ObjectDecl). Fall back to
         // the field's declaring type if the reference doesn't carry one. If
@@ -1126,7 +1129,7 @@ public class Abstractor {
         // Type of the `null` literal in Spoon and not a real external type.
         if (SpoonUtils.isNull(tr)) return this.proj.baker.anyDesc();
 
-        // A boxed type (e.g. Integer, String) that we alias as a basic.
+        // A boxed type (e.g. Integer, String) that can alias as a basic.
         final Ref<Basic> boxed = this.proj.baker.basicForBoxedOrString(tr);
         if (boxed != null) return boxed;
         
@@ -1250,12 +1253,22 @@ public class Abstractor {
      * resolve anything else that needs to be done to finish the abstraction.
      */
     public void performAbstraction() throws Exception {
-        this.log.measure("processPendingPackages",     () -> this.processPendingPackages());
-        this.log.measure("shortValidate",              () -> this.shortValidate());
-        this.log.measure("consolidateCons",            () -> this.consolidateCons());
-        this.log.measure("collectPackageDeclarations", () -> this.collectPackageDeclarations());
-        this.log.measure("addImportsFromUsage",        () -> this.addImportsFromUsage());
-        this.log.measure("removeEmptyPackages",        () -> this.removeEmptyPackages());
+        this.log.measure("process pending packages",     () -> this.processPendingPackages());
+        this.log.measure("finish synthesizing",          () -> this.finishSynthesizing());
+        this.log.measure("short validation",             () -> this.shortValidate());
+        this.log.measure("consolidate constructs",       () -> this.consolidateCons());
+        this.log.measure("collect package declarations", () -> this.collectPackageDeclarations());
+        this.log.measure("addImports from usage",        () -> this.addImportsFromUsage());
+        this.log.measure("remove empty packages",        () -> this.removeEmptyPackages());
+    }
+
+    private void finishSynthesizing() throws Exception {
+        // TODO: Finish synthesizing interfaces. The interfaces should be pinned
+        // and pre-created to collect imports, so now we need to add any missing
+        // abstracts to handle when a shadow object has been adding methods.
+        // Alternatively, the synthesized interface could be appended to as
+        // new methods are added to shadow objects, in which case, this can 
+        // be removed.
     }
 
     private void processPendingPackages() throws Exception {
