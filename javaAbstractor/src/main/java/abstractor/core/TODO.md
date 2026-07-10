@@ -45,16 +45,6 @@
   directly here; `tp.getSuperclass()` plus `tp.getSuperInterfaces()` (or
   walking `tp.getReference().getBoundingType()`) gives the full list.
 
-4. [x] **`getAllMethods()` pulls inherited methods from JDK shadow super-interfaces.**
-  `addInterfaceDesc` iterates `i.getAllMethods()` and then filters via
-  `isObjectMethod`; for any interface that extends `java.util.Map` (or
-  similar) this pulls dozens of abstracts and signatures into the project,
-  as seen in test1005. The cheapest mitigation is `i.getMethods()` for the
-  declared set plus an explicit walk of declared `getSuperInterfaces()` —
-  which is exactly the walk the `inherits` post-hook already does, so the
-  two can share one traversal that stops at shadow interfaces. The current
-  approach is workable but produces noisy output and slow tests.
-
 ## Behavior gaps
 
 1. [ ] **`addObjectInst` calls `synthesizeObjectInterface(c, null)` in its supplier.**
@@ -77,17 +67,7 @@
 
 ## Additional cleanup candidates
 
-1. [ ] **`SpoonUtils.parameterizedRefCache` is a JVM-lifetime static.** It's a
-  `static IdentityHashMap<CtType<?>, CtTypeReference<?>>`. Single abstraction
-  runs are fine, but tests that share a JVM (Surefire without
-  `forkPerTest`/`reuseForks=false`) accumulate entries across runs and pin
-  the `CtType`s from prior models. If cross-test flakiness ever appears,
-  clear it in `prepareModel` or make the cache a per-`Abstractor` field.
-  NOTE: This may not be replaced with HashMap since Spoon has several CtElements
-  that are equal under `equal` since they have no position and the same name
-  (e.g. `<inital>` for two different classes both in the STL).
-
-2. [ ] **`addDeclaration` unchecked `(CtTypeReference<?>)ref` cast.** Lines
+1. [ ] **`addDeclaration` unchecked `(CtTypeReference<?>)ref` cast.** Lines
   122–123 narrow with `elem instanceof CtReference ref` and then blind-cast
   to `CtTypeReference<?>` inside the CtClass / CtInterface branches. In
   practice only type references resolve to class/interface declarations, but
