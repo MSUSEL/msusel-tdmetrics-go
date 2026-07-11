@@ -9,7 +9,7 @@ import abstractor.core.json.*;
 public class InterfaceDesc extends ConstructImp implements TypeDesc {
     public final TreeSet<Ref<Abstract>>      abstracts = new TreeSet<>();
     public final TreeSet<Ref<InterfaceDesc>> inherits  = new TreeSet<>();
-    public       Ref<? extends Construct>    pin;  
+    public       Ref<? extends Construct>    pin;
     
     public InterfaceDesc() {}
 

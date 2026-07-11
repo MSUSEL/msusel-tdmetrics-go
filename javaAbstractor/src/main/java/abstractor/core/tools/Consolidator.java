@@ -4,10 +4,14 @@ import java.util.*;
 
 import abstractor.core.cmp.*;
 import abstractor.core.constructs.*;
+import abstractor.core.json.JsonFormat;
+import abstractor.core.json.JsonHelper;
 import abstractor.core.log.*;
 import abstractor.core.require.Require;
 
 public class Consolidator {
+    static public boolean logConsolidations = false;
+
     final public Logger log;
     final public Project proj;
 
@@ -21,6 +25,8 @@ public class Consolidator {
         this.log.push();
 
         this.setToCompareResolved();
+        this.pullPinsOnAnys();
+        this.pullPinsOnEmptyStructs();
         this.proj.setAllIndices();
 
         int collisions;
@@ -32,6 +38,45 @@ public class Consolidator {
         } while(collisions > 0);
         this.proj.setAllIndices();
         this.log.pop();
+    }
+
+    private String conToString(Construct con) {
+        final JsonHelper jh = new JsonHelper();
+        jh.writeKinds     = true;
+        jh.writeIndices   = true;
+        jh.writeRefs      = true;
+        jh.refSkipResolve = false;
+        return JsonFormat.Inline().format(con.toJson(jh));
+    }
+
+    /**
+     * Removes the pins from all interfaces that have no abstracts
+     * (and has no inherits) but have a pin.
+     * Without the pin, the consolidator will dedup these interfaces.
+     * 
+     * This is because all "any" interfaces do not need to be unique.
+     */
+    private void pullPinsOnAnys() {
+        for (InterfaceDesc i : this.proj.interfaceDescs.getConSet()) {
+            if (i.pin != null && i.abstracts.size() <= 0 && i.inherits.size() <= 0) {
+                if (logConsolidations)
+                    this.log.log("unpinning interface description from " + this.conToString(i.pin));
+                i.pin = null;
+            }
+        }
+    }
+
+    /**
+     * Same as pullPinsOnAnys but for structs.
+     */
+    private void pullPinsOnEmptyStructs() {
+        for (StructDesc s : this.proj.structDescs.getConSet()) {
+            if (s.pin != null && s.fields.size() <= 0) {
+                if (logConsolidations)
+                    this.log.log("unpinning struct description from " + this.conToString(s.pin));
+                s.pin = null;
+            }
+        }
     }
 
     /**
@@ -84,6 +129,9 @@ public class Consolidator {
             for (Ref<T> ref : factory.getRefSet()) {
                 final T oldRes = ref.getResolved();
                 final T unique = conSet.floor(oldRes);
+                // Since duplicates have been removed then oldRes should be
+                // equal to the unique value, otherwise it means that oldRes
+                // or a con equal to it is not in the conSet.
                 Require.equal(oldRes, unique, "expected all constructs to be found in conSet");
                 ref.setResolved(unique);
             }
@@ -103,6 +151,8 @@ public class Consolidator {
             // Compare against the last confirmed unique node.
             if (unique.equals(con)) {
                 // Found another construct that is equal.
+                if (logConsolidations)
+                    this.log.log("found duplicate: " + this.conToString(con));
                 con.setIndex(-100);
                 continue;
             }
@@ -124,7 +174,7 @@ public class Consolidator {
         T cur, prev = iter.next();
         while (iter.hasNext()) {
             cur = iter.next();
-            if (prev.compareTo(cur) < 0) return false;
+            if (prev.compareTo(cur) >= 0) return false;
             prev = cur;
         }
         return true;

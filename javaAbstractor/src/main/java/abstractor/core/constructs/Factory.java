@@ -59,9 +59,12 @@ public class Factory<T extends Construct> implements Jsonable {
     public interface Creator<T extends Construct> { T create() throws Exception; }
     
     @FunctionalInterface
+    public interface CreatorWithRef<T extends Construct> { T create(Ref<T> ref) throws Exception; }
+    
+    @FunctionalInterface
     public interface Finisher<T extends Construct> { void finish(Ref<T> ref, T con) throws Exception; }
 
-    public Ref<T> create(Logger log, ElementKey elemKey, String title, Creator<T> creator, Finisher<T> finisher) throws Exception {
+    public Ref<T> create(Logger log, ElementKey elemKey, String title, CreatorWithRef<T> creator, Finisher<T> finisher) throws Exception {
         Require.notNull(elemKey, "factories' create methods require non-null element keys");
 
         // If already "in progress" then check for if a reference already exists
@@ -103,7 +106,7 @@ public class Factory<T extends Construct> implements Jsonable {
             this.elemInProg.add(elemKey);
 
             // Create a new construct for this data.
-            final T newCon = creator.create();
+            final T newCon = creator.create(ref);
             if (newCon == null)
                 throw new AbstractorException("Factory creator for " + this.toString() + " returned null.");
             if (!newCon.kind().equals(this.conKind))
@@ -128,6 +131,14 @@ public class Factory<T extends Construct> implements Jsonable {
         } finally {
             if (logCreate) log.pop();
         }
+    }
+
+    public Ref<T> create(Logger log, ElementKey elemKey, String title, Creator<T> creator, Finisher<T> finisher) throws Exception {
+        return this.create(log, elemKey, title, (Ref<T> red) -> creator.create(), finisher);
+    }
+
+    public Ref<T> create(Logger log, ElementKey elemKey, String title, CreatorWithRef<T> creator) throws Exception {
+        return this.create(log, elemKey, title, creator, null);
     }
 
     public Ref<T> create(Logger log, ElementKey elemKey, String title, Creator<T> creator) throws Exception {
