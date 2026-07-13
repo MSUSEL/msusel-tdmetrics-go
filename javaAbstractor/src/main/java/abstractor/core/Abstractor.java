@@ -972,9 +972,11 @@ public class Abstractor {
 
         // Synthesize the interface abstractions for the class.
         final TreeSet<Ref<Abstract>> abstracts = new TreeSet<Ref<Abstract>>();
-         for (CtMethod<?> m : c.getAllMethods()) {
-            if (!m.isStatic() && !SpoonUtils.isObjectMethod(m))
-                abstracts.add(this.addAbstract(m));
+        if (!c.isShadow()) {
+            for (CtMethod<?> m : c.getAllMethods()) {
+                if (!m.isStatic() && !SpoonUtils.isObjectMethod(m))
+                    abstracts.add(this.addAbstract(m));
+            }
         }
 
         if (abstracts.size() <= 0 && c.getSuperInterfaces().size() <= 0 && pin == null)

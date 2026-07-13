@@ -216,9 +216,9 @@ public class MetricsTests {
             "  complexity: 2,",
             "  indents:    6,",
             "  lineCount:  7,",
-            "  reads:  [ basic1, basic6, object9, object10, selection1 ],",
-            "  writes: [ basic6 ],",
-            // TODO: Add invokes for println (for this and other tests with println)
+            "  reads:   [ basic1, basic2, object2, object3, selection1 ],",
+            "  writes:  [ basic6 ],",
+            "  invokes: [ method2 ],",
             "}");
     }
 
@@ -243,9 +243,9 @@ public class MetricsTests {
             "  complexity:  2,",
             "  indents:    11,",
             "  lineCount:  10,",
-            "  reads:  [ basic1, basic6, basic8, object9, object10, selection1 ],",
-            "  writes: [ basic6 ],",
-            // TODO: Add invokes for println (for this and other tests with println)
+            "  reads:   [ basic1, basic2, basic3, object2, object3, selection1 ],",
+            "  writes:  [ basic2 ],",
+            "  invokes: [ method2, method3 ],",
             "}");
     }
 
@@ -269,9 +269,9 @@ public class MetricsTests {
             "  complexity: 3,",
             "  indents:    9,",
             "  lineCount:  9,",
-            "  reads:  [ basic1, basic6, object9, object10, selection1 ],",
-            "  writes: [ basic6 ],",
-            // TODO: Add invokes for println (for this and other tests with println)
+            "  reads:   [ basic1, basic2, object9, object10, selection1 ],",
+            "  writes:  [ basic6 ],",
+            "  invokes: [ method2 ],",
             "}");
     }
 
@@ -297,9 +297,9 @@ public class MetricsTests {
             "  complexity:  3,",
             "  indents:    12,",
             "  lineCount:  11,",
-            "  reads:  [ basic1, basic6, object9, object10, selection1 ],",
-            "  writes: [ basic6 ],",
-            // TODO: Add invokes for println (for this and other tests with println)
+            "  reads:   [ basic1, basic2, object2, object3, selection1 ],",
+            "  writes:  [ basic2 ],",
+            "  invokes: [ method2 ],",
             "}");
     }
 
@@ -326,9 +326,9 @@ public class MetricsTests {
             "  complexity:  3,",
             "  indents:    13,",
             "  lineCount:  12,",
-            "  reads: [ basic6, object9, object10, selection1 ],",
-            "  writes: [ basic6 ],",
-            // TODO: Add invokes for println (for this and other tests with println)
+            "  reads:   [ basic1, object2, object3, selection1 ],",
+            "  writes:  [ basic1 ],",
+            "  invokes: [ method2 ],",
             "}");
     }
 
@@ -348,9 +348,9 @@ public class MetricsTests {
             "  complexity: 2,",
             "  indents:    4,",
             "  lineCount:  5,",
-            "  reads:  [ basic1, basic6, object9, object10, selection1 ],",
-            "  writes: [ basic6 ],",
-            // TODO: Add invokes for println (for this and other tests with println)
+            "  reads:   [ basic1, basic2, object2, object3, selection1 ],",
+            "  writes:  [ basic2 ],",
+            "  invokes: [ method2 ],",
             "}");
     }
 

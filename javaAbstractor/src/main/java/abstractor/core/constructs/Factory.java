@@ -134,7 +134,7 @@ public class Factory<T extends Construct> implements Jsonable {
     }
 
     public Ref<T> create(Logger log, ElementKey elemKey, String title, Creator<T> creator, Finisher<T> finisher) throws Exception {
-        return this.create(log, elemKey, title, (Ref<T> red) -> creator.create(), finisher);
+        return this.create(log, elemKey, title, (Ref<T> ref) -> creator.create(), finisher);
     }
 
     public Ref<T> create(Logger log, ElementKey elemKey, String title, CreatorWithRef<T> creator) throws Exception {
@@ -142,7 +142,7 @@ public class Factory<T extends Construct> implements Jsonable {
     }
 
     public Ref<T> create(Logger log, ElementKey elemKey, String title, Creator<T> creator) throws Exception {
-        return this.create(log, elemKey, title, creator, null);
+        return this.create(log, elemKey, title, (Ref<T> ref) -> creator.create(), null);
     }
 
     public void removeIf(Logger log, Predicate<T> predicate) {
