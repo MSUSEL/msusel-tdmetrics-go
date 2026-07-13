@@ -22,7 +22,6 @@
     },
     { # 2. interface{Bar(value int); Bar(value T); Baz(value U)}
       abstracts: [ 1, 3, 4 ],
-      pin: object1,
     },
     { # 3. any
       abstracts: [ ],

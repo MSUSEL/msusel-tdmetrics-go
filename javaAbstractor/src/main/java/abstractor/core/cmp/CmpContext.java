@@ -1,6 +1,6 @@
 package abstractor.core.cmp;
 
-import java.util.HashMap;
+import java.util.*;
 
 import abstractor.core.log.Logger;
 
@@ -8,7 +8,7 @@ public class CmpContext {
     final private CmpOptions options;
     final private String prefix;
     final private Logger log;
-    final private HashMap<CacheKey, Integer> cache = new HashMap<>();
+    final private HashMap<CacheKey, Integer> cache;
 
     public CmpContext(CmpOptions options) {
         this(options, "", null);
@@ -22,10 +22,15 @@ public class CmpContext {
         this(options, "", log);
     }
 
-    public CmpContext(CmpOptions options, String prefix,  Logger log) {
+    public CmpContext(CmpOptions options, String prefix, Logger log) {
+        this(options, prefix, log, new HashMap<>());
+    }
+
+    private CmpContext(CmpOptions options, String prefix, Logger log, HashMap<CacheKey, Integer> cache) {
         this.options = options != null ? options : new CmpOptions();
         this.prefix = prefix;
         this.log = log;
+        this.cache = cache;
     }
 
     static private String join(String a, String b) {
@@ -34,8 +39,13 @@ public class CmpContext {
         return a + "." + b;
     }
 
+    private void debugPrint(String msg) {
+        if (this.log != null) this.log.log(msg);
+        else System.out.println(msg);
+    }
+
     public CmpContext subContext(String prefix) {
-        return new CmpContext(this.options, join(this.prefix, prefix), this.log);
+        return new CmpContext(this.options, join(this.prefix, prefix), this.log, this.cache);
     }
 
     public <T> int compare(T a, T b) {
@@ -53,8 +63,7 @@ public class CmpContext {
             else if (b != null) type = b.getClass().getSimpleName();
 
             final String msg = header + "compare<" + type + ">(" + a + ", " + b + ") => " + cmp;
-            if (this.log != null) this.log.log(msg);
-            else System.out.println(msg);
+            this.debugPrint(msg);
         }
         return cmp;
     }
@@ -66,9 +75,9 @@ public class CmpContext {
 
         // Check cache and prevent loop.
         final CacheKey cacheKey = new CacheKey(a, b);
-        final Integer cachedValue = cache.get(cacheKey);
+        final Integer cachedValue = this.cache.get(cacheKey);
         if (cachedValue != null) return cachedValue.intValue();
-        cache.put(cacheKey, 0);
+        this.cache.put(cacheKey, 0);
 
         // Perform comparison.
         int cmp;
@@ -88,7 +97,7 @@ public class CmpContext {
         }
 
         // Cache results.
-        cache.put(cacheKey, cmp);
+        this.cache.put(cacheKey, cmp);
         return cmp;
     }
 }

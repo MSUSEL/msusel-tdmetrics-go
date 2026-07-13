@@ -13,6 +13,11 @@ public class CacheKey {
     }
 
     @Override
+    public String toString() {
+        return "CacheKey(hash = " + this.hash + ", a = " + a + ", b = " + b + ")";
+    }
+
+    @Override
     public int hashCode() { return this.hash; }
 
     @Override
@@ -20,7 +25,7 @@ public class CacheKey {
         return obj != null &&
             obj instanceof CacheKey ck &&
             this.hash == ck.hash &&
-            this.a.equals(ck.a) &&
-            this.b.equals(ck.b);
+            this.a == ck.a &&
+            this.b == ck.b;
     }
 }

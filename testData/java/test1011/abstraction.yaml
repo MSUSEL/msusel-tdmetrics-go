@@ -17,8 +17,8 @@
     },
   ],
   interfaceDescs: [
-    { abstracts: [ 1, 2 ], pin: object1 }, # 1. interface{ bar( x int ); baz( value int ) }
-    { abstracts: [ 3 ],    pin: object1 }, # 2. interface{ execute() }
+    { abstracts: [ 1, 2 ] }, # 1. interface{ bar( x int ); baz( value int ) }
+    { abstracts: [ 3 ]    }, # 2. interface{ execute() }
   ],
   methods: [
     { # 1. Foo.bar( x int )

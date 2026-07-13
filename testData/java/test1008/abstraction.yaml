@@ -21,9 +21,6 @@
     { # 1. interface{ Foo1() Foo<int>; Foo2() Foo<string>; Foo3() Foo<U> }
       abstracts: [ 1, 2, 3 ],
     },
-    { # 2. interface{ Foo1() Foo<int>; Foo2() Foo<string>; Foo3() Foo<U> }
-      abstracts: [ 1, 2, 3 ], pin: object1,
-    },
     { # 3. any
       abstracts: [ ],
     },
@@ -122,7 +119,7 @@
   ],
   objects: [
     { # 1. Foo<T> struct{ x T }{ Foo1() Foo<int>; Foo2() Foo<string>; Foo3<U>() Foo<U> }
-      name: Foo, package: 1, data: 3, interface: 2,
+      name: Foo, package: 1, data: 3, interface: 1,
       loc: 3, vis: public, typeParams: [ 1 ],
       methods: [ 1, 2, 3 ],
     },
@@ -146,8 +143,8 @@
     { fields: [ 4 ] }, # 4. struct{ x U }
   ],
   typeParams: [
-    { name: T, type: interfaceDesc3 }, # 1. T any
-    { name: U, type: interfaceDesc3 }, # 2. U any
+    { name: T, type: interfaceDesc2 }, # 1. T any
+    { name: U, type: interfaceDesc2 }, # 2. U any
   ],
   locs: { 1: ClassesFromSource.java },
 }

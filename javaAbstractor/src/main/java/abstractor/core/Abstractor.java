@@ -243,7 +243,7 @@ public class Abstractor {
         final ElementKey key = new ElementKey(i, this.instantiator.typeArgs());
         return this.proj.interfaceDescs.create(this.log, key,
             "interface description " + SpoonUtils.describeElem(i),
-            () -> {
+            (Ref<InterfaceDesc> ref) -> {
                 final TreeSet<Ref<Abstract>> abstracts = new TreeSet<Ref<Abstract>>();
                 if (!i.isShadow()) {
                     // Shadow interfaces: abstracts are attached on demand from addAbstract.
@@ -265,7 +265,8 @@ public class Abstractor {
                     }
                 }
 
-                // TODO: Add pin when a shadow to the InterfaceDecl or something to keep unique
+                // If pin is still null for a shadow, then pin it to itself.
+                if (i.isShadow() && pin == null) pin = ref;
 
                 return new InterfaceDesc(abstracts, pin);
             },
@@ -378,7 +379,9 @@ public class Abstractor {
         if (er == null) return null;
         if (er.isImplicit()) return null;
 
-        final CtExecutable<?> ex = er.getDeclaration();
+        final CtExecutable<?> ex = er.getExecutableDeclaration();
+        if (ex == null) return null;
+
         if (!(ex instanceof CtMethod<?> m)) return null; // caller handles ctors / others
         if (SpoonUtils.isObjectMethod(m)) return null;
 

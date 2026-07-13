@@ -12,8 +12,8 @@
     { name: value, type: typeParam1, vis: private }, # 1. value T
   ],
   interfaceDescs: [
-    { abstracts: [ 1, 2 ], pin: object1 }, # 1. interface{ getValue() T; setValue(value T) }
-    { abstracts: [ ] },                    # 2. any
+    { abstracts: [ 1, 2 ] }, # 1. interface{ getValue() T; setValue(value T) }
+    { abstracts: [ ]      }, # 2. any
   ],
   methods: [
     { # 1. Foo<T>.getValue() T

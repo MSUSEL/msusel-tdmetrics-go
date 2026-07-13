@@ -25,8 +25,7 @@ public class Consolidator {
         this.log.push();
 
         this.setToCompareResolved();
-        this.pullPinsOnAnys();
-        this.pullPinsOnEmptyStructs();
+        this.pullTemporaryPins();
         this.proj.setAllIndices();
 
         int collisions;
@@ -50,33 +49,12 @@ public class Consolidator {
     }
 
     /**
-     * Removes the pins from all interfaces that have no abstracts
-     * (and has no inherits) but have a pin.
-     * Without the pin, the consolidator will dedup these interfaces.
-     * 
-     * This is because all "any" interfaces do not need to be unique.
+     * Removes the pins from all interfaces descriptions and struct descriptions.
+     * Those pins are added to keep them unique when adding to a shadow type on-demand.
      */
-    private void pullPinsOnAnys() {
-        for (InterfaceDesc i : this.proj.interfaceDescs.getConSet()) {
-            if (i.pin != null && i.abstracts.size() <= 0 && i.inherits.size() <= 0) {
-                if (logConsolidations)
-                    this.log.log("unpinning interface description from " + this.conToString(i.pin));
-                i.pin = null;
-            }
-        }
-    }
-
-    /**
-     * Same as pullPinsOnAnys but for structs.
-     */
-    private void pullPinsOnEmptyStructs() {
-        for (StructDesc s : this.proj.structDescs.getConSet()) {
-            if (s.pin != null && s.fields.size() <= 0) {
-                if (logConsolidations)
-                    this.log.log("unpinning struct description from " + this.conToString(s.pin));
-                s.pin = null;
-            }
-        }
+    private void pullTemporaryPins() {
+        for (InterfaceDesc i : this.proj.interfaceDescs.getConSet()) i.pin = null;
+        for (StructDesc    s : this.proj.structDescs.getConSet())    s.pin = null;
     }
 
     /**

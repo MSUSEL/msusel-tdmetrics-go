@@ -35,7 +35,7 @@
       abstracts: [ 2, 3, 5 ],
     },
     { # 3. interface{ bar(x int, y int) int; baz(); cat(t $Array<int> ...) }
-      abstracts: [ 6, 7, 8 ], pin: object1,
+      abstracts: [ 6, 7, 8 ],
     },
     { # 4. any
       abstracts: [ ],

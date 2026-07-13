@@ -21,20 +21,17 @@
   ],
   interfaceDecls: [
     { # 1. Bar{ Run() bool }
-      name: Bar, package: 1, interface: 3,
+      name: Bar, package: 1, interface: 2,
       loc: 4, vis: public, nest: object3,
     },
   ],
   interfaceDescs: [
     { # 1. interface{ Boop() bool; Moog() bool }
-      abstracts: [ 1, 2 ], pin: object3,
+      abstracts: [ 1, 2 ]
     },
     { # 2. interface{ Run() bool }
-      abstracts: [ 3 ], pin: object1,
-      inherits: [ 3 ],
-    },
-    { # 3. interface{ Run() bool }
-      abstracts: [ 3 ], pin: object3,
+      abstracts: [ 3 ],
+      inherits: [ 2 ], # TODO: Check this inherit?
     },
     { # 4. any
       abstracts: [ ],
@@ -92,7 +89,7 @@
       reads: [
         basic1,         # bool
         interfaceDecl1, # Bar
-        interfaceDesc4, # any
+        interfaceDesc3, # any
         object2,        # Bip<T>
         object3,        # Foo
         objectInst1,    # Bip<Bar>
@@ -110,16 +107,16 @@
   ],
   objectInsts: [
     { # 1. Bip<Bar>{ t Tak<Bar>; $nest Foo }{}
-      generic: 2, resData: 4, resInterface: 4, instanceTypes: [ interfaceDecl1 ],
+      generic: 2, resData: 4, resInterface: 3, instanceTypes: [ interfaceDecl1 ],
     },
     { # 2. Bip<Baz>{ t Tak<Baz>; $nest Foo }{}
-      generic: 2, resData: 5, resInterface: 4, instanceTypes: [ object1 ],
+      generic: 2, resData: 5, resInterface: 3, instanceTypes: [ object1 ],
     },
     { # 3. Tak<Bar>{ x Bar; $nest Bip<T> }{}
-      generic: 4, resData: 6, resInterface: 4, instanceTypes: [ interfaceDecl1 ],
+      generic: 4, resData: 6, resInterface: 3, instanceTypes: [ interfaceDecl1 ],
     },
     { # 4. Tak<Baz>{ x Baz; $nest Bip<T> }{}
-      generic: 4, resData: 7, resInterface: 4, instanceTypes: [ object1 ],
+      generic: 4, resData: 7, resInterface: 3, instanceTypes: [ object1 ],
     },
   ],
   objects: [
@@ -129,7 +126,7 @@
       methods: [ 3 ],
     },
     { # 2. Foo.Bip<T>{ t Tak<T>; $nest Foo }{}
-      name: Bip, package: 1, data: 3, interface: 4,
+      name: Bip, package: 1, data: 3, interface: 3,
       loc: 8, vis: public, nest: object3, typeParams: [ 1 ],
       nested: [ object4 ], # Tak<T>
     },
@@ -140,7 +137,7 @@
       methods: [ 1, 2 ],
     },
     { # 4. Bip<T>.Tak<T>{ x T; $nest Bip<T> }{}
-      name: Tak, package: 1, data: 8, interface: 4,
+      name: Tak, package: 1, data: 8, interface: 3,
       loc: 9, vis: public, typeParams: [ 1 ],
       nest: object2, # Bip<T>
     },

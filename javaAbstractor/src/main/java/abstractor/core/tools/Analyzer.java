@@ -374,18 +374,8 @@ public class Analyzer {
             return;
         }
 
-        // When this reference is the executable of a call, the parent handler
-        // (addInvocationUsage / addConstructorCallUsage) has already added the
-        // right invocation edge (a narrowed MethodInst when possible). Skip
-        // here to avoid also adding the generic decl as a duplicate edge.
-        final CtElement parent = er.getParent();
-        if (parent instanceof CtAbstractInvocation) return;
-
-        final CtExecutable<?> ex = er.getDeclaration();
-
-        // TODO: Finished null investigation.
+        final CtExecutable<?> ex = er.getExecutableDeclaration();
         if (ex == null) return;
-        //Require.notNull(ex, "executable target was null for " + SpoonUtils.describeElem(er));
 
         if (ex instanceof CtMethod      mt) { this.addMethodUsage(mt);      return; }
         if (ex instanceof CtConstructor ct) { this.addConstructorUsage(ct); return; }
@@ -422,7 +412,7 @@ public class Analyzer {
         if (logUsage) this.log.log("addUsage.CtConstructorCall: " + SpoonUtils.describeElem(cc));
         final CtExecutableReference<?> execRef = cc.getExecutable();
 
-        final CtExecutable<?> exec = execRef.getDeclaration();
+        final CtExecutable<?> exec = execRef.getExecutableDeclaration();
         if (exec instanceof CtConstructor<?> ctor) {
             if (ctor.isImplicit()) { // default constructor called.
                 final CtTypeReference<?> dt = execRef.getDeclaringType();

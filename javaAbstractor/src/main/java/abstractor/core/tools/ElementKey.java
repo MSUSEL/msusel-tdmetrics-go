@@ -7,6 +7,7 @@ import spoon.reflect.declaration.CtElement;
 import abstractor.core.cmp.*;
 import abstractor.core.constructs.*;
 import abstractor.core.json.*;
+import abstractor.core.spoonUtils.SpoonUtils;
 
 public class ElementKey implements Comparable<ElementKey>, CmpGetter<ElementKey>, Jsonable {
     static private IdentityHashMap<CtElement, String> elemOrder = new IdentityHashMap<>();
@@ -59,7 +60,7 @@ public class ElementKey implements Comparable<ElementKey>, CmpGetter<ElementKey>
     @Override
     public JsonNode toJson(JsonHelper h) {
         JsonObject obj = new JsonObject();
-        obj.put("elem", this.elem.toStringDebug());
+        obj.put("elem", SpoonUtils.describeElem(this.elem));
         if (this.typeArgs != null) {
             JsonArray arr = new JsonArray();
             for (Ref<? extends TypeDesc> ta : this.typeArgs)
