@@ -193,8 +193,8 @@ public class MetricsTests {
             "  complexity: 1,",
             "  indents:    1,",
             "  lineCount:  3,",
-            "  reads: [ basic6, object9, object10, selection1 ],",
-            // TODO: Add invokes for println (for this and other tests with println)
+            "  reads:   [ basic1, object2, object3, selection1 ],",
+            "  invokes: [ method2 ],",
             "}");
     }
 
@@ -217,7 +217,7 @@ public class MetricsTests {
             "  indents:    6,",
             "  lineCount:  7,",
             "  reads:   [ basic1, basic2, object2, object3, selection1 ],",
-            "  writes:  [ basic6 ],",
+            "  writes:  [ basic2 ],",
             "  invokes: [ method2 ],",
             "}");
     }
@@ -269,8 +269,8 @@ public class MetricsTests {
             "  complexity: 3,",
             "  indents:    9,",
             "  lineCount:  9,",
-            "  reads:   [ basic1, basic2, object9, object10, selection1 ],",
-            "  writes:  [ basic6 ],",
+            "  reads:   [ basic1, basic2, object2, object3, selection1 ],",
+            "  writes:  [ basic2 ],",
             "  invokes: [ method2 ],",
             "}");
     }

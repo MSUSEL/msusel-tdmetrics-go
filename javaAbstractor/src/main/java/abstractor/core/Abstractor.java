@@ -1254,6 +1254,7 @@ public class Abstractor {
         this.log.measure("process pending packages",     () -> this.processPendingPackages());
         this.log.measure("short validation",             () -> this.shortValidate());
         this.log.measure("consolidate constructs",       () -> this.consolidateCons());
+        this.log.measure("connect nests",                () -> this.connectNests());
         this.log.measure("collect package declarations", () -> this.collectPackageDeclarations());
         this.log.measure("addImports from usage",        () -> this.addImportsFromUsage());
         this.log.measure("remove empty packages",        () -> this.removeEmptyPackages());
@@ -1323,6 +1324,34 @@ public class Abstractor {
 
     private void consolidateCons() throws Exception {
         new Consolidator(this.log, this.proj).consolidate();
+    }
+
+    private void connectNests() throws Exception {
+        connectNests(this.proj.objectDecls);
+        connectNests(this.proj.interfaceDecls);
+        connectNests(this.proj.methodDecls);
+        connectNests(this.proj.values);
+    }
+
+    private <T extends Declaration> void connectNests(Factory<T> factory) throws Exception {
+        for (T decl : factory.getConSet())
+            connectNests(factory, decl);
+    }
+
+    private <T extends Declaration> void connectNests(Factory<T> factory, T decl) throws Exception {
+        final Ref<? extends Construct> nest = decl.getNest();
+        if (nest != null && nest.isResolved() && nest.getResolved() instanceof Declaration p && decl instanceof TypeDesc) {
+            final Ref<T> declRef = factory.addOrGetRef(decl, null, "connecting nests");
+            @SuppressWarnings("unchecked")
+            final Ref<? extends TypeDesc> tdRef = (Ref<? extends TypeDesc>)declRef;
+            p.getNestedTypes().add(tdRef);
+        }
+
+        for (Ref<? extends TypeDesc> ref : decl.getNestedTypes()) {
+            final TypeDesc res = ref.getResolved();
+            if (res != null && res instanceof Declaration other && other.getNest() == null)
+                other.setNest(ref);
+        }
     }
 
     /**
