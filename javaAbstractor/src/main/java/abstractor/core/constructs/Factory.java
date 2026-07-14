@@ -11,7 +11,7 @@ import abstractor.core.require.Require;
 import abstractor.core.tools.ElementKey;
 
 public class Factory<T extends Construct> implements Jsonable {
-    static private final boolean logCreate = true;
+    static private final boolean logCreate = false;
 
     private final ConstructKind conKind;
 
