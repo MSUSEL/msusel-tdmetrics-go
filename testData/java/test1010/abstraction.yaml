@@ -74,7 +74,10 @@
   metrics: [
     { # 1. Foo<T>.Bar(value T)
       codeCount: 1, complexity: 1, lineCount: 1, loc: 4,
-      invokes: [ methodInst5 ], # Foo<T>.Baz<T>(value T)
+      invokes: [
+        method3,     # Foo<T>.Baz<U>(value U)
+        methodInst5, # Foo<T>.Baz<T>(value T)
+      ],
       reads: [
         interfaceDesc3, # any
         object1,        # Foo<T>
@@ -83,7 +86,10 @@
     },
     { # 2. Foo<T>.Bar(value int)
       codeCount: 1, complexity: 1, lineCount: 1, loc: 5,
-      invokes: [ methodInst4 ], # Foo<T>.Baz<int>(value int)
+      invokes: [
+        method3,     # Foo<T>.Baz<U>(value U)
+        methodInst4, # Foo<T>.Baz<int>(value int)
+      ],
       reads: [
         basic1,         # int
         interfaceDesc3, # any
@@ -107,14 +113,19 @@
     },
     { # 4. Foo<T>.Do()
       codeCount: 3, complexity: 1, indents: 1, lineCount: 3, loc: 8,
-      invokes: [ methodInst2 ], # Foo<string>.Bar(value string)
+      invokes: [
+        method2,     # Foo<T>.Bar(value T)
+        methodInst2, # Foo<string>.Bar(value string)
+      ],
       reads: [
         basic2,         # string
         interfaceDesc3, # any
         object1,        # Foo<T>
         objectInst1,    # Foo<string>
       ],
-      writes: [ object1 ], # Foo<T>
+      writes: [
+        object1, # Foo<T>
+      ],
     },
   ],
   objectInsts: [

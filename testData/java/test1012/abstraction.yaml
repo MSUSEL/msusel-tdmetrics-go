@@ -93,6 +93,7 @@
     { # 3. ???
       loc: 13, codeCount: 3, complexity: 1, indents: 1, lineCount: 3,
       invokes: [
+        method3,     # ???
         methodInst3, # ???
         methodInst4, # ???
       ],

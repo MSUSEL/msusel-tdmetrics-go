@@ -47,19 +47,7 @@
 
 ## Behavior gaps
 
-1. [ ] **`addObjectInst` calls `synthesizeObjectInterface(c, null)` in its supplier.**
-  That passes `null` for the pin, so the InterfaceDesc has no `pin`, while the
-  ObjectDecl path passes the decl ref. After consolidation these will collapse
-  to the same InterfaceDesc only if the abstracts match exactly.
-  It is not an issue to be inconsistent (both do not need to pin), should add a
-  comment in `synthesizeObjectInterface` should explain why ObjectInsts intentionally
-  lose the pin. Pins should only be added when there are unexported (private) methods
-  in the interface meaning it may only be used within the current package, otherwise
-  the pin can be ignored, however, we need to check that inheritance is being used
-  to differentiate so that they remain different if constructed differently since
-  Java doesn't have duck-typing like Go does.
-
-2. [ ] **`addStructDesc` doesn't include `$super` chain types.** Only `getSuperclass()`
+1. [ ] **`addStructDesc` doesn't include `$super` chain types.** Only `getSuperclass()`
   is added as a single `$super` field. A class with both `extends` and `implements`
   ignores the interface side here (those are handled via `synthesizeObjectInterface.inherits`),
   but the lack of any link in the data view means TD metrics computed from struct data
@@ -68,7 +56,7 @@
 ## Additional cleanup candidates
 
 1. [ ] **`addDeclaration` unchecked `(CtTypeReference<?>)ref` cast.** Lines
-  122–123 narrow with `elem instanceof CtReference ref` and then blind-cast
+  122–123 (old line numbers) narrow with `elem instanceof CtReference ref` and then blind-cast
   to `CtTypeReference<?>` inside the CtClass / CtInterface branches. In
   practice only type references resolve to class/interface declarations, but
   a rogue `CtExecutableReference` or `CtFieldReference` reaching this point

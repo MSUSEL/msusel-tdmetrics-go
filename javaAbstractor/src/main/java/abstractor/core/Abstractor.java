@@ -613,6 +613,10 @@ public class Abstractor {
 
     public Ref<MethodDecl> addMethodDeclForConstructor(CtConstructor<?> ctor) throws Exception {
         if (ctor.isImplicit()) return null;
+        if (!ctor.isParentInitialized()) {
+            this.log.warning("failed to constructor: parent not initialized for " + SpoonUtils.describeElem(ctor));
+            return null;
+        }
         if (ctor.getParent() instanceof CtClass c) {
             final Ref<ObjectDecl> receiver = this.addObjectDecl(c);
             return this.addMethodDeclForConstructor(receiver, ctor);
