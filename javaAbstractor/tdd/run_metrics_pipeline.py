@@ -22,6 +22,8 @@ Usage:
     ./run_metrics_pipeline.py --all                      # all 31 projects
     ./run_metrics_pipeline.py --targets commons-io hive  # explicit subset
     ./run_metrics_pipeline.py --tools pmd                # PMD only, skip CK
+
+Note: This script was created by Opus 4.7 High
 """
 
 from __future__ import annotations

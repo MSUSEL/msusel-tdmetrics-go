@@ -368,3 +368,84 @@ A class is flagged as a God Class if **all three** conditions are met.
 - SourceMeter: <https://www.sourcemeter.com/>
 - PMD: <https://pmd.github.io/>
 - SonarQube API: <https://docs.sonarqube.org/latest/extend/web-api/>
+
+### Running python tools
+
+The following is a short summary of how to run the python tools. All three
+are stdlib-only Python 3 scripts and live alongside this README. Run them
+from this folder unless a `--` flag says otherwise.
+
+The commit SHA of every project is hardcoded in `build_tdd_flat.py` as the
+`README_PROJECTS` constant, and mirrors the "Projects and Newest Analysis
+Dates" table above. `run_metrics_pipeline.py` imports that constant, so
+neither script requires you to type SHAs on the command line — you refer
+to projects by short `project_key` (e.g. `commons-io`).
+
+### build_tdd_flat.py
+
+Rebuilds `tdd_flat.json` — a flat, human-readable snapshot of the TDD
+database restricted to the 31 pinned commits and to the code-smell rules
+called out above.
+
+```bash
+# Rebuild tdd_flat.json using ./td_V2.db.
+python3 build_tdd_flat.py
+
+# Point at a db / output path in a different location.
+python3 build_tdd_flat.py --db /some/where/td_V2.db --out /tmp/tdd.json
+```
+
+### collect_project_metrics.py
+
+Runs the metric collectors (CK and/or PMD) against **one** project at a
+specific commit. Clones the repo into
+`~/go/src/github.com/<org>/<repo>/` on first run, then reuses the clone
+on subsequent runs (delete or rename the folder to force a fresh clone).
+
+```bash
+# Run both CK and PMD for one project (positional args: key, slug, sha).
+python3 collect_project_metrics.py \
+    commons-io apache/commons-io 65c4a9c0ec651dd99f28b9fae40378728d071985
+
+# PMD only (useful before ck.jar is installed).
+python3 collect_project_metrics.py --tools pmd \
+    commons-io apache/commons-io 65c4a9c0ec651dd99f28b9fae40378728d071985
+```
+
+Defaults it will look for:
+
+- `--ck-jar   ~/tools/ck.jar`
+- `--pmd-bin  ~/pmd-bin-7.26.0/bin/pmd`
+- `--repo-base ~/go/src/github.com`
+- `--out      ./metrics_output`
+
+Missing CK jar or PMD binary is non-fatal: the corresponding step is
+skipped with a clear message so the other tool still runs.
+
+### run_metrics_pipeline.py
+
+Batch driver that loops `collect_project_metrics.py` over a subset (or
+all) of the pinned projects. Uses `README_PROJECTS` from
+`build_tdd_flat.py` for the SHA of each requested `project_key`.
+
+Four ways to select targets:
+
+```bash
+# 1. Default: run a curated 4-project test set
+#    (commons-cli, commons-exec, commons-codec, commons-io).
+python3 run_metrics_pipeline.py
+
+# 2. Run all 31 projects.
+python3 run_metrics_pipeline.py --all
+
+# 3. Explicit subset by short project_key.
+python3 run_metrics_pipeline.py --targets commons-io hive zookeeper
+
+# 4. Same as any of the above, restricted to one tool.
+python3 run_metrics_pipeline.py --all --tools pmd
+```
+
+Per-project results land in `metrics_output/<key>-<short_sha>/`; a
+pipeline-level summary lands in
+`metrics_output/pipeline_run_<UTC>.json`. Failures don't stop the run
+unless you pass `--stop-on-error`.

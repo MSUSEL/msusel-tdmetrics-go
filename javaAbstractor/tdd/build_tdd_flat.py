@@ -16,6 +16,8 @@ Usage:
     python3 build_tdd_flat.py [--db path/to/td_V2.db] [--out path/to/tdd_flat.json]
 
 Only depends on the Python stdlib (sqlite3, json, argparse, datetime).
+
+Note: This script was created by Opus 4.7 High
 """
 
 from __future__ import annotations
