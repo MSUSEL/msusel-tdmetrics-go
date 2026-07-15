@@ -47,7 +47,7 @@ public class MethodInst : IMethod, IConstruct, IInitializable<Project> {
         this.Index = index;
         Object obj = node.AsObject();
         this.inGeneric = obj.ReadIndex("generic", project.MethodDecls);
-        this.Receiver = obj.TryReadKey(project, "receiver");
+        this.Receiver = obj.TryReadKey<IObject>(project, "receiver");
         this.inSignature = obj.ReadIndex("resolved", project.Signatures);
         obj.ReadKeyList(project, "instanceTypes", this.inInstanceTypes);
         this.Signature.AddUses(this);

@@ -14,7 +14,7 @@ public class Class(Source source) :
     /// <summary>The name and location from the source code that this class came from.</summary>
     public readonly Source Source = source;
 
-    /// <summary>The set of method partitations and fuzzy estimates.</summary>
+    /// <summary>The set of method participation and fuzzy estimates.</summary>
     public readonly SortedSet<Participation> Participation = [];
 
     /// <summary>Gets the Weighted Method Count (WMC) for this class.</summary>
