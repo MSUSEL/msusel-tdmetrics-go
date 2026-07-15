@@ -1,0 +1,50 @@
+{
+  "generated_at": "2026-07-15T22:54:02.303635+00:00",
+  "project_key": "commons-cli",
+  "git_slug": "apache/commons-cli",
+  "target_commit": "92f1def0bb3c0345295012e36b7150cfd1d7b6ab",
+  "resolved_head": "92f1def0bb3c0345295012e36b7150cfd1d7b6ab",
+  "repo_dir": "/Users/grantnelson/go/src/github.com/apache/commons-cli",
+  "out_dir": "/Users/grantnelson/go/src/github.com/MSUSEL/msusel-tdmetrics-go/javaAbstractor/tdd/metrics_output/commons-cli-92f1def0bb",
+  "tools_requested": [
+    "pmd"
+  ],
+  "steps": {
+    "pmd": {
+      "skipped": false,
+      "cmd": [
+        "/Users/grantnelson/pmd-bin-7.26.0/bin/pmd",
+        "check",
+        "-d",
+        "/Users/grantnelson/go/src/github.com/apache/commons-cli/src",
+        "-R",
+        "/Users/grantnelson/go/src/github.com/MSUSEL/msusel-tdmetrics-go/javaAbstractor/tdd/pmd_metrics.xml",
+        "-f",
+        "csv",
+        "-r",
+        "/Users/grantnelson/go/src/github.com/MSUSEL/msusel-tdmetrics-go/javaAbstractor/tdd/metrics_output/commons-cli-92f1def0bb/pmd/report.csv",
+        "--use-version",
+        "java-5",
+        "--no-cache",
+        "--no-progress",
+        "--no-fail-on-violation",
+        "--no-fail-on-error"
+      ],
+      "exit_code": 0,
+      "elapsed_sec": 5.85,
+      "stdout_log": "pmd.stdout.log",
+      "stderr_log": "pmd.stderr.log",
+      "target_dir": "/Users/grantnelson/go/src/github.com/apache/commons-cli/src",
+      "java_version": "5",
+      "java_version_reason": "pom.xml maven.compiler.source",
+      "version": "7.26.0",
+      "report": {
+        "path": "report.csv",
+        "size_bytes": 564181,
+        "row_count": 2179
+      }
+    }
+  },
+  "errors": [],
+  "finished_at": "2026-07-15T22:54:09.188226+00:00"
+}

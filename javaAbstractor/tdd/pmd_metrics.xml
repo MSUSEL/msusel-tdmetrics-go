@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ruleset name="tdmetrics-cross-check"
+         xmlns="http://pmd.sourceforge.net/ruleset/2.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://pmd.sourceforge.net/ruleset/2.0.0
+                             https://pmd.sourceforge.io/ruleset_2_0_0.xsd">
+
+  <description>
+    Cross-check ruleset for tdmetrics: reference PMD 7's built-in Java
+    metric rules with thresholds pushed to the minimum so they fire for
+    every class / method. Each rule's built-in violation message already
+    contains the underlying metric value, which the driver script
+    (collect_project_metrics.py) regex-parses out of the CSV report.
+
+    Complements CK output (which is the primary WMC/TCC/LOC/NOM/ATFD
+    source). This ruleset intentionally uses only shipped PMD rules so
+    it stays reproducible under future PMD releases without
+    hand-maintained XPath expressions.
+
+    NOTE: A few useful metrics (NOM, ATFD as a raw value, TCC as a raw
+    value) are not surfaced by any PMD 7 built-in rule as a message
+    argument, and are therefore taken from CK. GodClass fires only for
+    classes that pass Lanza &amp; Marinescu's threshold, and its message
+    reports WMC / ATFD / TCC for those cases.
+  </description>
+
+  <!--
+    Cyclomatic complexity. Fires per method (methodReportLevel) AND once
+    per class with the total (classReportLevel), so we get both
+    per-method cyclo values and a WMC-adjacent class total.
+    Message: "The <method|class> 'X' has a[n (highest N)]? cyclomatic
+    complexity of NNN."
+  -->
+  <rule ref="category/java/design.xml/CyclomaticComplexity">
+    <properties>
+      <property name="classReportLevel"  value="1"/>
+      <property name="methodReportLevel" value="1"/>
+    </properties>
+  </rule>
+
+  <!--
+    Cognitive complexity per method.
+    Message: "The method 'X' has a cognitive complexity of NNN, current
+    threshold is 1"
+  -->
+  <rule ref="category/java/design.xml/CognitiveComplexity">
+    <properties>
+      <property name="reportLevel" value="1"/>
+    </properties>
+  </rule>
+
+  <!--
+    NCSS - non-commenting source statements (a size / LOC proxy).
+    Message: "The <method|class> 'X' has a NCSS line count of NNN."
+  -->
+  <rule ref="category/java/design.xml/NcssCount">
+    <properties>
+      <property name="methodReportLevel" value="1"/>
+      <property name="classReportLevel"  value="1"/>
+    </properties>
+  </rule>
+
+  <!--
+    N-path complexity per method.
+    Message: "The method 'X' has an NPath complexity of NNN, current
+    threshold is 1"
+  -->
+  <rule ref="category/java/design.xml/NPathComplexity">
+    <properties>
+      <property name="reportLevel" value="1"/>
+    </properties>
+  </rule>
+
+  <!--
+    Coupling Between Objects (CBO) per class.
+    Message: "A value of NNN may denote a high amount of coupling within
+    the class (threshold: 1)"
+  -->
+  <rule ref="category/java/design.xml/CouplingBetweenObjects">
+    <properties>
+      <property name="threshold" value="1"/>
+    </properties>
+  </rule>
+
+  <!--
+    Parameter list length per method / constructor.
+    Message: "Avoid long parameter lists (NNN parameters - threshold is 1)."
+  -->
+  <rule ref="category/java/design.xml/ExcessiveParameterList">
+    <properties>
+      <property name="minimum" value="1"/>
+    </properties>
+  </rule>
+
+  <!--
+    "Public API surface" proxy: public methods + public attributes.
+    Message: "This class has NNN public methods and attributes; current
+    threshold is 1."
+  -->
+  <rule ref="category/java/design.xml/ExcessivePublicCount">
+    <properties>
+      <property name="minimum" value="1"/>
+    </properties>
+  </rule>
+
+  <!--
+    God Class detection using Lanza & Marinescu's WMC / TCC / ATFD
+    strategy. Uses PMD's built-in fixed thresholds; message reports the
+    three underlying values for every class flagged.
+    Message: "Possible God Class (WMC=X, ATFD=Y, TCC=Z)"
+  -->
+  <rule ref="category/java/design.xml/GodClass"/>
+
+</ruleset>
