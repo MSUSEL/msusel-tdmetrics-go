@@ -261,17 +261,32 @@ public class Analyzer {
         if (elem instanceof CtAnnotation) return false;
 
         // Skip these but their children will still be checked.
-        if (elem instanceof CtBinaryOperator) return true;
-        if (elem instanceof CtBlock         ) return true;
-        if (elem instanceof CtCase          ) return true;
-        if (elem instanceof CtFor           ) return true;
-        if (elem instanceof CtForEach       ) return true;
-        if (elem instanceof CtIfImpl        ) return true;
-        if (elem instanceof CtReturn        ) return true;
-        if (elem instanceof CtSwitch        ) return true;
-        if (elem instanceof CtThisAccess    ) return true;
-        if (elem instanceof CtUnaryOperator ) return true;
-
+        if (elem instanceof CtBinaryOperator ) return true;
+        if (elem instanceof CtBlock          ) return true;
+        if (elem instanceof CtCase           ) return true;
+        if (elem instanceof CtFor            ) return true;
+        if (elem instanceof CtForEach        ) return true;
+        if (elem instanceof CtDo             ) return true;
+        if (elem instanceof CtWhile          ) return true;
+        if (elem instanceof CtBreak          ) return true;
+        if (elem instanceof CtContinue       ) return true;
+        if (elem instanceof CtIfImpl         ) return true;
+        if (elem instanceof CtReturn         ) return true;
+        if (elem instanceof CtSwitch         ) return true;
+        if (elem instanceof CtThisAccess     ) return true;
+        if (elem instanceof CtUnaryOperator  ) return true;
+        if (elem instanceof CtSynchronized   ) return true;
+        if (elem instanceof CtThrow          ) return true;
+        if (elem instanceof CtTry            ) return true;
+        if (elem instanceof CtTryWithResource) return true;
+        if (elem instanceof CtCatch          ) return true;
+        if (elem instanceof CtCatchVariable  ) return true;
+        if (elem instanceof CtCatchVariableReference       ) return true;
+        if (elem instanceof CtExecutableReferenceExpression) return true;
+        if (elem instanceof CtConditional    ) return true;
+        if (elem instanceof CtLambda         ) return true;
+        if (elem instanceof CtParameter      ) return true;
+       
         // Process these and their children.
         if (elem instanceof CtAssignment             as) { this.addAssignmentUsage(as);             return true; }
         if (elem instanceof CtClass                  cl) { this.addClassUsage(cl);                  return true; }
@@ -292,6 +307,10 @@ public class Analyzer {
         if (elem instanceof CtTypeReference          tr) { this.addTypeReferenceUsage(tr);          return true; }
         if (elem instanceof CtVariableRead           vr) { this.addVariableReadUsage(vr);           return true; }
         if (elem instanceof CtVariableWrite          vw) { this.addVariableWrite(vw);               return true; }
+        if (elem instanceof CtNewArray               na) { this.addNewArray(na);                    return true; }
+        if (elem instanceof CtArrayRead              ar) { this.addArrayRead(ar);                   return true; }
+        if (elem instanceof CtArrayWrite             aw) { this.addArrayWrite(aw);                  return true; }
+        if (elem instanceof CtField                  fd) { this.addField(fd);                       return true; }
 
         // Use to see elements (may produce a lot of output).
         this.log.notice("unimplemented addUsage: " + SpoonUtils.describeElem(elem));
@@ -448,5 +467,25 @@ public class Analyzer {
     private void addClassUsage(CtClass<?> c) throws Exception {
         if (logUsage) this.log.log("addUsage.CtClass: " + SpoonUtils.describeElem(c));
         this.addRead(this.abs.addObjectDecl(c));
+    }
+
+    private void addNewArray(CtNewArray<?> c) throws Exception {
+        if (logUsage) this.log.log("addUsage.CtNewArray: " + SpoonUtils.describeElem(c));
+        // TODO: Should we create a reference?
+    }
+
+    private void addArrayRead(CtArrayRead<?> c) throws Exception {
+        if (logUsage) this.log.log("addUsage.CtArrayRead: " + SpoonUtils.describeElem(c));
+        // TODO: Should we create a reference?
+    }
+
+    private void addArrayWrite(CtArrayWrite<?> c) throws Exception {
+        if (logUsage) this.log.log("addUsage.CtArrayWrite: " + SpoonUtils.describeElem(c));
+        // TODO: Should we create a reference?
+    }
+
+    private void addField(CtField<?> c) throws Exception {
+        if (logUsage) this.log.log("addUsage.CtField: " + SpoonUtils.describeElem(c));
+        // TODO: Should we create a reference?
     }
 }
