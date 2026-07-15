@@ -15,3 +15,6 @@ javaAbstractor/tdd/td_V2.db
 
 # Ignore VS code files
 .vscode
+
+# Python bytecode cache from tdd/ helper scripts.
+__pycache__/

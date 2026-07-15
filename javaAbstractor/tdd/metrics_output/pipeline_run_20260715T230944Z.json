@@ -1,0 +1,86 @@
+{
+  "started_at": "2026-07-15T23:09:44.883902+00:00",
+  "finished_at": "2026-07-15T23:10:27.165480+00:00",
+  "collect_script": "/Users/grantnelson/go/src/github.com/MSUSEL/msusel-tdmetrics-go/javaAbstractor/tdd/collect_project_metrics.py",
+  "passthrough_args": [
+    "--out",
+    "/Users/grantnelson/go/src/github.com/MSUSEL/msusel-tdmetrics-go/javaAbstractor/tdd/metrics_output"
+  ],
+  "targets_requested": [
+    "commons-cli",
+    "commons-exec",
+    "commons-codec",
+    "commons-io"
+  ],
+  "counts": {
+    "total": 4,
+    "success": 4,
+    "failed": 0
+  },
+  "results": [
+    {
+      "project_key": "commons-cli",
+      "git_slug": "apache/commons-cli",
+      "commit_sha": "92f1def0bb3c0345295012e36b7150cfd1d7b6ab",
+      "cmd": [
+        "/opt/homebrew/opt/python@3.14/bin/python3.14",
+        "/Users/grantnelson/go/src/github.com/MSUSEL/msusel-tdmetrics-go/javaAbstractor/tdd/collect_project_metrics.py",
+        "commons-cli",
+        "apache/commons-cli",
+        "92f1def0bb3c0345295012e36b7150cfd1d7b6ab",
+        "--out",
+        "/Users/grantnelson/go/src/github.com/MSUSEL/msusel-tdmetrics-go/javaAbstractor/tdd/metrics_output"
+      ],
+      "exit_code": 0,
+      "elapsed_sec": 6.6
+    },
+    {
+      "project_key": "commons-exec",
+      "git_slug": "apache/commons-exec",
+      "commit_sha": "2da60ab3eefaaa2f8a434ded1eebe1ce17efd34a",
+      "cmd": [
+        "/opt/homebrew/opt/python@3.14/bin/python3.14",
+        "/Users/grantnelson/go/src/github.com/MSUSEL/msusel-tdmetrics-go/javaAbstractor/tdd/collect_project_metrics.py",
+        "commons-exec",
+        "apache/commons-exec",
+        "2da60ab3eefaaa2f8a434ded1eebe1ce17efd34a",
+        "--out",
+        "/Users/grantnelson/go/src/github.com/MSUSEL/msusel-tdmetrics-go/javaAbstractor/tdd/metrics_output"
+      ],
+      "exit_code": 0,
+      "elapsed_sec": 8.45
+    },
+    {
+      "project_key": "commons-codec",
+      "git_slug": "apache/commons-codec",
+      "commit_sha": "db51a1cb41e9155ca028a73b0637b32a2c37c43a",
+      "cmd": [
+        "/opt/homebrew/opt/python@3.14/bin/python3.14",
+        "/Users/grantnelson/go/src/github.com/MSUSEL/msusel-tdmetrics-go/javaAbstractor/tdd/collect_project_metrics.py",
+        "commons-codec",
+        "apache/commons-codec",
+        "db51a1cb41e9155ca028a73b0637b32a2c37c43a",
+        "--out",
+        "/Users/grantnelson/go/src/github.com/MSUSEL/msusel-tdmetrics-go/javaAbstractor/tdd/metrics_output"
+      ],
+      "exit_code": 0,
+      "elapsed_sec": 12.58
+    },
+    {
+      "project_key": "commons-io",
+      "git_slug": "apache/commons-io",
+      "commit_sha": "65c4a9c0ec651dd99f28b9fae40378728d071985",
+      "cmd": [
+        "/opt/homebrew/opt/python@3.14/bin/python3.14",
+        "/Users/grantnelson/go/src/github.com/MSUSEL/msusel-tdmetrics-go/javaAbstractor/tdd/collect_project_metrics.py",
+        "commons-io",
+        "apache/commons-io",
+        "65c4a9c0ec651dd99f28b9fae40378728d071985",
+        "--out",
+        "/Users/grantnelson/go/src/github.com/MSUSEL/msusel-tdmetrics-go/javaAbstractor/tdd/metrics_output"
+      ],
+      "exit_code": 0,
+      "elapsed_sec": 14.65
+    }
+  ]
+}

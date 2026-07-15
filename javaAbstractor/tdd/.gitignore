@@ -1,0 +1,2 @@
+# Per-run PMD log files under tdd/metrics_output.
+metrics_output/**/pmd.*.log
