@@ -311,7 +311,9 @@ def run_pmd(pmd_bin: Path, ruleset: Path, repo_dir: Path,
 def main() -> int:
     here = Path(__file__).resolve().parent
     default_repo_base = Path.home() / "go" / "src" / "github.com"
-    default_ck_jar    = Path.home() / "tools" / "ck.jar"
+    default_ck_jar    = (Path.home() / "go" / "src" / "github.com"
+                         / "mauricioaniche" / "ck" / "target"
+                         / "ck-0.7.1-SNAPSHOT-jar-with-dependencies.jar")
     default_pmd_bin   = Path.home() / "pmd-bin-7.26.0" / "bin" / "pmd"
     default_ruleset   = here / "pmd_metrics.xml"
     default_out_root  = here / "metrics_output"
