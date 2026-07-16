@@ -1,0 +1,57 @@
+{
+  "generated_at": "2026-07-16T00:09:56.140942+00:00",
+  "project_key": "archiva",
+  "git_slug": "apache/archiva",
+  "target_commit": "374fc983abc92df8aa4f8ef30caee94b34312ad2",
+  "resolved_head": "374fc983abc92df8aa4f8ef30caee94b34312ad2",
+  "repo_dir": "/Users/grantnelson/go/src/github.com/apache/archiva",
+  "out_dir": "/Users/grantnelson/go/src/github.com/MSUSEL/msusel-tdmetrics-go/javaAbstractor/tdd/metrics_output/archiva-374fc983ab",
+  "tools_requested": [
+    "ck",
+    "pmd"
+  ],
+  "steps": {
+    "ck": {
+      "skipped": true,
+      "reason": "CK jar not found at /Users/grantnelson/tools/ck.jar. Skipping CK. Install with e.g.:"
+    },
+    "pmd": {
+      "skipped": false,
+      "cmd": [
+        "/Users/grantnelson/pmd-bin-7.26.0/bin/pmd",
+        "check",
+        "-d",
+        "/Users/grantnelson/go/src/github.com/apache/archiva",
+        "-R",
+        "/Users/grantnelson/go/src/github.com/MSUSEL/msusel-tdmetrics-go/javaAbstractor/tdd/pmd_metrics.xml",
+        "-f",
+        "csv",
+        "-r",
+        "/Users/grantnelson/go/src/github.com/MSUSEL/msusel-tdmetrics-go/javaAbstractor/tdd/metrics_output/archiva-374fc983ab/pmd/report.csv",
+        "--use-version",
+        "java-1.5",
+        "--no-cache",
+        "--no-progress",
+        "--no-fail-on-violation",
+        "--no-fail-on-error"
+      ],
+      "exit_code": 0,
+      "elapsed_sec": 15.03,
+      "stdout_log": "pmd.stdout.log",
+      "stderr_log": "pmd.stderr.log",
+      "target_dir": "/Users/grantnelson/go/src/github.com/apache/archiva",
+      "java_version": "1.5",
+      "java_version_reason": "pom.xml maven.compiler.source",
+      "version": "7.26.0",
+      "report": {
+        "path": "report.csv",
+        "size_bytes": 9894159,
+        "row_count": 28709
+      }
+    }
+  },
+  "errors": [
+    "CK jar not found at /Users/grantnelson/tools/ck.jar. Skipping CK. Install with e.g.:"
+  ],
+  "finished_at": "2026-07-16T00:10:12.213776+00:00"
+}

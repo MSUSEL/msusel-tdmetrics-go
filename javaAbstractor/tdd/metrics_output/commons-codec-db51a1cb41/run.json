@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-15T23:10:00.005954+00:00",
+  "generated_at": "2026-07-16T00:06:21.093646+00:00",
   "project_key": "commons-codec",
   "git_slug": "apache/commons-codec",
   "target_commit": "db51a1cb41e9155ca028a73b0637b32a2c37c43a",
@@ -21,7 +21,7 @@
         "/Users/grantnelson/pmd-bin-7.26.0/bin/pmd",
         "check",
         "-d",
-        "/Users/grantnelson/go/src/github.com/apache/commons-codec/src",
+        "/Users/grantnelson/go/src/github.com/apache/commons-codec",
         "-R",
         "/Users/grantnelson/go/src/github.com/MSUSEL/msusel-tdmetrics-go/javaAbstractor/tdd/pmd_metrics.xml",
         "-f",
@@ -29,18 +29,18 @@
         "-r",
         "/Users/grantnelson/go/src/github.com/MSUSEL/msusel-tdmetrics-go/javaAbstractor/tdd/metrics_output/commons-codec-db51a1cb41/pmd/report.csv",
         "--use-version",
-        "java-7",
+        "java-1.7",
         "--no-cache",
         "--no-progress",
         "--no-fail-on-violation",
         "--no-fail-on-error"
       ],
       "exit_code": 0,
-      "elapsed_sec": 9.05,
+      "elapsed_sec": 9.14,
       "stdout_log": "pmd.stdout.log",
       "stderr_log": "pmd.stderr.log",
-      "target_dir": "/Users/grantnelson/go/src/github.com/apache/commons-codec/src",
-      "java_version": "7",
+      "target_dir": "/Users/grantnelson/go/src/github.com/apache/commons-codec",
+      "java_version": "1.7",
       "java_version_reason": "pom.xml maven.compiler.source",
       "version": "7.26.0",
       "report": {
@@ -53,5 +53,5 @@
   "errors": [
     "CK jar not found at /Users/grantnelson/tools/ck.jar. Skipping CK. Install with e.g.:"
   ],
-  "finished_at": "2026-07-15T23:10:12.508619+00:00"
+  "finished_at": "2026-07-16T00:06:31.260260+00:00"
 }

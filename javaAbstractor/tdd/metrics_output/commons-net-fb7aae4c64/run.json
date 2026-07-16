@@ -1,0 +1,57 @@
+{
+  "generated_at": "2026-07-16T00:05:25.859389+00:00",
+  "project_key": "commons-net",
+  "git_slug": "apache/commons-net",
+  "target_commit": "fb7aae4c64f7d2bf6dced00c49c3ffc428b2d572",
+  "resolved_head": "fb7aae4c64f7d2bf6dced00c49c3ffc428b2d572",
+  "repo_dir": "/Users/grantnelson/go/src/github.com/apache/commons-net",
+  "out_dir": "/Users/grantnelson/go/src/github.com/MSUSEL/msusel-tdmetrics-go/javaAbstractor/tdd/metrics_output/commons-net-fb7aae4c64",
+  "tools_requested": [
+    "ck",
+    "pmd"
+  ],
+  "steps": {
+    "ck": {
+      "skipped": true,
+      "reason": "CK jar not found at /Users/grantnelson/tools/ck.jar. Skipping CK. Install with e.g.:"
+    },
+    "pmd": {
+      "skipped": false,
+      "cmd": [
+        "/Users/grantnelson/pmd-bin-7.26.0/bin/pmd",
+        "check",
+        "-d",
+        "/Users/grantnelson/go/src/github.com/apache/commons-net",
+        "-R",
+        "/Users/grantnelson/go/src/github.com/MSUSEL/msusel-tdmetrics-go/javaAbstractor/tdd/pmd_metrics.xml",
+        "-f",
+        "csv",
+        "-r",
+        "/Users/grantnelson/go/src/github.com/MSUSEL/msusel-tdmetrics-go/javaAbstractor/tdd/metrics_output/commons-net-fb7aae4c64/pmd/report.csv",
+        "--use-version",
+        "java-1.6",
+        "--no-cache",
+        "--no-progress",
+        "--no-fail-on-violation",
+        "--no-fail-on-error"
+      ],
+      "exit_code": 0,
+      "elapsed_sec": 10.28,
+      "stdout_log": "pmd.stdout.log",
+      "stderr_log": "pmd.stderr.log",
+      "target_dir": "/Users/grantnelson/go/src/github.com/apache/commons-net",
+      "java_version": "1.6",
+      "java_version_reason": "pom.xml maven.compiler.source",
+      "version": "7.26.0",
+      "report": {
+        "path": "report.csv",
+        "size_bytes": 2672372,
+        "row_count": 9855
+      }
+    }
+  },
+  "errors": [
+    "CK jar not found at /Users/grantnelson/tools/ck.jar. Skipping CK. Install with e.g.:"
+  ],
+  "finished_at": "2026-07-16T00:05:37.138747+00:00"
+}

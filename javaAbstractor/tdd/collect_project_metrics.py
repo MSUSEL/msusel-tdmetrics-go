@@ -217,8 +217,10 @@ _JAVA_SOURCE_RE = re.compile(
 def _detect_pmd_java_version(repo_dir: Path, fallback: str) -> tuple[str, str]:
     """Best-effort Java source version inference from a top-level pom.xml.
 
-    Returns (version_string_for_pmd, reason). E.g. ("17", "fallback") or
-    ("8",  "pom.xml maven.compiler.source").
+    Returns (version_string_for_pmd, reason). PMD 7 accepts both "1.8" and
+    "8" for Java 5+, but *requires* the "1.x" form for pre-Java-5 versions
+    (only java-1.3 and java-1.4 exist; there is no java-3 or java-4).
+    We therefore pass the raw pom value through unchanged.
     """
     pom = repo_dir / "pom.xml"
     if pom.exists():
@@ -226,11 +228,7 @@ def _detect_pmd_java_version(repo_dir: Path, fallback: str) -> tuple[str, str]:
             text = pom.read_text(encoding="utf-8", errors="ignore")
             m = _JAVA_SOURCE_RE.search(text)
             if m and m.group(1):
-                raw = m.group(1)
-                # "1.8" -> "8", "17" -> "17"
-                if raw.startswith("1.") and raw[2:].isdigit():
-                    raw = raw[2:]
-                return raw, "pom.xml maven.compiler.source"
+                return m.group(1), "pom.xml maven.compiler.source"
         except Exception:
             pass
     return fallback, "fallback default"
@@ -256,10 +254,12 @@ def run_pmd(pmd_bin: Path, ruleset: Path, repo_dir: Path,
     stdout_path = out_dir / "pmd.stdout.log"
     stderr_path = out_dir / "pmd.stderr.log"
 
-    # Locate the source root(s) to analyse. Prefer src/ if present, else
-    # feed PMD the whole repo (with binaries excluded via --exclude).
-    src_root = repo_dir / "src"
-    target = src_root if src_root.exists() else repo_dir
+    # Feed PMD the whole repo. PMD scans recursively for .java files, so
+    # this handles simple single-module layouts (src/main/java) and
+    # multi-module Maven layouts (<module>/src/main/java) equally well.
+    # A pinned commit checkout won't contain build outputs, so there's
+    # nothing to exclude.
+    target = repo_dir
 
     java_ver, java_ver_reason = _detect_pmd_java_version(
         repo_dir, fallback=java_version_default
