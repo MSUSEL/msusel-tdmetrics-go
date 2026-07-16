@@ -1,2 +1,2 @@
-# Per-run PMD log files under tdd/metrics_output.
-metrics_output/**/pmd.*.log
+# Results from PMD log files (should be store with a zip)
+metrics_output/
