@@ -449,3 +449,35 @@ Per-project results land in `metrics_output/<key>-<short_sha>/`; a
 pipeline-level summary lands in
 `metrics_output/pipeline_run_<UTC>.json`. Failures don't stop the run
 unless you pass `--stop-on-error`.
+
+### build_per_project.py
+
+Merges the TDD portion of `tdd_flat.json` with the per-class CK and PMD
+outputs produced by `run_metrics_pipeline.py`, writing one file per
+project at `per_project/<project_key>.json`. Each output file is a
+single top-level object mirroring an entry in `tdd_flat.json`'s
+`projects` list plus a `classes` array containing the merged CK + PMD
+metrics (with `methods_ck` and `methods_pmd` nested per class).
+
+Repo-absolute paths from CK/PMD and Sonar-encoded paths from
+`code_smell_issues.component` are all trimmed to repo-relative form so
+paths across sources are directly comparable. CK's `NaN` values (e.g.
+`tcc` / `lcc` on 0-or-1-method classes) are emitted as the JSON string
+`"NaN"` so the output is spec-valid JSON.
+
+```bash
+# Merge all 31 projects.
+python3 build_per_project.py
+
+# Only rebuild a subset.
+python3 build_per_project.py --targets commons-io commons-cli
+
+# Read / write to non-default locations.
+python3 build_per_project.py \
+    --metrics /some/where/metrics_output \
+    --out     /some/where/per_project
+```
+
+Requires `tdd_flat.json` (from `build_tdd_flat.py`) and populated
+`metrics_output/<key>-<sha>/{ck,pmd}/` directories (from
+`run_metrics_pipeline.py`).

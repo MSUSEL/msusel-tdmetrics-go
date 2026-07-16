@@ -39,6 +39,7 @@ from __future__ import annotations
 import argparse
 import csv
 import json
+import math
 import re
 import sys
 from collections import defaultdict
@@ -61,10 +62,15 @@ def _num(v):
     """Coerce CK CSV string values to int/float when possible.
 
     Strips thousand-separator commas (e.g., PMD's "WMC=1,022").
+    NaN and Infinity are emitted as strings ("NaN", "Infinity",
+    "-Infinity") so the output is spec-valid JSON. CK produces NaN for
+    e.g. TCC/LCC on 0-or-1-method classes.
     """
     if v is None or v == "":
         return None
     if isinstance(v, str):
+        if v in ("NaN", "nan", "NAN"):
+            return "NaN"
         stripped = v.replace(",", "") if _COMMA_INT.match(v) else v
     else:
         stripped = v
@@ -73,9 +79,14 @@ def _num(v):
     except (TypeError, ValueError):
         pass
     try:
-        return float(stripped)
+        f = float(stripped)
     except (TypeError, ValueError):
         return v
+    if math.isnan(f):
+        return "NaN"
+    if math.isinf(f):
+        return "Infinity" if f > 0 else "-Infinity"
+    return f
 
 
 _COMMA_INT = re.compile(r"^-?\d{1,3}(?:,\d{3})+$")
@@ -474,7 +485,9 @@ def _build_one(project_key: str, git_slug: str, commit_sha: str,
     base["pmd_orphans"] = orphans
 
     out_path = out_root / f"{project_key}.json"
-    out_path.write_text(json.dumps(base, indent=2, ensure_ascii=False))
+    out_path.write_text(json.dumps(
+        base, indent=2, ensure_ascii=False, allow_nan=False,
+    ))
 
     stats = {
         "classes":     len(classes),
