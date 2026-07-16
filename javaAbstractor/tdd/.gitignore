@@ -1,2 +1,5 @@
-# Results from PMD log files (should be store with a zip)
+# Results from PMD log files (these are huge so shouldn't be persisted as is)
 metrics_output/
+
+# The TDD database file is large so do not push it to repo.
+td_V2.db
