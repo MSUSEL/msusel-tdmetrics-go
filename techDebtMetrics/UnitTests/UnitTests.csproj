@@ -33,8 +33,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Commons\Commons.csproj" />
     <ProjectReference Include="..\Constructs\Constructs.csproj" />
     <ProjectReference Include="..\DesignRecovery\DesignRecovery.csproj" />
+    <ProjectReference Include="..\GroundTruth\GroundTruth.csproj" />
   </ItemGroup>
 
   <ItemGroup>

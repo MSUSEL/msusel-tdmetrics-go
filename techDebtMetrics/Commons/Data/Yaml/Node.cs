@@ -15,10 +15,20 @@ public class Node(YamlNode source) {
     /// <summary>Reads a node and child nodes from the given input text.</summary>
     /// <param name="text">Text formatted as YAML or JSON to read from.</param>
     /// <returns>The read node.</returns>
-    static public Node Parse(string text) {
+    static public Node Parse(string text) => Parse(new StringReader(text));
+    
+    /// <summary>Reads a node and child nodes from the given input stream.</summary>
+    /// <param name="stream">Stream text formatted as YAML or JSON to read from.</param>
+    /// <returns>The read node.</returns>
+    static public Node Parse(Stream stream) => Parse(new StreamReader(stream));
+
+    /// <summary>Reads a node and child nodes from the given input stream.</summary>
+    /// <param name="stream">Stream text formatted as YAML or JSON to read from.</param>
+    /// <returns>The read node.</returns>
+    static public Node Parse(TextReader stream) {
         YamlStream yaml = [];
-        yaml.Load(new StringReader(text));
-        return new Node(yaml.Documents[0].RootNode);
+        yaml.Load(stream);
+        return new(yaml.Documents[0].RootNode);
     }
 
     /// <summary>Creates a new node with the given value.</summary>

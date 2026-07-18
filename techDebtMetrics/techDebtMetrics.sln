@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 17
-VisualStudioVersion = 17.10.34928.147
+# Visual Studio Version 18
+VisualStudioVersion = 18.8.12009.203 stable
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DesignRecovery", "DesignRecovery\DesignRecovery.csproj", "{471996A4-298A-4BF8-A6E8-2001702670E1}"
 EndProject
@@ -14,6 +14,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TechDebt", "TechDebt\TechDebt.csproj", "{C6E4844B-5BAB-497B-8E50-B6B00F386840}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Commons", "Commons\Commons.csproj", "{1D39884A-9970-479D-A325-C912158AFD43}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GroundTruth", "GroundTruth\GroundTruth.csproj", "{8114B743-479E-420E-82B6-223AF46017B8}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -45,6 +47,10 @@ Global
 		{1D39884A-9970-479D-A325-C912158AFD43}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1D39884A-9970-479D-A325-C912158AFD43}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1D39884A-9970-479D-A325-C912158AFD43}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8114B743-479E-420E-82B6-223AF46017B8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8114B743-479E-420E-82B6-223AF46017B8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8114B743-479E-420E-82B6-223AF46017B8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8114B743-479E-420E-82B6-223AF46017B8}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
