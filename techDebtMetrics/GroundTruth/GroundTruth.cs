@@ -3,7 +3,7 @@ using Yaml = Commons.Data.Yaml;
 
 namespace GroundTruth;
 
-public class GroundTruth {
+public class GroundTruth(Yaml.Node node) {
     static public GroundTruth FromZip(string zipfile, Target target) =>
         FromZip(zipfile, target.ProjectKey + ".json");
 
@@ -23,23 +23,25 @@ public class GroundTruth {
 
     static public GroundTruth FromJson(Stream jsonStream) => new(Yaml.Node.Parse(jsonStream));
 
-    public GroundTruth(Yaml.Node node) {
-        this.Root = node.AsObject();
+    public readonly Yaml.Object Root = node.AsObject();
 
-        List<ClassMetrics> classes = [];
-        Yaml.Array array = this.Root.ReadNode("classes").AsArray();
-        foreach (Yaml.Node item in array.Items)
-            classes.Add(new(item.AsObject()));
-        this.Classes = classes.AsReadOnly();
+    public string ProjectKey => this.Root.TryReadString("project_key");
+    public string ProjectId  => this.Root.TryReadString("project_id");
+    public string GitLink    => this.Root.TryReadString("git_link");
+    public string CommitSha  => this.Root.TryReadString("commit_sha");
+    public Measures Measures => new(this.Root.TryReadNode("measures")?.AsObject() ?? new Yaml.Object());
+
+    public List<ClassMetrics> Classes {
+        get {
+            if (field is not null) return field;
+            List<ClassMetrics> list = [];
+            Yaml.Node? node = this.Root.TryReadNode("classes");
+            if (node is not null) {
+                foreach (Yaml.Node item in node.AsArray().Items)
+                    list.Add(new(item.AsObject()));
+            }
+            field = list;
+            return field;
+        }
     }
-
-    public readonly Yaml.Object Root;
-    public readonly IReadOnlyList<ClassMetrics> Classes;
-
-    public string ProjectKey => this.Root.ReadString("project_key");
-    public string ProjectId  => this.Root.ReadString("project_id");
-    public string GitLink    => this.Root.ReadString("git_link");
-    public string CommitSha  => this.Root.ReadString("commit_sha");
-
-    public Measures Measures => new(this.Root.ReadNode("measures").AsObject());
 }
