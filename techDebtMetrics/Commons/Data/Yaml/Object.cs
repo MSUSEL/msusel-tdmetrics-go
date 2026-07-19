@@ -27,26 +27,26 @@ public class Object(YamlMappingNode source) : Node(source) {
         Select(p => new KeyValuePair<Node, Node>(new Node(p.Key), new(p.Value)));
 
     /// <summary>Adds a new item for the node at the given key into the given list.</summary>
-    /// <typeparam name="T">The type to preallocate.</typeparam
-    /// <param name="name">The name for the node to preallocate for.</param>
+    /// <typeparam name="T">The type to pre-allocate.</typeparam
+    /// <param name="name">The name for the node to pre-allocate for.</param>
     /// <param name="list">The list to add to.</param>
     public void PreallocateList<T>(string name, List<T> list)
         where T : new() =>
         this.TryReadNode(name)?.AsArray().PreallocateList(list);
 
     /// <summary>Adds a new item for the node at the given key into the given list.</summary>
-    /// <typeparam name="T">The type to preallocate.</typeparam
-    /// <param name="name">The name for the node to preallocate for.</param>
+    /// <typeparam name="T">The type to pre-allocate.</typeparam
+    /// <param name="name">The name for the node to pre-allocate for.</param>
     /// <param name="list">The list to add to.</param>
-    /// <param name="constructor">The construtor used for preallocating the list.</param>
+    /// <param name="constructor">The constructor used for pre-allocating the list.</param>
     public void PreallocateList<T>(string name, List<T> list, Func<Node, T> constructor) =>
         this.TryReadNode(name)?.AsArray().PreallocateList(list, constructor);
 
-    /// <summary>Initializes the given preallocated list with the node at the given name.</summary>
+    /// <summary>Initializes the given pre-allocated list with the node at the given name.</summary>
     /// <typeparam name="T">The type to call Initialize on.</typeparam>
     /// <typeparam name="D">The type of data to pass along while initializing.</typeparam>
     /// <param name="data">The data to to pass along while initializing.</param>
-    /// <param name="name">The name for the node to initalize with.</param>
+    /// <param name="name">The name for the node to initialize with.</param>
     /// <param name="list">The list of items to initialize.</param>
     public void InitializeList<T, D>(D data, string name, List<T> list)
         where T : IInitializable<D> =>

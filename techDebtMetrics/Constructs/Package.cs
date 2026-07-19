@@ -60,7 +60,7 @@ public class Package : IConstruct, IInitializable<Project> {
     void IInitializable<Project>.Initialize(Project project, int index, Node node) {
         this.Index = index;
         Object obj = node.AsObject();
-        this.Path = obj.ReadString("path");
+        this.Path = obj.TryReadString("path");
         this.Name = obj.ReadString("name");
         obj.TryReadIndexList("imports", this.inImports, project.Packages);
         obj.TryReadIndexList("interfaces", this.inInterfaces, project.InterfaceDecls);

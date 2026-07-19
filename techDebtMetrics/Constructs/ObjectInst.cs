@@ -67,9 +67,14 @@ public class ObjectInst : IObject, IInitializable<Project> {
     public override string ToString() => Journal.ToString(this);
 
     public void ToStub(Journal j) {
-        if (this.Generic.Nested)
-            j.AsShort.Write(this.Generic.Nest?.Name ?? "<nest>").
-                Write(this.ImplicitTypes, "<", ">").Write(":");
+        if (this.Generic.Nest is not null) {
+            string name;
+            if (this.Generic.Nest is IMethod m) name = m.Name;
+            else if (this.Generic.Nest is IObject o) name = o.Name;
+            else name = "[" + this.Generic.Nest.GetType().Name + "]";
+
+            j.AsShort.Write(name).Write(this.ImplicitTypes, "<", ">").Write(":");
+        }
         j.AsShort.Write(this.Name).Write(this.InstanceTypes, "<", ">");
         if (j.Long) j.AsShort.Write(this.Data);
     }

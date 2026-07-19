@@ -1,10 +1,11 @@
 ﻿using System.IO.Compression;
 using Yaml = Commons.Data.Yaml;
+using Commons.Data.Repo;
 
 namespace GroundTruth;
 
 public class GroundTruth(Yaml.Node node) {
-    static public GroundTruth FromZip(string zipfile, Target target) =>
+    static public GroundTruth FromZip(string zipfile, JavaTarget target) =>
         FromZip(zipfile, target.ProjectKey + ".json");
 
     static public GroundTruth FromZip(string zipfile, string targetFile) {

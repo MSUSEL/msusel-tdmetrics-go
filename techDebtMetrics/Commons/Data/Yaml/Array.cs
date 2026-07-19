@@ -25,7 +25,7 @@ public class Array(YamlSequenceNode source) : Node(source) {
     /// <param name="nodes">The nodes to add to the array.</param>
     public Array(IEnumerable<Node> nodes) : this() => nodes.ForAll(this.Add);
     
-    /// <summary>Initializes the given preallocated list with the nodes in this node.</summary>
+    /// <summary>Initializes the given pre-allocated list with the nodes in this node.</summary>
     /// <typeparam name="T">The type to call Initialize on.</typeparam>
     /// <typeparam name="D">The type of data to pass along while initializing.</typeparam>
     /// <param name="data">The data to to pass along while initializing.</param>
@@ -93,21 +93,21 @@ public class Array(YamlSequenceNode source) : Node(source) {
     #endregion
 
     /// <summary>Adds a new item for each node in this array into the given list.</summary>
-    /// <typeparam name="T">The type to preallocate.</typeparam>
+    /// <typeparam name="T">The type to pre-allocate.</typeparam>
     /// <param name="list">The list to add to.</param>
     public void PreallocateList<T>(List<T> list) where T : new() =>
         this.PreallocateList(list, _ => new T());
 
     /// <summary>Adds a new item for each node in this array into the given list.</summary>
-    /// <typeparam name="T">The type to preallocate.</typeparam>
+    /// <typeparam name="T">The type to pre-allocate.</typeparam>
     /// <param name="list">The list to add to.</param>
-    /// <param name="constructor">The construtor used for preallocating the list.</param>
+    /// <param name="constructor">The constructor used for pre-allocating the list.</param>
     public void PreallocateList<T>(List<T> list, Func<Node, T> constructor) {
         for (int i = 0; i < this.Count; ++i)
             list.Add(constructor(this[i]));
     }
 
-    /// <summary>Initializes the given preallocated list with the nodes in this node.</summary>
+    /// <summary>Initializes the given pre-allocated list with the nodes in this node.</summary>
     /// <typeparam name="T">The type to call Initialize on.</typeparam>
     /// <typeparam name="D">The type of data to pass along while initializing.</typeparam>
     /// <param name="data">The data to to pass along while initializing.</param>
@@ -115,11 +115,11 @@ public class Array(YamlSequenceNode source) : Node(source) {
     public void InitializeList<T, D>(D data, IReadOnlyList<T> list)
         where T : IInitializable<D> {
         for (int i = 0; i < this.Count; ++i) {
-            try {
+            //try {
                 list[i].Initialize(data, i, this[i]);
-            } catch (Exception ex) {
-                throw new Exception("Failed to initialize #" + i + " in " + typeof(T).Name + " list:", ex);
-            }
+            //} catch (Exception ex) {
+            //    throw new Exception("Failed to initialize #" + i + " in " + typeof(T).Name + " list:", ex);
+            //}
         }
     }
 
