@@ -1,8 +1,11 @@
 ﻿using Yaml = Commons.Data.Yaml;
+using System.Text.RegularExpressions;
+using System;
 
 namespace GroundTruth;
 
 public class ClassMetrics(Yaml.Object obj) {
+    private static readonly Lazy<Regex> anonymousNamePattern = new(() => new Regex(@"\$Anonymous\d+$", RegexOptions.Compiled));
 
     /// <summary>The raw JSON class containing the class information.</summary>
     public readonly Yaml.Object Object = obj;
@@ -16,7 +19,10 @@ public class ClassMetrics(Yaml.Object obj) {
 
     /// <summary>Name of just the class without any of the path.</summary>
     public string Name => this.FullName.Split('.').Last();
-    
+
+    /// <summary>Determines if this class is an anonymous class, based on it's name.</summary>
+    public bool IsAnonymous => anonymousNamePattern.Value.IsMatch(this.FullName);
+
     /// <summary>Raw JSON from Mauricioaniche's CK for this current class/object.</summary>
     /// <see cref="https://github.com/mauricioaniche/ck"/>
     /// <remarks>The documentation on the values from Ck was barrowed from the github repo.</remarks>

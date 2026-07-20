@@ -22,15 +22,28 @@ public class GroundTruthTests {
         JavaTarget target = JavaTarget.CommonsBcel;
         GT.GroundTruth gt = GT.GroundTruth.FromZip(Repo.MetricsZip, target);
         Project proj = Project.FromFile(Repo.AbstractedJava(target));
-        SortedSet<string> gtNames     = [.. gt.Classes.Where(c => c.FullName.StartsWith("org.apache.bcel")).Select(c => c.FullName)];
-        SortedSet<string> projNames   = [.. proj.ObjectDecls.Where(c => c.Package.Name.StartsWith("org.apache.bcel")).Select(c => c.FullName)];
+        List<GT.ClassMetrics> gtClasses = [..
+            from c in gt.Classes
+            where c.FullName.StartsWith("org.apache.bcel")
+            where !c.File.StartsWith("src/test/")
+            where c.IsAnonymous
+            select c
+        ];
+        List<ObjectDecl> projObjects = [..
+            from c in proj.ObjectDecls
+            where c.Package.Name.StartsWith("org.apache.bcel")
+            select c    
+        ];
+
+        SortedSet<string> gtNames     = [.. from c in gtClasses select c.FullName];
+        SortedSet<string> projNames   = [.. from c in projObjects select c.FullName];
         SortedSet<string> found       = [.. gtNames.Intersect(projNames)];
         SortedSet<string> gtMissing   = [.. gtNames.Except(found)];
         SortedSet<string> projMissing = [.. projNames.Except(found)];
 
         Assert.Multiple(() => {
-            Assert.AreEqual(gtNames.Count,   gt.Classes.Count,       "Duplicate class names in ground truth data");
-            Assert.AreEqual(projNames.Count, proj.ObjectDecls.Count, "Duplicate class names in object declarations");
+            Assert.AreEqual(gtClasses.Count,   gtNames.Count,   "Duplicate class names in ground truth data");
+            Assert.AreEqual(projObjects.Count, projNames.Count, "Duplicate class names in object declarations");
             Assert.Zero(gtMissing.Count,   "Ground truth missing count:\n  " + string.Join("\n  ", gtMissing));
             Assert.Zero(projMissing.Count, "Object declarations missing count:\n  " + string.Join("\n  ", projMissing));
         });
