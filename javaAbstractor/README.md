@@ -38,10 +38,11 @@
 
 ## Running Abstractor
 
-1. Compile with `mvn clean compile assembly:single`.
+1. Compile with `mvn clean compile assembly:single`
 
-2. Run with `java -jar .\target\abstractor-0.1-jar-with-dependencies.jar <options>`.
-   - e.g. `java -jar .\target\abstractor-0.1-jar-with-dependencies.jar -i C:\Data\Code\Apache\commons-bcel\ -o temp.json -v`
+2. Run with `java -jar .\target\abstractor-0.1-jar-with-dependencies.jar <options>`
+   - e.g. (Windows) `java -jar .\target\abstractor-0.1-jar-with-dependencies.jar -i C:\Data\Code\Apache\commons-bcel\ -o temp.json -v`
+   - e.g. (Darwin) `java -jar ./target/abstractor-0.1-jar-with-dependencies.jar -i ~/go/src/github.com/apache/commons-bcel -o temp.json -v`
 
 3. For help with the `<options>` use `-help`.
 

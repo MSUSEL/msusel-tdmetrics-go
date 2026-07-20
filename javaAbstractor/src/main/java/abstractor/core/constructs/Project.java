@@ -4,6 +4,12 @@ import abstractor.core.json.*;
 import abstractor.core.tools.Baker;
 
 public class Project implements Jsonable {
+    public String groupId;
+    public String artifactId;
+    public String version;
+    public String name;
+    public String commitHash;
+
     public final Baker                  baker          = new Baker(this);
     public final Locations              locations      = new Locations();
     public final Factory<Abstract>      abstracts      = new Factory<>(ConstructKind.ABSTRACT);
@@ -64,6 +70,11 @@ public class Project implements Jsonable {
 
         JsonObject obj = new JsonObject();
         obj.put("language", "java");
+        obj.putNotEmpty("groupId",    groupId);
+        obj.putNotEmpty("artifactId", artifactId);
+        obj.putNotEmpty("version",    version);
+        obj.putNotEmpty("name",       name);
+        obj.putNotEmpty("commitHash", commitHash);
         obj.putNotEmpty("locs", this.locations.toJson(h));
         for (Factory<?> factory : this.factories)
             obj.putNotEmpty(factory.kind().plural(), factory.toJson(h));

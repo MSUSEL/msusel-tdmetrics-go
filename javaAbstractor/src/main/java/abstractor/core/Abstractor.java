@@ -1,6 +1,9 @@
 package abstractor.core;
 
+import java.io.*;
 import java.util.*;
+
+import org.apache.maven.model.Model;
 
 import spoon.Launcher;
 import spoon.MavenLauncher;
@@ -8,6 +11,7 @@ import spoon.reflect.*;
 import spoon.reflect.code.*;
 import spoon.reflect.declaration.*;
 import spoon.reflect.reference.*;
+import spoon.support.compiler.SpoonPom;
 import spoon.support.compiler.VirtualFile;
 
 import abstractor.core.cmp.*;
@@ -37,15 +41,18 @@ public class Abstractor {
 
     /**
      * Reads a project containing a pom.xml maven file.
-     * @param mavenProject The path to the project file. 
+     * @param mavenProject The path to the project folder containing a pom.xml
      */
     public void prepareMavenProject(String mavenProject) throws Exception {
         this.log.log("Reading " + mavenProject);
         SpoonUtils.addKnownPathRoot(mavenProject);
+        this.setCommitHash(mavenProject);
 
         MavenLauncher launcher = new MavenLauncher(mavenProject, MavenLauncher.SOURCE_TYPE.APP_SOURCE);
+        launcher.getEnvironment().setComplianceLevel(17);
         CtModel model = launcher.buildModel();
         if (model.getAllTypes().size() > 0) {
+            this.setProjectInfo(launcher);
             this.prepareModel(model);
             return;
         }
@@ -60,6 +67,7 @@ public class Abstractor {
         launcher = new MavenLauncher(mavenProject, MavenLauncher.SOURCE_TYPE.APP_SOURCE);
         launcher.addInputResource(mavenProject);
         model = launcher.buildModel();
+        this.setProjectInfo(launcher);
         this.prepareModel(model);
     }
 
@@ -86,6 +94,35 @@ public class Abstractor {
         for (CtPackage pkg: model.getAllPackages()) {
             this.log.log("Init pending package " + SpoonUtils.describeElem(pkg));
             this.pendingPackages.add(pkg);
+        }
+    }
+
+    private void setProjectInfo(MavenLauncher launcher) {
+        SpoonPom pom = launcher.getPomFile();
+        if (pom != null) {
+            Model m = pom.getModel();
+            this.proj.groupId    = m.getGroupId();
+            this.proj.artifactId = m.getArtifactId();
+            this.proj.version    = m.getVersion();
+            this.proj.name       = m.getName();
+        }
+    }
+
+    private void setCommitHash(String repoDir) {
+        try {
+            Process p = new ProcessBuilder("git", "rev-parse", "HEAD")
+                .directory(new File(repoDir))
+                .redirectErrorStream(true)
+                .start();
+            try (BufferedReader r = new BufferedReader(new InputStreamReader(p.getInputStream()))) {
+                p.waitFor();
+                if (p.exitValue() != 0) return;
+                String line = r.readLine();
+                if (line != null)
+                    this.proj.commitHash = line.trim();
+            }
+        } catch (Exception e) {
+            return;
         }
     }
 

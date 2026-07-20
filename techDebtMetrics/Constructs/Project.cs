@@ -17,6 +17,21 @@ public class Project : IConstruct, IKeyResolver {
     /// <summary>The name of the langauge that this project was created from.</summary>
     public readonly string Language;
 
+    /// <summary>Optional group identifier that may have been set in the data.</summary>
+    public readonly string GroupId;
+
+    /// <summary>Optional atrifact identifier that may have been set in the data.</summary>
+    public readonly string ArtifactId;
+
+    /// <summary>Optional project vaersion that may have been set in the data.</summary>
+    public readonly string Version;
+
+    /// <summary>Optional project name that may have been set in the data.</summary>
+    public readonly string Name;
+
+    /// <summary>Optional commit hash that may have been set in the data.</summary>
+    public readonly string CommitHash;
+
     /// <summary>The file paths and line numbers for the source code that created this package.</summary>
     public readonly Reader Locations;
 
@@ -134,8 +149,13 @@ public class Project : IConstruct, IKeyResolver {
     /// <param name="root">The YAML root node to load.</param>
     internal Project(Node root) {
         Commons.Data.Yaml.Object obj = root.AsObject();
-        this.Language = obj.ReadString("language");
-        this.Locations = Reader.Read(obj.TryReadNode("locs"));
+        this.Language   = obj.ReadString("language");
+        this.GroupId    = obj.TryReadString("groupId");
+        this.ArtifactId = obj.TryReadString("artifactId");
+        this.Version    = obj.TryReadString("version");
+        this.Name       = obj.TryReadString("name");
+        this.CommitHash = obj.TryReadString("commitHash");
+        this.Locations  = Reader.Read(obj.TryReadNode("locs"));
 
         obj.PreallocateList("abstracts", this.inAbstracts);
         obj.PreallocateList("arguments", this.inArguments);

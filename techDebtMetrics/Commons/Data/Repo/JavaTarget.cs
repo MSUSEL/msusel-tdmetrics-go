@@ -1,4 +1,6 @@
-﻿namespace Commons.Data.Repo;
+﻿using System.Linq;
+
+namespace Commons.Data.Repo;
 
 public readonly record struct JavaTarget(string ProjectKey, string GetLink, string CommitSha) {
     static public readonly JavaTarget Santuario            = new("santuario",             "apache/santuario-java",        "be4e2331f77adb1e479406ebf973e516bbf5e32b");
@@ -66,4 +68,7 @@ public readonly record struct JavaTarget(string ProjectKey, string GetLink, stri
         Cocoon,
         Batik,
     ];
+
+    static public JavaTarget? Find(string project_key) =>
+        (from t in Targets where t.ProjectKey == project_key select t).First();
 }

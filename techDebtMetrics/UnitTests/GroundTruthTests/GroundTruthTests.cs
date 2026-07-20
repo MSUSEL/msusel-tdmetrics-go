@@ -22,17 +22,28 @@ public class GroundTruthTests {
         JavaTarget target = JavaTarget.CommonsBcel;
         GT.GroundTruth gt = GT.GroundTruth.FromZip(Repo.MetricsZip, target);
         Project proj = Project.FromFile(Repo.AbstractedJava(target));
+
+        Assert.AreEqual(proj.CommitHash, target.CommitSha, "commit hash should match");
+
+        List<string> projInterfaceNames = [..
+            from c in proj.InterfaceDecls
+            where c.Package.Name.StartsWith("org.apache.bcel")
+            select c.FullName
+        ];
+
+        List<ObjectDecl> projObjects = [..
+            from c in proj.ObjectDecls
+            where c.Package.Name.StartsWith("org.apache.bcel")
+            select c    
+        ];
+
         List<GT.ClassMetrics> gtClasses = [..
             from c in gt.Classes
             where c.FullName.StartsWith("org.apache.bcel")
             where !c.File.StartsWith("src/test/")
             where !c.IsAnonymous // TODO: Probably need to fold this into the nest to be counted instead of skipping it.
+            where !projInterfaceNames.Contains(c.FullName)
             select c
-        ];
-        List<ObjectDecl> projObjects = [..
-            from c in proj.ObjectDecls
-            where c.Package.Name.StartsWith("org.apache.bcel")
-            select c    
         ];
 
         SortedSet<string> gtNames     = [.. from c in gtClasses select c.FullName];
