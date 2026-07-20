@@ -32,15 +32,17 @@ public class GroundTruth(Yaml.Node node) {
     public string CommitSha  => this.Root.TryReadString("commit_sha");
     public Measures Measures => new(this.Root.TryReadNode("measures")?.AsObject() ?? new Yaml.Object());
 
-    public List<ClassMetrics> Classes {
+    public List<DeclMetrics> Declarations {
         get {
-            // TODO: NEED TO FIX Anon and nested classes
             if (field is not null) return field;
-            List<ClassMetrics> list = [];
+            List<DeclMetrics> list = [];
             Yaml.Node? node = this.Root.TryReadNode("classes");
             if (node is not null) {
-                foreach (Yaml.Node item in node.AsArray().Items)
+                foreach (Yaml.Node item in node.AsArray().Items) {
+                    
+
                     list.Add(new(item.AsObject()));
+                }
             }
             field = list;
             return field;

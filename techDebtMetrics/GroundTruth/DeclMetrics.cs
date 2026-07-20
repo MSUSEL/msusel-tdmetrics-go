@@ -4,11 +4,14 @@ using System;
 
 namespace GroundTruth;
 
-public class ClassMetrics(Yaml.Object obj) {
+public class DeclMetrics(Yaml.Object obj) {
     private static readonly Lazy<Regex> anonymousNamePattern = new(() => new Regex(@"\$Anonymous\d+$", RegexOptions.Compiled));
 
     /// <summary>The raw JSON class containing the class information.</summary>
     public readonly Yaml.Object Object = obj;
+
+    /// <summary>Indicates if this declaration is a "class", "interface", "anonymous", "innerclass", "enum", etc.</summary>
+    public string Type => this.Object.TryReadString("type");
     
     /// <summary>The path to the file this class was defined in.</summary>
     public string File => this.Object.TryReadString("file");
@@ -212,7 +215,7 @@ public class ClassMetrics(Yaml.Object obj) {
             foreach (int line in lines) {
                 ck.TryGetValue(line, out Yaml.Object? ckMethod);
                 pmd.TryGetValue(line, out Yaml.Object? pmdMethod);
-                methods.Add(new MethodMetrics(ckMethod ?? new Yaml.Object(), pmdMethod ?? new Yaml.Object()));
+                methods.Add(new(this, ckMethod ?? new Yaml.Object(), pmdMethod ?? new Yaml.Object()));
             }
 
             field = methods.AsReadOnly();

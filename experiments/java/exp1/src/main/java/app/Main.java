@@ -1,8 +1,5 @@
 package app;
 
-import app.Nook;
-import app.Foo;
-
 public class Main {
     public static void main(String[] args) {
         Nook n = new Nook();

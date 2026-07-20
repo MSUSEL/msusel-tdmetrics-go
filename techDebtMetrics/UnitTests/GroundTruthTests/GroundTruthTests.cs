@@ -18,18 +18,12 @@ public class GroundTruthTests {
     }
 
     [Test]
-    public void GroundTruthClasses() {
+    public void GroundTruthClassMatching() {
         JavaTarget target = JavaTarget.CommonsBcel;
         GT.GroundTruth gt = GT.GroundTruth.FromZip(Repo.MetricsZip, target);
         Project proj = Project.FromFile(Repo.AbstractedJava(target));
 
         Assert.AreEqual(proj.CommitHash, target.CommitSha, "commit hash should match");
-
-        List<string> projInterfaceNames = [..
-            from c in proj.InterfaceDecls
-            where c.Package.Name.StartsWith("org.apache.bcel")
-            select c.FullName
-        ];
 
         List<ObjectDecl> projObjects = [..
             from c in proj.ObjectDecls
@@ -37,12 +31,12 @@ public class GroundTruthTests {
             select c    
         ];
 
-        List<GT.ClassMetrics> gtClasses = [..
-            from c in gt.Classes
+        List<GT.DeclMetrics> gtClasses = [..
+            from c in gt.Declarations
             where c.FullName.StartsWith("org.apache.bcel")
             where !c.File.StartsWith("src/test/")
             where !c.IsAnonymous // TODO: Probably need to fold this into the nest to be counted instead of skipping it.
-            where !projInterfaceNames.Contains(c.FullName)
+            where c.Type != "interface"
             select c
         ];
 
@@ -67,7 +61,7 @@ public class GroundTruthTests {
     private void checkGroundTruth(JavaTarget target) {
         GT.GroundTruth gt = GT.GroundTruth.FromZip(Repo.MetricsZip, target);
         Project proj = Project.FromFile(Repo.AbstractedJava(target));
-        foreach (GT.ClassMetrics gtObj in gt.Classes) {
+        foreach (GT.DeclMetrics gtObj in gt.Declarations) {
             ObjectDecl? obj = proj.ObjectDecls.FirstOrDefault(c => c.FullName == gtObj.FullName);
             if (obj is null) {
                 System.Console.WriteLine("Failed to find class/object " + gtObj.FullName);
@@ -77,7 +71,7 @@ public class GroundTruthTests {
         }
     }
 
-    private void checkGroundTruth(GT.ClassMetrics gtObj, ObjectDecl obj) {
+    private void checkGroundTruth(GT.DeclMetrics gtObj, ObjectDecl obj) {
         foreach (GT.MethodMetrics gtMet in gtObj.Methods) {
             MethodDecl? met = obj.Methods.FirstOrDefault(m => m.Location.LineNo == gtMet.Line);
             if (met is null) {
@@ -88,7 +82,7 @@ public class GroundTruthTests {
         }
     }
 
-    private void checkGroundTruth(GT.ClassMetrics gtObj, ObjectDecl obj, GT.MethodMetrics gtMet, MethodDecl met) {
+    private void checkGroundTruth(GT.DeclMetrics gtObj, ObjectDecl obj, GT.MethodMetrics gtMet, MethodDecl met) {
         // TODO: Add more.
         Assert.AreEqual(gtMet.Loc,   met.Metrics?.LineCount ?? 0,  "Lines of code for " + gtMet.Name + " in " + gtObj.FullName);
         Assert.AreEqual(gtMet.Cyclo, met.Metrics?.Complexity ?? 0, "Complexity for " + gtMet.Name + " in " + gtObj.FullName);

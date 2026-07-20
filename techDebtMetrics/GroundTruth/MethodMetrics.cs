@@ -2,12 +2,15 @@
 
 namespace GroundTruth;
 
-public class MethodMetrics(Yaml.Object ckObj, Yaml.Object pmdObj) {
+public class MethodMetrics(DeclMetrics parent, Yaml.Object ckObj, Yaml.Object pmdObj) {
     
     /// <summary>Raw JSON from Mauricioaniche's CK for this current method.</summary>
     /// <see cref="https://github.com/mauricioaniche/ck"/>
     /// <remarks>The documentation on the values from CK was barrowed from the github repo.</remarks>
     public readonly Yaml.Object Ck = ckObj;
+
+    /// <remarks>The parent declaration that this method is declared inside of.</remarks>
+    public readonly DeclMetrics Parent = parent;
 
     /// <summary>Indicates if the Ck object for this method was defined.</summary>
     public bool HasCk => this.Ck.Count > 0;
