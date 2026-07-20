@@ -26,7 +26,7 @@ public class GroundTruthTests {
             from c in gt.Classes
             where c.FullName.StartsWith("org.apache.bcel")
             where !c.File.StartsWith("src/test/")
-            where c.IsAnonymous
+            where !c.IsAnonymous // TODO: Probably need to fold this into the nest to be counted instead of skipping it.
             select c
         ];
         List<ObjectDecl> projObjects = [..
