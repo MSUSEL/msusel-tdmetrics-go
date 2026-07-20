@@ -17,8 +17,9 @@ public class ObjectDecl : IObject, IDeclaration, IInitializable<Project> {
     /// <summary>The name of the object declaration.</summary>
     public string Name { get; private set; } = "";
     
-    /// <summary>The full name of the object delaration including the package name.</summary>
-    public string FullName => this.Package.Name + "." + this.Name; // TODO: This may not work correctly in Go.
+    /// <summary>The full name of the object declaration including the package name.</summary>
+    public string FullName =>
+        (this.Nest is not null ? this.Nest.FullName + "$" : this.Package.Name + ".") + this.Name;
 
     /// <summary>The location the object was defined.</summary>
     public Location Location { get; private set; }
@@ -51,7 +52,7 @@ public class ObjectDecl : IObject, IDeclaration, IInitializable<Project> {
     private readonly List<ObjectInst> inInstances = [];
 
     /// <summary>Optional construct this object was defined inside of.</summary>
-    public IConstruct? Nest { get; private set; }
+    public IDeclaration? Nest { get; private set; }
 
     /// <summary>The implicit type parameters from the nest method for this object.</summary>
     public IReadOnlyList<TypeParam> ImplicitTypeParams =>
@@ -85,8 +86,18 @@ public class ObjectDecl : IObject, IDeclaration, IInitializable<Project> {
         obj.TryReadIndexList("typeParams", this.inTypeParams, project.TypeParams);
         obj.TryReadIndexList("methods", this.inMethods, project.MethodDecls);
         obj.TryReadIndexList("instances", this.inInstances, project.ObjectInsts);
-        this.Nest = obj.TryReadKey<IConstruct>(project, "nest");
+        this.Nest = obj.TryReadKey<IDeclaration>(project, "nest");
         this.Data.AddUses(this);
+    }
+
+    private string NestName {
+        get {
+            if (this.Nest is null) return "";
+            if (this.Nest is IMethod m) return m.Name;
+            if (this.Nest is IObject o) return o.Name;
+            if (this.Nest is IDeclaration d) return d.Name;
+            return "[" + this.Nest.GetType().Name + "]";
+        }
     }
 
     public override string ToString() => Journal.ToString(this);
@@ -98,10 +109,7 @@ public class ObjectDecl : IObject, IDeclaration, IInitializable<Project> {
             j.Write("class ");
         }
         if (this.Nest is not null) {
-            if (this.Nest is IMethod m) j.Write(m.Name);
-            else if (this.Nest is IObject o) j.Write(o.Name);
-            else j.Write("[" + this.Nest.GetType().Name + "]");
-
+            j.Write(this.NestName);
             if (j.Long)
                 j.Write(this.ImplicitTypeParams, "<", ">");
             j.Write(":");

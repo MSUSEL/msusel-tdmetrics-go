@@ -6,6 +6,9 @@ public interface IObject : ITypeDesc {
     /// <summary>The name of the object.</summary>
     public string Name { get; }
 
+    /// <summary>The full name of the object including the package name.</summary>
+    public string FullName { get; }
+
     /// <summary>The interface that summarizes the methods of this object.</summary>
     public InterfaceDesc Interface { get; }
 

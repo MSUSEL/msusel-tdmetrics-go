@@ -13,8 +13,11 @@ public class Value : IDeclaration, IInitializable<Project> {
     /// <summary>Gets the index of this construct in the project list.</summary>
     public int Index { get; private set; } = 0;
 
-    /// <summary>The name of the object declaration.</summary>
+    /// <summary>The name of the value declaration.</summary>
     public string Name { get; private set; } = "";
+
+    /// <summary>The full name of the value declaration including the package name.</summary>
+    public string FullName => this.Package.Name + "." + this.Name;
 
     /// <summary>The location the object was defined.</summary>
     public Location Location { get; private set; }

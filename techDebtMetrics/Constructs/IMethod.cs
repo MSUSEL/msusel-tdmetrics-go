@@ -6,6 +6,9 @@ public interface IMethod : IConstruct {
     /// <summary>The name of the method.</summary>
     public string Name { get; }
 
+    /// <summary>The full name of the method delaration including the package name.</summary>
+    public string FullName { get; }
+
     /// <summary>The signature type declaration.</summary>
     public Signature Signature { get; }
 }

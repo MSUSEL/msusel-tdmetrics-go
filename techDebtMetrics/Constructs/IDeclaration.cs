@@ -9,6 +9,9 @@ public interface IDeclaration : IConstruct {
     /// <summary>The name of the declaration.</summary>
     public string Name { get; }
 
+    /// <summary>The full name of the declaration including the package name.</summary>
+    public string FullName { get; }
+
     /// <summary>The location that the declaration was defined in the source code.</summary>
     public Location Location { get; }
 

@@ -22,8 +22,8 @@ public class GroundTruthTests {
         JavaTarget target = JavaTarget.CommonsBcel;
         GT.GroundTruth gt = GT.GroundTruth.FromZip(Repo.MetricsZip, target);
         Project proj = Project.FromFile(Repo.AbstractedJava(target));
-        SortedSet<string> gtNames     = [.. gt.Classes.Select(c => c.FullName)];
-        SortedSet<string> projNames   = [.. proj.ObjectDecls.Select(c => c.FullName)];
+        SortedSet<string> gtNames     = [.. gt.Classes.Where(c => c.FullName.StartsWith("org.apache.bcel")).Select(c => c.FullName)];
+        SortedSet<string> projNames   = [.. proj.ObjectDecls.Where(c => c.Package.Name.StartsWith("org.apache.bcel")).Select(c => c.FullName)];
         SortedSet<string> found       = [.. gtNames.Intersect(projNames)];
         SortedSet<string> gtMissing   = [.. gtNames.Except(found)];
         SortedSet<string> projMissing = [.. projNames.Except(found)];

@@ -17,6 +17,10 @@ public class MethodDecl : IMethod, IDeclaration, IInitializable<Project> {
     /// <summary>The name of the method declaration.</summary>
     public string Name { get; private set; } = "";
 
+    /// <summary>The full name of the method declaration including the package name.</summary>
+    public string FullName =>
+        (this.Receiver is not null ? this.Receiver.FullName + "$" : this.Package.Name + ".") + this.Name;
+
     /// <summary>The location the method was defined.</summary>
     public Location Location { get; private set; }
 

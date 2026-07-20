@@ -35,7 +35,6 @@ public class GroundTruth(Yaml.Node node) {
     public List<ClassMetrics> Classes {
         get {
             // TODO: NEED TO FIX Anon and nested classes
-
             if (field is not null) return field;
             List<ClassMetrics> list = [];
             Yaml.Node? node = this.Root.TryReadNode("classes");

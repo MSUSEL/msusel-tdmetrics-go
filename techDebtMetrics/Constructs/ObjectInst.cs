@@ -15,6 +15,9 @@ public class ObjectInst : IObject, IInitializable<Project> {
     /// <summary>The name of the object declaration.</summary>
     public string Name => this.Generic.Name;
 
+    /// <summary>The full name of the generic object declaration including the package name for this instance.</summary>
+    public string FullName => this.Generic.FullName;
+
     /// <summary>The generic object this is an instance of.</summary>
     public ObjectDecl Generic => this.inGeneric ??
         throw new UninitializedException(nameof(this.Generic));

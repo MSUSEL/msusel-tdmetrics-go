@@ -17,6 +17,9 @@ public class InterfaceDecl : IInterface, IDeclaration, IInitializable<Project> {
     /// <summary>The name of the interface declaration.</summary>
     public string Name { get; private set; } = "";
 
+    /// <summary>The full name of the object declaration including the package name.</summary>
+    public string FullName => this.Package.Name + "." + this.Name; // TODO: Why is there no nest?
+
     /// <summary>The location the interface was defined.</summary>
     public Location Location { get; private set; }
 
