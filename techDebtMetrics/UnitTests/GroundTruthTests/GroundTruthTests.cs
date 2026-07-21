@@ -36,7 +36,7 @@ public class GroundTruthTests {
             where c.FullName.StartsWith("org.apache.bcel")
             where !c.File.StartsWith("src/test/")
             where !c.IsAnonymous // TODO: Probably need to fold this into the nest to be counted instead of skipping it.
-            where c.Type != "interface"
+            where c.Type != GT.DeclType.Interface
             select c
         ];
 

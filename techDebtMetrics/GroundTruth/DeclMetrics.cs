@@ -1,6 +1,5 @@
 ﻿using Yaml = Commons.Data.Yaml;
 using System.Text.RegularExpressions;
-using System;
 
 namespace GroundTruth;
 
@@ -10,58 +9,8 @@ public class DeclMetrics(Yaml.Object obj) {
     /// <summary>The raw JSON class containing the class information.</summary>
     public readonly Yaml.Object Object = obj;
 
-    /// <summary>Indicates if this declaration is a "class", "interface", "anonymous", "innerclass", "enum", etc.</summary>
-    public string Type => this.Object.TryReadString("type");
-
-    /*
-    TODO: Address this agent comment
-
-     The type field comes straight from CK's class.csv, copied through by _load_ck_classes in tdd/build_per_project.py:258. CK sets it in CKVisitor.java:
-
-  • getTypeOfTheUnit (CKVisitor.java:385-386) — TypeDeclarations
-  • visit(AnonymousClassDeclaration) (CKVisitor.java:172)
-  • visit(EnumDeclaration) (CKVisitor.java:268)
-  • visit(RecordDeclaration) (CKVisitor.java:321)
-
-  So the complete set of type values you'll see in classes[i].type:
-
-  ┌──────┬──────────────────────────┬─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┐
-  │ valu │ Source in CK             │ Meaning                                                                                                                                         │
-  │ e    │                          │                                                                                                                                                 │
-  ├──────┼──────────────────────────┼─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┤
-  │ clas │ TypeDeclaration, class   │ Top-level (compilation-unit level) Java class.                                                                                                  │
-  │ s    │ stack empty              │                                                                                                                                                 │
-  ├──────┼──────────────────────────┼─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┤
-  │ inne │ TypeDeclaration, class   │ Any nested class TypeDeclaration — static nested, non-static inner, or local (method-local) class. Not just JLS "inner".                        │
-  │ rcla │ stack non-empty,         │                                                                                                                                                 │
-  │ ss   │ !isInterface()           │                                                                                                                                                 │
-  ├──────┼──────────────────────────┼─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┤
-  │ inte │ TypeDeclaration with     │ Any Java interface, top-level or nested. isInterface() is checked before the stack check, so there is no "innerinterface".                      │
-  │ rfac │ isInterface() == true    │                                                                                                                                                 │
-  │ e    │                          │                                                                                                                                                 │
-  ├──────┼──────────────────────────┼─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┤
-  │ enum │ EnumDeclaration          │ Any enum type, top-level or nested. No "innerenum".                                                                                             │
-  ├──────┼──────────────────────────┼─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┤
-  │ reco │ RecordDeclaration        │ Java 16+ record, top-level or nested. No "innerrecord".                                                                                         │
-  │ rd   │                          │                                                                                                                                                 │
-  ├──────┼──────────────────────────┼─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┤
-  │ anon │ AnonymousClassDeclaratio │ Always an anonymous class. Java's AST only has AnonymousClassDeclaration for the new Foo() { ... } form, which is only ever an anonymous class  │
-  │ ymou │ n                        │ (Java has no anonymous interfaces / enums / records). Lambdas are LambdaExpressions and are not emitted as CK class rows (they're counted via   │
-  │ s    │                          │ lambdasQty on the enclosing class).                                                                                                             │
-  └──────┴──────────────────────────┴─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
-
-  One extra value comes from your own pipeline, not from CK:
-
-  • unknown — injected by _synth_class in tdd/build_per_project.py:323 when PMD reports a class that CK didn't emit a row for, so a placeholder entry is synthesized.
-
-  Key source line, in case you want to cite it:
-
-   /Users/grantnelson/go/src/github.com/mauricioaniche/ck/src/main/java/com/github/mauricioaniche/ck/CKVisitor.java lines 385-386
-
-      private String getTypeOfTheUnit(TypeDeclaration node) {
-          return node.isInterface() ? "interface" : (classes.isEmpty() ? "class" : "innerclass");
-
-    */
+    /// <summary>Indicates the type of this declaration.</summary>
+    public DeclType Type => DeclTypeExt.FromName(this.Object.TryReadString("type"));
     
     /// <summary>The path to the file this class was defined in.</summary>
     public string File => this.Object.TryReadString("file");

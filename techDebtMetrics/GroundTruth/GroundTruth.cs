@@ -38,11 +38,8 @@ public class GroundTruth(Yaml.Node node) {
             List<DeclMetrics> list = [];
             Yaml.Node? node = this.Root.TryReadNode("classes");
             if (node is not null) {
-                foreach (Yaml.Node item in node.AsArray().Items) {
-                    
-
+                foreach (Yaml.Node item in node.AsArray().Items)
                     list.Add(new(item.AsObject()));
-                }
             }
             field = list;
             return field;
