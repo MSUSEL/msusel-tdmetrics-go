@@ -34,8 +34,8 @@ public class GroundTruthTests {
         List<GT.DeclMetrics> gtClasses = [..
             from c in gt.Declarations
             where c.FullName.StartsWith("org.apache.bcel")
-            where !c.File.StartsWith("src/test/")
-            where !c.IsAnonymous // TODO: Probably need to fold this into the nest to be counted instead of skipping it.
+            where !c.InTestPath
+            where c.Type != GT.DeclType.Anonymous // TODO: Probably need to fold this into the nest to be counted instead of skipping it.
             where c.Type != GT.DeclType.Interface
             select c
         ];

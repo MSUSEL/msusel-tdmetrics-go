@@ -4,7 +4,6 @@ using System.Text.RegularExpressions;
 namespace GroundTruth;
 
 public class DeclMetrics(Yaml.Object obj) {
-    private static readonly Lazy<Regex> anonymousNamePattern = new(() => new Regex(@"\$Anonymous\d+$", RegexOptions.Compiled));
 
     /// <summary>The raw JSON class containing the class information.</summary>
     public readonly Yaml.Object Object = obj;
@@ -15,15 +14,15 @@ public class DeclMetrics(Yaml.Object obj) {
     /// <summary>The path to the file this class was defined in.</summary>
     public string File => this.Object.TryReadString("file");
 
+    /// <summary>Checks if the file is in src/test/.</summary>
+    public bool InTestPath => this.File.StartsWith("src/test/");
+
     /// <summary>Name of the class with the path dot separated.</summary>
     /// <example>org.apache.bcel.generic.InstructionList</example>
     public string FullName => this.Object.TryReadString("class");
 
     /// <summary>Name of just the class without any of the path.</summary>
     public string Name => this.FullName.Split('.').Last();
-
-    /// <summary>Determines if this class is an anonymous class, based on it's name.</summary>
-    public bool IsAnonymous => anonymousNamePattern.Value.IsMatch(this.FullName);
 
     /// <summary>Raw JSON from Mauricioaniche's CK for this current class/object.</summary>
     /// <see cref="https://github.com/mauricioaniche/ck"/>
