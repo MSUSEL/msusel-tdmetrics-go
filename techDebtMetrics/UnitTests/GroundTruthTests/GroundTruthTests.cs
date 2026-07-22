@@ -48,12 +48,12 @@ public class GroundTruthTests {
         SortedSet<string> gtMissing   = [.. gtNames.Except(found)];
         SortedSet<string> projMissing = [.. projNames.Except(found)];
 
-        Assert.Multiple(() => {
+        using (Assert.EnterMultipleScope()) {
             Assert.AreEqual(gtClasses.Count,   gtNames.Count,   "Duplicate class names in ground truth data");
             Assert.AreEqual(projObjects.Count, projNames.Count, "Duplicate class names in object declarations");
             Assert.Zero(gtMissing.Count,   "Ground truth missing count:\n  " + string.Join("\n  ", gtMissing));
             Assert.Zero(projMissing.Count, "Object declarations missing count:\n  " + string.Join("\n  ", projMissing));
-        });
+        }
     }
     
     [Test]
@@ -84,22 +84,23 @@ public class GroundTruthTests {
             ObjectDecl projObj = p.Value;
             Assert.AreEqual(gtObj.FullName, projObj.FullName, "the object full names should match");
 
-            Dictionary<string, MethodDecl> projMethods = new(
-                from m in projObj.Methods
-                select new KeyValuePair<string, MethodDecl>(m.Name, m)
-            );
+            List<MethodDecl> projMethods = [.. projObj.Methods];
+            List<GT.MethodMetrics> gtMethods = [.. gtObj.Methods];
 
-            Dictionary<string, GT.MethodMetrics> gtMethods = new(
-                from m in gtObj.Methods
-                select new KeyValuePair<string, GT.MethodMetrics>(m.Name, m)
-            );
+            // TODO: HANDLE OVERLOADED METHODS!!
 
+            SortedSet<string> gtNames     = [.. from c in gtMethods select c.Name];
+            SortedSet<string> projNames   = [.. from c in projMethods select c.Name];
+            SortedSet<string> found       = [.. gtNames.Intersect(projNames)];
+            SortedSet<string> gtMissing   = [.. gtNames.Except(found)];
+            SortedSet<string> projMissing = [.. projNames.Except(found)];
 
-
-
-            // TODO: Finish
-
-
+            using (Assert.EnterMultipleScope()) {
+                Assert.AreEqual(gtMethods.Count,   gtNames.Count,   "Duplicate method names in ground truth class " + gtObj.FullName);
+                Assert.AreEqual(projMethods.Count, projNames.Count, "Duplicate method names in object declaration " + projObj.FullName);
+                Assert.Zero(gtMissing.Count,   "Ground truth, " + gtObj.FullName + ", missing count:\n  " + string.Join("\n  ", gtMissing));
+                Assert.Zero(projMissing.Count, "Object declaration, " + projObj.FullName + ", missing count:\n  " + string.Join("\n  ", projMissing));
+            }
         }
     }
 
@@ -137,6 +138,8 @@ public class GroundTruthTests {
         Assert.AreEqual(gtObj.FullName, obj.FullName, "the objects should match");
         //Assert.AreEqual(gtObj.Wmc, obj.Wmc, "WMC for " + obj.FullName);
         
+        // TODO: FIX
+
         //foreach (GT.MethodMetrics gtMet in gtObj.Methods) {
         //    MethodDecl? met = obj.Methods.FirstOrDefault(m => m.Location.LineNo == gtMet.Line);
         //    if (met is null) {
