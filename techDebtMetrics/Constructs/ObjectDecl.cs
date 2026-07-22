@@ -64,6 +64,17 @@ public class ObjectDecl : IObject, IDeclaration, IInitializable<Project> {
     /// <summary>True if this object is nested, false otherwise.</summary>
     public bool Nested => this.Nest is not null;
 
+    public int Wmc {
+        get {
+            int sum = 0;
+            foreach (MethodDecl md in this.Methods) {
+                if (md.Metrics is not null)
+                    sum += md.Metrics.Complexity;
+            }
+            return sum;
+        }
+    }
+
     /// <summary>Enumerates all the constructs that are directly part of this construct.</summary>
     public IEnumerable<IConstruct> SubConstructs {
         get {

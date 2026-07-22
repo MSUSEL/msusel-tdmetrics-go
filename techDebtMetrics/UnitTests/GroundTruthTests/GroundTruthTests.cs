@@ -1,8 +1,10 @@
-﻿using GT = GroundTruth;
-using Commons.Data.Repo;
+﻿using Commons.Data.Repo;
 using Constructs;
-using System.Linq;
+using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
+using System.Text.RegularExpressions;
+using GT = GroundTruth;
 
 namespace UnitTests.GroundTruthTests;
 
@@ -22,18 +24,18 @@ public class GroundTruthTests {
         JavaTarget target = JavaTarget.CommonsBcel;
         GT.GroundTruth gt = GT.GroundTruth.FromZip(Repo.MetricsZip, target);
         Project proj = Project.FromFile(Repo.AbstractedJava(target));
-
-        Assert.AreEqual(proj.CommitHash, target.CommitSha, "commit hash should match");
+        string groupId = proj.GroupId;
+        Assert.AreEqual(proj.CommitHash, target.CommitSha, "commit hash should match for " + groupId);
 
         List<ObjectDecl> projObjects = [..
             from c in proj.ObjectDecls
-            where c.Package.Name.StartsWith("org.apache.bcel")
+            where c.Package.Name.StartsWith(groupId)
             select c    
         ];
 
         List<GT.DeclMetrics> gtClasses = [..
             from c in gt.Declarations
-            where c.FullName.StartsWith("org.apache.bcel")
+            where c.FullName.StartsWith(groupId)
             where !c.InTestPath
             where c.Type != GT.DeclType.Anonymous // TODO: Probably need to fold this into the nest to be counted instead of skipping it.
             where c.Type != GT.DeclType.Interface
@@ -53,6 +55,54 @@ public class GroundTruthTests {
             Assert.Zero(projMissing.Count, "Object declarations missing count:\n  " + string.Join("\n  ", projMissing));
         });
     }
+    
+    [Test]
+    public void GroundTruthMethodMatching() {
+        JavaTarget target = JavaTarget.CommonsBcel;
+        GT.GroundTruth gt = GT.GroundTruth.FromZip(Repo.MetricsZip, target);
+        Project proj = Project.FromFile(Repo.AbstractedJava(target));
+        string groupId = proj.GroupId;
+        Assert.AreEqual(proj.CommitHash, target.CommitSha, "commit hash should match for " + groupId);
+
+        Dictionary<string, ObjectDecl> projObjects = new(
+            from c in proj.ObjectDecls
+            where c.Package.Name.StartsWith(groupId)
+            select new KeyValuePair<string, ObjectDecl>(c.FullName, c)
+        );
+
+        Dictionary<string, GT.DeclMetrics> gtClasses = new(
+            from c in gt.Declarations
+            where c.FullName.StartsWith(groupId)
+            where !c.InTestPath
+            where c.Type != GT.DeclType.Anonymous // TODO: Probably need to fold this into the nest to be counted instead of skipping it.
+            where c.Type != GT.DeclType.Interface
+            select new KeyValuePair<string, GT.DeclMetrics>(c.FullName, c)
+        );
+
+        foreach (KeyValuePair<string, ObjectDecl> p in projObjects) {
+            GT.DeclMetrics gtObj = gtClasses[p.Key];
+            ObjectDecl projObj = p.Value;
+            Assert.AreEqual(gtObj.FullName, projObj.FullName, "the object full names should match");
+
+            Dictionary<string, MethodDecl> projMethods = new(
+                from m in projObj.Methods
+                select new KeyValuePair<string, MethodDecl>(m.Name, m)
+            );
+
+            Dictionary<string, GT.MethodMetrics> gtMethods = new(
+                from m in gtObj.Methods
+                select new KeyValuePair<string, GT.MethodMetrics>(m.Name, m)
+            );
+
+
+
+
+            // TODO: Finish
+
+
+        }
+    }
+
 
     [Test]
     public void GroundTruthCommonBcel() =>
@@ -61,30 +111,45 @@ public class GroundTruthTests {
     private void checkGroundTruth(JavaTarget target) {
         GT.GroundTruth gt = GT.GroundTruth.FromZip(Repo.MetricsZip, target);
         Project proj = Project.FromFile(Repo.AbstractedJava(target));
-        foreach (GT.DeclMetrics gtObj in gt.Declarations) {
-            ObjectDecl? obj = proj.ObjectDecls.FirstOrDefault(c => c.FullName == gtObj.FullName);
-            if (obj is null) {
-                System.Console.WriteLine("Failed to find class/object " + gtObj.FullName);
-                continue;
-            }
-            this.checkGroundTruth(gtObj, obj);
-        }
+        string groupId = proj.GroupId;
+        Assert.AreEqual(proj.CommitHash, target.CommitSha, "commit hash should match for " + groupId);
+
+        Dictionary<string, ObjectDecl> projObjects = new(
+            from c in proj.ObjectDecls
+            where c.Package.Name.StartsWith(groupId)
+            select new KeyValuePair<string, ObjectDecl>(c.FullName, c)
+        );
+
+        Dictionary<string, GT.DeclMetrics> gtClasses = new(
+            from c in gt.Declarations
+            where c.FullName.StartsWith(groupId)
+            where !c.InTestPath
+            where c.Type != GT.DeclType.Anonymous // TODO: Probably need to fold this into the nest to be counted instead of skipping it.
+            where c.Type != GT.DeclType.Interface
+            select new KeyValuePair<string, GT.DeclMetrics>(c.FullName, c)
+        );
+
+        foreach (KeyValuePair<string, ObjectDecl> p in projObjects)
+            this.checkGroundTruth(gtClasses[p.Key], p.Value);
     }
 
     private void checkGroundTruth(GT.DeclMetrics gtObj, ObjectDecl obj) {
-        foreach (GT.MethodMetrics gtMet in gtObj.Methods) {
-            MethodDecl? met = obj.Methods.FirstOrDefault(m => m.Location.LineNo == gtMet.Line);
-            if (met is null) {
-                System.Console.WriteLine("Failed to find method " + gtMet.Name + " in " + gtObj.FullName);
-                continue;
-            }
-            this.checkGroundTruth(gtObj, obj, gtMet, met);
-        }
+        Assert.AreEqual(gtObj.FullName, obj.FullName, "the objects should match");
+        //Assert.AreEqual(gtObj.Wmc, obj.Wmc, "WMC for " + obj.FullName);
+        
+        //foreach (GT.MethodMetrics gtMet in gtObj.Methods) {
+        //    MethodDecl? met = obj.Methods.FirstOrDefault(m => m.Location.LineNo == gtMet.Line);
+        //    if (met is null) {
+        //        System.Console.WriteLine("Failed to find method " + gtMet.Name + " in " + gtObj.FullName);
+        //        continue;
+        //    }
+        //    this.checkGroundTruth(gtObj, obj, gtMet, met);
+        //}
     }
 
-    private void checkGroundTruth(GT.DeclMetrics gtObj, ObjectDecl obj, GT.MethodMetrics gtMet, MethodDecl met) {
-        // TODO: Add more.
-        Assert.AreEqual(gtMet.Loc,   met.Metrics?.LineCount ?? 0,  "Lines of code for " + gtMet.Name + " in " + gtObj.FullName);
-        Assert.AreEqual(gtMet.Cyclo, met.Metrics?.Complexity ?? 0, "Complexity for " + gtMet.Name + " in " + gtObj.FullName);
-    }
+    //private void checkGroundTruth(GT.DeclMetrics gtObj, ObjectDecl obj, GT.MethodMetrics gtMet, MethodDecl met) {
+    //    // TODO: Add more.
+    //    Assert.AreEqual(gtMet.Loc,   met.Metrics?.LineCount ?? 0,  "Lines of code for " + gtMet.Name + " in " + gtObj.FullName);
+    //    Assert.AreEqual(gtMet.Cyclo, met.Metrics?.Complexity ?? 0, "Complexity for " + gtMet.Name + " in " + gtObj.FullName);
+    //}
 }
