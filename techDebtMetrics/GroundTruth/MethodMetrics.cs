@@ -16,14 +16,49 @@ public class MethodMetrics(DeclMetrics parent, Yaml.Object ckObj, Yaml.Object pm
     public bool HasCk => this.Ck.Count > 0;
 
     /// <summary>The name of the method without the path.</summary>
-    public string Name => this.Ck.ReadString("method").Split("/")[0];
+    public string Name {
+        get {
+            string sig = this.CkSignature;
+            if (!string.IsNullOrEmpty(sig)) return sig.Split("/")[0];
+            sig = this.PmdSignature;
+            if (!string.IsNullOrEmpty(sig)) return sig.Split("(")[0];
+            throw new Exception("Name of method in " + Parent.FullName + " was undefined");
+        }
+    }
+
+    /// <summary>The line number that the method starts on.</summary>
+    /// <remarks>
+    /// The line numbers for CK and PMD may be slightly different (see CkLine and PmdLine).
+    /// This will try to return the CK line number, then fall back to the PMD line number,
+    /// then error if no line number could be determined.
+    /// </remarks>
+    public int Line {
+        get {
+            int line = this.CkLine;
+            if (line > 0) return line;
+            line = this.PmdLine;
+            if (line > 0) return line;
+            throw new Exception("Line of method in " + Parent.FullName + " was undefined");
+        }
+    }
 
     /// <summary>Indicates if this method is a constructor or not.</summary>
     public bool Constructor => this.Ck.ReadBool("constructor");
 
-    /// <summary>The line number that the method starts on.</summary>
-    public int Line => this.Ck.ReadInt("line");
- 
+    /// <summary>
+    /// The CK line number that the method starts on.
+    /// If the line isn't given then -1 is returned.
+    /// </summary>
+    /// <remarks>The CK line number seems to always be the line of the open bracket for the method body `{`.</remarks>
+    public int CkLine => this.Ck.TryReadInt("line", -1);
+
+    /// <summary>
+    /// The string of the CK signature of this method.
+    /// If the signature isn't given then an empty string is returned.
+    /// </summary>
+    /// <example>Variable/2[Mini.ASTIdent,boolean]</example>
+    public string CkSignature => this.Ck.TryReadString("method");
+
     /// <summary>
     /// FAN-IN: Counts the number of input dependencies a class has, i.e, the number of classes that
     /// reference a particular class. For instance, given a class X, the fan-in of X would be the number
@@ -49,8 +84,9 @@ public class MethodMetrics(DeclMetrics parent, Yaml.Object ckObj, Yaml.Object pm
     /// LOC (Lines of code): It counts the lines of count, ignoring empty lines and comments
     /// (i.e., it's Source Lines of Code, or SLOC). The number of lines here might be a bit different
     /// from the original file, as we use JDT's internal representation of the source code to calculate it.
+    /// This will return 0 if the LOC was not defined in the CK metrics.
     /// </summary>
-    public int Loc => this.Ck.ReadInt("loc");
+    public int Loc => this.Ck.TryReadInt("loc");
     
     /// <summary>
     /// CBO (Coupling between objects): Counts the number of dependencies a class has.
@@ -82,8 +118,22 @@ public class MethodMetrics(DeclMetrics parent, Yaml.Object ckObj, Yaml.Object pm
     /// <summary>Indicates if the PMD object for this method was defined.</summary>
     public bool HasPmd => this.Pmd.Count > 0;
 
-    /// <summary>The string of the signature of this method.</summary>
-    public string Signature => this.Pmd.ReadString("signature");
+    /// <summary>
+    /// The PMD line number that the method starts on.
+    /// If the line isn't given then -1 is returned.
+    /// </summary>
+    /// <remarks>
+    /// The PMD metrics' line number seems to be the line of the method's name identifier
+    /// (or possibly the first modifier, but not the annotations).
+    /// </remarks>
+    public int PmdLine => this.Pmd.TryReadInt("line", -1);
+
+    /// <summary>
+    /// The string of the PMD signature of this method.
+    /// If the signature isn't given then an empty string is returned.
+    /// </summary>
+    /// <example>Variable(ASTIdent, boolean)</example>
+    public string PmdSignature => this.Pmd.TryReadString("signature");
 
     /// <summary>
     /// NCSS (Non-Commenting Source Statements) metric to determine the number

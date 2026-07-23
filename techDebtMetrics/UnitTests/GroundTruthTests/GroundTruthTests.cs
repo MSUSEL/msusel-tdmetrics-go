@@ -84,26 +84,38 @@ public class GroundTruthTests {
             ObjectDecl projObj = p.Value;
             Assert.AreEqual(gtObj.FullName, projObj.FullName, "the object full names should match");
 
-            List<MethodDecl> projMethods = [.. projObj.Methods];
-            List<GT.MethodMetrics> gtMethods = [.. gtObj.Methods];
+            if (projObj.FullName == "org.apache.bcel.classfile.AnnotationElementValue") {
+                System.Console.WriteLine("====================================");
+                System.Console.WriteLine("---[ gt ]---");
+                foreach (GT.MethodMetrics c in gtObj.Methods) {
+                    if (c.HasCk && c.HasPmd) {
+                        System.Console.WriteLine(c.Name);
+                    } else if (c.HasCk) {
+                        System.Console.WriteLine(c.Name + " [CK] " + c.Line);
+                    } else if (c.HasPmd) {
+                        System.Console.WriteLine(c.Name + " [PMD]" + c.Line);
+                    }
+                }
+                System.Console.WriteLine("---[ proj ]---");
+                foreach (MethodDecl c in projObj.Methods) {
+                    System.Console.WriteLine(c.Name);
+                }
+            }
 
-            // TODO: HANDLE OVERLOADED METHODS!!
-
-            SortedSet<string> gtNames     = [.. from c in gtMethods select c.Name];
-            SortedSet<string> projNames   = [.. from c in projMethods select c.Name];
-            SortedSet<string> found       = [.. gtNames.Intersect(projNames)];
-            SortedSet<string> gtMissing   = [.. gtNames.Except(found)];
-            SortedSet<string> projMissing = [.. projNames.Except(found)];
+            SortedSet<int> gtLines     = [.. from c in gtObj.Methods select c.Line];
+            SortedSet<int> projLines   = [.. from c in projObj.Methods select c.Location.LineNo];
+            SortedSet<int> found       = [.. gtLines.Intersect(projLines)];
+            SortedSet<int> gtMissing   = [.. gtLines.Except(found)];
+            SortedSet<int> projMissing = [.. projLines.Except(found)];
 
             using (Assert.EnterMultipleScope()) {
-                Assert.AreEqual(gtMethods.Count,   gtNames.Count,   "Duplicate method names in ground truth class " + gtObj.FullName);
-                Assert.AreEqual(projMethods.Count, projNames.Count, "Duplicate method names in object declaration " + projObj.FullName);
+                Assert.AreEqual(gtObj.Methods.Count,   gtLines.Count,   "Duplicate method names in ground truth class " + gtObj.FullName);
+                Assert.AreEqual(projObj.Methods.Count, projLines.Count, "Duplicate method names in object declaration " + projObj.FullName);
                 Assert.Zero(gtMissing.Count,   "Ground truth, " + gtObj.FullName + ", missing count:\n  " + string.Join("\n  ", gtMissing));
                 Assert.Zero(projMissing.Count, "Object declaration, " + projObj.FullName + ", missing count:\n  " + string.Join("\n  ", projMissing));
             }
         }
     }
-
 
     [Test]
     public void GroundTruthCommonBcel() =>

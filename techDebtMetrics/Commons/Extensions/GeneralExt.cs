@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Security.Cryptography;
 
 namespace Commons.Extensions;
 
@@ -96,5 +95,52 @@ public static class GeneralExt {
             else high = mid - 1; 
         }
         return (floor, false);
+    }
+
+    public static IEnumerable<Tuple<T1?, T2?>> Merge<T1, T2>(this IEnumerable<T1> e1, IEnumerable<T2> e2, Func<T1, T2, int> comparer) {
+        using var enum1 = e1.GetEnumerator();
+        using var enum2 = e2.GetEnumerator();
+        bool hasNext1 = enum1.MoveNext();
+        bool hasNext2 = enum2.MoveNext();
+        while (hasNext1 && hasNext2) {
+            int cmp = comparer(enum1.Current, enum2.Current);
+            if (cmp < 0) {
+                yield return new(enum1.Current, default);
+                hasNext1 = enum1.MoveNext();
+            } else if (cmp > 0) {
+                yield return new(default, enum2.Current);
+                hasNext2 = enum2.MoveNext();
+            } else {
+                yield return new(enum1.Current, enum2.Current);
+                hasNext1 = enum1.MoveNext();
+                hasNext2 = enum2.MoveNext();
+            }
+        }
+        while (hasNext1) {
+            yield return new(enum1.Current, default);
+            hasNext1 = enum1.MoveNext();
+        }
+        while (hasNext2) {
+            yield return new(default, enum2.Current);
+            hasNext2 = enum2.MoveNext();
+        }
+    }
+
+    public static IEnumerable<T> Squish<T>(this IEnumerable<T> s, Func<T, T, T?> joiner) {
+        using var e = s.GetEnumerator();
+        bool hasNext = e.MoveNext();
+        if (!hasNext) yield break;
+        T prev = e.Current;
+        while (e.MoveNext()) {
+            T cur = e.Current;
+            T? j = joiner(prev, cur);
+            if (j is not null) {
+                prev = j;
+                continue;
+            }
+            yield return prev;
+            prev = cur;
+        }
+        if (prev is not null) yield return prev;
     }
 }

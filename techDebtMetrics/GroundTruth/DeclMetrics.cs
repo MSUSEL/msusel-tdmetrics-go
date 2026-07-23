@@ -1,5 +1,5 @@
 ﻿using Yaml = Commons.Data.Yaml;
-using System.Text.RegularExpressions;
+using Commons.Extensions;
 
 namespace GroundTruth;
 
@@ -203,37 +203,57 @@ public class DeclMetrics(Yaml.Object obj) {
         get {
             if (field is not null) return field;
 
-            Dictionary<int, Yaml.Object> ck  = this.methodsByLine("methods_ck");
-            Dictionary<int, Yaml.Object> pmd = this.methodsByLine("methods_pmd");
-
-            List<int> lines = [.. ck.Keys.Union(pmd.Keys)];
-            lines.Sort();
-
-            List<MethodMetrics> methods = [];
-            foreach (int line in lines) {
-                ck.TryGetValue(line, out Yaml.Object? ckMethod);
-                pmd.TryGetValue(line, out Yaml.Object? pmdMethod);
-                methods.Add(new(this, ckMethod ?? new Yaml.Object(), pmdMethod ?? new Yaml.Object()));
-            }
-
+            List<Yaml.Object> ck  = this.methodsByLine("methods_ck");
+            List<Yaml.Object> pmd = this.methodsByLine("methods_pmd");
+            List<MethodMetrics> methods = ck.Merge(pmd, compareByLines).
+                Squish(squishByName).Select((t) => tupleToMethod(this, t)).ToList();
             field = methods.AsReadOnly();
             return field;
         }
     }
 
-    /// <summary>Gets the methods from the named JSON object keyed by the methods' line.</summary>
-    /// <param name="name">The name of the JSON obejct to get.</param>
-    /// <returns>The set of method objects keyed by the methods' line.</returns>
-    private Dictionary<int, Yaml.Object> methodsByLine(string name) {
-        Dictionary<int, Yaml.Object> ck = [];
-        Yaml.Array ckArray = this.Object.TryReadNode(name)?.AsArray() ?? new Yaml.Array();
-        foreach (Yaml.Node ckNode in ckArray.Items) {
-            Yaml.Object ckMethod = ckNode.AsObject();
-            int line = ckMethod.TryReadInt("line");
-            if (ck.ContainsKey(line))
+    static private int compareByLines(Yaml.Object ck, Yaml.Object pmd) =>
+        ck.TryReadInt("line", -1) - pmd.TryReadInt("line", -1);
+
+    static private Tuple<Yaml.Object?, Yaml.Object?>? squishByName(Tuple<Yaml.Object?, Yaml.Object?> prev, Tuple<Yaml.Object?, Yaml.Object?> cur) {
+        // Look for this shape since PMD's line will always be less than CK's line if they can match:
+        // prev: [  -  | PMD ]
+        // cur:  [ CK  |  -  ]
+        if (prev.Item1 is not null) return null;
+        if (prev.Item2 is null) return null;
+        if (cur.Item1 is null) return null;
+        if (cur.Item2 is not null) return null;
+
+        string ckSig = cur.Item1.TryReadString("method");
+        if (string.IsNullOrEmpty(ckSig)) return null;
+        ckSig = ckSig.Split("/")[0];
+
+        string pmdSig = prev.Item2.TryReadString("signature");
+        if (string.IsNullOrEmpty(pmdSig)) return null;
+        pmdSig = pmdSig.Split("(")[0];
+
+        if (ckSig != pmdSig) return null;
+        return new(cur.Item1, prev.Item2);
+    }
+
+    static private MethodMetrics tupleToMethod(DeclMetrics parent, Tuple<Yaml.Object?, Yaml.Object?> t) =>
+        new(parent, t.Item1 ?? new Yaml.Object(), t.Item2 ?? new Yaml.Object());
+
+    /// <summary>Gets the methods from the named JSON object sorted by the methods' line.</summary>
+    /// <param name="name">The name of the JSON object to get.</param>
+    /// <returns>The set of method objects sorted by the methods' line.</returns>
+    private List<Yaml.Object> methodsByLine(string name) {
+        SortedDictionary<int, Yaml.Object> obj = [];
+        Yaml.Array arr = this.Object.TryReadNode(name)?.AsArray() ?? new Yaml.Array();
+        foreach (Yaml.Node n in arr.Items) {
+            Yaml.Object method = n.AsObject();
+            int line = method.TryReadInt("line", -1);
+            if (line <= 0)
+                throw new Exception("Line number was not defined or invalid in " + name + " for class " + this.FullName);
+            if (obj.ContainsKey(line))
                 throw new Exception("Multiple methods on the same line " + line + " in " + name + " for class " + this.FullName);
-            ck[line] = ckMethod;
+            obj[line] = method;
         }
-        return ck;
+        return [.. obj.Values];
     }
 }
