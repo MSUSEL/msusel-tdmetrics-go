@@ -202,11 +202,10 @@ public class DeclMetrics(Yaml.Object obj) {
     public IReadOnlyList<MethodMetrics> Methods {
         get {
             if (field is not null) return field;
-
             List<Yaml.Object> ck  = this.methodsByLine("methods_ck");
             List<Yaml.Object> pmd = this.methodsByLine("methods_pmd");
-            List<MethodMetrics> methods = ck.Merge(pmd, compareByLines).
-                Squish(squishByName).Select((t) => tupleToMethod(this, t)).ToList();
+            List<MethodMetrics> methods = [.. ck.Merge(pmd, compareByLines).
+                Squish(squishByName).Select((t) => tupleToMethod(this, t))];
             field = methods.AsReadOnly();
             return field;
         }
@@ -219,10 +218,8 @@ public class DeclMetrics(Yaml.Object obj) {
         // Look for this shape since PMD's line will always be less than CK's line if they can match:
         // prev: [  -  | PMD ]
         // cur:  [ CK  |  -  ]
-        if (prev.Item1 is not null) return null;
-        if (prev.Item2 is null) return null;
-        if (cur.Item1 is null) return null;
-        if (cur.Item2 is not null) return null;
+        if (prev.Item1 is not null || prev.Item2 is null) return null;
+        if (cur.Item1 is null || cur.Item2 is not null) return null;
 
         string ckSig = cur.Item1.TryReadString("method");
         if (string.IsNullOrEmpty(ckSig)) return null;

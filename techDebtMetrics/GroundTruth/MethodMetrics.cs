@@ -29,14 +29,14 @@ public class MethodMetrics(DeclMetrics parent, Yaml.Object ckObj, Yaml.Object pm
     /// <summary>The line number that the method starts on.</summary>
     /// <remarks>
     /// The line numbers for CK and PMD may be slightly different (see CkLine and PmdLine).
-    /// This will try to return the CK line number, then fall back to the PMD line number,
+    /// This will try to return the PMD line number, then fall back to the CK line number,
     /// then error if no line number could be determined.
     /// </remarks>
     public int Line {
         get {
-            int line = this.CkLine;
+            int line = this.PmdLine;
             if (line > 0) return line;
-            line = this.PmdLine;
+            line = this.CkLine;
             if (line > 0) return line;
             throw new Exception("Line of method in " + Parent.FullName + " was undefined");
         }

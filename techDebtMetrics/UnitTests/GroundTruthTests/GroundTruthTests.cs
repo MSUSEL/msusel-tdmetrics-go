@@ -84,34 +84,42 @@ public class GroundTruthTests {
             ObjectDecl projObj = p.Value;
             Assert.AreEqual(gtObj.FullName, projObj.FullName, "the object full names should match");
 
-            if (projObj.FullName == "org.apache.bcel.classfile.AnnotationElementValue") {
+            if (projObj.FullName == "org.apache.bcel.classfile.AnnotationElementValue") { // TODO: REMOVE!!
                 System.Console.WriteLine("====================================");
                 System.Console.WriteLine("---[ gt ]---");
                 foreach (GT.MethodMetrics c in gtObj.Methods) {
                     if (c.HasCk && c.HasPmd) {
-                        System.Console.WriteLine(c.Name);
+                        System.Console.WriteLine(c.Name + " [CK: " + c.CkLine + "] [PMD:" + c.PmdLine + "]");
                     } else if (c.HasCk) {
-                        System.Console.WriteLine(c.Name + " [CK] " + c.Line);
+                        System.Console.WriteLine(c.Name + " [CK: " + c.CkLine + "]");
                     } else if (c.HasPmd) {
-                        System.Console.WriteLine(c.Name + " [PMD]" + c.Line);
+                        System.Console.WriteLine(c.Name + " [PMD:" + c.PmdLine + "]");
                     }
                 }
                 System.Console.WriteLine("---[ proj ]---");
                 foreach (MethodDecl c in projObj.Methods) {
-                    System.Console.WriteLine(c.Name);
+                    System.Console.WriteLine(c.Name + " [proj: " + c.Location.LineNo + "]");
                 }
             }
 
-            SortedSet<int> gtLines     = [.. from c in gtObj.Methods select c.Line];
+            /*
+            List<GT.MethodMetrics> gtMethods = [..
+                from m in gtObj.Methods
+                where m.Name != "toString"
+                select m
+            ];
+            */
+
+            SortedSet<int> gtLines     = [.. from c in gtMethods select c.Line];
             SortedSet<int> projLines   = [.. from c in projObj.Methods select c.Location.LineNo];
             SortedSet<int> found       = [.. gtLines.Intersect(projLines)];
             SortedSet<int> gtMissing   = [.. gtLines.Except(found)];
             SortedSet<int> projMissing = [.. projLines.Except(found)];
 
             using (Assert.EnterMultipleScope()) {
-                Assert.AreEqual(gtObj.Methods.Count,   gtLines.Count,   "Duplicate method names in ground truth class " + gtObj.FullName);
+                Assert.AreEqual(gtMethods.Count, gtLines.Count, "Duplicate method names in ground truth class " + gtObj.FullName);
                 Assert.AreEqual(projObj.Methods.Count, projLines.Count, "Duplicate method names in object declaration " + projObj.FullName);
-                Assert.Zero(gtMissing.Count,   "Ground truth, " + gtObj.FullName + ", missing count:\n  " + string.Join("\n  ", gtMissing));
+                Assert.Zero(gtMissing.Count, "Ground truth, " + gtObj.FullName + ", missing count:\n  " + string.Join("\n  ", gtMissing));
                 Assert.Zero(projMissing.Count, "Object declaration, " + projObj.FullName + ", missing count:\n  " + string.Join("\n  ", projMissing));
             }
         }
