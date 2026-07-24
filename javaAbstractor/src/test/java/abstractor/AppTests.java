@@ -29,6 +29,7 @@ public class AppTests {
     @Test public void test1010() throws Exception { testClass("test1010", "Foo"); }
     @Test public void test1011() throws Exception { testClass("test1011", "Foo"); }
     @Test public void test1012() throws Exception { testClass("test1012", "Foo"); }
+    @Test public void test1013() throws Exception { testClass("test1013", "Foo"); }
 
     static private void runApp(String testName) throws Exception {
         final String testPath = "../testData/java/" + testName;
@@ -44,6 +45,7 @@ public class AppTests {
         final Config cfg  = new Config();
         cfg.input         = testPath;
         cfg.verbose       = true;
+        cfg.skipProjInfo  = true;
         cfg.writeIndices  = false;
         cfg.writeKinds    = false;
         cfg.writeRefs     = false;

@@ -14,6 +14,7 @@ public class Config {
 
     public boolean verbose;
     public boolean minimize;
+    public boolean skipProjInfo;
 
     public boolean writeKinds;
     public boolean writeIndices;

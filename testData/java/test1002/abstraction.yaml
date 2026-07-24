@@ -108,10 +108,10 @@
     { params: [ 4 ],    variadic: true }, # 8. func(t $Array<int> ...)
   ],
   structDescs: [
-    { }, # 1. ???
+    { }, # 1. struct{}
   ],
   typeParams: [
-    { name: T, type: interfaceDesc4 }, # 1. T ???
+    { name: T, type: interfaceDesc4 }, # 1. T any
   ],
   locs: {
     1: ClassesFromSource.java,

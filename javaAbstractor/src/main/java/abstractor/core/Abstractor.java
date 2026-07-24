@@ -26,6 +26,7 @@ import abstractor.core.tools.*;
 public class Abstractor {
     public final Logger  log;
     public final Project proj;
+    public final boolean skipProjInfo;
     public final Instantiator instantiator;
 
     public final Set<CtExecutable<?>> pendingMetrics  = Collections.newSetFromMap(new IdentityHashMap<>());
@@ -33,9 +34,10 @@ public class Abstractor {
 
     public CtModel model;
 
-    public Abstractor(Logger log, Project proj) {
+    public Abstractor(Logger log, Project proj, boolean skipProjInfo) {
         this.log          = log;
         this.proj         = proj;
+        this.skipProjInfo = skipProjInfo;
         this.instantiator = new Instantiator();
     }
 
@@ -98,6 +100,7 @@ public class Abstractor {
     }
 
     private void setProjectInfo(MavenLauncher launcher) {
+        if (this.skipProjInfo) return;
         SpoonPom pom = launcher.getPomFile();
         if (pom != null) {
             Model m = pom.getModel();
@@ -109,6 +112,7 @@ public class Abstractor {
     }
 
     private void setCommitHash(String repoDir) {
+        if (this.skipProjInfo) return;
         try {
             Process p = new ProcessBuilder("git", "rev-parse", "HEAD")
                 .directory(new File(repoDir))

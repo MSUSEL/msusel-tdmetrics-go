@@ -44,7 +44,7 @@ public class Tester {
         this.log.log("Testing " + getTestMethodName(depth) + "...");
 
         this.proj = new Project();
-        this.ab = new Abstractor(this.log, this.proj);
+        this.ab = new Abstractor(this.log, this.proj, true);
     }
 
     public void printLogs() {

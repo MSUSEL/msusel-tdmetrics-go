@@ -84,7 +84,7 @@ public class GroundTruthTests {
             ObjectDecl projObj = p.Value;
             Assert.AreEqual(gtObj.FullName, projObj.FullName, "the object full names should match");
 
-            if (projObj.FullName == "org.apache.bcel.classfile.AnnotationElementValue") { // TODO: REMOVE!!
+            if (projObj.FullName == "org.apache.bcel.classfile.Attribute") { // TODO: REMOVE!!
                 System.Console.WriteLine("====================================");
                 System.Console.WriteLine("---[ gt ]---");
                 foreach (GT.MethodMetrics c in gtObj.Methods) {
@@ -102,13 +102,21 @@ public class GroundTruthTests {
                 }
             }
 
-            /*
+            /************
+             * org.apache.bcel.classfile.Attribute
+             *  accept [CK: 84]
+             *  clone [CK: 346] [PMD:345]
+             *  copy [CK: 359]
+             ************/
+
+            // TODO: It seems like overrides of Java Objects need to be dealt with better
             List<GT.MethodMetrics> gtMethods = [..
                 from m in gtObj.Methods
-                where m.Name != "toString"
+            //    where m.Name != "toString"
+            //    where m.Name != "hashCode"
+            //    where m.Name != "equals"
                 select m
             ];
-            */
 
             SortedSet<int> gtLines     = [.. from c in gtMethods select c.Line];
             SortedSet<int> projLines   = [.. from c in projObj.Methods select c.Location.LineNo];

@@ -183,19 +183,30 @@ final public class SpoonUtils {
         if (m == null) return false;
 
         if (objSigs.isEmpty()) {
-            final CtTypeReference<?> objectRef = m.getFactory().Type().objectType();
-            assert(isObject(objectRef));
-
-            final CtType<?> objectDecl = objectRef.getTypeDeclaration();
-            assert(objectDecl != null);
-
+            final CtType<?> objectDecl = getObjectDecl(m);
             for (CtMethod<?> objectMethod : objectDecl.getMethods())
                 objSigs.add(objectMethod.getSignature());
         }
 
         final String sig = m.getSignature();
         assert(sig != null);
-        return objSigs.contains(sig);
+        if (!objSigs.contains(sig)) return false;
+
+        if (m.isParentInitialized()) {
+            final CtType<?> objectDecl = getObjectDecl(m);
+            if (m.getParent() != objectDecl) return false;
+        }
+
+        // The method was defined on the root Object
+        return true;
+    }
+
+    static private CtType<?> getObjectDecl(CtMethod<?> m) {
+        final CtTypeReference<?> objectRef = m.getFactory().Type().objectType();
+        assert(isObject(objectRef));
+        final CtType<?> objectDecl = objectRef.getTypeDeclaration();
+        assert(objectDecl != null);
+        return objectDecl;
     }
 
     static private final Set<String> objSigs = new HashSet<>();

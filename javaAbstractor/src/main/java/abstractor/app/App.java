@@ -21,7 +21,7 @@ public class App {
         final long start = System.nanoTime();
         Logger log = new Logger(cfg.verbose ? Level.All: Level.Warning, cfg.logOut, cfg.logErr);
         Project proj = new Project();
-        Abstractor ab = new Abstractor(log, proj);
+        Abstractor ab = new Abstractor(log, proj, cfg.skipProjInfo);
         ab.prepareMavenProject(cfg.input);
         ab.performAbstraction();
 
