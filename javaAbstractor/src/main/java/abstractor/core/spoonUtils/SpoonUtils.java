@@ -182,23 +182,31 @@ final public class SpoonUtils {
     static public boolean isObjectMethod(CtMethod<?> m) {
         if (m == null) return false;
 
-        if (objSigs.isEmpty()) {
+        if (builtinSigs.isEmpty()) {
             final CtType<?> objectDecl = getObjectDecl(m);
             for (CtMethod<?> objectMethod : objectDecl.getMethods())
-                objSigs.add(objectMethod.getSignature());
+                builtinSigs.add(objectMethod.getSignature());
+
+            final CtType<?> enumDecl = getEnumDecl(m);
+            for (CtMethod<?> enumMethod : enumDecl.getMethods())
+                builtinSigs.add(enumMethod.getSignature());
         }
 
         final String sig = m.getSignature();
         assert(sig != null);
-        if (!objSigs.contains(sig)) return false;
+        if (!builtinSigs.contains(sig)) return false; // Not one of the Object/Enum signatures
 
         if (m.isParentInitialized()) {
             final CtType<?> objectDecl = getObjectDecl(m);
-            if (m.getParent() != objectDecl) return false;
+            if (m.getParent() == objectDecl) return true; // Is Object method
+
+            final CtType<?> enumDecl = getEnumDecl(m);
+            if (m.getParent() == enumDecl) return true; // Is Enum method
+
+            return false;
         }
 
-        // The method was defined on the root Object
-        return true;
+        return true; // Couldn't check the parent so assume it
     }
 
     static private CtType<?> getObjectDecl(CtMethod<?> m) {
@@ -209,5 +217,11 @@ final public class SpoonUtils {
         return objectDecl;
     }
 
-    static private final Set<String> objSigs = new HashSet<>();
+    static private CtType<?> getEnumDecl(CtMethod<?> m) {
+        CtType<?> enumType = m.getFactory().Type().get(Enum.class);
+        assert(enumType != null);
+        return enumType;
+    }
+
+    static private final Set<String> builtinSigs = new HashSet<>();
 }

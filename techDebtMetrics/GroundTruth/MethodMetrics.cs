@@ -6,7 +6,7 @@ public class MethodMetrics(DeclMetrics parent, Yaml.Object ckObj, Yaml.Object pm
     
     /// <summary>Raw JSON from Mauricioaniche's CK for this current method.</summary>
     /// <see cref="https://github.com/mauricioaniche/ck"/>
-    /// <remarks>The documentation on the values from CK was barrowed from the github repo.</remarks>
+    /// <remarks>The documentation on the values from CK was barrowed from the GitHub repo.</remarks>
     public readonly Yaml.Object Ck = ckObj;
 
     /// <remarks>The parent declaration that this method is declared inside of.</remarks>
@@ -14,6 +14,9 @@ public class MethodMetrics(DeclMetrics parent, Yaml.Object ckObj, Yaml.Object pm
 
     /// <summary>Indicates if the Ck object for this method was defined.</summary>
     public bool HasCk => this.Ck.Count > 0;
+
+    /// <summary>Gets the object's full name and the method's name.</summary>
+    public string FullName => this.Parent.FullName + "#" + this.Name;
 
     /// <summary>The name of the method without the path.</summary>
     public string Name {
@@ -94,7 +97,7 @@ public class MethodMetrics(DeclMetrics parent, Yaml.Object ckObj, Yaml.Object pm
     /// variable declarations, etc). It ignores dependencies to Java itself (e.g. java.lang.String).
     /// </summary>
     public int Cbo => this.Ck.TryReadInt("cbo");
- 
+
     /// <summary>
     /// CBO Modified (Coupling between objects): Counts the number of dependencies a class has.
     /// It is very similar to the CKTool's original CBO. However, this metric considers a dependency
@@ -110,6 +113,10 @@ public class MethodMetrics(DeclMetrics parent, Yaml.Object ckObj, Yaml.Object pm
     /// </summary>
     public int Rfc => this.Ck.TryReadInt("rfc");
     
+    /// <summary>The modifiers for this methods.</summary>
+    /// <remarks>Can be decoded using `org.eclipse.jdt.core.dom.Modifier`.</remarks>
+    public Modifiers Modifiers => new(this.Ck.TryReadInt("modifiers"));
+
     /// <summary>Raw JSON from PMD for this current method.</summary>
     /// <see cref="https://docs.pmd-code.org/latest/pmd_rules_java.html"/>
     /// <remarks>The documentation on the values from PMD was barrowed from the PMD website.</remarks>

@@ -84,17 +84,13 @@ public class GroundTruthTests {
             ObjectDecl projObj = p.Value;
             Assert.AreEqual(gtObj.FullName, projObj.FullName, "the object full names should match");
 
-            if (projObj.FullName == "org.apache.bcel.classfile.Attribute") { // TODO: REMOVE!!
+            if (projObj.FullName == "org.apache.bcel.verifier.structurals.Subroutines$ColourConstants") { // TODO: REMOVE!!
                 System.Console.WriteLine("====================================");
                 System.Console.WriteLine("---[ gt ]---");
-                foreach (GT.MethodMetrics c in gtObj.Methods) {
-                    if (c.HasCk && c.HasPmd) {
-                        System.Console.WriteLine(c.Name + " [CK: " + c.CkLine + "] [PMD:" + c.PmdLine + "]");
-                    } else if (c.HasCk) {
-                        System.Console.WriteLine(c.Name + " [CK: " + c.CkLine + "]");
-                    } else if (c.HasPmd) {
-                        System.Console.WriteLine(c.Name + " [PMD:" + c.PmdLine + "]");
-                    }
+                foreach (GT.MethodMetrics m in gtObj.Methods) {
+                    string ckStr = m.HasCk ? " [CK: " + m.CkLine + "]" : "";
+                    string pmdStr = m.HasPmd ? " [PMD: " + m.PmdLine + "]" : "";
+                    System.Console.WriteLine(m.Name + ckStr + pmdStr);
                 }
                 System.Console.WriteLine("---[ proj ]---");
                 foreach (MethodDecl c in projObj.Methods) {
@@ -102,19 +98,11 @@ public class GroundTruthTests {
                 }
             }
 
-            /************
-             * org.apache.bcel.classfile.Attribute
-             *  accept [CK: 84]
-             *  clone [CK: 346] [PMD:345]
-             *  copy [CK: 359]
-             ************/
-
-            // TODO: It seems like overrides of Java Objects need to be dealt with better
             List<GT.MethodMetrics> gtMethods = [..
                 from m in gtObj.Methods
-            //    where m.Name != "toString"
-            //    where m.Name != "hashCode"
-            //    where m.Name != "equals"
+                where !m.Name.StartsWith("(initializer ")
+                where m.FullName != "org.apache.bcel.util.ClassPath#getSize" // PMD was the only one that read this, it seems wrong.
+                where !m.Modifiers.Abstract
                 select m
             ];
 
@@ -125,8 +113,8 @@ public class GroundTruthTests {
             SortedSet<int> projMissing = [.. projLines.Except(found)];
 
             using (Assert.EnterMultipleScope()) {
-                Assert.AreEqual(gtMethods.Count, gtLines.Count, "Duplicate method names in ground truth class " + gtObj.FullName);
-                Assert.AreEqual(projObj.Methods.Count, projLines.Count, "Duplicate method names in object declaration " + projObj.FullName);
+                Assert.AreEqual(gtMethods.Count, gtLines.Count, "Duplicate method lines in ground truth class " + gtObj.FullName);
+                Assert.AreEqual(projObj.Methods.Count, projLines.Count, "Duplicate method lines in object declaration " + projObj.FullName);
                 Assert.Zero(gtMissing.Count, "Ground truth, " + gtObj.FullName + ", missing count:\n  " + string.Join("\n  ", gtMissing));
                 Assert.Zero(projMissing.Count, "Object declaration, " + projObj.FullName + ", missing count:\n  " + string.Join("\n  ", projMissing));
             }
