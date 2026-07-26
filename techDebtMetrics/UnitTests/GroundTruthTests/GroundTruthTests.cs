@@ -84,8 +84,10 @@ public class GroundTruthTests {
             ObjectDecl projObj = p.Value;
             Assert.AreEqual(gtObj.FullName, projObj.FullName, "the object full names should match");
 
-            if (projObj.FullName == "org.apache.bcel.verifier.structurals.Subroutines$ColourConstants") { // TODO: REMOVE!!
+            string debugTarget = "org.apache.bcel.generic.PUSH"; // TODO: REMOVE!!
+            if (projObj.FullName == debugTarget) { // TODO: REMOVE!!
                 System.Console.WriteLine("====================================");
+                System.Console.WriteLine(debugTarget);
                 System.Console.WriteLine("---[ gt ]---");
                 foreach (GT.MethodMetrics m in gtObj.Methods) {
                     string ckStr = m.HasCk ? " [CK: " + m.CkLine + "]" : "";
@@ -102,7 +104,8 @@ public class GroundTruthTests {
                 from m in gtObj.Methods
                 where !m.Name.StartsWith("(initializer ")
                 where m.FullName != "org.apache.bcel.util.ClassPath#getSize" // PMD was the only one that read this, it seems wrong.
-                where !m.Modifiers.Abstract
+                where m.FullName != "org.apache.bcel.util.InstructionFinder#checkCode" // PMD put this interface abstract in the wrong location too.
+                //where !m.Modifiers.Abstract
                 select m
             ];
 
@@ -111,6 +114,14 @@ public class GroundTruthTests {
             SortedSet<int> found       = [.. gtLines.Intersect(projLines)];
             SortedSet<int> gtMissing   = [.. gtLines.Except(found)];
             SortedSet<int> projMissing = [.. projLines.Except(found)];
+
+            if (projObj.FullName == debugTarget) { // TODO: REMOVE!!
+                System.Console.WriteLine("gtLines:     [" + string.Join(", ", gtLines) + "]"); // TODO: REMOVE
+                System.Console.WriteLine("projLines:   [" + string.Join(", ", projLines) + "]"); // TODO: REMOVE
+                System.Console.WriteLine("found:       [" + string.Join(", ", found) + "]"); // TODO: REMOVE
+                System.Console.WriteLine("gtMissing:   [" + string.Join(", ", gtMissing) + "]"); // TODO: REMOVE
+                System.Console.WriteLine("projMissing: [" + string.Join(", ", projMissing) + "]"); // TODO: REMOVE
+            }
 
             using (Assert.EnterMultipleScope()) {
                 Assert.AreEqual(gtMethods.Count, gtLines.Count, "Duplicate method lines in ground truth class " + gtObj.FullName);

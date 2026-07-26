@@ -205,7 +205,9 @@ public class DeclMetrics(Yaml.Object obj) {
             List<Yaml.Object> ck  = this.methodsByLine("methods_ck");
             List<Yaml.Object> pmd = this.methodsByLine("methods_pmd");
             List<MethodMetrics> methods = [.. ck.Merge(pmd, compareByLines).
-                Squish(squishByName).Select((t) => tupleToMethod(this, t))];
+                Squish(squishByNamePmdFirst).
+                Squish(squishByNameCkFirst).
+                Select((t) => tupleToMethod(this, t))];
             field = methods.AsReadOnly();
             return field;
         }
@@ -214,8 +216,8 @@ public class DeclMetrics(Yaml.Object obj) {
     static private int compareByLines(Yaml.Object ck, Yaml.Object pmd) =>
         ck.TryReadInt("line", -1) - pmd.TryReadInt("line", -1);
 
-    static private Tuple<Yaml.Object?, Yaml.Object?>? squishByName(Tuple<Yaml.Object?, Yaml.Object?> prev, Tuple<Yaml.Object?, Yaml.Object?> cur) {
-        // Look for this shape since PMD's line will always be less than CK's line if they can match:
+    static private Tuple<Yaml.Object?, Yaml.Object?>? squishByNamePmdFirst(Tuple<Yaml.Object?, Yaml.Object?> prev, Tuple<Yaml.Object?, Yaml.Object?> cur) {
+        // Look for this shape since PMD's line will normally be less than CK's line if they can match:
         // prev: [  -  | PMD ]
         // cur:  [ CK  |  -  ]
         if (prev.Item1 is not null || prev.Item2 is null) return null;
@@ -231,6 +233,25 @@ public class DeclMetrics(Yaml.Object obj) {
 
         if (ckSig != pmdSig) return null;
         return new(cur.Item1, prev.Item2);
+    }
+    
+    static private Tuple<Yaml.Object?, Yaml.Object?>? squishByNameCkFirst(Tuple<Yaml.Object?, Yaml.Object?> prev, Tuple<Yaml.Object?, Yaml.Object?> cur) {
+        // Look for this shape so that this will handle the rare case where PMD's line is greater than CK's line if they can match:
+        // cur:  [ CK  |  -  ]
+        // prev: [  -  | PMD ]
+        if (prev.Item1 is null || prev.Item2 is not null) return null;
+        if (cur.Item1 is not null || cur.Item2 is null) return null;
+
+        string ckSig = prev.Item1.TryReadString("method");
+        if (string.IsNullOrEmpty(ckSig)) return null;
+        ckSig = ckSig.Split("/")[0];
+
+        string pmdSig = cur.Item2.TryReadString("signature");
+        if (string.IsNullOrEmpty(pmdSig)) return null;
+        pmdSig = pmdSig.Split("(")[0];
+
+        if (ckSig != pmdSig) return null;
+        return new(prev.Item1, cur.Item2);
     }
 
     static private MethodMetrics tupleToMethod(DeclMetrics parent, Tuple<Yaml.Object?, Yaml.Object?> t) =>

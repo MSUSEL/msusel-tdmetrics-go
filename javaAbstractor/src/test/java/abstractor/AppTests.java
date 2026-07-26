@@ -31,6 +31,7 @@ public class AppTests {
     @Test public void test1012() throws Exception { testClass("test1012", "Foo"); }
     @Test public void test1013() throws Exception { testClass("test1013", "Foo"); }
     @Test public void test1014() throws Exception { testClass("test1014", "Foo"); }
+    @Test public void test1015() throws Exception { testClass("test1015", "Foo"); }
 
     static private void runApp(String testName) throws Exception {
         final String testPath = "../testData/java/" + testName;

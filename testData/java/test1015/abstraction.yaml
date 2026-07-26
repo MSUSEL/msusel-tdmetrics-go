@@ -1,0 +1,77 @@
+{
+  language: java,
+  arguments: [
+    {              type: object1 }, # 1. <unnamed> Foo
+    { name: value, type: basic1  }, # 2. value bool
+  ],
+  basics: [ boolean, int ],
+  fields: [
+    { name: Bar, type: basic2, vis: public }, # 1. Bar int
+  ],
+  interfaceDescs: [
+    { abstracts: [ ] }, # 1. any
+  ],
+  methods: [
+    { # 1. Foo(value bool) Foo @ 5
+      name: Foo, package: 1, receiver: 1, signature: 1,
+      constructor: true, loc: 5, metrics: 1, static: true, vis: public,
+    },
+    { # 2. Foo(value bool) Foo @ 13
+      name: Foo, package: 1, receiver: 1, signature: 1,
+      constructor: true, loc: 13, metrics: 2, static: true, vis: public,
+    },
+  ],
+  metrics: [
+    { # 1. Foo(value bool) Foo @ 5
+      loc: 5, codeCount: 7, complexity: 2, indents: 10, lineCount: 7,
+      reads: [
+        basic1,         # bool
+        basic2,         # int
+        interfaceDesc1, # any
+        object1,        # Foo
+        selection1,     # Foo.Bar
+      ],
+      writes: [
+        basic2,     # int
+        selection1, # Foo.Bar
+      ],
+    },
+    { # 2. Foo(value bool) Foo @ 13
+      loc: 13, codeCount: 3, complexity: 1, indents: 3, lineCount: 3,
+      reads: [
+        basic1,         # bool
+        basic2,         # int
+        interfaceDesc1, # any
+        object1,        # Foo
+        selection1,     # Foo.Bar
+      ],
+      writes: [
+        basic2,     # int
+        selection1, # Foo.Bar
+      ],
+    },
+  ],
+  objects: [
+    { # 1. Foo{ Bar int }
+      name: Foo, package: 1, data: 1, interface: 1,
+      loc: 3, vis: public, methods: [ 1, 2 ],
+    },
+  ],
+  packages: [
+    {
+      name: testData.java.test1014,
+      objects: [ 1 ],
+      methods: [ 1, 2 ],
+    },
+  ],
+  selections: [
+    { name: Bar, origin: object1 }, # 1. Foo.Bar
+  ],
+  signatures: [
+    { params: [ 2 ], results: [ 1 ] }, # 1. func(value bool) Foo
+  ],
+  structDescs: [
+    { fields: [ 1 ] }, # 1. struct{ Bar int }
+  ],
+  locs: { 1: ClassesFromSource.java },
+}

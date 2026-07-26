@@ -41,7 +41,11 @@ public class MethodDecl extends DeclarationImp implements Method {
         return Cmp.or(super.getCmp(c, options),
             Cmp.defer(    this.receiver,    () -> ((MethodDecl)c).receiver),
             Cmp.defer(    this.signature,   () -> ((MethodDecl)c).signature),
-            Cmp.deferList(this.typeParams,  () -> ((MethodDecl)c).typeParams)
+            Cmp.deferList(this.typeParams,  () -> ((MethodDecl)c).typeParams),
+            // Methods also check location since there can be `Foo(Boolean)`
+            // and `Foo(boolean)` as two separate definitions, so even though
+            // all else will match, the line numbers will not allowing both.
+            Cmp.defer(this.loc, () -> ((DeclarationImp)c).loc)
         );
     }
 

@@ -52,7 +52,10 @@ public class MethodMetrics(DeclMetrics parent, Yaml.Object ckObj, Yaml.Object pm
     /// The CK line number that the method starts on.
     /// If the line isn't given then -1 is returned.
     /// </summary>
-    /// <remarks>The CK line number seems to always be the line of the open bracket for the method body `{`.</remarks>
+    /// <remarks>
+    /// The CK line number seems to always be the line of the open bracket for the method body `{`,
+    /// unless the method has no body, then it seems to use the first line of the comment.
+    /// </remarks>
     public int CkLine => this.Ck.TryReadInt("line", -1);
 
     /// <summary>

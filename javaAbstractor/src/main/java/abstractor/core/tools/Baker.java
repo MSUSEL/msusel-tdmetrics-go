@@ -160,6 +160,10 @@ public class Baker {
 
     /**
      * Qualified erasure name (e.g. java.lang.Integer) to basic type name (i.e. int).
+     *
+     * This can cause some issues since Java allows overloading of methods with
+     * the boxed and unboxed types, (e.g. Foo(Integer) and Foo(int)), therefore
+     * methods need to also check the line number of the declaration to differentiate.
      */
     private static final Map<String, String> boxedQualifiedNameToBasic = Map.of(
         "java.lang.Byte",      "byte",
