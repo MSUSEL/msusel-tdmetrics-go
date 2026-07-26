@@ -193,6 +193,10 @@ public class Abstractor {
             this.log.notice("Ignoring method of a local declaring type: " + SpoonUtils.describeElem(m) + " in " + SpoonUtils.describeElem(decl));
             return null;
         }
+        if (m.isImplicit()) {
+            this.log.notice("Ignoring implicit method: " + SpoonUtils.describeElem(m) + " in " + SpoonUtils.describeElem(decl));
+            return null;
+        }
 
         if (decl instanceof CtEnum<?>    e) return this.addMethodDecl(this.addEnum(e), m);
         if (decl instanceof CtClass<?>   c) return this.addMethodDecl(this.addObjectDecl(c), m);
@@ -327,6 +331,7 @@ public class Abstractor {
 
     public Ref<MethodDecl> addMethodDecl(Ref<ObjectDecl> receiver, CtMethod<?> m) throws Exception {
         Require.notObjectMethod(m);
+        Require.require(!m.isImplicit(), SpoonUtils.describeElem(m) + " is implicit");
         final ObjectDecl recv = receiver.mustGetResolved();
         try {
             // All declarations must be added without type arguments.
@@ -1264,7 +1269,7 @@ public class Abstractor {
 
                         // Finish by adding the "const values" to the package for each enumerator value.
                         for (CtEnumValue<?> ev: e.getEnumValues()) {
-                            this.proj.values.create(this.log, new ElementKey(e),
+                            this.proj.values.create(this.log, new ElementKey(ev),
                                 "enum value "+ SpoonUtils.describeElem(ev),
                                 () -> {
                                     final String   name = ev.getSimpleName();
@@ -1275,7 +1280,7 @@ public class Abstractor {
 
                         // Add methods for the enum.
                         for (CtMethod<?> m : e.getAllMethods()) {
-                            if (m.getParent().equals(e) && !SpoonUtils.isObjectMethod(m))
+                            if (!m.isImplicit() && m.getParent().equals(e) && !SpoonUtils.isObjectMethod(m))
                                 this.addMethodDecl(ref, m);
                         }
                     }

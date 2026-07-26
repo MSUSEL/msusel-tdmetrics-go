@@ -175,7 +175,7 @@ final public class SpoonUtils {
     }
 
     /**
-     * This determines if the given method is a method on the base Object.
+     * This determines if the given method is a method on the base Object or Enum.
      * Since all Objects inherits the base Object, adding those methods are
      * just additional unneeded noise in the abstraction.
      */
@@ -218,7 +218,9 @@ final public class SpoonUtils {
     }
 
     static private CtType<?> getEnumDecl(CtMethod<?> m) {
-        CtType<?> enumType = m.getFactory().Type().get(Enum.class);
+        final CtTypeReference<?> enumRef = m.getFactory().Type().createReference(Enum.class);
+        assert(enumRef != null);
+        final CtType<?> enumType = enumRef.getTypeDeclaration();
         assert(enumType != null);
         return enumType;
     }
