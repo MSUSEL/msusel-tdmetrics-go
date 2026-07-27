@@ -75,6 +75,18 @@ public class ObjectDecl : IObject, IDeclaration, IInitializable<Project> {
         }
     }
 
+    public int PmdWmc {
+        get {
+            int sum = 0;
+            foreach (MethodDecl md in this.Methods) {
+                if (md.Metrics is not null)
+                    sum += md.Metrics.PmdCyclo;
+                else sum++; // add one for empty methods without metrics
+            }
+            return sum;
+        }
+    }
+
     /// <summary>Enumerates all the constructs that are directly part of this construct.</summary>
     public IEnumerable<IConstruct> SubConstructs {
         get {

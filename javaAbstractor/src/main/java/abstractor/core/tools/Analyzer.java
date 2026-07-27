@@ -44,8 +44,8 @@ public class Analyzer {
         this.log        = abs.log;
         this.loc        = loc;
         this.minLine    = Integer.MAX_VALUE;
-        this.complexity = 1;
-        this.pmdCyclo   = 1;
+        this.complexity = 0;
+        this.pmdCyclo   = 0;
     }
 
     public Metrics getMetrics() {
@@ -58,6 +58,7 @@ public class Analyzer {
         if (logElementTree) {
             this.log.log("+- codeCount:  " + codeCount);
             this.log.log("+- complexity: " + this.complexity);
+            this.log.log("+- pmdCyclo:   " + this.pmdCyclo);
             this.log.log("+- indents:    " + indents);
             this.log.log("+- lineCount:  " + lineCount);
         }
@@ -101,6 +102,8 @@ public class Analyzer {
         final CtBlock<?> block = m.getBody();
         if (block != null) {
             this.addPosition(block.getPosition());
+            this.complexity++;
+            this.pmdCyclo++;
 
             final List<CtStatement> stmts = block.getStatements();
             for (CtStatement st : stmts) {

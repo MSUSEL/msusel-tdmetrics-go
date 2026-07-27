@@ -29,6 +29,9 @@ public class Metrics : IConstruct, IInitializable<Project> {
     /// <summary>The cyclomatic complexity of the method.</summary>
     public int Complexity { get; private set; }
 
+    /// <summary>The cyclomatic complexity of the method using the PMD algorithm.</summary>
+    public int PmdCyclo { get; private set; }
+
     /// <summary>The indent complexity of the method.</summary>
     public int Indents { get; private set; }
 
@@ -62,6 +65,7 @@ public class Metrics : IConstruct, IInitializable<Project> {
         this.Location = obj.ReadLocation(project.Locations, "loc");
         this.CodeCount = obj.TryReadInt("codeCount");
         this.Complexity = obj.TryReadInt("complexity");
+        this.PmdCyclo = obj.TryReadInt("pmdCyclo", 1);
         this.Indents = obj.TryReadInt("indents");
         this.LineCount = obj.TryReadInt("lineCounr");
         this.Getter = obj.TryReadBool("getter");

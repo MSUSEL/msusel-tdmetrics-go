@@ -157,30 +157,10 @@ public class GroundTruthTests {
 
         foreach (MethodDecl projMet in projObj.Methods) {
             GT.MethodMetrics gtMet = gtMetByLine[projMet.Location.LineNo];
-
-            Assert.AreEqual(gtMet.Cyclo, projMet.Metrics?.Complexity ?? 0, "Cyclomatic for " + projObj.FullName + ":" + projMet);
+            Assert.AreEqual(gtMet.Cyclo, projMet.Metrics?.PmdCyclo ?? 1, "Cyclomatic for " + projObj.FullName + ":" + projMet);
         }
-
-
-
-
-        Assert.AreEqual(gtObj.Wmc, projObj.Wmc, "WMC for " + projObj.FullName);
-        
-        // TODO: FIX
-
-        //foreach (GT.MethodMetrics gtMet in gtObj.Methods) {
-        //    MethodDecl? met = obj.Methods.FirstOrDefault(m => m.Location.LineNo == gtMet.Line);
-        //    if (met is null) {
-        //        System.Console.WriteLine("Failed to find method " + gtMet.Name + " in " + gtObj.FullName);
-        //        continue;
-        //    }
-        //    this.checkGroundTruth(gtObj, obj, gtMet, met);
-        //}
+        Assert.AreEqual(gtObj.GodWmc, projObj.PmdWmc, "WMC for " + projObj.FullName + " @ "  + projObj.Location);
+        // TODO: Finish
     }
 
-    //private void checkGroundTruth(GT.DeclMetrics gtObj, ObjectDecl obj, GT.MethodMetrics gtMet, MethodDecl met) {
-    //    // TODO: Add more.
-    //    Assert.AreEqual(gtMet.Loc,   met.Metrics?.LineCount ?? 0,  "Lines of code for " + gtMet.Name + " in " + gtObj.FullName);
-    //    Assert.AreEqual(gtMet.Cyclo, met.Metrics?.Complexity ?? 0, "Complexity for " + gtMet.Name + " in " + gtObj.FullName);
-    //}
 }
