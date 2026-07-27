@@ -8,4 +8,10 @@
     <StartupObject>Runner.Program</StartupObject>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Commons\Commons.csproj" />
+    <ProjectReference Include="..\Constructs\Constructs.csproj" />
+    <ProjectReference Include="..\GroundTruth\GroundTruth.csproj" />
+  </ItemGroup>
+
 </Project>
