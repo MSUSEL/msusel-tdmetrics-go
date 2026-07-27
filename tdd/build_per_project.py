@@ -42,6 +42,7 @@ import json
 import math
 import re
 import sys
+import zipfile
 from collections import defaultdict
 from pathlib import Path
 
@@ -309,7 +310,7 @@ def _class_simple_from_file(rel: str) -> str:
 
 
 def _synth_class(index: dict, classes: list[dict], rel: str,
-                 cls_name: str) -> dict:
+                 cls_name: str, entry_type: str = "unknown") -> dict:
     """Create and register a PMD-only class entry when no CK entry exists.
 
     Some codebases (e.g., felix) have many files declaring the same
@@ -320,7 +321,7 @@ def _synth_class(index: dict, classes: list[dict], rel: str,
     entry = {
         "file":        rel,
         "class":       cls_name,
-        "type":        "unknown",
+        "type":        entry_type,
         "ck":          {},
         "pmd":         {},
         "methods_ck":  [],
@@ -370,21 +371,48 @@ def _attach_pmd(pmd_dir: Path, index: dict, classes: list[dict],
             gd = m.groupdict()
 
             if spec["scope"] == "class":
-                # Regex-captured name is authoritative; only fall back to
-                # the filename when the message name is empty (e.g., PMD's
-                # "The class '' has ..." on synthetic/anonymous decls).
-                # Never fall back to the file's outer class for a named
-                # inner class - that would silently overwrite outer-class
-                # metrics with inner-class metrics.
-                raw_name = gd.get("name") or ""
-                cls_name = raw_name or _class_simple_from_file(rel)
-                entry = index.get((rel, cls_name))
-                if entry is None and "." in cls_name:
-                    entry = index.get((rel, cls_name.rsplit(".", 1)[-1]))
-                if entry is None and "$" in cls_name:
-                    entry = index.get((rel, cls_name.rsplit("$", 1)[-1]))
-                if entry is None:
-                    entry = _synth_class(index, classes, rel, cls_name)
+                # Regex-captured name is authoritative. Never fall back to
+                # the file's outer class for a named inner class - that
+                # would silently overwrite outer-class metrics with
+                # inner-class metrics.
+                #
+                # Two empty-name cases to distinguish here:
+                #   (a) The regex has no `name` group at all (e.g. GodClass,
+                #       CouplingBetweenObjects, ExcessivePublicCount): the
+                #       message doesn't include a class name and PMD emits
+                #       one violation per file, so fall back to the file's
+                #       outer class as before.
+                #   (b) The regex has a `name` group that captured empty
+                #       (CyclomaticComplexity / NcssCount on an anonymous
+                #       class declaration - "The class '' has ..."): route
+                #       to a distinct synthesised entry keyed by
+                #       (file, line) so both rules merge onto the same anon
+                #       entry and the outer class isn't clobbered.
+                raw_name  = gd.get("name")
+                anon_case = raw_name == ""  # captured group but empty
+                if anon_case:
+                    if line_i is not None:
+                        anon_key  = f"<anon@{line_i}>"
+                        anon_name = f"{_class_simple_from_file(rel)}$anon@{line_i}"
+                    else:
+                        # No line to disambiguate: pick a unique-per-file
+                        # slot so we still never overwrite the outer class.
+                        anon_key  = f"<anon#{len(classes)}>"
+                        anon_name = f"{_class_simple_from_file(rel)}$anon"
+                    entry = index.get((rel, anon_key))
+                    if entry is None:
+                        entry = _synth_class(index, classes, rel, anon_name,
+                                             entry_type="anonymous")
+                        index[(rel, anon_key)] = entry
+                else:
+                    cls_name = raw_name or _class_simple_from_file(rel)
+                    entry = index.get((rel, cls_name))
+                    if entry is None and "." in cls_name:
+                        entry = index.get((rel, cls_name.rsplit(".", 1)[-1]))
+                    if entry is None and "$" in cls_name:
+                        entry = index.get((rel, cls_name.rsplit("$", 1)[-1]))
+                    if entry is None:
+                        entry = _synth_class(index, classes, rel, cls_name)
 
                 if rule == "GodClass":
                     entry["pmd"]["god_class"]   = True
@@ -507,6 +535,13 @@ def main() -> int:
     ap.add_argument("--out",         default=str(here / "per_project"))
     ap.add_argument("--targets", nargs="+",
                     help="only build these project_keys (default: all 31)")
+    ap.add_argument("--zip", dest="zip_path", nargs="?",
+                    const=str(here / "per_project.zip"), default=None,
+                    help="after building, zip the output folder to this "
+                         "path (default when flag given without value: "
+                         "sibling per_project.zip). Zip contains files "
+                         "under a top-level 'per_project/' directory so "
+                         "the C# GT loader can read them directly.")
     args = ap.parse_args()
 
     tdd = json.loads(Path(args.tdd_flat).read_text())
@@ -544,7 +579,25 @@ def main() -> int:
             grand[k] += v
 
     print(f"totals: {dict(grand)}", file=sys.stderr)
+
+    if args.zip_path:
+        zip_path = Path(args.zip_path).expanduser().resolve()
+        _write_zip(out_root, zip_path)
+        print(f"zipped {out_root} -> {zip_path} "
+              f"({zip_path.stat().st_size // 1024} KB)", file=sys.stderr)
+
     return 0
+
+
+def _write_zip(folder: Path, zip_path: Path) -> None:
+    """Zip *.json files in `folder` into `zip_path` under a top-level
+    directory named after `folder`. Matches the layout the C# GT loader
+    expects (paths like 'per_project/<key>.json' inside the archive)."""
+    zip_path.parent.mkdir(parents=True, exist_ok=True)
+    top = folder.name
+    with zipfile.ZipFile(zip_path, "w", zipfile.ZIP_DEFLATED) as zf:
+        for p in sorted(folder.glob("*.json")):
+            zf.write(p, arcname=f"{top}/{p.name}")
 
 
 if __name__ == "__main__":

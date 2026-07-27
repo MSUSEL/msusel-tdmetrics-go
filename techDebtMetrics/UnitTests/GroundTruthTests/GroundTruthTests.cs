@@ -159,8 +159,6 @@ public class GroundTruthTests {
             GT.MethodMetrics gtMet = gtMetByLine[projMet.Location.LineNo];
             Assert.AreEqual(gtMet.Cyclo, projMet.Metrics?.PmdCyclo ?? 1, "Cyclomatic for " + projObj.FullName + ":" + projMet);
         }
-        Assert.AreEqual(gtObj.GodWmc, projObj.PmdWmc, "WMC for " + projObj.FullName + " @ "  + projObj.Location);
-        // TODO: Finish
+        Assert.AreEqual(gtObj.CycloTotal, projObj.PmdWmc, "WMC for " + projObj.FullName + " @ "  + projObj.Location);
     }
-
 }

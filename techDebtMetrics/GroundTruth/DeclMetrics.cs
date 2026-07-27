@@ -211,6 +211,21 @@ public class DeclMetrics(Yaml.Object obj) {
     /// Sum of the statistical complexity of the operations in the class
     /// from the PMD God class rule.
     /// </summary>
+    /// <remarks>
+    /// PMD's GodClass rule only emits a violation (and therefore only reports god_wmc) when the class simultaneously
+    /// trips all three Lanza & Marinescu thresholds hardcoded in GodClassRule.java:
+    ///
+    ///  - `WMC >= 47`  (very-high weighted method count)
+    ///  - `ATFD > 5`   (more than a few accesses to foreign data)
+    ///  - `TCC < 1/3`  (low tight class cohesion)
+    ///
+    ///  Any one of those failing → no violation is emitted → no god_wmc field in the JSON → TryReadInt("god_wmc") returns 0.
+    ///
+    /// So `god_wmc == 0` doesn't mean "WMC is zero", it means "PMD didn't flag this class as a God Class."
+    /// Most classes are small, well-encapsulated, and/or cohesive, so they never trip the trio. The
+    /// values `god_wmc != 0` (like ConstantPool=57, JavaClass=129) are only for the classes PMD did flag, and for those
+    /// `god_wmc` equals PMD's `WEIGHED_METHOD_COUNT` (same metric cyclo_total uses), which is why they now match `pmd_wmc` too.
+    /// </remarks>
     /// <see cref="https://docs.pmd-code.org/latest/pmd_rules_java_design.html#godclass"/>
     /// <see cref="https://docs.pmd-code.org/apidocs/pmd-java/7.26.0/net/sourceforge/pmd/lang/java/metrics/JavaMetrics.html#WEIGHED_METHOD_COUNT"/>
     public int GodWmc => this.Pmd.TryReadInt("god_wmc");
