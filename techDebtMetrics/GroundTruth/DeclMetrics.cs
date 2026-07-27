@@ -1,5 +1,5 @@
-﻿using Yaml = Commons.Data.Yaml;
-using Commons.Extensions;
+﻿using Commons.Extensions;
+using Yaml = Commons.Data.Yaml;
 
 namespace GroundTruth;
 
@@ -76,12 +76,50 @@ public class DeclMetrics(Yaml.Object obj) {
     public int Noc => this.Ck.TryReadInt("noc");
 
     /// <summary>
-    /// This is the sum of all the WMC for the whole class.
-    /// WMC (Weight Method Class) or McCabe's complexity.
-    /// It counts the number of branch instructions in a class.
+    /// This is the WMC (Weight Method Class), that is the sum of all the McCabe's Cyclomatic Complexity (CC)
+    /// for the whole class. It counts the number of branch instructions in the class's methods.
     /// </summary>
+    /// <remarks>Since CK gets this wrong, this will use PMD's CycloTotal.</remarks>
+    public int Wmc => this.CycloTotal;
+
+    /// <summary>
+    /// This is the CK version of WMC that is incorrect.
+    /// </summary>
+    /// <remarks>
+    /// WARNING: CK's algorithm for finding WMC is Incorrect!!!
+    ///
+    /// 1. Counting inline binary comparison operators (`==`, `>`, `<`, etc.) is incorrect:
+    /// 
+    ///    If CK is incrementing the CC for standard relational/comparison operators, it is deviating
+    ///    from McCabe's definition. CC is a measure of the *Control Flow Graph* (CFG) — specifically,
+    ///    decision points that branch the execution path. A simple boolean comparison like `a == b`
+    ///    does not branch the code unless it is evaluated inside a control flow statement
+    ///    (like an `if` or `while`), and in those cases, the `if` or `while` itself is what generates
+    ///    the +1 complexity, not the operator.
+    ///
+    /// 2. Undercounting nested ternary operators (`?:`) is incorrect (and buggy):
+    ///
+    ///    A ternary operator (`? :`) is functionally identical to an `if-else` block. Therefore,
+    ///    **every single instance** of a ternary operator should add +1 to the complexity.
+    ///    If `int a = c1 ? (c2 ? 12 : 34) : (c3 ? 56 : 78)` is only yielding +1, CK is undercounting.
+    ///    Because CK is built on top of the Eclipse JDT (Java Development Tools) AST parser, this specific
+    ///    bug usually happens when an AST Visitor's `visit(ConditionalExpression node)` method calculates
+    ///    the count but fails to `return true;` (which tells the parser to recursively traverse the child
+    ///    nodes of that expression).
+    ///
+    /// 3. Counting bitwise-AND (`&`) and bitwise-OR (`|`) is incorrect:
+    ///
+    ///    - **Logical operators** (`&&`, `||`) are short-circuiting. `if (A && B)` essentially behaves as
+    ///      `if (A) { if (B) { ... } }`. Because the second condition might not execute based on the first,
+    ///      there is a hidden branch in the control flow graph. They *should* add +1.
+    ///    - **Bitwise operators** (`&`, `|`) do not short-circuit. Both sides of the expression are always
+    ///      fully evaluated linearly before the operator is applied. They create no branches and *should not*
+    ///      add to the CC.
+    /// 
+    /// 4. Other possible issues that I haven't notices yet.
+    /// </remarks>
     /// <see cref="https://github.com/mauricioaniche/ck/blob/master/src/main/java/com/github/mauricioaniche/ck/metric/WMC.java"/>
-    public int Wmc => this.Ck.TryReadInt("wmc");
+    public int CkWmc => this.Ck.TryReadInt("wmc");
 
     /// <summary>
     /// LOC (Lines of code): It counts the lines of count, ignoring empty lines and comments
@@ -156,9 +194,10 @@ public class DeclMetrics(Yaml.Object obj) {
     /// <summary>The highest NCSS (Non-Commenting Source Statements) of any method in this class.</summary>
     public int NcssHighest => this.Pmd.TryReadInt("ncss_highest");
 
-    /// <summary>The sum of McCabe’s Cyclomatic Complexity for all methods in this class.</summary>
+    /// <summary>The sum of McCabe’s Cyclomatic Complexity for all methods in this class, i.e. WMC (Weighted Method Count)</summary>
     /// <see cref="https://docs.pmd-code.org/latest/pmd_rules_java_design.html#cyclomaticcomplexity"/>
     /// <see cref="https://docs.pmd-code.org/apidocs/pmd-java/7.26.0/net/sourceforge/pmd/lang/java/metrics/JavaMetrics.html#CYCLO"/>
+    /// <see cref="https://github.com/pmd/pmd/blob/main/pmd-java/src/main/java/net/sourceforge/pmd/lang/java/metrics/internal/CycloVisitor.java"/>
     public int CycloTotal => this.Pmd.TryReadInt("cyclo_total");
 
     /// <summary>The highest Cyclomatic Complexity of any method in this class.</summary>

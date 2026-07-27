@@ -37,7 +37,7 @@
       ],
     },
     { # 2. Foo(value bool) Foo @ 13
-      loc: 13, codeCount: 3, complexity: 1, indents: 3, lineCount: 3,
+      loc: 13, codeCount: 3, complexity: 2, indents: 3, lineCount: 3,
       reads: [
         basic1,         # bool
         basic2,         # int

@@ -80,11 +80,9 @@ public class MethodMetrics(DeclMetrics parent, Yaml.Object ckObj, Yaml.Object pm
     /// </summary>
     public int FanOut => this.Ck.ReadInt("fanout");
 
-    /// <summary>
-    /// The number of branch instructions in this method.
-    /// WMC (Weight Method Class) or McCabe's complexity.
-    /// </summary>
-    public int Wmc => this.Ck.ReadInt("wmc");
+    /// <summary>CK's incorrect number of branch instructions in this method.</summary>
+    /// <remarks>See remarks on CkWmc on DeclType.</remarks>
+    public int CkWmc => this.Ck.ReadInt("wmc");
     
     /// <summary>
     /// LOC (Lines of code): It counts the lines of count, ignoring empty lines and comments

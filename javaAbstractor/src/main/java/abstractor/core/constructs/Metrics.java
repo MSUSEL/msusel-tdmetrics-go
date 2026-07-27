@@ -11,6 +11,7 @@ public class Metrics extends ConstructImp {
 
     public int codeCount;
     public int complexity;
+    public int pmdCyclo;
     public int indents;
     public int lineCount;
 
@@ -25,12 +26,13 @@ public class Metrics extends ConstructImp {
 
     public Metrics(Location loc) { this.loc = loc; }
 
-    public Metrics(Location loc, int codeCount, int complexity, int indents, int lineCount,
+    public Metrics(Location loc, int codeCount, int complexity, int pmdCyclo, int indents, int lineCount,
         boolean getter, boolean setter, SortedSet<Ref<? extends Construct>> invokes,
         SortedSet<Ref<? extends Construct>> reads, SortedSet<Ref<? extends Construct>> writes) {
         this.loc        = loc;
         this.codeCount  = codeCount;
         this.complexity = complexity;
+        this.pmdCyclo   = pmdCyclo;
         this.indents    = indents;
         this.lineCount  = lineCount;
         this.getter     = getter;
@@ -50,6 +52,7 @@ public class Metrics extends ConstructImp {
         obj.putNotEmpty("loc",        loc.toJson(h));
         obj.putNotEmpty("codeCount",  this.codeCount);
         obj.putNotEmpty("complexity", this.complexity);
+        obj.putNotEmpty("pmdCyclo",   this.pmdCyclo);
         obj.putNotEmpty("indents",    this.indents);
         obj.putNotEmpty("lineCount",  this.lineCount);
         obj.putNotEmpty("getter",     this.getter);

@@ -1,9 +1,7 @@
 ﻿using Commons.Data.Repo;
 using Constructs;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text.RegularExpressions;
 using GT = GroundTruth;
 
 namespace UnitTests.GroundTruthTests;
@@ -84,28 +82,10 @@ public class GroundTruthTests {
             ObjectDecl projObj = p.Value;
             Assert.AreEqual(gtObj.FullName, projObj.FullName, "the object full names should match");
 
-            string debugTarget = "org.apache.bcel.generic.PUSH"; // TODO: REMOVE!!
-            if (projObj.FullName == debugTarget) { // TODO: REMOVE!!
-                System.Console.WriteLine("====================================");
-                System.Console.WriteLine(debugTarget);
-                System.Console.WriteLine("---[ gt ]---");
-                foreach (GT.MethodMetrics m in gtObj.Methods) {
-                    string ckStr = m.HasCk ? " [CK: " + m.CkLine + "]" : "";
-                    string pmdStr = m.HasPmd ? " [PMD: " + m.PmdLine + "]" : "";
-                    System.Console.WriteLine(m.Name + ckStr + pmdStr);
-                }
-                System.Console.WriteLine("---[ proj ]---");
-                foreach (MethodDecl c in projObj.Methods) {
-                    System.Console.WriteLine(c.Name + " [proj: " + c.Location.LineNo + "]");
-                }
-            }
-
             List<GT.MethodMetrics> gtMethods = [..
                 from m in gtObj.Methods
                 where !m.Name.StartsWith("(initializer ")
-                where m.FullName != "org.apache.bcel.util.ClassPath#getSize" // PMD was the only one that read this, it seems wrong.
-                where m.FullName != "org.apache.bcel.util.InstructionFinder#checkCode" // PMD put this interface abstract in the wrong location too.
-                //where !m.Modifiers.Abstract
+                where !isPmdProblem(m)
                 select m
             ];
 
@@ -115,14 +95,6 @@ public class GroundTruthTests {
             SortedSet<int> gtMissing   = [.. gtLines.Except(found)];
             SortedSet<int> projMissing = [.. projLines.Except(found)];
 
-            if (projObj.FullName == debugTarget) { // TODO: REMOVE!!
-                System.Console.WriteLine("gtLines:     [" + string.Join(", ", gtLines) + "]"); // TODO: REMOVE
-                System.Console.WriteLine("projLines:   [" + string.Join(", ", projLines) + "]"); // TODO: REMOVE
-                System.Console.WriteLine("found:       [" + string.Join(", ", found) + "]"); // TODO: REMOVE
-                System.Console.WriteLine("gtMissing:   [" + string.Join(", ", gtMissing) + "]"); // TODO: REMOVE
-                System.Console.WriteLine("projMissing: [" + string.Join(", ", projMissing) + "]"); // TODO: REMOVE
-            }
-
             using (Assert.EnterMultipleScope()) {
                 Assert.AreEqual(gtMethods.Count, gtLines.Count, "Duplicate method lines in ground truth class " + gtObj.FullName);
                 Assert.AreEqual(projObj.Methods.Count, projLines.Count, "Duplicate method lines in object declaration " + projObj.FullName);
@@ -130,6 +102,18 @@ public class GroundTruthTests {
                 Assert.Zero(projMissing.Count, "Object declaration, " + projObj.FullName + ", missing count:\n  " + string.Join("\n  ", projMissing));
             }
         }
+    }
+
+    static private bool isPmdProblem(GT.MethodMetrics m) {
+        // PMD was the only one that read this method.
+        if (!m.HasPmd || m.HasCk) return false;
+
+        // PMD put these interface abstract in the wrong location.
+        return m.FullName switch {
+            "org.apache.bcel.util.ClassPath#getSize" => true,
+            "org.apache.bcel.util.InstructionFinder#checkCode" => true,
+            _ => false,
+        };
     }
 
     [Test]
@@ -161,9 +145,26 @@ public class GroundTruthTests {
             this.checkGroundTruth(gtClasses[p.Key], p.Value);
     }
 
-    private void checkGroundTruth(GT.DeclMetrics gtObj, ObjectDecl obj) {
-        Assert.AreEqual(gtObj.FullName, obj.FullName, "the objects should match");
-        //Assert.AreEqual(gtObj.Wmc, obj.Wmc, "WMC for " + obj.FullName);
+    private void checkGroundTruth(GT.DeclMetrics gtObj, ObjectDecl projObj) {
+        Assert.AreEqual(gtObj.FullName, projObj.FullName, "the objects should match");
+
+        Dictionary<int, GT.MethodMetrics> gtMetByLine = new(
+            from m in gtObj.Methods
+            where !m.Name.StartsWith("(initializer ")
+            where !isPmdProblem(m)
+            select new KeyValuePair<int, GT.MethodMetrics>(m.Line, m)
+        );
+
+        foreach (MethodDecl projMet in projObj.Methods) {
+            GT.MethodMetrics gtMet = gtMetByLine[projMet.Location.LineNo];
+
+            Assert.AreEqual(gtMet.Cyclo, projMet.Metrics?.Complexity ?? 0, "Cyclomatic for " + projObj.FullName + ":" + projMet);
+        }
+
+
+
+
+        Assert.AreEqual(gtObj.Wmc, projObj.Wmc, "WMC for " + projObj.FullName);
         
         // TODO: FIX
 

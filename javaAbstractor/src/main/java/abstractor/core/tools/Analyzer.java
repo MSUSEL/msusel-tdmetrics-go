@@ -6,8 +6,8 @@ import spoon.reflect.code.*;
 import spoon.reflect.cu.SourcePosition;
 import spoon.reflect.declaration.*;
 import spoon.reflect.reference.*;
-import spoon.support.reflect.CtExtendedModifier;
-import spoon.support.reflect.code.CtIfImpl;
+import spoon.support.reflect.*;
+import spoon.support.reflect.code.*;
 
 import abstractor.core.Abstractor;
 import abstractor.core.constructs.*;
@@ -18,6 +18,8 @@ import abstractor.core.spoonUtils.SpoonUtils;
 public class Analyzer {
     private static final boolean logElementTree = false;
     private static final boolean logUsage       = false;
+    private static final boolean pmdConsiderBoolPaths = true;
+    private static final boolean pmdConsiderAssert    = false;
 
     private final Abstractor abs;
     private final Logger     log;
@@ -26,8 +28,9 @@ public class Analyzer {
     private final Map<Integer, Integer> minColumn = new TreeMap<>();
     private int minLine;
     private int maxLine;
-    
+
     private int complexity;
+    private int pmdCyclo;
 
     private boolean getter;
     private boolean setter;
@@ -42,6 +45,7 @@ public class Analyzer {
         this.loc        = loc;
         this.minLine    = Integer.MAX_VALUE;
         this.complexity = 1;
+        this.pmdCyclo   = 1;
     }
 
     public Metrics getMetrics() {
@@ -50,7 +54,7 @@ public class Analyzer {
 
         final int codeCount = this.minColumn.size();
         final int indents   = this.calcIndent();
-        
+
         if (logElementTree) {
             this.log.log("+- codeCount:  " + codeCount);
             this.log.log("+- complexity: " + this.complexity);
@@ -59,7 +63,7 @@ public class Analyzer {
         }
 
         return new Metrics(this.loc,
-            codeCount, this.complexity, indents, lineCount,
+            codeCount, this.complexity, this.pmdCyclo, indents, lineCount,
             this.getter, this.setter,
             this.invokes, this.reads, this.writes);
     }
@@ -99,8 +103,10 @@ public class Analyzer {
             this.addPosition(block.getPosition());
 
             final List<CtStatement> stmts = block.getStatements();
-            for (CtStatement st : stmts)
+            for (CtStatement st : stmts) {
+                this.pmdCycloComplexity(st);
                 this.addElement(st);
+            }
 
             if (stmts.size() == 1) {
                 final CtStatement onlySt = stmts.get(0);
@@ -200,7 +206,7 @@ public class Analyzer {
     }
 
     /**
-     * Gets the McCabe cyclomatic complexity for this element.
+     * Gets McCabe's cyclomatic complexity for this element.
      * @param elem The element to get the complexity metric for.
      * @return The complexity metric for the given element.
      */
@@ -226,7 +232,46 @@ public class Analyzer {
             return 0;
         }
 
+        // Add one for a ternary operator `?:`.
+        if (elem instanceof CtConditional<?>) return 1;
+
+        // Add one for catch part of a try.
+        if (elem instanceof CtCatch) return 1;
+
         return 0;
+    }
+
+    public void pmdCycloComplexity(CtElement elem) {
+        // TODO: FINISH
+
+        //if (elem instanceof CtAbstractSwitch sw) {
+        //    if (pmdConsiderBoolPaths)
+        //        this.pmdCyclo += pmdBoolExprComplexity(sw.getSelector());
+        //}
+
+    }
+
+    /**
+     * The PMD method to get the number of paths through the expression.
+     * This is the total number of {@code &&} and {@code ||} operators appearing
+     * in the expression, and counts the ternary operators {@code ?:}.
+     * This is used in the calculation of cyclomatic and n-path complexity.
+     *
+     * @see https://github.com/pmd/pmd/blob/main/pmd-java/src/main/java/net/sourceforge/pmd/lang/java/metrics/internal/CycloVisitor.java#L192
+     */
+    public int pmdBoolExprComplexity(CtElement elem) {
+        if (elem == null) return 0;
+
+        int sum = 0;
+        if (elem instanceof CtConditional) sum += 2;
+        else if (elem instanceof CtBinaryOperator opElem) {
+            if (opElem.getKind() == BinaryOperatorKind.AND) sum += 1;
+            else if (opElem.getKind() == BinaryOperatorKind.OR)  sum += 1;
+        }
+ 
+        for (CtElement child : elem.getDirectChildren())
+            sum += this.pmdBoolExprComplexity(child);
+        return sum;
     }
 
     public String conString(Ref<? extends Construct> c) {
