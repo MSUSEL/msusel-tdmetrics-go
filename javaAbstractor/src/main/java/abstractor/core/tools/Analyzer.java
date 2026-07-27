@@ -241,20 +241,65 @@ public class Analyzer {
         return 0;
     }
 
+    /**
+     * This gets the cyclomatic complexity as defined by PMD. This is incorrect to how
+     * McCabe defines cyclomatic complexity, however to check against PMD, we need to
+     * read the same value with the same mistakes.
+     * 
+     * @see https://github.com/pmd/pmd/blob/main/pmd-java/src/main/java/net/sourceforge/pmd/lang/java/metrics/internal/CycloVisitor.java
+     */
     public void pmdCycloComplexity(CtElement elem) {
-        // TODO: FINISH
+        if (elem == null) return;
 
-        //if (elem instanceof CtAbstractSwitch sw) {
-        //    if (pmdConsiderBoolPaths)
-        //        this.pmdCyclo += pmdBoolExprComplexity(sw.getSelector());
-        //}
+        // Find boundaries: stop descending into nested declarations and lambdas
+        // so their complexity is not folded into the enclosing method (mirrors
+        // PMD's JavaNode.isFindBoundary check for non-top nodes).
+        if (elem instanceof CtType)   return;
+        if (elem instanceof CtLambda) return;
 
+        if (elem instanceof CtAbstractSwitch<?> sw) {
+            if (pmdConsiderBoolPaths) this.pmdCyclo += pmdBoolExprComplexity(sw.getSelector());
+            for (CtCase<?> c : sw.getCases()) {
+                if (c.getCaseExpressions().isEmpty()) continue; // default label is not a decision point
+                if (pmdConsiderBoolPaths) {
+                    this.pmdCyclo += c.getCaseExpressions().size();
+                } else if (c.getCaseKind() == CaseKind.COLON && !c.getStatements().isEmpty()) {
+                    this.pmdCyclo++;
+                }
+            }
+        } else if (elem instanceof CtConditional<?> t) {
+            this.pmdCyclo++;
+            if (pmdConsiderBoolPaths) this.pmdCyclo += pmdBoolExprComplexity(t.getCondition());
+        } else if (elem instanceof CtIf i) {
+            this.pmdCyclo++;
+            if (pmdConsiderBoolPaths) this.pmdCyclo += pmdBoolExprComplexity(i.getCondition());
+        } else if (elem instanceof CtWhile w) {
+            this.pmdCyclo++;
+            if (pmdConsiderBoolPaths) this.pmdCyclo += pmdBoolExprComplexity(w.getLoopingExpression());
+        } else if (elem instanceof CtDo d) {
+            this.pmdCyclo++;
+            if (pmdConsiderBoolPaths) this.pmdCyclo += pmdBoolExprComplexity(d.getLoopingExpression());
+        } else if (elem instanceof CtFor f) {
+            this.pmdCyclo++;
+            if (pmdConsiderBoolPaths) this.pmdCyclo += pmdBoolExprComplexity(f.getExpression());
+        } else if (elem instanceof CtForEach) this.pmdCyclo++;
+        else if (elem instanceof CtCatch) this.pmdCyclo++;
+        else if (elem instanceof CtThrow) this.pmdCyclo++;
+        else if (elem instanceof CtAssert<?> a) {
+            if (pmdConsiderAssert) {
+                this.pmdCyclo += 2; // equivalent to `if (condition) { throw ... }`
+                if (pmdConsiderBoolPaths) this.pmdCyclo += pmdBoolExprComplexity(a.getAssertExpression());
+            }
+        }
+
+        for (CtElement child : elem.getDirectChildren())
+            this.pmdCycloComplexity(child);
     }
 
     /**
      * The PMD method to get the number of paths through the expression.
      * This is the total number of {@code &&} and {@code ||} operators appearing
-     * in the expression, and counts the ternary operators {@code ?:}.
+     * in the expression, and counts the ternary operators {@code ?:} (top level only).
      * This is used in the calculation of cyclomatic and n-path complexity.
      *
      * @see https://github.com/pmd/pmd/blob/main/pmd-java/src/main/java/net/sourceforge/pmd/lang/java/metrics/internal/CycloVisitor.java#L192
@@ -262,16 +307,30 @@ public class Analyzer {
     public int pmdBoolExprComplexity(CtElement elem) {
         if (elem == null) return 0;
 
-        int sum = 0;
-        if (elem instanceof CtConditional) sum += 2;
-        else if (elem instanceof CtBinaryOperator opElem) {
-            if (opElem.getKind() == BinaryOperatorKind.AND) sum += 1;
-            else if (opElem.getKind() == BinaryOperatorKind.OR)  sum += 1;
+        if (elem instanceof CtConditional<?> t) {
+            return 2
+                + pmdBoolExprComplexity(t.getCondition())
+                + pmdBoolExprComplexity(t.getThenExpression())
+                + pmdBoolExprComplexity(t.getElseExpression());
         }
- 
+
+        // Non-ternary: PMD counts short-circuit `&&`/`||` in descendants-or-self
+        // without re-entering the ternary path for nested ternaries.
+        // This misses any inner ternaries, i.e. `(y ? a : b) && z`, because
+        // it short-cuts instead of recursively calling `pmdBoolExprComplexity`.
+        return countShortCircuitOps(elem);
+    }
+
+    private int countShortCircuitOps(CtElement elem) {
+        if (elem == null) return 0;
+        int count = 0;
+        if (elem instanceof CtBinaryOperator<?> op) {
+            if (op.getKind() == BinaryOperatorKind.AND) count++;
+            else if (op.getKind() == BinaryOperatorKind.OR) count++;
+        }
         for (CtElement child : elem.getDirectChildren())
-            sum += this.pmdBoolExprComplexity(child);
-        return sum;
+            count += countShortCircuitOps(child);
+        return count;
     }
 
     public String conString(Ref<? extends Construct> c) {
