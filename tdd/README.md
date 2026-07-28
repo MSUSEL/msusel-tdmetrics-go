@@ -450,6 +450,46 @@ pipeline-level summary lands in
 `metrics_output/pipeline_run_<UTC>.json`. Failures don't stop the run
 unless you pass `--stop-on-error`.
 
+### run_abstractor_pipeline.py
+
+Batch driver that runs the Java abstractor against pinned Apache
+projects and drops one `abstractions/<project_key>.json` (and matching
+`.log` capturing stdout/stderr) per project. Same target-selection UX
+as `run_metrics_pipeline.py` (test set / `--all` / `--targets`).
+
+By default the abstractor jar is rebuilt once at the start via
+`mvn clean compile assembly:single` in `../javaAbstractor/`. Each
+target is then checked out at its pinned commit and the abstractor is
+invoked with `-i <repo>/ -o abstractions/<key>.json -v`. Existing
+`<key>.json` / `<key>.log` are overwritten every run. There is no
+per-project timeout; abstraction typically runs for up to ~2 minutes.
+
+Repos are expected to already be cloned under `~/go/src/github.com/`
+(run `collect_project_metrics.py` first if a repo is missing -- this
+script never clones).
+
+```bash
+# Default: run the curated 4-project test set.
+python3 run_abstractor_pipeline.py
+
+# All 31 pinned projects.
+python3 run_abstractor_pipeline.py --all
+
+# Explicit subset.
+python3 run_abstractor_pipeline.py --targets commons-io commons-bcel
+
+# Reuse the existing jar (skip the mvn build).
+python3 run_abstractor_pipeline.py --skip-build --targets commons-io
+
+# Stop on first failure instead of continuing through the list.
+python3 run_abstractor_pipeline.py --all --stop-on-error
+```
+
+Console prints one `starting <key>...` line and one
+`<key> successful (Ns)` / `<key> FAILED (exit N, Ns)` line per
+project, plus a final summary table. A pipeline-level summary is
+written to `abstractions/abstraction_run_<UTC>.json`.
+
 ### build_per_project.py
 
 Merges the TDD portion of `tdd_flat.json` with the per-class CK and PMD

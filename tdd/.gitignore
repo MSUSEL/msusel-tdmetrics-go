@@ -5,3 +5,5 @@ per_project/
 # The TDD database file is large so do not push it to repo.
 td_V2.db
 
+# The abstraction run logs
+*_run_*.json
