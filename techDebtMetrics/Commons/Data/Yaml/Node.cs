@@ -123,10 +123,16 @@ public class Node(YamlNode source) {
     /// <param name="key">The key to find the split point in.</param>
     /// <returns>The index in the key string of the first digit of the index part of the key.</returns>
     static private int keySplitPoint(string key) {
+        bool hasDigit = false;
         for (int i = key.Length - 1; i >= 0; --i) {
-            if (!char.IsDigit(key[i])) return i + 1;
+            if (!char.IsDigit(key[i])) {
+                if (!hasDigit)
+                    throw new Exception("Bad key, missing index: " + key);
+                return i + 1;
+            }
+            hasDigit = true;
         }
-        throw new Exception("Bad key: " + key);
+        throw new Exception("Bad key, missing kind: " + key);
     }
 
     /// <summary>Reads a single key from the given lookup.</summary>
