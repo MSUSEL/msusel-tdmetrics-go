@@ -1,0 +1,8 @@
+# cmd: java -jar /Users/grantnelson/go/src/github.com/MSUSEL/msusel-tdmetrics-go/javaAbstractor/target/abstractor-0.1-jar-with-dependencies.jar -i /Users/grantnelson/go/src/github.com/apache/batik/ -o /Users/grantnelson/go/src/github.com/MSUSEL/msusel-tdmetrics-go/tdd/abstractions/batik.json -v
+# cwd: /Users/grantnelson/go/src/github.com/MSUSEL/msusel-tdmetrics-go/tdd
+# repo: /Users/grantnelson/go/src/github.com/apache/batik @ 2bb3a6ea5a6258ff6372e2493b81d7768d6bb494
+# started: 2026-07-28T01:56:12.316251+00:00
+# timeout_min: 10
+# ---
+Input path must be an existing directory containing a pom.xml Maven file.
+Use -h for help with arguments.

@@ -1,0 +1,12 @@
+# cmd: java -jar /Users/grantnelson/go/src/github.com/MSUSEL/msusel-tdmetrics-go/javaAbstractor/target/abstractor-0.1-jar-with-dependencies.jar -i /Users/grantnelson/go/src/github.com/apache/commons-jxpath/ -o /Users/grantnelson/go/src/github.com/MSUSEL/msusel-tdmetrics-go/tdd/abstractions/commons-jxpath.json -v
+# cwd: /Users/grantnelson/go/src/github.com/MSUSEL/msusel-tdmetrics-go/tdd
+# repo: /Users/grantnelson/go/src/github.com/apache/commons-jxpath @ eff47ab8ca52fdbc91d1313cc224324465dd043e
+# started: 2026-07-28T00:54:04.085676+00:00
+# timeout_min: 10
+# ---
+Reading /Users/grantnelson/go/src/github.com/apache/commons-jxpath/
+SLF4J(W): No SLF4J providers were found.
+SLF4J(W): Defaulting to no-operation (NOP) logger implementation
+SLF4J(W): See https://www.slf4j.org/codes.html#noProviders for further details.
+
+# TIMED OUT after 10 minutes

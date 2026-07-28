@@ -1,0 +1,1011 @@
+# cmd: java -jar /Users/grantnelson/go/src/github.com/MSUSEL/msusel-tdmetrics-go/javaAbstractor/target/abstractor-0.1-jar-with-dependencies.jar -i /Users/grantnelson/go/src/github.com/apache/commons-codec/ -o /Users/grantnelson/go/src/github.com/MSUSEL/msusel-tdmetrics-go/tdd/abstractions/commons-codec.json -v
+# cwd: /Users/grantnelson/go/src/github.com/MSUSEL/msusel-tdmetrics-go/tdd
+# repo: /Users/grantnelson/go/src/github.com/apache/commons-codec @ db51a1cb41e9155ca028a73b0637b32a2c37c43a
+# started: 2026-07-28T00:53:00.237550+00:00
+# timeout_min: 10
+# ---
+Reading /Users/grantnelson/go/src/github.com/apache/commons-codec/
+SLF4J(W): No SLF4J providers were found.
+SLF4J(W): Defaulting to no-operation (NOP) logger implementation
+SLF4J(W): See https://www.slf4j.org/codes.html#noProviders for further details.
+Init pending package <unnamed>
+Init pending package org
+Init pending package org.apache
+Init pending package org.apache.commons
+Init pending package org.apache.commons.codec
+Init pending package org.apache.commons.codec.binary
+Init pending package org.apache.commons.codec.cli
+Init pending package org.apache.commons.codec.digest
+Init pending package org.apache.commons.codec.language
+Init pending package org.apache.commons.codec.language.bm
+Init pending package org.apache.commons.codec.net
+[34mStarting process pending packages...[0m
+  Pending package java.nio.charset
+  [34mskipping default constructor: org.apache.commons.codec.net.RFC1522Codec()[0m
+  Pending package java.util
+  Pending package java.io
+  [34mskipping default constructor: org.apache.commons.codec.net.Utils()[0m
+  Pending package org.apache.commons.codec
+  Pending package java.lang
+  Pending package java.lang
+  Pending package java.io
+  getting parent type for (CtClassImpl) PrintStreamOrWriter
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  Pending package java.lang.invoke
+  [34mUnused type args: [?][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [?][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  Pending package org.apache.commons.codec.binary
+  [34mskipping default constructor: org.apache.commons.codec.binary.StringUtils()[0m
+  Pending package java.nio
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [?][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [?][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [?][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [?][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mskipping default constructor: org.apache.commons.codec.Charsets()[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  getting parent type for (CtClassImpl) Context @ src/main/java/org/apache/commons/codec/binary/BaseNCodec.java:45:18
+  Pending package java.math
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mskipping default constructor: org.apache.commons.codec.CharEncoding()[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [?][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [?][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [?][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [?][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [?][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mskipping default constructor: org.apache.commons.codec.binary.CharSequenceUtils()[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mskipping default constructor: org.apache.commons.codec.digest.B64()[0m
+  [34mskipping default constructor: org.apache.commons.codec.digest.Crypt()[0m
+  Pending package java.security
+  Pending package javax.crypto
+  [34mskipping default constructor: org.apache.commons.codec.digest.Md5Crypt()[0m
+  Pending package java.util.regex
+  [34mskipping default constructor: org.apache.commons.codec.digest.Sha2Crypt()[0m
+  [34mskipping default constructor: org.apache.commons.codec.digest.UnixCrypt()[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  Pending package javax.crypto.spec
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  Pending package java.util.concurrent
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mskipping default constructor: org.apache.commons.codec.language.Caverphone2()[0m
+  [34mskipping default constructor: org.apache.commons.codec.language.Caverphone1()[0m
+  getting parent type for (CtClassImpl) CologneBuffer @ src/main/java/org/apache/commons/codec/language/ColognePhonetic.java:200:28
+  getting parent type for (CtClassImpl) CologneOutputBuffer @ src/main/java/org/apache/commons/codec/language/ColognePhonetic.java:228:19
+  getting parent type for (CtClassImpl) CologneInputBuffer @ src/main/java/org/apache/commons/codec/language/ColognePhonetic.java:247:19
+  [34mskipping default constructor: org.apache.commons.codec.language.ColognePhonetic()[0m
+  getting parent type for (CtClassImpl) Rule @ src/main/java/org/apache/commons/codec/language/DaitchMokotoffSoundex.java:162:32
+  getting parent type for (CtClassImpl) Branch @ src/main/java/org/apache/commons/codec/language/DaitchMokotoffSoundex.java:77:32
+  getting parent type for (CtClassImpl) DoubleMetaphoneResult @ src/main/java/org/apache/commons/codec/language/DoubleMetaphone.java:936:18
+  [34mskipping default constructor: org.apache.commons.codec.language.MatchRatingApproachEncoder()[0m
+  [34mskipping default constructor: org.apache.commons.codec.language.SoundexUtils()[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [java.lang.Character, java.lang.Character][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [org.apache.commons.codec.language.DaitchMokotoffSoundex$Rule @ src/main/java/org/apache/commons/codec/language/DaitchMokotoffSoundex.java:314:30][0m
+  [34mUnused type args: [java.lang.Character, java.util.List][0m
+  [34mUnused type args: [org.apache.commons.codec.language.DaitchMokotoffSoundex$Rule][0m
+  [34mUnused type args: [org.apache.commons.codec.language.DaitchMokotoffSoundex$Rule][0m
+  [34mUnused type args: [org.apache.commons.codec.language.DaitchMokotoffSoundex$Rule][0m
+  [34mUnused type args: [org.apache.commons.codec.language.DaitchMokotoffSoundex$Rule][0m
+  [34mUnused type args: [org.apache.commons.codec.language.DaitchMokotoffSoundex$Rule][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [org.apache.commons.codec.language.DaitchMokotoffSoundex$Rule][0m
+  [34mUnused type args: [java.lang.Character, java.util.List][0m
+  [34mUnused type args: [org.apache.commons.codec.language.DaitchMokotoffSoundex$Rule][0m
+  [34mUnused type args: [org.apache.commons.codec.language.DaitchMokotoffSoundex$Rule][0m
+  [34mUnused type args: [org.apache.commons.codec.language.DaitchMokotoffSoundex$Rule][0m
+  [34mUnused type args: [org.apache.commons.codec.language.DaitchMokotoffSoundex$Rule][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [java.lang.String][0m
+  [34mUnused type args: [java.lang.String][0m
+  [34mUnused type args: [java.lang.String][0m
+  [34mUnused type args: [java.lang.String][0m
+  [34mUnused type args: [java.lang.String][0m
+  [34mUnused type args: [java.lang.String][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mSkipping selection with no field declaration: (CtFieldReferenceImpl) class[0m
+  [34mSkipping selection with no field declaration: (CtFieldReferenceImpl) class[0m
+  [34mUnused type args: [?][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [java.lang.Character, java.lang.Character][0m
+  [34mUnused type args: [java.lang.Character, java.lang.Character][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [org.apache.commons.codec.language.DaitchMokotoffSoundex$Branch @ src/main/java/org/apache/commons/codec/language/DaitchMokotoffSoundex.java:490:19][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [org.apache.commons.codec.language.DaitchMokotoffSoundex$Branch][0m
+  [34mUnused type args: [org.apache.commons.codec.language.DaitchMokotoffSoundex$Branch][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [org.apache.commons.codec.language.DaitchMokotoffSoundex$Rule @ src/main/java/org/apache/commons/codec/language/DaitchMokotoffSoundex.java:503:24][0m
+  [34mUnused type args: [java.lang.Character, java.util.List][0m
+  [34mUnused type args: [org.apache.commons.codec.language.DaitchMokotoffSoundex$Rule][0m
+  [34mUnused type args: [org.apache.commons.codec.language.DaitchMokotoffSoundex$Rule][0m
+  [34mUnused type args: [org.apache.commons.codec.language.DaitchMokotoffSoundex$Rule][0m
+  [34mUnused type args: [org.apache.commons.codec.language.DaitchMokotoffSoundex$Branch @ src/main/java/org/apache/commons/codec/language/DaitchMokotoffSoundex.java:510:24][0m
+  [34mUnused type args: [org.apache.commons.codec.language.DaitchMokotoffSoundex$Branch][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [org.apache.commons.codec.language.DaitchMokotoffSoundex$Branch @ src/main/java/org/apache/commons/codec/language/DaitchMokotoffSoundex.java:510:73][0m
+  [34mUnused type args: [org.apache.commons.codec.language.DaitchMokotoffSoundex$Rule][0m
+  [34mUnused type args: [org.apache.commons.codec.language.DaitchMokotoffSoundex$Branch][0m
+  [34mUnused type args: [org.apache.commons.codec.language.DaitchMokotoffSoundex$Branch][0m
+  [34mUnused type args: [org.apache.commons.codec.language.DaitchMokotoffSoundex$Branch][0m
+  [34mUnused type args: [org.apache.commons.codec.language.DaitchMokotoffSoundex$Branch][0m
+  Pending package java.util
+  [34mUnused type args: [org.apache.commons.codec.language.DaitchMokotoffSoundex$Branch][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [org.apache.commons.codec.language.DaitchMokotoffSoundex$Branch][0m
+  [34mUnused type args: [org.apache.commons.codec.language.DaitchMokotoffSoundex$Branch][0m
+  [34mUnused type args: [org.apache.commons.codec.language.DaitchMokotoffSoundex$Branch][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  Pending package java.util.function
+  [34mUnused type args: [java.lang.Comparable @ src/main/java/org/apache/commons/codec/StringEncoderComparator.java:82:30][0m
+  [34mUnused type args: [? @ src/main/java/org/apache/commons/codec/StringEncoderComparator.java:82:41][0m
+  [34mUnused type args: [java.lang.Comparable @ src/main/java/org/apache/commons/codec/StringEncoderComparator.java:82:62][0m
+  [34mUnused type args: [? @ src/main/java/org/apache/commons/codec/StringEncoderComparator.java:82:73][0m
+  [34mUnused type args: [? @ src/main/java/org/apache/commons/codec/StringEncoderComparator.java:83:30][0m
+  [34mUnused type args: [? @ src/main/java/org/apache/commons/codec/StringEncoderComparator.java:83:50][0m
+  [34mUnused type args: [java.lang.Comparable][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mskipping default constructor: org.apache.commons.codec.binary.BinaryCodec()[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mSkipping selection with no field declaration: (CtFieldReferenceImpl) class[0m
+  [34mSkipping selection with no field declaration: (CtFieldReferenceImpl) class[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  getting parent type for (CtClassImpl) LanguageSet @ src/main/java/org/apache/commons/codec/language/bm/Languages.java:61:34
+  [34mskipping default constructor: org.apache.commons.codec.language.bm.Languages$LanguageSet()[0m
+  getting parent type for (CtClassImpl) SomeLanguages @ src/main/java/org/apache/commons/codec/language/bm/Languages.java:83:31
+  getting parent type for (CtClassImpl) LangRule @ src/main/java/org/apache/commons/codec/language/bm/Lang.java:80:32
+  getting parent type for (CtInterfaceImpl) RPattern @ src/main/java/org/apache/commons/codec/language/bm/Rule.java:192:22
+  getting parent type for (CtInterfaceImpl) PhonemeExpr @ src/main/java/org/apache/commons/codec/language/bm/Rule.java:172:22
+  getting parent type for (CtClassImpl) PhonemeList @ src/main/java/org/apache/commons/codec/language/bm/Rule.java:176:31
+  getting parent type for (CtClassImpl) Phoneme @ src/main/java/org/apache/commons/codec/language/bm/Rule.java:84:31
+  getting parent type for (CtClassImpl) PhonemeBuilder @ src/main/java/org/apache/commons/codec/language/bm/PhoneticEngine.java:61:24
+  getting parent type for (CtClassImpl) RulesApplication @ src/main/java/org/apache/commons/codec/language/bm/PhoneticEngine.java:170:32
+  [34mskipping default constructor: org.apache.commons.codec.language.bm.BeiderMorseEncoder()[0m
+  [34mskipping default constructor: org.apache.commons.codec.language.bm.ResourceConstants()[0m
+  [34mUnused type args: [java.lang.String][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [java.lang.String][0m
+  [34mUnused type args: [java.lang.String][0m
+  [34mUnused type args: [org.apache.commons.codec.language.bm.NameType, org.apache.commons.codec.language.bm.Lang][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [org.apache.commons.codec.language.bm.Rule$Phoneme][0m
+  [34mUnused type args: [org.apache.commons.codec.language.bm.Rule$Phoneme][0m
+  [34mUnused type args: [org.apache.commons.codec.language.bm.Rule$Phoneme][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [java.lang.String][0m
+  [34mUnused type args: [java.lang.String][0m
+  [34mUnused type args: [java.lang.String][0m
+  [34mUnused type args: [java.lang.String][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [java.lang.String][0m
+  [34mUnused type args: [java.lang.String][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [org.apache.commons.codec.language.bm.Rule$Phoneme][0m
+  [34mUnused type args: [org.apache.commons.codec.language.bm.Rule$Phoneme][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [org.apache.commons.codec.language.bm.Rule$Phoneme][0m
+  [34mUnused type args: [org.apache.commons.codec.language.bm.Rule$Phoneme][0m
+  [34mUnused type args: [java.lang.String @ src/main/java/org/apache/commons/codec/language/bm/Languages.java:171:19][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [java.lang.String][0m
+  [34mSkipping selection with no field declaration: (CtFieldReferenceImpl) class[0m
+  [34mSkipping selection with no field declaration: (CtFieldReferenceImpl) class[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [java.lang.String][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [java.lang.String][0m
+  [34mUnused type args: [java.lang.String][0m
+  [34mUnused type args: [java.lang.String][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [java.lang.String][0m
+  [34mUnused type args: [org.apache.commons.codec.language.bm.Rule$Phoneme][0m
+  [34mUnused type args: [org.apache.commons.codec.language.bm.Rule$Phoneme][0m
+  [34mSkipping selection with no field declaration: (CtFieldReferenceImpl) class[0m
+  [34mSkipping selection with no field declaration: (CtFieldReferenceImpl) class[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [org.apache.commons.codec.language.bm.Rule$Phoneme][0m
+  [34mUnused type args: [java.lang.String @ src/main/java/org/apache/commons/codec/language/bm/Rule.java:357:19, java.util.List @ src/main/java/org/apache/commons/codec/language/bm/Rule.java:357:27][0m
+  [34mUnused type args: [org.apache.commons.codec.language.bm.Rule @ src/main/java/org/apache/commons/codec/language/bm/Rule.java:357:32][0m
+  [34mUnused type args: [org.apache.commons.codec.language.bm.NameType, java.util.Map][0m
+  [34mUnused type args: [org.apache.commons.codec.language.bm.RuleType, java.util.Map][0m
+  [34mUnused type args: [java.lang.String, java.util.Map][0m
+  [34mUnused type args: [java.lang.String, java.util.List][0m
+  [34mUnused type args: [org.apache.commons.codec.language.bm.Rule][0m
+  [34mUnused type args: [org.apache.commons.codec.language.bm.RuleType, java.util.Map][0m
+  [34mUnused type args: [java.lang.String, java.util.Map][0m
+  [34mUnused type args: [java.lang.String, java.util.List][0m
+  [34mUnused type args: [org.apache.commons.codec.language.bm.Rule][0m
+  [34mUnused type args: [java.lang.String, java.util.Map][0m
+  [34mUnused type args: [java.lang.String, java.util.List][0m
+  [34mUnused type args: [org.apache.commons.codec.language.bm.Rule][0m
+  [34mUnused type args: [java.lang.String, java.util.List][0m
+  [34mUnused type args: [org.apache.commons.codec.language.bm.Rule][0m
+  [34mUnused type args: [java.lang.String, java.util.List][0m
+  [34mUnused type args: [org.apache.commons.codec.language.bm.Rule][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [java.lang.String, java.util.List][0m
+  [34mUnused type args: [org.apache.commons.codec.language.bm.Rule][0m
+  [34mUnused type args: [java.lang.String][0m
+  [34mUnused type args: [java.lang.String][0m
+  [34mUnused type args: [java.lang.String][0m
+  [34mUnused type args: [java.lang.String][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [org.apache.commons.codec.language.bm.Rule$Phoneme @ src/main/java/org/apache/commons/codec/language/bm/PhoneticEngine.java:107:23][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [org.apache.commons.codec.language.bm.Rule$Phoneme][0m
+  [34mUnused type args: [org.apache.commons.codec.language.bm.Rule$Phoneme][0m
+  [34mUnused type args: [org.apache.commons.codec.language.bm.Rule$Phoneme][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [org.apache.commons.codec.language.bm.Rule$Phoneme][0m
+  [34mUnused type args: [org.apache.commons.codec.language.bm.Rule$Phoneme][0m
+  [34mUnused type args: [org.apache.commons.codec.language.bm.Rule$Phoneme][0m
+  [34mUnused type args: [org.apache.commons.codec.language.bm.Rule$Phoneme][0m
+  [34mUnused type args: [org.apache.commons.codec.language.bm.Rule$Phoneme][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [org.apache.commons.codec.language.bm.Rule$Phoneme][0m
+  [34mUnused type args: [java.lang.String][0m
+  [34mUnused type args: [java.lang.String @ src/main/java/org/apache/commons/codec/language/bm/PhoneticEngine.java:399:19, java.util.List @ src/main/java/org/apache/commons/codec/language/bm/PhoneticEngine.java:399:27][0m
+  [34mUnused type args: [org.apache.commons.codec.language.bm.Rule @ src/main/java/org/apache/commons/codec/language/bm/PhoneticEngine.java:399:32][0m
+  [34mUnused type args: [java.lang.String, java.util.List][0m
+  [34mUnused type args: [org.apache.commons.codec.language.bm.Rule][0m
+  [34mUnused type args: [java.lang.String @ src/main/java/org/apache/commons/codec/language/bm/PhoneticEngine.java:401:19, java.util.List @ src/main/java/org/apache/commons/codec/language/bm/PhoneticEngine.java:401:27][0m
+  [34mUnused type args: [org.apache.commons.codec.language.bm.Rule @ src/main/java/org/apache/commons/codec/language/bm/PhoneticEngine.java:401:32][0m
+  [34mUnused type args: [java.lang.String, java.util.List][0m
+  [34mUnused type args: [org.apache.commons.codec.language.bm.Rule][0m
+  [34mUnused type args: [java.lang.String @ src/main/java/org/apache/commons/codec/language/bm/PhoneticEngine.java:403:19, java.util.List @ src/main/java/org/apache/commons/codec/language/bm/PhoneticEngine.java:403:27][0m
+  [34mUnused type args: [org.apache.commons.codec.language.bm.Rule @ src/main/java/org/apache/commons/codec/language/bm/PhoneticEngine.java:403:32][0m
+  [34mUnused type args: [java.lang.String, java.util.List][0m
+  [34mUnused type args: [org.apache.commons.codec.language.bm.Rule][0m
+  [34mUnused type args: [org.apache.commons.codec.language.bm.NameType, java.util.Set][0m
+  [34mUnused type args: [java.lang.String][0m
+  [34mUnused type args: [java.lang.String][0m
+  [34mUnused type args: [java.lang.String @ src/main/java/org/apache/commons/codec/language/bm/PhoneticEngine.java:426:20][0m
+  [34mUnused type args: [java.lang.String][0m
+  [34mUnused type args: [java.lang.String][0m
+  [34mUnused type args: [java.lang.String @ src/main/java/org/apache/commons/codec/language/bm/PhoneticEngine.java:427:20][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [java.lang.String][0m
+  [34mUnused type args: [java.lang.String][0m
+  [34mUnused type args: [java.lang.String][0m
+  [34mUnused type args: [java.lang.String][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [org.apache.commons.codec.language.bm.NameType, java.util.Set][0m
+  [34mUnused type args: [java.lang.String][0m
+  [34mUnused type args: [java.lang.String][0m
+  [34mUnused type args: [java.lang.String][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [java.lang.String][0m
+  [34mUnused type args: [java.lang.String][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [org.apache.commons.codec.language.bm.NameType, java.util.Set][0m
+  [34mUnused type args: [java.lang.String][0m
+  [34mUnused type args: [java.lang.String][0m
+  [34mUnused type args: [java.lang.String][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [java.lang.String][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [java.lang.String][0m
+  [34mUnused type args: [java.lang.String][0m
+  [34mUnused type args: [java.lang.String][0m
+  [34mUnused type args: [java.lang.String][0m
+  [34mUnused type args: [java.lang.String][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [java.lang.String][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [java.lang.String, java.util.List][0m
+  [34mUnused type args: [org.apache.commons.codec.language.bm.Rule][0m
+  [34mUnused type args: [java.lang.String, java.util.List][0m
+  [34mUnused type args: [org.apache.commons.codec.language.bm.Rule][0m
+  [34mUnused type args: [java.lang.String, java.util.List][0m
+  [34mUnused type args: [org.apache.commons.codec.language.bm.Rule][0m
+  [34mUnused type args: [java.lang.String, java.util.List][0m
+  [34mUnused type args: [org.apache.commons.codec.language.bm.Rule][0m
+  [34mUnused type args: [java.lang.String, java.util.List][0m
+  [34mUnused type args: [org.apache.commons.codec.language.bm.Rule][0m
+  [34mUnused type args: [java.lang.String, java.util.List][0m
+  [34mUnused type args: [org.apache.commons.codec.language.bm.Rule][0m
+  [34mUnused type args: [org.apache.commons.codec.language.bm.Rule @ src/main/java/org/apache/commons/codec/language/bm/PhoneticEngine.java:209:24][0m
+  [34mUnused type args: [java.lang.String, java.util.List][0m
+  [34mUnused type args: [org.apache.commons.codec.language.bm.Rule][0m
+  [34mUnused type args: [org.apache.commons.codec.language.bm.Rule][0m
+  [34mUnused type args: [org.apache.commons.codec.language.bm.Rule][0m
+  [34mUnused type args: [org.apache.commons.codec.language.bm.Rule][0m
+  [34mUnused type args: [java.lang.String @ src/main/java/org/apache/commons/codec/language/bm/Lang.java:214:19][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [java.lang.String][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [java.lang.String][0m
+  [34mUnused type args: [org.apache.commons.codec.language.bm.Lang$LangRule][0m
+  [34mUnused type args: [java.lang.String][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [java.lang.String][0m
+  [34mUnused type args: [java.lang.String][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [java.lang.String][0m
+  [34mUnused type args: [java.lang.String][0m
+  [34mUnused type args: [java.lang.String][0m
+  [34mUnused type args: [org.apache.commons.codec.language.bm.NameType, org.apache.commons.codec.language.bm.Languages][0m
+  [34mSkipping selection with no field declaration: (CtFieldReferenceImpl) class[0m
+  [34mSkipping selection with no field declaration: (CtFieldReferenceImpl) class[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [java.lang.String, java.util.List][0m
+  [34mUnused type args: [org.apache.commons.codec.language.bm.Rule][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [java.lang.String, java.util.List][0m
+  [34mUnused type args: [org.apache.commons.codec.language.bm.Rule][0m
+  [34mUnused type args: [java.lang.String, java.util.List][0m
+  [34mUnused type args: [org.apache.commons.codec.language.bm.Rule][0m
+  [34mUnused type args: [java.lang.String, java.util.List][0m
+  [34mUnused type args: [org.apache.commons.codec.language.bm.Rule][0m
+  [34mUnused type args: [java.lang.String @ src/main/java/org/apache/commons/codec/language/bm/Rule.java:302:19, java.util.List @ src/main/java/org/apache/commons/codec/language/bm/Rule.java:302:27][0m
+  [34mUnused type args: [org.apache.commons.codec.language.bm.Rule @ src/main/java/org/apache/commons/codec/language/bm/Rule.java:302:32][0m
+  [34mUnused type args: [java.lang.String, java.util.List][0m
+  [34mUnused type args: [org.apache.commons.codec.language.bm.Rule][0m
+  [34mUnused type args: [org.apache.commons.codec.language.bm.Rule @ src/main/java/org/apache/commons/codec/language/bm/Rule.java:303:20][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [org.apache.commons.codec.language.bm.Rule][0m
+  [34mUnused type args: [org.apache.commons.codec.language.bm.Rule @ src/main/java/org/apache/commons/codec/language/bm/Rule.java:304:25][0m
+  [34mUnused type args: [java.lang.String, java.util.List][0m
+  [34mUnused type args: [org.apache.commons.codec.language.bm.Rule][0m
+  [34mUnused type args: [java.util.List][0m
+  [34mUnused type args: [org.apache.commons.codec.language.bm.Rule][0m
+  [34mUnused type args: [org.apache.commons.codec.language.bm.Rule][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [org.apache.commons.codec.language.bm.Rule][0m
+  [34mUnused type args: [org.apache.commons.codec.language.bm.Rule][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [java.lang.String][0m
+  [34mUnused type args: [java.lang.String][0m
+  [34mUnused type args: [java.lang.String][0m
+  [34mUnused type args: [java.lang.String @ src/main/java/org/apache/commons/codec/language/bm/Languages.java:122:27][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [java.lang.String][0m
+  [34mUnused type args: [java.lang.String][0m
+  [34mUnused type args: [java.lang.String][0m
+  [34mUnused type args: [java.lang.String][0m
+  [34mUnused type args: [java.lang.String][0m
+  [34mUnused type args: [java.lang.String][0m
+  [34mUnused type args: [java.lang.String][0m
+  [34mUnused type args: [java.lang.String][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [java.lang.String, java.util.List][0m
+  [34mUnused type args: [org.apache.commons.codec.language.bm.Rule][0m
+  [34mUnused type args: [java.lang.String, java.util.List][0m
+  [34mUnused type args: [org.apache.commons.codec.language.bm.Rule][0m
+  [34mUnused type args: [java.lang.String, java.util.List][0m
+  [34mUnused type args: [org.apache.commons.codec.language.bm.Rule][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [org.apache.commons.codec.language.bm.Rule$Phoneme @ src/main/java/org/apache/commons/codec/language/bm/Rule.java:388:24][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [org.apache.commons.codec.language.bm.Rule$Phoneme][0m
+  [34mUnused type args: [org.apache.commons.codec.language.bm.Rule$Phoneme][0m
+  [34mUnused type args: [org.apache.commons.codec.language.bm.Rule$Phoneme][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [org.apache.commons.codec.language.bm.Rule$Phoneme][0m
+  [34mUnused type args: [org.apache.commons.codec.language.bm.Rule$Phoneme][0m
+  [34mIgnoring anonymous type: (CtTypeReferenceImpl) org.apache.commons.codec.language.bm.Rule$3[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring anonymous type: (CtTypeReferenceImpl) org.apache.commons.codec.language.bm.Rule$3[0m
+  [34mIgnoring anonymous object declaration: (CtClassImpl) 3 @ src/main/java/org/apache/commons/codec/language/bm/Rule.java:510:43[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring method of an anonymous declaring type: (CtMethodImpl) isMatch @ src/main/java/org/apache/commons/codec/language/bm/Rule.java:512:40 in (CtClassImpl) 3 @ src/main/java/org/apache/commons/codec/language/bm/Rule.java:510:43[0m
+  [34mIgnoring anonymous type: (CtTypeReferenceImpl) org.apache.commons.codec.language.bm.Rule$4[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring anonymous type: (CtTypeReferenceImpl) org.apache.commons.codec.language.bm.Rule$4[0m
+  [34mIgnoring anonymous object declaration: (CtClassImpl) 4 @ src/main/java/org/apache/commons/codec/language/bm/Rule.java:517:39[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring method of an anonymous declaring type: (CtMethodImpl) isMatch @ src/main/java/org/apache/commons/codec/language/bm/Rule.java:519:36 in (CtClassImpl) 4 @ src/main/java/org/apache/commons/codec/language/bm/Rule.java:517:39[0m
+  [34mIgnoring anonymous type: (CtTypeReferenceImpl) org.apache.commons.codec.language.bm.Rule$5[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring anonymous type: (CtTypeReferenceImpl) org.apache.commons.codec.language.bm.Rule$5[0m
+  [34mIgnoring anonymous object declaration: (CtClassImpl) 5 @ src/main/java/org/apache/commons/codec/language/bm/Rule.java:528:39[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring method of an anonymous declaring type: (CtMethodImpl) isMatch @ src/main/java/org/apache/commons/codec/language/bm/Rule.java:530:36 in (CtClassImpl) 5 @ src/main/java/org/apache/commons/codec/language/bm/Rule.java:528:39[0m
+  [34mIgnoring anonymous type: (CtTypeReferenceImpl) org.apache.commons.codec.language.bm.Rule$6[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring anonymous type: (CtTypeReferenceImpl) org.apache.commons.codec.language.bm.Rule$6[0m
+  [34mIgnoring anonymous object declaration: (CtClassImpl) 6 @ src/main/java/org/apache/commons/codec/language/bm/Rule.java:536:39[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring method of an anonymous declaring type: (CtMethodImpl) isMatch @ src/main/java/org/apache/commons/codec/language/bm/Rule.java:538:36 in (CtClassImpl) 6 @ src/main/java/org/apache/commons/codec/language/bm/Rule.java:536:39[0m
+  [34mIgnoring anonymous type: (CtTypeReferenceImpl) org.apache.commons.codec.language.bm.Rule$7[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring anonymous type: (CtTypeReferenceImpl) org.apache.commons.codec.language.bm.Rule$7[0m
+  [34mIgnoring anonymous object declaration: (CtClassImpl) 7 @ src/main/java/org/apache/commons/codec/language/bm/Rule.java:560:47[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring method of an anonymous declaring type: (CtMethodImpl) isMatch @ src/main/java/org/apache/commons/codec/language/bm/Rule.java:562:44 in (CtClassImpl) 7 @ src/main/java/org/apache/commons/codec/language/bm/Rule.java:560:47[0m
+  [34mIgnoring anonymous type: (CtTypeReferenceImpl) org.apache.commons.codec.language.bm.Rule$8[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring anonymous type: (CtTypeReferenceImpl) org.apache.commons.codec.language.bm.Rule$8[0m
+  [34mIgnoring anonymous object declaration: (CtClassImpl) 8 @ src/main/java/org/apache/commons/codec/language/bm/Rule.java:568:47[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring method of an anonymous declaring type: (CtMethodImpl) isMatch @ src/main/java/org/apache/commons/codec/language/bm/Rule.java:570:44 in (CtClassImpl) 8 @ src/main/java/org/apache/commons/codec/language/bm/Rule.java:568:47[0m
+  [34mIgnoring anonymous type: (CtTypeReferenceImpl) org.apache.commons.codec.language.bm.Rule$9[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring anonymous type: (CtTypeReferenceImpl) org.apache.commons.codec.language.bm.Rule$9[0m
+  [34mIgnoring anonymous object declaration: (CtClassImpl) 9 @ src/main/java/org/apache/commons/codec/language/bm/Rule.java:576:47[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring method of an anonymous declaring type: (CtMethodImpl) isMatch @ src/main/java/org/apache/commons/codec/language/bm/Rule.java:578:44 in (CtClassImpl) 9 @ src/main/java/org/apache/commons/codec/language/bm/Rule.java:576:47[0m
+  [34mIgnoring anonymous type: (CtTypeReferenceImpl) org.apache.commons.codec.language.bm.Rule$10[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring anonymous type: (CtTypeReferenceImpl) org.apache.commons.codec.language.bm.Rule$10[0m
+  [34mIgnoring anonymous object declaration: (CtClassImpl) 10 @ src/main/java/org/apache/commons/codec/language/bm/Rule.java:588:31[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring method of an anonymous declaring type: (CtMethodImpl) isMatch @ src/main/java/org/apache/commons/codec/language/bm/Rule.java:592:28 in (CtClassImpl) 10 @ src/main/java/org/apache/commons/codec/language/bm/Rule.java:588:31[0m
+  [34mIgnoring anonymous type: (CtTypeReferenceImpl) org.apache.commons.codec.language.bm.Rule$10[0m
+  [34mIgnoring anonymous object declaration: (CtClassImpl) 10 @ src/main/java/org/apache/commons/codec/language/bm/Rule.java:588:31[0m
+  [34mSkipping selection with no resolvable origin: (CtFieldImpl) pattern @ src/main/java/org/apache/commons/codec/language/bm/Rule.java:589:21[0m
+  [34mIgnoring anonymous type: (CtTypeReferenceImpl) org.apache.commons.codec.language.bm.Rule$10[0m
+  [34mIgnoring anonymous type: (CtTypeReferenceImpl) org.apache.commons.codec.language.bm.Rule$10[0m
+  [34mIgnoring anonymous type: (CtTypeReferenceImpl) org.apache.commons.codec.language.bm.Rule$10[0m
+  [34mIgnoring anonymous type: (CtTypeReferenceImpl) org.apache.commons.codec.language.bm.Rule$10[0m
+  [34mIgnoring anonymous object declaration: (CtClassImpl) 10 @ src/main/java/org/apache/commons/codec/language/bm/Rule.java:588:31[0m
+  [34mSkipping selection with no resolvable origin: (CtFieldImpl) pattern @ src/main/java/org/apache/commons/codec/language/bm/Rule.java:589:21[0m
+  [34mIgnoring anonymous type: (CtTypeReferenceImpl) org.apache.commons.codec.language.bm.Rule$10[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [java.lang.String @ src/main/java/org/apache/commons/codec/language/bm/Rule.java:403:19, java.util.List @ src/main/java/org/apache/commons/codec/language/bm/Rule.java:403:27][0m
+  [34mUnused type args: [org.apache.commons.codec.language.bm.Rule @ src/main/java/org/apache/commons/codec/language/bm/Rule.java:403:32][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [java.lang.String, java.util.List][0m
+  [34mUnused type args: [org.apache.commons.codec.language.bm.Rule][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [java.lang.String, java.util.List][0m
+  [34mUnused type args: [org.apache.commons.codec.language.bm.Rule][0m
+  [34mUnused type args: [?, ?][0m
+  [34mUnused type args: [java.lang.String, java.util.List][0m
+  [34mUnused type args: [org.apache.commons.codec.language.bm.Rule][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring anonymous type: (CtTypeReferenceImpl) org.apache.commons.codec.language.bm.Rule$2[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring anonymous type: (CtTypeReferenceImpl) org.apache.commons.codec.language.bm.Rule$2[0m
+  [34mIgnoring anonymous object declaration: (CtClassImpl) 2 @ src/main/java/org/apache/commons/codec/language/bm/Rule.java:456:74[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring method of an anonymous declaring type: (CtMethodImpl) toString @ src/main/java/org/apache/commons/codec/language/bm/Rule.java:461:47 in (CtClassImpl) 2 @ src/main/java/org/apache/commons/codec/language/bm/Rule.java:456:74[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring anonymous type: (CtTypeReferenceImpl) org.apache.commons.codec.language.bm.Rule$2[0m
+  [34mIgnoring anonymous object declaration: (CtClassImpl) 2 @ src/main/java/org/apache/commons/codec/language/bm/Rule.java:456:74[0m
+  [34mSkipping selection with no resolvable origin: (CtFieldImpl) myLine @ src/main/java/org/apache/commons/codec/language/bm/Rule.java:457:51[0m
+  [34mIgnoring anonymous type: (CtTypeReferenceImpl) org.apache.commons.codec.language.bm.Rule$2[0m
+  [34mIgnoring anonymous type: (CtTypeReferenceImpl) org.apache.commons.codec.language.bm.Rule$2[0m
+  [34mIgnoring anonymous type: (CtTypeReferenceImpl) org.apache.commons.codec.language.bm.Rule$2[0m
+  [34mIgnoring anonymous type: (CtTypeReferenceImpl) org.apache.commons.codec.language.bm.Rule$2[0m
+  [34mIgnoring anonymous object declaration: (CtClassImpl) 2 @ src/main/java/org/apache/commons/codec/language/bm/Rule.java:456:74[0m
+  [34mSkipping selection with no resolvable origin: (CtFieldImpl) myLine @ src/main/java/org/apache/commons/codec/language/bm/Rule.java:457:51[0m
+  [34mIgnoring anonymous type: (CtTypeReferenceImpl) org.apache.commons.codec.language.bm.Rule$2[0m
+  [34mIgnoring anonymous type: (CtTypeReferenceImpl) org.apache.commons.codec.language.bm.Rule$2[0m
+  [34mIgnoring anonymous object declaration: (CtClassImpl) 2 @ src/main/java/org/apache/commons/codec/language/bm/Rule.java:456:74[0m
+  [34mSkipping selection with no resolvable origin: (CtFieldImpl) loc @ src/main/java/org/apache/commons/codec/language/bm/Rule.java:458:54[0m
+  [34mIgnoring anonymous type: (CtTypeReferenceImpl) org.apache.commons.codec.language.bm.Rule$2[0m
+  [34mIgnoring anonymous type: (CtTypeReferenceImpl) org.apache.commons.codec.language.bm.Rule$2[0m
+  [34mIgnoring anonymous type: (CtTypeReferenceImpl) org.apache.commons.codec.language.bm.Rule$2[0m
+  [34mIgnoring anonymous type: (CtTypeReferenceImpl) org.apache.commons.codec.language.bm.Rule$2[0m
+  [34mIgnoring anonymous object declaration: (CtClassImpl) 2 @ src/main/java/org/apache/commons/codec/language/bm/Rule.java:456:74[0m
+  [34mSkipping selection with no resolvable origin: (CtFieldImpl) loc @ src/main/java/org/apache/commons/codec/language/bm/Rule.java:458:54[0m
+  [34mIgnoring anonymous type: (CtTypeReferenceImpl) org.apache.commons.codec.language.bm.Rule$2[0m
+  [34mUnused type args: [org.apache.commons.codec.language.bm.Rule @ src/main/java/org/apache/commons/codec/language/bm/Rule.java:474:34][0m
+  [34mUnused type args: [java.lang.String, java.util.List][0m
+  [34mUnused type args: [org.apache.commons.codec.language.bm.Rule][0m
+  [34mUnused type args: [org.apache.commons.codec.language.bm.Rule][0m
+  [34mUnused type args: [org.apache.commons.codec.language.bm.Rule][0m
+  [34mUnused type args: [org.apache.commons.codec.language.bm.Rule][0m
+  [34mUnused type args: [org.apache.commons.codec.language.bm.Rule][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [org.apache.commons.codec.language.bm.Rule][0m
+  [34mUnused type args: [java.lang.String, java.util.List][0m
+  [34mUnused type args: [org.apache.commons.codec.language.bm.Rule][0m
+  [34mUnused type args: [org.apache.commons.codec.language.bm.Rule][0m
+  [34mUnused type args: [org.apache.commons.codec.language.bm.Rule][0m
+  [34mUnused type args: [org.apache.commons.codec.language.bm.Rule][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [java.lang.String, java.util.List][0m
+  [34mUnused type args: [org.apache.commons.codec.language.bm.Rule][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [org.apache.commons.codec.language.bm.Rule$Phoneme][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [org.apache.commons.codec.language.bm.Lang$LangRule][0m
+  [34mUnused type args: [org.apache.commons.codec.language.bm.Lang$LangRule][0m
+  [34mUnused type args: [org.apache.commons.codec.language.bm.Lang$LangRule][0m
+  [34mUnused type args: [org.apache.commons.codec.language.bm.Lang$LangRule][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [org.apache.commons.codec.language.bm.Lang$LangRule][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [org.apache.commons.codec.language.bm.Rule$Phoneme][0m
+  [34mUnused type args: [org.apache.commons.codec.language.bm.Rule$Phoneme][0m
+  [34mUnused type args: [org.apache.commons.codec.language.bm.Rule$Phoneme][0m
+  [34mUnused type args: [org.apache.commons.codec.language.bm.Rule][0m
+  [34mUnused type args: [java.lang.String][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [java.lang.String][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [java.lang.String][0m
+  [34mUnused type args: [java.lang.String][0m
+  [34mUnused type args: [org.apache.commons.codec.language.bm.Rule$Phoneme][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [org.apache.commons.codec.language.bm.Lang$LangRule @ src/main/java/org/apache/commons/codec/language/bm/Lang.java:130:20][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [org.apache.commons.codec.language.bm.Lang$LangRule][0m
+  [34mSkipping selection with no field declaration: (CtFieldReferenceImpl) class[0m
+  [34mSkipping selection with no field declaration: (CtFieldReferenceImpl) class[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [org.apache.commons.codec.language.bm.Lang$LangRule][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [java.lang.String][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [java.lang.String][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [java.lang.String][0m
+  [34mUnused type args: [java.lang.String][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [org.apache.commons.codec.language.bm.Lang$LangRule][0m
+  [34mUnused type args: [org.apache.commons.codec.language.bm.Lang$LangRule][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [org.apache.commons.codec.language.bm.Rule$Phoneme][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [java.lang.String][0m
+  [34mUnused type args: [java.lang.String][0m
+  [34mUnused type args: [java.lang.String][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [java.lang.String @ src/main/java/org/apache/commons/codec/language/bm/PhoneticEngine.java:259:24][0m
+  [34mUnused type args: [java.lang.String][0m
+  [34mUnused type args: [java.lang.String][0m
+  [34mUnused type args: [java.lang.String][0m
+  [34mUnused type args: [java.lang.String][0m
+  [34mUnused type args: [java.lang.String][0m
+  [34mUnused type args: [java.lang.String][0m
+  [34mUnused type args: [java.lang.String @ src/main/java/org/apache/commons/codec/language/bm/Languages.java:140:27][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [java.lang.String][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [java.lang.String][0m
+  [34mUnused type args: [java.lang.String][0m
+  [34mUnused type args: [java.lang.String][0m
+  [34mUnused type args: [java.lang.String][0m
+  [34mUnused type args: [java.lang.String][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [java.lang.String @ src/main/java/org/apache/commons/codec/language/bm/Rule.java:375:23][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [java.lang.String][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [java.lang.String][0m
+  [34mUnused type args: [java.lang.String][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [java.lang.String][0m
+  [34mUnused type args: [java.lang.String][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [java.lang.String][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [java.lang.String][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [java.lang.String, java.util.List][0m
+  [34mUnused type args: [org.apache.commons.codec.language.bm.Rule][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [java.lang.String, java.util.List][0m
+  [34mUnused type args: [org.apache.commons.codec.language.bm.Rule][0m
+  [34mUnused type args: [org.apache.commons.codec.language.bm.Rule$Phoneme @ src/main/java/org/apache/commons/codec/language/bm/PhoneticEngine.java:338:19, org.apache.commons.codec.language.bm.Rule$Phoneme @ src/main/java/org/apache/commons/codec/language/bm/PhoneticEngine.java:338:33][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [org.apache.commons.codec.language.bm.Rule$Phoneme, org.apache.commons.codec.language.bm.Rule$Phoneme][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [org.apache.commons.codec.language.bm.Rule$Phoneme][0m
+  [34mUnused type args: [org.apache.commons.codec.language.bm.Rule$Phoneme][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [java.lang.String, java.util.List][0m
+  [34mUnused type args: [org.apache.commons.codec.language.bm.Rule][0m
+  [34mUnused type args: [java.lang.String, java.util.List][0m
+  [34mUnused type args: [org.apache.commons.codec.language.bm.Rule][0m
+  [34mUnused type args: [org.apache.commons.codec.language.bm.Rule$Phoneme][0m
+  [34mUnused type args: [org.apache.commons.codec.language.bm.Rule$Phoneme, org.apache.commons.codec.language.bm.Rule$Phoneme][0m
+  [34mUnused type args: [org.apache.commons.codec.language.bm.Rule$Phoneme, org.apache.commons.codec.language.bm.Rule$Phoneme][0m
+  [34mUnused type args: [org.apache.commons.codec.language.bm.Rule$Phoneme, org.apache.commons.codec.language.bm.Rule$Phoneme][0m
+  [34mUnused type args: [org.apache.commons.codec.language.bm.Rule$Phoneme, org.apache.commons.codec.language.bm.Rule$Phoneme][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [org.apache.commons.codec.language.bm.Rule$Phoneme][0m
+  [34mUnused type args: [org.apache.commons.codec.language.bm.Rule$Phoneme, org.apache.commons.codec.language.bm.Rule$Phoneme][0m
+  [34mUnused type args: [org.apache.commons.codec.language.bm.Rule$Phoneme][0m
+[34mFinished process pending packages (8.923643s)[0m
+[34mStarting short validation...[0m
+  [34mStarting performShortValidation...[0m
+  [34mFinished performShortValidation (0.007615s)[0m
+[34mFinished short validation (0.008703s)[0m
+[34mStarting consolidate constructs...[0m
+  Consolidating all constructs
+    Removed 1344 collisions
+    Removed 0 collisions
+[34mFinished consolidate constructs (0.080021s)[0m
+[34mStarting connect nests...[0m
+[34mFinished connect nests (0.002136s)[0m
+[34mStarting collect package declarations...[0m
+[34mFinished collect package declarations (0.439089s)[0m
+[34mStarting addImports from usage...[0m
+[34mFinished addImports from usage (0.006249s)[0m
+[34mStarting remove empty packages...[0m
+[34mFinished remove empty packages (0.001500s)[0m
+[34mStarting performValidation...[0m
+[34mFinished performValidation (3.455337s)[0m
+[34mFinished Abstraction (24.389227s)[0m
+Success

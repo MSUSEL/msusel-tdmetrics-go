@@ -1,0 +1,1994 @@
+# cmd: java -jar /Users/grantnelson/go/src/github.com/MSUSEL/msusel-tdmetrics-go/javaAbstractor/target/abstractor-0.1-jar-with-dependencies.jar -i /Users/grantnelson/go/src/github.com/apache/commons-collections/ -o /Users/grantnelson/go/src/github.com/MSUSEL/msusel-tdmetrics-go/tdd/abstractions/commons-collections.json -v
+# cwd: /Users/grantnelson/go/src/github.com/MSUSEL/msusel-tdmetrics-go/tdd
+# repo: /Users/grantnelson/go/src/github.com/apache/commons-collections @ f0f364fd9d946483f947011a3557c1e6f2e5d8ee
+# started: 2026-07-28T01:19:14.109467+00:00
+# timeout_min: 10
+# ---
+Reading /Users/grantnelson/go/src/github.com/apache/commons-collections/
+SLF4J(W): No SLF4J providers were found.
+SLF4J(W): Defaulting to no-operation (NOP) logger implementation
+SLF4J(W): See https://www.slf4j.org/codes.html#noProviders for further details.
+Init pending package <unnamed>
+Init pending package org
+Init pending package org.apache
+Init pending package org.apache.commons
+Init pending package org.apache.commons.collections4
+Init pending package org.apache.commons.collections4.bag
+Init pending package org.apache.commons.collections4.bidimap
+Init pending package org.apache.commons.collections4.collection
+Init pending package org.apache.commons.collections4.comparators
+Init pending package org.apache.commons.collections4.functors
+Init pending package org.apache.commons.collections4.iterators
+Init pending package org.apache.commons.collections4.keyvalue
+Init pending package org.apache.commons.collections4.list
+Init pending package org.apache.commons.collections4.map
+Init pending package org.apache.commons.collections4.multimap
+Init pending package org.apache.commons.collections4.multiset
+Init pending package org.apache.commons.collections4.queue
+Init pending package org.apache.commons.collections4.sequence
+Init pending package org.apache.commons.collections4.set
+Init pending package org.apache.commons.collections4.splitmap
+Init pending package org.apache.commons.collections4.trie
+Init pending package org.apache.commons.collections4.trie.analyzer
+[34mStarting process pending packages...[0m
+  Pending package org.apache.commons.collections4.trie
+  [34mskipping default constructor: org.apache.commons.collections4.trie.KeyAnalyzer()[0m
+  Pending package java.util.function
+  Pending package java.util
+  Pending package java.lang
+  [34mskipping default constructor: org.apache.commons.collections4.trie.KeyAnalyzer()[0m
+  [34mskipping default constructor: org.apache.commons.collections4.trie.analyzer.StringKeyAnalyzer()[0m
+  [34mUnused type args: [K @ src/main/java/org/apache/commons/collections4/trie/KeyAnalyzer.java:146:29][0m
+  Pending package java.lang
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  Pending package org.apache.commons.collections4
+  getting parent type for (CtClassImpl) Snake @ src/main/java/org/apache/commons/collections4/sequence/SequencesComparator.java:297:26
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [T][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [T @ src/main/java/org/apache/commons/collections4/sequence/ReplacementsFinder.java:66:43][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [T @ src/main/java/org/apache/commons/collections4/sequence/ReplacementsFinder.java:67:43][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T @ src/main/java/org/apache/commons/collections4/sequence/SequencesComparator.java:129:26][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [T @ src/main/java/org/apache/commons/collections4/sequence/SequencesComparator.java:129:53][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [org.apache.commons.collections4.sequence.EditCommand][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [org.apache.commons.collections4.sequence.EditCommand][0m
+  [34mUnused type args: [T][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [org.apache.commons.collections4.sequence.EditCommand @ src/main/java/org/apache/commons/collections4/sequence/EditScript.java:61:34][0m
+  [34mUnused type args: [T @ src/main/java/org/apache/commons/collections4/sequence/EditScript.java:61:46][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [org.apache.commons.collections4.sequence.EditCommand][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [T @ src/main/java/org/apache/commons/collections4/sequence/SequencesComparator.java:265:51][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [T @ src/main/java/org/apache/commons/collections4/sequence/SequencesComparator.java:270:57][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [T @ src/main/java/org/apache/commons/collections4/sequence/SequencesComparator.java:273:57][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [T @ src/main/java/org/apache/commons/collections4/sequence/SequencesComparator.java:285:47][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  Pending package org.apache.commons.collections4.functors
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T @ src/main/java/org/apache/commons/collections4/sequence/EditScript.java:106:32][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [org.apache.commons.collections4.sequence.EditCommand][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [org.apache.commons.collections4.sequence.EditCommand][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [org.apache.commons.collections4.sequence.EditCommand][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T @ src/main/java/org/apache/commons/collections4/functors/DefaultEquator.java:52:32][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  getting parent type for (CtInterfaceImpl) Entry
+  [34mUnused type args: [K, V][0m
+  [34mUnused type args: [K, V][0m
+  [34mUnused type args: [K, V][0m
+  [34mUnused type args: [K, V][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [?, ?][0m
+  [34mUnused type args: [?, ?][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [K][0m
+  [34mUnused type args: [K][0m
+  [34mUnused type args: [K][0m
+  [34mUnused type args: [K][0m
+  [34mUnused type args: [K][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [K, V][0m
+  [34mUnused type args: [K, V][0m
+  [34mUnused type args: [K, V][0m
+  [34mUnused type args: [K][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [K, V][0m
+  [34mUnused type args: [K, V][0m
+  [34mUnused type args: [K, V][0m
+  [34mUnused type args: [K, V][0m
+  [34mUnused type args: [K][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [K, V][0m
+  [34mUnused type args: [K, V][0m
+  [34mUnused type args: [K, V][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [K][0m
+  [34mUnused type args: [K][0m
+  [34mUnused type args: [K][0m
+  [34mUnused type args: [K][0m
+  [34mUnused type args: [K][0m
+  [34mUnused type args: [K, V][0m
+  [34mUnused type args: [? @ src/main/java/org/apache/commons/collections4/keyvalue/AbstractMapEntry.java:72:25, ? @ src/main/java/org/apache/commons/collections4/keyvalue/AbstractMapEntry.java:72:28][0m
+  [34mUnused type args: [? @ src/main/java/org/apache/commons/collections4/keyvalue/AbstractMapEntry.java:72:50, ? @ src/main/java/org/apache/commons/collections4/keyvalue/AbstractMapEntry.java:72:53][0m
+  [34mUnused type args: [K, V][0m
+  [34mUnused type args: [?, ?][0m
+  [34mUnused type args: [K, V][0m
+  [34mUnused type args: [?, ?][0m
+  [34mUnused type args: [K, V][0m
+  [34mUnused type args: [?, ?][0m
+  [34mUnused type args: [K, V][0m
+  [34mUnused type args: [?, ?][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [?, ?][0m
+  [34mUnused type args: [?, ?][0m
+  [34mUnused type args: [K, V][0m
+  [34mUnused type args: [K, V][0m
+  [34mUnused type args: [K, V][0m
+  [34mUnused type args: [K, V][0m
+  [34mUnused type args: [K, V][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [K, V][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [K, V][0m
+  [34mUnused type args: [K][0m
+  [34mUnused type args: [K, V][0m
+  [34mUnused type args: [? @ src/main/java/org/apache/commons/collections4/keyvalue/DefaultKeyValue.java:134:31, ? @ src/main/java/org/apache/commons/collections4/keyvalue/DefaultKeyValue.java:134:34][0m
+  [34mUnused type args: [? @ src/main/java/org/apache/commons/collections4/keyvalue/DefaultKeyValue.java:134:62, ? @ src/main/java/org/apache/commons/collections4/keyvalue/DefaultKeyValue.java:134:65][0m
+  [34mUnused type args: [K, V][0m
+  [34mUnused type args: [?, ?][0m
+  [34mUnused type args: [K, V][0m
+  [34mUnused type args: [?, ?][0m
+  [34mUnused type args: [K, V][0m
+  [34mUnused type args: [?, ?][0m
+  [34mUnused type args: [K, V][0m
+  [34mUnused type args: [?, ?][0m
+  [34mUnused type args: [K, V][0m
+  [34mUnused type args: [K, V][0m
+  [34mUnused type args: [K, V][0m
+  [34mUnused type args: [K, V][0m
+  [34mUnused type args: [K, V][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [K, V][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [K, V][0m
+  [34mUnused type args: [K, V][0m
+  [34mUnused type args: [K, V][0m
+  [34mUnused type args: [K, V][0m
+  [34mUnused type args: [K, V][0m
+  [34mUnused type args: [K, V][0m
+  [34mUnused type args: [K, V][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [?, ?][0m
+  [34mUnused type args: [?, ?][0m
+  [34mUnused type args: [K][0m
+  [34mUnused type args: [K, V][0m
+  [34mUnused type args: [K, V][0m
+  [34mUnused type args: [K, V][0m
+  [34mUnused type args: [K, V][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [K, V][0m
+  [34mUnused type args: [K, V][0m
+  [34mUnused type args: [K, V][0m
+  [34mUnused type args: [K, V][0m
+  [34mUnused type args: [K][0m
+  [34mUnused type args: [? @ src/main/java/org/apache/commons/collections4/keyvalue/MultiKey.java:225:28][0m
+  [34mUnused type args: [? @ src/main/java/org/apache/commons/collections4/keyvalue/MultiKey.java:225:54][0m
+  [34mUnused type args: [K][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [K @ src/main/java/org/apache/commons/collections4/keyvalue/DefaultKeyValue.java:112:36, V @ src/main/java/org/apache/commons/collections4/keyvalue/DefaultKeyValue.java:112:39][0m
+  [34mUnused type args: [?, ?][0m
+  [34mUnused type args: [K, V][0m
+  [34mUnused type args: [K][0m
+  [34mUnused type args: [K, V][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [K, V][0m
+  [34mUnused type args: [K, V][0m
+  [34mUnused type args: [K, V][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [K, V][0m
+  [34mUnused type args: [K, V][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [K, V][0m
+  [34mUnused type args: [K, V][0m
+  [34mUnused type args: [? @ src/main/java/org/apache/commons/collections4/keyvalue/TiedMapEntry.java:109:25, ? @ src/main/java/org/apache/commons/collections4/keyvalue/TiedMapEntry.java:109:27][0m
+  [34mUnused type args: [? @ src/main/java/org/apache/commons/collections4/keyvalue/TiedMapEntry.java:109:49, ? @ src/main/java/org/apache/commons/collections4/keyvalue/TiedMapEntry.java:109:51][0m
+  [34mUnused type args: [K, V][0m
+  [34mUnused type args: [K, V][0m
+  [34mUnused type args: [?, ?][0m
+  [34mUnused type args: [K, V][0m
+  [34mUnused type args: [?, ?][0m
+  [34mUnused type args: [?, ?][0m
+  [34mUnused type args: [?, ?][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [K, V][0m
+  [34mUnused type args: [K, V][0m
+  [34mUnused type args: [K, V][0m
+  [34mUnused type args: [K, V][0m
+  [34mUnused type args: [K, V][0m
+  [34mUnused type args: [K, V][0m
+  [34mUnused type args: [K, V][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [?, ?][0m
+  [34mUnused type args: [?, ?][0m
+  [34mUnused type args: [K, V][0m
+  [34mUnused type args: [K, V][0m
+  [34mUnused type args: [K, V][0m
+  [34mUnused type args: [K, V][0m
+  [34mUnused type args: [K, V][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [K, V][0m
+  [34mUnused type args: [K, V][0m
+  [34mUnused type args: [K, V][0m
+  [34mUnused type args: [K, V][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [?, ?][0m
+  [34mUnused type args: [?, ?][0m
+  [34mUnused type args: [K, V][0m
+  [34mUnused type args: [K, V][0m
+  [34mUnused type args: [K, V][0m
+  [34mUnused type args: [K, V][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [K, V][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [?, ?][0m
+  [34mUnused type args: [?, ?][0m
+  [34mskipping default constructor: org.apache.commons.collections4.functors.CatchAndRethrowClosure()[0m
+  getting parent type for (CtEnumImpl) Criterion @ src/main/java/org/apache/commons/collections4/functors/ComparatorPredicate.java:83:17
+  Pending package java.lang.invoke
+  Pending package java.lang.reflect
+  getting parent type for (CtClassImpl) PrototypeCloneFactory @ src/main/java/org/apache/commons/collections4/functors/PrototypeFactory.java:100:18
+  Pending package java.io
+  getting parent type for (CtClassImpl) PrototypeSerializationFactory @ src/main/java/org/apache/commons/collections4/functors/PrototypeFactory.java:155:18
+  [34mUnused type args: [T @ src/main/java/org/apache/commons/collections4/functors/FunctorUtils.java:70:27][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [E][0m
+  [34mUnused type args: [?][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [?, ?][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [?, ?][0m
+  [34mUnused type args: [?, ?][0m
+  [34mUnused type args: [T, T][0m
+  [34mUnused type args: [T, T][0m
+  [34mUnused type args: [?, ?][0m
+  [34mUnused type args: [?, ?][0m
+  [34mUnused type args: [?, ?][0m
+  [34mUnused type args: [?, ?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?, ?][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [?, ?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?, ?][0m
+  [34mUnused type args: [I @ src/main/java/org/apache/commons/collections4/functors/SwitchTransformer.java:99:41, O @ src/main/java/org/apache/commons/collections4/functors/SwitchTransformer.java:99:44][0m
+  [34mUnused type args: [I, O][0m
+  [34mUnused type args: [? @ src/main/java/org/apache/commons/collections4/functors/SwitchTransformer.java:102:27, ? @ src/main/java/org/apache/commons/collections4/functors/SwitchTransformer.java:102:38][0m
+  [34mUnused type args: [?, ?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?, ?][0m
+  [34mUnused type args: [?, ?][0m
+  [34mUnused type args: [?, ?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?, ?][0m
+  [34mUnused type args: [?, ?][0m
+  [34mUnused type args: [?, ?][0m
+  [34mUnused type args: [I @ src/main/java/org/apache/commons/collections4/functors/SwitchTransformer.java:105:91, O @ src/main/java/org/apache/commons/collections4/functors/SwitchTransformer.java:105:94][0m
+  [34mUnused type args: [I, O][0m
+  [34mUnused type args: [?, ?][0m
+  [34mUnused type args: [I @ src/main/java/org/apache/commons/collections4/functors/SwitchTransformer.java:105:33, O @ src/main/java/org/apache/commons/collections4/functors/SwitchTransformer.java:105:36][0m
+  [34mUnused type args: [? @ src/main/java/org/apache/commons/collections4/functors/SwitchTransformer.java:108:27, ? @ src/main/java/org/apache/commons/collections4/functors/SwitchTransformer.java:108:38][0m
+  [34mUnused type args: [? @ src/main/java/org/apache/commons/collections4/functors/SwitchTransformer.java:109:25][0m
+  [34mUnused type args: [? @ src/main/java/org/apache/commons/collections4/functors/SwitchTransformer.java:111:30, ? @ src/main/java/org/apache/commons/collections4/functors/SwitchTransformer.java:112:30][0m
+  [34mUnused type args: [? @ src/main/java/org/apache/commons/collections4/functors/SwitchTransformer.java:111:50][0m
+  [34mUnused type args: [? @ src/main/java/org/apache/commons/collections4/functors/SwitchTransformer.java:112:52, ? @ src/main/java/org/apache/commons/collections4/functors/SwitchTransformer.java:112:63][0m
+  [34mUnused type args: [?, ?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?, ?][0m
+  [34mUnused type args: [java.util.Map$Entry][0m
+  [34mUnused type args: [?, ?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?, ?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?, ?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?, ?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?, ?][0m
+  [34mUnused type args: [?, ?][0m
+  [34mUnused type args: [?, ?][0m
+  [34mUnused type args: [?, ?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?, ?][0m
+  [34mUnused type args: [?, ?][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [I @ src/main/java/org/apache/commons/collections4/functors/SwitchTransformer.java:117:38, O @ src/main/java/org/apache/commons/collections4/functors/SwitchTransformer.java:117:41][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?, ?][0m
+  [34mUnused type args: [?, ?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?, ?][0m
+  [34mUnused type args: [?, ?][0m
+  [34mUnused type args: [?][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [I, O][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [I, O][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [I, O][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [?][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [T][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [T @ src/main/java/org/apache/commons/collections4/functors/ComparatorPredicate.java:129:40][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [E][0m
+  [34mUnused type args: [?][0m
+  Pending package java.io
+  getting parent type for (CtClassImpl) PrintStreamOrWriter
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?, ?][0m
+  [34mUnused type args: [?, ?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?, ?][0m
+  [34mUnused type args: [?, ?][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?, ?][0m
+  [34mUnused type args: [?, ?][0m
+  [34mUnused type args: [I @ src/main/java/org/apache/commons/collections4/functors/SwitchTransformer.java:66:91, O @ src/main/java/org/apache/commons/collections4/functors/SwitchTransformer.java:66:94][0m
+  [34mUnused type args: [I, O][0m
+  [34mUnused type args: [?, ?][0m
+  [34mUnused type args: [I @ src/main/java/org/apache/commons/collections4/functors/SwitchTransformer.java:66:33, O @ src/main/java/org/apache/commons/collections4/functors/SwitchTransformer.java:66:36][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [I @ src/main/java/org/apache/commons/collections4/functors/SwitchTransformer.java:69:38, O @ src/main/java/org/apache/commons/collections4/functors/SwitchTransformer.java:69:41][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?, ?][0m
+  [34mUnused type args: [?, ?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?, ?][0m
+  [34mUnused type args: [?, ?][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [T][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [E @ src/main/java/org/apache/commons/collections4/functors/SwitchClosure.java:174:30][0m
+  [34mUnused type args: [E][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [E][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [T @ src/main/java/org/apache/commons/collections4/functors/NotPredicate.java:49:33][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [E][0m
+  [34mUnused type args: [E][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [E][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [E][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?, ?][0m
+  [34mUnused type args: [I @ src/main/java/org/apache/commons/collections4/functors/MapTransformer.java:51:41, O @ src/main/java/org/apache/commons/collections4/functors/MapTransformer.java:51:44][0m
+  [34mUnused type args: [I, O][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [I @ src/main/java/org/apache/commons/collections4/functors/MapTransformer.java:53:35, O @ src/main/java/org/apache/commons/collections4/functors/MapTransformer.java:53:38][0m
+  [34mUnused type args: [?, ?][0m
+  [34mUnused type args: [?, ?][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [E][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [E][0m
+  [34mUnused type args: [E][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [?][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [I, O][0m
+  [34mUnused type args: [?, ?][0m
+  [34mUnused type args: [E][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [E @ src/main/java/org/apache/commons/collections4/functors/ChainedClosure.java:50:32][0m
+  [34mUnused type args: [E][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [E @ src/main/java/org/apache/commons/collections4/functors/ChainedClosure.java:52:35][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [T @ src/main/java/org/apache/commons/collections4/functors/InstantiateTransformer.java:76:47][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [T @ src/main/java/org/apache/commons/collections4/functors/InstantiateTransformer.java:78:43][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [?, ?][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [?][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [I @ src/main/java/org/apache/commons/collections4/functors/InvokerTransformer.java:85:43, O @ src/main/java/org/apache/commons/collections4/functors/InvokerTransformer.java:85:46][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [I @ src/main/java/org/apache/commons/collections4/functors/InvokerTransformer.java:87:39, O @ src/main/java/org/apache/commons/collections4/functors/InvokerTransformer.java:87:42][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [E @ src/main/java/org/apache/commons/collections4/functors/SwitchClosure.java:66:71][0m
+  [34mUnused type args: [E][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [E @ src/main/java/org/apache/commons/collections4/functors/SwitchClosure.java:66:29][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [E @ src/main/java/org/apache/commons/collections4/functors/SwitchClosure.java:68:34][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [?, ?][0m
+  [34mUnused type args: [I @ src/main/java/org/apache/commons/collections4/functors/FunctorUtils.java:172:29, O @ src/main/java/org/apache/commons/collections4/functors/FunctorUtils.java:172:32][0m
+  [34mUnused type args: [?, ?][0m
+  [34mUnused type args: [?, ?][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?, ?][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?, ?][0m
+  [34mUnused type args: [T @ src/main/java/org/apache/commons/collections4/functors/ChainedTransformer.java:76:36][0m
+  [34mUnused type args: [T, T][0m
+  [34mUnused type args: [T @ src/main/java/org/apache/commons/collections4/functors/ChainedTransformer.java:79:27, T @ src/main/java/org/apache/commons/collections4/functors/ChainedTransformer.java:79:30][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?, ?][0m
+  [34mUnused type args: [org.apache.commons.collections4.Transformer][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?, ?][0m
+  [34mUnused type args: [?, ?][0m
+  [34mUnused type args: [T, T][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [T @ src/main/java/org/apache/commons/collections4/functors/ChainedTransformer.java:81:39][0m
+  [34mUnused type args: [?, ?][0m
+  [34mUnused type args: [T, T][0m
+  [34mUnused type args: [?][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [?][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [E][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [E][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [E][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [?, ?][0m
+  [34mUnused type args: [?, ?][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [I @ src/main/java/org/apache/commons/collections4/functors/IfTransformer.java:67:34, O @ src/main/java/org/apache/commons/collections4/functors/IfTransformer.java:67:37][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?, ?][0m
+  [34mUnused type args: [?, ?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?, ?][0m
+  [34mUnused type args: [?, ?][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [I, O][0m
+  [34mUnused type args: [?, ?][0m
+  [34mUnused type args: [?][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [?, ?][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [T @ src/main/java/org/apache/commons/collections4/functors/IfTransformer.java:93:34, T @ src/main/java/org/apache/commons/collections4/functors/IfTransformer.java:93:37][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?, ?][0m
+  [34mUnused type args: [?, ?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?, ?][0m
+  [34mUnused type args: [T @ src/main/java/org/apache/commons/collections4/functors/IfTransformer.java:93:84][0m
+  [34mUnused type args: [T, T][0m
+  [34mUnused type args: [E][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [? @ src/main/java/org/apache/commons/collections4/functors/InstantiateTransformer.java:118:31][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [T][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [E @ src/main/java/org/apache/commons/collections4/functors/IfClosure.java:57:27][0m
+  [34mUnused type args: [E][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [E @ src/main/java/org/apache/commons/collections4/functors/IfClosure.java:57:75][0m
+  [34mUnused type args: [E][0m
+  [34mUnused type args: [?, java.lang.Boolean][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [T @ src/main/java/org/apache/commons/collections4/functors/TransformerPredicate.java:51:41][0m
+  [34mUnused type args: [?, java.lang.Boolean][0m
+  [34mUnused type args: [?, java.lang.Boolean][0m
+  [34mUnused type args: [I, O][0m
+  [34mUnused type args: [I, O][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [I @ src/main/java/org/apache/commons/collections4/functors/ConstantTransformer.java:69:40, O @ src/main/java/org/apache/commons/collections4/functors/ConstantTransformer.java:69:43][0m
+  [34mUnused type args: [E][0m
+  [34mUnused type args: [E][0m
+  [34mUnused type args: [E][0m
+  [34mUnused type args: [?][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [T][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [?][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [E @ src/main/java/org/apache/commons/collections4/functors/IfClosure.java:79:30][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [I, O][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [I][0m
+  [34mUnused type args: [I][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?, ?][0m
+  [34mUnused type args: [I, O][0m
+  [34mUnused type args: [?, ?][0m
+  [34mUnused type args: [?, ?][0m
+  [34mUnused type args: [I, O][0m
+  [34mUnused type args: [I, O][0m
+  [34mUnused type args: [?, ?][0m
+  [34mUnused type args: [?, ?][0m
+  [34mUnused type args: [?, ?][0m
+  [34mUnused type args: [?, ?][0m
+  [34mUnused type args: [I, O][0m
+  [34mUnused type args: [?, ?][0m
+  [34mUnused type args: [?, ?][0m
+  [34mUnused type args: [?, ?][0m
+  [34mUnused type args: [I @ src/main/java/org/apache/commons/collections4/functors/SwitchTransformer.java:136:38, O @ src/main/java/org/apache/commons/collections4/functors/SwitchTransformer.java:136:41][0m
+  [34mUnused type args: [I, O][0m
+  [34mUnused type args: [?, ?][0m
+  [34mUnused type args: [? @ src/main/java/org/apache/commons/collections4/functors/SwitchTransformer.java:135:33, ? @ src/main/java/org/apache/commons/collections4/functors/SwitchTransformer.java:135:44][0m
+  [34mUnused type args: [E][0m
+  [34mUnused type args: [?, ?][0m
+  [34mUnused type args: [?][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [T @ src/main/java/org/apache/commons/collections4/functors/NullIsExceptionPredicate.java:50:45][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [I, O][0m
+  [34mUnused type args: [?, ?][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [?][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T @ src/main/java/org/apache/commons/collections4/functors/ConstantFactory.java:55:29][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [T @ src/main/java/org/apache/commons/collections4/functors/ConstantFactory.java:57:36][0m
+  [34mUnused type args: [T @ src/main/java/org/apache/commons/collections4/functors/FalsePredicate.java:47:27][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [E @ src/main/java/org/apache/commons/collections4/functors/ExceptionClosure.java:48:25][0m
+  [34mUnused type args: [?, ?][0m
+  [34mUnused type args: [E @ src/main/java/org/apache/commons/collections4/functors/TransformerClosure.java:50:32][0m
+  [34mUnused type args: [E][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [E @ src/main/java/org/apache/commons/collections4/functors/TransformerClosure.java:52:39][0m
+  [34mUnused type args: [?, ?][0m
+  [34mUnused type args: [?, ?][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [? @ src/main/java/org/apache/commons/collections4/functors/ChainedClosure.java:112:28][0m
+  [34mUnused type args: [E][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [T @ src/main/java/org/apache/commons/collections4/functors/AndPredicate.java:53:33][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [E][0m
+  [34mUnused type args: [?][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [? @ src/main/java/org/apache/commons/collections4/functors/OnePredicate.java:97:30][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [?][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [T @ src/main/java/org/apache/commons/collections4/functors/PredicateTransformer.java:51:41][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [T @ src/main/java/org/apache/commons/collections4/functors/NullIsTruePredicate.java:49:40][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [I, O][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?, ?][0m
+  [34mUnused type args: [I, O][0m
+  [34mUnused type args: [?, ?][0m
+  [34mUnused type args: [?, ?][0m
+  [34mUnused type args: [?, ?][0m
+  [34mUnused type args: [I, O][0m
+  [34mUnused type args: [?, ?][0m
+  [34mUnused type args: [?, ?][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [T @ src/main/java/org/apache/commons/collections4/functors/NonePredicate.java:53:35][0m
+  [34mUnused type args: [T][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [T @ src/main/java/org/apache/commons/collections4/functors/NonePredicate.java:55:34][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [I, O][0m
+  [34mUnused type args: [?, ?][0m
+  [34mUnused type args: [I, O][0m
+  [34mUnused type args: [?][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [I, O][0m
+  [34mUnused type args: [?, ?][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [?, ?][0m
+  [34mUnused type args: [?, ?][0m
+  [34mUnused type args: [?, ?][0m
+  [34mUnused type args: [?, ?][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [T @ src/main/java/org/apache/commons/collections4/functors/NullPredicate.java:47:27][0m
+  [34mUnused type args: [?][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [I @ src/main/java/org/apache/commons/collections4/functors/FactoryTransformer.java:51:39, O @ src/main/java/org/apache/commons/collections4/functors/FactoryTransformer.java:51:42][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [?][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [E @ src/main/java/org/apache/commons/collections4/functors/WhileClosure.java:61:33][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [E @ src/main/java/org/apache/commons/collections4/functors/ChainedClosure.java:124:30][0m
+  [34mUnused type args: [E][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [E][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [T @ src/main/java/org/apache/commons/collections4/functors/EqualPredicate.java:69:35][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [I, O][0m
+  [34mUnused type args: [? @ src/main/java/org/apache/commons/collections4/functors/ConstantTransformer.java:115:60, ? @ src/main/java/org/apache/commons/collections4/functors/ConstantTransformer.java:115:63][0m
+  [34mUnused type args: [I, O][0m
+  [34mUnused type args: [I, O][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [T @ src/main/java/org/apache/commons/collections4/functors/EqualPredicate.java:53:35][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [T @ src/main/java/org/apache/commons/collections4/functors/UniquePredicate.java:48:36][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [?][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [T @ src/main/java/org/apache/commons/collections4/functors/TruePredicate.java:47:27][0m
+  [34mUnused type args: [? @ src/main/java/org/apache/commons/collections4/functors/AllPredicate.java:80:25][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [T @ src/main/java/org/apache/commons/collections4/functors/AllPredicate.java:87:33][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [?, ?][0m
+  [34mUnused type args: [?][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [T @ src/main/java/org/apache/commons/collections4/functors/NullIsFalsePredicate.java:49:41][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [T @ src/main/java/org/apache/commons/collections4/functors/FunctorUtils.java:158:25][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [?][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [I @ src/main/java/org/apache/commons/collections4/functors/ExceptionTransformer.java:49:29, O @ src/main/java/org/apache/commons/collections4/functors/ExceptionTransformer.java:49:32][0m
+  [34mUnused type args: [I, O][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [I, O][0m
+  [34mUnused type args: [?, ?][0m
+  [34mUnused type args: [I, O][0m
+  [34mUnused type args: [?, ?][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?, ?][0m
+  [34mUnused type args: [?, ?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?, ?][0m
+  [34mUnused type args: [?, ?][0m
+  [34mUnused type args: [? @ src/main/java/org/apache/commons/collections4/functors/InvokerTransformer.java:132:25][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [I, O][0m
+  [34mUnused type args: [I, O][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [I, O][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [I, O][0m
+  [34mUnused type args: [?][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [I, O][0m
+  [34mUnused type args: [?][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [I, O][0m
+  [34mUnused type args: [?][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [I, O][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?, ?][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [?][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [T @ src/main/java/org/apache/commons/collections4/functors/TransformedPredicate.java:59:41][0m
+  [34mUnused type args: [?, ?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?, ?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [?][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [?, ?][0m
+  [34mUnused type args: [I, O][0m
+  [34mUnused type args: [?, ?][0m
+  [34mUnused type args: [?, ?][0m
+  [34mUnused type args: [E][0m
+  [34mUnused type args: [E][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [E][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [E][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [E][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [?, java.lang.Boolean][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [?, ?][0m
+  [34mUnused type args: [?, ?][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [?][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [I @ src/main/java/org/apache/commons/collections4/functors/SwitchTransformer.java:177:30][0m
+  [34mUnused type args: [I][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [I, O][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [? @ src/main/java/org/apache/commons/collections4/functors/ChainedTransformer.java:113:32, ? @ src/main/java/org/apache/commons/collections4/functors/ChainedTransformer.java:113:43][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [?, ?][0m
+  [34mUnused type args: [?, ?][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [T @ src/main/java/org/apache/commons/collections4/functors/ExceptionFactory.java:48:25][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [? @ src/main/java/org/apache/commons/collections4/functors/FunctorUtils.java:102:25][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [? @ src/main/java/org/apache/commons/collections4/functors/FunctorUtils.java:104:30][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [?][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [I, O][0m
+  [34mUnused type args: [?][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [? @ src/main/java/org/apache/commons/collections4/functors/AnyPredicate.java:77:25][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [T @ src/main/java/org/apache/commons/collections4/functors/AnyPredicate.java:79:36][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [T @ src/main/java/org/apache/commons/collections4/functors/AnyPredicate.java:82:31][0m
+  [34mUnused type args: [?][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [T @ src/main/java/org/apache/commons/collections4/functors/AnyPredicate.java:84:33][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [E][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [?][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [I, O][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [E][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [T][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [T @ src/main/java/org/apache/commons/collections4/functors/InstantiateFactory.java:71:43][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [T @ src/main/java/org/apache/commons/collections4/functors/InstantiateFactory.java:73:39][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [E @ src/main/java/org/apache/commons/collections4/functors/FunctorUtils.java:126:25][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [T @ src/main/java/org/apache/commons/collections4/functors/ChainedTransformer.java:126:30, T @ src/main/java/org/apache/commons/collections4/functors/ChainedTransformer.java:126:33][0m
+  [34mUnused type args: [T, T][0m
+  [34mUnused type args: [?, ?][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [?, ?][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [?][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [E @ src/main/java/org/apache/commons/collections4/functors/ChainedClosure.java:72:32][0m
+  [34mUnused type args: [E][0m
+  [34mUnused type args: [? @ src/main/java/org/apache/commons/collections4/functors/ChainedClosure.java:75:23][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [? @ src/main/java/org/apache/commons/collections4/functors/ChainedClosure.java:77:28][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [E @ src/main/java/org/apache/commons/collections4/functors/ChainedClosure.java:81:35][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [T][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [E][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [E][0m
+  [34mUnused type args: [E][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [E][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [E][0m
+  [34mUnused type args: [E][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [E][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [E @ src/main/java/org/apache/commons/collections4/functors/SwitchClosure.java:125:79][0m
+  [34mUnused type args: [E][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [? @ src/main/java/org/apache/commons/collections4/functors/SwitchClosure.java:125:29][0m
+  [34mUnused type args: [org.apache.commons.collections4.Predicate, org.apache.commons.collections4.Closure][0m
+  [34mUnused type args: [E][0m
+  [34mUnused type args: [E][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [? @ src/main/java/org/apache/commons/collections4/functors/SwitchClosure.java:95:23][0m
+  [34mUnused type args: [org.apache.commons.collections4.Predicate, org.apache.commons.collections4.Closure][0m
+  [34mUnused type args: [E][0m
+  [34mUnused type args: [E][0m
+  [34mUnused type args: [E][0m
+  [34mUnused type args: [org.apache.commons.collections4.Predicate, org.apache.commons.collections4.Closure][0m
+  [34mUnused type args: [E][0m
+  [34mUnused type args: [E][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [E @ src/main/java/org/apache/commons/collections4/functors/SwitchClosure.java:98:71][0m
+  [34mUnused type args: [E][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [E @ src/main/java/org/apache/commons/collections4/functors/SwitchClosure.java:98:29][0m
+  [34mUnused type args: [E @ src/main/java/org/apache/commons/collections4/functors/SwitchClosure.java:100:23][0m
+  [34mUnused type args: [E @ src/main/java/org/apache/commons/collections4/functors/SwitchClosure.java:101:25][0m
+  [34mUnused type args: [org.apache.commons.collections4.Predicate @ src/main/java/org/apache/commons/collections4/functors/SwitchClosure.java:103:30, org.apache.commons.collections4.Closure @ src/main/java/org/apache/commons/collections4/functors/SwitchClosure.java:103:44][0m
+  [34mUnused type args: [E @ src/main/java/org/apache/commons/collections4/functors/SwitchClosure.java:103:40][0m
+  [34mUnused type args: [E @ src/main/java/org/apache/commons/collections4/functors/SwitchClosure.java:103:52][0m
+  [34mUnused type args: [org.apache.commons.collections4.Predicate, org.apache.commons.collections4.Closure][0m
+  [34mUnused type args: [E][0m
+  [34mUnused type args: [E][0m
+  [34mUnused type args: [java.util.Map$Entry][0m
+  [34mUnused type args: [org.apache.commons.collections4.Predicate, org.apache.commons.collections4.Closure][0m
+  [34mUnused type args: [E][0m
+  [34mUnused type args: [E][0m
+  [34mUnused type args: [E][0m
+  [34mUnused type args: [E][0m
+  [34mUnused type args: [E][0m
+  [34mUnused type args: [org.apache.commons.collections4.Predicate, org.apache.commons.collections4.Closure][0m
+  [34mUnused type args: [E][0m
+  [34mUnused type args: [E][0m
+  [34mUnused type args: [E][0m
+  [34mUnused type args: [E][0m
+  [34mUnused type args: [E][0m
+  [34mUnused type args: [E][0m
+  [34mUnused type args: [org.apache.commons.collections4.Predicate, org.apache.commons.collections4.Closure][0m
+  [34mUnused type args: [E][0m
+  [34mUnused type args: [E][0m
+  [34mUnused type args: [E][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [E @ src/main/java/org/apache/commons/collections4/functors/SwitchClosure.java:108:34][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [E][0m
+  [34mUnused type args: [E][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [? @ src/main/java/org/apache/commons/collections4/functors/NonePredicate.java:95:30][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [E @ src/main/java/org/apache/commons/collections4/functors/ForClosure.java:53:32][0m
+  [34mUnused type args: [E][0m
+  [34mUnused type args: [E @ src/main/java/org/apache/commons/collections4/functors/ForClosure.java:56:29][0m
+  [34mUnused type args: [?][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [E @ src/main/java/org/apache/commons/collections4/functors/ForClosure.java:58:31][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [T @ src/main/java/org/apache/commons/collections4/functors/OrPredicate.java:53:32][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [I @ src/main/java/org/apache/commons/collections4/functors/FunctorUtils.java:204:29, O @ src/main/java/org/apache/commons/collections4/functors/FunctorUtils.java:204:32][0m
+  [34mUnused type args: [?, ?][0m
+  [34mUnused type args: [E][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [T @ src/main/java/org/apache/commons/collections4/functors/AbstractQuantifierPredicate.java:54:30][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [java.lang.Object, java.lang.String][0m
+  [34mUnused type args: [T @ src/main/java/org/apache/commons/collections4/functors/NOPTransformer.java:47:29, T @ src/main/java/org/apache/commons/collections4/functors/NOPTransformer.java:47:32][0m
+  [34mUnused type args: [I, O][0m
+  [34mUnused type args: [I, O][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [? @ src/main/java/org/apache/commons/collections4/functors/NonePredicate.java:70:25][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [T @ src/main/java/org/apache/commons/collections4/functors/NonePredicate.java:72:35][0m
+  [34mUnused type args: [T][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [T @ src/main/java/org/apache/commons/collections4/functors/NonePredicate.java:74:34][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [?, ?][0m
+  [34mUnused type args: [E][0m
+  [34mUnused type args: [?, ?][0m
+  [34mUnused type args: [?, ?][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [?, java.lang.Boolean][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [?, java.lang.Boolean][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [?, java.lang.Boolean][0m
+  [34mUnused type args: [?, java.lang.Boolean][0m
+  [34mUnused type args: [I, O][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [I @ src/main/java/org/apache/commons/collections4/functors/SwitchTransformer.java:187:30, O @ src/main/java/org/apache/commons/collections4/functors/SwitchTransformer.java:187:33][0m
+  [34mUnused type args: [I, O][0m
+  [34mUnused type args: [?, ?][0m
+  [34mUnused type args: [I, O][0m
+  [34mUnused type args: [?, ?][0m
+  [34mUnused type args: [? @ src/main/java/org/apache/commons/collections4/functors/OnePredicate.java:73:25][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [T @ src/main/java/org/apache/commons/collections4/functors/OnePredicate.java:74:33][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [T @ src/main/java/org/apache/commons/collections4/functors/ClosureTransformer.java:51:39][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [? @ src/main/java/org/apache/commons/collections4/functors/AllPredicate.java:108:30][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [E][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [E][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [T @ src/main/java/org/apache/commons/collections4/functors/ExceptionPredicate.java:48:27][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [? @ src/main/java/org/apache/commons/collections4/functors/AnyPredicate.java:105:30][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [T][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [T @ src/main/java/org/apache/commons/collections4/functors/NotNullPredicate.java:47:27][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [T @ src/main/java/org/apache/commons/collections4/functors/OnePredicate.java:55:36][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [T @ src/main/java/org/apache/commons/collections4/functors/OnePredicate.java:58:31][0m
+  [34mUnused type args: [?][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [T @ src/main/java/org/apache/commons/collections4/functors/OnePredicate.java:60:33][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [I, O][0m
+  [34mUnused type args: [I, O][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [I, O][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?, ?][0m
+  [34mUnused type args: [I, O][0m
+  [34mUnused type args: [?, ?][0m
+  [34mUnused type args: [I, O][0m
+  [34mUnused type args: [?, ?][0m
+  [34mUnused type args: [T @ src/main/java/org/apache/commons/collections4/functors/PrototypeFactory.java:66:37][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [T @ src/main/java/org/apache/commons/collections4/functors/PrototypeFactory.java:70:46][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [? @ src/main/java/org/apache/commons/collections4/functors/PrototypeFactory.java:74:63][0m
+  [34mUnused type args: [?][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [T @ src/main/java/org/apache/commons/collections4/functors/PrototypeFactory.java:75:47][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [T @ src/main/java/org/apache/commons/collections4/functors/PrototypeFactory.java:76:28][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [? @ src/main/java/org/apache/commons/collections4/functors/PrototypeFactory.java:77:31][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [T @ src/main/java/org/apache/commons/collections4/functors/PrototypeFactory.java:81:37][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [java.io.Serializable @ src/main/java/org/apache/commons/collections4/functors/PrototypeFactory.java:81:75][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [E @ src/main/java/org/apache/commons/collections4/functors/SwitchClosure.java:164:30][0m
+  [34mUnused type args: [E][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [E][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [T @ src/main/java/org/apache/commons/collections4/functors/AnyPredicate.java:55:36][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [T @ src/main/java/org/apache/commons/collections4/functors/AnyPredicate.java:58:31][0m
+  [34mUnused type args: [?][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [T @ src/main/java/org/apache/commons/collections4/functors/AnyPredicate.java:60:33][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [I, O][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [I, O][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [I, O][0m
+  [34mUnused type args: [I @ src/main/java/org/apache/commons/collections4/functors/ConstantTransformer.java:54:29, O @ src/main/java/org/apache/commons/collections4/functors/ConstantTransformer.java:54:32][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [E][0m
+  [34mUnused type args: [E][0m
+  [34mUnused type args: [T @ src/main/java/org/apache/commons/collections4/functors/StringValueTransformer.java:47:29, java.lang.String @ src/main/java/org/apache/commons/collections4/functors/StringValueTransformer.java:47:32][0m
+  [34mUnused type args: [java.lang.Object, java.lang.String][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [E][0m
+  [34mUnused type args: [?, ?][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [E][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [E][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [E][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [?, ?][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [?, ?][0m
+  [34mUnused type args: [?, ?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [E][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [E][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [E][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [E @ src/main/java/org/apache/commons/collections4/functors/NOPClosure.java:47:25][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [T @ src/main/java/org/apache/commons/collections4/functors/AllPredicate.java:64:33][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [?][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [I, O][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [I, O][0m
+  [34mUnused type args: [?, ?][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [I @ src/main/java/org/apache/commons/collections4/functors/InvokerTransformer.java:59:39, O @ src/main/java/org/apache/commons/collections4/functors/InvokerTransformer.java:59:42][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [T @ src/main/java/org/apache/commons/collections4/functors/IdentityPredicate.java:47:35][0m
+  [34mUnused type args: [T][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [T @ src/main/java/org/apache/commons/collections4/functors/IdentityPredicate.java:49:38][0m
+  [34mUnused type args: [?, ?][0m
+  [34mUnused type args: [?, ?][0m
+  [34mUnused type args: [?, ?][0m
+  [34mUnused type args: [?, ?][0m
+  [34mUnused type args: [T @ src/main/java/org/apache/commons/collections4/functors/ChainedTransformer.java:53:36][0m
+  [34mUnused type args: [T, T][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [T @ src/main/java/org/apache/commons/collections4/functors/ChainedTransformer.java:55:39][0m
+  [34mUnused type args: [?, ?][0m
+  [34mUnused type args: [?, ?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [T @ src/main/java/org/apache/commons/collections4/functors/FunctorUtils.java:53:27][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [E][0m
+  [34mUnused type args: [?][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [T][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [T][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  getting parent type for (CtClassImpl) HashEntry @ src/main/java/org/apache/commons/collections4/map/AbstractHashedMap.java:1072:28
+  getting parent type for (CtClassImpl) EntrySet @ src/main/java/org/apache/commons/collections4/map/AbstractHashedMap.java:837:28
+  Pending package java.util.stream
+  Pending package java.util
+[34mFinished process pending packages (4.099386s)[0m
+Exception in thread "main" abstractor.core.AbstractorException: Expected the object reference is resolved for {
+  context: "object decl (CtClassImpl) AbstractHashedMap @ src/main/java/org/apache/commons/collections4/map/AbstractHashedMap.java:58:14",
+  index: -1,
+  kind: object,
+  ref: true,
+}
+	at abstractor.core.constructs.Ref.mustGetResolved(Ref.java:38)
+	at abstractor.core.Abstractor.lambda$addMethodDeclForConstructor$18(Abstractor.java:682)
+	at abstractor.core.constructs.Factory.lambda$create$0(Factory.java:137)
+	at abstractor.core.constructs.Factory.create(Factory.java:109)
+	at abstractor.core.constructs.Factory.create(Factory.java:137)
+	at abstractor.core.Abstractor.addMethodDeclForConstructor(Abstractor.java:679)
+	at abstractor.core.Abstractor.addMethodInstForObjectInst(Abstractor.java:393)
+	at abstractor.core.Abstractor.lambda$addObjectInst$35(Abstractor.java:1089)
+	at abstractor.core.constructs.Factory.create(Factory.java:127)
+	at abstractor.core.Abstractor.addObjectInst(Abstractor.java:1068)
+	at abstractor.core.Abstractor.addTypeDesc(Abstractor.java:1213)
+	at abstractor.core.Abstractor.lambda$addArgument$22(Abstractor.java:739)
+	at abstractor.core.constructs.Factory.lambda$create$1(Factory.java:145)
+	at abstractor.core.constructs.Factory.create(Factory.java:109)
+	at abstractor.core.constructs.Factory.create(Factory.java:145)
+	at abstractor.core.Abstractor.addArgument(Abstractor.java:736)
+	at abstractor.core.Abstractor.lambda$addSignature$17(Abstractor.java:654)
+	at abstractor.core.constructs.Factory.lambda$create$1(Factory.java:145)
+	at abstractor.core.constructs.Factory.create(Factory.java:109)
+	at abstractor.core.constructs.Factory.create(Factory.java:145)
+	at abstractor.core.Abstractor.addSignature(Abstractor.java:643)
+	at abstractor.core.Abstractor.lambda$addAbstract$16(Abstractor.java:621)
+	at abstractor.core.constructs.Factory.lambda$create$1(Factory.java:145)
+	at abstractor.core.constructs.Factory.create(Factory.java:109)
+	at abstractor.core.constructs.Factory.create(Factory.java:145)
+	at abstractor.core.Abstractor.addAbstract(Abstractor.java:617)
+	at abstractor.core.Abstractor.synthesizeObjectInterface(Abstractor.java:1028)
+	at abstractor.core.Abstractor.lambda$addObjectInst$34(Abstractor.java:1072)
+	at abstractor.core.constructs.Factory.create(Factory.java:109)
+	at abstractor.core.Abstractor.addObjectInst(Abstractor.java:1068)
+	at abstractor.core.Abstractor.addTypeDesc(Abstractor.java:1213)
+	at abstractor.core.Abstractor.lambda$addField$24(Abstractor.java:789)
+	at abstractor.core.constructs.Factory.lambda$create$0(Factory.java:137)
+	at abstractor.core.constructs.Factory.create(Factory.java:109)
+	at abstractor.core.constructs.Factory.create(Factory.java:137)
+	at abstractor.core.Abstractor.addField(Abstractor.java:785)
+	at abstractor.core.Abstractor.addField(Abstractor.java:780)
+	at abstractor.core.Abstractor.lambda$addStructDesc$23(Abstractor.java:757)
+	at abstractor.core.constructs.Factory.create(Factory.java:109)
+	at abstractor.core.constructs.Factory.create(Factory.java:141)
+	at abstractor.core.Abstractor.addStructDesc(Abstractor.java:746)
+	at abstractor.core.Abstractor.lambda$addObjectDecl$32(Abstractor.java:975)
+	at abstractor.core.constructs.Factory.lambda$create$0(Factory.java:137)
+	at abstractor.core.constructs.Factory.create(Factory.java:109)
+	at abstractor.core.constructs.Factory.create(Factory.java:137)
+	at abstractor.core.Abstractor.addObjectDecl(Abstractor.java:969)
+	at abstractor.core.Abstractor.addObjectInst(Abstractor.java:1053)
+	at abstractor.core.Abstractor.addTypeDesc(Abstractor.java:1213)
+	at abstractor.core.Abstractor.lambda$addField$24(Abstractor.java:789)
+	at abstractor.core.constructs.Factory.lambda$create$0(Factory.java:137)
+	at abstractor.core.constructs.Factory.create(Factory.java:109)
+	at abstractor.core.constructs.Factory.create(Factory.java:137)
+	at abstractor.core.Abstractor.addField(Abstractor.java:785)
+	at abstractor.core.Abstractor.addField(Abstractor.java:780)
+	at abstractor.core.Abstractor.lambda$addStructDesc$23(Abstractor.java:757)
+	at abstractor.core.constructs.Factory.create(Factory.java:109)
+	at abstractor.core.constructs.Factory.create(Factory.java:141)
+	at abstractor.core.Abstractor.addStructDesc(Abstractor.java:746)
+	at abstractor.core.Abstractor.lambda$addObjectInst$34(Abstractor.java:1071)
+	at abstractor.core.constructs.Factory.create(Factory.java:109)
+	at abstractor.core.Abstractor.addObjectInst(Abstractor.java:1068)
+	at abstractor.core.Abstractor.addTypeDesc(Abstractor.java:1213)
+	at abstractor.core.Abstractor.lambda$addField$24(Abstractor.java:789)
+	at abstractor.core.constructs.Factory.lambda$create$0(Factory.java:137)
+	at abstractor.core.constructs.Factory.create(Factory.java:109)
+	at abstractor.core.constructs.Factory.create(Factory.java:137)
+	at abstractor.core.Abstractor.addField(Abstractor.java:785)
+	at abstractor.core.Abstractor.addField(Abstractor.java:780)
+	at abstractor.core.Abstractor.lambda$addStructDesc$23(Abstractor.java:757)
+	at abstractor.core.constructs.Factory.create(Factory.java:109)
+	at abstractor.core.constructs.Factory.create(Factory.java:141)
+	at abstractor.core.Abstractor.addStructDesc(Abstractor.java:746)
+	at abstractor.core.Abstractor.lambda$addObjectDecl$32(Abstractor.java:975)
+	at abstractor.core.constructs.Factory.lambda$create$0(Factory.java:137)
+	at abstractor.core.constructs.Factory.create(Factory.java:109)
+	at abstractor.core.constructs.Factory.create(Factory.java:137)
+	at abstractor.core.Abstractor.addObjectDecl(Abstractor.java:969)
+	at abstractor.core.Abstractor.addObjectInst(Abstractor.java:1053)
+	at abstractor.core.Abstractor.addTypeDesc(Abstractor.java:1213)
+	at abstractor.core.Abstractor.lambda$addField$24(Abstractor.java:789)
+	at abstractor.core.constructs.Factory.lambda$create$0(Factory.java:137)
+	at abstractor.core.constructs.Factory.create(Factory.java:109)
+	at abstractor.core.constructs.Factory.create(Factory.java:137)
+	at abstractor.core.Abstractor.addField(Abstractor.java:785)
+	at abstractor.core.Abstractor.addField(Abstractor.java:780)
+	at abstractor.core.Abstractor.lambda$addStructDesc$23(Abstractor.java:757)
+	at abstractor.core.constructs.Factory.create(Factory.java:109)
+	at abstractor.core.constructs.Factory.create(Factory.java:141)
+	at abstractor.core.Abstractor.addStructDesc(Abstractor.java:746)
+	at abstractor.core.Abstractor.lambda$addObjectDecl$32(Abstractor.java:975)
+	at abstractor.core.constructs.Factory.lambda$create$0(Factory.java:137)
+	at abstractor.core.constructs.Factory.create(Factory.java:109)
+	at abstractor.core.constructs.Factory.create(Factory.java:137)
+	at abstractor.core.Abstractor.addObjectDecl(Abstractor.java:969)
+	at abstractor.core.Abstractor.addDeclaration(Abstractor.java:175)
+	at abstractor.core.Abstractor.lambda$processPackage$48(Abstractor.java:1332)
+	at abstractor.core.constructs.Factory.create(Factory.java:127)
+	at abstractor.core.constructs.Factory.create(Factory.java:137)
+	at abstractor.core.Abstractor.processPackage(Abstractor.java:1323)
+	at abstractor.core.Abstractor.processPendingPackages(Abstractor.java:1317)
+	at abstractor.core.Abstractor.lambda$performAbstraction$40(Abstractor.java:1304)
+	at abstractor.core.log.Logger.measure(Logger.java:123)
+	at abstractor.core.Abstractor.performAbstraction(Abstractor.java:1304)
+	at abstractor.app.App.run(App.java:26)
+	at abstractor.app.App.main(App.java:17)

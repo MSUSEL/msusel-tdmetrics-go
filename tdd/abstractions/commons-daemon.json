@@ -1,0 +1,1975 @@
+{
+  "abstracts": [
+    { "name": "$get", "signature": 70 },
+    { "name": "$get", "signature": 71 },
+    { "name": "$get", "signature": 72 },
+    { "name": "$get", "signature": 73 },
+    { "name": "$get", "signature": 74 },
+    { "name": "$get", "signature": 75 },
+    { "name": "$len", "signature": 3 },
+    { "name": "$set", "signature": 76 },
+    { "name": "$set", "signature": 77 },
+    { "name": "$set", "signature": 78 },
+    { "name": "$set", "signature": 79 },
+    { "name": "$set", "signature": 80 },
+    { "name": "$set", "signature": 81 },
+    { "name": "addArguments", "signature": 62 },
+    { "name": "addSuppressed", "signature": 58 },
+    { "name": "checkGuard", "signature": 44 },
+    { "name": "createControlActions", "signature": 82 },
+    { "name": "createControlMask", "signature": 22 },
+    { "name": "destroy", "signature": 1 },
+    { "name": "equals", "signature": 90 },
+    { "name": "expandProperty", "signature": 92 },
+    { "name": "fail", "signature": 1 },
+    { "name": "fail", "signature": 68 },
+    { "name": "fail", "signature": 83 },
+    { "name": "fail", "signature": 86 },
+    { "name": "fillInStackTrace", "signature": 20 },
+    { "name": "fillInStackTrace", "signature": 27 },
+    { "name": "getActions", "signature": 4 },
+    { "name": "getArguments", "signature": 7 },
+    { "name": "getCause", "signature": 20 },
+    { "name": "getController", "signature": 5 },
+    { "name": "getLocalizedMessage", "signature": 4 },
+    { "name": "getMessage", "signature": 4 },
+    { "name": "getMessageWithCause", "signature": 4 },
+    { "name": "getName", "signature": 4 },
+    { "name": "getOurStackTrace", "signature": 8 },
+    { "name": "getProperty", "signature": 88 },
+    { "name": "getPropertyArray", "signature": 89 },
+    { "name": "getStackTrace", "signature": 8 },
+    { "name": "getSuppressed", "signature": 9 },
+    { "name": "hashCode", "signature": 3 },
+    { "name": "implies", "signature": 91 },
+    { "name": "init", "signature": 66 },
+    { "name": "initCause", "signature": 59 },
+    { "name": "invoke", "signature": 1 },
+    { "name": "isAvailable", "signature": 2 },
+    { "name": "load", "signature": 69 },
+    { "name": "newPermissionCollection", "signature": 17 },
+    { "name": "printEnclosedStackTrace", "signature": 56 },
+    { "name": "printStackTrace", "signature": 1 },
+    { "name": "printStackTrace", "signature": 54 },
+    { "name": "printStackTrace", "signature": 55 },
+    { "name": "printStackTrace", "signature": 57 },
+    { "name": "readObject", "signature": 52 },
+    { "name": "reload", "signature": 1 },
+    { "name": "setArguments", "signature": 62 },
+    { "name": "setAvailable", "signature": 63 },
+    { "name": "setCause", "signature": 58 },
+    { "name": "setClassName", "signature": 87 },
+    { "name": "setController", "signature": 67 },
+    { "name": "setMethodName", "signature": 87 },
+    { "name": "setStackTrace", "signature": 48 },
+    { "name": "setupDescription", "signature": 1 },
+    { "name": "shutdown", "signature": 1 },
+    { "name": "signal", "signature": 1 },
+    { "name": "start", "signature": 1 },
+    { "name": "stop", "signature": 1 },
+    { "name": "toString", "signature": 4 },
+    { "name": "validate", "signature": 1 },
+    { "name": "validateSuppressedExceptionsList", "signature": 50 },
+    { "name": "writeObject", "signature": 53 }
+  ],
+  "arguments": [
+    { "type": "basic1" },
+    { "type": "basic2" },
+    { "type": "basic3" },
+    { "type": "basic5" },
+    { "type": "interfaceDecl1" },
+    { "type": "interfaceDecl11" },
+    { "type": "interfaceDesc17" },
+    { "type": "interfaceInst1" },
+    { "type": "interfaceInst3" },
+    { "type": "interfaceInst4" },
+    { "type": "interfaceInst7" },
+    { "type": "interfaceInst9" },
+    { "type": "object1" },
+    { "type": "object4" },
+    { "type": "object5" },
+    { "type": "object7" },
+    { "type": "object8" },
+    { "type": "object9" },
+    { "type": "object11" },
+    { "type": "object12" },
+    { "type": "object15" },
+    { "type": "object18" },
+    { "type": "object19" },
+    { "type": "object22" },
+    { "type": "object23" },
+    { "type": "object26" },
+    { "type": "object29" },
+    { "type": "object31" },
+    { "type": "object35" },
+    { "type": "object36" },
+    { "type": "object38" },
+    { "type": "object39" },
+    { "type": "object41" },
+    { "type": "objectInst2" },
+    { "type": "typeParam3" },
+    { "name": "actions", "type": "basic5" },
+    { "name": "arg0", "type": "basic2" },
+    { "name": "arg0", "type": "basic3" },
+    { "name": "arg0", "type": "basic5" },
+    { "name": "arg0", "type": "interfaceDecl1" },
+    { "name": "arg0", "type": "interfaceDecl7" },
+    { "name": "arg0", "type": "interfaceDesc17" },
+    { "name": "arg0", "type": "interfaceInst1" },
+    { "name": "arg0", "type": "interfaceInst3" },
+    { "name": "arg0", "type": "interfaceInst6" },
+    { "name": "arg0", "type": "interfaceInst8" },
+    { "name": "arg0", "type": "object20" },
+    { "name": "arg0", "type": "object27" },
+    { "name": "arg0", "type": "object28" },
+    { "name": "arg0", "type": "object32" },
+    { "name": "arg0", "type": "object33" },
+    { "name": "arg0", "type": "object34" },
+    { "name": "arg0", "type": "object41" },
+    { "name": "arg0", "type": "objectInst2" },
+    { "name": "arg0", "type": "typeParam1" },
+    { "name": "arg1", "type": "basic3" },
+    { "name": "arg1", "type": "basic5" },
+    { "name": "arg1", "type": "interfaceInst2" },
+    { "name": "arg1", "type": "interfaceInst3" },
+    { "name": "arg1", "type": "interfaceInst5" },
+    { "name": "arg2", "type": "basic1" },
+    { "name": "arg2", "type": "basic5" },
+    { "name": "arg2", "type": "interfaceDesc17" },
+    { "name": "arg3", "type": "basic3" },
+    { "name": "arg3", "type": "basic5" },
+    { "name": "arg4", "type": "basic3" },
+    { "name": "arg4", "type": "interfaceInst10" },
+    { "name": "args", "type": "interfaceInst1" },
+    { "name": "available", "type": "basic1" },
+    { "name": "cause", "type": "object41" },
+    { "name": "className", "type": "basic5" },
+    { "name": "cn", "type": "basic5" },
+    { "name": "context", "type": "interfaceDecl10" },
+    { "name": "controller", "type": "interfaceDecl11" },
+    { "name": "exception", "type": "object14" },
+    { "name": "fileName", "type": "basic5" },
+    { "name": "index", "type": "basic3" },
+    { "name": "mask", "type": "basic3" },
+    { "name": "message", "type": "basic5" },
+    { "name": "name", "type": "basic5" },
+    { "name": "object", "type": "interfaceDesc17" },
+    { "name": "permission", "type": "object30" },
+    { "name": "propValue", "type": "basic5" },
+    { "name": "reload", "type": "basic1" },
+    { "name": "target", "type": "basic5" },
+    { "name": "value", "type": "basic5" },
+    { "name": "value", "type": "interfaceDesc17" },
+    { "name": "value", "type": "object36" },
+    { "name": "value", "type": "object41" },
+    { "name": "value", "type": "objectInst2" },
+    { "name": "value", "type": "typeParam3" }
+  ],
+  "artifactId": "commons-daemon",
+  "basics": [ "boolean", "char", "int", "long", "string" ],
+  "commitHash": "1ffa799cb3ddf5a4a918e59e46cd9868ee766b19",
+  "fields": [
+    { "name": "$nest", "type": "object10" },
+    { "name": "$nest", "type": "object12" },
+    { "name": "$super", "type": "object14" },
+    { "name": "$super", "type": "object30" },
+    { "name": "ARGS", "type": "basic5", "vis": "private" },
+    { "name": "BTOKEN", "type": "basic5", "vis": "private" },
+    { "name": "CAUSE_CAPTION", "type": "basic5", "vis": "private" },
+    { "name": "CONTROL", "type": "basic5", "vis": "protected" },
+    { "name": "CONTROL_RELOAD", "type": "basic5", "vis": "protected" },
+    { "name": "CONTROL_SHUTDOWN", "type": "basic5", "vis": "protected" },
+    { "name": "CONTROL_START", "type": "basic5", "vis": "protected" },
+    { "name": "CONTROL_STOP", "type": "basic5", "vis": "protected" },
+    { "name": "DEFAULT_CONFIG", "type": "basic5", "vis": "protected" },
+    { "name": "EMPTY_THROWABLE_ARRAY", "type": "interfaceInst4", "vis": "private" },
+    { "name": "ETOKEN", "type": "basic5", "vis": "private" },
+    { "name": "MASK_CONTROL_RELOAD", "type": "basic3", "vis": "protected" },
+    { "name": "MASK_CONTROL_SHUTDOWN", "type": "basic3", "vis": "protected" },
+    { "name": "MASK_CONTROL_START", "type": "basic3", "vis": "protected" },
+    { "name": "MASK_CONTROL_STOP", "type": "basic3", "vis": "protected" },
+    { "name": "NULL_CAUSE_MESSAGE", "type": "basic5", "vis": "private" },
+    { "name": "PREFIX", "type": "basic5", "vis": "protected" },
+    { "name": "SELF_SUPPRESSION_MESSAGE", "type": "basic5", "vis": "private" },
+    { "name": "START_CLASS", "type": "basic5", "vis": "private" },
+    { "name": "START_METHOD", "type": "basic5", "vis": "private" },
+    { "name": "STATIC", "type": "basic3", "vis": "public" },
+    { "name": "STOP_ARGS", "type": "basic5", "vis": "private" },
+    { "name": "STOP_CLASS", "type": "basic5", "vis": "private" },
+    { "name": "STOP_METHOD", "type": "basic5", "vis": "private" },
+    { "name": "SUPPRESSED_CAPTION", "type": "basic5", "vis": "private" },
+    { "name": "SUPPRESSED_SENTINEL", "type": "interfaceInst8", "vis": "private" },
+    { "name": "TYPE_CONTROL", "type": "basic3", "vis": "protected" },
+    { "name": "UNASSIGNED_STACK", "type": "interfaceInst3", "vis": "private" },
+    { "name": "WILDCARD", "type": "basic5", "vis": "protected" },
+    { "name": "args", "type": "interfaceInst1", "vis": "private" },
+    { "name": "available", "type": "basic1", "vis": "private" },
+    { "name": "backtrace", "type": "interfaceDesc17", "vis": "private" },
+    { "name": "call", "type": "basic5", "vis": "private" },
+    { "name": "cause", "type": "object41", "vis": "private" },
+    { "name": "config", "type": "object8", "vis": "private" },
+    { "name": "configFileName", "type": "basic5", "vis": "private" },
+    { "name": "configurationProperties", "type": "object35", "vis": "private" },
+    { "name": "controller", "type": "object7", "vis": "private" },
+    { "name": "daemon", "type": "interfaceDesc17", "vis": "private" },
+    { "name": "daemonController", "type": "interfaceDecl11", "vis": "private" },
+    { "name": "depth", "type": "basic3", "vis": "private" },
+    { "name": "desc", "type": "basic5", "vis": "private" },
+    { "name": "destroy", "type": "object23", "vis": "private" },
+    { "name": "detailMessage", "type": "basic5", "vis": "private" },
+    { "name": "err", "type": "object32", "vis": "public" },
+    { "name": "init", "type": "object23", "vis": "private" },
+    { "name": "inst", "type": "object23", "vis": "private" },
+    { "name": "main", "type": "objectInst2", "vis": "private" },
+    { "name": "mask", "type": "basic3", "vis": "private" },
+    { "name": "name", "type": "basic5", "vis": "private" },
+    { "name": "out", "type": "object32", "vis": "public" },
+    { "name": "serialVersionUID", "type": "basic4", "vis": "private" },
+    { "name": "shutdown", "type": "object22", "vis": "private" },
+    { "name": "signal", "type": "object23", "vis": "private" },
+    { "name": "stackTrace", "type": "interfaceInst3", "vis": "private" },
+    { "name": "start", "type": "object23", "vis": "private" },
+    { "name": "startup", "type": "object22", "vis": "private" },
+    { "name": "stop", "type": "object23", "vis": "private" },
+    { "name": "suppressedExceptions", "type": "interfaceInst8", "vis": "private" },
+    { "name": "systemProperties", "type": "object35", "vis": "private" },
+    { "name": "type", "type": "basic3", "vis": "private" }
+  ],
+  "groupId": "commons-daemon",
+  "interfaceDecls": [
+    {
+      "interface": 6,
+      "name": "$Array",
+      "package": 1,
+      "typeParams": [ 3 ]
+    },
+    { "interface": 17, "name": "AnnotatedElement", "package": 5, "shadow": true, "vis": "public" },
+    { "interface": 17, "name": "Appendable", "package": 3, "shadow": true, "vis": "public" },
+    { "interface": 17, "name": "CharSequence", "package": 3, "shadow": true, "vis": "public" },
+    { "interface": 17, "name": "Cloneable", "package": 3, "shadow": true, "vis": "public" },
+    { "interface": 17, "name": "Closeable", "package": 2, "shadow": true, "vis": "public" },
+    {
+      "interface": 17,
+      "name": "Collection",
+      "package": 8,
+      "shadow": true,
+      "typeParams": [ 1 ],
+      "vis": "public"
+    },
+    {
+      "interface": 17,
+      "name": "Comparable",
+      "package": 3,
+      "shadow": true,
+      "typeParams": [ 3 ],
+      "vis": "public"
+    },
+    { "interface": 16, "loc": 32, "name": "Daemon", "package": 9, "vis": "public" },
+    { "interface": 8, "loc": 57, "name": "DaemonContext", "package": 9, "vis": "public" },
+    { "interface": 14, "loc": 81, "name": "DaemonController", "package": 9, "vis": "public" },
+    { "interface": 17, "loc": 147, "name": "DaemonListener", "package": 9, "vis": "public" },
+    { "interface": 15, "loc": 573, "name": "DaemonUserSignal", "package": 9, "vis": "public" },
+    {
+      "interface": 17,
+      "name": "Enumeration",
+      "package": 8,
+      "shadow": true,
+      "typeParams": [ 1 ],
+      "vis": "public"
+    },
+    { "interface": 17, "name": "EventListener", "package": 8, "shadow": true, "vis": "public" },
+    { "interface": 17, "name": "GenericDeclaration", "package": 5, "shadow": true, "vis": "public" },
+    { "interface": 17, "name": "Guard", "package": 6, "shadow": true, "vis": "public" },
+    {
+      "interface": 17,
+      "name": "List",
+      "package": 8,
+      "shadow": true,
+      "typeParams": [ 1 ],
+      "vis": "public"
+    },
+    { "interface": 17, "name": "ObjectInput", "package": 2, "shadow": true, "vis": "public" },
+    { "interface": 17, "name": "ObjectOutput", "package": 2, "shadow": true, "vis": "public" },
+    { "interface": 17, "name": "ObjectStreamConstants", "package": 2, "shadow": true, "vis": "public" },
+    { "interface": 17, "name": "RandomAccess", "package": 8, "shadow": true, "vis": "public" },
+    { "interface": 17, "name": "Serializable", "package": 2, "shadow": true, "vis": "public" },
+    {
+      "interface": 17,
+      "name": "Set",
+      "package": 8,
+      "shadow": true,
+      "typeParams": [ 1 ],
+      "vis": "public"
+    },
+    { "interface": 17, "name": "Type", "package": 5, "shadow": true, "vis": "public" },
+    { "interface": 17, "name": "TypeDescriptor", "package": 4, "shadow": true, "vis": "public" }
+  ],
+  "interfaceDescs": [
+    {
+      "abstracts": [ 1, 7, 8 ]
+    },
+    {
+      "abstracts": [ 2, 7, 9 ]
+    },
+    {
+      "abstracts": [ 3, 7, 10 ]
+    },
+    {
+      "abstracts": [ 4, 7, 11 ]
+    },
+    {
+      "abstracts": [ 5, 7, 12 ]
+    },
+    {
+      "abstracts": [ 6, 7, 13 ]
+    },
+    {
+      "abstracts": [ 15, 26, 27, 30, 32, 33, 34, 36, 39, 40, 44, 49, 50, 51, 52, 53, 54, 58, 62, 68, 70, 71 ]
+    },
+    {
+      "abstracts": [ 29, 31 ]
+    },
+    {
+      "abstracts": [ 29, 31, 56, 60 ],
+      "inherits": [ 8 ]
+    },
+    {
+      "abstracts": [ 21, 37, 38, 47 ]
+    },
+    {
+      "abstracts": [ 14, 45, 59, 61, 69 ]
+    },
+    {
+      "abstracts": [ 16, 17, 18, 20, 28, 35, 41, 42, 48, 63, 68 ]
+    },
+    {
+      "abstracts": [ 22, 23, 24, 25, 46, 55, 57, 64 ],
+      "inherits": [ 14 ]
+    },
+    {
+      "abstracts": [ 22, 23, 24, 25, 55, 64 ]
+    },
+    {
+      "abstracts": [ 65 ]
+    },
+    {
+      "abstracts": [ 19, 43, 66, 67 ]
+    },
+    {
+      "abstracts": [ ],
+      "inherits": [ 17 ]
+    }
+  ],
+  "interfaceInsts": [
+    {
+      "generic": 1,
+      "instanceTypes": [ "basic5" ],
+      "resolved": 1
+    },
+    {
+      "generic": 1,
+      "instanceTypes": [ "interfaceDesc17" ],
+      "resolved": 2
+    },
+    {
+      "generic": 1,
+      "instanceTypes": [ "object36" ],
+      "resolved": 3
+    },
+    {
+      "generic": 1,
+      "instanceTypes": [ "object41" ],
+      "resolved": 4
+    },
+    {
+      "generic": 1,
+      "instanceTypes": [ "objectInst2" ],
+      "resolved": 5
+    },
+    {
+      "generic": 7,
+      "instanceTypes": [ "basic5" ],
+      "resolved": 17
+    },
+    {
+      "generic": 18,
+      "instanceTypes": [ "basic5" ],
+      "resolved": 17
+    },
+    {
+      "generic": 18,
+      "instanceTypes": [ "object41" ],
+      "resolved": 17
+    },
+    {
+      "generic": 18,
+      "instanceTypes": [ "typeParam3" ],
+      "resolved": 17
+    },
+    {
+      "generic": 24,
+      "instanceTypes": [ "object41" ],
+      "resolved": 17
+    }
+  ],
+  "language": "java",
+  "locs": { "1": "src/main/java/org/apache/commons/daemon/Daemon.java", "1184": "src/main/java/org/apache/commons/daemon/support/DaemonWrapper.java", "123": "src/main/java/org/apache/commons/daemon/DaemonListener.java", "148": "src/main/java/org/apache/commons/daemon/DaemonPermission.java", "33": "src/main/java/org/apache/commons/daemon/DaemonContext.java", "545": "src/main/java/org/apache/commons/daemon/DaemonUserSignal.java", "574": "src/main/java/org/apache/commons/daemon/support/DaemonConfiguration.java", "58": "src/main/java/org/apache/commons/daemon/DaemonController.java", "767": "src/main/java/org/apache/commons/daemon/support/DaemonLoader.java", "82": "src/main/java/org/apache/commons/daemon/DaemonInitException.java" },
+  "methodInsts": [
+    {
+      "generic": 19,
+      "instanceTypes": [ "basic5" ],
+      "receiver": "objectInst1",
+      "resolved": 30
+    },
+    {
+      "generic": 20,
+      "instanceTypes": [ "basic5" ],
+      "receiver": "objectInst1",
+      "resolved": 49
+    },
+    {
+      "generic": 25,
+      "instanceTypes": [ "basic5" ],
+      "receiver": "object2",
+      "resolved": 99
+    },
+    {
+      "generic": 50,
+      "instanceTypes": [ "interfaceDesc17" ],
+      "receiver": "objectInst2",
+      "resolved": 96
+    },
+    {
+      "generic": 52,
+      "instanceTypes": [ "object11" ],
+      "receiver": "objectInst4",
+      "resolved": 4
+    },
+    {
+      "generic": 69,
+      "instanceTypes": [ "interfaceDesc17" ],
+      "receiver": "objectInst2",
+      "resolved": 60
+    },
+    {
+      "generic": 76,
+      "instanceTypes": [ "interfaceDesc17" ],
+      "receiver": "objectInst2",
+      "resolved": 6
+    },
+    {
+      "generic": 90,
+      "instanceTypes": [ "basic5" ],
+      "receiver": "objectInst1",
+      "resolved": 3
+    },
+    {
+      "generic": 97,
+      "instanceTypes": [ "basic5", "basic5" ],
+      "receiver": "objectInst1",
+      "resolved": 47
+    }
+  ],
+  "methods": [
+    {
+      "constructor": true,
+      "name": "ArrayList",
+      "package": 8,
+      "receiver": 1,
+      "signature": 10,
+      "static": true,
+      "typeParams": [ 1 ],
+      "vis": "public"
+    },
+    { "constructor": true, "name": "ClassNotFoundException", "package": 3, "receiver": 5, "signature": 33, "static": true, "vis": "public" },
+    { "constructor": true, "loc": 1074, "metrics": 26, "name": "Controller", "package": 10, "receiver": 7, "signature": 12, "static": true, "vis": "private" },
+    { "constructor": true, "loc": 642, "metrics": 14, "name": "DaemonConfiguration", "package": 10, "receiver": 8, "signature": 13, "static": true, "vis": "public" },
+    { "constructor": true, "loc": 112, "metrics": 1, "name": "DaemonInitException", "package": 9, "receiver": 9, "signature": 84, "static": true, "vis": "public" },
+    { "constructor": true, "loc": 117, "metrics": 2, "name": "DaemonInitException", "package": 9, "receiver": 9, "signature": 85, "static": true, "vis": "public" },
+    { "constructor": true, "loc": 331, "metrics": 4, "name": "DaemonPermission", "package": 9, "receiver": 11, "signature": 94, "static": true, "vis": "public" },
+    { "constructor": true, "loc": 363, "metrics": 5, "name": "DaemonPermission", "package": 9, "receiver": 11, "signature": 95, "static": true, "vis": "public" },
+    { "constructor": true, "loc": 1232, "metrics": 39, "name": "DaemonWrapper", "package": 10, "receiver": 12, "signature": 14, "static": true, "vis": "public" },
+    { "constructor": true, "name": "FileInputStream", "package": 2, "receiver": 15, "signature": 34, "static": true, "vis": "public" },
+    { "constructor": true, "name": "IllegalArgumentException", "package": 3, "receiver": 18, "signature": 35, "static": true, "vis": "public" },
+    { "constructor": true, "name": "IllegalStateException", "package": 3, "receiver": 19, "signature": 15, "static": true, "vis": "public" },
+    { "constructor": true, "loc": 1384, "metrics": 44, "name": "Invoker", "package": 10, "receiver": 22, "signature": 16, "static": true, "vis": "protected" },
+    { "constructor": true, "name": "NullPointerException", "package": 3, "receiver": 26, "signature": 36, "static": true, "vis": "public" },
+    { "constructor": true, "name": "ParseException", "package": 7, "receiver": 29, "signature": 40, "static": true, "vis": "public" },
+    { "constructor": true, "name": "Properties", "package": 8, "receiver": 35, "signature": 18, "static": true, "vis": "public" },
+    { "constructor": true, "name": "StringBuffer", "package": 3, "receiver": 38, "signature": 19, "static": true, "vis": "public" },
+    { "constructor": true, "name": "StringTokenizer", "package": 8, "receiver": 39, "signature": 41, "static": true, "vis": "public" },
+    {
+      "name": "add",
+      "package": 8,
+      "receiver": 1,
+      "signature": 61,
+      "typeParams": [ 1 ],
+      "vis": "public"
+    },
+    {
+      "name": "addAll",
+      "package": 8,
+      "receiver": 1,
+      "signature": 43,
+      "typeParams": [ 1 ],
+      "vis": "public"
+    },
+    { "loc": 1400, "metrics": 47, "name": "addArguments", "package": 10, "receiver": 22, "signature": 62, "vis": "protected" },
+    { "name": "append", "package": 3, "receiver": 38, "signature": 23, "vis": "public" },
+    { "name": "append", "package": 3, "receiver": 38, "signature": 37, "vis": "public" },
+    { "name": "arraycopy", "package": 3, "receiver": 40, "signature": 46, "static": true, "vis": "public" },
+    {
+      "name": "asList",
+      "package": 8,
+      "receiver": 2,
+      "signature": 97,
+      "static": true,
+      "typeParams": [ 3 ],
+      "vis": "public"
+    },
+    { "name": "charAt", "package": 3, "receiver": 37, "signature": 25, "vis": "public" },
+    { "loc": 828, "metrics": 20, "name": "check", "package": 10, "receiver": 10, "signature": 65, "static": true, "vis": "public" },
+    { "name": "clear", "package": 8, "receiver": 35, "signature": 1, "vis": "public" },
+    { "name": "close", "package": 2, "receiver": 15, "signature": 1, "vis": "public" },
+    { "loc": 544, "metrics": 13, "name": "createControlActions", "package": 9, "receiver": 11, "signature": 82, "vis": "private" },
+    { "loc": 506, "metrics": 12, "name": "createControlMask", "package": 9, "receiver": 11, "signature": 22, "vis": "private" },
+    { "loc": 1046, "metrics": 25, "name": "destroy", "package": 10, "receiver": 10, "signature": 2, "static": true, "vis": "public" },
+    { "loc": 1369, "metrics": 43, "name": "destroy", "package": 10, "receiver": 12, "signature": 1, "vis": "public" },
+    { "name": "equals", "package": 3, "receiver": 37, "signature": 45, "vis": "public" },
+    { "loc": 414, "metrics": 8, "name": "equals", "package": 9, "receiver": 11, "signature": 90, "vis": "public" },
+    { "name": "equalsIgnoreCase", "package": 3, "receiver": 37, "signature": 30, "vis": "public" },
+    { "name": "exit", "package": 3, "receiver": 40, "signature": 24, "static": true, "vis": "public" },
+    { "loc": 683, "metrics": 16, "name": "expandProperty", "package": 10, "receiver": 8, "signature": 92, "vis": "private" },
+    { "loc": 1121, "metrics": 31, "name": "fail", "package": 10, "receiver": 7, "signature": 1, "vis": "public" },
+    { "loc": 1133, "metrics": 33, "name": "fail", "package": 10, "receiver": 7, "signature": 68, "vis": "public" },
+    { "loc": 1127, "metrics": 32, "name": "fail", "package": 10, "receiver": 7, "signature": 83, "vis": "public" },
+    { "loc": 1139, "metrics": 34, "name": "fail", "package": 10, "receiver": 7, "signature": 86, "vis": "public" },
+    { "loc": 1066, "name": "failed", "package": 10, "receiver": 10, "signature": 83, "static": true, "vis": "private" },
+    { "loc": 387, "metrics": 6, "name": "getActions", "package": 9, "receiver": 11, "signature": 4, "vis": "public" },
+    { "loc": 1178, "metrics": 37, "name": "getArguments", "package": 10, "receiver": 6, "signature": 7, "vis": "public" },
+    {
+      "name": "getClassLoader",
+      "package": 3,
+      "receiver": 3,
+      "signature": 11,
+      "typeParams": [ 3 ],
+      "vis": "public"
+    },
+    { "loc": 1167, "metrics": 35, "name": "getController", "package": 10, "receiver": 6, "signature": 5, "vis": "public" },
+    { "name": "getMessage", "package": 3, "receiver": 41, "signature": 4, "vis": "public" },
+    { "loc": 122, "metrics": 3, "name": "getMessageWithCause", "package": 9, "receiver": 9, "signature": 4, "vis": "public" },
+    {
+      "name": "getMethod",
+      "package": 3,
+      "receiver": 3,
+      "signature": 96,
+      "typeParams": [ 3 ],
+      "vis": "public"
+    },
+    { "name": "getModifiers", "package": 5, "receiver": 23, "signature": 3, "vis": "public" },
+    {
+      "name": "getName",
+      "package": 3,
+      "receiver": 3,
+      "signature": 4,
+      "typeParams": [ 3 ],
+      "vis": "public"
+    },
+    { "name": "getProperties", "package": 3, "receiver": 40, "signature": 18, "static": true, "vis": "public" },
+    { "name": "getProperty", "package": 3, "receiver": 40, "signature": 32, "static": true, "vis": "public" },
+    { "name": "getProperty", "package": 8, "receiver": 35, "signature": 32, "vis": "public" },
+    { "loc": 740, "metrics": 17, "name": "getProperty", "package": 10, "receiver": 8, "signature": 88, "vis": "public" },
+    { "loc": 766, "metrics": 18, "name": "getPropertyArray", "package": 10, "receiver": 8, "signature": 89, "vis": "public" },
+    { "name": "getTargetException", "package": 5, "receiver": 21, "signature": 20, "vis": "public" },
+    { "name": "getenv", "package": 3, "receiver": 40, "signature": 32, "static": true, "vis": "public" },
+    { "name": "hasMoreTokens", "package": 8, "receiver": 39, "signature": 2, "vis": "public" },
+    { "name": "hashCode", "package": 3, "receiver": 37, "signature": 3, "vis": "public" },
+    { "loc": 401, "metrics": 7, "name": "hashCode", "package": 9, "receiver": 11, "signature": 3, "vis": "public" },
+    { "loc": 441, "metrics": 9, "name": "implies", "package": 9, "receiver": 11, "signature": 91, "vis": "public" },
+    { "name": "indexOf", "package": 3, "receiver": 37, "signature": 31, "vis": "public" },
+    { "name": "indexOf", "package": 3, "receiver": 37, "signature": 39, "vis": "public" },
+    { "loc": 1268, "metrics": 40, "name": "init", "package": 10, "receiver": 12, "signature": 66, "vis": "public" },
+    { "name": "invoke", "package": 5, "receiver": 23, "signature": 98, "vis": "public" },
+    { "loc": 1412, "metrics": 48, "name": "invoke", "package": 10, "receiver": 22, "signature": 1, "vis": "protected" },
+    {
+      "name": "isAssignableFrom",
+      "package": 3,
+      "receiver": 3,
+      "signature": 60,
+      "typeParams": [ 3 ],
+      "vis": "public"
+    },
+    { "loc": 1080, "metrics": 27, "name": "isAvailable", "package": 10, "receiver": 7, "signature": 2, "vis": "private" },
+    { "name": "length", "package": 3, "receiver": 37, "signature": 3, "vis": "public" },
+    { "name": "load", "package": 8, "receiver": 35, "signature": 51, "vis": "public" },
+    { "loc": 654, "metrics": 15, "name": "load", "package": 10, "receiver": 8, "signature": 69, "vis": "public" },
+    { "loc": 881, "metrics": 22, "name": "load", "package": 10, "receiver": 10, "signature": 64, "static": true, "vis": "public" },
+    { "name": "loadClass", "package": 3, "receiver": 4, "signature": 38, "vis": "public" },
+    {
+      "name": "newInstance",
+      "package": 3,
+      "receiver": 3,
+      "signature": 21,
+      "typeParams": [ 3 ],
+      "vis": "public"
+    },
+    { "name": "nextToken", "package": 8, "receiver": 39, "signature": 4, "vis": "public" },
+    { "name": "printStackTrace", "package": 3, "receiver": 41, "signature": 54, "vis": "public" },
+    { "name": "println", "package": 2, "receiver": 32, "signature": 29, "vis": "public" },
+    { "loc": 1108, "metrics": 30, "name": "reload", "package": 10, "receiver": 7, "signature": 1, "vis": "public" },
+    { "loc": 1183, "metrics": 38, "name": "setArguments", "package": 10, "receiver": 6, "signature": 62, "vis": "public" },
+    { "loc": 1087, "metrics": 28, "name": "setAvailable", "package": 10, "receiver": 7, "signature": 63, "vis": "private" },
+    { "loc": 1388, "metrics": 45, "name": "setClassName", "package": 10, "receiver": 22, "signature": 87, "vis": "protected" },
+    { "loc": 1172, "metrics": 36, "name": "setController", "package": 10, "receiver": 6, "signature": 67, "vis": "public" },
+    { "loc": 1394, "metrics": 46, "name": "setMethodName", "package": 10, "receiver": 22, "signature": 87, "vis": "protected" },
+    { "loc": 479, "metrics": 11, "name": "setupDescription", "package": 9, "receiver": 11, "signature": 1, "vis": "private" },
+    { "loc": 1095, "metrics": 29, "name": "shutdown", "package": 10, "receiver": 7, "signature": 1, "vis": "public" },
+    { "loc": 1065, "name": "shutdown", "package": 10, "receiver": 10, "signature": 93, "static": true, "vis": "private" },
+    { "loc": 866, "metrics": 21, "name": "signal", "package": 10, "receiver": 10, "signature": 2, "static": true, "vis": "public" },
+    {
+      "name": "size",
+      "package": 8,
+      "receiver": 1,
+      "signature": 3,
+      "typeParams": [ 1 ],
+      "vis": "public"
+    },
+    { "loc": 1002, "metrics": 23, "name": "start", "package": 10, "receiver": 10, "signature": 2, "static": true, "vis": "public" },
+    { "loc": 1351, "metrics": 41, "name": "start", "package": 10, "receiver": 12, "signature": 1, "vis": "public" },
+    { "loc": 1024, "metrics": 24, "name": "stop", "package": 10, "receiver": 10, "signature": 2, "static": true, "vis": "public" },
+    { "loc": 1360, "metrics": 42, "name": "stop", "package": 10, "receiver": 12, "signature": 1, "vis": "public" },
+    { "name": "substring", "package": 3, "receiver": 37, "signature": 26, "vis": "public" },
+    { "name": "substring", "package": 3, "receiver": 37, "signature": 28, "vis": "public" },
+    {
+      "name": "toArray",
+      "package": 8,
+      "receiver": 1,
+      "signature": 42,
+      "typeParams": [ 1, 3 ],
+      "vis": "public"
+    },
+    { "name": "toString", "package": 3, "receiver": 38, "signature": 4, "vis": "public" },
+    { "name": "toString", "package": 3, "receiver": 41, "signature": 4, "vis": "public" },
+    { "loc": 466, "metrics": 10, "name": "toString", "package": 9, "receiver": 11, "signature": 4, "vis": "public" },
+    { "name": "trim", "package": 3, "receiver": 37, "signature": 4, "vis": "public" },
+    { "loc": 1434, "metrics": 49, "name": "validate", "package": 10, "receiver": 22, "signature": 1, "vis": "protected" },
+    { "loc": 809, "metrics": 19, "name": "version", "package": 10, "receiver": 10, "signature": 1, "static": true, "vis": "public" }
+  ],
+  "metrics": [
+    {
+      "codeCount": 4,
+      "complexity": 1,
+      "indents": 4,
+      "lineCount": 4,
+      "loc": 112,
+      "pmdCyclo": 1,
+      "reads": [ "basic5", "interfaceDesc17", "object9", "object14", "object41", "selection27" ],
+      "writes": [ "object41", "selection27" ]
+    },
+    {
+      "codeCount": 4,
+      "complexity": 1,
+      "indents": 4,
+      "lineCount": 4,
+      "loc": 117,
+      "pmdCyclo": 1,
+      "reads": [ "basic5", "object9", "object14", "object41", "selection27" ],
+      "writes": [ "object41", "selection27" ]
+    },
+    {
+      "codeCount": 4,
+      "complexity": 2,
+      "indents": 2,
+      "invokes": [ "method48" ],
+      "lineCount": 4,
+      "loc": 122,
+      "pmdCyclo": 2,
+      "reads": [ "basic1", "basic5", "interfaceDesc17", "object9", "object41", "selection27" ],
+      "writes": [ "basic5" ]
+    },
+    {
+      "codeCount": 13,
+      "complexity": 3,
+      "indents": 21,
+      "invokes": [ "method11", "method36" ],
+      "lineCount": 21,
+      "loc": 331,
+      "pmdCyclo": 5,
+      "reads": [ "basic1", "basic3", "basic5", "interfaceDesc17", "object11", "object18", "object30", "selection3", "selection21", "selection49" ],
+      "writes": [ "basic3", "selection49" ]
+    },
+    {
+      "codeCount": 8,
+      "complexity": 2,
+      "indents": 11,
+      "invokes": [ "method31" ],
+      "lineCount": 12,
+      "loc": 363,
+      "pmdCyclo": 2,
+      "reads": [ "basic1", "basic3", "basic5", "object11", "selection21", "selection40", "selection49" ],
+      "writes": [ "basic3", "selection40" ]
+    },
+    {
+      "codeCount": 7,
+      "complexity": 2,
+      "indents": 5,
+      "invokes": [ "method30" ],
+      "lineCount": 7,
+      "loc": 387,
+      "pmdCyclo": 2,
+      "reads": [ "basic1", "basic3", "basic5", "object11", "selection21", "selection40", "selection49" ]
+    },
+    {
+      "codeCount": 5,
+      "complexity": 1,
+      "indents": 2,
+      "invokes": [ "method61", "method86" ],
+      "lineCount": 5,
+      "loc": 401,
+      "pmdCyclo": 1,
+      "reads": [ "basic3", "basic5", "object11", "selection34" ]
+    },
+    {
+      "codeCount": 14,
+      "complexity": 4,
+      "indents": 14,
+      "lineCount": 17,
+      "loc": 414,
+      "pmdCyclo": 4,
+      "reads": [ "basic1", "basic3", "interfaceDesc17", "object11", "selection40", "selection49" ],
+      "writes": [ "object11" ]
+    },
+    {
+      "codeCount": 14,
+      "complexity": 4,
+      "indents": 14,
+      "lineCount": 17,
+      "loc": 441,
+      "pmdCyclo": 4,
+      "reads": [ "basic1", "basic3", "object11", "object30", "selection40", "selection49" ],
+      "writes": [ "object11" ]
+    },
+    {
+      "codeCount": 5,
+      "complexity": 1,
+      "indents": 2,
+      "invokes": [ "method86" ],
+      "lineCount": 5,
+      "loc": 466,
+      "pmdCyclo": 1,
+      "reads": [ "basic5", "object11", "selection34" ]
+    },
+    {
+      "codeCount": 21,
+      "complexity": 3,
+      "indents": 27,
+      "invokes": [ "method17", "method22", "method23", "method44", "method52", "method98", "methodInst5" ],
+      "lineCount": 23,
+      "loc": 479,
+      "pmdCyclo": 3,
+      "reads": [ "basic1", "basic2", "basic3", "basic5", "interfaceDesc17", "object3", "object11", "object38", "objectInst4", "selection3", "selection21", "selection34", "selection49" ],
+      "writes": [ "basic5", "object38", "selection34" ]
+    },
+    {
+      "codeCount": 32,
+      "complexity": 8,
+      "indents": 74,
+      "invokes": [ "method11", "method18", "method34", "method36", "method60", "method77", "method101" ],
+      "lineCount": 36,
+      "loc": 506,
+      "pmdCyclo": 9,
+      "reads": [ "basic1", "basic3", "basic5", "interfaceDesc17", "object11", "object18", "object39", "selection4", "selection5", "selection6", "selection7", "selection10", "selection11", "selection12", "selection13", "selection22" ],
+      "writes": [ "basic3", "basic5", "object39" ]
+    },
+    {
+      "codeCount": 37,
+      "complexity": 8,
+      "indents": 69,
+      "invokes": [ "method17", "method23", "method98" ],
+      "lineCount": 42,
+      "loc": 544,
+      "pmdCyclo": 8,
+      "reads": [ "basic1", "basic3", "basic5", "object11", "object38", "selection4", "selection5", "selection6", "selection7", "selection10", "selection11", "selection12", "selection13" ],
+      "writes": [ "basic1", "object38" ]
+    },
+    {
+      "codeCount": 5,
+      "complexity": 1,
+      "indents": 4,
+      "invokes": [ "method16", "method53" ],
+      "lineCount": 5,
+      "loc": 642,
+      "pmdCyclo": 1,
+      "reads": [ "interfaceDesc17", "object8", "object35", "object40", "selection30", "selection48" ],
+      "writes": [ "object35", "selection30", "selection48" ]
+    },
+    {
+      "codeCount": 26,
+      "complexity": 6,
+      "indents": 49,
+      "invokes": [ "method10", "method28", "method29", "method72" ],
+      "lineCount": 28,
+      "loc": 654,
+      "pmdCyclo": 6,
+      "reads": [ "basic1", "basic5", "interfaceDesc17", "object8", "object15", "object16", "object17", "object20", "object35", "selection8", "selection30" ],
+      "writes": [ "basic1", "basic5", "object15" ]
+    },
+    {
+      "codeCount": 40,
+      "complexity": 8,
+      "indents": 95,
+      "invokes": [ "method15", "method17", "method23", "method26", "method55", "method59", "method64", "method65", "method71", "method96", "method98" ],
+      "lineCount": 47,
+      "loc": 683,
+      "pmdCyclo": 9,
+      "reads": [ "basic1", "basic2", "basic3", "basic5", "interfaceDesc17", "object8", "object29", "object35", "object38", "object40", "selection2", "selection9", "selection48" ],
+      "writes": [ "basic3", "basic5", "object38" ]
+    },
+    {
+      "codeCount": 7,
+      "complexity": 2,
+      "indents": 5,
+      "invokes": [ "method38", "method55" ],
+      "lineCount": 8,
+      "loc": 740,
+      "pmdCyclo": 2,
+      "reads": [ "basic1", "basic5", "interfaceDesc17", "object8", "object35", "selection14", "selection30" ]
+    },
+    {
+      "codeCount": 9,
+      "complexity": 2,
+      "indents": 7,
+      "invokes": [ "method1", "method19", "method56", "method90", "method97", "methodInst1", "methodInst8", "methodInst9" ],
+      "lineCount": 13,
+      "loc": 766,
+      "pmdCyclo": 2,
+      "reads": [ "basic1", "basic3", "basic5", "interfaceDesc17", "interfaceInst1", "interfaceInst2", "object1", "object8", "objectInst1" ],
+      "writes": [ "basic5", "objectInst1" ]
+    },
+    {
+      "codeCount": 18,
+      "complexity": 1,
+      "indents": 34,
+      "invokes": [ "method54", "method79" ],
+      "lineCount": 18,
+      "loc": 809,
+      "pmdCyclo": 1,
+      "reads": [ "basic5", "object32", "object40", "selection36" ]
+    },
+    {
+      "codeCount": 22,
+      "complexity": 5,
+      "indents": 38,
+      "invokes": [ "method2", "method14", "method46", "method75", "method76", "method78", "method79", "methodInst7" ],
+      "lineCount": 37,
+      "loc": 828,
+      "pmdCyclo": 7,
+      "reads": [ "basic1", "basic5", "interfaceDesc17", "object3", "object4", "object5", "object10", "object26", "object32", "object40", "object41", "objectInst2", "selection36" ],
+      "writes": [ "object4", "objectInst2" ]
+    },
+    {
+      "codeCount": 14,
+      "complexity": 3,
+      "indents": 20,
+      "invokes": [ "method67", "method78", "method79" ],
+      "lineCount": 14,
+      "loc": 866,
+      "pmdCyclo": 3,
+      "reads": [ "basic1", "basic3", "basic5", "interfaceDesc17", "interfaceInst2", "object10", "object23", "object32", "object40", "object41", "selection32", "selection36", "selection42", "selection44" ]
+    },
+    {
+      "codeCount": 85,
+      "complexity": 13,
+      "indents": 237,
+      "invokes": [ "method2", "method3", "method14", "method24", "method26", "method43", "method46", "method49", "method50", "method58", "method67", "method69", "method75", "method76", "method78", "method79", "method81", "method82", "method84", "method95", "methodInst4", "methodInst6", "methodInst7" ],
+      "lineCount": 120,
+      "loc": 881,
+      "pmdCyclo": 15,
+      "reads": [ "basic1", "basic2", "basic3", "basic5", "interfaceDecl10", "interfaceDecl11", "interfaceDesc17", "interfaceInst1", "interfaceInst2", "interfaceInst5", "object3", "object4", "object5", "object6", "object7", "object9", "object10", "object12", "object14", "object21", "object23", "object25", "object26", "object32", "object40", "object41", "objectInst2", "objectInst3", "selection31", "selection32", "selection35", "selection36", "selection37", "selection44", "selection45", "selection47" ],
+      "writes": [ "basic1", "basic5", "interfaceDesc17", "interfaceInst1", "interfaceInst2", "interfaceInst5", "object4", "object6", "object7", "object23", "object41", "objectInst2", "selection31", "selection32", "selection35", "selection37", "selection44", "selection45", "selection47" ]
+    },
+    {
+      "codeCount": 14,
+      "complexity": 3,
+      "indents": 19,
+      "invokes": [ "method67", "method78", "method82" ],
+      "lineCount": 21,
+      "loc": 1002,
+      "pmdCyclo": 3,
+      "reads": [ "basic1", "interfaceDesc17", "interfaceInst2", "object7", "object10", "object23", "object32", "object40", "object41", "selection31", "selection32", "selection36", "selection45" ],
+      "writes": [ "interfaceInst2" ]
+    },
+    {
+      "codeCount": 15,
+      "complexity": 3,
+      "indents": 23,
+      "invokes": [ "method67", "method78", "method82" ],
+      "lineCount": 21,
+      "loc": 1024,
+      "pmdCyclo": 3,
+      "reads": [ "basic1", "interfaceDesc17", "interfaceInst2", "object7", "object10", "object23", "object32", "object40", "object41", "selection31", "selection32", "selection36", "selection47" ],
+      "writes": [ "interfaceInst2" ]
+    },
+    {
+      "codeCount": 13,
+      "complexity": 2,
+      "indents": 16,
+      "invokes": [ "method67", "method78" ],
+      "lineCount": 18,
+      "loc": 1046,
+      "pmdCyclo": 2,
+      "reads": [ "basic1", "interfaceDesc17", "interfaceInst2", "object7", "object10", "object23", "object32", "object40", "object41", "selection31", "selection32", "selection35", "selection36" ],
+      "writes": [ "interfaceDesc17", "interfaceInst2", "object7", "selection31", "selection32" ]
+    },
+    {
+      "codeCount": 5,
+      "complexity": 1,
+      "indents": 4,
+      "invokes": [ "method82" ],
+      "lineCount": 5,
+      "loc": 1074,
+      "pmdCyclo": 1,
+      "reads": [ "basic1", "interfaceDesc17", "object7", "object10" ]
+    },
+    {
+      "codeCount": 6,
+      "complexity": 1,
+      "indents": 4,
+      "lineCount": 6,
+      "loc": 1080,
+      "pmdCyclo": 1,
+      "reads": [ "basic1", "object7", "object10", "selection25" ]
+    },
+    {
+      "codeCount": 6,
+      "complexity": 1,
+      "indents": 4,
+      "lineCount": 6,
+      "loc": 1087,
+      "pmdCyclo": 1,
+      "reads": [ "basic1", "object7", "object10", "selection25" ],
+      "writes": [ "basic1", "selection25" ]
+    },
+    {
+      "codeCount": 10,
+      "complexity": 2,
+      "indents": 13,
+      "invokes": [ "method12", "method70", "method82", "method88" ],
+      "lineCount": 11,
+      "loc": 1095,
+      "pmdCyclo": 3,
+      "reads": [ "basic1", "object7", "object10", "object19" ]
+    },
+    {
+      "codeCount": 10,
+      "complexity": 2,
+      "indents": 13,
+      "invokes": [ "method12", "method70", "method82", "method88" ],
+      "lineCount": 11,
+      "loc": 1108,
+      "pmdCyclo": 3,
+      "reads": [ "basic1", "object7", "object10", "object19" ]
+    },
+    {
+      "codeCount": 4,
+      "complexity": 1,
+      "indents": 1,
+      "invokes": [ "method42" ],
+      "lineCount": 4,
+      "loc": 1121,
+      "pmdCyclo": 1,
+      "reads": [ "basic5", "interfaceDesc17", "object7", "object10", "object14" ]
+    },
+    {
+      "codeCount": 4,
+      "complexity": 1,
+      "indents": 1,
+      "invokes": [ "method42" ],
+      "lineCount": 4,
+      "loc": 1127,
+      "pmdCyclo": 1,
+      "reads": [ "basic5", "interfaceDesc17", "object7", "object10", "object14" ]
+    },
+    {
+      "codeCount": 4,
+      "complexity": 1,
+      "indents": 1,
+      "invokes": [ "method42" ],
+      "lineCount": 4,
+      "loc": 1133,
+      "pmdCyclo": 1,
+      "reads": [ "basic5", "interfaceDesc17", "object7", "object10", "object14" ]
+    },
+    {
+      "codeCount": 16,
+      "complexity": 3,
+      "indents": 34,
+      "invokes": [ "method43", "method82", "method99" ],
+      "lineCount": 16,
+      "loc": 1139,
+      "pmdCyclo": 3,
+      "reads": [ "basic1", "basic5", "interfaceDesc17", "object7", "object10", "object14", "object41" ],
+      "writes": [ "basic5" ]
+    },
+    {
+      "codeCount": 4,
+      "complexity": 1,
+      "getter": true,
+      "indents": 1,
+      "lineCount": 4,
+      "loc": 1167,
+      "pmdCyclo": 1,
+      "reads": [ "interfaceDecl11", "object6", "object10", "selection33" ]
+    },
+    {
+      "codeCount": 4,
+      "complexity": 1,
+      "indents": 1,
+      "lineCount": 4,
+      "loc": 1172,
+      "pmdCyclo": 1,
+      "reads": [ "interfaceDecl11", "object6", "object10", "selection33" ],
+      "setter": true,
+      "writes": [ "interfaceDecl11", "selection33" ]
+    },
+    {
+      "codeCount": 4,
+      "complexity": 1,
+      "getter": true,
+      "indents": 1,
+      "lineCount": 4,
+      "loc": 1178,
+      "pmdCyclo": 1,
+      "reads": [ "basic5", "interfaceInst1", "object6", "object10", "selection23" ]
+    },
+    {
+      "codeCount": 4,
+      "complexity": 1,
+      "indents": 1,
+      "lineCount": 4,
+      "loc": 1183,
+      "pmdCyclo": 1,
+      "reads": [ "basic5", "interfaceInst1", "object6", "object10", "selection23" ],
+      "setter": true,
+      "writes": [ "interfaceInst1", "selection23" ]
+    },
+    {
+      "codeCount": 7,
+      "complexity": 1,
+      "indents": 6,
+      "invokes": [ "method4", "method13" ],
+      "lineCount": 7,
+      "loc": 1232,
+      "pmdCyclo": 1,
+      "reads": [ "interfaceDesc17", "object8", "object12", "object22", "selection28", "selection43", "selection46" ],
+      "writes": [ "object8", "object22", "selection28", "selection43", "selection46" ]
+    },
+    {
+      "codeCount": 68,
+      "complexity": 18,
+      "indents": 224,
+      "invokes": [ "abstract29", "method11", "method21", "method24", "method34", "method56", "method57", "method73", "method83", "method85", "method102" ],
+      "lineCount": 79,
+      "loc": 1268,
+      "pmdCyclo": 24,
+      "reads": [ "basic1", "basic3", "basic5", "interfaceDecl10", "interfaceDesc17", "interfaceInst1", "object8", "object12", "object18", "object22", "object40", "selection1", "selection15", "selection16", "selection18", "selection19", "selection20", "selection28", "selection29", "selection43", "selection46" ],
+      "writes": [ "basic3", "basic5", "interfaceInst1", "selection29" ]
+    },
+    {
+      "codeCount": 4,
+      "complexity": 1,
+      "indents": 1,
+      "invokes": [ "method68" ],
+      "lineCount": 5,
+      "loc": 1351,
+      "pmdCyclo": 1,
+      "reads": [ "object12", "object22", "selection46" ]
+    },
+    {
+      "codeCount": 4,
+      "complexity": 1,
+      "indents": 1,
+      "invokes": [ "method68" ],
+      "lineCount": 5,
+      "loc": 1360,
+      "pmdCyclo": 1,
+      "reads": [ "object12", "object22", "selection43" ]
+    },
+    {
+      "codeCount": 4,
+      "complexity": 1,
+      "indents": 1,
+      "invokes": [ "method79" ],
+      "lineCount": 5,
+      "loc": 1369,
+      "pmdCyclo": 1,
+      "reads": [ "basic3", "basic5", "interfaceDesc17", "object12", "object32", "object40", "selection36" ]
+    },
+    {
+      "codeCount": 3,
+      "complexity": 1,
+      "indents": 1,
+      "lineCount": 3,
+      "loc": 1384,
+      "pmdCyclo": 1,
+      "reads": [ "interfaceDesc17" ]
+    },
+    {
+      "codeCount": 6,
+      "complexity": 2,
+      "indents": 4,
+      "lineCount": 6,
+      "loc": 1388,
+      "pmdCyclo": 2,
+      "reads": [ "basic1", "basic5", "interfaceDesc17", "object12", "object22", "selection41" ],
+      "writes": [ "basic5", "selection41" ]
+    },
+    {
+      "codeCount": 6,
+      "complexity": 2,
+      "indents": 4,
+      "lineCount": 6,
+      "loc": 1394,
+      "pmdCyclo": 2,
+      "reads": [ "basic1", "basic5", "interfaceDesc17", "object12", "object22", "selection26" ],
+      "writes": [ "basic5", "selection26" ]
+    },
+    {
+      "codeCount": 11,
+      "complexity": 3,
+      "indents": 15,
+      "invokes": [ "method1", "method20", "method25", "method90", "method97", "methodInst2", "methodInst3", "methodInst8", "methodInst9" ],
+      "lineCount": 11,
+      "loc": 1400,
+      "pmdCyclo": 3,
+      "reads": [ "basic1", "basic3", "basic5", "interfaceDecl7", "interfaceDesc17", "interfaceInst1", "interfaceInst2", "interfaceInst7", "object1", "object2", "object12", "object22", "objectInst1", "selection24", "typeParam1" ],
+      "writes": [ "interfaceInst1", "objectInst1", "selection24" ]
+    },
+    {
+      "codeCount": 15,
+      "complexity": 4,
+      "indents": 24,
+      "invokes": [ "method34", "method37", "method51", "method67", "method76", "methodInst7" ],
+      "lineCount": 21,
+      "loc": 1412,
+      "pmdCyclo": 4,
+      "reads": [ "basic1", "basic3", "basic5", "interfaceDesc17", "interfaceInst1", "interfaceInst2", "object3", "object12", "object22", "object23", "object24", "object40", "objectInst2", "selection17", "selection24", "selection26", "selection38", "selection39", "selection41" ],
+      "writes": [ "interfaceDesc17", "interfaceInst2" ]
+    },
+    {
+      "codeCount": 25,
+      "complexity": 6,
+      "indents": 29,
+      "invokes": [ "method2", "method14", "method46", "method50", "method75", "methodInst4" ],
+      "lineCount": 33,
+      "loc": 1434,
+      "pmdCyclo": 8,
+      "reads": [ "basic1", "basic3", "basic5", "interfaceDesc17", "interfaceInst1", "interfaceInst5", "object3", "object4", "object5", "object12", "object22", "object23", "object26", "objectInst2", "objectInst3", "selection24", "selection26", "selection38", "selection39", "selection41" ],
+      "writes": [ "basic5", "interfaceInst1", "interfaceInst5", "object4", "object23", "objectInst2", "selection24", "selection26", "selection38", "selection39", "selection41" ]
+    }
+  ],
+  "name": "Apache Commons Daemon",
+  "objectInsts": [
+    {
+      "generic": 1,
+      "instanceTypes": [ "basic5" ],
+      "methods": [ 1, 2, 8, 9 ],
+      "resData": 1,
+      "resInterface": 17
+    },
+    {
+      "generic": 3,
+      "instanceTypes": [ "interfaceDesc17" ],
+      "methods": [ 4, 6, 7 ],
+      "resData": 1,
+      "resInterface": 17
+    },
+    {
+      "generic": 3,
+      "instanceTypes": [ "interfaceInst1" ],
+      "resData": 1,
+      "resInterface": 17
+    },
+    {
+      "generic": 3,
+      "instanceTypes": [ "object11" ],
+      "methods": [ 5 ],
+      "resData": 1,
+      "resInterface": 17
+    }
+  ],
+  "objects": [
+    {
+      "data": 1,
+      "interface": 17,
+      "methods": [ 1, 19, 20, 90, 97 ],
+      "name": "ArrayList",
+      "package": 8,
+      "shadow": true,
+      "typeParams": [ 1 ],
+      "vis": "public"
+    },
+    {
+      "data": 1,
+      "interface": 17,
+      "methods": [ 25 ],
+      "name": "Arrays",
+      "package": 8,
+      "shadow": true,
+      "vis": "public"
+    },
+    {
+      "data": 1,
+      "interface": 17,
+      "methods": [ 46, 50, 52, 69, 76 ],
+      "name": "Class",
+      "package": 3,
+      "shadow": true,
+      "typeParams": [ 3 ],
+      "vis": "public"
+    },
+    {
+      "data": 1,
+      "interface": 17,
+      "methods": [ 75 ],
+      "name": "ClassLoader",
+      "package": 3,
+      "shadow": true,
+      "vis": "public"
+    },
+    {
+      "data": 1,
+      "interface": 17,
+      "methods": [ 2 ],
+      "name": "ClassNotFoundException",
+      "package": 3,
+      "shadow": true,
+      "vis": "public"
+    },
+    {
+      "data": 7,
+      "interface": 9,
+      "loc": 1158,
+      "methods": [ 45, 47, 81, 84 ],
+      "name": "Context",
+      "nest": "object10",
+      "package": 10,
+      "vis": "public"
+    },
+    {
+      "data": 5,
+      "interface": 13,
+      "loc": 1068,
+      "methods": [ 3, 39, 40, 41, 42, 70, 80, 82, 87 ],
+      "name": "Controller",
+      "nest": "object10",
+      "package": 10,
+      "vis": "public"
+    },
+    {
+      "data": 3,
+      "interface": 10,
+      "loc": 622,
+      "methods": [ 4, 38, 56, 57, 73 ],
+      "name": "DaemonConfiguration",
+      "package": 10,
+      "vis": "public"
+    },
+    {
+      "data": 11,
+      "interface": 7,
+      "loc": 105,
+      "methods": [ 5, 6, 49 ],
+      "name": "DaemonInitException",
+      "package": 9,
+      "vis": "public"
+    },
+    {
+      "data": 6,
+      "interface": 17,
+      "loc": 796,
+      "methods": [ 27, 32, 43, 74, 88, 89, 91, 93, 103 ],
+      "name": "DaemonLoader",
+      "nested": [ "object6", "object7" ],
+      "package": 10,
+      "vis": "public"
+    },
+    {
+      "data": 10,
+      "interface": 12,
+      "loc": 231,
+      "methods": [ 7, 8, 30, 31, 35, 44, 62, 63, 86, 100 ],
+      "name": "DaemonPermission",
+      "package": 9,
+      "vis": "public"
+    },
+    {
+      "data": 2,
+      "interface": 16,
+      "loc": 1217,
+      "methods": [ 9, 33, 66, 92, 94 ],
+      "name": "DaemonWrapper",
+      "nested": [ "object22" ],
+      "package": 10,
+      "vis": "public"
+    },
+    {
+      "data": 1,
+      "interface": 17,
+      "name": "Enum",
+      "package": 3,
+      "shadow": true,
+      "typeParams": [ 2 ],
+      "vis": "public"
+    },
+    { "data": 1, "interface": 17, "name": "Exception", "package": 3, "shadow": true, "vis": "public" },
+    {
+      "data": 1,
+      "interface": 17,
+      "methods": [ 10, 29 ],
+      "name": "FileInputStream",
+      "package": 2,
+      "shadow": true,
+      "vis": "public"
+    },
+    { "data": 1, "interface": 17, "name": "FileNotFoundException", "package": 2, "shadow": true, "vis": "public" },
+    { "data": 1, "interface": 17, "name": "IOException", "package": 2, "shadow": true, "vis": "public" },
+    {
+      "data": 1,
+      "interface": 17,
+      "methods": [ 11 ],
+      "name": "IllegalArgumentException",
+      "package": 3,
+      "shadow": true,
+      "vis": "public"
+    },
+    {
+      "data": 1,
+      "interface": 17,
+      "methods": [ 12 ],
+      "name": "IllegalStateException",
+      "package": 3,
+      "shadow": true,
+      "vis": "public"
+    },
+    { "data": 1, "interface": 17, "name": "InputStream", "package": 2, "shadow": true, "vis": "public" },
+    {
+      "data": 1,
+      "interface": 17,
+      "methods": [ 58 ],
+      "name": "InvocationTargetException",
+      "package": 5,
+      "shadow": true,
+      "vis": "public"
+    },
+    {
+      "data": 9,
+      "interface": 11,
+      "loc": 1376,
+      "methods": [ 13, 21, 68, 83, 85, 102 ],
+      "name": "Invoker",
+      "nest": "object12",
+      "package": 10
+    },
+    {
+      "data": 1,
+      "interface": 17,
+      "methods": [ 51, 67 ],
+      "name": "Method",
+      "package": 5,
+      "shadow": true,
+      "vis": "public"
+    },
+    { "data": 4, "interface": 17, "name": "Modifier", "package": 5, "shadow": true, "vis": "public" },
+    { "data": 1, "interface": 17, "name": "NoSuchMethodException", "package": 3, "shadow": true, "vis": "public" },
+    {
+      "data": 1,
+      "interface": 17,
+      "methods": [ 14 ],
+      "name": "NullPointerException",
+      "package": 3,
+      "shadow": true,
+      "vis": "public"
+    },
+    { "data": 1, "interface": 17, "name": "ObjectInputStream", "package": 2, "shadow": true, "vis": "public" },
+    { "data": 1, "interface": 17, "name": "ObjectOutputStream", "package": 2, "shadow": true, "vis": "public" },
+    {
+      "data": 1,
+      "interface": 17,
+      "methods": [ 15 ],
+      "name": "ParseException",
+      "package": 7,
+      "shadow": true,
+      "vis": "public"
+    },
+    { "data": 1, "interface": 17, "name": "Permission", "package": 6, "shadow": true, "vis": "public" },
+    { "data": 1, "interface": 17, "name": "PermissionCollection", "package": 6, "shadow": true, "vis": "public" },
+    {
+      "data": 1,
+      "interface": 17,
+      "methods": [ 79 ],
+      "name": "PrintStream",
+      "package": 2,
+      "shadow": true,
+      "vis": "public"
+    },
+    { "data": 1, "interface": 17, "name": "PrintStreamOrWriter", "nest": "object41", "package": 3, "shadow": true, "vis": "private" },
+    { "data": 1, "interface": 17, "name": "PrintWriter", "package": 2, "shadow": true, "vis": "public" },
+    {
+      "data": 1,
+      "interface": 17,
+      "methods": [ 16, 28, 55, 72 ],
+      "name": "Properties",
+      "package": 8,
+      "shadow": true,
+      "vis": "public"
+    },
+    { "data": 1, "interface": 17, "name": "StackTraceElement", "package": 3, "shadow": true, "vis": "public" },
+    {
+      "data": 1,
+      "interface": 17,
+      "methods": [ 26, 34, 36, 61, 64, 65, 71, 95, 96, 101 ],
+      "name": "String",
+      "package": 3,
+      "shadow": true,
+      "vis": "public"
+    },
+    {
+      "data": 1,
+      "interface": 17,
+      "methods": [ 17, 22, 23, 98 ],
+      "name": "StringBuffer",
+      "package": 3,
+      "shadow": true,
+      "vis": "public"
+    },
+    {
+      "data": 1,
+      "interface": 17,
+      "methods": [ 18, 60, 77 ],
+      "name": "StringTokenizer",
+      "package": 8,
+      "shadow": true,
+      "vis": "public"
+    },
+    {
+      "data": 8,
+      "interface": 17,
+      "methods": [ 24, 37, 53, 54, 59 ],
+      "name": "System",
+      "package": 3,
+      "shadow": true,
+      "vis": "public"
+    },
+    {
+      "data": 1,
+      "interface": 17,
+      "methods": [ 48, 78, 99 ],
+      "name": "Throwable",
+      "nested": [ "object33" ],
+      "package": 3,
+      "shadow": true,
+      "vis": "public"
+    }
+  ],
+  "packages": [
+    {
+      "interfaces": [ 1 ],
+      "name": "$builtin"
+    },
+    {
+      "imports": [ 2 ],
+      "interfaces": [ 6, 19, 20, 21, 23 ],
+      "methods": [ 10, 29, 79 ],
+      "name": "java.io",
+      "objects": [ 15, 16, 17, 20, 27, 28, 32, 34 ]
+    },
+    {
+      "imports": [ 3 ],
+      "interfaces": [ 3, 4, 5, 8 ],
+      "methods": [ 2, 11, 12, 14, 17, 22, 23, 24, 26, 34, 36, 37, 46, 48, 50, 52, 53, 54, 59, 61, 64, 65, 69, 71, 75, 76, 78, 95, 96, 98, 99, 101 ],
+      "name": "java.lang",
+      "objects": [ 3, 4, 5, 13, 14, 18, 19, 25, 26, 33, 36, 37, 38, 40, 41 ]
+    },
+    {
+      "interfaces": [ 26 ],
+      "name": "java.lang.invoke"
+    },
+    {
+      "interfaces": [ 2, 16, 25 ],
+      "methods": [ 51, 58, 67 ],
+      "name": "java.lang.reflect",
+      "objects": [ 21, 23, 24 ]
+    },
+    {
+      "imports": [ 6 ],
+      "interfaces": [ 17 ],
+      "name": "java.security",
+      "objects": [ 30, 31 ]
+    },
+    {
+      "methods": [ 15 ],
+      "name": "java.text",
+      "objects": [ 29 ]
+    },
+    {
+      "imports": [ 8 ],
+      "interfaces": [ 7, 14, 15, 18, 22, 24 ],
+      "methods": [ 1, 16, 18, 19, 20, 25, 28, 55, 60, 72, 77, 90, 97 ],
+      "name": "java.util",
+      "objects": [ 1, 2, 35, 39 ]
+    },
+    {
+      "interfaces": [ 9, 10, 11, 12, 13 ],
+      "methods": [ 5, 6, 7, 8, 30, 31, 35, 44, 49, 62, 63, 86, 100 ],
+      "name": "org.apache.commons.daemon",
+      "objects": [ 9, 11 ]
+    },
+    {
+      "methods": [ 3, 4, 9, 13, 21, 27, 32, 33, 38, 39, 40, 41, 42, 43, 45, 47, 56, 57, 66, 68, 70, 73, 74, 80, 81, 82, 83, 84, 85, 87, 88, 89, 91, 92, 93, 94, 102, 103 ],
+      "name": "org.apache.commons.daemon.support",
+      "objects": [ 6, 7, 8, 10, 12, 22 ]
+    }
+  ],
+  "selections": [
+    { "name": "ARGS", "origin": "object12" },
+    { "name": "BTOKEN", "origin": "object8" },
+    { "name": "CONTROL", "origin": "object11" },
+    { "name": "CONTROL_RELOAD", "origin": "object11" },
+    { "name": "CONTROL_SHUTDOWN", "origin": "object11" },
+    { "name": "CONTROL_START", "origin": "object11" },
+    { "name": "CONTROL_STOP", "origin": "object11" },
+    { "name": "DEFAULT_CONFIG", "origin": "object8" },
+    { "name": "ETOKEN", "origin": "object8" },
+    { "name": "MASK_CONTROL_RELOAD", "origin": "object11" },
+    { "name": "MASK_CONTROL_SHUTDOWN", "origin": "object11" },
+    { "name": "MASK_CONTROL_START", "origin": "object11" },
+    { "name": "MASK_CONTROL_STOP", "origin": "object11" },
+    { "name": "PREFIX", "origin": "object8" },
+    { "name": "START_CLASS", "origin": "object12" },
+    { "name": "START_METHOD", "origin": "object12" },
+    { "name": "STATIC", "origin": "object24" },
+    { "name": "STOP_ARGS", "origin": "object12" },
+    { "name": "STOP_CLASS", "origin": "object12" },
+    { "name": "STOP_METHOD", "origin": "object12" },
+    { "name": "TYPE_CONTROL", "origin": "object11" },
+    { "name": "WILDCARD", "origin": "object11" },
+    { "name": "args", "origin": "object6" },
+    { "name": "args", "origin": "object22" },
+    { "name": "available", "origin": "object7" },
+    { "name": "call", "origin": "object22" },
+    { "name": "cause", "origin": "object9" },
+    { "name": "config", "origin": "object12" },
+    { "name": "configFileName", "origin": "object12" },
+    { "name": "configurationProperties", "origin": "object8" },
+    { "name": "controller", "origin": "object10" },
+    { "name": "daemon", "origin": "object10" },
+    { "name": "daemonController", "origin": "object6" },
+    { "name": "desc", "origin": "object11" },
+    { "name": "destroy", "origin": "object10" },
+    { "name": "err", "origin": "object40" },
+    { "name": "init", "origin": "object10" },
+    { "name": "inst", "origin": "object22" },
+    { "name": "main", "origin": "object22" },
+    { "name": "mask", "origin": "object11" },
+    { "name": "name", "origin": "object22" },
+    { "name": "out", "origin": "object40" },
+    { "name": "shutdown", "origin": "object12" },
+    { "name": "signal", "origin": "object10" },
+    { "name": "start", "origin": "object10" },
+    { "name": "startup", "origin": "object12" },
+    { "name": "stop", "origin": "object10" },
+    { "name": "systemProperties", "origin": "object8" },
+    { "name": "type", "origin": "object11" }
+  ],
+  "signatures": [
+    { },
+    {
+      "results": [ 1 ]
+    },
+    {
+      "results": [ 3 ]
+    },
+    {
+      "results": [ 4 ]
+    },
+    {
+      "results": [ 6 ]
+    },
+    {
+      "results": [ 7 ]
+    },
+    {
+      "results": [ 8 ]
+    },
+    {
+      "results": [ 9 ]
+    },
+    {
+      "results": [ 10 ]
+    },
+    {
+      "results": [ 13 ]
+    },
+    {
+      "results": [ 14 ]
+    },
+    {
+      "results": [ 16 ]
+    },
+    {
+      "results": [ 17 ]
+    },
+    {
+      "results": [ 20 ]
+    },
+    {
+      "results": [ 23 ]
+    },
+    {
+      "results": [ 24 ]
+    },
+    {
+      "results": [ 28 ]
+    },
+    {
+      "results": [ 29 ]
+    },
+    {
+      "results": [ 31 ]
+    },
+    {
+      "results": [ 33 ]
+    },
+    {
+      "results": [ 35 ]
+    },
+    {
+      "params": [ 36 ],
+      "results": [ 3 ]
+    },
+    {
+      "params": [ 37 ],
+      "results": [ 31 ]
+    },
+    {
+      "params": [ 38 ]
+    },
+    {
+      "params": [ 38 ],
+      "results": [ 2 ]
+    },
+    {
+      "params": [ 38 ],
+      "results": [ 4 ]
+    },
+    {
+      "params": [ 38 ],
+      "results": [ 33 ]
+    },
+    {
+      "params": [ 38, 56 ],
+      "results": [ 4 ]
+    },
+    {
+      "params": [ 39 ]
+    },
+    {
+      "params": [ 39 ],
+      "results": [ 1 ]
+    },
+    {
+      "params": [ 39 ],
+      "results": [ 3 ]
+    },
+    {
+      "params": [ 39 ],
+      "results": [ 4 ]
+    },
+    {
+      "params": [ 39 ],
+      "results": [ 15 ]
+    },
+    {
+      "params": [ 39 ],
+      "results": [ 21 ]
+    },
+    {
+      "params": [ 39 ],
+      "results": [ 22 ]
+    },
+    {
+      "params": [ 39 ],
+      "results": [ 26 ]
+    },
+    {
+      "params": [ 39 ],
+      "results": [ 31 ]
+    },
+    {
+      "params": [ 39 ],
+      "results": [ 34 ]
+    },
+    {
+      "params": [ 39, 56 ],
+      "results": [ 3 ]
+    },
+    {
+      "params": [ 39, 56 ],
+      "results": [ 27 ]
+    },
+    {
+      "params": [ 39, 57, 61 ],
+      "results": [ 32 ]
+    },
+    {
+      "params": [ 40 ],
+      "results": [ 5 ]
+    },
+    {
+      "params": [ 41 ],
+      "results": [ 1 ]
+    },
+    {
+      "params": [ 42 ]
+    },
+    {
+      "params": [ 42 ],
+      "results": [ 1 ]
+    },
+    {
+      "params": [ 42, 56, 63, 64, 66 ]
+    },
+    {
+      "params": [ 43 ],
+      "results": [ 8 ]
+    },
+    {
+      "params": [ 44 ]
+    },
+    {
+      "params": [ 45 ],
+      "results": [ 1 ]
+    },
+    {
+      "params": [ 46 ],
+      "results": [ 3 ]
+    },
+    {
+      "params": [ 47 ]
+    },
+    {
+      "params": [ 48 ]
+    },
+    {
+      "params": [ 49 ]
+    },
+    {
+      "params": [ 50 ]
+    },
+    {
+      "params": [ 51 ]
+    },
+    {
+      "params": [ 51, 59, 62, 65, 67 ]
+    },
+    {
+      "params": [ 52 ]
+    },
+    {
+      "params": [ 53 ]
+    },
+    {
+      "params": [ 53 ],
+      "results": [ 33 ]
+    },
+    {
+      "params": [ 54 ],
+      "results": [ 1 ]
+    },
+    {
+      "params": [ 55 ],
+      "results": [ 1 ]
+    },
+    {
+      "params": [ 68 ]
+    },
+    {
+      "params": [ 69 ]
+    },
+    {
+      "params": [ 71, 68 ],
+      "results": [ 1 ]
+    },
+    {
+      "params": [ 72 ],
+      "results": [ 1 ]
+    },
+    {
+      "params": [ 73 ]
+    },
+    {
+      "params": [ 74 ]
+    },
+    {
+      "params": [ 75 ]
+    },
+    {
+      "params": [ 76 ],
+      "results": [ 1 ]
+    },
+    {
+      "params": [ 77 ],
+      "results": [ 4 ]
+    },
+    {
+      "params": [ 77 ],
+      "results": [ 7 ]
+    },
+    {
+      "params": [ 77 ],
+      "results": [ 30 ]
+    },
+    {
+      "params": [ 77 ],
+      "results": [ 33 ]
+    },
+    {
+      "params": [ 77 ],
+      "results": [ 34 ]
+    },
+    {
+      "params": [ 77 ],
+      "results": [ 35 ]
+    },
+    {
+      "params": [ 77, 86 ]
+    },
+    {
+      "params": [ 77, 87 ]
+    },
+    {
+      "params": [ 77, 88 ]
+    },
+    {
+      "params": [ 77, 89 ]
+    },
+    {
+      "params": [ 77, 90 ]
+    },
+    {
+      "params": [ 77, 91 ]
+    },
+    {
+      "params": [ 78 ],
+      "results": [ 4 ]
+    },
+    {
+      "params": [ 79 ]
+    },
+    {
+      "params": [ 79 ],
+      "results": [ 18 ]
+    },
+    {
+      "params": [ 79, 70 ],
+      "results": [ 18 ]
+    },
+    {
+      "params": [ 79, 75 ]
+    },
+    {
+      "params": [ 80 ]
+    },
+    {
+      "params": [ 80 ],
+      "results": [ 4 ]
+    },
+    {
+      "params": [ 80 ],
+      "results": [ 8 ]
+    },
+    {
+      "params": [ 81 ],
+      "results": [ 1 ]
+    },
+    {
+      "params": [ 82 ],
+      "results": [ 1 ]
+    },
+    {
+      "params": [ 83 ],
+      "results": [ 4 ]
+    },
+    {
+      "params": [ 84 ]
+    },
+    {
+      "params": [ 85 ],
+      "results": [ 19 ]
+    },
+    {
+      "params": [ 85, 36 ],
+      "results": [ 19 ]
+    },
+    {
+      "params": [ 39, 60 ],
+      "results": [ 25 ],
+      "variadic": true
+    },
+    {
+      "params": [ 40 ],
+      "results": [ 12 ],
+      "variadic": true
+    },
+    {
+      "params": [ 42, 58 ],
+      "results": [ 7 ],
+      "variadic": true
+    },
+    {
+      "params": [ 43 ],
+      "results": [ 11 ],
+      "variadic": true
+    }
+  ],
+  "structDescs": [
+    { },
+    {
+      "fields": [ 5, 23, 24, 27, 28, 26, 40, 39, 61, 57 ]
+    },
+    {
+      "fields": [ 13, 21, 6, 15, 41, 64 ]
+    },
+    {
+      "fields": [ 25 ]
+    },
+    {
+      "fields": [ 35, 1 ]
+    },
+    {
+      "fields": [ 42, 43, 50, 60, 62, 47, 58 ]
+    },
+    {
+      "fields": [ 44, 34, 1 ]
+    },
+    {
+      "fields": [ 49, 55 ]
+    },
+    {
+      "fields": [ 54, 37, 34, 51, 52, 2 ]
+    },
+    {
+      "fields": [ 56, 8, 31, 11, 12, 10, 9, 18, 19, 17, 16, 33, 65, 53, 46, 56, 54, 4 ]
+    },
+    {
+      "fields": [ 56, 38, 56, 56, 36, 48, 32, 38, 59, 45, 30, 63, 20, 22, 7, 29, 14, 3 ]
+    }
+  ],
+  "typeParams": [
+    { "name": "E", "type": "interfaceDesc17" },
+    { "name": "E", "type": "object13" },
+    { "name": "T", "type": "interfaceDesc17" }
+  ],
+  "version": "1.1.1-SNAPSHOT"
+}

@@ -1,0 +1,19 @@
+# cmd: java -jar /Users/grantnelson/go/src/github.com/MSUSEL/msusel-tdmetrics-go/javaAbstractor/target/abstractor-0.1-jar-with-dependencies.jar -i /Users/grantnelson/go/src/github.com/apache/cayenne/ -o /Users/grantnelson/go/src/github.com/MSUSEL/msusel-tdmetrics-go/tdd/abstractions/cayenne.json -v
+# cwd: /Users/grantnelson/go/src/github.com/MSUSEL/msusel-tdmetrics-go/tdd
+# repo: /Users/grantnelson/go/src/github.com/apache/cayenne @ b9988a83e364b9b470873dff8996dcf401d08dc4
+# started: 2026-07-28T01:55:18.155137+00:00
+# timeout_min: 10
+# ---
+Reading /Users/grantnelson/go/src/github.com/apache/cayenne/
+SLF4J(W): No SLF4J providers were found.
+SLF4J(W): Defaulting to no-operation (NOP) logger implementation
+SLF4J(W): See https://www.slf4j.org/codes.html#noProviders for further details.
+Exception in thread "main" spoon.compiler.ModelBuildingException: Entity cannot be resolved to a type at /Users/grantnelson/go/src/github.com/apache/cayenne/itests/jpa-chapter2/src/main/java/org/apache/cayenne/jpa/itest/ch2/entity/EmbeddedIdEntity.java:24
+	at spoon.support.compiler.jdt.JDTBasedSpoonCompiler.report(JDTBasedSpoonCompiler.java:664)
+	at spoon.support.compiler.jdt.JDTBasedSpoonCompiler.reportProblems(JDTBasedSpoonCompiler.java:646)
+	at spoon.support.compiler.jdt.JDTBasedSpoonCompiler.build(JDTBasedSpoonCompiler.java:120)
+	at spoon.support.compiler.jdt.JDTBasedSpoonCompiler.build(JDTBasedSpoonCompiler.java:101)
+	at spoon.Launcher.buildModel(Launcher.java:781)
+	at abstractor.core.Abstractor.prepareMavenProject(Abstractor.java:55)
+	at abstractor.app.App.run(App.java:25)
+	at abstractor.app.App.main(App.java:17)

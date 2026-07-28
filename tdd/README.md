@@ -461,8 +461,11 @@ By default the abstractor jar is rebuilt once at the start via
 `mvn clean compile assembly:single` in `../javaAbstractor/`. Each
 target is then checked out at its pinned commit and the abstractor is
 invoked with `-i <repo>/ -o abstractions/<key>.json -v`. Existing
-`<key>.json` / `<key>.log` are overwritten every run. There is no
-per-project timeout; abstraction typically runs for up to ~2 minutes.
+`<key>.json` / `<key>.log` are overwritten every run. Each project has
+a per-run timeout (in whole minutes) controlled by `--timeout`
+(default `10`; use `--timeout 0` to disable). On timeout the child is
+killed, a `# TIMED OUT ...` line is appended to the log, and the
+project is recorded as failed.
 
 Repos are expected to already be cloned under `~/go/src/github.com/`
 (run `collect_project_metrics.py` first if a repo is missing -- this
@@ -483,6 +486,9 @@ python3 run_abstractor_pipeline.py --skip-build --targets commons-io
 
 # Stop on first failure instead of continuing through the list.
 python3 run_abstractor_pipeline.py --all --stop-on-error
+
+# Override the per-project timeout (whole minutes; 0 = no timeout).
+python3 run_abstractor_pipeline.py --all --timeout 20
 ```
 
 Console prints one `starting <key>...` line and one

@@ -1,0 +1,1625 @@
+# cmd: java -jar /Users/grantnelson/go/src/github.com/MSUSEL/msusel-tdmetrics-go/javaAbstractor/target/abstractor-0.1-jar-with-dependencies.jar -i /Users/grantnelson/go/src/github.com/apache/commons-io/ -o /Users/grantnelson/go/src/github.com/MSUSEL/msusel-tdmetrics-go/tdd/abstractions/commons-io.json -v
+# cwd: /Users/grantnelson/go/src/github.com/MSUSEL/msusel-tdmetrics-go/tdd
+# repo: /Users/grantnelson/go/src/github.com/apache/commons-io @ 65c4a9c0ec651dd99f28b9fae40378728d071985
+# started: 2026-07-28T01:07:45.676088+00:00
+# timeout_min: 10
+# ---
+Reading /Users/grantnelson/go/src/github.com/apache/commons-io/
+SLF4J(W): No SLF4J providers were found.
+SLF4J(W): Defaulting to no-operation (NOP) logger implementation
+SLF4J(W): See https://www.slf4j.org/codes.html#noProviders for further details.
+Init pending package <unnamed>
+Init pending package org
+Init pending package org.apache
+Init pending package org.apache.commons
+Init pending package org.apache.commons.io
+Init pending package org.apache.commons.io.comparator
+Init pending package org.apache.commons.io.filefilter
+Init pending package org.apache.commons.io.input
+Init pending package org.apache.commons.io.monitor
+Init pending package org.apache.commons.io.output
+Init pending package org.apache.commons.io.serialization
+[34mStarting process pending packages...[0m
+  [34mskipping default constructor: org.apache.commons.io.comparator.AbstractFileComparator()[0m
+  Pending package java.io
+  Pending package java.util
+  Pending package java.util.function
+  Pending package java.lang
+  [34mskipping default constructor: org.apache.commons.io.comparator.DefaultFileComparator()[0m
+  [34mskipping default constructor: org.apache.commons.io.comparator.DirectoryFileComparator()[0m
+  Pending package org.apache.commons.io
+  [34mskipping default constructor: org.apache.commons.io.comparator.LastModifiedFileComparator()[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [java.util.Comparator][0m
+  [34mUnused type args: [java.io.File][0m
+  [34mUnused type args: [java.io.File][0m
+  [34mUnused type args: [java.io.File][0m
+  [34mUnused type args: [java.io.File @ src/main/java/org/apache/commons/io/comparator/CompositeFileComparator.java:73:42][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [java.util.Comparator @ src/main/java/org/apache/commons/io/comparator/CompositeFileComparator.java:75:24][0m
+  [34mUnused type args: [java.io.File @ src/main/java/org/apache/commons/io/comparator/CompositeFileComparator.java:75:35][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [java.util.Comparator][0m
+  [34mUnused type args: [java.io.File][0m
+  [34mUnused type args: [java.io.File @ src/main/java/org/apache/commons/io/comparator/CompositeFileComparator.java:76:35][0m
+  [34mUnused type args: [java.util.Comparator][0m
+  [34mUnused type args: [java.io.File][0m
+  [34mUnused type args: [java.util.Comparator][0m
+  [34mUnused type args: [java.io.File][0m
+  [34mUnused type args: [java.io.File][0m
+  [34mUnused type args: [java.io.File][0m
+  [34mUnused type args: [java.io.File][0m
+  [34mUnused type args: [java.io.File @ src/main/java/org/apache/commons/io/comparator/CompositeFileComparator.java:79:42][0m
+  [34mUnused type args: [java.util.Comparator][0m
+  [34mUnused type args: [java.io.File][0m
+  [34mUnused type args: [java.util.Comparator][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [? @ src/main/java/org/apache/commons/io/comparator/CompositeFileComparator.java:79:79][0m
+  [34mUnused type args: [java.util.Comparator][0m
+  [34mUnused type args: [java.io.File][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [java.io.File][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [java.io.File][0m
+  [34mUnused type args: [java.io.File][0m
+  [34mUnused type args: [java.io.File][0m
+  [34mUnused type args: [java.io.File @ src/main/java/org/apache/commons/io/comparator/CompositeFileComparator.java:58:42][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [java.io.File][0m
+  [34mUnused type args: [java.io.File][0m
+  [34mUnused type args: [? @ src/main/java/org/apache/commons/io/comparator/CompositeFileComparator.java:60:66][0m
+  [34mUnused type args: [java.io.File @ src/main/java/org/apache/commons/io/comparator/CompositeFileComparator.java:60:42][0m
+  [34mUnused type args: [java.io.File][0m
+  [34mUnused type args: [java.io.File][0m
+  [34mUnused type args: [java.io.File][0m
+  [34mUnused type args: [java.io.File][0m
+  [34mUnused type args: [java.io.File][0m
+  [34mUnused type args: [java.io.File][0m
+  [34mUnused type args: [java.io.File][0m
+  [34mUnused type args: [?][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [java.io.File @ src/main/java/org/apache/commons/io/comparator/CompositeFileComparator.java:94:31][0m
+  [34mUnused type args: [java.io.File][0m
+  [34mUnused type args: [java.io.File][0m
+  Pending package java.lang.invoke
+  [34mUnused type args: [?][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [java.io.File][0m
+  [34mUnused type args: [java.io.File][0m
+  [34mUnused type args: [java.io.File][0m
+  [34mUnused type args: [java.io.File][0m
+  [34mIgnoring implicit method: (CtMethodImpl) values in (CtEnumImpl) IOCase @ src/main/java/org/apache/commons/io/IOCase.java:36:13[0m
+  [34mIgnoring implicit method: (CtMethodImpl) values in (CtEnumImpl) IOCase @ src/main/java/org/apache/commons/io/IOCase.java:36:13[0m
+  [34mIgnoring implicit method: (CtMethodImpl) values in (CtEnumImpl) IOCase @ src/main/java/org/apache/commons/io/IOCase.java:36:13[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [java.io.File][0m
+  [34mUnused type args: [java.io.File][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [java.io.File][0m
+  [34mUnused type args: [java.io.File][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [java.io.File][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [java.io.File][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [java.io.File][0m
+  [34mUnused type args: [java.io.File][0m
+  [34mUnused type args: [java.io.File][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  Pending package java.math
+  Pending package java.nio.charset
+  Pending package java.net
+  Pending package org.apache.commons.io.filefilter
+  Pending package java.util.zip
+  [34mUnused type args: [java.lang.String][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [java.lang.String][0m
+  [34mUnused type args: [java.lang.String][0m
+  [34mUnused type args: [java.lang.String][0m
+  [34mUnused type args: [java.io.File][0m
+  [34mUnused type args: [java.io.File][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  Pending package java.nio.channels
+  Pending package java.nio
+  [34mUnused type args: [java.io.File @ src/main/java/org/apache/commons/io/FileUtils.java:595:26][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [java.io.File][0m
+  [34mUnused type args: [java.io.File][0m
+  [34mUnused type args: [java.io.File][0m
+  [34mUnused type args: [java.io.File][0m
+  [34mUnused type args: [java.io.File][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [java.lang.String][0m
+  [34mskipping default constructor: org.apache.commons.io.Charsets()[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  Pending package java.nio.file
+  Pending package java.nio.file
+  [34mskipping default constructor: org.apache.commons.io.filefilter.AbstractFileFilter()[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [java.lang.String @ src/main/java/org/apache/commons/io/FileUtils.java:1354:14][0m
+  [34mUnused type args: [java.lang.String][0m
+  [34mUnused type args: [java.lang.String][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [java.lang.String][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [java.lang.String][0m
+  [34mUnused type args: [java.lang.String][0m
+  [34mUnused type args: [java.lang.String][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [java.io.File][0m
+  [34mUnused type args: [java.io.File][0m
+  [34mUnused type args: [java.io.File][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [java.io.File][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [java.io.File][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [java.io.File @ src/main/java/org/apache/commons/io/FileUtils.java:522:26][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [java.io.File][0m
+  [34mUnused type args: [java.io.File][0m
+  [34mUnused type args: [java.io.File][0m
+  [34mUnused type args: [java.io.File][0m
+  [34mUnused type args: [java.lang.String @ src/main/java/org/apache/commons/io/FilenameUtils.java:1427:25][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [java.lang.String][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [java.lang.String][0m
+  [34mUnused type args: [java.lang.String][0m
+  [34mUnused type args: [java.lang.String][0m
+  [34mUnused type args: [java.lang.String][0m
+  [34mUnused type args: [java.lang.String][0m
+  [34mUnused type args: [java.lang.String][0m
+  [34mUnused type args: [java.lang.String][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [java.io.File][0m
+  [34mUnused type args: [java.io.File][0m
+  [34mUnused type args: [java.io.File][0m
+  [34mUnused type args: [java.io.File][0m
+  [34mUnused type args: [java.io.File][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [java.io.File][0m
+  [34mUnused type args: [java.io.File][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  Pending package java.lang
+  Pending package java.io
+  getting parent type for (CtClassImpl) PrintStreamOrWriter
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  Pending package org.apache.commons.io.output
+  [34mskipping default constructor: org.apache.commons.io.output.NullOutputStream()[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [java.lang.String][0m
+  [34mUnused type args: [java.lang.String][0m
+  [34mUnused type args: [java.lang.String][0m
+  [34mUnused type args: [java.lang.String][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [java.io.File][0m
+  [34mUnused type args: [java.io.File][0m
+  [34mUnused type args: [int[] @ src/main/java/org/apache/commons/io/FilenameUtils.java:1342:21][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [int[]][0m
+  [34mUnused type args: [int[]][0m
+  [34mUnused type args: [int[]][0m
+  [34mUnused type args: [int[]][0m
+  [34mUnused type args: [int[]][0m
+  [34mUnused type args: [java.lang.String][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [java.lang.String][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [java.lang.String][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [java.io.File][0m
+  [34mUnused type args: [java.io.File][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [java.lang.String][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [java.lang.String][0m
+  [34mUnused type args: [java.lang.String][0m
+  [34mUnused type args: [java.lang.String][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [java.io.File @ src/main/java/org/apache/commons/io/filefilter/FileFilterUtils.java:122:20][0m
+  [34mUnused type args: [java.io.File][0m
+  [34mUnused type args: [java.io.File][0m
+  [34mUnused type args: [java.io.File][0m
+  [34mUnused type args: [java.io.File][0m
+  [34mUnused type args: [java.io.File][0m
+  [34mUnused type args: [java.io.File][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [java.util.ArrayList][0m
+  [34mUnused type args: [java.io.File][0m
+  [34mUnused type args: [java.io.File][0m
+  [34mUnused type args: [java.io.File][0m
+  [34mUnused type args: [java.io.File][0m
+  [34mUnused type args: [java.io.File][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [java.io.File @ src/main/java/org/apache/commons/io/filefilter/FileFilterUtils.java:152:52][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [java.util.HashSet][0m
+  [34mUnused type args: [java.io.File][0m
+  [34mUnused type args: [java.io.File][0m
+  [34mUnused type args: [java.io.File][0m
+  [34mUnused type args: [java.io.File][0m
+  [34mUnused type args: [java.io.File][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [java.io.File @ src/main/java/org/apache/commons/io/filefilter/FileFilterUtils.java:243:50][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [java.lang.String][0m
+  [34mUnused type args: [java.io.File][0m
+  [34mUnused type args: [java.io.File][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mSkipping selection with no field declaration: (CtFieldReferenceImpl) class[0m
+  [34mSkipping selection with no field declaration: (CtFieldReferenceImpl) class[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [java.lang.String @ src/main/java/org/apache/commons/io/Charsets.java:76:23, java.nio.charset.Charset @ src/main/java/org/apache/commons/io/Charsets.java:76:31][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [java.lang.String, java.nio.charset.Charset][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [java.lang.String][0m
+  [34mUnused type args: [java.lang.String, java.nio.charset.Charset][0m
+  [34mUnused type args: [java.lang.String, java.nio.charset.Charset][0m
+  [34mUnused type args: [java.lang.String, java.nio.charset.Charset][0m
+  [34mUnused type args: [java.lang.String, java.nio.charset.Charset][0m
+  [34mUnused type args: [java.lang.String, java.nio.charset.Charset][0m
+  [34mUnused type args: [java.lang.String, java.nio.charset.Charset][0m
+  [34mUnused type args: [java.lang.String, java.nio.charset.Charset][0m
+  [34mUnused type args: [java.lang.String, java.nio.charset.Charset][0m
+  [34mUnused type args: [K, ?][0m
+  [34mUnused type args: [java.lang.String, java.nio.charset.Charset][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [org.apache.commons.io.filefilter.IOFileFilter @ src/main/java/org/apache/commons/io/filefilter/FileFilterUtils.java:452:20][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [org.apache.commons.io.filefilter.IOFileFilter][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [org.apache.commons.io.filefilter.IOFileFilter][0m
+  [34mUnused type args: [org.apache.commons.io.filefilter.IOFileFilter][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [org.apache.commons.io.filefilter.IOFileFilter][0m
+  [34mUnused type args: [org.apache.commons.io.filefilter.IOFileFilter][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [org.apache.commons.io.filefilter.IOFileFilter][0m
+  [34mUnused type args: [org.apache.commons.io.filefilter.IOFileFilter][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [java.io.File @ src/main/java/org/apache/commons/io/filefilter/FileFilterUtils.java:83:20][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [java.io.File][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [java.io.File][0m
+  [34mUnused type args: [java.io.File][0m
+  [34mUnused type args: [java.io.File][0m
+  [34mUnused type args: [java.io.File][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [java.io.File][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [java.io.File][0m
+  [34mUnused type args: [java.io.File][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [java.lang.String @ src/main/java/org/apache/commons/io/IOUtils.java:1457:20][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [java.lang.String][0m
+  [34mUnused type args: [java.lang.String][0m
+  [34mUnused type args: [java.lang.String][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [java.lang.String][0m
+  [34mUnused type args: [java.lang.String][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [org.apache.commons.io.filefilter.IOFileFilter][0m
+  [34mUnused type args: [org.apache.commons.io.filefilter.IOFileFilter][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [org.apache.commons.io.filefilter.IOFileFilter][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [java.lang.String][0m
+  [34mUnused type args: [java.lang.String][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [org.apache.commons.io.filefilter.IOFileFilter][0m
+  [34mUnused type args: [org.apache.commons.io.filefilter.IOFileFilter][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [org.apache.commons.io.filefilter.IOFileFilter][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [org.apache.commons.io.filefilter.IOFileFilter][0m
+  [34mUnused type args: [org.apache.commons.io.filefilter.IOFileFilter][0m
+  [34mUnused type args: [org.apache.commons.io.filefilter.IOFileFilter][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [org.apache.commons.io.filefilter.IOFileFilter][0m
+  [34mUnused type args: [org.apache.commons.io.filefilter.IOFileFilter][0m
+  [34mUnused type args: [org.apache.commons.io.filefilter.IOFileFilter][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [org.apache.commons.io.filefilter.IOFileFilter][0m
+  [34mUnused type args: [org.apache.commons.io.filefilter.IOFileFilter][0m
+  [34mUnused type args: [org.apache.commons.io.filefilter.IOFileFilter][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [org.apache.commons.io.filefilter.IOFileFilter][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [org.apache.commons.io.filefilter.IOFileFilter][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [org.apache.commons.io.filefilter.IOFileFilter][0m
+  [34mUnused type args: [org.apache.commons.io.filefilter.IOFileFilter][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [org.apache.commons.io.filefilter.IOFileFilter][0m
+  [34mUnused type args: [org.apache.commons.io.filefilter.IOFileFilter][0m
+  [34mUnused type args: [org.apache.commons.io.filefilter.IOFileFilter][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [org.apache.commons.io.filefilter.IOFileFilter][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [org.apache.commons.io.filefilter.IOFileFilter][0m
+  [34mUnused type args: [org.apache.commons.io.filefilter.IOFileFilter][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [org.apache.commons.io.filefilter.IOFileFilter][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [org.apache.commons.io.filefilter.IOFileFilter][0m
+  [34mUnused type args: [byte[]][0m
+  [34mUnused type args: [byte[]][0m
+  [34mUnused type args: [byte[]][0m
+  [34mUnused type args: [org.apache.commons.io.filefilter.IOFileFilter][0m
+  [34mUnused type args: [org.apache.commons.io.filefilter.IOFileFilter][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [org.apache.commons.io.filefilter.IOFileFilter][0m
+  [34mUnused type args: [byte[]][0m
+  [34mUnused type args: [byte[]][0m
+  [34mUnused type args: [byte[]][0m
+  Pending package org.apache.commons.io.input
+  [34mskipping default constructor: org.apache.commons.io.input.ClosedInputStream()[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [java.io.ByteArrayInputStream @ src/main/java/org/apache/commons/io/output/ByteArrayOutputStream.java:341:20][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [java.io.ByteArrayInputStream][0m
+  [34mUnused type args: [byte[]][0m
+  [34mUnused type args: [byte[]][0m
+  [34mUnused type args: [java.io.ByteArrayInputStream][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  Pending package java.util
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [java.io.ByteArrayInputStream][0m
+  [34mUnused type args: [java.io.ByteArrayInputStream][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [java.io.ByteArrayInputStream][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [java.lang.String][0m
+  [34mUnused type args: [java.lang.String][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [org.apache.commons.io.filefilter.IOFileFilter][0m
+  [34mUnused type args: [org.apache.commons.io.filefilter.IOFileFilter][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [org.apache.commons.io.filefilter.IOFileFilter][0m
+  [34mUnused type args: [org.apache.commons.io.filefilter.IOFileFilter][0m
+  [34mUnused type args: [org.apache.commons.io.filefilter.IOFileFilter][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [org.apache.commons.io.filefilter.IOFileFilter][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [org.apache.commons.io.filefilter.IOFileFilter][0m
+  [34mUnused type args: [org.apache.commons.io.filefilter.IOFileFilter][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [org.apache.commons.io.filefilter.IOFileFilter][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [org.apache.commons.io.filefilter.IOFileFilter][0m
+  [34mUnused type args: [org.apache.commons.io.filefilter.IOFileFilter][0m
+  [34mUnused type args: [org.apache.commons.io.filefilter.IOFileFilter][0m
+  [34mUnused type args: [org.apache.commons.io.filefilter.IOFileFilter][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [java.lang.String][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [java.lang.String][0m
+  [34mUnused type args: [java.lang.String][0m
+  [34mUnused type args: [java.lang.String][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [java.lang.String][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [java.lang.String][0m
+  [34mUnused type args: [java.lang.String][0m
+  [34mUnused type args: [java.lang.String][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [org.apache.commons.io.filefilter.IOFileFilter][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [org.apache.commons.io.filefilter.IOFileFilter][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [org.apache.commons.io.filefilter.IOFileFilter][0m
+  [34mUnused type args: [org.apache.commons.io.filefilter.IOFileFilter][0m
+  [34mUnused type args: [org.apache.commons.io.filefilter.IOFileFilter][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [org.apache.commons.io.filefilter.IOFileFilter][0m
+  [34mUnused type args: [org.apache.commons.io.filefilter.IOFileFilter][0m
+  [34mUnused type args: [org.apache.commons.io.filefilter.IOFileFilter][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [org.apache.commons.io.filefilter.IOFileFilter][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [org.apache.commons.io.filefilter.IOFileFilter][0m
+  [34mUnused type args: [byte[]][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [byte[]][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [org.apache.commons.io.filefilter.IOFileFilter][0m
+  [34mUnused type args: [org.apache.commons.io.filefilter.IOFileFilter][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [org.apache.commons.io.filefilter.IOFileFilter][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  getting parent type for (CtClassImpl) CancelException @ src/main/java/org/apache/commons/io/DirectoryWalker.java:588:25
+  Pending package java.lang.ref
+  getting parent type for (CtClassImpl) ForceFileDeleteStrategy @ src/main/java/org/apache/commons/io/FileDeleteStrategy.java:132:18
+  getting parent type for (CtClassImpl) Tracker @ src/main/java/org/apache/commons/io/FileCleaningTracker.java:241:32
+  Pending package java.security
+  Pending package java.lang
+  getting parent type for (CtClassImpl) ThreadLocalMap
+  Pending package sun.nio.ch
+  getting parent type for (CtInterfaceImpl) UncaughtExceptionHandler
+  getting parent type for (CtClassImpl) Reaper @ src/main/java/org/apache/commons/io/FileCleaningTracker.java:206:25
+  getting parent type for (CtEnumImpl) State
+  [34mskipping default constructor: org.apache.commons.io.FileCleaningTracker()[0m
+  [34mskipping default constructor: org.apache.commons.io.FileCleaner()[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [java.lang.String @ src/main/java/org/apache/commons/io/FileSystemUtils.java:316:20][0m
+  [34mUnused type args: [java.lang.String][0m
+  [34mUnused type args: [java.lang.String][0m
+  [34mUnused type args: [java.lang.String][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [?][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mSkipping selection with no field declaration: (CtFieldReferenceImpl) class[0m
+  [34mSkipping selection with no field declaration: (CtFieldReferenceImpl) class[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [java.lang.String][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [org.apache.commons.io.FileCleaningTracker$Tracker][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [java.lang.Object][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [org.apache.commons.io.FileCleaningTracker$Tracker][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [java.lang.String @ src/main/java/org/apache/commons/io/FileSystemUtils.java:416:20][0m
+  [34mUnused type args: [java.lang.String][0m
+  [34mUnused type args: [java.lang.String][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [java.lang.String][0m
+  [34mUnused type args: [java.lang.String][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [java.lang.String][0m
+  [34mUnused type args: [java.lang.String][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [?][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [org.apache.commons.io.FileCleaningTracker$Tracker][0m
+  [34mUnused type args: [java.lang.Object][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [org.apache.commons.io.FileCleaningTracker$Tracker][0m
+  [34mUnused type args: [java.lang.String][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [java.lang.String @ src/main/java/org/apache/commons/io/FileSystemUtils.java:492:20][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [java.lang.String][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [java.lang.String][0m
+  [34mUnused type args: [java.lang.String][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [java.lang.String][0m
+  [34mUnused type args: [java.lang.String][0m
+  [34mUnused type args: [java.lang.String][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [java.lang.String][0m
+  [34mUnused type args: [java.lang.String][0m
+  [34mUnused type args: [java.lang.String][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [java.lang.String][0m
+  [34mUnused type args: [java.lang.String][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mskipping default constructor: org.apache.commons.io.monitor.FileAlterationListenerAdaptor()[0m
+  Pending package java.util.concurrent
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [org.apache.commons.io.monitor.FileAlterationObserver][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [org.apache.commons.io.monitor.FileAlterationListener][0m
+  [34mUnused type args: [org.apache.commons.io.monitor.FileAlterationListener][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [java.io.File][0m
+  [34mUnused type args: [java.io.File][0m
+  [34mUnused type args: [java.io.File][0m
+  [34mUnused type args: [java.io.File][0m
+  [34mUnused type args: [java.io.File][0m
+  [34mUnused type args: [java.io.File][0m
+  [34mUnused type args: [java.io.File][0m
+  [34mUnused type args: [java.io.File][0m
+  [34mUnused type args: [java.io.File][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [org.apache.commons.io.monitor.FileAlterationObserver][0m
+  [34mUnused type args: [java.io.File][0m
+  [34mUnused type args: [java.io.File][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [java.io.File][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [org.apache.commons.io.monitor.FileAlterationObserver][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [org.apache.commons.io.monitor.FileAlterationListener][0m
+  [34mUnused type args: [org.apache.commons.io.monitor.FileAlterationListener][0m
+  [34mUnused type args: [org.apache.commons.io.monitor.FileAlterationListener][0m
+  [34mUnused type args: [org.apache.commons.io.monitor.FileAlterationListener][0m
+  [34mUnused type args: [org.apache.commons.io.monitor.FileAlterationObserver][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [org.apache.commons.io.monitor.FileAlterationObserver][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [org.apache.commons.io.monitor.FileAlterationListener][0m
+  [34mUnused type args: [org.apache.commons.io.monitor.FileAlterationListener][0m
+  [34mUnused type args: [org.apache.commons.io.monitor.FileAlterationObserver][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [java.io.File][0m
+  [34mUnused type args: [java.io.File][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [org.apache.commons.io.monitor.FileAlterationListener][0m
+  Pending package java.util.regex
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [java.lang.String][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [java.lang.String][0m
+  [34mUnused type args: [java.lang.String][0m
+  [34mUnused type args: [java.lang.String][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [java.lang.String][0m
+  [34mUnused type args: [java.lang.String][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [java.lang.String][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [java.lang.String][0m
+  [34mUnused type args: [java.lang.String][0m
+  [34mUnused type args: [java.lang.String][0m
+  getting parent type for (CtClassImpl) BlockDataInputStream
+  getting parent type for (CtClassImpl) ValidationList
+  getting parent type for (CtClassImpl) HandleTable
+  Pending package jdk.internal.misc
+  getting parent type for (CtClassImpl) GetField
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [org.apache.commons.io.serialization.ClassNameMatcher][0m
+  [34mUnused type args: [org.apache.commons.io.serialization.ClassNameMatcher][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [org.apache.commons.io.serialization.ClassNameMatcher][0m
+  [34mUnused type args: [java.lang.String][0m
+  [34mUnused type args: [? @ src/main/java/org/apache/commons/io/serialization/ValidatingObjectInputStream.java:126:26][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [org.apache.commons.io.serialization.ClassNameMatcher][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [java.lang.String][0m
+  [34mUnused type args: [java.lang.String][0m
+  [34mUnused type args: [java.lang.String][0m
+  [34mUnused type args: [java.lang.String][0m
+  [34mUnused type args: [?][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [java.lang.String][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [java.lang.String][0m
+  [34mUnused type args: [java.lang.String][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [? @ src/main/java/org/apache/commons/io/serialization/ValidatingObjectInputStream.java:112:26][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [org.apache.commons.io.serialization.ClassNameMatcher][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [org.apache.commons.io.serialization.ClassNameMatcher][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [org.apache.commons.io.serialization.ClassNameMatcher][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [org.apache.commons.io.serialization.ClassNameMatcher][0m
+  [34mUnused type args: [org.apache.commons.io.serialization.ClassNameMatcher][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [org.apache.commons.io.serialization.ClassNameMatcher][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mskipping default constructor: org.apache.commons.io.input.DemuxInputStream()[0m
+  Pending package java.security
+  getting parent type for (CtClassImpl) Observer @ src/main/java/org/apache/commons/io/input/ObservableInputStream.java:39:34
+  [34mskipping default constructor: org.apache.commons.io.input.ObservableInputStream$Observer()[0m
+  getting parent type for (CtClassImpl) MessageDigestMaintainingObserver @ src/main/java/org/apache/commons/io/input/MessageDigestCalculatingInputStream.java:37:25
+  getting parent type for (CtClassImpl) FilePart @ src/main/java/org/apache/commons/io/input/ReversedLinesFileReader.java:206:19
+  [34mskipping default constructor: org.apache.commons.io.input.TailerListenerAdapter()[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [org.apache.commons.io.ByteOrderMark][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [org.apache.commons.io.input.ObservableInputStream$Observer][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [org.apache.commons.io.input.ObservableInputStream$Observer][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  Pending package java.text
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [org.apache.commons.io.input.ObservableInputStream$Observer][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [org.apache.commons.io.input.ObservableInputStream$Observer][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [org.apache.commons.io.input.ObservableInputStream$Observer][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [org.apache.commons.io.input.ObservableInputStream$Observer][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [org.apache.commons.io.input.ObservableInputStream$Observer][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [? @ src/main/java/org/apache/commons/io/input/ClassLoaderObjectInputStream.java:89:21][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  Pending package java.lang.reflect
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [org.apache.commons.io.input.ObservableInputStream$Observer][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [org.apache.commons.io.input.ObservableInputStream$Observer][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [org.apache.commons.io.ByteOrderMark][0m
+  [34mUnused type args: [java.io.InputStream][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [org.apache.commons.io.ByteOrderMark][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [org.apache.commons.io.ByteOrderMark @ src/main/java/org/apache/commons/io/input/BOMInputStream.java:172:20][0m
+  [34mUnused type args: [org.apache.commons.io.ByteOrderMark][0m
+  [34mUnused type args: [org.apache.commons.io.ByteOrderMark][0m
+  [34mUnused type args: [org.apache.commons.io.ByteOrderMark][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [org.apache.commons.io.ByteOrderMark][0m
+  [34mUnused type args: [org.apache.commons.io.ByteOrderMark][0m
+  [34mUnused type args: [org.apache.commons.io.ByteOrderMark][0m
+  [34mUnused type args: [org.apache.commons.io.ByteOrderMark][0m
+  [34mUnused type args: [org.apache.commons.io.ByteOrderMark][0m
+  [34mUnused type args: [java.io.InputStream][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [java.io.InputStream][0m
+  [34mUnused type args: [java.io.InputStream][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mskipping default constructor: org.apache.commons.io.output.ClosedOutputStream()[0m
+  [34mskipping default constructor: org.apache.commons.io.output.DemuxOutputStream()[0m
+  [34mUnused type args: [java.io.OutputStream][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [java.io.OutputStream][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mSkipping selection with no field declaration: (CtFieldReferenceImpl) class[0m
+  [34mSkipping selection with no field declaration: (CtFieldReferenceImpl) class[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [T][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [T][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [java.io.OutputStream][0m
+  [34mUnused type args: [java.io.OutputStream][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [java.io.OutputStream][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+[34mFinished process pending packages (7.339999s)[0m
+[34mStarting short validation...[0m
+  [34mStarting performShortValidation...[0m
+  [34mFinished performShortValidation (0.007769s)[0m
+[34mFinished short validation (0.008922s)[0m
+[34mStarting consolidate constructs...[0m
+  Consolidating all constructs
+    Removed 2558 collisions
+    Removed 0 collisions
+[34mFinished consolidate constructs (0.135877s)[0m
+[34mStarting connect nests...[0m
+[34mFinished connect nests (0.006946s)[0m
+[34mStarting collect package declarations...[0m
+[34mFinished collect package declarations (1.687130s)[0m
+[34mStarting addImports from usage...[0m
+[34mFinished addImports from usage (0.004005s)[0m
+[34mStarting remove empty packages...[0m
+[34mFinished remove empty packages (0.001419s)[0m
+[34mStarting performValidation...[0m
+[34mFinished performValidation (4.902411s)[0m
+[34mFinished Abstraction (27.064998s)[0m
+Success

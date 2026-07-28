@@ -1,0 +1,19 @@
+# cmd: java -jar /Users/grantnelson/go/src/github.com/MSUSEL/msusel-tdmetrics-go/javaAbstractor/target/abstractor-0.1-jar-with-dependencies.jar -i /Users/grantnelson/go/src/github.com/apache/cocoon/ -o /Users/grantnelson/go/src/github.com/MSUSEL/msusel-tdmetrics-go/tdd/abstractions/cocoon.json -v
+# cwd: /Users/grantnelson/go/src/github.com/MSUSEL/msusel-tdmetrics-go/tdd
+# repo: /Users/grantnelson/go/src/github.com/apache/cocoon @ a80f73b27592a2794c9133ee03d2e402bf12ecc1
+# started: 2026-07-28T01:55:45.141187+00:00
+# timeout_min: 10
+# ---
+Reading /Users/grantnelson/go/src/github.com/apache/cocoon/
+SLF4J(W): No SLF4J providers were found.
+SLF4J(W): Defaulting to no-operation (NOP) logger implementation
+SLF4J(W): See https://www.slf4j.org/codes.html#noProviders for further details.
+Exception in thread "main" spoon.compiler.ModelBuildingException: BeanDefinitionDecorator cannot be resolved to a type at /Users/grantnelson/go/src/github.com/apache/cocoon/core/cocoon-pipeline/cocoon-pipeline-impl/src/main/java/org/apache/cocoon/core/container/spring/pipeline/PipelineComponentInfoInitializerDecorator.java:42
+	at spoon.support.compiler.jdt.JDTBasedSpoonCompiler.report(JDTBasedSpoonCompiler.java:664)
+	at spoon.support.compiler.jdt.JDTBasedSpoonCompiler.reportProblems(JDTBasedSpoonCompiler.java:646)
+	at spoon.support.compiler.jdt.JDTBasedSpoonCompiler.build(JDTBasedSpoonCompiler.java:120)
+	at spoon.support.compiler.jdt.JDTBasedSpoonCompiler.build(JDTBasedSpoonCompiler.java:101)
+	at spoon.Launcher.buildModel(Launcher.java:781)
+	at abstractor.core.Abstractor.prepareMavenProject(Abstractor.java:55)
+	at abstractor.app.App.run(App.java:25)
+	at abstractor.app.App.main(App.java:17)

@@ -1,0 +1,190 @@
+# cmd: java -jar /Users/grantnelson/go/src/github.com/MSUSEL/msusel-tdmetrics-go/javaAbstractor/target/abstractor-0.1-jar-with-dependencies.jar -i /Users/grantnelson/go/src/github.com/apache/commons-daemon/ -o /Users/grantnelson/go/src/github.com/MSUSEL/msusel-tdmetrics-go/tdd/abstractions/commons-daemon.json -v
+# cwd: /Users/grantnelson/go/src/github.com/MSUSEL/msusel-tdmetrics-go/tdd
+# repo: /Users/grantnelson/go/src/github.com/apache/commons-daemon @ 1ffa799cb3ddf5a4a918e59e46cd9868ee766b19
+# started: 2026-07-28T00:51:12.702069+00:00
+# timeout_min: 10
+# ---
+Reading /Users/grantnelson/go/src/github.com/apache/commons-daemon/
+SLF4J(W): No SLF4J providers were found.
+SLF4J(W): Defaulting to no-operation (NOP) logger implementation
+SLF4J(W): See https://www.slf4j.org/codes.html#noProviders for further details.
+Init pending package <unnamed>
+Init pending package org
+Init pending package org.apache
+Init pending package org.apache.commons
+Init pending package org.apache.commons.daemon
+Init pending package org.apache.commons.daemon.support
+[34mStarting process pending packages...[0m
+  Pending package java.util
+  getting parent type for (CtClassImpl) Controller @ src/main/java/org/apache/commons/daemon/support/DaemonLoader.java:302:25
+  Pending package java.lang
+  Pending package java.lang.reflect
+  Pending package org.apache.commons.daemon
+  getting parent type for (CtClassImpl) Context @ src/main/java/org/apache/commons/daemon/support/DaemonLoader.java:392:25
+  [34mskipping default constructor: org.apache.commons.daemon.support.DaemonLoader$Context()[0m
+  [34mskipping default constructor: org.apache.commons.daemon.support.DaemonLoader()[0m
+  Pending package java.lang.invoke
+  getting parent type for (CtClassImpl) Invoker @ src/main/java/org/apache/commons/daemon/support/DaemonWrapper.java:193:11
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mSkipping selection with no field declaration: (CtFieldReferenceImpl) class[0m
+  [34mSkipping selection with no field declaration: (CtFieldReferenceImpl) class[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [? @ src/main/java/org/apache/commons/daemon/support/DaemonWrapper.java:272:25][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  Pending package java.io
+  [34mUnused type args: [java.lang.String @ src/main/java/org/apache/commons/daemon/support/DaemonConfiguration.java:196:25][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [java.lang.String @ src/main/java/org/apache/commons/daemon/support/DaemonConfiguration.java:196:54][0m
+  [34mUnused type args: [java.lang.String][0m
+  [34mUnused type args: [java.lang.String][0m
+  [34mUnused type args: [java.lang.String][0m
+  [34mUnused type args: [java.lang.String][0m
+  [34mUnused type args: [java.lang.String][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [?][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mSkipping selection with no field declaration: (CtFieldReferenceImpl) class[0m
+  [34mSkipping selection with no field declaration: (CtFieldReferenceImpl) class[0m
+  [34mUnused type args: [? @ src/main/java/org/apache/commons/daemon/support/DaemonLoader.java:135:19][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mSkipping selection with no field declaration: (CtFieldReferenceImpl) class[0m
+  [34mSkipping selection with no field declaration: (CtFieldReferenceImpl) class[0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [? @ src/main/java/org/apache/commons/daemon/support/DaemonLoader.java:158:29][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [? @ src/main/java/org/apache/commons/daemon/support/DaemonLoader.java:166:19][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mSkipping selection with no field declaration: (CtFieldReferenceImpl) class[0m
+  [34mSkipping selection with no field declaration: (CtFieldReferenceImpl) class[0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  Pending package java.lang
+  Pending package java.io
+  getting parent type for (CtClassImpl) PrintStreamOrWriter
+  Pending package java.util
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mSkipping selection with no field declaration: (CtFieldReferenceImpl) class[0m
+  [34mSkipping selection with no field declaration: (CtFieldReferenceImpl) class[0m
+  [34mUnused type args: [? @ src/main/java/org/apache/commons/daemon/support/DaemonLoader.java:78:25][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [?][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [java.lang.String @ src/main/java/org/apache/commons/daemon/support/DaemonWrapper.java:220:33][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [java.lang.String @ src/main/java/org/apache/commons/daemon/support/DaemonWrapper.java:220:60][0m
+  [34mUnused type args: [java.lang.String][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [java.lang.String][0m
+  [34mUnused type args: [java.lang.String][0m
+  [34mUnused type args: [java.lang.String][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [java.lang.String][0m
+  [34mUnused type args: [java.lang.String][0m
+  [34mUnused type args: [java.lang.String][0m
+  [34mUnused type args: [java.lang.String][0m
+  [34mUnused type args: [java.lang.String][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  Pending package java.text
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  Pending package java.security
+  Pending package java.security
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [?][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+[34mFinished process pending packages (2.013391s)[0m
+[34mStarting short validation...[0m
+  [34mStarting performShortValidation...[0m
+  [34mFinished performShortValidation (0.007346s)[0m
+[34mFinished short validation (0.007883s)[0m
+[34mStarting consolidate constructs...[0m
+  Consolidating all constructs
+    Removed 282 collisions
+    Removed 0 collisions
+[34mFinished consolidate constructs (0.023871s)[0m
+[34mStarting connect nests...[0m
+[34mFinished connect nests (0.001924s)[0m
+[34mStarting collect package declarations...[0m
+[34mFinished collect package declarations (0.069701s)[0m
+[34mStarting addImports from usage...[0m
+[34mFinished addImports from usage (0.003085s)[0m
+[34mStarting remove empty packages...[0m
+[34mFinished remove empty packages (0.001528s)[0m
+[34mStarting performValidation...[0m
+[34mFinished performValidation (0.247329s)[0m
+[34mFinished Abstraction (9.824532s)[0m
+Success

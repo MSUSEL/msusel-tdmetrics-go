@@ -1,0 +1,20 @@
+# cmd: java -jar /Users/grantnelson/go/src/github.com/MSUSEL/msusel-tdmetrics-go/javaAbstractor/target/abstractor-0.1-jar-with-dependencies.jar -i /Users/grantnelson/go/src/github.com/apache/commons-jexl/ -o /Users/grantnelson/go/src/github.com/MSUSEL/msusel-tdmetrics-go/tdd/abstractions/commons-jexl.json -v
+# cwd: /Users/grantnelson/go/src/github.com/MSUSEL/msusel-tdmetrics-go/tdd
+# repo: /Users/grantnelson/go/src/github.com/apache/commons-jexl @ d3e702149a3db297d6db2c0b7671807f5c7b98fc
+# started: 2026-07-28T01:04:26.192988+00:00
+# timeout_min: 10
+# ---
+Reading /Users/grantnelson/go/src/github.com/apache/commons-jexl/
+SLF4J(W): No SLF4J providers were found.
+SLF4J(W): Defaulting to no-operation (NOP) logger implementation
+SLF4J(W): See https://www.slf4j.org/codes.html#noProviders for further details.
+The method public static transient List<T> asList(T[])  is wrongly tagged as containing missing types
+Exception in thread "main" spoon.compiler.ModelBuildingException: Token cannot be resolved to a type at /Users/grantnelson/go/src/github.com/apache/commons-jexl/src/main/java/org/apache/commons/jexl3/parser/JexlParser.java:232
+	at spoon.support.compiler.jdt.JDTBasedSpoonCompiler.report(JDTBasedSpoonCompiler.java:664)
+	at spoon.support.compiler.jdt.JDTBasedSpoonCompiler.reportProblems(JDTBasedSpoonCompiler.java:646)
+	at spoon.support.compiler.jdt.JDTBasedSpoonCompiler.build(JDTBasedSpoonCompiler.java:120)
+	at spoon.support.compiler.jdt.JDTBasedSpoonCompiler.build(JDTBasedSpoonCompiler.java:101)
+	at spoon.Launcher.buildModel(Launcher.java:781)
+	at abstractor.core.Abstractor.prepareMavenProject(Abstractor.java:55)
+	at abstractor.app.App.run(App.java:25)
+	at abstractor.app.App.main(App.java:17)

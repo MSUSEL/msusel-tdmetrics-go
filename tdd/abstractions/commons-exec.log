@@ -1,0 +1,394 @@
+# cmd: java -jar /Users/grantnelson/go/src/github.com/MSUSEL/msusel-tdmetrics-go/javaAbstractor/target/abstractor-0.1-jar-with-dependencies.jar -i /Users/grantnelson/go/src/github.com/apache/commons-exec/ -o /Users/grantnelson/go/src/github.com/MSUSEL/msusel-tdmetrics-go/tdd/abstractions/commons-exec.json -v
+# cwd: /Users/grantnelson/go/src/github.com/MSUSEL/msusel-tdmetrics-go/tdd
+# repo: /Users/grantnelson/go/src/github.com/apache/commons-exec @ 2da60ab3eefaaa2f8a434ded1eebe1ce17efd34a
+# started: 2026-07-28T01:04:04.137541+00:00
+# timeout_min: 10
+# ---
+Reading /Users/grantnelson/go/src/github.com/apache/commons-exec/
+SLF4J(W): No SLF4J providers were found.
+SLF4J(W): Defaulting to no-operation (NOP) logger implementation
+SLF4J(W): See https://www.slf4j.org/codes.html#noProviders for further details.
+Init pending package <unnamed>
+Init pending package org
+Init pending package org.apache
+Init pending package org.apache.commons
+Init pending package org.apache.commons.exec
+Init pending package org.apache.commons.exec.environment
+Init pending package org.apache.commons.exec.launcher
+Init pending package org.apache.commons.exec.util
+[34mStarting process pending packages...[0m
+  Pending package org.apache.commons.exec
+  Pending package java.util
+  getting parent type for (CtClassImpl) Argument @ src/main/java/org/apache/commons/exec/CommandLine.java:424:11
+  Pending package java.io
+  Pending package java.lang
+  [34mskipping default constructor: org.apache.commons.exec.launcher.CommandLauncherImpl()[0m
+  [34mskipping default constructor: org.apache.commons.exec.launcher.VmsCommandLauncher()[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [java.lang.String, ?][0m
+  [34mUnused type args: [java.lang.String, ?][0m
+  Pending package org.apache.commons.exec.environment
+  [34mskipping default constructor: org.apache.commons.exec.environment.DefaultProcessingEnvironment()[0m
+  [34mUnused type args: [java.lang.String, java.lang.String][0m
+  [34mUnused type args: [java.lang.String, java.lang.String][0m
+  Pending package java.io
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [java.lang.String, java.lang.String][0m
+  getting parent type for (CtInterfaceImpl) Entry
+  [34mUnused type args: [java.util.Map$Entry @ src/main/java/org/apache/commons/exec/launcher/VmsCommandLauncher.java:91:27][0m
+  [34mUnused type args: [java.lang.String @ src/main/java/org/apache/commons/exec/launcher/VmsCommandLauncher.java:91:33, java.lang.String @ src/main/java/org/apache/commons/exec/launcher/VmsCommandLauncher.java:91:41][0m
+  [34mUnused type args: [java.lang.String, java.lang.String][0m
+  [34mUnused type args: [java.util.Map$Entry][0m
+  [34mUnused type args: [java.lang.String, java.lang.String][0m
+  [34mUnused type args: [java.lang.String @ src/main/java/org/apache/commons/exec/launcher/VmsCommandLauncher.java:93:34, java.lang.String @ src/main/java/org/apache/commons/exec/launcher/VmsCommandLauncher.java:93:42][0m
+  [34mUnused type args: [java.util.Map$Entry][0m
+  [34mUnused type args: [java.lang.String, java.lang.String][0m
+  [34mUnused type args: [java.lang.String, java.lang.String][0m
+  [34mUnused type args: [java.lang.String, java.lang.String][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  Pending package org.apache.commons.exec.util
+  [34mskipping default constructor: org.apache.commons.exec.util.StringUtils()[0m
+  [34mUnused type args: [java.lang.String, java.lang.String][0m
+  [34mUnused type args: [java.lang.String, java.lang.String][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [java.lang.String, java.lang.String][0m
+  [34mUnused type args: [java.lang.String, java.lang.String][0m
+  [34mUnused type args: [java.lang.String, ?][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [java.lang.String @ src/main/java/org/apache/commons/exec/CommandLine.java:350:25][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [java.lang.String @ src/main/java/org/apache/commons/exec/CommandLine.java:350:54][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [java.lang.String][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [java.lang.String][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [java.lang.String][0m
+  [34mUnused type args: [java.lang.String][0m
+  [34mUnused type args: [java.lang.String][0m
+  [34mUnused type args: [?, ?][0m
+  [34mUnused type args: [java.lang.String, ?][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [org.apache.commons.exec.CommandLine$Argument][0m
+  [34mUnused type args: [org.apache.commons.exec.CommandLine$Argument][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [java.lang.String, java.lang.String][0m
+  [34mUnused type args: [java.lang.String, java.lang.String][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  Pending package java.util
+  [34mUnused type args: [org.apache.commons.exec.CommandLine$Argument][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [org.apache.commons.exec.CommandLine$Argument][0m
+  [34mUnused type args: [java.lang.String, ?][0m
+  [34mUnused type args: [java.lang.String @ src/main/java/org/apache/commons/exec/CommandLine.java:130:23, java.lang.Object @ src/main/java/org/apache/commons/exec/CommandLine.java:130:31][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [java.lang.String @ src/main/java/org/apache/commons/exec/CommandLine.java:130:58, java.lang.Object @ src/main/java/org/apache/commons/exec/CommandLine.java:130:66][0m
+  [34mUnused type args: [java.lang.String, ?][0m
+  [34mUnused type args: [java.lang.String, ?][0m
+  [34mUnused type args: [java.lang.String, java.lang.Object][0m
+  [34mUnused type args: [java.lang.String @ src/main/java/org/apache/commons/exec/CommandLine.java:132:28][0m
+  [34mUnused type args: [java.lang.String, ?][0m
+  [34mUnused type args: [java.lang.String][0m
+  [34mUnused type args: [java.lang.String][0m
+  [34mUnused type args: [java.lang.String][0m
+  [34mUnused type args: [java.lang.String][0m
+  [34mUnused type args: [java.lang.String, java.lang.Object][0m
+  [34mUnused type args: [java.lang.String, ?][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [java.lang.String, java.lang.String][0m
+  [34mUnused type args: [java.lang.String, java.lang.String][0m
+  [34mUnused type args: [java.lang.String, java.lang.String][0m
+  [34mUnused type args: [java.lang.String, java.lang.String][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [java.lang.String, java.lang.String][0m
+  [34mUnused type args: [java.lang.String, java.lang.String][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [java.lang.String, java.lang.String][0m
+  [34mUnused type args: [java.lang.String, java.lang.String][0m
+  [34mUnused type args: [java.lang.String, java.lang.String][0m
+  [34mUnused type args: [java.lang.String, java.lang.String][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [java.lang.String, ?][0m
+  [34mUnused type args: [java.lang.String, ?][0m
+  [34mUnused type args: [java.lang.String, ?][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [org.apache.commons.exec.CommandLine$Argument][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [org.apache.commons.exec.CommandLine$Argument][0m
+  [34mUnused type args: [java.lang.String, java.lang.String][0m
+  [34mUnused type args: [java.lang.String, java.lang.String][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [java.lang.String, java.lang.String][0m
+  [34mUnused type args: [java.lang.String, java.lang.String][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [java.lang.String, ?][0m
+  [34mUnused type args: [java.lang.String, java.lang.String][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [java.lang.String, java.lang.String][0m
+  [34mUnused type args: [java.lang.String, java.lang.String][0m
+  [34mUnused type args: [java.lang.String @ src/main/java/org/apache/commons/exec/environment/EnvironmentUtils.java:65:26, java.lang.String @ src/main/java/org/apache/commons/exec/environment/EnvironmentUtils.java:65:34][0m
+  [34mUnused type args: [java.lang.String, java.lang.String][0m
+  [34mUnused type args: [java.util.Map$Entry][0m
+  [34mUnused type args: [java.lang.String, java.lang.String][0m
+  [34mUnused type args: [java.lang.String, java.lang.String][0m
+  [34mUnused type args: [java.lang.String, java.lang.String][0m
+  [34mUnused type args: [java.lang.String, java.lang.String][0m
+  [34mUnused type args: [java.lang.String, java.lang.String][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [java.lang.String @ src/main/java/org/apache/commons/exec/environment/DefaultProcessingEnvironment.java:220:32, java.lang.String @ src/main/java/org/apache/commons/exec/environment/DefaultProcessingEnvironment.java:220:40][0m
+  [34mUnused type args: [?][0m
+  [34mIgnoring anonymous type: (CtTypeReferenceImpl) org.apache.commons.exec.environment.DefaultProcessingEnvironment$1[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring anonymous type: (CtTypeReferenceImpl) org.apache.commons.exec.environment.DefaultProcessingEnvironment$1[0m
+  [34mUnused type args: [java.lang.String @ src/main/java/org/apache/commons/exec/environment/DefaultProcessingEnvironment.java:220:63][0m
+  [34mIgnoring anonymous object declaration: (CtClassImpl) 1 @ src/main/java/org/apache/commons/exec/environment/DefaultProcessingEnvironment.java:220:73[0m
+  [34mUnused type args: [java.lang.String][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring method of an anonymous declaring type: (CtMethodImpl) compare @ src/main/java/org/apache/commons/exec/environment/DefaultProcessingEnvironment.java:221:28 in (CtClassImpl) 1 @ src/main/java/org/apache/commons/exec/environment/DefaultProcessingEnvironment.java:220:73[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [java.lang.String @ src/main/java/org/apache/commons/exec/environment/DefaultProcessingEnvironment.java:226:28, java.lang.String @ src/main/java/org/apache/commons/exec/environment/DefaultProcessingEnvironment.java:226:36][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [java.lang.String @ src/main/java/org/apache/commons/exec/util/StringUtils.java:168:20][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [java.lang.String @ src/main/java/org/apache/commons/exec/util/StringUtils.java:168:52][0m
+  [34mUnused type args: [java.lang.String][0m
+  [34mUnused type args: [java.lang.String][0m
+  [34mUnused type args: [java.lang.String][0m
+  [34mUnused type args: [java.lang.String][0m
+  [34mUnused type args: [java.lang.String, java.lang.String][0m
+  [34mUnused type args: [java.lang.String @ src/main/java/org/apache/commons/exec/environment/DefaultProcessingEnvironment.java:75:23, java.lang.String @ src/main/java/org/apache/commons/exec/environment/DefaultProcessingEnvironment.java:75:31][0m
+  [34mUnused type args: [java.lang.String, java.lang.String][0m
+  [34mUnused type args: [java.lang.String, java.lang.String][0m
+  [34mUnused type args: [java.lang.String, java.lang.String][0m
+  [34mUnused type args: [java.lang.String, java.lang.String][0m
+  [34mUnused type args: [java.lang.String, java.lang.String][0m
+  [34mUnused type args: [?, ?][0m
+  [34mUnused type args: [java.lang.String, java.lang.String][0m
+  [34mUnused type args: [java.lang.String, java.lang.String][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [java.lang.String, java.lang.String][0m
+  [34mUnused type args: [java.lang.String, java.lang.String][0m
+  [34mUnused type args: [java.lang.String, java.lang.String][0m
+  [34mUnused type args: [java.lang.String, java.lang.String][0m
+  [34mUnused type args: [java.lang.String @ src/main/java/org/apache/commons/exec/environment/DefaultProcessingEnvironment.java:62:19, java.lang.String @ src/main/java/org/apache/commons/exec/environment/DefaultProcessingEnvironment.java:62:27][0m
+  [34mUnused type args: [java.lang.String, java.lang.String][0m
+  [34mUnused type args: [java.lang.String, java.lang.String][0m
+  [34mUnused type args: [?, ?][0m
+  [34mUnused type args: [java.lang.String, java.lang.String][0m
+  [34mUnused type args: [java.lang.String, java.lang.String][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [?, ?][0m
+  [34mUnused type args: [?, ?][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [?, ?][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [java.lang.String, java.lang.String][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mskipping default constructor: org.apache.commons.exec.util.DebugUtils()[0m
+  [34mskipping default constructor: org.apache.commons.exec.util.MapUtils()[0m
+  [34mUnused type args: [K, V][0m
+  [34mUnused type args: [java.lang.String @ src/main/java/org/apache/commons/exec/util/MapUtils.java:74:19, V @ src/main/java/org/apache/commons/exec/util/MapUtils.java:74:27][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [java.lang.String @ src/main/java/org/apache/commons/exec/util/MapUtils.java:74:51, V @ src/main/java/org/apache/commons/exec/util/MapUtils.java:74:59][0m
+  [34mUnused type args: [K @ src/main/java/org/apache/commons/exec/util/MapUtils.java:76:30, V @ src/main/java/org/apache/commons/exec/util/MapUtils.java:76:33][0m
+  [34mUnused type args: [K, V][0m
+  [34mUnused type args: [java.util.Map$Entry][0m
+  [34mUnused type args: [K, V][0m
+  [34mUnused type args: [K, V][0m
+  [34mUnused type args: [K, V][0m
+  [34mUnused type args: [java.lang.String, V][0m
+  [34mUnused type args: [java.lang.String, V][0m
+  [34mUnused type args: [K, V][0m
+  [34mUnused type args: [K @ src/main/java/org/apache/commons/exec/util/MapUtils.java:49:19, V @ src/main/java/org/apache/commons/exec/util/MapUtils.java:49:22][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [K @ src/main/java/org/apache/commons/exec/util/MapUtils.java:49:46, V @ src/main/java/org/apache/commons/exec/util/MapUtils.java:49:49][0m
+  [34mUnused type args: [K, V][0m
+  [34mUnused type args: [?, ?][0m
+  [34mUnused type args: [K, V][0m
+  [34mUnused type args: [K, V][0m
+  [34mUnused type args: [K @ src/main/java/org/apache/commons/exec/util/MapUtils.java:100:13, V @ src/main/java/org/apache/commons/exec/util/MapUtils.java:100:16][0m
+  [34mUnused type args: [K, V][0m
+  [34mUnused type args: [K, V][0m
+  [34mUnused type args: [K, V][0m
+  [34mUnused type args: [K, V][0m
+  [34mUnused type args: [K, V][0m
+  [34mUnused type args: [K, V][0m
+  [34mUnused type args: [K, V][0m
+  [34mUnused type args: [K, V][0m
+  [34mUnused type args: [K, V][0m
+  [34mUnused type args: [K, V][0m
+  [34mUnused type args: [K, V][0m
+  [34mUnused type args: [K, V][0m
+  [34mUnused type args: [K, V][0m
+  [34mUnused type args: [K, V][0m
+  [34mUnused type args: [K, V][0m
+  [34mUnused type args: [K, V][0m
+  [34mUnused type args: [K, V][0m
+  [34mUnused type args: [K, V][0m
+  [34mUnused type args: [K, V][0m
+  [34mUnused type args: [K, V][0m
+  [34mUnused type args: [K, V][0m
+  [34mUnused type args: [K, V][0m
+  [34mUnused type args: [K, V][0m
+  [34mUnused type args: [?, ?][0m
+  [34mUnused type args: [K, V][0m
+  [34mUnused type args: [K, V][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  Pending package java.lang
+  getting parent type for (CtClassImpl) PrintStreamOrWriter
+  [34mskipping default constructor: org.apache.commons.exec.DaemonExecutor()[0m
+  Pending package java.security
+  Pending package java.lang
+  getting parent type for (CtClassImpl) ThreadLocalMap
+  Pending package sun.nio.ch
+  getting parent type for (CtInterfaceImpl) UncaughtExceptionHandler
+  getting parent type for (CtClassImpl) ProcessDestroyerImpl @ src/main/java/org/apache/commons/exec/ShutdownHookProcessDestroyer.java:45:19
+  getting parent type for (CtEnumImpl) State
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [java.lang.String, java.lang.String][0m
+  [34mUnused type args: [java.lang.String, java.lang.String][0m
+  [34mUnused type args: [java.lang.Process][0m
+  [34mUnused type args: [java.lang.Process][0m
+  [34mUnused type args: [java.lang.Process][0m
+  [34mUnused type args: [java.lang.String, java.lang.String][0m
+  [34mUnused type args: [java.lang.String, java.lang.String][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [java.lang.String, java.lang.String][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [java.lang.Process][0m
+  [34mUnused type args: [java.lang.Process @ src/main/java/org/apache/commons/exec/ShutdownHookProcessDestroyer.java:185:29][0m
+  [34mUnused type args: [java.lang.Process][0m
+  [34mUnused type args: [java.lang.Process][0m
+  [34mUnused type args: [java.lang.Process][0m
+  [34mUnused type args: [java.lang.Process][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [java.lang.Process][0m
+  [34mUnused type args: [java.lang.Process][0m
+  [34mUnused type args: [java.lang.Process][0m
+  [34mUnused type args: [java.lang.Process][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [org.apache.commons.exec.TimeoutObserver][0m
+  [34mUnused type args: [java.lang.Process][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [org.apache.commons.exec.TimeoutObserver @ src/main/java/org/apache/commons/exec/Watchdog.java:55:27][0m
+  [34mUnused type args: [org.apache.commons.exec.TimeoutObserver][0m
+  [34mUnused type args: [org.apache.commons.exec.TimeoutObserver][0m
+  [34mUnused type args: [org.apache.commons.exec.TimeoutObserver][0m
+  [34mUnused type args: [org.apache.commons.exec.TimeoutObserver][0m
+  [34mUnused type args: [org.apache.commons.exec.TimeoutObserver][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring anonymous type: (CtTypeReferenceImpl) org.apache.commons.exec.DefaultExecutor$1[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring anonymous type: (CtTypeReferenceImpl) org.apache.commons.exec.DefaultExecutor$1[0m
+  [34mIgnoring anonymous object declaration: (CtClassImpl) 1 @ src/main/java/org/apache/commons/exec/DefaultExecutor.java:195:9[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring method of an anonymous declaring type: (CtMethodImpl) run @ src/main/java/org/apache/commons/exec/DefaultExecutor.java:196:25 in (CtClassImpl) 1 @ src/main/java/org/apache/commons/exec/DefaultExecutor.java:195:9[0m
+  [34mUnused type args: [java.lang.String, java.lang.String][0m
+  [34mUnused type args: [java.lang.String, java.lang.String][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [java.lang.String, java.lang.String][0m
+  [34mUnused type args: [java.lang.String, java.lang.String][0m
+  [34mUnused type args: [java.lang.String, java.lang.String][0m
+  [34mUnused type args: [java.lang.String @ src/main/java/org/apache/commons/exec/DefaultExecutor.java:153:38, java.lang.String @ src/main/java/org/apache/commons/exec/DefaultExecutor.java:153:46][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mskipping default constructor: org.apache.commons.exec.environment.OpenVmsProcessingEnvironment()[0m
+[34mFinished process pending packages (2.854903s)[0m
+[34mStarting short validation...[0m
+  [34mStarting performShortValidation...[0m
+  [34mFinished performShortValidation (0.006683s)[0m
+[34mFinished short validation (0.011268s)[0m
+[34mStarting consolidate constructs...[0m
+  Consolidating all constructs
+    Removed 564 collisions
+    Removed 0 collisions
+[34mFinished consolidate constructs (0.050785s)[0m
+[34mStarting connect nests...[0m
+[34mFinished connect nests (0.002822s)[0m
+[34mStarting collect package declarations...[0m
+[34mFinished collect package declarations (0.212093s)[0m
+[34mStarting addImports from usage...[0m
+[34mFinished addImports from usage (0.001962s)[0m
+[34mStarting remove empty packages...[0m
+[34mFinished remove empty packages (0.001948s)[0m
+[34mStarting performValidation...[0m
+[34mFinished performValidation (0.493112s)[0m
+[34mFinished Abstraction (21.809381s)[0m
+Success

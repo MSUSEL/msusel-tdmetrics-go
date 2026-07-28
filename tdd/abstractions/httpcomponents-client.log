@@ -1,0 +1,20 @@
+# cmd: java -jar /Users/grantnelson/go/src/github.com/MSUSEL/msusel-tdmetrics-go/javaAbstractor/target/abstractor-0.1-jar-with-dependencies.jar -i /Users/grantnelson/go/src/github.com/apache/httpcomponents-client/ -o /Users/grantnelson/go/src/github.com/MSUSEL/msusel-tdmetrics-go/tdd/abstractions/httpcomponents-client.json -v
+# cwd: /Users/grantnelson/go/src/github.com/MSUSEL/msusel-tdmetrics-go/tdd
+# repo: /Users/grantnelson/go/src/github.com/apache/httpcomponents-client @ 8a1b96bfa75382c0b94d70f6914fbb9bfeb0451e
+# started: 2026-07-28T01:20:11.702662+00:00
+# timeout_min: 10
+# ---
+Reading /Users/grantnelson/go/src/github.com/apache/httpcomponents-client/
+SLF4J(W): No SLF4J providers were found.
+SLF4J(W): Defaulting to no-operation (NOP) logger implementation
+SLF4J(W): See https://www.slf4j.org/codes.html#noProviders for further details.
+ERROR StatusLogger Log4j2 could not find a logging implementation. Please add log4j-core to the classpath. Using SimpleLogger to log to the console...
+Exception in thread "main" spoon.compiler.ModelBuildingException: BundleActivator cannot be resolved to a type at /Users/grantnelson/go/src/github.com/apache/httpcomponents-client/httpclient5-osgi/src/main/java/org/apache/hc/client5/http/osgi/impl/HttpProxyConfigurationActivator.java:54
+	at spoon.support.compiler.jdt.JDTBasedSpoonCompiler.report(JDTBasedSpoonCompiler.java:664)
+	at spoon.support.compiler.jdt.JDTBasedSpoonCompiler.reportProblems(JDTBasedSpoonCompiler.java:646)
+	at spoon.support.compiler.jdt.JDTBasedSpoonCompiler.build(JDTBasedSpoonCompiler.java:120)
+	at spoon.support.compiler.jdt.JDTBasedSpoonCompiler.build(JDTBasedSpoonCompiler.java:101)
+	at spoon.Launcher.buildModel(Launcher.java:781)
+	at abstractor.core.Abstractor.prepareMavenProject(Abstractor.java:55)
+	at abstractor.app.App.run(App.java:25)
+	at abstractor.app.App.main(App.java:17)

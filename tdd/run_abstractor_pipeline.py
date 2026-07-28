@@ -6,9 +6,11 @@ For each target `(project_key, git_slug, commit_sha)` taken from
   1. Ensure the checkout at `<repo-base>/<git_slug>` exists and its HEAD is
      at the pinned `commit_sha` (fetch + checkout only if needed; never
      clones -- run collect_project_metrics.py first if the repo is missing).
-  2. Invoke the Java abstractor jar with `-i <repo> -o abstractions/<key>.json -v`.
+     2. Invoke the Java abstractor jar with `-i <repo> -o abstractions/<key>.json -v`.
      Combined stdout+stderr is captured to `abstractions/<key>.log`
-     (overwritten each run). No per-project timeout.
+     (overwritten each run). Each project has a `--timeout` (minutes,
+     default 10, 0 = no timeout) after which the child is killed and
+     the project is recorded as failed.
   3. Print a short "starting / successful / FAILED" line per project.
 
 Before the per-project loop, the abstractor jar is rebuilt once via
@@ -154,7 +156,8 @@ def _ensure_checkout(repo_base: Path, git_slug: str, commit_sha: str) -> Path:
 
 
 def _run_one(jar: Path, abs_dir: Path, repo_base: Path,
-             project_key: str, git_slug: str, commit_sha: str) -> dict:
+             project_key: str, git_slug: str, commit_sha: str,
+             timeout_min: int) -> dict:
     json_path = abs_dir / f"{project_key}.json"
     log_path  = abs_dir / f"{project_key}.log"
 
@@ -190,28 +193,52 @@ def _run_one(jar: Path, abs_dir: Path, repo_base: Path,
         "-v",
     ]
 
+    timeout_sec = timeout_min * 60 if timeout_min > 0 else None
+
     # Combined stdout+stderr to the log file, overwritten each run.
+    timed_out = False
     with log_path.open("w") as lf:
         lf.write(f"# cmd: {' '.join(cmd)}\n")
         lf.write(f"# cwd: {HERE}\n")
         lf.write(f"# repo: {repo_dir} @ {commit_sha}\n")
         lf.write(f"# started: {datetime.now(timezone.utc).isoformat()}\n")
+        lf.write(f"# timeout_min: {timeout_min if timeout_min > 0 else 'none'}\n")
         lf.write("# ---\n")
         lf.flush()
-        proc = subprocess.run(cmd, cwd=str(HERE), stdout=lf,
-                              stderr=subprocess.STDOUT)
+        try:
+            proc = subprocess.run(cmd, cwd=str(HERE), stdout=lf,
+                                  stderr=subprocess.STDOUT,
+                                  timeout=timeout_sec)
+            returncode = proc.returncode
+        except subprocess.TimeoutExpired:
+            timed_out = True
+            returncode = None
+            lf.write(f"\n# TIMED OUT after {timeout_min} minutes\n")
 
     elapsed = time.time() - started
+
+    if timed_out:
+        result.update({
+            "cmd":         cmd,
+            "exit_code":   None,
+            "timed_out":   True,
+            "timeout_min": timeout_min,
+            "elapsed_sec": round(elapsed, 2),
+        })
+        print(f"{project_key} FAILED (timed out after {timeout_min}m) "
+              f"-- see {log_path.relative_to(HERE)}", flush=True)
+        return result
+
     result.update({
         "cmd":         cmd,
-        "exit_code":   proc.returncode,
+        "exit_code":   returncode,
         "elapsed_sec": round(elapsed, 2),
     })
 
-    if proc.returncode == 0:
+    if returncode == 0:
         print(f"{project_key} successful ({elapsed:.1f}s)", flush=True)
     else:
-        print(f"{project_key} FAILED (exit {proc.returncode}, {elapsed:.1f}s) "
+        print(f"{project_key} FAILED (exit {returncode}, {elapsed:.1f}s) "
               f"-- see {log_path.relative_to(HERE)}", flush=True)
     return result
 
@@ -236,10 +263,16 @@ def main() -> int:
     ap.add_argument("--skip-build", action="store_true",
                     help="skip 'mvn clean compile assembly:single'; reuse "
                          "the existing jar as-is")
+    ap.add_argument("--timeout", type=int, default=10, metavar="MINUTES",
+                    help="per-project timeout in whole minutes "
+                         "(default: 10; 0 = no timeout)")
     ap.add_argument("--stop-on-error", action="store_true",
                     help="stop the pipeline on the first non-zero exit "
                          "(default: continue and record failures)")
     args = ap.parse_args()
+
+    if args.timeout < 0:
+        raise SystemExit("error: --timeout must be >= 0 (whole minutes)")
 
     jar       = Path(args.jar).expanduser().resolve()
     abs_dir   = Path(args.abs_out).expanduser().resolve()
@@ -264,7 +297,8 @@ def main() -> int:
     for project_key, git_slug, commit_sha in targets:
         try:
             r = _run_one(jar, abs_dir, repo_base,
-                         project_key, git_slug, commit_sha)
+                         project_key, git_slug, commit_sha,
+                         args.timeout)
         except KeyboardInterrupt:
             _log("interrupted; recording partial results")
             results.append({
@@ -275,8 +309,9 @@ def main() -> int:
             print(f"{project_key} FAILED (interrupted)", flush=True)
             break
         results.append(r)
-        if r["exit_code"] != 0 and args.stop_on_error:
-            _log(f"stopping: {project_key} exited {r['exit_code']}")
+        if r.get("exit_code") != 0 and args.stop_on_error:
+            reason = "timed out" if r.get("timed_out") else f"exited {r.get('exit_code')}"
+            _log(f"stopping: {project_key} {reason}")
             break
 
     finished_at = datetime.now(timezone.utc).isoformat()
@@ -285,7 +320,7 @@ def main() -> int:
     summary_path = abs_dir / f"abstraction_run_{stamp}Z.json"
 
     ok   = [r for r in results if r.get("exit_code") == 0]
-    fail = [r for r in results if r.get("exit_code") not in (0, None)]
+    fail = [r for r in results if r.get("exit_code") != 0]
 
     summary = {
         "started_at":  started_at,
@@ -293,6 +328,7 @@ def main() -> int:
         "jar":         str(jar),
         "repo_base":   str(repo_base),
         "abs_out":     str(abs_dir),
+        "timeout_min": args.timeout,
         "targets_requested": [t[0] for t in targets],
         "counts": {
             "total":   len(results),
@@ -307,7 +343,12 @@ def main() -> int:
     print(f"summary: {len(ok)} ok / {len(fail)} failed / {len(results)} total",
           flush=True)
     for r in results:
-        status = "OK  " if r.get("exit_code") == 0 else f"FAIL({r.get('exit_code')})"
+        if r.get("exit_code") == 0:
+            status = "OK      "
+        elif r.get("timed_out"):
+            status = "TIMEOUT "
+        else:
+            status = f"FAIL({r.get('exit_code')})"
         print(f"  {status}  {r['project_key']:<24} "
               f"{r.get('elapsed_sec', '?'):>6}s", flush=True)
     print(f"wrote {summary_path}", flush=True)
