@@ -117,8 +117,31 @@ public class GroundTruthTests {
     }
 
     [Test]
-    public void GroundTruthCommonBcel() =>
-        this.checkGroundTruth(JavaTarget.CommonsBcel);
+    public void GroundTruthCommonBcel() => this.checkGroundTruth(JavaTarget.CommonsBcel);
+
+    [Test]
+    public void GroundTruthCommonsBeanutils() => this.checkGroundTruth(JavaTarget.CommonsBeanutils);
+
+    [Test]
+    public void GroundTruthCommonsCli() => this.checkGroundTruth(JavaTarget.CommonsCli);
+
+    [Test]
+    public void GroundTruthCommonsCodec() => this.checkGroundTruth(JavaTarget.CommonsCodec);
+    
+    [Test]
+    public void GroundTruthCommonsDaemon() => this.checkGroundTruth(JavaTarget.CommonsDaemon);
+    
+    [Test]
+    public void GroundTruthCommonsDbutils() => this.checkGroundTruth(JavaTarget.CommonsDbutils);
+
+    [Test]
+    public void GroundTruthCommonsExec() => this.checkGroundTruth(JavaTarget.CommonsExec);
+    
+    [Test]
+    public void GroundTruthCommonsIo() => this.checkGroundTruth(JavaTarget.CommonsIo);
+    
+    [Test]
+    public void GroundTruthCommonsNet() => this.checkGroundTruth(JavaTarget.CommonsNet);
 
     private void checkGroundTruth(JavaTarget target) {
         GT.GroundTruth gt = GT.GroundTruth.FromZip(Repo.MetricsZip, target);
