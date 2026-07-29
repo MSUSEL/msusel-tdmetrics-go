@@ -8,7 +8,11 @@ namespace Commons.Data.Yaml;
 
 /// <summary>This is a node of data to read with.</summary>
 /// <param name="source">The underlying data source.</param>
-public class Node(YamlNode source) {
+public class Node(YamlNode source, string path) {
+
+    /// <summary>The path to this node.</summary>
+    internal string Path { get; } = path;
+
     /// <summary>The underlying data source.</summary>
     internal YamlNode Source { get; } = source;
 
@@ -28,32 +32,29 @@ public class Node(YamlNode source) {
     static public Node Parse(TextReader stream) {
         YamlStream yaml = [];
         yaml.Load(stream);
-        return new(yaml.Documents[0].RootNode);
+        return new(yaml.Documents[0].RootNode, "");
     }
 
     /// <summary>Creates a new node with the given value.</summary>
     /// <param name="value">The value to create a node for.</param>
-    public Node(string value) : this(new YamlScalarNode(value)) { }
-    
+    public Node(string value) : this(new YamlScalarNode(value), "") { }
+
     /// <summary>Creates a new node with the given value.</summary>
     /// <param name="value">The value to create a node for.</param>
-    public Node(bool value) : this(new YamlScalarNode(value.ToString())) { }
-    
+    public Node(bool value) : this(new YamlScalarNode(value.ToString()), "") { }
+
     /// <summary>Creates a new node with the given value.</summary>
     /// <param name="value">The value to create a node for.</param>
-    public Node(int value) : this(new YamlScalarNode(value.ToString())) { }
-    
+    public Node(int value) : this(new YamlScalarNode(value.ToString()), "") { }
+
     /// <summary>Creates a new node with the given value.</summary>
     /// <param name="value">The value to create a node for.</param>
-    public Node(double value) : this(new YamlScalarNode(value.ToString())) { }
-    
+    public Node(double value) : this(new YamlScalarNode(value.ToString()), "") { }
+ 
     /// <summary>Creates a new node with the given location.</summary>
     /// <param name="locs">The location writer to use.</param>
     /// <param name="loc">The location to create a node for.</param>
     public Node(Writer locs, Location loc) : this(locs.Offset(loc)) { }
-
-    /// <summary>Indicates this node is null.</summary>
-    public bool IsNull => this.Source is null;
 
     /// <summary>Indicates this node contains key/value pairs.</summary>
     public bool IsObject => this.Source is YamlMappingNode;
@@ -67,22 +68,22 @@ public class Node(YamlNode source) {
     /// <summary>Gets this node as an object with key/value pairs.</summary>
     /// <returns>The object node.</returns>
     public Object AsObject() => new(this.Source as YamlMappingNode ??
-        throw new InvalidCastException("Not an object node at " + this.Source.End));
+        throw new InvalidCastException("Not an object node \"" + this.Path + "\" at " + this.Source.End), this.Path);
 
     /// <summary>Gets this node as an array with a list of nodes.</summary>
     /// <returns>The array node.</returns>
     public Array AsArray() => new(this.Source as YamlSequenceNode ??
-        throw new InvalidCastException("Not an array node at " + this.Source.End));
+        throw new InvalidCastException("Not an array node \"" + this.Path + "\" at " + this.Source.End), this.Path);
 
     /// <summary>Gets the underlying source as a scalar node.</summary>
     /// <returns>The scalar node source to read from.</returns>
     private YamlScalarNode getScalar() => this.Source as YamlScalarNode ??
-        throw new InvalidCastException("Not a value node at " + this.Source.End);
+        throw new InvalidCastException("Not a value node \"" + this.Path + "\" at " + this.Source.End);
 
     /// <summary>Gets this node as a string.</summary>
     /// <returns>The string value of this node.</returns>
     public string AsString() => this.getScalar().Value ??
-        throw new Exception("Null string from value node.");
+        throw new Exception("Null string from value node \"" + this.Path + "\".");
 
     /// <summary>Gets this node as a boolean.</summary>
     /// <returns>The boolean value of this node.</returns>
@@ -108,7 +109,7 @@ public class Node(YamlNode source) {
     public T AsIndex<T>(IReadOnlyList<T> source) {
         int index = this.AsInt() - 1;
         if (index < 0 || index >= source.Count)
-            throw new Exception("Index out of range [0.." + source.Count + "): " + index);
+            throw new Exception("Index out of range [0.." + source.Count + ") in \"" + this.Path + "\" at " + this.Source.End+ ": " + index);
         return source[index];
     }
 
@@ -122,25 +123,25 @@ public class Node(YamlNode source) {
     /// <summary>Find the place in the key to split it into a name and index.</summary>
     /// <param name="key">The key to find the split point in.</param>
     /// <returns>The index in the key string of the first digit of the index part of the key.</returns>
-    static private int keySplitPoint(string key) {
+    private int keySplitPoint(string key) {
         bool hasDigit = false;
         for (int i = key.Length - 1; i >= 0; --i) {
             if (!char.IsDigit(key[i])) {
                 if (!hasDigit)
-                    throw new Exception("Bad key, missing index: " + key);
+                    throw new Exception("Bad key, missing index: " + key + " in \"" + this.Path + "\" at " + this.Source.End);
                 return i + 1;
             }
             hasDigit = true;
         }
-        throw new Exception("Bad key, missing kind: " + key);
+        throw new Exception("Bad key, missing kind: " + key + " in \"" + this.Path + "\" at " + this.Source.End);
     }
 
     /// <summary>Reads a single key from the given lookup.</summary>
     /// <param name="res">The key resolver to lookup the value with the key.</param>
     /// <param name="key">The key of the value to read.</param>
     /// <returns>The read key from the lookup.</returns>
-    private static object readKey(IKeyResolver res, string key) {
-        int split = keySplitPoint(key);
+    private object readKey(IKeyResolver res, string key) {
+        int split = this.keySplitPoint(key);
         string name = key[..split];
         int index = int.Parse(key[split..]) - 1;
         return res.FindData(name, index);

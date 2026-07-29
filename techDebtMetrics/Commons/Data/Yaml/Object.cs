@@ -8,11 +8,14 @@ namespace Commons.Data.Yaml;
 
 /// <summary>An object with key/value pairs to read data from.</summary>
 /// <param name="source">The underlying data source.</param>
-public class Object(YamlMappingNode source) : Node(source) {
+public class Object(YamlMappingNode source, string path) : Node(source, path) {
     private readonly YamlMappingNode source = source;
 
     /// <summary>Creates a new empty object.</summary>
-    public Object() : this([]) { }
+    public Object() : this([], "") { }
+
+    private string chainPath(string name) =>
+        string.IsNullOrWhiteSpace(this.Path) ? name : this.Path + "." + name;
 
     /// <summary>The number of key/value pairs in this node.</summary>
     public int Count => this.source.Children.Count;
@@ -24,7 +27,10 @@ public class Object(YamlMappingNode source) : Node(source) {
 
     /// <summary>Enumerates all the key/value pairs in this node.</summary>
     public IEnumerable<KeyValuePair<Node, Node>> Children => this.source.Children.
-        Select(p => new KeyValuePair<Node, Node>(new Node(p.Key), new(p.Value)));
+        Select(p => new KeyValuePair<Node, Node>(
+            new(p.Key, this.chainPath("[key]")),
+            new(p.Value,this.chainPath(p.Key.ToString()))
+        ));
 
     /// <summary>Adds a new item for the node at the given key into the given list.</summary>
     /// <typeparam name="T">The type to pre-allocate.</typeparam
@@ -109,8 +115,8 @@ public class Object(YamlMappingNode source) : Node(source) {
     /// <returns>The node with the given name.</returns>
     public Node ReadNode(string name) =>
         this.source.Children.TryGetValue(new YamlScalarNode(name), out YamlNode? value) ?
-            new Node(value) :
-            throw new Exception("Expected \"" + name + "\" in object at " + this.source.Start.ToString());
+            new Node(value, this.chainPath(name)) :
+            throw new Exception("Expected \"" + name + "\" in \"" + this.Path + "\" object at " + this.source.Start);
 
     /// <summary>Gets the node with the given name as a string.</summary>
     /// <param name="name">The name of the node to get the string from.</param>
@@ -181,7 +187,7 @@ public class Object(YamlMappingNode source) : Node(source) {
     /// <returns>The node with the given name or null if it didn't exist.</returns>
     public Node? TryReadNode(string name) =>
         this.source.Children.TryGetValue(new YamlScalarNode(name), out YamlNode? value) ?
-            new Node(value) : null;
+            new Node(value, this.chainPath(name)) : null;
 
     /// <summary>Try to get the node with the given name as a string.</summary>
     /// <param name="name">The name of the node to get the string from.</param>

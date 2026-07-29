@@ -9,11 +9,11 @@ namespace Commons.Data.Yaml;
 
 /// <summary>A node containing a fixed length linear list of nodes.</summary>
 /// <param name="source">The underlying data source.</param>
-public class Array(YamlSequenceNode source) : Node(source) {
+public class Array(YamlSequenceNode source, string path) : Node(source, path) {
     private readonly YamlSequenceNode source = source;
 
     /// <summary>Creates a new empty array.</summary>
-    public Array() : this(new YamlSequenceNode()) { }
+    public Array() : this([], "") { }
 
     /// <summary>Creates a new array with the given nodes.</summary>
     /// <param name="nodes">The nodes to add to the array.</param>
@@ -43,16 +43,27 @@ public class Array(YamlSequenceNode source) : Node(source) {
         return a;
     }
 
+    private string chainPath(int index) =>
+        (string.IsNullOrWhiteSpace(this.Path) ? "" : this.Path) + "[" + index + "]";
+
     /// <summary>The number of nodes in this node.</summary>
     public int Count => this.source.Children.Count;
 
     /// <summary>Gets the node at the given index.</summary>
     /// <param name="index">The index to get the node from. Must be [0..Count).</param>
     /// <returns>The node at the given index.</returns>
-    public Node this[int index] => new(this.source[index]);
+    public Node this[int index] => new(this.source[index], this.chainPath(index));
 
     /// <summary>Enumerates all the nodes in this node.</summary>
-    public IEnumerable<Node> Items => this.source.Children.Select(x => new Node(x));
+    public IEnumerable<Node> Items {
+        get {
+            int index = 0;
+            foreach (YamlNode node in this.source.Children) {
+                yield return new Node(node, this.chainPath(index));
+                index++;
+            }
+        }
+    }
 
     #region Writes
 
@@ -115,11 +126,11 @@ public class Array(YamlSequenceNode source) : Node(source) {
     public void InitializeList<T, D>(D data, IReadOnlyList<T> list)
         where T : IInitializable<D> {
         for (int i = 0; i < this.Count; ++i) {
-            //try {
+            try {
                 list[i].Initialize(data, i, this[i]);
-            //} catch (Exception ex) {
-            //    throw new Exception("Failed to initialize #" + i + " in " + typeof(T).Name + " list:", ex);
-            //}
+            } catch (Exception ex) {
+                throw new Exception("Failed to initialize #" + i + " in " + typeof(T).Name + " list:", ex);
+            }
         }
     }
 
