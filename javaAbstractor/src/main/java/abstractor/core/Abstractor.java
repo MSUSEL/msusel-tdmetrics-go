@@ -725,8 +725,13 @@ public class Abstractor {
         return this.proj.arguments.create(this.log, key,
             "parameter " + SpoonUtils.describeElem(p),
             () -> {
-                final String                  name = p.getSimpleName();
-                final Ref<? extends TypeDesc> type = this.addTypeDesc(p.getType());
+                final String            name = p.getSimpleName();
+                Ref<? extends TypeDesc> type = this.addTypeDesc(p.getType());
+                if (type == null) {
+                    this.log.notice("argument " + SpoonUtils.describeElem(p) + " had a null type. The type likely "+
+                        "was an attribute or some other type not handled by the abstractor so using anyDesc.");
+                    type = this.proj.baker.anyDesc();
+                }
                 return new Argument(name, type);
             });
     }

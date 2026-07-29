@@ -128,6 +128,8 @@ public class Factory<T extends Construct> implements Jsonable {
             }
 
             return ref;
+        } catch (Exception e) {
+            throw new Exception("Error while processing " + title + ": " + elemKey, e);
         } finally {
             if (logCreate) log.pop();
         }

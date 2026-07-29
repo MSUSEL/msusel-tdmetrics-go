@@ -13,12 +13,14 @@ public class Argument extends ConstructImp {
 
     public Argument() {}
 
-    public Argument(String name, Ref<? extends TypeDesc> type) {
+    public Argument(String name, Ref<? extends TypeDesc> type) throws Exception {
         this.name = name;
         this.type = type;
+        if(this.type == null)
+            throw new Exception("Argument type may not be null (name: " + this.name + ")");
     }
     
-    public Argument(Ref<? extends TypeDesc> type) {
+    public Argument(Ref<? extends TypeDesc> type) throws Exception {
         this("", type);
     }
 
