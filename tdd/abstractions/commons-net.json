@@ -3009,7 +3009,7 @@
     { "name": "writeBuffer", "type": "interfaceInst3", "vis": "private" },
     { "name": "x", "type": "basic6", "vis": "private" }
   ],
-  "groupId": "commons-net",
+  "groupId": "org.apache.commons.net",
   "interfaceDecls": [
     {
       "interface": 21,

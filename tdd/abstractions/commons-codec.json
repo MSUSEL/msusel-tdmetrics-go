@@ -1128,7 +1128,7 @@
     { "name": "totalLen", "type": "basic4", "vis": "private" },
     { "name": "unencodedBlockSize", "type": "basic4", "vis": "private" }
   ],
-  "groupId": "commons-codec",
+  "groupId": "org.apache.commons.codec",
   "interfaceDecls": [
     {
       "interface": 10,

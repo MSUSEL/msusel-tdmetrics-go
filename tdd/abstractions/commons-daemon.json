@@ -235,7 +235,7 @@
     { "name": "systemProperties", "type": "object35", "vis": "private" },
     { "name": "type", "type": "basic3", "vis": "private" }
   ],
-  "groupId": "commons-daemon",
+  "groupId": "org.apache.commons.daemon",
   "interfaceDecls": [
     {
       "interface": 6,

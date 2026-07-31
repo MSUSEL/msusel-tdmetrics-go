@@ -72,7 +72,7 @@ public class GroundTruthTests {
             from c in gt.Declarations
             where c.FullName.StartsWith(groupId)
             where !c.InTestPath
-            where c.Type != GT.DeclType.Anonymous // TODO: Probably need to fold this into the nest to be counted instead of skipping it.
+            where c.Type != GT.DeclType.Anonymous
             where c.Type != GT.DeclType.Interface
             select new KeyValuePair<string, GT.DeclMetrics>(c.FullName, c)
         );
@@ -147,6 +147,7 @@ public class GroundTruthTests {
         GT.GroundTruth gt = GT.GroundTruth.FromZip(Repo.MetricsZip, target);
         Project proj = Project.FromFile(Repo.AbstractedJava(target));
         string groupId = proj.GroupId;
+        Assert.IsNotEmpty(groupId, "the groupId needs to not be empty");
         Assert.AreEqual(proj.CommitHash, target.CommitSha, "commit hash should match for " + groupId);
 
         Dictionary<string, ObjectDecl> projObjects = new(
@@ -154,21 +155,26 @@ public class GroundTruthTests {
             where c.Package.Name.StartsWith(groupId)
             select new KeyValuePair<string, ObjectDecl>(c.FullName, c)
         );
+        // If projObjects is empty, check that the groupId is the the root package name.
+        Assert.IsNotEmpty(projObjects, "must check at least one class for " + groupId);
 
         Dictionary<string, GT.DeclMetrics> gtClasses = new(
             from c in gt.Declarations
             where c.FullName.StartsWith(groupId)
             where !c.InTestPath
-            where c.Type != GT.DeclType.Anonymous // TODO: Probably need to fold this into the nest to be counted instead of skipping it.
+            where c.Type != GT.DeclType.Anonymous
             where c.Type != GT.DeclType.Interface
             select new KeyValuePair<string, GT.DeclMetrics>(c.FullName, c)
         );
 
-        foreach (KeyValuePair<string, ObjectDecl> p in projObjects)
-            this.checkGroundTruth(gtClasses[p.Key], p.Value);
+        int methods = 0;
+        foreach (KeyValuePair<string, ObjectDecl> p in projObjects) {
+            methods += checkGroundTruth(gtClasses[p.Key], p.Value);
+        }
+        Assert.NotZero(methods, "must check at least one method");
     }
 
-    private void checkGroundTruth(GT.DeclMetrics gtObj, ObjectDecl projObj) {
+    static private int checkGroundTruth(GT.DeclMetrics gtObj, ObjectDecl projObj) {
         Assert.AreEqual(gtObj.FullName, projObj.FullName, "the objects should match");
 
         Dictionary<int, GT.MethodMetrics> gtMetByLine = new(
@@ -178,10 +184,13 @@ public class GroundTruthTests {
             select new KeyValuePair<int, GT.MethodMetrics>(m.Line, m)
         );
 
+        int methods = 0;
         foreach (MethodDecl projMet in projObj.Methods) {
             GT.MethodMetrics gtMet = gtMetByLine[projMet.Location.LineNo];
             Assert.AreEqual(gtMet.Cyclo, projMet.Metrics?.PmdCyclo ?? 1, "Cyclomatic for " + projObj.FullName + ":" + projMet);
+            methods++;
         }
         Assert.AreEqual(gtObj.CycloTotal, projObj.PmdWmc, "WMC for " + projObj.FullName + " @ "  + projObj.Location);
+        return methods;
     }
 }

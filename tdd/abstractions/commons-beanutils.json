@@ -1225,6 +1225,7 @@
   "artifactId": "commons-beanutils2",
   "basics": [ "boolean", "byte", "char", "double", "float", "int", "long", "short", "string" ],
   "commitHash": "c4da598872233b59af41a221bd2bdcefbbca1259",
+  "groupId": "org.apache.commons.beanutils",
   "fields": [
     { "name": "$nest", "type": "object14" },
     { "name": "$nest", "type": "object21" },

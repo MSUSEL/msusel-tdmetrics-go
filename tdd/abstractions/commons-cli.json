@@ -539,7 +539,7 @@
     { "name": "values", "type": "interfaceInst22", "vis": "private" },
     { "name": "valuesep", "type": "basic2", "vis": "private" }
   ],
-  "groupId": "commons-cli",
+  "groupId": "org.apache.commons.cli",
   "interfaceDecls": [
     {
       "interface": 8,

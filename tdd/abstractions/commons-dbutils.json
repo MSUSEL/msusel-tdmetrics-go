@@ -1094,7 +1094,7 @@
     { "name": "value", "type": "typeParam6", "vis": "private" },
     { "name": "values", "type": "interfaceInst15" }
   ],
-  "groupId": "commons-dbutils",
+  "groupId": "org.apache.commons.dbutils",
   "interfaceDecls": [
     {
       "interface": 9,

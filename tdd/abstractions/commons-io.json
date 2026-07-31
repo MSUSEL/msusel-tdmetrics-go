@@ -1656,7 +1656,7 @@
     { "name": "xmlGuessEncoding", "type": "basic9", "vis": "private" },
     { "name": "xmlPrologWriter", "type": "object209", "vis": "private" }
   ],
-  "groupId": "commons-io",
+  "groupId": "org.apache.commons.io",
   "interfaceDecls": [
     {
       "interface": 18,
