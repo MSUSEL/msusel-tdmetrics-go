@@ -166,6 +166,7 @@ public class GroundTruthTests {
             where c.Type != GT.DeclType.Interface
             select new KeyValuePair<string, GT.DeclMetrics>(c.FullName, c)
         );
+        Assert.AreEqual(projObjects.Count(), gtClasses.Count(), "the number of classes are expected to match");
 
         int methods = 0;
         foreach (KeyValuePair<string, ObjectDecl> p in projObjects) {
@@ -183,6 +184,13 @@ public class GroundTruthTests {
             where !isPmdProblem(m)
             select new KeyValuePair<int, GT.MethodMetrics>(m.Line, m)
         );
+        if (projObj.Methods.Count() != gtMetByLine.Count()) {
+
+            // TODO: FINISH!!!
+
+
+            Assert.AreEqual(projObj.Methods.Count(), gtMetByLine.Count(), "the number of methods in " + projObj.FullName + " are expected to match");
+        }
 
         int methods = 0;
         foreach (MethodDecl projMet in projObj.Methods) {
