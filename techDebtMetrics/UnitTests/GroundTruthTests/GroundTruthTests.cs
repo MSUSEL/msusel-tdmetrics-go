@@ -184,7 +184,11 @@ public class GroundTruthTests {
             where !isPmdProblem(m)
             select new KeyValuePair<int, GT.MethodMetrics>(m.Line, m)
         );
-        if (projObj.Methods.Count() != gtMetByLine.Count()) {
+
+        Assert.AreEqual(gtMetByLine.Count, gtObj.Methods.Count,
+            "the line numbers for ground truth methods in " + projObj.FullName + " are not unique");
+
+        if (projObj.Methods.Count != gtMetByLine.Count) {
             SortedSet<int> projLines = [.. from m in projObj.Methods select m.Location.LineNo];
 
             List<string> missing = [..
@@ -193,18 +197,19 @@ public class GroundTruthTests {
                 orderby m.Line
                 select m.Line + ": " + m.Name
             ];
-            string missingMsg = missing.Count() <= 0 ? "" :
+            string missingMsg = missing.Count <= 0 ? "" :
                 "\n  Missing (in ground truth but not in objects):\n    " + string.Join("\n    ", missing);
+
             List<string> extra = [..
                 from m in projObj.Methods
                 where !gtMetByLine.ContainsKey(m.Location.LineNo)
                 orderby m.Location.LineNo
                 select m.Location.LineNo + ": " + m.Name
             ];
-            string extraMsg = extra.Count() <= 0 ? "" :
+            string extraMsg = extra.Count <= 0 ? "" :
                 "\n  Extra (in objects but not in ground truth):\n    " + string.Join("\n    ", extra);
 
-            Assert.AreEqual(projObj.Methods.Count(), gtMetByLine.Count(),
+            Assert.AreEqual(projObj.Methods.Count, gtMetByLine.Count,
                 "the number of methods in " + projObj.FullName + " are expected to match" +missingMsg+extraMsg);
         }
 
