@@ -1,7 +1,7 @@
 # cmd: java -jar /Users/grantnelson/go/src/github.com/MSUSEL/msusel-tdmetrics-go/javaAbstractor/target/abstractor-0.1-jar-with-dependencies.jar -i /Users/grantnelson/go/src/github.com/apache/commons-configuration/ -o /Users/grantnelson/go/src/github.com/MSUSEL/msusel-tdmetrics-go/tdd/abstractions/commons-configuration.json -v
 # cwd: /Users/grantnelson/go/src/github.com/MSUSEL/msusel-tdmetrics-go/tdd
 # repo: /Users/grantnelson/go/src/github.com/apache/commons-configuration @ 15b4031ba94a60f20b854e6ce2c7964d77086387
-# started: 2026-08-17T18:24:04.729993+00:00
+# started: 2026-08-17T18:50:54.344501+00:00
 # timeout_min: 10
 # ---
 Reading /Users/grantnelson/go/src/github.com/apache/commons-configuration/
@@ -41,28 +41,28 @@ Init pending package org.apache.commons.configuration2.web
   Pending package java.util.concurrent.atomic
   Pending package org.apache.commons.configuration2.sync
   Pending package org.apache.commons.configuration2.io
-  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.logging.Log @ src/main/java/org/apache/commons/configuration2/io/ConfigurationLogger.java:57:19[0m
-  [34mfield (CtFieldImpl) log @ src/main/java/org/apache/commons/configuration2/io/ConfigurationLogger.java:57:23 had a null type. The type likely was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.[0m
-  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.logging.Log @ src/main/java/org/apache/commons/configuration2/io/ConfigurationLogger.java:102:25[0m
-  [34margument (CtParameterImpl) wrapped @ src/main/java/org/apache/commons/configuration2/io/ConfigurationLogger.java:102:29 had a null type. The type likely was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.[0m
-  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.logging.Log @ src/main/java/org/apache/commons/configuration2/io/ConfigurationLogger.java:205:5[0m
-  [34margument (CtTypeReferenceImpl) org.apache.commons.logging.Log @ src/main/java/org/apache/commons/configuration2/io/ConfigurationLogger.java:205:5 had a null type. The type likely was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.[0m
-  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.logging.Log @ src/main/java/org/apache/commons/configuration2/io/ConfigurationLogger.java:235:20[0m
-  [34margument (CtTypeReferenceImpl) org.apache.commons.logging.Log @ src/main/java/org/apache/commons/configuration2/io/ConfigurationLogger.java:235:20 had a null type. The type likely was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.[0m
-  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.logging.Log @ src/main/java/org/apache/commons/configuration2/io/ConfigurationLogger.java:218:20[0m
-  [34margument (CtTypeReferenceImpl) org.apache.commons.logging.Log @ src/main/java/org/apache/commons/configuration2/io/ConfigurationLogger.java:218:20 had a null type. The type likely was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.[0m
+  [31mType description did not have a declaration but was not labelled as anonymous: (CtTypeReferenceImpl) org.apache.commons.logging.Log @ src/main/java/org/apache/commons/configuration2/io/ConfigurationLogger.java:57:19
+  The type likely was an external dependency or some other type not handled by the abstractor so using anyDesc.[0m
+  [31mType description did not have a declaration but was not labelled as anonymous: (CtTypeReferenceImpl) org.apache.commons.logging.Log @ src/main/java/org/apache/commons/configuration2/io/ConfigurationLogger.java:102:25
+  The type likely was an external dependency or some other type not handled by the abstractor so using anyDesc.[0m
+  [31mType description did not have a declaration but was not labelled as anonymous: (CtTypeReferenceImpl) org.apache.commons.logging.Log @ src/main/java/org/apache/commons/configuration2/io/ConfigurationLogger.java:205:5
+  The type likely was an external dependency or some other type not handled by the abstractor so using anyDesc.[0m
+  [31mType description did not have a declaration but was not labelled as anonymous: (CtTypeReferenceImpl) org.apache.commons.logging.Log @ src/main/java/org/apache/commons/configuration2/io/ConfigurationLogger.java:235:20
+  The type likely was an external dependency or some other type not handled by the abstractor so using anyDesc.[0m
+  [31mType description did not have a declaration but was not labelled as anonymous: (CtTypeReferenceImpl) org.apache.commons.logging.Log @ src/main/java/org/apache/commons/configuration2/io/ConfigurationLogger.java:218:20
+  The type likely was an external dependency or some other type not handled by the abstractor so using anyDesc.[0m
   Pending package org.apache.commons.configuration2.event
-[34mFinished process pending packages (0.435982s)[0m
+[34mFinished process pending packages (0.614549s)[0m
 Exception in thread "main" java.lang.Exception: Error while processing package org.apache.commons.configuration2: {
   elem: org.apache.commons.configuration2,
 }
 	at abstractor.core.constructs.Factory.create(Factory.java:132)
 	at abstractor.core.constructs.Factory.create(Factory.java:139)
-	at abstractor.core.Abstractor.processPackage(Abstractor.java:1351)
-	at abstractor.core.Abstractor.processPendingPackages(Abstractor.java:1345)
-	at abstractor.core.Abstractor.lambda$performAbstraction$40(Abstractor.java:1332)
+	at abstractor.core.Abstractor.processPackage(Abstractor.java:1352)
+	at abstractor.core.Abstractor.processPendingPackages(Abstractor.java:1346)
+	at abstractor.core.Abstractor.lambda$performAbstraction$40(Abstractor.java:1333)
 	at abstractor.core.log.Logger.measure(Logger.java:123)
-	at abstractor.core.Abstractor.performAbstraction(Abstractor.java:1332)
+	at abstractor.core.Abstractor.performAbstraction(Abstractor.java:1333)
 	at abstractor.app.App.run(App.java:26)
 	at abstractor.app.App.main(App.java:17)
 Caused by: java.lang.Exception: Error while processing object decl (CtClassImpl) AbstractConfiguration @ src/main/java/org/apache/commons/configuration2/AbstractConfiguration.java:102:23: {
@@ -72,7 +72,7 @@ Caused by: java.lang.Exception: Error while processing object decl (CtClassImpl)
 	at abstractor.core.constructs.Factory.create(Factory.java:139)
 	at abstractor.core.Abstractor.addObjectDecl(Abstractor.java:985)
 	at abstractor.core.Abstractor.addDeclaration(Abstractor.java:176)
-	at abstractor.core.Abstractor.lambda$processPackage$48(Abstractor.java:1360)
+	at abstractor.core.Abstractor.lambda$processPackage$48(Abstractor.java:1361)
 	at abstractor.core.constructs.Factory.create(Factory.java:127)
 	... 8 more
 Caused by: java.lang.Exception: Error while processing struct (CtClassImpl) AbstractConfiguration @ src/main/java/org/apache/commons/configuration2/AbstractConfiguration.java:102:23: {
@@ -102,7 +102,7 @@ Caused by: java.lang.Exception: Error while processing object decl (CtClassImpl)
 	at abstractor.core.constructs.Factory.create(Factory.java:139)
 	at abstractor.core.Abstractor.addObjectDecl(Abstractor.java:985)
 	at abstractor.core.Abstractor.addObjectInst(Abstractor.java:1069)
-	at abstractor.core.Abstractor.addTypeDesc(Abstractor.java:1229)
+	at abstractor.core.Abstractor.addTypeDesc(Abstractor.java:1230)
 	at abstractor.core.Abstractor.lambda$addField$24(Abstractor.java:800)
 	at abstractor.core.constructs.Factory.lambda$create$0(Factory.java:139)
 	at abstractor.core.constructs.Factory.create(Factory.java:109)
@@ -134,10 +134,10 @@ Caused by: java.lang.Exception: Error while processing object decl (CtClassImpl)
 	at abstractor.core.constructs.Factory.create(Factory.java:139)
 	at abstractor.core.Abstractor.addObjectDecl(Abstractor.java:985)
 	at abstractor.core.Abstractor.addObjectInst(Abstractor.java:1069)
-	at abstractor.core.Abstractor.addTypeDesc(Abstractor.java:1229)
+	at abstractor.core.Abstractor.addTypeDesc(Abstractor.java:1230)
 	at abstractor.core.Abstractor.addTypeArguments(Abstractor.java:1140)
 	at abstractor.core.Abstractor.addInterfaceInst(Abstractor.java:258)
-	at abstractor.core.Abstractor.addTypeDesc(Abstractor.java:1230)
+	at abstractor.core.Abstractor.addTypeDesc(Abstractor.java:1231)
 	at abstractor.core.Abstractor.lambda$addField$24(Abstractor.java:800)
 	at abstractor.core.constructs.Factory.lambda$create$0(Factory.java:139)
 	at abstractor.core.constructs.Factory.create(Factory.java:109)
@@ -169,7 +169,7 @@ Caused by: java.lang.Exception: Error while processing object decl (CtClassImpl)
 	at abstractor.core.constructs.Factory.create(Factory.java:139)
 	at abstractor.core.Abstractor.addObjectDecl(Abstractor.java:985)
 	at abstractor.core.Abstractor.addObjectInst(Abstractor.java:1069)
-	at abstractor.core.Abstractor.addTypeDesc(Abstractor.java:1229)
+	at abstractor.core.Abstractor.addTypeDesc(Abstractor.java:1230)
 	at abstractor.core.Abstractor.lambda$addField$24(Abstractor.java:800)
 	at abstractor.core.constructs.Factory.lambda$create$0(Factory.java:139)
 	at abstractor.core.constructs.Factory.create(Factory.java:109)
@@ -202,7 +202,7 @@ Caused by: java.lang.Exception: Error while processing type params (CtTypeParame
 	at abstractor.core.Abstractor.addTypeParam(Abstractor.java:935)
 	at abstractor.core.Abstractor.addTypeParams(Abstractor.java:924)
 	at abstractor.core.Abstractor.addObjectInst(Abstractor.java:1072)
-	at abstractor.core.Abstractor.addTypeDesc(Abstractor.java:1229)
+	at abstractor.core.Abstractor.addTypeDesc(Abstractor.java:1230)
 	at abstractor.core.Abstractor.lambda$addField$24(Abstractor.java:800)
 	at abstractor.core.constructs.Factory.lambda$create$0(Factory.java:139)
 	at abstractor.core.constructs.Factory.create(Factory.java:109)
@@ -214,7 +214,7 @@ Caused by: java.lang.Exception: Error while processing object decl (CtClassImpl)
 	at abstractor.core.constructs.Factory.create(Factory.java:139)
 	at abstractor.core.Abstractor.addObjectDecl(Abstractor.java:985)
 	at abstractor.core.Abstractor.addObjectInst(Abstractor.java:1069)
-	at abstractor.core.Abstractor.addTypeDesc(Abstractor.java:1229)
+	at abstractor.core.Abstractor.addTypeDesc(Abstractor.java:1230)
 	at abstractor.core.Abstractor.lambda$addTypeParam$29(Abstractor.java:941)
 	at abstractor.core.constructs.Factory.lambda$create$1(Factory.java:147)
 	at abstractor.core.constructs.Factory.create(Factory.java:109)
@@ -247,7 +247,7 @@ Caused by: java.lang.Exception: Error while processing object instantiation org.
 }
 	at abstractor.core.constructs.Factory.create(Factory.java:132)
 	at abstractor.core.Abstractor.addObjectInst(Abstractor.java:1084)
-	at abstractor.core.Abstractor.addTypeDesc(Abstractor.java:1229)
+	at abstractor.core.Abstractor.addTypeDesc(Abstractor.java:1230)
 	at abstractor.core.Abstractor.lambda$addField$24(Abstractor.java:800)
 	at abstractor.core.constructs.Factory.lambda$create$0(Factory.java:139)
 	at abstractor.core.constructs.Factory.create(Factory.java:109)
@@ -285,7 +285,7 @@ Caused by: java.lang.Exception: Error while processing object instantiation org.
 }
 	at abstractor.core.constructs.Factory.create(Factory.java:132)
 	at abstractor.core.Abstractor.addObjectInst(Abstractor.java:1084)
-	at abstractor.core.Abstractor.addTypeDesc(Abstractor.java:1229)
+	at abstractor.core.Abstractor.addTypeDesc(Abstractor.java:1230)
 	at abstractor.core.Abstractor.lambda$addField$24(Abstractor.java:800)
 	at abstractor.core.constructs.Factory.lambda$create$0(Factory.java:139)
 	at abstractor.core.constructs.Factory.create(Factory.java:109)
@@ -337,7 +337,7 @@ Caused by: java.lang.Exception: Error while processing object instantiation org.
 }
 	at abstractor.core.constructs.Factory.create(Factory.java:132)
 	at abstractor.core.Abstractor.addObjectInst(Abstractor.java:1084)
-	at abstractor.core.Abstractor.addTypeDesc(Abstractor.java:1229)
+	at abstractor.core.Abstractor.addTypeDesc(Abstractor.java:1230)
 	at abstractor.core.Abstractor.lambda$addArgument$22(Abstractor.java:745)
 	at abstractor.core.constructs.Factory.lambda$create$1(Factory.java:147)
 	at abstractor.core.constructs.Factory.create(Factory.java:109)

@@ -1209,8 +1209,9 @@ public class Abstractor {
         final CtType<?> ty = tr.getTypeDeclaration();
         if (ty == null) {
             this.log.error("Type description did not have a declaration but "+
-                "was not labelled a anonymous: " + SpoonUtils.describeElem(tr));
-            return null;
+                "was not labelled as anonymous: " + SpoonUtils.describeElem(tr)+"\n"+
+                "The type likely was an external dependency or some other type not handled by the abstractor so using anyDesc.");
+            return this.proj.baker.anyDesc();
         }
 
         // Annotation types don't participate in data flow. Use an object instead.
