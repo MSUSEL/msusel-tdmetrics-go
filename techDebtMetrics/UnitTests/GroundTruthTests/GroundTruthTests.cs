@@ -116,34 +116,17 @@ public class GroundTruthTests {
         };
     }
 
-    [Test]
-    public void GroundTruthCommonBcel() => this.checkGroundTruth(JavaTarget.CommonsBcel);
+    [Test] public void GroundTruthCommonBcel() => checkGroundTruth(JavaTarget.CommonsBcel);
+    [Test] public void GroundTruthCommonsBeanutils() => checkGroundTruth(JavaTarget.CommonsBeanutils);
+    [Test] public void GroundTruthCommonsCli() => checkGroundTruth(JavaTarget.CommonsCli);
+    [Test] public void GroundTruthCommonsCodec() => checkGroundTruth(JavaTarget.CommonsCodec);
+    [Test] public void GroundTruthCommonsDaemon() => checkGroundTruth(JavaTarget.CommonsDaemon);
+    [Test] public void GroundTruthCommonsDbutils() => checkGroundTruth(JavaTarget.CommonsDbutils);
+    [Test] public void GroundTruthCommonsExec() => checkGroundTruth(JavaTarget.CommonsExec);
+    [Test] public void GroundTruthCommonsIo() => checkGroundTruth(JavaTarget.CommonsIo);
+    [Test] public void GroundTruthCommonsNet() => checkGroundTruth(JavaTarget.CommonsNet);
 
-    [Test]
-    public void GroundTruthCommonsBeanutils() => this.checkGroundTruth(JavaTarget.CommonsBeanutils);
-
-    [Test]
-    public void GroundTruthCommonsCli() => this.checkGroundTruth(JavaTarget.CommonsCli);
-
-    [Test]
-    public void GroundTruthCommonsCodec() => this.checkGroundTruth(JavaTarget.CommonsCodec);
-    
-    [Test]
-    public void GroundTruthCommonsDaemon() => this.checkGroundTruth(JavaTarget.CommonsDaemon);
-    
-    [Test]
-    public void GroundTruthCommonsDbutils() => this.checkGroundTruth(JavaTarget.CommonsDbutils);
-
-    [Test]
-    public void GroundTruthCommonsExec() => this.checkGroundTruth(JavaTarget.CommonsExec);
-    
-    [Test]
-    public void GroundTruthCommonsIo() => this.checkGroundTruth(JavaTarget.CommonsIo);
-    
-    [Test]
-    public void GroundTruthCommonsNet() => this.checkGroundTruth(JavaTarget.CommonsNet);
-
-    private void checkGroundTruth(JavaTarget target) {
+    static private void checkGroundTruth(JavaTarget target) {
         GT.GroundTruth gt = GT.GroundTruth.FromZip(Repo.MetricsZip, target);
         Project proj = Project.FromFile(Repo.AbstractedJava(target));
         string groupId = proj.GroupId;
@@ -155,8 +138,9 @@ public class GroundTruthTests {
             where c.Package.Name.StartsWith(groupId)
             select new KeyValuePair<string, ObjectDecl>(c.FullName, c)
         );
-        // If projObjects is empty, check that the groupId is the the root package name.
-        Assert.IsNotEmpty(projObjects, "must check at least one class for " + groupId);
+        Assert.IsNotEmpty(projObjects, "must check at least one class for " + groupId + "\n" +
+            "   NOTICE: If projObjects is empty, check that the groupId is the the root package name "+
+            "(e.g. \"commons-codec\" needs to be \"org.apache.commons.codec\")");
 
         Dictionary<string, GT.DeclMetrics> gtClasses = new(
             from c in gt.Declarations
@@ -185,9 +169,6 @@ public class GroundTruthTests {
             select new KeyValuePair<int, GT.MethodMetrics>(m.Line, m)
         );
 
-        Assert.AreEqual(gtMetByLine.Count, gtObj.Methods.Count,
-            "the line numbers for ground truth methods in " + projObj.FullName + " are not unique");
-
         if (projObj.Methods.Count != gtMetByLine.Count) {
             SortedSet<int> projLines = [.. from m in projObj.Methods select m.Location.LineNo];
 
@@ -209,8 +190,26 @@ public class GroundTruthTests {
             string extraMsg = extra.Count <= 0 ? "" :
                 "\n  Extra (in objects but not in ground truth):\n    " + string.Join("\n    ", extra);
 
+            List<string> gtMethodLines = [..
+                from m in gtObj.Methods
+                where !m.Name.StartsWith("(initializer ")
+                orderby m.Line
+                select m.Line + ": " + m.Name
+            ];
+            string getMethodsMsg = gtMethodLines.Count <= 0 ? "":
+                "\n Methods in ground truth were:\n    " + string.Join("\n    ", gtMethodLines);
+
+            List<string> projMethodLines = [..
+                from m in projObj.Methods
+                orderby m.Location.LineNo
+                select m.Location.LineNo + ": " + m.Name
+            ];
+            string projMethodsMsg = projMethodLines.Count <= 0 ? "":
+                "\n Methods in objects were:\n    " + string.Join("\n    ", projMethodLines);
+
             Assert.AreEqual(projObj.Methods.Count, gtMetByLine.Count,
-                "the number of methods in " + projObj.FullName + " are expected to match" +missingMsg+extraMsg);
+                "the number of methods in " + projObj.FullName + " are expected to match" + 
+                missingMsg + extraMsg + getMethodsMsg + projMethodsMsg);
         }
 
         int methods = 0;

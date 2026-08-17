@@ -1283,6 +1283,18 @@ public class Abstractor {
                                 });
                         }
 
+                        // Add constructors as (static) methods.
+                        for (CtConstructor<?> ctor : e.getConstructors()) {
+                            if (ctor.getParent().equals(e)) {
+                                // Skip default constructors
+                                if (ctor.isImplicit()) {
+                                    this.log.notice("skipping default constructor: " + ctor.getSignature());
+                                    continue;
+                                }
+                                this.addMethodDeclForConstructor(ref, ctor);
+                            }
+                        }
+
                         // Add methods for the enum.
                         for (CtMethod<?> m : e.getAllMethods()) {
                             if (!m.isImplicit() && m.getParent().equals(e) && !SpoonUtils.isObjectMethod(m))
