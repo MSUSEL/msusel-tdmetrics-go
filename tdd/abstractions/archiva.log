@@ -1,7 +1,7 @@
 # cmd: java -jar /Users/grantnelson/go/src/github.com/MSUSEL/msusel-tdmetrics-go/javaAbstractor/target/abstractor-0.1-jar-with-dependencies.jar -i /Users/grantnelson/go/src/github.com/apache/archiva/ -o /Users/grantnelson/go/src/github.com/MSUSEL/msusel-tdmetrics-go/tdd/abstractions/archiva.json -v
 # cwd: /Users/grantnelson/go/src/github.com/MSUSEL/msusel-tdmetrics-go/tdd
 # repo: /Users/grantnelson/go/src/github.com/apache/archiva @ 374fc983abc92df8aa4f8ef30caee94b34312ad2
-# started: 2026-07-28T01:54:45.481953+00:00
+# started: 2026-08-17T18:33:11.332404+00:00
 # timeout_min: 10
 # ---
 Reading /Users/grantnelson/go/src/github.com/apache/archiva/
@@ -9,12 +9,190 @@ SLF4J(W): No SLF4J providers were found.
 SLF4J(W): Defaulting to no-operation (NOP) logger implementation
 SLF4J(W): See https://www.slf4j.org/codes.html#noProviders for further details.
 The method public static final Set<T> emptySet()  is wrongly tagged as containing missing types
-Exception in thread "main" spoon.compiler.ModelBuildingException: TaskExecutor cannot be resolved to a type at /Users/grantnelson/go/src/github.com/apache/archiva/archiva-modules/archiva-scheduler/archiva-scheduler-repository/src/main/java/org/apache/archiva/scheduler/repository/ArchivaRepositoryScanningTaskExecutor.java:56
-	at spoon.support.compiler.jdt.JDTBasedSpoonCompiler.report(JDTBasedSpoonCompiler.java:664)
-	at spoon.support.compiler.jdt.JDTBasedSpoonCompiler.reportProblems(JDTBasedSpoonCompiler.java:646)
-	at spoon.support.compiler.jdt.JDTBasedSpoonCompiler.build(JDTBasedSpoonCompiler.java:120)
-	at spoon.support.compiler.jdt.JDTBasedSpoonCompiler.build(JDTBasedSpoonCompiler.java:101)
-	at spoon.Launcher.buildModel(Launcher.java:781)
-	at abstractor.core.Abstractor.prepareMavenProject(Abstractor.java:55)
-	at abstractor.app.App.run(App.java:25)
+Init pending package <unnamed>
+Init pending package org
+Init pending package org.apache
+Init pending package org.apache.archiva
+Init pending package org.apache.archiva.cli
+Init pending package org.apache.archiva.converter
+Init pending package org.apache.archiva.converter.artifact
+Init pending package org.apache.archiva.converter.legacy
+Init pending package org.apache.archiva.checksum
+Init pending package org.apache.archiva.common
+Init pending package org.apache.archiva.common.utils
+Init pending package org.apache.archiva.common.plexusbridge
+Init pending package org.apache.archiva.configuration
+Init pending package org.apache.archiva.configuration.functors
+Init pending package org.apache.archiva.consumers
+Init pending package org.apache.archiva.consumers.functors
+Init pending package org.apache.archiva.consumers.core
+Init pending package org.apache.archiva.consumers.core.repository
+Init pending package org.apache.archiva.consumers.lucene
+Init pending package org.apache.archiva.consumers.metadata
+Init pending package org.apache.archiva.indexer
+Init pending package org.apache.archiva.indexer.merger
+Init pending package org.apache.archiva.indexer.search
+Init pending package org.apache.archiva.indexer.util
+Init pending package org.apache.archiva.model
+Init pending package org.apache.archiva.policies
+Init pending package org.apache.archiva.policies.urlcache
+Init pending package org.apache.archiva.proxy
+Init pending package org.apache.archiva.proxy.common
+Init pending package org.apache.archiva.admin
+Init pending package org.apache.archiva.admin.model
+Init pending package org.apache.archiva.admin.model.admin
+Init pending package org.apache.archiva.admin.model.beans
+Init pending package org.apache.archiva.admin.model.group
+Init pending package org.apache.archiva.admin.model.managed
+Init pending package org.apache.archiva.admin.model.networkproxy
+Init pending package org.apache.archiva.admin.model.proxyconnector
+Init pending package org.apache.archiva.admin.model.remote
+Init pending package org.apache.archiva.admin.repository
+Init pending package org.apache.archiva.admin.repository.admin
+Init pending package org.apache.archiva.admin.repository.group
+Init pending package org.apache.archiva.admin.repository.managed
+Init pending package org.apache.archiva.admin.repository.networkproxy
+Init pending package org.apache.archiva.admin.repository.proxyconnector
+Init pending package org.apache.archiva.admin.repository.remote
+Init pending package org.apache.archiva.admin.repository.utils
+Init pending package org.apache.archiva.repository
+Init pending package org.apache.archiva.repository.connector
+Init pending package org.apache.archiva.repository.content
+Init pending package org.apache.archiva.repository.layout
+Init pending package org.apache.archiva.repository.metadata
+Init pending package org.apache.archiva.repository.scanner
+Init pending package org.apache.archiva.repository.scanner.functors
+Init pending package org.apache.archiva.repository.events
+Init pending package org.apache.archiva.security
+Init pending package org.apache.archiva.security.common
+Init pending package org.apache.archiva.transaction
+Init pending package org.apache.archiva.xml
+Init pending package org.apache.archiva.scheduler
+Init pending package org.apache.archiva.scheduler.indexing
+Init pending package org.apache.archiva.scheduler.repository
+Init pending package org.apache.archiva.applet
+Init pending package org.apache.archiva.rest
+Init pending package org.apache.archiva.rest.api
+Init pending package org.apache.archiva.rest.api.model
+Init pending package org.apache.archiva.rest.api.services
+Init pending package org.apache.archiva.rest.services
+Init pending package org.apache.archiva.rest.services.interceptors
+Init pending package org.apache.archiva.rss
+Init pending package org.apache.archiva.rss.processor
+Init pending package org.apache.archiva.web
+Init pending package org.apache.archiva.web.rss
+Init pending package org.apache.archiva.web.runtime
+Init pending package org.apache.archiva.web.spring
+Init pending package org.apache.archiva.web.startup
+Init pending package org.apache.archiva.web.action
+Init pending package org.apache.archiva.web.action.admin
+Init pending package org.apache.archiva.web.action.admin.appearance
+Init pending package org.apache.archiva.web.action.admin.connectors
+Init pending package org.apache.archiva.web.action.admin.connectors.proxy
+Init pending package org.apache.archiva.web.action.admin.legacy
+Init pending package org.apache.archiva.web.action.admin.network
+Init pending package org.apache.archiva.web.action.admin.networkproxies
+Init pending package org.apache.archiva.web.action.admin.repositories
+Init pending package org.apache.archiva.web.action.admin.scanning
+Init pending package org.apache.archiva.web.action.reports
+Init pending package org.apache.archiva.web.interceptor
+Init pending package org.apache.archiva.web.mapper
+Init pending package org.apache.archiva.web.tags
+Init pending package org.apache.archiva.web.util
+Init pending package org.apache.archiva.web.validator
+Init pending package org.apache.archiva.webdav
+Init pending package org.apache.archiva.webdav.util
+Init pending package org.apache.archiva.metadata
+Init pending package org.apache.archiva.metadata.model
+Init pending package org.apache.archiva.metadata.repository
+Init pending package org.apache.archiva.metadata.repository.filter
+Init pending package org.apache.archiva.metadata.repository.storage
+Init pending package org.apache.archiva.metadata.repository.storage.maven2
+Init pending package org.apache.archiva.metadata.repository.file
+Init pending package org.apache.archiva.metadata.repository.jcr
+Init pending package org.apache.archiva.metadata.repository.stats
+Init pending package org.apache.archiva.metadata.generic
+Init pending package org.apache.archiva.audit
+Init pending package org.apache.archiva.dependency
+Init pending package org.apache.archiva.dependency.tree
+Init pending package org.apache.archiva.dependency.tree.maven2
+Init pending package org.apache.archiva.plugins
+Init pending package org.apache.archiva.plugins.npanday
+Init pending package org.apache.archiva.reports
+Init pending package org.apache.archiva.reports.consumers
+Init pending package org.apache.archiva.stagerepository
+Init pending package org.apache.archiva.stagerepository.merge
+[34mStarting process pending packages...[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.archiva.configuration.Configuration @ archiva-modules/archiva-base/archiva-configuration/src/main/java/org/apache/archiva/configuration/ArchivaConfiguration.java:35:5[0m
+  [34margument (CtTypeReferenceImpl) org.apache.archiva.configuration.Configuration @ archiva-modules/archiva-base/archiva-configuration/src/main/java/org/apache/archiva/configuration/ArchivaConfiguration.java:35:5 had a null type. The type likely was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.archiva.configuration.Configuration @ archiva-modules/archiva-base/archiva-configuration/src/main/java/org/apache/archiva/configuration/ArchivaConfiguration.java:46:16[0m
+  [34margument (CtParameterImpl) configuration @ archiva-modules/archiva-base/archiva-configuration/src/main/java/org/apache/archiva/configuration/ArchivaConfiguration.java:46:30 had a null type. The type likely was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.codehaus.plexus.registry.RegistryListener @ archiva-modules/archiva-base/archiva-configuration/src/main/java/org/apache/archiva/configuration/ArchivaConfiguration.java:78:29[0m
+  [34margument (CtParameterImpl) listener @ archiva-modules/archiva-base/archiva-configuration/src/main/java/org/apache/archiva/configuration/ArchivaConfiguration.java:78:46 had a null type. The type likely was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.[0m
+  [34mskipping default constructor: org.apache.archiva.configuration.ConfigurationNames()[0m
+  Pending package java.lang
+  Pending package java.lang
+  Pending package java.util
+  Pending package java.io
+  Pending package java.io
+  getting parent type for (CtClassImpl) PrintStreamOrWriter
+  Pending package org.slf4j
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.codehaus.plexus.registry.Registry @ archiva-modules/archiva-base/archiva-configuration/src/main/java/org/apache/archiva/configuration/DefaultArchivaConfiguration.java:103:13[0m
+  [34mfield (CtFieldImpl) registry @ archiva-modules/archiva-base/archiva-configuration/src/main/java/org/apache/archiva/configuration/DefaultArchivaConfiguration.java:103:22 had a null type. The type likely was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.codehaus.redback.components.springutils.ComponentContainer @ archiva-modules/archiva-base/archiva-configuration/src/main/java/org/apache/archiva/configuration/DefaultArchivaConfiguration.java:106:13[0m
+  [34mfield (CtFieldImpl) componentContainer @ archiva-modules/archiva-base/archiva-configuration/src/main/java/org/apache/archiva/configuration/DefaultArchivaConfiguration.java:106:32 had a null type. The type likely was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.archiva.configuration.Configuration @ archiva-modules/archiva-base/archiva-configuration/src/main/java/org/apache/archiva/configuration/DefaultArchivaConfiguration.java:111:13[0m
+  [34mfield (CtFieldImpl) configuration @ archiva-modules/archiva-base/archiva-configuration/src/main/java/org/apache/archiva/configuration/DefaultArchivaConfiguration.java:111:27 had a null type. The type likely was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.[0m
+  Pending package org.apache.archiva.policies
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.codehaus.plexus.registry.RegistryListener @ archiva-modules/archiva-base/archiva-configuration/src/main/java/org/apache/archiva/configuration/DefaultArchivaConfiguration.java:155:17[0m
+[34mFinished process pending packages (0.372876s)[0m
+Exception in thread "main" java.lang.Exception: Error while processing package org.apache.archiva.configuration: {
+  elem: org.apache.archiva.configuration,
+}
+	at abstractor.core.constructs.Factory.create(Factory.java:132)
+	at abstractor.core.constructs.Factory.create(Factory.java:139)
+	at abstractor.core.Abstractor.processPackage(Abstractor.java:1351)
+	at abstractor.core.Abstractor.processPendingPackages(Abstractor.java:1345)
+	at abstractor.core.Abstractor.lambda$performAbstraction$40(Abstractor.java:1332)
+	at abstractor.core.log.Logger.measure(Logger.java:123)
+	at abstractor.core.Abstractor.performAbstraction(Abstractor.java:1332)
+	at abstractor.app.App.run(App.java:26)
 	at abstractor.app.App.main(App.java:17)
+Caused by: java.lang.Exception: Error while processing object decl (CtClassImpl) DefaultArchivaConfiguration @ archiva-modules/archiva-base/archiva-configuration/src/main/java/org/apache/archiva/configuration/DefaultArchivaConfiguration.java:93:14: {
+  elem: "(CtClassImpl) DefaultArchivaConfiguration @ archiva-modules/archiva-base/archiva-configuration/src/main/java/org/apache/archiva/configuration/DefaultArchivaConfiguration.java:93:14",
+}
+	at abstractor.core.constructs.Factory.create(Factory.java:132)
+	at abstractor.core.constructs.Factory.create(Factory.java:139)
+	at abstractor.core.Abstractor.addObjectDecl(Abstractor.java:985)
+	at abstractor.core.Abstractor.addDeclaration(Abstractor.java:176)
+	at abstractor.core.Abstractor.lambda$processPackage$48(Abstractor.java:1360)
+	at abstractor.core.constructs.Factory.create(Factory.java:127)
+	... 8 more
+Caused by: java.lang.Exception: Error while processing struct (CtClassImpl) DefaultArchivaConfiguration @ archiva-modules/archiva-base/archiva-configuration/src/main/java/org/apache/archiva/configuration/DefaultArchivaConfiguration.java:93:14: {
+  elem: "(CtClassImpl) DefaultArchivaConfiguration @ archiva-modules/archiva-base/archiva-configuration/src/main/java/org/apache/archiva/configuration/DefaultArchivaConfiguration.java:93:14",
+}
+	at abstractor.core.constructs.Factory.create(Factory.java:132)
+	at abstractor.core.constructs.Factory.create(Factory.java:143)
+	at abstractor.core.Abstractor.addStructDesc(Abstractor.java:757)
+	at abstractor.core.Abstractor.lambda$addObjectDecl$32(Abstractor.java:991)
+	at abstractor.core.constructs.Factory.lambda$create$0(Factory.java:139)
+	at abstractor.core.constructs.Factory.create(Factory.java:109)
+	... 13 more
+Caused by: java.lang.Exception: Error while processing field (CtFieldImpl) registryListeners @ archiva-modules/archiva-base/archiva-configuration/src/main/java/org/apache/archiva/configuration/DefaultArchivaConfiguration.java:155:35: {
+  elem: "(CtFieldImpl) registryListeners @ archiva-modules/archiva-base/archiva-configuration/src/main/java/org/apache/archiva/configuration/DefaultArchivaConfiguration.java:155:35",
+}
+	at abstractor.core.constructs.Factory.create(Factory.java:132)
+	at abstractor.core.constructs.Factory.create(Factory.java:139)
+	at abstractor.core.Abstractor.addField(Abstractor.java:796)
+	at abstractor.core.Abstractor.addField(Abstractor.java:791)
+	at abstractor.core.Abstractor.lambda$addStructDesc$23(Abstractor.java:768)
+	at abstractor.core.constructs.Factory.create(Factory.java:109)
+	... 18 more
+Caused by: java.lang.NullPointerException: Cannot invoke "abstractor.core.constructs.Ref.getCmp(abstractor.core.constructs.Construct, abstractor.core.cmp.CmpOptions)" because "ta" is null
+	at abstractor.core.Abstractor.addTypeArguments(Abstractor.java:1147)
+	at abstractor.core.Abstractor.addInterfaceInst(Abstractor.java:258)
+	at abstractor.core.Abstractor.addTypeDesc(Abstractor.java:1230)
+	at abstractor.core.Abstractor.lambda$addField$24(Abstractor.java:800)
+	at abstractor.core.constructs.Factory.lambda$create$0(Factory.java:139)
+	at abstractor.core.constructs.Factory.create(Factory.java:109)
+	... 23 more

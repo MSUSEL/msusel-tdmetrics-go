@@ -1,19 +1,1672 @@
 # cmd: java -jar /Users/grantnelson/go/src/github.com/MSUSEL/msusel-tdmetrics-go/javaAbstractor/target/abstractor-0.1-jar-with-dependencies.jar -i /Users/grantnelson/go/src/github.com/apache/commons-ognl/ -o /Users/grantnelson/go/src/github.com/MSUSEL/msusel-tdmetrics-go/tdd/abstractions/commons-ognl.json -v
 # cwd: /Users/grantnelson/go/src/github.com/MSUSEL/msusel-tdmetrics-go/tdd
 # repo: /Users/grantnelson/go/src/github.com/apache/commons-ognl @ 6ec1a1a4588b82c0972ca2ff35b85d9b50cc4604
-# started: 2026-07-28T00:53:24.849518+00:00
+# started: 2026-08-17T18:27:12.626433+00:00
 # timeout_min: 10
 # ---
 Reading /Users/grantnelson/go/src/github.com/apache/commons-ognl/
 SLF4J(W): No SLF4J providers were found.
 SLF4J(W): Defaulting to no-operation (NOP) logger implementation
 SLF4J(W): See https://www.slf4j.org/codes.html#noProviders for further details.
-Exception in thread "main" spoon.compiler.ModelBuildingException: OgnlParser cannot be resolved to a type at /Users/grantnelson/go/src/github.com/apache/commons-ognl/src/main/java/org/apache/commons/ognl/ASTOr.java:36
-	at spoon.support.compiler.jdt.JDTBasedSpoonCompiler.report(JDTBasedSpoonCompiler.java:664)
-	at spoon.support.compiler.jdt.JDTBasedSpoonCompiler.reportProblems(JDTBasedSpoonCompiler.java:646)
-	at spoon.support.compiler.jdt.JDTBasedSpoonCompiler.build(JDTBasedSpoonCompiler.java:120)
-	at spoon.support.compiler.jdt.JDTBasedSpoonCompiler.build(JDTBasedSpoonCompiler.java:101)
-	at spoon.Launcher.buildModel(Launcher.java:781)
-	at abstractor.core.Abstractor.prepareMavenProject(Abstractor.java:55)
-	at abstractor.app.App.run(App.java:25)
+Init pending package <unnamed>
+Init pending package org
+Init pending package org.apache
+Init pending package org.apache.commons
+Init pending package org.apache.commons.ognl
+Init pending package org.apache.commons.ognl.enhance
+Init pending package org.apache.commons.ognl.internal
+Init pending package org.apache.commons.ognl.internal.entry
+[34mStarting process pending packages...[0m
+  Pending package java.lang
+  Pending package java.lang
+  Pending package java.util
+  Pending package java.io
+  Pending package java.io
+  getting parent type for (CtClassImpl) PrintStreamOrWriter
+  Pending package org.apache.commons.ognl.internal.entry
+  Pending package org.apache.commons.ognl
+  Pending package java.lang.invoke
+  [34mskipping default constructor: org.apache.commons.ognl.internal.ClassCacheImpl()[0m
+  Pending package java.util.concurrent
+  [34mskipping default constructor: org.apache.commons.ognl.internal.ConcurrentHashMapCacheFactory()[0m
+  [34mskipping default constructor: org.apache.commons.ognl.internal.HashMapCacheFactory()[0m
+  Pending package java.util.concurrent.locks
+  [34mskipping default constructor: org.apache.commons.ognl.internal.ReentrantReadWriteLockCacheFactory()[0m
+  [34mUnused type args: [K, V][0m
+  [34mUnused type args: [K, V][0m
+  [34mUnused type args: [K, V][0m
+  [34mUnused type args: [K, V][0m
+  [34mUnused type args: [K, V][0m
+  [34mUnused type args: [K, V][0m
+  [34mUnused type args: [K, V][0m
+  [34mUnused type args: [K, V][0m
+  [34mUnused type args: [K, V][0m
+  [34mUnused type args: [K, V][0m
+  [34mUnused type args: [K, V][0m
+  [34mUnused type args: [K, V][0m
+  [34mUnused type args: [K, V][0m
+  [34mUnused type args: [K, V][0m
+  [34mUnused type args: [K, V][0m
+  [34mUnused type args: [K, V][0m
+  [34mUnused type args: [K, V][0m
+  [34mUnused type args: [K, V][0m
+  [34mUnused type args: [K, V][0m
+  [34mUnused type args: [K, V][0m
+  [34mUnused type args: [K, V][0m
+  [34mUnused type args: [K, V][0m
+  [34mUnused type args: [K, V][0m
+  [34mUnused type args: [K, V][0m
+  [34mUnused type args: [K, V][0m
+  [34mUnused type args: [K, V][0m
+  [34mUnused type args: [K, V][0m
+  [34mUnused type args: [K, V][0m
+  [34mUnused type args: [K, V][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [K, V][0m
+  [34mUnused type args: [K, V][0m
+  [34mUnused type args: [K, V][0m
+  [34mUnused type args: [K, V][0m
+  [34mUnused type args: [K, V][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [V][0m
+  [34mUnused type args: [V][0m
+  [34mUnused type args: [V][0m
+  [34mUnused type args: [K, V][0m
+  [34mUnused type args: [K, V][0m
+  [34mUnused type args: [V][0m
+  [34mUnused type args: [V][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [java.lang.Class @ src/main/java/org/apache/commons/ognl/internal/ClassCacheImpl.java:113:15, V @ src/main/java/org/apache/commons/ognl/internal/ClassCacheImpl.java:113:25][0m
+  [34mUnused type args: [? @ src/main/java/org/apache/commons/ognl/internal/ClassCacheImpl.java:113:21][0m
+  [34mUnused type args: [java.lang.Class, V][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [V][0m
+  [34mUnused type args: [java.lang.Class, V][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [java.lang.Class, V][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [java.lang.Class, V][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [java.lang.Class, V][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [V][0m
+  [34mUnused type args: [java.lang.Class, V][0m
+  [34mUnused type args: [?][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [java.lang.Class @ src/main/java/org/apache/commons/ognl/internal/ClassCacheImpl.java:117:34, V @ src/main/java/org/apache/commons/ognl/internal/ClassCacheImpl.java:117:44][0m
+  [34mUnused type args: [? @ src/main/java/org/apache/commons/ognl/internal/ClassCacheImpl.java:117:40][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [V][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [java.lang.Class, V][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [java.lang.Class, V][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [java.lang.Class, V][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [java.lang.Class, V][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [java.lang.Class, V][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [java.lang.Class, V][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [java.lang.Class, V][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [java.lang.Class, V][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [java.lang.Class, V][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [K, V][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [java.lang.Class @ src/main/java/org/apache/commons/ognl/internal/ClassCacheImpl.java:142:50, V @ src/main/java/org/apache/commons/ognl/internal/ClassCacheImpl.java:142:60][0m
+  [34mUnused type args: [? @ src/main/java/org/apache/commons/ognl/internal/ClassCacheImpl.java:142:56][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [java.lang.Class, V][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [java.lang.Class, V][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [java.lang.Class, V][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [java.lang.Class, V][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [K, V][0m
+  [34mUnused type args: [K, V][0m
+  [34mUnused type args: [K, V][0m
+  [34mUnused type args: [K, V][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [V @ src/main/java/org/apache/commons/ognl/internal/HashMapCacheFactory.java:44:38][0m
+  [34mUnused type args: [java.lang.Class, T][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [V][0m
+  [34mUnused type args: [org.apache.commons.ognl.internal.Entry][0m
+  [34mUnused type args: [java.lang.Class, V][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [V][0m
+  [34mUnused type args: [java.lang.Class, V][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [org.apache.commons.ognl.internal.Entry][0m
+  [34mUnused type args: [org.apache.commons.ognl.internal.Entry][0m
+  [34mUnused type args: [java.lang.Class, V][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [java.lang.Class, V][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [V][0m
+  [34mUnused type args: [java.lang.Class, V][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [V][0m
+  [34mUnused type args: [V][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [K, V][0m
+  [34mUnused type args: [java.lang.Class, T][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [K, V][0m
+  [34mUnused type args: [K, V][0m
+  [34mUnused type args: [K, V][0m
+  [34mUnused type args: [K, V][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [V @ src/main/java/org/apache/commons/ognl/internal/ConcurrentHashMapCacheFactory.java:45:48][0m
+  [34mUnused type args: [java.lang.Class, T][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [V][0m
+  [34mUnused type args: [K, V][0m
+  [34mUnused type args: [K, V][0m
+  [34mUnused type args: [K, V][0m
+  [34mUnused type args: [K, V][0m
+  [34mUnused type args: [K, V][0m
+  [34mUnused type args: [V][0m
+  [34mUnused type args: [V][0m
+  [34mUnused type args: [java.lang.Class, V][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [java.lang.Class, V][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [java.lang.Class, V][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [java.lang.Class, V][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [V][0m
+  [34mUnused type args: [java.lang.Class, V][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [V][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [java.lang.Class @ src/main/java/org/apache/commons/ognl/internal/ClassCacheImpl.java:86:15, V @ src/main/java/org/apache/commons/ognl/internal/ClassCacheImpl.java:86:25][0m
+  [34mUnused type args: [? @ src/main/java/org/apache/commons/ognl/internal/ClassCacheImpl.java:86:21][0m
+  [34mUnused type args: [java.lang.Class, V][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [V][0m
+  [34mUnused type args: [java.lang.Class, V][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [java.lang.Class, V][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [java.lang.Class, V][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [java.lang.Class, V][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [java.lang.Class, V][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [java.lang.Class, V][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [java.lang.Class, V][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [java.lang.Class, V][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [K, V][0m
+  [34mUnused type args: [K, V][0m
+  [34mUnused type args: [K, V][0m
+  [34mUnused type args: [K, V][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [K, V][0m
+  [34mUnused type args: [K, V][0m
+  [34mUnused type args: [K, V][0m
+  [34mUnused type args: [K, V][0m
+  [34mUnused type args: [K, V][0m
+  [34mUnused type args: [K, V][0m
+  [34mUnused type args: [K, V][0m
+  [34mUnused type args: [K, V][0m
+  [34mUnused type args: [K, V][0m
+  [34mUnused type args: [K, V][0m
+  [34mUnused type args: [K, V][0m
+  [34mUnused type args: [K, V][0m
+  [34mUnused type args: [K, V][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [K @ src/main/java/org/apache/commons/ognl/internal/HashMapCacheFactory.java:34:33, V @ src/main/java/org/apache/commons/ognl/internal/HashMapCacheFactory.java:34:36][0m
+  [34mUnused type args: [K, V][0m
+  [34mUnused type args: [K, V][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [V @ src/main/java/org/apache/commons/ognl/internal/ReentrantReadWriteLockCacheFactory.java:44:53][0m
+  [34mUnused type args: [java.lang.Class, T][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [V][0m
+  [34mUnused type args: [K, V][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [K, V][0m
+  [34mUnused type args: [java.lang.Class, T][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [K, V][0m
+  [34mUnused type args: [K, V][0m
+  [34mUnused type args: [K, V][0m
+  [34mUnused type args: [K, V][0m
+  [34mUnused type args: [K, V][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [K, V][0m
+  [34mUnused type args: [K, V][0m
+  [34mUnused type args: [K, V][0m
+  [34mUnused type args: [K, V][0m
+  [34mUnused type args: [K, V][0m
+  [34mUnused type args: [K, V][0m
+  [34mUnused type args: [K, V][0m
+  [34mUnused type args: [K, V][0m
+  [34mUnused type args: [K, V][0m
+  [34mUnused type args: [K, V][0m
+  [34mUnused type args: [K, V][0m
+  [34mUnused type args: [K, V][0m
+  [34mUnused type args: [K, V][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [java.lang.Class, T][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [java.lang.Class, T][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [K, V][0m
+  [34mUnused type args: [java.lang.Class, T][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [K, V][0m
+  [34mUnused type args: [K, V][0m
+  [34mUnused type args: [V][0m
+  [34mUnused type args: [V][0m
+  [34mUnused type args: [V][0m
+  [34mUnused type args: [K, V][0m
+  [34mUnused type args: [K, V][0m
+  [34mUnused type args: [K, V][0m
+  [34mUnused type args: [K, V][0m
+  [34mUnused type args: [K, V][0m
+  [34mUnused type args: [K, V][0m
+  [34mUnused type args: [K, V][0m
+  [34mUnused type args: [K, V][0m
+  [34mUnused type args: [K, V][0m
+  [34mUnused type args: [K, V][0m
+  [34mUnused type args: [K, V][0m
+  [34mUnused type args: [K, V][0m
+  [34mUnused type args: [K, V][0m
+  [34mUnused type args: [K, V][0m
+  [34mUnused type args: [K, V][0m
+  [34mUnused type args: [K, V][0m
+  [34mUnused type args: [K, V][0m
+  [34mUnused type args: [V][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [java.lang.Class, T][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [K, V][0m
+  [34mUnused type args: [V][0m
+  [34mUnused type args: [V][0m
+  [34mUnused type args: [V][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [? @ src/main/java/org/apache/commons/ognl/internal/ClassCacheHandler.java:42:23][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [? @ src/main/java/org/apache/commons/ognl/internal/ClassCacheHandler.java:53:33][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [? @ src/main/java/org/apache/commons/ognl/internal/ClassCacheHandler.java:58:35][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [? @ src/main/java/org/apache/commons/ognl/internal/ClassCacheHandler.java:59:41][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [K, V][0m
+  [34mUnused type args: [K, V][0m
+  [34mUnused type args: [K, V][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [K @ src/main/java/org/apache/commons/ognl/internal/ConcurrentHashMapCacheFactory.java:35:43, V @ src/main/java/org/apache/commons/ognl/internal/ConcurrentHashMapCacheFactory.java:35:46][0m
+  [34mUnused type args: [K, V][0m
+  [34mUnused type args: [K, V][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [K @ src/main/java/org/apache/commons/ognl/internal/ReentrantReadWriteLockCacheFactory.java:34:48, V @ src/main/java/org/apache/commons/ognl/internal/ReentrantReadWriteLockCacheFactory.java:34:51][0m
+  [34mUnused type args: [K, V][0m
+  [34mUnused type args: [K, V][0m
+  [34mUnused type args: [V][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [K, V][0m
+  [34mUnused type args: [K, V][0m
+  [34mUnused type args: [K, V][0m
+  [34mUnused type args: [K, V][0m
+  [34mUnused type args: [K, V][0m
+  [34mUnused type args: [K, V][0m
+  [34mUnused type args: [K, V][0m
+  [34mskipping default constructor: org.apache.commons.ognl.DefaultClassResolver()[0m
+  Pending package java.lang.reflect
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.ognl.OgnlParser @ src/main/java/org/apache/commons/ognl/SimpleNode.java:39:15[0m
+  [34mfield (CtFieldImpl) parser @ src/main/java/org/apache/commons/ognl/SimpleNode.java:39:26 had a null type. The type likely was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.[0m
+  Pending package org.apache.commons.ognl.enhance
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.ognl.OgnlParser @ src/main/java/org/apache/commons/ognl/SimpleNode.java:54:24[0m
+  [34margument (CtParameterImpl) p @ src/main/java/org/apache/commons/ognl/SimpleNode.java:54:35 had a null type. The type likely was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.ognl.OgnlParser @ src/main/java/org/apache/commons/ognl/ExpressionNode.java:35:28[0m
+  [34margument (CtParameterImpl) p @ src/main/java/org/apache/commons/ognl/ExpressionNode.java:35:39 had a null type. The type likely was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.ognl.OgnlParser @ src/main/java/org/apache/commons/ognl/NumericExpression.java:41:31[0m
+  [34margument (CtParameterImpl) p @ src/main/java/org/apache/commons/ognl/NumericExpression.java:41:42 had a null type. The type likely was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.ognl.OgnlParser @ src/main/java/org/apache/commons/ognl/ASTBitAnd.java:33:23[0m
+  [34margument (CtParameterImpl) p @ src/main/java/org/apache/commons/ognl/ASTBitAnd.java:33:34 had a null type. The type likely was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.ognl.OgnlParser @ src/main/java/org/apache/commons/ognl/ASTSequence.java:43:25[0m
+  [34margument (CtParameterImpl) p @ src/main/java/org/apache/commons/ognl/ASTSequence.java:43:36 had a null type. The type likely was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.ognl.OgnlParser @ src/main/java/org/apache/commons/ognl/ASTAssign.java:36:23[0m
+  [34margument (CtParameterImpl) p @ src/main/java/org/apache/commons/ognl/ASTAssign.java:36:34 had a null type. The type likely was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.ognl.OgnlParser @ src/main/java/org/apache/commons/ognl/ASTShiftRight.java:33:27[0m
+  [34margument (CtParameterImpl) p @ src/main/java/org/apache/commons/ognl/ASTShiftRight.java:33:38 had a null type. The type likely was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.ognl.OgnlParser @ src/main/java/org/apache/commons/ognl/ASTChain.java:49:22[0m
+  [34margument (CtParameterImpl) p @ src/main/java/org/apache/commons/ognl/ASTChain.java:49:33 had a null type. The type likely was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.ognl.OgnlParser @ src/main/java/org/apache/commons/ognl/ASTEval.java:36:21[0m
+  [34margument (CtParameterImpl) p @ src/main/java/org/apache/commons/ognl/ASTEval.java:36:32 had a null type. The type likely was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.ognl.OgnlParser @ src/main/java/org/apache/commons/ognl/ASTTest.java:35:21[0m
+  [34margument (CtParameterImpl) p @ src/main/java/org/apache/commons/ognl/ASTTest.java:35:32 had a null type. The type likely was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.ognl.OgnlParser @ src/main/java/org/apache/commons/ognl/BooleanExpression.java:41:31[0m
+  [34margument (CtParameterImpl) p @ src/main/java/org/apache/commons/ognl/BooleanExpression.java:41:42 had a null type. The type likely was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.ognl.OgnlParser @ src/main/java/org/apache/commons/ognl/ASTOr.java:36:19[0m
+  [34margument (CtParameterImpl) p @ src/main/java/org/apache/commons/ognl/ASTOr.java:36:30 had a null type. The type likely was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.ognl.OgnlParser @ src/main/java/org/apache/commons/ognl/ASTIn.java:36:19[0m
+  [34margument (CtParameterImpl) p @ src/main/java/org/apache/commons/ognl/ASTIn.java:36:30 had a null type. The type likely was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.ognl.OgnlParser @ src/main/java/org/apache/commons/ognl/ASTDivide.java:33:23[0m
+  [34margument (CtParameterImpl) p @ src/main/java/org/apache/commons/ognl/ASTDivide.java:33:34 had a null type. The type likely was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.ognl.OgnlParser @ src/main/java/org/apache/commons/ognl/ASTKeyValue.java:33:25[0m
+  [34margument (CtParameterImpl) p @ src/main/java/org/apache/commons/ognl/ASTKeyValue.java:33:36 had a null type. The type likely was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.ognl.OgnlParser @ src/main/java/org/apache/commons/ognl/ASTNotIn.java:36:22[0m
+  [34margument (CtParameterImpl) p @ src/main/java/org/apache/commons/ognl/ASTNotIn.java:36:33 had a null type. The type likely was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.ognl.OgnlParser @ src/main/java/org/apache/commons/ognl/ASTNegate.java:33:23[0m
+  [34margument (CtParameterImpl) p @ src/main/java/org/apache/commons/ognl/ASTNegate.java:33:34 had a null type. The type likely was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.ognl.OgnlParser @ src/main/java/org/apache/commons/ognl/ASTUnsignedShiftRight.java:33:35[0m
+  [34margument (CtParameterImpl) p @ src/main/java/org/apache/commons/ognl/ASTUnsignedShiftRight.java:33:46 had a null type. The type likely was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.ognl.OgnlParser @ src/main/java/org/apache/commons/ognl/ComparisonExpression.java:38:34[0m
+  [34margument (CtParameterImpl) p @ src/main/java/org/apache/commons/ognl/ComparisonExpression.java:38:45 had a null type. The type likely was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.ognl.OgnlParser @ src/main/java/org/apache/commons/ognl/ASTGreaterEq.java:33:26[0m
+  [34margument (CtParameterImpl) p @ src/main/java/org/apache/commons/ognl/ASTGreaterEq.java:33:37 had a null type. The type likely was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.ognl.OgnlParser @ src/main/java/org/apache/commons/ognl/ASTShiftLeft.java:33:26[0m
+  [34margument (CtParameterImpl) p @ src/main/java/org/apache/commons/ognl/ASTShiftLeft.java:33:37 had a null type. The type likely was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.[0m
+  Pending package java.beans
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.ognl.OgnlParser @ src/main/java/org/apache/commons/ognl/ASTSelectFirst.java:39:28[0m
+  [34margument (CtParameterImpl) p @ src/main/java/org/apache/commons/ognl/ASTSelectFirst.java:39:39 had a null type. The type likely was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.ognl.OgnlParser @ src/main/java/org/apache/commons/ognl/ASTNot.java:33:20[0m
+  [34margument (CtParameterImpl) p @ src/main/java/org/apache/commons/ognl/ASTNot.java:33:31 had a null type. The type likely was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.ognl.OgnlParser @ src/main/java/org/apache/commons/ognl/ASTAnd.java:50:20[0m
+  [34margument (CtParameterImpl) p @ src/main/java/org/apache/commons/ognl/ASTAnd.java:50:31 had a null type. The type likely was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.ognl.OgnlParser @ src/main/java/org/apache/commons/ognl/ASTInstanceof.java:36:27[0m
+  [34margument (CtParameterImpl) p @ src/main/java/org/apache/commons/ognl/ASTInstanceof.java:36:38 had a null type. The type likely was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.ognl.OgnlParser @ src/main/java/org/apache/commons/ognl/ASTBitOr.java:33:22[0m
+  [34margument (CtParameterImpl) p @ src/main/java/org/apache/commons/ognl/ASTBitOr.java:33:33 had a null type. The type likely was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.ognl.OgnlParser @ src/main/java/org/apache/commons/ognl/ASTGreater.java:33:24[0m
+  [34margument (CtParameterImpl) p @ src/main/java/org/apache/commons/ognl/ASTGreater.java:33:35 had a null type. The type likely was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.ognl.OgnlParser @ src/main/java/org/apache/commons/ognl/ASTLessEq.java:33:23[0m
+  [34margument (CtParameterImpl) p @ src/main/java/org/apache/commons/ognl/ASTLessEq.java:33:34 had a null type. The type likely was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.ognl.OgnlParser @ src/main/java/org/apache/commons/ognl/ASTXor.java:33:20[0m
+  [34margument (CtParameterImpl) p @ src/main/java/org/apache/commons/ognl/ASTXor.java:33:31 had a null type. The type likely was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.ognl.OgnlParser @ src/main/java/org/apache/commons/ognl/ASTEq.java:33:19[0m
+  [34margument (CtParameterImpl) p @ src/main/java/org/apache/commons/ognl/ASTEq.java:33:30 had a null type. The type likely was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.ognl.OgnlParser @ src/main/java/org/apache/commons/ognl/ASTSubtract.java:33:25[0m
+  [34margument (CtParameterImpl) p @ src/main/java/org/apache/commons/ognl/ASTSubtract.java:33:36 had a null type. The type likely was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.ognl.OgnlParser @ src/main/java/org/apache/commons/ognl/ASTConst.java:41:22[0m
+  [34margument (CtParameterImpl) p @ src/main/java/org/apache/commons/ognl/ASTConst.java:41:33 had a null type. The type likely was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.ognl.OgnlParser @ src/main/java/org/apache/commons/ognl/ASTList.java:41:21[0m
+  [34margument (CtParameterImpl) p @ src/main/java/org/apache/commons/ognl/ASTList.java:41:32 had a null type. The type likely was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.ognl.OgnlParser @ src/main/java/org/apache/commons/ognl/ASTMultiply.java:34:25[0m
+  [34margument (CtParameterImpl) p @ src/main/java/org/apache/commons/ognl/ASTMultiply.java:34:36 had a null type. The type likely was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.ognl.OgnlParser @ src/main/java/org/apache/commons/ognl/ASTStaticMethod.java:47:29[0m
+  [34margument (CtParameterImpl) p @ src/main/java/org/apache/commons/ognl/ASTStaticMethod.java:47:40 had a null type. The type likely was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.ognl.OgnlParser @ src/main/java/org/apache/commons/ognl/ASTVarRef.java:46:23[0m
+  [34margument (CtParameterImpl) p @ src/main/java/org/apache/commons/ognl/ASTVarRef.java:46:34 had a null type. The type likely was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.ognl.OgnlParser @ src/main/java/org/apache/commons/ognl/ASTRootVarRef.java:35:27[0m
+  [34margument (CtParameterImpl) p @ src/main/java/org/apache/commons/ognl/ASTRootVarRef.java:35:38 had a null type. The type likely was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.ognl.OgnlParser @ src/main/java/org/apache/commons/ognl/ASTStaticField.java:44:28[0m
+  [34margument (CtParameterImpl) p @ src/main/java/org/apache/commons/ognl/ASTStaticField.java:44:39 had a null type. The type likely was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.ognl.OgnlParser @ src/main/java/org/apache/commons/ognl/ASTNotEq.java:33:22[0m
+  [34margument (CtParameterImpl) p @ src/main/java/org/apache/commons/ognl/ASTNotEq.java:33:33 had a null type. The type likely was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.ognl.OgnlParser @ src/main/java/org/apache/commons/ognl/ASTMap.java:43:20[0m
+  [34margument (CtParameterImpl) p @ src/main/java/org/apache/commons/ognl/ASTMap.java:43:31 had a null type. The type likely was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.ognl.OgnlParser @ src/main/java/org/apache/commons/ognl/ASTSelect.java:40:23[0m
+  [34margument (CtParameterImpl) p @ src/main/java/org/apache/commons/ognl/ASTSelect.java:40:34 had a null type. The type likely was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.ognl.OgnlParser @ src/main/java/org/apache/commons/ognl/ASTThisVarRef.java:36:27[0m
+  [34margument (CtParameterImpl) p @ src/main/java/org/apache/commons/ognl/ASTThisVarRef.java:36:38 had a null type. The type likely was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.ognl.OgnlParser @ src/main/java/org/apache/commons/ognl/ASTProject.java:40:24[0m
+  [34margument (CtParameterImpl) p @ src/main/java/org/apache/commons/ognl/ASTProject.java:40:35 had a null type. The type likely was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.ognl.OgnlParser @ src/main/java/org/apache/commons/ognl/ASTRemainder.java:33:26[0m
+  [34margument (CtParameterImpl) p @ src/main/java/org/apache/commons/ognl/ASTRemainder.java:33:37 had a null type. The type likely was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.ognl.OgnlParser @ src/main/java/org/apache/commons/ognl/ASTBitNegate.java:33:26[0m
+  [34margument (CtParameterImpl) p @ src/main/java/org/apache/commons/ognl/ASTBitNegate.java:33:37 had a null type. The type likely was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.ognl.OgnlParser @ src/main/java/org/apache/commons/ognl/ASTCtor.java:44:21[0m
+  [34margument (CtParameterImpl) p @ src/main/java/org/apache/commons/ognl/ASTCtor.java:44:32 had a null type. The type likely was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.ognl.OgnlParser @ src/main/java/org/apache/commons/ognl/ASTMethod.java:50:23[0m
+  [34margument (CtParameterImpl) p @ src/main/java/org/apache/commons/ognl/ASTMethod.java:50:34 had a null type. The type likely was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.ognl.OgnlParser @ src/main/java/org/apache/commons/ognl/ASTLess.java:33:21[0m
+  [34margument (CtParameterImpl) p @ src/main/java/org/apache/commons/ognl/ASTLess.java:33:32 had a null type. The type likely was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.ognl.OgnlParser @ src/main/java/org/apache/commons/ognl/ASTSelectLast.java:39:27[0m
+  [34margument (CtParameterImpl) p @ src/main/java/org/apache/commons/ognl/ASTSelectLast.java:39:38 had a null type. The type likely was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.[0m
+  getting parent type for (CtInterfaceImpl) Entry
+  Pending package java.util.function
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.ognl.OgnlParser @ src/main/java/org/apache/commons/ognl/ASTAdd.java:40:20[0m
+  [34margument (CtParameterImpl) p @ src/main/java/org/apache/commons/ognl/ASTAdd.java:40:31 had a null type. The type likely was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.[0m
+  [34mskipping default constructor: org.apache.commons.ognl.ArrayElementsAccessor()[0m
+  [34mskipping default constructor: org.apache.commons.ognl.ObjectPropertyAccessor()[0m
+  [34mskipping default constructor: org.apache.commons.ognl.ArrayPropertyAccessor()[0m
+  [34mskipping default constructor: org.apache.commons.ognl.CollectionElementsAccessor()[0m
+  [34mskipping default constructor: org.apache.commons.ognl.DefaultTypeConverter()[0m
+  [34mskipping default constructor: org.apache.commons.ognl.EnumerationElementsAccessor()[0m
+  [34mskipping default constructor: org.apache.commons.ognl.EnumerationPropertyAccessor()[0m
+  [34mskipping default constructor: org.apache.commons.ognl.IteratorElementsAccessor()[0m
+  [34mskipping default constructor: org.apache.commons.ognl.IteratorPropertyAccessor()[0m
+  [34mskipping default constructor: org.apache.commons.ognl.ListPropertyAccessor()[0m
+  [34mskipping default constructor: org.apache.commons.ognl.MapElementsAccessor()[0m
+  [34mskipping default constructor: org.apache.commons.ognl.MapPropertyAccessor()[0m
+  [34mskipping default constructor: org.apache.commons.ognl.NumberElementsAccessor()[0m
+  [34mskipping default constructor: org.apache.commons.ognl.ObjectElementsAccessor()[0m
+  Pending package java.lang.ref
+  Pending package java.beans
+  Pending package java.util
+  [34mIgnoring annotation type: (CtAnnotationTypeImpl) Transient[0m
+  [34margument (CtParameterImpl) arg0 had a null type. The type likely was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.[0m
+  [34mskipping default constructor: org.apache.commons.ognl.ObjectMethodAccessor()[0m
+  [34mskipping default constructor: org.apache.commons.ognl.ObjectNullHandler()[0m
+  getting parent type for (CtEnumImpl) MethodType @ src/main/java/org/apache/commons/ognl/internal/entry/DeclaredMethodCacheEntry.java:32:17
+  [34mskipping default constructor: org.apache.commons.ognl.internal.entry.DeclaredMethodCacheEntry$MethodType()[0m
+  Pending package java.security
+  [34mskipping default constructor: org.apache.commons.ognl.OgnlCache()[0m
+  Pending package java.security
+  [34mskipping default constructor: org.apache.commons.ognl.OgnlOps()[0m
+  Pending package java.math
+  [34mskipping default constructor: org.apache.commons.ognl.OgnlRuntime()[0m
+  [34mskipping default constructor: org.apache.commons.ognl.SetPropertyAccessor()[0m
+  [34mskipping default constructor: org.apache.commons.ognl.ToStringVisitor()[0m
+  [34mSkipping selection with no field declaration: (CtFieldReferenceImpl) class[0m
+  [34mSkipping selection with no field declaration: (CtFieldReferenceImpl) class[0m
+  [34mUnused type args: [?][0m
+  Pending package java.net
+  Pending package java.util.stream
+  Pending package java.security.cert
+  Pending package java.nio
+  Pending package javassist
+  [34mskipping default constructor: org.apache.commons.ognl.enhance.ExpressionCompiler()[0m
+  [34mSkipping selection with no field declaration: (CtFieldReferenceImpl) class[0m
+  [34mSkipping selection with no field declaration: (CtFieldReferenceImpl) class[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.ognl.OgnlParser[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.ognl.OgnlParser[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.ognl.OgnlParser[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.ognl.OgnlParser[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [? @ src/main/java/org/apache/commons/ognl/SetPropertyAccessor.java:37:13][0m
+  [34mUnused type args: [? @ src/main/java/org/apache/commons/ognl/SetPropertyAccessor.java:37:27][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [java.lang.String, java.lang.Object][0m
+  [34mUnused type args: [java.lang.String, java.lang.Object][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.ognl.OgnlParser[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.ognl.OgnlParser[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.ognl.OgnlParser[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.ognl.OgnlParser[0m
+  [34mUnused type args: [?][0m
+  [34mSkipping selection with no field declaration: (CtFieldReferenceImpl) class[0m
+  [34mSkipping selection with no field declaration: (CtFieldReferenceImpl) class[0m
+  [34mSkipping selection with no field declaration: (CtFieldReferenceImpl) class[0m
+  [34mSkipping selection with no field declaration: (CtFieldReferenceImpl) class[0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mSkipping selection with no field declaration: (CtFieldReferenceImpl) class[0m
+  [34mSkipping selection with no field declaration: (CtFieldReferenceImpl) class[0m
+  [34mUnused type args: [java.lang.String][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [java.lang.String, java.lang.Object][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mSkipping selection with no field declaration: (CtFieldReferenceImpl) class[0m
+  [34mSkipping selection with no field declaration: (CtFieldReferenceImpl) class[0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [java.lang.Boolean][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [java.lang.String, java.lang.Class][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [java.lang.Boolean][0m
+  [34mUnused type args: [java.lang.String, java.lang.Class][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [java.lang.Byte][0m
+  [34mUnused type args: [java.lang.String, java.lang.Class][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [java.lang.Short][0m
+  [34mUnused type args: [java.lang.String, java.lang.Class][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [java.lang.Character][0m
+  [34mUnused type args: [java.lang.String, java.lang.Class][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [java.lang.Integer][0m
+  [34mUnused type args: [java.lang.String, java.lang.Class][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [java.lang.Long][0m
+  [34mUnused type args: [java.lang.String, java.lang.Class][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [java.lang.Float][0m
+  [34mUnused type args: [java.lang.String, java.lang.Class][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [java.lang.Double][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [java.lang.String, java.lang.Object][0m
+  [34mUnused type args: [java.lang.String, java.lang.Object][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [T][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.ognl.OgnlParser[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.ognl.OgnlParser[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.ognl.OgnlParser[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.ognl.OgnlParser[0m
+  [34mUnused type args: [java.lang.String, java.lang.Object][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [java.lang.String, java.lang.Object][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.ognl.OgnlParser[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.ognl.OgnlParser[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.ognl.OgnlParser[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.ognl.OgnlParser[0m
+  [34mUnused type args: [?, ?][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [java.lang.String, java.lang.Object][0m
+  [34mUnused type args: [java.lang.String, java.lang.Object][0m
+  [34mUnused type args: [java.lang.String, java.lang.Object][0m
+  [34mUnused type args: [?, ?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mSkipping selection with no field declaration: (CtFieldReferenceImpl) class[0m
+  [34mSkipping selection with no field declaration: (CtFieldReferenceImpl) class[0m
+  [34mUnused type args: [?][0m
+  [34mSkipping selection with no field declaration: (CtFieldReferenceImpl) class[0m
+  [34mSkipping selection with no field declaration: (CtFieldReferenceImpl) class[0m
+  [34mUnused type args: [?][0m
+  [34mSkipping selection with no field declaration: (CtFieldReferenceImpl) class[0m
+  [34mSkipping selection with no field declaration: (CtFieldReferenceImpl) class[0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [java.lang.String, java.lang.Object][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [java.lang.String, java.lang.Object][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [java.lang.String, java.lang.Object][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [java.lang.String, java.lang.Object][0m
+  [34mUnused type args: [java.lang.String, java.lang.Object][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [? @ src/main/java/org/apache/commons/ognl/OgnlRuntime.java:229:73][0m
+  [34mUnused type args: [?][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.ognl.OgnlParser[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.ognl.OgnlParser[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.ognl.OgnlParser[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.ognl.OgnlParser[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [java.lang.Integer][0m
+  [34mUnused type args: [java.lang.Integer][0m
+  [34mUnused type args: [org.apache.commons.ognl.Node][0m
+  [34mUnused type args: [org.apache.commons.ognl.Node][0m
+  [34mUnused type args: [?, ?][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [? @ src/main/java/org/apache/commons/ognl/OgnlOps.java:311:15][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mSkipping selection with no field declaration: (CtFieldReferenceImpl) class[0m
+  [34mSkipping selection with no field declaration: (CtFieldReferenceImpl) class[0m
+  [34mUnused type args: [?][0m
+  [34mSkipping selection with no field declaration: (CtFieldReferenceImpl) class[0m
+  [34mSkipping selection with no field declaration: (CtFieldReferenceImpl) class[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [?][0m
+  [34mSkipping selection with no field declaration: (CtFieldReferenceImpl) class[0m
+  [34mSkipping selection with no field declaration: (CtFieldReferenceImpl) class[0m
+  [34mUnused type args: [?][0m
+  [34mSkipping selection with no field declaration: (CtFieldReferenceImpl) class[0m
+  [34mSkipping selection with no field declaration: (CtFieldReferenceImpl) class[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [java.lang.String, java.lang.Object][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [java.lang.String][0m
+  [34mUnused type args: [java.lang.String, java.lang.Object][0m
+  [34mUnused type args: [java.lang.String][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [java.lang.String, java.lang.Object][0m
+  [34mUnused type args: [? @ src/main/java/org/apache/commons/ognl/OgnlOps.java:380:19][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mSkipping selection with no field declaration: (CtFieldReferenceImpl) class[0m
+  [34mSkipping selection with no field declaration: (CtFieldReferenceImpl) class[0m
+  [34mUnused type args: [?][0m
+  [34mSkipping selection with no field declaration: (CtFieldReferenceImpl) class[0m
+  [34mSkipping selection with no field declaration: (CtFieldReferenceImpl) class[0m
+  [34mUnused type args: [?][0m
+  [34mSkipping selection with no field declaration: (CtFieldReferenceImpl) class[0m
+  [34mSkipping selection with no field declaration: (CtFieldReferenceImpl) class[0m
+  [34mUnused type args: [?][0m
+  [34mSkipping selection with no field declaration: (CtFieldReferenceImpl) class[0m
+  [34mSkipping selection with no field declaration: (CtFieldReferenceImpl) class[0m
+  [34mUnused type args: [?][0m
+  [34mSkipping selection with no field declaration: (CtFieldReferenceImpl) class[0m
+  [34mSkipping selection with no field declaration: (CtFieldReferenceImpl) class[0m
+  [34mUnused type args: [?][0m
+  [34mSkipping selection with no field declaration: (CtFieldReferenceImpl) class[0m
+  [34mSkipping selection with no field declaration: (CtFieldReferenceImpl) class[0m
+  [34mUnused type args: [?][0m
+  [34mSkipping selection with no field declaration: (CtFieldReferenceImpl) class[0m
+  [34mSkipping selection with no field declaration: (CtFieldReferenceImpl) class[0m
+  [34mUnused type args: [?][0m
+  [34mSkipping selection with no field declaration: (CtFieldReferenceImpl) class[0m
+  [34mSkipping selection with no field declaration: (CtFieldReferenceImpl) class[0m
+  [34mUnused type args: [?][0m
+  [34mSkipping selection with no field declaration: (CtFieldReferenceImpl) class[0m
+  [34mSkipping selection with no field declaration: (CtFieldReferenceImpl) class[0m
+  [34mUnused type args: [?][0m
+  [34mSkipping selection with no field declaration: (CtFieldReferenceImpl) class[0m
+  [34mSkipping selection with no field declaration: (CtFieldReferenceImpl) class[0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [java.lang.String, java.lang.reflect.Field][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [? @ src/main/java/org/apache/commons/ognl/OgnlRuntime.java:1170:19][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [java.lang.String, java.lang.reflect.Field][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [java.lang.String, java.lang.Object][0m
+  [34mUnused type args: [java.lang.String, java.lang.Object][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [java.lang.String, java.lang.Object][0m
+  [34mUnused type args: [java.lang.String, java.lang.Object][0m
+  [34mUnused type args: [java.lang.String, java.lang.Object][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [T][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [java.lang.Boolean][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mSkipping selection with no field declaration: (CtFieldReferenceImpl) class[0m
+  [34mSkipping selection with no field declaration: (CtFieldReferenceImpl) class[0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mSkipping selection with no field declaration: (CtFieldReferenceImpl) class[0m
+  [34mSkipping selection with no field declaration: (CtFieldReferenceImpl) class[0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mSkipping selection with no field declaration: (CtFieldReferenceImpl) class[0m
+  [34mSkipping selection with no field declaration: (CtFieldReferenceImpl) class[0m
+  [34mUnused type args: [?][0m
+  [34mSkipping selection with no field declaration: (CtFieldReferenceImpl) class[0m
+  [34mSkipping selection with no field declaration: (CtFieldReferenceImpl) class[0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?, ?][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.ognl.OgnlParser[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.ognl.OgnlParser[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.ognl.OgnlParser[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.ognl.OgnlParser[0m
+  [34mUnused type args: [java.lang.reflect.Method @ src/main/java/org/apache/commons/ognl/ObjectMethodAccessor.java:41:14][0m
+  [34mUnused type args: [java.lang.reflect.Method][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [java.lang.reflect.Method][0m
+  [34mUnused type args: [java.lang.String, java.lang.Object][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [java.lang.reflect.Method][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [? @ src/main/java/org/apache/commons/ognl/OgnlRuntime.java:1242:19][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [java.lang.String, java.lang.Object][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [java.lang.String, java.lang.Object][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [java.lang.String, java.lang.Object][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.ognl.OgnlParser[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.ognl.OgnlParser[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.ognl.OgnlParser[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.ognl.OgnlParser[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.ognl.OgnlParser[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.ognl.OgnlParser[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.ognl.OgnlParser[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.ognl.OgnlParser[0m
+  [34mUnused type args: [java.lang.String, java.lang.Object][0m
+  [34mUnused type args: [java.lang.String, java.lang.Object][0m
+  [34mUnused type args: [java.lang.String, java.lang.Object][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [?, ?][0m
+  [34mUnused type args: [java.lang.Class][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [java.lang.Class][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [java.lang.reflect.Method, org.apache.commons.ognl.internal.entry.MethodAccessEntryValue][0m
+  [34mUnused type args: [java.lang.Class, java.lang.Object][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [java.lang.String, java.lang.Object][0m
+  [34mUnused type args: [java.lang.String, java.lang.Object][0m
+  [34mUnused type args: [java.lang.String, java.lang.Object][0m
+  [34mUnused type args: [java.lang.String, java.lang.Object][0m
+  [34mUnused type args: [java.lang.String, java.lang.Object][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?, ?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [org.apache.commons.ognl.ElementsAccessor][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [org.apache.commons.ognl.ElementsAccessor][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [?][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.ognl.OgnlParser[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.ognl.OgnlParser[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.ognl.OgnlParser[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.ognl.OgnlParser[0m
+  [34mUnused type args: [?, ?][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mSkipping selection with no field declaration: (CtFieldReferenceImpl) class[0m
+  [34mSkipping selection with no field declaration: (CtFieldReferenceImpl) class[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [java.lang.String, java.lang.Object][0m
+  [34mUnused type args: [java.lang.String, java.lang.Object][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [java.lang.String, java.lang.Object][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [java.lang.String, java.lang.Object][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.ognl.OgnlParser[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.ognl.OgnlParser[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.ognl.OgnlParser[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.ognl.OgnlParser[0m
+  [34mUnused type args: [java.lang.String, java.lang.Object][0m
+  [34mUnused type args: [?, ?][0m
+  [34mUnused type args: [java.lang.String, java.lang.Object][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mSkipping selection with no field declaration: (CtFieldReferenceImpl) class[0m
+  [34mSkipping selection with no field declaration: (CtFieldReferenceImpl) class[0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mSkipping selection with no field declaration: (CtFieldReferenceImpl) class[0m
+  [34mSkipping selection with no field declaration: (CtFieldReferenceImpl) class[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mSkipping selection with no field declaration: (CtFieldReferenceImpl) class[0m
+  [34mSkipping selection with no field declaration: (CtFieldReferenceImpl) class[0m
+  [34mSkipping selection with no field declaration: (CtFieldReferenceImpl) class[0m
+  [34mSkipping selection with no field declaration: (CtFieldReferenceImpl) class[0m
+  [34mUnused type args: [? @ src/main/java/org/apache/commons/ognl/NumericExpression.java:128:19][0m
+  [34mUnused type args: [? @ src/main/java/org/apache/commons/ognl/NumericExpression.java:128:58][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mSkipping selection with no field declaration: (CtFieldReferenceImpl) class[0m
+  [34mSkipping selection with no field declaration: (CtFieldReferenceImpl) class[0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [java.lang.Double][0m
+  [34mSkipping selection with no field declaration: (CtFieldReferenceImpl) class[0m
+  [34mSkipping selection with no field declaration: (CtFieldReferenceImpl) class[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.ognl.OgnlParser[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.ognl.OgnlParser[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.ognl.OgnlParser[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.ognl.OgnlParser[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.ognl.OgnlParser[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.ognl.OgnlParser[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.ognl.OgnlParser[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.ognl.OgnlParser[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [java.lang.String, java.beans.PropertyDescriptor][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [java.lang.String, java.lang.Object][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.ognl.OgnlParser[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.ognl.OgnlParser[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.ognl.OgnlParser[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.ognl.OgnlParser[0m
+  [34mUnused type args: [java.lang.String, org.apache.commons.ognl.enhance.LocalReference][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mSkipping selection with no field declaration: (CtFieldReferenceImpl) class[0m
+  [34mSkipping selection with no field declaration: (CtFieldReferenceImpl) class[0m
+  [34mSkipping selection with no field declaration: (CtFieldReferenceImpl) class[0m
+  [34mSkipping selection with no field declaration: (CtFieldReferenceImpl) class[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [java.lang.String, java.lang.Object][0m
+  [34mUnused type args: [java.lang.Boolean][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.ognl.OgnlParser[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.ognl.OgnlParser[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.ognl.OgnlParser[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.ognl.OgnlParser[0m
+  [34mUnused type args: [?, ?][0m
+  [34mUnused type args: [java.lang.String, java.lang.Object][0m
+  [34mUnused type args: [java.lang.String, java.lang.Object][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mSkipping selection with no field declaration: (CtFieldReferenceImpl) class[0m
+  [34mSkipping selection with no field declaration: (CtFieldReferenceImpl) class[0m
+  [34mSkipping selection with no field declaration: (CtFieldReferenceImpl) class[0m
+  [34mSkipping selection with no field declaration: (CtFieldReferenceImpl) class[0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [java.lang.String, java.lang.Object][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [java.lang.String, java.lang.Object][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [?][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mSkipping selection with no field declaration: (CtFieldReferenceImpl) class[0m
+  [34mSkipping selection with no field declaration: (CtFieldReferenceImpl) class[0m
+  [34mSkipping selection with no field declaration: (CtFieldReferenceImpl) class[0m
+  [34mSkipping selection with no field declaration: (CtFieldReferenceImpl) class[0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [java.lang.reflect.Method][0m
+  [34mUnused type args: [java.lang.reflect.Method][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [? @ src/main/java/org/apache/commons/ognl/OgnlRuntime.java:886:23][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [java.lang.Object @ src/main/java/org/apache/commons/ognl/OgnlRuntime.java:905:34][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [java.lang.Object @ src/main/java/org/apache/commons/ognl/OgnlRuntime.java:905:70][0m
+  [34mUnused type args: [java.lang.Object][0m
+  [34mUnused type args: [java.lang.Object][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [java.lang.String, java.lang.Object][0m
+  [34mUnused type args: [java.lang.Object][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [java.lang.String, java.lang.Object][0m
+  [34mUnused type args: [java.lang.String][0m
+  [34mSkipping selection with no field declaration: (CtFieldReferenceImpl) class[0m
+  [34mSkipping selection with no field declaration: (CtFieldReferenceImpl) class[0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mSkipping selection with no field declaration: (CtFieldReferenceImpl) class[0m
+  [34mSkipping selection with no field declaration: (CtFieldReferenceImpl) class[0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mSkipping selection with no field declaration: (CtFieldReferenceImpl) class[0m
+  [34mSkipping selection with no field declaration: (CtFieldReferenceImpl) class[0m
+  [34mUnused type args: [?][0m
+  [34mSkipping selection with no field declaration: (CtFieldReferenceImpl) class[0m
+  [34mSkipping selection with no field declaration: (CtFieldReferenceImpl) class[0m
+  [34mSkipping selection with no field declaration: (CtFieldReferenceImpl) class[0m
+  [34mSkipping selection with no field declaration: (CtFieldReferenceImpl) class[0m
+  [34mSkipping selection with no field declaration: (CtFieldReferenceImpl) class[0m
+  [34mSkipping selection with no field declaration: (CtFieldReferenceImpl) class[0m
+  [34mUnused type args: [?][0m
+  [34mSkipping selection with no field declaration: (CtFieldReferenceImpl) class[0m
+  [34mSkipping selection with no field declaration: (CtFieldReferenceImpl) class[0m
+  [34mUnused type args: [?][0m
+  [34mSkipping selection with no field declaration: (CtFieldReferenceImpl) class[0m
+  [34mSkipping selection with no field declaration: (CtFieldReferenceImpl) class[0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mSkipping selection with no field declaration: (CtFieldReferenceImpl) class[0m
+  [34mSkipping selection with no field declaration: (CtFieldReferenceImpl) class[0m
+  [34mUnused type args: [?][0m
+  [34mSkipping selection with no field declaration: (CtFieldReferenceImpl) class[0m
+  [34mSkipping selection with no field declaration: (CtFieldReferenceImpl) class[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.ognl.OgnlParser[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.ognl.OgnlParser[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.ognl.OgnlParser[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.ognl.OgnlParser[0m
+  [34mUnused type args: [java.lang.reflect.Method, java.lang.Class[]][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [java.lang.reflect.Constructor, java.lang.Class[]][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [java.util.Map][0m
+  [34mUnused type args: [java.lang.String, java.beans.PropertyDescriptor][0m
+  [34mUnused type args: [java.util.List][0m
+  [34mUnused type args: [java.lang.reflect.Constructor][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [org.apache.commons.ognl.internal.entry.DeclaredMethodCacheEntry, java.util.Map][0m
+  [34mUnused type args: [java.lang.String, java.util.List][0m
+  [34mUnused type args: [java.lang.reflect.Method][0m
+  [34mUnused type args: [org.apache.commons.ognl.internal.entry.PermissionCacheEntry, java.security.Permission][0m
+  [34mUnused type args: [java.util.Map][0m
+  [34mUnused type args: [java.lang.String, java.lang.reflect.Field][0m
+  [34mUnused type args: [java.lang.reflect.Method, org.apache.commons.ognl.internal.entry.MethodAccessEntryValue][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mSkipping selection with no field declaration: (CtFieldReferenceImpl) class[0m
+  [34mSkipping selection with no field declaration: (CtFieldReferenceImpl) class[0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [java.lang.Class][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [java.lang.String, java.lang.Object][0m
+  [34mUnused type args: [java.lang.String, java.lang.Object][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.ognl.OgnlParser[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.ognl.OgnlParser[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.ognl.OgnlParser[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.ognl.OgnlParser[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.ognl.OgnlParser[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.ognl.OgnlParser[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.ognl.OgnlParser[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.ognl.OgnlParser[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [java.lang.Class, java.lang.Class][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.ognl.OgnlParser[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.ognl.OgnlParser[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.ognl.OgnlParser[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.ognl.OgnlParser[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.ognl.OgnlParser[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.ognl.OgnlParser[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.ognl.OgnlParser[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.ognl.OgnlParser[0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [java.lang.reflect.Constructor, java.lang.Class[]][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mIgnoring anonymous type: (CtTypeReferenceImpl) org.apache.commons.ognl.ObjectElementsAccessor$1[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring anonymous type: (CtTypeReferenceImpl) org.apache.commons.ognl.ObjectElementsAccessor$1[0m
+  [34mUnused type args: [java.lang.Object @ src/main/java/org/apache/commons/ognl/ObjectElementsAccessor.java:37:32][0m
+  [34mIgnoring anonymous object declaration: (CtClassImpl) 1 @ src/main/java/org/apache/commons/ognl/ObjectElementsAccessor.java:38:9[0m
+  [34mUnused type args: [java.lang.Object][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring method of an anonymous declaring type: (CtMethodImpl) hasMoreElements @ src/main/java/org/apache/commons/ognl/ObjectElementsAccessor.java:41:28 in (CtClassImpl) 1 @ src/main/java/org/apache/commons/ognl/ObjectElementsAccessor.java:38:9[0m
+  [34mIgnoring anonymous type: (CtTypeReferenceImpl) org.apache.commons.ognl.ObjectElementsAccessor$1[0m
+  [34mIgnoring anonymous object declaration: (CtClassImpl) 1 @ src/main/java/org/apache/commons/ognl/ObjectElementsAccessor.java:38:9[0m
+  [34mSkipping selection with no resolvable origin: (CtFieldImpl) seen @ src/main/java/org/apache/commons/ognl/ObjectElementsAccessor.java:39:29[0m
+  [34mIgnoring anonymous type: (CtTypeReferenceImpl) org.apache.commons.ognl.ObjectElementsAccessor$1[0m
+  [34mIgnoring anonymous type: (CtTypeReferenceImpl) org.apache.commons.ognl.ObjectElementsAccessor$1[0m
+  [34mIgnoring anonymous type: (CtTypeReferenceImpl) org.apache.commons.ognl.ObjectElementsAccessor$1[0m
+  [34mIgnoring anonymous type: (CtTypeReferenceImpl) org.apache.commons.ognl.ObjectElementsAccessor$1[0m
+  [34mIgnoring anonymous object declaration: (CtClassImpl) 1 @ src/main/java/org/apache/commons/ognl/ObjectElementsAccessor.java:38:9[0m
+  [34mSkipping selection with no resolvable origin: (CtFieldImpl) seen @ src/main/java/org/apache/commons/ognl/ObjectElementsAccessor.java:39:29[0m
+  [34mIgnoring anonymous type: (CtTypeReferenceImpl) org.apache.commons.ognl.ObjectElementsAccessor$1[0m
+  [34mIgnoring method of an anonymous declaring type: (CtMethodImpl) nextElement @ src/main/java/org/apache/commons/ognl/ObjectElementsAccessor.java:46:27 in (CtClassImpl) 1 @ src/main/java/org/apache/commons/ognl/ObjectElementsAccessor.java:38:9[0m
+  [34mIgnoring anonymous type: (CtTypeReferenceImpl) org.apache.commons.ognl.ObjectElementsAccessor$1[0m
+  [34mIgnoring anonymous object declaration: (CtClassImpl) 1 @ src/main/java/org/apache/commons/ognl/ObjectElementsAccessor.java:38:9[0m
+  [34mSkipping selection with no resolvable origin: (CtFieldImpl) seen @ src/main/java/org/apache/commons/ognl/ObjectElementsAccessor.java:39:29[0m
+  [34mIgnoring anonymous type: (CtTypeReferenceImpl) org.apache.commons.ognl.ObjectElementsAccessor$1[0m
+  [34mIgnoring anonymous type: (CtTypeReferenceImpl) org.apache.commons.ognl.ObjectElementsAccessor$1[0m
+  [34mIgnoring anonymous type: (CtTypeReferenceImpl) org.apache.commons.ognl.ObjectElementsAccessor$1[0m
+  [34mIgnoring anonymous type: (CtTypeReferenceImpl) org.apache.commons.ognl.ObjectElementsAccessor$1[0m
+  [34mIgnoring anonymous object declaration: (CtClassImpl) 1 @ src/main/java/org/apache/commons/ognl/ObjectElementsAccessor.java:38:9[0m
+  [34mSkipping selection with no resolvable origin: (CtFieldImpl) seen @ src/main/java/org/apache/commons/ognl/ObjectElementsAccessor.java:39:29[0m
+  [34mIgnoring anonymous type: (CtTypeReferenceImpl) org.apache.commons.ognl.ObjectElementsAccessor$1[0m
+  [34mIgnoring anonymous type: (CtTypeReferenceImpl) org.apache.commons.ognl.ObjectElementsAccessor$1[0m
+  [34mIgnoring anonymous object declaration: (CtClassImpl) 1 @ src/main/java/org/apache/commons/ognl/ObjectElementsAccessor.java:38:9[0m
+  [34mSkipping selection with no resolvable origin: (CtFieldImpl) seen @ src/main/java/org/apache/commons/ognl/ObjectElementsAccessor.java:39:29[0m
+  [34mIgnoring anonymous type: (CtTypeReferenceImpl) org.apache.commons.ognl.ObjectElementsAccessor$1[0m
+  [34mIgnoring anonymous type: (CtTypeReferenceImpl) org.apache.commons.ognl.ObjectElementsAccessor$1[0m
+  [34mIgnoring anonymous type: (CtTypeReferenceImpl) org.apache.commons.ognl.ObjectElementsAccessor$1[0m
+  [34mIgnoring anonymous type: (CtTypeReferenceImpl) org.apache.commons.ognl.ObjectElementsAccessor$1[0m
+  [34mIgnoring anonymous object declaration: (CtClassImpl) 1 @ src/main/java/org/apache/commons/ognl/ObjectElementsAccessor.java:38:9[0m
+  [34mSkipping selection with no resolvable origin: (CtFieldImpl) seen @ src/main/java/org/apache/commons/ognl/ObjectElementsAccessor.java:39:29[0m
+  [34mIgnoring anonymous type: (CtTypeReferenceImpl) org.apache.commons.ognl.ObjectElementsAccessor$1[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [java.lang.Class][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [java.lang.Class][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [java.lang.Class][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [java.lang.Class][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [java.lang.Class][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [java.lang.Class][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [java.lang.Void][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?, ?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.ognl.OgnlParser[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.ognl.OgnlParser[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.ognl.OgnlParser[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.ognl.OgnlParser[0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [java.lang.String, java.lang.Object][0m
+  [34mUnused type args: [java.lang.String, java.lang.Object][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.ognl.OgnlParser[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.ognl.OgnlParser[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.ognl.OgnlParser[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.ognl.OgnlParser[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [java.lang.String, java.lang.Object][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [org.apache.commons.ognl.MethodAccessor][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [java.lang.Class][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [java.lang.Class][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [java.lang.Class][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [java.lang.Class][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [java.lang.String, java.beans.PropertyDescriptor][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [java.lang.Integer][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [java.lang.Class, java.lang.String][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [java.lang.String, java.lang.Object][0m
+  [34mUnused type args: [java.lang.String, java.lang.Object][0m
+  [34mUnused type args: [java.lang.String, java.lang.Object][0m
+  [34mUnused type args: [java.lang.String, java.lang.Object][0m
+  [34mUnused type args: [java.lang.String, java.lang.Object][0m
+  [34mUnused type args: [T @ src/main/java/org/apache/commons/ognl/Ognl.java:575:22][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [?, ?][0m
+  [34mIgnoring anonymous type: (CtTypeReferenceImpl) org.apache.commons.ognl.NumberElementsAccessor$1[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring anonymous type: (CtTypeReferenceImpl) org.apache.commons.ognl.NumberElementsAccessor$1[0m
+  [34mUnused type args: [java.lang.Object @ src/main/java/org/apache/commons/ognl/NumberElementsAccessor.java:36:32][0m
+  [34mIgnoring anonymous object declaration: (CtClassImpl) 1 @ src/main/java/org/apache/commons/ognl/NumberElementsAccessor.java:37:9[0m
+  [34mUnused type args: [java.lang.Object][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring method of an anonymous declaring type: (CtMethodImpl) hasMoreElements @ src/main/java/org/apache/commons/ognl/NumberElementsAccessor.java:44:28 in (CtClassImpl) 1 @ src/main/java/org/apache/commons/ognl/NumberElementsAccessor.java:37:9[0m
+  [34mIgnoring anonymous type: (CtTypeReferenceImpl) org.apache.commons.ognl.NumberElementsAccessor$1[0m
+  [34mIgnoring anonymous object declaration: (CtClassImpl) 1 @ src/main/java/org/apache/commons/ognl/NumberElementsAccessor.java:37:9[0m
+  [34mSkipping selection with no resolvable origin: (CtFieldImpl) next @ src/main/java/org/apache/commons/ognl/NumberElementsAccessor.java:40:26[0m
+  [34mIgnoring anonymous type: (CtTypeReferenceImpl) org.apache.commons.ognl.NumberElementsAccessor$1[0m
+  [34mIgnoring anonymous type: (CtTypeReferenceImpl) org.apache.commons.ognl.NumberElementsAccessor$1[0m
+  [34mIgnoring anonymous type: (CtTypeReferenceImpl) org.apache.commons.ognl.NumberElementsAccessor$1[0m
+  [34mIgnoring anonymous type: (CtTypeReferenceImpl) org.apache.commons.ognl.NumberElementsAccessor$1[0m
+  [34mIgnoring anonymous object declaration: (CtClassImpl) 1 @ src/main/java/org/apache/commons/ognl/NumberElementsAccessor.java:37:9[0m
+  [34mSkipping selection with no resolvable origin: (CtFieldImpl) next @ src/main/java/org/apache/commons/ognl/NumberElementsAccessor.java:40:26[0m
+  [34mIgnoring anonymous type: (CtTypeReferenceImpl) org.apache.commons.ognl.NumberElementsAccessor$1[0m
+  [34mIgnoring anonymous type: (CtTypeReferenceImpl) org.apache.commons.ognl.NumberElementsAccessor$1[0m
+  [34mIgnoring anonymous object declaration: (CtClassImpl) 1 @ src/main/java/org/apache/commons/ognl/NumberElementsAccessor.java:37:9[0m
+  [34mSkipping selection with no resolvable origin: (CtFieldImpl) finish @ src/main/java/org/apache/commons/ognl/NumberElementsAccessor.java:42:26[0m
+  [34mIgnoring anonymous type: (CtTypeReferenceImpl) org.apache.commons.ognl.NumberElementsAccessor$1[0m
+  [34mIgnoring anonymous type: (CtTypeReferenceImpl) org.apache.commons.ognl.NumberElementsAccessor$1[0m
+  [34mIgnoring anonymous type: (CtTypeReferenceImpl) org.apache.commons.ognl.NumberElementsAccessor$1[0m
+  [34mIgnoring anonymous type: (CtTypeReferenceImpl) org.apache.commons.ognl.NumberElementsAccessor$1[0m
+  [34mIgnoring anonymous object declaration: (CtClassImpl) 1 @ src/main/java/org/apache/commons/ognl/NumberElementsAccessor.java:37:9[0m
+  [34mSkipping selection with no resolvable origin: (CtFieldImpl) finish @ src/main/java/org/apache/commons/ognl/NumberElementsAccessor.java:42:26[0m
+  [34mIgnoring anonymous type: (CtTypeReferenceImpl) org.apache.commons.ognl.NumberElementsAccessor$1[0m
+  [34mIgnoring method of an anonymous declaring type: (CtMethodImpl) nextElement @ src/main/java/org/apache/commons/ognl/NumberElementsAccessor.java:49:27 in (CtClassImpl) 1 @ src/main/java/org/apache/commons/ognl/NumberElementsAccessor.java:37:9[0m
+  [34mIgnoring anonymous type: (CtTypeReferenceImpl) org.apache.commons.ognl.NumberElementsAccessor$1[0m
+  [34mIgnoring anonymous object declaration: (CtClassImpl) 1 @ src/main/java/org/apache/commons/ognl/NumberElementsAccessor.java:37:9[0m
+  [34mSkipping selection with no resolvable origin: (CtFieldImpl) next @ src/main/java/org/apache/commons/ognl/NumberElementsAccessor.java:40:26[0m
+  [34mIgnoring anonymous type: (CtTypeReferenceImpl) org.apache.commons.ognl.NumberElementsAccessor$1[0m
+  [34mIgnoring anonymous type: (CtTypeReferenceImpl) org.apache.commons.ognl.NumberElementsAccessor$1[0m
+  [34mIgnoring anonymous type: (CtTypeReferenceImpl) org.apache.commons.ognl.NumberElementsAccessor$1[0m
+  [34mIgnoring anonymous type: (CtTypeReferenceImpl) org.apache.commons.ognl.NumberElementsAccessor$1[0m
+  [34mIgnoring anonymous object declaration: (CtClassImpl) 1 @ src/main/java/org/apache/commons/ognl/NumberElementsAccessor.java:37:9[0m
+  [34mSkipping selection with no resolvable origin: (CtFieldImpl) next @ src/main/java/org/apache/commons/ognl/NumberElementsAccessor.java:40:26[0m
+  [34mIgnoring anonymous type: (CtTypeReferenceImpl) org.apache.commons.ognl.NumberElementsAccessor$1[0m
+  [34mIgnoring anonymous type: (CtTypeReferenceImpl) org.apache.commons.ognl.NumberElementsAccessor$1[0m
+  [34mIgnoring anonymous object declaration: (CtClassImpl) 1 @ src/main/java/org/apache/commons/ognl/NumberElementsAccessor.java:37:9[0m
+  [34mSkipping selection with no resolvable origin: (CtFieldImpl) finish @ src/main/java/org/apache/commons/ognl/NumberElementsAccessor.java:42:26[0m
+  [34mIgnoring anonymous type: (CtTypeReferenceImpl) org.apache.commons.ognl.NumberElementsAccessor$1[0m
+  [34mIgnoring anonymous type: (CtTypeReferenceImpl) org.apache.commons.ognl.NumberElementsAccessor$1[0m
+  [34mIgnoring anonymous type: (CtTypeReferenceImpl) org.apache.commons.ognl.NumberElementsAccessor$1[0m
+  [34mIgnoring anonymous type: (CtTypeReferenceImpl) org.apache.commons.ognl.NumberElementsAccessor$1[0m
+  [34mIgnoring anonymous object declaration: (CtClassImpl) 1 @ src/main/java/org/apache/commons/ognl/NumberElementsAccessor.java:37:9[0m
+  [34mSkipping selection with no resolvable origin: (CtFieldImpl) finish @ src/main/java/org/apache/commons/ognl/NumberElementsAccessor.java:42:26[0m
+  [34mIgnoring anonymous type: (CtTypeReferenceImpl) org.apache.commons.ognl.NumberElementsAccessor$1[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring anonymous type: (CtTypeReferenceImpl) org.apache.commons.ognl.NumberElementsAccessor$1[0m
+  [34mIgnoring anonymous object declaration: (CtClassImpl) 1 @ src/main/java/org/apache/commons/ognl/NumberElementsAccessor.java:37:9[0m
+  [34mSkipping selection with no resolvable origin: (CtFieldImpl) type @ src/main/java/org/apache/commons/ognl/NumberElementsAccessor.java:38:25[0m
+  [34mIgnoring anonymous type: (CtTypeReferenceImpl) org.apache.commons.ognl.NumberElementsAccessor$1[0m
+  [34mIgnoring anonymous type: (CtTypeReferenceImpl) org.apache.commons.ognl.NumberElementsAccessor$1[0m
+  [34mIgnoring anonymous type: (CtTypeReferenceImpl) org.apache.commons.ognl.NumberElementsAccessor$1[0m
+  [34mIgnoring anonymous type: (CtTypeReferenceImpl) org.apache.commons.ognl.NumberElementsAccessor$1[0m
+  [34mIgnoring anonymous object declaration: (CtClassImpl) 1 @ src/main/java/org/apache/commons/ognl/NumberElementsAccessor.java:37:9[0m
+  [34mSkipping selection with no resolvable origin: (CtFieldImpl) type @ src/main/java/org/apache/commons/ognl/NumberElementsAccessor.java:38:25[0m
+  [34mIgnoring anonymous type: (CtTypeReferenceImpl) org.apache.commons.ognl.NumberElementsAccessor$1[0m
+  [34mIgnoring anonymous type: (CtTypeReferenceImpl) org.apache.commons.ognl.NumberElementsAccessor$1[0m
+  [34mIgnoring anonymous object declaration: (CtClassImpl) 1 @ src/main/java/org/apache/commons/ognl/NumberElementsAccessor.java:37:9[0m
+  [34mSkipping selection with no resolvable origin: (CtFieldImpl) next @ src/main/java/org/apache/commons/ognl/NumberElementsAccessor.java:40:26[0m
+  [34mIgnoring anonymous type: (CtTypeReferenceImpl) org.apache.commons.ognl.NumberElementsAccessor$1[0m
+  [34mIgnoring anonymous type: (CtTypeReferenceImpl) org.apache.commons.ognl.NumberElementsAccessor$1[0m
+  [34mIgnoring anonymous type: (CtTypeReferenceImpl) org.apache.commons.ognl.NumberElementsAccessor$1[0m
+  [34mIgnoring anonymous type: (CtTypeReferenceImpl) org.apache.commons.ognl.NumberElementsAccessor$1[0m
+  [34mIgnoring anonymous object declaration: (CtClassImpl) 1 @ src/main/java/org/apache/commons/ognl/NumberElementsAccessor.java:37:9[0m
+  [34mSkipping selection with no resolvable origin: (CtFieldImpl) next @ src/main/java/org/apache/commons/ognl/NumberElementsAccessor.java:40:26[0m
+  [34mIgnoring anonymous type: (CtTypeReferenceImpl) org.apache.commons.ognl.NumberElementsAccessor$1[0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?, ?][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [java.lang.Class, java.lang.String][0m
+  [34mUnused type args: [?][0m
+  [34mSkipping selection with no field declaration: (CtFieldReferenceImpl) class[0m
+  [34mSkipping selection with no field declaration: (CtFieldReferenceImpl) class[0m
+  [34mUnused type args: [java.lang.Class, java.lang.String][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [java.lang.Integer][0m
+  [34mUnused type args: [java.lang.Class, java.lang.String][0m
+  [34mUnused type args: [?][0m
+  [34mSkipping selection with no field declaration: (CtFieldReferenceImpl) class[0m
+  [34mSkipping selection with no field declaration: (CtFieldReferenceImpl) class[0m
+  [34mUnused type args: [java.lang.Class, java.lang.String][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [java.lang.Long][0m
+  [34mUnused type args: [java.lang.Class, java.lang.String][0m
+  [34mUnused type args: [?][0m
+  [34mSkipping selection with no field declaration: (CtFieldReferenceImpl) class[0m
+  [34mSkipping selection with no field declaration: (CtFieldReferenceImpl) class[0m
+  [34mUnused type args: [java.lang.Class, java.lang.String][0m
+  [34mUnused type args: [?][0m
+  [34mSkipping selection with no field declaration: (CtFieldReferenceImpl) class[0m
+  [34mSkipping selection with no field declaration: (CtFieldReferenceImpl) class[0m
+  [34mUnused type args: [java.lang.Class, java.lang.String][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [java.lang.Float][0m
+  [34mUnused type args: [java.lang.Class, java.lang.String][0m
+  [34mUnused type args: [?][0m
+  [34mSkipping selection with no field declaration: (CtFieldReferenceImpl) class[0m
+  [34mSkipping selection with no field declaration: (CtFieldReferenceImpl) class[0m
+  [34mUnused type args: [java.lang.Class, java.lang.String][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [java.lang.Double][0m
+  [34mUnused type args: [java.lang.Class, java.lang.String][0m
+  [34mUnused type args: [?][0m
+  [34mSkipping selection with no field declaration: (CtFieldReferenceImpl) class[0m
+  [34mSkipping selection with no field declaration: (CtFieldReferenceImpl) class[0m
+  [34mUnused type args: [java.lang.Class, java.lang.String][0m
+  [34mUnused type args: [?][0m
+  [34mSkipping selection with no field declaration: (CtFieldReferenceImpl) class[0m
+  [34mSkipping selection with no field declaration: (CtFieldReferenceImpl) class[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [org.apache.commons.ognl.Node][0m
+  [34mUnused type args: [java.lang.String, java.lang.Object][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [?][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [java.lang.String, java.lang.Object][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mSkipping selection with no field declaration: (CtFieldReferenceImpl) class[0m
+  [34mSkipping selection with no field declaration: (CtFieldReferenceImpl) class[0m
+  [34mUnused type args: [?][0m
+  [34mSkipping selection with no field declaration: (CtFieldReferenceImpl) class[0m
+  [34mSkipping selection with no field declaration: (CtFieldReferenceImpl) class[0m
+  [34mUnused type args: [?][0m
+  [34mSkipping selection with no field declaration: (CtFieldReferenceImpl) class[0m
+  [34mSkipping selection with no field declaration: (CtFieldReferenceImpl) class[0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.ognl.OgnlParser[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.ognl.OgnlParser[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.ognl.OgnlParser[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.ognl.OgnlParser[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.ognl.OgnlParser[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.ognl.OgnlParser[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.ognl.OgnlParser[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.ognl.OgnlParser[0m
+  [34mUnused type args: [?, ?][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.ognl.OgnlParser[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.ognl.OgnlParser[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.ognl.OgnlParser[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.ognl.OgnlParser[0m
+  [34mUnused type args: [java.lang.String, java.lang.Object][0m
+  [34mUnused type args: [java.lang.String, java.lang.Object][0m
+  [34mUnused type args: [java.lang.Object @ src/main/java/org/apache/commons/ognl/ListPropertyAccessor.java:105:18][0m
+  [34mUnused type args: [java.lang.Object @ src/main/java/org/apache/commons/ognl/ListPropertyAccessor.java:105:39][0m
+  [34mUnused type args: [java.lang.Object][0m
+  [34mUnused type args: [java.lang.Object][0m
+  [34mUnused type args: [java.lang.Object][0m
+  [34mUnused type args: [java.lang.Object][0m
+  [34mUnused type args: [java.lang.Object][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [java.lang.Object][0m
+  [34mUnused type args: [java.lang.Object][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [? @ src/main/java/org/apache/commons/ognl/ListPropertyAccessor.java:142:46][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.ognl.OgnlParser @ src/main/java/org/apache/commons/ognl/Ognl.java:111:13[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.ognl.OgnlParser @ src/main/java/org/apache/commons/ognl/Ognl.java:111:13[0m
+  [33maddUsage.CtConstructorCall: expected constructor for (null) from spoon.support.reflect.code.CtConstructorCallImpl @ src/main/java/org/apache/commons/ognl/Ognl.java:111:33[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.ognl.OgnlParser[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.ognl.OgnlParser @ src/main/java/org/apache/commons/ognl/Ognl.java:111:37[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.ognl.OgnlParser[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.ognl.OgnlParser[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.ognl.OgnlParser[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.ognl.OgnlParser[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.ognl.ParseException @ src/main/java/org/apache/commons/ognl/Ognl.java:114:17[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.ognl.ParseException[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.ognl.ParseException[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.ognl.TokenMgrError @ src/main/java/org/apache/commons/ognl/Ognl.java:118:17[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.ognl.TokenMgrError[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.ognl.TokenMgrError[0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mSkipping selection with no field declaration: (CtFieldReferenceImpl) class[0m
+  [34mSkipping selection with no field declaration: (CtFieldReferenceImpl) class[0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mSkipping selection with no field declaration: (CtFieldReferenceImpl) class[0m
+  [34mSkipping selection with no field declaration: (CtFieldReferenceImpl) class[0m
+  [34mSkipping selection with no field declaration: (CtFieldReferenceImpl) class[0m
+  [34mSkipping selection with no field declaration: (CtFieldReferenceImpl) class[0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mSkipping selection with no field declaration: (CtFieldReferenceImpl) class[0m
+  [34mSkipping selection with no field declaration: (CtFieldReferenceImpl) class[0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mSkipping selection with no field declaration: (CtFieldReferenceImpl) class[0m
+  [34mSkipping selection with no field declaration: (CtFieldReferenceImpl) class[0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mSkipping selection with no field declaration: (CtFieldReferenceImpl) class[0m
+  [34mSkipping selection with no field declaration: (CtFieldReferenceImpl) class[0m
+  [34mSkipping selection with no field declaration: (CtFieldReferenceImpl) class[0m
+  [34mSkipping selection with no field declaration: (CtFieldReferenceImpl) class[0m
+  [34mUnused type args: [?][0m
+  [34mSkipping selection with no field declaration: (CtFieldReferenceImpl) class[0m
+  [34mSkipping selection with no field declaration: (CtFieldReferenceImpl) class[0m
+  [34mSkipping selection with no field declaration: (CtFieldReferenceImpl) class[0m
+  [34mSkipping selection with no field declaration: (CtFieldReferenceImpl) class[0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [java.lang.Boolean][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [java.lang.Boolean][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.ognl.OgnlParser[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.ognl.OgnlParser[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.ognl.OgnlParser[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.ognl.OgnlParser[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.ognl.OgnlParser[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.ognl.OgnlParser[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.ognl.OgnlParser[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.ognl.OgnlParser[0m
+  [34mUnused type args: [?, ?][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [T @ src/main/java/org/apache/commons/ognl/EnumerationIterator.java:34:40][0m
+  [34mUnused type args: [E][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [?, ?][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+[34mFinished process pending packages (7.108155s)[0m
+Exception in thread "main" java.lang.Exception: Error while processing metrics (CtConstructorImpl) <init> @ src/main/java/org/apache/commons/ognl/SimpleNode.java:54:12: {
+  elem: "(CtConstructorImpl) <init> @ src/main/java/org/apache/commons/ognl/SimpleNode.java:54:12",
+}
+	at abstractor.core.constructs.Factory.create(Factory.java:132)
+	at abstractor.core.constructs.Factory.create(Factory.java:147)
+	at abstractor.core.Abstractor.addMetrics(Abstractor.java:962)
+	at abstractor.core.Abstractor.processPendingMetrics(Abstractor.java:1392)
+	at abstractor.core.Abstractor.processPendingPackages(Abstractor.java:1346)
+	at abstractor.core.Abstractor.lambda$performAbstraction$40(Abstractor.java:1332)
+	at abstractor.core.log.Logger.measure(Logger.java:123)
+	at abstractor.core.Abstractor.performAbstraction(Abstractor.java:1332)
+	at abstractor.app.App.run(App.java:26)
 	at abstractor.app.App.main(App.java:17)
+Caused by: java.lang.NullPointerException: Cannot invoke "spoon.reflect.reference.CtTypeReference.isPrimitive()" because "tr" is null
+	at abstractor.core.spoonUtils.SpoonUtils.isVoid(SpoonUtils.java:165)
+	at abstractor.core.tools.Analyzer.addAssignmentUsage(Analyzer.java:460)
+	at abstractor.core.tools.Analyzer.addUsage(Analyzer.java:398)
+	at abstractor.core.tools.Analyzer.addElement(Analyzer.java:133)
+	at abstractor.core.tools.Analyzer.addMethod(Analyzer.java:111)
+	at abstractor.core.Abstractor.lambda$addMetrics$31(Abstractor.java:967)
+	at abstractor.core.constructs.Factory.lambda$create$1(Factory.java:147)
+	at abstractor.core.constructs.Factory.create(Factory.java:109)
+	... 9 more

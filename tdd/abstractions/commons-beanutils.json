@@ -1225,7 +1225,6 @@
   "artifactId": "commons-beanutils2",
   "basics": [ "boolean", "byte", "char", "double", "float", "int", "long", "short", "string" ],
   "commitHash": "c4da598872233b59af41a221bd2bdcefbbca1259",
-  "groupId": "org.apache.commons.beanutils",
   "fields": [
     { "name": "$nest", "type": "object14" },
     { "name": "$nest", "type": "object21" },
@@ -1410,7 +1409,7 @@
     { "name": "limit", "type": "basic6", "vis": "protected" },
     { "name": "loadFactor", "type": "basic5" },
     { "name": "locPattern", "type": "basic1", "vis": "protected" },
-    { "name": "locale", "type": "object120", "vis": "private" },
+    { "name": "locale", "type": "object120", "vis": "protected" },
     { "name": "localeConvertUtils", "type": "object124", "vis": "private" },
     { "name": "log", "type": "interfaceDecl32", "vis": "private" },
     { "name": "loggedAccessibleWarning", "type": "basic1", "vis": "private" },
@@ -1429,13 +1428,13 @@
     { "name": "mappedWriteMethodRef", "type": "object130", "vis": "private" },
     { "name": "methodName", "type": "basic9", "vis": "private" },
     { "name": "methodRef", "type": "objectInst57", "vis": "private" },
-    { "name": "modCount", "type": "basic6", "vis": "protected" },
+    { "name": "modCount", "type": "basic6" },
     { "name": "name", "type": "basic9", "vis": "protected" },
     { "name": "onlyFirstToString", "type": "basic1", "vis": "private" },
     { "name": "out", "type": "object150", "vis": "public" },
     { "name": "owner", "type": "object21", "vis": "private" },
     { "name": "paramTypes", "type": "interfaceInst12", "vis": "private" },
-    { "name": "pattern", "type": "basic9", "vis": "private" },
+    { "name": "pattern", "type": "basic9", "vis": "protected" },
     { "name": "patterns", "type": "interfaceInst2", "vis": "private" },
     { "name": "predicate", "type": "interfaceDecl39", "vis": "private" },
     { "name": "preferred", "type": "basic1", "vis": "private" },
@@ -1461,7 +1460,7 @@
     { "name": "rows", "type": "interfaceInst44", "vis": "protected" },
     { "name": "serialVersionUID", "type": "basic7", "vis": "private" },
     { "name": "shortDescription", "type": "basic9", "vis": "private" },
-    { "name": "size", "type": "basic6", "vis": "private" },
+    { "name": "size", "type": "basic6" },
     { "name": "stackTrace", "type": "interfaceInst10", "vis": "private" },
     { "name": "suppressedExceptions", "type": "interfaceInst47", "vis": "private" },
     { "name": "sval", "type": "basic9", "vis": "public" },
@@ -18719,7 +18718,7 @@
       "vis": "public"
     },
     {
-      "data": 16,
+      "data": 17,
       "interface": 115,
       "name": "ComparableComparator",
       "package": 22,
@@ -18867,7 +18866,7 @@
       "vis": "public"
     },
     {
-      "data": 19,
+      "data": 20,
       "interface": 115,
       "methods": [ 592, 642, 654, 655, 656, 657, 889, 890, 1040, 1063, 1164, 1207 ],
       "name": "DateFormat",
@@ -18930,7 +18929,7 @@
       "vis": "public"
     },
     {
-      "data": 15,
+      "data": 16,
       "interface": 73,
       "loc": 6669,
       "methods": [ 142, 908, 933 ],
@@ -18947,7 +18946,7 @@
       "package": 16
     },
     {
-      "data": 18,
+      "data": 19,
       "interface": 68,
       "loc": 21658,
       "methods": [ 144, 721, 756, 834, 910, 978, 983, 1037, 1110 ],
@@ -19292,7 +19291,7 @@
       "vis": "public"
     },
     {
-      "data": 23,
+      "data": 15,
       "interface": 115,
       "methods": [ 663 ],
       "name": "Locale",
@@ -19310,7 +19309,7 @@
       "vis": "public"
     },
     {
-      "data": 17,
+      "data": 18,
       "interface": 25,
       "loc": 22903,
       "methods": [ 229, 230, 231, 465, 466, 547, 633, 668, 734, 735, 736, 737, 762, 763, 779, 780, 781, 786, 816, 817, 837, 838, 880, 881, 956, 1141, 1147, 1163, 1194, 1195 ],
@@ -19742,7 +19741,7 @@
       "vis": "public"
     },
     {
-      "data": 21,
+      "data": 22,
       "interface": 115,
       "methods": [ 336, 1038, 1039, 1295, 1296 ],
       "name": "StreamTokenizer",
@@ -19796,7 +19795,7 @@
       "vis": "public"
     },
     {
-      "data": 20,
+      "data": 21,
       "interface": 71,
       "loc": 16356,
       "methods": [ 356, 883, 936 ],
@@ -19899,7 +19898,7 @@
       "typeParams": [ 5, 11 ],
       "vis": "private"
     },
-    { "data": 22, "interface": 115, "name": "Void", "package": 4, "shadow": true, "vis": "public" },
+    { "data": 23, "interface": 115, "name": "Void", "package": 4, "shadow": true, "vis": "public" },
     {
       "data": 68,
       "interface": 20,
@@ -23940,6 +23939,9 @@
       "fields": [ 60, 133, 141 ]
     },
     {
+      "fields": [ 64, 105 ]
+    },
+    {
       "fields": [ 70, 59, 74, 186 ]
     },
     {
@@ -23962,9 +23964,6 @@
     },
     {
       "fields": [ 102 ]
-    },
-    {
-      "fields": [ 105, 64 ]
     },
     {
       "fields": [ 106, 85, 209, 107, 249, 184, 52, 86, 186, 248, 137, 9 ]

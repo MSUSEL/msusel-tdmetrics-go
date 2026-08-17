@@ -1,7 +1,7 @@
 # cmd: java -jar /Users/grantnelson/go/src/github.com/MSUSEL/msusel-tdmetrics-go/javaAbstractor/target/abstractor-0.1-jar-with-dependencies.jar -i /Users/grantnelson/go/src/github.com/apache/commons-dbutils/ -o /Users/grantnelson/go/src/github.com/MSUSEL/msusel-tdmetrics-go/tdd/abstractions/commons-dbutils.json -v
 # cwd: /Users/grantnelson/go/src/github.com/MSUSEL/msusel-tdmetrics-go/tdd
 # repo: /Users/grantnelson/go/src/github.com/apache/commons-dbutils @ 2f48485a82697d9aed060ba36f6d5beb3a58ed8b
-# started: 2026-07-28T01:19:50.747849+00:00
+# started: 2026-08-17T18:30:53.518343+00:00
 # timeout_min: 10
 # ---
 Reading /Users/grantnelson/go/src/github.com/apache/commons-dbutils/
@@ -18,133 +18,84 @@ Init pending package org.apache.commons.dbutils.handlers.columns
 Init pending package org.apache.commons.dbutils.handlers.properties
 Init pending package org.apache.commons.dbutils.wrappers
 [34mStarting process pending packages...[0m
-  Pending package java.util
-  Pending package java.lang.reflect
-  Pending package org.apache.commons.dbutils
+  [34mskipping default constructor: org.apache.commons.dbutils.handlers.properties.DatePropertyHandler()[0m
   Pending package java.lang
   Pending package java.lang.invoke
+  [34mskipping default constructor: org.apache.commons.dbutils.handlers.properties.StringEnumPropertyHandler()[0m
+  [34mUnused type args: [java.lang.Enum][0m
+  [34mUnused type args: [java.lang.Enum][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [java.lang.Enum][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [U][0m
+  [34mSkipping selection with no field declaration: (CtFieldReferenceImpl) class[0m
+  [34mSkipping selection with no field declaration: (CtFieldReferenceImpl) class[0m
+  [34mUnused type args: [?][0m
   Pending package java.sql
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  Pending package java.util
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  Pending package java.lang.reflect
+  Pending package org.apache.commons.dbutils
   Pending package java.io
   Pending package java.math
   Pending package java.net
-  [34mUnused type args: [java.sql.Connection][0m
-  [34mUnused type args: [T][0m
-  [34mSkipping selection with no field declaration: (CtFieldReferenceImpl) class[0m
-  [34mSkipping selection with no field declaration: (CtFieldReferenceImpl) class[0m
-  [34mUnused type args: [java.sql.Statement][0m
-  [34mUnused type args: [T][0m
-  [34mSkipping selection with no field declaration: (CtFieldReferenceImpl) class[0m
-  [34mSkipping selection with no field declaration: (CtFieldReferenceImpl) class[0m
-  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
-  [34mUnused type args: [java.sql.Driver][0m
-  [34mUnused type args: [T][0m
-  [34mSkipping selection with no field declaration: (CtFieldReferenceImpl) class[0m
-  [34mSkipping selection with no field declaration: (CtFieldReferenceImpl) class[0m
-  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
-  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
-  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
-  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
-  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
-  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
-  [34mUnused type args: [java.lang.String, java.lang.reflect.Method][0m
-  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
   [34mUnused type args: [java.sql.ResultSet][0m
   [34mUnused type args: [T][0m
   [34mSkipping selection with no field declaration: (CtFieldReferenceImpl) class[0m
   [34mSkipping selection with no field declaration: (CtFieldReferenceImpl) class[0m
   [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
   [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
-  [34mUnused type args: [java.sql.ResultSetMetaData][0m
-  [34mUnused type args: [T][0m
-  [34mSkipping selection with no field declaration: (CtFieldReferenceImpl) class[0m
-  [34mSkipping selection with no field declaration: (CtFieldReferenceImpl) class[0m
-  [34mUnused type args: [T][0m
-  Pending package java.lang
-  [34mUnused type args: [?][0m
-  [34mUnused type args: [?][0m
-  [34mUnused type args: [? @ src/main/java/org/apache/commons/dbutils/ProxyFactory.java:69:96][0m
-  [34mUnused type args: [T][0m
-  [34mUnused type args: [java.sql.PreparedStatement][0m
-  [34mUnused type args: [T][0m
-  [34mSkipping selection with no field declaration: (CtFieldReferenceImpl) class[0m
-  [34mSkipping selection with no field declaration: (CtFieldReferenceImpl) class[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
   [34mUnused type args: [java.sql.CallableStatement][0m
   [34mUnused type args: [T][0m
   [34mSkipping selection with no field declaration: (CtFieldReferenceImpl) class[0m
   [34mSkipping selection with no field declaration: (CtFieldReferenceImpl) class[0m
   [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
   [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
-  [34mskipping default constructor: org.apache.commons.dbutils.handlers.columns.BooleanColumnHandler()[0m
-  [34mskipping default constructor: org.apache.commons.dbutils.handlers.columns.ByteColumnHandler()[0m
-  [34mskipping default constructor: org.apache.commons.dbutils.handlers.columns.DoubleColumnHandler()[0m
-  [34mskipping default constructor: org.apache.commons.dbutils.handlers.columns.FloatColumnHandler()[0m
-  [34mskipping default constructor: org.apache.commons.dbutils.handlers.columns.IntegerColumnHandler()[0m
-  [34mskipping default constructor: org.apache.commons.dbutils.handlers.columns.LongColumnHandler()[0m
-  [34mskipping default constructor: org.apache.commons.dbutils.handlers.columns.SQLXMLColumnHandler()[0m
-  [34mskipping default constructor: org.apache.commons.dbutils.handlers.columns.ShortColumnHandler()[0m
-  [34mskipping default constructor: org.apache.commons.dbutils.handlers.columns.StringColumnHandler()[0m
-  [34mskipping default constructor: org.apache.commons.dbutils.handlers.columns.TimestampColumnHandler()[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [java.sql.Statement][0m
+  [34mUnused type args: [T][0m
+  [34mSkipping selection with no field declaration: (CtFieldReferenceImpl) class[0m
+  [34mSkipping selection with no field declaration: (CtFieldReferenceImpl) class[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [T][0m
+  Pending package java.lang
   [34mUnused type args: [?][0m
-  [34mUnused type args: [java.lang.Float][0m
   [34mUnused type args: [?][0m
+  [34mUnused type args: [? @ src/main/java/org/apache/commons/dbutils/ProxyFactory.java:69:96][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [java.sql.Connection][0m
+  [34mUnused type args: [T][0m
   [34mSkipping selection with no field declaration: (CtFieldReferenceImpl) class[0m
   [34mSkipping selection with no field declaration: (CtFieldReferenceImpl) class[0m
-  [34mUnused type args: [?][0m
+  [34mUnused type args: [java.sql.ResultSetMetaData][0m
+  [34mUnused type args: [T][0m
   [34mSkipping selection with no field declaration: (CtFieldReferenceImpl) class[0m
   [34mSkipping selection with no field declaration: (CtFieldReferenceImpl) class[0m
-  [34mUnused type args: [?][0m
-  [34mUnused type args: [java.lang.Long][0m
-  [34mUnused type args: [?][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [java.sql.Driver][0m
+  [34mUnused type args: [T][0m
   [34mSkipping selection with no field declaration: (CtFieldReferenceImpl) class[0m
   [34mSkipping selection with no field declaration: (CtFieldReferenceImpl) class[0m
-  [34mUnused type args: [?][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [java.sql.PreparedStatement][0m
+  [34mUnused type args: [T][0m
   [34mSkipping selection with no field declaration: (CtFieldReferenceImpl) class[0m
   [34mSkipping selection with no field declaration: (CtFieldReferenceImpl) class[0m
-  [34mUnused type args: [?][0m
-  [34mUnused type args: [java.lang.Boolean][0m
-  [34mUnused type args: [?][0m
-  [34mSkipping selection with no field declaration: (CtFieldReferenceImpl) class[0m
-  [34mSkipping selection with no field declaration: (CtFieldReferenceImpl) class[0m
-  [34mUnused type args: [?][0m
-  [34mSkipping selection with no field declaration: (CtFieldReferenceImpl) class[0m
-  [34mSkipping selection with no field declaration: (CtFieldReferenceImpl) class[0m
-  [34mUnused type args: [?][0m
-  [34mUnused type args: [java.lang.Integer][0m
-  [34mUnused type args: [?][0m
-  [34mSkipping selection with no field declaration: (CtFieldReferenceImpl) class[0m
-  [34mSkipping selection with no field declaration: (CtFieldReferenceImpl) class[0m
-  [34mUnused type args: [?][0m
-  [34mUnused type args: [java.lang.Byte][0m
-  [34mUnused type args: [?][0m
-  [34mSkipping selection with no field declaration: (CtFieldReferenceImpl) class[0m
-  [34mSkipping selection with no field declaration: (CtFieldReferenceImpl) class[0m
-  [34mUnused type args: [?][0m
-  [34mUnused type args: [java.lang.Double][0m
-  [34mUnused type args: [?][0m
-  [34mSkipping selection with no field declaration: (CtFieldReferenceImpl) class[0m
-  [34mSkipping selection with no field declaration: (CtFieldReferenceImpl) class[0m
-  [34mUnused type args: [?][0m
-  [34mUnused type args: [java.lang.Short][0m
-  [34mUnused type args: [?][0m
-  [34mSkipping selection with no field declaration: (CtFieldReferenceImpl) class[0m
-  [34mSkipping selection with no field declaration: (CtFieldReferenceImpl) class[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [java.lang.String, java.lang.reflect.Method][0m
   [34mskipping default constructor: org.apache.commons.dbutils.handlers.AbstractKeyedHandler()[0m
   [34mskipping default constructor: org.apache.commons.dbutils.handlers.AbstractListHandler()[0m
   [34mskipping default constructor: org.apache.commons.dbutils.handlers.AbstractListHandler()[0m
   [34mskipping default constructor: org.apache.commons.dbutils.handlers.AbstractKeyedHandler()[0m
   [34mskipping default constructor: org.apache.commons.dbutils.handlers.AbstractListHandler()[0m
-  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
-  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
-  [34mUnused type args: [T][0m
-  [34mUnused type args: [T][0m
-  [34mUnused type args: [T][0m
-  [34mUnused type args: [T][0m
-  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
-  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
-  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
-  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
-  [34mUnused type args: [V][0m
-  [34mUnused type args: [V][0m
   [34mUnused type args: [K][0m
   [34mUnused type args: [K][0m
   [34mUnused type args: [java.lang.String, java.lang.Object][0m
@@ -156,28 +107,41 @@ Init pending package org.apache.commons.dbutils.wrappers
   [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
   [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
   [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
-  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
-  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [V][0m
+  [34mUnused type args: [V][0m
   [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
   [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
   [34mUnused type args: [V][0m
   [34mUnused type args: [V][0m
-  [34mUnused type args: [java.lang.String, java.lang.Object][0m
-  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
-  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
-  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
-  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
-  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
-  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
   [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
   [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
   [34mUnused type args: [?][0m
   [34mUnused type args: [?][0m
-  [34mUnused type args: [K][0m
-  [34mUnused type args: [K][0m
-  [34mUnused type args: [K][0m
-  [34mUnused type args: [java.lang.String, java.lang.Object][0m
-  [34mUnused type args: [java.lang.String, java.lang.Object][0m
+  [34mUnused type args: [K, V][0m
+  [34mUnused type args: [K, V][0m
+  [34mUnused type args: [V][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [K, V][0m
+  [34mUnused type args: [V][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [K @ src/main/java/org/apache/commons/dbutils/handlers/AbstractKeyedHandler.java:66:28, V @ src/main/java/org/apache/commons/dbutils/handlers/AbstractKeyedHandler.java:66:31][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [?][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
   [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
   [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
   [34mUnused type args: [T @ src/main/java/org/apache/commons/dbutils/handlers/AbstractListHandler.java:46:14][0m
@@ -190,40 +154,13 @@ Init pending package org.apache.commons.dbutils.wrappers
   [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
   [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
   [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
-  [34mUnused type args: [V][0m
-  [34mUnused type args: [V][0m
-  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
-  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
-  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
-  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [?][0m
   [34mUnused type args: [T][0m
   [34mUnused type args: [T][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
   [34mUnused type args: [T][0m
   [34mUnused type args: [T][0m
-  [34mUnused type args: [T][0m
-  [34mUnused type args: [T][0m
-  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
-  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
-  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
-  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
-  [34mUnused type args: [T][0m
-  [34mUnused type args: [T][0m
-  [34mUnused type args: [T][0m
-  [34mUnused type args: [T][0m
-  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
-  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
-  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
-  [34mUnused type args: [K @ src/main/java/org/apache/commons/dbutils/handlers/AbstractKeyedHandler.java:66:28, V @ src/main/java/org/apache/commons/dbutils/handlers/AbstractKeyedHandler.java:66:31][0m
-  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
-  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
-  [34mUnused type args: [K][0m
-  [34mUnused type args: [K][0m
-  [34mUnused type args: [K][0m
-  [34mUnused type args: [K][0m
-  [34mUnused type args: [K][0m
-  [34mUnused type args: [K][0m
-  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
-  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
   [34mUnused type args: [T][0m
   [34mUnused type args: [T][0m
   [34mUnused type args: [T][0m
@@ -231,6 +168,20 @@ Init pending package org.apache.commons.dbutils.wrappers
   [34mUnused type args: [?][0m
   [34mUnused type args: [T][0m
   [34mUnused type args: [?][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [V][0m
+  [34mUnused type args: [V][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
   [34mUnused type args: [K @ src/main/java/org/apache/commons/dbutils/handlers/AbstractKeyedHandler.java:51:13, V @ src/main/java/org/apache/commons/dbutils/handlers/AbstractKeyedHandler.java:51:16][0m
   [34mUnused type args: [K, V][0m
   [34mUnused type args: [K, V][0m
@@ -241,6 +192,38 @@ Init pending package org.apache.commons.dbutils.wrappers
   [34mUnused type args: [K, V][0m
   [34mUnused type args: [K, V][0m
   [34mUnused type args: [K, V][0m
+  [34mUnused type args: [java.lang.String, java.lang.Object][0m
+  [34mUnused type args: [java.lang.String, java.lang.Object][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [K][0m
+  [34mUnused type args: [K][0m
+  [34mUnused type args: [K][0m
+  [34mUnused type args: [K][0m
+  [34mUnused type args: [K][0m
+  [34mUnused type args: [K][0m
+  [34mUnused type args: [java.lang.String, java.lang.Object][0m
   [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
   [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
   [34mUnused type args: [V][0m
@@ -256,49 +239,29 @@ Init pending package org.apache.commons.dbutils.wrappers
   [34mUnused type args: [K, V][0m
   [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
   [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
-  [34mUnused type args: [T][0m
-  [34mUnused type args: [T][0m
-  [34mUnused type args: [?][0m
-  [34mUnused type args: [?][0m
-  [34mUnused type args: [T][0m
-  [34mUnused type args: [T][0m
-  [34mUnused type args: [?][0m
-  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
-  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
-  [34mUnused type args: [?][0m
-  [34mUnused type args: [T][0m
-  [34mUnused type args: [T][0m
-  [34mUnused type args: [?][0m
-  [34mUnused type args: [?][0m
-  [34mUnused type args: [T][0m
-  [34mUnused type args: [T][0m
-  [34mUnused type args: [T][0m
-  [34mUnused type args: [T][0m
-  [34mUnused type args: [T][0m
-  [34mUnused type args: [T][0m
-  [34mUnused type args: [T][0m
-  [34mUnused type args: [T][0m
-  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
-  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
-  [34mUnused type args: [?][0m
-  [34mUnused type args: [T][0m
-  [34mUnused type args: [T][0m
-  [34mUnused type args: [?][0m
-  [34mUnused type args: [?][0m
-  [34mUnused type args: [T][0m
-  [34mUnused type args: [T][0m
-  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
-  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
-  [34mUnused type args: [K, V][0m
-  [34mUnused type args: [K, V][0m
-  [34mUnused type args: [V][0m
-  [34mUnused type args: [?][0m
-  [34mUnused type args: [K, V][0m
-  [34mUnused type args: [V][0m
-  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
-  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
   [34mUnused type args: [V][0m
   [34mUnused type args: [V][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [K][0m
+  [34mUnused type args: [K][0m
+  [34mUnused type args: [K][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
   [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
   [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
   [34mUnused type args: [?][0m
@@ -325,193 +288,17 @@ Init pending package org.apache.commons.dbutils.wrappers
   Pending package java.util.logging
   Pending package java.util.regex
   [34mUnused type args: [T][0m
-  [34mUnused type args: [T][0m
-  [34mUnused type args: [T][0m
-  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
-  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
-  [34mUnused type args: [T][0m
-  [34mUnused type args: [T][0m
-  [34mUnused type args: [T][0m
-  [34mUnused type args: [T][0m
-  [34mUnused type args: [T][0m
-  [34mUnused type args: [T][0m
-  [34mUnused type args: [T][0m
-  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
-  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
-  [34mUnused type args: [T][0m
-  [34mUnused type args: [T][0m
-  [34mUnused type args: [T][0m
-  [34mUnused type args: [T][0m
-  [34mUnused type args: [T][0m
-  [34mUnused type args: [T][0m
-  [34mUnused type args: [T][0m
-  [34mUnused type args: [T][0m
-  [34mUnused type args: [T][0m
-  [34mUnused type args: [T][0m
-  [34mUnused type args: [T][0m
-  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
-  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
-  [34mUnused type args: [T][0m
-  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
   [34mUnused type args: [java.lang.String, java.lang.String][0m
   [34mUnused type args: [java.lang.String, java.lang.Object][0m
-  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
-  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
-  [34mUnused type args: [T][0m
-  [34mUnused type args: [T][0m
-  [34mUnused type args: [T][0m
-  [34mUnused type args: [T][0m
-  [34mUnused type args: [T][0m
-  [34mUnused type args: [T][0m
-  [34mUnused type args: [T][0m
-  [34mUnused type args: [T][0m
-  [34mUnused type args: [T][0m
-  [34mUnused type args: [T][0m
-  [34mUnused type args: [T][0m
-  [34mUnused type args: [T][0m
-  [34mUnused type args: [T][0m
-  [34mUnused type args: [T][0m
-  [34mUnused type args: [T][0m
-  [34mUnused type args: [T][0m
-  [34mUnused type args: [T][0m
-  [34mUnused type args: [T][0m
-  [34mUnused type args: [T][0m
-  [34mUnused type args: [java.lang.Integer][0m
-  [34mUnused type args: [java.lang.Integer][0m
-  [34mUnused type args: [T][0m
-  [34mIgnoring anonymous type: (CtTypeReferenceImpl) org.apache.commons.dbutils.AsyncQueryRunner$10[0m
-  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
-  [34mIgnoring anonymous type: (CtTypeReferenceImpl) org.apache.commons.dbutils.AsyncQueryRunner$10[0m
-  [34mUnused type args: [java.lang.Integer @ src/main/java/org/apache/commons/dbutils/AsyncQueryRunner.java:499:52][0m
-  [34mIgnoring anonymous object declaration: (CtClassImpl) 10 @ src/main/java/org/apache/commons/dbutils/AsyncQueryRunner.java:499:63[0m
-  [34mUnused type args: [java.lang.Integer][0m
-  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
-  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
-  [34mIgnoring method of an anonymous declaring type: (CtMethodImpl) call @ src/main/java/org/apache/commons/dbutils/AsyncQueryRunner.java:502:28 in (CtClassImpl) 10 @ src/main/java/org/apache/commons/dbutils/AsyncQueryRunner.java:499:63[0m
-  [34mUnused type args: [?][0m
-  [34mUnused type args: [?][0m
-  [34mUnused type args: [?][0m
-  [34mUnused type args: [?][0m
-  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
-  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
-  [34mUnused type args: [T][0m
-  [34mUnused type args: [T][0m
-  [34mUnused type args: [T][0m
-  [34mUnused type args: [java.lang.String, java.util.Map][0m
-  [34mUnused type args: [java.lang.String, java.lang.String][0m
-  [34mUnused type args: [java.lang.String, java.lang.String][0m
-  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
-  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
-  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
-  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
-  [34mUnused type args: [T][0m
-  [34mUnused type args: [T][0m
-  [34mUnused type args: [T][0m
-  [34mUnused type args: [T][0m
-  [34mUnused type args: [T][0m
-  [34mUnused type args: [T][0m
-  [34mUnused type args: [T][0m
-  [34mUnused type args: [T][0m
-  [34mUnused type args: [T][0m
-  [34mUnused type args: [int[]][0m
-  [34mUnused type args: [int[]][0m
-  [34mUnused type args: [T][0m
-  [34mIgnoring anonymous type: (CtTypeReferenceImpl) org.apache.commons.dbutils.AsyncQueryRunner$1[0m
-  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
-  [34mIgnoring anonymous type: (CtTypeReferenceImpl) org.apache.commons.dbutils.AsyncQueryRunner$1[0m
-  [34mUnused type args: [int[] @ src/main/java/org/apache/commons/dbutils/AsyncQueryRunner.java:178:52][0m
-  [34mIgnoring anonymous object declaration: (CtClassImpl) 1 @ src/main/java/org/apache/commons/dbutils/AsyncQueryRunner.java:178:61[0m
-  [34mUnused type args: [int[]][0m
-  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
-  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
-  [34mIgnoring method of an anonymous declaring type: (CtMethodImpl) call @ src/main/java/org/apache/commons/dbutils/AsyncQueryRunner.java:181:26 in (CtClassImpl) 1 @ src/main/java/org/apache/commons/dbutils/AsyncQueryRunner.java:178:61[0m
-  [34mUnused type args: [T][0m
-  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
-  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
-  [34mUnused type args: [java.lang.String, java.lang.String][0m
-  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
-  [34mUnused type args: [java.lang.String @ src/main/java/org/apache/commons/dbutils/BeanProcessor.java:102:26, java.lang.String @ src/main/java/org/apache/commons/dbutils/BeanProcessor.java:102:34][0m
-  [34mUnused type args: [T][0m
-  [34mUnused type args: [T][0m
-  [34mUnused type args: [T][0m
-  [34mUnused type args: [T][0m
-  [34mUnused type args: [T][0m
-  [34mUnused type args: [T][0m
-  [34mUnused type args: [T][0m
-  [34mUnused type args: [T][0m
-  [34mUnused type args: [java.lang.String, java.lang.String][0m
-  [34mUnused type args: [java.lang.String, java.lang.Object][0m
-  [34mUnused type args: [T][0m
-  [34mUnused type args: [T][0m
-  [34mUnused type args: [T][0m
-  [34mIgnoring anonymous type: (CtTypeReferenceImpl) org.apache.commons.dbutils.AsyncQueryRunner$15[0m
-  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
-  [34mIgnoring anonymous type: (CtTypeReferenceImpl) org.apache.commons.dbutils.AsyncQueryRunner$15[0m
-  [34mUnused type args: [T @ src/main/java/org/apache/commons/dbutils/AsyncQueryRunner.java:598:52][0m
-  [34mIgnoring anonymous object declaration: (CtClassImpl) 15 @ src/main/java/org/apache/commons/dbutils/AsyncQueryRunner.java:598:57[0m
-  [34mUnused type args: [T][0m
-  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
-  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
-  [34mIgnoring method of an anonymous declaring type: (CtMethodImpl) call @ src/main/java/org/apache/commons/dbutils/AsyncQueryRunner.java:601:22 in (CtClassImpl) 15 @ src/main/java/org/apache/commons/dbutils/AsyncQueryRunner.java:598:57[0m
-  [34mUnused type args: [T][0m
-  [34mUnused type args: [T][0m
-  [34mUnused type args: [T][0m
-  [34mUnused type args: [T][0m
-  [34mUnused type args: [E][0m
-  [34mUnused type args: [T][0m
-  [34mUnused type args: [E][0m
-  [34mUnused type args: [T][0m
-  [34mUnused type args: [T][0m
-  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
-  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
-  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
-  [34mUnused type args: [T][0m
-  [34mUnused type args: [T][0m
-  [34mUnused type args: [T][0m
-  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
-  [34mUnused type args: [T][0m
-  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
-  [34mUnused type args: [T][0m
-  [34mUnused type args: [T][0m
-  [34mUnused type args: [T][0m
-  [34mUnused type args: [T][0m
-  [34mUnused type args: [T][0m
-  [34mUnused type args: [T][0m
-  [34mUnused type args: [T][0m
-  [34mUnused type args: [T][0m
-  [34mUnused type args: [java.lang.String, java.lang.Class][0m
-  [34mUnused type args: [?][0m
-  [34mUnused type args: [java.lang.String, java.lang.Class][0m
-  [34mUnused type args: [?][0m
-  [34mUnused type args: [T][0m
-  [34mUnused type args: [T][0m
-  [34mUnused type args: [T][0m
-  [34mUnused type args: [T][0m
-  [34mUnused type args: [T][0m
-  [34mUnused type args: [T][0m
-  [34mUnused type args: [T][0m
-  [34mUnused type args: [T][0m
-  [34mUnused type args: [T][0m
-  [34mUnused type args: [T][0m
-  [34mUnused type args: [T][0m
-  [34mUnused type args: [T][0m
-  [34mUnused type args: [T][0m
-  [34mUnused type args: [T][0m
-  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
-  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
-  [34mUnused type args: [?][0m
-  [34mUnused type args: [?][0m
-  [34mUnused type args: [?][0m
-  [34mUnused type args: [T][0m
-  [34mUnused type args: [? @ src/main/java/org/apache/commons/dbutils/BeanProcessor.java:264:19][0m
   [34mUnused type args: [?][0m
   [34mUnused type args: [?][0m
   [34mUnused type args: [?][0m
   [34mUnused type args: [?][0m
   [34mUnused type args: [?][0m
-  [34mUnused type args: [java.lang.Class, java.lang.Object][0m
-  [34mUnused type args: [?][0m
-  [34mUnused type args: [?][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
   [34mUnused type args: [?][0m
   [34mUnused type args: [?][0m
   [34mUnused type args: [? @ src/main/java/org/apache/commons/dbutils/BeanProcessor.java:299:19][0m
@@ -531,157 +318,8 @@ Init pending package org.apache.commons.dbutils.wrappers
   [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
   [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
   [34mUnused type args: [T][0m
-  [34mUnused type args: [T][0m
   [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
   [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
-  [34mUnused type args: [T][0m
-  [34mUnused type args: [T][0m
-  [34mUnused type args: [T][0m
-  [34mUnused type args: [T][0m
-  [34mUnused type args: [T][0m
-  [34mUnused type args: [T][0m
-  [34mUnused type args: [T][0m
-  [34mUnused type args: [T][0m
-  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
-  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
-  [34mUnused type args: [T][0m
-  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
-  [34mUnused type args: [T][0m
-  [34mUnused type args: [T][0m
-  [34mSkipping selection with no field declaration: (CtFieldReferenceImpl) class[0m
-  [34mSkipping selection with no field declaration: (CtFieldReferenceImpl) class[0m
-  [34mUnused type args: [T][0m
-  [34mUnused type args: [T][0m
-  [34mUnused type args: [T][0m
-  [34mUnused type args: [?][0m
-  [34mUnused type args: [org.apache.commons.dbutils.ColumnHandler][0m
-  [34mUnused type args: [?][0m
-  [34mUnused type args: [?][0m
-  [34mUnused type args: [T][0m
-  [34mUnused type args: [T][0m
-  [34mUnused type args: [T][0m
-  [34mUnused type args: [T][0m
-  [34mUnused type args: [T][0m
-  [34mUnused type args: [T][0m
-  [34mUnused type args: [T][0m
-  [34mUnused type args: [T][0m
-  [34mUnused type args: [T][0m
-  [34mUnused type args: [?][0m
-  [34mUnused type args: [?][0m
-  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
-  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
-  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
-  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
-  [34mUnused type args: [T][0m
-  [34mUnused type args: [T][0m
-  [34mUnused type args: [T][0m
-  [34mUnused type args: [T][0m
-  [34mUnused type args: [T][0m
-  [34mUnused type args: [T][0m
-  [34mIgnoring anonymous type: (CtTypeReferenceImpl) org.apache.commons.dbutils.AsyncQueryRunner$13[0m
-  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
-  [34mIgnoring anonymous type: (CtTypeReferenceImpl) org.apache.commons.dbutils.AsyncQueryRunner$13[0m
-  [34mUnused type args: [T @ src/main/java/org/apache/commons/dbutils/AsyncQueryRunner.java:563:52][0m
-  [34mIgnoring anonymous object declaration: (CtClassImpl) 13 @ src/main/java/org/apache/commons/dbutils/AsyncQueryRunner.java:563:57[0m
-  [34mUnused type args: [T][0m
-  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
-  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
-  [34mIgnoring method of an anonymous declaring type: (CtMethodImpl) call @ src/main/java/org/apache/commons/dbutils/AsyncQueryRunner.java:566:22 in (CtClassImpl) 13 @ src/main/java/org/apache/commons/dbutils/AsyncQueryRunner.java:563:57[0m
-  [34mUnused type args: [T][0m
-  [34mUnused type args: [T][0m
-  [34mUnused type args: [T][0m
-  [34mUnused type args: [T][0m
-  [34mUnused type args: [T][0m
-  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
-  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
-  [34mUnused type args: [T][0m
-  [34mUnused type args: [T][0m
-  [34mUnused type args: [T][0m
-  [34mUnused type args: [T][0m
-  [34mUnused type args: [T][0m
-  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
-  [34mUnused type args: [T][0m
-  [34mUnused type args: [T][0m
-  [34mUnused type args: [T][0m
-  [34mUnused type args: [T][0m
-  [34mUnused type args: [T][0m
-  [34mUnused type args: [T][0m
-  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
-  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
-  [34mUnused type args: [T @ src/main/java/org/apache/commons/dbutils/QueryRunner.java:310:22][0m
-  [34mUnused type args: [T][0m
-  [34mUnused type args: [T][0m
-  [34mUnused type args: [T][0m
-  [34mUnused type args: [T][0m
-  [34mUnused type args: [T][0m
-  [34mUnused type args: [T][0m
-  [34mUnused type args: [T][0m
-  [34mUnused type args: [T][0m
-  [34mUnused type args: [T][0m
-  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
-  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
-  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
-  [34mUnused type args: [T][0m
-  [34mUnused type args: [T][0m
-  [34mUnused type args: [T][0m
-  [34mUnused type args: [T][0m
-  [34mUnused type args: [T][0m
-  [34mUnused type args: [T][0m
-  [34mUnused type args: [T][0m
-  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
-  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
-  [34mUnused type args: [? @ src/main/java/org/apache/commons/dbutils/BasicRowProcessor.java:251:28, ? @ src/main/java/org/apache/commons/dbutils/BasicRowProcessor.java:251:46][0m
-  [34mUnused type args: [?, ?][0m
-  [34mUnused type args: [java.util.Map$Entry][0m
-  [34mUnused type args: [?, ?][0m
-  [34mUnused type args: [?, ?][0m
-  [34mUnused type args: [?, ?][0m
-  [34mUnused type args: [T][0m
-  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
-  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
-  [34mUnused type args: [T][0m
-  [34mUnused type args: [T][0m
-  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
-  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
-  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
-  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
-  [34mUnused type args: [T][0m
-  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
-  [34mUnused type args: [java.lang.Integer][0m
-  [34mUnused type args: [java.lang.Integer][0m
-  [34mUnused type args: [T][0m
-  [34mIgnoring anonymous type: (CtTypeReferenceImpl) org.apache.commons.dbutils.AsyncQueryRunner$11[0m
-  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
-  [34mIgnoring anonymous type: (CtTypeReferenceImpl) org.apache.commons.dbutils.AsyncQueryRunner$11[0m
-  [34mUnused type args: [java.lang.Integer @ src/main/java/org/apache/commons/dbutils/AsyncQueryRunner.java:522:52][0m
-  [34mIgnoring anonymous object declaration: (CtClassImpl) 11 @ src/main/java/org/apache/commons/dbutils/AsyncQueryRunner.java:522:63[0m
-  [34mUnused type args: [java.lang.Integer][0m
-  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
-  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
-  [34mIgnoring method of an anonymous declaring type: (CtMethodImpl) call @ src/main/java/org/apache/commons/dbutils/AsyncQueryRunner.java:525:28 in (CtClassImpl) 11 @ src/main/java/org/apache/commons/dbutils/AsyncQueryRunner.java:522:63[0m
-  [34mUnused type args: [T][0m
-  [34mUnused type args: [T][0m
-  [34mUnused type args: [T][0m
-  [34mUnused type args: [T][0m
-  [34mUnused type args: [T][0m
-  [34mUnused type args: [T][0m
-  [34mIgnoring anonymous type: (CtTypeReferenceImpl) org.apache.commons.dbutils.AsyncQueryRunner$5[0m
-  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
-  [34mIgnoring anonymous type: (CtTypeReferenceImpl) org.apache.commons.dbutils.AsyncQueryRunner$5[0m
-  [34mUnused type args: [T @ src/main/java/org/apache/commons/dbutils/AsyncQueryRunner.java:335:52][0m
-  [34mIgnoring anonymous object declaration: (CtClassImpl) 5 @ src/main/java/org/apache/commons/dbutils/AsyncQueryRunner.java:335:57[0m
-  [34mUnused type args: [T][0m
-  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
-  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
-  [34mIgnoring method of an anonymous declaring type: (CtMethodImpl) call @ src/main/java/org/apache/commons/dbutils/AsyncQueryRunner.java:338:22 in (CtClassImpl) 5 @ src/main/java/org/apache/commons/dbutils/AsyncQueryRunner.java:335:57[0m
-  [34mUnused type args: [T][0m
-  [34mUnused type args: [T][0m
-  [34mUnused type args: [T][0m
-  [34mUnused type args: [T][0m
-  [34mUnused type args: [?][0m
-  [34mUnused type args: [?][0m
-  [34mUnused type args: [T][0m
-  [34mUnused type args: [T][0m
   [34mUnused type args: [T][0m
   [34mUnused type args: [T][0m
   [34mUnused type args: [T][0m
@@ -706,61 +344,9 @@ Init pending package org.apache.commons.dbutils.wrappers
   [34mUnused type args: [T][0m
   [34mUnused type args: [T][0m
   [34mUnused type args: [T][0m
-  [34mUnused type args: [T][0m
-  [34mUnused type args: [T][0m
-  [34mUnused type args: [T][0m
-  [34mUnused type args: [T][0m
-  [34mUnused type args: [T][0m
-  [34mUnused type args: [T][0m
-  [34mIgnoring anonymous type: (CtTypeReferenceImpl) org.apache.commons.dbutils.AsyncQueryRunner$17[0m
-  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
-  [34mIgnoring anonymous type: (CtTypeReferenceImpl) org.apache.commons.dbutils.AsyncQueryRunner$17[0m
-  [34mUnused type args: [T @ src/main/java/org/apache/commons/dbutils/AsyncQueryRunner.java:632:52][0m
-  [34mIgnoring anonymous object declaration: (CtClassImpl) 17 @ src/main/java/org/apache/commons/dbutils/AsyncQueryRunner.java:632:57[0m
-  [34mUnused type args: [T][0m
-  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
-  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
-  [34mIgnoring method of an anonymous declaring type: (CtMethodImpl) call @ src/main/java/org/apache/commons/dbutils/AsyncQueryRunner.java:635:22 in (CtClassImpl) 17 @ src/main/java/org/apache/commons/dbutils/AsyncQueryRunner.java:632:57[0m
-  [34mUnused type args: [T][0m
-  [34mUnused type args: [T][0m
-  [34mUnused type args: [T][0m
-  [34mUnused type args: [? @ src/main/java/org/apache/commons/dbutils/DbUtils.java:206:19][0m
-  [34mUnused type args: [?][0m
-  [34mSkipping selection with no field declaration: (CtFieldReferenceImpl) class[0m
-  [34mSkipping selection with no field declaration: (CtFieldReferenceImpl) class[0m
-  [34mUnused type args: [?][0m
-  [34mUnused type args: [?][0m
-  [34mUnused type args: [java.sql.Driver @ src/main/java/org/apache/commons/dbutils/DbUtils.java:213:19][0m
-  [34mUnused type args: [java.sql.Driver @ src/main/java/org/apache/commons/dbutils/DbUtils.java:213:48][0m
-  [34mUnused type args: [?][0m
-  [34mUnused type args: [java.sql.Driver @ src/main/java/org/apache/commons/dbutils/DbUtils.java:214:25][0m
-  [34mUnused type args: [java.sql.Driver][0m
-  [34mUnused type args: [java.sql.Driver][0m
-  [34mUnused type args: [?][0m
-  [34mUnused type args: [java.sql.Driver][0m
-  [34mUnused type args: [java.sql.Driver][0m
-  [34mUnused type args: [java.sql.Driver][0m
-  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
-  [34mUnused type args: [java.sql.Driver][0m
   [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
   [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
   [34mUnused type args: [T][0m
-  [34mUnused type args: [T][0m
-  [34mUnused type args: [T][0m
-  [34mUnused type args: [T @ src/main/java/org/apache/commons/dbutils/BeanProcessor.java:191:14][0m
-  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
-  [34mUnused type args: [T @ src/main/java/org/apache/commons/dbutils/BeanProcessor.java:191:41][0m
-  [34mUnused type args: [T][0m
-  [34mUnused type args: [?][0m
-  [34mUnused type args: [?][0m
-  [34mUnused type args: [T][0m
-  [34mUnused type args: [?][0m
-  [34mUnused type args: [T][0m
-  [34mUnused type args: [?][0m
-  [34mUnused type args: [T][0m
-  [34mUnused type args: [T][0m
-  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
-  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
   [34mUnused type args: [T][0m
   [34mUnused type args: [T][0m
   [34mUnused type args: [T][0m
@@ -771,8 +357,40 @@ Init pending package org.apache.commons.dbutils.wrappers
   [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
   [34mUnused type args: [T][0m
   [34mUnused type args: [T][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [T][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
   [34mUnused type args: [T][0m
   [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [T][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [T][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [T][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
   [34mUnused type args: [T][0m
   [34mUnused type args: [T][0m
   [34mUnused type args: [T][0m
@@ -784,274 +402,27 @@ Init pending package org.apache.commons.dbutils.wrappers
   [34mUnused type args: [T][0m
   [34mUnused type args: [?][0m
   [34mUnused type args: [?][0m
-  [34mUnused type args: [?][0m
-  [34mUnused type args: [?][0m
-  [34mUnused type args: [?][0m
-  [34mUnused type args: [java.lang.Integer][0m
-  [34mUnused type args: [java.lang.Integer][0m
-  [34mUnused type args: [T][0m
-  [34mIgnoring anonymous type: (CtTypeReferenceImpl) org.apache.commons.dbutils.AsyncQueryRunner$8[0m
-  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
-  [34mIgnoring anonymous type: (CtTypeReferenceImpl) org.apache.commons.dbutils.AsyncQueryRunner$8[0m
-  [34mUnused type args: [java.lang.Integer @ src/main/java/org/apache/commons/dbutils/AsyncQueryRunner.java:457:52][0m
-  [34mIgnoring anonymous object declaration: (CtClassImpl) 8 @ src/main/java/org/apache/commons/dbutils/AsyncQueryRunner.java:457:63[0m
-  [34mUnused type args: [java.lang.Integer][0m
-  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
-  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
-  [34mIgnoring method of an anonymous declaring type: (CtMethodImpl) call @ src/main/java/org/apache/commons/dbutils/AsyncQueryRunner.java:460:28 in (CtClassImpl) 8 @ src/main/java/org/apache/commons/dbutils/AsyncQueryRunner.java:457:63[0m
-  [34mUnused type args: [T][0m
-  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
-  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
-  [34mIgnoring anonymous type: (CtTypeReferenceImpl) org.apache.commons.dbutils.ResultSetIterator$1[0m
-  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
-  [34mIgnoring anonymous type: (CtTypeReferenceImpl) org.apache.commons.dbutils.ResultSetIterator$1[0m
-  [34mUnused type args: [java.lang.Object[] @ src/main/java/org/apache/commons/dbutils/ResultSetIterator.java:131:29][0m
-  [34mIgnoring anonymous object declaration: (CtClassImpl) 1 @ src/main/java/org/apache/commons/dbutils/ResultSetIterator.java:131:41[0m
-  [34mUnused type args: [java.lang.Object[]][0m
-  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
-  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
-  [34mIgnoring method of an anonymous declaring type: (CtMethodImpl) iterator @ src/main/java/org/apache/commons/dbutils/ResultSetIterator.java:134:39 in (CtClassImpl) 1 @ src/main/java/org/apache/commons/dbutils/ResultSetIterator.java:131:41[0m
-  [34mUnused type args: [java.lang.Object[] @ src/main/java/org/apache/commons/dbutils/ResultSetIterator.java:134:29][0m
   [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
   [34mUnused type args: [T][0m
-  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
-  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
-  [34mUnused type args: [T][0m
-  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
-  [34mUnused type args: [T][0m
-  [34mUnused type args: [T][0m
-  [34mUnused type args: [T][0m
-  [34mUnused type args: [T][0m
-  [34mUnused type args: [java.lang.String, java.lang.String][0m
-  [34mUnused type args: [T][0m
-  [34mUnused type args: [T][0m
-  [34mUnused type args: [T][0m
-  [34mUnused type args: [T][0m
-  [34mUnused type args: [T][0m
-  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
-  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
-  [34mUnused type args: [T][0m
-  [34mUnused type args: [T][0m
-  [34mUnused type args: [T][0m
-  [34mUnused type args: [T][0m
-  [34mUnused type args: [java.lang.String @ src/main/java/org/apache/commons/dbutils/BasicRowProcessor.java:160:13, java.lang.Object @ src/main/java/org/apache/commons/dbutils/BasicRowProcessor.java:160:21][0m
-  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
-  [34mUnused type args: [java.lang.String, java.lang.Object][0m
-  [34mUnused type args: [java.lang.String, java.lang.Object][0m
-  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
-  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
-  [34mUnused type args: [T][0m
-  [34mUnused type args: [T][0m
-  [34mUnused type args: [T][0m
-  [34mUnused type args: [T][0m
-  [34mUnused type args: [T][0m
-  [34mUnused type args: [T][0m
-  [34mUnused type args: [T][0m
-  [34mIgnoring anonymous type: (CtTypeReferenceImpl) org.apache.commons.dbutils.AsyncQueryRunner$6[0m
-  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
-  [34mIgnoring anonymous type: (CtTypeReferenceImpl) org.apache.commons.dbutils.AsyncQueryRunner$6[0m
-  [34mUnused type args: [T @ src/main/java/org/apache/commons/dbutils/AsyncQueryRunner.java:358:52][0m
-  [34mIgnoring anonymous object declaration: (CtClassImpl) 6 @ src/main/java/org/apache/commons/dbutils/AsyncQueryRunner.java:358:57[0m
-  [34mUnused type args: [T][0m
-  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
-  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
-  [34mIgnoring method of an anonymous declaring type: (CtMethodImpl) call @ src/main/java/org/apache/commons/dbutils/AsyncQueryRunner.java:361:22 in (CtClassImpl) 6 @ src/main/java/org/apache/commons/dbutils/AsyncQueryRunner.java:358:57[0m
-  [34mUnused type args: [T][0m
-  [34mUnused type args: [T][0m
-  [34mUnused type args: [T][0m
-  [34mUnused type args: [java.lang.Integer][0m
-  [34mUnused type args: [java.lang.Integer][0m
-  [34mUnused type args: [T][0m
-  [34mIgnoring anonymous type: (CtTypeReferenceImpl) org.apache.commons.dbutils.AsyncQueryRunner$12[0m
-  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
-  [34mIgnoring anonymous type: (CtTypeReferenceImpl) org.apache.commons.dbutils.AsyncQueryRunner$12[0m
-  [34mUnused type args: [java.lang.Integer @ src/main/java/org/apache/commons/dbutils/AsyncQueryRunner.java:545:52][0m
-  [34mIgnoring anonymous object declaration: (CtClassImpl) 12 @ src/main/java/org/apache/commons/dbutils/AsyncQueryRunner.java:545:63[0m
-  [34mUnused type args: [java.lang.Integer][0m
-  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
-  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
-  [34mIgnoring method of an anonymous declaring type: (CtMethodImpl) call @ src/main/java/org/apache/commons/dbutils/AsyncQueryRunner.java:548:28 in (CtClassImpl) 12 @ src/main/java/org/apache/commons/dbutils/AsyncQueryRunner.java:545:63[0m
-  [34mUnused type args: [T][0m
-  [34mUnused type args: [?][0m
-  [34mUnused type args: [?][0m
-  [34mUnused type args: [T][0m
-  [34mUnused type args: [?][0m
-  [34mUnused type args: [?][0m
-  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
-  [34mUnused type args: [?][0m
-  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
-  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
-  [34mUnused type args: [?][0m
   [34mUnused type args: [?][0m
   [34mUnused type args: [?][0m
   [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
   [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
   [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
-  [34mUnused type args: [T][0m
-  [34mUnused type args: [T][0m
-  [34mUnused type args: [T][0m
-  [34mUnused type args: [T][0m
   [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
-  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
-  [34mUnused type args: [java.lang.String, java.lang.String][0m
-  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
-  [34mUnused type args: [java.lang.String, java.lang.String][0m
-  [34mUnused type args: [java.lang.String, java.lang.String][0m
-  [34mUnused type args: [java.lang.String, java.lang.String][0m
-  [34mUnused type args: [T][0m
-  [34mUnused type args: [T][0m
-  [34mUnused type args: [T][0m
-  [34mUnused type args: [java.lang.Integer][0m
-  [34mUnused type args: [java.lang.Integer][0m
-  [34mUnused type args: [T][0m
-  [34mIgnoring anonymous type: (CtTypeReferenceImpl) org.apache.commons.dbutils.AsyncQueryRunner$9[0m
-  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
-  [34mIgnoring anonymous type: (CtTypeReferenceImpl) org.apache.commons.dbutils.AsyncQueryRunner$9[0m
-  [34mUnused type args: [java.lang.Integer @ src/main/java/org/apache/commons/dbutils/AsyncQueryRunner.java:477:52][0m
-  [34mIgnoring anonymous object declaration: (CtClassImpl) 9 @ src/main/java/org/apache/commons/dbutils/AsyncQueryRunner.java:477:63[0m
-  [34mUnused type args: [java.lang.Integer][0m
-  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
-  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
-  [34mIgnoring method of an anonymous declaring type: (CtMethodImpl) call @ src/main/java/org/apache/commons/dbutils/AsyncQueryRunner.java:480:28 in (CtClassImpl) 9 @ src/main/java/org/apache/commons/dbutils/AsyncQueryRunner.java:477:63[0m
-  [34mUnused type args: [T][0m
-  [34mUnused type args: [java.lang.String, java.lang.Class][0m
-  [34mUnused type args: [?][0m
-  [34mUnused type args: [java.lang.String, java.lang.Class][0m
-  [34mUnused type args: [?][0m
-  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
-  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
-  [34mUnused type args: [T][0m
-  [34mUnused type args: [T][0m
-  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
-  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
-  [34mUnused type args: [T][0m
-  [34mUnused type args: [T][0m
-  [34mUnused type args: [T][0m
-  [34mUnused type args: [?][0m
-  [34mUnused type args: [?][0m
-  [34mUnused type args: [T][0m
-  [34mUnused type args: [T][0m
-  [34mUnused type args: [int[]][0m
-  [34mUnused type args: [int[]][0m
-  [34mUnused type args: [T][0m
-  [34mIgnoring anonymous type: (CtTypeReferenceImpl) org.apache.commons.dbutils.AsyncQueryRunner$2[0m
-  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
-  [34mIgnoring anonymous type: (CtTypeReferenceImpl) org.apache.commons.dbutils.AsyncQueryRunner$2[0m
-  [34mUnused type args: [int[] @ src/main/java/org/apache/commons/dbutils/AsyncQueryRunner.java:201:52][0m
-  [34mIgnoring anonymous object declaration: (CtClassImpl) 2 @ src/main/java/org/apache/commons/dbutils/AsyncQueryRunner.java:201:61[0m
-  [34mUnused type args: [int[]][0m
-  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
-  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
-  [34mIgnoring method of an anonymous declaring type: (CtMethodImpl) call @ src/main/java/org/apache/commons/dbutils/AsyncQueryRunner.java:204:26 in (CtClassImpl) 2 @ src/main/java/org/apache/commons/dbutils/AsyncQueryRunner.java:201:61[0m
-  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
-  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
-  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
-  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
-  [34mUnused type args: [java.lang.Integer][0m
-  [34mUnused type args: [java.lang.Integer][0m
-  [34mUnused type args: [T][0m
-  [34mIgnoring anonymous type: (CtTypeReferenceImpl) org.apache.commons.dbutils.AsyncQueryRunner$7[0m
-  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
-  [34mIgnoring anonymous type: (CtTypeReferenceImpl) org.apache.commons.dbutils.AsyncQueryRunner$7[0m
-  [34mUnused type args: [java.lang.Integer @ src/main/java/org/apache/commons/dbutils/AsyncQueryRunner.java:436:52][0m
-  [34mIgnoring anonymous object declaration: (CtClassImpl) 7 @ src/main/java/org/apache/commons/dbutils/AsyncQueryRunner.java:436:63[0m
-  [34mUnused type args: [java.lang.Integer][0m
-  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
-  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
-  [34mIgnoring method of an anonymous declaring type: (CtMethodImpl) call @ src/main/java/org/apache/commons/dbutils/AsyncQueryRunner.java:439:28 in (CtClassImpl) 7 @ src/main/java/org/apache/commons/dbutils/AsyncQueryRunner.java:436:63[0m
   [34mUnused type args: [java.lang.String, java.lang.String][0m
   [34mUnused type args: [java.lang.String, java.lang.Object][0m
-  [34mUnused type args: [java.lang.String, java.lang.Object][0m
-  [34mUnused type args: [T @ src/main/java/org/apache/commons/dbutils/QueryRunner.java:266:22][0m
-  [34mUnused type args: [T][0m
-  [34mUnused type args: [T][0m
-  [34mUnused type args: [T][0m
-  [34mUnused type args: [T][0m
-  [34mUnused type args: [T @ src/main/java/org/apache/commons/dbutils/QueryRunner.java:329:22][0m
-  [34mUnused type args: [T][0m
-  [34mUnused type args: [T][0m
   [34mUnused type args: [?][0m
-  [34mUnused type args: [T][0m
+  [34mUnused type args: [org.apache.commons.dbutils.ColumnHandler][0m
   [34mUnused type args: [?][0m
-  [34mUnused type args: [T][0m
-  [34mUnused type args: [java.lang.String, java.lang.String][0m
-  [34mUnused type args: [java.lang.String, java.lang.Object][0m
-  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
-  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
-  [34mUnused type args: [T][0m
   [34mUnused type args: [?][0m
-  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
-  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
-  [34mUnused type args: [java.lang.String @ src/main/java/org/apache/commons/dbutils/QueryLoader.java:133:17, java.lang.String @ src/main/java/org/apache/commons/dbutils/QueryLoader.java:133:25][0m
-  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
-  [34mUnused type args: [?, ?][0m
-  [34mUnused type args: [java.lang.String, java.lang.String][0m
-  [34mUnused type args: [T][0m
-  [34mUnused type args: [T][0m
-  [34mUnused type args: [T][0m
-  [34mUnused type args: [T][0m
-  [34mIgnoring anonymous type: (CtTypeReferenceImpl) org.apache.commons.dbutils.AsyncQueryRunner$14[0m
-  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
-  [34mIgnoring anonymous type: (CtTypeReferenceImpl) org.apache.commons.dbutils.AsyncQueryRunner$14[0m
-  [34mUnused type args: [T @ src/main/java/org/apache/commons/dbutils/AsyncQueryRunner.java:581:52][0m
-  [34mIgnoring anonymous object declaration: (CtClassImpl) 14 @ src/main/java/org/apache/commons/dbutils/AsyncQueryRunner.java:581:57[0m
-  [34mUnused type args: [T][0m
-  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
-  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
-  [34mIgnoring method of an anonymous declaring type: (CtMethodImpl) call @ src/main/java/org/apache/commons/dbutils/AsyncQueryRunner.java:584:22 in (CtClassImpl) 14 @ src/main/java/org/apache/commons/dbutils/AsyncQueryRunner.java:581:57[0m
-  [34mUnused type args: [T][0m
-  [34mUnused type args: [T][0m
-  [34mUnused type args: [T][0m
-  [34mUnused type args: [T][0m
-  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
-  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
-  [34mUnused type args: [T][0m
-  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
-  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
-  [34mUnused type args: [T][0m
-  [34mUnused type args: [T][0m
-  [34mUnused type args: [T][0m
-  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
-  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [T @ src/main/java/org/apache/commons/dbutils/QueryRunner.java:287:22][0m
   [34mUnused type args: [T][0m
   [34mUnused type args: [T][0m
   [34mUnused type args: [T][0m
   [34mUnused type args: [T][0m
   [34mUnused type args: [T][0m
   [34mUnused type args: [T][0m
-  [34mUnused type args: [T][0m
-  [34mUnused type args: [T][0m
-  [34mUnused type args: [T][0m
-  [34mUnused type args: [T][0m
-  [34mUnused type args: [T @ src/main/java/org/apache/commons/dbutils/QueryRunner.java:252:22][0m
-  [34mUnused type args: [T][0m
-  [34mUnused type args: [T][0m
-  [34mUnused type args: [java.lang.String @ src/main/java/org/apache/commons/dbutils/QueryLoader.java:85:13, java.lang.String @ src/main/java/org/apache/commons/dbutils/QueryLoader.java:85:21][0m
-  [34mUnused type args: [java.lang.String, java.util.Map][0m
-  [34mUnused type args: [java.lang.String, java.lang.String][0m
-  [34mUnused type args: [java.lang.String, java.lang.String][0m
-  [34mUnused type args: [java.lang.String, java.lang.String][0m
-  [34mUnused type args: [java.lang.String, java.lang.String][0m
-  [34mUnused type args: [java.lang.String, java.lang.String][0m
-  [34mUnused type args: [java.lang.String, java.lang.String][0m
-  [34mUnused type args: [java.lang.String, java.util.Map][0m
-  [34mUnused type args: [java.lang.String, java.lang.String][0m
-  [34mUnused type args: [java.lang.String, java.lang.String][0m
-  [34mUnused type args: [java.lang.String, java.lang.String][0m
-  [34mUnused type args: [java.lang.String, java.lang.String][0m
-  [34mUnused type args: [T][0m
-  [34mUnused type args: [T][0m
-  [34mUnused type args: [T][0m
-  [34mUnused type args: [T][0m
-  [34mIgnoring anonymous type: (CtTypeReferenceImpl) org.apache.commons.dbutils.AsyncQueryRunner$16[0m
-  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
-  [34mIgnoring anonymous type: (CtTypeReferenceImpl) org.apache.commons.dbutils.AsyncQueryRunner$16[0m
-  [34mUnused type args: [T @ src/main/java/org/apache/commons/dbutils/AsyncQueryRunner.java:615:52][0m
-  [34mIgnoring anonymous object declaration: (CtClassImpl) 16 @ src/main/java/org/apache/commons/dbutils/AsyncQueryRunner.java:615:57[0m
-  [34mUnused type args: [T][0m
-  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
-  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
-  [34mIgnoring method of an anonymous declaring type: (CtMethodImpl) call @ src/main/java/org/apache/commons/dbutils/AsyncQueryRunner.java:618:22 in (CtClassImpl) 16 @ src/main/java/org/apache/commons/dbutils/AsyncQueryRunner.java:615:57[0m
   [34mUnused type args: [T][0m
   [34mUnused type args: [T][0m
   [34mUnused type args: [T][0m
@@ -1071,10 +442,12 @@ Init pending package org.apache.commons.dbutils.wrappers
   [34mUnused type args: [T][0m
   [34mUnused type args: [T][0m
   [34mUnused type args: [T][0m
-  [34mUnused type args: [T][0m
-  [34mUnused type args: [T][0m
   [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
   [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
   [34mUnused type args: [T][0m
   [34mUnused type args: [T][0m
   [34mUnused type args: [T][0m
@@ -1082,21 +455,316 @@ Init pending package org.apache.commons.dbutils.wrappers
   [34mUnused type args: [T @ src/main/java/org/apache/commons/dbutils/QueryRunner.java:220:22][0m
   [34mUnused type args: [T][0m
   [34mUnused type args: [T][0m
-  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
   [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mIgnoring anonymous type: (CtTypeReferenceImpl) org.apache.commons.dbutils.AsyncQueryRunner$17[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring anonymous type: (CtTypeReferenceImpl) org.apache.commons.dbutils.AsyncQueryRunner$17[0m
+  [34mUnused type args: [T @ src/main/java/org/apache/commons/dbutils/AsyncQueryRunner.java:632:52][0m
+  [34mIgnoring anonymous object declaration: (CtClassImpl) 17 @ src/main/java/org/apache/commons/dbutils/AsyncQueryRunner.java:632:57[0m
+  [34mUnused type args: [T][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring method of an anonymous declaring type: (CtMethodImpl) call @ src/main/java/org/apache/commons/dbutils/AsyncQueryRunner.java:635:22 in (CtClassImpl) 17 @ src/main/java/org/apache/commons/dbutils/AsyncQueryRunner.java:632:57[0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [java.lang.String @ src/main/java/org/apache/commons/dbutils/QueryLoader.java:85:13, java.lang.String @ src/main/java/org/apache/commons/dbutils/QueryLoader.java:85:21][0m
+  [34mUnused type args: [java.lang.String, java.util.Map][0m
+  [34mUnused type args: [java.lang.String, java.lang.String][0m
+  [34mUnused type args: [java.lang.String, java.lang.String][0m
+  [34mUnused type args: [java.lang.String, java.lang.String][0m
+  [34mUnused type args: [java.lang.String, java.lang.String][0m
+  [34mUnused type args: [java.lang.String, java.lang.String][0m
+  [34mUnused type args: [java.lang.String, java.lang.String][0m
+  [34mUnused type args: [java.lang.String, java.util.Map][0m
+  [34mUnused type args: [java.lang.String, java.lang.String][0m
+  [34mUnused type args: [java.lang.String, java.lang.String][0m
+  [34mUnused type args: [java.lang.String, java.lang.String][0m
+  [34mUnused type args: [java.lang.String, java.lang.String][0m
   [34mUnused type args: [T][0m
   [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
   [34mUnused type args: [?][0m
   [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
   [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
   [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [java.lang.Integer][0m
+  [34mUnused type args: [java.lang.Integer][0m
+  [34mUnused type args: [T][0m
+  [34mIgnoring anonymous type: (CtTypeReferenceImpl) org.apache.commons.dbutils.AsyncQueryRunner$8[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring anonymous type: (CtTypeReferenceImpl) org.apache.commons.dbutils.AsyncQueryRunner$8[0m
+  [34mUnused type args: [java.lang.Integer @ src/main/java/org/apache/commons/dbutils/AsyncQueryRunner.java:457:52][0m
+  [34mIgnoring anonymous object declaration: (CtClassImpl) 8 @ src/main/java/org/apache/commons/dbutils/AsyncQueryRunner.java:457:63[0m
+  [34mUnused type args: [java.lang.Integer][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring method of an anonymous declaring type: (CtMethodImpl) call @ src/main/java/org/apache/commons/dbutils/AsyncQueryRunner.java:460:28 in (CtClassImpl) 8 @ src/main/java/org/apache/commons/dbutils/AsyncQueryRunner.java:457:63[0m
+  [34mUnused type args: [T @ src/main/java/org/apache/commons/dbutils/QueryRunner.java:252:22][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mSkipping selection with no field declaration: (CtFieldReferenceImpl) class[0m
+  [34mSkipping selection with no field declaration: (CtFieldReferenceImpl) class[0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T @ src/main/java/org/apache/commons/dbutils/QueryRunner.java:347:22][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [T][0m
   [34mUnused type args: [T][0m
   [34mUnused type args: [T][0m
   [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
   [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [java.lang.String, java.util.Map][0m
+  [34mUnused type args: [java.lang.String, java.lang.String][0m
+  [34mUnused type args: [java.lang.String, java.lang.String][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [T][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T @ src/main/java/org/apache/commons/dbutils/QueryRunner.java:266:22][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [?][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [java.lang.String @ src/main/java/org/apache/commons/dbutils/QueryLoader.java:133:17, java.lang.String @ src/main/java/org/apache/commons/dbutils/QueryLoader.java:133:25][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [?, ?][0m
+  [34mUnused type args: [java.lang.String, java.lang.String][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mIgnoring anonymous type: (CtTypeReferenceImpl) org.apache.commons.dbutils.AsyncQueryRunner$14[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring anonymous type: (CtTypeReferenceImpl) org.apache.commons.dbutils.AsyncQueryRunner$14[0m
+  [34mUnused type args: [T @ src/main/java/org/apache/commons/dbutils/AsyncQueryRunner.java:581:52][0m
+  [34mIgnoring anonymous object declaration: (CtClassImpl) 14 @ src/main/java/org/apache/commons/dbutils/AsyncQueryRunner.java:581:57[0m
+  [34mUnused type args: [T][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring method of an anonymous declaring type: (CtMethodImpl) call @ src/main/java/org/apache/commons/dbutils/AsyncQueryRunner.java:584:22 in (CtClassImpl) 14 @ src/main/java/org/apache/commons/dbutils/AsyncQueryRunner.java:581:57[0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mIgnoring anonymous type: (CtTypeReferenceImpl) org.apache.commons.dbutils.ResultSetIterator$1[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring anonymous type: (CtTypeReferenceImpl) org.apache.commons.dbutils.ResultSetIterator$1[0m
+  [34mUnused type args: [java.lang.Object[] @ src/main/java/org/apache/commons/dbutils/ResultSetIterator.java:131:29][0m
+  [34mIgnoring anonymous object declaration: (CtClassImpl) 1 @ src/main/java/org/apache/commons/dbutils/ResultSetIterator.java:131:41[0m
+  [34mUnused type args: [java.lang.Object[]][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring method of an anonymous declaring type: (CtMethodImpl) iterator @ src/main/java/org/apache/commons/dbutils/ResultSetIterator.java:134:39 in (CtClassImpl) 1 @ src/main/java/org/apache/commons/dbutils/ResultSetIterator.java:131:41[0m
+  [34mUnused type args: [java.lang.Object[] @ src/main/java/org/apache/commons/dbutils/ResultSetIterator.java:134:29][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mIgnoring anonymous type: (CtTypeReferenceImpl) org.apache.commons.dbutils.AsyncQueryRunner$6[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring anonymous type: (CtTypeReferenceImpl) org.apache.commons.dbutils.AsyncQueryRunner$6[0m
+  [34mUnused type args: [T @ src/main/java/org/apache/commons/dbutils/AsyncQueryRunner.java:358:52][0m
+  [34mIgnoring anonymous object declaration: (CtClassImpl) 6 @ src/main/java/org/apache/commons/dbutils/AsyncQueryRunner.java:358:57[0m
+  [34mUnused type args: [T][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring method of an anonymous declaring type: (CtMethodImpl) call @ src/main/java/org/apache/commons/dbutils/AsyncQueryRunner.java:361:22 in (CtClassImpl) 6 @ src/main/java/org/apache/commons/dbutils/AsyncQueryRunner.java:358:57[0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [? @ src/main/java/org/apache/commons/dbutils/DbUtils.java:206:19][0m
+  [34mUnused type args: [?][0m
+  [34mSkipping selection with no field declaration: (CtFieldReferenceImpl) class[0m
+  [34mSkipping selection with no field declaration: (CtFieldReferenceImpl) class[0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [java.sql.Driver @ src/main/java/org/apache/commons/dbutils/DbUtils.java:213:19][0m
+  [34mUnused type args: [java.sql.Driver @ src/main/java/org/apache/commons/dbutils/DbUtils.java:213:48][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [java.sql.Driver @ src/main/java/org/apache/commons/dbutils/DbUtils.java:214:25][0m
+  [34mUnused type args: [java.sql.Driver][0m
+  [34mUnused type args: [java.sql.Driver][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [java.sql.Driver][0m
+  [34mUnused type args: [java.sql.Driver][0m
+  [34mUnused type args: [java.sql.Driver][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [java.sql.Driver][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [java.lang.Integer][0m
+  [34mUnused type args: [java.lang.Integer][0m
+  [34mUnused type args: [T][0m
+  [34mIgnoring anonymous type: (CtTypeReferenceImpl) org.apache.commons.dbutils.AsyncQueryRunner$12[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring anonymous type: (CtTypeReferenceImpl) org.apache.commons.dbutils.AsyncQueryRunner$12[0m
+  [34mUnused type args: [java.lang.Integer @ src/main/java/org/apache/commons/dbutils/AsyncQueryRunner.java:545:52][0m
+  [34mIgnoring anonymous object declaration: (CtClassImpl) 12 @ src/main/java/org/apache/commons/dbutils/AsyncQueryRunner.java:545:63[0m
+  [34mUnused type args: [java.lang.Integer][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring method of an anonymous declaring type: (CtMethodImpl) call @ src/main/java/org/apache/commons/dbutils/AsyncQueryRunner.java:548:28 in (CtClassImpl) 12 @ src/main/java/org/apache/commons/dbutils/AsyncQueryRunner.java:545:63[0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [T][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [java.lang.String, java.lang.String][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [java.lang.String, java.lang.String][0m
+  [34mUnused type args: [java.lang.String, java.lang.String][0m
+  [34mUnused type args: [java.lang.String, java.lang.String][0m
   [34mUnused type args: [T][0m
   [34mUnused type args: [T][0m
   [34mUnused type args: [T @ src/main/java/org/apache/commons/dbutils/QueryRunner.java:237:22][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [java.lang.String, java.lang.String][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [java.lang.String @ src/main/java/org/apache/commons/dbutils/BeanProcessor.java:102:26, java.lang.String @ src/main/java/org/apache/commons/dbutils/BeanProcessor.java:102:34][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [java.lang.String, java.lang.Class][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [java.lang.String, java.lang.Class][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [T][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [java.lang.Integer][0m
+  [34mUnused type args: [java.lang.Integer][0m
+  [34mUnused type args: [T][0m
+  [34mIgnoring anonymous type: (CtTypeReferenceImpl) org.apache.commons.dbutils.AsyncQueryRunner$10[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring anonymous type: (CtTypeReferenceImpl) org.apache.commons.dbutils.AsyncQueryRunner$10[0m
+  [34mUnused type args: [java.lang.Integer @ src/main/java/org/apache/commons/dbutils/AsyncQueryRunner.java:499:52][0m
+  [34mIgnoring anonymous object declaration: (CtClassImpl) 10 @ src/main/java/org/apache/commons/dbutils/AsyncQueryRunner.java:499:63[0m
+  [34mUnused type args: [java.lang.Integer][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring method of an anonymous declaring type: (CtMethodImpl) call @ src/main/java/org/apache/commons/dbutils/AsyncQueryRunner.java:502:28 in (CtClassImpl) 10 @ src/main/java/org/apache/commons/dbutils/AsyncQueryRunner.java:499:63[0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [java.lang.String, java.lang.String][0m
+  [34mUnused type args: [java.lang.String, java.lang.Object][0m
+  [34mUnused type args: [T][0m
   [34mUnused type args: [T][0m
   [34mUnused type args: [T][0m
   [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
@@ -1109,32 +777,124 @@ Init pending package org.apache.commons.dbutils.wrappers
   [34mUnused type args: [T][0m
   [34mUnused type args: [T][0m
   [34mUnused type args: [T][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [?][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [E][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [E][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
   [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
   [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
   [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [java.lang.String, java.lang.String][0m
+  [34mUnused type args: [java.lang.String, java.lang.Object][0m
+  [34mUnused type args: [java.lang.String, java.lang.Object][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [java.lang.String, java.lang.String][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [java.lang.Integer][0m
+  [34mUnused type args: [java.lang.Integer][0m
+  [34mUnused type args: [T][0m
+  [34mIgnoring anonymous type: (CtTypeReferenceImpl) org.apache.commons.dbutils.AsyncQueryRunner$9[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring anonymous type: (CtTypeReferenceImpl) org.apache.commons.dbutils.AsyncQueryRunner$9[0m
+  [34mUnused type args: [java.lang.Integer @ src/main/java/org/apache/commons/dbutils/AsyncQueryRunner.java:477:52][0m
+  [34mIgnoring anonymous object declaration: (CtClassImpl) 9 @ src/main/java/org/apache/commons/dbutils/AsyncQueryRunner.java:477:63[0m
+  [34mUnused type args: [java.lang.Integer][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring method of an anonymous declaring type: (CtMethodImpl) call @ src/main/java/org/apache/commons/dbutils/AsyncQueryRunner.java:480:28 in (CtClassImpl) 9 @ src/main/java/org/apache/commons/dbutils/AsyncQueryRunner.java:477:63[0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T @ src/main/java/org/apache/commons/dbutils/QueryRunner.java:329:22][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mIgnoring anonymous type: (CtTypeReferenceImpl) org.apache.commons.dbutils.AsyncQueryRunner$13[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring anonymous type: (CtTypeReferenceImpl) org.apache.commons.dbutils.AsyncQueryRunner$13[0m
+  [34mUnused type args: [T @ src/main/java/org/apache/commons/dbutils/AsyncQueryRunner.java:563:52][0m
+  [34mIgnoring anonymous object declaration: (CtClassImpl) 13 @ src/main/java/org/apache/commons/dbutils/AsyncQueryRunner.java:563:57[0m
+  [34mUnused type args: [T][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring method of an anonymous declaring type: (CtMethodImpl) call @ src/main/java/org/apache/commons/dbutils/AsyncQueryRunner.java:566:22 in (CtClassImpl) 13 @ src/main/java/org/apache/commons/dbutils/AsyncQueryRunner.java:563:57[0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [java.lang.Integer][0m
+  [34mUnused type args: [java.lang.Integer][0m
+  [34mUnused type args: [T][0m
+  [34mIgnoring anonymous type: (CtTypeReferenceImpl) org.apache.commons.dbutils.AsyncQueryRunner$11[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring anonymous type: (CtTypeReferenceImpl) org.apache.commons.dbutils.AsyncQueryRunner$11[0m
+  [34mUnused type args: [java.lang.Integer @ src/main/java/org/apache/commons/dbutils/AsyncQueryRunner.java:522:52][0m
+  [34mIgnoring anonymous object declaration: (CtClassImpl) 11 @ src/main/java/org/apache/commons/dbutils/AsyncQueryRunner.java:522:63[0m
+  [34mUnused type args: [java.lang.Integer][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring method of an anonymous declaring type: (CtMethodImpl) call @ src/main/java/org/apache/commons/dbutils/AsyncQueryRunner.java:525:28 in (CtClassImpl) 11 @ src/main/java/org/apache/commons/dbutils/AsyncQueryRunner.java:522:63[0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
   [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
   [34mUnused type args: [T][0m
   [34mUnused type args: [T][0m
   [34mUnused type args: [T][0m
-  [34mUnused type args: [T @ src/main/java/org/apache/commons/dbutils/QueryRunner.java:347:22][0m
   [34mUnused type args: [T][0m
   [34mUnused type args: [T][0m
-  [34mUnused type args: [T][0m
-  [34mUnused type args: [T][0m
-  [34mUnused type args: [T][0m
+  [34mIgnoring anonymous type: (CtTypeReferenceImpl) org.apache.commons.dbutils.AsyncQueryRunner$5[0m
   [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
-  [34mUnused type args: [T][0m
-  [34mUnused type args: [T][0m
-  [34mUnused type args: [T][0m
-  [34mUnused type args: [T][0m
-  [34mUnused type args: [T][0m
-  [34mUnused type args: [T][0m
-  [34mUnused type args: [T][0m
+  [34mIgnoring anonymous type: (CtTypeReferenceImpl) org.apache.commons.dbutils.AsyncQueryRunner$5[0m
+  [34mUnused type args: [T @ src/main/java/org/apache/commons/dbutils/AsyncQueryRunner.java:335:52][0m
+  [34mIgnoring anonymous object declaration: (CtClassImpl) 5 @ src/main/java/org/apache/commons/dbutils/AsyncQueryRunner.java:335:57[0m
   [34mUnused type args: [T][0m
   [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
   [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring method of an anonymous declaring type: (CtMethodImpl) call @ src/main/java/org/apache/commons/dbutils/AsyncQueryRunner.java:338:22 in (CtClassImpl) 5 @ src/main/java/org/apache/commons/dbutils/AsyncQueryRunner.java:335:57[0m
   [34mUnused type args: [T][0m
-  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
   [34mUnused type args: [T][0m
   [34mUnused type args: [T][0m
   [34mUnused type args: [T][0m
@@ -1154,7 +914,15 @@ Init pending package org.apache.commons.dbutils.wrappers
   [34mUnused type args: [T][0m
   [34mUnused type args: [T][0m
   [34mUnused type args: [T][0m
-  [34mUnused type args: [T @ src/main/java/org/apache/commons/dbutils/QueryRunner.java:287:22][0m
+  [34mIgnoring anonymous type: (CtTypeReferenceImpl) org.apache.commons.dbutils.AsyncQueryRunner$16[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring anonymous type: (CtTypeReferenceImpl) org.apache.commons.dbutils.AsyncQueryRunner$16[0m
+  [34mUnused type args: [T @ src/main/java/org/apache/commons/dbutils/AsyncQueryRunner.java:615:52][0m
+  [34mIgnoring anonymous object declaration: (CtClassImpl) 16 @ src/main/java/org/apache/commons/dbutils/AsyncQueryRunner.java:615:57[0m
+  [34mUnused type args: [T][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring method of an anonymous declaring type: (CtMethodImpl) call @ src/main/java/org/apache/commons/dbutils/AsyncQueryRunner.java:618:22 in (CtClassImpl) 16 @ src/main/java/org/apache/commons/dbutils/AsyncQueryRunner.java:615:57[0m
   [34mUnused type args: [T][0m
   [34mUnused type args: [T][0m
   [34mUnused type args: [T][0m
@@ -1164,6 +932,52 @@ Init pending package org.apache.commons.dbutils.wrappers
   [34mUnused type args: [T][0m
   [34mUnused type args: [T][0m
   [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [? @ src/main/java/org/apache/commons/dbutils/BeanProcessor.java:264:19][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [java.lang.Class, java.lang.Object][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [T][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mIgnoring anonymous type: (CtTypeReferenceImpl) org.apache.commons.dbutils.AsyncQueryRunner$15[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring anonymous type: (CtTypeReferenceImpl) org.apache.commons.dbutils.AsyncQueryRunner$15[0m
+  [34mUnused type args: [T @ src/main/java/org/apache/commons/dbutils/AsyncQueryRunner.java:598:52][0m
+  [34mIgnoring anonymous object declaration: (CtClassImpl) 15 @ src/main/java/org/apache/commons/dbutils/AsyncQueryRunner.java:598:57[0m
+  [34mUnused type args: [T][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring method of an anonymous declaring type: (CtMethodImpl) call @ src/main/java/org/apache/commons/dbutils/AsyncQueryRunner.java:601:22 in (CtClassImpl) 15 @ src/main/java/org/apache/commons/dbutils/AsyncQueryRunner.java:598:57[0m
   [34mUnused type args: [T][0m
   [34mUnused type args: [T][0m
   [34mUnused type args: [T][0m
@@ -1174,42 +988,228 @@ Init pending package org.apache.commons.dbutils.wrappers
   [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
   [34mUnused type args: [T][0m
   [34mUnused type args: [T][0m
-  [34mskipping default constructor: org.apache.commons.dbutils.handlers.properties.DatePropertyHandler()[0m
-  [34mskipping default constructor: org.apache.commons.dbutils.handlers.properties.StringEnumPropertyHandler()[0m
-  [34mUnused type args: [java.lang.Enum][0m
-  [34mUnused type args: [java.lang.Enum][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [int[]][0m
+  [34mUnused type args: [int[]][0m
+  [34mUnused type args: [T][0m
+  [34mIgnoring anonymous type: (CtTypeReferenceImpl) org.apache.commons.dbutils.AsyncQueryRunner$1[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring anonymous type: (CtTypeReferenceImpl) org.apache.commons.dbutils.AsyncQueryRunner$1[0m
+  [34mUnused type args: [int[] @ src/main/java/org/apache/commons/dbutils/AsyncQueryRunner.java:178:52][0m
+  [34mIgnoring anonymous object declaration: (CtClassImpl) 1 @ src/main/java/org/apache/commons/dbutils/AsyncQueryRunner.java:178:61[0m
+  [34mUnused type args: [int[]][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring method of an anonymous declaring type: (CtMethodImpl) call @ src/main/java/org/apache/commons/dbutils/AsyncQueryRunner.java:181:26 in (CtClassImpl) 1 @ src/main/java/org/apache/commons/dbutils/AsyncQueryRunner.java:178:61[0m
+  [34mUnused type args: [T @ src/main/java/org/apache/commons/dbutils/BeanProcessor.java:191:14][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [T @ src/main/java/org/apache/commons/dbutils/BeanProcessor.java:191:41][0m
   [34mUnused type args: [T][0m
   [34mUnused type args: [?][0m
-  [34mUnused type args: [java.lang.Enum][0m
   [34mUnused type args: [?][0m
-  [34mUnused type args: [U][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [java.lang.String @ src/main/java/org/apache/commons/dbutils/BasicRowProcessor.java:160:13, java.lang.Object @ src/main/java/org/apache/commons/dbutils/BasicRowProcessor.java:160:21][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [java.lang.String, java.lang.Object][0m
+  [34mUnused type args: [java.lang.String, java.lang.Object][0m
+  [34mUnused type args: [? @ src/main/java/org/apache/commons/dbutils/BasicRowProcessor.java:251:28, ? @ src/main/java/org/apache/commons/dbutils/BasicRowProcessor.java:251:46][0m
+  [34mUnused type args: [?, ?][0m
+  [34mUnused type args: [java.util.Map$Entry][0m
+  [34mUnused type args: [?, ?][0m
+  [34mUnused type args: [?, ?][0m
+  [34mUnused type args: [?, ?][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T @ src/main/java/org/apache/commons/dbutils/QueryRunner.java:310:22][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [int[]][0m
+  [34mUnused type args: [int[]][0m
+  [34mUnused type args: [T][0m
+  [34mIgnoring anonymous type: (CtTypeReferenceImpl) org.apache.commons.dbutils.AsyncQueryRunner$2[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring anonymous type: (CtTypeReferenceImpl) org.apache.commons.dbutils.AsyncQueryRunner$2[0m
+  [34mUnused type args: [int[] @ src/main/java/org/apache/commons/dbutils/AsyncQueryRunner.java:201:52][0m
+  [34mIgnoring anonymous object declaration: (CtClassImpl) 2 @ src/main/java/org/apache/commons/dbutils/AsyncQueryRunner.java:201:61[0m
+  [34mUnused type args: [int[]][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring method of an anonymous declaring type: (CtMethodImpl) call @ src/main/java/org/apache/commons/dbutils/AsyncQueryRunner.java:204:26 in (CtClassImpl) 2 @ src/main/java/org/apache/commons/dbutils/AsyncQueryRunner.java:201:61[0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [java.lang.String, java.lang.Class][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [java.lang.String, java.lang.Class][0m
+  [34mUnused type args: [?][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [T][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [T][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [T][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [T][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [java.lang.Integer][0m
+  [34mUnused type args: [java.lang.Integer][0m
+  [34mUnused type args: [T][0m
+  [34mIgnoring anonymous type: (CtTypeReferenceImpl) org.apache.commons.dbutils.AsyncQueryRunner$7[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring anonymous type: (CtTypeReferenceImpl) org.apache.commons.dbutils.AsyncQueryRunner$7[0m
+  [34mUnused type args: [java.lang.Integer @ src/main/java/org/apache/commons/dbutils/AsyncQueryRunner.java:436:52][0m
+  [34mIgnoring anonymous object declaration: (CtClassImpl) 7 @ src/main/java/org/apache/commons/dbutils/AsyncQueryRunner.java:436:63[0m
+  [34mUnused type args: [java.lang.Integer][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring method of an anonymous declaring type: (CtMethodImpl) call @ src/main/java/org/apache/commons/dbutils/AsyncQueryRunner.java:439:28 in (CtClassImpl) 7 @ src/main/java/org/apache/commons/dbutils/AsyncQueryRunner.java:436:63[0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mskipping default constructor: org.apache.commons.dbutils.handlers.columns.BooleanColumnHandler()[0m
+  [34mskipping default constructor: org.apache.commons.dbutils.handlers.columns.ByteColumnHandler()[0m
+  [34mskipping default constructor: org.apache.commons.dbutils.handlers.columns.DoubleColumnHandler()[0m
+  [34mskipping default constructor: org.apache.commons.dbutils.handlers.columns.FloatColumnHandler()[0m
+  [34mskipping default constructor: org.apache.commons.dbutils.handlers.columns.IntegerColumnHandler()[0m
+  [34mskipping default constructor: org.apache.commons.dbutils.handlers.columns.LongColumnHandler()[0m
+  [34mskipping default constructor: org.apache.commons.dbutils.handlers.columns.SQLXMLColumnHandler()[0m
+  [34mskipping default constructor: org.apache.commons.dbutils.handlers.columns.ShortColumnHandler()[0m
+  [34mskipping default constructor: org.apache.commons.dbutils.handlers.columns.StringColumnHandler()[0m
+  [34mskipping default constructor: org.apache.commons.dbutils.handlers.columns.TimestampColumnHandler()[0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [java.lang.Short][0m
+  [34mUnused type args: [?][0m
   [34mSkipping selection with no field declaration: (CtFieldReferenceImpl) class[0m
   [34mSkipping selection with no field declaration: (CtFieldReferenceImpl) class[0m
   [34mUnused type args: [?][0m
+  [34mSkipping selection with no field declaration: (CtFieldReferenceImpl) class[0m
+  [34mSkipping selection with no field declaration: (CtFieldReferenceImpl) class[0m
   [34mUnused type args: [?][0m
+  [34mUnused type args: [java.lang.Integer][0m
   [34mUnused type args: [?][0m
-  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
-  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
-  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
-[34mFinished process pending packages (4.169155s)[0m
+  [34mSkipping selection with no field declaration: (CtFieldReferenceImpl) class[0m
+  [34mSkipping selection with no field declaration: (CtFieldReferenceImpl) class[0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [java.lang.Boolean][0m
+  [34mUnused type args: [?][0m
+  [34mSkipping selection with no field declaration: (CtFieldReferenceImpl) class[0m
+  [34mSkipping selection with no field declaration: (CtFieldReferenceImpl) class[0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [java.lang.Long][0m
+  [34mUnused type args: [?][0m
+  [34mSkipping selection with no field declaration: (CtFieldReferenceImpl) class[0m
+  [34mSkipping selection with no field declaration: (CtFieldReferenceImpl) class[0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [java.lang.Float][0m
+  [34mUnused type args: [?][0m
+  [34mSkipping selection with no field declaration: (CtFieldReferenceImpl) class[0m
+  [34mSkipping selection with no field declaration: (CtFieldReferenceImpl) class[0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [java.lang.Byte][0m
+  [34mUnused type args: [?][0m
+  [34mSkipping selection with no field declaration: (CtFieldReferenceImpl) class[0m
+  [34mSkipping selection with no field declaration: (CtFieldReferenceImpl) class[0m
+  [34mUnused type args: [?][0m
+  [34mSkipping selection with no field declaration: (CtFieldReferenceImpl) class[0m
+  [34mSkipping selection with no field declaration: (CtFieldReferenceImpl) class[0m
+  [34mUnused type args: [?][0m
+  [34mSkipping selection with no field declaration: (CtFieldReferenceImpl) class[0m
+  [34mSkipping selection with no field declaration: (CtFieldReferenceImpl) class[0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [java.lang.Double][0m
+  [34mUnused type args: [?][0m
+  [34mSkipping selection with no field declaration: (CtFieldReferenceImpl) class[0m
+  [34mSkipping selection with no field declaration: (CtFieldReferenceImpl) class[0m
+[34mFinished process pending packages (4.374753s)[0m
 [34mStarting short validation...[0m
   [34mStarting performShortValidation...[0m
-  [34mFinished performShortValidation (0.002024s)[0m
-[34mFinished short validation (0.003093s)[0m
+  [34mFinished performShortValidation (0.007464s)[0m
+[34mFinished short validation (0.008390s)[0m
 [34mStarting consolidate constructs...[0m
   Consolidating all constructs
-    Removed 1620 collisions
+    Removed 1621 collisions
     Removed 0 collisions
-[34mFinished consolidate constructs (0.072801s)[0m
+[34mFinished consolidate constructs (0.075008s)[0m
 [34mStarting connect nests...[0m
-[34mFinished connect nests (0.001481s)[0m
+[34mFinished connect nests (0.001608s)[0m
 [34mStarting collect package declarations...[0m
-[34mFinished collect package declarations (0.660093s)[0m
+[34mFinished collect package declarations (0.644812s)[0m
 [34mStarting addImports from usage...[0m
-[34mFinished addImports from usage (0.003021s)[0m
+[34mFinished addImports from usage (0.003659s)[0m
 [34mStarting remove empty packages...[0m
-[34mFinished remove empty packages (0.001013s)[0m
+[34mFinished remove empty packages (0.001431s)[0m
 [34mStarting performValidation...[0m
-[34mFinished performValidation (1.960694s)[0m
-[34mFinished Abstraction (20.754743s)[0m
+[34mFinished performValidation (1.954228s)[0m
+[34mFinished Abstraction (17.281034s)[0m
 Success

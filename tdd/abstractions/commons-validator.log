@@ -1,19 +1,164 @@
 # cmd: java -jar /Users/grantnelson/go/src/github.com/MSUSEL/msusel-tdmetrics-go/javaAbstractor/target/abstractor-0.1-jar-with-dependencies.jar -i /Users/grantnelson/go/src/github.com/apache/commons-validator/ -o /Users/grantnelson/go/src/github.com/MSUSEL/msusel-tdmetrics-go/tdd/abstractions/commons-validator.json -v
 # cwd: /Users/grantnelson/go/src/github.com/MSUSEL/msusel-tdmetrics-go/tdd
 # repo: /Users/grantnelson/go/src/github.com/apache/commons-validator @ a3771313c9f1833abf32c7c294ad1de4810e532d
-# started: 2026-07-28T00:46:41.667575+00:00
+# started: 2026-08-17T18:23:14.691666+00:00
 # timeout_min: 10
 # ---
 Reading /Users/grantnelson/go/src/github.com/apache/commons-validator/
 SLF4J(W): No SLF4J providers were found.
 SLF4J(W): Defaulting to no-operation (NOP) logger implementation
 SLF4J(W): See https://www.slf4j.org/codes.html#noProviders for further details.
-Exception in thread "main" spoon.compiler.ModelBuildingException: The import org.apache.commons.logging cannot be resolved at /Users/grantnelson/go/src/github.com/apache/commons-validator/src/main/java/org/apache/commons/validator/GenericTypeValidator.java:28
-	at spoon.support.compiler.jdt.JDTBasedSpoonCompiler.report(JDTBasedSpoonCompiler.java:664)
-	at spoon.support.compiler.jdt.JDTBasedSpoonCompiler.reportProblems(JDTBasedSpoonCompiler.java:646)
-	at spoon.support.compiler.jdt.JDTBasedSpoonCompiler.build(JDTBasedSpoonCompiler.java:120)
-	at spoon.support.compiler.jdt.JDTBasedSpoonCompiler.build(JDTBasedSpoonCompiler.java:101)
-	at spoon.Launcher.buildModel(Launcher.java:781)
-	at abstractor.core.Abstractor.prepareMavenProject(Abstractor.java:55)
-	at abstractor.app.App.run(App.java:25)
+Init pending package <unnamed>
+Init pending package org
+Init pending package org.apache
+Init pending package org.apache.commons
+Init pending package org.apache.commons.validator
+Init pending package org.apache.commons.validator.routines
+Init pending package org.apache.commons.validator.routines.checkdigit
+Init pending package org.apache.commons.validator.util
+[34mStarting process pending packages...[0m
+  Pending package java.lang
+  Pending package java.lang
+  Pending package java.util
+  Pending package java.io
+  getting parent type for (CtClassImpl) PrintStreamOrWriter
+  [34mskipping default constructor: org.apache.commons.validator.routines.checkdigit.ISBNCheckDigit()[0m
+  [34mskipping default constructor: org.apache.commons.validator.routines.checkdigit.VerhoeffCheckDigit()[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  Pending package java.lang.invoke
+  [34mUnused type args: [?][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mskipping default constructor: org.apache.commons.validator.Arg()[0m
+  getting parent type for (CtInterfaceImpl) CreditCardType @ src/main/java/org/apache/commons/validator/CreditCardValidator.java:203:22
+  getting parent type for (CtClassImpl) Visa @ src/main/java/org/apache/commons/validator/CreditCardValidator.java:224:26
+  [34mskipping default constructor: org.apache.commons.validator.CreditCardValidator$Visa()[0m
+  getting parent type for (CtClassImpl) Amex @ src/main/java/org/apache/commons/validator/CreditCardValidator.java:234:26
+  [34mskipping default constructor: org.apache.commons.validator.CreditCardValidator$Amex()[0m
+  getting parent type for (CtClassImpl) Discover @ src/main/java/org/apache/commons/validator/CreditCardValidator.java:243:26
+  [34mskipping default constructor: org.apache.commons.validator.CreditCardValidator$Discover()[0m
+  getting parent type for (CtClassImpl) Mastercard @ src/main/java/org/apache/commons/validator/CreditCardValidator.java:251:26
+  [34mskipping default constructor: org.apache.commons.validator.CreditCardValidator$Mastercard()[0m
+  Pending package java.util.regex
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.collections.FastHashMap @ src/main/java/org/apache/commons/validator/Field.java:134:15[0m
+  [34mfield (CtFieldImpl) hVars @ src/main/java/org/apache/commons/validator/Field.java:134:27 had a null type. The type likely was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.collections.FastHashMap @ src/main/java/org/apache/commons/validator/Field.java:140:15[0m
+  [34mfield (CtFieldImpl) hMsgs @ src/main/java/org/apache/commons/validator/Field.java:140:27 had a null type. The type likely was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.[0m
+  [34mskipping default constructor: org.apache.commons.validator.Field()[0m
+  [34mskipping default constructor: org.apache.commons.validator.Msg()[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.logging.Log @ src/main/java/org/apache/commons/validator/ValidatorAction.java:53:23[0m
+  [34mfield (CtFieldImpl) log @ src/main/java/org/apache/commons/validator/ValidatorAction.java:53:27 had a null type. The type likely was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.[0m
+  Pending package java.lang.reflect
+  [34mskipping default constructor: org.apache.commons.validator.ValidatorAction()[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.logging.Log @ src/main/java/org/apache/commons/validator/ValidatorAction.java:790:13[0m
+  [34margument (CtTypeReferenceImpl) org.apache.commons.logging.Log @ src/main/java/org/apache/commons/validator/ValidatorAction.java:790:13 had a null type. The type likely was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.[0m
+  getting parent type for (CtClassImpl) ResultStatus @ src/main/java/org/apache/commons/validator/ValidatorResult.java:137:28
+  [34mskipping default constructor: org.apache.commons.validator.ValidatorResults()[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.collections.FastHashMap @ src/main/java/org/apache/commons/validator/Form.java:61:15[0m
+  [34mfield (CtFieldImpl) hFields @ src/main/java/org/apache/commons/validator/Form.java:61:27 had a null type. The type likely was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.[0m
+  [34mskipping default constructor: org.apache.commons.validator.Form()[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.logging.Log @ src/main/java/org/apache/commons/validator/FormSet.java:41:23[0m
+  [34mfield (CtFieldImpl) log @ src/main/java/org/apache/commons/validator/FormSet.java:41:27 had a null type. The type likely was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.[0m
+  [34mskipping default constructor: org.apache.commons.validator.FormSet()[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.logging.Log @ src/main/java/org/apache/commons/validator/FormSet.java:372:13[0m
+  [34margument (CtTypeReferenceImpl) org.apache.commons.logging.Log @ src/main/java/org/apache/commons/validator/FormSet.java:372:13 had a null type. The type likely was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.logging.Log @ src/main/java/org/apache/commons/validator/FormSetFactory.java:33:23[0m
+  [34mfield (CtFieldImpl) log @ src/main/java/org/apache/commons/validator/FormSetFactory.java:33:27 had a null type. The type likely was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.digester.AbstractObjectCreationFactory @ src/main/java/org/apache/commons/validator/FormSetFactory.java:30:37[0m
+[34mFinished process pending packages (1.775246s)[0m
+Exception in thread "main" java.lang.Exception: Error while processing package org.apache.commons.validator: {
+  elem: org.apache.commons.validator,
+}
+	at abstractor.core.constructs.Factory.create(Factory.java:132)
+	at abstractor.core.constructs.Factory.create(Factory.java:139)
+	at abstractor.core.Abstractor.processPackage(Abstractor.java:1351)
+	at abstractor.core.Abstractor.processPendingPackages(Abstractor.java:1345)
+	at abstractor.core.Abstractor.lambda$performAbstraction$40(Abstractor.java:1332)
+	at abstractor.core.log.Logger.measure(Logger.java:123)
+	at abstractor.core.Abstractor.performAbstraction(Abstractor.java:1332)
+	at abstractor.app.App.run(App.java:26)
 	at abstractor.app.App.main(App.java:17)
+Caused by: java.lang.Exception: Error while processing object decl (CtClassImpl) FormSetFactory @ src/main/java/org/apache/commons/validator/FormSetFactory.java:30:14: {
+  elem: "(CtClassImpl) FormSetFactory @ src/main/java/org/apache/commons/validator/FormSetFactory.java:30:14",
+}
+	at abstractor.core.constructs.Factory.create(Factory.java:132)
+	at abstractor.core.constructs.Factory.create(Factory.java:139)
+	at abstractor.core.Abstractor.addObjectDecl(Abstractor.java:985)
+	at abstractor.core.Abstractor.addDeclaration(Abstractor.java:176)
+	at abstractor.core.Abstractor.lambda$processPackage$48(Abstractor.java:1360)
+	at abstractor.core.constructs.Factory.create(Factory.java:127)
+	... 8 more
+Caused by: java.lang.Exception: Error while processing struct (CtClassImpl) FormSetFactory @ src/main/java/org/apache/commons/validator/FormSetFactory.java:30:14: {
+  elem: "(CtClassImpl) FormSetFactory @ src/main/java/org/apache/commons/validator/FormSetFactory.java:30:14",
+}
+	at abstractor.core.constructs.Factory.create(Factory.java:132)
+	at abstractor.core.constructs.Factory.create(Factory.java:143)
+	at abstractor.core.Abstractor.addStructDesc(Abstractor.java:757)
+	at abstractor.core.Abstractor.lambda$addObjectDecl$32(Abstractor.java:991)
+	at abstractor.core.constructs.Factory.lambda$create$0(Factory.java:139)
+	at abstractor.core.constructs.Factory.create(Factory.java:109)
+	... 13 more
+Caused by: java.lang.Exception: Error while processing field $super: {
+  elem: "(CtTypeReferenceImpl) org.apache.commons.digester.AbstractObjectCreationFactory @ src/main/java/org/apache/commons/validator/FormSetFactory.java:30:37",
+}
+	at abstractor.core.constructs.Factory.create(Factory.java:132)
+	at abstractor.core.constructs.Factory.create(Factory.java:147)
+	at abstractor.core.Abstractor.addField(Abstractor.java:815)
+	at abstractor.core.Abstractor.lambda$addStructDesc$23(Abstractor.java:772)
+	at abstractor.core.constructs.Factory.create(Factory.java:109)
+	... 18 more
+Caused by: abstractor.core.AbstractorException: a field must have a non-null type
+	at abstractor.core.require.Require.fail(Require.java:19)
+	at abstractor.core.require.Require.require(Require.java:24)
+	at abstractor.core.require.Require.notNull(Require.java:59)
+	at abstractor.core.constructs.Field.<init>(Field.java:20)
+	at abstractor.core.Abstractor.lambda$addField$26(Abstractor.java:819)
+	at abstractor.core.constructs.Factory.lambda$create$1(Factory.java:147)
+	at abstractor.core.constructs.Factory.create(Factory.java:109)
+	... 22 more

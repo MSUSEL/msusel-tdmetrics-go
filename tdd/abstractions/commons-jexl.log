@@ -1,7 +1,7 @@
 # cmd: java -jar /Users/grantnelson/go/src/github.com/MSUSEL/msusel-tdmetrics-go/javaAbstractor/target/abstractor-0.1-jar-with-dependencies.jar -i /Users/grantnelson/go/src/github.com/apache/commons-jexl/ -o /Users/grantnelson/go/src/github.com/MSUSEL/msusel-tdmetrics-go/tdd/abstractions/commons-jexl.json -v
 # cwd: /Users/grantnelson/go/src/github.com/MSUSEL/msusel-tdmetrics-go/tdd
 # repo: /Users/grantnelson/go/src/github.com/apache/commons-jexl @ d3e702149a3db297d6db2c0b7671807f5c7b98fc
-# started: 2026-07-28T01:04:26.192988+00:00
+# started: 2026-08-17T18:28:08.573612+00:00
 # timeout_min: 10
 # ---
 Reading /Users/grantnelson/go/src/github.com/apache/commons-jexl/
@@ -9,12 +9,1111 @@ SLF4J(W): No SLF4J providers were found.
 SLF4J(W): Defaulting to no-operation (NOP) logger implementation
 SLF4J(W): See https://www.slf4j.org/codes.html#noProviders for further details.
 The method public static transient List<T> asList(T[])  is wrongly tagged as containing missing types
-Exception in thread "main" spoon.compiler.ModelBuildingException: Token cannot be resolved to a type at /Users/grantnelson/go/src/github.com/apache/commons-jexl/src/main/java/org/apache/commons/jexl3/parser/JexlParser.java:232
-	at spoon.support.compiler.jdt.JDTBasedSpoonCompiler.report(JDTBasedSpoonCompiler.java:664)
-	at spoon.support.compiler.jdt.JDTBasedSpoonCompiler.reportProblems(JDTBasedSpoonCompiler.java:646)
-	at spoon.support.compiler.jdt.JDTBasedSpoonCompiler.build(JDTBasedSpoonCompiler.java:120)
-	at spoon.support.compiler.jdt.JDTBasedSpoonCompiler.build(JDTBasedSpoonCompiler.java:101)
-	at spoon.Launcher.buildModel(Launcher.java:781)
-	at abstractor.core.Abstractor.prepareMavenProject(Abstractor.java:55)
-	at abstractor.app.App.run(App.java:25)
+Init pending package <unnamed>
+Init pending package org
+Init pending package org.apache
+Init pending package org.apache.commons
+Init pending package org.apache.commons.jexl3
+Init pending package org.apache.commons.jexl3.annotations
+Init pending package org.apache.commons.jexl3.internal
+Init pending package org.apache.commons.jexl3.internal.introspection
+Init pending package org.apache.commons.jexl3.introspection
+Init pending package org.apache.commons.jexl3.parser
+Init pending package org.apache.commons.jexl3.scripting
+[34mStarting process pending packages...[0m
+  Pending package java.util
+  Pending package java.lang
+  Pending package java.lang.invoke
+  Pending package org.apache.commons.jexl3
+  Pending package java.math
+  Pending package java.util.regex
+  Pending package java.lang
+  getting parent type for (CtClassImpl) NullOperand @ src/main/java/org/apache/commons/jexl3/JexlArithmetic.java:59:25
+  [34mskipping default constructor: org.apache.commons.jexl3.JexlArithmetic$NullOperand()[0m
+  Pending package java.io
+  Pending package java.io
+  getting parent type for (CtClassImpl) PrintStreamOrWriter
+  Pending package org.apache.commons.jexl3.introspection
+  getting parent type for (CtInterfaceImpl) Uberspect @ src/main/java/org/apache/commons/jexl3/JexlArithmetic.java:168:22
+  getting parent type for (CtInterfaceImpl) ArrayBuilder @ src/main/java/org/apache/commons/jexl3/JexlArithmetic.java:199:22
+  getting parent type for (CtInterfaceImpl) SetBuilder @ src/main/java/org/apache/commons/jexl3/JexlArithmetic.java:231:22
+  getting parent type for (CtInterfaceImpl) MapBuilder @ src/main/java/org/apache/commons/jexl3/JexlArithmetic.java:261:22
+  Pending package java.nio.charset
+  getting parent type for (CtInterfaceImpl) NamespaceResolver @ src/main/java/org/apache/commons/jexl3/JexlContext.java:82:15
+  getting parent type for (CtInterfaceImpl) NamespaceFunctor @ src/main/java/org/apache/commons/jexl3/JexlContext.java:98:15
+  Pending package java.util.concurrent
+  getting parent type for (CtInterfaceImpl) AnnotationProcessor @ src/main/java/org/apache/commons/jexl3/JexlContext.java:130:15
+  getting parent type for (CtInterfaceImpl) ThreadLocal @ src/main/java/org/apache/commons/jexl3/JexlContext.java:119:15
+  getting parent type for (CtClassImpl) FailObject @ src/main/java/org/apache/commons/jexl3/JexlEngine.java:53:32
+  getting parent type for (CtClassImpl) EmptyContext @ src/main/java/org/apache/commons/jexl3/JexlEngine.java:174:31
+  getting parent type for (CtClassImpl) EmptyNamespaceResolver @ src/main/java/org/apache/commons/jexl3/JexlEngine.java:204:31
+  [34mskipping default constructor: org.apache.commons.jexl3.JexlEngine()[0m
+  Pending package java.net
+  Pending package org.apache.commons.jexl3.parser
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.Parser @ src/main/java/org/apache/commons/jexl3/parser/SimpleNode.java:57:23[0m
+  [34margument (CtParameterImpl) p @ src/main/java/org/apache/commons/jexl3/parser/SimpleNode.java:57:30 had a null type. The type likely was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.Node @ src/main/java/org/apache/commons/jexl3/parser/SimpleNode.java:74:30[0m
+  [34margument (CtParameterImpl) n @ src/main/java/org/apache/commons/jexl3/parser/SimpleNode.java:74:35 had a null type. The type likely was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.Node @ src/main/java/org/apache/commons/jexl3/parser/SimpleNode.java:92:29[0m
+  [34margument (CtParameterImpl) n @ src/main/java/org/apache/commons/jexl3/parser/SimpleNode.java:92:34 had a null type. The type likely was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.[0m
+  [34mskipping default constructor: org.apache.commons.jexl3.parser.ParserVisitor()[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.Parser @ src/main/java/org/apache/commons/jexl3/parser/ASTIdentifier.java:30:19[0m
+  [34margument (CtParameterImpl) p @ src/main/java/org/apache/commons/jexl3/parser/ASTIdentifier.java:30:26 had a null type. The type likely was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.Token @ src/main/java/org/apache/commons/jexl3/parser/JexlNode.java:49:34[0m
+  [34margument (CtParameterImpl) t @ src/main/java/org/apache/commons/jexl3/parser/JexlNode.java:49:40 had a null type. The type likely was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.[0m
+  getting parent type for (CtInterfaceImpl) Detail @ src/main/java/org/apache/commons/jexl3/JexlInfo.java:45:22
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.Token @ src/main/java/org/apache/commons/jexl3/parser/JexlNode.java:55:33[0m
+  [34margument (CtParameterImpl) t @ src/main/java/org/apache/commons/jexl3/parser/JexlNode.java:55:39 had a null type. The type likely was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.Parser @ src/main/java/org/apache/commons/jexl3/parser/ASTVar.java:27:19[0m
+  [34margument (CtParameterImpl) p @ src/main/java/org/apache/commons/jexl3/parser/ASTVar.java:27:26 had a null type. The type likely was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTContinue @ src/main/java/org/apache/commons/jexl3/parser/ParserVisitor.java:51:37[0m
+  [34margument (CtParameterImpl) node @ src/main/java/org/apache/commons/jexl3/parser/ParserVisitor.java:51:49 had a null type. The type likely was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTAmbiguous @ src/main/java/org/apache/commons/jexl3/parser/ParserVisitor.java:39:34[0m
+  [34margument (CtParameterImpl) node @ src/main/java/org/apache/commons/jexl3/parser/ParserVisitor.java:39:47 had a null type. The type likely was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.[0m
+  getting parent type for (CtClassImpl) Frame @ src/main/java/org/apache/commons/jexl3/internal/Scope.java:278:31
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.Parser @ src/main/java/org/apache/commons/jexl3/parser/ASTJexlScript.java:38:26[0m
+  [34margument (CtParameterImpl) p @ src/main/java/org/apache/commons/jexl3/parser/ASTJexlScript.java:38:33 had a null type. The type likely was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.Parser @ src/main/java/org/apache/commons/jexl3/parser/ASTIdentifierAccess.java:30:25[0m
+  [34margument (CtParameterImpl) p @ src/main/java/org/apache/commons/jexl3/parser/ASTIdentifierAccess.java:30:32 had a null type. The type likely was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTNotNode @ src/main/java/org/apache/commons/jexl3/parser/ParserVisitor.java:117:37[0m
+  [34margument (CtParameterImpl) node @ src/main/java/org/apache/commons/jexl3/parser/ParserVisitor.java:117:48 had a null type. The type likely was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTTrueNode @ src/main/java/org/apache/commons/jexl3/parser/ParserVisitor.java:123:37[0m
+  [34margument (CtParameterImpl) node @ src/main/java/org/apache/commons/jexl3/parser/ParserVisitor.java:123:49 had a null type. The type likely was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTBlock @ src/main/java/org/apache/commons/jexl3/parser/ParserVisitor.java:45:37[0m
+  [34margument (CtParameterImpl) node @ src/main/java/org/apache/commons/jexl3/parser/ParserVisitor.java:45:46 had a null type. The type likely was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTSubNode @ src/main/java/org/apache/commons/jexl3/parser/ParserVisitor.java:105:37[0m
+  [34margument (CtParameterImpl) node @ src/main/java/org/apache/commons/jexl3/parser/ParserVisitor.java:105:48 had a null type. The type likely was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTNEWNode @ src/main/java/org/apache/commons/jexl3/parser/ParserVisitor.java:101:37[0m
+  [34margument (CtParameterImpl) node @ src/main/java/org/apache/commons/jexl3/parser/ParserVisitor.java:101:48 had a null type. The type likely was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTDivNode @ src/main/java/org/apache/commons/jexl3/parser/ParserVisitor.java:109:37[0m
+  [34margument (CtParameterImpl) node @ src/main/java/org/apache/commons/jexl3/parser/ParserVisitor.java:109:48 had a null type. The type likely was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTSizeMethod @ src/main/java/org/apache/commons/jexl3/parser/ParserVisitor.java:153:37[0m
+  [34margument (CtParameterImpl) node @ src/main/java/org/apache/commons/jexl3/parser/ParserVisitor.java:153:51 had a null type. The type likely was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTReference @ src/main/java/org/apache/commons/jexl3/parser/ParserVisitor.java:63:37[0m
+  [34margument (CtParameterImpl) node @ src/main/java/org/apache/commons/jexl3/parser/ParserVisitor.java:63:50 had a null type. The type likely was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTNENode @ src/main/java/org/apache/commons/jexl3/parser/ParserVisitor.java:81:37[0m
+  [34margument (CtParameterImpl) node @ src/main/java/org/apache/commons/jexl3/parser/ParserVisitor.java:81:47 had a null type. The type likely was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.Parser @ src/main/java/org/apache/commons/jexl3/parser/ASTAnnotation.java:29:19[0m
+  [34margument (CtParameterImpl) p @ src/main/java/org/apache/commons/jexl3/parser/ASTAnnotation.java:29:26 had a null type. The type likely was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTBitwiseOrNode @ src/main/java/org/apache/commons/jexl3/parser/ParserVisitor.java:73:37[0m
+  [34margument (CtParameterImpl) node @ src/main/java/org/apache/commons/jexl3/parser/ParserVisitor.java:73:54 had a null type. The type likely was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTIfStatement @ src/main/java/org/apache/commons/jexl3/parser/ParserVisitor.java:47:37[0m
+  [34margument (CtParameterImpl) node @ src/main/java/org/apache/commons/jexl3/parser/ParserVisitor.java:47:52 had a null type. The type likely was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTERNode @ src/main/java/org/apache/commons/jexl3/parser/ParserVisitor.java:91:37[0m
+  [34margument (CtParameterImpl) node @ src/main/java/org/apache/commons/jexl3/parser/ParserVisitor.java:91:47 had a null type. The type likely was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTMethodNode @ src/main/java/org/apache/commons/jexl3/parser/ParserVisitor.java:151:37[0m
+  [34margument (CtParameterImpl) node @ src/main/java/org/apache/commons/jexl3/parser/ParserVisitor.java:151:51 had a null type. The type likely was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTSetAndNode @ src/main/java/org/apache/commons/jexl3/parser/ParserVisitor.java:175:37[0m
+  [34margument (CtParameterImpl) node @ src/main/java/org/apache/commons/jexl3/parser/ParserVisitor.java:175:51 had a null type. The type likely was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTArguments @ src/main/java/org/apache/commons/jexl3/parser/ParserVisitor.java:161:37[0m
+  [34margument (CtParameterImpl) node @ src/main/java/org/apache/commons/jexl3/parser/ParserVisitor.java:161:50 had a null type. The type likely was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTLTNode @ src/main/java/org/apache/commons/jexl3/parser/ParserVisitor.java:83:37[0m
+  [34margument (CtParameterImpl) node @ src/main/java/org/apache/commons/jexl3/parser/ParserVisitor.java:83:47 had a null type. The type likely was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.[0m
+  Pending package java.text
+  [34mskipping default constructor: org.apache.commons.jexl3.parser.NumberParser()[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.Parser @ src/main/java/org/apache/commons/jexl3/parser/ASTNumberLiteral.java:27:22[0m
+  [34margument (CtParameterImpl) p @ src/main/java/org/apache/commons/jexl3/parser/ASTNumberLiteral.java:27:29 had a null type. The type likely was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTConstructorNode @ src/main/java/org/apache/commons/jexl3/parser/ParserVisitor.java:155:37[0m
+  [34margument (CtParameterImpl) node @ src/main/java/org/apache/commons/jexl3/parser/ParserVisitor.java:155:56 had a null type. The type likely was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTBitwiseAndNode @ src/main/java/org/apache/commons/jexl3/parser/ParserVisitor.java:77:37[0m
+  [34margument (CtParameterImpl) node @ src/main/java/org/apache/commons/jexl3/parser/ParserVisitor.java:77:55 had a null type. The type likely was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTEQNode @ src/main/java/org/apache/commons/jexl3/parser/ParserVisitor.java:79:37[0m
+  [34margument (CtParameterImpl) node @ src/main/java/org/apache/commons/jexl3/parser/ParserVisitor.java:79:47 had a null type. The type likely was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTEWNode @ src/main/java/org/apache/commons/jexl3/parser/ParserVisitor.java:99:37[0m
+  [34margument (CtParameterImpl) node @ src/main/java/org/apache/commons/jexl3/parser/ParserVisitor.java:99:47 had a null type. The type likely was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTEmptyFunction @ src/main/java/org/apache/commons/jexl3/parser/ParserVisitor.java:143:37[0m
+  [34margument (CtParameterImpl) node @ src/main/java/org/apache/commons/jexl3/parser/ParserVisitor.java:143:54 had a null type. The type likely was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTSWNode @ src/main/java/org/apache/commons/jexl3/parser/ParserVisitor.java:95:37[0m
+  [34margument (CtParameterImpl) node @ src/main/java/org/apache/commons/jexl3/parser/ParserVisitor.java:95:47 had a null type. The type likely was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.Parser @ src/main/java/org/apache/commons/jexl3/parser/ASTSetLiteral.java:29:19[0m
+  [34margument (CtParameterImpl) p @ src/main/java/org/apache/commons/jexl3/parser/ASTSetLiteral.java:29:26 had a null type. The type likely was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTMulNode @ src/main/java/org/apache/commons/jexl3/parser/ParserVisitor.java:107:37[0m
+  [34margument (CtParameterImpl) node @ src/main/java/org/apache/commons/jexl3/parser/ParserVisitor.java:107:48 had a null type. The type likely was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTRangeNode @ src/main/java/org/apache/commons/jexl3/parser/ParserVisitor.java:137:37[0m
+  [34margument (CtParameterImpl) node @ src/main/java/org/apache/commons/jexl3/parser/ParserVisitor.java:137:50 had a null type. The type likely was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTBitwiseComplNode @ src/main/java/org/apache/commons/jexl3/parser/ParserVisitor.java:115:37[0m
+  [34margument (CtParameterImpl) node @ src/main/java/org/apache/commons/jexl3/parser/ParserVisitor.java:115:57 had a null type. The type likely was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTWhileStatement @ src/main/java/org/apache/commons/jexl3/parser/ParserVisitor.java:49:37[0m
+  [34margument (CtParameterImpl) node @ src/main/java/org/apache/commons/jexl3/parser/ParserVisitor.java:49:55 had a null type. The type likely was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.Parser @ src/main/java/org/apache/commons/jexl3/parser/ASTStringLiteral.java:27:22[0m
+  [34margument (CtParameterImpl) p @ src/main/java/org/apache/commons/jexl3/parser/ASTStringLiteral.java:27:29 had a null type. The type likely was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTFunctionNode @ src/main/java/org/apache/commons/jexl3/parser/ParserVisitor.java:149:37[0m
+  [34margument (CtParameterImpl) node @ src/main/java/org/apache/commons/jexl3/parser/ParserVisitor.java:149:53 had a null type. The type likely was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTNRNode @ src/main/java/org/apache/commons/jexl3/parser/ParserVisitor.java:93:37[0m
+  [34margument (CtParameterImpl) node @ src/main/java/org/apache/commons/jexl3/parser/ParserVisitor.java:93:47 had a null type. The type likely was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTMapEntry @ src/main/java/org/apache/commons/jexl3/parser/ParserVisitor.java:141:37[0m
+  [34margument (CtParameterImpl) node @ src/main/java/org/apache/commons/jexl3/parser/ParserVisitor.java:141:49 had a null type. The type likely was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTBreak @ src/main/java/org/apache/commons/jexl3/parser/ParserVisitor.java:53:37[0m
+  [34margument (CtParameterImpl) node @ src/main/java/org/apache/commons/jexl3/parser/ParserVisitor.java:53:46 had a null type. The type likely was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTNullpNode @ src/main/java/org/apache/commons/jexl3/parser/ParserVisitor.java:67:37[0m
+  [34margument (CtParameterImpl) node @ src/main/java/org/apache/commons/jexl3/parser/ParserVisitor.java:67:50 had a null type. The type likely was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.Parser @ src/main/java/org/apache/commons/jexl3/parser/ASTMapLiteral.java:29:19[0m
+  [34margument (CtParameterImpl) p @ src/main/java/org/apache/commons/jexl3/parser/ASTMapLiteral.java:29:26 had a null type. The type likely was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTSetOrNode @ src/main/java/org/apache/commons/jexl3/parser/ParserVisitor.java:177:37[0m
+  [34margument (CtParameterImpl) node @ src/main/java/org/apache/commons/jexl3/parser/ParserVisitor.java:177:50 had a null type. The type likely was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTNullLiteral @ src/main/java/org/apache/commons/jexl3/parser/ParserVisitor.java:121:37[0m
+  [34margument (CtParameterImpl) node @ src/main/java/org/apache/commons/jexl3/parser/ParserVisitor.java:121:52 had a null type. The type likely was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTAndNode @ src/main/java/org/apache/commons/jexl3/parser/ParserVisitor.java:71:37[0m
+  [34margument (CtParameterImpl) node @ src/main/java/org/apache/commons/jexl3/parser/ParserVisitor.java:71:48 had a null type. The type likely was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTExtendedLiteral @ src/main/java/org/apache/commons/jexl3/parser/ParserVisitor.java:133:37[0m
+  [34margument (CtParameterImpl) node @ src/main/java/org/apache/commons/jexl3/parser/ParserVisitor.java:133:56 had a null type. The type likely was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTBitwiseXorNode @ src/main/java/org/apache/commons/jexl3/parser/ParserVisitor.java:75:37[0m
+  [34margument (CtParameterImpl) node @ src/main/java/org/apache/commons/jexl3/parser/ParserVisitor.java:75:55 had a null type. The type likely was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTTernaryNode @ src/main/java/org/apache/commons/jexl3/parser/ParserVisitor.java:65:37[0m
+  [34margument (CtParameterImpl) node @ src/main/java/org/apache/commons/jexl3/parser/ParserVisitor.java:65:52 had a null type. The type likely was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTLENode @ src/main/java/org/apache/commons/jexl3/parser/ParserVisitor.java:87:37[0m
+  [34margument (CtParameterImpl) node @ src/main/java/org/apache/commons/jexl3/parser/ParserVisitor.java:87:47 had a null type. The type likely was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTEmptyMethod @ src/main/java/org/apache/commons/jexl3/parser/ParserVisitor.java:145:37[0m
+  [34margument (CtParameterImpl) node @ src/main/java/org/apache/commons/jexl3/parser/ParserVisitor.java:145:52 had a null type. The type likely was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTSetModNode @ src/main/java/org/apache/commons/jexl3/parser/ParserVisitor.java:173:37[0m
+  [34margument (CtParameterImpl) node @ src/main/java/org/apache/commons/jexl3/parser/ParserVisitor.java:173:51 had a null type. The type likely was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTSetXorNode @ src/main/java/org/apache/commons/jexl3/parser/ParserVisitor.java:179:37[0m
+  [34margument (CtParameterImpl) node @ src/main/java/org/apache/commons/jexl3/parser/ParserVisitor.java:179:51 had a null type. The type likely was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTSetDivNode @ src/main/java/org/apache/commons/jexl3/parser/ParserVisitor.java:171:37[0m
+  [34margument (CtParameterImpl) node @ src/main/java/org/apache/commons/jexl3/parser/ParserVisitor.java:171:51 had a null type. The type likely was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTSetSubNode @ src/main/java/org/apache/commons/jexl3/parser/ParserVisitor.java:167:37[0m
+  [34margument (CtParameterImpl) node @ src/main/java/org/apache/commons/jexl3/parser/ParserVisitor.java:167:51 had a null type. The type likely was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTGTNode @ src/main/java/org/apache/commons/jexl3/parser/ParserVisitor.java:85:37[0m
+  [34margument (CtParameterImpl) node @ src/main/java/org/apache/commons/jexl3/parser/ParserVisitor.java:85:47 had a null type. The type likely was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTFalseNode @ src/main/java/org/apache/commons/jexl3/parser/ParserVisitor.java:125:37[0m
+  [34margument (CtParameterImpl) node @ src/main/java/org/apache/commons/jexl3/parser/ParserVisitor.java:125:50 had a null type. The type likely was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.Parser @ src/main/java/org/apache/commons/jexl3/parser/ASTArrayLiteral.java:32:21[0m
+  [34margument (CtParameterImpl) p @ src/main/java/org/apache/commons/jexl3/parser/ASTArrayLiteral.java:32:28 had a null type. The type likely was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTAnnotatedStatement @ src/main/java/org/apache/commons/jexl3/parser/ParserVisitor.java:185:37[0m
+  [34margument (CtParameterImpl) node @ src/main/java/org/apache/commons/jexl3/parser/ParserVisitor.java:185:59 had a null type. The type likely was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTForeachStatement @ src/main/java/org/apache/commons/jexl3/parser/ParserVisitor.java:55:37[0m
+  [34margument (CtParameterImpl) node @ src/main/java/org/apache/commons/jexl3/parser/ParserVisitor.java:55:57 had a null type. The type likely was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTReturnStatement @ src/main/java/org/apache/commons/jexl3/parser/ParserVisitor.java:57:37[0m
+  [34margument (CtParameterImpl) node @ src/main/java/org/apache/commons/jexl3/parser/ParserVisitor.java:57:56 had a null type. The type likely was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTSetAddNode @ src/main/java/org/apache/commons/jexl3/parser/ParserVisitor.java:165:37[0m
+  [34margument (CtParameterImpl) node @ src/main/java/org/apache/commons/jexl3/parser/ParserVisitor.java:165:51 had a null type. The type likely was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTArrayAccess @ src/main/java/org/apache/commons/jexl3/parser/ParserVisitor.java:157:37[0m
+  [34margument (CtParameterImpl) node @ src/main/java/org/apache/commons/jexl3/parser/ParserVisitor.java:157:52 had a null type. The type likely was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTSetMultNode @ src/main/java/org/apache/commons/jexl3/parser/ParserVisitor.java:169:37[0m
+  [34margument (CtParameterImpl) node @ src/main/java/org/apache/commons/jexl3/parser/ParserVisitor.java:169:52 had a null type. The type likely was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTOrNode @ src/main/java/org/apache/commons/jexl3/parser/ParserVisitor.java:69:37[0m
+  [34margument (CtParameterImpl) node @ src/main/java/org/apache/commons/jexl3/parser/ParserVisitor.java:69:47 had a null type. The type likely was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTAssignment @ src/main/java/org/apache/commons/jexl3/parser/ParserVisitor.java:59:37[0m
+  [34margument (CtParameterImpl) node @ src/main/java/org/apache/commons/jexl3/parser/ParserVisitor.java:59:51 had a null type. The type likely was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTUnaryMinusNode @ src/main/java/org/apache/commons/jexl3/parser/ParserVisitor.java:113:37[0m
+  [34margument (CtParameterImpl) node @ src/main/java/org/apache/commons/jexl3/parser/ParserVisitor.java:113:55 had a null type. The type likely was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.Parser @ src/main/java/org/apache/commons/jexl3/parser/ASTJxltLiteral.java:27:20[0m
+  [34margument (CtParameterImpl) p @ src/main/java/org/apache/commons/jexl3/parser/ASTJxltLiteral.java:27:27 had a null type. The type likely was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTSizeFunction @ src/main/java/org/apache/commons/jexl3/parser/ParserVisitor.java:147:37[0m
+  [34margument (CtParameterImpl) node @ src/main/java/org/apache/commons/jexl3/parser/ParserVisitor.java:147:53 had a null type. The type likely was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTAddNode @ src/main/java/org/apache/commons/jexl3/parser/ParserVisitor.java:103:37[0m
+  [34margument (CtParameterImpl) node @ src/main/java/org/apache/commons/jexl3/parser/ParserVisitor.java:103:48 had a null type. The type likely was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTGENode @ src/main/java/org/apache/commons/jexl3/parser/ParserVisitor.java:89:37[0m
+  [34margument (CtParameterImpl) node @ src/main/java/org/apache/commons/jexl3/parser/ParserVisitor.java:89:47 had a null type. The type likely was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTModNode @ src/main/java/org/apache/commons/jexl3/parser/ParserVisitor.java:111:37[0m
+  [34margument (CtParameterImpl) node @ src/main/java/org/apache/commons/jexl3/parser/ParserVisitor.java:111:48 had a null type. The type likely was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.Parser @ src/main/java/org/apache/commons/jexl3/parser/ASTReferenceExpression.java:24:28[0m
+  [34margument (CtParameterImpl) p @ src/main/java/org/apache/commons/jexl3/parser/ASTReferenceExpression.java:24:35 had a null type. The type likely was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTNSWNode @ src/main/java/org/apache/commons/jexl3/parser/ParserVisitor.java:97:37[0m
+  [34margument (CtParameterImpl) node @ src/main/java/org/apache/commons/jexl3/parser/ParserVisitor.java:97:48 had a null type. The type likely was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.[0m
+  [31mUnhandled super-interface (null) for {
+    context: "object decl (CtClassImpl) SimpleNode @ src/main/java/org/apache/commons/jexl3/parser/SimpleNode.java:34:14",
+    index: -1,
+    kind: object,
+    ref: true,
+  }[0m
+  getting parent type for (CtInterfaceImpl) Constant @ src/main/java/org/apache/commons/jexl3/parser/JexlNode.java:37:22
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.Parser @ src/main/java/org/apache/commons/jexl3/parser/JexlNode.java:45:21[0m
+  [34margument (CtParameterImpl) p @ src/main/java/org/apache/commons/jexl3/parser/JexlNode.java:45:28 had a null type. The type likely was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.[0m
+  getting parent type for (CtClassImpl) Tokenization @ src/main/java/org/apache/commons/jexl3/JexlException.java:241:25
+  getting parent type for (CtClassImpl) Parsing @ src/main/java/org/apache/commons/jexl3/JexlException.java:269:25
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.Token @ src/main/java/org/apache/commons/jexl3/parser/ParseException.java:56:27[0m
+  [34margument (CtParameterImpl) currentToken @ src/main/java/org/apache/commons/jexl3/parser/ParseException.java:56:33 had a null type. The type likely was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.[0m
+  getting parent type for (CtClassImpl) Ambiguous @ src/main/java/org/apache/commons/jexl3/JexlException.java:308:25
+  getting parent type for (CtClassImpl) Assignment @ src/main/java/org/apache/commons/jexl3/JexlException.java:329:25
+  getting parent type for (CtClassImpl) Feature @ src/main/java/org/apache/commons/jexl3/JexlException.java:351:25
+  getting parent type for (CtClassImpl) Variable @ src/main/java/org/apache/commons/jexl3/JexlException.java:376:25
+  getting parent type for (CtClassImpl) Property @ src/main/java/org/apache/commons/jexl3/JexlException.java:440:25
+  getting parent type for (CtClassImpl) Method @ src/main/java/org/apache/commons/jexl3/JexlException.java:495:25
+  getting parent type for (CtClassImpl) Operator @ src/main/java/org/apache/commons/jexl3/JexlException.java:550:25
+  getting parent type for (CtClassImpl) Annotation @ src/main/java/org/apache/commons/jexl3/JexlException.java:595:25
+  getting parent type for (CtClassImpl) Return @ src/main/java/org/apache/commons/jexl3/JexlException.java:641:25
+  getting parent type for (CtClassImpl) Cancel @ src/main/java/org/apache/commons/jexl3/JexlException.java:671:25
+  getting parent type for (CtClassImpl) Break @ src/main/java/org/apache/commons/jexl3/JexlException.java:687:25
+  getting parent type for (CtClassImpl) Continue @ src/main/java/org/apache/commons/jexl3/JexlException.java:703:25
+  getting parent type for (CtClassImpl) Exception @ src/main/java/org/apache/commons/jexl3/JxltEngine.java:46:25
+  getting parent type for (CtInterfaceImpl) Expression @ src/main/java/org/apache/commons/jexl3/JxltEngine.java:110:22
+  getting parent type for (CtInterfaceImpl) Template @ src/main/java/org/apache/commons/jexl3/JxltEngine.java:279:22
+  [34mskipping default constructor: org.apache.commons.jexl3.JxltEngine()[0m
+  getting parent type for (CtInterfaceImpl) PropertyResolver @ src/main/java/org/apache/commons/jexl3/introspection/JexlUberspect.java:48:15
+  getting parent type for (CtEnumImpl) JexlResolver @ src/main/java/org/apache/commons/jexl3/introspection/JexlUberspect.java:80:10
+  [34mskipping default constructor: org.apache.commons.jexl3.introspection.JexlUberspect$JexlResolver()[0m
+  getting parent type for (CtInterfaceImpl) ResolverStrategy @ src/main/java/org/apache/commons/jexl3/introspection/JexlUberspect.java:145:15
+  getting parent type for (CtInterfaceImpl) Options @ src/main/java/org/apache/commons/jexl3/JexlEngine.java:111:22
+  Pending package org.apache.commons.logging
+  Pending package java.util.concurrent.atomic
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.Parser @ src/main/java/org/apache/commons/jexl3/internal/Engine.java:131:21[0m
+  [34mfield (CtFieldImpl) parser @ src/main/java/org/apache/commons/jexl3/internal/Engine.java:131:28 had a null type. The type likely was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.[0m
+  Pending package java.lang.ref
+  Pending package java.util.concurrent.locks
+  getting parent type for (CtInterfaceImpl) Entry
+  getting parent type for (CtClassImpl) TemplateExpression @ src/main/java/org/apache/commons/jexl3/internal/TemplateEngine.java:210:20
+  getting parent type for (CtClassImpl) VarCollector @ src/main/java/org/apache/commons/jexl3/internal/Engine.java:473:28
+  [34mskipping default constructor: org.apache.commons.jexl3.internal.Engine$VarCollector()[0m
+  getting parent type for (CtClassImpl) Funcall @ src/main/java/org/apache/commons/jexl3/internal/Interpreter.java:1418:26
+  getting parent type for (CtClassImpl) ArithmeticFuncall @ src/main/java/org/apache/commons/jexl3/internal/Interpreter.java:1449:26
+  getting parent type for (CtClassImpl) ContextFuncall @ src/main/java/org/apache/commons/jexl3/internal/Interpreter.java:1468:26
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTArguments @ src/main/java/org/apache/commons/jexl3/internal/Interpreter.java:1501:85[0m
+  [34margument (CtParameterImpl) argNode @ src/main/java/org/apache/commons/jexl3/internal/Interpreter.java:1501:98 had a null type. The type likely was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTAnnotatedStatement @ src/main/java/org/apache/commons/jexl3/internal/Interpreter.java:1896:46[0m
+  [34margument (CtParameterImpl) stmt @ src/main/java/org/apache/commons/jexl3/internal/Interpreter.java:1896:68 had a null type. The type likely was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTReference @ src/main/java/org/apache/commons/jexl3/internal/Interpreter.java:997:39[0m
+  [34margument (CtParameterImpl) node @ src/main/java/org/apache/commons/jexl3/internal/Interpreter.java:997:52 had a null type. The type likely was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTModNode @ src/main/java/org/apache/commons/jexl3/internal/Interpreter.java:334:28[0m
+  [34margument (CtParameterImpl) node @ src/main/java/org/apache/commons/jexl3/internal/Interpreter.java:334:39 had a null type. The type likely was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTBitwiseAndNode @ src/main/java/org/apache/commons/jexl3/internal/Interpreter.java:350:28[0m
+  [34margument (CtParameterImpl) node @ src/main/java/org/apache/commons/jexl3/internal/Interpreter.java:350:46 had a null type. The type likely was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTAddNode @ src/main/java/org/apache/commons/jexl3/internal/Interpreter.java:281:28[0m
+  [34margument (CtParameterImpl) node @ src/main/java/org/apache/commons/jexl3/internal/Interpreter.java:281:39 had a null type. The type likely was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTTernaryNode @ src/main/java/org/apache/commons/jexl3/internal/Interpreter.java:840:28[0m
+  [34margument (CtParameterImpl) node @ src/main/java/org/apache/commons/jexl3/internal/Interpreter.java:840:43 had a null type. The type likely was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTReference @ src/main/java/org/apache/commons/jexl3/internal/Interpreter.java:1009:28[0m
+  [34margument (CtParameterImpl) node @ src/main/java/org/apache/commons/jexl3/internal/Interpreter.java:1009:41 had a null type. The type likely was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTSetModNode @ src/main/java/org/apache/commons/jexl3/internal/Interpreter.java:1122:28[0m
+  [34margument (CtParameterImpl) node @ src/main/java/org/apache/commons/jexl3/internal/Interpreter.java:1122:42 had a null type. The type likely was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTNRNode @ src/main/java/org/apache/commons/jexl3/internal/Interpreter.java:506:28[0m
+  [34margument (CtParameterImpl) node @ src/main/java/org/apache/commons/jexl3/internal/Interpreter.java:506:38 had a null type. The type likely was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTConstructorNode @ src/main/java/org/apache/commons/jexl3/internal/Interpreter.java:1666:28[0m
+  [34margument (CtParameterImpl) node @ src/main/java/org/apache/commons/jexl3/internal/Interpreter.java:1666:47 had a null type. The type likely was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTSubNode @ src/main/java/org/apache/commons/jexl3/internal/Interpreter.java:293:28[0m
+  [34margument (CtParameterImpl) node @ src/main/java/org/apache/commons/jexl3/internal/Interpreter.java:293:39 had a null type. The type likely was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTSetAddNode @ src/main/java/org/apache/commons/jexl3/internal/Interpreter.java:1102:28[0m
+  [34margument (CtParameterImpl) node @ src/main/java/org/apache/commons/jexl3/internal/Interpreter.java:1102:42 had a null type. The type likely was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTWhileStatement @ src/main/java/org/apache/commons/jexl3/internal/Interpreter.java:675:28[0m
+  [34margument (CtParameterImpl) node @ src/main/java/org/apache/commons/jexl3/internal/Interpreter.java:675:46 had a null type. The type likely was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTAssignment @ src/main/java/org/apache/commons/jexl3/internal/Interpreter.java:1097:28[0m
+  [34margument (CtParameterImpl) node @ src/main/java/org/apache/commons/jexl3/internal/Interpreter.java:1097:42 had a null type. The type likely was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTEmptyMethod @ src/main/java/org/apache/commons/jexl3/internal/Interpreter.java:889:28[0m
+  [34margument (CtParameterImpl) node @ src/main/java/org/apache/commons/jexl3/internal/Interpreter.java:889:43 had a null type. The type likely was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTNullpNode @ src/main/java/org/apache/commons/jexl3/internal/Interpreter.java:857:28[0m
+  [34margument (CtParameterImpl) node @ src/main/java/org/apache/commons/jexl3/internal/Interpreter.java:857:41 had a null type. The type likely was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTMulNode @ src/main/java/org/apache/commons/jexl3/internal/Interpreter.java:305:28[0m
+  [34margument (CtParameterImpl) node @ src/main/java/org/apache/commons/jexl3/internal/Interpreter.java:305:39 had a null type. The type likely was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTDivNode @ src/main/java/org/apache/commons/jexl3/internal/Interpreter.java:318:28[0m
+  [34margument (CtParameterImpl) node @ src/main/java/org/apache/commons/jexl3/internal/Interpreter.java:318:39 had a null type. The type likely was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTBreak @ src/main/java/org/apache/commons/jexl3/internal/Interpreter.java:620:28[0m
+  [34margument (CtParameterImpl) node @ src/main/java/org/apache/commons/jexl3/internal/Interpreter.java:620:37 had a null type. The type likely was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTSetMultNode @ src/main/java/org/apache/commons/jexl3/internal/Interpreter.java:1112:28[0m
+  [34margument (CtParameterImpl) node @ src/main/java/org/apache/commons/jexl3/internal/Interpreter.java:1112:43 had a null type. The type likely was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTRangeNode @ src/main/java/org/apache/commons/jexl3/internal/Interpreter.java:513:28[0m
+  [34margument (CtParameterImpl) node @ src/main/java/org/apache/commons/jexl3/internal/Interpreter.java:513:41 had a null type. The type likely was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTReturnStatement @ src/main/java/org/apache/commons/jexl3/internal/Interpreter.java:606:28[0m
+  [34margument (CtParameterImpl) node @ src/main/java/org/apache/commons/jexl3/internal/Interpreter.java:606:47 had a null type. The type likely was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTNullLiteral @ src/main/java/org/apache/commons/jexl3/internal/Interpreter.java:749:28[0m
+  [34margument (CtParameterImpl) node @ src/main/java/org/apache/commons/jexl3/internal/Interpreter.java:749:43 had a null type. The type likely was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTLENode @ src/main/java/org/apache/commons/jexl3/internal/Interpreter.java:443:28[0m
+  [34margument (CtParameterImpl) node @ src/main/java/org/apache/commons/jexl3/internal/Interpreter.java:443:38 had a null type. The type likely was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTMethodNode @ src/main/java/org/apache/commons/jexl3/internal/Interpreter.java:1313:34[0m
+  [34margument (CtParameterImpl) node @ src/main/java/org/apache/commons/jexl3/internal/Interpreter.java:1313:48 had a null type. The type likely was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTNSWNode @ src/main/java/org/apache/commons/jexl3/internal/Interpreter.java:478:28[0m
+  [34margument (CtParameterImpl) node @ src/main/java/org/apache/commons/jexl3/internal/Interpreter.java:478:39 had a null type. The type likely was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTBitwiseOrNode @ src/main/java/org/apache/commons/jexl3/internal/Interpreter.java:362:28[0m
+  [34margument (CtParameterImpl) node @ src/main/java/org/apache/commons/jexl3/internal/Interpreter.java:362:45 had a null type. The type likely was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTAndNode @ src/main/java/org/apache/commons/jexl3/internal/Interpreter.java:698:28[0m
+  [34margument (CtParameterImpl) node @ src/main/java/org/apache/commons/jexl3/internal/Interpreter.java:698:39 had a null type. The type likely was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTIfStatement @ src/main/java/org/apache/commons/jexl3/internal/Interpreter.java:567:28[0m
+  [34margument (CtParameterImpl) node @ src/main/java/org/apache/commons/jexl3/internal/Interpreter.java:567:43 had a null type. The type likely was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTArguments @ src/main/java/org/apache/commons/jexl3/internal/Interpreter.java:1303:30[0m
+  [34margument (CtParameterImpl) node @ src/main/java/org/apache/commons/jexl3/internal/Interpreter.java:1303:43 had a null type. The type likely was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTUnaryMinusNode @ src/main/java/org/apache/commons/jexl3/internal/Interpreter.java:525:28[0m
+  [34margument (CtParameterImpl) node @ src/main/java/org/apache/commons/jexl3/internal/Interpreter.java:525:46 had a null type. The type likely was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTTrueNode @ src/main/java/org/apache/commons/jexl3/internal/Interpreter.java:754:28[0m
+  [34margument (CtParameterImpl) node @ src/main/java/org/apache/commons/jexl3/internal/Interpreter.java:754:40 had a null type. The type likely was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTSizeMethod @ src/main/java/org/apache/commons/jexl3/internal/Interpreter.java:873:28[0m
+  [34margument (CtParameterImpl) node @ src/main/java/org/apache/commons/jexl3/internal/Interpreter.java:873:42 had a null type. The type likely was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTBitwiseComplNode @ src/main/java/org/apache/commons/jexl3/internal/Interpreter.java:545:28[0m
+  [34margument (CtParameterImpl) node @ src/main/java/org/apache/commons/jexl3/internal/Interpreter.java:545:48 had a null type. The type likely was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTBitwiseXorNode @ src/main/java/org/apache/commons/jexl3/internal/Interpreter.java:374:28[0m
+  [34margument (CtParameterImpl) node @ src/main/java/org/apache/commons/jexl3/internal/Interpreter.java:374:46 had a null type. The type likely was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTEQNode @ src/main/java/org/apache/commons/jexl3/internal/Interpreter.java:386:28[0m
+  [34margument (CtParameterImpl) node @ src/main/java/org/apache/commons/jexl3/internal/Interpreter.java:386:38 had a null type. The type likely was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTNENode @ src/main/java/org/apache/commons/jexl3/internal/Interpreter.java:400:28[0m
+  [34margument (CtParameterImpl) node @ src/main/java/org/apache/commons/jexl3/internal/Interpreter.java:400:38 had a null type. The type likely was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTSetXorNode @ src/main/java/org/apache/commons/jexl3/internal/Interpreter.java:1137:28[0m
+  [34margument (CtParameterImpl) node @ src/main/java/org/apache/commons/jexl3/internal/Interpreter.java:1137:42 had a null type. The type likely was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTBlock @ src/main/java/org/apache/commons/jexl3/internal/Interpreter.java:593:28[0m
+  [34margument (CtParameterImpl) node @ src/main/java/org/apache/commons/jexl3/internal/Interpreter.java:593:37 had a null type. The type likely was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTForeachStatement @ src/main/java/org/apache/commons/jexl3/internal/Interpreter.java:625:28[0m
+  [34margument (CtParameterImpl) node @ src/main/java/org/apache/commons/jexl3/internal/Interpreter.java:625:48 had a null type. The type likely was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTSWNode @ src/main/java/org/apache/commons/jexl3/internal/Interpreter.java:471:28[0m
+  [34margument (CtParameterImpl) node @ src/main/java/org/apache/commons/jexl3/internal/Interpreter.java:471:38 had a null type. The type likely was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTEWNode @ src/main/java/org/apache/commons/jexl3/internal/Interpreter.java:485:28[0m
+  [34margument (CtParameterImpl) node @ src/main/java/org/apache/commons/jexl3/internal/Interpreter.java:485:38 had a null type. The type likely was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTFalseNode @ src/main/java/org/apache/commons/jexl3/internal/Interpreter.java:759:28[0m
+  [34margument (CtParameterImpl) node @ src/main/java/org/apache/commons/jexl3/internal/Interpreter.java:759:41 had a null type. The type likely was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTGENode @ src/main/java/org/apache/commons/jexl3/internal/Interpreter.java:415:28[0m
+  [34margument (CtParameterImpl) node @ src/main/java/org/apache/commons/jexl3/internal/Interpreter.java:415:38 had a null type. The type likely was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTContinue @ src/main/java/org/apache/commons/jexl3/internal/Interpreter.java:615:28[0m
+  [34margument (CtParameterImpl) node @ src/main/java/org/apache/commons/jexl3/internal/Interpreter.java:615:40 had a null type. The type likely was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTOrNode @ src/main/java/org/apache/commons/jexl3/internal/Interpreter.java:726:28[0m
+  [34margument (CtParameterImpl) node @ src/main/java/org/apache/commons/jexl3/internal/Interpreter.java:726:38 had a null type. The type likely was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTArrayAccess @ src/main/java/org/apache/commons/jexl3/internal/Interpreter.java:947:28[0m
+  [34margument (CtParameterImpl) node @ src/main/java/org/apache/commons/jexl3/internal/Interpreter.java:947:43 had a null type. The type likely was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTAnnotatedStatement @ src/main/java/org/apache/commons/jexl3/internal/Interpreter.java:1885:28[0m
+  [34margument (CtParameterImpl) node @ src/main/java/org/apache/commons/jexl3/internal/Interpreter.java:1885:50 had a null type. The type likely was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTSetAndNode @ src/main/java/org/apache/commons/jexl3/internal/Interpreter.java:1127:28[0m
+  [34margument (CtParameterImpl) node @ src/main/java/org/apache/commons/jexl3/internal/Interpreter.java:1127:42 had a null type. The type likely was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTMethodNode @ src/main/java/org/apache/commons/jexl3/internal/Interpreter.java:1324:32[0m
+  [34margument (CtParameterImpl) node @ src/main/java/org/apache/commons/jexl3/internal/Interpreter.java:1324:46 had a null type. The type likely was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTFunctionNode @ src/main/java/org/apache/commons/jexl3/internal/Interpreter.java:1358:28[0m
+  [34margument (CtParameterImpl) node @ src/main/java/org/apache/commons/jexl3/internal/Interpreter.java:1358:44 had a null type. The type likely was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTSetOrNode @ src/main/java/org/apache/commons/jexl3/internal/Interpreter.java:1132:28[0m
+  [34margument (CtParameterImpl) node @ src/main/java/org/apache/commons/jexl3/internal/Interpreter.java:1132:41 had a null type. The type likely was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTSetSubNode @ src/main/java/org/apache/commons/jexl3/internal/Interpreter.java:1107:28[0m
+  [34margument (CtParameterImpl) node @ src/main/java/org/apache/commons/jexl3/internal/Interpreter.java:1107:42 had a null type. The type likely was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTSetDivNode @ src/main/java/org/apache/commons/jexl3/internal/Interpreter.java:1117:28[0m
+  [34margument (CtParameterImpl) node @ src/main/java/org/apache/commons/jexl3/internal/Interpreter.java:1117:42 had a null type. The type likely was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTNotNode @ src/main/java/org/apache/commons/jexl3/internal/Interpreter.java:556:28[0m
+  [34margument (CtParameterImpl) node @ src/main/java/org/apache/commons/jexl3/internal/Interpreter.java:556:39 had a null type. The type likely was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTMapEntry @ src/main/java/org/apache/commons/jexl3/internal/Interpreter.java:833:28[0m
+  [34margument (CtParameterImpl) node @ src/main/java/org/apache/commons/jexl3/internal/Interpreter.java:833:40 had a null type. The type likely was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTSizeFunction @ src/main/java/org/apache/commons/jexl3/internal/Interpreter.java:863:28[0m
+  [34margument (CtParameterImpl) node @ src/main/java/org/apache/commons/jexl3/internal/Interpreter.java:863:44 had a null type. The type likely was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTGTNode @ src/main/java/org/apache/commons/jexl3/internal/Interpreter.java:429:28[0m
+  [34margument (CtParameterImpl) node @ src/main/java/org/apache/commons/jexl3/internal/Interpreter.java:429:38 had a null type. The type likely was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTLTNode @ src/main/java/org/apache/commons/jexl3/internal/Interpreter.java:457:28[0m
+  [34margument (CtParameterImpl) node @ src/main/java/org/apache/commons/jexl3/internal/Interpreter.java:457:38 had a null type. The type likely was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTExtendedLiteral @ src/main/java/org/apache/commons/jexl3/internal/Interpreter.java:800:28[0m
+  [34margument (CtParameterImpl) node @ src/main/java/org/apache/commons/jexl3/internal/Interpreter.java:800:47 had a null type. The type likely was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTEmptyFunction @ src/main/java/org/apache/commons/jexl3/internal/Interpreter.java:879:28[0m
+  [34margument (CtParameterImpl) node @ src/main/java/org/apache/commons/jexl3/internal/Interpreter.java:879:45 had a null type. The type likely was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTNEWNode @ src/main/java/org/apache/commons/jexl3/internal/Interpreter.java:492:28[0m
+  [34margument (CtParameterImpl) node @ src/main/java/org/apache/commons/jexl3/internal/Interpreter.java:492:39 had a null type. The type likely was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTERNode @ src/main/java/org/apache/commons/jexl3/internal/Interpreter.java:499:28[0m
+  [34margument (CtParameterImpl) node @ src/main/java/org/apache/commons/jexl3/internal/Interpreter.java:499:38 had a null type. The type likely was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.[0m
+  getting parent type for (CtEnumImpl) ExpressionType @ src/main/java/org/apache/commons/jexl3/internal/TemplateEngine.java:89:10
+  getting parent type for (CtClassImpl) ExpressionBuilder @ src/main/java/org/apache/commons/jexl3/internal/TemplateEngine.java:117:24
+  getting parent type for (CtClassImpl) ConstantExpression @ src/main/java/org/apache/commons/jexl3/internal/TemplateEngine.java:353:11
+  getting parent type for (CtClassImpl) JexlBasedExpression @ src/main/java/org/apache/commons/jexl3/internal/TemplateEngine.java:397:20
+  getting parent type for (CtClassImpl) ImmediateExpression @ src/main/java/org/apache/commons/jexl3/internal/TemplateEngine.java:448:11
+  getting parent type for (CtClassImpl) DeferredExpression @ src/main/java/org/apache/commons/jexl3/internal/TemplateEngine.java:473:11
+  getting parent type for (CtClassImpl) NestedExpression @ src/main/java/org/apache/commons/jexl3/internal/TemplateEngine.java:510:11
+  getting parent type for (CtClassImpl) CompositeExpression @ src/main/java/org/apache/commons/jexl3/internal/TemplateEngine.java:554:11
+  getting parent type for (CtEnumImpl) ParseState @ src/main/java/org/apache/commons/jexl3/internal/TemplateEngine.java:709:18
+  [34mskipping default constructor: org.apache.commons.jexl3.internal.TemplateEngine$ParseState()[0m
+  getting parent type for (CtEnumImpl) BlockType @ src/main/java/org/apache/commons/jexl3/internal/TemplateEngine.java:899:10
+  [34mskipping default constructor: org.apache.commons.jexl3.internal.TemplateEngine$BlockType()[0m
+  getting parent type for (CtClassImpl) Block @ src/main/java/org/apache/commons/jexl3/internal/TemplateEngine.java:909:24
+  Pending package org.apache.commons.jexl3.internal.introspection
+  Pending package java.lang.reflect
+  getting parent type for (CtClassImpl) Parameters @ src/main/java/org/apache/commons/jexl3/internal/introspection/MethodKey.java:450:35
+  [34mskipping default constructor: org.apache.commons.jexl3.internal.introspection.MethodKey$Parameters()[0m
+  getting parent type for (CtClassImpl) AmbiguousException @ src/main/java/org/apache/commons/jexl3/internal/introspection/MethodKey.java:421:25
+  [34mskipping default constructor: org.apache.commons.jexl3.internal.introspection.MethodKey$Parameters()[0m
+  [34mskipping default constructor: org.apache.commons.jexl3.internal.introspection.MethodKey$Parameters()[0m
+  getting parent type for (CtClassImpl) CacheMiss @ src/main/java/org/apache/commons/jexl3/internal/introspection/Introspector.java:51:26
+  getting parent type for (CtClassImpl) ArithmeticUberspect @ src/main/java/org/apache/commons/jexl3/internal/introspection/Uberspect.java:394:21
+  getting parent type for (CtClassImpl) UberspectHolder @ src/main/java/org/apache/commons/jexl3/internal/Engine.java:68:32
+  getting parent type for (CtClassImpl) Names @ src/main/java/org/apache/commons/jexl3/introspection/JexlSandbox.java:203:34
+  [34mskipping default constructor: org.apache.commons.jexl3.introspection.JexlSandbox$Names()[0m
+  getting parent type for (CtClassImpl) Permissions @ src/main/java/org/apache/commons/jexl3/introspection/JexlSandbox.java:329:31
+  getting parent type for (CtClassImpl) WhiteSet @ src/main/java/org/apache/commons/jexl3/introspection/JexlSandbox.java:261:31
+  [34mskipping default constructor: org.apache.commons.jexl3.introspection.JexlSandbox$WhiteSet()[0m
+  getting parent type for (CtClassImpl) BlackSet @ src/main/java/org/apache/commons/jexl3/introspection/JexlSandbox.java:301:31
+  [34mskipping default constructor: org.apache.commons.jexl3.introspection.JexlSandbox$BlackSet()[0m
+  [34mskipping default constructor: org.apache.commons.jexl3.JexlBuilder()[0m
+  getting parent type for (CtClassImpl) Curried @ src/main/java/org/apache/commons/jexl3/internal/Script.java:199:25
+  getting parent type for (CtClassImpl) Callable @ src/main/java/org/apache/commons/jexl3/internal/Script.java:327:18
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.Parser @ src/main/java/org/apache/commons/jexl3/parser/ASTJexlLambda.java:29:19[0m
+  [34margument (CtParameterImpl) p @ src/main/java/org/apache/commons/jexl3/parser/ASTJexlLambda.java:29:26 had a null type. The type likely was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTContinue @ src/main/java/org/apache/commons/jexl3/internal/Debugger.java:551:28[0m
+  [34margument (CtParameterImpl) node @ src/main/java/org/apache/commons/jexl3/internal/Debugger.java:551:40 had a null type. The type likely was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTArrayAccess @ src/main/java/org/apache/commons/jexl3/internal/Debugger.java:407:28[0m
+  [34margument (CtParameterImpl) node @ src/main/java/org/apache/commons/jexl3/internal/Debugger.java:407:43 had a null type. The type likely was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTSubNode @ src/main/java/org/apache/commons/jexl3/internal/Debugger.java:370:28[0m
+  [34margument (CtParameterImpl) node @ src/main/java/org/apache/commons/jexl3/internal/Debugger.java:370:39 had a null type. The type likely was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTAddNode @ src/main/java/org/apache/commons/jexl3/internal/Debugger.java:365:28[0m
+  [34margument (CtParameterImpl) node @ src/main/java/org/apache/commons/jexl3/internal/Debugger.java:365:39 had a null type. The type likely was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTEWNode @ src/main/java/org/apache/commons/jexl3/internal/Debugger.java:531:28[0m
+  [34margument (CtParameterImpl) node @ src/main/java/org/apache/commons/jexl3/internal/Debugger.java:531:38 had a null type. The type likely was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTSetOrNode @ src/main/java/org/apache/commons/jexl3/internal/Debugger.java:984:28[0m
+  [34margument (CtParameterImpl) node @ src/main/java/org/apache/commons/jexl3/internal/Debugger.java:984:41 had a null type. The type likely was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTOrNode @ src/main/java/org/apache/commons/jexl3/internal/Debugger.java:841:28[0m
+  [34margument (CtParameterImpl) node @ src/main/java/org/apache/commons/jexl3/internal/Debugger.java:841:38 had a null type. The type likely was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTNotNode @ src/main/java/org/apache/commons/jexl3/internal/Debugger.java:828:28[0m
+  [34margument (CtParameterImpl) node @ src/main/java/org/apache/commons/jexl3/internal/Debugger.java:828:39 had a null type. The type likely was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTEQNode @ src/main/java/org/apache/commons/jexl3/internal/Debugger.java:516:28[0m
+  [34margument (CtParameterImpl) node @ src/main/java/org/apache/commons/jexl3/internal/Debugger.java:516:38 had a null type. The type likely was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTERNode @ src/main/java/org/apache/commons/jexl3/internal/Debugger.java:521:28[0m
+  [34margument (CtParameterImpl) node @ src/main/java/org/apache/commons/jexl3/internal/Debugger.java:521:38 had a null type. The type likely was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTMulNode @ src/main/java/org/apache/commons/jexl3/internal/Debugger.java:813:28[0m
+  [34margument (CtParameterImpl) node @ src/main/java/org/apache/commons/jexl3/internal/Debugger.java:813:39 had a null type. The type likely was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTNRNode @ src/main/java/org/apache/commons/jexl3/internal/Debugger.java:823:28[0m
+  [34margument (CtParameterImpl) node @ src/main/java/org/apache/commons/jexl3/internal/Debugger.java:823:38 had a null type. The type likely was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTTrueNode @ src/main/java/org/apache/commons/jexl3/internal/Debugger.java:923:28[0m
+  [34margument (CtParameterImpl) node @ src/main/java/org/apache/commons/jexl3/internal/Debugger.java:923:40 had a null type. The type likely was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTSetAndNode @ src/main/java/org/apache/commons/jexl3/internal/Debugger.java:979:28[0m
+  [34margument (CtParameterImpl) node @ src/main/java/org/apache/commons/jexl3/internal/Debugger.java:979:42 had a null type. The type likely was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTAndNode @ src/main/java/org/apache/commons/jexl3/internal/Debugger.java:402:28[0m
+  [34margument (CtParameterImpl) node @ src/main/java/org/apache/commons/jexl3/internal/Debugger.java:402:39 had a null type. The type likely was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTSetMultNode @ src/main/java/org/apache/commons/jexl3/internal/Debugger.java:964:28[0m
+  [34margument (CtParameterImpl) node @ src/main/java/org/apache/commons/jexl3/internal/Debugger.java:964:43 had a null type. The type likely was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTNEWNode @ src/main/java/org/apache/commons/jexl3/internal/Debugger.java:541:28[0m
+  [34margument (CtParameterImpl) node @ src/main/java/org/apache/commons/jexl3/internal/Debugger.java:541:39 had a null type. The type likely was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTMapEntry @ src/main/java/org/apache/commons/jexl3/internal/Debugger.java:715:28[0m
+  [34margument (CtParameterImpl) node @ src/main/java/org/apache/commons/jexl3/internal/Debugger.java:715:40 had a null type. The type likely was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTSetSubNode @ src/main/java/org/apache/commons/jexl3/internal/Debugger.java:959:28[0m
+  [34margument (CtParameterImpl) node @ src/main/java/org/apache/commons/jexl3/internal/Debugger.java:959:42 had a null type. The type likely was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTForeachStatement @ src/main/java/org/apache/commons/jexl3/internal/Debugger.java:561:28[0m
+  [34margument (CtParameterImpl) node @ src/main/java/org/apache/commons/jexl3/internal/Debugger.java:561:48 had a null type. The type likely was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTExtendedLiteral @ src/main/java/org/apache/commons/jexl3/internal/Debugger.java:418:28[0m
+  [34margument (CtParameterImpl) node @ src/main/java/org/apache/commons/jexl3/internal/Debugger.java:418:47 had a null type. The type likely was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTBreak @ src/main/java/org/apache/commons/jexl3/internal/Debugger.java:556:28[0m
+  [34margument (CtParameterImpl) node @ src/main/java/org/apache/commons/jexl3/internal/Debugger.java:556:37 had a null type. The type likely was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTUnaryMinusNode @ src/main/java/org/apache/commons/jexl3/internal/Debugger.java:929:28[0m
+  [34margument (CtParameterImpl) node @ src/main/java/org/apache/commons/jexl3/internal/Debugger.java:929:46 had a null type. The type likely was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTEmptyFunction @ src/main/java/org/apache/commons/jexl3/internal/Debugger.java:502:28[0m
+  [34margument (CtParameterImpl) node @ src/main/java/org/apache/commons/jexl3/internal/Debugger.java:502:45 had a null type. The type likely was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTSetAddNode @ src/main/java/org/apache/commons/jexl3/internal/Debugger.java:954:28[0m
+  [34margument (CtParameterImpl) node @ src/main/java/org/apache/commons/jexl3/internal/Debugger.java:954:42 had a null type. The type likely was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTBlock @ src/main/java/org/apache/commons/jexl3/internal/Debugger.java:471:28[0m
+  [34margument (CtParameterImpl) node @ src/main/java/org/apache/commons/jexl3/internal/Debugger.java:471:37 had a null type. The type likely was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTFunctionNode @ src/main/java/org/apache/commons/jexl3/internal/Debugger.java:768:28[0m
+  [34margument (CtParameterImpl) node @ src/main/java/org/apache/commons/jexl3/internal/Debugger.java:768:44 had a null type. The type likely was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTRangeNode @ src/main/java/org/apache/commons/jexl3/internal/Debugger.java:439:28[0m
+  [34margument (CtParameterImpl) node @ src/main/java/org/apache/commons/jexl3/internal/Debugger.java:439:41 had a null type. The type likely was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTAssignment @ src/main/java/org/apache/commons/jexl3/internal/Debugger.java:444:28[0m
+  [34margument (CtParameterImpl) node @ src/main/java/org/apache/commons/jexl3/internal/Debugger.java:444:42 had a null type. The type likely was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTSizeMethod @ src/main/java/org/apache/commons/jexl3/internal/Debugger.java:886:28[0m
+  [34margument (CtParameterImpl) node @ src/main/java/org/apache/commons/jexl3/internal/Debugger.java:886:42 had a null type. The type likely was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTNullpNode @ src/main/java/org/apache/commons/jexl3/internal/Debugger.java:915:28[0m
+  [34margument (CtParameterImpl) node @ src/main/java/org/apache/commons/jexl3/internal/Debugger.java:915:41 had a null type. The type likely was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTModNode @ src/main/java/org/apache/commons/jexl3/internal/Debugger.java:808:28[0m
+  [34margument (CtParameterImpl) node @ src/main/java/org/apache/commons/jexl3/internal/Debugger.java:808:39 had a null type. The type likely was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTWhileStatement @ src/main/java/org/apache/commons/jexl3/internal/Debugger.java:941:28[0m
+  [34margument (CtParameterImpl) node @ src/main/java/org/apache/commons/jexl3/internal/Debugger.java:941:46 had a null type. The type likely was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTGENode @ src/main/java/org/apache/commons/jexl3/internal/Debugger.java:576:28[0m
+  [34margument (CtParameterImpl) node @ src/main/java/org/apache/commons/jexl3/internal/Debugger.java:576:38 had a null type. The type likely was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTNENode @ src/main/java/org/apache/commons/jexl3/internal/Debugger.java:818:28[0m
+  [34margument (CtParameterImpl) node @ src/main/java/org/apache/commons/jexl3/internal/Debugger.java:818:38 had a null type. The type likely was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTAnnotatedStatement @ src/main/java/org/apache/commons/jexl3/internal/Debugger.java:1011:28[0m
+  [34margument (CtParameterImpl) node @ src/main/java/org/apache/commons/jexl3/internal/Debugger.java:1011:50 had a null type. The type likely was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTEmptyMethod @ src/main/java/org/apache/commons/jexl3/internal/Debugger.java:509:28[0m
+  [34margument (CtParameterImpl) node @ src/main/java/org/apache/commons/jexl3/internal/Debugger.java:509:43 had a null type. The type likely was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTNSWNode @ src/main/java/org/apache/commons/jexl3/internal/Debugger.java:536:28[0m
+  [34margument (CtParameterImpl) node @ src/main/java/org/apache/commons/jexl3/internal/Debugger.java:536:39 had a null type. The type likely was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTSetDivNode @ src/main/java/org/apache/commons/jexl3/internal/Debugger.java:969:28[0m
+  [34margument (CtParameterImpl) node @ src/main/java/org/apache/commons/jexl3/internal/Debugger.java:969:42 had a null type. The type likely was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTLTNode @ src/main/java/org/apache/commons/jexl3/internal/Debugger.java:710:28[0m
+  [34margument (CtParameterImpl) node @ src/main/java/org/apache/commons/jexl3/internal/Debugger.java:710:38 had a null type. The type likely was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTFalseNode @ src/main/java/org/apache/commons/jexl3/internal/Debugger.java:546:28[0m
+  [34margument (CtParameterImpl) node @ src/main/java/org/apache/commons/jexl3/internal/Debugger.java:546:41 had a null type. The type likely was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTNullLiteral @ src/main/java/org/apache/commons/jexl3/internal/Debugger.java:835:28[0m
+  [34margument (CtParameterImpl) node @ src/main/java/org/apache/commons/jexl3/internal/Debugger.java:835:43 had a null type. The type likely was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTSetModNode @ src/main/java/org/apache/commons/jexl3/internal/Debugger.java:974:28[0m
+  [34margument (CtParameterImpl) node @ src/main/java/org/apache/commons/jexl3/internal/Debugger.java:974:42 had a null type. The type likely was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTConstructorNode @ src/main/java/org/apache/commons/jexl3/internal/Debugger.java:755:28[0m
+  [34margument (CtParameterImpl) node @ src/main/java/org/apache/commons/jexl3/internal/Debugger.java:755:47 had a null type. The type likely was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTMethodNode @ src/main/java/org/apache/commons/jexl3/internal/Debugger.java:783:28[0m
+  [34margument (CtParameterImpl) node @ src/main/java/org/apache/commons/jexl3/internal/Debugger.java:783:42 had a null type. The type likely was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTArguments @ src/main/java/org/apache/commons/jexl3/internal/Debugger.java:793:28[0m
+  [34margument (CtParameterImpl) node @ src/main/java/org/apache/commons/jexl3/internal/Debugger.java:793:41 had a null type. The type likely was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTIfStatement @ src/main/java/org/apache/commons/jexl3/internal/Debugger.java:625:28[0m
+  [34margument (CtParameterImpl) node @ src/main/java/org/apache/commons/jexl3/internal/Debugger.java:625:43 had a null type. The type likely was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTBitwiseOrNode @ src/main/java/org/apache/commons/jexl3/internal/Debugger.java:459:28[0m
+  [34margument (CtParameterImpl) node @ src/main/java/org/apache/commons/jexl3/internal/Debugger.java:459:45 had a null type. The type likely was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTBitwiseAndNode @ src/main/java/org/apache/commons/jexl3/internal/Debugger.java:449:28[0m
+  [34margument (CtParameterImpl) node @ src/main/java/org/apache/commons/jexl3/internal/Debugger.java:449:46 had a null type. The type likely was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTBitwiseComplNode @ src/main/java/org/apache/commons/jexl3/internal/Debugger.java:454:28[0m
+  [34margument (CtParameterImpl) node @ src/main/java/org/apache/commons/jexl3/internal/Debugger.java:454:48 had a null type. The type likely was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTSWNode @ src/main/java/org/apache/commons/jexl3/internal/Debugger.java:526:28[0m
+  [34margument (CtParameterImpl) node @ src/main/java/org/apache/commons/jexl3/internal/Debugger.java:526:38 had a null type. The type likely was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTTernaryNode @ src/main/java/org/apache/commons/jexl3/internal/Debugger.java:899:28[0m
+  [34margument (CtParameterImpl) node @ src/main/java/org/apache/commons/jexl3/internal/Debugger.java:899:43 had a null type. The type likely was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTBitwiseXorNode @ src/main/java/org/apache/commons/jexl3/internal/Debugger.java:465:28[0m
+  [34margument (CtParameterImpl) node @ src/main/java/org/apache/commons/jexl3/internal/Debugger.java:465:46 had a null type. The type likely was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTLENode @ src/main/java/org/apache/commons/jexl3/internal/Debugger.java:705:28[0m
+  [34margument (CtParameterImpl) node @ src/main/java/org/apache/commons/jexl3/internal/Debugger.java:705:38 had a null type. The type likely was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTSetXorNode @ src/main/java/org/apache/commons/jexl3/internal/Debugger.java:989:28[0m
+  [34margument (CtParameterImpl) node @ src/main/java/org/apache/commons/jexl3/internal/Debugger.java:989:42 had a null type. The type likely was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTReturnStatement @ src/main/java/org/apache/commons/jexl3/internal/Debugger.java:872:28[0m
+  [34margument (CtParameterImpl) node @ src/main/java/org/apache/commons/jexl3/internal/Debugger.java:872:47 had a null type. The type likely was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTReference @ src/main/java/org/apache/commons/jexl3/internal/Debugger.java:848:28[0m
+  [34margument (CtParameterImpl) node @ src/main/java/org/apache/commons/jexl3/internal/Debugger.java:848:41 had a null type. The type likely was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTSizeFunction @ src/main/java/org/apache/commons/jexl3/internal/Debugger.java:879:28[0m
+  [34margument (CtParameterImpl) node @ src/main/java/org/apache/commons/jexl3/internal/Debugger.java:879:44 had a null type. The type likely was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTGTNode @ src/main/java/org/apache/commons/jexl3/internal/Debugger.java:581:28[0m
+  [34margument (CtParameterImpl) node @ src/main/java/org/apache/commons/jexl3/internal/Debugger.java:581:38 had a null type. The type likely was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTDivNode @ src/main/java/org/apache/commons/jexl3/internal/Debugger.java:497:28[0m
+  [34margument (CtParameterImpl) node @ src/main/java/org/apache/commons/jexl3/internal/Debugger.java:497:39 had a null type. The type likely was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.[0m
+  getting parent type for (CtClassImpl) Ascending @ src/main/java/org/apache/commons/jexl3/internal/IntegerRange.java:200:25
+  Pending package java.util.stream
+  Pending package java.util.function
+  Pending package java.util
+  getting parent type for (CtClassImpl) Descending @ src/main/java/org/apache/commons/jexl3/internal/IntegerRange.java:219:25
+  getting parent type for (CtClassImpl) Ascending @ src/main/java/org/apache/commons/jexl3/internal/LongRange.java:202:25
+  getting parent type for (CtClassImpl) Descending @ src/main/java/org/apache/commons/jexl3/internal/LongRange.java:221:25
+  [34mskipping default constructor: org.apache.commons.jexl3.internal.ScriptVisitor()[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTAssignment @ src/main/java/org/apache/commons/jexl3/internal/ScriptVisitor.java:178:28[0m
+  [34margument (CtParameterImpl) node @ src/main/java/org/apache/commons/jexl3/internal/ScriptVisitor.java:178:42 had a null type. The type likely was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTBlock @ src/main/java/org/apache/commons/jexl3/internal/ScriptVisitor.java:143:28[0m
+  [34margument (CtParameterImpl) node @ src/main/java/org/apache/commons/jexl3/internal/ScriptVisitor.java:143:37 had a null type. The type likely was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTLENode @ src/main/java/org/apache/commons/jexl3/internal/ScriptVisitor.java:248:28[0m
+  [34margument (CtParameterImpl) node @ src/main/java/org/apache/commons/jexl3/internal/ScriptVisitor.java:248:38 had a null type. The type likely was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTNotNode @ src/main/java/org/apache/commons/jexl3/internal/ScriptVisitor.java:323:28[0m
+  [34margument (CtParameterImpl) node @ src/main/java/org/apache/commons/jexl3/internal/ScriptVisitor.java:323:39 had a null type. The type likely was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTExtendedLiteral @ src/main/java/org/apache/commons/jexl3/internal/ScriptVisitor.java:363:28[0m
+  [34margument (CtParameterImpl) node @ src/main/java/org/apache/commons/jexl3/internal/ScriptVisitor.java:363:47 had a null type. The type likely was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTArguments @ src/main/java/org/apache/commons/jexl3/internal/ScriptVisitor.java:433:28[0m
+  [34margument (CtParameterImpl) node @ src/main/java/org/apache/commons/jexl3/internal/ScriptVisitor.java:433:41 had a null type. The type likely was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTSetSubNode @ src/main/java/org/apache/commons/jexl3/internal/ScriptVisitor.java:448:28[0m
+  [34margument (CtParameterImpl) node @ src/main/java/org/apache/commons/jexl3/internal/ScriptVisitor.java:448:42 had a null type. The type likely was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTSetOrNode @ src/main/java/org/apache/commons/jexl3/internal/ScriptVisitor.java:473:28[0m
+  [34margument (CtParameterImpl) node @ src/main/java/org/apache/commons/jexl3/internal/ScriptVisitor.java:473:41 had a null type. The type likely was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTLTNode @ src/main/java/org/apache/commons/jexl3/internal/ScriptVisitor.java:238:28[0m
+  [34margument (CtParameterImpl) node @ src/main/java/org/apache/commons/jexl3/internal/ScriptVisitor.java:238:38 had a null type. The type likely was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTSizeMethod @ src/main/java/org/apache/commons/jexl3/internal/ScriptVisitor.java:413:28[0m
+  [34margument (CtParameterImpl) node @ src/main/java/org/apache/commons/jexl3/internal/ScriptVisitor.java:413:42 had a null type. The type likely was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTMapEntry @ src/main/java/org/apache/commons/jexl3/internal/ScriptVisitor.java:383:28[0m
+  [34margument (CtParameterImpl) node @ src/main/java/org/apache/commons/jexl3/internal/ScriptVisitor.java:383:40 had a null type. The type likely was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTSetXorNode @ src/main/java/org/apache/commons/jexl3/internal/ScriptVisitor.java:478:28[0m
+  [34margument (CtParameterImpl) node @ src/main/java/org/apache/commons/jexl3/internal/ScriptVisitor.java:478:42 had a null type. The type likely was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTFalseNode @ src/main/java/org/apache/commons/jexl3/internal/ScriptVisitor.java:343:28[0m
+  [34margument (CtParameterImpl) node @ src/main/java/org/apache/commons/jexl3/internal/ScriptVisitor.java:343:41 had a null type. The type likely was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTTernaryNode @ src/main/java/org/apache/commons/jexl3/internal/ScriptVisitor.java:193:28[0m
+  [34margument (CtParameterImpl) node @ src/main/java/org/apache/commons/jexl3/internal/ScriptVisitor.java:193:43 had a null type. The type likely was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTAndNode @ src/main/java/org/apache/commons/jexl3/internal/ScriptVisitor.java:208:28[0m
+  [34margument (CtParameterImpl) node @ src/main/java/org/apache/commons/jexl3/internal/ScriptVisitor.java:208:39 had a null type. The type likely was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTUnaryMinusNode @ src/main/java/org/apache/commons/jexl3/internal/ScriptVisitor.java:313:28[0m
+  [34margument (CtParameterImpl) node @ src/main/java/org/apache/commons/jexl3/internal/ScriptVisitor.java:313:46 had a null type. The type likely was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTSetMultNode @ src/main/java/org/apache/commons/jexl3/internal/ScriptVisitor.java:453:28[0m
+  [34margument (CtParameterImpl) node @ src/main/java/org/apache/commons/jexl3/internal/ScriptVisitor.java:453:43 had a null type. The type likely was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTIfStatement @ src/main/java/org/apache/commons/jexl3/internal/ScriptVisitor.java:148:28[0m
+  [34margument (CtParameterImpl) node @ src/main/java/org/apache/commons/jexl3/internal/ScriptVisitor.java:148:43 had a null type. The type likely was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTWhileStatement @ src/main/java/org/apache/commons/jexl3/internal/ScriptVisitor.java:153:28[0m
+  [34margument (CtParameterImpl) node @ src/main/java/org/apache/commons/jexl3/internal/ScriptVisitor.java:153:46 had a null type. The type likely was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTBitwiseAndNode @ src/main/java/org/apache/commons/jexl3/internal/ScriptVisitor.java:223:28[0m
+  [34margument (CtParameterImpl) node @ src/main/java/org/apache/commons/jexl3/internal/ScriptVisitor.java:223:46 had a null type. The type likely was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTNullpNode @ src/main/java/org/apache/commons/jexl3/internal/ScriptVisitor.java:198:28[0m
+  [34margument (CtParameterImpl) node @ src/main/java/org/apache/commons/jexl3/internal/ScriptVisitor.java:198:41 had a null type. The type likely was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTEmptyFunction @ src/main/java/org/apache/commons/jexl3/internal/ScriptVisitor.java:388:28[0m
+  [34margument (CtParameterImpl) node @ src/main/java/org/apache/commons/jexl3/internal/ScriptVisitor.java:388:45 had a null type. The type likely was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTModNode @ src/main/java/org/apache/commons/jexl3/internal/ScriptVisitor.java:308:28[0m
+  [34margument (CtParameterImpl) node @ src/main/java/org/apache/commons/jexl3/internal/ScriptVisitor.java:308:39 had a null type. The type likely was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTRangeNode @ src/main/java/org/apache/commons/jexl3/internal/ScriptVisitor.java:373:28[0m
+  [34margument (CtParameterImpl) node @ src/main/java/org/apache/commons/jexl3/internal/ScriptVisitor.java:373:41 had a null type. The type likely was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTFunctionNode @ src/main/java/org/apache/commons/jexl3/internal/ScriptVisitor.java:403:28[0m
+  [34margument (CtParameterImpl) node @ src/main/java/org/apache/commons/jexl3/internal/ScriptVisitor.java:403:44 had a null type. The type likely was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTContinue @ src/main/java/org/apache/commons/jexl3/internal/ScriptVisitor.java:158:28[0m
+  [34margument (CtParameterImpl) node @ src/main/java/org/apache/commons/jexl3/internal/ScriptVisitor.java:158:40 had a null type. The type likely was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTSizeFunction @ src/main/java/org/apache/commons/jexl3/internal/ScriptVisitor.java:398:28[0m
+  [34margument (CtParameterImpl) node @ src/main/java/org/apache/commons/jexl3/internal/ScriptVisitor.java:398:44 had a null type. The type likely was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTNRNode @ src/main/java/org/apache/commons/jexl3/internal/ScriptVisitor.java:263:28[0m
+  [34margument (CtParameterImpl) node @ src/main/java/org/apache/commons/jexl3/internal/ScriptVisitor.java:263:38 had a null type. The type likely was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTConstructorNode @ src/main/java/org/apache/commons/jexl3/internal/ScriptVisitor.java:418:28[0m
+  [34margument (CtParameterImpl) node @ src/main/java/org/apache/commons/jexl3/internal/ScriptVisitor.java:418:47 had a null type. The type likely was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTNSWNode @ src/main/java/org/apache/commons/jexl3/internal/ScriptVisitor.java:273:28[0m
+  [34margument (CtParameterImpl) node @ src/main/java/org/apache/commons/jexl3/internal/ScriptVisitor.java:273:39 had a null type. The type likely was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTOrNode @ src/main/java/org/apache/commons/jexl3/internal/ScriptVisitor.java:203:28[0m
+  [34margument (CtParameterImpl) node @ src/main/java/org/apache/commons/jexl3/internal/ScriptVisitor.java:203:38 had a null type. The type likely was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTGTNode @ src/main/java/org/apache/commons/jexl3/internal/ScriptVisitor.java:243:28[0m
+  [34margument (CtParameterImpl) node @ src/main/java/org/apache/commons/jexl3/internal/ScriptVisitor.java:243:38 had a null type. The type likely was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTGENode @ src/main/java/org/apache/commons/jexl3/internal/ScriptVisitor.java:253:28[0m
+  [34margument (CtParameterImpl) node @ src/main/java/org/apache/commons/jexl3/internal/ScriptVisitor.java:253:38 had a null type. The type likely was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTERNode @ src/main/java/org/apache/commons/jexl3/internal/ScriptVisitor.java:258:28[0m
+  [34margument (CtParameterImpl) node @ src/main/java/org/apache/commons/jexl3/internal/ScriptVisitor.java:258:38 had a null type. The type likely was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTBreak @ src/main/java/org/apache/commons/jexl3/internal/ScriptVisitor.java:163:28[0m
+  [34margument (CtParameterImpl) node @ src/main/java/org/apache/commons/jexl3/internal/ScriptVisitor.java:163:37 had a null type. The type likely was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTBitwiseXorNode @ src/main/java/org/apache/commons/jexl3/internal/ScriptVisitor.java:218:28[0m
+  [34margument (CtParameterImpl) node @ src/main/java/org/apache/commons/jexl3/internal/ScriptVisitor.java:218:46 had a null type. The type likely was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTEQNode @ src/main/java/org/apache/commons/jexl3/internal/ScriptVisitor.java:228:28[0m
+  [34margument (CtParameterImpl) node @ src/main/java/org/apache/commons/jexl3/internal/ScriptVisitor.java:228:38 had a null type. The type likely was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTSetAndNode @ src/main/java/org/apache/commons/jexl3/internal/ScriptVisitor.java:468:28[0m
+  [34margument (CtParameterImpl) node @ src/main/java/org/apache/commons/jexl3/internal/ScriptVisitor.java:468:42 had a null type. The type likely was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTBitwiseComplNode @ src/main/java/org/apache/commons/jexl3/internal/ScriptVisitor.java:318:28[0m
+  [34margument (CtParameterImpl) node @ src/main/java/org/apache/commons/jexl3/internal/ScriptVisitor.java:318:48 had a null type. The type likely was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTArrayAccess @ src/main/java/org/apache/commons/jexl3/internal/ScriptVisitor.java:423:28[0m
+  [34margument (CtParameterImpl) node @ src/main/java/org/apache/commons/jexl3/internal/ScriptVisitor.java:423:43 had a null type. The type likely was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTDivNode @ src/main/java/org/apache/commons/jexl3/internal/ScriptVisitor.java:303:28[0m
+  [34margument (CtParameterImpl) node @ src/main/java/org/apache/commons/jexl3/internal/ScriptVisitor.java:303:39 had a null type. The type likely was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTBitwiseOrNode @ src/main/java/org/apache/commons/jexl3/internal/ScriptVisitor.java:213:28[0m
+  [34margument (CtParameterImpl) node @ src/main/java/org/apache/commons/jexl3/internal/ScriptVisitor.java:213:45 had a null type. The type likely was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTMulNode @ src/main/java/org/apache/commons/jexl3/internal/ScriptVisitor.java:298:28[0m
+  [34margument (CtParameterImpl) node @ src/main/java/org/apache/commons/jexl3/internal/ScriptVisitor.java:298:39 had a null type. The type likely was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTAddNode @ src/main/java/org/apache/commons/jexl3/internal/ScriptVisitor.java:288:28[0m
+  [34margument (CtParameterImpl) node @ src/main/java/org/apache/commons/jexl3/internal/ScriptVisitor.java:288:39 had a null type. The type likely was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTEmptyMethod @ src/main/java/org/apache/commons/jexl3/internal/ScriptVisitor.java:393:28[0m
+  [34margument (CtParameterImpl) node @ src/main/java/org/apache/commons/jexl3/internal/ScriptVisitor.java:393:43 had a null type. The type likely was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTNENode @ src/main/java/org/apache/commons/jexl3/internal/ScriptVisitor.java:233:28[0m
+  [34margument (CtParameterImpl) node @ src/main/java/org/apache/commons/jexl3/internal/ScriptVisitor.java:233:38 had a null type. The type likely was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTMethodNode @ src/main/java/org/apache/commons/jexl3/internal/ScriptVisitor.java:408:28[0m
+  [34margument (CtParameterImpl) node @ src/main/java/org/apache/commons/jexl3/internal/ScriptVisitor.java:408:42 had a null type. The type likely was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTTrueNode @ src/main/java/org/apache/commons/jexl3/internal/ScriptVisitor.java:338:28[0m
+  [34margument (CtParameterImpl) node @ src/main/java/org/apache/commons/jexl3/internal/ScriptVisitor.java:338:40 had a null type. The type likely was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTNEWNode @ src/main/java/org/apache/commons/jexl3/internal/ScriptVisitor.java:283:28[0m
+  [34margument (CtParameterImpl) node @ src/main/java/org/apache/commons/jexl3/internal/ScriptVisitor.java:283:39 had a null type. The type likely was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTForeachStatement @ src/main/java/org/apache/commons/jexl3/internal/ScriptVisitor.java:168:28[0m
+  [34margument (CtParameterImpl) node @ src/main/java/org/apache/commons/jexl3/internal/ScriptVisitor.java:168:48 had a null type. The type likely was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTReturnStatement @ src/main/java/org/apache/commons/jexl3/internal/ScriptVisitor.java:173:28[0m
+  [34margument (CtParameterImpl) node @ src/main/java/org/apache/commons/jexl3/internal/ScriptVisitor.java:173:47 had a null type. The type likely was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTEWNode @ src/main/java/org/apache/commons/jexl3/internal/ScriptVisitor.java:278:28[0m
+  [34margument (CtParameterImpl) node @ src/main/java/org/apache/commons/jexl3/internal/ScriptVisitor.java:278:38 had a null type. The type likely was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTSetModNode @ src/main/java/org/apache/commons/jexl3/internal/ScriptVisitor.java:463:28[0m
+  [34margument (CtParameterImpl) node @ src/main/java/org/apache/commons/jexl3/internal/ScriptVisitor.java:463:42 had a null type. The type likely was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTAnnotatedStatement @ src/main/java/org/apache/commons/jexl3/internal/ScriptVisitor.java:493:28[0m
+  [34margument (CtParameterImpl) node @ src/main/java/org/apache/commons/jexl3/internal/ScriptVisitor.java:493:50 had a null type. The type likely was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTSWNode @ src/main/java/org/apache/commons/jexl3/internal/ScriptVisitor.java:268:28[0m
+  [34margument (CtParameterImpl) node @ src/main/java/org/apache/commons/jexl3/internal/ScriptVisitor.java:268:38 had a null type. The type likely was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTSetDivNode @ src/main/java/org/apache/commons/jexl3/internal/ScriptVisitor.java:458:28[0m
+  [34margument (CtParameterImpl) node @ src/main/java/org/apache/commons/jexl3/internal/ScriptVisitor.java:458:42 had a null type. The type likely was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTSubNode @ src/main/java/org/apache/commons/jexl3/internal/ScriptVisitor.java:293:28[0m
+  [34margument (CtParameterImpl) node @ src/main/java/org/apache/commons/jexl3/internal/ScriptVisitor.java:293:39 had a null type. The type likely was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTNullLiteral @ src/main/java/org/apache/commons/jexl3/internal/ScriptVisitor.java:333:28[0m
+  [34margument (CtParameterImpl) node @ src/main/java/org/apache/commons/jexl3/internal/ScriptVisitor.java:333:43 had a null type. The type likely was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTSetAddNode @ src/main/java/org/apache/commons/jexl3/internal/ScriptVisitor.java:443:28[0m
+  [34margument (CtParameterImpl) node @ src/main/java/org/apache/commons/jexl3/internal/ScriptVisitor.java:443:42 had a null type. The type likely was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTReference @ src/main/java/org/apache/commons/jexl3/internal/ScriptVisitor.java:188:28[0m
+  [34margument (CtParameterImpl) node @ src/main/java/org/apache/commons/jexl3/internal/ScriptVisitor.java:188:41 had a null type. The type likely was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTBlock @ src/main/java/org/apache/commons/jexl3/internal/TemplateDebugger.java:97:28[0m
+  [34margument (CtParameterImpl) node @ src/main/java/org/apache/commons/jexl3/internal/TemplateDebugger.java:97:37 had a null type. The type likely was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTFunctionNode @ src/main/java/org/apache/commons/jexl3/internal/TemplateInterpreter.java:140:28[0m
+  [34margument (CtParameterImpl) node @ src/main/java/org/apache/commons/jexl3/internal/TemplateInterpreter.java:140:44 had a null type. The type likely was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.[0m
+  [34mUnused type args: [java.lang.String, java.lang.reflect.Method[]][0m
+  [34mUnused type args: [K, V][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.Parser[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.Parser[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.Parser[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.Parser[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTArrayAccess[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTArrayAccess[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTArrayAccess[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTArrayAccess[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTArrayAccess[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTArrayAccess[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTArrayAccess[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTArrayAccess[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTArrayAccess[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTArrayAccess[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTArrayAccess[0m
+  [34mUnused type args: [org.apache.commons.jexl3.internal.introspection.MethodKey, java.lang.reflect.Method][0m
+  [34mUnused type args: [java.lang.String, java.lang.reflect.Method[]][0m
+  [34mUnused type args: [org.apache.commons.jexl3.internal.introspection.MethodKey, java.lang.reflect.Method][0m
+  [34mUnused type args: [org.apache.commons.jexl3.internal.introspection.MethodKey, java.lang.reflect.Method][0m
+  [34mUnused type args: [org.apache.commons.jexl3.internal.introspection.MethodKey, java.lang.reflect.Method][0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTNRNode[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTNRNode[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTNRNode[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTNSWNode[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTNSWNode[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTNSWNode[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTNSWNode[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTNSWNode[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTNSWNode[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTNSWNode[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTNSWNode[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTNSWNode[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTNSWNode[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTNSWNode[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [java.lang.Object][0m
+  [34mUnused type args: [java.lang.Object][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [java.lang.Object @ src/main/java/org/apache/commons/jexl3/internal/SetBuilder.java:35:27][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTSetAndNode[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTSetAndNode[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTSetAndNode[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTForeachStatement[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTForeachStatement[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTForeachStatement[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTArrayAccess[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTArrayAccess[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTArrayAccess[0m
+  [34mSkipping selection with no field declaration: (CtFieldReferenceImpl) class[0m
+  [34mSkipping selection with no field declaration: (CtFieldReferenceImpl) class[0m
+  [34mUnused type args: [?][0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTSetMultNode[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTSetMultNode[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTSetMultNode[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.Parser[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.Parser[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.Parser[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.Parser[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTAndNode[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTAndNode[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTAndNode[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTTernaryNode[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTTernaryNode[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTTernaryNode[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTTernaryNode[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTTernaryNode[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTTernaryNode[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTTernaryNode[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTTernaryNode[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTTernaryNode[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTTernaryNode[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTTernaryNode[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTTernaryNode[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTTernaryNode[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTTernaryNode[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTTernaryNode[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTTernaryNode[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTTernaryNode[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTTernaryNode[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTTernaryNode[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTTernaryNode[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [java.lang.String, java.lang.Object][0m
+  [34mUnused type args: [java.lang.String, java.lang.Object][0m
+  [34mUnused type args: [java.lang.String, java.lang.Object][0m
+  [34mUnused type args: [java.lang.String, java.lang.Object][0m
+  [34mUnused type args: [java.lang.String, java.lang.Object][0m
+  [34mUnused type args: [java.lang.String, java.lang.Object][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTModNode[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTModNode[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTModNode[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTModNode[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTModNode[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTModNode[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTModNode[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTModNode[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTModNode[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTModNode[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTModNode[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTModNode[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTModNode[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTModNode[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTBlock[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTBlock[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTBlock[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTNSWNode[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTNSWNode[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTNSWNode[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTOrNode[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTOrNode[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTOrNode[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTOrNode[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTOrNode[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTOrNode[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTOrNode[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTOrNode[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTOrNode[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTOrNode[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTOrNode[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTOrNode[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTOrNode[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTOrNode[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTOrNode[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTOrNode[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTSetAndNode[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTSetAndNode[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTSetAndNode[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [java.lang.String, org.apache.commons.jexl3.introspection.JexlSandbox$Permissions][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [java.lang.String @ src/main/java/org/apache/commons/jexl3/introspection/JexlSandbox.java:74:32, org.apache.commons.jexl3.introspection.JexlSandbox$Permissions @ src/main/java/org/apache/commons/jexl3/introspection/JexlSandbox.java:74:40][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [java.lang.StackTraceElement @ src/main/java/org/apache/commons/jexl3/JexlException.java:156:18][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [java.lang.StackTraceElement @ src/main/java/org/apache/commons/jexl3/JexlException.java:156:63][0m
+  [34mUnused type args: [java.lang.StackTraceElement][0m
+  [34mUnused type args: [java.lang.StackTraceElement][0m
+  [34mUnused type args: [java.lang.StackTraceElement][0m
+  [34mUnused type args: [java.lang.StackTraceElement][0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTModNode[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTModNode[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTModNode[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTArguments[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTArguments[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTArguments[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTArguments[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTArguments[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTArguments[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTArguments[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTArguments[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTArguments[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTArguments[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTArguments[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTArguments[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTSetOrNode[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTSetOrNode[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTSetOrNode[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTFunctionNode[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTFunctionNode[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTFunctionNode[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTFunctionNode[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTFunctionNode[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTFunctionNode[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTFunctionNode[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTFunctionNode[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTArguments @ src/main/java/org/apache/commons/jexl3/internal/Interpreter.java:1362:13[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTArguments @ src/main/java/org/apache/commons/jexl3/internal/Interpreter.java:1362:13[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTArguments @ src/main/java/org/apache/commons/jexl3/internal/Interpreter.java:1362:37[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTFunctionNode[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTFunctionNode[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTFunctionNode[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTFunctionNode[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTArguments[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTFunctionNode[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTFunctionNode[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTFunctionNode[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTArguments[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTArguments[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTArguments[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTFunctionNode[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTFunctionNode[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTFunctionNode[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTFunctionNode[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTFunctionNode[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTFunctionNode[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTFunctionNode[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTFunctionNode[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTFunctionNode[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTFunctionNode[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTFunctionNode[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTArguments @ src/main/java/org/apache/commons/jexl3/internal/Interpreter.java:1370:13[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTArguments @ src/main/java/org/apache/commons/jexl3/internal/Interpreter.java:1370:13[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTArguments @ src/main/java/org/apache/commons/jexl3/internal/Interpreter.java:1370:37[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTFunctionNode[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTFunctionNode[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTFunctionNode[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTFunctionNode[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTArguments[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTFunctionNode[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTFunctionNode[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTFunctionNode[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTArguments[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTArguments[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTArguments[0m
+  [34mUnused type args: [java.lang.String, java.lang.Integer][0m
+  [34mUnused type args: [java.lang.String, java.lang.Integer][0m
+  [34mUnused type args: [java.lang.String, java.lang.Integer][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [java.lang.String @ src/main/java/org/apache/commons/jexl3/internal/Scope.java:146:48, java.lang.Integer @ src/main/java/org/apache/commons/jexl3/internal/Scope.java:146:56][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [java.lang.String, java.lang.Integer][0m
+  [34mUnused type args: [java.lang.String, java.lang.Integer][0m
+  [34mUnused type args: [java.lang.String, java.lang.Integer][0m
+  [34mSkipping selection with no field declaration: (CtFieldReferenceImpl) jjtNodeName[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) ParserTreeConstants[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) ParserTreeConstants[0m
+  Pending package <unnamed>
+  [34mSkipping selection with no field declaration: (CtFieldReferenceImpl) jjtNodeName[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) ParserTreeConstants[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTTernaryNode[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTTernaryNode[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTTernaryNode[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTBlock[0m
+  [34mUnused type args: [java.lang.String, java.lang.Integer][0m
+  [34mUnused type args: [java.lang.String, java.lang.Integer][0m
+  [34mUnused type args: [java.lang.Integer, java.lang.Integer][0m
+  [34mUnused type args: [java.lang.Integer, java.lang.Integer][0m
+  [34mUnused type args: [java.lang.Integer, java.lang.Integer][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [java.lang.Integer @ src/main/java/org/apache/commons/jexl3/internal/Scope.java:115:58, java.lang.Integer @ src/main/java/org/apache/commons/jexl3/internal/Scope.java:115:67][0m
+  [34mUnused type args: [java.lang.String, java.lang.Integer][0m
+  [34mUnused type args: [java.lang.String, java.lang.Integer][0m
+  [34mUnused type args: [java.lang.String, java.lang.Integer][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [java.lang.String @ src/main/java/org/apache/commons/jexl3/internal/Scope.java:118:56, java.lang.Integer @ src/main/java/org/apache/commons/jexl3/internal/Scope.java:118:64][0m
+  [34mUnused type args: [java.lang.String, java.lang.Integer][0m
+  [34mUnused type args: [java.lang.String, java.lang.Integer][0m
+  [34mUnused type args: [java.lang.Integer, java.lang.Integer][0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTSWNode[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTSWNode[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTSWNode[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTSWNode[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTSWNode[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTSWNode[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTSWNode[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTSWNode[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTSWNode[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTSWNode[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTSWNode[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTSizeMethod[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTSizeMethod[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTSizeMethod[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTSizeMethod[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTSizeMethod[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTSizeMethod[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTSizeMethod[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTEmptyMethod[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTEmptyMethod[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTEmptyMethod[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTNotNode[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTNotNode[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTNotNode[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTNotNode[0m
+  [34mSkipping selection with no field declaration: (CtFieldReferenceImpl) class[0m
+  [34mSkipping selection with no field declaration: (CtFieldReferenceImpl) class[0m
+  [34mUnused type args: [?][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [?][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [? @ src/main/java/org/apache/commons/jexl3/internal/introspection/Uberspect.java:235:21][0m
+  [34mUnused type args: [?][0m
+  getting parent type for (CtClassImpl) Get @ src/main/java/org/apache/commons/jexl3/internal/introspection/AbstractExecutor.java:194:34
+  getting parent type for (CtClassImpl) Set @ src/main/java/org/apache/commons/jexl3/internal/introspection/AbstractExecutor.java:208:34
+  getting parent type for (CtClassImpl) Method @ src/main/java/org/apache/commons/jexl3/internal/introspection/AbstractExecutor.java:222:34
+  [34mUnused type args: [org.apache.commons.jexl3.introspection.JexlUberspect$PropertyResolver @ src/main/java/org/apache/commons/jexl3/internal/introspection/Uberspect.java:238:20][0m
+  [34mUnused type args: [org.apache.commons.jexl3.introspection.JexlUberspect$PropertyResolver][0m
+  [34mUnused type args: [org.apache.commons.jexl3.introspection.JexlUberspect$PropertyResolver][0m
+  [34mUnused type args: [org.apache.commons.jexl3.introspection.JexlUberspect$PropertyResolver][0m
+  [34mUnused type args: [org.apache.commons.jexl3.introspection.JexlUberspect$PropertyResolver][0m
+  [34mUnused type args: [org.apache.commons.jexl3.introspection.JexlUberspect$PropertyResolver][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [? @ src/main/java/org/apache/commons/jexl3/internal/introspection/Uberspect.java:273:50][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [? @ src/main/java/org/apache/commons/jexl3/internal/introspection/Uberspect.java:274:77][0m
+  getting parent type for (CtClassImpl) IndexedContainer @ src/main/java/org/apache/commons/jexl3/internal/introspection/IndexedType.java:75:31
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [? @ src/main/java/org/apache/commons/jexl3/parser/JexlNode.java:110:61][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.Parser[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.Parser[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.Parser[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.Parser[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTBitwiseOrNode[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTBitwiseOrNode[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTBitwiseOrNode[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [java.lang.CharSequence @ src/main/java/org/apache/commons/jexl3/internal/TemplateEngine.java:958:26][0m
+  [34mUnused type args: [java.lang.CharSequence][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [java.lang.CharSequence][0m
+  [34mUnused type args: [java.lang.CharSequence][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTERNode[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTERNode[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTERNode[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTERNode[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTERNode[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTERNode[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTERNode[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTERNode[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTERNode[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTERNode[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTERNode[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTContinue[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTContinue[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl3.parser.ASTContinue[0m
+  [34mUnused type args: [java.lang.String, java.lang.String][0m
+  [34mUnused type args: [java.lang.String, java.lang.String][0m
+  [34mUnused type args: [java.lang.String, java.lang.String][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [java.lang.String @ src/main/java/org/apache/commons/jexl3/introspection/JexlSandbox.java:275:37, java.lang.String @ src/main/java/org/apache/commons/jexl3/introspection/JexlSandbox.java:275:45][0m
+  [34mUnused type args: [java.lang.String, java.lang.String][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [? @ src/main/java/org/apache/commons/jexl3/internal/introspection/Permissions.java:97:15][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mIgnoring annotation type: (CtAnnotationTypeImpl) NoJexl @ src/main/java/org/apache/commons/jexl3/annotations/NoJexl.java:37:19[0m
+  [34mIgnoring annotation type: (CtAnnotationTypeImpl) NoJexl @ src/main/java/org/apache/commons/jexl3/annotations/NoJexl.java:37:19[0m
+  Pending package java.lang.annotation
+  [34mIgnoring annotation type: (CtAnnotationTypeImpl) NoJexl @ src/main/java/org/apache/commons/jexl3/annotations/NoJexl.java:37:19[0m
+[34mFinished process pending packages (7.996082s)[0m
+Exception in thread "main" java.lang.Exception: Error while processing metrics (CtMethodImpl) allow @ src/main/java/org/apache/commons/jexl3/internal/introspection/Permissions.java:90:20: {
+  elem: "(CtMethodImpl) allow @ src/main/java/org/apache/commons/jexl3/internal/introspection/Permissions.java:90:20",
+}
+	at abstractor.core.constructs.Factory.create(Factory.java:132)
+	at abstractor.core.constructs.Factory.create(Factory.java:147)
+	at abstractor.core.Abstractor.addMetrics(Abstractor.java:962)
+	at abstractor.core.Abstractor.processPendingMetrics(Abstractor.java:1392)
+	at abstractor.core.Abstractor.processPendingPackages(Abstractor.java:1346)
+	at abstractor.core.Abstractor.lambda$performAbstraction$40(Abstractor.java:1332)
+	at abstractor.core.log.Logger.measure(Logger.java:123)
+	at abstractor.core.Abstractor.performAbstraction(Abstractor.java:1332)
+	at abstractor.app.App.run(App.java:26)
 	at abstractor.app.App.main(App.java:17)
+Caused by: java.lang.NullPointerException: Cannot invoke "abstractor.core.constructs.Ref.getCmp(abstractor.core.constructs.Construct, abstractor.core.cmp.CmpOptions)" because the return value of "java.util.List.get(int)" is null
+	at abstractor.core.Abstractor.isUsefulInstantiation(Abstractor.java:610)
+	at abstractor.core.Abstractor.addMethodInstForCall(Abstractor.java:466)
+	at abstractor.core.tools.Analyzer.addInvocationUsage(Analyzer.java:432)
+	at abstractor.core.tools.Analyzer.addUsage(Analyzer.java:406)
+	at abstractor.core.tools.Analyzer.addElement(Analyzer.java:133)
+	at abstractor.core.tools.Analyzer.addElement(Analyzer.java:140)
+	at abstractor.core.tools.Analyzer.addMethod(Analyzer.java:111)
+	at abstractor.core.Abstractor.lambda$addMetrics$31(Abstractor.java:967)
+	at abstractor.core.constructs.Factory.lambda$create$1(Factory.java:147)
+	at abstractor.core.constructs.Factory.create(Factory.java:109)
+	... 9 more

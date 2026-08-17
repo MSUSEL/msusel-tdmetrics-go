@@ -1,12 +1,1471 @@
 # cmd: java -jar /Users/grantnelson/go/src/github.com/MSUSEL/msusel-tdmetrics-go/javaAbstractor/target/abstractor-0.1-jar-with-dependencies.jar -i /Users/grantnelson/go/src/github.com/apache/hive/ -o /Users/grantnelson/go/src/github.com/MSUSEL/msusel-tdmetrics-go/tdd/abstractions/hive.json -v
 # cwd: /Users/grantnelson/go/src/github.com/MSUSEL/msusel-tdmetrics-go/tdd
 # repo: /Users/grantnelson/go/src/github.com/apache/hive @ a4d91eaf2925239aa29342f7e5b0f8680c842390
-# started: 2026-07-28T01:25:53.136201+00:00
+# started: 2026-08-17T18:32:19.526774+00:00
 # timeout_min: 10
 # ---
 Reading /Users/grantnelson/go/src/github.com/apache/hive/
 SLF4J(W): No SLF4J providers were found.
 SLF4J(W): Defaulting to no-operation (NOP) logger implementation
 SLF4J(W): See https://www.slf4j.org/codes.html#noProviders for further details.
-
-# TIMED OUT after 10 minutes
+The method public static ArrayList<E> newArrayList()  is wrongly tagged as containing missing types
+The method public static ArrayList<E> newArrayList()  is wrongly tagged as containing missing types
+The method public static ArrayList<E> newArrayList()  is wrongly tagged as containing missing types
+The method public static ArrayList<E> newArrayList()  is wrongly tagged as containing missing types
+The method public static Builder<K,V> builder()  is wrongly tagged as containing missing types
+The method public static ArrayList<E> newArrayList()  is wrongly tagged as containing missing types
+The method public static ArrayList<E> newArrayList()  is wrongly tagged as containing missing types
+The method public static ArrayList<E> newArrayList()  is wrongly tagged as containing missing types
+The method public static ArrayList<E> newArrayList()  is wrongly tagged as containing missing types
+The method public static ArrayList<E> newArrayList()  is wrongly tagged as containing missing types
+The method public static ArrayList<E> newArrayList()  is wrongly tagged as containing missing types
+The method public static ArrayList<E> newArrayList()  is wrongly tagged as containing missing types
+The method public static HashMap<K,V> newHashMap()  is wrongly tagged as containing missing types
+The method public static final List<T> emptyList()  is wrongly tagged as containing missing types
+The method public static final List<T> emptyList()  is wrongly tagged as containing missing types
+The method public static ArrayList<E> newArrayList()  is wrongly tagged as containing missing types
+The method public static ArrayList<E> newArrayList()  is wrongly tagged as containing missing types
+The method public static ArrayList<E> newArrayList()  is wrongly tagged as containing missing types
+The method public static ArrayList<E> newArrayList()  is wrongly tagged as containing missing types
+The method public static ArrayList<E> newArrayList()  is wrongly tagged as containing missing types
+The method public static HashMap<K,V> newHashMap()  is wrongly tagged as containing missing types
+The method public static ArrayList<E> newArrayListWithCapacity(int)  is wrongly tagged as containing missing types
+The method public static HashMap<K,V> newHashMap()  is wrongly tagged as containing missing types
+The method public static HashMap<K,V> newHashMap()  is wrongly tagged as containing missing types
+The method public static HashMap<K,V> newHashMap()  is wrongly tagged as containing missing types
+The method public static ArrayList<E> newArrayList()  is wrongly tagged as containing missing types
+The method public static ArrayList<E> newArrayListWithCapacity(int)  is wrongly tagged as containing missing types
+26/08/17 12:33:04 WARN util.NativeCodeLoader: Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
+Init pending package <unnamed>
+Init pending package org
+Init pending package org.apache
+Init pending package org.apache.hadoop
+Init pending package org.apache.hadoop.hive
+Init pending package org.apache.hadoop.hive.accumulo
+Init pending package org.apache.hadoop.hive.accumulo.columns
+Init pending package org.apache.hadoop.hive.accumulo.mr
+Init pending package org.apache.hadoop.hive.accumulo.predicate
+Init pending package org.apache.hadoop.hive.accumulo.predicate.compare
+Init pending package org.apache.hadoop.hive.accumulo.serde
+Init pending package org.apache.hadoop.hive.ant
+Init pending package org.apache.hadoop.hive.cli
+Init pending package org.apache.hadoop.hive.common
+Init pending package org.apache.hadoop.hive.common.classification
+Init pending package org.apache.hadoop.hive.common.cli
+Init pending package org.apache.hadoop.hive.common.io
+Init pending package org.apache.hadoop.hive.common.metrics
+Init pending package org.apache.hadoop.hive.common.type
+Init pending package org.apache.hadoop.hive.conf
+Init pending package org.apache.hadoop.hive.contrib
+Init pending package org.apache.hadoop.hive.contrib.fileformat
+Init pending package org.apache.hadoop.hive.contrib.fileformat.base64
+Init pending package org.apache.hadoop.hive.contrib.genericudf
+Init pending package org.apache.hadoop.hive.contrib.genericudf.example
+Init pending package org.apache.hadoop.hive.contrib.metastore
+Init pending package org.apache.hadoop.hive.contrib.metastore.hooks
+Init pending package org.apache.hadoop.hive.contrib.mr
+Init pending package org.apache.hadoop.hive.contrib.mr.example
+Init pending package org.apache.hadoop.hive.contrib.serde2
+Init pending package org.apache.hadoop.hive.contrib.serde2.s3
+Init pending package org.apache.hadoop.hive.contrib.udaf
+Init pending package org.apache.hadoop.hive.contrib.udaf.example
+Init pending package org.apache.hadoop.hive.contrib.udf
+Init pending package org.apache.hadoop.hive.contrib.udf.example
+Init pending package org.apache.hadoop.hive.contrib.udtf
+Init pending package org.apache.hadoop.hive.contrib.udtf.example
+Init pending package org.apache.hadoop.hive.contrib.util
+Init pending package org.apache.hadoop.hive.contrib.util.typedbytes
+Init pending package org.apache.hadoop.hive.hbase
+Init pending package org.apache.hadoop.hive.hbase.struct
+Init pending package org.apache.hadoop.hive.hwi
+Init pending package org.apache.hadoop.hive.llap
+Init pending package org.apache.hadoop.hive.llap.io
+Init pending package org.apache.hadoop.hive.llap.io.api
+Init pending package org.apache.hadoop.hive.llap.io.api.cache
+Init pending package org.apache.hadoop.hive.llap.io.api.orc
+Init pending package org.apache.hadoop.hive.llap.io.api.impl
+Init pending package org.apache.hadoop.hive.llap.io.decode
+Init pending package org.apache.hadoop.hive.llap.io.decode.orc
+Init pending package org.apache.hadoop.hive.llap.io.decode.orc.stream
+Init pending package org.apache.hadoop.hive.llap.io.decode.orc.stream.readers
+Init pending package org.apache.hadoop.hive.llap.io.encoded
+Init pending package org.apache.hadoop.hive.llap.io.metadata
+Init pending package org.apache.hadoop.hive.llap.io.orc
+Init pending package org.apache.hadoop.hive.llap.cache
+Init pending package org.apache.hadoop.hive.llap.daemon
+Init pending package org.apache.hadoop.hive.llap.daemon.impl
+Init pending package org.apache.hadoop.hive.llap.old
+Init pending package org.apache.hadoop.hive.llap.shufflehandler
+Init pending package org.apache.hadoop.hive.metastore
+Init pending package org.apache.hadoop.hive.metastore.events
+Init pending package org.apache.hadoop.hive.metastore.hooks
+Init pending package org.apache.hadoop.hive.metastore.parser
+Init pending package org.apache.hadoop.hive.metastore.partition
+Init pending package org.apache.hadoop.hive.metastore.partition.spec
+Init pending package org.apache.hadoop.hive.metastore.tools
+Init pending package org.apache.hadoop.hive.metastore.txn
+Init pending package org.apache.hadoop.hive.ql
+Init pending package org.apache.hadoop.hive.ql.debug
+Init pending package org.apache.hadoop.hive.ql.exec
+Init pending package org.apache.hadoop.hive.ql.exec.errors
+Init pending package org.apache.hadoop.hive.ql.exec.mapjoin
+Init pending package org.apache.hadoop.hive.ql.exec.mr
+Init pending package org.apache.hadoop.hive.ql.exec.persistence
+Init pending package org.apache.hadoop.hive.ql.exec.spark
+Init pending package org.apache.hadoop.hive.ql.exec.spark.Statistic
+Init pending package org.apache.hadoop.hive.ql.exec.spark.session
+Init pending package org.apache.hadoop.hive.ql.exec.spark.status
+Init pending package org.apache.hadoop.hive.ql.exec.spark.status.impl
+Init pending package org.apache.hadoop.hive.ql.exec.tez
+Init pending package org.apache.hadoop.hive.ql.exec.tez.tools
+Init pending package org.apache.hadoop.hive.ql.exec.vector
+Init pending package org.apache.hadoop.hive.ql.exec.vector.expressions
+Init pending package org.apache.hadoop.hive.ql.exec.vector.expressions.aggregates
+Init pending package org.apache.hadoop.hive.ql.exec.vector.udf
+Init pending package org.apache.hadoop.hive.ql.history
+Init pending package org.apache.hadoop.hive.ql.hooks
+Init pending package org.apache.hadoop.hive.ql.index
+Init pending package org.apache.hadoop.hive.ql.index.bitmap
+Init pending package org.apache.hadoop.hive.ql.index.compact
+Init pending package org.apache.hadoop.hive.ql.io
+Init pending package org.apache.hadoop.hive.ql.io.avro
+Init pending package org.apache.hadoop.hive.ql.io.filters
+Init pending package org.apache.hadoop.hive.ql.io.merge
+Init pending package org.apache.hadoop.hive.ql.io.orc
+Init pending package org.apache.hadoop.hive.ql.io.parquet
+Init pending package org.apache.hadoop.hive.ql.io.parquet.convert
+Init pending package org.apache.hadoop.hive.ql.io.parquet.read
+Init pending package org.apache.hadoop.hive.ql.io.parquet.serde
+Init pending package org.apache.hadoop.hive.ql.io.parquet.serde.primitive
+Init pending package org.apache.hadoop.hive.ql.io.parquet.timestamp
+Init pending package org.apache.hadoop.hive.ql.io.parquet.write
+Init pending package org.apache.hadoop.hive.ql.io.rcfile
+Init pending package org.apache.hadoop.hive.ql.io.rcfile.merge
+Init pending package org.apache.hadoop.hive.ql.io.rcfile.stats
+Init pending package org.apache.hadoop.hive.ql.io.rcfile.truncate
+Init pending package org.apache.hadoop.hive.ql.io.sarg
+Init pending package org.apache.hadoop.hive.ql.lib
+Init pending package org.apache.hadoop.hive.ql.lockmgr
+Init pending package org.apache.hadoop.hive.ql.lockmgr.zookeeper
+Init pending package org.apache.hadoop.hive.ql.log
+Init pending package org.apache.hadoop.hive.ql.metadata
+Init pending package org.apache.hadoop.hive.ql.metadata.formatting
+Init pending package org.apache.hadoop.hive.ql.optimizer
+Init pending package org.apache.hadoop.hive.ql.optimizer.calcite
+Init pending package org.apache.hadoop.hive.ql.optimizer.calcite.cost
+Init pending package org.apache.hadoop.hive.ql.optimizer.calcite.reloperators
+Init pending package org.apache.hadoop.hive.ql.optimizer.calcite.rules
+Init pending package org.apache.hadoop.hive.ql.optimizer.calcite.stats
+Init pending package org.apache.hadoop.hive.ql.optimizer.calcite.translator
+Init pending package org.apache.hadoop.hive.ql.optimizer.correlation
+Init pending package org.apache.hadoop.hive.ql.optimizer.index
+Init pending package org.apache.hadoop.hive.ql.optimizer.lineage
+Init pending package org.apache.hadoop.hive.ql.optimizer.listbucketingpruner
+Init pending package org.apache.hadoop.hive.ql.optimizer.metainfo
+Init pending package org.apache.hadoop.hive.ql.optimizer.metainfo.annotation
+Init pending package org.apache.hadoop.hive.ql.optimizer.pcr
+Init pending package org.apache.hadoop.hive.ql.optimizer.physical
+Init pending package org.apache.hadoop.hive.ql.optimizer.physical.index
+Init pending package org.apache.hadoop.hive.ql.optimizer.ppr
+Init pending package org.apache.hadoop.hive.ql.optimizer.spark
+Init pending package org.apache.hadoop.hive.ql.optimizer.stats
+Init pending package org.apache.hadoop.hive.ql.optimizer.stats.annotation
+Init pending package org.apache.hadoop.hive.ql.optimizer.unionproc
+Init pending package org.apache.hadoop.hive.ql.parse
+Init pending package org.apache.hadoop.hive.ql.parse.authorization
+Init pending package org.apache.hadoop.hive.ql.parse.spark
+Init pending package org.apache.hadoop.hive.ql.plan
+Init pending package org.apache.hadoop.hive.ql.plan.ptf
+Init pending package org.apache.hadoop.hive.ql.ppd
+Init pending package org.apache.hadoop.hive.ql.processors
+Init pending package org.apache.hadoop.hive.ql.security
+Init pending package org.apache.hadoop.hive.ql.security.authorization
+Init pending package org.apache.hadoop.hive.ql.security.authorization.plugin
+Init pending package org.apache.hadoop.hive.ql.security.authorization.plugin.sqlstd
+Init pending package org.apache.hadoop.hive.ql.session
+Init pending package org.apache.hadoop.hive.ql.stats
+Init pending package org.apache.hadoop.hive.ql.stats.fs
+Init pending package org.apache.hadoop.hive.ql.stats.jdbc
+Init pending package org.apache.hadoop.hive.ql.tools
+Init pending package org.apache.hadoop.hive.ql.txn
+Init pending package org.apache.hadoop.hive.ql.txn.compactor
+Init pending package org.apache.hadoop.hive.ql.udf
+Init pending package org.apache.hadoop.hive.ql.udf.generic
+Init pending package org.apache.hadoop.hive.ql.udf.ptf
+Init pending package org.apache.hadoop.hive.ql.udf.xml
+Init pending package org.apache.hadoop.hive.ql.util
+Init pending package org.apache.hadoop.hive.serde
+Init pending package org.apache.hadoop.hive.serde2
+Init pending package org.apache.hadoop.hive.serde2.avro
+Init pending package org.apache.hadoop.hive.serde2.binarysortable
+Init pending package org.apache.hadoop.hive.serde2.columnar
+Init pending package org.apache.hadoop.hive.serde2.dynamic_type
+Init pending package org.apache.hadoop.hive.serde2.io
+Init pending package org.apache.hadoop.hive.serde2.lazy
+Init pending package org.apache.hadoop.hive.serde2.lazy.objectinspector
+Init pending package org.apache.hadoop.hive.serde2.lazy.objectinspector.primitive
+Init pending package org.apache.hadoop.hive.serde2.lazybinary
+Init pending package org.apache.hadoop.hive.serde2.lazybinary.objectinspector
+Init pending package org.apache.hadoop.hive.serde2.lazydio
+Init pending package org.apache.hadoop.hive.serde2.objectinspector
+Init pending package org.apache.hadoop.hive.serde2.objectinspector.primitive
+Init pending package org.apache.hadoop.hive.serde2.thrift
+Init pending package org.apache.hadoop.hive.serde2.typeinfo
+Init pending package org.apache.hadoop.hive.shims
+Init pending package org.apache.hadoop.hive.thrift
+Init pending package org.apache.hadoop.hive.thrift.client
+Init pending package org.apache.hadoop.hive.io
+Init pending package org.apache.hadoop.hive.schshim
+Init pending package org.apache.hadoop.mapred
+Init pending package org.apache.hadoop.fs
+Init pending package org.apache.hadoop.security
+Init pending package org.apache.hadoop.security.token
+Init pending package org.apache.hadoop.security.token.delegation
+Init pending package org.apache.hive
+Init pending package org.apache.hive.beeline
+Init pending package org.apache.hive.beeline.util
+Init pending package org.apache.hive.common
+Init pending package org.apache.hive.common.util
+Init pending package org.apache.hive.hcatalog
+Init pending package org.apache.hive.hcatalog.cli
+Init pending package org.apache.hive.hcatalog.cli.SemanticAnalysis
+Init pending package org.apache.hive.hcatalog.common
+Init pending package org.apache.hive.hcatalog.data
+Init pending package org.apache.hive.hcatalog.data.schema
+Init pending package org.apache.hive.hcatalog.data.transfer
+Init pending package org.apache.hive.hcatalog.data.transfer.impl
+Init pending package org.apache.hive.hcatalog.data.transfer.state
+Init pending package org.apache.hive.hcatalog.har
+Init pending package org.apache.hive.hcatalog.mapreduce
+Init pending package org.apache.hive.hcatalog.oozie
+Init pending package org.apache.hive.hcatalog.rcfile
+Init pending package org.apache.hive.hcatalog.storagehandler
+Init pending package org.apache.hive.hcatalog.pig
+Init pending package org.apache.hive.hcatalog.listener
+Init pending package org.apache.hive.hcatalog.messaging
+Init pending package org.apache.hive.hcatalog.messaging.jms
+Init pending package org.apache.hive.hcatalog.messaging.json
+Init pending package org.apache.hive.hcatalog.streaming
+Init pending package org.apache.hive.hcatalog.api
+Init pending package org.apache.hive.hcatalog.templeton
+Init pending package org.apache.hive.hcatalog.templeton.tool
+Init pending package org.apache.hive.jdbc
+Init pending package org.apache.hive.service
+Init pending package org.apache.hive.service.auth
+Init pending package org.apache.hive.service.cli
+Init pending package org.apache.hive.service.cli.operation
+Init pending package org.apache.hive.service.cli.session
+Init pending package org.apache.hive.service.cli.thrift
+Init pending package org.apache.hive.service.server
+Init pending package org.apache.hive.spark
+Init pending package org.apache.hive.spark.client
+Init pending package org.apache.hive.spark.client.metrics
+Init pending package org.apache.hive.spark.client.rpc
+Init pending package org.apache.hive.spark.counter
+Init pending package org.apache.hive.testutils
+Init pending package org.apache.hive.testutils.jdbc
+Init pending package org.apache.hive.testutils.junit
+Init pending package org.apache.hive.testutils.junit.runners
+Init pending package org.apache.hive.testutils.junit.runners.model
+Init pending package org.apache.tez
+Init pending package org.apache.tez.dag
+Init pending package org.apache.tez.dag.app
+Init pending package org.apache.tez.dag.app.launcher
+Init pending package org.apache.tez.dag.app.rm
+Init pending package org.apache.avro
+Init pending package org.apache.avro.file
+Init pending package com
+Init pending package com.esotericsoftware
+Init pending package com.esotericsoftware.kryo
+Init pending package io
+Init pending package io.netty
+Init pending package io.netty.util
+Init pending package io.netty.util.concurrent
+[34mStarting process pending packages...[0m
+  Pending package java.math
+  [34mskipping default constructor: org.apache.hadoop.hive.accumulo.predicate.compare.DoubleCompare()[0m
+  [34mskipping default constructor: org.apache.hadoop.hive.accumulo.predicate.compare.IntCompare()[0m
+  [34mskipping default constructor: org.apache.hadoop.hive.accumulo.predicate.compare.LongCompare()[0m
+  Pending package org.apache.log4j
+  [34mskipping default constructor: org.apache.hadoop.hive.accumulo.predicate.compare.StringCompare()[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  Pending package java.lang
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  Pending package java.nio
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  Pending package java.lang.invoke
+  [34mUnused type args: [?][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  Pending package java.util.regex
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [?][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [?][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  Pending package org.apache.commons.logging
+  Pending package org.apache.hadoop.hive.ql.parse
+  Pending package java.util
+  Pending package org.apache.hadoop.hive.ql.exec
+  Pending package org.apache.hadoop.mapred
+  Pending package org.apache.hadoop.conf
+  Pending package org.apache.hadoop.hive.ql.plan
+  Pending package org.apache.hadoop.hive.serde2
+  Pending package org.apache.hadoop.io
+  Pending package org.apache.hadoop.hive.serde2.objectinspector
+  getting parent type for (CtEnumImpl) Category @ serde/src/java/org/apache/hadoop/hive/serde2/objectinspector/ObjectInspector.java:44:22
+  [34mskipping default constructor: org.apache.hadoop.hive.serde2.objectinspector.ObjectInspector$Category()[0m
+  getting parent type for (CtEnumImpl) State @ ql/src/java/org/apache/hadoop/hive/ql/plan/Statistics.java:37:15
+  [34mskipping default constructor: org.apache.hadoop.hive.ql.plan.Statistics$State()[0m
+  getting parent type for (CtClassImpl) Range @ ql/src/java/org/apache/hadoop/hive/ql/plan/ColStatistics.java:188:23
+  Pending package org.apache.hadoop.hive.serde2.typeinfo
+  getting parent type for (CtClassImpl) ExprNodeDescEqualityWrapper @ ql/src/java/org/apache/hadoop/hive/ql/plan/ExprNodeDesc.java:101:23
+  Pending package org.apache.hadoop.hive.ql.lib
+  Pending package org.apache.hadoop.hive.ql.exec.mr
+  Pending package org.apache.hadoop.fs
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.hadoop.hive.ql.plan.api.OperatorType @ ql/src/java/org/apache/hadoop/hive/ql/exec/Operator.java:1038:19[0m
+  [34margument (CtTypeReferenceImpl) org.apache.hadoop.hive.ql.plan.api.OperatorType @ ql/src/java/org/apache/hadoop/hive/ql/exec/Operator.java:1038:19 had a null type. The type likely was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.[0m
+[34mFinished process pending packages (1.460904s)[0m
+Exception in thread "main" java.lang.Exception: Error while processing package org.apache.hadoop.hive.ql.optimizer.index: {
+  elem: org.apache.hadoop.hive.ql.optimizer.index,
+}
+	at abstractor.core.constructs.Factory.create(Factory.java:132)
+	at abstractor.core.constructs.Factory.create(Factory.java:139)
+	at abstractor.core.Abstractor.processPackage(Abstractor.java:1351)
+	at abstractor.core.Abstractor.processPendingPackages(Abstractor.java:1345)
+	at abstractor.core.Abstractor.lambda$performAbstraction$40(Abstractor.java:1332)
+	at abstractor.core.log.Logger.measure(Logger.java:123)
+	at abstractor.core.Abstractor.performAbstraction(Abstractor.java:1332)
+	at abstractor.app.App.run(App.java:26)
+	at abstractor.app.App.main(App.java:17)
+Caused by: java.lang.Exception: Error while processing object decl (CtClassImpl) RewriteCanApplyCtx @ ql/src/java/org/apache/hadoop/hive/ql/optimizer/index/RewriteCanApplyCtx.java:52:20: {
+  elem: "(CtClassImpl) RewriteCanApplyCtx @ ql/src/java/org/apache/hadoop/hive/ql/optimizer/index/RewriteCanApplyCtx.java:52:20",
+}
+	at abstractor.core.constructs.Factory.create(Factory.java:132)
+	at abstractor.core.constructs.Factory.create(Factory.java:139)
+	at abstractor.core.Abstractor.addObjectDecl(Abstractor.java:985)
+	at abstractor.core.Abstractor.addDeclaration(Abstractor.java:176)
+	at abstractor.core.Abstractor.lambda$processPackage$48(Abstractor.java:1360)
+	at abstractor.core.constructs.Factory.create(Factory.java:127)
+	... 8 more
+Caused by: java.lang.Exception: Error while processing struct (CtClassImpl) RewriteCanApplyCtx @ ql/src/java/org/apache/hadoop/hive/ql/optimizer/index/RewriteCanApplyCtx.java:52:20: {
+  elem: "(CtClassImpl) RewriteCanApplyCtx @ ql/src/java/org/apache/hadoop/hive/ql/optimizer/index/RewriteCanApplyCtx.java:52:20",
+}
+	at abstractor.core.constructs.Factory.create(Factory.java:132)
+	at abstractor.core.constructs.Factory.create(Factory.java:143)
+	at abstractor.core.Abstractor.addStructDesc(Abstractor.java:757)
+	at abstractor.core.Abstractor.lambda$addObjectDecl$32(Abstractor.java:991)
+	at abstractor.core.constructs.Factory.lambda$create$0(Factory.java:139)
+	at abstractor.core.constructs.Factory.create(Factory.java:109)
+	... 13 more
+Caused by: java.lang.Exception: Error while processing field (CtFieldImpl) parseContext @ ql/src/java/org/apache/hadoop/hive/ql/optimizer/index/RewriteCanApplyCtx.java:73:30: {
+  elem: "(CtFieldImpl) parseContext @ ql/src/java/org/apache/hadoop/hive/ql/optimizer/index/RewriteCanApplyCtx.java:73:30",
+}
+	at abstractor.core.constructs.Factory.create(Factory.java:132)
+	at abstractor.core.constructs.Factory.create(Factory.java:139)
+	at abstractor.core.Abstractor.addField(Abstractor.java:796)
+	at abstractor.core.Abstractor.addField(Abstractor.java:791)
+	at abstractor.core.Abstractor.lambda$addStructDesc$23(Abstractor.java:768)
+	at abstractor.core.constructs.Factory.create(Factory.java:109)
+	... 18 more
+Caused by: java.lang.Exception: Error while processing object decl (CtClassImpl) ParseContext @ ql/src/java/org/apache/hadoop/hive/ql/parse/ParseContext.java:65:14: {
+  elem: "(CtClassImpl) ParseContext @ ql/src/java/org/apache/hadoop/hive/ql/parse/ParseContext.java:65:14",
+}
+	at abstractor.core.constructs.Factory.create(Factory.java:132)
+	at abstractor.core.constructs.Factory.create(Factory.java:139)
+	at abstractor.core.Abstractor.addObjectDecl(Abstractor.java:985)
+	at abstractor.core.Abstractor.addObjectInst(Abstractor.java:1069)
+	at abstractor.core.Abstractor.addTypeDesc(Abstractor.java:1229)
+	at abstractor.core.Abstractor.lambda$addField$24(Abstractor.java:800)
+	at abstractor.core.constructs.Factory.lambda$create$0(Factory.java:139)
+	at abstractor.core.constructs.Factory.create(Factory.java:109)
+	... 23 more
+Caused by: java.lang.Exception: Error while processing struct (CtClassImpl) ParseContext @ ql/src/java/org/apache/hadoop/hive/ql/parse/ParseContext.java:65:14: {
+  elem: "(CtClassImpl) ParseContext @ ql/src/java/org/apache/hadoop/hive/ql/parse/ParseContext.java:65:14",
+}
+	at abstractor.core.constructs.Factory.create(Factory.java:132)
+	at abstractor.core.constructs.Factory.create(Factory.java:143)
+	at abstractor.core.Abstractor.addStructDesc(Abstractor.java:757)
+	at abstractor.core.Abstractor.lambda$addObjectDecl$32(Abstractor.java:991)
+	at abstractor.core.constructs.Factory.lambda$create$0(Factory.java:139)
+	at abstractor.core.constructs.Factory.create(Factory.java:109)
+	... 30 more
+Caused by: java.lang.Exception: Error while processing field (CtFieldImpl) opToPartPruner @ ql/src/java/org/apache/hadoop/hive/ql/parse/ParseContext.java:67:52: {
+  elem: "(CtFieldImpl) opToPartPruner @ ql/src/java/org/apache/hadoop/hive/ql/parse/ParseContext.java:67:52",
+}
+	at abstractor.core.constructs.Factory.create(Factory.java:132)
+	at abstractor.core.constructs.Factory.create(Factory.java:139)
+	at abstractor.core.Abstractor.addField(Abstractor.java:796)
+	at abstractor.core.Abstractor.addField(Abstractor.java:791)
+	at abstractor.core.Abstractor.lambda$addStructDesc$23(Abstractor.java:768)
+	at abstractor.core.constructs.Factory.create(Factory.java:109)
+	... 35 more
+Caused by: java.lang.Exception: Error while processing object decl (CtClassImpl) TableScanOperator @ ql/src/java/org/apache/hadoop/hive/ql/exec/TableScanOperator.java:54:14: {
+  elem: "(CtClassImpl) TableScanOperator @ ql/src/java/org/apache/hadoop/hive/ql/exec/TableScanOperator.java:54:14",
+}
+	at abstractor.core.constructs.Factory.create(Factory.java:132)
+	at abstractor.core.constructs.Factory.create(Factory.java:139)
+	at abstractor.core.Abstractor.addObjectDecl(Abstractor.java:985)
+	at abstractor.core.Abstractor.addObjectInst(Abstractor.java:1069)
+	at abstractor.core.Abstractor.addTypeDesc(Abstractor.java:1229)
+	at abstractor.core.Abstractor.addTypeArguments(Abstractor.java:1140)
+	at abstractor.core.Abstractor.addObjectInst(Abstractor.java:1073)
+	at abstractor.core.Abstractor.addTypeDesc(Abstractor.java:1229)
+	at abstractor.core.Abstractor.lambda$addField$24(Abstractor.java:800)
+	at abstractor.core.constructs.Factory.lambda$create$0(Factory.java:139)
+	at abstractor.core.constructs.Factory.create(Factory.java:109)
+	... 40 more
+Caused by: java.lang.Exception: Error while processing struct (CtClassImpl) TableScanOperator @ ql/src/java/org/apache/hadoop/hive/ql/exec/TableScanOperator.java:54:14: {
+  elem: "(CtClassImpl) TableScanOperator @ ql/src/java/org/apache/hadoop/hive/ql/exec/TableScanOperator.java:54:14",
+}
+	at abstractor.core.constructs.Factory.create(Factory.java:132)
+	at abstractor.core.constructs.Factory.create(Factory.java:143)
+	at abstractor.core.Abstractor.addStructDesc(Abstractor.java:757)
+	at abstractor.core.Abstractor.lambda$addObjectDecl$32(Abstractor.java:991)
+	at abstractor.core.constructs.Factory.lambda$create$0(Factory.java:139)
+	at abstractor.core.constructs.Factory.create(Factory.java:109)
+	... 50 more
+Caused by: java.lang.Exception: Error while processing field (CtFieldImpl) childOperators @ ql/src/java/org/apache/hadoop/hive/ql/exec/Operator.java:67:52: {
+  elem: "(CtFieldImpl) childOperators @ ql/src/java/org/apache/hadoop/hive/ql/exec/Operator.java:67:52",
+}
+	at abstractor.core.constructs.Factory.create(Factory.java:132)
+	at abstractor.core.constructs.Factory.create(Factory.java:139)
+	at abstractor.core.Abstractor.addField(Abstractor.java:796)
+	at abstractor.core.Abstractor.addField(Abstractor.java:791)
+	at abstractor.core.Abstractor.lambda$addStructDesc$23(Abstractor.java:768)
+	at abstractor.core.constructs.Factory.create(Factory.java:109)
+	... 55 more
+Caused by: java.lang.Exception: Error while processing object decl (CtClassImpl) Operator @ ql/src/java/org/apache/hadoop/hive/ql/exec/Operator.java:55:23: {
+  elem: "(CtClassImpl) Operator @ ql/src/java/org/apache/hadoop/hive/ql/exec/Operator.java:55:23",
+}
+	at abstractor.core.constructs.Factory.create(Factory.java:132)
+	at abstractor.core.constructs.Factory.create(Factory.java:139)
+	at abstractor.core.Abstractor.addObjectDecl(Abstractor.java:985)
+	at abstractor.core.Abstractor.addObjectInst(Abstractor.java:1069)
+	at abstractor.core.Abstractor.addTypeDesc(Abstractor.java:1229)
+	at abstractor.core.Abstractor.addTypeArguments(Abstractor.java:1140)
+	at abstractor.core.Abstractor.addInterfaceInst(Abstractor.java:258)
+	at abstractor.core.Abstractor.addTypeDesc(Abstractor.java:1230)
+	at abstractor.core.Abstractor.lambda$addField$24(Abstractor.java:800)
+	at abstractor.core.constructs.Factory.lambda$create$0(Factory.java:139)
+	at abstractor.core.constructs.Factory.create(Factory.java:109)
+	... 60 more
+Caused by: java.lang.Exception: Error while processing struct (CtClassImpl) Operator @ ql/src/java/org/apache/hadoop/hive/ql/exec/Operator.java:55:23: {
+  elem: "(CtClassImpl) Operator @ ql/src/java/org/apache/hadoop/hive/ql/exec/Operator.java:55:23",
+}
+	at abstractor.core.constructs.Factory.create(Factory.java:132)
+	at abstractor.core.constructs.Factory.create(Factory.java:143)
+	at abstractor.core.Abstractor.addStructDesc(Abstractor.java:757)
+	at abstractor.core.Abstractor.lambda$addObjectDecl$32(Abstractor.java:991)
+	at abstractor.core.constructs.Factory.lambda$create$0(Factory.java:139)
+	at abstractor.core.constructs.Factory.create(Factory.java:109)
+	... 70 more
+Caused by: java.lang.Exception: Error while processing field (CtFieldImpl) parentOperators @ ql/src/java/org/apache/hadoop/hive/ql/exec/Operator.java:68:52: {
+  elem: "(CtFieldImpl) parentOperators @ ql/src/java/org/apache/hadoop/hive/ql/exec/Operator.java:68:52",
+}
+	at abstractor.core.constructs.Factory.create(Factory.java:132)
+	at abstractor.core.constructs.Factory.create(Factory.java:139)
+	at abstractor.core.Abstractor.addField(Abstractor.java:796)
+	at abstractor.core.Abstractor.addField(Abstractor.java:791)
+	at abstractor.core.Abstractor.lambda$addStructDesc$23(Abstractor.java:768)
+	at abstractor.core.constructs.Factory.create(Factory.java:109)
+	... 75 more
+Caused by: java.lang.Exception: Error while processing object instantiation org.apache.hadoop.hive.ql.exec.Operator @ ql/src/java/org/apache/hadoop/hive/ql/exec/Operator.java:68:18<? @ ql/src/java/org/apache/hadoop/hive/ql/exec/Operator.java:68:27>: {
+  elem: "(CtTypeReferenceImpl) org.apache.hadoop.hive.ql.exec.Operator @ ql/src/java/org/apache/hadoop/hive/ql/exec/Operator.java:68:18",
+  typeArgs: [
+    { context: "interface decl (CtInterfaceImpl) OperatorDesc @ ql/src/java/org/apache/hadoop/hive/ql/plan/OperatorDesc.java:24:18", index: -1, kind: interfaceDecl, ref: true },
+  ],
+}
+	at abstractor.core.constructs.Factory.create(Factory.java:132)
+	at abstractor.core.Abstractor.addObjectInst(Abstractor.java:1084)
+	at abstractor.core.Abstractor.addTypeDesc(Abstractor.java:1229)
+	at abstractor.core.Abstractor.addTypeArguments(Abstractor.java:1140)
+	at abstractor.core.Abstractor.addInterfaceInst(Abstractor.java:258)
+	at abstractor.core.Abstractor.addTypeDesc(Abstractor.java:1230)
+	at abstractor.core.Abstractor.lambda$addField$24(Abstractor.java:800)
+	at abstractor.core.constructs.Factory.lambda$create$0(Factory.java:139)
+	at abstractor.core.constructs.Factory.create(Factory.java:109)
+	... 80 more
+Caused by: java.lang.Exception: Error while processing struct (CtClassImpl) Operator @ ql/src/java/org/apache/hadoop/hive/ql/exec/Operator.java:55:23: {
+  elem: "(CtClassImpl) Operator @ ql/src/java/org/apache/hadoop/hive/ql/exec/Operator.java:55:23",
+  typeArgs: [
+    { context: "interface decl (CtInterfaceImpl) OperatorDesc @ ql/src/java/org/apache/hadoop/hive/ql/plan/OperatorDesc.java:24:18", index: -1, kind: interfaceDecl, ref: true },
+  ],
+}
+	at abstractor.core.constructs.Factory.create(Factory.java:132)
+	at abstractor.core.constructs.Factory.create(Factory.java:143)
+	at abstractor.core.Abstractor.addStructDesc(Abstractor.java:757)
+	at abstractor.core.Abstractor.lambda$addObjectInst$34(Abstractor.java:1087)
+	at abstractor.core.constructs.Factory.create(Factory.java:109)
+	... 88 more
+Caused by: java.lang.Exception: Error while processing field (CtFieldImpl) childOperators @ ql/src/java/org/apache/hadoop/hive/ql/exec/Operator.java:67:52: {
+  elem: "(CtFieldImpl) childOperators @ ql/src/java/org/apache/hadoop/hive/ql/exec/Operator.java:67:52",
+  typeArgs: [
+    { context: "interface decl (CtInterfaceImpl) OperatorDesc @ ql/src/java/org/apache/hadoop/hive/ql/plan/OperatorDesc.java:24:18", index: -1, kind: interfaceDecl, ref: true },
+  ],
+}
+	at abstractor.core.constructs.Factory.create(Factory.java:132)
+	at abstractor.core.constructs.Factory.create(Factory.java:139)
+	at abstractor.core.Abstractor.addField(Abstractor.java:796)
+	at abstractor.core.Abstractor.addField(Abstractor.java:791)
+	at abstractor.core.Abstractor.lambda$addStructDesc$23(Abstractor.java:768)
+	at abstractor.core.constructs.Factory.create(Factory.java:109)
+	... 92 more
+Caused by: java.lang.Exception: Error while processing object instantiation org.apache.hadoop.hive.ql.exec.Operator @ ql/src/java/org/apache/hadoop/hive/ql/exec/Operator.java:67:18<? @ ql/src/java/org/apache/hadoop/hive/ql/exec/Operator.java:67:27>: {
+  elem: "(CtTypeReferenceImpl) org.apache.hadoop.hive.ql.exec.Operator @ ql/src/java/org/apache/hadoop/hive/ql/exec/Operator.java:67:18",
+  typeArgs: [
+    { context: "interface decl (CtInterfaceImpl) OperatorDesc @ ql/src/java/org/apache/hadoop/hive/ql/plan/OperatorDesc.java:24:18", index: -1, kind: interfaceDecl, ref: true },
+  ],
+}
+	at abstractor.core.constructs.Factory.create(Factory.java:132)
+	at abstractor.core.Abstractor.addObjectInst(Abstractor.java:1084)
+	at abstractor.core.Abstractor.addTypeDesc(Abstractor.java:1229)
+	at abstractor.core.Abstractor.addTypeArguments(Abstractor.java:1140)
+	at abstractor.core.Abstractor.addInterfaceInst(Abstractor.java:258)
+	at abstractor.core.Abstractor.addTypeDesc(Abstractor.java:1230)
+	at abstractor.core.Abstractor.lambda$addField$24(Abstractor.java:800)
+	at abstractor.core.constructs.Factory.lambda$create$0(Factory.java:139)
+	at abstractor.core.constructs.Factory.create(Factory.java:109)
+	... 97 more
+Caused by: java.lang.Exception: Error while processing abstract (CtMethodImpl) removeChild @ ql/src/java/org/apache/hadoop/hive/ql/exec/Operator.java:703:15: {
+  elem: "(CtMethodImpl) removeChild @ ql/src/java/org/apache/hadoop/hive/ql/exec/Operator.java:703:15",
+  typeArgs: [
+    { context: "interface decl (CtInterfaceImpl) OperatorDesc @ ql/src/java/org/apache/hadoop/hive/ql/plan/OperatorDesc.java:24:18", index: -1, kind: interfaceDecl, ref: true },
+  ],
+}
+	at abstractor.core.constructs.Factory.create(Factory.java:132)
+	at abstractor.core.constructs.Factory.create(Factory.java:147)
+	at abstractor.core.Abstractor.addAbstract(Abstractor.java:618)
+	at abstractor.core.Abstractor.synthesizeObjectInterface(Abstractor.java:1044)
+	at abstractor.core.Abstractor.lambda$addObjectInst$34(Abstractor.java:1088)
+	at abstractor.core.constructs.Factory.create(Factory.java:109)
+	... 105 more
+Caused by: java.lang.Exception: Error while processing signature (CtMethodImpl) removeChild @ ql/src/java/org/apache/hadoop/hive/ql/exec/Operator.java:703:15: {
+  elem: "(CtMethodImpl) removeChild @ ql/src/java/org/apache/hadoop/hive/ql/exec/Operator.java:703:15",
+  typeArgs: [
+    { context: "interface decl (CtInterfaceImpl) OperatorDesc @ ql/src/java/org/apache/hadoop/hive/ql/plan/OperatorDesc.java:24:18", index: -1, kind: interfaceDecl, ref: true },
+  ],
+}
+	at abstractor.core.constructs.Factory.create(Factory.java:132)
+	at abstractor.core.constructs.Factory.create(Factory.java:147)
+	at abstractor.core.Abstractor.addSignature(Abstractor.java:644)
+	at abstractor.core.Abstractor.lambda$addAbstract$16(Abstractor.java:622)
+	at abstractor.core.constructs.Factory.lambda$create$1(Factory.java:147)
+	at abstractor.core.constructs.Factory.create(Factory.java:109)
+	... 110 more
+Caused by: java.lang.Exception: Error while processing parameter (CtParameterImpl) child @ ql/src/java/org/apache/hadoop/hive/ql/exec/Operator.java:703:60: {
+  elem: "(CtParameterImpl) child @ ql/src/java/org/apache/hadoop/hive/ql/exec/Operator.java:703:60",
+  typeArgs: [
+    { context: "interface decl (CtInterfaceImpl) OperatorDesc @ ql/src/java/org/apache/hadoop/hive/ql/plan/OperatorDesc.java:24:18", index: -1, kind: interfaceDecl, ref: true },
+  ],
+}
+	at abstractor.core.constructs.Factory.create(Factory.java:132)
+	at abstractor.core.constructs.Factory.create(Factory.java:147)
+	at abstractor.core.Abstractor.addArgument(Abstractor.java:726)
+	at abstractor.core.Abstractor.lambda$addSignature$17(Abstractor.java:651)
+	at abstractor.core.constructs.Factory.lambda$create$1(Factory.java:147)
+	at abstractor.core.constructs.Factory.create(Factory.java:109)
+	... 115 more
+Caused by: java.lang.Exception: Error while processing object instantiation org.apache.hadoop.hive.ql.exec.Operator @ ql/src/java/org/apache/hadoop/hive/ql/exec/Operator.java:703:27<? @ ql/src/java/org/apache/hadoop/hive/ql/exec/Operator.java:703:36>: {
+  elem: "(CtTypeReferenceImpl) org.apache.hadoop.hive.ql.exec.Operator @ ql/src/java/org/apache/hadoop/hive/ql/exec/Operator.java:703:27",
+  typeArgs: [
+    { context: "interface decl (CtInterfaceImpl) OperatorDesc @ ql/src/java/org/apache/hadoop/hive/ql/plan/OperatorDesc.java:24:18", index: -1, kind: interfaceDecl, ref: true },
+  ],
+}
+	at abstractor.core.constructs.Factory.create(Factory.java:132)
+	at abstractor.core.Abstractor.addObjectInst(Abstractor.java:1084)
+	at abstractor.core.Abstractor.addTypeDesc(Abstractor.java:1229)
+	at abstractor.core.Abstractor.lambda$addArgument$21(Abstractor.java:730)
+	at abstractor.core.constructs.Factory.lambda$create$1(Factory.java:147)
+	at abstractor.core.constructs.Factory.create(Factory.java:109)
+	... 120 more
+Caused by: java.lang.Exception: Error while processing abstract (CtMethodImpl) replaceParent @ ql/src/java/org/apache/hadoop/hive/ql/exec/Operator.java:804:15: {
+  elem: "(CtMethodImpl) replaceParent @ ql/src/java/org/apache/hadoop/hive/ql/exec/Operator.java:804:15",
+  typeArgs: [
+    { context: "interface decl (CtInterfaceImpl) OperatorDesc @ ql/src/java/org/apache/hadoop/hive/ql/plan/OperatorDesc.java:24:18", index: -1, kind: interfaceDecl, ref: true },
+  ],
+}
+	at abstractor.core.constructs.Factory.create(Factory.java:132)
+	at abstractor.core.constructs.Factory.create(Factory.java:147)
+	at abstractor.core.Abstractor.addAbstract(Abstractor.java:618)
+	at abstractor.core.Abstractor.synthesizeObjectInterface(Abstractor.java:1044)
+	at abstractor.core.Abstractor.lambda$addObjectInst$34(Abstractor.java:1088)
+	at abstractor.core.constructs.Factory.create(Factory.java:109)
+	... 125 more
+Caused by: java.lang.Exception: Error while processing signature (CtMethodImpl) replaceParent @ ql/src/java/org/apache/hadoop/hive/ql/exec/Operator.java:804:15: {
+  elem: "(CtMethodImpl) replaceParent @ ql/src/java/org/apache/hadoop/hive/ql/exec/Operator.java:804:15",
+  typeArgs: [
+    { context: "interface decl (CtInterfaceImpl) OperatorDesc @ ql/src/java/org/apache/hadoop/hive/ql/plan/OperatorDesc.java:24:18", index: -1, kind: interfaceDecl, ref: true },
+  ],
+}
+	at abstractor.core.constructs.Factory.create(Factory.java:132)
+	at abstractor.core.constructs.Factory.create(Factory.java:147)
+	at abstractor.core.Abstractor.addSignature(Abstractor.java:644)
+	at abstractor.core.Abstractor.lambda$addAbstract$16(Abstractor.java:622)
+	at abstractor.core.constructs.Factory.lambda$create$1(Factory.java:147)
+	at abstractor.core.constructs.Factory.create(Factory.java:109)
+	... 130 more
+Caused by: java.lang.Exception: Error while processing parameter (CtParameterImpl) parent @ ql/src/java/org/apache/hadoop/hive/ql/exec/Operator.java:804:62: {
+  elem: "(CtParameterImpl) parent @ ql/src/java/org/apache/hadoop/hive/ql/exec/Operator.java:804:62",
+  typeArgs: [
+    { context: "interface decl (CtInterfaceImpl) OperatorDesc @ ql/src/java/org/apache/hadoop/hive/ql/plan/OperatorDesc.java:24:18", index: -1, kind: interfaceDecl, ref: true },
+  ],
+}
+	at abstractor.core.constructs.Factory.create(Factory.java:132)
+	at abstractor.core.constructs.Factory.create(Factory.java:147)
+	at abstractor.core.Abstractor.addArgument(Abstractor.java:726)
+	at abstractor.core.Abstractor.lambda$addSignature$17(Abstractor.java:651)
+	at abstractor.core.constructs.Factory.lambda$create$1(Factory.java:147)
+	at abstractor.core.constructs.Factory.create(Factory.java:109)
+	... 135 more
+Caused by: java.lang.Exception: Error while processing object instantiation org.apache.hadoop.hive.ql.exec.Operator @ ql/src/java/org/apache/hadoop/hive/ql/exec/Operator.java:804:29<? @ ql/src/java/org/apache/hadoop/hive/ql/exec/Operator.java:804:38>: {
+  elem: "(CtTypeReferenceImpl) org.apache.hadoop.hive.ql.exec.Operator @ ql/src/java/org/apache/hadoop/hive/ql/exec/Operator.java:804:29",
+  typeArgs: [
+    { context: "interface decl (CtInterfaceImpl) OperatorDesc @ ql/src/java/org/apache/hadoop/hive/ql/plan/OperatorDesc.java:24:18", index: -1, kind: interfaceDecl, ref: true },
+  ],
+}
+	at abstractor.core.constructs.Factory.create(Factory.java:132)
+	at abstractor.core.Abstractor.addObjectInst(Abstractor.java:1084)
+	at abstractor.core.Abstractor.addTypeDesc(Abstractor.java:1229)
+	at abstractor.core.Abstractor.lambda$addArgument$21(Abstractor.java:730)
+	at abstractor.core.constructs.Factory.lambda$create$1(Factory.java:147)
+	at abstractor.core.constructs.Factory.create(Factory.java:109)
+	... 140 more
+Caused by: java.lang.Exception: Error while processing abstract (CtMethodImpl) replaceChild @ ql/src/java/org/apache/hadoop/hive/ql/exec/Operator.java:696:15: {
+  elem: "(CtMethodImpl) replaceChild @ ql/src/java/org/apache/hadoop/hive/ql/exec/Operator.java:696:15",
+  typeArgs: [
+    { context: "interface decl (CtInterfaceImpl) OperatorDesc @ ql/src/java/org/apache/hadoop/hive/ql/plan/OperatorDesc.java:24:18", index: -1, kind: interfaceDecl, ref: true },
+  ],
+}
+	at abstractor.core.constructs.Factory.create(Factory.java:132)
+	at abstractor.core.constructs.Factory.create(Factory.java:147)
+	at abstractor.core.Abstractor.addAbstract(Abstractor.java:618)
+	at abstractor.core.Abstractor.synthesizeObjectInterface(Abstractor.java:1044)
+	at abstractor.core.Abstractor.lambda$addObjectInst$34(Abstractor.java:1088)
+	at abstractor.core.constructs.Factory.create(Factory.java:109)
+	... 145 more
+Caused by: java.lang.Exception: Error while processing signature (CtMethodImpl) replaceChild @ ql/src/java/org/apache/hadoop/hive/ql/exec/Operator.java:696:15: {
+  elem: "(CtMethodImpl) replaceChild @ ql/src/java/org/apache/hadoop/hive/ql/exec/Operator.java:696:15",
+  typeArgs: [
+    { context: "interface decl (CtInterfaceImpl) OperatorDesc @ ql/src/java/org/apache/hadoop/hive/ql/plan/OperatorDesc.java:24:18", index: -1, kind: interfaceDecl, ref: true },
+  ],
+}
+	at abstractor.core.constructs.Factory.create(Factory.java:132)
+	at abstractor.core.constructs.Factory.create(Factory.java:147)
+	at abstractor.core.Abstractor.addSignature(Abstractor.java:644)
+	at abstractor.core.Abstractor.lambda$addAbstract$16(Abstractor.java:622)
+	at abstractor.core.constructs.Factory.lambda$create$1(Factory.java:147)
+	at abstractor.core.constructs.Factory.create(Factory.java:109)
+	... 150 more
+Caused by: java.lang.Exception: Error while processing parameter (CtParameterImpl) child @ ql/src/java/org/apache/hadoop/hive/ql/exec/Operator.java:696:61: {
+  elem: "(CtParameterImpl) child @ ql/src/java/org/apache/hadoop/hive/ql/exec/Operator.java:696:61",
+  typeArgs: [
+    { context: "interface decl (CtInterfaceImpl) OperatorDesc @ ql/src/java/org/apache/hadoop/hive/ql/plan/OperatorDesc.java:24:18", index: -1, kind: interfaceDecl, ref: true },
+  ],
+}
+	at abstractor.core.constructs.Factory.create(Factory.java:132)
+	at abstractor.core.constructs.Factory.create(Factory.java:147)
+	at abstractor.core.Abstractor.addArgument(Abstractor.java:726)
+	at abstractor.core.Abstractor.lambda$addSignature$17(Abstractor.java:651)
+	at abstractor.core.constructs.Factory.lambda$create$1(Factory.java:147)
+	at abstractor.core.constructs.Factory.create(Factory.java:109)
+	... 155 more
+Caused by: java.lang.Exception: Error while processing object instantiation org.apache.hadoop.hive.ql.exec.Operator @ ql/src/java/org/apache/hadoop/hive/ql/exec/Operator.java:696:28<? @ ql/src/java/org/apache/hadoop/hive/ql/exec/Operator.java:696:37>: {
+  elem: "(CtTypeReferenceImpl) org.apache.hadoop.hive.ql.exec.Operator @ ql/src/java/org/apache/hadoop/hive/ql/exec/Operator.java:696:28",
+  typeArgs: [
+    { context: "interface decl (CtInterfaceImpl) OperatorDesc @ ql/src/java/org/apache/hadoop/hive/ql/plan/OperatorDesc.java:24:18", index: -1, kind: interfaceDecl, ref: true },
+  ],
+}
+	at abstractor.core.constructs.Factory.create(Factory.java:132)
+	at abstractor.core.Abstractor.addObjectInst(Abstractor.java:1084)
+	at abstractor.core.Abstractor.addTypeDesc(Abstractor.java:1229)
+	at abstractor.core.Abstractor.lambda$addArgument$21(Abstractor.java:730)
+	at abstractor.core.constructs.Factory.lambda$create$1(Factory.java:147)
+	at abstractor.core.constructs.Factory.create(Factory.java:109)
+	... 160 more
+Caused by: java.lang.Exception: Error while processing abstract (CtMethodImpl) getTagToOperatorTree @ ql/src/java/org/apache/hadoop/hive/ql/exec/Operator.java:1349:43: {
+  elem: "(CtMethodImpl) getTagToOperatorTree @ ql/src/java/org/apache/hadoop/hive/ql/exec/Operator.java:1349:43",
+  typeArgs: [
+    { context: "interface decl (CtInterfaceImpl) OperatorDesc @ ql/src/java/org/apache/hadoop/hive/ql/plan/OperatorDesc.java:24:18", index: -1, kind: interfaceDecl, ref: true },
+  ],
+}
+	at abstractor.core.constructs.Factory.create(Factory.java:132)
+	at abstractor.core.constructs.Factory.create(Factory.java:147)
+	at abstractor.core.Abstractor.addAbstract(Abstractor.java:618)
+	at abstractor.core.Abstractor.synthesizeObjectInterface(Abstractor.java:1044)
+	at abstractor.core.Abstractor.lambda$addObjectInst$34(Abstractor.java:1088)
+	at abstractor.core.constructs.Factory.create(Factory.java:109)
+	... 165 more
+Caused by: java.lang.Exception: Error while processing signature (CtMethodImpl) getTagToOperatorTree @ ql/src/java/org/apache/hadoop/hive/ql/exec/Operator.java:1349:43: {
+  elem: "(CtMethodImpl) getTagToOperatorTree @ ql/src/java/org/apache/hadoop/hive/ql/exec/Operator.java:1349:43",
+  typeArgs: [
+    { context: "interface decl (CtInterfaceImpl) OperatorDesc @ ql/src/java/org/apache/hadoop/hive/ql/plan/OperatorDesc.java:24:18", index: -1, kind: interfaceDecl, ref: true },
+  ],
+}
+	at abstractor.core.constructs.Factory.create(Factory.java:132)
+	at abstractor.core.constructs.Factory.create(Factory.java:147)
+	at abstractor.core.Abstractor.addSignature(Abstractor.java:644)
+	at abstractor.core.Abstractor.lambda$addAbstract$16(Abstractor.java:622)
+	at abstractor.core.constructs.Factory.lambda$create$1(Factory.java:147)
+	at abstractor.core.constructs.Factory.create(Factory.java:109)
+	... 170 more
+Caused by: java.lang.Exception: Error while processing parameter <unnamed> java.util.Map @ ql/src/java/org/apache/hadoop/hive/ql/exec/Operator.java:1349:10<java.lang.Integer @ ql/src/java/org/apache/hadoop/hive/ql/exec/Operator.java:1349:14, org.apache.hadoop.hive.ql.exec.DummyStoreOperator @ ql/src/java/org/apache/hadoop/hive/ql/exec/Operator.java:1349:23>: {
+  elem: "(CtTypeReferenceImpl) java.util.Map @ ql/src/java/org/apache/hadoop/hive/ql/exec/Operator.java:1349:10",
+  typeArgs: [
+    { context: "interface decl (CtInterfaceImpl) OperatorDesc @ ql/src/java/org/apache/hadoop/hive/ql/plan/OperatorDesc.java:24:18", index: -1, kind: interfaceDecl, ref: true },
+  ],
+}
+	at abstractor.core.constructs.Factory.create(Factory.java:132)
+	at abstractor.core.constructs.Factory.create(Factory.java:147)
+	at abstractor.core.Abstractor.addArgument(Abstractor.java:742)
+	at abstractor.core.Abstractor.lambda$addSignature$17(Abstractor.java:655)
+	at abstractor.core.constructs.Factory.lambda$create$1(Factory.java:147)
+	at abstractor.core.constructs.Factory.create(Factory.java:109)
+	... 175 more
+Caused by: java.lang.Exception: Error while processing object decl (CtClassImpl) DummyStoreOperator @ ql/src/java/org/apache/hadoop/hive/ql/exec/DummyStoreOperator.java:66:14: {
+  elem: "(CtClassImpl) DummyStoreOperator @ ql/src/java/org/apache/hadoop/hive/ql/exec/DummyStoreOperator.java:66:14",
+}
+	at abstractor.core.constructs.Factory.create(Factory.java:132)
+	at abstractor.core.constructs.Factory.create(Factory.java:139)
+	at abstractor.core.Abstractor.addObjectDecl(Abstractor.java:985)
+	at abstractor.core.Abstractor.addObjectInst(Abstractor.java:1069)
+	at abstractor.core.Abstractor.addTypeDesc(Abstractor.java:1229)
+	at abstractor.core.Abstractor.addTypeArguments(Abstractor.java:1140)
+	at abstractor.core.Abstractor.addInterfaceInst(Abstractor.java:258)
+	at abstractor.core.Abstractor.addTypeDesc(Abstractor.java:1230)
+	at abstractor.core.Abstractor.lambda$addArgument$22(Abstractor.java:745)
+	at abstractor.core.constructs.Factory.lambda$create$1(Factory.java:147)
+	at abstractor.core.constructs.Factory.create(Factory.java:109)
+	... 180 more
+Caused by: java.lang.Exception: Error while processing struct (CtClassImpl) DummyStoreOperator @ ql/src/java/org/apache/hadoop/hive/ql/exec/DummyStoreOperator.java:66:14: {
+  elem: "(CtClassImpl) DummyStoreOperator @ ql/src/java/org/apache/hadoop/hive/ql/exec/DummyStoreOperator.java:66:14",
+}
+	at abstractor.core.constructs.Factory.create(Factory.java:132)
+	at abstractor.core.constructs.Factory.create(Factory.java:143)
+	at abstractor.core.Abstractor.addStructDesc(Abstractor.java:757)
+	at abstractor.core.Abstractor.lambda$addObjectDecl$32(Abstractor.java:991)
+	at abstractor.core.constructs.Factory.lambda$create$0(Factory.java:139)
+	at abstractor.core.constructs.Factory.create(Factory.java:109)
+	... 190 more
+Caused by: java.lang.Exception: Error while processing field (CtFieldImpl) execContext @ ql/src/java/org/apache/hadoop/hive/ql/exec/Operator.java:70:39: {
+  elem: "(CtFieldImpl) execContext @ ql/src/java/org/apache/hadoop/hive/ql/exec/Operator.java:70:39",
+}
+	at abstractor.core.constructs.Factory.create(Factory.java:132)
+	at abstractor.core.constructs.Factory.create(Factory.java:139)
+	at abstractor.core.Abstractor.addField(Abstractor.java:796)
+	at abstractor.core.Abstractor.addField(Abstractor.java:791)
+	at abstractor.core.Abstractor.lambda$addStructDesc$23(Abstractor.java:768)
+	at abstractor.core.constructs.Factory.create(Factory.java:109)
+	... 195 more
+Caused by: java.lang.Exception: Error while processing object decl (CtClassImpl) ExecMapperContext @ ql/src/java/org/apache/hadoop/hive/ql/exec/mr/ExecMapperContext.java:30:14: {
+  elem: "(CtClassImpl) ExecMapperContext @ ql/src/java/org/apache/hadoop/hive/ql/exec/mr/ExecMapperContext.java:30:14",
+}
+	at abstractor.core.constructs.Factory.create(Factory.java:132)
+	at abstractor.core.constructs.Factory.create(Factory.java:139)
+	at abstractor.core.Abstractor.addObjectDecl(Abstractor.java:985)
+	at abstractor.core.Abstractor.addObjectInst(Abstractor.java:1069)
+	at abstractor.core.Abstractor.addTypeDesc(Abstractor.java:1229)
+	at abstractor.core.Abstractor.lambda$addField$24(Abstractor.java:800)
+	at abstractor.core.constructs.Factory.lambda$create$0(Factory.java:139)
+	at abstractor.core.constructs.Factory.create(Factory.java:109)
+	... 200 more
+Caused by: java.lang.Exception: Error while processing struct (CtClassImpl) ExecMapperContext @ ql/src/java/org/apache/hadoop/hive/ql/exec/mr/ExecMapperContext.java:30:14: {
+  elem: "(CtClassImpl) ExecMapperContext @ ql/src/java/org/apache/hadoop/hive/ql/exec/mr/ExecMapperContext.java:30:14",
+}
+	at abstractor.core.constructs.Factory.create(Factory.java:132)
+	at abstractor.core.constructs.Factory.create(Factory.java:143)
+	at abstractor.core.Abstractor.addStructDesc(Abstractor.java:757)
+	at abstractor.core.Abstractor.lambda$addObjectDecl$32(Abstractor.java:991)
+	at abstractor.core.constructs.Factory.lambda$create$0(Factory.java:139)
+	at abstractor.core.constructs.Factory.create(Factory.java:109)
+	... 207 more
+Caused by: java.lang.Exception: Error while processing field (CtFieldImpl) localWork @ ql/src/java/org/apache/hadoop/hive/ql/exec/mr/ExecMapperContext.java:48:27: {
+  elem: "(CtFieldImpl) localWork @ ql/src/java/org/apache/hadoop/hive/ql/exec/mr/ExecMapperContext.java:48:27",
+}
+	at abstractor.core.constructs.Factory.create(Factory.java:132)
+	at abstractor.core.constructs.Factory.create(Factory.java:139)
+	at abstractor.core.Abstractor.addField(Abstractor.java:796)
+	at abstractor.core.Abstractor.addField(Abstractor.java:791)
+	at abstractor.core.Abstractor.lambda$addStructDesc$23(Abstractor.java:768)
+	at abstractor.core.constructs.Factory.create(Factory.java:109)
+	... 212 more
+Caused by: java.lang.Exception: Error while processing object decl (CtClassImpl) MapredLocalWork @ ql/src/java/org/apache/hadoop/hive/ql/plan/MapredLocalWork.java:40:14: {
+  elem: "(CtClassImpl) MapredLocalWork @ ql/src/java/org/apache/hadoop/hive/ql/plan/MapredLocalWork.java:40:14",
+}
+	at abstractor.core.constructs.Factory.create(Factory.java:132)
+	at abstractor.core.constructs.Factory.create(Factory.java:139)
+	at abstractor.core.Abstractor.addObjectDecl(Abstractor.java:985)
+	at abstractor.core.Abstractor.addObjectInst(Abstractor.java:1069)
+	at abstractor.core.Abstractor.addTypeDesc(Abstractor.java:1229)
+	at abstractor.core.Abstractor.lambda$addField$24(Abstractor.java:800)
+	at abstractor.core.constructs.Factory.lambda$create$0(Factory.java:139)
+	at abstractor.core.constructs.Factory.create(Factory.java:109)
+	... 217 more
+Caused by: java.lang.Exception: Error while processing struct (CtClassImpl) MapredLocalWork @ ql/src/java/org/apache/hadoop/hive/ql/plan/MapredLocalWork.java:40:14: {
+  elem: "(CtClassImpl) MapredLocalWork @ ql/src/java/org/apache/hadoop/hive/ql/plan/MapredLocalWork.java:40:14",
+}
+	at abstractor.core.constructs.Factory.create(Factory.java:132)
+	at abstractor.core.constructs.Factory.create(Factory.java:143)
+	at abstractor.core.Abstractor.addStructDesc(Abstractor.java:757)
+	at abstractor.core.Abstractor.lambda$addObjectDecl$32(Abstractor.java:991)
+	at abstractor.core.constructs.Factory.lambda$create$0(Factory.java:139)
+	at abstractor.core.constructs.Factory.create(Factory.java:109)
+	... 224 more
+Caused by: java.lang.Exception: Error while processing field (CtFieldImpl) aliasToWork @ ql/src/java/org/apache/hadoop/hive/ql/plan/MapredLocalWork.java:43:67: {
+  elem: "(CtFieldImpl) aliasToWork @ ql/src/java/org/apache/hadoop/hive/ql/plan/MapredLocalWork.java:43:67",
+}
+	at abstractor.core.constructs.Factory.create(Factory.java:132)
+	at abstractor.core.constructs.Factory.create(Factory.java:139)
+	at abstractor.core.Abstractor.addField(Abstractor.java:796)
+	at abstractor.core.Abstractor.addField(Abstractor.java:791)
+	at abstractor.core.Abstractor.lambda$addStructDesc$23(Abstractor.java:768)
+	at abstractor.core.constructs.Factory.create(Factory.java:109)
+	... 229 more
+Caused by: java.lang.Exception: Error while processing object instantiation org.apache.hadoop.hive.ql.exec.Operator @ ql/src/java/org/apache/hadoop/hive/ql/plan/MapredLocalWork.java:43:33<? @ ql/src/java/org/apache/hadoop/hive/ql/plan/MapredLocalWork.java:43:42>: {
+  elem: "(CtTypeReferenceImpl) org.apache.hadoop.hive.ql.exec.Operator @ ql/src/java/org/apache/hadoop/hive/ql/plan/MapredLocalWork.java:43:33",
+  typeArgs: [
+    { context: "interface decl (CtInterfaceImpl) OperatorDesc @ ql/src/java/org/apache/hadoop/hive/ql/plan/OperatorDesc.java:24:18", index: -1, kind: interfaceDecl, ref: true },
+  ],
+}
+	at abstractor.core.constructs.Factory.create(Factory.java:132)
+	at abstractor.core.Abstractor.addObjectInst(Abstractor.java:1084)
+	at abstractor.core.Abstractor.addTypeDesc(Abstractor.java:1229)
+	at abstractor.core.Abstractor.addTypeArguments(Abstractor.java:1140)
+	at abstractor.core.Abstractor.addObjectInst(Abstractor.java:1073)
+	at abstractor.core.Abstractor.addTypeDesc(Abstractor.java:1229)
+	at abstractor.core.Abstractor.lambda$addField$24(Abstractor.java:800)
+	at abstractor.core.constructs.Factory.lambda$create$0(Factory.java:139)
+	at abstractor.core.constructs.Factory.create(Factory.java:109)
+	... 234 more
+Caused by: java.lang.Exception: Error while processing abstract (CtMethodImpl) removeChildAndAdoptItsChildren @ ql/src/java/org/apache/hadoop/hive/ql/exec/Operator.java:727:15: {
+  elem: "(CtMethodImpl) removeChildAndAdoptItsChildren @ ql/src/java/org/apache/hadoop/hive/ql/exec/Operator.java:727:15",
+  typeArgs: [
+    { context: "interface decl (CtInterfaceImpl) OperatorDesc @ ql/src/java/org/apache/hadoop/hive/ql/plan/OperatorDesc.java:24:18", index: -1, kind: interfaceDecl, ref: true },
+  ],
+}
+	at abstractor.core.constructs.Factory.create(Factory.java:132)
+	at abstractor.core.constructs.Factory.create(Factory.java:147)
+	at abstractor.core.Abstractor.addAbstract(Abstractor.java:618)
+	at abstractor.core.Abstractor.synthesizeObjectInterface(Abstractor.java:1044)
+	at abstractor.core.Abstractor.lambda$addObjectInst$34(Abstractor.java:1088)
+	at abstractor.core.constructs.Factory.create(Factory.java:109)
+	... 242 more
+Caused by: java.lang.Exception: Error while processing signature (CtMethodImpl) removeChildAndAdoptItsChildren @ ql/src/java/org/apache/hadoop/hive/ql/exec/Operator.java:727:15: {
+  elem: "(CtMethodImpl) removeChildAndAdoptItsChildren @ ql/src/java/org/apache/hadoop/hive/ql/exec/Operator.java:727:15",
+  typeArgs: [
+    { context: "interface decl (CtInterfaceImpl) OperatorDesc @ ql/src/java/org/apache/hadoop/hive/ql/plan/OperatorDesc.java:24:18", index: -1, kind: interfaceDecl, ref: true },
+  ],
+}
+	at abstractor.core.constructs.Factory.create(Factory.java:132)
+	at abstractor.core.constructs.Factory.create(Factory.java:147)
+	at abstractor.core.Abstractor.addSignature(Abstractor.java:644)
+	at abstractor.core.Abstractor.lambda$addAbstract$16(Abstractor.java:622)
+	at abstractor.core.constructs.Factory.lambda$create$1(Factory.java:147)
+	at abstractor.core.constructs.Factory.create(Factory.java:109)
+	... 247 more
+Caused by: java.lang.Exception: Error while processing parameter (CtParameterImpl) child @ ql/src/java/org/apache/hadoop/hive/ql/exec/Operator.java:728:38: {
+  elem: "(CtParameterImpl) child @ ql/src/java/org/apache/hadoop/hive/ql/exec/Operator.java:728:38",
+  typeArgs: [
+    { context: "interface decl (CtInterfaceImpl) OperatorDesc @ ql/src/java/org/apache/hadoop/hive/ql/plan/OperatorDesc.java:24:18", index: -1, kind: interfaceDecl, ref: true },
+  ],
+}
+	at abstractor.core.constructs.Factory.create(Factory.java:132)
+	at abstractor.core.constructs.Factory.create(Factory.java:147)
+	at abstractor.core.Abstractor.addArgument(Abstractor.java:726)
+	at abstractor.core.Abstractor.lambda$addSignature$17(Abstractor.java:651)
+	at abstractor.core.constructs.Factory.lambda$create$1(Factory.java:147)
+	at abstractor.core.constructs.Factory.create(Factory.java:109)
+	... 252 more
+Caused by: java.lang.Exception: Error while processing object instantiation org.apache.hadoop.hive.ql.exec.Operator @ ql/src/java/org/apache/hadoop/hive/ql/exec/Operator.java:728:5<? @ ql/src/java/org/apache/hadoop/hive/ql/exec/Operator.java:728:14>: {
+  elem: "(CtTypeReferenceImpl) org.apache.hadoop.hive.ql.exec.Operator @ ql/src/java/org/apache/hadoop/hive/ql/exec/Operator.java:728:5",
+  typeArgs: [
+    { context: "interface decl (CtInterfaceImpl) OperatorDesc @ ql/src/java/org/apache/hadoop/hive/ql/plan/OperatorDesc.java:24:18", index: -1, kind: interfaceDecl, ref: true },
+  ],
+}
+	at abstractor.core.constructs.Factory.create(Factory.java:132)
+	at abstractor.core.Abstractor.addObjectInst(Abstractor.java:1084)
+	at abstractor.core.Abstractor.addTypeDesc(Abstractor.java:1229)
+	at abstractor.core.Abstractor.lambda$addArgument$21(Abstractor.java:730)
+	at abstractor.core.constructs.Factory.lambda$create$1(Factory.java:147)
+	at abstractor.core.constructs.Factory.create(Factory.java:109)
+	... 257 more
+Caused by: java.lang.Exception: Error while processing abstract (CtMethodImpl) getParentOperators @ ql/src/java/org/apache/hadoop/hive/ql/exec/Operator.java:173:49: {
+  elem: "(CtMethodImpl) getParentOperators @ ql/src/java/org/apache/hadoop/hive/ql/exec/Operator.java:173:49",
+  typeArgs: [
+    { context: "interface decl (CtInterfaceImpl) OperatorDesc @ ql/src/java/org/apache/hadoop/hive/ql/plan/OperatorDesc.java:24:18", index: -1, kind: interfaceDecl, ref: true },
+  ],
+}
+	at abstractor.core.constructs.Factory.create(Factory.java:132)
+	at abstractor.core.constructs.Factory.create(Factory.java:147)
+	at abstractor.core.Abstractor.addAbstract(Abstractor.java:618)
+	at abstractor.core.Abstractor.synthesizeObjectInterface(Abstractor.java:1044)
+	at abstractor.core.Abstractor.lambda$addObjectInst$34(Abstractor.java:1088)
+	at abstractor.core.constructs.Factory.create(Factory.java:109)
+	... 262 more
+Caused by: java.lang.Exception: Error while processing signature (CtMethodImpl) getParentOperators @ ql/src/java/org/apache/hadoop/hive/ql/exec/Operator.java:173:49: {
+  elem: "(CtMethodImpl) getParentOperators @ ql/src/java/org/apache/hadoop/hive/ql/exec/Operator.java:173:49",
+  typeArgs: [
+    { context: "interface decl (CtInterfaceImpl) OperatorDesc @ ql/src/java/org/apache/hadoop/hive/ql/plan/OperatorDesc.java:24:18", index: -1, kind: interfaceDecl, ref: true },
+  ],
+}
+	at abstractor.core.constructs.Factory.create(Factory.java:132)
+	at abstractor.core.constructs.Factory.create(Factory.java:147)
+	at abstractor.core.Abstractor.addSignature(Abstractor.java:644)
+	at abstractor.core.Abstractor.lambda$addAbstract$16(Abstractor.java:622)
+	at abstractor.core.constructs.Factory.lambda$create$1(Factory.java:147)
+	at abstractor.core.constructs.Factory.create(Factory.java:109)
+	... 267 more
+Caused by: java.lang.Exception: Error while processing parameter <unnamed> java.util.List @ ql/src/java/org/apache/hadoop/hive/ql/exec/Operator.java:173:10<org.apache.hadoop.hive.ql.exec.Operator @ ql/src/java/org/apache/hadoop/hive/ql/exec/Operator.java:173:15>: {
+  elem: "(CtTypeReferenceImpl) java.util.List @ ql/src/java/org/apache/hadoop/hive/ql/exec/Operator.java:173:10",
+  typeArgs: [
+    { context: "interface decl (CtInterfaceImpl) OperatorDesc @ ql/src/java/org/apache/hadoop/hive/ql/plan/OperatorDesc.java:24:18", index: -1, kind: interfaceDecl, ref: true },
+  ],
+}
+	at abstractor.core.constructs.Factory.create(Factory.java:132)
+	at abstractor.core.constructs.Factory.create(Factory.java:147)
+	at abstractor.core.Abstractor.addArgument(Abstractor.java:742)
+	at abstractor.core.Abstractor.lambda$addSignature$17(Abstractor.java:655)
+	at abstractor.core.constructs.Factory.lambda$create$1(Factory.java:147)
+	at abstractor.core.constructs.Factory.create(Factory.java:109)
+	... 272 more
+Caused by: java.lang.Exception: Error while processing object instantiation org.apache.hadoop.hive.ql.exec.Operator @ ql/src/java/org/apache/hadoop/hive/ql/exec/Operator.java:173:15<? @ ql/src/java/org/apache/hadoop/hive/ql/exec/Operator.java:173:24>: {
+  elem: "(CtTypeReferenceImpl) org.apache.hadoop.hive.ql.exec.Operator @ ql/src/java/org/apache/hadoop/hive/ql/exec/Operator.java:173:15",
+  typeArgs: [
+    { context: "interface decl (CtInterfaceImpl) OperatorDesc @ ql/src/java/org/apache/hadoop/hive/ql/plan/OperatorDesc.java:24:18", index: -1, kind: interfaceDecl, ref: true },
+  ],
+}
+	at abstractor.core.constructs.Factory.create(Factory.java:132)
+	at abstractor.core.Abstractor.addObjectInst(Abstractor.java:1084)
+	at abstractor.core.Abstractor.addTypeDesc(Abstractor.java:1229)
+	at abstractor.core.Abstractor.addTypeArguments(Abstractor.java:1140)
+	at abstractor.core.Abstractor.addInterfaceInst(Abstractor.java:258)
+	at abstractor.core.Abstractor.addTypeDesc(Abstractor.java:1230)
+	at abstractor.core.Abstractor.lambda$addArgument$22(Abstractor.java:745)
+	at abstractor.core.constructs.Factory.lambda$create$1(Factory.java:147)
+	at abstractor.core.constructs.Factory.create(Factory.java:109)
+	... 277 more
+Caused by: java.lang.Exception: Error while processing abstract (CtMethodImpl) preorderMap @ ql/src/java/org/apache/hadoop/hive/ql/exec/Operator.java:869:15: {
+  elem: "(CtMethodImpl) preorderMap @ ql/src/java/org/apache/hadoop/hive/ql/exec/Operator.java:869:15",
+  typeArgs: [
+    { context: "interface decl (CtInterfaceImpl) OperatorDesc @ ql/src/java/org/apache/hadoop/hive/ql/plan/OperatorDesc.java:24:18", index: -1, kind: interfaceDecl, ref: true },
+  ],
+}
+	at abstractor.core.constructs.Factory.create(Factory.java:132)
+	at abstractor.core.constructs.Factory.create(Factory.java:147)
+	at abstractor.core.Abstractor.addAbstract(Abstractor.java:618)
+	at abstractor.core.Abstractor.synthesizeObjectInterface(Abstractor.java:1044)
+	at abstractor.core.Abstractor.lambda$addObjectInst$34(Abstractor.java:1088)
+	at abstractor.core.constructs.Factory.create(Factory.java:109)
+	... 285 more
+Caused by: java.lang.Exception: Error while processing signature (CtMethodImpl) preorderMap @ ql/src/java/org/apache/hadoop/hive/ql/exec/Operator.java:869:15: {
+  elem: "(CtMethodImpl) preorderMap @ ql/src/java/org/apache/hadoop/hive/ql/exec/Operator.java:869:15",
+  typeArgs: [
+    { context: "interface decl (CtInterfaceImpl) OperatorDesc @ ql/src/java/org/apache/hadoop/hive/ql/plan/OperatorDesc.java:24:18", index: -1, kind: interfaceDecl, ref: true },
+  ],
+}
+	at abstractor.core.constructs.Factory.create(Factory.java:132)
+	at abstractor.core.constructs.Factory.create(Factory.java:147)
+	at abstractor.core.Abstractor.addSignature(Abstractor.java:644)
+	at abstractor.core.Abstractor.lambda$addAbstract$16(Abstractor.java:622)
+	at abstractor.core.constructs.Factory.lambda$create$1(Factory.java:147)
+	at abstractor.core.constructs.Factory.create(Factory.java:109)
+	... 290 more
+Caused by: java.lang.Exception: Error while processing parameter (CtParameterImpl) opFunc @ ql/src/java/org/apache/hadoop/hive/ql/exec/Operator.java:869:40: {
+  elem: "(CtParameterImpl) opFunc @ ql/src/java/org/apache/hadoop/hive/ql/exec/Operator.java:869:40",
+  typeArgs: [
+    { context: "interface decl (CtInterfaceImpl) OperatorDesc @ ql/src/java/org/apache/hadoop/hive/ql/plan/OperatorDesc.java:24:18", index: -1, kind: interfaceDecl, ref: true },
+  ],
+}
+	at abstractor.core.constructs.Factory.create(Factory.java:132)
+	at abstractor.core.constructs.Factory.create(Factory.java:147)
+	at abstractor.core.Abstractor.addArgument(Abstractor.java:726)
+	at abstractor.core.Abstractor.lambda$addSignature$17(Abstractor.java:651)
+	at abstractor.core.constructs.Factory.lambda$create$1(Factory.java:147)
+	at abstractor.core.constructs.Factory.create(Factory.java:109)
+	... 295 more
+Caused by: java.lang.Exception: Error while processing interface decl (CtInterfaceImpl) OperatorFunc @ ql/src/java/org/apache/hadoop/hive/ql/exec/Operator.java:865:27: {
+  elem: "(CtInterfaceImpl) OperatorFunc @ ql/src/java/org/apache/hadoop/hive/ql/exec/Operator.java:865:27",
+}
+	at abstractor.core.constructs.Factory.create(Factory.java:132)
+	at abstractor.core.constructs.Factory.create(Factory.java:139)
+	at abstractor.core.Abstractor.addInterfaceDecl(Abstractor.java:224)
+	at abstractor.core.Abstractor.addInterfaceInst(Abstractor.java:254)
+	at abstractor.core.Abstractor.addTypeDesc(Abstractor.java:1230)
+	at abstractor.core.Abstractor.lambda$addArgument$21(Abstractor.java:730)
+	at abstractor.core.constructs.Factory.lambda$create$1(Factory.java:147)
+	at abstractor.core.constructs.Factory.create(Factory.java:109)
+	... 300 more
+Caused by: java.lang.Exception: Error while processing interface description (CtInterfaceImpl) OperatorFunc @ ql/src/java/org/apache/hadoop/hive/ql/exec/Operator.java:865:27: {
+  elem: "(CtInterfaceImpl) OperatorFunc @ ql/src/java/org/apache/hadoop/hive/ql/exec/Operator.java:865:27",
+}
+	at abstractor.core.constructs.Factory.create(Factory.java:132)
+	at abstractor.core.Abstractor.addInterfaceDesc(Abstractor.java:290)
+	at abstractor.core.Abstractor.lambda$addInterfaceDecl$0(Abstractor.java:230)
+	at abstractor.core.constructs.Factory.lambda$create$0(Factory.java:139)
+	at abstractor.core.constructs.Factory.create(Factory.java:109)
+	... 307 more
+Caused by: java.lang.Exception: Error while processing abstract (CtMethodImpl) func @ ql/src/java/org/apache/hadoop/hive/ql/exec/Operator.java:866:10: {
+  elem: "(CtMethodImpl) func @ ql/src/java/org/apache/hadoop/hive/ql/exec/Operator.java:866:10",
+}
+	at abstractor.core.constructs.Factory.create(Factory.java:132)
+	at abstractor.core.constructs.Factory.create(Factory.java:147)
+	at abstractor.core.Abstractor.addAbstract(Abstractor.java:618)
+	at abstractor.core.Abstractor.lambda$addInterfaceDesc$4(Abstractor.java:298)
+	at abstractor.core.constructs.Factory.create(Factory.java:109)
+	... 311 more
+Caused by: java.lang.Exception: Error while processing signature (CtMethodImpl) func @ ql/src/java/org/apache/hadoop/hive/ql/exec/Operator.java:866:10: {
+  elem: "(CtMethodImpl) func @ ql/src/java/org/apache/hadoop/hive/ql/exec/Operator.java:866:10",
+}
+	at abstractor.core.constructs.Factory.create(Factory.java:132)
+	at abstractor.core.constructs.Factory.create(Factory.java:147)
+	at abstractor.core.Abstractor.addSignature(Abstractor.java:644)
+	at abstractor.core.Abstractor.lambda$addAbstract$16(Abstractor.java:622)
+	at abstractor.core.constructs.Factory.lambda$create$1(Factory.java:147)
+	at abstractor.core.constructs.Factory.create(Factory.java:109)
+	... 315 more
+Caused by: java.lang.Exception: Error while processing parameter (CtParameterImpl) op @ ql/src/java/org/apache/hadoop/hive/ql/exec/Operator.java:866:48: {
+  elem: "(CtParameterImpl) op @ ql/src/java/org/apache/hadoop/hive/ql/exec/Operator.java:866:48",
+}
+	at abstractor.core.constructs.Factory.create(Factory.java:132)
+	at abstractor.core.constructs.Factory.create(Factory.java:147)
+	at abstractor.core.Abstractor.addArgument(Abstractor.java:726)
+	at abstractor.core.Abstractor.lambda$addSignature$17(Abstractor.java:651)
+	at abstractor.core.constructs.Factory.lambda$create$1(Factory.java:147)
+	at abstractor.core.constructs.Factory.create(Factory.java:109)
+	... 320 more
+Caused by: java.lang.Exception: Error while processing object instantiation org.apache.hadoop.hive.ql.exec.Operator @ ql/src/java/org/apache/hadoop/hive/ql/exec/Operator.java:866:15<? @ ql/src/java/org/apache/hadoop/hive/ql/exec/Operator.java:866:24>: {
+  elem: "(CtTypeReferenceImpl) org.apache.hadoop.hive.ql.exec.Operator @ ql/src/java/org/apache/hadoop/hive/ql/exec/Operator.java:866:15",
+  typeArgs: [
+    { context: "interface decl (CtInterfaceImpl) OperatorDesc @ ql/src/java/org/apache/hadoop/hive/ql/plan/OperatorDesc.java:24:18", index: -1, kind: interfaceDecl, ref: true },
+  ],
+}
+	at abstractor.core.constructs.Factory.create(Factory.java:132)
+	at abstractor.core.Abstractor.addObjectInst(Abstractor.java:1084)
+	at abstractor.core.Abstractor.addTypeDesc(Abstractor.java:1229)
+	at abstractor.core.Abstractor.lambda$addArgument$21(Abstractor.java:730)
+	at abstractor.core.constructs.Factory.lambda$create$1(Factory.java:147)
+	at abstractor.core.constructs.Factory.create(Factory.java:109)
+	... 325 more
+Caused by: java.lang.Exception: Error while processing abstract (CtMethodImpl) cloneRecursiveChildren @ ql/src/java/org/apache/hadoop/hive/ql/exec/Operator.java:1147:43: {
+  elem: "(CtMethodImpl) cloneRecursiveChildren @ ql/src/java/org/apache/hadoop/hive/ql/exec/Operator.java:1147:43",
+  typeArgs: [
+    { context: "interface decl (CtInterfaceImpl) OperatorDesc @ ql/src/java/org/apache/hadoop/hive/ql/plan/OperatorDesc.java:24:18", index: -1, kind: interfaceDecl, ref: true },
+  ],
+}
+	at abstractor.core.constructs.Factory.create(Factory.java:132)
+	at abstractor.core.constructs.Factory.create(Factory.java:147)
+	at abstractor.core.Abstractor.addAbstract(Abstractor.java:618)
+	at abstractor.core.Abstractor.synthesizeObjectInterface(Abstractor.java:1044)
+	at abstractor.core.Abstractor.lambda$addObjectInst$34(Abstractor.java:1088)
+	at abstractor.core.constructs.Factory.create(Factory.java:109)
+	... 330 more
+Caused by: java.lang.Exception: Error while processing signature (CtMethodImpl) cloneRecursiveChildren @ ql/src/java/org/apache/hadoop/hive/ql/exec/Operator.java:1147:43: {
+  elem: "(CtMethodImpl) cloneRecursiveChildren @ ql/src/java/org/apache/hadoop/hive/ql/exec/Operator.java:1147:43",
+  typeArgs: [
+    { context: "interface decl (CtInterfaceImpl) OperatorDesc @ ql/src/java/org/apache/hadoop/hive/ql/plan/OperatorDesc.java:24:18", index: -1, kind: interfaceDecl, ref: true },
+  ],
+}
+	at abstractor.core.constructs.Factory.create(Factory.java:132)
+	at abstractor.core.constructs.Factory.create(Factory.java:147)
+	at abstractor.core.Abstractor.addSignature(Abstractor.java:644)
+	at abstractor.core.Abstractor.lambda$addAbstract$16(Abstractor.java:622)
+	at abstractor.core.constructs.Factory.lambda$create$1(Factory.java:147)
+	at abstractor.core.constructs.Factory.create(Factory.java:109)
+	... 335 more
+Caused by: java.lang.Exception: Error while processing parameter <unnamed> org.apache.hadoop.hive.ql.exec.Operator @ ql/src/java/org/apache/hadoop/hive/ql/exec/Operator.java:1147:10<? @ ql/src/java/org/apache/hadoop/hive/ql/exec/Operator.java:1147:19>: {
+  elem: "(CtTypeReferenceImpl) org.apache.hadoop.hive.ql.exec.Operator @ ql/src/java/org/apache/hadoop/hive/ql/exec/Operator.java:1147:10",
+  typeArgs: [
+    { context: "interface decl (CtInterfaceImpl) OperatorDesc @ ql/src/java/org/apache/hadoop/hive/ql/plan/OperatorDesc.java:24:18", index: -1, kind: interfaceDecl, ref: true },
+  ],
+}
+	at abstractor.core.constructs.Factory.create(Factory.java:132)
+	at abstractor.core.constructs.Factory.create(Factory.java:147)
+	at abstractor.core.Abstractor.addArgument(Abstractor.java:742)
+	at abstractor.core.Abstractor.lambda$addSignature$17(Abstractor.java:655)
+	at abstractor.core.constructs.Factory.lambda$create$1(Factory.java:147)
+	at abstractor.core.constructs.Factory.create(Factory.java:109)
+	... 340 more
+Caused by: java.lang.Exception: Error while processing object instantiation org.apache.hadoop.hive.ql.exec.Operator @ ql/src/java/org/apache/hadoop/hive/ql/exec/Operator.java:1147:10<? @ ql/src/java/org/apache/hadoop/hive/ql/exec/Operator.java:1147:19>: {
+  elem: "(CtTypeReferenceImpl) org.apache.hadoop.hive.ql.exec.Operator @ ql/src/java/org/apache/hadoop/hive/ql/exec/Operator.java:1147:10",
+  typeArgs: [
+    { context: "interface decl (CtInterfaceImpl) OperatorDesc @ ql/src/java/org/apache/hadoop/hive/ql/plan/OperatorDesc.java:24:18", index: -1, kind: interfaceDecl, ref: true },
+  ],
+}
+	at abstractor.core.constructs.Factory.create(Factory.java:132)
+	at abstractor.core.Abstractor.addObjectInst(Abstractor.java:1084)
+	at abstractor.core.Abstractor.addTypeDesc(Abstractor.java:1229)
+	at abstractor.core.Abstractor.lambda$addArgument$22(Abstractor.java:745)
+	at abstractor.core.constructs.Factory.lambda$create$1(Factory.java:147)
+	at abstractor.core.constructs.Factory.create(Factory.java:109)
+	... 345 more
+Caused by: java.lang.Exception: Error while processing abstract (CtMethodImpl) getChildOperators @ ql/src/java/org/apache/hadoop/hive/ql/exec/Operator.java:139:49: {
+  elem: "(CtMethodImpl) getChildOperators @ ql/src/java/org/apache/hadoop/hive/ql/exec/Operator.java:139:49",
+  typeArgs: [
+    { context: "interface decl (CtInterfaceImpl) OperatorDesc @ ql/src/java/org/apache/hadoop/hive/ql/plan/OperatorDesc.java:24:18", index: -1, kind: interfaceDecl, ref: true },
+  ],
+}
+	at abstractor.core.constructs.Factory.create(Factory.java:132)
+	at abstractor.core.constructs.Factory.create(Factory.java:147)
+	at abstractor.core.Abstractor.addAbstract(Abstractor.java:618)
+	at abstractor.core.Abstractor.synthesizeObjectInterface(Abstractor.java:1044)
+	at abstractor.core.Abstractor.lambda$addObjectInst$34(Abstractor.java:1088)
+	at abstractor.core.constructs.Factory.create(Factory.java:109)
+	... 350 more
+Caused by: java.lang.Exception: Error while processing signature (CtMethodImpl) getChildOperators @ ql/src/java/org/apache/hadoop/hive/ql/exec/Operator.java:139:49: {
+  elem: "(CtMethodImpl) getChildOperators @ ql/src/java/org/apache/hadoop/hive/ql/exec/Operator.java:139:49",
+  typeArgs: [
+    { context: "interface decl (CtInterfaceImpl) OperatorDesc @ ql/src/java/org/apache/hadoop/hive/ql/plan/OperatorDesc.java:24:18", index: -1, kind: interfaceDecl, ref: true },
+  ],
+}
+	at abstractor.core.constructs.Factory.create(Factory.java:132)
+	at abstractor.core.constructs.Factory.create(Factory.java:147)
+	at abstractor.core.Abstractor.addSignature(Abstractor.java:644)
+	at abstractor.core.Abstractor.lambda$addAbstract$16(Abstractor.java:622)
+	at abstractor.core.constructs.Factory.lambda$create$1(Factory.java:147)
+	at abstractor.core.constructs.Factory.create(Factory.java:109)
+	... 355 more
+Caused by: java.lang.Exception: Error while processing parameter <unnamed> java.util.List @ ql/src/java/org/apache/hadoop/hive/ql/exec/Operator.java:139:10<org.apache.hadoop.hive.ql.exec.Operator @ ql/src/java/org/apache/hadoop/hive/ql/exec/Operator.java:139:15>: {
+  elem: "(CtTypeReferenceImpl) java.util.List @ ql/src/java/org/apache/hadoop/hive/ql/exec/Operator.java:139:10",
+  typeArgs: [
+    { context: "interface decl (CtInterfaceImpl) OperatorDesc @ ql/src/java/org/apache/hadoop/hive/ql/plan/OperatorDesc.java:24:18", index: -1, kind: interfaceDecl, ref: true },
+  ],
+}
+	at abstractor.core.constructs.Factory.create(Factory.java:132)
+	at abstractor.core.constructs.Factory.create(Factory.java:147)
+	at abstractor.core.Abstractor.addArgument(Abstractor.java:742)
+	at abstractor.core.Abstractor.lambda$addSignature$17(Abstractor.java:655)
+	at abstractor.core.constructs.Factory.lambda$create$1(Factory.java:147)
+	at abstractor.core.constructs.Factory.create(Factory.java:109)
+	... 360 more
+Caused by: java.lang.Exception: Error while processing object instantiation org.apache.hadoop.hive.ql.exec.Operator @ ql/src/java/org/apache/hadoop/hive/ql/exec/Operator.java:139:15<? @ ql/src/java/org/apache/hadoop/hive/ql/exec/Operator.java:139:24>: {
+  elem: "(CtTypeReferenceImpl) org.apache.hadoop.hive.ql.exec.Operator @ ql/src/java/org/apache/hadoop/hive/ql/exec/Operator.java:139:15",
+  typeArgs: [
+    { context: "interface decl (CtInterfaceImpl) OperatorDesc @ ql/src/java/org/apache/hadoop/hive/ql/plan/OperatorDesc.java:24:18", index: -1, kind: interfaceDecl, ref: true },
+  ],
+}
+	at abstractor.core.constructs.Factory.create(Factory.java:132)
+	at abstractor.core.Abstractor.addObjectInst(Abstractor.java:1084)
+	at abstractor.core.Abstractor.addTypeDesc(Abstractor.java:1229)
+	at abstractor.core.Abstractor.addTypeArguments(Abstractor.java:1140)
+	at abstractor.core.Abstractor.addInterfaceInst(Abstractor.java:258)
+	at abstractor.core.Abstractor.addTypeDesc(Abstractor.java:1230)
+	at abstractor.core.Abstractor.lambda$addArgument$22(Abstractor.java:745)
+	at abstractor.core.constructs.Factory.lambda$create$1(Factory.java:147)
+	at abstractor.core.constructs.Factory.create(Factory.java:109)
+	... 365 more
+Caused by: java.lang.Exception: Error while processing abstract (CtMethodImpl) setChildOperators @ ql/src/java/org/apache/hadoop/hive/ql/exec/Operator.java:128:15: {
+  elem: "(CtMethodImpl) setChildOperators @ ql/src/java/org/apache/hadoop/hive/ql/exec/Operator.java:128:15",
+  typeArgs: [
+    { context: "interface decl (CtInterfaceImpl) OperatorDesc @ ql/src/java/org/apache/hadoop/hive/ql/plan/OperatorDesc.java:24:18", index: -1, kind: interfaceDecl, ref: true },
+  ],
+}
+	at abstractor.core.constructs.Factory.create(Factory.java:132)
+	at abstractor.core.constructs.Factory.create(Factory.java:147)
+	at abstractor.core.Abstractor.addAbstract(Abstractor.java:618)
+	at abstractor.core.Abstractor.synthesizeObjectInterface(Abstractor.java:1044)
+	at abstractor.core.Abstractor.lambda$addObjectInst$34(Abstractor.java:1088)
+	at abstractor.core.constructs.Factory.create(Factory.java:109)
+	... 373 more
+Caused by: java.lang.Exception: Error while processing signature (CtMethodImpl) setChildOperators @ ql/src/java/org/apache/hadoop/hive/ql/exec/Operator.java:128:15: {
+  elem: "(CtMethodImpl) setChildOperators @ ql/src/java/org/apache/hadoop/hive/ql/exec/Operator.java:128:15",
+  typeArgs: [
+    { context: "interface decl (CtInterfaceImpl) OperatorDesc @ ql/src/java/org/apache/hadoop/hive/ql/plan/OperatorDesc.java:24:18", index: -1, kind: interfaceDecl, ref: true },
+  ],
+}
+	at abstractor.core.constructs.Factory.create(Factory.java:132)
+	at abstractor.core.constructs.Factory.create(Factory.java:147)
+	at abstractor.core.Abstractor.addSignature(Abstractor.java:644)
+	at abstractor.core.Abstractor.lambda$addAbstract$16(Abstractor.java:622)
+	at abstractor.core.constructs.Factory.lambda$create$1(Factory.java:147)
+	at abstractor.core.constructs.Factory.create(Factory.java:109)
+	... 378 more
+Caused by: java.lang.Exception: Error while processing parameter (CtParameterImpl) childOperators @ ql/src/java/org/apache/hadoop/hive/ql/exec/Operator.java:129:46: {
+  elem: "(CtParameterImpl) childOperators @ ql/src/java/org/apache/hadoop/hive/ql/exec/Operator.java:129:46",
+  typeArgs: [
+    { context: "interface decl (CtInterfaceImpl) OperatorDesc @ ql/src/java/org/apache/hadoop/hive/ql/plan/OperatorDesc.java:24:18", index: -1, kind: interfaceDecl, ref: true },
+  ],
+}
+	at abstractor.core.constructs.Factory.create(Factory.java:132)
+	at abstractor.core.constructs.Factory.create(Factory.java:147)
+	at abstractor.core.Abstractor.addArgument(Abstractor.java:726)
+	at abstractor.core.Abstractor.lambda$addSignature$17(Abstractor.java:651)
+	at abstractor.core.constructs.Factory.lambda$create$1(Factory.java:147)
+	at abstractor.core.constructs.Factory.create(Factory.java:109)
+	... 383 more
+Caused by: java.lang.Exception: Error while processing object instantiation org.apache.hadoop.hive.ql.exec.Operator @ ql/src/java/org/apache/hadoop/hive/ql/exec/Operator.java:129:12<? @ ql/src/java/org/apache/hadoop/hive/ql/exec/Operator.java:129:21>: {
+  elem: "(CtTypeReferenceImpl) org.apache.hadoop.hive.ql.exec.Operator @ ql/src/java/org/apache/hadoop/hive/ql/exec/Operator.java:129:12",
+  typeArgs: [
+    { context: "interface decl (CtInterfaceImpl) OperatorDesc @ ql/src/java/org/apache/hadoop/hive/ql/plan/OperatorDesc.java:24:18", index: -1, kind: interfaceDecl, ref: true },
+  ],
+}
+	at abstractor.core.constructs.Factory.create(Factory.java:132)
+	at abstractor.core.Abstractor.addObjectInst(Abstractor.java:1084)
+	at abstractor.core.Abstractor.addTypeDesc(Abstractor.java:1229)
+	at abstractor.core.Abstractor.addTypeArguments(Abstractor.java:1140)
+	at abstractor.core.Abstractor.addInterfaceInst(Abstractor.java:258)
+	at abstractor.core.Abstractor.addTypeDesc(Abstractor.java:1230)
+	at abstractor.core.Abstractor.lambda$addArgument$21(Abstractor.java:730)
+	at abstractor.core.constructs.Factory.lambda$create$1(Factory.java:147)
+	at abstractor.core.constructs.Factory.create(Factory.java:109)
+	... 388 more
+Caused by: java.lang.Exception: Error while processing abstract (CtMethodImpl) removeParent @ ql/src/java/org/apache/hadoop/hive/ql/exec/Operator.java:752:15: {
+  elem: "(CtMethodImpl) removeParent @ ql/src/java/org/apache/hadoop/hive/ql/exec/Operator.java:752:15",
+  typeArgs: [
+    { context: "interface decl (CtInterfaceImpl) OperatorDesc @ ql/src/java/org/apache/hadoop/hive/ql/plan/OperatorDesc.java:24:18", index: -1, kind: interfaceDecl, ref: true },
+  ],
+}
+	at abstractor.core.constructs.Factory.create(Factory.java:132)
+	at abstractor.core.constructs.Factory.create(Factory.java:147)
+	at abstractor.core.Abstractor.addAbstract(Abstractor.java:618)
+	at abstractor.core.Abstractor.synthesizeObjectInterface(Abstractor.java:1044)
+	at abstractor.core.Abstractor.lambda$addObjectInst$34(Abstractor.java:1088)
+	at abstractor.core.constructs.Factory.create(Factory.java:109)
+	... 396 more
+Caused by: java.lang.Exception: Error while processing signature (CtMethodImpl) removeParent @ ql/src/java/org/apache/hadoop/hive/ql/exec/Operator.java:752:15: {
+  elem: "(CtMethodImpl) removeParent @ ql/src/java/org/apache/hadoop/hive/ql/exec/Operator.java:752:15",
+  typeArgs: [
+    { context: "interface decl (CtInterfaceImpl) OperatorDesc @ ql/src/java/org/apache/hadoop/hive/ql/plan/OperatorDesc.java:24:18", index: -1, kind: interfaceDecl, ref: true },
+  ],
+}
+	at abstractor.core.constructs.Factory.create(Factory.java:132)
+	at abstractor.core.constructs.Factory.create(Factory.java:147)
+	at abstractor.core.Abstractor.addSignature(Abstractor.java:644)
+	at abstractor.core.Abstractor.lambda$addAbstract$16(Abstractor.java:622)
+	at abstractor.core.constructs.Factory.lambda$create$1(Factory.java:147)
+	at abstractor.core.constructs.Factory.create(Factory.java:109)
+	... 401 more
+Caused by: java.lang.Exception: Error while processing parameter (CtParameterImpl) parent @ ql/src/java/org/apache/hadoop/hive/ql/exec/Operator.java:752:61: {
+  elem: "(CtParameterImpl) parent @ ql/src/java/org/apache/hadoop/hive/ql/exec/Operator.java:752:61",
+  typeArgs: [
+    { context: "interface decl (CtInterfaceImpl) OperatorDesc @ ql/src/java/org/apache/hadoop/hive/ql/plan/OperatorDesc.java:24:18", index: -1, kind: interfaceDecl, ref: true },
+  ],
+}
+	at abstractor.core.constructs.Factory.create(Factory.java:132)
+	at abstractor.core.constructs.Factory.create(Factory.java:147)
+	at abstractor.core.Abstractor.addArgument(Abstractor.java:726)
+	at abstractor.core.Abstractor.lambda$addSignature$17(Abstractor.java:651)
+	at abstractor.core.constructs.Factory.lambda$create$1(Factory.java:147)
+	at abstractor.core.constructs.Factory.create(Factory.java:109)
+	... 406 more
+Caused by: java.lang.Exception: Error while processing object instantiation org.apache.hadoop.hive.ql.exec.Operator @ ql/src/java/org/apache/hadoop/hive/ql/exec/Operator.java:752:28<? @ ql/src/java/org/apache/hadoop/hive/ql/exec/Operator.java:752:37>: {
+  elem: "(CtTypeReferenceImpl) org.apache.hadoop.hive.ql.exec.Operator @ ql/src/java/org/apache/hadoop/hive/ql/exec/Operator.java:752:28",
+  typeArgs: [
+    { context: "interface decl (CtInterfaceImpl) OperatorDesc @ ql/src/java/org/apache/hadoop/hive/ql/plan/OperatorDesc.java:24:18", index: -1, kind: interfaceDecl, ref: true },
+  ],
+}
+	at abstractor.core.constructs.Factory.create(Factory.java:132)
+	at abstractor.core.Abstractor.addObjectInst(Abstractor.java:1084)
+	at abstractor.core.Abstractor.addTypeDesc(Abstractor.java:1229)
+	at abstractor.core.Abstractor.lambda$addArgument$21(Abstractor.java:730)
+	at abstractor.core.constructs.Factory.lambda$create$1(Factory.java:147)
+	at abstractor.core.constructs.Factory.create(Factory.java:109)
+	... 411 more
+Caused by: java.lang.Exception: Error while processing abstract (CtMethodImpl) cloneOp @ ql/src/java/org/apache/hadoop/hive/ql/exec/Operator.java:1131:43: {
+  elem: "(CtMethodImpl) cloneOp @ ql/src/java/org/apache/hadoop/hive/ql/exec/Operator.java:1131:43",
+  typeArgs: [
+    { context: "interface decl (CtInterfaceImpl) OperatorDesc @ ql/src/java/org/apache/hadoop/hive/ql/plan/OperatorDesc.java:24:18", index: -1, kind: interfaceDecl, ref: true },
+  ],
+}
+	at abstractor.core.constructs.Factory.create(Factory.java:132)
+	at abstractor.core.constructs.Factory.create(Factory.java:147)
+	at abstractor.core.Abstractor.addAbstract(Abstractor.java:618)
+	at abstractor.core.Abstractor.synthesizeObjectInterface(Abstractor.java:1044)
+	at abstractor.core.Abstractor.lambda$addObjectInst$34(Abstractor.java:1088)
+	at abstractor.core.constructs.Factory.create(Factory.java:109)
+	... 416 more
+Caused by: java.lang.Exception: Error while processing signature (CtMethodImpl) cloneOp @ ql/src/java/org/apache/hadoop/hive/ql/exec/Operator.java:1131:43: {
+  elem: "(CtMethodImpl) cloneOp @ ql/src/java/org/apache/hadoop/hive/ql/exec/Operator.java:1131:43",
+  typeArgs: [
+    { context: "interface decl (CtInterfaceImpl) OperatorDesc @ ql/src/java/org/apache/hadoop/hive/ql/plan/OperatorDesc.java:24:18", index: -1, kind: interfaceDecl, ref: true },
+  ],
+}
+	at abstractor.core.constructs.Factory.create(Factory.java:132)
+	at abstractor.core.constructs.Factory.create(Factory.java:147)
+	at abstractor.core.Abstractor.addSignature(Abstractor.java:644)
+	at abstractor.core.Abstractor.lambda$addAbstract$16(Abstractor.java:622)
+	at abstractor.core.constructs.Factory.lambda$create$1(Factory.java:147)
+	at abstractor.core.constructs.Factory.create(Factory.java:109)
+	... 421 more
+Caused by: java.lang.Exception: Error while processing parameter <unnamed> org.apache.hadoop.hive.ql.exec.Operator @ ql/src/java/org/apache/hadoop/hive/ql/exec/Operator.java:1131:10<? @ ql/src/java/org/apache/hadoop/hive/ql/exec/Operator.java:1131:19>: {
+  elem: "(CtTypeReferenceImpl) org.apache.hadoop.hive.ql.exec.Operator @ ql/src/java/org/apache/hadoop/hive/ql/exec/Operator.java:1131:10",
+  typeArgs: [
+    { context: "interface decl (CtInterfaceImpl) OperatorDesc @ ql/src/java/org/apache/hadoop/hive/ql/plan/OperatorDesc.java:24:18", index: -1, kind: interfaceDecl, ref: true },
+  ],
+}
+	at abstractor.core.constructs.Factory.create(Factory.java:132)
+	at abstractor.core.constructs.Factory.create(Factory.java:147)
+	at abstractor.core.Abstractor.addArgument(Abstractor.java:742)
+	at abstractor.core.Abstractor.lambda$addSignature$17(Abstractor.java:655)
+	at abstractor.core.constructs.Factory.lambda$create$1(Factory.java:147)
+	at abstractor.core.constructs.Factory.create(Factory.java:109)
+	... 426 more
+Caused by: java.lang.Exception: Error while processing object instantiation org.apache.hadoop.hive.ql.exec.Operator @ ql/src/java/org/apache/hadoop/hive/ql/exec/Operator.java:1131:10<? @ ql/src/java/org/apache/hadoop/hive/ql/exec/Operator.java:1131:19>: {
+  elem: "(CtTypeReferenceImpl) org.apache.hadoop.hive.ql.exec.Operator @ ql/src/java/org/apache/hadoop/hive/ql/exec/Operator.java:1131:10",
+  typeArgs: [
+    { context: "interface decl (CtInterfaceImpl) OperatorDesc @ ql/src/java/org/apache/hadoop/hive/ql/plan/OperatorDesc.java:24:18", index: -1, kind: interfaceDecl, ref: true },
+  ],
+}
+	at abstractor.core.constructs.Factory.create(Factory.java:132)
+	at abstractor.core.Abstractor.addObjectInst(Abstractor.java:1084)
+	at abstractor.core.Abstractor.addTypeDesc(Abstractor.java:1229)
+	at abstractor.core.Abstractor.lambda$addArgument$22(Abstractor.java:745)
+	at abstractor.core.constructs.Factory.lambda$create$1(Factory.java:147)
+	at abstractor.core.constructs.Factory.create(Factory.java:109)
+	... 431 more
+Caused by: java.lang.Exception: Error while processing abstract (CtMethodImpl) setParentOperators @ ql/src/java/org/apache/hadoop/hive/ql/exec/Operator.java:165:15: {
+  elem: "(CtMethodImpl) setParentOperators @ ql/src/java/org/apache/hadoop/hive/ql/exec/Operator.java:165:15",
+  typeArgs: [
+    { context: "interface decl (CtInterfaceImpl) OperatorDesc @ ql/src/java/org/apache/hadoop/hive/ql/plan/OperatorDesc.java:24:18", index: -1, kind: interfaceDecl, ref: true },
+  ],
+}
+	at abstractor.core.constructs.Factory.create(Factory.java:132)
+	at abstractor.core.constructs.Factory.create(Factory.java:147)
+	at abstractor.core.Abstractor.addAbstract(Abstractor.java:618)
+	at abstractor.core.Abstractor.synthesizeObjectInterface(Abstractor.java:1044)
+	at abstractor.core.Abstractor.lambda$addObjectInst$34(Abstractor.java:1088)
+	at abstractor.core.constructs.Factory.create(Factory.java:109)
+	... 436 more
+Caused by: java.lang.Exception: Error while processing signature (CtMethodImpl) setParentOperators @ ql/src/java/org/apache/hadoop/hive/ql/exec/Operator.java:165:15: {
+  elem: "(CtMethodImpl) setParentOperators @ ql/src/java/org/apache/hadoop/hive/ql/exec/Operator.java:165:15",
+  typeArgs: [
+    { context: "interface decl (CtInterfaceImpl) OperatorDesc @ ql/src/java/org/apache/hadoop/hive/ql/plan/OperatorDesc.java:24:18", index: -1, kind: interfaceDecl, ref: true },
+  ],
+}
+	at abstractor.core.constructs.Factory.create(Factory.java:132)
+	at abstractor.core.constructs.Factory.create(Factory.java:147)
+	at abstractor.core.Abstractor.addSignature(Abstractor.java:644)
+	at abstractor.core.Abstractor.lambda$addAbstract$16(Abstractor.java:622)
+	at abstractor.core.constructs.Factory.lambda$create$1(Factory.java:147)
+	at abstractor.core.constructs.Factory.create(Factory.java:109)
+	... 441 more
+Caused by: java.lang.Exception: Error while processing parameter (CtParameterImpl) parentOperators @ ql/src/java/org/apache/hadoop/hive/ql/exec/Operator.java:166:46: {
+  elem: "(CtParameterImpl) parentOperators @ ql/src/java/org/apache/hadoop/hive/ql/exec/Operator.java:166:46",
+  typeArgs: [
+    { context: "interface decl (CtInterfaceImpl) OperatorDesc @ ql/src/java/org/apache/hadoop/hive/ql/plan/OperatorDesc.java:24:18", index: -1, kind: interfaceDecl, ref: true },
+  ],
+}
+	at abstractor.core.constructs.Factory.create(Factory.java:132)
+	at abstractor.core.constructs.Factory.create(Factory.java:147)
+	at abstractor.core.Abstractor.addArgument(Abstractor.java:726)
+	at abstractor.core.Abstractor.lambda$addSignature$17(Abstractor.java:651)
+	at abstractor.core.constructs.Factory.lambda$create$1(Factory.java:147)
+	at abstractor.core.constructs.Factory.create(Factory.java:109)
+	... 446 more
+Caused by: java.lang.Exception: Error while processing object instantiation org.apache.hadoop.hive.ql.exec.Operator @ ql/src/java/org/apache/hadoop/hive/ql/exec/Operator.java:166:12<? @ ql/src/java/org/apache/hadoop/hive/ql/exec/Operator.java:166:21>: {
+  elem: "(CtTypeReferenceImpl) org.apache.hadoop.hive.ql.exec.Operator @ ql/src/java/org/apache/hadoop/hive/ql/exec/Operator.java:166:12",
+  typeArgs: [
+    { context: "interface decl (CtInterfaceImpl) OperatorDesc @ ql/src/java/org/apache/hadoop/hive/ql/plan/OperatorDesc.java:24:18", index: -1, kind: interfaceDecl, ref: true },
+  ],
+}
+	at abstractor.core.constructs.Factory.create(Factory.java:132)
+	at abstractor.core.Abstractor.addObjectInst(Abstractor.java:1084)
+	at abstractor.core.Abstractor.addTypeDesc(Abstractor.java:1229)
+	at abstractor.core.Abstractor.addTypeArguments(Abstractor.java:1140)
+	at abstractor.core.Abstractor.addInterfaceInst(Abstractor.java:258)
+	at abstractor.core.Abstractor.addTypeDesc(Abstractor.java:1230)
+	at abstractor.core.Abstractor.lambda$addArgument$21(Abstractor.java:730)
+	at abstractor.core.constructs.Factory.lambda$create$1(Factory.java:147)
+	at abstractor.core.constructs.Factory.create(Factory.java:109)
+	... 451 more
+Caused by: java.lang.Exception: Error while processing abstract (CtMethodImpl) clone @ ql/src/java/org/apache/hadoop/hive/ql/exec/Operator.java:1103:43: {
+  elem: "(CtMethodImpl) clone @ ql/src/java/org/apache/hadoop/hive/ql/exec/Operator.java:1103:43",
+  typeArgs: [
+    { context: "interface decl (CtInterfaceImpl) OperatorDesc @ ql/src/java/org/apache/hadoop/hive/ql/plan/OperatorDesc.java:24:18", index: -1, kind: interfaceDecl, ref: true },
+  ],
+}
+	at abstractor.core.constructs.Factory.create(Factory.java:132)
+	at abstractor.core.constructs.Factory.create(Factory.java:147)
+	at abstractor.core.Abstractor.addAbstract(Abstractor.java:618)
+	at abstractor.core.Abstractor.synthesizeObjectInterface(Abstractor.java:1044)
+	at abstractor.core.Abstractor.lambda$addObjectInst$34(Abstractor.java:1088)
+	at abstractor.core.constructs.Factory.create(Factory.java:109)
+	... 459 more
+Caused by: java.lang.Exception: Error while processing signature (CtMethodImpl) clone @ ql/src/java/org/apache/hadoop/hive/ql/exec/Operator.java:1103:43: {
+  elem: "(CtMethodImpl) clone @ ql/src/java/org/apache/hadoop/hive/ql/exec/Operator.java:1103:43",
+  typeArgs: [
+    { context: "interface decl (CtInterfaceImpl) OperatorDesc @ ql/src/java/org/apache/hadoop/hive/ql/plan/OperatorDesc.java:24:18", index: -1, kind: interfaceDecl, ref: true },
+  ],
+}
+	at abstractor.core.constructs.Factory.create(Factory.java:132)
+	at abstractor.core.constructs.Factory.create(Factory.java:147)
+	at abstractor.core.Abstractor.addSignature(Abstractor.java:644)
+	at abstractor.core.Abstractor.lambda$addAbstract$16(Abstractor.java:622)
+	at abstractor.core.constructs.Factory.lambda$create$1(Factory.java:147)
+	at abstractor.core.constructs.Factory.create(Factory.java:109)
+	... 464 more
+Caused by: java.lang.Exception: Error while processing parameter <unnamed> org.apache.hadoop.hive.ql.exec.Operator @ ql/src/java/org/apache/hadoop/hive/ql/exec/Operator.java:1103:10<? @ ql/src/java/org/apache/hadoop/hive/ql/exec/Operator.java:1103:19>: {
+  elem: "(CtTypeReferenceImpl) org.apache.hadoop.hive.ql.exec.Operator @ ql/src/java/org/apache/hadoop/hive/ql/exec/Operator.java:1103:10",
+  typeArgs: [
+    { context: "interface decl (CtInterfaceImpl) OperatorDesc @ ql/src/java/org/apache/hadoop/hive/ql/plan/OperatorDesc.java:24:18", index: -1, kind: interfaceDecl, ref: true },
+  ],
+}
+	at abstractor.core.constructs.Factory.create(Factory.java:132)
+	at abstractor.core.constructs.Factory.create(Factory.java:147)
+	at abstractor.core.Abstractor.addArgument(Abstractor.java:742)
+	at abstractor.core.Abstractor.lambda$addSignature$17(Abstractor.java:655)
+	at abstractor.core.constructs.Factory.lambda$create$1(Factory.java:147)
+	at abstractor.core.constructs.Factory.create(Factory.java:109)
+	... 469 more
+Caused by: java.lang.Exception: Error while processing object instantiation org.apache.hadoop.hive.ql.exec.Operator @ ql/src/java/org/apache/hadoop/hive/ql/exec/Operator.java:1103:10<? @ ql/src/java/org/apache/hadoop/hive/ql/exec/Operator.java:1103:19>: {
+  elem: "(CtTypeReferenceImpl) org.apache.hadoop.hive.ql.exec.Operator @ ql/src/java/org/apache/hadoop/hive/ql/exec/Operator.java:1103:10",
+  typeArgs: [
+    { context: "interface decl (CtInterfaceImpl) OperatorDesc @ ql/src/java/org/apache/hadoop/hive/ql/plan/OperatorDesc.java:24:18", index: -1, kind: interfaceDecl, ref: true },
+  ],
+}
+	at abstractor.core.constructs.Factory.create(Factory.java:132)
+	at abstractor.core.Abstractor.addObjectInst(Abstractor.java:1084)
+	at abstractor.core.Abstractor.addTypeDesc(Abstractor.java:1229)
+	at abstractor.core.Abstractor.lambda$addArgument$22(Abstractor.java:745)
+	at abstractor.core.constructs.Factory.lambda$create$1(Factory.java:147)
+	at abstractor.core.constructs.Factory.create(Factory.java:109)
+	... 474 more
+Caused by: java.lang.Exception: Error while processing constructor (CtConstructorImpl) <init> @ ql/src/java/org/apache/hadoop/hive/ql/exec/Operator.java:106:10: {
+  elem: "(CtConstructorImpl) <init> @ ql/src/java/org/apache/hadoop/hive/ql/exec/Operator.java:106:10",
+}
+	at abstractor.core.constructs.Factory.create(Factory.java:132)
+	at abstractor.core.constructs.Factory.create(Factory.java:139)
+	at abstractor.core.Abstractor.addMethodDeclForConstructor(Abstractor.java:680)
+	at abstractor.core.Abstractor.addMethodInstForObjectInst(Abstractor.java:394)
+	at abstractor.core.Abstractor.lambda$addObjectInst$35(Abstractor.java:1105)
+	at abstractor.core.constructs.Factory.create(Factory.java:127)
+	... 479 more
+Caused by: abstractor.core.AbstractorException: Expected the object reference is resolved for {
+  context: "object decl (CtClassImpl) Operator @ ql/src/java/org/apache/hadoop/hive/ql/exec/Operator.java:55:23",
+  index: -1,
+  kind: object,
+  ref: true,
+}
+	at abstractor.core.constructs.Ref.mustGetResolved(Ref.java:38)
+	at abstractor.core.Abstractor.lambda$addMethodDeclForConstructor$18(Abstractor.java:683)
+	at abstractor.core.constructs.Factory.lambda$create$0(Factory.java:139)
+	at abstractor.core.constructs.Factory.create(Factory.java:109)
+	... 484 more

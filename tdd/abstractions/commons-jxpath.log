@@ -1,12 +1,966 @@
 # cmd: java -jar /Users/grantnelson/go/src/github.com/MSUSEL/msusel-tdmetrics-go/javaAbstractor/target/abstractor-0.1-jar-with-dependencies.jar -i /Users/grantnelson/go/src/github.com/apache/commons-jxpath/ -o /Users/grantnelson/go/src/github.com/MSUSEL/msusel-tdmetrics-go/tdd/abstractions/commons-jxpath.json -v
 # cwd: /Users/grantnelson/go/src/github.com/MSUSEL/msusel-tdmetrics-go/tdd
 # repo: /Users/grantnelson/go/src/github.com/apache/commons-jxpath @ eff47ab8ca52fdbc91d1313cc224324465dd043e
-# started: 2026-07-28T00:54:04.085676+00:00
+# started: 2026-08-17T18:27:32.369697+00:00
 # timeout_min: 10
 # ---
 Reading /Users/grantnelson/go/src/github.com/apache/commons-jxpath/
 SLF4J(W): No SLF4J providers were found.
 SLF4J(W): Defaulting to no-operation (NOP) logger implementation
 SLF4J(W): See https://www.slf4j.org/codes.html#noProviders for further details.
-
-# TIMED OUT after 10 minutes
+Init pending package <unnamed>
+Init pending package org
+Init pending package org.apache
+Init pending package org.apache.commons
+Init pending package org.apache.commons.jxpath
+Init pending package org.apache.commons.jxpath.functions
+Init pending package org.apache.commons.jxpath.ri
+Init pending package org.apache.commons.jxpath.ri.axes
+Init pending package org.apache.commons.jxpath.ri.compiler
+Init pending package org.apache.commons.jxpath.ri.model
+Init pending package org.apache.commons.jxpath.ri.model.beans
+Init pending package org.apache.commons.jxpath.ri.model.container
+Init pending package org.apache.commons.jxpath.ri.model.dom
+Init pending package org.apache.commons.jxpath.ri.model.dynabeans
+Init pending package org.apache.commons.jxpath.ri.model.dynamic
+Init pending package org.apache.commons.jxpath.ri.model.jdom
+Init pending package org.apache.commons.jxpath.ri.parser
+Init pending package org.apache.commons.jxpath.servlet
+Init pending package org.apache.commons.jxpath.util
+Init pending package org.apache.commons.jxpath.xml
+[34mStarting process pending packages...[0m
+  Pending package org.apache.commons.jxpath.ri.model
+  Pending package org.apache.commons.jxpath.ri
+  Pending package java.util
+  Pending package org.apache.commons.jxpath
+  Pending package java.lang
+  [34mskipping default constructor: org.apache.commons.jxpath.AbstractFactory()[0m
+  Pending package java.lang.invoke
+  Pending package java.text
+  Pending package org.apache.commons.jxpath.ri.compiler
+  [34mskipping default constructor: org.apache.commons.jxpath.ri.compiler.NodeTest()[0m
+  Pending package java.beans
+  [34mskipping default constructor: org.apache.commons.jxpath.ri.model.beans.BeanPointerFactory()[0m
+  [34mskipping default constructor: org.apache.commons.jxpath.ri.model.beans.CollectionPointerFactory()[0m
+  Pending package java.lang
+  Pending package java.io
+  getting parent type for (CtClassImpl) PrintStreamOrWriter
+  Pending package org.apache.commons.jxpath.util
+  getting parent type for (CtClassImpl) SingleNodeExtendedKeyManager @ src/main/java/org/apache/commons/jxpath/util/KeyManagerUtils.java:38:26
+  [34mskipping default constructor: org.apache.commons.jxpath.util.KeyManagerUtils()[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mskipping default constructor: org.apache.commons.jxpath.JXPathIntrospector()[0m
+  [34mUnused type args: [?][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [?][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mskipping default constructor: org.apache.commons.jxpath.util.ValueUtils()[0m
+  Pending package java.lang.reflect
+  [34mUnused type args: [?][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [?][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [?][0m
+  [34mskipping default constructor: org.apache.commons.jxpath.BasicVariables()[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [?][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [?][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [java.lang.String][0m
+  [34mUnused type args: [java.lang.String][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mskipping default constructor: org.apache.commons.jxpath.util.ClassLoaderUtil()[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mskipping default constructor: org.apache.commons.jxpath.util.TypeUtils()[0m
+  [34mSkipping selection with no field declaration: (CtFieldReferenceImpl) class[0m
+  [34mSkipping selection with no field declaration: (CtFieldReferenceImpl) class[0m
+  [34mskipping default constructor: org.apache.commons.jxpath.util.MethodLookupUtils()[0m
+  [34mUnused type args: [?][0m
+  Pending package org.apache.commons.jxpath.functions
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [?][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [?][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  Pending package org.apache.commons.jxpath.ri.axes
+  Pending package java.util.function
+  getting parent type for (CtClassImpl) PointerIterator @ src/main/java/org/apache/commons/jxpath/ri/compiler/Expression.java:131:25
+  getting parent type for (CtClassImpl) ValueIterator @ src/main/java/org/apache/commons/jxpath/ri/compiler/Expression.java:170:25
+  [34mskipping default constructor: org.apache.commons.jxpath.ri.compiler.Expression()[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  Pending package java.io
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [?][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [?][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [?][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [?][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [?][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [?][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [?][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mSkipping selection with no field declaration: (CtFieldReferenceImpl) class[0m
+  [34mSkipping selection with no field declaration: (CtFieldReferenceImpl) class[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [?][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mSkipping selection with no field declaration: (CtFieldReferenceImpl) class[0m
+  [34mSkipping selection with no field declaration: (CtFieldReferenceImpl) class[0m
+  [34mUnused type args: [?][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [java.lang.Object][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [?][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [?][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [?][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [?][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mSkipping selection with no field declaration: (CtFieldReferenceImpl) class[0m
+  [34mSkipping selection with no field declaration: (CtFieldReferenceImpl) class[0m
+  [34mUnused type args: [?][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [?][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [java.lang.Object][0m
+  [34mUnused type args: [java.lang.Object][0m
+  [34mUnused type args: [java.lang.Object][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mSkipping selection with no field declaration: (CtFieldReferenceImpl) class[0m
+  [34mSkipping selection with no field declaration: (CtFieldReferenceImpl) class[0m
+  [34mUnused type args: [?][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [?][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [?][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [?][0m
+  Pending package java.lang.ref
+  Pending package org.apache.commons.jxpath.ri.parser
+  [34mskipping default constructor: org.apache.commons.jxpath.ri.parser.Token()[0m
+  getting parent type for (CtClassImpl) JJCalls @ src/main/java/org/apache/commons/jxpath/ri/parser/XPathParser.java:3343:22
+  [34mskipping default constructor: org.apache.commons.jxpath.ri.parser.XPathParser$JJCalls()[0m
+  getting parent type for (CtClassImpl) LookaheadSuccess @ src/main/java/org/apache/commons/jxpath/ri/parser/XPathParser.java:3191:30
+  [34mskipping default constructor: org.apache.commons.jxpath.ri.parser.XPathParser$LookaheadSuccess()[0m
+  [34mskipping default constructor: org.apache.commons.jxpath.ri.Parser()[0m
+  getting parent type for (CtInterfaceImpl) Entry
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mskipping default constructor: org.apache.commons.jxpath.BasicNodeSet()[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [java.lang.Object][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [?][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mskipping default constructor: org.apache.commons.jxpath.ri.InfoSetUtil()[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [?][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [java.lang.Object][0m
+  [34mUnused type args: [java.lang.Object][0m
+  [34mSkipping selection with no field declaration: (CtFieldReferenceImpl) class[0m
+  [34mSkipping selection with no field declaration: (CtFieldReferenceImpl) class[0m
+  [34mUnused type args: [?][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  getting parent type for (CtClassImpl) VariableContextWrapper @ src/main/java/org/apache/commons/jxpath/ri/model/VariablePointerFactory.java:38:31
+  [34mskipping default constructor: org.apache.commons.jxpath.ri.model.VariablePointerFactory()[0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mSkipping selection with no field declaration: (CtFieldReferenceImpl) class[0m
+  [34mSkipping selection with no field declaration: (CtFieldReferenceImpl) class[0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mSkipping selection with no field declaration: (CtFieldReferenceImpl) class[0m
+  [34mSkipping selection with no field declaration: (CtFieldReferenceImpl) class[0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [java.lang.Object][0m
+  [34mUnused type args: [org.apache.commons.jxpath.ri.model.NodePointerFactory][0m
+  [34mUnused type args: [?][0m
+  [34mIgnoring anonymous type: (CtTypeReferenceImpl) org.apache.commons.jxpath.ri.JXPathContextReferenceImpl$1[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring anonymous type: (CtTypeReferenceImpl) org.apache.commons.jxpath.ri.JXPathContextReferenceImpl$1[0m
+  [34mIgnoring anonymous object declaration: (CtClassImpl) 1 @ src/main/java/org/apache/commons/jxpath/ri/JXPathContextReferenceImpl.java:125:60[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring method of an anonymous declaring type: (CtMethodImpl) compare @ src/main/java/org/apache/commons/jxpath/ri/JXPathContextReferenceImpl.java:126:28 in (CtClassImpl) 1 @ src/main/java/org/apache/commons/jxpath/ri/JXPathContextReferenceImpl.java:125:60[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [?][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [?][0m
+  [34mSkipping selection with no field declaration: (CtFieldReferenceImpl) class[0m
+  [34mSkipping selection with no field declaration: (CtFieldReferenceImpl) class[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mskipping default constructor: org.apache.commons.jxpath.ri.axes.SimplePathInterpreter()[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [java.lang.Object][0m
+  [34mUnused type args: [?][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [java.lang.Object][0m
+  [34mUnused type args: [?][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [java.lang.Object][0m
+  [34mUnused type args: [?][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [?][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [?][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mSkipping selection with no field declaration: (CtFieldReferenceImpl) class[0m
+  [34mSkipping selection with no field declaration: (CtFieldReferenceImpl) class[0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mSkipping selection with no field declaration: (CtFieldReferenceImpl) class[0m
+  [34mSkipping selection with no field declaration: (CtFieldReferenceImpl) class[0m
+  [34mUnused type args: [java.beans.PropertyDescriptor][0m
+  [34mUnused type args: [?][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [?][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring anonymous type: (CtTypeReferenceImpl) org.apache.commons.jxpath.ri.model.VariablePointer$1[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring anonymous type: (CtTypeReferenceImpl) org.apache.commons.jxpath.ri.model.VariablePointer$1[0m
+  [34mIgnoring anonymous object declaration: (CtClassImpl) 1 @ src/main/java/org/apache/commons/jxpath/ri/model/VariablePointer.java:130:57[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring method of an anonymous declaring type: (CtMethodImpl) getImmediateNode @ src/main/java/org/apache/commons/jxpath/ri/model/VariablePointer.java:131:35 in (CtClassImpl) 1 @ src/main/java/org/apache/commons/jxpath/ri/model/VariablePointer.java:130:57[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [org.apache.commons.jxpath.ri.model.NodePointer][0m
+  [34mUnused type args: [org.apache.commons.jxpath.ri.model.NodePointer][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mskipping default constructor: org.apache.commons.jxpath.servlet.Constants()[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) javax.servlet.http.HttpSession @ src/main/java/org/apache/commons/jxpath/servlet/HttpSessionAndServletContext.java:30:13[0m
+  [34mfield (CtFieldImpl) session @ src/main/java/org/apache/commons/jxpath/servlet/HttpSessionAndServletContext.java:30:25 had a null type. The type likely was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) javax.servlet.ServletContext @ src/main/java/org/apache/commons/jxpath/servlet/HttpSessionAndServletContext.java:31:13[0m
+  [34mfield (CtFieldImpl) context @ src/main/java/org/apache/commons/jxpath/servlet/HttpSessionAndServletContext.java:31:28 had a null type. The type likely was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) javax.servlet.http.HttpSession @ src/main/java/org/apache/commons/jxpath/servlet/HttpSessionAndServletContext.java:38:41[0m
+  [34margument (CtParameterImpl) session @ src/main/java/org/apache/commons/jxpath/servlet/HttpSessionAndServletContext.java:38:53 had a null type. The type likely was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) javax.servlet.ServletContext @ src/main/java/org/apache/commons/jxpath/servlet/HttpSessionAndServletContext.java:39:13[0m
+  [34margument (CtParameterImpl) context @ src/main/java/org/apache/commons/jxpath/servlet/HttpSessionAndServletContext.java:39:28 had a null type. The type likely was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) javax.servlet.ServletContext @ src/main/java/org/apache/commons/jxpath/servlet/HttpSessionAndServletContext.java:56:12[0m
+  [34margument (CtTypeReferenceImpl) javax.servlet.ServletContext @ src/main/java/org/apache/commons/jxpath/servlet/HttpSessionAndServletContext.java:56:12 had a null type. The type likely was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) javax.servlet.http.HttpSession @ src/main/java/org/apache/commons/jxpath/servlet/HttpSessionAndServletContext.java:48:12[0m
+  [34margument (CtTypeReferenceImpl) javax.servlet.http.HttpSession @ src/main/java/org/apache/commons/jxpath/servlet/HttpSessionAndServletContext.java:48:12 had a null type. The type likely was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.[0m
+  [34mskipping default constructor: org.apache.commons.jxpath.servlet.ServletContextHandler()[0m
+  [34mskipping default constructor: org.apache.commons.jxpath.servlet.HttpSessionHandler()[0m
+  [34mskipping default constructor: org.apache.commons.jxpath.servlet.JXPathServletContexts()[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) javax.servlet.http.HttpSession @ src/main/java/org/apache/commons/jxpath/servlet/JXPathServletContexts.java:164:51[0m
+  [34margument (CtParameterImpl) session @ src/main/java/org/apache/commons/jxpath/servlet/JXPathServletContexts.java:164:63 had a null type. The type likely was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) javax.servlet.ServletContext @ src/main/java/org/apache/commons/jxpath/servlet/JXPathServletContexts.java:165:13[0m
+  [34margument (CtParameterImpl) servletContext @ src/main/java/org/apache/commons/jxpath/servlet/JXPathServletContexts.java:165:28 had a null type. The type likely was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) javax.servlet.jsp.PageContext @ src/main/java/org/apache/commons/jxpath/servlet/JXPathServletContexts.java:97:48[0m
+  [34margument (CtParameterImpl) pageContext @ src/main/java/org/apache/commons/jxpath/servlet/JXPathServletContexts.java:97:60 had a null type. The type likely was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) javax.servlet.ServletContext @ src/main/java/org/apache/commons/jxpath/servlet/JXPathServletContexts.java:187:13[0m
+  [34margument (CtParameterImpl) servletContext @ src/main/java/org/apache/commons/jxpath/servlet/JXPathServletContexts.java:187:28 had a null type. The type likely was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) javax.servlet.ServletRequest @ src/main/java/org/apache/commons/jxpath/servlet/JXPathServletContexts.java:122:51[0m
+  [34margument (CtParameterImpl) request @ src/main/java/org/apache/commons/jxpath/servlet/JXPathServletContexts.java:122:66 had a null type. The type likely was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) javax.servlet.ServletContext @ src/main/java/org/apache/commons/jxpath/servlet/JXPathServletContexts.java:123:13[0m
+  [34margument (CtParameterImpl) servletContext @ src/main/java/org/apache/commons/jxpath/servlet/JXPathServletContexts.java:123:28 had a null type. The type likely was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.[0m
+  [34mskipping default constructor: org.apache.commons.jxpath.servlet.PageContextHandler()[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) javax.servlet.jsp.PageContext @ src/main/java/org/apache/commons/jxpath/servlet/PageScopeContext.java:33:13[0m
+  [34mfield (CtFieldImpl) pageContext @ src/main/java/org/apache/commons/jxpath/servlet/PageScopeContext.java:33:25 had a null type. The type likely was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) javax.servlet.jsp.PageContext @ src/main/java/org/apache/commons/jxpath/servlet/PageScopeContext.java:39:29[0m
+  [34margument (CtParameterImpl) pageContext @ src/main/java/org/apache/commons/jxpath/servlet/PageScopeContext.java:39:41 had a null type. The type likely was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.[0m
+  [34mskipping default constructor: org.apache.commons.jxpath.servlet.PageScopeContextHandler()[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) javax.servlet.ServletRequest @ src/main/java/org/apache/commons/jxpath/servlet/ServletRequestAndContext.java:32:13[0m
+  [34mfield (CtFieldImpl) request @ src/main/java/org/apache/commons/jxpath/servlet/ServletRequestAndContext.java:32:28 had a null type. The type likely was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) javax.servlet.ServletRequest @ src/main/java/org/apache/commons/jxpath/servlet/ServletRequestAndContext.java:40:37[0m
+  [34margument (CtParameterImpl) request @ src/main/java/org/apache/commons/jxpath/servlet/ServletRequestAndContext.java:40:52 had a null type. The type likely was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) javax.servlet.ServletContext @ src/main/java/org/apache/commons/jxpath/servlet/ServletRequestAndContext.java:41:13[0m
+  [34margument (CtParameterImpl) context @ src/main/java/org/apache/commons/jxpath/servlet/ServletRequestAndContext.java:41:28 had a null type. The type likely was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) javax.servlet.http.HttpSession @ src/main/java/org/apache/commons/jxpath/servlet/ServletRequestAndContext.java:46:12[0m
+  [34margument (CtTypeReferenceImpl) javax.servlet.http.HttpSession @ src/main/java/org/apache/commons/jxpath/servlet/ServletRequestAndContext.java:46:12 had a null type. The type likely was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) javax.servlet.ServletRequest @ src/main/java/org/apache/commons/jxpath/servlet/ServletRequestAndContext.java:56:12[0m
+  [34margument (CtTypeReferenceImpl) javax.servlet.ServletRequest @ src/main/java/org/apache/commons/jxpath/servlet/ServletRequestAndContext.java:56:12 had a null type. The type likely was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.[0m
+  [34mskipping default constructor: org.apache.commons.jxpath.servlet.ServletRequestHandler()[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) javax.servlet.jsp.PageContext @ src/main/java/org/apache/commons/jxpath/servlet/PageContextHandler.java:71:18[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [java.lang.Object][0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jxpath.servlet.ServletContext[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) javax.servlet.http.HttpSession @ src/main/java/org/apache/commons/jxpath/servlet/HttpSessionHandler.java:38:9[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) javax.servlet.http.HttpSession @ src/main/java/org/apache/commons/jxpath/servlet/HttpSessionHandler.java:38:9[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) javax.servlet.http.HttpSession[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) javax.servlet.http.HttpSession[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) javax.servlet.http.HttpSession[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) javax.servlet.http.HttpSession[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) javax.servlet.http.HttpSession[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) javax.servlet.http.HttpSession[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) javax.servlet.http.HttpSession[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) javax.servlet.http.HttpSession[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) javax.servlet.ServletContext[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) javax.servlet.ServletContext @ src/main/java/org/apache/commons/jxpath/servlet/ServletContextHandler.java:53:27[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) javax.servlet.jsp.PageContext @ src/main/java/org/apache/commons/jxpath/servlet/PageContextHandler.java:75:11[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) javax.servlet.jsp.PageContext[0m
+  [34mSkipping selection with no field declaration: (CtFieldReferenceImpl) PAGE_SCOPE[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) javax.servlet.jsp.PageContext[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) javax.servlet.jsp.PageContext[0m
+  [34mSkipping selection with no field declaration: (CtFieldReferenceImpl) PAGE_SCOPE[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) javax.servlet.jsp.PageContext[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) javax.servlet.http.HttpSession @ src/main/java/org/apache/commons/jxpath/servlet/HttpSessionHandler.java:50:9[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) javax.servlet.http.HttpSession @ src/main/java/org/apache/commons/jxpath/servlet/HttpSessionHandler.java:50:9[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) javax.servlet.http.HttpSession[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) javax.servlet.http.HttpSession[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) javax.servlet.http.HttpSession[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) javax.servlet.http.HttpSession[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) javax.servlet.http.HttpSession[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) javax.servlet.http.HttpSession[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) javax.servlet.http.HttpSession[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) javax.servlet.http.HttpSession[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.jxpath.servlet.ServletContext[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) javax.servlet.ServletRequest[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) javax.servlet.ServletRequest[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) javax.servlet.ServletRequest[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) javax.servlet.ServletRequest[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) javax.servlet.ServletRequest[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) javax.servlet.ServletRequest[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) javax.servlet.ServletRequest[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) javax.servlet.ServletRequest[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) javax.servlet.ServletRequest[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) javax.servlet.ServletRequest[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) javax.servlet.ServletRequest[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) javax.servlet.http.HttpServletRequest @ src/main/java/org/apache/commons/jxpath/servlet/JXPathServletContexts.java:138:32[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) javax.servlet.http.HttpServletRequest @ src/main/java/org/apache/commons/jxpath/servlet/JXPathServletContexts.java:138:32[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) javax.servlet.http.HttpSession @ src/main/java/org/apache/commons/jxpath/servlet/JXPathServletContexts.java:139:13[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) javax.servlet.http.HttpSession @ src/main/java/org/apache/commons/jxpath/servlet/JXPathServletContexts.java:139:13[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) javax.servlet.ServletRequest[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) javax.servlet.http.HttpServletRequest @ src/main/java/org/apache/commons/jxpath/servlet/JXPathServletContexts.java:140:19[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) javax.servlet.ServletRequest[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) javax.servlet.ServletRequest[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) javax.servlet.http.HttpSession[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) javax.servlet.http.HttpSession[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) javax.servlet.http.HttpSession[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) javax.servlet.http.HttpSession[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) javax.servlet.http.HttpSession[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) javax.servlet.ServletContext[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) javax.servlet.http.HttpSession[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) javax.servlet.http.HttpSession[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) javax.servlet.http.HttpSession[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) javax.servlet.ServletContext[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) javax.servlet.ServletContext[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) javax.servlet.ServletContext[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) javax.servlet.ServletContext[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) javax.servlet.ServletContext[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) javax.servlet.ServletContext[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) javax.servlet.ServletContext[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) javax.servlet.ServletRequest[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) javax.servlet.ServletContext[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) javax.servlet.ServletRequest[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) javax.servlet.ServletRequest[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) javax.servlet.ServletRequest[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) javax.servlet.ServletContext[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) javax.servlet.ServletContext[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) javax.servlet.ServletContext[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) javax.servlet.ServletRequest[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) javax.servlet.ServletRequest[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) javax.servlet.ServletRequest[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) javax.servlet.ServletRequest[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) javax.servlet.ServletRequest @ src/main/java/org/apache/commons/jxpath/servlet/ServletRequestHandler.java:36:9[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) javax.servlet.ServletRequest @ src/main/java/org/apache/commons/jxpath/servlet/ServletRequestHandler.java:36:9[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) javax.servlet.ServletRequest[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) javax.servlet.ServletRequest[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) javax.servlet.ServletRequest[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) javax.servlet.ServletRequest[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) javax.servlet.ServletRequest[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) javax.servlet.ServletRequest[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) javax.servlet.ServletRequest[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) javax.servlet.ServletRequest[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) javax.servlet.ServletRequest[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) javax.servlet.http.HttpSession @ src/main/java/org/apache/commons/jxpath/servlet/HttpSessionHandler.java:63:9[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) javax.servlet.http.HttpSession @ src/main/java/org/apache/commons/jxpath/servlet/HttpSessionHandler.java:63:9[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) javax.servlet.http.HttpSession[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) javax.servlet.http.HttpSession[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) javax.servlet.http.HttpSession[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) javax.servlet.http.HttpSession[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) javax.servlet.http.HttpSession[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) javax.servlet.http.HttpSession[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) javax.servlet.http.HttpSession[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) javax.servlet.http.HttpSession[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) javax.servlet.jsp.PageContext[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) javax.servlet.jsp.PageContext[0m
+  [34mSkipping selection with no field declaration: (CtFieldReferenceImpl) PAGE_SCOPE[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) javax.servlet.jsp.PageContext[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) javax.servlet.jsp.PageContext[0m
+  [34mSkipping selection with no field declaration: (CtFieldReferenceImpl) PAGE_SCOPE[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) javax.servlet.jsp.PageContext[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) javax.servlet.ServletContext @ src/main/java/org/apache/commons/jxpath/servlet/ServletContextHandler.java:60:18[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) javax.servlet.ServletContext[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) javax.servlet.ServletRequest @ src/main/java/org/apache/commons/jxpath/servlet/ServletRequestHandler.java:49:9[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) javax.servlet.ServletRequest @ src/main/java/org/apache/commons/jxpath/servlet/ServletRequestHandler.java:49:9[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) javax.servlet.ServletRequest[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) javax.servlet.ServletRequest[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) javax.servlet.ServletRequest[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) javax.servlet.ServletRequest[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) javax.servlet.ServletRequest[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) javax.servlet.ServletRequest[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) javax.servlet.ServletRequest[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) javax.servlet.ServletRequest[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) javax.servlet.ServletRequest[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) javax.servlet.ServletRequest[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) javax.servlet.ServletRequest[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) javax.servlet.ServletContext[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) javax.servlet.ServletContext[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) javax.servlet.ServletContext[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) javax.servlet.ServletContext[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) javax.servlet.ServletContext[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) javax.servlet.ServletContext[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) javax.servlet.ServletContext[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) javax.servlet.ServletContext[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) javax.servlet.ServletContext[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) javax.servlet.ServletContext[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) javax.servlet.ServletContext[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) javax.servlet.ServletContext[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) javax.servlet.ServletContext[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) javax.servlet.ServletContext[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) javax.servlet.ServletContext @ src/main/java/org/apache/commons/jxpath/servlet/ServletContextHandler.java:64:11[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) javax.servlet.ServletRequest[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) javax.servlet.http.HttpServletRequest @ src/main/java/org/apache/commons/jxpath/servlet/ServletRequestAndContext.java:47:35[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) javax.servlet.http.HttpServletRequest @ src/main/java/org/apache/commons/jxpath/servlet/ServletRequestAndContext.java:47:35[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) javax.servlet.http.HttpServletRequest @ src/main/java/org/apache/commons/jxpath/servlet/ServletRequestAndContext.java:48:21[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) javax.servlet.ServletRequest[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) javax.servlet.http.HttpSession[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+[34mFinished process pending packages (10.629489s)[0m
+Exception in thread "main" java.lang.Exception: Error while processing metrics (CtConstructorImpl) <init> @ src/main/java/org/apache/commons/jxpath/servlet/HttpSessionAndServletContext.java:38:12: {
+  elem: "(CtConstructorImpl) <init> @ src/main/java/org/apache/commons/jxpath/servlet/HttpSessionAndServletContext.java:38:12",
+}
+	at abstractor.core.constructs.Factory.create(Factory.java:132)
+	at abstractor.core.constructs.Factory.create(Factory.java:147)
+	at abstractor.core.Abstractor.addMetrics(Abstractor.java:962)
+	at abstractor.core.Abstractor.processPendingMetrics(Abstractor.java:1392)
+	at abstractor.core.Abstractor.processPendingPackages(Abstractor.java:1346)
+	at abstractor.core.Abstractor.lambda$performAbstraction$40(Abstractor.java:1332)
+	at abstractor.core.log.Logger.measure(Logger.java:123)
+	at abstractor.core.Abstractor.performAbstraction(Abstractor.java:1332)
+	at abstractor.app.App.run(App.java:26)
+	at abstractor.app.App.main(App.java:17)
+Caused by: java.lang.NullPointerException: Cannot invoke "spoon.reflect.reference.CtTypeReference.isPrimitive()" because "tr" is null
+	at abstractor.core.spoonUtils.SpoonUtils.isVoid(SpoonUtils.java:165)
+	at abstractor.core.tools.Analyzer.addAssignmentUsage(Analyzer.java:460)
+	at abstractor.core.tools.Analyzer.addUsage(Analyzer.java:398)
+	at abstractor.core.tools.Analyzer.addElement(Analyzer.java:133)
+	at abstractor.core.tools.Analyzer.addMethod(Analyzer.java:111)
+	at abstractor.core.Abstractor.lambda$addMetrics$31(Abstractor.java:967)
+	at abstractor.core.constructs.Factory.lambda$create$1(Factory.java:147)
+	at abstractor.core.constructs.Factory.create(Factory.java:109)
+	... 9 more

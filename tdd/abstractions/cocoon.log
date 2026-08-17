@@ -1,19 +1,248 @@
 # cmd: java -jar /Users/grantnelson/go/src/github.com/MSUSEL/msusel-tdmetrics-go/javaAbstractor/target/abstractor-0.1-jar-with-dependencies.jar -i /Users/grantnelson/go/src/github.com/apache/cocoon/ -o /Users/grantnelson/go/src/github.com/MSUSEL/msusel-tdmetrics-go/tdd/abstractions/cocoon.json -v
 # cwd: /Users/grantnelson/go/src/github.com/MSUSEL/msusel-tdmetrics-go/tdd
 # repo: /Users/grantnelson/go/src/github.com/apache/cocoon @ a80f73b27592a2794c9133ee03d2e402bf12ecc1
-# started: 2026-07-28T01:55:45.141187+00:00
+# started: 2026-08-17T18:34:10.396975+00:00
 # timeout_min: 10
 # ---
 Reading /Users/grantnelson/go/src/github.com/apache/cocoon/
 SLF4J(W): No SLF4J providers were found.
 SLF4J(W): Defaulting to no-operation (NOP) logger implementation
 SLF4J(W): See https://www.slf4j.org/codes.html#noProviders for further details.
-Exception in thread "main" spoon.compiler.ModelBuildingException: BeanDefinitionDecorator cannot be resolved to a type at /Users/grantnelson/go/src/github.com/apache/cocoon/core/cocoon-pipeline/cocoon-pipeline-impl/src/main/java/org/apache/cocoon/core/container/spring/pipeline/PipelineComponentInfoInitializerDecorator.java:42
-	at spoon.support.compiler.jdt.JDTBasedSpoonCompiler.report(JDTBasedSpoonCompiler.java:664)
-	at spoon.support.compiler.jdt.JDTBasedSpoonCompiler.reportProblems(JDTBasedSpoonCompiler.java:646)
-	at spoon.support.compiler.jdt.JDTBasedSpoonCompiler.build(JDTBasedSpoonCompiler.java:120)
-	at spoon.support.compiler.jdt.JDTBasedSpoonCompiler.build(JDTBasedSpoonCompiler.java:101)
-	at spoon.Launcher.buildModel(Launcher.java:781)
-	at abstractor.core.Abstractor.prepareMavenProject(Abstractor.java:55)
-	at abstractor.app.App.run(App.java:25)
+Init pending package <unnamed>
+Init pending package org
+Init pending package org.apache
+Init pending package org.apache.cocoon
+Init pending package org.apache.cocoon.ajax
+Init pending package org.apache.cocoon.components
+Init pending package org.apache.cocoon.components.flow
+Init pending package org.apache.cocoon.components.flow.apples
+Init pending package org.apache.cocoon.components.flow.apples.samples
+Init pending package org.apache.cocoon.components.flow.javascript
+Init pending package org.apache.cocoon.components.flow.javascript.fom
+Init pending package org.apache.cocoon.components.flow.util
+Init pending package org.apache.cocoon.components.accessor
+Init pending package org.apache.cocoon.components.expression
+Init pending package org.apache.cocoon.components.expression.javascript
+Init pending package org.apache.cocoon.components.expression.jexl
+Init pending package org.apache.cocoon.components.expression.jxpath
+Init pending package org.apache.cocoon.components.crawler
+Init pending package org.apache.cocoon.components.fam
+Init pending package org.apache.cocoon.components.persistence
+Init pending package org.apache.cocoon.components.source
+Init pending package org.apache.cocoon.components.source.helpers
+Init pending package org.apache.cocoon.components.source.impl
+Init pending package org.apache.cocoon.components.source.impl.validity
+Init pending package org.apache.cocoon.components.source.util
+Init pending package org.apache.cocoon.components.pipeline
+Init pending package org.apache.cocoon.components.pipeline.impl
+Init pending package org.apache.cocoon.components.xpointer
+Init pending package org.apache.cocoon.components.xpointer.parser
+Init pending package org.apache.cocoon.components.xslt
+Init pending package org.apache.cocoon.components.sax
+Init pending package org.apache.cocoon.components.modules
+Init pending package org.apache.cocoon.components.modules.input
+Init pending package org.apache.cocoon.components.modules.output
+Init pending package org.apache.cocoon.components.notification
+Init pending package org.apache.cocoon.components.treeprocessor
+Init pending package org.apache.cocoon.components.treeprocessor.sitemap
+Init pending package org.apache.cocoon.components.treeprocessor.variables
+Init pending package org.apache.cocoon.components.store
+Init pending package org.apache.cocoon.components.store.impl
+Init pending package org.apache.cocoon.components.thread
+Init pending package org.apache.cocoon.core
+Init pending package org.apache.cocoon.core.container
+Init pending package org.apache.cocoon.core.container.reloading
+Init pending package org.apache.cocoon.core.container.spring
+Init pending package org.apache.cocoon.core.container.spring.test
+Init pending package org.apache.cocoon.core.container.spring.pipeline
+Init pending package org.apache.cocoon.core.container.spring.avalon
+Init pending package org.apache.cocoon.core.xml
+Init pending package org.apache.cocoon.core.xml.avalon
+Init pending package org.apache.cocoon.core.xml.impl
+Init pending package org.apache.cocoon.core.xml.resolver
+Init pending package org.apache.cocoon.forms
+Init pending package org.apache.cocoon.forms.acting
+Init pending package org.apache.cocoon.forms.binding
+Init pending package org.apache.cocoon.forms.binding.library
+Init pending package org.apache.cocoon.forms.datatype
+Init pending package org.apache.cocoon.forms.datatype.convertor
+Init pending package org.apache.cocoon.forms.datatype.typeimpl
+Init pending package org.apache.cocoon.forms.datatype.validationruleimpl
+Init pending package org.apache.cocoon.forms.event
+Init pending package org.apache.cocoon.forms.event.impl
+Init pending package org.apache.cocoon.forms.expression
+Init pending package org.apache.cocoon.forms.flow
+Init pending package org.apache.cocoon.forms.flow.javascript
+Init pending package org.apache.cocoon.forms.formmodel
+Init pending package org.apache.cocoon.forms.formmodel.algorithms
+Init pending package org.apache.cocoon.forms.formmodel.library
+Init pending package org.apache.cocoon.forms.formmodel.tree
+Init pending package org.apache.cocoon.forms.formmodel.tree.builder
+Init pending package org.apache.cocoon.forms.generation
+Init pending package org.apache.cocoon.forms.samples
+Init pending package org.apache.cocoon.forms.samples.bindings
+Init pending package org.apache.cocoon.forms.samples.dreamteam
+Init pending package org.apache.cocoon.forms.transformation
+Init pending package org.apache.cocoon.forms.util
+Init pending package org.apache.cocoon.forms.validation
+Init pending package org.apache.cocoon.forms.validation.impl
+Init pending package org.apache.cocoon.template
+Init pending package org.apache.cocoon.template.environment
+Init pending package org.apache.cocoon.template.expression
+Init pending package org.apache.cocoon.template.instruction
+Init pending package org.apache.cocoon.template.script
+Init pending package org.apache.cocoon.template.script.event
+Init pending package org.apache.cocoon.template.xml
+Init pending package org.apache.cocoon.configuration
+Init pending package org.apache.cocoon.spring
+Init pending package org.apache.cocoon.spring.configurator
+Init pending package org.apache.cocoon.spring.configurator.impl
+Init pending package org.apache.cocoon.spring.configurator.log4j
+Init pending package org.apache.cocoon.acting
+Init pending package org.apache.cocoon.environment
+Init pending package org.apache.cocoon.environment.background
+Init pending package org.apache.cocoon.environment.http
+Init pending package org.apache.cocoon.environment.impl
+Init pending package org.apache.cocoon.environment.internal
+Init pending package org.apache.cocoon.environment.wrapper
+Init pending package org.apache.cocoon.generation
+Init pending package org.apache.cocoon.i18n
+Init pending package org.apache.cocoon.matching
+Init pending package org.apache.cocoon.matching.modular
+Init pending package org.apache.cocoon.servlet
+Init pending package org.apache.cocoon.servlet.multipart
+Init pending package org.apache.cocoon.sitemap
+Init pending package org.apache.cocoon.sitemap.impl
+Init pending package org.apache.cocoon.transformation
+Init pending package org.apache.cocoon.transformation.helpers
+Init pending package org.apache.cocoon.transformation.pagination
+Init pending package org.apache.cocoon.xml
+Init pending package org.apache.cocoon.xml.dom
+Init pending package org.apache.cocoon.xml.xlink
+Init pending package org.apache.cocoon.caching
+Init pending package org.apache.cocoon.caching.impl
+Init pending package org.apache.cocoon.reading
+Init pending package org.apache.cocoon.serialization
+Init pending package org.apache.cocoon.util
+Init pending package org.apache.cocoon.util.location
+Init pending package org.apache.cocoon.util.jxpath
+Init pending package org.apache.cocoon.util.avalon
+Init pending package org.apache.cocoon.servletservice
+Init pending package org.apache.cocoon.servletservice.components
+Init pending package org.apache.cocoon.servletservice.shielding
+Init pending package org.apache.cocoon.servletservice.spring
+Init pending package org.apache.cocoon.servletservice.util
+Init pending package org.apache.cocoon.servletservice.demo1
+Init pending package org.apache.cocoon.servletservice.demo2
+Init pending package org.apache.cocoon.callstack
+Init pending package org.apache.cocoon.classloader
+Init pending package org.apache.cocoon.classloader.reloading
+Init pending package org.apache.cocoon.processing
+Init pending package org.apache.cocoon.processing.impl
+Init pending package org.apache.cocoon.selection
+Init pending package org.apache.cocoon.maven
+Init pending package org.apache.cocoon.maven.deployer
+Init pending package org.apache.cocoon.maven.deployer.monolithic
+Init pending package org.apache.cocoon.maven.deployer.servlet
+Init pending package org.apache.cocoon.maven.deployer.utils
+Init pending package org.apache.cocoon.maven.rcl
+[34mStarting process pending packages...[0m
+  Pending package org.apache.cocoon.environment
+  Pending package java.security
+  Pending package java.util
+  Pending package java.io
+  [34mskipping default constructor: org.apache.cocoon.ajax.AjaxRequestMatcher()[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.avalon.framework.parameters.Parameters @ blocks/cocoon-ajax/cocoon-ajax-impl/src/main/java/org/apache/cocoon/ajax/AjaxRequestMatcher.java:45:55[0m
+  [34margument (CtParameterImpl) parameters @ blocks/cocoon-ajax/cocoon-ajax-impl/src/main/java/org/apache/cocoon/ajax/AjaxRequestMatcher.java:45:66 had a null type. The type likely was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.avalon.framework.parameters.Parameters @ core/cocoon-sitemap/cocoon-sitemap-api/src/main/java/org/apache/cocoon/matching/Matcher.java:47:49[0m
+  [34margument (CtParameterImpl) parameters @ core/cocoon-sitemap/cocoon-sitemap-api/src/main/java/org/apache/cocoon/matching/Matcher.java:47:60 had a null type. The type likely was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.[0m
+  [31mUnhandled super-interface (null) for {
+    context: "object decl (CtClassImpl) AjaxRequestMatcher @ blocks/cocoon-ajax/cocoon-ajax-impl/src/main/java/org/apache/cocoon/ajax/AjaxRequestMatcher.java:43:14",
+    index: -1,
+    kind: object,
+    ref: true,
+  }[0m
+  Pending package org.apache.cocoon.selection
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.avalon.framework.logger.AbstractLogEnabled @ core/cocoon-sitemap/cocoon-sitemap-impl/src/main/java/org/apache/cocoon/selection/AbstractSwitchSelector.java:29:54[0m
+[34mFinished process pending packages (0.373354s)[0m
+Exception in thread "main" java.lang.Exception: Error while processing package org.apache.cocoon.ajax: {
+  elem: org.apache.cocoon.ajax,
+}
+	at abstractor.core.constructs.Factory.create(Factory.java:132)
+	at abstractor.core.constructs.Factory.create(Factory.java:139)
+	at abstractor.core.Abstractor.processPackage(Abstractor.java:1351)
+	at abstractor.core.Abstractor.processPendingPackages(Abstractor.java:1345)
+	at abstractor.core.Abstractor.lambda$performAbstraction$40(Abstractor.java:1332)
+	at abstractor.core.log.Logger.measure(Logger.java:123)
+	at abstractor.core.Abstractor.performAbstraction(Abstractor.java:1332)
+	at abstractor.app.App.run(App.java:26)
 	at abstractor.app.App.main(App.java:17)
+Caused by: java.lang.Exception: Error while processing object decl (CtClassImpl) AjaxRequestSelector @ blocks/cocoon-ajax/cocoon-ajax-impl/src/main/java/org/apache/cocoon/ajax/AjaxRequestSelector.java:45:14: {
+  elem: "(CtClassImpl) AjaxRequestSelector @ blocks/cocoon-ajax/cocoon-ajax-impl/src/main/java/org/apache/cocoon/ajax/AjaxRequestSelector.java:45:14",
+}
+	at abstractor.core.constructs.Factory.create(Factory.java:132)
+	at abstractor.core.constructs.Factory.create(Factory.java:139)
+	at abstractor.core.Abstractor.addObjectDecl(Abstractor.java:985)
+	at abstractor.core.Abstractor.addDeclaration(Abstractor.java:176)
+	at abstractor.core.Abstractor.lambda$processPackage$48(Abstractor.java:1360)
+	at abstractor.core.constructs.Factory.create(Factory.java:127)
+	... 8 more
+Caused by: java.lang.Exception: Error while processing struct (CtClassImpl) AjaxRequestSelector @ blocks/cocoon-ajax/cocoon-ajax-impl/src/main/java/org/apache/cocoon/ajax/AjaxRequestSelector.java:45:14: {
+  elem: "(CtClassImpl) AjaxRequestSelector @ blocks/cocoon-ajax/cocoon-ajax-impl/src/main/java/org/apache/cocoon/ajax/AjaxRequestSelector.java:45:14",
+}
+	at abstractor.core.constructs.Factory.create(Factory.java:132)
+	at abstractor.core.constructs.Factory.create(Factory.java:143)
+	at abstractor.core.Abstractor.addStructDesc(Abstractor.java:757)
+	at abstractor.core.Abstractor.lambda$addObjectDecl$32(Abstractor.java:991)
+	at abstractor.core.constructs.Factory.lambda$create$0(Factory.java:139)
+	at abstractor.core.constructs.Factory.create(Factory.java:109)
+	... 13 more
+Caused by: java.lang.Exception: Error while processing field $super: {
+  elem: "(CtTypeReferenceImpl) org.apache.cocoon.selection.AbstractSwitchSelector @ blocks/cocoon-ajax/cocoon-ajax-impl/src/main/java/org/apache/cocoon/ajax/AjaxRequestSelector.java:45:42",
+}
+	at abstractor.core.constructs.Factory.create(Factory.java:132)
+	at abstractor.core.constructs.Factory.create(Factory.java:147)
+	at abstractor.core.Abstractor.addField(Abstractor.java:815)
+	at abstractor.core.Abstractor.lambda$addStructDesc$23(Abstractor.java:772)
+	at abstractor.core.constructs.Factory.create(Factory.java:109)
+	... 18 more
+Caused by: java.lang.Exception: Error while processing object decl (CtClassImpl) AbstractSwitchSelector @ core/cocoon-sitemap/cocoon-sitemap-impl/src/main/java/org/apache/cocoon/selection/AbstractSwitchSelector.java:29:23: {
+  elem: "(CtClassImpl) AbstractSwitchSelector @ core/cocoon-sitemap/cocoon-sitemap-impl/src/main/java/org/apache/cocoon/selection/AbstractSwitchSelector.java:29:23",
+}
+	at abstractor.core.constructs.Factory.create(Factory.java:132)
+	at abstractor.core.constructs.Factory.create(Factory.java:139)
+	at abstractor.core.Abstractor.addObjectDecl(Abstractor.java:985)
+	at abstractor.core.Abstractor.addObjectInst(Abstractor.java:1069)
+	at abstractor.core.Abstractor.addTypeDesc(Abstractor.java:1229)
+	at abstractor.core.Abstractor.lambda$addField$26(Abstractor.java:818)
+	at abstractor.core.constructs.Factory.lambda$create$1(Factory.java:147)
+	at abstractor.core.constructs.Factory.create(Factory.java:109)
+	... 22 more
+Caused by: java.lang.Exception: Error while processing struct (CtClassImpl) AbstractSwitchSelector @ core/cocoon-sitemap/cocoon-sitemap-impl/src/main/java/org/apache/cocoon/selection/AbstractSwitchSelector.java:29:23: {
+  elem: "(CtClassImpl) AbstractSwitchSelector @ core/cocoon-sitemap/cocoon-sitemap-impl/src/main/java/org/apache/cocoon/selection/AbstractSwitchSelector.java:29:23",
+}
+	at abstractor.core.constructs.Factory.create(Factory.java:132)
+	at abstractor.core.constructs.Factory.create(Factory.java:143)
+	at abstractor.core.Abstractor.addStructDesc(Abstractor.java:757)
+	at abstractor.core.Abstractor.lambda$addObjectDecl$32(Abstractor.java:991)
+	at abstractor.core.constructs.Factory.lambda$create$0(Factory.java:139)
+	at abstractor.core.constructs.Factory.create(Factory.java:109)
+	... 29 more
+Caused by: java.lang.Exception: Error while processing field $super: {
+  elem: "(CtTypeReferenceImpl) org.apache.avalon.framework.logger.AbstractLogEnabled @ core/cocoon-sitemap/cocoon-sitemap-impl/src/main/java/org/apache/cocoon/selection/AbstractSwitchSelector.java:29:54",
+}
+	at abstractor.core.constructs.Factory.create(Factory.java:132)
+	at abstractor.core.constructs.Factory.create(Factory.java:147)
+	at abstractor.core.Abstractor.addField(Abstractor.java:815)
+	at abstractor.core.Abstractor.lambda$addStructDesc$23(Abstractor.java:772)
+	at abstractor.core.constructs.Factory.create(Factory.java:109)
+	... 34 more
+Caused by: abstractor.core.AbstractorException: a field must have a non-null type
+	at abstractor.core.require.Require.fail(Require.java:19)
+	at abstractor.core.require.Require.require(Require.java:24)
+	at abstractor.core.require.Require.notNull(Require.java:59)
+	at abstractor.core.constructs.Field.<init>(Field.java:20)
+	at abstractor.core.Abstractor.lambda$addField$26(Abstractor.java:819)
+	at abstractor.core.constructs.Factory.lambda$create$1(Factory.java:147)
+	at abstractor.core.constructs.Factory.create(Factory.java:109)
+	... 38 more

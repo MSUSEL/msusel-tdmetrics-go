@@ -1,7 +1,7 @@
 # cmd: java -jar /Users/grantnelson/go/src/github.com/MSUSEL/msusel-tdmetrics-go/javaAbstractor/target/abstractor-0.1-jar-with-dependencies.jar -i /Users/grantnelson/go/src/github.com/apache/commons-cli/ -o /Users/grantnelson/go/src/github.com/MSUSEL/msusel-tdmetrics-go/tdd/abstractions/commons-cli.json -v
 # cwd: /Users/grantnelson/go/src/github.com/MSUSEL/msusel-tdmetrics-go/tdd
 # repo: /Users/grantnelson/go/src/github.com/apache/commons-cli @ 92f1def0bb3c0345295012e36b7150cfd1d7b6ab
-# started: 2026-07-28T01:19:37.059408+00:00
+# started: 2026-08-17T18:30:39.072714+00:00
 # timeout_min: 10
 # ---
 Reading /Users/grantnelson/go/src/github.com/apache/commons-cli/
@@ -41,81 +41,73 @@ Init pending package org.apache.commons.cli
   [34mskipping default constructor: org.apache.commons.cli.PosixParser()[0m
   [34mskipping default constructor: org.apache.commons.cli.TypeHandler()[0m
   [34mskipping default constructor: org.apache.commons.cli.Util()[0m
-  [34mUnused type args: [java.lang.String, org.apache.commons.cli.Option][0m
-  [34mUnused type args: [org.apache.commons.cli.Option][0m
-  [34mUnused type args: [java.lang.String][0m
-  [34mUnused type args: [java.lang.String][0m
-  [34mUnused type args: [java.lang.String][0m
-  [34mUnused type args: [java.lang.String][0m
-  [34mUnused type args: [org.apache.commons.cli.Option @ src/main/java/org/apache/commons/cli/HelpFormatter.java:651:20][0m
+  [34mUnused type args: [java.lang.String @ src/main/java/org/apache/commons/cli/Options.java:278:20][0m
   [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
-  [34mUnused type args: [org.apache.commons.cli.Option @ src/main/java/org/apache/commons/cli/HelpFormatter.java:651:52][0m
+  [34mUnused type args: [java.lang.String @ src/main/java/org/apache/commons/cli/Options.java:278:57][0m
+  [34mUnused type args: [java.lang.String, org.apache.commons.cli.Option][0m
+  [34mUnused type args: [java.lang.String][0m
+  [34mUnused type args: [java.lang.String][0m
+  [34mUnused type args: [java.lang.String][0m
+  [34mUnused type args: [java.lang.String, org.apache.commons.cli.Option][0m
+  [34mUnused type args: [java.lang.String][0m
+  [34mUnused type args: [java.lang.String][0m
+  [34mUnused type args: [java.lang.String][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [org.apache.commons.cli.OptionGroup @ src/main/java/org/apache/commons/cli/Options.java:96:28][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [java.lang.String, org.apache.commons.cli.OptionGroup][0m
+  [34mUnused type args: [org.apache.commons.cli.OptionGroup][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [java.lang.String, org.apache.commons.cli.OptionGroup][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mSkipping selection with no field declaration: (CtFieldReferenceImpl) class[0m
+  [34mSkipping selection with no field declaration: (CtFieldReferenceImpl) class[0m
+  [34mUnused type args: [org.apache.commons.cli.Option][0m
+  [34mUnused type args: [org.apache.commons.cli.Option][0m
   [34mUnused type args: [?][0m
   [34mUnused type args: [org.apache.commons.cli.Option][0m
-  [34mUnused type args: [org.apache.commons.cli.Option][0m
-  [34mUnused type args: [org.apache.commons.cli.Option][0m
-  [34mUnused type args: [T][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [? @ src/main/java/org/apache/commons/cli/DefaultParser.java:147:32][0m
   [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [java.lang.String][0m
+  [34mUnused type args: [java.lang.String][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [org.apache.commons.cli.OptionGroup][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [? @ src/main/java/org/apache/commons/cli/PatternOptionBuilder.java:154:15][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [? @ src/main/java/org/apache/commons/cli/PatternOptionBuilder.java:189:31][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
   [34mUnused type args: [org.apache.commons.cli.Option][0m
-  [34mUnused type args: [org.apache.commons.cli.Option][0m
-  [34mUnused type args: [org.apache.commons.cli.Option @ src/main/java/org/apache/commons/cli/HelpFormatter.java:657:29][0m
-  [34mUnused type args: [org.apache.commons.cli.Option][0m
-  [34mUnused type args: [org.apache.commons.cli.Option][0m
-  [34mUnused type args: [org.apache.commons.cli.Option][0m
-  [34mUnused type args: [org.apache.commons.cli.Option][0m
-  [34mUnused type args: [org.apache.commons.cli.Option][0m
-  [34mUnused type args: [java.lang.String][0m
-  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
-  [34mUnused type args: [org.apache.commons.cli.Option][0m
-  [34mUnused type args: [java.lang.String @ src/main/java/org/apache/commons/cli/CommandLine.java:394:28][0m
-  [34mUnused type args: [java.lang.String][0m
-  [34mUnused type args: [java.lang.String][0m
-  [34mUnused type args: [java.lang.String][0m
-  [34mUnused type args: [java.lang.String][0m
-  [34mUnused type args: [java.lang.String][0m
-  [34mUnused type args: [java.lang.String][0m
-  [34mUnused type args: [java.lang.String, org.apache.commons.cli.Option][0m
-  [34mUnused type args: [java.lang.String, org.apache.commons.cli.Option][0m
-  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
-  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
-  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
-  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
-  [34mUnused type args: [java.lang.String][0m
-  [34mUnused type args: [java.lang.String][0m
-  [34mUnused type args: [java.lang.String, org.apache.commons.cli.Option][0m
-  [34mUnused type args: [java.lang.String][0m
-  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
-  [34mUnused type args: [org.apache.commons.cli.Option][0m
-  [34mUnused type args: [java.lang.String @ src/main/java/org/apache/commons/cli/CommandLine.java:356:28][0m
-  [34mUnused type args: [java.lang.String][0m
-  [34mUnused type args: [java.lang.String][0m
-  [34mUnused type args: [java.lang.String][0m
-  [34mUnused type args: [java.lang.String][0m
-  [34mUnused type args: [java.lang.String][0m
-  [34mUnused type args: [java.lang.String][0m
-  [34mUnused type args: [java.lang.String, org.apache.commons.cli.Option][0m
-  [34mUnused type args: [java.lang.String, org.apache.commons.cli.Option][0m
-  [34mUnused type args: [java.lang.String, org.apache.commons.cli.Option][0m
-  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
-  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
-  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
-  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
-  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
-  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
-  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
-  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
-  [34mUnused type args: [java.lang.String @ src/main/java/org/apache/commons/cli/DefaultParser.java:437:20][0m
-  [34mUnused type args: [java.lang.String][0m
-  [34mUnused type args: [java.lang.String][0m
-  [34mUnused type args: [java.lang.String][0m
-  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
-  [34mUnused type args: [java.lang.String][0m
-  [34mUnused type args: [java.lang.String][0m
-  [34mUnused type args: [java.lang.String][0m
-  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
-  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
-  [34mUnused type args: [java.lang.String][0m
-  [34mUnused type args: [java.lang.String][0m
   [34mUnused type args: [java.lang.String][0m
   [34mUnused type args: [java.lang.String][0m
   [34mUnused type args: [java.lang.String][0m
@@ -137,21 +129,48 @@ Init pending package org.apache.commons.cli
   [34mUnused type args: [java.lang.String][0m
   [34mUnused type args: [java.lang.String][0m
   [34mUnused type args: [java.lang.String][0m
-  [34mUnused type args: [org.apache.commons.cli.Option][0m
-  [34mUnused type args: [java.lang.String][0m
-  [34mUnused type args: [java.lang.String][0m
-  [34mUnused type args: [java.lang.String][0m
-  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
   [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
   [34mUnused type args: [java.lang.String][0m
+  [34mUnused type args: [java.lang.String, org.apache.commons.cli.Option][0m
   [34mUnused type args: [java.lang.String][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
   [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
   [34mUnused type args: [?][0m
   [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [? @ src/main/java/org/apache/commons/cli/Parser.java:261:32][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [java.lang.String][0m
+  [34mUnused type args: [java.lang.String][0m
+  [34mUnused type args: [java.lang.String][0m
+  [34mUnused type args: [java.lang.String][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [java.lang.String][0m
+  [34mUnused type args: [java.lang.Object][0m
+  [34mUnused type args: [java.lang.String][0m
+  [34mUnused type args: [java.lang.Number][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [java.util.Date][0m
+  [34mUnused type args: [java.io.FileInputStream][0m
+  [34mUnused type args: [java.io.File][0m
+  [34mUnused type args: [java.io.File[]][0m
+  [34mUnused type args: [java.net.URL][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [java.lang.Object][0m
   [34mUnused type args: [org.apache.commons.cli.Option][0m
-  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
-  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
-  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [java.lang.String, org.apache.commons.cli.OptionGroup][0m
+  [34mUnused type args: [java.lang.String][0m
+  [34mUnused type args: [java.lang.String][0m
+  [34mUnused type args: [java.lang.String][0m
   [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
   [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
   [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
@@ -178,27 +197,78 @@ Init pending package org.apache.commons.cli
   [34mUnused type args: [org.apache.commons.cli.OptionGroup][0m
   [34mUnused type args: [org.apache.commons.cli.OptionGroup][0m
   [34mUnused type args: [org.apache.commons.cli.Option][0m
-  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
-  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
-  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
-  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
-  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
-  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
-  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
-  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
-  [34mUnused type args: [java.lang.String][0m
   [34mUnused type args: [java.lang.String][0m
   [34mUnused type args: [java.lang.String][0m
   [34mUnused type args: [java.lang.String, org.apache.commons.cli.Option][0m
-  [34mUnused type args: [java.lang.Object][0m
-  [34mUnused type args: [java.lang.Object][0m
-  [34mUnused type args: [java.lang.Object][0m
-  [34mUnused type args: [java.lang.Object][0m
-  [34mUnused type args: [java.lang.String, org.apache.commons.cli.Option][0m
   [34mUnused type args: [java.lang.String][0m
+  [34mUnused type args: [org.apache.commons.cli.Option][0m
+  [34mUnused type args: [org.apache.commons.cli.Option @ src/main/java/org/apache/commons/cli/HelpFormatter.java:651:20][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [org.apache.commons.cli.Option @ src/main/java/org/apache/commons/cli/HelpFormatter.java:651:52][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [org.apache.commons.cli.Option][0m
+  [34mUnused type args: [org.apache.commons.cli.Option][0m
+  [34mUnused type args: [org.apache.commons.cli.Option][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [org.apache.commons.cli.Option][0m
+  [34mUnused type args: [org.apache.commons.cli.Option][0m
+  [34mUnused type args: [org.apache.commons.cli.Option @ src/main/java/org/apache/commons/cli/HelpFormatter.java:657:29][0m
+  [34mUnused type args: [org.apache.commons.cli.Option][0m
+  [34mUnused type args: [org.apache.commons.cli.Option][0m
+  [34mUnused type args: [org.apache.commons.cli.Option][0m
+  [34mUnused type args: [org.apache.commons.cli.Option][0m
+  [34mUnused type args: [org.apache.commons.cli.Option][0m
+  [34mUnused type args: [java.lang.Object][0m
+  [34mUnused type args: [java.lang.Object][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [java.lang.Object][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [org.apache.commons.cli.Option][0m
+  [34mUnused type args: [java.lang.String @ src/main/java/org/apache/commons/cli/CommandLine.java:394:28][0m
+  [34mUnused type args: [java.lang.String][0m
+  [34mUnused type args: [java.lang.String][0m
+  [34mUnused type args: [java.lang.String][0m
+  [34mUnused type args: [java.lang.String][0m
+  [34mUnused type args: [java.lang.String][0m
+  [34mUnused type args: [java.lang.String][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [java.lang.String][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [java.lang.String][0m
+  [34mUnused type args: [java.lang.String][0m
+  [34mUnused type args: [java.lang.String][0m
+  [34mUnused type args: [java.lang.String][0m
+  [34mUnused type args: [java.lang.String][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [java.lang.String][0m
+  [34mUnused type args: [java.lang.String][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [java.lang.String @ src/main/java/org/apache/commons/cli/Option.java:685:43][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [java.lang.String][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [java.lang.String @ src/main/java/org/apache/commons/cli/AmbiguousOptionException.java:73:24][0m
+  [34mUnused type args: [java.lang.String][0m
+  [34mUnused type args: [java.lang.String][0m
+  [34mUnused type args: [java.lang.String][0m
+  [34mUnused type args: [java.lang.String][0m
+  [34mUnused type args: [java.lang.String][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
   [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
   [34mUnused type args: [?][0m
-  [34mUnused type args: [java.lang.String, org.apache.commons.cli.OptionGroup][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [java.lang.String][0m
+  [34mUnused type args: [java.lang.String][0m
   [34mUnused type args: [java.lang.String @ src/main/java/org/apache/commons/cli/PosixParser.java:102:24][0m
   [34mUnused type args: [java.lang.String][0m
   [34mUnused type args: [java.lang.String][0m
@@ -229,87 +299,195 @@ Init pending package org.apache.commons.cli
   [34mUnused type args: [java.lang.String][0m
   [34mUnused type args: [java.lang.String][0m
   [34mUnused type args: [java.lang.String][0m
-  [34mUnused type args: [java.lang.String][0m
-  [34mUnused type args: [java.lang.String][0m
-  [34mUnused type args: [java.lang.String][0m
-  [34mUnused type args: [?][0m
-  [34mUnused type args: [?][0m
-  [34mUnused type args: [? @ src/main/java/org/apache/commons/cli/PatternOptionBuilder.java:154:15][0m
-  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
-  [34mUnused type args: [?][0m
-  [34mUnused type args: [?][0m
-  [34mUnused type args: [?][0m
-  [34mUnused type args: [?][0m
-  [34mUnused type args: [?][0m
-  [34mUnused type args: [?][0m
-  [34mUnused type args: [?][0m
-  [34mUnused type args: [? @ src/main/java/org/apache/commons/cli/PatternOptionBuilder.java:189:31][0m
-  [34mUnused type args: [?][0m
-  [34mUnused type args: [?][0m
-  [34mUnused type args: [?][0m
-  [34mUnused type args: [java.lang.String][0m
-  [34mUnused type args: [java.lang.String][0m
-  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
-  [34mUnused type args: [java.lang.String @ src/main/java/org/apache/commons/cli/Option.java:685:43][0m
-  [34mUnused type args: [?][0m
-  [34mUnused type args: [java.lang.String][0m
-  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
-  [34mUnused type args: [?][0m
-  [34mUnused type args: [?][0m
-  [34mSkipping selection with no field declaration: (CtFieldReferenceImpl) class[0m
-  [34mSkipping selection with no field declaration: (CtFieldReferenceImpl) class[0m
-  [34mUnused type args: [?][0m
-  [34mUnused type args: [? @ src/main/java/org/apache/commons/cli/OptionBuilder.java:298:32][0m
-  [34mUnused type args: [java.lang.String][0m
-  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
   [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
   [34mUnused type args: [java.lang.String][0m
   [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
-  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
-  [34mUnused type args: [?][0m
-  [34mUnused type args: [?][0m
-  [34mUnused type args: [?][0m
-  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
-  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
-  [34mUnused type args: [java.lang.String][0m
-  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
-  [34mUnused type args: [?][0m
-  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [org.apache.commons.cli.Option @ src/main/java/org/apache/commons/cli/OptionGroup.java:144:24][0m
   [34mUnused type args: [org.apache.commons.cli.Option][0m
-  [34mUnused type args: [?][0m
-  [34mUnused type args: [?][0m
-  [34mUnused type args: [?][0m
-  [34mUnused type args: [?][0m
-  [34mUnused type args: [?][0m
-  [34mUnused type args: [?][0m
+  [34mUnused type args: [org.apache.commons.cli.Option][0m
+  [34mUnused type args: [org.apache.commons.cli.Option][0m
+  [34mUnused type args: [org.apache.commons.cli.Option][0m
+  [34mUnused type args: [org.apache.commons.cli.Option][0m
   [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
   [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [java.lang.String][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [java.lang.String][0m
+  [34mUnused type args: [java.lang.String][0m
+  [34mUnused type args: [java.lang.String][0m
+  [34mUnused type args: [java.lang.String][0m
   [34mUnused type args: [org.apache.commons.cli.Option @ src/main/java/org/apache/commons/cli/CommandLine.java:495:26][0m
   [34mUnused type args: [org.apache.commons.cli.Option][0m
   [34mUnused type args: [org.apache.commons.cli.Option][0m
   [34mUnused type args: [org.apache.commons.cli.Option][0m
   [34mUnused type args: [org.apache.commons.cli.Option][0m
-  [34mUnused type args: [org.apache.commons.cli.Option][0m
-  [34mUnused type args: [org.apache.commons.cli.Option][0m
-  [34mUnused type args: [org.apache.commons.cli.Option][0m
   [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
-  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
-  [34mUnused type args: [java.lang.String @ src/main/java/org/apache/commons/cli/Options.java:278:20][0m
-  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
-  [34mUnused type args: [java.lang.String @ src/main/java/org/apache/commons/cli/Options.java:278:57][0m
-  [34mUnused type args: [java.lang.String, org.apache.commons.cli.Option][0m
-  [34mUnused type args: [java.lang.String][0m
-  [34mUnused type args: [java.lang.String][0m
-  [34mUnused type args: [java.lang.String][0m
-  [34mUnused type args: [java.lang.String, org.apache.commons.cli.Option][0m
-  [34mUnused type args: [java.lang.String][0m
-  [34mUnused type args: [java.lang.String][0m
-  [34mUnused type args: [java.lang.String][0m
+  [34mUnused type args: [org.apache.commons.cli.Option @ src/main/java/org/apache/commons/cli/Options.java:232:30][0m
   [34mUnused type args: [?][0m
+  [34mUnused type args: [java.lang.String, org.apache.commons.cli.Option][0m
+  [34mUnused type args: [org.apache.commons.cli.Option][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
   [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
   [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
   [34mUnused type args: [?][0m
+  [34mUnused type args: [org.apache.commons.cli.Option][0m
+  [34mUnused type args: [org.apache.commons.cli.Option][0m
+  [34mUnused type args: [org.apache.commons.cli.Option][0m
+  [34mUnused type args: [java.lang.String, org.apache.commons.cli.Option][0m
+  [34mUnused type args: [org.apache.commons.cli.Option][0m
   [34mUnused type args: [org.apache.commons.cli.OptionGroup][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [java.lang.String @ src/main/java/org/apache/commons/cli/Parser.java:172:20][0m
+  [34mUnused type args: [java.lang.String][0m
+  [34mUnused type args: [java.lang.String][0m
+  [34mUnused type args: [java.lang.String @ src/main/java/org/apache/commons/cli/Parser.java:174:28][0m
+  [34mUnused type args: [java.lang.String][0m
+  [34mUnused type args: [java.lang.String][0m
+  [34mUnused type args: [java.lang.String][0m
+  [34mUnused type args: [java.lang.String][0m
+  [34mUnused type args: [java.lang.String][0m
+  [34mUnused type args: [java.lang.String][0m
+  [34mUnused type args: [java.lang.String][0m
+  [34mUnused type args: [java.lang.String][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [java.lang.String, org.apache.commons.cli.Option][0m
+  [34mUnused type args: [java.lang.String, org.apache.commons.cli.Option][0m
+  [34mUnused type args: [java.lang.String, org.apache.commons.cli.Option][0m
+  [34mUnused type args: [java.lang.String @ src/main/java/org/apache/commons/cli/DefaultParser.java:437:20][0m
+  [34mUnused type args: [java.lang.String][0m
+  [34mUnused type args: [java.lang.String][0m
+  [34mUnused type args: [java.lang.String][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [java.lang.String][0m
+  [34mUnused type args: [java.lang.String][0m
+  [34mUnused type args: [java.lang.String][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [? @ src/main/java/org/apache/commons/cli/TypeHandler.java:49:40][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [java.lang.String][0m
+  [34mUnused type args: [java.lang.String][0m
+  [34mUnused type args: [java.lang.String, org.apache.commons.cli.Option][0m
+  [34mUnused type args: [java.lang.String, org.apache.commons.cli.Option][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [java.lang.String @ src/main/java/org/apache/commons/cli/CommandLine.java:229:20][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [java.lang.String @ src/main/java/org/apache/commons/cli/CommandLine.java:229:51][0m
+  [34mUnused type args: [org.apache.commons.cli.Option][0m
+  [34mUnused type args: [java.lang.String][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [java.lang.String][0m
+  [34mUnused type args: [java.lang.String][0m
+  [34mUnused type args: [java.lang.String][0m
+  [34mUnused type args: [java.lang.String][0m
+  [34mUnused type args: [java.lang.String][0m
+  [34mUnused type args: [org.apache.commons.cli.Option][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [? @ src/main/java/org/apache/commons/cli/OptionBuilder.java:298:32][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [org.apache.commons.cli.Option][0m
+  [34mUnused type args: [java.lang.String @ src/main/java/org/apache/commons/cli/DefaultParser.java:404:20][0m
+  [34mUnused type args: [java.lang.String][0m
+  [34mUnused type args: [java.lang.String][0m
+  [34mUnused type args: [java.lang.String][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [java.lang.String][0m
+  [34mUnused type args: [java.lang.String][0m
+  [34mUnused type args: [java.lang.String][0m
+  [34mUnused type args: [java.lang.String][0m
+  [34mUnused type args: [java.lang.String][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [java.lang.Object][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [java.lang.Number][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [java.util.Date][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [java.io.File][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [java.io.FileInputStream][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [java.io.File[]][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [java.net.URL][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [? @ src/main/java/org/apache/commons/cli/Option.java:220:24][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [java.lang.String][0m
+  [34mUnused type args: [java.lang.String][0m
+  [34mUnused type args: [java.lang.String, org.apache.commons.cli.Option][0m
+  [34mUnused type args: [org.apache.commons.cli.Option][0m
+  [34mUnused type args: [java.lang.String, org.apache.commons.cli.Option][0m
+  [34mUnused type args: [? @ src/main/java/org/apache/commons/cli/TypeHandler.java:115:15][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [?][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [java.lang.String][0m
+  [34mUnused type args: [java.lang.String][0m
+  [34mUnused type args: [java.lang.String][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [java.lang.String, org.apache.commons.cli.Option][0m
+  [34mUnused type args: [java.lang.Object][0m
+  [34mUnused type args: [java.lang.Object][0m
+  [34mUnused type args: [java.lang.Object][0m
+  [34mUnused type args: [java.lang.Object][0m
+  [34mUnused type args: [java.lang.String, org.apache.commons.cli.Option][0m
+  [34mUnused type args: [?][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [?][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [? @ src/main/java/org/apache/commons/cli/MissingOptionException.java:84:24][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [java.lang.String][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [org.apache.commons.cli.Option][0m
+  [34mUnused type args: [java.lang.String @ src/main/java/org/apache/commons/cli/CommandLine.java:356:28][0m
+  [34mUnused type args: [java.lang.String][0m
+  [34mUnused type args: [java.lang.String][0m
+  [34mUnused type args: [java.lang.String][0m
+  [34mUnused type args: [java.lang.String][0m
+  [34mUnused type args: [java.lang.String][0m
+  [34mUnused type args: [java.lang.String][0m
+  [34mUnused type args: [?][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [org.apache.commons.cli.Option][0m
+  [34mUnused type args: [org.apache.commons.cli.Option][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [java.lang.String][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [java.lang.String, org.apache.commons.cli.Option][0m
+  [34mUnused type args: [java.lang.String, org.apache.commons.cli.Option][0m
   [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
   [34mUnused type args: [java.lang.StringBuffer @ src/main/java/org/apache/commons/cli/HelpFormatter.java:801:20][0m
   [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
@@ -333,203 +511,25 @@ Init pending package org.apache.commons.cli
   [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
   [34mUnused type args: [java.lang.StringBuffer][0m
   [34mUnused type args: [org.apache.commons.cli.Option][0m
-  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
-  [34mUnused type args: [java.lang.String][0m
-  [34mUnused type args: [? @ src/main/java/org/apache/commons/cli/Parser.java:261:32][0m
-  [34mUnused type args: [?][0m
-  [34mUnused type args: [?][0m
-  [34mUnused type args: [?][0m
-  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
-  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
-  [34mUnused type args: [org.apache.commons.cli.Option @ src/main/java/org/apache/commons/cli/OptionGroup.java:144:24][0m
-  [34mUnused type args: [org.apache.commons.cli.Option][0m
-  [34mUnused type args: [org.apache.commons.cli.Option][0m
-  [34mUnused type args: [org.apache.commons.cli.Option][0m
-  [34mUnused type args: [org.apache.commons.cli.Option][0m
-  [34mUnused type args: [org.apache.commons.cli.Option][0m
-  [34mUnused type args: [org.apache.commons.cli.Option][0m
-  [34mUnused type args: [org.apache.commons.cli.OptionGroup][0m
-  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
-  [34mUnused type args: [java.lang.String @ src/main/java/org/apache/commons/cli/Parser.java:172:20][0m
-  [34mUnused type args: [java.lang.String][0m
-  [34mUnused type args: [java.lang.String][0m
-  [34mUnused type args: [java.lang.String @ src/main/java/org/apache/commons/cli/Parser.java:174:28][0m
-  [34mUnused type args: [java.lang.String][0m
-  [34mUnused type args: [java.lang.String][0m
-  [34mUnused type args: [java.lang.String][0m
-  [34mUnused type args: [java.lang.String][0m
-  [34mUnused type args: [java.lang.String][0m
-  [34mUnused type args: [java.lang.String][0m
-  [34mUnused type args: [java.lang.String][0m
-  [34mUnused type args: [java.lang.String][0m
-  [34mUnused type args: [?][0m
-  [34mUnused type args: [? @ src/main/java/org/apache/commons/cli/Option.java:220:24][0m
-  [34mUnused type args: [java.lang.Object][0m
-  [34mUnused type args: [org.apache.commons.cli.Option][0m
-  [34mUnused type args: [java.lang.String, org.apache.commons.cli.OptionGroup][0m
-  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
-  [34mUnused type args: [java.lang.String, org.apache.commons.cli.Option][0m
-  [34mUnused type args: [java.lang.String][0m
-  [34mUnused type args: [java.lang.String][0m
-  [34mUnused type args: [java.lang.String][0m
-  [34mUnused type args: [java.lang.String][0m
-  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
-  [34mUnused type args: [java.lang.String][0m
-  [34mUnused type args: [org.apache.commons.cli.Option][0m
-  [34mUnused type args: [java.lang.String, org.apache.commons.cli.Option][0m
-  [34mUnused type args: [java.lang.String][0m
-  [34mUnused type args: [java.lang.String][0m
-  [34mUnused type args: [java.lang.String][0m
-  [34mUnused type args: [java.lang.String][0m
-  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
-  [34mUnused type args: [java.lang.Object][0m
-  [34mUnused type args: [java.lang.String][0m
-  [34mUnused type args: [java.lang.Number][0m
-  [34mUnused type args: [?][0m
-  [34mUnused type args: [java.util.Date][0m
-  [34mUnused type args: [java.io.FileInputStream][0m
-  [34mUnused type args: [java.io.File][0m
-  [34mUnused type args: [java.io.File[]][0m
-  [34mUnused type args: [java.net.URL][0m
-  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
-  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
-  [34mUnused type args: [java.lang.String, org.apache.commons.cli.Option][0m
-  [34mUnused type args: [org.apache.commons.cli.Option][0m
-  [34mUnused type args: [org.apache.commons.cli.Option][0m
-  [34mUnused type args: [?][0m
-  [34mUnused type args: [org.apache.commons.cli.Option][0m
-  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
-  [34mUnused type args: [java.lang.String][0m
-  [34mUnused type args: [java.lang.String][0m
-  [34mUnused type args: [?][0m
-  [34mUnused type args: [?][0m
-  [34mUnused type args: [?][0m
-  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
-  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
-  [34mUnused type args: [java.lang.String @ src/main/java/org/apache/commons/cli/AmbiguousOptionException.java:73:24][0m
-  [34mUnused type args: [java.lang.String][0m
-  [34mUnused type args: [java.lang.String][0m
-  [34mUnused type args: [java.lang.String][0m
-  [34mUnused type args: [java.lang.String][0m
-  [34mUnused type args: [java.lang.String][0m
-  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
-  [34mUnused type args: [java.lang.String, org.apache.commons.cli.Option][0m
-  [34mUnused type args: [java.lang.String, org.apache.commons.cli.Option][0m
-  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
-  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
-  [34mUnused type args: [org.apache.commons.cli.OptionGroup @ src/main/java/org/apache/commons/cli/Options.java:96:28][0m
-  [34mUnused type args: [?][0m
-  [34mUnused type args: [java.lang.String, org.apache.commons.cli.OptionGroup][0m
-  [34mUnused type args: [org.apache.commons.cli.OptionGroup][0m
-  [34mUnused type args: [java.lang.Object][0m
-  [34mUnused type args: [java.lang.Object][0m
-  [34mUnused type args: [?][0m
-  [34mUnused type args: [java.lang.Object][0m
-  [34mUnused type args: [java.lang.String @ src/main/java/org/apache/commons/cli/CommandLine.java:229:20][0m
-  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
-  [34mUnused type args: [java.lang.String @ src/main/java/org/apache/commons/cli/CommandLine.java:229:51][0m
-  [34mUnused type args: [org.apache.commons.cli.Option][0m
-  [34mUnused type args: [java.lang.String][0m
-  [34mUnused type args: [?][0m
-  [34mUnused type args: [java.lang.String][0m
-  [34mUnused type args: [java.lang.String][0m
-  [34mUnused type args: [java.lang.String][0m
-  [34mUnused type args: [java.lang.String][0m
-  [34mUnused type args: [java.lang.String][0m
-  [34mUnused type args: [java.lang.String][0m
-  [34mUnused type args: [?][0m
-  [34mUnused type args: [java.lang.Object][0m
-  [34mUnused type args: [?][0m
-  [34mUnused type args: [java.lang.Number][0m
-  [34mUnused type args: [?][0m
-  [34mUnused type args: [java.util.Date][0m
-  [34mUnused type args: [?][0m
-  [34mUnused type args: [?][0m
-  [34mUnused type args: [?][0m
-  [34mUnused type args: [?][0m
-  [34mUnused type args: [java.io.File][0m
-  [34mUnused type args: [?][0m
-  [34mUnused type args: [java.io.FileInputStream][0m
-  [34mUnused type args: [?][0m
-  [34mUnused type args: [java.io.File[]][0m
-  [34mUnused type args: [?][0m
-  [34mUnused type args: [java.net.URL][0m
-  [34mUnused type args: [?][0m
-  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
-  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
-  [34mUnused type args: [java.lang.String @ src/main/java/org/apache/commons/cli/DefaultParser.java:404:20][0m
-  [34mUnused type args: [java.lang.String][0m
-  [34mUnused type args: [java.lang.String][0m
-  [34mUnused type args: [java.lang.String][0m
-  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
-  [34mUnused type args: [java.lang.String][0m
-  [34mUnused type args: [java.lang.String][0m
-  [34mUnused type args: [java.lang.String][0m
-  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
-  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
-  [34mUnused type args: [?][0m
-  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
-  [34mUnused type args: [org.apache.commons.cli.Option @ src/main/java/org/apache/commons/cli/Options.java:232:30][0m
-  [34mUnused type args: [?][0m
-  [34mUnused type args: [java.lang.String, org.apache.commons.cli.Option][0m
-  [34mUnused type args: [org.apache.commons.cli.Option][0m
-  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
-  [34mUnused type args: [?][0m
-  [34mUnused type args: [? @ src/main/java/org/apache/commons/cli/TypeHandler.java:49:40][0m
-  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
-  [34mUnused type args: [?][0m
-  [34mUnused type args: [?][0m
-  [34mUnused type args: [? @ src/main/java/org/apache/commons/cli/DefaultParser.java:147:32][0m
-  [34mUnused type args: [?][0m
-  [34mUnused type args: [?][0m
-  [34mUnused type args: [?][0m
-  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
-  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
-  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
-  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
-  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
-  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
-  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
-  [34mUnused type args: [?][0m
-  [34mUnused type args: [? @ src/main/java/org/apache/commons/cli/MissingOptionException.java:84:24][0m
-  [34mUnused type args: [?][0m
-  [34mUnused type args: [?][0m
-  [34mUnused type args: [?][0m
-  [34mUnused type args: [?][0m
-  [34mUnused type args: [?][0m
-  [34mUnused type args: [java.lang.String][0m
-  [34mUnused type args: [java.lang.String][0m
-  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
-  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
-  [34mUnused type args: [org.apache.commons.cli.Option][0m
-  [34mUnused type args: [org.apache.commons.cli.Option][0m
-  [34mUnused type args: [? @ src/main/java/org/apache/commons/cli/TypeHandler.java:115:15][0m
-  [34mUnused type args: [?][0m
-  [34mUnused type args: [?][0m
-  [34mUnused type args: [?][0m
-  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
-  [34mUnused type args: [?][0m
-  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
-  [34mUnused type args: [?][0m
-[34mFinished process pending packages (3.284275s)[0m
+[34mFinished process pending packages (3.610755s)[0m
 [34mStarting short validation...[0m
   [34mStarting performShortValidation...[0m
-  [34mFinished performShortValidation (0.002623s)[0m
-[34mFinished short validation (0.004253s)[0m
+  [34mFinished performShortValidation (0.008369s)[0m
+[34mFinished short validation (0.009787s)[0m
 [34mStarting consolidate constructs...[0m
   Consolidating all constructs
     Removed 692 collisions
     Removed 0 collisions
-[34mFinished consolidate constructs (0.064426s)[0m
+[34mFinished consolidate constructs (0.061991s)[0m
 [34mStarting connect nests...[0m
-[34mFinished connect nests (0.001291s)[0m
+[34mFinished connect nests (0.001698s)[0m
 [34mStarting collect package declarations...[0m
-[34mFinished collect package declarations (0.314374s)[0m
+[34mFinished collect package declarations (0.420717s)[0m
 [34mStarting addImports from usage...[0m
-[34mFinished addImports from usage (0.004938s)[0m
+[34mFinished addImports from usage (0.001761s)[0m
 [34mStarting remove empty packages...[0m
-[34mFinished remove empty packages (0.001499s)[0m
+[34mFinished remove empty packages (0.001385s)[0m
 [34mStarting performValidation...[0m
-[34mFinished performValidation (0.912856s)[0m
-[34mFinished Abstraction (13.481007s)[0m
+[34mFinished performValidation (0.926517s)[0m
+[34mFinished Abstraction (14.201418s)[0m
 Success

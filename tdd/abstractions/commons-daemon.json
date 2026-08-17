@@ -78,7 +78,7 @@
     { "type": "basic3" },
     { "type": "basic5" },
     { "type": "interfaceDecl1" },
-    { "type": "interfaceDecl11" },
+    { "type": "interfaceDecl10" },
     { "type": "interfaceDesc17" },
     { "type": "interfaceInst1" },
     { "type": "interfaceInst3" },
@@ -113,7 +113,7 @@
     { "name": "arg0", "type": "basic3" },
     { "name": "arg0", "type": "basic5" },
     { "name": "arg0", "type": "interfaceDecl1" },
-    { "name": "arg0", "type": "interfaceDecl7" },
+    { "name": "arg0", "type": "interfaceDecl6" },
     { "name": "arg0", "type": "interfaceDesc17" },
     { "name": "arg0", "type": "interfaceInst1" },
     { "name": "arg0", "type": "interfaceInst3" },
@@ -145,8 +145,8 @@
     { "name": "cause", "type": "object41" },
     { "name": "className", "type": "basic5" },
     { "name": "cn", "type": "basic5" },
-    { "name": "context", "type": "interfaceDecl10" },
-    { "name": "controller", "type": "interfaceDecl11" },
+    { "name": "context", "type": "interfaceDecl9" },
+    { "name": "controller", "type": "interfaceDecl10" },
     { "name": "exception", "type": "object14" },
     { "name": "fileName", "type": "basic5" },
     { "name": "index", "type": "basic3" },
@@ -212,7 +212,7 @@
     { "name": "configurationProperties", "type": "object35", "vis": "private" },
     { "name": "controller", "type": "object7", "vis": "private" },
     { "name": "daemon", "type": "interfaceDesc17", "vis": "private" },
-    { "name": "daemonController", "type": "interfaceDecl11", "vis": "private" },
+    { "name": "daemonController", "type": "interfaceDecl10", "vis": "private" },
     { "name": "depth", "type": "basic3", "vis": "private" },
     { "name": "desc", "type": "basic5", "vis": "private" },
     { "name": "destroy", "type": "object23", "vis": "private" },
@@ -235,7 +235,7 @@
     { "name": "systemProperties", "type": "object35", "vis": "private" },
     { "name": "type", "type": "basic3", "vis": "private" }
   ],
-  "groupId": "org.apache.commons.daemon",
+  "groupId": "commons-daemon",
   "interfaceDecls": [
     {
       "interface": 6,
@@ -246,7 +246,6 @@
     { "interface": 17, "name": "AnnotatedElement", "package": 5, "shadow": true, "vis": "public" },
     { "interface": 17, "name": "Appendable", "package": 3, "shadow": true, "vis": "public" },
     { "interface": 17, "name": "CharSequence", "package": 3, "shadow": true, "vis": "public" },
-    { "interface": 17, "name": "Cloneable", "package": 3, "shadow": true, "vis": "public" },
     { "interface": 17, "name": "Closeable", "package": 2, "shadow": true, "vis": "public" },
     {
       "interface": 17,
@@ -291,7 +290,6 @@
     { "interface": 17, "name": "ObjectInput", "package": 2, "shadow": true, "vis": "public" },
     { "interface": 17, "name": "ObjectOutput", "package": 2, "shadow": true, "vis": "public" },
     { "interface": 17, "name": "ObjectStreamConstants", "package": 2, "shadow": true, "vis": "public" },
-    { "interface": 17, "name": "RandomAccess", "package": 8, "shadow": true, "vis": "public" },
     { "interface": 17, "name": "Serializable", "package": 2, "shadow": true, "vis": "public" },
     {
       "interface": 17,
@@ -387,27 +385,27 @@
       "resolved": 5
     },
     {
-      "generic": 7,
+      "generic": 6,
       "instanceTypes": [ "basic5" ],
       "resolved": 17
     },
     {
-      "generic": 18,
+      "generic": 17,
       "instanceTypes": [ "basic5" ],
       "resolved": 17
     },
     {
-      "generic": 18,
+      "generic": 17,
       "instanceTypes": [ "object41" ],
       "resolved": 17
     },
     {
-      "generic": 18,
+      "generic": 17,
       "instanceTypes": [ "typeParam3" ],
       "resolved": 17
     },
     {
-      "generic": 24,
+      "generic": 22,
       "instanceTypes": [ "object41" ],
       "resolved": 17
     }
@@ -885,7 +883,7 @@
       "lineCount": 120,
       "loc": 881,
       "pmdCyclo": 15,
-      "reads": [ "basic1", "basic2", "basic3", "basic5", "interfaceDecl10", "interfaceDecl11", "interfaceDesc17", "interfaceInst1", "interfaceInst2", "interfaceInst5", "object3", "object4", "object5", "object6", "object7", "object9", "object10", "object12", "object14", "object21", "object23", "object25", "object26", "object32", "object40", "object41", "objectInst2", "objectInst3", "selection31", "selection32", "selection35", "selection36", "selection37", "selection44", "selection45", "selection47" ],
+      "reads": [ "basic1", "basic2", "basic3", "basic5", "interfaceDecl9", "interfaceDecl10", "interfaceDesc17", "interfaceInst1", "interfaceInst2", "interfaceInst5", "object3", "object4", "object5", "object6", "object7", "object9", "object10", "object12", "object14", "object21", "object23", "object25", "object26", "object32", "object40", "object41", "objectInst2", "objectInst3", "selection31", "selection32", "selection35", "selection36", "selection37", "selection44", "selection45", "selection47" ],
       "writes": [ "basic1", "basic5", "interfaceDesc17", "interfaceInst1", "interfaceInst2", "interfaceInst5", "object4", "object6", "object7", "object23", "object41", "objectInst2", "selection31", "selection32", "selection35", "selection37", "selection44", "selection45", "selection47" ]
     },
     {
@@ -1019,7 +1017,7 @@
       "lineCount": 4,
       "loc": 1167,
       "pmdCyclo": 1,
-      "reads": [ "interfaceDecl11", "object6", "object10", "selection33" ]
+      "reads": [ "interfaceDecl10", "object6", "object10", "selection33" ]
     },
     {
       "codeCount": 4,
@@ -1028,9 +1026,9 @@
       "lineCount": 4,
       "loc": 1172,
       "pmdCyclo": 1,
-      "reads": [ "interfaceDecl11", "object6", "object10", "selection33" ],
+      "reads": [ "interfaceDecl10", "object6", "object10", "selection33" ],
       "setter": true,
-      "writes": [ "interfaceDecl11", "selection33" ]
+      "writes": [ "interfaceDecl10", "selection33" ]
     },
     {
       "codeCount": 4,
@@ -1072,7 +1070,7 @@
       "lineCount": 79,
       "loc": 1268,
       "pmdCyclo": 24,
-      "reads": [ "basic1", "basic3", "basic5", "interfaceDecl10", "interfaceDesc17", "interfaceInst1", "object8", "object12", "object18", "object22", "object40", "selection1", "selection15", "selection16", "selection18", "selection19", "selection20", "selection28", "selection29", "selection43", "selection46" ],
+      "reads": [ "basic1", "basic3", "basic5", "interfaceDecl9", "interfaceDesc17", "interfaceInst1", "object8", "object12", "object18", "object22", "object40", "selection1", "selection15", "selection16", "selection18", "selection19", "selection20", "selection28", "selection29", "selection43", "selection46" ],
       "writes": [ "basic3", "basic5", "interfaceInst1", "selection29" ]
     },
     {
@@ -1142,7 +1140,7 @@
       "lineCount": 11,
       "loc": 1400,
       "pmdCyclo": 3,
-      "reads": [ "basic1", "basic3", "basic5", "interfaceDecl7", "interfaceDesc17", "interfaceInst1", "interfaceInst2", "interfaceInst7", "object1", "object2", "object12", "object22", "objectInst1", "selection24", "typeParam1" ],
+      "reads": [ "basic1", "basic3", "basic5", "interfaceDecl6", "interfaceDesc17", "interfaceInst1", "interfaceInst2", "interfaceInst7", "object1", "object2", "object12", "object22", "objectInst1", "selection24", "typeParam1" ],
       "writes": [ "interfaceInst1", "objectInst1", "selection24" ]
     },
     {
@@ -1479,31 +1477,31 @@
     },
     {
       "imports": [ 2 ],
-      "interfaces": [ 6, 19, 20, 21, 23 ],
+      "interfaces": [ 5, 18, 19, 20, 21 ],
       "methods": [ 10, 29, 79 ],
       "name": "java.io",
       "objects": [ 15, 16, 17, 20, 27, 28, 32, 34 ]
     },
     {
       "imports": [ 3 ],
-      "interfaces": [ 3, 4, 5, 8 ],
+      "interfaces": [ 3, 4, 7 ],
       "methods": [ 2, 11, 12, 14, 17, 22, 23, 24, 26, 34, 36, 37, 46, 48, 50, 52, 53, 54, 59, 61, 64, 65, 69, 71, 75, 76, 78, 95, 96, 98, 99, 101 ],
       "name": "java.lang",
       "objects": [ 3, 4, 5, 13, 14, 18, 19, 25, 26, 33, 36, 37, 38, 40, 41 ]
     },
     {
-      "interfaces": [ 26 ],
+      "interfaces": [ 24 ],
       "name": "java.lang.invoke"
     },
     {
-      "interfaces": [ 2, 16, 25 ],
+      "interfaces": [ 2, 15, 23 ],
       "methods": [ 51, 58, 67 ],
       "name": "java.lang.reflect",
       "objects": [ 21, 23, 24 ]
     },
     {
       "imports": [ 6 ],
-      "interfaces": [ 17 ],
+      "interfaces": [ 16 ],
       "name": "java.security",
       "objects": [ 30, 31 ]
     },
@@ -1514,13 +1512,13 @@
     },
     {
       "imports": [ 8 ],
-      "interfaces": [ 7, 14, 15, 18, 22, 24 ],
+      "interfaces": [ 6, 13, 14, 17, 22 ],
       "methods": [ 1, 16, 18, 19, 20, 25, 28, 55, 60, 72, 77, 90, 97 ],
       "name": "java.util",
       "objects": [ 1, 2, 35, 39 ]
     },
     {
-      "interfaces": [ 9, 10, 11, 12, 13 ],
+      "interfaces": [ 8, 9, 10, 11, 12 ],
       "methods": [ 5, 6, 7, 8, 30, 31, 35, 44, 49, 62, 63, 86, 100 ],
       "name": "org.apache.commons.daemon",
       "objects": [ 9, 11 ]

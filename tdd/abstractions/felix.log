@@ -1,7 +1,7 @@
 # cmd: java -jar /Users/grantnelson/go/src/github.com/MSUSEL/msusel-tdmetrics-go/javaAbstractor/target/abstractor-0.1-jar-with-dependencies.jar -i /Users/grantnelson/go/src/github.com/apache/felix/ -o /Users/grantnelson/go/src/github.com/MSUSEL/msusel-tdmetrics-go/tdd/abstractions/felix.json -v
 # cwd: /Users/grantnelson/go/src/github.com/MSUSEL/msusel-tdmetrics-go/tdd
 # repo: /Users/grantnelson/go/src/github.com/apache/felix @ bdb6cb5cac0d81e9cd3fda666065e0e577eb9c41
-# started: 2026-07-28T01:55:05.525565+00:00
+# started: 2026-08-17T18:33:26.675621+00:00
 # timeout_min: 10
 # ---
 Reading /Users/grantnelson/go/src/github.com/apache/felix/
@@ -28,6 +28,6 @@ Exception in thread "main" org.eclipse.jdt.internal.compiler.problem.AbortCompil
 	at spoon.support.compiler.jdt.JDTBasedSpoonCompiler.build(JDTBasedSpoonCompiler.java:118)
 	at spoon.support.compiler.jdt.JDTBasedSpoonCompiler.build(JDTBasedSpoonCompiler.java:101)
 	at spoon.Launcher.buildModel(Launcher.java:781)
-	at abstractor.core.Abstractor.prepareMavenProject(Abstractor.java:71)
+	at abstractor.core.Abstractor.prepareMavenProject(Abstractor.java:72)
 	at abstractor.app.App.run(App.java:25)
 	at abstractor.app.App.main(App.java:17)

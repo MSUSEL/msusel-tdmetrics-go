@@ -1,19 +1,171 @@
 # cmd: java -jar /Users/grantnelson/go/src/github.com/MSUSEL/msusel-tdmetrics-go/javaAbstractor/target/abstractor-0.1-jar-with-dependencies.jar -i /Users/grantnelson/go/src/github.com/apache/commons-fileupload/ -o /Users/grantnelson/go/src/github.com/MSUSEL/msusel-tdmetrics-go/tdd/abstractions/commons-fileupload.json -v
 # cwd: /Users/grantnelson/go/src/github.com/MSUSEL/msusel-tdmetrics-go/tdd
 # repo: /Users/grantnelson/go/src/github.com/apache/commons-fileupload @ cae90facebc54803232a0593003914ca77193a73
-# started: 2026-07-28T01:08:13.010073+00:00
+# started: 2026-08-17T18:29:20.808747+00:00
 # timeout_min: 10
 # ---
 Reading /Users/grantnelson/go/src/github.com/apache/commons-fileupload/
 SLF4J(W): No SLF4J providers were found.
 SLF4J(W): Defaulting to no-operation (NOP) logger implementation
 SLF4J(W): See https://www.slf4j.org/codes.html#noProviders for further details.
-Exception in thread "main" spoon.compiler.ModelBuildingException: The import javax.portlet cannot be resolved at /Users/grantnelson/go/src/github.com/apache/commons-fileupload/src/main/java/org/apache/commons/fileupload/portlet/PortletRequestContext.java:24
-	at spoon.support.compiler.jdt.JDTBasedSpoonCompiler.report(JDTBasedSpoonCompiler.java:664)
-	at spoon.support.compiler.jdt.JDTBasedSpoonCompiler.reportProblems(JDTBasedSpoonCompiler.java:646)
-	at spoon.support.compiler.jdt.JDTBasedSpoonCompiler.build(JDTBasedSpoonCompiler.java:120)
-	at spoon.support.compiler.jdt.JDTBasedSpoonCompiler.build(JDTBasedSpoonCompiler.java:101)
-	at spoon.Launcher.buildModel(Launcher.java:781)
-	at abstractor.core.Abstractor.prepareMavenProject(Abstractor.java:55)
-	at abstractor.app.App.run(App.java:25)
+Init pending package <unnamed>
+Init pending package org
+Init pending package org.apache
+Init pending package org.apache.commons
+Init pending package org.apache.commons.fileupload
+Init pending package org.apache.commons.fileupload.disk
+Init pending package org.apache.commons.fileupload.portlet
+Init pending package org.apache.commons.fileupload.servlet
+Init pending package org.apache.commons.fileupload.util
+Init pending package org.apache.commons.fileupload.util.mime
+[34mStarting process pending packages...[0m
+  Pending package org.apache.commons.fileupload
+  Pending package java.util
+  Pending package java.io
+  getting parent type for (CtClassImpl) ProgressNotifier @ src/main/java/org/apache/commons/fileupload/MultipartStream.java:90:25
+  Pending package java.lang
+  Pending package java.lang
+  getting parent type for (CtClassImpl) MalformedStreamException @ src/main/java/org/apache/commons/fileupload/MultipartStream.java:754:25
+  getting parent type for (CtClassImpl) PrintStreamOrWriter
+  Pending package java.io
+  Pending package java.util
+  getting parent type for (CtClassImpl) IllegalBoundaryException @ src/main/java/org/apache/commons/fileupload/MultipartStream.java:784:25
+  getting parent type for (CtClassImpl) ItemInputStream @ src/main/java/org/apache/commons/fileupload/MultipartStream.java:814:18
+  getting parent type for (CtClassImpl) FileItemStreamImpl @ src/main/java/org/apache/commons/fileupload/FileUploadBase.java:713:15
+  getting parent type for (CtClassImpl) FileItemIteratorImpl @ src/main/java/org/apache/commons/fileupload/FileUploadBase.java:708:19
+  getting parent type for (CtClassImpl) ItemSkippedException @ src/main/java/org/apache/commons/fileupload/FileItemStream.java:43:25
+  [34mskipping default constructor: org.apache.commons.fileupload.FileItemStream$ItemSkippedException()[0m
+  getting parent type for (CtClassImpl) FileUploadIOException @ src/main/java/org/apache/commons/fileupload/FileUploadBase.java:1142:25
+  getting parent type for (CtClassImpl) InvalidContentTypeException @ src/main/java/org/apache/commons/fileupload/FileUploadBase.java:1182:25
+  getting parent type for (CtClassImpl) IOFileUploadException @ src/main/java/org/apache/commons/fileupload/FileUploadBase.java:1225:25
+  getting parent type for (CtClassImpl) SizeException @ src/main/java/org/apache/commons/fileupload/FileUploadBase.java:1266:37
+  getting parent type for (CtClassImpl) UnknownSizeException @ src/main/java/org/apache/commons/fileupload/FileUploadBase.java:1327:25
+  getting parent type for (CtClassImpl) SizeLimitExceededException @ src/main/java/org/apache/commons/fileupload/FileUploadBase.java:1358:25
+  getting parent type for (CtClassImpl) FileSizeLimitExceededException @ src/main/java/org/apache/commons/fileupload/FileUploadBase.java:1403:25
+  [34mskipping default constructor: org.apache.commons.fileupload.FileUploadBase()[0m
+  Pending package org.apache.commons.fileupload.util
+  [34mskipping default constructor: org.apache.commons.fileupload.util.FileItemHeadersImpl()[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) javax.servlet.http.HttpServletRequest @ src/main/java/org/apache/commons/fileupload/FileUploadBase.java:98:46[0m
+  [34margument (CtParameterImpl) req @ src/main/java/org/apache/commons/fileupload/FileUploadBase.java:98:65 had a null type. The type likely was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) javax.servlet.http.HttpServletRequest @ src/main/java/org/apache/commons/fileupload/FileUploadBase.java:285:40[0m
+  [34margument (CtParameterImpl) req @ src/main/java/org/apache/commons/fileupload/FileUploadBase.java:285:59 had a null type. The type likely was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) javax.portlet.ActionRequest @ src/main/java/org/apache/commons/fileupload/portlet/PortletFileUpload.java:62:52[0m
+  [34margument (CtParameterImpl) request @ src/main/java/org/apache/commons/fileupload/portlet/PortletFileUpload.java:62:66 had a null type. The type likely was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) javax.portlet.ActionRequest @ src/main/java/org/apache/commons/fileupload/portlet/PortletFileUpload.java:123:58[0m
+  [34margument (CtParameterImpl) request @ src/main/java/org/apache/commons/fileupload/portlet/PortletFileUpload.java:123:72 had a null type. The type likely was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) javax.portlet.ActionRequest @ src/main/java/org/apache/commons/fileupload/portlet/PortletFileUpload.java:105:40[0m
+  [34margument (CtParameterImpl) request @ src/main/java/org/apache/commons/fileupload/portlet/PortletFileUpload.java:105:54 had a null type. The type likely was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) javax.portlet.ActionRequest @ src/main/java/org/apache/commons/fileupload/portlet/PortletFileUpload.java:144:45[0m
+  [34margument (CtParameterImpl) request @ src/main/java/org/apache/commons/fileupload/portlet/PortletFileUpload.java:144:59 had a null type. The type likely was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) javax.portlet.ActionRequest @ src/main/java/org/apache/commons/fileupload/portlet/PortletRequestContext.java:42:19[0m
+  [34mfield (CtFieldImpl) request @ src/main/java/org/apache/commons/fileupload/portlet/PortletRequestContext.java:42:33 had a null type. The type likely was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) javax.portlet.ActionRequest @ src/main/java/org/apache/commons/fileupload/portlet/PortletRequestContext.java:52:34[0m
+  [34margument (CtParameterImpl) request @ src/main/java/org/apache/commons/fileupload/portlet/PortletRequestContext.java:52:48 had a null type. The type likely was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [java.lang.String @ src/main/java/org/apache/commons/fileupload/util/FileItemHeadersImpl.java:53:14][0m
+  [34mUnused type args: [java.lang.String, java.util.List][0m
+  [34mUnused type args: [java.lang.String][0m
+  [34mUnused type args: [java.lang.String][0m
+  [34mUnused type args: [java.lang.String][0m
+  [34mUnused type args: [java.lang.String][0m
+  [34mUnused type args: [org.apache.commons.fileupload.FileItem @ src/main/java/org/apache/commons/fileupload/FileUploadBase.java:390:20][0m
+  [34mUnused type args: [org.apache.commons.fileupload.FileItem][0m
+  [34mUnused type args: [java.lang.String @ src/main/java/org/apache/commons/fileupload/FileUploadBase.java:391:19, java.util.List @ src/main/java/org/apache/commons/fileupload/FileUploadBase.java:391:27][0m
+  [34mUnused type args: [org.apache.commons.fileupload.FileItem @ src/main/java/org/apache/commons/fileupload/FileUploadBase.java:391:32][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [java.lang.String @ src/main/java/org/apache/commons/fileupload/FileUploadBase.java:391:66, java.util.List @ src/main/java/org/apache/commons/fileupload/FileUploadBase.java:391:74][0m
+  [34mUnused type args: [org.apache.commons.fileupload.FileItem @ src/main/java/org/apache/commons/fileupload/FileUploadBase.java:391:79][0m
+  [34mUnused type args: [org.apache.commons.fileupload.FileItem][0m
+  [34mUnused type args: [org.apache.commons.fileupload.FileItem][0m
+  [34mUnused type args: [org.apache.commons.fileupload.FileItem @ src/main/java/org/apache/commons/fileupload/FileUploadBase.java:395:18][0m
+  [34mUnused type args: [java.lang.String, java.util.List][0m
+  [34mUnused type args: [org.apache.commons.fileupload.FileItem][0m
+  [34mUnused type args: [org.apache.commons.fileupload.FileItem][0m
+  [34mUnused type args: [org.apache.commons.fileupload.FileItem][0m
+  [34mUnused type args: [org.apache.commons.fileupload.FileItem][0m
+  [34mUnused type args: [org.apache.commons.fileupload.FileItem][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [org.apache.commons.fileupload.FileItem @ src/main/java/org/apache/commons/fileupload/FileUploadBase.java:398:45][0m
+  [34mUnused type args: [java.lang.String, java.util.List][0m
+  [34mUnused type args: [org.apache.commons.fileupload.FileItem][0m
+  [34mUnused type args: [org.apache.commons.fileupload.FileItem][0m
+  [34mUnused type args: [org.apache.commons.fileupload.FileItem][0m
+  [34mUnused type args: [org.apache.commons.fileupload.FileItem][0m
+  [34mUnused type args: [java.lang.String, java.util.List][0m
+  [34mUnused type args: [org.apache.commons.fileupload.FileItem][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [java.lang.String @ src/main/java/org/apache/commons/fileupload/util/FileItemHeadersImpl.java:72:14][0m
+  [34mUnused type args: [java.lang.String, java.util.List][0m
+  [34mUnused type args: [java.lang.String][0m
+  [34mUnused type args: [java.lang.String][0m
+  [34mUnused type args: [java.lang.String][0m
+  [34mUnused type args: [java.lang.String][0m
+  [34mUnused type args: [java.lang.String][0m
+  [34mUnused type args: [java.lang.String][0m
+  [34mUnused type args: [java.lang.String][0m
+  [34mUnused type args: [java.lang.String][0m
+  [34mUnused type args: [java.lang.String][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [java.lang.String @ src/main/java/org/apache/commons/fileupload/FileUploadBase.java:518:17, java.lang.String @ src/main/java/org/apache/commons/fileupload/FileUploadBase.java:518:25][0m
+  [34mUnused type args: [java.lang.String, java.lang.String][0m
+  [34mUnused type args: [java.lang.String, java.lang.String][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring anonymous type: (CtTypeReferenceImpl) org.apache.commons.fileupload.FileUploadBase$FileItemIteratorImpl$FileItemStreamImpl$1[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring anonymous type: (CtTypeReferenceImpl) org.apache.commons.fileupload.FileUploadBase$FileItemIteratorImpl$FileItemStreamImpl$1[0m
+  [34mIgnoring anonymous object declaration: (CtClassImpl) 1 @ src/main/java/org/apache/commons/fileupload/FileUploadBase.java:781:76[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring method of an anonymous declaring type: (CtMethodImpl) raiseError @ src/main/java/org/apache/commons/fileupload/FileUploadBase.java:783:40 in (CtClassImpl) 1 @ src/main/java/org/apache/commons/fileupload/FileUploadBase.java:781:76[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) javax.portlet.ActionRequest[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) javax.portlet.ActionRequest[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+[34mFinished process pending packages (2.080432s)[0m
+Exception in thread "main" java.lang.Exception: Error while processing metrics (CtConstructorImpl) <init> @ src/main/java/org/apache/commons/fileupload/portlet/PortletRequestContext.java:52:12: {
+  elem: "(CtConstructorImpl) <init> @ src/main/java/org/apache/commons/fileupload/portlet/PortletRequestContext.java:52:12",
+}
+	at abstractor.core.constructs.Factory.create(Factory.java:132)
+	at abstractor.core.constructs.Factory.create(Factory.java:147)
+	at abstractor.core.Abstractor.addMetrics(Abstractor.java:962)
+	at abstractor.core.Abstractor.processPendingMetrics(Abstractor.java:1392)
+	at abstractor.core.Abstractor.processPendingPackages(Abstractor.java:1346)
+	at abstractor.core.Abstractor.lambda$performAbstraction$40(Abstractor.java:1332)
+	at abstractor.core.log.Logger.measure(Logger.java:123)
+	at abstractor.core.Abstractor.performAbstraction(Abstractor.java:1332)
+	at abstractor.app.App.run(App.java:26)
 	at abstractor.app.App.main(App.java:17)
+Caused by: java.lang.NullPointerException: Cannot invoke "spoon.reflect.reference.CtTypeReference.isPrimitive()" because "tr" is null
+	at abstractor.core.spoonUtils.SpoonUtils.isVoid(SpoonUtils.java:165)
+	at abstractor.core.tools.Analyzer.addAssignmentUsage(Analyzer.java:460)
+	at abstractor.core.tools.Analyzer.addUsage(Analyzer.java:398)
+	at abstractor.core.tools.Analyzer.addElement(Analyzer.java:133)
+	at abstractor.core.tools.Analyzer.addMethod(Analyzer.java:111)
+	at abstractor.core.Abstractor.lambda$addMetrics$31(Abstractor.java:967)
+	at abstractor.core.constructs.Factory.lambda$create$1(Factory.java:147)
+	at abstractor.core.constructs.Factory.create(Factory.java:109)
+	... 9 more

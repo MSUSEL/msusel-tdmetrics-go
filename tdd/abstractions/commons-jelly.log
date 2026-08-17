@@ -1,12 +1,129 @@
 # cmd: java -jar /Users/grantnelson/go/src/github.com/MSUSEL/msusel-tdmetrics-go/javaAbstractor/target/abstractor-0.1-jar-with-dependencies.jar -i /Users/grantnelson/go/src/github.com/apache/commons-jelly/ -o /Users/grantnelson/go/src/github.com/MSUSEL/msusel-tdmetrics-go/tdd/abstractions/commons-jelly.json -v
 # cwd: /Users/grantnelson/go/src/github.com/MSUSEL/msusel-tdmetrics-go/tdd
 # repo: /Users/grantnelson/go/src/github.com/apache/commons-jelly @ 48c008cc2328402e0976295625b32c5197ba2324
-# started: 2026-07-28T01:08:46.321461+00:00
+# started: 2026-08-17T18:29:32.202998+00:00
 # timeout_min: 10
 # ---
 Reading /Users/grantnelson/go/src/github.com/apache/commons-jelly/
 SLF4J(W): No SLF4J providers were found.
 SLF4J(W): Defaulting to no-operation (NOP) logger implementation
 SLF4J(W): See https://www.slf4j.org/codes.html#noProviders for further details.
-
-# TIMED OUT after 10 minutes
+Init pending package <unnamed>
+Init pending package org
+Init pending package org.apache
+Init pending package org.apache.commons
+Init pending package org.apache.commons.jelly
+Init pending package org.apache.commons.jelly.expression
+Init pending package org.apache.commons.jelly.expression.jexl
+Init pending package org.apache.commons.jelly.expression.xpath
+Init pending package org.apache.commons.jelly.impl
+Init pending package org.apache.commons.jelly.parser
+Init pending package org.apache.commons.jelly.servlet
+Init pending package org.apache.commons.jelly.tags
+Init pending package org.apache.commons.jelly.tags.core
+Init pending package org.apache.commons.jelly.tags.ant
+Init pending package org.apache.commons.jelly.tags.antlr
+Init pending package org.apache.commons.jelly.tags.bean
+Init pending package org.apache.commons.jelly.tags.beanshell
+Init pending package org.apache.commons.jelly.tags.betwixt
+Init pending package org.apache.commons.jelly.tags.bsf
+Init pending package org.apache.commons.jelly.tags.define
+Init pending package org.apache.commons.jelly.tags.dynabean
+Init pending package org.apache.commons.jelly.tags.email
+Init pending package org.apache.commons.jelly.tags.fmt
+Init pending package org.apache.commons.jelly.tags.html
+Init pending package org.apache.commons.jelly.tags.http
+Init pending package org.apache.commons.jelly.tags.interaction
+Init pending package org.apache.commons.jelly.tags.jaxme
+Init pending package org.apache.commons.jelly.tags.jetty
+Init pending package org.apache.commons.jelly.tags.jface
+Init pending package org.apache.commons.jelly.tags.jface.impl
+Init pending package org.apache.commons.jelly.tags.jface.preference
+Init pending package org.apache.commons.jelly.tags.jface.window
+Init pending package org.apache.commons.jelly.tags.jface.wizard
+Init pending package org.apache.commons.jelly.tags.jms
+Init pending package org.apache.commons.jelly.tags.jmx
+Init pending package org.apache.commons.jelly.tags.jsl
+Init pending package org.apache.commons.jelly.tags.junit
+Init pending package org.apache.commons.jelly.tags.log
+Init pending package org.apache.commons.jelly.tags.memory
+Init pending package org.apache.commons.jelly.tags.ojb
+Init pending package org.apache.commons.jelly.tags.quartz
+Init pending package org.apache.commons.jelly.tags.regexp
+Init pending package org.apache.commons.jelly.tags.soap
+Init pending package org.apache.commons.jelly.tags.sql
+Init pending package org.apache.commons.jelly.tags.swing
+Init pending package org.apache.commons.jelly.tags.swing.converters
+Init pending package org.apache.commons.jelly.tags.swing.impl
+Init pending package org.apache.commons.jelly.tags.swing.model
+Init pending package org.apache.commons.jelly.tags.swt
+Init pending package org.apache.commons.jelly.tags.swt.converters
+Init pending package org.apache.commons.jelly.tags.threads
+Init pending package org.apache.commons.jelly.tags.util
+Init pending package org.apache.commons.jelly.tags.validate
+Init pending package org.apache.commons.jelly.tags.velocity
+Init pending package org.apache.commons.jelly.tags.xml
+Init pending package org.apache.commons.jelly.tags.xmlunit
+Init pending package org.apache.commons.jelly.test
+Init pending package org.apache.commons.jelly.util
+Init pending package org.apache.commons.jelly.xpath
+Init pending package org.apache.commons.jelly.task
+Init pending package org.apache.commons.jelly.avalon
+Init pending package javax
+Init pending package javax.servlet
+Init pending package javax.servlet.jsp
+Init pending package javax.servlet.jsp.jstl
+Init pending package javax.servlet.jsp.jstl.sql
+[34mStarting process pending packages...[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.eclipse.jface.window.ApplicationWindow @ jelly-tags/jface/src/main/java/org/apache/commons/jelly/tags/jface/impl/ApplicationWindowImpl.java:29:44[0m
+[34mFinished process pending packages (0.028051s)[0m
+Exception in thread "main" java.lang.Exception: Error while processing package org.apache.commons.jelly.tags.jface.impl: {
+  elem: org.apache.commons.jelly.tags.jface.impl,
+}
+	at abstractor.core.constructs.Factory.create(Factory.java:132)
+	at abstractor.core.constructs.Factory.create(Factory.java:139)
+	at abstractor.core.Abstractor.processPackage(Abstractor.java:1351)
+	at abstractor.core.Abstractor.processPendingPackages(Abstractor.java:1345)
+	at abstractor.core.Abstractor.lambda$performAbstraction$40(Abstractor.java:1332)
+	at abstractor.core.log.Logger.measure(Logger.java:123)
+	at abstractor.core.Abstractor.performAbstraction(Abstractor.java:1332)
+	at abstractor.app.App.run(App.java:26)
+	at abstractor.app.App.main(App.java:17)
+Caused by: java.lang.Exception: Error while processing object decl (CtClassImpl) ApplicationWindowImpl @ jelly-tags/jface/src/main/java/org/apache/commons/jelly/tags/jface/impl/ApplicationWindowImpl.java:29:14: {
+  elem: "(CtClassImpl) ApplicationWindowImpl @ jelly-tags/jface/src/main/java/org/apache/commons/jelly/tags/jface/impl/ApplicationWindowImpl.java:29:14",
+}
+	at abstractor.core.constructs.Factory.create(Factory.java:132)
+	at abstractor.core.constructs.Factory.create(Factory.java:139)
+	at abstractor.core.Abstractor.addObjectDecl(Abstractor.java:985)
+	at abstractor.core.Abstractor.addDeclaration(Abstractor.java:176)
+	at abstractor.core.Abstractor.lambda$processPackage$48(Abstractor.java:1360)
+	at abstractor.core.constructs.Factory.create(Factory.java:127)
+	... 8 more
+Caused by: java.lang.Exception: Error while processing struct (CtClassImpl) ApplicationWindowImpl @ jelly-tags/jface/src/main/java/org/apache/commons/jelly/tags/jface/impl/ApplicationWindowImpl.java:29:14: {
+  elem: "(CtClassImpl) ApplicationWindowImpl @ jelly-tags/jface/src/main/java/org/apache/commons/jelly/tags/jface/impl/ApplicationWindowImpl.java:29:14",
+}
+	at abstractor.core.constructs.Factory.create(Factory.java:132)
+	at abstractor.core.constructs.Factory.create(Factory.java:143)
+	at abstractor.core.Abstractor.addStructDesc(Abstractor.java:757)
+	at abstractor.core.Abstractor.lambda$addObjectDecl$32(Abstractor.java:991)
+	at abstractor.core.constructs.Factory.lambda$create$0(Factory.java:139)
+	at abstractor.core.constructs.Factory.create(Factory.java:109)
+	... 13 more
+Caused by: java.lang.Exception: Error while processing field $super: {
+  elem: "(CtTypeReferenceImpl) org.eclipse.jface.window.ApplicationWindow @ jelly-tags/jface/src/main/java/org/apache/commons/jelly/tags/jface/impl/ApplicationWindowImpl.java:29:44",
+}
+	at abstractor.core.constructs.Factory.create(Factory.java:132)
+	at abstractor.core.constructs.Factory.create(Factory.java:147)
+	at abstractor.core.Abstractor.addField(Abstractor.java:815)
+	at abstractor.core.Abstractor.lambda$addStructDesc$23(Abstractor.java:772)
+	at abstractor.core.constructs.Factory.create(Factory.java:109)
+	... 18 more
+Caused by: abstractor.core.AbstractorException: a field must have a non-null type
+	at abstractor.core.require.Require.fail(Require.java:19)
+	at abstractor.core.require.Require.require(Require.java:24)
+	at abstractor.core.require.Require.notNull(Require.java:59)
+	at abstractor.core.constructs.Field.<init>(Field.java:20)
+	at abstractor.core.Abstractor.lambda$addField$26(Abstractor.java:819)
+	at abstractor.core.constructs.Factory.lambda$create$1(Factory.java:147)
+	at abstractor.core.constructs.Factory.create(Factory.java:109)
+	... 22 more

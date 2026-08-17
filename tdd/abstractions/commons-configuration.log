@@ -1,19 +1,365 @@
 # cmd: java -jar /Users/grantnelson/go/src/github.com/MSUSEL/msusel-tdmetrics-go/javaAbstractor/target/abstractor-0.1-jar-with-dependencies.jar -i /Users/grantnelson/go/src/github.com/apache/commons-configuration/ -o /Users/grantnelson/go/src/github.com/MSUSEL/msusel-tdmetrics-go/tdd/abstractions/commons-configuration.json -v
 # cwd: /Users/grantnelson/go/src/github.com/MSUSEL/msusel-tdmetrics-go/tdd
 # repo: /Users/grantnelson/go/src/github.com/apache/commons-configuration @ 15b4031ba94a60f20b854e6ce2c7964d77086387
-# started: 2026-07-28T00:47:27.848145+00:00
+# started: 2026-08-17T18:24:04.729993+00:00
 # timeout_min: 10
 # ---
 Reading /Users/grantnelson/go/src/github.com/apache/commons-configuration/
 SLF4J(W): No SLF4J providers were found.
 SLF4J(W): Defaulting to no-operation (NOP) logger implementation
 SLF4J(W): See https://www.slf4j.org/codes.html#noProviders for further details.
-Exception in thread "main" spoon.compiler.ModelBuildingException: The import org.apache.commons.logging cannot be resolved at /Users/grantnelson/go/src/github.com/apache/commons-configuration/src/main/java/org/apache/commons/configuration2/interpol/ConstantLookup.java:24
-	at spoon.support.compiler.jdt.JDTBasedSpoonCompiler.report(JDTBasedSpoonCompiler.java:664)
-	at spoon.support.compiler.jdt.JDTBasedSpoonCompiler.reportProblems(JDTBasedSpoonCompiler.java:646)
-	at spoon.support.compiler.jdt.JDTBasedSpoonCompiler.build(JDTBasedSpoonCompiler.java:120)
-	at spoon.support.compiler.jdt.JDTBasedSpoonCompiler.build(JDTBasedSpoonCompiler.java:101)
-	at spoon.Launcher.buildModel(Launcher.java:781)
-	at abstractor.core.Abstractor.prepareMavenProject(Abstractor.java:55)
-	at abstractor.app.App.run(App.java:25)
+Init pending package <unnamed>
+Init pending package org
+Init pending package org.apache
+Init pending package org.apache.commons
+Init pending package org.apache.commons.configuration2
+Init pending package org.apache.commons.configuration2.beanutils
+Init pending package org.apache.commons.configuration2.builder
+Init pending package org.apache.commons.configuration2.builder.combined
+Init pending package org.apache.commons.configuration2.builder.fluent
+Init pending package org.apache.commons.configuration2.convert
+Init pending package org.apache.commons.configuration2.event
+Init pending package org.apache.commons.configuration2.ex
+Init pending package org.apache.commons.configuration2.interpol
+Init pending package org.apache.commons.configuration2.io
+Init pending package org.apache.commons.configuration2.plist
+Init pending package org.apache.commons.configuration2.reloading
+Init pending package org.apache.commons.configuration2.resolver
+Init pending package org.apache.commons.configuration2.spring
+Init pending package org.apache.commons.configuration2.sync
+Init pending package org.apache.commons.configuration2.tree
+Init pending package org.apache.commons.configuration2.tree.xpath
+Init pending package org.apache.commons.configuration2.web
+[34mStarting process pending packages...[0m
+  Pending package org.apache.commons.configuration2.convert
+  Pending package java.util
+  Pending package java.lang
+  Pending package java.lang.invoke
+  Pending package org.apache.commons.configuration2.interpol
+  Pending package org.apache.commons.lang3.text
+  getting parent type for (CtClassImpl) Builder @ src/main/java/org/apache/commons/configuration2/interpol/InterpolatorSpecification.java:143:25
+  Pending package java.util.concurrent.atomic
+  Pending package org.apache.commons.configuration2.sync
+  Pending package org.apache.commons.configuration2.io
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.logging.Log @ src/main/java/org/apache/commons/configuration2/io/ConfigurationLogger.java:57:19[0m
+  [34mfield (CtFieldImpl) log @ src/main/java/org/apache/commons/configuration2/io/ConfigurationLogger.java:57:23 had a null type. The type likely was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.logging.Log @ src/main/java/org/apache/commons/configuration2/io/ConfigurationLogger.java:102:25[0m
+  [34margument (CtParameterImpl) wrapped @ src/main/java/org/apache/commons/configuration2/io/ConfigurationLogger.java:102:29 had a null type. The type likely was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.logging.Log @ src/main/java/org/apache/commons/configuration2/io/ConfigurationLogger.java:205:5[0m
+  [34margument (CtTypeReferenceImpl) org.apache.commons.logging.Log @ src/main/java/org/apache/commons/configuration2/io/ConfigurationLogger.java:205:5 had a null type. The type likely was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.logging.Log @ src/main/java/org/apache/commons/configuration2/io/ConfigurationLogger.java:235:20[0m
+  [34margument (CtTypeReferenceImpl) org.apache.commons.logging.Log @ src/main/java/org/apache/commons/configuration2/io/ConfigurationLogger.java:235:20 had a null type. The type likely was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.logging.Log @ src/main/java/org/apache/commons/configuration2/io/ConfigurationLogger.java:218:20[0m
+  [34margument (CtTypeReferenceImpl) org.apache.commons.logging.Log @ src/main/java/org/apache/commons/configuration2/io/ConfigurationLogger.java:218:20 had a null type. The type likely was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.[0m
+  Pending package org.apache.commons.configuration2.event
+[34mFinished process pending packages (0.435982s)[0m
+Exception in thread "main" java.lang.Exception: Error while processing package org.apache.commons.configuration2: {
+  elem: org.apache.commons.configuration2,
+}
+	at abstractor.core.constructs.Factory.create(Factory.java:132)
+	at abstractor.core.constructs.Factory.create(Factory.java:139)
+	at abstractor.core.Abstractor.processPackage(Abstractor.java:1351)
+	at abstractor.core.Abstractor.processPendingPackages(Abstractor.java:1345)
+	at abstractor.core.Abstractor.lambda$performAbstraction$40(Abstractor.java:1332)
+	at abstractor.core.log.Logger.measure(Logger.java:123)
+	at abstractor.core.Abstractor.performAbstraction(Abstractor.java:1332)
+	at abstractor.app.App.run(App.java:26)
 	at abstractor.app.App.main(App.java:17)
+Caused by: java.lang.Exception: Error while processing object decl (CtClassImpl) AbstractConfiguration @ src/main/java/org/apache/commons/configuration2/AbstractConfiguration.java:102:23: {
+  elem: "(CtClassImpl) AbstractConfiguration @ src/main/java/org/apache/commons/configuration2/AbstractConfiguration.java:102:23",
+}
+	at abstractor.core.constructs.Factory.create(Factory.java:132)
+	at abstractor.core.constructs.Factory.create(Factory.java:139)
+	at abstractor.core.Abstractor.addObjectDecl(Abstractor.java:985)
+	at abstractor.core.Abstractor.addDeclaration(Abstractor.java:176)
+	at abstractor.core.Abstractor.lambda$processPackage$48(Abstractor.java:1360)
+	at abstractor.core.constructs.Factory.create(Factory.java:127)
+	... 8 more
+Caused by: java.lang.Exception: Error while processing struct (CtClassImpl) AbstractConfiguration @ src/main/java/org/apache/commons/configuration2/AbstractConfiguration.java:102:23: {
+  elem: "(CtClassImpl) AbstractConfiguration @ src/main/java/org/apache/commons/configuration2/AbstractConfiguration.java:102:23",
+}
+	at abstractor.core.constructs.Factory.create(Factory.java:132)
+	at abstractor.core.constructs.Factory.create(Factory.java:143)
+	at abstractor.core.Abstractor.addStructDesc(Abstractor.java:757)
+	at abstractor.core.Abstractor.lambda$addObjectDecl$32(Abstractor.java:991)
+	at abstractor.core.constructs.Factory.lambda$create$0(Factory.java:139)
+	at abstractor.core.constructs.Factory.create(Factory.java:109)
+	... 13 more
+Caused by: java.lang.Exception: Error while processing field (CtFieldImpl) eventListeners @ src/main/java/org/apache/commons/configuration2/event/BaseEventSource.java:70:31: {
+  elem: "(CtFieldImpl) eventListeners @ src/main/java/org/apache/commons/configuration2/event/BaseEventSource.java:70:31",
+}
+	at abstractor.core.constructs.Factory.create(Factory.java:132)
+	at abstractor.core.constructs.Factory.create(Factory.java:139)
+	at abstractor.core.Abstractor.addField(Abstractor.java:796)
+	at abstractor.core.Abstractor.addField(Abstractor.java:791)
+	at abstractor.core.Abstractor.lambda$addStructDesc$23(Abstractor.java:768)
+	at abstractor.core.constructs.Factory.create(Factory.java:109)
+	... 18 more
+Caused by: java.lang.Exception: Error while processing object decl (CtClassImpl) EventListenerList @ src/main/java/org/apache/commons/configuration2/event/EventListenerList.java:56:14: {
+  elem: "(CtClassImpl) EventListenerList @ src/main/java/org/apache/commons/configuration2/event/EventListenerList.java:56:14",
+}
+	at abstractor.core.constructs.Factory.create(Factory.java:132)
+	at abstractor.core.constructs.Factory.create(Factory.java:139)
+	at abstractor.core.Abstractor.addObjectDecl(Abstractor.java:985)
+	at abstractor.core.Abstractor.addObjectInst(Abstractor.java:1069)
+	at abstractor.core.Abstractor.addTypeDesc(Abstractor.java:1229)
+	at abstractor.core.Abstractor.lambda$addField$24(Abstractor.java:800)
+	at abstractor.core.constructs.Factory.lambda$create$0(Factory.java:139)
+	at abstractor.core.constructs.Factory.create(Factory.java:109)
+	... 23 more
+Caused by: java.lang.Exception: Error while processing struct (CtClassImpl) EventListenerList @ src/main/java/org/apache/commons/configuration2/event/EventListenerList.java:56:14: {
+  elem: "(CtClassImpl) EventListenerList @ src/main/java/org/apache/commons/configuration2/event/EventListenerList.java:56:14",
+}
+	at abstractor.core.constructs.Factory.create(Factory.java:132)
+	at abstractor.core.constructs.Factory.create(Factory.java:143)
+	at abstractor.core.Abstractor.addStructDesc(Abstractor.java:757)
+	at abstractor.core.Abstractor.lambda$addObjectDecl$32(Abstractor.java:991)
+	at abstractor.core.constructs.Factory.lambda$create$0(Factory.java:139)
+	at abstractor.core.constructs.Factory.create(Factory.java:109)
+	... 30 more
+Caused by: java.lang.Exception: Error while processing field (CtFieldImpl) listeners @ src/main/java/org/apache/commons/configuration2/event/EventListenerList.java:59:58: {
+  elem: "(CtFieldImpl) listeners @ src/main/java/org/apache/commons/configuration2/event/EventListenerList.java:59:58",
+}
+	at abstractor.core.constructs.Factory.create(Factory.java:132)
+	at abstractor.core.constructs.Factory.create(Factory.java:139)
+	at abstractor.core.Abstractor.addField(Abstractor.java:796)
+	at abstractor.core.Abstractor.addField(Abstractor.java:791)
+	at abstractor.core.Abstractor.lambda$addStructDesc$23(Abstractor.java:768)
+	at abstractor.core.constructs.Factory.create(Factory.java:109)
+	... 35 more
+Caused by: java.lang.Exception: Error while processing object decl (CtClassImpl) EventListenerRegistrationData @ src/main/java/org/apache/commons/configuration2/event/EventListenerRegistrationData.java:38:20: {
+  elem: "(CtClassImpl) EventListenerRegistrationData @ src/main/java/org/apache/commons/configuration2/event/EventListenerRegistrationData.java:38:20",
+}
+	at abstractor.core.constructs.Factory.create(Factory.java:132)
+	at abstractor.core.constructs.Factory.create(Factory.java:139)
+	at abstractor.core.Abstractor.addObjectDecl(Abstractor.java:985)
+	at abstractor.core.Abstractor.addObjectInst(Abstractor.java:1069)
+	at abstractor.core.Abstractor.addTypeDesc(Abstractor.java:1229)
+	at abstractor.core.Abstractor.addTypeArguments(Abstractor.java:1140)
+	at abstractor.core.Abstractor.addInterfaceInst(Abstractor.java:258)
+	at abstractor.core.Abstractor.addTypeDesc(Abstractor.java:1230)
+	at abstractor.core.Abstractor.lambda$addField$24(Abstractor.java:800)
+	at abstractor.core.constructs.Factory.lambda$create$0(Factory.java:139)
+	at abstractor.core.constructs.Factory.create(Factory.java:109)
+	... 40 more
+Caused by: java.lang.Exception: Error while processing struct (CtClassImpl) EventListenerRegistrationData @ src/main/java/org/apache/commons/configuration2/event/EventListenerRegistrationData.java:38:20: {
+  elem: "(CtClassImpl) EventListenerRegistrationData @ src/main/java/org/apache/commons/configuration2/event/EventListenerRegistrationData.java:38:20",
+}
+	at abstractor.core.constructs.Factory.create(Factory.java:132)
+	at abstractor.core.constructs.Factory.create(Factory.java:143)
+	at abstractor.core.Abstractor.addStructDesc(Abstractor.java:757)
+	at abstractor.core.Abstractor.lambda$addObjectDecl$32(Abstractor.java:991)
+	at abstractor.core.constructs.Factory.lambda$create$0(Factory.java:139)
+	at abstractor.core.constructs.Factory.create(Factory.java:109)
+	... 50 more
+Caused by: java.lang.Exception: Error while processing field (CtFieldImpl) eventType @ src/main/java/org/apache/commons/configuration2/event/EventListenerRegistrationData.java:44:32: {
+  elem: "(CtFieldImpl) eventType @ src/main/java/org/apache/commons/configuration2/event/EventListenerRegistrationData.java:44:32",
+}
+	at abstractor.core.constructs.Factory.create(Factory.java:132)
+	at abstractor.core.constructs.Factory.create(Factory.java:139)
+	at abstractor.core.Abstractor.addField(Abstractor.java:796)
+	at abstractor.core.Abstractor.addField(Abstractor.java:791)
+	at abstractor.core.Abstractor.lambda$addStructDesc$23(Abstractor.java:768)
+	at abstractor.core.constructs.Factory.create(Factory.java:109)
+	... 55 more
+Caused by: java.lang.Exception: Error while processing object decl (CtClassImpl) EventType @ src/main/java/org/apache/commons/configuration2/event/EventType.java:47:14: {
+  elem: "(CtClassImpl) EventType @ src/main/java/org/apache/commons/configuration2/event/EventType.java:47:14",
+}
+	at abstractor.core.constructs.Factory.create(Factory.java:132)
+	at abstractor.core.constructs.Factory.create(Factory.java:139)
+	at abstractor.core.Abstractor.addObjectDecl(Abstractor.java:985)
+	at abstractor.core.Abstractor.addObjectInst(Abstractor.java:1069)
+	at abstractor.core.Abstractor.addTypeDesc(Abstractor.java:1229)
+	at abstractor.core.Abstractor.lambda$addField$24(Abstractor.java:800)
+	at abstractor.core.constructs.Factory.lambda$create$0(Factory.java:139)
+	at abstractor.core.constructs.Factory.create(Factory.java:109)
+	... 60 more
+Caused by: java.lang.Exception: Error while processing struct (CtClassImpl) EventType @ src/main/java/org/apache/commons/configuration2/event/EventType.java:47:14: {
+  elem: "(CtClassImpl) EventType @ src/main/java/org/apache/commons/configuration2/event/EventType.java:47:14",
+}
+	at abstractor.core.constructs.Factory.create(Factory.java:132)
+	at abstractor.core.constructs.Factory.create(Factory.java:143)
+	at abstractor.core.Abstractor.addStructDesc(Abstractor.java:757)
+	at abstractor.core.Abstractor.lambda$addObjectDecl$32(Abstractor.java:991)
+	at abstractor.core.constructs.Factory.lambda$create$0(Factory.java:139)
+	at abstractor.core.constructs.Factory.create(Factory.java:109)
+	... 67 more
+Caused by: java.lang.Exception: Error while processing field (CtFieldImpl) superType @ src/main/java/org/apache/commons/configuration2/event/EventType.java:56:40: {
+  elem: "(CtFieldImpl) superType @ src/main/java/org/apache/commons/configuration2/event/EventType.java:56:40",
+}
+	at abstractor.core.constructs.Factory.create(Factory.java:132)
+	at abstractor.core.constructs.Factory.create(Factory.java:139)
+	at abstractor.core.Abstractor.addField(Abstractor.java:796)
+	at abstractor.core.Abstractor.addField(Abstractor.java:791)
+	at abstractor.core.Abstractor.lambda$addStructDesc$23(Abstractor.java:768)
+	at abstractor.core.constructs.Factory.create(Factory.java:109)
+	... 72 more
+Caused by: java.lang.Exception: Error while processing type params (CtTypeParameterImpl) T @ src/main/java/org/apache/commons/configuration2/event/EventType.java:47:24: {
+  elem: "(CtTypeParameterImpl) T @ src/main/java/org/apache/commons/configuration2/event/EventType.java:47:24",
+}
+	at abstractor.core.constructs.Factory.create(Factory.java:132)
+	at abstractor.core.constructs.Factory.create(Factory.java:147)
+	at abstractor.core.Abstractor.addTypeParam(Abstractor.java:935)
+	at abstractor.core.Abstractor.addTypeParams(Abstractor.java:924)
+	at abstractor.core.Abstractor.addObjectInst(Abstractor.java:1072)
+	at abstractor.core.Abstractor.addTypeDesc(Abstractor.java:1229)
+	at abstractor.core.Abstractor.lambda$addField$24(Abstractor.java:800)
+	at abstractor.core.constructs.Factory.lambda$create$0(Factory.java:139)
+	at abstractor.core.constructs.Factory.create(Factory.java:109)
+	... 77 more
+Caused by: java.lang.Exception: Error while processing object decl (CtClassImpl) Event @ src/main/java/org/apache/commons/configuration2/event/Event.java:36:14: {
+  elem: "(CtClassImpl) Event @ src/main/java/org/apache/commons/configuration2/event/Event.java:36:14",
+}
+	at abstractor.core.constructs.Factory.create(Factory.java:132)
+	at abstractor.core.constructs.Factory.create(Factory.java:139)
+	at abstractor.core.Abstractor.addObjectDecl(Abstractor.java:985)
+	at abstractor.core.Abstractor.addObjectInst(Abstractor.java:1069)
+	at abstractor.core.Abstractor.addTypeDesc(Abstractor.java:1229)
+	at abstractor.core.Abstractor.lambda$addTypeParam$29(Abstractor.java:941)
+	at abstractor.core.constructs.Factory.lambda$create$1(Factory.java:147)
+	at abstractor.core.constructs.Factory.create(Factory.java:109)
+	... 85 more
+Caused by: java.lang.Exception: Error while processing struct (CtClassImpl) Event @ src/main/java/org/apache/commons/configuration2/event/Event.java:36:14: {
+  elem: "(CtClassImpl) Event @ src/main/java/org/apache/commons/configuration2/event/Event.java:36:14",
+}
+	at abstractor.core.constructs.Factory.create(Factory.java:132)
+	at abstractor.core.constructs.Factory.create(Factory.java:143)
+	at abstractor.core.Abstractor.addStructDesc(Abstractor.java:757)
+	at abstractor.core.Abstractor.lambda$addObjectDecl$32(Abstractor.java:991)
+	at abstractor.core.constructs.Factory.lambda$create$0(Factory.java:139)
+	at abstractor.core.constructs.Factory.create(Factory.java:109)
+	... 92 more
+Caused by: java.lang.Exception: Error while processing field (CtFieldImpl) ANY @ src/main/java/org/apache/commons/configuration2/event/Event.java:42:42: {
+  elem: "(CtFieldImpl) ANY @ src/main/java/org/apache/commons/configuration2/event/Event.java:42:42",
+}
+	at abstractor.core.constructs.Factory.create(Factory.java:132)
+	at abstractor.core.constructs.Factory.create(Factory.java:139)
+	at abstractor.core.Abstractor.addField(Abstractor.java:796)
+	at abstractor.core.Abstractor.addField(Abstractor.java:791)
+	at abstractor.core.Abstractor.lambda$addStructDesc$23(Abstractor.java:768)
+	at abstractor.core.constructs.Factory.create(Factory.java:109)
+	... 97 more
+Caused by: java.lang.Exception: Error while processing object instantiation org.apache.commons.configuration2.event.EventType @ src/main/java/org/apache/commons/configuration2/event/Event.java:42:25<org.apache.commons.configuration2.event.Event @ src/main/java/org/apache/commons/configuration2/event/Event.java:42:35>: {
+  elem: "(CtTypeReferenceImpl) org.apache.commons.configuration2.event.EventType @ src/main/java/org/apache/commons/configuration2/event/Event.java:42:25",
+  typeArgs: [
+    { context: "object decl (CtClassImpl) Event @ src/main/java/org/apache/commons/configuration2/event/Event.java:36:14", index: -1, kind: object, ref: true },
+  ],
+}
+	at abstractor.core.constructs.Factory.create(Factory.java:132)
+	at abstractor.core.Abstractor.addObjectInst(Abstractor.java:1084)
+	at abstractor.core.Abstractor.addTypeDesc(Abstractor.java:1229)
+	at abstractor.core.Abstractor.lambda$addField$24(Abstractor.java:800)
+	at abstractor.core.constructs.Factory.lambda$create$0(Factory.java:139)
+	at abstractor.core.constructs.Factory.create(Factory.java:109)
+	... 102 more
+Caused by: java.lang.Exception: Error while processing struct (CtClassImpl) EventType @ src/main/java/org/apache/commons/configuration2/event/EventType.java:47:14: {
+  elem: "(CtClassImpl) EventType @ src/main/java/org/apache/commons/configuration2/event/EventType.java:47:14",
+  typeArgs: [
+    { context: "object decl (CtClassImpl) Event @ src/main/java/org/apache/commons/configuration2/event/Event.java:36:14", index: -1, kind: object, ref: true },
+  ],
+}
+	at abstractor.core.constructs.Factory.create(Factory.java:132)
+	at abstractor.core.constructs.Factory.create(Factory.java:143)
+	at abstractor.core.Abstractor.addStructDesc(Abstractor.java:757)
+	at abstractor.core.Abstractor.lambda$addObjectInst$34(Abstractor.java:1087)
+	at abstractor.core.constructs.Factory.create(Factory.java:109)
+	... 107 more
+Caused by: java.lang.Exception: Error while processing field (CtFieldImpl) superType @ src/main/java/org/apache/commons/configuration2/event/EventType.java:56:40: {
+  elem: "(CtFieldImpl) superType @ src/main/java/org/apache/commons/configuration2/event/EventType.java:56:40",
+  typeArgs: [
+    { context: "object decl (CtClassImpl) Event @ src/main/java/org/apache/commons/configuration2/event/Event.java:36:14", index: -1, kind: object, ref: true },
+  ],
+}
+	at abstractor.core.constructs.Factory.create(Factory.java:132)
+	at abstractor.core.constructs.Factory.create(Factory.java:139)
+	at abstractor.core.Abstractor.addField(Abstractor.java:796)
+	at abstractor.core.Abstractor.addField(Abstractor.java:791)
+	at abstractor.core.Abstractor.lambda$addStructDesc$23(Abstractor.java:768)
+	at abstractor.core.constructs.Factory.create(Factory.java:109)
+	... 111 more
+Caused by: java.lang.Exception: Error while processing object instantiation org.apache.commons.configuration2.event.EventType @ src/main/java/org/apache/commons/configuration2/event/EventType.java:56:19<? @ src/main/java/org/apache/commons/configuration2/event/EventType.java:56:29>: {
+  elem: "(CtTypeReferenceImpl) org.apache.commons.configuration2.event.EventType @ src/main/java/org/apache/commons/configuration2/event/EventType.java:56:19",
+  typeArgs: [
+    { context: "object decl (CtClassImpl) Event @ src/main/java/org/apache/commons/configuration2/event/Event.java:36:14", index: -1, kind: object, ref: true },
+  ],
+}
+	at abstractor.core.constructs.Factory.create(Factory.java:132)
+	at abstractor.core.Abstractor.addObjectInst(Abstractor.java:1084)
+	at abstractor.core.Abstractor.addTypeDesc(Abstractor.java:1229)
+	at abstractor.core.Abstractor.lambda$addField$24(Abstractor.java:800)
+	at abstractor.core.constructs.Factory.lambda$create$0(Factory.java:139)
+	at abstractor.core.constructs.Factory.create(Factory.java:109)
+	... 116 more
+Caused by: java.lang.Exception: Error while processing abstract (CtMethodImpl) getSuperType @ src/main/java/org/apache/commons/configuration2/event/EventType.java:81:33: {
+  elem: "(CtMethodImpl) getSuperType @ src/main/java/org/apache/commons/configuration2/event/EventType.java:81:33",
+  typeArgs: [
+    { context: "object decl (CtClassImpl) Event @ src/main/java/org/apache/commons/configuration2/event/Event.java:36:14", index: -1, kind: object, ref: true },
+  ],
+}
+	at abstractor.core.constructs.Factory.create(Factory.java:132)
+	at abstractor.core.constructs.Factory.create(Factory.java:147)
+	at abstractor.core.Abstractor.addAbstract(Abstractor.java:618)
+	at abstractor.core.Abstractor.synthesizeObjectInterface(Abstractor.java:1044)
+	at abstractor.core.Abstractor.lambda$addObjectInst$34(Abstractor.java:1088)
+	at abstractor.core.constructs.Factory.create(Factory.java:109)
+	... 121 more
+Caused by: java.lang.Exception: Error while processing signature (CtMethodImpl) getSuperType @ src/main/java/org/apache/commons/configuration2/event/EventType.java:81:33: {
+  elem: "(CtMethodImpl) getSuperType @ src/main/java/org/apache/commons/configuration2/event/EventType.java:81:33",
+  typeArgs: [
+    { context: "object decl (CtClassImpl) Event @ src/main/java/org/apache/commons/configuration2/event/Event.java:36:14", index: -1, kind: object, ref: true },
+  ],
+}
+	at abstractor.core.constructs.Factory.create(Factory.java:132)
+	at abstractor.core.constructs.Factory.create(Factory.java:147)
+	at abstractor.core.Abstractor.addSignature(Abstractor.java:644)
+	at abstractor.core.Abstractor.lambda$addAbstract$16(Abstractor.java:622)
+	at abstractor.core.constructs.Factory.lambda$create$1(Factory.java:147)
+	at abstractor.core.constructs.Factory.create(Factory.java:109)
+	... 126 more
+Caused by: java.lang.Exception: Error while processing parameter <unnamed> org.apache.commons.configuration2.event.EventType @ src/main/java/org/apache/commons/configuration2/event/EventType.java:81:12<? @ src/main/java/org/apache/commons/configuration2/event/EventType.java:81:22>: {
+  elem: "(CtTypeReferenceImpl) org.apache.commons.configuration2.event.EventType @ src/main/java/org/apache/commons/configuration2/event/EventType.java:81:12",
+  typeArgs: [
+    { context: "object decl (CtClassImpl) Event @ src/main/java/org/apache/commons/configuration2/event/Event.java:36:14", index: -1, kind: object, ref: true },
+  ],
+}
+	at abstractor.core.constructs.Factory.create(Factory.java:132)
+	at abstractor.core.constructs.Factory.create(Factory.java:147)
+	at abstractor.core.Abstractor.addArgument(Abstractor.java:742)
+	at abstractor.core.Abstractor.lambda$addSignature$17(Abstractor.java:655)
+	at abstractor.core.constructs.Factory.lambda$create$1(Factory.java:147)
+	at abstractor.core.constructs.Factory.create(Factory.java:109)
+	... 131 more
+Caused by: java.lang.Exception: Error while processing object instantiation org.apache.commons.configuration2.event.EventType @ src/main/java/org/apache/commons/configuration2/event/EventType.java:81:12<? @ src/main/java/org/apache/commons/configuration2/event/EventType.java:81:22>: {
+  elem: "(CtTypeReferenceImpl) org.apache.commons.configuration2.event.EventType @ src/main/java/org/apache/commons/configuration2/event/EventType.java:81:12",
+  typeArgs: [
+    { context: "object decl (CtClassImpl) Event @ src/main/java/org/apache/commons/configuration2/event/Event.java:36:14", index: -1, kind: object, ref: true },
+  ],
+}
+	at abstractor.core.constructs.Factory.create(Factory.java:132)
+	at abstractor.core.Abstractor.addObjectInst(Abstractor.java:1084)
+	at abstractor.core.Abstractor.addTypeDesc(Abstractor.java:1229)
+	at abstractor.core.Abstractor.lambda$addArgument$22(Abstractor.java:745)
+	at abstractor.core.constructs.Factory.lambda$create$1(Factory.java:147)
+	at abstractor.core.constructs.Factory.create(Factory.java:109)
+	... 136 more
+Caused by: java.lang.Exception: Error while processing constructor (CtConstructorImpl) <init> @ src/main/java/org/apache/commons/configuration2/event/EventType.java:69:12: {
+  elem: "(CtConstructorImpl) <init> @ src/main/java/org/apache/commons/configuration2/event/EventType.java:69:12",
+}
+	at abstractor.core.constructs.Factory.create(Factory.java:132)
+	at abstractor.core.constructs.Factory.create(Factory.java:139)
+	at abstractor.core.Abstractor.addMethodDeclForConstructor(Abstractor.java:680)
+	at abstractor.core.Abstractor.addMethodInstForObjectInst(Abstractor.java:394)
+	at abstractor.core.Abstractor.lambda$addObjectInst$35(Abstractor.java:1105)
+	at abstractor.core.constructs.Factory.create(Factory.java:127)
+	... 141 more
+Caused by: abstractor.core.AbstractorException: Expected the object reference is resolved for {
+  context: "object decl (CtClassImpl) EventType @ src/main/java/org/apache/commons/configuration2/event/EventType.java:47:14",
+  index: -1,
+  kind: object,
+  ref: true,
+}
+	at abstractor.core.constructs.Ref.mustGetResolved(Ref.java:38)
+	at abstractor.core.Abstractor.lambda$addMethodDeclForConstructor$18(Abstractor.java:683)
+	at abstractor.core.constructs.Factory.lambda$create$0(Factory.java:139)
+	at abstractor.core.constructs.Factory.create(Factory.java:109)
+	... 146 more

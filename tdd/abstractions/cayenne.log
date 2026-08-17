@@ -1,19 +1,1148 @@
 # cmd: java -jar /Users/grantnelson/go/src/github.com/MSUSEL/msusel-tdmetrics-go/javaAbstractor/target/abstractor-0.1-jar-with-dependencies.jar -i /Users/grantnelson/go/src/github.com/apache/cayenne/ -o /Users/grantnelson/go/src/github.com/MSUSEL/msusel-tdmetrics-go/tdd/abstractions/cayenne.json -v
 # cwd: /Users/grantnelson/go/src/github.com/MSUSEL/msusel-tdmetrics-go/tdd
 # repo: /Users/grantnelson/go/src/github.com/apache/cayenne @ b9988a83e364b9b470873dff8996dcf401d08dc4
-# started: 2026-07-28T01:55:18.155137+00:00
+# started: 2026-08-17T18:33:39.755219+00:00
 # timeout_min: 10
 # ---
 Reading /Users/grantnelson/go/src/github.com/apache/cayenne/
 SLF4J(W): No SLF4J providers were found.
 SLF4J(W): Defaulting to no-operation (NOP) logger implementation
 SLF4J(W): See https://www.slf4j.org/codes.html#noProviders for further details.
-Exception in thread "main" spoon.compiler.ModelBuildingException: Entity cannot be resolved to a type at /Users/grantnelson/go/src/github.com/apache/cayenne/itests/jpa-chapter2/src/main/java/org/apache/cayenne/jpa/itest/ch2/entity/EmbeddedIdEntity.java:24
-	at spoon.support.compiler.jdt.JDTBasedSpoonCompiler.report(JDTBasedSpoonCompiler.java:664)
-	at spoon.support.compiler.jdt.JDTBasedSpoonCompiler.reportProblems(JDTBasedSpoonCompiler.java:646)
-	at spoon.support.compiler.jdt.JDTBasedSpoonCompiler.build(JDTBasedSpoonCompiler.java:120)
-	at spoon.support.compiler.jdt.JDTBasedSpoonCompiler.build(JDTBasedSpoonCompiler.java:101)
-	at spoon.Launcher.buildModel(Launcher.java:781)
-	at abstractor.core.Abstractor.prepareMavenProject(Abstractor.java:55)
-	at abstractor.app.App.run(App.java:25)
+Init pending package <unnamed>
+Init pending package org
+Init pending package org.apache
+Init pending package org.apache.cayenne
+Init pending package org.apache.cayenne.maven
+Init pending package org.apache.cayenne.maven.plugin
+Init pending package org.apache.cayenne.maven.plugin.aggregator
+Init pending package org.apache.cayenne.maven.plugin.date
+Init pending package org.apache.cayenne.maven.plugin.util
+Init pending package org.apache.cayenne.maven.plugin.confluence
+Init pending package org.apache.cayenne.instrument
+Init pending package org.apache.cayenne.access
+Init pending package org.apache.cayenne.access.event
+Init pending package org.apache.cayenne.access.jdbc
+Init pending package org.apache.cayenne.access.trans
+Init pending package org.apache.cayenne.access.types
+Init pending package org.apache.cayenne.access.util
+Init pending package org.apache.cayenne.cache
+Init pending package org.apache.cayenne.conf
+Init pending package org.apache.cayenne.conn
+Init pending package org.apache.cayenne.dba
+Init pending package org.apache.cayenne.dba.db2
+Init pending package org.apache.cayenne.dba.derby
+Init pending package org.apache.cayenne.dba.frontbase
+Init pending package org.apache.cayenne.dba.h2
+Init pending package org.apache.cayenne.dba.hsqldb
+Init pending package org.apache.cayenne.dba.ingres
+Init pending package org.apache.cayenne.dba.mysql
+Init pending package org.apache.cayenne.dba.openbase
+Init pending package org.apache.cayenne.dba.oracle
+Init pending package org.apache.cayenne.dba.postgres
+Init pending package org.apache.cayenne.dba.sqlite
+Init pending package org.apache.cayenne.dba.sqlserver
+Init pending package org.apache.cayenne.dba.sybase
+Init pending package org.apache.cayenne.ejbql
+Init pending package org.apache.cayenne.ejbql.parser
+Init pending package org.apache.cayenne.enhancer
+Init pending package org.apache.cayenne.event
+Init pending package org.apache.cayenne.exp
+Init pending package org.apache.cayenne.exp.parser
+Init pending package org.apache.cayenne.gen
+Init pending package org.apache.cayenne.graph
+Init pending package org.apache.cayenne.map
+Init pending package org.apache.cayenne.map.event
+Init pending package org.apache.cayenne.merge
+Init pending package org.apache.cayenne.project
+Init pending package org.apache.cayenne.project.validator
+Init pending package org.apache.cayenne.query
+Init pending package org.apache.cayenne.reflect
+Init pending package org.apache.cayenne.reflect.generic
+Init pending package org.apache.cayenne.reflect.pojo
+Init pending package org.apache.cayenne.reflect.valueholder
+Init pending package org.apache.cayenne.remote
+Init pending package org.apache.cayenne.remote.hessian
+Init pending package org.apache.cayenne.remote.hessian.service
+Init pending package org.apache.cayenne.remote.service
+Init pending package org.apache.cayenne.tools
+Init pending package org.apache.cayenne.util
+Init pending package org.apache.cayenne.validation
+Init pending package org.apache.cayenne.wocompat
+Init pending package org.apache.cayenne.wocompat.parser
+Init pending package org.apache.cayenne.xml
+Init pending package org.apache.cayenne.jpa
+Init pending package org.apache.cayenne.jpa.bridge
+Init pending package org.apache.cayenne.jpa.conf
+Init pending package org.apache.cayenne.jpa.enhancer
+Init pending package org.apache.cayenne.jpa.instrument
+Init pending package org.apache.cayenne.jpa.map
+Init pending package org.apache.cayenne.jpa.reflect
+Init pending package org.apache.cayenne.jpa.itest
+Init pending package org.apache.cayenne.jpa.itest.ch2
+Init pending package org.apache.cayenne.jpa.itest.ch2.entity
+Init pending package org.apache.cayenne.jpa.itest.ch3
+Init pending package org.apache.cayenne.jpa.itest.ch3.entity
+Init pending package org.apache.cayenne.jpa.itest.ch5
+Init pending package org.apache.cayenne.jpa.itest.ch5.entity
+Init pending package org.apache.cayenne.jpa.itest.ch6
+Init pending package org.apache.cayenne.jpa.itest.ch6.entity
+Init pending package org.apache.cayenne.jpa.itest.ch9
+Init pending package org.apache.cayenne.jpa.itest.ch9.entity
+Init pending package org.apache.cayenne.modeler
+Init pending package org.apache.cayenne.modeler.action
+Init pending package org.apache.cayenne.modeler.dialog
+Init pending package org.apache.cayenne.modeler.dialog.codegen
+Init pending package org.apache.cayenne.modeler.dialog.datadomain
+Init pending package org.apache.cayenne.modeler.dialog.datamap
+Init pending package org.apache.cayenne.modeler.dialog.db
+Init pending package org.apache.cayenne.modeler.dialog.objentity
+Init pending package org.apache.cayenne.modeler.dialog.pref
+Init pending package org.apache.cayenne.modeler.dialog.query
+Init pending package org.apache.cayenne.modeler.dialog.validator
+Init pending package org.apache.cayenne.modeler.editor
+Init pending package org.apache.cayenne.modeler.editor.datanode
+Init pending package org.apache.cayenne.modeler.editor.dbentity
+Init pending package org.apache.cayenne.modeler.event
+Init pending package org.apache.cayenne.modeler.pref
+Init pending package org.apache.cayenne.modeler.util
+Init pending package org.apache.cayenne.modeler.util.combo
+Init pending package org.apache.cayenne.pref
+Init pending package org.apache.cayenne.swing
+Init pending package org.apache.cayenne.swing.control
+Init pending package org.apache.cayenne.itest
+Init pending package org.apache.cayenne.itest.cpa
+Init pending package org.apache.cayenne.itest.cpa.auto
+Init pending package org.apache.cayenne.itest.cpa.defaults
+Init pending package org.apache.cayenne.itest.cpa.defaults.auto
+Init pending package org.apache.cayenne.itest.cpa.defaults.client
+Init pending package org.apache.cayenne.itest.cpa.defaults.client.auto
+Init pending package org.apache.cayenne.itest.jpa
+Init pending package org.apache.cayenne.itest.pojo
+[34mStarting process pending packages...[0m
+  Pending package org.apache.cayenne.dba
+  Pending package org.apache.cayenne.access
+  Pending package javax.sql
+  Pending package org.apache.cayenne.access.trans
+  Pending package java.util
+  Pending package org.apache.cayenne.map
+  Pending package org.apache.cayenne.query
+  Pending package java.lang
+  Pending package java.lang.invoke
+  Pending package org.apache.cayenne.exp
+  [34mskipping default constructor: org.apache.cayenne.exp.Expression()[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.collections.Transformer @ framework/cayenne-jdk1.5-unpublished/src/main/java/org/apache/cayenne/exp/Expression.java:485:33[0m
+  [34margument (CtParameterImpl) transformer @ framework/cayenne-jdk1.5-unpublished/src/main/java/org/apache/cayenne/exp/Expression.java:485:45 had a null type. The type likely was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.collections.Transformer @ framework/cayenne-jdk1.5-unpublished/src/main/java/org/apache/cayenne/exp/Expression.java:504:42[0m
+  [34margument (CtParameterImpl) transformer @ framework/cayenne-jdk1.5-unpublished/src/main/java/org/apache/cayenne/exp/Expression.java:504:54 had a null type. The type likely was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.[0m
+  Pending package org.apache.cayenne.util
+  Pending package java.io
+  [34mskipping default constructor: org.apache.cayenne.map.LifecycleEvent()[0m
+  getting parent type for (CtClassImpl) DBPathConverter @ framework/cayenne-jdk1.5-unpublished/src/main/java/org/apache/cayenne/map/ObjEntity.java:1016:17
+  [34mskipping default constructor: org.apache.cayenne.map.ObjEntity$DBPathConverter()[0m
+  [31mUnhandled super-interface (null) for {
+    context: "object decl (CtClassImpl) DBPathConverter @ framework/cayenne-jdk1.5-unpublished/src/main/java/org/apache/cayenne/map/ObjEntity.java:1016:17",
+    index: -1,
+    kind: object,
+    ref: true,
+  }[0m
+  Pending package org.apache.cayenne.map.event
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.logging.Log @ framework/cayenne-jdk1.5-unpublished/src/main/java/org/apache/cayenne/access/DataRowStore.java:60:20[0m
+  [34mfield (CtFieldImpl) logger @ framework/cayenne-jdk1.5-unpublished/src/main/java/org/apache/cayenne/access/DataRowStore.java:60:24 had a null type. The type likely was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.collections.map.LRUMap @ framework/cayenne-jdk1.5-unpublished/src/main/java/org/apache/cayenne/access/DataRowStore.java:80:15[0m
+  [34mfield (CtFieldImpl) snapshots @ framework/cayenne-jdk1.5-unpublished/src/main/java/org/apache/cayenne/access/DataRowStore.java:80:22 had a null type. The type likely was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.[0m
+  Pending package org.apache.cayenne.event
+  Pending package java.lang.ref
+  Pending package java.lang.reflect
+  [34mskipping default constructor: org.apache.cayenne.event.DispatchQueue()[0m
+  getting parent type for (CtClassImpl) Dispatch @ framework/cayenne-jdk1.5-unpublished/src/main/java/org/apache/cayenne/event/EventManager.java:379:11
+  Pending package java.lang
+  Pending package java.security
+  Pending package java.lang
+  getting parent type for (CtClassImpl) ThreadLocalMap
+  Pending package sun.nio.ch
+  getting parent type for (CtInterfaceImpl) UncaughtExceptionHandler
+  getting parent type for (CtClassImpl) DispatchThread @ framework/cayenne-jdk1.5-unpublished/src/main/java/org/apache/cayenne/event/EventManager.java:457:17
+  getting parent type for (CtEnumImpl) State
+  getting parent type for (CtClassImpl) InvocationDispatch @ framework/cayenne-jdk1.5-unpublished/src/main/java/org/apache/cayenne/event/EventManager.java:429:11
+  getting parent type for (CtClassImpl) NonBlockingInvocation @ framework/cayenne-jdk1.5-unpublished/src/main/java/org/apache/cayenne/event/EventManager.java:449:17
+  getting parent type for (CtClassImpl) SubjectListener @ framework/cayenne-jdk1.5-unpublished/src/main/java/org/apache/cayenne/event/EventBridge.java:314:17
+  Pending package org.apache.cayenne
+  getting parent type for (CtClassImpl) Node
+  getting parent type for (CtInterfaceImpl) Entry
+  getting parent type for (CtClassImpl) RelationshipPathConverter @ framework/cayenne-jdk1.5-unpublished/src/main/java/org/apache/cayenne/map/DbEntity.java:613:17
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.collections.Transformer @ framework/cayenne-jdk1.5-unpublished/src/main/java/org/apache/cayenne/map/DbRelationship.java:469:22[0m
+  [34mfield (CtFieldImpl) targetExtractor @ framework/cayenne-jdk1.5-unpublished/src/main/java/org/apache/cayenne/map/DbRelationship.java:469:34 had a null type. The type likely was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.collections.Transformer @ framework/cayenne-jdk1.5-unpublished/src/main/java/org/apache/cayenne/map/DbRelationship.java:476:22[0m
+  [34mfield (CtFieldImpl) sourceExtractor @ framework/cayenne-jdk1.5-unpublished/src/main/java/org/apache/cayenne/map/DbRelationship.java:476:34 had a null type. The type likely was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.[0m
+  getting parent type for (CtClassImpl) JoinTransformers @ framework/cayenne-jdk1.5-unpublished/src/main/java/org/apache/cayenne/map/DbRelationship.java:467:24
+  [34mskipping default constructor: org.apache.cayenne.map.DbRelationship$JoinTransformers()[0m
+  getting parent type for (CtClassImpl) TestJoin @ framework/cayenne-jdk1.5-unpublished/src/main/java/org/apache/cayenne/map/DbRelationship.java:485:24
+  [31mUnhandled super-interface (null) for {
+    context: "object decl (CtClassImpl) RelationshipPathConverter @ framework/cayenne-jdk1.5-unpublished/src/main/java/org/apache/cayenne/map/DbEntity.java:613:17",
+    index: -1,
+    kind: object,
+    ref: true,
+  }[0m
+  [34mskipping default constructor: org.apache.cayenne.map.JoinType()[0m
+  getting parent type for (CtClassImpl) TreeNode
+  Pending package java.util.function
+  Pending package org.apache.cayenne.access.event
+  Pending package java.sql
+  Pending package org.apache.cayenne.reflect
+  [34mskipping default constructor: org.apache.cayenne.query.QueryCacheStrategy()[0m
+  getting parent type for (CtClassImpl) XMLEncoderOperation @ framework/cayenne-jdk1.5-unpublished/src/main/java/org/apache/cayenne/query/PrefetchTreeNode.java:366:11
+  getting parent type for (CtClassImpl) CollectionBuilderOperation @ framework/cayenne-jdk1.5-unpublished/src/main/java/org/apache/cayenne/query/PrefetchTreeNode.java:407:11
+  getting parent type for (CtClassImpl) AdjacentJoinsOperation @ framework/cayenne-jdk1.5-unpublished/src/main/java/org/apache/cayenne/query/PrefetchTreeNode.java:458:11
+  [34mskipping default constructor: org.apache.cayenne.query.BaseQueryMetadata()[0m
+  [34mskipping default constructor: org.apache.cayenne.query.ProcedureQueryMetadata()[0m
+  Pending package org.apache.cayenne.access.jdbc
+  [34mskipping default constructor: org.apache.cayenne.query.AbstractQuery()[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.collections.Transformer @ framework/cayenne-jdk1.5-unpublished/src/main/java/org/apache/cayenne/query/SQLTemplate.java:90:26[0m
+  [34mfield (CtFieldImpl) nullMapTransformer @ framework/cayenne-jdk1.5-unpublished/src/main/java/org/apache/cayenne/query/SQLTemplate.java:90:38 had a null type. The type likely was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.[0m
+  [34mskipping default constructor: org.apache.cayenne.query.SQLTemplateMetadata()[0m
+  [34mskipping default constructor: org.apache.cayenne.query.SelectQueryMetadata()[0m
+  [34mskipping default constructor: org.apache.cayenne.query.QualifiedQuery()[0m
+  Pending package org.apache.cayenne.ejbql
+  Pending package org.apache.cayenne.ejbql.parser
+  [34mskipping default constructor: org.apache.cayenne.query.EJBQLQueryMetadata()[0m
+  Pending package org.apache.cayenne.graph
+  getting parent type for (CtClassImpl) ArcOperation @ framework/cayenne-jdk1.5-unpublished/src/main/java/org/apache/cayenne/access/ObjectDiff.java:392:24
+  Pending package org.apache.cayenne.cache
+  [34mskipping default constructor: org.apache.cayenne.BaseContext()[0m
+  [34mskipping default constructor: org.apache.cayenne.query.IndirectQuery()[0m
+  getting parent type for (CtClassImpl) CachedSnapshotQuery @ framework/cayenne-jdk1.5-unpublished/src/main/java/org/apache/cayenne/access/ObjectStore.java:1113:17
+  getting parent type for (CtClassImpl) SnapshotEventDecorator @ framework/cayenne-jdk1.5-unpublished/src/main/java/org/apache/cayenne/access/ObjectStore.java:1125:11
+  getting parent type for (CtClassImpl) CacheQueryMetadata @ framework/cayenne-jdk1.5-unpublished/src/main/java/org/apache/cayenne/access/ObjectStore.java:1154:17
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.collections.Transformer @ framework/cayenne-jdk1.5-unpublished/src/main/java/org/apache/cayenne/access/DataDomain.java:833:29[0m
+  [34margument (CtParameterImpl) operation @ framework/cayenne-jdk1.5-unpublished/src/main/java/org/apache/cayenne/access/DataDomain.java:833:41 had a null type. The type likely was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.logging.Log @ framework/cayenne-jdk1.5-unpublished/src/main/java/org/apache/cayenne/map/EntityResolver.java:62:28[0m
+  [34mfield (CtFieldImpl) logger @ framework/cayenne-jdk1.5-unpublished/src/main/java/org/apache/cayenne/map/EntityResolver.java:62:32 had a null type. The type likely was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.[0m
+  [34mskipping default constructor: org.apache.cayenne.reflect.AbstractCallback()[0m
+  getting parent type for (CtClassImpl) PathIterator @ framework/cayenne-jdk1.5-unpublished/src/main/java/org/apache/cayenne/map/Entity.java:388:17
+  [34mskipping default constructor: org.apache.cayenne.access.QueryTranslator()[0m
+  [34mskipping default constructor: org.apache.cayenne.access.trans.QueryAssembler()[0m
+  [34mskipping default constructor: org.apache.cayenne.access.trans.DataObjectMatchTranslator()[0m
+  Pending package org.apache.cayenne.access.types
+  Pending package org.apache.cayenne.validation
+  [34mskipping default constructor: org.apache.cayenne.access.types.AbstractType()[0m
+  Pending package org.apache.cayenne.merge
+  [34mskipping default constructor: org.apache.cayenne.merge.MergerFactory()[0m
+  getting parent type for (CtClassImpl) TransactionDataSource @ framework/cayenne-jdk1.5-unpublished/src/main/java/org/apache/cayenne/access/DataNode.java:310:17
+  [34mskipping default constructor: org.apache.cayenne.access.DataNode$TransactionDataSource()[0m
+  Pending package java.sql
+  Pending package java.util.logging
+  Pending package java.net
+  Pending package org.xml.sax.helpers
+  getting parent type for (CtClassImpl) TypesParseHandler @ framework/cayenne-jdk1.5-unpublished/src/main/java/org/apache/cayenne/dba/TypesHandler.java:113:17
+  [34mskipping default constructor: org.apache.cayenne.dba.TypesHandler$TypesParseHandler()[0m
+  Pending package org.xml.sax
+  Pending package org.xml.sax
+  [34mskipping default constructor: org.apache.cayenne.access.types.BooleanType()[0m
+  [34mskipping default constructor: org.apache.cayenne.dba.frontbase.FrontBaseBooleanType()[0m
+  getting parent type for (CtClassImpl) PkRetrieveProcessor @ framework/cayenne-jdk1.5-unpublished/src/main/java/org/apache/cayenne/dba/JdbcPkGenerator.java:420:17
+  [34mskipping default constructor: org.apache.cayenne.dba.JdbcPkGenerator()[0m
+  [34mskipping default constructor: org.apache.cayenne.access.trans.SelectTranslator()[0m
+  [34mskipping default constructor: org.apache.cayenne.dba.frontbase.FrontBaseSelectTranslator()[0m
+  [34mskipping default constructor: org.apache.cayenne.dba.frontbase.FrontBaseSniffer()[0m
+  [34mUnused type args: [java.lang.Object, org.apache.cayenne.access.ObjectDiff][0m
+  [34mUnused type args: [java.lang.Object, org.apache.cayenne.access.ObjectDiff][0m
+  [34mUnused type args: [org.apache.cayenne.access.ObjectDiff][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mskipping default constructor: org.apache.cayenne.PersistenceState()[0m
+  getting parent type for (CtClassImpl) PrintStreamOrWriter
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [org.apache.cayenne.map.ObjAttribute @ framework/cayenne-jdk1.5-unpublished/src/main/java/org/apache/cayenne/map/ObjEntity.java:705:28][0m
+  [34mUnused type args: [?][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [?][0m
+  [34mskipping default constructor: org.apache.cayenne.ejbql.EJBQLParserFactory()[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [org.apache.cayenne.map.ObjAttribute @ framework/cayenne-jdk1.5-unpublished/src/main/java/org/apache/cayenne/map/ObjEntity.java:692:32][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [java.lang.String, org.apache.cayenne.map.ObjAttribute][0m
+  [34mUnused type args: [org.apache.cayenne.map.ObjAttribute][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit method: (CtMethodImpl) valueOf in (CtEnumImpl) QueryCacheStrategy @ framework/cayenne-jdk1.5-unpublished/src/main/java/org/apache/cayenne/query/QueryCacheStrategy.java:27:13[0m
+  [34mIgnoring implicit method: (CtMethodImpl) valueOf in (CtEnumImpl) QueryCacheStrategy @ framework/cayenne-jdk1.5-unpublished/src/main/java/org/apache/cayenne/query/QueryCacheStrategy.java:27:13[0m
+  [34mIgnoring implicit method: (CtMethodImpl) valueOf in (CtEnumImpl) QueryCacheStrategy @ framework/cayenne-jdk1.5-unpublished/src/main/java/org/apache/cayenne/query/QueryCacheStrategy.java:27:13[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [java.lang.String @ framework/cayenne-jdk1.5-unpublished/src/main/java/org/apache/cayenne/access/types/ExtendedTypeMap.java:252:13][0m
+  [34mUnused type args: [java.lang.String, org.apache.cayenne.access.types.ExtendedType][0m
+  [34mUnused type args: [java.lang.String][0m
+  [34mUnused type args: [java.lang.String][0m
+  [34mUnused type args: [java.lang.String @ framework/cayenne-jdk1.5-unpublished/src/main/java/org/apache/cayenne/access/types/ExtendedTypeMap.java:256:18][0m
+  [34mUnused type args: [java.lang.String][0m
+  [34mUnused type args: [java.lang.String][0m
+  [34mUnused type args: [java.lang.String][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [java.lang.String @ framework/cayenne-jdk1.5-unpublished/src/main/java/org/apache/cayenne/DataRow.java:146:13, java.lang.Object @ framework/cayenne-jdk1.5-unpublished/src/main/java/org/apache/cayenne/DataRow.java:146:21][0m
+  [34mUnused type args: [java.lang.String, java.lang.Object][0m
+  [34mUnused type args: [java.lang.String, java.lang.Object][0m
+  [34mUnused type args: [java.lang.String, java.lang.Object][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [java.lang.String, ?][0m
+  [34mUnused type args: [java.lang.String, java.lang.Object][0m
+  [34mUnused type args: [java.lang.String, java.lang.String][0m
+  [34mUnused type args: [java.lang.String, java.lang.Object][0m
+  [34mUnused type args: [java.lang.String, java.lang.Object][0m
+  [34mUnused type args: [java.lang.String, java.lang.Object][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [java.lang.String @ framework/cayenne-jdk1.5-unpublished/src/main/java/org/apache/cayenne/access/jdbc/EJBQLTranslationContext.java:322:43, java.lang.Object @ framework/cayenne-jdk1.5-unpublished/src/main/java/org/apache/cayenne/access/jdbc/EJBQLTranslationContext.java:322:51][0m
+  [34mUnused type args: [java.lang.String, java.lang.Object][0m
+  [34mUnused type args: [java.lang.String, java.lang.Object][0m
+  [34mUnused type args: [org.apache.cayenne.query.PrefetchTreeNode][0m
+  [34mUnused type args: [org.apache.cayenne.validation.ValidationFailure][0m
+  [34mskipping default constructor: org.apache.cayenne.util.Util()[0m
+  Pending package java.util.regex
+  [34mUnused type args: [java.lang.String, ?][0m
+  [34mUnused type args: [java.lang.String, ?][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mskipping default constructor: org.apache.cayenne.reflect.SingletonFaultFactory()[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  Pending package org.apache.cayenne.reflect.valueholder
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  Pending package org.apache.cayenne.reflect.pojo
+  Pending package org.apache.cayenne.enhancer
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.objectweb.asm.ClassVisitor @ framework/cayenne-jdk1.5-unpublished/src/main/java/org/apache/cayenne/enhancer/EnhancementHelper.java:46:13[0m
+  [34mfield (CtFieldImpl) classVisitor @ framework/cayenne-jdk1.5-unpublished/src/main/java/org/apache/cayenne/enhancer/EnhancementHelper.java:46:26 had a null type. The type likely was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.objectweb.asm.Type @ framework/cayenne-jdk1.5-unpublished/src/main/java/org/apache/cayenne/enhancer/EnhancementHelper.java:47:13[0m
+  [34mfield (CtFieldImpl) currentClass @ framework/cayenne-jdk1.5-unpublished/src/main/java/org/apache/cayenne/enhancer/EnhancementHelper.java:47:18 had a null type. The type likely was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.objectweb.asm.ClassVisitor @ framework/cayenne-jdk1.5-unpublished/src/main/java/org/apache/cayenne/enhancer/EnhancementHelper.java:49:30[0m
+  [34margument (CtParameterImpl) classVisitor @ framework/cayenne-jdk1.5-unpublished/src/main/java/org/apache/cayenne/enhancer/EnhancementHelper.java:49:43 had a null type. The type likely was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.objectweb.asm.Type @ framework/cayenne-jdk1.5-unpublished/src/main/java/org/apache/cayenne/enhancer/EnhancementHelper.java:53:12[0m
+  [34margument (CtTypeReferenceImpl) org.objectweb.asm.Type @ framework/cayenne-jdk1.5-unpublished/src/main/java/org/apache/cayenne/enhancer/EnhancementHelper.java:53:12 had a null type. The type likely was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.objectweb.asm.Type @ framework/cayenne-jdk1.5-unpublished/src/main/java/org/apache/cayenne/enhancer/EnhancementHelper.java:129:52[0m
+  [34margument (CtParameterImpl) asmType @ framework/cayenne-jdk1.5-unpublished/src/main/java/org/apache/cayenne/enhancer/EnhancementHelper.java:129:57 had a null type. The type likely was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.objectweb.asm.Type @ framework/cayenne-jdk1.5-unpublished/src/main/java/org/apache/cayenne/enhancer/EnhancementHelper.java:201:51[0m
+  [34margument (CtParameterImpl) asmType @ framework/cayenne-jdk1.5-unpublished/src/main/java/org/apache/cayenne/enhancer/EnhancementHelper.java:201:56 had a null type. The type likely was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.objectweb.asm.Type @ framework/cayenne-jdk1.5-unpublished/src/main/java/org/apache/cayenne/enhancer/EnhancementHelper.java:166:52[0m
+  [34margument (CtParameterImpl) asmType @ framework/cayenne-jdk1.5-unpublished/src/main/java/org/apache/cayenne/enhancer/EnhancementHelper.java:166:57 had a null type. The type likely was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  Pending package org.apache.cayenne.reflect.generic
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [org.apache.cayenne.map.DataMap][0m
+  [34mUnused type args: [java.lang.String, org.apache.cayenne.map.ObjEntity][0m
+  [34mUnused type args: [java.lang.String][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [org.apache.cayenne.map.EntityInheritanceTree][0m
+  [34mUnused type args: [org.apache.cayenne.map.EntityInheritanceTree][0m
+  [34mUnused type args: [org.apache.cayenne.map.DbAttribute @ framework/cayenne-jdk1.5-unpublished/src/main/java/org/apache/cayenne/map/DbEntity.java:180:28][0m
+  [34mUnused type args: [?][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [java.lang.Object][0m
+  [34mUnused type args: [java.lang.Object][0m
+  [34mUnused type args: [java.lang.Object][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [?][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [?][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring anonymous type: (CtTypeReferenceImpl) org.apache.cayenne.map.DbEntity$1[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring anonymous type: (CtTypeReferenceImpl) org.apache.cayenne.map.DbEntity$1[0m
+  [34mUnused type args: [org.apache.cayenne.map.PathComponent @ framework/cayenne-jdk1.5-unpublished/src/main/java/org/apache/cayenne/map/DbEntity.java:296:33][0m
+  [34mUnused type args: [org.apache.cayenne.map.DbAttribute @ framework/cayenne-jdk1.5-unpublished/src/main/java/org/apache/cayenne/map/DbEntity.java:296:47, org.apache.cayenne.map.DbRelationship @ framework/cayenne-jdk1.5-unpublished/src/main/java/org/apache/cayenne/map/DbEntity.java:296:60][0m
+  [34mIgnoring anonymous object declaration: (CtClassImpl) 1 @ framework/cayenne-jdk1.5-unpublished/src/main/java/org/apache/cayenne/map/DbEntity.java:296:79[0m
+  [34mUnused type args: [org.apache.cayenne.map.PathComponent][0m
+  [34mUnused type args: [org.apache.cayenne.map.DbAttribute, org.apache.cayenne.map.DbRelationship][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring method of an anonymous declaring type: (CtMethodImpl) iterator @ framework/cayenne-jdk1.5-unpublished/src/main/java/org/apache/cayenne/map/DbEntity.java:298:33 in (CtClassImpl) 1 @ framework/cayenne-jdk1.5-unpublished/src/main/java/org/apache/cayenne/map/DbEntity.java:296:79[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [java.lang.String, java.lang.String][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [java.lang.String, org.apache.cayenne.access.DataNode][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [? @ framework/cayenne-jdk1.5-unpublished/src/main/java/org/apache/cayenne/access/ObjectStore.java:566:18][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [org.apache.cayenne.reflect.ClassDescriptorFactory][0m
+  [34mUnused type args: [org.apache.cayenne.access.trans.JoinTreeNode][0m
+  [34mUnused type args: [org.apache.cayenne.access.trans.JoinTreeNode][0m
+  [34mUnused type args: [org.apache.cayenne.access.trans.JoinTreeNode][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [org.apache.cayenne.access.trans.JoinTreeNode @ framework/cayenne-jdk1.5-unpublished/src/main/java/org/apache/cayenne/access/trans/JoinTreeNode.java:77:38][0m
+  [34mUnused type args: [org.apache.cayenne.access.trans.JoinTreeNode][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [org.apache.cayenne.access.trans.JoinTreeNode][0m
+  [34mUnused type args: [org.apache.cayenne.map.DataMap][0m
+  [34mUnused type args: [org.apache.cayenne.map.ObjEntity][0m
+  [34mUnused type args: [org.apache.cayenne.map.ObjRelationship][0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.logging.Log[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.logging.Log[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  getting parent type for (CtClassImpl) TypeInfo @ framework/cayenne-jdk1.5-unpublished/src/main/java/org/apache/cayenne/dba/TypesMapping.java:531:18
+  [34mskipping default constructor: org.apache.cayenne.dba.TypesMapping$TypeInfo()[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [? @ framework/cayenne-jdk1.5-unpublished/src/main/java/org/apache/cayenne/map/EntityResolver.java:280:15][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [?][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [java.lang.String, java.lang.Object][0m
+  [34mUnused type args: [java.lang.String, java.lang.Object][0m
+  [34mUnused type args: [java.lang.Object, org.apache.cayenne.access.ObjectDiff][0m
+  [34mUnused type args: [java.lang.Object][0m
+  [34mUnused type args: [java.lang.Object, org.apache.cayenne.Persistent][0m
+  [34mUnused type args: [java.lang.Object, org.apache.cayenne.access.ObjectDiff][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [org.apache.cayenne.map.DbAttribute @ framework/cayenne-jdk1.5-unpublished/src/main/java/org/apache/cayenne/access/trans/SelectTranslator.java:264:19][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [org.apache.cayenne.map.DbAttribute @ framework/cayenne-jdk1.5-unpublished/src/main/java/org/apache/cayenne/access/trans/SelectTranslator.java:264:57][0m
+  [34mIgnoring anonymous type: (CtTypeReferenceImpl) org.apache.cayenne.access.trans.SelectTranslator$1[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring anonymous type: (CtTypeReferenceImpl) org.apache.cayenne.access.trans.SelectTranslator$1[0m
+  [34mIgnoring anonymous object declaration: (CtClassImpl) 1 @ framework/cayenne-jdk1.5-unpublished/src/main/java/org/apache/cayenne/access/trans/SelectTranslator.java:279:57[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring method of an anonymous declaring type: (CtMethodImpl) visitAttribute @ framework/cayenne-jdk1.5-unpublished/src/main/java/org/apache/cayenne/access/trans/SelectTranslator.java:281:28 in (CtClassImpl) 1 @ framework/cayenne-jdk1.5-unpublished/src/main/java/org/apache/cayenne/access/trans/SelectTranslator.java:279:57[0m
+  [34mUnused type args: [org.apache.cayenne.util.CayenneMapEntry @ framework/cayenne-jdk1.5-unpublished/src/main/java/org/apache/cayenne/access/trans/SelectTranslator.java:285:26][0m
+  [34mUnused type args: [org.apache.cayenne.util.CayenneMapEntry][0m
+  [34mUnused type args: [org.apache.cayenne.util.CayenneMapEntry][0m
+  [34mUnused type args: [org.apache.cayenne.util.CayenneMapEntry][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [org.apache.cayenne.access.jdbc.ColumnDescriptor][0m
+  [34mUnused type args: [org.apache.cayenne.map.DbAttribute][0m
+  [34mUnused type args: [org.apache.cayenne.access.jdbc.ColumnDescriptor][0m
+  [34mUnused type args: [org.apache.cayenne.map.DbAttribute][0m
+  [34mIgnoring method of an anonymous declaring type: (CtMethodImpl) visitToMany @ framework/cayenne-jdk1.5-unpublished/src/main/java/org/apache/cayenne/access/trans/SelectTranslator.java:306:28 in (CtClassImpl) 1 @ framework/cayenne-jdk1.5-unpublished/src/main/java/org/apache/cayenne/access/trans/SelectTranslator.java:279:57[0m
+  [34mIgnoring method of an anonymous declaring type: (CtMethodImpl) visitRelationship @ framework/cayenne-jdk1.5-unpublished/src/main/java/org/apache/cayenne/access/trans/SelectTranslator.java:316:26 in (CtClassImpl) 1 @ framework/cayenne-jdk1.5-unpublished/src/main/java/org/apache/cayenne/access/trans/SelectTranslator.java:279:57[0m
+  [34mIgnoring method of an anonymous declaring type: (CtMethodImpl) visitRelationship @ framework/cayenne-jdk1.5-unpublished/src/main/java/org/apache/cayenne/access/trans/SelectTranslator.java:316:26 in (CtClassImpl) 1 @ framework/cayenne-jdk1.5-unpublished/src/main/java/org/apache/cayenne/access/trans/SelectTranslator.java:279:57[0m
+  [34mIgnoring anonymous type: (CtTypeReferenceImpl) org.apache.cayenne.access.trans.SelectTranslator$1[0m
+  [34mIgnoring anonymous type: (CtTypeReferenceImpl) org.apache.cayenne.access.trans.SelectTranslator$1[0m
+  [34mIgnoring anonymous type: (CtTypeReferenceImpl) org.apache.cayenne.access.trans.SelectTranslator$1[0m
+  [34mIgnoring method of an anonymous declaring type: (CtMethodImpl) visitRelationship @ framework/cayenne-jdk1.5-unpublished/src/main/java/org/apache/cayenne/access/trans/SelectTranslator.java:316:26 in (CtClassImpl) 1 @ framework/cayenne-jdk1.5-unpublished/src/main/java/org/apache/cayenne/access/trans/SelectTranslator.java:279:57[0m
+  [34mIgnoring anonymous type: (CtTypeReferenceImpl) org.apache.cayenne.access.trans.SelectTranslator$1[0m
+  [34mIgnoring method of an anonymous declaring type: (CtMethodImpl) visitToOne @ framework/cayenne-jdk1.5-unpublished/src/main/java/org/apache/cayenne/access/trans/SelectTranslator.java:311:28 in (CtClassImpl) 1 @ framework/cayenne-jdk1.5-unpublished/src/main/java/org/apache/cayenne/access/trans/SelectTranslator.java:279:57[0m
+  [34mIgnoring method of an anonymous declaring type: (CtMethodImpl) visitRelationship @ framework/cayenne-jdk1.5-unpublished/src/main/java/org/apache/cayenne/access/trans/SelectTranslator.java:316:26 in (CtClassImpl) 1 @ framework/cayenne-jdk1.5-unpublished/src/main/java/org/apache/cayenne/access/trans/SelectTranslator.java:279:57[0m
+  [34mIgnoring method of an anonymous declaring type: (CtMethodImpl) visitRelationship @ framework/cayenne-jdk1.5-unpublished/src/main/java/org/apache/cayenne/access/trans/SelectTranslator.java:316:26 in (CtClassImpl) 1 @ framework/cayenne-jdk1.5-unpublished/src/main/java/org/apache/cayenne/access/trans/SelectTranslator.java:279:57[0m
+  [34mIgnoring anonymous type: (CtTypeReferenceImpl) org.apache.cayenne.access.trans.SelectTranslator$1[0m
+  [34mIgnoring anonymous type: (CtTypeReferenceImpl) org.apache.cayenne.access.trans.SelectTranslator$1[0m
+  [34mIgnoring anonymous type: (CtTypeReferenceImpl) org.apache.cayenne.access.trans.SelectTranslator$1[0m
+  [34mIgnoring method of an anonymous declaring type: (CtMethodImpl) visitRelationship @ framework/cayenne-jdk1.5-unpublished/src/main/java/org/apache/cayenne/access/trans/SelectTranslator.java:316:26 in (CtClassImpl) 1 @ framework/cayenne-jdk1.5-unpublished/src/main/java/org/apache/cayenne/access/trans/SelectTranslator.java:279:57[0m
+  [34mIgnoring anonymous type: (CtTypeReferenceImpl) org.apache.cayenne.access.trans.SelectTranslator$1[0m
+  [34mIgnoring method of an anonymous declaring type: (CtMethodImpl) visitRelationship @ framework/cayenne-jdk1.5-unpublished/src/main/java/org/apache/cayenne/access/trans/SelectTranslator.java:316:26 in (CtClassImpl) 1 @ framework/cayenne-jdk1.5-unpublished/src/main/java/org/apache/cayenne/access/trans/SelectTranslator.java:279:57[0m
+  [34mUnused type args: [org.apache.cayenne.map.DbRelationship][0m
+  [34mUnused type args: [org.apache.cayenne.map.DbJoin @ framework/cayenne-jdk1.5-unpublished/src/main/java/org/apache/cayenne/access/trans/SelectTranslator.java:320:22][0m
+  [34mUnused type args: [org.apache.cayenne.map.DbJoin][0m
+  [34mUnused type args: [org.apache.cayenne.map.DbJoin][0m
+  [34mUnused type args: [org.apache.cayenne.map.DbJoin][0m
+  [34mUnused type args: [org.apache.cayenne.access.jdbc.ColumnDescriptor][0m
+  [34mUnused type args: [org.apache.cayenne.map.DbAttribute][0m
+  [34mUnused type args: [org.apache.cayenne.access.jdbc.ColumnDescriptor][0m
+  [34mUnused type args: [org.apache.cayenne.map.DbAttribute][0m
+  [34mUnused type args: [org.apache.cayenne.map.DbAttribute][0m
+  [34mUnused type args: [org.apache.cayenne.access.jdbc.ColumnDescriptor][0m
+  [34mUnused type args: [org.apache.cayenne.map.DbAttribute][0m
+  [34mUnused type args: [org.apache.cayenne.access.jdbc.ColumnDescriptor][0m
+  [34mUnused type args: [org.apache.cayenne.map.DbAttribute][0m
+  [34mUnused type args: [java.lang.String][0m
+  [34mUnused type args: [org.apache.cayenne.map.DbAttribute @ framework/cayenne-jdk1.5-unpublished/src/main/java/org/apache/cayenne/access/trans/SelectTranslator.java:360:31, org.apache.cayenne.map.DbRelationship @ framework/cayenne-jdk1.5-unpublished/src/main/java/org/apache/cayenne/access/trans/SelectTranslator.java:360:44][0m
+  [34mUnused type args: [org.apache.cayenne.map.DbAttribute @ framework/cayenne-jdk1.5-unpublished/src/main/java/org/apache/cayenne/access/trans/SelectTranslator.java:361:36, org.apache.cayenne.map.DbRelationship @ framework/cayenne-jdk1.5-unpublished/src/main/java/org/apache/cayenne/access/trans/SelectTranslator.java:361:49][0m
+  [34mUnused type args: [org.apache.cayenne.map.PathComponent][0m
+  [34mUnused type args: [org.apache.cayenne.map.DbAttribute, org.apache.cayenne.map.DbRelationship][0m
+  [34mUnused type args: [java.lang.String, java.lang.String][0m
+  [34mUnused type args: [org.apache.cayenne.map.DbAttribute, org.apache.cayenne.map.DbRelationship][0m
+  [34mUnused type args: [org.apache.cayenne.map.DbAttribute, org.apache.cayenne.map.DbRelationship][0m
+  [34mUnused type args: [org.apache.cayenne.map.DbAttribute, org.apache.cayenne.map.DbRelationship][0m
+  [34mUnused type args: [org.apache.cayenne.map.DbAttribute, org.apache.cayenne.map.DbRelationship][0m
+  [34mUnused type args: [org.apache.cayenne.map.DbAttribute, org.apache.cayenne.map.DbRelationship][0m
+  [34mUnused type args: [org.apache.cayenne.map.DbAttribute, org.apache.cayenne.map.DbRelationship][0m
+  [34mUnused type args: [org.apache.cayenne.map.DbAttribute, org.apache.cayenne.map.DbRelationship][0m
+  [34mUnused type args: [org.apache.cayenne.map.DbAttribute, org.apache.cayenne.map.DbRelationship][0m
+  [34mUnused type args: [org.apache.cayenne.map.DbAttribute, org.apache.cayenne.map.DbRelationship][0m
+  [34mUnused type args: [org.apache.cayenne.map.DbJoin][0m
+  [34mUnused type args: [org.apache.cayenne.access.jdbc.ColumnDescriptor][0m
+  [34mUnused type args: [org.apache.cayenne.map.DbAttribute][0m
+  [34mUnused type args: [org.apache.cayenne.access.jdbc.ColumnDescriptor][0m
+  [34mUnused type args: [org.apache.cayenne.map.DbAttribute][0m
+  [34mUnused type args: [org.apache.cayenne.access.jdbc.ColumnDescriptor][0m
+  [34mUnused type args: [org.apache.cayenne.map.DbAttribute][0m
+  [34mUnused type args: [org.apache.cayenne.access.jdbc.ColumnDescriptor][0m
+  [34mUnused type args: [org.apache.cayenne.map.DbAttribute, org.apache.cayenne.map.DbRelationship][0m
+  [34mUnused type args: [org.apache.cayenne.map.DbAttribute][0m
+  [34mUnused type args: [org.apache.cayenne.query.PrefetchTreeNode][0m
+  [34mUnused type args: [org.apache.cayenne.map.DbAttribute @ framework/cayenne-jdk1.5-unpublished/src/main/java/org/apache/cayenne/access/trans/SelectTranslator.java:429:36, org.apache.cayenne.map.DbRelationship @ framework/cayenne-jdk1.5-unpublished/src/main/java/org/apache/cayenne/access/trans/SelectTranslator.java:429:49][0m
+  [34mUnused type args: [org.apache.cayenne.map.PathComponent][0m
+  [34mUnused type args: [org.apache.cayenne.map.DbAttribute, org.apache.cayenne.map.DbRelationship][0m
+  [34mUnused type args: [java.lang.String, java.lang.String][0m
+  [34mUnused type args: [org.apache.cayenne.map.DbAttribute, org.apache.cayenne.map.DbRelationship][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [org.apache.cayenne.map.DbAttribute @ framework/cayenne-jdk1.5-unpublished/src/main/java/org/apache/cayenne/access/trans/SelectTranslator.java:445:28][0m
+  [34mUnused type args: [org.apache.cayenne.map.DbAttribute][0m
+  [34mUnused type args: [org.apache.cayenne.map.DbAttribute][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [org.apache.cayenne.map.DbAttribute @ framework/cayenne-jdk1.5-unpublished/src/main/java/org/apache/cayenne/access/trans/SelectTranslator.java:447:49][0m
+  [34mUnused type args: [org.apache.cayenne.map.DbJoin][0m
+  [34mUnused type args: [org.apache.cayenne.map.DbAttribute][0m
+  [34mUnused type args: [org.apache.cayenne.map.DbAttribute][0m
+  [34mUnused type args: [org.apache.cayenne.map.ObjAttribute @ framework/cayenne-jdk1.5-unpublished/src/main/java/org/apache/cayenne/access/trans/SelectTranslator.java:457:26][0m
+  [34mUnused type args: [org.apache.cayenne.map.ObjAttribute @ framework/cayenne-jdk1.5-unpublished/src/main/java/org/apache/cayenne/access/trans/SelectTranslator.java:457:67][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [org.apache.cayenne.map.ObjAttribute][0m
+  [34mUnused type args: [org.apache.cayenne.map.ObjAttribute][0m
+  [34mUnused type args: [org.apache.cayenne.util.CayenneMapEntry @ framework/cayenne-jdk1.5-unpublished/src/main/java/org/apache/cayenne/access/trans/SelectTranslator.java:465:30][0m
+  [34mUnused type args: [org.apache.cayenne.util.CayenneMapEntry][0m
+  [34mUnused type args: [org.apache.cayenne.util.CayenneMapEntry][0m
+  [34mUnused type args: [org.apache.cayenne.util.CayenneMapEntry][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [org.apache.cayenne.map.DbAttribute][0m
+  [34mUnused type args: [org.apache.cayenne.access.jdbc.ColumnDescriptor][0m
+  [34mUnused type args: [org.apache.cayenne.map.DbAttribute][0m
+  [34mUnused type args: [org.apache.cayenne.access.jdbc.ColumnDescriptor][0m
+  [34mUnused type args: [org.apache.cayenne.map.DbAttribute][0m
+  [34mUnused type args: [org.apache.cayenne.map.DbAttribute @ framework/cayenne-jdk1.5-unpublished/src/main/java/org/apache/cayenne/access/trans/SelectTranslator.java:494:26][0m
+  [34mUnused type args: [org.apache.cayenne.map.DbAttribute @ framework/cayenne-jdk1.5-unpublished/src/main/java/org/apache/cayenne/access/trans/SelectTranslator.java:494:68][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [org.apache.cayenne.map.DbAttribute][0m
+  [34mUnused type args: [org.apache.cayenne.map.DbAttribute][0m
+  [34mUnused type args: [org.apache.cayenne.map.DbAttribute][0m
+  [34mUnused type args: [org.apache.cayenne.access.jdbc.ColumnDescriptor][0m
+  [34mUnused type args: [org.apache.cayenne.map.DbAttribute][0m
+  [34mUnused type args: [org.apache.cayenne.access.jdbc.ColumnDescriptor][0m
+  [34mUnused type args: [org.apache.cayenne.map.DbAttribute][0m
+  [34mUnused type args: [org.apache.cayenne.access.jdbc.ColumnDescriptor][0m
+  [34mskipping default constructor: org.apache.cayenne.access.DataDomainQuery()[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [org.apache.cayenne.reflect.ClassDescriptorFactory][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [org.apache.cayenne.query.PrefetchTreeNode][0m
+  [34mUnused type args: [org.apache.cayenne.query.PrefetchTreeNode][0m
+  [34mUnused type args: [org.apache.cayenne.query.PrefetchTreeNode][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [org.apache.cayenne.query.PrefetchTreeNode @ framework/cayenne-jdk1.5-unpublished/src/main/java/org/apache/cayenne/query/PrefetchTreeNode.java:269:38][0m
+  [34mUnused type args: [org.apache.cayenne.query.PrefetchTreeNode][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [java.lang.String, org.apache.cayenne.map.Attribute][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [java.lang.String, org.apache.cayenne.map.Relationship][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [java.lang.String, org.apache.cayenne.map.Attribute][0m
+  [34mUnused type args: [java.lang.Integer, java.lang.String[]][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [?][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [org.apache.cayenne.access.DataContext][0m
+  [34mUnused type args: [java.lang.String][0m
+  [34mUnused type args: [java.lang.String][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [org.apache.cayenne.Persistent][0m
+  [34mUnused type args: [java.lang.String, java.lang.Object][0m
+  [34mUnused type args: [org.apache.cayenne.access.jdbc.ColumnDescriptor[]][0m
+  [34mUnused type args: [org.apache.cayenne.access.jdbc.ColumnDescriptor[]][0m
+  [34mUnused type args: [org.apache.cayenne.access.jdbc.ColumnDescriptor[]][0m
+  [34mUnused type args: [java.lang.String, org.apache.cayenne.access.DataNode][0m
+  [34mUnused type args: [java.lang.String, org.apache.cayenne.access.DataNode][0m
+  [34mUnused type args: [java.lang.String, org.apache.cayenne.access.DataNode][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring anonymous type: (CtTypeReferenceImpl) org.apache.cayenne.dba.frontbase.FrontBaseActionBuilder$1[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring anonymous type: (CtTypeReferenceImpl) org.apache.cayenne.dba.frontbase.FrontBaseActionBuilder$1[0m
+  [34mIgnoring anonymous object declaration: (CtClassImpl) 1 @ framework/cayenne-jdk1.5-unpublished/src/main/java/org/apache/cayenne/dba/frontbase/FrontBaseActionBuilder.java:40:65[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring method of an anonymous declaring type: (CtMethodImpl) createTranslator @ framework/cayenne-jdk1.5-unpublished/src/main/java/org/apache/cayenne/dba/frontbase/FrontBaseActionBuilder.java:43:40 in (CtClassImpl) 1 @ framework/cayenne-jdk1.5-unpublished/src/main/java/org/apache/cayenne/dba/frontbase/FrontBaseActionBuilder.java:40:65[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring anonymous type: (CtTypeReferenceImpl) org.apache.cayenne.dba.frontbase.FrontBaseActionBuilder$1[0m
+  [34mIgnoring anonymous type: (CtTypeReferenceImpl) org.apache.cayenne.dba.frontbase.FrontBaseActionBuilder$1[0m
+  [34mIgnoring anonymous type: (CtTypeReferenceImpl) org.apache.cayenne.dba.frontbase.FrontBaseActionBuilder$1[0m
+  [34mSkipping selection with no field declaration: (CtFieldReferenceImpl) class[0m
+  [34mSkipping selection with no field declaration: (CtFieldReferenceImpl) class[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [java.lang.String, org.apache.cayenne.reflect.ClassDescriptor][0m
+  Pending package java.util.concurrent
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [java.lang.String @ framework/cayenne-jdk1.5-unpublished/src/main/java/org/apache/cayenne/map/ObjEntity.java:730:31, org.apache.cayenne.map.ObjRelationship @ framework/cayenne-jdk1.5-unpublished/src/main/java/org/apache/cayenne/map/ObjEntity.java:730:39][0m
+  [34mUnused type args: [java.lang.String, ?][0m
+  [34mUnused type args: [java.lang.String @ framework/cayenne-jdk1.5-unpublished/src/main/java/org/apache/cayenne/map/ObjEntity.java:733:19, org.apache.cayenne.map.ObjRelationship @ framework/cayenne-jdk1.5-unpublished/src/main/java/org/apache/cayenne/map/ObjEntity.java:733:27][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [java.lang.String @ framework/cayenne-jdk1.5-unpublished/src/main/java/org/apache/cayenne/map/ObjEntity.java:733:74, org.apache.cayenne.map.ObjRelationship @ framework/cayenne-jdk1.5-unpublished/src/main/java/org/apache/cayenne/map/ObjEntity.java:733:82][0m
+  [34mUnused type args: [java.lang.String, org.apache.cayenne.map.ObjRelationship][0m
+  [34mUnused type args: [java.lang.String, org.apache.cayenne.map.ObjRelationship][0m
+  [34mUnused type args: [java.lang.String, org.apache.cayenne.map.ObjRelationship][0m
+  [34mUnused type args: [java.lang.String, java.lang.String][0m
+  [34mUnused type args: [java.lang.String, java.lang.String][0m
+  [34mUnused type args: [org.apache.cayenne.map.DbEntity][0m
+  [34mUnused type args: [org.apache.cayenne.map.DbEntity][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [java.lang.String, org.apache.cayenne.map.DbEntity][0m
+  [34mUnused type args: [org.apache.cayenne.map.DbEntity][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [org.apache.cayenne.event.EventSubject][0m
+  [34mUnused type args: [org.apache.cayenne.event.EventSubject][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [org.apache.cayenne.event.EventSubject @ framework/cayenne-jdk1.5-unpublished/src/main/java/org/apache/cayenne/event/EventBridge.java:104:42][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [org.apache.cayenne.event.EventSubject][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring anonymous type: (CtTypeReferenceImpl) org.apache.cayenne.query.ObjectIdQuery$1[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring anonymous type: (CtTypeReferenceImpl) org.apache.cayenne.query.ObjectIdQuery$1[0m
+  [34mskipping default constructor: org.apache.cayenne.query.DefaultQueryMetadata()[0m
+  [34mIgnoring anonymous object declaration: (CtClassImpl) 1 @ framework/cayenne-jdk1.5-unpublished/src/main/java/org/apache/cayenne/query/ObjectIdQuery.java:90:56[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring method of an anonymous declaring type: (CtMethodImpl) getClassDescriptor @ framework/cayenne-jdk1.5-unpublished/src/main/java/org/apache/cayenne/query/ObjectIdQuery.java:93:40 in (CtClassImpl) 1 @ framework/cayenne-jdk1.5-unpublished/src/main/java/org/apache/cayenne/query/ObjectIdQuery.java:90:56[0m
+  [34mIgnoring method of an anonymous declaring type: (CtMethodImpl) getObjEntity @ framework/cayenne-jdk1.5-unpublished/src/main/java/org/apache/cayenne/query/ObjectIdQuery.java:98:34 in (CtClassImpl) 1 @ framework/cayenne-jdk1.5-unpublished/src/main/java/org/apache/cayenne/query/ObjectIdQuery.java:90:56[0m
+  [34mIgnoring method of an anonymous declaring type: (CtMethodImpl) getClassDescriptor @ framework/cayenne-jdk1.5-unpublished/src/main/java/org/apache/cayenne/query/ObjectIdQuery.java:93:40 in (CtClassImpl) 1 @ framework/cayenne-jdk1.5-unpublished/src/main/java/org/apache/cayenne/query/ObjectIdQuery.java:90:56[0m
+  [34mIgnoring method of an anonymous declaring type: (CtMethodImpl) getClassDescriptor @ framework/cayenne-jdk1.5-unpublished/src/main/java/org/apache/cayenne/query/ObjectIdQuery.java:93:40 in (CtClassImpl) 1 @ framework/cayenne-jdk1.5-unpublished/src/main/java/org/apache/cayenne/query/ObjectIdQuery.java:90:56[0m
+  [34mIgnoring anonymous type: (CtTypeReferenceImpl) org.apache.cayenne.query.ObjectIdQuery$1[0m
+  [34mIgnoring anonymous type: (CtTypeReferenceImpl) org.apache.cayenne.query.ObjectIdQuery$1[0m
+  [34mIgnoring anonymous type: (CtTypeReferenceImpl) org.apache.cayenne.query.ObjectIdQuery$1[0m
+  [34mIgnoring method of an anonymous declaring type: (CtMethodImpl) getClassDescriptor @ framework/cayenne-jdk1.5-unpublished/src/main/java/org/apache/cayenne/query/ObjectIdQuery.java:93:40 in (CtClassImpl) 1 @ framework/cayenne-jdk1.5-unpublished/src/main/java/org/apache/cayenne/query/ObjectIdQuery.java:90:56[0m
+  [34mIgnoring anonymous type: (CtTypeReferenceImpl) org.apache.cayenne.query.ObjectIdQuery$1[0m
+  [34mIgnoring method of an anonymous declaring type: (CtMethodImpl) isFetchingDataRows @ framework/cayenne-jdk1.5-unpublished/src/main/java/org/apache/cayenne/query/ObjectIdQuery.java:103:32 in (CtClassImpl) 1 @ framework/cayenne-jdk1.5-unpublished/src/main/java/org/apache/cayenne/query/ObjectIdQuery.java:90:56[0m
+  [34mUnused type args: [java.lang.String, java.lang.String][0m
+  [34mUnused type args: [java.lang.String, java.lang.String][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [java.lang.String, org.apache.cayenne.query.SQLResultSetMapping][0m
+  [34mUnused type args: [?][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [org.apache.cayenne.event.EventSubject][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mskipping default constructor: org.apache.cayenne.access.NoopDelegate()[0m
+  [34mUnused type args: [java.lang.String, org.apache.cayenne.access.types.ExtendedType][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [java.lang.StringBuilder][0m
+  [34mUnused type args: [java.lang.StringBuilder][0m
+  [34mUnused type args: [java.lang.StringBuilder][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [java.lang.String, org.apache.cayenne.map.ObjEntity][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [java.lang.String, org.apache.cayenne.map.ObjEntity][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [java.lang.String, org.apache.cayenne.map.ObjAttribute][0m
+  [34mUnused type args: [org.apache.cayenne.map.ObjAttribute][0m
+  getting parent type for (CtClassImpl) CacheEntry @ framework/cayenne-jdk1.5-unpublished/src/main/java/org/apache/cayenne/cache/MapQueryCache.java:147:17
+  [34mskipping default constructor: org.apache.cayenne.cache.MapQueryCache$CacheEntry()[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [java.lang.String][0m
+  [34mUnused type args: [java.lang.String, java.lang.String][0m
+  [34mUnused type args: [java.lang.String][0m
+  [34mUnused type args: [java.lang.String][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [java.lang.String, java.lang.String][0m
+  [34mUnused type args: [java.lang.String][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [org.apache.cayenne.map.DbJoin][0m
+  [34mUnused type args: [java.lang.String, java.lang.Object][0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.collections.map.LRUMap[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.collections.map.LRUMap[0m
+  [34mIgnoring anonymous type: (CtTypeReferenceImpl) org.apache.cayenne.map.ObjEntity$1[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring anonymous type: (CtTypeReferenceImpl) org.apache.cayenne.map.ObjEntity$1[0m
+  [34mUnused type args: [org.apache.cayenne.map.PathComponent @ framework/cayenne-jdk1.5-unpublished/src/main/java/org/apache/cayenne/map/ObjEntity.java:919:33][0m
+  [34mUnused type args: [org.apache.cayenne.map.ObjAttribute @ framework/cayenne-jdk1.5-unpublished/src/main/java/org/apache/cayenne/map/ObjEntity.java:919:47, org.apache.cayenne.map.ObjRelationship @ framework/cayenne-jdk1.5-unpublished/src/main/java/org/apache/cayenne/map/ObjEntity.java:919:61][0m
+  [34mIgnoring anonymous object declaration: (CtClassImpl) 1 @ framework/cayenne-jdk1.5-unpublished/src/main/java/org/apache/cayenne/map/ObjEntity.java:919:81[0m
+  [34mUnused type args: [org.apache.cayenne.map.PathComponent][0m
+  [34mUnused type args: [org.apache.cayenne.map.ObjAttribute, org.apache.cayenne.map.ObjRelationship][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring method of an anonymous declaring type: (CtMethodImpl) iterator @ framework/cayenne-jdk1.5-unpublished/src/main/java/org/apache/cayenne/map/ObjEntity.java:921:33 in (CtClassImpl) 1 @ framework/cayenne-jdk1.5-unpublished/src/main/java/org/apache/cayenne/map/ObjEntity.java:919:81[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [java.lang.String, java.lang.String][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [org.apache.cayenne.util.Invocation @ framework/cayenne-jdk1.5-unpublished/src/main/java/org/apache/cayenne/event/DispatchQueue.java:117:20][0m
+  [34mUnused type args: [java.lang.Object, java.util.Collection][0m
+  [34mUnused type args: [org.apache.cayenne.util.Invocation][0m
+  [34mUnused type args: [org.apache.cayenne.util.Invocation][0m
+  [34mUnused type args: [org.apache.cayenne.util.Invocation][0m
+  [34mUnused type args: [org.apache.cayenne.util.Invocation][0m
+  [34mUnused type args: [org.apache.cayenne.util.Invocation][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [org.apache.cayenne.util.Invocation @ framework/cayenne-jdk1.5-unpublished/src/main/java/org/apache/cayenne/event/DispatchQueue.java:119:45][0m
+  [34mUnused type args: [java.lang.Object, java.util.Collection][0m
+  [34mUnused type args: [org.apache.cayenne.util.Invocation][0m
+  [34mUnused type args: [org.apache.cayenne.util.Invocation][0m
+  [34mUnused type args: [org.apache.cayenne.util.Invocation][0m
+  [34mUnused type args: [org.apache.cayenne.util.Invocation][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [org.apache.cayenne.map.DataMap][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [org.apache.cayenne.map.DataMap][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [java.lang.String, org.apache.cayenne.access.types.ExtendedType][0m
+  [34mUnused type args: [java.lang.String, org.apache.cayenne.access.types.ExtendedType][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [java.lang.String @ framework/cayenne-jdk1.5-unpublished/src/main/java/org/apache/cayenne/access/types/ExtendedTypeMap.java:70:36, org.apache.cayenne.access.types.ExtendedType @ framework/cayenne-jdk1.5-unpublished/src/main/java/org/apache/cayenne/access/types/ExtendedTypeMap.java:70:44][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [org.apache.cayenne.map.DbRelationship][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [java.lang.String, org.apache.cayenne.map.Embeddable][0m
+  [34mUnused type args: [java.lang.String, org.apache.cayenne.map.Embeddable][0m
+  [34mUnused type args: [?, ?][0m
+  [34mUnused type args: [java.lang.String, org.apache.cayenne.map.Embeddable][0m
+  [34mskipping default constructor: org.apache.cayenne.merge.AbstractToDbToken()[0m
+  getting parent type for (CtClassImpl) Entity @ framework/cayenne-jdk1.5-unpublished/src/main/java/org/apache/cayenne/merge/AbstractToDbToken.java:58:27
+  getting parent type for (CtClassImpl) EntityAndColumn @ framework/cayenne-jdk1.5-unpublished/src/main/java/org/apache/cayenne/merge/AbstractToDbToken.java:76:27
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [org.apache.cayenne.event.EventManager$Dispatch][0m
+  [34mUnused type args: [org.apache.cayenne.event.EventManager$Dispatch][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [org.apache.cayenne.event.EventManager$Dispatch][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [java.lang.Object, java.lang.Object][0m
+  [34mUnused type args: [java.lang.Object, java.lang.Object][0m
+  [34mUnused type args: [java.lang.Object, java.lang.Object][0m
+  [34mUnused type args: [java.lang.StringBuilder][0m
+  [34mUnused type args: [java.lang.StringBuilder][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [java.lang.StringBuilder @ framework/cayenne-jdk1.5-unpublished/src/main/java/org/apache/cayenne/access/jdbc/EJBQLTranslationContext.java:78:42][0m
+  [34mUnused type args: [java.lang.StringBuilder][0m
+  [34mUnused type args: [java.lang.StringBuilder][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [java.lang.StringBuilder @ framework/cayenne-jdk1.5-unpublished/src/main/java/org/apache/cayenne/access/jdbc/EJBQLTranslationContext.java:82:42][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [java.lang.StringBuilder][0m
+  [34mUnused type args: [java.lang.StringBuilder][0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.collections.Transformer @ framework/cayenne-jdk1.5-unpublished/src/main/java/org/apache/cayenne/exp/Expression.java:271:9[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.collections.Transformer @ framework/cayenne-jdk1.5-unpublished/src/main/java/org/apache/cayenne/exp/Expression.java:271:9[0m
+  [33maddUsage.CtConstructorCall: expected constructor for (null) from spoon.support.reflect.code.CtNewClassImpl @ framework/cayenne-jdk1.5-unpublished/src/main/java/org/apache/cayenne/exp/Expression.java:271:35[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.collections.Transformer[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.collections.Transformer @ framework/cayenne-jdk1.5-unpublished/src/main/java/org/apache/cayenne/exp/Expression.java:271:39[0m
+  [34mIgnoring anonymous object declaration: (CtClassImpl) 1 @ framework/cayenne-jdk1.5-unpublished/src/main/java/org/apache/cayenne/exp/Expression.java:271:53[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.collections.Transformer[0m
+  [34mIgnoring method of an anonymous declaring type: (CtMethodImpl) transform @ framework/cayenne-jdk1.5-unpublished/src/main/java/org/apache/cayenne/exp/Expression.java:273:27 in (CtClassImpl) 1 @ framework/cayenne-jdk1.5-unpublished/src/main/java/org/apache/cayenne/exp/Expression.java:271:53[0m
+  [34mUnused type args: [java.lang.String, ?][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [java.lang.String, ?][0m
+  [34mskipping default constructor: org.apache.cayenne.exp.ExpressionFactory()[0m
+  Pending package org.apache.cayenne.exp.parser
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.collections.Transformer[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.collections.Transformer[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.collections.Transformer[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.collections.Transformer[0m
+  [34mUnused type args: [java.lang.String][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [org.apache.cayenne.query.Query @ framework/cayenne-jdk1.5-unpublished/src/main/java/org/apache/cayenne/dba/JdbcPkGenerator.java:381:14][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [org.apache.cayenne.query.Query @ framework/cayenne-jdk1.5-unpublished/src/main/java/org/apache/cayenne/dba/JdbcPkGenerator.java:381:45][0m
+  [34mUnused type args: [org.apache.cayenne.query.Query][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [org.apache.cayenne.query.Query][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [org.apache.cayenne.query.Query][0m
+  [34mUnused type args: [org.apache.cayenne.query.Query][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [org.apache.cayenne.query.Ordering][0m
+  [34mUnused type args: [org.apache.cayenne.query.Ordering][0m
+  [34mUnused type args: [? @ framework/cayenne-jdk1.5-unpublished/src/main/java/org/apache/cayenne/access/DataDomain.java:268:15][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [java.lang.String, java.lang.String][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [java.lang.String, java.lang.String][0m
+  [34mUnused type args: [java.lang.String, java.lang.String][0m
+  [34mUnused type args: [java.lang.String, java.lang.String][0m
+  [34mUnused type args: [java.lang.String, java.lang.String][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [java.lang.String @ framework/cayenne-jdk1.5-unpublished/src/main/java/org/apache/cayenne/access/jdbc/EJBQLTranslationContext.java:366:40, java.lang.String @ framework/cayenne-jdk1.5-unpublished/src/main/java/org/apache/cayenne/access/jdbc/EJBQLTranslationContext.java:366:48][0m
+  [34mUnused type args: [java.lang.String, java.lang.String][0m
+  [34mUnused type args: [java.lang.String, java.lang.String][0m
+  [34mUnused type args: [java.lang.Object][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [java.lang.Object][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [org.apache.cayenne.query.PrefetchTreeNode][0m
+  [34mUnused type args: [org.apache.cayenne.graph.GraphDiff][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [org.apache.cayenne.access.jdbc.ColumnDescriptor][0m
+  [34mUnused type args: [org.apache.cayenne.access.jdbc.ColumnDescriptor][0m
+  [34mUnused type args: [org.apache.cayenne.access.jdbc.ColumnDescriptor][0m
+  [34mUnused type args: [org.apache.cayenne.access.jdbc.ColumnDescriptor][0m
+  [34mUnused type args: [org.apache.cayenne.access.jdbc.ColumnDescriptor][0m
+  [34mskipping default constructor: org.apache.cayenne.cache.MapQueryCacheFactory()[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [org.apache.cayenne.query.PrefetchTreeNode][0m
+  [34mUnused type args: [org.apache.cayenne.query.PrefetchTreeNode][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [org.apache.cayenne.map.EntityInheritanceTree][0m
+  [34mUnused type args: [org.apache.cayenne.map.EntityInheritanceTree][0m
+  [34mUnused type args: [java.lang.String, org.apache.cayenne.map.Procedure][0m
+  [34mUnused type args: [java.lang.String, org.apache.cayenne.map.Procedure][0m
+  [34mUnused type args: [java.lang.String, java.lang.Object][0m
+  [34mUnused type args: [java.lang.String, java.lang.Object][0m
+  [34mUnused type args: [java.lang.String @ framework/cayenne-jdk1.5-unpublished/src/main/java/org/apache/cayenne/dba/frontbase/FrontBasePkGenerator.java:63:14][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [java.lang.String @ framework/cayenne-jdk1.5-unpublished/src/main/java/org/apache/cayenne/dba/frontbase/FrontBasePkGenerator.java:63:43][0m
+  [34mUnused type args: [org.apache.cayenne.map.DbEntity][0m
+  [34mUnused type args: [java.lang.String][0m
+  [34mUnused type args: [java.lang.String][0m
+  [34mUnused type args: [java.lang.String, org.apache.cayenne.map.DbEntity][0m
+  [34mUnused type args: [java.lang.String, org.apache.cayenne.map.DbEntity][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [java.lang.String, java.lang.Object][0m
+  [34mUnused type args: [java.lang.String, java.lang.Object][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mSkipping selection with no field declaration: (CtFieldReferenceImpl) class[0m
+  [34mSkipping selection with no field declaration: (CtFieldReferenceImpl) class[0m
+  [34mUnused type args: [org.apache.cayenne.query.PrefetchTreeNode @ framework/cayenne-jdk1.5-unpublished/src/main/java/org/apache/cayenne/query/PrefetchTreeNode.java:131:20][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [org.apache.cayenne.query.PrefetchTreeNode @ framework/cayenne-jdk1.5-unpublished/src/main/java/org/apache/cayenne/query/PrefetchTreeNode.java:131:56][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [org.apache.cayenne.query.PrefetchTreeNode][0m
+  [34mUnused type args: [org.apache.cayenne.query.PrefetchTreeNode][0m
+  [34mUnused type args: [org.apache.cayenne.query.PrefetchTreeNode][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [java.lang.Integer, java.lang.String[]][0m
+  [34mUnused type args: [java.lang.Integer, java.lang.String[]][0m
+  [34mUnused type args: [java.lang.Integer, java.lang.String[]][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mskipping default constructor: org.apache.cayenne.exp.parser.Token()[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [java.lang.String, org.apache.cayenne.access.DataNode][0m
+  [34mUnused type args: [org.apache.cayenne.map.DataMap][0m
+  [34mUnused type args: [java.lang.String, org.apache.cayenne.access.DataNode][0m
+  [34mUnused type args: [org.apache.cayenne.map.Attribute, org.apache.cayenne.map.Relationship][0m
+  [34mUnused type args: [org.apache.cayenne.map.Attribute, org.apache.cayenne.map.Relationship][0m
+  [34mUnused type args: [org.apache.cayenne.map.Attribute, org.apache.cayenne.map.Relationship][0m
+  [34mUnused type args: [org.apache.cayenne.map.PathComponent][0m
+  [34mUnused type args: [org.apache.cayenne.map.Attribute, org.apache.cayenne.map.Relationship][0m
+  [34mUnused type args: [org.apache.cayenne.map.Attribute, org.apache.cayenne.map.Relationship][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [org.apache.cayenne.map.Attribute, org.apache.cayenne.map.Relationship][0m
+  [34mUnused type args: [java.lang.String, org.apache.cayenne.map.EmbeddableAttribute][0m
+  [34mUnused type args: [java.lang.Object, org.apache.cayenne.Persistent][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [org.apache.cayenne.map.ProcedureParameter][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [org.apache.cayenne.map.ProcedureParameter][0m
+  [34mUnused type args: [org.apache.cayenne.graph.GraphDiff][0m
+  [34mUnused type args: [org.apache.cayenne.graph.GraphDiff][0m
+  [34mUnused type args: [org.apache.cayenne.graph.GraphDiff][0m
+  [34mUnused type args: [java.lang.String @ framework/cayenne-jdk1.5-unpublished/src/main/java/org/apache/cayenne/query/SQLTemplate.java:515:13, ? @ framework/cayenne-jdk1.5-unpublished/src/main/java/org/apache/cayenne/query/SQLTemplate.java:515:21][0m
+  [34mUnused type args: [java.lang.String, ?][0m
+  [34mUnused type args: [java.lang.String, ?][0m
+  [34mUnused type args: [java.lang.String, ?][0m
+  [34mUnused type args: [java.lang.String, ?][0m
+  [34mUnused type args: [java.lang.String, ?][0m
+  [34mUnused type args: [java.lang.String, ?][0m
+  [34mUnused type args: [java.lang.String, ?][0m
+  [34mUnused type args: [java.lang.String, ?][0m
+  [34mUnused type args: [java.lang.String, ?][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [org.apache.cayenne.map.EntityListener][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.collections.map.LRUMap[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.collections.map.LRUMap[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [org.apache.cayenne.event.EventBridge$SubjectListener][0m
+  [34mUnused type args: [org.apache.cayenne.event.EventBridge$SubjectListener][0m
+  [34mUnused type args: [org.apache.cayenne.event.EventBridge$SubjectListener][0m
+  [34mUnused type args: [org.apache.cayenne.event.EventBridge$SubjectListener][0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.collections.collection.CompositeCollection @ framework/cayenne-jdk1.5-unpublished/src/main/java/org/apache/cayenne/map/EntityResolver.java:413:9[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.collections.collection.CompositeCollection @ framework/cayenne-jdk1.5-unpublished/src/main/java/org/apache/cayenne/map/EntityResolver.java:413:9[0m
+  [33maddUsage.CtConstructorCall: expected constructor for (null) from spoon.support.reflect.code.CtConstructorCallImpl @ framework/cayenne-jdk1.5-unpublished/src/main/java/org/apache/cayenne/map/EntityResolver.java:413:33[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.collections.collection.CompositeCollection[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.collections.collection.CompositeCollection @ framework/cayenne-jdk1.5-unpublished/src/main/java/org/apache/cayenne/map/EntityResolver.java:413:37[0m
+  [34mUnused type args: [org.apache.cayenne.map.DataMap][0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.collections.collection.CompositeCollection[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.collections.collection.CompositeCollection[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.collections.collection.CompositeCollection[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.collections.collection.CompositeCollection[0m
+  [34mUnused type args: [org.apache.cayenne.query.Query][0m
+  [34mUnused type args: [org.apache.cayenne.query.Query][0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.collections.collection.CompositeCollection[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.collections.collection.CompositeCollection[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.collections.collection.CompositeCollection[0m
+  [34mUnused type args: [org.apache.cayenne.map.EntityInheritanceTree][0m
+  [34mUnused type args: [org.apache.cayenne.map.ObjAttribute][0m
+  [34mUnused type args: [org.apache.cayenne.map.ObjAttribute @ framework/cayenne-jdk1.5-unpublished/src/main/java/org/apache/cayenne/map/EntityInheritanceTree.java:129:20][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [org.apache.cayenne.map.ObjAttribute @ framework/cayenne-jdk1.5-unpublished/src/main/java/org/apache/cayenne/map/EntityInheritanceTree.java:129:52][0m
+  [34mUnused type args: [org.apache.cayenne.map.ObjAttribute][0m
+  [34mUnused type args: [org.apache.cayenne.map.ObjAttribute][0m
+  [34mUnused type args: [org.apache.cayenne.map.ObjAttribute][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [org.apache.cayenne.map.ObjAttribute][0m
+  [34mUnused type args: [org.apache.cayenne.map.ObjAttribute][0m
+  [34mUnused type args: [org.apache.cayenne.map.DbEntity][0m
+  [34mUnused type args: [org.apache.cayenne.map.DbEntity][0m
+  [34mUnused type args: [org.apache.cayenne.map.DbEntity][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [java.lang.String, org.apache.cayenne.map.EmbeddableAttribute][0m
+  [34mUnused type args: [java.lang.String, org.apache.cayenne.map.EmbeddableAttribute][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [java.lang.String @ framework/cayenne-jdk1.5-unpublished/src/main/java/org/apache/cayenne/map/Embeddable.java:51:39, org.apache.cayenne.map.EmbeddableAttribute @ framework/cayenne-jdk1.5-unpublished/src/main/java/org/apache/cayenne/map/Embeddable.java:51:47][0m
+  [34mUnused type args: [java.lang.String, org.apache.cayenne.map.ObjEntity][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [java.lang.String, java.lang.Object][0m
+  [34mUnused type args: [java.lang.String, java.lang.Object][0m
+  [34mUnused type args: [java.lang.String, java.lang.Object][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [org.apache.cayenne.map.EntityListener][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [org.apache.cayenne.map.EntityListener][0m
+  [34mUnused type args: [java.lang.StringBuilder][0m
+  [34mUnused type args: [org.apache.cayenne.map.EntityListener @ framework/cayenne-jdk1.5-unpublished/src/main/java/org/apache/cayenne/map/ObjEntity.java:316:18][0m
+  [34mUnused type args: [org.apache.cayenne.map.EntityListener][0m
+  [34mUnused type args: [org.apache.cayenne.map.EntityListener][0m
+  [34mUnused type args: [org.apache.cayenne.map.EntityListener][0m
+  [34mUnused type args: [org.apache.cayenne.map.EntityListener][0m
+  [34mUnused type args: [org.apache.cayenne.map.EntityListener][0m
+  [34mUnused type args: [java.lang.String, ?][0m
+  [34mUnused type args: [java.lang.String, ?][0m
+  [34mIgnoring anonymous type: (CtTypeReferenceImpl) org.apache.cayenne.access.jdbc.EJBQLJoinAppender$1[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring anonymous type: (CtTypeReferenceImpl) org.apache.cayenne.access.jdbc.EJBQLJoinAppender$1[0m
+  [34mIgnoring anonymous object declaration: (CtClassImpl) 1 @ framework/cayenne-jdk1.5-unpublished/src/main/java/org/apache/cayenne/access/jdbc/EJBQLJoinAppender.java:215:49[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring method of an anonymous declaring type: (CtMethodImpl) visitWhere @ framework/cayenne-jdk1.5-unpublished/src/main/java/org/apache/cayenne/access/jdbc/EJBQLJoinAppender.java:218:28 in (CtClassImpl) 1 @ framework/cayenne-jdk1.5-unpublished/src/main/java/org/apache/cayenne/access/jdbc/EJBQLJoinAppender.java:215:49[0m
+  [34mIgnoring anonymous type: (CtTypeReferenceImpl) org.apache.cayenne.access.ObjectDiff$4[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring anonymous type: (CtTypeReferenceImpl) org.apache.cayenne.access.ObjectDiff$4[0m
+  [34mIgnoring anonymous object declaration: (CtClassImpl) 4 @ framework/cayenne-jdk1.5-unpublished/src/main/java/org/apache/cayenne/access/ObjectDiff.java:338:68[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring method of an anonymous declaring type: (CtMethodImpl) visitAttribute @ framework/cayenne-jdk1.5-unpublished/src/main/java/org/apache/cayenne/access/ObjectDiff.java:340:28 in (CtClassImpl) 4 @ framework/cayenne-jdk1.5-unpublished/src/main/java/org/apache/cayenne/access/ObjectDiff.java:338:68[0m
+  [34mUnused type args: [java.lang.String, java.lang.Object][0m
+  [34mUnused type args: [java.lang.String, java.lang.Object][0m
+  [34mIgnoring method of an anonymous declaring type: (CtMethodImpl) visitToMany @ framework/cayenne-jdk1.5-unpublished/src/main/java/org/apache/cayenne/access/ObjectDiff.java:371:28 in (CtClassImpl) 4 @ framework/cayenne-jdk1.5-unpublished/src/main/java/org/apache/cayenne/access/ObjectDiff.java:338:68[0m
+  [34mIgnoring method of an anonymous declaring type: (CtMethodImpl) visitToOne @ framework/cayenne-jdk1.5-unpublished/src/main/java/org/apache/cayenne/access/ObjectDiff.java:375:28 in (CtClassImpl) 4 @ framework/cayenne-jdk1.5-unpublished/src/main/java/org/apache/cayenne/access/ObjectDiff.java:338:68[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.collections.Transformer[0m
+  [33maddUsage.CtConstructorCall: expected constructor for (null) from spoon.support.reflect.code.CtNewClassImpl @ framework/cayenne-jdk1.5-unpublished/src/main/java/org/apache/cayenne/access/DataDomain.java:714:26[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.collections.Transformer[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.collections.Transformer @ framework/cayenne-jdk1.5-unpublished/src/main/java/org/apache/cayenne/access/DataDomain.java:714:30[0m
+  [34mIgnoring anonymous object declaration: (CtClassImpl) 1 @ framework/cayenne-jdk1.5-unpublished/src/main/java/org/apache/cayenne/access/DataDomain.java:714:44[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.collections.Transformer[0m
+  [34mIgnoring method of an anonymous declaring type: (CtMethodImpl) transform @ framework/cayenne-jdk1.5-unpublished/src/main/java/org/apache/cayenne/access/DataDomain.java:716:27 in (CtClassImpl) 1 @ framework/cayenne-jdk1.5-unpublished/src/main/java/org/apache/cayenne/access/DataDomain.java:714:44[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [org.apache.cayenne.query.Query][0m
+  [34mUnused type args: [org.apache.cayenne.query.Query][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [java.lang.String, org.apache.cayenne.map.ObjEntity][0m
+  [34mUnused type args: [java.lang.String, org.apache.cayenne.map.ObjEntity][0m
+  [34mUnused type args: [K, ?][0m
+  [34mUnused type args: [java.lang.String, org.apache.cayenne.map.ObjEntity][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.collections.Transformer[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.collections.Transformer[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.collections.Transformer[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.collections.Transformer[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [java.lang.String, java.sql.Connection][0m
+  [34mUnused type args: [java.lang.String, java.sql.Connection][0m
+  [34mUnused type args: [java.lang.String, java.lang.String][0m
+  [34mUnused type args: [java.lang.String, java.lang.String][0m
+  [34mUnused type args: [java.lang.String, java.lang.String][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [java.lang.String @ framework/cayenne-jdk1.5-unpublished/src/main/java/org/apache/cayenne/query/SQLTemplate.java:490:37, java.lang.String @ framework/cayenne-jdk1.5-unpublished/src/main/java/org/apache/cayenne/query/SQLTemplate.java:490:45][0m
+  [34mUnused type args: [java.lang.String, java.lang.String][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [org.apache.cayenne.graph.GraphDiff][0m
+  [34mUnused type args: [org.apache.cayenne.access.trans.JoinTreeNode][0m
+  [34mUnused type args: [org.apache.cayenne.access.trans.JoinTreeNode][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring anonymous type: (CtTypeReferenceImpl) org.apache.cayenne.query.BatchQuery$1[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring anonymous type: (CtTypeReferenceImpl) org.apache.cayenne.query.BatchQuery$1[0m
+  [34mIgnoring anonymous object declaration: (CtClassImpl) 1 @ framework/cayenne-jdk1.5-unpublished/src/main/java/org/apache/cayenne/query/BatchQuery.java:73:43[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring method of an anonymous declaring type: (CtMethodImpl) getDbEntity @ framework/cayenne-jdk1.5-unpublished/src/main/java/org/apache/cayenne/query/BatchQuery.java:76:29 in (CtClassImpl) 1 @ framework/cayenne-jdk1.5-unpublished/src/main/java/org/apache/cayenne/query/BatchQuery.java:73:43[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.collections.map.LRUMap[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.commons.collections.map.LRUMap[0m
+  [34mUnused type args: [java.lang.String, org.apache.cayenne.map.ObjEntity][0m
+  [34mUnused type args: [java.lang.String, org.apache.cayenne.map.ObjEntity][0m
+  [34mUnused type args: [java.lang.String, org.apache.cayenne.access.DataNode][0m
+  [34mUnused type args: [java.lang.String, org.apache.cayenne.access.DataNode][0m
+  [34mUnused type args: [org.apache.cayenne.access.DataNode][0m
+  [34mUnused type args: [org.apache.cayenne.access.DataNode][0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.objectstyle.ashwood.dbutil.Table @ framework/cayenne-jdk1.5-unpublished/src/main/java/org/apache/cayenne/map/AshwoodEntitySorter.java:61:29[0m
+[34mFinished process pending packages (6.811289s)[0m
+Exception in thread "main" java.lang.Exception: Error while processing metrics (CtMethodImpl) getEntitySorter @ framework/cayenne-jdk1.5-unpublished/src/main/java/org/apache/cayenne/access/DataDomain.java:166:18: {
+  elem: "(CtMethodImpl) getEntitySorter @ framework/cayenne-jdk1.5-unpublished/src/main/java/org/apache/cayenne/access/DataDomain.java:166:18",
+}
+	at abstractor.core.constructs.Factory.create(Factory.java:132)
+	at abstractor.core.constructs.Factory.create(Factory.java:147)
+	at abstractor.core.Abstractor.addMetrics(Abstractor.java:962)
+	at abstractor.core.Abstractor.processPendingMetrics(Abstractor.java:1392)
+	at abstractor.core.Abstractor.processPendingPackages(Abstractor.java:1346)
+	at abstractor.core.Abstractor.lambda$performAbstraction$40(Abstractor.java:1332)
+	at abstractor.core.log.Logger.measure(Logger.java:123)
+	at abstractor.core.Abstractor.performAbstraction(Abstractor.java:1332)
+	at abstractor.app.App.run(App.java:26)
 	at abstractor.app.App.main(App.java:17)
+Caused by: java.lang.Exception: Error while processing object decl (CtClassImpl) AshwoodEntitySorter @ framework/cayenne-jdk1.5-unpublished/src/main/java/org/apache/cayenne/map/AshwoodEntitySorter.java:58:14: {
+  elem: "(CtClassImpl) AshwoodEntitySorter @ framework/cayenne-jdk1.5-unpublished/src/main/java/org/apache/cayenne/map/AshwoodEntitySorter.java:58:14",
+}
+	at abstractor.core.constructs.Factory.create(Factory.java:132)
+	at abstractor.core.constructs.Factory.create(Factory.java:139)
+	at abstractor.core.Abstractor.addObjectDecl(Abstractor.java:985)
+	at abstractor.core.Abstractor.addMethodDeclForConstructor(Abstractor.java:668)
+	at abstractor.core.Abstractor.addMethodInstForCall(Abstractor.java:535)
+	at abstractor.core.tools.Analyzer.addConstructorCallUsage(Analyzer.java:550)
+	at abstractor.core.tools.Analyzer.addUsage(Analyzer.java:401)
+	at abstractor.core.tools.Analyzer.addElement(Analyzer.java:133)
+	at abstractor.core.tools.Analyzer.addElement(Analyzer.java:140)
+	at abstractor.core.tools.Analyzer.addElement(Analyzer.java:140)
+	at abstractor.core.tools.Analyzer.addElement(Analyzer.java:140)
+	at abstractor.core.tools.Analyzer.addElement(Analyzer.java:140)
+	at abstractor.core.tools.Analyzer.addElement(Analyzer.java:140)
+	at abstractor.core.tools.Analyzer.addElement(Analyzer.java:140)
+	at abstractor.core.tools.Analyzer.addElement(Analyzer.java:140)
+	at abstractor.core.tools.Analyzer.addElement(Analyzer.java:140)
+	at abstractor.core.tools.Analyzer.addElement(Analyzer.java:140)
+	at abstractor.core.tools.Analyzer.addMethod(Analyzer.java:111)
+	at abstractor.core.Abstractor.lambda$addMetrics$31(Abstractor.java:967)
+	at abstractor.core.constructs.Factory.lambda$create$1(Factory.java:147)
+	at abstractor.core.constructs.Factory.create(Factory.java:109)
+	... 9 more
+Caused by: java.lang.Exception: Error while processing struct (CtClassImpl) AshwoodEntitySorter @ framework/cayenne-jdk1.5-unpublished/src/main/java/org/apache/cayenne/map/AshwoodEntitySorter.java:58:14: {
+  elem: "(CtClassImpl) AshwoodEntitySorter @ framework/cayenne-jdk1.5-unpublished/src/main/java/org/apache/cayenne/map/AshwoodEntitySorter.java:58:14",
+}
+	at abstractor.core.constructs.Factory.create(Factory.java:132)
+	at abstractor.core.constructs.Factory.create(Factory.java:143)
+	at abstractor.core.Abstractor.addStructDesc(Abstractor.java:757)
+	at abstractor.core.Abstractor.lambda$addObjectDecl$32(Abstractor.java:991)
+	at abstractor.core.constructs.Factory.lambda$create$0(Factory.java:139)
+	at abstractor.core.constructs.Factory.create(Factory.java:109)
+	... 29 more
+Caused by: java.lang.Exception: Error while processing field (CtFieldImpl) dbEntityToTableMap @ framework/cayenne-jdk1.5-unpublished/src/main/java/org/apache/cayenne/map/AshwoodEntitySorter.java:61:36: {
+  elem: "(CtFieldImpl) dbEntityToTableMap @ framework/cayenne-jdk1.5-unpublished/src/main/java/org/apache/cayenne/map/AshwoodEntitySorter.java:61:36",
+}
+	at abstractor.core.constructs.Factory.create(Factory.java:132)
+	at abstractor.core.constructs.Factory.create(Factory.java:139)
+	at abstractor.core.Abstractor.addField(Abstractor.java:796)
+	at abstractor.core.Abstractor.addField(Abstractor.java:791)
+	at abstractor.core.Abstractor.lambda$addStructDesc$23(Abstractor.java:768)
+	at abstractor.core.constructs.Factory.create(Factory.java:109)
+	... 34 more
+Caused by: abstractor.core.AbstractorException: can not have a null the argument in an instantiator frame
+	at abstractor.core.require.Require.fail(Require.java:19)
+	at abstractor.core.require.Require.require(Require.java:24)
+	at abstractor.core.require.Require.notNull(Require.java:59)
+	at abstractor.core.tools.Instantiator.add(Instantiator.java:139)
+	at abstractor.core.Abstractor.addInterfaceInst(Abstractor.java:266)
+	at abstractor.core.Abstractor.addTypeDesc(Abstractor.java:1230)
+	at abstractor.core.Abstractor.lambda$addField$24(Abstractor.java:800)
+	at abstractor.core.constructs.Factory.lambda$create$0(Factory.java:139)
+	at abstractor.core.constructs.Factory.create(Factory.java:109)
+	... 39 more

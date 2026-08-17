@@ -1,19 +1,1062 @@
 # cmd: java -jar /Users/grantnelson/go/src/github.com/MSUSEL/msusel-tdmetrics-go/javaAbstractor/target/abstractor-0.1-jar-with-dependencies.jar -i /Users/grantnelson/go/src/github.com/apache/httpcomponents-core/ -o /Users/grantnelson/go/src/github.com/MSUSEL/msusel-tdmetrics-go/tdd/abstractions/httpcomponents-core.json -v
 # cwd: /Users/grantnelson/go/src/github.com/MSUSEL/msusel-tdmetrics-go/tdd
 # repo: /Users/grantnelson/go/src/github.com/apache/httpcomponents-core @ 3a677d47cb872b6ede20b28e93d3206f08b349ac
-# started: 2026-07-28T01:25:25.599302+00:00
+# started: 2026-08-17T18:31:55.722876+00:00
 # timeout_min: 10
 # ---
 Reading /Users/grantnelson/go/src/github.com/apache/httpcomponents-core/
 SLF4J(W): No SLF4J providers were found.
 SLF4J(W): Defaulting to no-operation (NOP) logger implementation
 SLF4J(W): See https://www.slf4j.org/codes.html#noProviders for further details.
-Exception in thread "main" spoon.compiler.ModelBuildingException: The import org.apache.logging cannot be resolved at /Users/grantnelson/go/src/github.com/apache/httpcomponents-core/httpcore5-testing/src/main/java/org/apache/hc/core5/testing/nio/InternalClientHttp2EventHandlerFactory.java:48
-	at spoon.support.compiler.jdt.JDTBasedSpoonCompiler.report(JDTBasedSpoonCompiler.java:664)
-	at spoon.support.compiler.jdt.JDTBasedSpoonCompiler.reportProblems(JDTBasedSpoonCompiler.java:646)
-	at spoon.support.compiler.jdt.JDTBasedSpoonCompiler.build(JDTBasedSpoonCompiler.java:120)
-	at spoon.support.compiler.jdt.JDTBasedSpoonCompiler.build(JDTBasedSpoonCompiler.java:101)
-	at spoon.Launcher.buildModel(Launcher.java:781)
-	at abstractor.core.Abstractor.prepareMavenProject(Abstractor.java:55)
-	at abstractor.app.App.run(App.java:25)
+Init pending package <unnamed>
+Init pending package org
+Init pending package org.apache
+Init pending package org.apache.hc
+Init pending package org.apache.hc.core5
+Init pending package org.apache.hc.core5.http
+Init pending package org.apache.hc.core5.http.benchmark
+Init pending package org.apache.hc.core5.http.config
+Init pending package org.apache.hc.core5.http.impl
+Init pending package org.apache.hc.core5.http.impl.bootstrap
+Init pending package org.apache.hc.core5.http.impl.io
+Init pending package org.apache.hc.core5.http.impl.nio
+Init pending package org.apache.hc.core5.http.impl.nio.entity
+Init pending package org.apache.hc.core5.http.io
+Init pending package org.apache.hc.core5.http.io.entity
+Init pending package org.apache.hc.core5.http.message
+Init pending package org.apache.hc.core5.http.nio
+Init pending package org.apache.hc.core5.http.nio.command
+Init pending package org.apache.hc.core5.http.nio.entity
+Init pending package org.apache.hc.core5.http.nio.ssl
+Init pending package org.apache.hc.core5.http.nio.support
+Init pending package org.apache.hc.core5.http.protocol
+Init pending package org.apache.hc.core5.http2
+Init pending package org.apache.hc.core5.http2.config
+Init pending package org.apache.hc.core5.http2.frame
+Init pending package org.apache.hc.core5.http2.hpack
+Init pending package org.apache.hc.core5.http2.impl
+Init pending package org.apache.hc.core5.http2.impl.io
+Init pending package org.apache.hc.core5.http2.impl.nio
+Init pending package org.apache.hc.core5.http2.impl.nio.bootstrap
+Init pending package org.apache.hc.core5.http2.nio
+Init pending package org.apache.hc.core5.http2.nio.command
+Init pending package org.apache.hc.core5.http2.nio.support
+Init pending package org.apache.hc.core5.http2.protocol
+Init pending package org.apache.hc.core5.http2.ssl
+Init pending package org.apache.hc.core5.testing
+Init pending package org.apache.hc.core5.testing.classic
+Init pending package org.apache.hc.core5.testing.framework
+Init pending package org.apache.hc.core5.testing.nio
+Init pending package org.apache.hc.core5.annotation
+Init pending package org.apache.hc.core5.concurrent
+Init pending package org.apache.hc.core5.function
+Init pending package org.apache.hc.core5.io
+Init pending package org.apache.hc.core5.net
+Init pending package org.apache.hc.core5.pool
+Init pending package org.apache.hc.core5.reactor
+Init pending package org.apache.hc.core5.reactor.ssl
+Init pending package org.apache.hc.core5.ssl
+Init pending package org.apache.hc.core5.util
+[34mStarting process pending packages...[0m
+  Pending package java.nio
+  Pending package java.lang
+  getting parent type for (CtClassImpl) Builder @ httpcore5-h2/src/main/java/org/apache/hc/core5/http2/config/H2Config.java:124:25
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  Pending package org.apache.hc.core5.util
+  Pending package org.apache.hc.core5.http
+  Pending package java.util
+  [34mUnused type args: [org.apache.hc.core5.http2.config.H2Param][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  Pending package org.apache.hc.core5.http2.frame
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [org.apache.hc.core5.http2.config.H2Config][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  Pending package java.util.concurrent
+  Pending package java.util.concurrent.atomic
+  Pending package java.lang
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [org.apache.hc.core5.concurrent.Cancellable][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [org.apache.hc.core5.concurrent.Cancellable][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [org.apache.hc.core5.concurrent.Cancellable][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [org.apache.hc.core5.concurrent.Cancellable][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [org.apache.hc.core5.concurrent.Cancellable][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [org.apache.hc.core5.concurrent.Cancellable][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [java.util.concurrent.TimeUnit][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [T][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [java.util.concurrent.Future][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [T][0m
+  [34mIgnoring anonymous type: (CtTypeReferenceImpl) org.apache.hc.core5.concurrent.ComplexFuture$1[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring anonymous type: (CtTypeReferenceImpl) org.apache.hc.core5.concurrent.ComplexFuture$1[0m
+  [34mIgnoring anonymous object declaration: (CtClassImpl) 1 @ httpcore5/src/main/java/org/apache/hc/core5/concurrent/ComplexFuture.java:62:41[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring method of an anonymous declaring type: (CtMethodImpl) cancel @ httpcore5/src/main/java/org/apache/hc/core5/concurrent/ComplexFuture.java:65:28 in (CtClassImpl) 1 @ httpcore5/src/main/java/org/apache/hc/core5/concurrent/ComplexFuture.java:62:41[0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [T][0m
+  [34mUnused type args: [org.apache.hc.core5.concurrent.Cancellable][0m
+  [34mskipping default constructor: org.apache.hc.core5.testing.framework.ClientPOJOAdapter()[0m
+  [34mskipping default constructor: org.apache.hc.core5.testing.framework.ClassicTestClientAdapter()[0m
+  [34mskipping default constructor: org.apache.hc.core5.testing.framework.TestingFrameworkRequestHandler()[0m
+  Pending package java.io
+  Pending package org.apache.hc.core5.function
+  Pending package org.apache.hc.core5.net
+  Pending package java.net
+  Pending package org.apache.hc.core5.http.protocol
+  Pending package org.apache.hc.core5.http.impl.bootstrap
+  Pending package org.apache.hc.core5.http.config
+  getting parent type for (CtClassImpl) Builder @ httpcore5/src/main/java/org/apache/hc/core5/http/config/SocketConfig.java:220:25
+  Pending package javax.net
+  Pending package org.apache.hc.core5.http.impl.io
+  Pending package org.apache.hc.core5.http.io
+  Pending package org.apache.hc.core5.http.impl
+  Pending package javax.net.ssl
+  Pending package org.apache.hc.core5.io
+  [34mskipping default constructor: org.apache.hc.core5.io.ShutdownType()[0m
+  Pending package java.io
+  getting parent type for (CtClassImpl) PrintStreamOrWriter
+  Pending package java.util.stream
+  getting parent type for (CtClassImpl) Builder @ httpcore5/src/main/java/org/apache/hc/core5/http/config/H1Config.java:116:25
+  Pending package java.nio.charset
+  Pending package java.util.concurrent.locks
+  getting parent type for (CtClassImpl) Worker
+  Pending package java.util.concurrent
+  getting parent type for (CtEnumImpl) Status @ httpcore5/src/main/java/org/apache/hc/core5/http/impl/bootstrap/HttpServer.java:63:10
+  [34mskipping default constructor: org.apache.hc.core5.http.impl.bootstrap.HttpServer$Status()[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [java.lang.String][0m
+  [34mUnused type args: [java.lang.Integer @ httpcore5-testing/src/main/java/org/apache/hc/core5/testing/framework/TestingFramework.java:157:24][0m
+  [34mUnused type args: [java.lang.Integer][0m
+  [34mUnused type args: [java.lang.Integer][0m
+  [34mUnused type args: [java.lang.Integer][0m
+  [34mUnused type args: [java.lang.String @ httpcore5-testing/src/main/java/org/apache/hc/core5/testing/framework/TestingFramework.java:159:27, java.lang.Object @ httpcore5-testing/src/main/java/org/apache/hc/core5/testing/framework/TestingFramework.java:159:35][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [java.lang.String @ httpcore5-testing/src/main/java/org/apache/hc/core5/testing/framework/TestingFramework.java:159:65, java.lang.Object @ httpcore5-testing/src/main/java/org/apache/hc/core5/testing/framework/TestingFramework.java:159:73][0m
+  [34mUnused type args: [java.lang.String, java.lang.Object][0m
+  [34mUnused type args: [java.lang.String @ httpcore5-testing/src/main/java/org/apache/hc/core5/testing/framework/TestingFramework.java:162:27, java.lang.Object @ httpcore5-testing/src/main/java/org/apache/hc/core5/testing/framework/TestingFramework.java:162:35][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [java.lang.String @ httpcore5-testing/src/main/java/org/apache/hc/core5/testing/framework/TestingFramework.java:162:66, java.lang.Object @ httpcore5-testing/src/main/java/org/apache/hc/core5/testing/framework/TestingFramework.java:162:74][0m
+  [34mUnused type args: [java.lang.String, java.lang.Object][0m
+  [34mUnused type args: [java.lang.String @ httpcore5-testing/src/main/java/org/apache/hc/core5/testing/framework/TestingFramework.java:165:27, java.lang.Object @ httpcore5-testing/src/main/java/org/apache/hc/core5/testing/framework/TestingFramework.java:165:35][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [java.lang.String @ httpcore5-testing/src/main/java/org/apache/hc/core5/testing/framework/TestingFramework.java:165:62, java.lang.Object @ httpcore5-testing/src/main/java/org/apache/hc/core5/testing/framework/TestingFramework.java:165:70][0m
+  [34mUnused type args: [java.lang.String, java.lang.Object][0m
+  [34mUnused type args: [java.lang.String, java.lang.Object][0m
+  [34mUnused type args: [java.lang.String, java.lang.Object][0m
+  [34mUnused type args: [java.lang.String, java.lang.Object][0m
+  [34mUnused type args: [java.lang.String, java.lang.Object][0m
+  [34mUnused type args: [java.lang.String, java.lang.Object][0m
+  [34mUnused type args: [java.lang.String, java.lang.Object][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [org.apache.hc.core5.http.impl.BasicHttpTransportMetrics][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [org.apache.hc.core5.util.TimeValue][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [org.apache.hc.core5.http.impl.io.SocketHolder][0m
+  [34mUnused type args: [org.apache.hc.core5.http.impl.io.SocketHolder][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  Pending package java.util.regex
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  Pending package java.text
+  [34mIgnoring implicit method: (CtMethodImpl) valueOf in (CtEnumImpl) TimeUnit[0m
+  [34mIgnoring implicit method: (CtMethodImpl) valueOf in (CtEnumImpl) TimeUnit[0m
+  [34mIgnoring implicit method: (CtMethodImpl) valueOf in (CtEnumImpl) TimeUnit[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [org.apache.hc.core5.http.impl.io.SocketHolder][0m
+  [34mUnused type args: [org.apache.hc.core5.http.impl.io.SocketHolder][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [org.apache.hc.core5.http.impl.io.SocketHolder][0m
+  [34mUnused type args: [org.apache.hc.core5.testing.framework.FrameworkTest][0m
+  [34mUnused type args: [org.apache.hc.core5.testing.framework.FrameworkTest][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [org.apache.hc.core5.testing.framework.FrameworkTest @ httpcore5-testing/src/main/java/org/apache/hc/core5/testing/framework/TestingFramework.java:405:31][0m
+  [34mUnused type args: [org.apache.hc.core5.http.impl.io.SocketHolder][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [org.apache.hc.core5.http.impl.io.SocketHolder][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [java.lang.String, java.lang.Object][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [java.lang.String, java.lang.Object][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [java.lang.String, java.lang.Object][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [java.lang.String, java.lang.Object][0m
+  [34mUnused type args: [java.lang.String, java.lang.Object][0m
+  Pending package org.apache.hc.core5.testing.classic
+  Pending package org.apache.hc.core5.pool
+  getting parent type for (CtClassImpl) PoolEntryHolder @ httpcore5/src/main/java/org/apache/hc/core5/http/impl/bootstrap/HttpRequester.java:327:19
+  getting parent type for (CtClassImpl) LoggingConnFactory @ httpcore5-testing/src/main/java/org/apache/hc/core5/testing/classic/ClassicTestClient.java:111:11
+  [34mskipping default constructor: org.apache.hc.core5.testing.classic.ClassicTestClient$LoggingConnFactory()[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.logging.log4j.Logger @ httpcore5-testing/src/main/java/org/apache/hc/core5/testing/classic/LoggingBHttpClientConnection.java:57:19[0m
+  [34mfield (CtFieldImpl) log @ httpcore5-testing/src/main/java/org/apache/hc/core5/testing/classic/LoggingBHttpClientConnection.java:57:26 had a null type. The type likely was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.logging.log4j.Logger @ httpcore5-testing/src/main/java/org/apache/hc/core5/testing/classic/LoggingBHttpClientConnection.java:58:19[0m
+  [34mfield (CtFieldImpl) headerlog @ httpcore5-testing/src/main/java/org/apache/hc/core5/testing/classic/LoggingBHttpClientConnection.java:58:26 had a null type. The type likely was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.logging.log4j.Logger @ httpcore5-testing/src/main/java/org/apache/hc/core5/testing/classic/Wire.java:35:19[0m
+  [34mfield (CtFieldImpl) log @ httpcore5-testing/src/main/java/org/apache/hc/core5/testing/classic/Wire.java:35:26 had a null type. The type likely was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.[0m
+  [31mType description did not have a declaration but was not labelled a anonymous: (CtTypeReferenceImpl) org.apache.logging.log4j.Logger @ httpcore5-testing/src/main/java/org/apache/hc/core5/testing/classic/Wire.java:38:23[0m
+  [34margument (CtParameterImpl) log @ httpcore5-testing/src/main/java/org/apache/hc/core5/testing/classic/Wire.java:38:30 had a null type. The type likely was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [java.lang.String, java.lang.Object][0m
+  [34mUnused type args: [java.lang.String @ httpcore5-testing/src/main/java/org/apache/hc/core5/testing/framework/ClassicTestClientAdapter.java:91:19, java.lang.String @ httpcore5-testing/src/main/java/org/apache/hc/core5/testing/framework/ClassicTestClientAdapter.java:91:27][0m
+  [34mUnused type args: [java.lang.String @ httpcore5-testing/src/main/java/org/apache/hc/core5/testing/framework/ClassicTestClientAdapter.java:91:51, java.lang.String @ httpcore5-testing/src/main/java/org/apache/hc/core5/testing/framework/ClassicTestClientAdapter.java:91:59][0m
+  [34mUnused type args: [java.lang.String, java.lang.Object][0m
+  [34mUnused type args: [java.lang.String, java.lang.String][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  getting parent type for (CtInterfaceImpl) Entry
+  [34mUnused type args: [java.lang.String @ httpcore5-testing/src/main/java/org/apache/hc/core5/testing/framework/ClassicTestClientAdapter.java:97:30, java.lang.String @ httpcore5-testing/src/main/java/org/apache/hc/core5/testing/framework/ClassicTestClientAdapter.java:97:38][0m
+  [34mUnused type args: [java.lang.String, java.lang.String][0m
+  [34mUnused type args: [java.util.Map$Entry][0m
+  [34mUnused type args: [java.lang.String, java.lang.String][0m
+  [34mUnused type args: [java.lang.String, java.lang.String][0m
+  [34mUnused type args: [java.lang.String, java.lang.String][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  Pending package org.apache.hc.core5.http.message
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [java.lang.String, java.lang.Object][0m
+  [34mUnused type args: [java.lang.String, java.lang.Object][0m
+  [34mUnused type args: [java.lang.String, java.lang.Object][0m
+  [34mUnused type args: [java.lang.String @ httpcore5-testing/src/main/java/org/apache/hc/core5/testing/framework/ClassicTestClientAdapter.java:121:19, java.lang.String @ httpcore5-testing/src/main/java/org/apache/hc/core5/testing/framework/ClassicTestClientAdapter.java:121:27][0m
+  [34mUnused type args: [java.lang.String @ httpcore5-testing/src/main/java/org/apache/hc/core5/testing/framework/ClassicTestClientAdapter.java:121:53, java.lang.String @ httpcore5-testing/src/main/java/org/apache/hc/core5/testing/framework/ClassicTestClientAdapter.java:121:61][0m
+  [34mUnused type args: [java.lang.String, java.lang.Object][0m
+  [34mUnused type args: [java.lang.String, java.lang.String][0m
+  [34mUnused type args: [java.lang.String @ httpcore5-testing/src/main/java/org/apache/hc/core5/testing/framework/ClassicTestClientAdapter.java:123:30, java.lang.String @ httpcore5-testing/src/main/java/org/apache/hc/core5/testing/framework/ClassicTestClientAdapter.java:123:38][0m
+  [34mUnused type args: [java.lang.String, java.lang.String][0m
+  [34mUnused type args: [java.util.Map$Entry][0m
+  [34mUnused type args: [java.lang.String, java.lang.String][0m
+  [34mUnused type args: [java.lang.String, java.lang.String][0m
+  [34mUnused type args: [java.lang.String, java.lang.String][0m
+  [34mUnused type args: [java.lang.String, java.lang.Object][0m
+  [34mUnused type args: [java.lang.String, java.lang.Object][0m
+  Pending package org.apache.hc.core5.http.io.entity
+  [34mskipping default constructor: org.apache.hc.core5.http.io.entity.AbstractImmutableHttpEntity()[0m
+  [34mskipping default constructor: org.apache.hc.core5.http.io.entity.AbstractHttpEntity()[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  Pending package java.lang.invoke
+  [34mUnused type args: [java.lang.String @ httpcore5-testing/src/main/java/org/apache/hc/core5/testing/framework/ClassicTestClientAdapter.java:150:23, java.lang.Object @ httpcore5-testing/src/main/java/org/apache/hc/core5/testing/framework/ClassicTestClientAdapter.java:150:31][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [java.lang.String @ httpcore5-testing/src/main/java/org/apache/hc/core5/testing/framework/ClassicTestClientAdapter.java:150:57, java.lang.Object @ httpcore5-testing/src/main/java/org/apache/hc/core5/testing/framework/ClassicTestClientAdapter.java:150:65][0m
+  [34mUnused type args: [java.lang.String, java.lang.Object][0m
+  [34mUnused type args: [java.lang.String @ httpcore5-testing/src/main/java/org/apache/hc/core5/testing/framework/ClassicTestClientAdapter.java:154:23, java.lang.Object @ httpcore5-testing/src/main/java/org/apache/hc/core5/testing/framework/ClassicTestClientAdapter.java:154:31][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [java.lang.String @ httpcore5-testing/src/main/java/org/apache/hc/core5/testing/framework/ClassicTestClientAdapter.java:154:63, java.lang.Object @ httpcore5-testing/src/main/java/org/apache/hc/core5/testing/framework/ClassicTestClientAdapter.java:154:71][0m
+  [34mUnused type args: [java.lang.String, java.lang.Object][0m
+  [34mUnused type args: [java.lang.String, java.lang.Object][0m
+  [34mUnused type args: [java.lang.String, java.lang.Object][0m
+  [34mUnused type args: [java.lang.String, java.lang.Object][0m
+  [34mUnused type args: [java.lang.String, java.lang.Object][0m
+  [34mUnused type args: [java.lang.String, java.lang.Object][0m
+  [34mUnused type args: [org.apache.hc.core5.http.impl.bootstrap.Worker, java.lang.Boolean][0m
+  [34mUnused type args: [java.lang.String, java.lang.Object][0m
+  [34mUnused type args: [java.lang.String, java.lang.Object][0m
+  [34mUnused type args: [org.apache.hc.core5.http.ClassicHttpResponse][0m
+  [34mUnused type args: [org.apache.hc.core5.http.ClassicHttpResponse][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [java.lang.String, java.lang.Object][0m
+  [34mUnused type args: [java.lang.String, java.lang.Object][0m
+  [34mUnused type args: [java.lang.String @ httpcore5-testing/src/main/java/org/apache/hc/core5/testing/framework/FrameworkTest.java:141:19, java.lang.Object @ httpcore5-testing/src/main/java/org/apache/hc/core5/testing/framework/FrameworkTest.java:141:27][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [java.lang.String @ httpcore5-testing/src/main/java/org/apache/hc/core5/testing/framework/FrameworkTest.java:141:70, java.lang.Object @ httpcore5-testing/src/main/java/org/apache/hc/core5/testing/framework/FrameworkTest.java:141:78][0m
+  [34mUnused type args: [java.lang.String, java.lang.Object][0m
+  [34mUnused type args: [java.lang.String, java.lang.Object][0m
+  [34mUnused type args: [java.lang.String, java.lang.Object][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [java.lang.String @ httpcore5-testing/src/main/java/org/apache/hc/core5/testing/framework/FrameworkTest.java:145:55, java.lang.String @ httpcore5-testing/src/main/java/org/apache/hc/core5/testing/framework/FrameworkTest.java:145:63][0m
+  [34mUnused type args: [?, ?][0m
+  [34mUnused type args: [java.lang.String, java.lang.String][0m
+  [34mUnused type args: [java.lang.String, java.lang.Object][0m
+  [34mUnused type args: [?, ?][0m
+  [34mUnused type args: [java.lang.String, java.lang.Object][0m
+  [34mUnused type args: [java.lang.String, java.lang.Object][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [java.lang.String, java.lang.Object][0m
+  [34mUnused type args: [java.lang.String, java.lang.Object][0m
+  [34mUnused type args: [java.lang.String @ httpcore5-testing/src/main/java/org/apache/hc/core5/testing/framework/TestingFrameworkRequestHandler.java:84:37, java.lang.Object @ httpcore5-testing/src/main/java/org/apache/hc/core5/testing/framework/TestingFrameworkRequestHandler.java:84:45][0m
+  [34mUnused type args: [java.lang.String, java.lang.Object][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [java.lang.String, java.lang.Object][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [java.lang.String, java.lang.Object][0m
+  [34mUnused type args: [java.lang.String, java.lang.Object][0m
+  [34mUnused type args: [java.lang.String, java.lang.Object][0m
+  [34mUnused type args: [java.lang.String, java.lang.Object][0m
+  [34mUnused type args: [java.lang.String, java.lang.Object][0m
+  [34mUnused type args: [java.lang.String, java.lang.Object][0m
+  [34mUnused type args: [java.lang.String, java.lang.Object][0m
+  [34mUnused type args: [java.lang.String, java.lang.Object][0m
+  [34mUnused type args: [java.lang.String, java.lang.Object][0m
+  [34mUnused type args: [java.lang.String, java.lang.Object][0m
+  [34mUnused type args: [java.lang.String, java.lang.String][0m
+  [34mUnused type args: [java.lang.String, java.lang.String][0m
+  [34mUnused type args: [java.lang.String @ httpcore5-testing/src/main/java/org/apache/hc/core5/testing/framework/TestingFramework.java:329:48, java.lang.String @ httpcore5-testing/src/main/java/org/apache/hc/core5/testing/framework/TestingFramework.java:329:56][0m
+  [34mUnused type args: [java.lang.String, java.lang.Object][0m
+  [34mUnused type args: [java.lang.String @ httpcore5-testing/src/main/java/org/apache/hc/core5/testing/framework/TestingFramework.java:330:48, java.lang.String @ httpcore5-testing/src/main/java/org/apache/hc/core5/testing/framework/TestingFramework.java:330:56][0m
+  [34mUnused type args: [java.lang.String, java.lang.Object][0m
+  [34mUnused type args: [java.lang.String @ httpcore5-testing/src/main/java/org/apache/hc/core5/testing/framework/TestingFramework.java:255:13, java.lang.Object @ httpcore5-testing/src/main/java/org/apache/hc/core5/testing/framework/TestingFramework.java:255:21][0m
+  [34mUnused type args: [java.lang.String, java.lang.Object][0m
+  [34mUnused type args: [java.lang.String, java.lang.Object][0m
+  [34mUnused type args: [java.lang.String, java.lang.Object][0m
+  [34mUnused type args: [java.lang.String, java.lang.Object][0m
+  [34mUnused type args: [java.lang.String, java.lang.Object][0m
+  [34mUnused type args: [java.lang.String, java.lang.Object][0m
+  [34mUnused type args: [java.lang.String, java.lang.Object][0m
+  [34mUnused type args: [java.lang.String, java.lang.Object][0m
+  [34mUnused type args: [java.lang.String, java.lang.Object][0m
+  [34mUnused type args: [java.lang.String, java.lang.Object][0m
+  [34mUnused type args: [java.lang.String @ httpcore5-testing/src/main/java/org/apache/hc/core5/testing/framework/TestingFramework.java:274:13, java.lang.Object @ httpcore5-testing/src/main/java/org/apache/hc/core5/testing/framework/TestingFramework.java:274:21][0m
+  [34mUnused type args: [java.lang.String, java.lang.Object][0m
+  [34mUnused type args: [java.lang.String, java.lang.Object][0m
+  [34mUnused type args: [java.lang.String, java.lang.Object][0m
+  [34mUnused type args: [java.lang.String, java.lang.Object][0m
+  [34mUnused type args: [java.lang.String, java.lang.Object][0m
+  [34mUnused type args: [java.lang.String, java.lang.Object][0m
+  [34mUnused type args: [java.lang.String, java.lang.Object][0m
+  [34mUnused type args: [java.lang.String, java.lang.Object][0m
+  [34mUnused type args: [java.lang.String, java.lang.Object][0m
+  [34mUnused type args: [java.lang.String, java.lang.Object][0m
+  [34mUnused type args: [java.lang.String @ httpcore5-testing/src/main/java/org/apache/hc/core5/testing/framework/TestingFramework.java:291:19, java.lang.Object @ httpcore5-testing/src/main/java/org/apache/hc/core5/testing/framework/TestingFramework.java:291:27][0m
+  [34mUnused type args: [java.lang.String, java.lang.Object][0m
+  [34mUnused type args: [java.lang.String, java.lang.Object][0m
+  [34mUnused type args: [java.lang.String, java.lang.Object][0m
+  [34mUnused type args: [java.lang.String, java.lang.Object][0m
+  [34mUnused type args: [java.lang.String, java.lang.Object][0m
+  [34mUnused type args: [java.lang.String, java.lang.Object][0m
+  [34mUnused type args: [?, ?][0m
+  [34mUnused type args: [java.lang.String, java.lang.Object][0m
+  [34mUnused type args: [java.lang.String, java.lang.Object][0m
+  [34mUnused type args: [java.lang.String, java.lang.Object][0m
+  [34mUnused type args: [java.lang.String, java.lang.Object][0m
+  [34mUnused type args: [java.lang.String, java.lang.Object][0m
+  [34mUnused type args: [java.lang.String, java.lang.Object][0m
+  [34mUnused type args: [java.lang.String, java.lang.Object][0m
+  [34mUnused type args: [?][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [java.io.OutputStream][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [java.io.InputStream][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  getting parent type for (CtClassImpl) Builder @ httpcore5/src/main/java/org/apache/hc/core5/http/config/CharCodingConfig.java:96:25
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [org.apache.hc.core5.http.impl.io.SocketHolder][0m
+  [34mUnused type args: [org.apache.hc.core5.http.impl.io.SocketHolder][0m
+  [34mUnused type args: [org.apache.hc.core5.http.ProtocolVersion][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [org.apache.hc.core5.http.impl.io.SocketHolder][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [org.apache.hc.core5.http.config.H1Config][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [org.apache.hc.core5.http.impl.io.HttpService][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [java.lang.Runnable][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [java.lang.Runnable @ httpcore5/src/main/java/org/apache/hc/core5/http/impl/bootstrap/HttpServer.java:103:38][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [java.lang.Runnable][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [java.lang.Runnable @ httpcore5/src/main/java/org/apache/hc/core5/http/impl/bootstrap/HttpServer.java:108:38][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [org.apache.hc.core5.http.impl.bootstrap.HttpServer$Status][0m
+  [34mUnused type args: [org.apache.hc.core5.http.impl.bootstrap.HttpServer$Status][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [org.apache.hc.core5.http.impl.bootstrap.HttpServer$Status][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [java.util.concurrent.TimeUnit][0m
+  [34mUnused type args: [java.io.OutputStream][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [java.net.Socket][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [java.lang.String, java.lang.Object][0m
+  [34mUnused type args: [java.lang.String, java.lang.Object][0m
+  [34mUnused type args: [java.lang.String, java.lang.Object][0m
+  [34mUnused type args: [java.lang.String, java.lang.Object][0m
+  [34mUnused type args: [java.lang.String, java.lang.Object][0m
+  [34mUnused type args: [java.lang.String, java.lang.Object][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [java.io.OutputStream][0m
+  [34mUnused type args: [org.apache.hc.core5.http.impl.io.SocketHolder][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [org.apache.hc.core5.http.config.SocketConfig][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [java.io.InputStream][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [org.apache.hc.core5.http.ClassicHttpRequest][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [java.lang.Runnable][0m
+  [34mUnused type args: [java.lang.Runnable][0m
+  [34mUnused type args: [org.apache.hc.core5.http.impl.bootstrap.Worker, java.lang.Boolean][0m
+  [34mUnused type args: [org.apache.hc.core5.http.impl.bootstrap.Worker, java.lang.Boolean][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [org.apache.hc.core5.http.impl.bootstrap.Worker, java.lang.Boolean][0m
+  [34mUnused type args: [org.apache.hc.core5.http.impl.bootstrap.HttpServer$Status][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [?][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [org.apache.hc.core5.http.ClassicHttpResponse][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [java.lang.String @ httpcore5-testing/src/main/java/org/apache/hc/core5/testing/framework/FrameworkTest.java:90:19, java.lang.Object @ httpcore5-testing/src/main/java/org/apache/hc/core5/testing/framework/FrameworkTest.java:90:27][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [java.lang.String @ httpcore5-testing/src/main/java/org/apache/hc/core5/testing/framework/FrameworkTest.java:90:53, java.lang.Object @ httpcore5-testing/src/main/java/org/apache/hc/core5/testing/framework/FrameworkTest.java:90:61][0m
+  [34mUnused type args: [java.lang.String, java.lang.Object][0m
+  [34mUnused type args: [java.lang.String, java.lang.Object][0m
+  [34mUnused type args: [java.lang.String, java.lang.Object][0m
+  [34mUnused type args: [java.lang.String, java.lang.Object][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [java.lang.String @ httpcore5-testing/src/main/java/org/apache/hc/core5/testing/framework/FrameworkTest.java:94:36, java.lang.String @ httpcore5-testing/src/main/java/org/apache/hc/core5/testing/framework/FrameworkTest.java:94:44][0m
+  [34mUnused type args: [?, ?][0m
+  [34mUnused type args: [java.lang.String, java.lang.String][0m
+  [34mUnused type args: [java.lang.String, java.lang.Object][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [java.lang.String @ httpcore5-testing/src/main/java/org/apache/hc/core5/testing/framework/FrameworkTest.java:95:38, java.lang.String @ httpcore5-testing/src/main/java/org/apache/hc/core5/testing/framework/FrameworkTest.java:95:46][0m
+  [34mUnused type args: [?, ?][0m
+  [34mUnused type args: [java.lang.String, java.lang.String][0m
+  [34mUnused type args: [java.lang.String, java.lang.Object][0m
+  [34mUnused type args: [java.lang.String, java.lang.Object][0m
+  [34mUnused type args: [java.lang.String, java.lang.Object][0m
+  [34mUnused type args: [java.lang.String, java.lang.Object][0m
+  [34mUnused type args: [?, ?][0m
+  [34mUnused type args: [java.lang.String, java.lang.Object][0m
+  [34mUnused type args: [java.lang.String, java.lang.Object][0m
+  [34mUnused type args: [java.lang.String, java.lang.Object][0m
+  [34mUnused type args: [java.lang.String, java.lang.Object][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [java.lang.String, java.lang.Object][0m
+  [34mUnused type args: [java.lang.String, java.lang.Object][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [java.io.OutputStream][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [org.apache.hc.core5.http.ClassicHttpRequest][0m
+  [34mUnused type args: [org.apache.hc.core5.http.ClassicHttpResponse][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [java.util.concurrent.TimeUnit][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [org.apache.hc.core5.http.ClassicHttpRequest][0m
+  [34mUnused type args: [java.lang.String, java.lang.Object][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [java.lang.String, java.lang.Object][0m
+  [34mUnused type args: [java.lang.String @ httpcore5-testing/src/main/java/org/apache/hc/core5/testing/framework/TestingFrameworkRequestHandler.java:137:23, java.lang.String @ httpcore5-testing/src/main/java/org/apache/hc/core5/testing/framework/TestingFrameworkRequestHandler.java:137:31][0m
+  [34mUnused type args: [java.lang.String @ httpcore5-testing/src/main/java/org/apache/hc/core5/testing/framework/TestingFrameworkRequestHandler.java:137:60, java.lang.String @ httpcore5-testing/src/main/java/org/apache/hc/core5/testing/framework/TestingFrameworkRequestHandler.java:137:68][0m
+  [34mUnused type args: [java.lang.String, java.lang.Object][0m
+  [34mUnused type args: [java.lang.String, java.lang.String][0m
+  [34mUnused type args: [org.apache.hc.core5.http.NameValuePair @ httpcore5-testing/src/main/java/org/apache/hc/core5/testing/framework/TestingFrameworkRequestHandler.java:140:28][0m
+  [34mskipping default constructor: org.apache.hc.core5.net.URLEncodedUtils()[0m
+  [34mUnused type args: [org.apache.hc.core5.http.NameValuePair][0m
+  [34mUnused type args: [java.lang.String @ httpcore5-testing/src/main/java/org/apache/hc/core5/testing/framework/TestingFrameworkRequestHandler.java:141:27, java.lang.String @ httpcore5-testing/src/main/java/org/apache/hc/core5/testing/framework/TestingFrameworkRequestHandler.java:141:35][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [java.lang.String @ httpcore5-testing/src/main/java/org/apache/hc/core5/testing/framework/TestingFrameworkRequestHandler.java:141:73, java.lang.String @ httpcore5-testing/src/main/java/org/apache/hc/core5/testing/framework/TestingFrameworkRequestHandler.java:141:81][0m
+  [34mUnused type args: [org.apache.hc.core5.http.NameValuePair][0m
+  [34mUnused type args: [java.lang.String, java.lang.String][0m
+  [34mUnused type args: [java.lang.String @ httpcore5-testing/src/main/java/org/apache/hc/core5/testing/framework/TestingFrameworkRequestHandler.java:145:38, java.lang.String @ httpcore5-testing/src/main/java/org/apache/hc/core5/testing/framework/TestingFrameworkRequestHandler.java:145:46][0m
+  [34mUnused type args: [java.lang.String, java.lang.String][0m
+  [34mUnused type args: [java.util.Map$Entry][0m
+  [34mUnused type args: [java.lang.String, java.lang.String][0m
+  [34mUnused type args: [java.lang.String, java.lang.String][0m
+  [34mUnused type args: [java.lang.String, java.lang.String][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [java.lang.String, java.lang.String][0m
+  [34mUnused type args: [java.lang.String, java.lang.String][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [java.lang.String @ httpcore5-testing/src/main/java/org/apache/hc/core5/testing/framework/TestingFrameworkRequestHandler.java:163:23, java.lang.String @ httpcore5-testing/src/main/java/org/apache/hc/core5/testing/framework/TestingFrameworkRequestHandler.java:163:31][0m
+  [34mUnused type args: [java.lang.String @ httpcore5-testing/src/main/java/org/apache/hc/core5/testing/framework/TestingFrameworkRequestHandler.java:163:62, java.lang.String @ httpcore5-testing/src/main/java/org/apache/hc/core5/testing/framework/TestingFrameworkRequestHandler.java:163:70][0m
+  [34mUnused type args: [java.lang.String, java.lang.Object][0m
+  [34mUnused type args: [java.lang.String, java.lang.String][0m
+  [34mUnused type args: [java.lang.String @ httpcore5-testing/src/main/java/org/apache/hc/core5/testing/framework/TestingFrameworkRequestHandler.java:165:27, java.lang.String @ httpcore5-testing/src/main/java/org/apache/hc/core5/testing/framework/TestingFrameworkRequestHandler.java:165:35][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [java.lang.String @ httpcore5-testing/src/main/java/org/apache/hc/core5/testing/framework/TestingFrameworkRequestHandler.java:165:74, java.lang.String @ httpcore5-testing/src/main/java/org/apache/hc/core5/testing/framework/TestingFrameworkRequestHandler.java:165:82][0m
+  [34mUnused type args: [java.lang.String, java.lang.String][0m
+  [34mUnused type args: [java.lang.String @ httpcore5-testing/src/main/java/org/apache/hc/core5/testing/framework/TestingFrameworkRequestHandler.java:170:34, java.lang.String @ httpcore5-testing/src/main/java/org/apache/hc/core5/testing/framework/TestingFrameworkRequestHandler.java:170:42][0m
+  [34mUnused type args: [java.lang.String, java.lang.String][0m
+  [34mUnused type args: [java.util.Map$Entry][0m
+  [34mUnused type args: [java.lang.String, java.lang.String][0m
+  [34mUnused type args: [java.lang.String, java.lang.String][0m
+  [34mUnused type args: [java.lang.String, java.lang.String][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [java.lang.String, java.lang.String][0m
+  [34mUnused type args: [java.lang.String, java.lang.String][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [java.lang.String, java.lang.Object][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [java.lang.String, java.lang.Object][0m
+  [34mUnused type args: [java.lang.String, java.lang.Object][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [java.lang.String, java.lang.Object][0m
+  [34mUnused type args: [java.lang.String, java.lang.Object][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [java.lang.String, java.lang.Object][0m
+  [34mUnused type args: [java.lang.String, java.lang.Object][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [java.lang.String @ httpcore5-testing/src/main/java/org/apache/hc/core5/testing/framework/TestingFrameworkRequestHandler.java:239:23, java.lang.String @ httpcore5-testing/src/main/java/org/apache/hc/core5/testing/framework/TestingFrameworkRequestHandler.java:239:31][0m
+  [34mUnused type args: [java.lang.String @ httpcore5-testing/src/main/java/org/apache/hc/core5/testing/framework/TestingFrameworkRequestHandler.java:239:61, java.lang.String @ httpcore5-testing/src/main/java/org/apache/hc/core5/testing/framework/TestingFrameworkRequestHandler.java:239:69][0m
+  [34mUnused type args: [java.lang.String, java.lang.Object][0m
+  [34mUnused type args: [java.lang.String, java.lang.String][0m
+  [34mUnused type args: [java.lang.String @ httpcore5-testing/src/main/java/org/apache/hc/core5/testing/framework/TestingFrameworkRequestHandler.java:241:34, java.lang.String @ httpcore5-testing/src/main/java/org/apache/hc/core5/testing/framework/TestingFrameworkRequestHandler.java:241:42][0m
+  [34mUnused type args: [java.lang.String, java.lang.String][0m
+  [34mUnused type args: [java.util.Map$Entry][0m
+  [34mUnused type args: [java.lang.String, java.lang.String][0m
+  [34mUnused type args: [java.lang.String, java.lang.String][0m
+  [34mUnused type args: [java.lang.String, java.lang.String][0m
+  [34mUnused type args: [org.apache.hc.core5.http.impl.bootstrap.Worker @ httpcore5/src/main/java/org/apache/hc/core5/http/impl/bootstrap/HttpServer.java:186:19][0m
+  [34mUnused type args: [org.apache.hc.core5.http.impl.bootstrap.Worker][0m
+  [34mUnused type args: [org.apache.hc.core5.http.impl.bootstrap.Worker][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [org.apache.hc.core5.http.impl.io.SocketHolder][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [org.apache.hc.core5.http.protocol.HttpProcessor][0m
+  [34mUnused type args: [org.apache.hc.core5.http.ClassicHttpResponse][0m
+  [34mUnused type args: [org.apache.hc.core5.http.ClassicHttpResponse][0m
+  [34mUnused type args: [org.apache.hc.core5.http.ClassicHttpResponse][0m
+  [34mUnused type args: [org.apache.hc.core5.http.ClassicHttpResponse][0m
+  [34mUnused type args: [org.apache.hc.core5.http.ClassicHttpResponse][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [java.lang.String, java.lang.Object][0m
+  [34mUnused type args: [org.apache.hc.core5.http.ClassicHttpResponse][0m
+  [34mUnused type args: [org.apache.hc.core5.http.ClassicHttpResponse][0m
+  [34mUnused type args: [org.apache.hc.core5.http.ClassicHttpResponse][0m
+  [34mUnused type args: [java.io.OutputStream][0m
+  [34mUnused type args: [java.io.OutputStream][0m
+  [34mUnused type args: [java.io.OutputStream][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [org.apache.hc.core5.http.impl.io.SocketHolder][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mskipping default constructor: org.apache.hc.core5.net.Ports()[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [org.apache.hc.core5.http.ClassicHttpResponse][0m
+  [34mUnused type args: [org.apache.hc.core5.http.ClassicHttpResponse][0m
+  [34mUnused type args: [java.lang.String, java.lang.Object][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [org.apache.hc.core5.http.NameValuePair @ httpcore5-testing/src/main/java/org/apache/hc/core5/testing/framework/FrameworkTest.java:115:28][0m
+  [34mUnused type args: [org.apache.hc.core5.http.NameValuePair][0m
+  [34mUnused type args: [java.lang.String @ httpcore5-testing/src/main/java/org/apache/hc/core5/testing/framework/FrameworkTest.java:117:27, java.lang.Object @ httpcore5-testing/src/main/java/org/apache/hc/core5/testing/framework/FrameworkTest.java:117:35][0m
+  [34mUnused type args: [java.lang.String @ httpcore5-testing/src/main/java/org/apache/hc/core5/testing/framework/FrameworkTest.java:117:59, java.lang.Object @ httpcore5-testing/src/main/java/org/apache/hc/core5/testing/framework/FrameworkTest.java:117:67][0m
+  [34mUnused type args: [java.lang.String, java.lang.Object][0m
+  [34mUnused type args: [org.apache.hc.core5.http.NameValuePair][0m
+  [34mUnused type args: [java.lang.String, java.lang.Object][0m
+  [34mUnused type args: [org.apache.hc.core5.http.NameValuePair][0m
+  [34mUnused type args: [java.lang.String, java.lang.Object][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [java.lang.String, java.lang.Object][0m
+  [34mUnused type args: [java.lang.String, java.lang.Object][0m
+  [34mUnused type args: [java.lang.String @ httpcore5-testing/src/main/java/org/apache/hc/core5/testing/framework/TestingFrameworkRequestHandler.java:73:41, java.lang.Object @ httpcore5-testing/src/main/java/org/apache/hc/core5/testing/framework/TestingFrameworkRequestHandler.java:73:49][0m
+  [34mUnused type args: [java.lang.String, java.lang.Object][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [org.apache.hc.core5.http.impl.bootstrap.HttpServer$Status][0m
+  [34mUnused type args: [java.lang.Runnable][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [org.apache.hc.core5.http.impl.io.SocketHolder][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [java.util.List][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [java.util.List][0m
+  [34mUnused type args: [?][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [org.apache.hc.core5.testing.framework.FrameworkTest][0m
+  [34mUnused type args: [java.lang.String, java.lang.String][0m
+  [34mUnused type args: [java.lang.String @ httpcore5-testing/src/main/java/org/apache/hc/core5/testing/framework/TestingFramework.java:375:30, java.lang.String @ httpcore5-testing/src/main/java/org/apache/hc/core5/testing/framework/TestingFramework.java:375:38][0m
+  [34mUnused type args: [java.lang.String @ httpcore5-testing/src/main/java/org/apache/hc/core5/testing/framework/TestingFramework.java:375:69, java.lang.String @ httpcore5-testing/src/main/java/org/apache/hc/core5/testing/framework/TestingFramework.java:375:77][0m
+  [34mUnused type args: [java.lang.String, java.lang.String][0m
+  [34mUnused type args: [java.util.Map$Entry][0m
+  [34mUnused type args: [java.lang.String, java.lang.String][0m
+  [34mUnused type args: [java.lang.String, java.lang.String][0m
+  [34mUnused type args: [java.lang.String, java.lang.String][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [java.lang.String, java.lang.String][0m
+  [34mUnused type args: [java.lang.String, java.lang.String][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [java.lang.String, java.lang.String][0m
+  [34mUnused type args: [java.lang.String, java.lang.String][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [java.lang.String][0m
+  [34mUnused type args: [java.lang.String][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [java.lang.String, java.lang.Object][0m
+  [34mUnused type args: [java.lang.String, java.lang.Object][0m
+  [34mUnused type args: [java.lang.String, java.lang.Object][0m
+  [34mUnused type args: [java.lang.String, java.lang.Object][0m
+  [34mUnused type args: [java.lang.String @ httpcore5-testing/src/main/java/org/apache/hc/core5/testing/framework/FrameworkTest.java:74:32, java.lang.Object @ httpcore5-testing/src/main/java/org/apache/hc/core5/testing/framework/FrameworkTest.java:74:40][0m
+  [34mUnused type args: [java.lang.String, java.lang.Object][0m
+  [34mUnused type args: [java.lang.String, java.lang.Object][0m
+  [34mUnused type args: [java.lang.String, java.lang.Object][0m
+  [34mUnused type args: [java.lang.String, java.lang.Object][0m
+  [34mUnused type args: [java.lang.String @ httpcore5-testing/src/main/java/org/apache/hc/core5/testing/framework/FrameworkTest.java:77:33, java.lang.Object @ httpcore5-testing/src/main/java/org/apache/hc/core5/testing/framework/FrameworkTest.java:77:41][0m
+  [34mUnused type args: [java.lang.String, java.lang.Object][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [java.lang.String, java.lang.Object][0m
+  [34mUnused type args: [java.lang.String, java.lang.Object][0m
+  [34mUnused type args: [org.apache.hc.core5.http.ClassicHttpResponse][0m
+  [34mUnused type args: [java.util.List][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [java.util.List][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [java.io.InputStream][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [org.apache.hc.core5.util.CharArrayBuffer][0m
+  [34mUnused type args: [java.io.InputStream][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [org.apache.hc.core5.http.impl.io.SocketHolder][0m
+  [34mUnused type args: [org.apache.hc.core5.http.impl.io.SocketHolder][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [org.apache.hc.core5.http.impl.BasicHttpTransportMetrics][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [java.lang.String][0m
+  [34mUnused type args: [java.io.InputStream][0m
+  [34mUnused type args: [java.io.InputStream][0m
+  [34mUnused type args: [java.io.InputStream][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [java.lang.String @ httpcore5-testing/src/main/java/org/apache/hc/core5/testing/framework/ClientTestingAdapter.java:84:23, java.lang.Object @ httpcore5-testing/src/main/java/org/apache/hc/core5/testing/framework/ClientTestingAdapter.java:84:31][0m
+  [34mUnused type args: [java.lang.String, java.lang.Object][0m
+  [34mUnused type args: [java.lang.String, java.lang.Object][0m
+  [34mUnused type args: [java.lang.String, java.lang.Object][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [java.lang.String, java.lang.Object][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [java.net.Socket][0m
+  [34mUnused type args: [java.io.InputStream][0m
+  [34mUnused type args: [java.io.InputStream][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [java.io.InputStream][0m
+  [34mUnused type args: [java.io.OutputStream][0m
+  [34mUnused type args: [java.io.OutputStream][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [java.io.OutputStream][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [org.apache.hc.core5.http.ClassicHttpRequest][0m
+  [34mUnused type args: [org.apache.hc.core5.http.ClassicHttpRequest][0m
+  [34mUnused type args: [org.apache.hc.core5.http.ClassicHttpRequest][0m
+  [34mUnused type args: [org.apache.hc.core5.http.ClassicHttpRequest][0m
+  [34mUnused type args: [org.apache.hc.core5.http.ClassicHttpRequest][0m
+  [34mUnused type args: [org.apache.hc.core5.http.ClassicHttpRequest][0m
+  [34mUnused type args: [org.apache.hc.core5.http.ClassicHttpResponse][0m
+  [34mUnused type args: [org.apache.hc.core5.http.ClassicHttpResponse][0m
+  [34mUnused type args: [org.apache.hc.core5.http.ClassicHttpResponse][0m
+  [34mUnused type args: [org.apache.hc.core5.http.ClassicHttpResponse][0m
+  [34mUnused type args: [org.apache.hc.core5.http.ClassicHttpResponse][0m
+  [34mUnused type args: [org.apache.hc.core5.http.ClassicHttpResponse][0m
+  [34mUnused type args: [java.lang.String @ httpcore5-testing/src/main/java/org/apache/hc/core5/testing/framework/TestingFramework.java:426:19, java.lang.Object @ httpcore5-testing/src/main/java/org/apache/hc/core5/testing/framework/TestingFramework.java:426:27][0m
+  [34mUnused type args: [java.lang.String @ httpcore5-testing/src/main/java/org/apache/hc/core5/testing/framework/TestingFramework.java:426:51, java.lang.Object @ httpcore5-testing/src/main/java/org/apache/hc/core5/testing/framework/TestingFramework.java:426:59][0m
+  [34mUnused type args: [java.lang.String, java.lang.Object][0m
+  [34mUnused type args: [org.apache.hc.core5.testing.framework.FrameworkTest][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [java.lang.String, java.lang.Object][0m
+  [34mUnused type args: [java.lang.String, java.lang.Object][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [org.apache.hc.core5.http.impl.io.SocketHolder][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [org.apache.hc.core5.http.impl.bootstrap.Worker][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [org.apache.hc.core5.http.impl.bootstrap.Worker, java.lang.Boolean][0m
+  [34mUnused type args: [org.apache.hc.core5.http.impl.bootstrap.Worker][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [org.apache.hc.core5.http.impl.bootstrap.Worker, java.lang.Boolean][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [org.apache.hc.core5.http.config.CharCodingConfig][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [org.apache.hc.core5.http.HttpHost, org.apache.hc.core5.http.io.HttpClientConnection][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [org.apache.hc.core5.http.ReasonPhraseCatalog][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [java.lang.String][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [org.apache.hc.core5.http.io.SessionInputBuffer][0m
+  [34mUnused type args: [java.io.InputStream][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [java.lang.StringBuilder][0m
+  [34mUnused type args: [java.lang.String][0m
+  [34mUnused type args: [org.apache.hc.core5.http.HttpEntity][0m
+  Pending package java.util.function
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [org.apache.hc.core5.http.Header][0m
+  [34mUnused type args: [org.apache.hc.core5.http.Header][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [org.apache.hc.core5.http.io.SessionOutputBuffer][0m
+  [34mUnused type args: [java.io.OutputStream][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [java.util.List][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [java.util.List][0m
+  [34mUnused type args: [?][0m
+  [34mUnused type args: [java.util.List][0m
+  [34mUnused type args: [?][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [T, C][0m
+  [34mUnused type args: [T, C][0m
+  [34mUnused type args: [C][0m
+  [34mUnused type args: [T, C][0m
+  [34mUnused type args: [T, C][0m
+  [34mUnused type args: [T, C][0m
+  [34mUnused type args: [T, C][0m
+  [34mUnused type args: [T, C][0m
+  [34mUnused type args: [T, C][0m
+  [34mUnused type args: [T, C][0m
+  [34mUnused type args: [T, C][0m
+  [34mUnused type args: [T, C][0m
+  [34mUnused type args: [T, C][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [org.apache.hc.core5.http.Header][0m
+  [34mUnused type args: [org.apache.hc.core5.http.Header][0m
+  [34mUnused type args: [org.apache.hc.core5.http.Header][0m
+  [34mUnused type args: [org.apache.hc.core5.http.Header][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [org.apache.hc.core5.http.HttpResponse][0m
+  [34mUnused type args: [T][0m
+  [34mSkipping selection with no field declaration: (CtFieldReferenceImpl) class[0m
+  [34mSkipping selection with no field declaration: (CtFieldReferenceImpl) class[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [org.apache.hc.core5.http.Header][0m
+  [34mUnused type args: [org.apache.hc.core5.http.Header][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [java.lang.String][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [org.apache.hc.core5.http.NameValuePair][0m
+  [34mUnused type args: [org.apache.hc.core5.http.NameValuePair][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [org.apache.hc.core5.http.NameValuePair][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [org.apache.hc.core5.http.HttpRequest][0m
+  [34mUnused type args: [T][0m
+  [34mSkipping selection with no field declaration: (CtFieldReferenceImpl) class[0m
+  [34mSkipping selection with no field declaration: (CtFieldReferenceImpl) class[0m
+  [34mUnused type args: [T, C][0m
+  [34mUnused type args: [T, C][0m
+  [34mUnused type args: [C][0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  [34mUnused type args: [org.apache.hc.core5.http.ClassicHttpRequest][0m
+  [34mUnused type args: [org.apache.hc.core5.http.ClassicHttpResponse][0m
+  [34mUnused type args: [org.apache.hc.core5.http.ClassicHttpRequest][0m
+  [34mUnused type args: [org.apache.hc.core5.http.ClassicHttpResponse][0m
+[34mFinished process pending packages (5.360464s)[0m
+Exception in thread "main" java.lang.Exception: Error while processing metrics (CtConstructorImpl) <init> @ httpcore5-testing/src/main/java/org/apache/hc/core5/testing/classic/LoggingBHttpClientConnection.java:61:12: {
+  elem: "(CtConstructorImpl) <init> @ httpcore5-testing/src/main/java/org/apache/hc/core5/testing/classic/LoggingBHttpClientConnection.java:61:12",
+}
+	at abstractor.core.constructs.Factory.create(Factory.java:132)
+	at abstractor.core.constructs.Factory.create(Factory.java:147)
+	at abstractor.core.Abstractor.addMetrics(Abstractor.java:962)
+	at abstractor.core.Abstractor.processPendingMetrics(Abstractor.java:1392)
+	at abstractor.core.Abstractor.processPendingPackages(Abstractor.java:1346)
+	at abstractor.core.Abstractor.lambda$performAbstraction$40(Abstractor.java:1332)
+	at abstractor.core.log.Logger.measure(Logger.java:123)
+	at abstractor.core.Abstractor.performAbstraction(Abstractor.java:1332)
+	at abstractor.app.App.run(App.java:26)
 	at abstractor.app.App.main(App.java:17)
+Caused by: java.lang.NullPointerException: Cannot invoke "spoon.reflect.reference.CtTypeReference.isPrimitive()" because "tr" is null
+	at abstractor.core.spoonUtils.SpoonUtils.isVoid(SpoonUtils.java:165)
+	at abstractor.core.tools.Analyzer.addAssignmentUsage(Analyzer.java:460)
+	at abstractor.core.tools.Analyzer.addUsage(Analyzer.java:398)
+	at abstractor.core.tools.Analyzer.addElement(Analyzer.java:133)
+	at abstractor.core.tools.Analyzer.addMethod(Analyzer.java:111)
+	at abstractor.core.Abstractor.lambda$addMetrics$31(Abstractor.java:967)
+	at abstractor.core.constructs.Factory.lambda$create$1(Factory.java:147)
+	at abstractor.core.constructs.Factory.create(Factory.java:109)
+	... 9 more
