@@ -52,6 +52,7 @@ public class Abstractor {
 
         MavenLauncher launcher = new MavenLauncher(mavenProject, MavenLauncher.SOURCE_TYPE.APP_SOURCE);
         launcher.getEnvironment().setComplianceLevel(17);
+        launcher.getEnvironment().setNoClasspath(true);
         CtModel model = launcher.buildModel();
         if (model.getAllTypes().size() > 0) {
             this.setProjectInfo(launcher);
@@ -729,7 +730,7 @@ public class Abstractor {
                 Ref<? extends TypeDesc> type = this.addTypeDesc(p.getType());
                 if (type == null) {
                     this.log.notice("argument " + SpoonUtils.describeElem(p) + " had a null type. The type likely "+
-                        "was an attribute or some other type not handled by the abstractor so using anyDesc.");
+                        "was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.");
                     type = this.proj.baker.anyDesc();
                 }
                 return new Argument(name, type);
@@ -741,7 +742,12 @@ public class Abstractor {
         return this.proj.arguments.create(this.log, key,
             "parameter <unnamed> " + SpoonUtils.describeGeneric(p),
             () -> {
-                final Ref<? extends TypeDesc> type = this.addTypeDesc(p);
+                Ref<? extends TypeDesc> type = this.addTypeDesc(p);
+                if (type == null) {
+                    this.log.notice("argument " + SpoonUtils.describeElem(p) + " had a null type. The type likely "+
+                        "was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.");
+                    type = this.proj.baker.anyDesc();
+                }
                 return new Argument("", type);
             });
     }
@@ -790,8 +796,13 @@ public class Abstractor {
         return this.proj.fields.create(this.log, key,
             "field " + SpoonUtils.describeElem(f),
             () -> {
-                final String                  name = f.getSimpleName();
-                final Ref<? extends TypeDesc> type = this.addTypeDesc(f.getType());
+                final String            name = f.getSimpleName();
+                Ref<? extends TypeDesc> type = this.addTypeDesc(f.getType());
+                if (type == null) {
+                    this.log.notice("field " + SpoonUtils.describeElem(f) + " had a null type. The type likely "+
+                        "was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.");
+                    type = this.proj.baker.anyDesc();
+                }
                 return new Field(name, type);
             },
             (Ref<Field> ref, Field field) -> {
