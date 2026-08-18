@@ -1,7 +1,7 @@
 # cmd: java -jar /Users/grantnelson/go/src/github.com/MSUSEL/msusel-tdmetrics-go/javaAbstractor/target/abstractor-0.1-jar-with-dependencies.jar -i /Users/grantnelson/go/src/github.com/apache/commons-configuration/ -o /Users/grantnelson/go/src/github.com/MSUSEL/msusel-tdmetrics-go/tdd/abstractions/commons-configuration.json -v
 # cwd: /Users/grantnelson/go/src/github.com/MSUSEL/msusel-tdmetrics-go/tdd
 # repo: /Users/grantnelson/go/src/github.com/apache/commons-configuration @ 15b4031ba94a60f20b854e6ce2c7964d77086387
-# started: 2026-08-17T18:50:54.344501+00:00
+# started: 2026-08-17T22:16:53.427785+00:00
 # timeout_min: 10
 # ---
 Reading /Users/grantnelson/go/src/github.com/apache/commons-configuration/
@@ -31,33 +31,929 @@ Init pending package org.apache.commons.configuration2.tree
 Init pending package org.apache.commons.configuration2.tree.xpath
 Init pending package org.apache.commons.configuration2.web
 [34mStarting process pending packages...[0m
-  Pending package org.apache.commons.configuration2.convert
-  Pending package java.util
-  Pending package java.lang
-  Pending package java.lang.invoke
-  Pending package org.apache.commons.configuration2.interpol
-  Pending package org.apache.commons.lang3.text
-  getting parent type for (CtClassImpl) Builder @ src/main/java/org/apache/commons/configuration2/interpol/InterpolatorSpecification.java:143:25
-  Pending package java.util.concurrent.atomic
-  Pending package org.apache.commons.configuration2.sync
-  Pending package org.apache.commons.configuration2.io
-  [31mType description did not have a declaration but was not labelled as anonymous: (CtTypeReferenceImpl) org.apache.commons.logging.Log @ src/main/java/org/apache/commons/configuration2/io/ConfigurationLogger.java:57:19
-  The type likely was an external dependency or some other type not handled by the abstractor so using anyDesc.[0m
-  [31mType description did not have a declaration but was not labelled as anonymous: (CtTypeReferenceImpl) org.apache.commons.logging.Log @ src/main/java/org/apache/commons/configuration2/io/ConfigurationLogger.java:102:25
-  The type likely was an external dependency or some other type not handled by the abstractor so using anyDesc.[0m
-  [31mType description did not have a declaration but was not labelled as anonymous: (CtTypeReferenceImpl) org.apache.commons.logging.Log @ src/main/java/org/apache/commons/configuration2/io/ConfigurationLogger.java:205:5
-  The type likely was an external dependency or some other type not handled by the abstractor so using anyDesc.[0m
-  [31mType description did not have a declaration but was not labelled as anonymous: (CtTypeReferenceImpl) org.apache.commons.logging.Log @ src/main/java/org/apache/commons/configuration2/io/ConfigurationLogger.java:235:20
-  The type likely was an external dependency or some other type not handled by the abstractor so using anyDesc.[0m
-  [31mType description did not have a declaration but was not labelled as anonymous: (CtTypeReferenceImpl) org.apache.commons.logging.Log @ src/main/java/org/apache/commons/configuration2/io/ConfigurationLogger.java:218:20
-  The type likely was an external dependency or some other type not handled by the abstractor so using anyDesc.[0m
-  Pending package org.apache.commons.configuration2.event
-[34mFinished process pending packages (0.614549s)[0m
+  Adding package org.apache.commons.configuration2
+    Resolved as new package org.apache.commons.configuration2
+    Adding object decl (CtClassImpl) AbstractConfiguration @ src/main/java/org/apache/commons/configuration2/AbstractConfiguration.java:102:23
+      Adding struct (CtClassImpl) AbstractConfiguration @ src/main/java/org/apache/commons/configuration2/AbstractConfiguration.java:102:23
+        Adding field (CtFieldImpl) listDelimiterHandler @ src/main/java/org/apache/commons/configuration2/AbstractConfiguration.java:105:34
+          Adding interface decl (CtInterfaceImpl) ListDelimiterHandler @ src/main/java/org/apache/commons/configuration2/convert/ListDelimiterHandler.java:57:18
+            Pending package org.apache.commons.configuration2.convert
+            Adding interface description (CtInterfaceImpl) ListDelimiterHandler @ src/main/java/org/apache/commons/configuration2/convert/ListDelimiterHandler.java:57:18
+              Adding abstract (CtMethodImpl) split @ src/main/java/org/apache/commons/configuration2/convert/ListDelimiterHandler.java:100:24
+                Adding signature (CtMethodImpl) split @ src/main/java/org/apache/commons/configuration2/convert/ListDelimiterHandler.java:100:24
+                  Adding parameter (CtParameterImpl) s @ src/main/java/org/apache/commons/configuration2/convert/ListDelimiterHandler.java:100:37
+                    Resolved as new parameter (CtParameterImpl) s @ src/main/java/org/apache/commons/configuration2/convert/ListDelimiterHandler.java:100:37
+                  Adding parameter (CtParameterImpl) trim @ src/main/java/org/apache/commons/configuration2/convert/ListDelimiterHandler.java:100:48
+                    Adding basic (CtTypeReferenceImpl) boolean @ src/main/java/org/apache/commons/configuration2/convert/ListDelimiterHandler.java:100:40
+                      Resolved as new basic (CtTypeReferenceImpl) boolean @ src/main/java/org/apache/commons/configuration2/convert/ListDelimiterHandler.java:100:40
+                    Resolved as new parameter (CtParameterImpl) trim @ src/main/java/org/apache/commons/configuration2/convert/ListDelimiterHandler.java:100:48
+                  Adding parameter <unnamed> java.util.Collection @ src/main/java/org/apache/commons/configuration2/convert/ListDelimiterHandler.java:100:5<java.lang.String @ src/main/java/org/apache/commons/configuration2/convert/ListDelimiterHandler.java:100:16>
+                    Adding interface decl (CtInterfaceImpl) Collection
+                      Pending package java.util
+                      Adding interface description (CtInterfaceImpl) Collection
+                        Resolved as new interface description (CtInterfaceImpl) Collection
+                      Adding type params (CtTypeParameterImpl) E
+                        Resolved as new type params (CtTypeParameterImpl) E
+                      Resolved as new interface decl (CtInterfaceImpl) Collection
+                    Adding interface instantiation java.util.Collection @ src/main/java/org/apache/commons/configuration2/convert/ListDelimiterHandler.java:100:5<java.lang.String @ src/main/java/org/apache/commons/configuration2/convert/ListDelimiterHandler.java:100:16>
+                      Adding interface description (CtInterfaceImpl) Collection
+                        Resolved as new interface description (CtInterfaceImpl) Collection
+                      Resolved as new interface instantiation java.util.Collection @ src/main/java/org/apache/commons/configuration2/convert/ListDelimiterHandler.java:100:5<java.lang.String @ src/main/java/org/apache/commons/configuration2/convert/ListDelimiterHandler.java:100:16>
+                    Resolved as new parameter <unnamed> java.util.Collection @ src/main/java/org/apache/commons/configuration2/convert/ListDelimiterHandler.java:100:5<java.lang.String @ src/main/java/org/apache/commons/configuration2/convert/ListDelimiterHandler.java:100:16>
+                  Resolved as new signature (CtMethodImpl) split @ src/main/java/org/apache/commons/configuration2/convert/ListDelimiterHandler.java:100:24
+                Resolved as new abstract (CtMethodImpl) split @ src/main/java/org/apache/commons/configuration2/convert/ListDelimiterHandler.java:100:24
+              Adding abstract (CtMethodImpl) escapeList @ src/main/java/org/apache/commons/configuration2/convert/ListDelimiterHandler.java:129:12
+                Adding signature (CtMethodImpl) escapeList @ src/main/java/org/apache/commons/configuration2/convert/ListDelimiterHandler.java:129:12
+                  Adding parameter (CtParameterImpl) values @ src/main/java/org/apache/commons/configuration2/convert/ListDelimiterHandler.java:129:31
+                    Adding interface decl (CtInterfaceImpl) List
+                      Adding interface description (CtInterfaceImpl) List
+                        Resolved as new interface description (CtInterfaceImpl) List
+                      Adding type params (CtTypeParameterImpl) E
+                        Resolved with match type params (CtTypeParameterImpl) E
+                      Resolved as new interface decl (CtInterfaceImpl) List
+                    Adding interface instantiation java.util.List @ src/main/java/org/apache/commons/configuration2/convert/ListDelimiterHandler.java:129:23<? @ src/main/java/org/apache/commons/configuration2/convert/ListDelimiterHandler.java:129:28>
+                      Adding interface description (CtInterfaceImpl) List
+                        Resolved as new interface description (CtInterfaceImpl) List
+                      Resolved as new interface instantiation java.util.List @ src/main/java/org/apache/commons/configuration2/convert/ListDelimiterHandler.java:129:23<? @ src/main/java/org/apache/commons/configuration2/convert/ListDelimiterHandler.java:129:28>
+                    Resolved as new parameter (CtParameterImpl) values @ src/main/java/org/apache/commons/configuration2/convert/ListDelimiterHandler.java:129:31
+                  Adding parameter (CtParameterImpl) transformer @ src/main/java/org/apache/commons/configuration2/convert/ListDelimiterHandler.java:129:56
+                    Adding interface decl (CtInterfaceImpl) ValueTransformer @ src/main/java/org/apache/commons/configuration2/convert/ValueTransformer.java:45:18
+                      Adding interface description (CtInterfaceImpl) ValueTransformer @ src/main/java/org/apache/commons/configuration2/convert/ValueTransformer.java:45:18
+                        Adding abstract (CtMethodImpl) transformValue @ src/main/java/org/apache/commons/configuration2/convert/ValueTransformer.java:55:12
+                          Adding signature (CtMethodImpl) transformValue @ src/main/java/org/apache/commons/configuration2/convert/ValueTransformer.java:55:12
+                            Adding parameter (CtParameterImpl) value @ src/main/java/org/apache/commons/configuration2/convert/ValueTransformer.java:55:34
+                              Resolved as new parameter (CtParameterImpl) value @ src/main/java/org/apache/commons/configuration2/convert/ValueTransformer.java:55:34
+                            Adding parameter <unnamed> java.lang.Object @ src/main/java/org/apache/commons/configuration2/convert/ValueTransformer.java:55:5
+                              Resolved as new parameter <unnamed> java.lang.Object @ src/main/java/org/apache/commons/configuration2/convert/ValueTransformer.java:55:5
+                            Resolved as new signature (CtMethodImpl) transformValue @ src/main/java/org/apache/commons/configuration2/convert/ValueTransformer.java:55:12
+                          Resolved as new abstract (CtMethodImpl) transformValue @ src/main/java/org/apache/commons/configuration2/convert/ValueTransformer.java:55:12
+                        Resolved as new interface description (CtInterfaceImpl) ValueTransformer @ src/main/java/org/apache/commons/configuration2/convert/ValueTransformer.java:45:18
+                      Resolved as new interface decl (CtInterfaceImpl) ValueTransformer @ src/main/java/org/apache/commons/configuration2/convert/ValueTransformer.java:45:18
+                    Resolved as new parameter (CtParameterImpl) transformer @ src/main/java/org/apache/commons/configuration2/convert/ListDelimiterHandler.java:129:56
+                  Adding parameter <unnamed> java.lang.Object @ src/main/java/org/apache/commons/configuration2/convert/ListDelimiterHandler.java:129:5
+                    Resolved with match parameter <unnamed> java.lang.Object @ src/main/java/org/apache/commons/configuration2/convert/ListDelimiterHandler.java:129:5
+                  Resolved as new signature (CtMethodImpl) escapeList @ src/main/java/org/apache/commons/configuration2/convert/ListDelimiterHandler.java:129:12
+                Resolved as new abstract (CtMethodImpl) escapeList @ src/main/java/org/apache/commons/configuration2/convert/ListDelimiterHandler.java:129:12
+              Adding abstract (CtMethodImpl) parse @ src/main/java/org/apache/commons/configuration2/convert/ListDelimiterHandler.java:84:17
+                Adding signature (CtMethodImpl) parse @ src/main/java/org/apache/commons/configuration2/convert/ListDelimiterHandler.java:84:17
+                  Adding parameter (CtParameterImpl) value @ src/main/java/org/apache/commons/configuration2/convert/ListDelimiterHandler.java:84:30
+                    Resolved with match parameter (CtParameterImpl) value @ src/main/java/org/apache/commons/configuration2/convert/ListDelimiterHandler.java:84:30
+                  Adding parameter <unnamed> java.lang.Iterable @ src/main/java/org/apache/commons/configuration2/convert/ListDelimiterHandler.java:84:5<? @ src/main/java/org/apache/commons/configuration2/convert/ListDelimiterHandler.java:84:14>
+                    Adding interface decl (CtInterfaceImpl) Iterable
+                      Pending package java.lang
+                      Adding interface description (CtInterfaceImpl) Iterable
+                        Resolved as new interface description (CtInterfaceImpl) Iterable
+                      Adding type params (CtTypeParameterImpl) T
+                        Resolved as new type params (CtTypeParameterImpl) T
+                      Resolved as new interface decl (CtInterfaceImpl) Iterable
+                    Adding interface instantiation java.lang.Iterable @ src/main/java/org/apache/commons/configuration2/convert/ListDelimiterHandler.java:84:5<? @ src/main/java/org/apache/commons/configuration2/convert/ListDelimiterHandler.java:84:14>
+                      Adding interface description (CtInterfaceImpl) Iterable
+                        Resolved as new interface description (CtInterfaceImpl) Iterable
+                      Resolved as new interface instantiation java.lang.Iterable @ src/main/java/org/apache/commons/configuration2/convert/ListDelimiterHandler.java:84:5<? @ src/main/java/org/apache/commons/configuration2/convert/ListDelimiterHandler.java:84:14>
+                    Resolved as new parameter <unnamed> java.lang.Iterable @ src/main/java/org/apache/commons/configuration2/convert/ListDelimiterHandler.java:84:5<? @ src/main/java/org/apache/commons/configuration2/convert/ListDelimiterHandler.java:84:14>
+                  Resolved as new signature (CtMethodImpl) parse @ src/main/java/org/apache/commons/configuration2/convert/ListDelimiterHandler.java:84:17
+                Resolved as new abstract (CtMethodImpl) parse @ src/main/java/org/apache/commons/configuration2/convert/ListDelimiterHandler.java:84:17
+              Adding abstract (CtMethodImpl) escape @ src/main/java/org/apache/commons/configuration2/convert/ListDelimiterHandler.java:114:12
+                Adding signature (CtMethodImpl) escape @ src/main/java/org/apache/commons/configuration2/convert/ListDelimiterHandler.java:114:12
+                  Adding parameter (CtParameterImpl) value @ src/main/java/org/apache/commons/configuration2/convert/ListDelimiterHandler.java:114:26
+                    Resolved with match parameter (CtParameterImpl) value @ src/main/java/org/apache/commons/configuration2/convert/ListDelimiterHandler.java:114:26
+                  Adding parameter (CtParameterImpl) transformer @ src/main/java/org/apache/commons/configuration2/convert/ListDelimiterHandler.java:114:50
+                    Resolved with match parameter (CtParameterImpl) transformer @ src/main/java/org/apache/commons/configuration2/convert/ListDelimiterHandler.java:114:50
+                  Adding parameter <unnamed> java.lang.Object @ src/main/java/org/apache/commons/configuration2/convert/ListDelimiterHandler.java:114:5
+                    Resolved with match parameter <unnamed> java.lang.Object @ src/main/java/org/apache/commons/configuration2/convert/ListDelimiterHandler.java:114:5
+                  Resolved as new signature (CtMethodImpl) escape @ src/main/java/org/apache/commons/configuration2/convert/ListDelimiterHandler.java:114:12
+                Resolved as new abstract (CtMethodImpl) escape @ src/main/java/org/apache/commons/configuration2/convert/ListDelimiterHandler.java:114:12
+              Resolved as new interface description (CtInterfaceImpl) ListDelimiterHandler @ src/main/java/org/apache/commons/configuration2/convert/ListDelimiterHandler.java:57:18
+            Resolved as new interface decl (CtInterfaceImpl) ListDelimiterHandler @ src/main/java/org/apache/commons/configuration2/convert/ListDelimiterHandler.java:57:18
+          Resolved as new field (CtFieldImpl) listDelimiterHandler @ src/main/java/org/apache/commons/configuration2/AbstractConfiguration.java:105:34
+        Adding field (CtFieldImpl) conversionHandler @ src/main/java/org/apache/commons/configuration2/AbstractConfiguration.java:108:31
+          Adding interface decl (CtInterfaceImpl) ConversionHandler @ src/main/java/org/apache/commons/configuration2/convert/ConversionHandler.java:57:18
+            Adding interface description (CtInterfaceImpl) ConversionHandler @ src/main/java/org/apache/commons/configuration2/convert/ConversionHandler.java:57:18
+              Adding abstract (CtMethodImpl) toCollection @ src/main/java/org/apache/commons/configuration2/convert/ConversionHandler.java:110:14
+                Adding signature (CtMethodImpl) toCollection @ src/main/java/org/apache/commons/configuration2/convert/ConversionHandler.java:110:14
+                  Adding parameter (CtParameterImpl) src @ src/main/java/org/apache/commons/configuration2/convert/ConversionHandler.java:110:34
+                    Resolved as new parameter (CtParameterImpl) src @ src/main/java/org/apache/commons/configuration2/convert/ConversionHandler.java:110:34
+                  Adding parameter (CtParameterImpl) elemClass @ src/main/java/org/apache/commons/configuration2/convert/ConversionHandler.java:110:48
+                    Adding object decl (CtClassImpl) Class
+                      Adding struct (CtClassImpl) Class
+                        Resolved as new struct (CtClassImpl) Class
+                      Adding type params (CtTypeParameterImpl) T
+                        Resolved with match type params (CtTypeParameterImpl) T
+                      Resolved as new object decl (CtClassImpl) Class
+                      Adding interface description (CtInterfaceImpl) Type
+                        Resolved as new interface description (CtInterfaceImpl) Type
+                      Adding interface description (CtInterfaceImpl) GenericDeclaration
+                        Resolved as new interface description (CtInterfaceImpl) GenericDeclaration
+                      Adding interface description (CtInterfaceImpl) OfField
+                        Adding interface decl (CtInterfaceImpl) TypeDescriptor
+                          Pending package java.lang.invoke
+                          Adding interface description (CtInterfaceImpl) TypeDescriptor
+                            Resolved as new interface description (CtInterfaceImpl) TypeDescriptor
+                          Resolved as new interface decl (CtInterfaceImpl) TypeDescriptor
+                        Resolved as new interface description (CtInterfaceImpl) OfField
+                      Adding interface description (CtInterfaceImpl) AnnotatedElement
+                        Resolved as new interface description (CtInterfaceImpl) AnnotatedElement
+                      Adding interface description (CtInterfaceImpl) Serializable
+                        Resolved as new interface description (CtInterfaceImpl) Serializable
+                      Adding interface description (CtInterfaceImpl) Constable
+                        Resolved as new interface description (CtInterfaceImpl) Constable
+                    Adding type params reference (CtTypeParameterReferenceImpl) T @ src/main/java/org/apache/commons/configuration2/convert/ConversionHandler.java:110:45
+                      Resolved with match type params reference (CtTypeParameterReferenceImpl) T @ src/main/java/org/apache/commons/configuration2/convert/ConversionHandler.java:110:45
+                    Resolved as new parameter (CtParameterImpl) elemClass @ src/main/java/org/apache/commons/configuration2/convert/ConversionHandler.java:110:48
+                  Adding parameter (CtParameterImpl) ci @ src/main/java/org/apache/commons/configuration2/convert/ConversionHandler.java:111:39
+                    Adding object decl (CtClassImpl) ConfigurationInterpolator @ src/main/java/org/apache/commons/configuration2/interpol/ConfigurationInterpolator.java:89:14
+                      Pending package org.apache.commons.configuration2.interpol
+                      Adding struct (CtClassImpl) ConfigurationInterpolator @ src/main/java/org/apache/commons/configuration2/interpol/ConfigurationInterpolator.java:89:14
+                        Adding field (CtFieldImpl) PREFIX_SEPARATOR @ src/main/java/org/apache/commons/configuration2/interpol/ConfigurationInterpolator.java:92:31
+                          Adding basic (CtTypeReferenceImpl) char @ src/main/java/org/apache/commons/configuration2/interpol/ConfigurationInterpolator.java:92:26
+                            Resolved as new basic (CtTypeReferenceImpl) char @ src/main/java/org/apache/commons/configuration2/interpol/ConfigurationInterpolator.java:92:26
+                          Resolved as new field (CtFieldImpl) PREFIX_SEPARATOR @ src/main/java/org/apache/commons/configuration2/interpol/ConfigurationInterpolator.java:92:31
+                        Adding field (CtFieldImpl) VAR_START @ src/main/java/org/apache/commons/configuration2/interpol/ConfigurationInterpolator.java:95:33
+                          Resolved as new field (CtFieldImpl) VAR_START @ src/main/java/org/apache/commons/configuration2/interpol/ConfigurationInterpolator.java:95:33
+                        Adding field (CtFieldImpl) VAR_END @ src/main/java/org/apache/commons/configuration2/interpol/ConfigurationInterpolator.java:98:33
+                          Resolved as new field (CtFieldImpl) VAR_END @ src/main/java/org/apache/commons/configuration2/interpol/ConfigurationInterpolator.java:98:33
+                        Adding field (CtFieldImpl) DEFAULT_PREFIX_LOOKUPS @ src/main/java/org/apache/commons/configuration2/interpol/ConfigurationInterpolator.java:101:46
+                          Adding interface decl (CtInterfaceImpl) Map
+                            Adding interface description (CtInterfaceImpl) Map
+                              Resolved as new interface description (CtInterfaceImpl) Map
+                            Adding type params (CtTypeParameterImpl) K
+                              Resolved as new type params (CtTypeParameterImpl) K
+                            Adding type params (CtTypeParameterImpl) V
+                              Resolved as new type params (CtTypeParameterImpl) V
+                            Resolved as new interface decl (CtInterfaceImpl) Map
+                          Adding interface decl (CtInterfaceImpl) Lookup @ src/main/java/org/apache/commons/configuration2/interpol/Lookup.java:47:18
+                            Adding interface description (CtInterfaceImpl) Lookup @ src/main/java/org/apache/commons/configuration2/interpol/Lookup.java:47:18
+                              Adding abstract (CtMethodImpl) lookup @ src/main/java/org/apache/commons/configuration2/interpol/Lookup.java:59:12
+                                Adding signature (CtMethodImpl) lookup @ src/main/java/org/apache/commons/configuration2/interpol/Lookup.java:59:12
+                                  Adding parameter (CtParameterImpl) variable @ src/main/java/org/apache/commons/configuration2/interpol/Lookup.java:59:26
+                                    Resolved as new parameter (CtParameterImpl) variable @ src/main/java/org/apache/commons/configuration2/interpol/Lookup.java:59:26
+                                  Adding parameter <unnamed> java.lang.Object @ src/main/java/org/apache/commons/configuration2/interpol/Lookup.java:59:5
+                                    Resolved with match parameter <unnamed> java.lang.Object @ src/main/java/org/apache/commons/configuration2/interpol/Lookup.java:59:5
+                                  Resolved as new signature (CtMethodImpl) lookup @ src/main/java/org/apache/commons/configuration2/interpol/Lookup.java:59:12
+                                Resolved as new abstract (CtMethodImpl) lookup @ src/main/java/org/apache/commons/configuration2/interpol/Lookup.java:59:12
+                              Resolved as new interface description (CtInterfaceImpl) Lookup @ src/main/java/org/apache/commons/configuration2/interpol/Lookup.java:47:18
+                            Resolved as new interface decl (CtInterfaceImpl) Lookup @ src/main/java/org/apache/commons/configuration2/interpol/Lookup.java:47:18
+                          Adding interface instantiation java.util.Map @ src/main/java/org/apache/commons/configuration2/interpol/ConfigurationInterpolator.java:101:26<java.lang.String @ src/main/java/org/apache/commons/configuration2/interpol/ConfigurationInterpolator.java:101:30, org.apache.commons.configuration2.interpol.Lookup @ src/main/java/org/apache/commons/configuration2/interpol/ConfigurationInterpolator.java:101:38>
+                            Adding interface description (CtInterfaceImpl) Map
+                              Resolved as new interface description (CtInterfaceImpl) Map
+                            Resolved as new interface instantiation java.util.Map @ src/main/java/org/apache/commons/configuration2/interpol/ConfigurationInterpolator.java:101:26<java.lang.String @ src/main/java/org/apache/commons/configuration2/interpol/ConfigurationInterpolator.java:101:30, org.apache.commons.configuration2.interpol.Lookup @ src/main/java/org/apache/commons/configuration2/interpol/ConfigurationInterpolator.java:101:38>
+                          Resolved as new field (CtFieldImpl) DEFAULT_PREFIX_LOOKUPS @ src/main/java/org/apache/commons/configuration2/interpol/ConfigurationInterpolator.java:101:46
+                        Adding field (CtFieldImpl) prefixLookups @ src/main/java/org/apache/commons/configuration2/interpol/ConfigurationInterpolator.java:104:39
+                          Adding interface instantiation java.util.Map @ src/main/java/org/apache/commons/configuration2/interpol/ConfigurationInterpolator.java:104:19<java.lang.String @ src/main/java/org/apache/commons/configuration2/interpol/ConfigurationInterpolator.java:104:23, org.apache.commons.configuration2.interpol.Lookup @ src/main/java/org/apache/commons/configuration2/interpol/ConfigurationInterpolator.java:104:31>
+                            Resolved with match interface instantiation java.util.Map @ src/main/java/org/apache/commons/configuration2/interpol/ConfigurationInterpolator.java:104:19<java.lang.String @ src/main/java/org/apache/commons/configuration2/interpol/ConfigurationInterpolator.java:104:23, org.apache.commons.configuration2.interpol.Lookup @ src/main/java/org/apache/commons/configuration2/interpol/ConfigurationInterpolator.java:104:31>
+                          Resolved as new field (CtFieldImpl) prefixLookups @ src/main/java/org/apache/commons/configuration2/interpol/ConfigurationInterpolator.java:104:39
+                        Adding field (CtFieldImpl) defaultLookups @ src/main/java/org/apache/commons/configuration2/interpol/ConfigurationInterpolator.java:107:32
+                          Adding interface instantiation java.util.List @ src/main/java/org/apache/commons/configuration2/interpol/ConfigurationInterpolator.java:107:19<org.apache.commons.configuration2.interpol.Lookup @ src/main/java/org/apache/commons/configuration2/interpol/ConfigurationInterpolator.java:107:24>
+                            Adding interface description (CtInterfaceImpl) List
+                              Resolved as new interface description (CtInterfaceImpl) List
+                            Resolved as new interface instantiation java.util.List @ src/main/java/org/apache/commons/configuration2/interpol/ConfigurationInterpolator.java:107:19<org.apache.commons.configuration2.interpol.Lookup @ src/main/java/org/apache/commons/configuration2/interpol/ConfigurationInterpolator.java:107:24>
+                          Resolved as new field (CtFieldImpl) defaultLookups @ src/main/java/org/apache/commons/configuration2/interpol/ConfigurationInterpolator.java:107:32
+                        Adding field (CtFieldImpl) substitutor @ src/main/java/org/apache/commons/configuration2/interpol/ConfigurationInterpolator.java:110:34
+                          Adding object decl (CtClassImpl) StrSubstitutor
+                            Pending package org.apache.commons.lang3.text
+                            Adding struct (CtClassImpl) StrSubstitutor
+                              Resolved as new struct (CtClassImpl) StrSubstitutor
+                            Resolved as new object decl (CtClassImpl) StrSubstitutor
+                          Resolved as new field (CtFieldImpl) substitutor @ src/main/java/org/apache/commons/configuration2/interpol/ConfigurationInterpolator.java:110:34
+                        Adding field (CtFieldImpl) parentInterpolator @ src/main/java/org/apache/commons/configuration2/interpol/ConfigurationInterpolator.java:113:48
+                          Resolved as new field (CtFieldImpl) parentInterpolator @ src/main/java/org/apache/commons/configuration2/interpol/ConfigurationInterpolator.java:113:48
+                        Resolved as new struct (CtClassImpl) ConfigurationInterpolator @ src/main/java/org/apache/commons/configuration2/interpol/ConfigurationInterpolator.java:89:14
+                      Resolved as new object decl (CtClassImpl) ConfigurationInterpolator @ src/main/java/org/apache/commons/configuration2/interpol/ConfigurationInterpolator.java:89:14
+                      Adding constructor (CtConstructorImpl) <init> @ src/main/java/org/apache/commons/configuration2/interpol/ConfigurationInterpolator.java:118:12
+                        Adding constructor signature (CtConstructorImpl) <init> @ src/main/java/org/apache/commons/configuration2/interpol/ConfigurationInterpolator.java:118:12
+                          Adding parameter <unnamed> org.apache.commons.configuration2.interpol.ConfigurationInterpolator
+                            Resolved as new parameter <unnamed> org.apache.commons.configuration2.interpol.ConfigurationInterpolator
+                          Resolved as new constructor signature (CtConstructorImpl) <init> @ src/main/java/org/apache/commons/configuration2/interpol/ConfigurationInterpolator.java:118:12
+                        Resolved as new constructor (CtConstructorImpl) <init> @ src/main/java/org/apache/commons/configuration2/interpol/ConfigurationInterpolator.java:118:12
+                      Adding method (CtMethodImpl) fromSpecification @ src/main/java/org/apache/commons/configuration2/interpol/ConfigurationInterpolator.java:139:45
+                        Adding signature (CtMethodImpl) fromSpecification @ src/main/java/org/apache/commons/configuration2/interpol/ConfigurationInterpolator.java:139:45
+                          Adding parameter (CtParameterImpl) spec @ src/main/java/org/apache/commons/configuration2/interpol/ConfigurationInterpolator.java:140:39
+                            Adding object decl (CtClassImpl) InterpolatorSpecification @ src/main/java/org/apache/commons/configuration2/interpol/InterpolatorSpecification.java:58:20
+                              Adding struct (CtClassImpl) InterpolatorSpecification @ src/main/java/org/apache/commons/configuration2/interpol/InterpolatorSpecification.java:58:20
+                                Adding field (CtFieldImpl) interpolator @ src/main/java/org/apache/commons/configuration2/interpol/InterpolatorSpecification.java:61:45
+                                  Resolved as new field (CtFieldImpl) interpolator @ src/main/java/org/apache/commons/configuration2/interpol/InterpolatorSpecification.java:61:45
+                                Adding field (CtFieldImpl) parentInterpolator @ src/main/java/org/apache/commons/configuration2/interpol/InterpolatorSpecification.java:64:45
+                                  Resolved with match field (CtFieldImpl) parentInterpolator @ src/main/java/org/apache/commons/configuration2/interpol/InterpolatorSpecification.java:64:45
+                                Adding field (CtFieldImpl) prefixLookups @ src/main/java/org/apache/commons/configuration2/interpol/InterpolatorSpecification.java:67:39
+                                  Adding interface instantiation java.util.Map @ src/main/java/org/apache/commons/configuration2/interpol/InterpolatorSpecification.java:67:19<java.lang.String @ src/main/java/org/apache/commons/configuration2/interpol/InterpolatorSpecification.java:67:23, org.apache.commons.configuration2.interpol.Lookup @ src/main/java/org/apache/commons/configuration2/interpol/InterpolatorSpecification.java:67:31>
+                                    Resolved with match interface instantiation java.util.Map @ src/main/java/org/apache/commons/configuration2/interpol/InterpolatorSpecification.java:67:19<java.lang.String @ src/main/java/org/apache/commons/configuration2/interpol/InterpolatorSpecification.java:67:23, org.apache.commons.configuration2.interpol.Lookup @ src/main/java/org/apache/commons/configuration2/interpol/InterpolatorSpecification.java:67:31>
+                                  Resolved as new field (CtFieldImpl) prefixLookups @ src/main/java/org/apache/commons/configuration2/interpol/InterpolatorSpecification.java:67:39
+                                Adding field (CtFieldImpl) defaultLookups @ src/main/java/org/apache/commons/configuration2/interpol/InterpolatorSpecification.java:70:38
+                                  Adding interface instantiation java.util.Collection @ src/main/java/org/apache/commons/configuration2/interpol/InterpolatorSpecification.java:70:19<org.apache.commons.configuration2.interpol.Lookup @ src/main/java/org/apache/commons/configuration2/interpol/InterpolatorSpecification.java:70:30>
+                                    Adding interface description (CtInterfaceImpl) Collection
+                                      Resolved as new interface description (CtInterfaceImpl) Collection
+                                    Resolved as new interface instantiation java.util.Collection @ src/main/java/org/apache/commons/configuration2/interpol/InterpolatorSpecification.java:70:19<org.apache.commons.configuration2.interpol.Lookup @ src/main/java/org/apache/commons/configuration2/interpol/InterpolatorSpecification.java:70:30>
+                                  Resolved as new field (CtFieldImpl) defaultLookups @ src/main/java/org/apache/commons/configuration2/interpol/InterpolatorSpecification.java:70:38
+                                Resolved as new struct (CtClassImpl) InterpolatorSpecification @ src/main/java/org/apache/commons/configuration2/interpol/InterpolatorSpecification.java:58:20
+                              Resolved as new object decl (CtClassImpl) InterpolatorSpecification @ src/main/java/org/apache/commons/configuration2/interpol/InterpolatorSpecification.java:58:20
+                              Adding object decl (CtClassImpl) Builder @ src/main/java/org/apache/commons/configuration2/interpol/InterpolatorSpecification.java:143:25
+                                Adding struct (CtClassImpl) Builder @ src/main/java/org/apache/commons/configuration2/interpol/InterpolatorSpecification.java:143:25
+                                  Adding field (CtFieldImpl) prefixLookups @ src/main/java/org/apache/commons/configuration2/interpol/InterpolatorSpecification.java:146:43
+                                    Adding interface instantiation java.util.Map @ src/main/java/org/apache/commons/configuration2/interpol/InterpolatorSpecification.java:146:23<java.lang.String @ src/main/java/org/apache/commons/configuration2/interpol/InterpolatorSpecification.java:146:27, org.apache.commons.configuration2.interpol.Lookup @ src/main/java/org/apache/commons/configuration2/interpol/InterpolatorSpecification.java:146:35>
+                                      Resolved with match interface instantiation java.util.Map @ src/main/java/org/apache/commons/configuration2/interpol/InterpolatorSpecification.java:146:23<java.lang.String @ src/main/java/org/apache/commons/configuration2/interpol/InterpolatorSpecification.java:146:27, org.apache.commons.configuration2.interpol.Lookup @ src/main/java/org/apache/commons/configuration2/interpol/InterpolatorSpecification.java:146:35>
+                                    Resolved as new field (CtFieldImpl) prefixLookups @ src/main/java/org/apache/commons/configuration2/interpol/InterpolatorSpecification.java:146:43
+                                  Adding field (CtFieldImpl) defLookups @ src/main/java/org/apache/commons/configuration2/interpol/InterpolatorSpecification.java:149:42
+                                    Adding interface instantiation java.util.Collection @ src/main/java/org/apache/commons/configuration2/interpol/InterpolatorSpecification.java:149:23<org.apache.commons.configuration2.interpol.Lookup @ src/main/java/org/apache/commons/configuration2/interpol/InterpolatorSpecification.java:149:34>
+                                      Resolved with match interface instantiation java.util.Collection @ src/main/java/org/apache/commons/configuration2/interpol/InterpolatorSpecification.java:149:23<org.apache.commons.configuration2.interpol.Lookup @ src/main/java/org/apache/commons/configuration2/interpol/InterpolatorSpecification.java:149:34>
+                                    Resolved as new field (CtFieldImpl) defLookups @ src/main/java/org/apache/commons/configuration2/interpol/InterpolatorSpecification.java:149:42
+                                  Adding field (CtFieldImpl) interpolator @ src/main/java/org/apache/commons/configuration2/interpol/InterpolatorSpecification.java:152:43
+                                    Resolved with match field (CtFieldImpl) interpolator @ src/main/java/org/apache/commons/configuration2/interpol/InterpolatorSpecification.java:152:43
+                                  Adding field (CtFieldImpl) parentInterpolator @ src/main/java/org/apache/commons/configuration2/interpol/InterpolatorSpecification.java:155:43
+                                    Resolved with match field (CtFieldImpl) parentInterpolator @ src/main/java/org/apache/commons/configuration2/interpol/InterpolatorSpecification.java:155:43
+                                  Adding field $nest
+                                    Resolved as new field $nest
+                                  Resolved as new struct (CtClassImpl) Builder @ src/main/java/org/apache/commons/configuration2/interpol/InterpolatorSpecification.java:143:25
+                                Resolved as new object decl (CtClassImpl) Builder @ src/main/java/org/apache/commons/configuration2/interpol/InterpolatorSpecification.java:143:25
+                                getting parent type for (CtClassImpl) Builder @ src/main/java/org/apache/commons/configuration2/interpol/InterpolatorSpecification.java:143:25
+                                Adding constructor (CtConstructorImpl) <init> @ src/main/java/org/apache/commons/configuration2/interpol/InterpolatorSpecification.java:157:16
+                                  Adding constructor signature (CtConstructorImpl) <init> @ src/main/java/org/apache/commons/configuration2/interpol/InterpolatorSpecification.java:157:16
+                                    Adding parameter <unnamed> org.apache.commons.configuration2.interpol.InterpolatorSpecification$Builder
+                                      Resolved as new parameter <unnamed> org.apache.commons.configuration2.interpol.InterpolatorSpecification$Builder
+                                    Resolved as new constructor signature (CtConstructorImpl) <init> @ src/main/java/org/apache/commons/configuration2/interpol/InterpolatorSpecification.java:157:16
+                                  Resolved as new constructor (CtConstructorImpl) <init> @ src/main/java/org/apache/commons/configuration2/interpol/InterpolatorSpecification.java:157:16
+                                Adding method (CtMethodImpl) reset @ src/main/java/org/apache/commons/configuration2/interpol/InterpolatorSpecification.java:289:21
+                                  Adding signature (CtMethodImpl) reset @ src/main/java/org/apache/commons/configuration2/interpol/InterpolatorSpecification.java:289:21
+                                    Resolved as new signature (CtMethodImpl) reset @ src/main/java/org/apache/commons/configuration2/interpol/InterpolatorSpecification.java:289:21
+                                  Resolved as new method (CtMethodImpl) reset @ src/main/java/org/apache/commons/configuration2/interpol/InterpolatorSpecification.java:289:21
+                                Adding method (CtMethodImpl) withInterpolator @ src/main/java/org/apache/commons/configuration2/interpol/InterpolatorSpecification.java:249:24
+                                  Adding signature (CtMethodImpl) withInterpolator @ src/main/java/org/apache/commons/configuration2/interpol/InterpolatorSpecification.java:249:24
+                                    Adding parameter (CtParameterImpl) ci @ src/main/java/org/apache/commons/configuration2/interpol/InterpolatorSpecification.java:249:67
+                                      Resolved as new parameter (CtParameterImpl) ci @ src/main/java/org/apache/commons/configuration2/interpol/InterpolatorSpecification.java:249:67
+                                    Adding parameter <unnamed> org.apache.commons.configuration2.interpol.InterpolatorSpecification$Builder @ src/main/java/org/apache/commons/configuration2/interpol/InterpolatorSpecification.java:249:16
+                                      Resolved with match parameter <unnamed> org.apache.commons.configuration2.interpol.InterpolatorSpecification$Builder @ src/main/java/org/apache/commons/configuration2/interpol/InterpolatorSpecification.java:249:16
+                                    Resolved as new signature (CtMethodImpl) withInterpolator @ src/main/java/org/apache/commons/configuration2/interpol/InterpolatorSpecification.java:249:24
+                                  Resolved as new method (CtMethodImpl) withInterpolator @ src/main/java/org/apache/commons/configuration2/interpol/InterpolatorSpecification.java:249:24
+                                Adding method (CtMethodImpl) withParentInterpolator @ src/main/java/org/apache/commons/configuration2/interpol/InterpolatorSpecification.java:264:24
+                                  Adding signature (CtMethodImpl) withParentInterpolator @ src/main/java/org/apache/commons/configuration2/interpol/InterpolatorSpecification.java:264:24
+                                    Adding parameter (CtParameterImpl) parent @ src/main/java/org/apache/commons/configuration2/interpol/InterpolatorSpecification.java:264:73
+                                      Resolved as new parameter (CtParameterImpl) parent @ src/main/java/org/apache/commons/configuration2/interpol/InterpolatorSpecification.java:264:73
+                                    Adding parameter <unnamed> org.apache.commons.configuration2.interpol.InterpolatorSpecification$Builder @ src/main/java/org/apache/commons/configuration2/interpol/InterpolatorSpecification.java:264:16
+                                      Resolved with match parameter <unnamed> org.apache.commons.configuration2.interpol.InterpolatorSpecification$Builder @ src/main/java/org/apache/commons/configuration2/interpol/InterpolatorSpecification.java:264:16
+                                    Resolved as new signature (CtMethodImpl) withParentInterpolator @ src/main/java/org/apache/commons/configuration2/interpol/InterpolatorSpecification.java:264:24
+                                  Resolved as new method (CtMethodImpl) withParentInterpolator @ src/main/java/org/apache/commons/configuration2/interpol/InterpolatorSpecification.java:264:24
+                                Adding method (CtMethodImpl) withPrefixLookups @ src/main/java/org/apache/commons/configuration2/interpol/InterpolatorSpecification.java:192:24
+                                  Adding signature (CtMethodImpl) withPrefixLookups @ src/main/java/org/apache/commons/configuration2/interpol/InterpolatorSpecification.java:192:24
+                                    Adding parameter (CtParameterImpl) lookups @ src/main/java/org/apache/commons/configuration2/interpol/InterpolatorSpecification.java:192:72
+                                      Adding interface instantiation java.util.Map @ src/main/java/org/apache/commons/configuration2/interpol/InterpolatorSpecification.java:192:42<java.lang.String @ src/main/java/org/apache/commons/configuration2/interpol/InterpolatorSpecification.java:192:46, ? @ src/main/java/org/apache/commons/configuration2/interpol/InterpolatorSpecification.java:192:54>
+                                        Resolved with match interface instantiation java.util.Map @ src/main/java/org/apache/commons/configuration2/interpol/InterpolatorSpecification.java:192:42<java.lang.String @ src/main/java/org/apache/commons/configuration2/interpol/InterpolatorSpecification.java:192:46, ? @ src/main/java/org/apache/commons/configuration2/interpol/InterpolatorSpecification.java:192:54>
+                                      Resolved as new parameter (CtParameterImpl) lookups @ src/main/java/org/apache/commons/configuration2/interpol/InterpolatorSpecification.java:192:72
+                                    Adding parameter <unnamed> org.apache.commons.configuration2.interpol.InterpolatorSpecification$Builder @ src/main/java/org/apache/commons/configuration2/interpol/InterpolatorSpecification.java:192:16
+                                      Resolved with match parameter <unnamed> org.apache.commons.configuration2.interpol.InterpolatorSpecification$Builder @ src/main/java/org/apache/commons/configuration2/interpol/InterpolatorSpecification.java:192:16
+                                    Resolved as new signature (CtMethodImpl) withPrefixLookups @ src/main/java/org/apache/commons/configuration2/interpol/InterpolatorSpecification.java:192:24
+                                  Resolved as new method (CtMethodImpl) withPrefixLookups @ src/main/java/org/apache/commons/configuration2/interpol/InterpolatorSpecification.java:192:24
+                                Adding method (CtMethodImpl) withDefaultLookups @ src/main/java/org/apache/commons/configuration2/interpol/InterpolatorSpecification.java:228:24
+                                  Adding signature (CtMethodImpl) withDefaultLookups @ src/main/java/org/apache/commons/configuration2/interpol/InterpolatorSpecification.java:228:24
+                                    Adding parameter (CtParameterImpl) lookups @ src/main/java/org/apache/commons/configuration2/interpol/InterpolatorSpecification.java:228:72
+                                      Adding interface instantiation java.util.Collection @ src/main/java/org/apache/commons/configuration2/interpol/InterpolatorSpecification.java:228:43<? @ src/main/java/org/apache/commons/configuration2/interpol/InterpolatorSpecification.java:228:54>
+                                        Resolved with match interface instantiation java.util.Collection @ src/main/java/org/apache/commons/configuration2/interpol/InterpolatorSpecification.java:228:43<? @ src/main/java/org/apache/commons/configuration2/interpol/InterpolatorSpecification.java:228:54>
+                                      Resolved as new parameter (CtParameterImpl) lookups @ src/main/java/org/apache/commons/configuration2/interpol/InterpolatorSpecification.java:228:72
+                                    Adding parameter <unnamed> org.apache.commons.configuration2.interpol.InterpolatorSpecification$Builder @ src/main/java/org/apache/commons/configuration2/interpol/InterpolatorSpecification.java:228:16
+                                      Resolved with match parameter <unnamed> org.apache.commons.configuration2.interpol.InterpolatorSpecification$Builder @ src/main/java/org/apache/commons/configuration2/interpol/InterpolatorSpecification.java:228:16
+                                    Resolved as new signature (CtMethodImpl) withDefaultLookups @ src/main/java/org/apache/commons/configuration2/interpol/InterpolatorSpecification.java:228:24
+                                  Resolved as new method (CtMethodImpl) withDefaultLookups @ src/main/java/org/apache/commons/configuration2/interpol/InterpolatorSpecification.java:228:24
+                                Adding method (CtMethodImpl) withPrefixLookup @ src/main/java/org/apache/commons/configuration2/interpol/InterpolatorSpecification.java:171:24
+                                  Adding signature (CtMethodImpl) withPrefixLookup @ src/main/java/org/apache/commons/configuration2/interpol/InterpolatorSpecification.java:171:24
+                                    Adding parameter (CtParameterImpl) prefix @ src/main/java/org/apache/commons/configuration2/interpol/InterpolatorSpecification.java:171:48
+                                      Resolved as new parameter (CtParameterImpl) prefix @ src/main/java/org/apache/commons/configuration2/interpol/InterpolatorSpecification.java:171:48
+                                    Adding parameter (CtParameterImpl) lookup @ src/main/java/org/apache/commons/configuration2/interpol/InterpolatorSpecification.java:171:63
+                                      Resolved as new parameter (CtParameterImpl) lookup @ src/main/java/org/apache/commons/configuration2/interpol/InterpolatorSpecification.java:171:63
+                                    Adding parameter <unnamed> org.apache.commons.configuration2.interpol.InterpolatorSpecification$Builder @ src/main/java/org/apache/commons/configuration2/interpol/InterpolatorSpecification.java:171:16
+                                      Resolved with match parameter <unnamed> org.apache.commons.configuration2.interpol.InterpolatorSpecification$Builder @ src/main/java/org/apache/commons/configuration2/interpol/InterpolatorSpecification.java:171:16
+                                    Resolved as new signature (CtMethodImpl) withPrefixLookup @ src/main/java/org/apache/commons/configuration2/interpol/InterpolatorSpecification.java:171:24
+                                  Resolved as new method (CtMethodImpl) withPrefixLookup @ src/main/java/org/apache/commons/configuration2/interpol/InterpolatorSpecification.java:171:24
+                                Adding method (CtMethodImpl) checkLookup @ src/main/java/org/apache/commons/configuration2/interpol/InterpolatorSpecification.java:304:29
+                                  Adding signature (CtMethodImpl) checkLookup @ src/main/java/org/apache/commons/configuration2/interpol/InterpolatorSpecification.java:304:29
+                                    Adding parameter (CtParameterImpl) lookup @ src/main/java/org/apache/commons/configuration2/interpol/InterpolatorSpecification.java:304:48
+                                      Resolved with match parameter (CtParameterImpl) lookup @ src/main/java/org/apache/commons/configuration2/interpol/InterpolatorSpecification.java:304:48
+                                    Resolved as new signature (CtMethodImpl) checkLookup @ src/main/java/org/apache/commons/configuration2/interpol/InterpolatorSpecification.java:304:29
+                                  Resolved as new method (CtMethodImpl) checkLookup @ src/main/java/org/apache/commons/configuration2/interpol/InterpolatorSpecification.java:304:29
+                                Adding method (CtMethodImpl) withDefaultLookup @ src/main/java/org/apache/commons/configuration2/interpol/InterpolatorSpecification.java:211:24
+                                  Adding signature (CtMethodImpl) withDefaultLookup @ src/main/java/org/apache/commons/configuration2/interpol/InterpolatorSpecification.java:211:24
+                                    Adding parameter (CtParameterImpl) lookup @ src/main/java/org/apache/commons/configuration2/interpol/InterpolatorSpecification.java:211:49
+                                      Resolved with match parameter (CtParameterImpl) lookup @ src/main/java/org/apache/commons/configuration2/interpol/InterpolatorSpecification.java:211:49
+                                    Adding parameter <unnamed> org.apache.commons.configuration2.interpol.InterpolatorSpecification$Builder @ src/main/java/org/apache/commons/configuration2/interpol/InterpolatorSpecification.java:211:16
+                                      Resolved with match parameter <unnamed> org.apache.commons.configuration2.interpol.InterpolatorSpecification$Builder @ src/main/java/org/apache/commons/configuration2/interpol/InterpolatorSpecification.java:211:16
+                                    Resolved as new signature (CtMethodImpl) withDefaultLookup @ src/main/java/org/apache/commons/configuration2/interpol/InterpolatorSpecification.java:211:24
+                                  Resolved as new method (CtMethodImpl) withDefaultLookup @ src/main/java/org/apache/commons/configuration2/interpol/InterpolatorSpecification.java:211:24
+                                Adding method (CtMethodImpl) create @ src/main/java/org/apache/commons/configuration2/interpol/InterpolatorSpecification.java:277:42
+                                  Adding signature (CtMethodImpl) create @ src/main/java/org/apache/commons/configuration2/interpol/InterpolatorSpecification.java:277:42
+                                    Adding parameter <unnamed> org.apache.commons.configuration2.interpol.InterpolatorSpecification @ src/main/java/org/apache/commons/configuration2/interpol/InterpolatorSpecification.java:277:16
+                                      Resolved as new parameter <unnamed> org.apache.commons.configuration2.interpol.InterpolatorSpecification @ src/main/java/org/apache/commons/configuration2/interpol/InterpolatorSpecification.java:277:16
+                                    Resolved as new signature (CtMethodImpl) create @ src/main/java/org/apache/commons/configuration2/interpol/InterpolatorSpecification.java:277:42
+                                  Resolved as new method (CtMethodImpl) create @ src/main/java/org/apache/commons/configuration2/interpol/InterpolatorSpecification.java:277:42
+                                Adding abstract (CtMethodImpl) reset @ src/main/java/org/apache/commons/configuration2/interpol/InterpolatorSpecification.java:289:21
+                                  Resolved as new abstract (CtMethodImpl) reset @ src/main/java/org/apache/commons/configuration2/interpol/InterpolatorSpecification.java:289:21
+                                Adding abstract (CtMethodImpl) withInterpolator @ src/main/java/org/apache/commons/configuration2/interpol/InterpolatorSpecification.java:249:24
+                                  Resolved as new abstract (CtMethodImpl) withInterpolator @ src/main/java/org/apache/commons/configuration2/interpol/InterpolatorSpecification.java:249:24
+                                Adding abstract (CtMethodImpl) withParentInterpolator @ src/main/java/org/apache/commons/configuration2/interpol/InterpolatorSpecification.java:264:24
+                                  Resolved as new abstract (CtMethodImpl) withParentInterpolator @ src/main/java/org/apache/commons/configuration2/interpol/InterpolatorSpecification.java:264:24
+                                Adding abstract (CtMethodImpl) withPrefixLookups @ src/main/java/org/apache/commons/configuration2/interpol/InterpolatorSpecification.java:192:24
+                                  Resolved as new abstract (CtMethodImpl) withPrefixLookups @ src/main/java/org/apache/commons/configuration2/interpol/InterpolatorSpecification.java:192:24
+                                Adding abstract (CtMethodImpl) withDefaultLookups @ src/main/java/org/apache/commons/configuration2/interpol/InterpolatorSpecification.java:228:24
+                                  Resolved as new abstract (CtMethodImpl) withDefaultLookups @ src/main/java/org/apache/commons/configuration2/interpol/InterpolatorSpecification.java:228:24
+                                Adding abstract (CtMethodImpl) withPrefixLookup @ src/main/java/org/apache/commons/configuration2/interpol/InterpolatorSpecification.java:171:24
+                                  Resolved as new abstract (CtMethodImpl) withPrefixLookup @ src/main/java/org/apache/commons/configuration2/interpol/InterpolatorSpecification.java:171:24
+                                Adding abstract (CtMethodImpl) withDefaultLookup @ src/main/java/org/apache/commons/configuration2/interpol/InterpolatorSpecification.java:211:24
+                                  Resolved as new abstract (CtMethodImpl) withDefaultLookup @ src/main/java/org/apache/commons/configuration2/interpol/InterpolatorSpecification.java:211:24
+                                Adding abstract (CtMethodImpl) create @ src/main/java/org/apache/commons/configuration2/interpol/InterpolatorSpecification.java:277:42
+                                  Resolved as new abstract (CtMethodImpl) create @ src/main/java/org/apache/commons/configuration2/interpol/InterpolatorSpecification.java:277:42
+                              Adding constructor (CtConstructorImpl) <init> @ src/main/java/org/apache/commons/configuration2/interpol/InterpolatorSpecification.java:78:13
+                                Adding constructor signature (CtConstructorImpl) <init> @ src/main/java/org/apache/commons/configuration2/interpol/InterpolatorSpecification.java:78:13
+                                  Adding parameter (CtParameterImpl) builder @ src/main/java/org/apache/commons/configuration2/interpol/InterpolatorSpecification.java:78:47
+                                    Resolved as new parameter (CtParameterImpl) builder @ src/main/java/org/apache/commons/configuration2/interpol/InterpolatorSpecification.java:78:47
+                                  Adding parameter <unnamed> org.apache.commons.configuration2.interpol.InterpolatorSpecification
+                                    Resolved with match parameter <unnamed> org.apache.commons.configuration2.interpol.InterpolatorSpecification
+                                  Resolved as new constructor signature (CtConstructorImpl) <init> @ src/main/java/org/apache/commons/configuration2/interpol/InterpolatorSpecification.java:78:13
+                                Resolved as new constructor (CtConstructorImpl) <init> @ src/main/java/org/apache/commons/configuration2/interpol/InterpolatorSpecification.java:78:13
+                              Adding method (CtMethodImpl) getDefaultLookups @ src/main/java/org/apache/commons/configuration2/interpol/InterpolatorSpecification.java:129:31
+                                Adding signature (CtMethodImpl) getDefaultLookups @ src/main/java/org/apache/commons/configuration2/interpol/InterpolatorSpecification.java:129:31
+                                  Adding parameter <unnamed> java.util.Collection @ src/main/java/org/apache/commons/configuration2/interpol/InterpolatorSpecification.java:129:12<org.apache.commons.configuration2.interpol.Lookup @ src/main/java/org/apache/commons/configuration2/interpol/InterpolatorSpecification.java:129:23>
+                                    Adding interface instantiation java.util.Collection @ src/main/java/org/apache/commons/configuration2/interpol/InterpolatorSpecification.java:129:12<org.apache.commons.configuration2.interpol.Lookup @ src/main/java/org/apache/commons/configuration2/interpol/InterpolatorSpecification.java:129:23>
+                                      Resolved with match interface instantiation java.util.Collection @ src/main/java/org/apache/commons/configuration2/interpol/InterpolatorSpecification.java:129:12<org.apache.commons.configuration2.interpol.Lookup @ src/main/java/org/apache/commons/configuration2/interpol/InterpolatorSpecification.java:129:23>
+                                    Resolved as new parameter <unnamed> java.util.Collection @ src/main/java/org/apache/commons/configuration2/interpol/InterpolatorSpecification.java:129:12<org.apache.commons.configuration2.interpol.Lookup @ src/main/java/org/apache/commons/configuration2/interpol/InterpolatorSpecification.java:129:23>
+                                  Resolved as new signature (CtMethodImpl) getDefaultLookups @ src/main/java/org/apache/commons/configuration2/interpol/InterpolatorSpecification.java:129:31
+                                Resolved as new method (CtMethodImpl) getDefaultLookups @ src/main/java/org/apache/commons/configuration2/interpol/InterpolatorSpecification.java:129:31
+                              Adding method (CtMethodImpl) getPrefixLookups @ src/main/java/org/apache/commons/configuration2/interpol/InterpolatorSpecification.java:118:32
+                                Adding signature (CtMethodImpl) getPrefixLookups @ src/main/java/org/apache/commons/configuration2/interpol/InterpolatorSpecification.java:118:32
+                                  Adding parameter <unnamed> java.util.Map @ src/main/java/org/apache/commons/configuration2/interpol/InterpolatorSpecification.java:118:12<java.lang.String @ src/main/java/org/apache/commons/configuration2/interpol/InterpolatorSpecification.java:118:16, org.apache.commons.configuration2.interpol.Lookup @ src/main/java/org/apache/commons/configuration2/interpol/InterpolatorSpecification.java:118:24>
+                                    Adding interface instantiation java.util.Map @ src/main/java/org/apache/commons/configuration2/interpol/InterpolatorSpecification.java:118:12<java.lang.String @ src/main/java/org/apache/commons/configuration2/interpol/InterpolatorSpecification.java:118:16, org.apache.commons.configuration2.interpol.Lookup @ src/main/java/org/apache/commons/configuration2/interpol/InterpolatorSpecification.java:118:24>
+                                      Resolved with match interface instantiation java.util.Map @ src/main/java/org/apache/commons/configuration2/interpol/InterpolatorSpecification.java:118:12<java.lang.String @ src/main/java/org/apache/commons/configuration2/interpol/InterpolatorSpecification.java:118:16, org.apache.commons.configuration2.interpol.Lookup @ src/main/java/org/apache/commons/configuration2/interpol/InterpolatorSpecification.java:118:24>
+                                    Resolved as new parameter <unnamed> java.util.Map @ src/main/java/org/apache/commons/configuration2/interpol/InterpolatorSpecification.java:118:12<java.lang.String @ src/main/java/org/apache/commons/configuration2/interpol/InterpolatorSpecification.java:118:16, org.apache.commons.configuration2.interpol.Lookup @ src/main/java/org/apache/commons/configuration2/interpol/InterpolatorSpecification.java:118:24>
+                                  Resolved as new signature (CtMethodImpl) getPrefixLookups @ src/main/java/org/apache/commons/configuration2/interpol/InterpolatorSpecification.java:118:32
+                                Resolved as new method (CtMethodImpl) getPrefixLookups @ src/main/java/org/apache/commons/configuration2/interpol/InterpolatorSpecification.java:118:32
+                              Adding method (CtMethodImpl) getParentInterpolator @ src/main/java/org/apache/commons/configuration2/interpol/InterpolatorSpecification.java:106:38
+                                Adding signature (CtMethodImpl) getParentInterpolator @ src/main/java/org/apache/commons/configuration2/interpol/InterpolatorSpecification.java:106:38
+                                  Adding parameter <unnamed> org.apache.commons.configuration2.interpol.ConfigurationInterpolator @ src/main/java/org/apache/commons/configuration2/interpol/InterpolatorSpecification.java:106:12
+                                    Resolved with match parameter <unnamed> org.apache.commons.configuration2.interpol.ConfigurationInterpolator @ src/main/java/org/apache/commons/configuration2/interpol/InterpolatorSpecification.java:106:12
+                                  Resolved as new signature (CtMethodImpl) getParentInterpolator @ src/main/java/org/apache/commons/configuration2/interpol/InterpolatorSpecification.java:106:38
+                                Resolved as new method (CtMethodImpl) getParentInterpolator @ src/main/java/org/apache/commons/configuration2/interpol/InterpolatorSpecification.java:106:38
+                              Adding method (CtMethodImpl) getInterpolator @ src/main/java/org/apache/commons/configuration2/interpol/InterpolatorSpecification.java:96:38
+                                Adding signature (CtMethodImpl) getInterpolator @ src/main/java/org/apache/commons/configuration2/interpol/InterpolatorSpecification.java:96:38
+                                  Adding parameter <unnamed> org.apache.commons.configuration2.interpol.ConfigurationInterpolator @ src/main/java/org/apache/commons/configuration2/interpol/InterpolatorSpecification.java:96:12
+                                    Resolved with match parameter <unnamed> org.apache.commons.configuration2.interpol.ConfigurationInterpolator @ src/main/java/org/apache/commons/configuration2/interpol/InterpolatorSpecification.java:96:12
+                                  Resolved as new signature (CtMethodImpl) getInterpolator @ src/main/java/org/apache/commons/configuration2/interpol/InterpolatorSpecification.java:96:38
+                                Resolved as new method (CtMethodImpl) getInterpolator @ src/main/java/org/apache/commons/configuration2/interpol/InterpolatorSpecification.java:96:38
+                              Adding abstract (CtMethodImpl) getDefaultLookups @ src/main/java/org/apache/commons/configuration2/interpol/InterpolatorSpecification.java:129:31
+                                Resolved as new abstract (CtMethodImpl) getDefaultLookups @ src/main/java/org/apache/commons/configuration2/interpol/InterpolatorSpecification.java:129:31
+                              Adding abstract (CtMethodImpl) getPrefixLookups @ src/main/java/org/apache/commons/configuration2/interpol/InterpolatorSpecification.java:118:32
+                                Resolved as new abstract (CtMethodImpl) getPrefixLookups @ src/main/java/org/apache/commons/configuration2/interpol/InterpolatorSpecification.java:118:32
+                              Adding abstract (CtMethodImpl) getParentInterpolator @ src/main/java/org/apache/commons/configuration2/interpol/InterpolatorSpecification.java:106:38
+                                Resolved as new abstract (CtMethodImpl) getParentInterpolator @ src/main/java/org/apache/commons/configuration2/interpol/InterpolatorSpecification.java:106:38
+                              Adding abstract (CtMethodImpl) getInterpolator @ src/main/java/org/apache/commons/configuration2/interpol/InterpolatorSpecification.java:96:38
+                                Resolved as new abstract (CtMethodImpl) getInterpolator @ src/main/java/org/apache/commons/configuration2/interpol/InterpolatorSpecification.java:96:38
+                            Resolved as new parameter (CtParameterImpl) spec @ src/main/java/org/apache/commons/configuration2/interpol/ConfigurationInterpolator.java:140:39
+                          Adding parameter <unnamed> org.apache.commons.configuration2.interpol.ConfigurationInterpolator @ src/main/java/org/apache/commons/configuration2/interpol/ConfigurationInterpolator.java:139:19
+                            Resolved with match parameter <unnamed> org.apache.commons.configuration2.interpol.ConfigurationInterpolator @ src/main/java/org/apache/commons/configuration2/interpol/ConfigurationInterpolator.java:139:19
+                          Resolved as new signature (CtMethodImpl) fromSpecification @ src/main/java/org/apache/commons/configuration2/interpol/ConfigurationInterpolator.java:139:45
+                        Resolved as new method (CtMethodImpl) fromSpecification @ src/main/java/org/apache/commons/configuration2/interpol/ConfigurationInterpolator.java:139:45
+                      Adding method (CtMethodImpl) resolve @ src/main/java/org/apache/commons/configuration2/interpol/ConfigurationInterpolator.java:419:19
+                        Adding signature (CtMethodImpl) resolve @ src/main/java/org/apache/commons/configuration2/interpol/ConfigurationInterpolator.java:419:19
+                          Adding parameter (CtParameterImpl) var @ src/main/java/org/apache/commons/configuration2/interpol/ConfigurationInterpolator.java:419:34
+                            Resolved as new parameter (CtParameterImpl) var @ src/main/java/org/apache/commons/configuration2/interpol/ConfigurationInterpolator.java:419:34
+                          Adding parameter <unnamed> java.lang.Object @ src/main/java/org/apache/commons/configuration2/interpol/ConfigurationInterpolator.java:419:12
+                            Resolved with match parameter <unnamed> java.lang.Object @ src/main/java/org/apache/commons/configuration2/interpol/ConfigurationInterpolator.java:419:12
+                          Resolved as new signature (CtMethodImpl) resolve @ src/main/java/org/apache/commons/configuration2/interpol/ConfigurationInterpolator.java:419:19
+                        Resolved as new method (CtMethodImpl) resolve @ src/main/java/org/apache/commons/configuration2/interpol/ConfigurationInterpolator.java:419:19
+                      Adding method (CtMethodImpl) createInterpolator @ src/main/java/org/apache/commons/configuration2/interpol/ConfigurationInterpolator.java:536:46
+                        Adding signature (CtMethodImpl) createInterpolator @ src/main/java/org/apache/commons/configuration2/interpol/ConfigurationInterpolator.java:536:46
+                          Adding parameter (CtParameterImpl) spec @ src/main/java/org/apache/commons/configuration2/interpol/ConfigurationInterpolator.java:537:39
+                            Resolved with match parameter (CtParameterImpl) spec @ src/main/java/org/apache/commons/configuration2/interpol/ConfigurationInterpolator.java:537:39
+                          Adding parameter <unnamed> org.apache.commons.configuration2.interpol.ConfigurationInterpolator @ src/main/java/org/apache/commons/configuration2/interpol/ConfigurationInterpolator.java:536:20
+                            Resolved with match parameter <unnamed> org.apache.commons.configuration2.interpol.ConfigurationInterpolator @ src/main/java/org/apache/commons/configuration2/interpol/ConfigurationInterpolator.java:536:20
+                          Resolved as new signature (CtMethodImpl) createInterpolator @ src/main/java/org/apache/commons/configuration2/interpol/ConfigurationInterpolator.java:536:46
+                        Resolved as new method (CtMethodImpl) createInterpolator @ src/main/java/org/apache/commons/configuration2/interpol/ConfigurationInterpolator.java:536:46
+                      Adding method (CtMethodImpl) getDefaultLookups @ src/main/java/org/apache/commons/configuration2/interpol/ConfigurationInterpolator.java:276:25
+                        Adding signature (CtMethodImpl) getDefaultLookups @ src/main/java/org/apache/commons/configuration2/interpol/ConfigurationInterpolator.java:276:25
+                          Adding parameter <unnamed> java.util.List @ src/main/java/org/apache/commons/configuration2/interpol/ConfigurationInterpolator.java:276:12<org.apache.commons.configuration2.interpol.Lookup @ src/main/java/org/apache/commons/configuration2/interpol/ConfigurationInterpolator.java:276:17>
+                            Adding interface instantiation java.util.List @ src/main/java/org/apache/commons/configuration2/interpol/ConfigurationInterpolator.java:276:12<org.apache.commons.configuration2.interpol.Lookup @ src/main/java/org/apache/commons/configuration2/interpol/ConfigurationInterpolator.java:276:17>
+                              Resolved with match interface instantiation java.util.List @ src/main/java/org/apache/commons/configuration2/interpol/ConfigurationInterpolator.java:276:12<org.apache.commons.configuration2.interpol.Lookup @ src/main/java/org/apache/commons/configuration2/interpol/ConfigurationInterpolator.java:276:17>
+                            Resolved as new parameter <unnamed> java.util.List @ src/main/java/org/apache/commons/configuration2/interpol/ConfigurationInterpolator.java:276:12<org.apache.commons.configuration2.interpol.Lookup @ src/main/java/org/apache/commons/configuration2/interpol/ConfigurationInterpolator.java:276:17>
+                          Resolved as new signature (CtMethodImpl) getDefaultLookups @ src/main/java/org/apache/commons/configuration2/interpol/ConfigurationInterpolator.java:276:25
+                        Resolved as new method (CtMethodImpl) getDefaultLookups @ src/main/java/org/apache/commons/configuration2/interpol/ConfigurationInterpolator.java:276:25
+                      Adding method (CtMethodImpl) isEnableSubstitutionInVariables @ src/main/java/org/apache/commons/configuration2/interpol/ConfigurationInterpolator.java:357:20
+                        Adding signature (CtMethodImpl) isEnableSubstitutionInVariables @ src/main/java/org/apache/commons/configuration2/interpol/ConfigurationInterpolator.java:357:20
+                          Adding parameter <unnamed> boolean @ src/main/java/org/apache/commons/configuration2/interpol/ConfigurationInterpolator.java:357:12
+                            Adding basic (CtTypeReferenceImpl) boolean @ src/main/java/org/apache/commons/configuration2/interpol/ConfigurationInterpolator.java:357:12
+                              Resolved with match basic (CtTypeReferenceImpl) boolean @ src/main/java/org/apache/commons/configuration2/interpol/ConfigurationInterpolator.java:357:12
+                            Resolved as new parameter <unnamed> boolean @ src/main/java/org/apache/commons/configuration2/interpol/ConfigurationInterpolator.java:357:12
+                          Resolved as new signature (CtMethodImpl) isEnableSubstitutionInVariables @ src/main/java/org/apache/commons/configuration2/interpol/ConfigurationInterpolator.java:357:20
+                        Resolved as new method (CtMethodImpl) isEnableSubstitutionInVariables @ src/main/java/org/apache/commons/configuration2/interpol/ConfigurationInterpolator.java:357:20
+                      Adding method (CtMethodImpl) getDefaultPrefixLookups @ src/main/java/org/apache/commons/configuration2/interpol/ConfigurationInterpolator.java:161:39
+                        Adding signature (CtMethodImpl) getDefaultPrefixLookups @ src/main/java/org/apache/commons/configuration2/interpol/ConfigurationInterpolator.java:161:39
+                          Adding parameter <unnamed> java.util.Map @ src/main/java/org/apache/commons/configuration2/interpol/ConfigurationInterpolator.java:161:19<java.lang.String @ src/main/java/org/apache/commons/configuration2/interpol/ConfigurationInterpolator.java:161:23, org.apache.commons.configuration2.interpol.Lookup @ src/main/java/org/apache/commons/configuration2/interpol/ConfigurationInterpolator.java:161:31>
+                            Adding interface instantiation java.util.Map @ src/main/java/org/apache/commons/configuration2/interpol/ConfigurationInterpolator.java:161:19<java.lang.String @ src/main/java/org/apache/commons/configuration2/interpol/ConfigurationInterpolator.java:161:23, org.apache.commons.configuration2.interpol.Lookup @ src/main/java/org/apache/commons/configuration2/interpol/ConfigurationInterpolator.java:161:31>
+                              Resolved with match interface instantiation java.util.Map @ src/main/java/org/apache/commons/configuration2/interpol/ConfigurationInterpolator.java:161:19<java.lang.String @ src/main/java/org/apache/commons/configuration2/interpol/ConfigurationInterpolator.java:161:23, org.apache.commons.configuration2.interpol.Lookup @ src/main/java/org/apache/commons/configuration2/interpol/ConfigurationInterpolator.java:161:31>
+                            Resolved as new parameter <unnamed> java.util.Map @ src/main/java/org/apache/commons/configuration2/interpol/ConfigurationInterpolator.java:161:19<java.lang.String @ src/main/java/org/apache/commons/configuration2/interpol/ConfigurationInterpolator.java:161:23, org.apache.commons.configuration2.interpol.Lookup @ src/main/java/org/apache/commons/configuration2/interpol/ConfigurationInterpolator.java:161:31>
+                          Resolved as new signature (CtMethodImpl) getDefaultPrefixLookups @ src/main/java/org/apache/commons/configuration2/interpol/ConfigurationInterpolator.java:161:39
+                        Resolved as new method (CtMethodImpl) getDefaultPrefixLookups @ src/main/java/org/apache/commons/configuration2/interpol/ConfigurationInterpolator.java:161:39
+                      Adding method (CtMethodImpl) fetchLookupForPrefix @ src/main/java/org/apache/commons/configuration2/interpol/ConfigurationInterpolator.java:464:22
+                        Adding signature (CtMethodImpl) fetchLookupForPrefix @ src/main/java/org/apache/commons/configuration2/interpol/ConfigurationInterpolator.java:464:22
+                          Adding parameter (CtParameterImpl) prefix @ src/main/java/org/apache/commons/configuration2/interpol/ConfigurationInterpolator.java:464:50
+                            Resolved with match parameter (CtParameterImpl) prefix @ src/main/java/org/apache/commons/configuration2/interpol/ConfigurationInterpolator.java:464:50
+                          Adding parameter <unnamed> org.apache.commons.configuration2.interpol.Lookup @ src/main/java/org/apache/commons/configuration2/interpol/ConfigurationInterpolator.java:464:15
+                            Resolved as new parameter <unnamed> org.apache.commons.configuration2.interpol.Lookup @ src/main/java/org/apache/commons/configuration2/interpol/ConfigurationInterpolator.java:464:15
+                          Resolved as new signature (CtMethodImpl) fetchLookupForPrefix @ src/main/java/org/apache/commons/configuration2/interpol/ConfigurationInterpolator.java:464:22
+                        Resolved as new method (CtMethodImpl) fetchLookupForPrefix @ src/main/java/org/apache/commons/configuration2/interpol/ConfigurationInterpolator.java:464:22
+                      Adding method (CtMethodImpl) extractVariableName @ src/main/java/org/apache/commons/configuration2/interpol/ConfigurationInterpolator.java:523:27
+                        Adding signature (CtMethodImpl) extractVariableName @ src/main/java/org/apache/commons/configuration2/interpol/ConfigurationInterpolator.java:523:27
+                          Adding parameter (CtParameterImpl) strValue @ src/main/java/org/apache/commons/configuration2/interpol/ConfigurationInterpolator.java:523:54
+                            Resolved as new parameter (CtParameterImpl) strValue @ src/main/java/org/apache/commons/configuration2/interpol/ConfigurationInterpolator.java:523:54
+                          Adding parameter <unnamed> java.lang.String @ src/main/java/org/apache/commons/configuration2/interpol/ConfigurationInterpolator.java:523:20
+                            Resolved as new parameter <unnamed> java.lang.String @ src/main/java/org/apache/commons/configuration2/interpol/ConfigurationInterpolator.java:523:20
+                          Resolved as new signature (CtMethodImpl) extractVariableName @ src/main/java/org/apache/commons/configuration2/interpol/ConfigurationInterpolator.java:523:27
+                        Resolved as new method (CtMethodImpl) extractVariableName @ src/main/java/org/apache/commons/configuration2/interpol/ConfigurationInterpolator.java:523:27
+                      Adding method (CtMethodImpl) addDefaultLookups @ src/main/java/org/apache/commons/configuration2/interpol/ConfigurationInterpolator.java:306:17
+                        Adding signature (CtMethodImpl) addDefaultLookups @ src/main/java/org/apache/commons/configuration2/interpol/ConfigurationInterpolator.java:306:17
+                          Adding parameter (CtParameterImpl) lookups @ src/main/java/org/apache/commons/configuration2/interpol/ConfigurationInterpolator.java:306:64
+                            Adding interface instantiation java.util.Collection @ src/main/java/org/apache/commons/configuration2/interpol/ConfigurationInterpolator.java:306:35<? @ src/main/java/org/apache/commons/configuration2/interpol/ConfigurationInterpolator.java:306:46>
+                              Resolved with match interface instantiation java.util.Collection @ src/main/java/org/apache/commons/configuration2/interpol/ConfigurationInterpolator.java:306:35<? @ src/main/java/org/apache/commons/configuration2/interpol/ConfigurationInterpolator.java:306:46>
+                            Resolved as new parameter (CtParameterImpl) lookups @ src/main/java/org/apache/commons/configuration2/interpol/ConfigurationInterpolator.java:306:64
+                          Resolved as new signature (CtMethodImpl) addDefaultLookups @ src/main/java/org/apache/commons/configuration2/interpol/ConfigurationInterpolator.java:306:17
+                        Resolved as new method (CtMethodImpl) addDefaultLookups @ src/main/java/org/apache/commons/configuration2/interpol/ConfigurationInterpolator.java:306:17
+                      Adding method (CtMethodImpl) deregisterLookup @ src/main/java/org/apache/commons/configuration2/interpol/ConfigurationInterpolator.java:250:20
+                        Adding signature (CtMethodImpl) deregisterLookup @ src/main/java/org/apache/commons/configuration2/interpol/ConfigurationInterpolator.java:250:20
+                          Adding parameter (CtParameterImpl) prefix @ src/main/java/org/apache/commons/configuration2/interpol/ConfigurationInterpolator.java:250:44
+                            Resolved with match parameter (CtParameterImpl) prefix @ src/main/java/org/apache/commons/configuration2/interpol/ConfigurationInterpolator.java:250:44
+                          Adding parameter <unnamed> boolean @ src/main/java/org/apache/commons/configuration2/interpol/ConfigurationInterpolator.java:250:12
+                            Adding basic (CtTypeReferenceImpl) boolean @ src/main/java/org/apache/commons/configuration2/interpol/ConfigurationInterpolator.java:250:12
+                              Resolved with match basic (CtTypeReferenceImpl) boolean @ src/main/java/org/apache/commons/configuration2/interpol/ConfigurationInterpolator.java:250:12
+                            Resolved as new parameter <unnamed> boolean @ src/main/java/org/apache/commons/configuration2/interpol/ConfigurationInterpolator.java:250:12
+                          Resolved as new signature (CtMethodImpl) deregisterLookup @ src/main/java/org/apache/commons/configuration2/interpol/ConfigurationInterpolator.java:250:20
+                        Resolved as new method (CtMethodImpl) deregisterLookup @ src/main/java/org/apache/commons/configuration2/interpol/ConfigurationInterpolator.java:250:20
+                      Adding method (CtMethodImpl) getLookups @ src/main/java/org/apache/commons/configuration2/interpol/ConfigurationInterpolator.java:194:32
+                        Adding signature (CtMethodImpl) getLookups @ src/main/java/org/apache/commons/configuration2/interpol/ConfigurationInterpolator.java:194:32
+                          Adding parameter <unnamed> java.util.Map @ src/main/java/org/apache/commons/configuration2/interpol/ConfigurationInterpolator.java:194:12<java.lang.String @ src/main/java/org/apache/commons/configuration2/interpol/ConfigurationInterpolator.java:194:16, org.apache.commons.configuration2.interpol.Lookup @ src/main/java/org/apache/commons/configuration2/interpol/ConfigurationInterpolator.java:194:24>
+                            Adding interface instantiation java.util.Map @ src/main/java/org/apache/commons/configuration2/interpol/ConfigurationInterpolator.java:194:12<java.lang.String @ src/main/java/org/apache/commons/configuration2/interpol/ConfigurationInterpolator.java:194:16, org.apache.commons.configuration2.interpol.Lookup @ src/main/java/org/apache/commons/configuration2/interpol/ConfigurationInterpolator.java:194:24>
+                              Resolved with match interface instantiation java.util.Map @ src/main/java/org/apache/commons/configuration2/interpol/ConfigurationInterpolator.java:194:12<java.lang.String @ src/main/java/org/apache/commons/configuration2/interpol/ConfigurationInterpolator.java:194:16, org.apache.commons.configuration2.interpol.Lookup @ src/main/java/org/apache/commons/configuration2/interpol/ConfigurationInterpolator.java:194:24>
+                            Resolved as new parameter <unnamed> java.util.Map @ src/main/java/org/apache/commons/configuration2/interpol/ConfigurationInterpolator.java:194:12<java.lang.String @ src/main/java/org/apache/commons/configuration2/interpol/ConfigurationInterpolator.java:194:16, org.apache.commons.configuration2.interpol.Lookup @ src/main/java/org/apache/commons/configuration2/interpol/ConfigurationInterpolator.java:194:24>
+                          Resolved as new signature (CtMethodImpl) getLookups @ src/main/java/org/apache/commons/configuration2/interpol/ConfigurationInterpolator.java:194:32
+                        Resolved as new method (CtMethodImpl) getLookups @ src/main/java/org/apache/commons/configuration2/interpol/ConfigurationInterpolator.java:194:32
+                      Adding method (CtMethodImpl) resolveSingleVariable @ src/main/java/org/apache/commons/configuration2/interpol/ConfigurationInterpolator.java:496:20
+                        Adding signature (CtMethodImpl) resolveSingleVariable @ src/main/java/org/apache/commons/configuration2/interpol/ConfigurationInterpolator.java:496:20
+                          Adding parameter (CtParameterImpl) strValue @ src/main/java/org/apache/commons/configuration2/interpol/ConfigurationInterpolator.java:496:49
+                            Resolved with match parameter (CtParameterImpl) strValue @ src/main/java/org/apache/commons/configuration2/interpol/ConfigurationInterpolator.java:496:49
+                          Adding parameter <unnamed> java.lang.Object @ src/main/java/org/apache/commons/configuration2/interpol/ConfigurationInterpolator.java:496:13
+                            Resolved with match parameter <unnamed> java.lang.Object @ src/main/java/org/apache/commons/configuration2/interpol/ConfigurationInterpolator.java:496:13
+                          Resolved as new signature (CtMethodImpl) resolveSingleVariable @ src/main/java/org/apache/commons/configuration2/interpol/ConfigurationInterpolator.java:496:20
+                        Resolved as new method (CtMethodImpl) resolveSingleVariable @ src/main/java/org/apache/commons/configuration2/interpol/ConfigurationInterpolator.java:496:20
+                      Adding method (CtMethodImpl) registerLookup @ src/main/java/org/apache/commons/configuration2/interpol/ConfigurationInterpolator.java:210:17
+                        Adding signature (CtMethodImpl) registerLookup @ src/main/java/org/apache/commons/configuration2/interpol/ConfigurationInterpolator.java:210:17
+                          Adding parameter (CtParameterImpl) prefix @ src/main/java/org/apache/commons/configuration2/interpol/ConfigurationInterpolator.java:210:39
+                            Resolved with match parameter (CtParameterImpl) prefix @ src/main/java/org/apache/commons/configuration2/interpol/ConfigurationInterpolator.java:210:39
+                          Adding parameter (CtParameterImpl) lookup @ src/main/java/org/apache/commons/configuration2/interpol/ConfigurationInterpolator.java:210:54
+                            Resolved with match parameter (CtParameterImpl) lookup @ src/main/java/org/apache/commons/configuration2/interpol/ConfigurationInterpolator.java:210:54
+                          Resolved as new signature (CtMethodImpl) registerLookup @ src/main/java/org/apache/commons/configuration2/interpol/ConfigurationInterpolator.java:210:17
+                        Resolved as new method (CtMethodImpl) registerLookup @ src/main/java/org/apache/commons/configuration2/interpol/ConfigurationInterpolator.java:210:17
+                      Adding method (CtMethodImpl) nullSafeLookup @ src/main/java/org/apache/commons/configuration2/interpol/ConfigurationInterpolator.java:177:26
+                        Adding signature (CtMethodImpl) nullSafeLookup @ src/main/java/org/apache/commons/configuration2/interpol/ConfigurationInterpolator.java:177:26
+                          Adding parameter (CtParameterImpl) lookup @ src/main/java/org/apache/commons/configuration2/interpol/ConfigurationInterpolator.java:177:48
+                            Resolved with match parameter (CtParameterImpl) lookup @ src/main/java/org/apache/commons/configuration2/interpol/ConfigurationInterpolator.java:177:48
+                          Adding parameter <unnamed> org.apache.commons.configuration2.interpol.Lookup @ src/main/java/org/apache/commons/configuration2/interpol/ConfigurationInterpolator.java:177:19
+                            Resolved with match parameter <unnamed> org.apache.commons.configuration2.interpol.Lookup @ src/main/java/org/apache/commons/configuration2/interpol/ConfigurationInterpolator.java:177:19
+                          Resolved as new signature (CtMethodImpl) nullSafeLookup @ src/main/java/org/apache/commons/configuration2/interpol/ConfigurationInterpolator.java:177:26
+                        Resolved as new method (CtMethodImpl) nullSafeLookup @ src/main/java/org/apache/commons/configuration2/interpol/ConfigurationInterpolator.java:177:26
+                      Adding method (CtMethodImpl) prefixSet @ src/main/java/org/apache/commons/configuration2/interpol/ConfigurationInterpolator.java:262:24
+                        Adding signature (CtMethodImpl) prefixSet @ src/main/java/org/apache/commons/configuration2/interpol/ConfigurationInterpolator.java:262:24
+                          Adding parameter <unnamed> java.util.Set @ src/main/java/org/apache/commons/configuration2/interpol/ConfigurationInterpolator.java:262:12<java.lang.String @ src/main/java/org/apache/commons/configuration2/interpol/ConfigurationInterpolator.java:262:16>
+                            Adding interface decl (CtInterfaceImpl) Set
+                              Adding interface description (CtInterfaceImpl) Set
+                                Resolved as new interface description (CtInterfaceImpl) Set
+                              Adding type params (CtTypeParameterImpl) E
+                                Resolved with match type params (CtTypeParameterImpl) E
+                              Resolved as new interface decl (CtInterfaceImpl) Set
+                            Adding interface instantiation java.util.Set @ src/main/java/org/apache/commons/configuration2/interpol/ConfigurationInterpolator.java:262:12<java.lang.String @ src/main/java/org/apache/commons/configuration2/interpol/ConfigurationInterpolator.java:262:16>
+                              Adding interface description (CtInterfaceImpl) Set
+                                Resolved as new interface description (CtInterfaceImpl) Set
+                              Resolved as new interface instantiation java.util.Set @ src/main/java/org/apache/commons/configuration2/interpol/ConfigurationInterpolator.java:262:12<java.lang.String @ src/main/java/org/apache/commons/configuration2/interpol/ConfigurationInterpolator.java:262:16>
+                            Resolved as new parameter <unnamed> java.util.Set @ src/main/java/org/apache/commons/configuration2/interpol/ConfigurationInterpolator.java:262:12<java.lang.String @ src/main/java/org/apache/commons/configuration2/interpol/ConfigurationInterpolator.java:262:16>
+                          Resolved as new signature (CtMethodImpl) prefixSet @ src/main/java/org/apache/commons/configuration2/interpol/ConfigurationInterpolator.java:262:24
+                        Resolved as new method (CtMethodImpl) prefixSet @ src/main/java/org/apache/commons/configuration2/interpol/ConfigurationInterpolator.java:262:24
+                      Adding method (CtMethodImpl) setEnableSubstitutionInVariables @ src/main/java/org/apache/commons/configuration2/interpol/ConfigurationInterpolator.java:369:17
+                        Adding signature (CtMethodImpl) setEnableSubstitutionInVariables @ src/main/java/org/apache/commons/configuration2/interpol/ConfigurationInterpolator.java:369:17
+                          Adding parameter (CtParameterImpl) f @ src/main/java/org/apache/commons/configuration2/interpol/ConfigurationInterpolator.java:369:58
+                            Adding basic (CtTypeReferenceImpl) boolean @ src/main/java/org/apache/commons/configuration2/interpol/ConfigurationInterpolator.java:369:50
+                              Resolved with match basic (CtTypeReferenceImpl) boolean @ src/main/java/org/apache/commons/configuration2/interpol/ConfigurationInterpolator.java:369:50
+                            Resolved as new parameter (CtParameterImpl) f @ src/main/java/org/apache/commons/configuration2/interpol/ConfigurationInterpolator.java:369:58
+                          Resolved as new signature (CtMethodImpl) setEnableSubstitutionInVariables @ src/main/java/org/apache/commons/configuration2/interpol/ConfigurationInterpolator.java:369:17
+                        Resolved as new method (CtMethodImpl) setEnableSubstitutionInVariables @ src/main/java/org/apache/commons/configuration2/interpol/ConfigurationInterpolator.java:369:17
+                      Adding method (CtMethodImpl) interpolate @ src/main/java/org/apache/commons/configuration2/interpol/ConfigurationInterpolator.java:383:19
+                        Adding signature (CtMethodImpl) interpolate @ src/main/java/org/apache/commons/configuration2/interpol/ConfigurationInterpolator.java:383:19
+                          Adding parameter (CtParameterImpl) value @ src/main/java/org/apache/commons/configuration2/interpol/ConfigurationInterpolator.java:383:38
+                            Resolved with match parameter (CtParameterImpl) value @ src/main/java/org/apache/commons/configuration2/interpol/ConfigurationInterpolator.java:383:38
+                          Adding parameter <unnamed> java.lang.Object @ src/main/java/org/apache/commons/configuration2/interpol/ConfigurationInterpolator.java:383:12
+                            Resolved with match parameter <unnamed> java.lang.Object @ src/main/java/org/apache/commons/configuration2/interpol/ConfigurationInterpolator.java:383:12
+                          Resolved as new signature (CtMethodImpl) interpolate @ src/main/java/org/apache/commons/configuration2/interpol/ConfigurationInterpolator.java:383:19
+                        Resolved as new method (CtMethodImpl) interpolate @ src/main/java/org/apache/commons/configuration2/interpol/ConfigurationInterpolator.java:383:19
+                      Adding method (CtMethodImpl) removeDefaultLookup @ src/main/java/org/apache/commons/configuration2/interpol/ConfigurationInterpolator.java:322:20
+                        Adding signature (CtMethodImpl) removeDefaultLookup @ src/main/java/org/apache/commons/configuration2/interpol/ConfigurationInterpolator.java:322:20
+                          Adding parameter (CtParameterImpl) lookup @ src/main/java/org/apache/commons/configuration2/interpol/ConfigurationInterpolator.java:322:47
+                            Resolved with match parameter (CtParameterImpl) lookup @ src/main/java/org/apache/commons/configuration2/interpol/ConfigurationInterpolator.java:322:47
+                          Adding parameter <unnamed> boolean @ src/main/java/org/apache/commons/configuration2/interpol/ConfigurationInterpolator.java:322:12
+                            Adding basic (CtTypeReferenceImpl) boolean @ src/main/java/org/apache/commons/configuration2/interpol/ConfigurationInterpolator.java:322:12
+                              Resolved with match basic (CtTypeReferenceImpl) boolean @ src/main/java/org/apache/commons/configuration2/interpol/ConfigurationInterpolator.java:322:12
+                            Resolved as new parameter <unnamed> boolean @ src/main/java/org/apache/commons/configuration2/interpol/ConfigurationInterpolator.java:322:12
+                          Resolved as new signature (CtMethodImpl) removeDefaultLookup @ src/main/java/org/apache/commons/configuration2/interpol/ConfigurationInterpolator.java:322:20
+                        Resolved as new method (CtMethodImpl) removeDefaultLookup @ src/main/java/org/apache/commons/configuration2/interpol/ConfigurationInterpolator.java:322:20
+                      Adding method (CtMethodImpl) initSubstitutor @ src/main/java/org/apache/commons/configuration2/interpol/ConfigurationInterpolator.java:477:28
+                        Adding signature (CtMethodImpl) initSubstitutor @ src/main/java/org/apache/commons/configuration2/interpol/ConfigurationInterpolator.java:477:28
+                          Adding parameter <unnamed> org.apache.commons.lang3.text.StrSubstitutor @ src/main/java/org/apache/commons/configuration2/interpol/ConfigurationInterpolator.java:477:13
+                            Resolved as new parameter <unnamed> org.apache.commons.lang3.text.StrSubstitutor @ src/main/java/org/apache/commons/configuration2/interpol/ConfigurationInterpolator.java:477:13
+                          Resolved as new signature (CtMethodImpl) initSubstitutor @ src/main/java/org/apache/commons/configuration2/interpol/ConfigurationInterpolator.java:477:28
+                        Resolved as new method (CtMethodImpl) initSubstitutor @ src/main/java/org/apache/commons/configuration2/interpol/ConfigurationInterpolator.java:477:28
+                      Adding method (CtMethodImpl) registerLookups @ src/main/java/org/apache/commons/configuration2/interpol/ConfigurationInterpolator.java:234:17
+                        Adding signature (CtMethodImpl) registerLookups @ src/main/java/org/apache/commons/configuration2/interpol/ConfigurationInterpolator.java:234:17
+                          Adding parameter (CtParameterImpl) lookups @ src/main/java/org/apache/commons/configuration2/interpol/ConfigurationInterpolator.java:234:63
+                            Adding interface instantiation java.util.Map @ src/main/java/org/apache/commons/configuration2/interpol/ConfigurationInterpolator.java:234:33<java.lang.String @ src/main/java/org/apache/commons/configuration2/interpol/ConfigurationInterpolator.java:234:37, ? @ src/main/java/org/apache/commons/configuration2/interpol/ConfigurationInterpolator.java:234:45>
+                              Resolved with match interface instantiation java.util.Map @ src/main/java/org/apache/commons/configuration2/interpol/ConfigurationInterpolator.java:234:33<java.lang.String @ src/main/java/org/apache/commons/configuration2/interpol/ConfigurationInterpolator.java:234:37, ? @ src/main/java/org/apache/commons/configuration2/interpol/ConfigurationInterpolator.java:234:45>
+                            Resolved as new parameter (CtParameterImpl) lookups @ src/main/java/org/apache/commons/configuration2/interpol/ConfigurationInterpolator.java:234:63
+                          Resolved as new signature (CtMethodImpl) registerLookups @ src/main/java/org/apache/commons/configuration2/interpol/ConfigurationInterpolator.java:234:17
+                        Resolved as new method (CtMethodImpl) registerLookups @ src/main/java/org/apache/commons/configuration2/interpol/ConfigurationInterpolator.java:234:17
+                      Adding method (CtMethodImpl) setParentInterpolator @ src/main/java/org/apache/commons/configuration2/interpol/ConfigurationInterpolator.java:335:17
+                        Adding signature (CtMethodImpl) setParentInterpolator @ src/main/java/org/apache/commons/configuration2/interpol/ConfigurationInterpolator.java:335:17
+                          Adding parameter (CtParameterImpl) parentInterpolator @ src/main/java/org/apache/commons/configuration2/interpol/ConfigurationInterpolator.java:336:39
+                            Resolved as new parameter (CtParameterImpl) parentInterpolator @ src/main/java/org/apache/commons/configuration2/interpol/ConfigurationInterpolator.java:336:39
+                          Resolved as new signature (CtMethodImpl) setParentInterpolator @ src/main/java/org/apache/commons/configuration2/interpol/ConfigurationInterpolator.java:335:17
+                        Resolved as new method (CtMethodImpl) setParentInterpolator @ src/main/java/org/apache/commons/configuration2/interpol/ConfigurationInterpolator.java:335:17
+                      Adding method (CtMethodImpl) getParentInterpolator @ src/main/java/org/apache/commons/configuration2/interpol/ConfigurationInterpolator.java:346:38
+                        Adding signature (CtMethodImpl) getParentInterpolator @ src/main/java/org/apache/commons/configuration2/interpol/ConfigurationInterpolator.java:346:38
+                          Adding parameter <unnamed> org.apache.commons.configuration2.interpol.ConfigurationInterpolator @ src/main/java/org/apache/commons/configuration2/interpol/ConfigurationInterpolator.java:346:12
+                            Resolved with match parameter <unnamed> org.apache.commons.configuration2.interpol.ConfigurationInterpolator @ src/main/java/org/apache/commons/configuration2/interpol/ConfigurationInterpolator.java:346:12
+                          Resolved as new signature (CtMethodImpl) getParentInterpolator @ src/main/java/org/apache/commons/configuration2/interpol/ConfigurationInterpolator.java:346:38
+                        Resolved as new method (CtMethodImpl) getParentInterpolator @ src/main/java/org/apache/commons/configuration2/interpol/ConfigurationInterpolator.java:346:38
+                      Adding method (CtMethodImpl) addDefaultLookup @ src/main/java/org/apache/commons/configuration2/interpol/ConfigurationInterpolator.java:292:17
+                        Adding signature (CtMethodImpl) addDefaultLookup @ src/main/java/org/apache/commons/configuration2/interpol/ConfigurationInterpolator.java:292:17
+                          Adding parameter (CtParameterImpl) defaultLookup @ src/main/java/org/apache/commons/configuration2/interpol/ConfigurationInterpolator.java:292:41
+                            Resolved as new parameter (CtParameterImpl) defaultLookup @ src/main/java/org/apache/commons/configuration2/interpol/ConfigurationInterpolator.java:292:41
+                          Resolved as new signature (CtMethodImpl) addDefaultLookup @ src/main/java/org/apache/commons/configuration2/interpol/ConfigurationInterpolator.java:292:17
+                        Resolved as new method (CtMethodImpl) addDefaultLookup @ src/main/java/org/apache/commons/configuration2/interpol/ConfigurationInterpolator.java:292:17
+                      Adding method (CtMethodImpl) looksLikeSingleVariable @ src/main/java/org/apache/commons/configuration2/interpol/ConfigurationInterpolator.java:511:28
+                        Adding signature (CtMethodImpl) looksLikeSingleVariable @ src/main/java/org/apache/commons/configuration2/interpol/ConfigurationInterpolator.java:511:28
+                          Adding parameter (CtParameterImpl) strValue @ src/main/java/org/apache/commons/configuration2/interpol/ConfigurationInterpolator.java:511:59
+                            Resolved with match parameter (CtParameterImpl) strValue @ src/main/java/org/apache/commons/configuration2/interpol/ConfigurationInterpolator.java:511:59
+                          Adding parameter <unnamed> boolean @ src/main/java/org/apache/commons/configuration2/interpol/ConfigurationInterpolator.java:511:20
+                            Adding basic (CtTypeReferenceImpl) boolean @ src/main/java/org/apache/commons/configuration2/interpol/ConfigurationInterpolator.java:511:20
+                              Resolved with match basic (CtTypeReferenceImpl) boolean @ src/main/java/org/apache/commons/configuration2/interpol/ConfigurationInterpolator.java:511:20
+                            Resolved as new parameter <unnamed> boolean @ src/main/java/org/apache/commons/configuration2/interpol/ConfigurationInterpolator.java:511:20
+                          Resolved as new signature (CtMethodImpl) looksLikeSingleVariable @ src/main/java/org/apache/commons/configuration2/interpol/ConfigurationInterpolator.java:511:28
+                        Resolved as new method (CtMethodImpl) looksLikeSingleVariable @ src/main/java/org/apache/commons/configuration2/interpol/ConfigurationInterpolator.java:511:28
+                      Adding abstract (CtMethodImpl) resolve @ src/main/java/org/apache/commons/configuration2/interpol/ConfigurationInterpolator.java:419:19
+                        Resolved as new abstract (CtMethodImpl) resolve @ src/main/java/org/apache/commons/configuration2/interpol/ConfigurationInterpolator.java:419:19
+                      Adding abstract (CtMethodImpl) getDefaultLookups @ src/main/java/org/apache/commons/configuration2/interpol/ConfigurationInterpolator.java:276:25
+                        Resolved as new abstract (CtMethodImpl) getDefaultLookups @ src/main/java/org/apache/commons/configuration2/interpol/ConfigurationInterpolator.java:276:25
+                      Adding abstract (CtMethodImpl) isEnableSubstitutionInVariables @ src/main/java/org/apache/commons/configuration2/interpol/ConfigurationInterpolator.java:357:20
+                        Resolved as new abstract (CtMethodImpl) isEnableSubstitutionInVariables @ src/main/java/org/apache/commons/configuration2/interpol/ConfigurationInterpolator.java:357:20
+                      Adding abstract (CtMethodImpl) fetchLookupForPrefix @ src/main/java/org/apache/commons/configuration2/interpol/ConfigurationInterpolator.java:464:22
+                        Resolved as new abstract (CtMethodImpl) fetchLookupForPrefix @ src/main/java/org/apache/commons/configuration2/interpol/ConfigurationInterpolator.java:464:22
+                      Adding abstract (CtMethodImpl) addDefaultLookups @ src/main/java/org/apache/commons/configuration2/interpol/ConfigurationInterpolator.java:306:17
+                        Resolved as new abstract (CtMethodImpl) addDefaultLookups @ src/main/java/org/apache/commons/configuration2/interpol/ConfigurationInterpolator.java:306:17
+                      Adding abstract (CtMethodImpl) deregisterLookup @ src/main/java/org/apache/commons/configuration2/interpol/ConfigurationInterpolator.java:250:20
+                        Resolved as new abstract (CtMethodImpl) deregisterLookup @ src/main/java/org/apache/commons/configuration2/interpol/ConfigurationInterpolator.java:250:20
+                      Adding abstract (CtMethodImpl) getLookups @ src/main/java/org/apache/commons/configuration2/interpol/ConfigurationInterpolator.java:194:32
+                        Resolved as new abstract (CtMethodImpl) getLookups @ src/main/java/org/apache/commons/configuration2/interpol/ConfigurationInterpolator.java:194:32
+                      Adding abstract (CtMethodImpl) resolveSingleVariable @ src/main/java/org/apache/commons/configuration2/interpol/ConfigurationInterpolator.java:496:20
+                        Resolved as new abstract (CtMethodImpl) resolveSingleVariable @ src/main/java/org/apache/commons/configuration2/interpol/ConfigurationInterpolator.java:496:20
+                      Adding abstract (CtMethodImpl) registerLookup @ src/main/java/org/apache/commons/configuration2/interpol/ConfigurationInterpolator.java:210:17
+                        Resolved as new abstract (CtMethodImpl) registerLookup @ src/main/java/org/apache/commons/configuration2/interpol/ConfigurationInterpolator.java:210:17
+                      Adding abstract (CtMethodImpl) prefixSet @ src/main/java/org/apache/commons/configuration2/interpol/ConfigurationInterpolator.java:262:24
+                        Resolved as new abstract (CtMethodImpl) prefixSet @ src/main/java/org/apache/commons/configuration2/interpol/ConfigurationInterpolator.java:262:24
+                      Adding abstract (CtMethodImpl) setEnableSubstitutionInVariables @ src/main/java/org/apache/commons/configuration2/interpol/ConfigurationInterpolator.java:369:17
+                        Resolved as new abstract (CtMethodImpl) setEnableSubstitutionInVariables @ src/main/java/org/apache/commons/configuration2/interpol/ConfigurationInterpolator.java:369:17
+                      Adding abstract (CtMethodImpl) interpolate @ src/main/java/org/apache/commons/configuration2/interpol/ConfigurationInterpolator.java:383:19
+                        Resolved as new abstract (CtMethodImpl) interpolate @ src/main/java/org/apache/commons/configuration2/interpol/ConfigurationInterpolator.java:383:19
+                      Adding abstract (CtMethodImpl) removeDefaultLookup @ src/main/java/org/apache/commons/configuration2/interpol/ConfigurationInterpolator.java:322:20
+                        Resolved as new abstract (CtMethodImpl) removeDefaultLookup @ src/main/java/org/apache/commons/configuration2/interpol/ConfigurationInterpolator.java:322:20
+                      Adding abstract (CtMethodImpl) initSubstitutor @ src/main/java/org/apache/commons/configuration2/interpol/ConfigurationInterpolator.java:477:28
+                        Resolved as new abstract (CtMethodImpl) initSubstitutor @ src/main/java/org/apache/commons/configuration2/interpol/ConfigurationInterpolator.java:477:28
+                      Adding abstract (CtMethodImpl) registerLookups @ src/main/java/org/apache/commons/configuration2/interpol/ConfigurationInterpolator.java:234:17
+                        Resolved as new abstract (CtMethodImpl) registerLookups @ src/main/java/org/apache/commons/configuration2/interpol/ConfigurationInterpolator.java:234:17
+                      Adding abstract (CtMethodImpl) setParentInterpolator @ src/main/java/org/apache/commons/configuration2/interpol/ConfigurationInterpolator.java:335:17
+                        Resolved as new abstract (CtMethodImpl) setParentInterpolator @ src/main/java/org/apache/commons/configuration2/interpol/ConfigurationInterpolator.java:335:17
+                      Adding abstract (CtMethodImpl) getParentInterpolator @ src/main/java/org/apache/commons/configuration2/interpol/ConfigurationInterpolator.java:346:38
+                        Resolved as new abstract (CtMethodImpl) getParentInterpolator @ src/main/java/org/apache/commons/configuration2/interpol/ConfigurationInterpolator.java:346:38
+                      Adding abstract (CtMethodImpl) addDefaultLookup @ src/main/java/org/apache/commons/configuration2/interpol/ConfigurationInterpolator.java:292:17
+                        Resolved as new abstract (CtMethodImpl) addDefaultLookup @ src/main/java/org/apache/commons/configuration2/interpol/ConfigurationInterpolator.java:292:17
+                    Resolved with match parameter (CtParameterImpl) ci @ src/main/java/org/apache/commons/configuration2/convert/ConversionHandler.java:111:39
+                  Adding parameter (CtParameterImpl) dest @ src/main/java/org/apache/commons/configuration2/convert/ConversionHandler.java:111:57
+                    Adding interface instantiation java.util.Collection @ src/main/java/org/apache/commons/configuration2/convert/ConversionHandler.java:111:43<T @ src/main/java/org/apache/commons/configuration2/convert/ConversionHandler.java:111:54>
+                      Adding interface description (CtInterfaceImpl) Collection
+                        Resolved as new interface description (CtInterfaceImpl) Collection
+                      Resolved as new interface instantiation java.util.Collection @ src/main/java/org/apache/commons/configuration2/convert/ConversionHandler.java:111:43<T @ src/main/java/org/apache/commons/configuration2/convert/ConversionHandler.java:111:54>
+                    Resolved as new parameter (CtParameterImpl) dest @ src/main/java/org/apache/commons/configuration2/convert/ConversionHandler.java:111:57
+                  Resolved as new signature (CtMethodImpl) toCollection @ src/main/java/org/apache/commons/configuration2/convert/ConversionHandler.java:110:14
+                Resolved as new abstract (CtMethodImpl) toCollection @ src/main/java/org/apache/commons/configuration2/convert/ConversionHandler.java:110:14
+              Adding abstract (CtMethodImpl) toArray @ src/main/java/org/apache/commons/configuration2/convert/ConversionHandler.java:93:12
+                Adding signature (CtMethodImpl) toArray @ src/main/java/org/apache/commons/configuration2/convert/ConversionHandler.java:93:12
+                  Adding parameter (CtParameterImpl) src @ src/main/java/org/apache/commons/configuration2/convert/ConversionHandler.java:93:27
+                    Resolved with match parameter (CtParameterImpl) src @ src/main/java/org/apache/commons/configuration2/convert/ConversionHandler.java:93:27
+                  Adding parameter (CtParameterImpl) elemClass @ src/main/java/org/apache/commons/configuration2/convert/ConversionHandler.java:93:41
+                    Adding object instantiation java.lang.Class @ src/main/java/org/apache/commons/configuration2/convert/ConversionHandler.java:93:32<? @ src/main/java/org/apache/commons/configuration2/convert/ConversionHandler.java:93:38>
+                      Adding struct (CtClassImpl) Class
+                        Resolved as new struct (CtClassImpl) Class
+                      Adding interface description (CtInterfaceImpl) Type
+                        Resolved as new interface description (CtInterfaceImpl) Type
+                      Adding interface description (CtInterfaceImpl) GenericDeclaration
+                        Resolved as new interface description (CtInterfaceImpl) GenericDeclaration
+                      Adding interface description (CtInterfaceImpl) OfField
+                        Resolved with match interface description (CtInterfaceImpl) OfField
+                      Adding interface description (CtInterfaceImpl) AnnotatedElement
+                        Resolved as new interface description (CtInterfaceImpl) AnnotatedElement
+                      Adding interface description (CtInterfaceImpl) Serializable
+                        Resolved as new interface description (CtInterfaceImpl) Serializable
+                      Adding interface description (CtInterfaceImpl) Constable
+                        Resolved as new interface description (CtInterfaceImpl) Constable
+                      Resolved as new object instantiation java.lang.Class @ src/main/java/org/apache/commons/configuration2/convert/ConversionHandler.java:93:32<? @ src/main/java/org/apache/commons/configuration2/convert/ConversionHandler.java:93:38>
+                    Resolved as new parameter (CtParameterImpl) elemClass @ src/main/java/org/apache/commons/configuration2/convert/ConversionHandler.java:93:41
+                  Adding parameter (CtParameterImpl) ci @ src/main/java/org/apache/commons/configuration2/convert/ConversionHandler.java:93:78
+                    Resolved with match parameter (CtParameterImpl) ci @ src/main/java/org/apache/commons/configuration2/convert/ConversionHandler.java:93:78
+                  Adding parameter <unnamed> java.lang.Object @ src/main/java/org/apache/commons/configuration2/convert/ConversionHandler.java:93:5
+                    Resolved with match parameter <unnamed> java.lang.Object @ src/main/java/org/apache/commons/configuration2/convert/ConversionHandler.java:93:5
+                  Resolved as new signature (CtMethodImpl) toArray @ src/main/java/org/apache/commons/configuration2/convert/ConversionHandler.java:93:12
+                Resolved as new abstract (CtMethodImpl) toArray @ src/main/java/org/apache/commons/configuration2/convert/ConversionHandler.java:93:12
+              Adding abstract (CtMethodImpl) to @ src/main/java/org/apache/commons/configuration2/convert/ConversionHandler.java:73:11
+                Adding signature (CtMethodImpl) to @ src/main/java/org/apache/commons/configuration2/convert/ConversionHandler.java:73:11
+                  Adding parameter (CtParameterImpl) src @ src/main/java/org/apache/commons/configuration2/convert/ConversionHandler.java:73:21
+                    Resolved with match parameter (CtParameterImpl) src @ src/main/java/org/apache/commons/configuration2/convert/ConversionHandler.java:73:21
+                  Adding parameter (CtParameterImpl) targetCls @ src/main/java/org/apache/commons/configuration2/convert/ConversionHandler.java:73:35
+                    Adding type params reference (CtTypeParameterReferenceImpl) T @ src/main/java/org/apache/commons/configuration2/convert/ConversionHandler.java:73:32
+                      Resolved with match type params reference (CtTypeParameterReferenceImpl) T @ src/main/java/org/apache/commons/configuration2/convert/ConversionHandler.java:73:32
+                    Resolved as new parameter (CtParameterImpl) targetCls @ src/main/java/org/apache/commons/configuration2/convert/ConversionHandler.java:73:35
+                  Adding parameter (CtParameterImpl) ci @ src/main/java/org/apache/commons/configuration2/convert/ConversionHandler.java:73:72
+                    Resolved with match parameter (CtParameterImpl) ci @ src/main/java/org/apache/commons/configuration2/convert/ConversionHandler.java:73:72
+                  Adding parameter <unnamed> T @ src/main/java/org/apache/commons/configuration2/convert/ConversionHandler.java:73:9
+                    Resolved as new parameter <unnamed> T @ src/main/java/org/apache/commons/configuration2/convert/ConversionHandler.java:73:9
+                  Resolved as new signature (CtMethodImpl) to @ src/main/java/org/apache/commons/configuration2/convert/ConversionHandler.java:73:11
+                Resolved as new abstract (CtMethodImpl) to @ src/main/java/org/apache/commons/configuration2/convert/ConversionHandler.java:73:11
+              Resolved as new interface description (CtInterfaceImpl) ConversionHandler @ src/main/java/org/apache/commons/configuration2/convert/ConversionHandler.java:57:18
+            Resolved as new interface decl (CtInterfaceImpl) ConversionHandler @ src/main/java/org/apache/commons/configuration2/convert/ConversionHandler.java:57:18
+          Resolved as new field (CtFieldImpl) conversionHandler @ src/main/java/org/apache/commons/configuration2/AbstractConfiguration.java:108:31
+        Adding field (CtFieldImpl) throwExceptionOnMissing @ src/main/java/org/apache/commons/configuration2/AbstractConfiguration.java:114:21
+          Adding basic (CtTypeReferenceImpl) boolean @ src/main/java/org/apache/commons/configuration2/AbstractConfiguration.java:114:13
+            Resolved with match basic (CtTypeReferenceImpl) boolean @ src/main/java/org/apache/commons/configuration2/AbstractConfiguration.java:114:13
+          Resolved as new field (CtFieldImpl) throwExceptionOnMissing @ src/main/java/org/apache/commons/configuration2/AbstractConfiguration.java:114:21
+        Adding field (CtFieldImpl) interpolator @ src/main/java/org/apache/commons/configuration2/AbstractConfiguration.java:117:56
+          Adding object decl (CtClassImpl) AtomicReference
+            Pending package java.util.concurrent.atomic
+            Adding struct (CtClassImpl) AtomicReference
+              Resolved as new struct (CtClassImpl) AtomicReference
+            Adding type params (CtTypeParameterImpl) V
+              Resolved with match type params (CtTypeParameterImpl) V
+            Resolved as new object decl (CtClassImpl) AtomicReference
+          Adding object instantiation java.util.concurrent.atomic.AtomicReference @ src/main/java/org/apache/commons/configuration2/AbstractConfiguration.java:117:13<org.apache.commons.configuration2.interpol.ConfigurationInterpolator @ src/main/java/org/apache/commons/configuration2/AbstractConfiguration.java:117:29>
+            Adding struct (CtClassImpl) AtomicReference
+              Resolved as new struct (CtClassImpl) AtomicReference
+            Adding interface description (CtInterfaceImpl) Serializable
+              Resolved as new interface description (CtInterfaceImpl) Serializable
+            Resolved as new object instantiation java.util.concurrent.atomic.AtomicReference @ src/main/java/org/apache/commons/configuration2/AbstractConfiguration.java:117:13<org.apache.commons.configuration2.interpol.ConfigurationInterpolator @ src/main/java/org/apache/commons/configuration2/AbstractConfiguration.java:117:29>
+          Resolved as new field (CtFieldImpl) interpolator @ src/main/java/org/apache/commons/configuration2/AbstractConfiguration.java:117:56
+        Adding field (CtFieldImpl) synchronizer @ src/main/java/org/apache/commons/configuration2/AbstractConfiguration.java:120:35
+          Adding interface decl (CtInterfaceImpl) Synchronizer @ src/main/java/org/apache/commons/configuration2/sync/Synchronizer.java:54:18
+            Pending package org.apache.commons.configuration2.sync
+            Adding interface description (CtInterfaceImpl) Synchronizer @ src/main/java/org/apache/commons/configuration2/sync/Synchronizer.java:54:18
+              Adding abstract (CtMethodImpl) endRead @ src/main/java/org/apache/commons/configuration2/sync/Synchronizer.java:69:10
+                Adding signature (CtMethodImpl) endRead @ src/main/java/org/apache/commons/configuration2/sync/Synchronizer.java:69:10
+                  Resolved with match signature (CtMethodImpl) endRead @ src/main/java/org/apache/commons/configuration2/sync/Synchronizer.java:69:10
+                Resolved as new abstract (CtMethodImpl) endRead @ src/main/java/org/apache/commons/configuration2/sync/Synchronizer.java:69:10
+              Adding abstract (CtMethodImpl) beginRead @ src/main/java/org/apache/commons/configuration2/sync/Synchronizer.java:62:10
+                Adding signature (CtMethodImpl) beginRead @ src/main/java/org/apache/commons/configuration2/sync/Synchronizer.java:62:10
+                  Resolved with match signature (CtMethodImpl) beginRead @ src/main/java/org/apache/commons/configuration2/sync/Synchronizer.java:62:10
+                Resolved as new abstract (CtMethodImpl) beginRead @ src/main/java/org/apache/commons/configuration2/sync/Synchronizer.java:62:10
+              Adding abstract (CtMethodImpl) endWrite @ src/main/java/org/apache/commons/configuration2/sync/Synchronizer.java:84:10
+                Adding signature (CtMethodImpl) endWrite @ src/main/java/org/apache/commons/configuration2/sync/Synchronizer.java:84:10
+                  Resolved with match signature (CtMethodImpl) endWrite @ src/main/java/org/apache/commons/configuration2/sync/Synchronizer.java:84:10
+                Resolved as new abstract (CtMethodImpl) endWrite @ src/main/java/org/apache/commons/configuration2/sync/Synchronizer.java:84:10
+              Adding abstract (CtMethodImpl) beginWrite @ src/main/java/org/apache/commons/configuration2/sync/Synchronizer.java:77:10
+                Adding signature (CtMethodImpl) beginWrite @ src/main/java/org/apache/commons/configuration2/sync/Synchronizer.java:77:10
+                  Resolved with match signature (CtMethodImpl) beginWrite @ src/main/java/org/apache/commons/configuration2/sync/Synchronizer.java:77:10
+                Resolved as new abstract (CtMethodImpl) beginWrite @ src/main/java/org/apache/commons/configuration2/sync/Synchronizer.java:77:10
+              Resolved as new interface description (CtInterfaceImpl) Synchronizer @ src/main/java/org/apache/commons/configuration2/sync/Synchronizer.java:54:18
+            Resolved as new interface decl (CtInterfaceImpl) Synchronizer @ src/main/java/org/apache/commons/configuration2/sync/Synchronizer.java:54:18
+          Resolved as new field (CtFieldImpl) synchronizer @ src/main/java/org/apache/commons/configuration2/AbstractConfiguration.java:120:35
+        Adding field (CtFieldImpl) configurationDecoder @ src/main/java/org/apache/commons/configuration2/AbstractConfiguration.java:123:34
+          Adding interface decl (CtInterfaceImpl) ConfigurationDecoder @ src/main/java/org/apache/commons/configuration2/ConfigurationDecoder.java:38:18
+            Adding interface description (CtInterfaceImpl) ConfigurationDecoder @ src/main/java/org/apache/commons/configuration2/ConfigurationDecoder.java:38:18
+              Adding abstract (CtMethodImpl) decode @ src/main/java/org/apache/commons/configuration2/ConfigurationDecoder.java:49:12
+                Adding signature (CtMethodImpl) decode @ src/main/java/org/apache/commons/configuration2/ConfigurationDecoder.java:49:12
+                  Adding parameter (CtParameterImpl) s @ src/main/java/org/apache/commons/configuration2/ConfigurationDecoder.java:49:26
+                    Resolved with match parameter (CtParameterImpl) s @ src/main/java/org/apache/commons/configuration2/ConfigurationDecoder.java:49:26
+                  Adding parameter <unnamed> java.lang.String @ src/main/java/org/apache/commons/configuration2/ConfigurationDecoder.java:49:5
+                    Resolved with match parameter <unnamed> java.lang.String @ src/main/java/org/apache/commons/configuration2/ConfigurationDecoder.java:49:5
+                  Resolved as new signature (CtMethodImpl) decode @ src/main/java/org/apache/commons/configuration2/ConfigurationDecoder.java:49:12
+                Resolved as new abstract (CtMethodImpl) decode @ src/main/java/org/apache/commons/configuration2/ConfigurationDecoder.java:49:12
+              Resolved as new interface description (CtInterfaceImpl) ConfigurationDecoder @ src/main/java/org/apache/commons/configuration2/ConfigurationDecoder.java:38:18
+            Resolved as new interface decl (CtInterfaceImpl) ConfigurationDecoder @ src/main/java/org/apache/commons/configuration2/ConfigurationDecoder.java:38:18
+          Resolved as new field (CtFieldImpl) configurationDecoder @ src/main/java/org/apache/commons/configuration2/AbstractConfiguration.java:123:34
+        Adding field (CtFieldImpl) log @ src/main/java/org/apache/commons/configuration2/AbstractConfiguration.java:126:33
+          Adding object decl (CtClassImpl) ConfigurationLogger @ src/main/java/org/apache/commons/configuration2/io/ConfigurationLogger.java:54:14
+            Pending package org.apache.commons.configuration2.io
+            Adding struct (CtClassImpl) ConfigurationLogger @ src/main/java/org/apache/commons/configuration2/io/ConfigurationLogger.java:54:14
+              Adding field (CtFieldImpl) log @ src/main/java/org/apache/commons/configuration2/io/ConfigurationLogger.java:57:23
+                [31mType description did not have a declaration but was not labelled as anonymous: (CtTypeReferenceImpl) org.apache.commons.logging.Log @ src/main/java/org/apache/commons/configuration2/io/ConfigurationLogger.java:57:19
+                The type likely was an external dependency or some other type not handled by the abstractor so using anyDesc.[0m
+                Resolved as new field (CtFieldImpl) log @ src/main/java/org/apache/commons/configuration2/io/ConfigurationLogger.java:57:23
+              Resolved as new struct (CtClassImpl) ConfigurationLogger @ src/main/java/org/apache/commons/configuration2/io/ConfigurationLogger.java:54:14
+            Resolved as new object decl (CtClassImpl) ConfigurationLogger @ src/main/java/org/apache/commons/configuration2/io/ConfigurationLogger.java:54:14
+            Adding constructor (CtConstructorImpl) <init> @ src/main/java/org/apache/commons/configuration2/io/ConfigurationLogger.java:91:15
+              Adding constructor signature (CtConstructorImpl) <init> @ src/main/java/org/apache/commons/configuration2/io/ConfigurationLogger.java:91:15
+                Adding parameter <unnamed> org.apache.commons.configuration2.io.ConfigurationLogger
+                  Resolved as new parameter <unnamed> org.apache.commons.configuration2.io.ConfigurationLogger
+                Resolved as new constructor signature (CtConstructorImpl) <init> @ src/main/java/org/apache/commons/configuration2/io/ConfigurationLogger.java:91:15
+              Resolved as new constructor (CtConstructorImpl) <init> @ src/main/java/org/apache/commons/configuration2/io/ConfigurationLogger.java:91:15
+            Adding constructor (CtConstructorImpl) <init> @ src/main/java/org/apache/commons/configuration2/io/ConfigurationLogger.java:79:12
+              Adding constructor signature (CtConstructorImpl) <init> @ src/main/java/org/apache/commons/configuration2/io/ConfigurationLogger.java:79:12
+                Adding parameter (CtParameterImpl) logCls @ src/main/java/org/apache/commons/configuration2/io/ConfigurationLogger.java:79:41
+                  Adding object instantiation java.lang.Class @ src/main/java/org/apache/commons/configuration2/io/ConfigurationLogger.java:79:32<? @ src/main/java/org/apache/commons/configuration2/io/ConfigurationLogger.java:79:38>
+                    Resolved with match object instantiation java.lang.Class @ src/main/java/org/apache/commons/configuration2/io/ConfigurationLogger.java:79:32<? @ src/main/java/org/apache/commons/configuration2/io/ConfigurationLogger.java:79:38>
+                  Resolved as new parameter (CtParameterImpl) logCls @ src/main/java/org/apache/commons/configuration2/io/ConfigurationLogger.java:79:41
+                Resolved as new constructor signature (CtConstructorImpl) <init> @ src/main/java/org/apache/commons/configuration2/io/ConfigurationLogger.java:79:12
+              Resolved as new constructor (CtConstructorImpl) <init> @ src/main/java/org/apache/commons/configuration2/io/ConfigurationLogger.java:79:12
+            Adding constructor (CtConstructorImpl) <init> @ src/main/java/org/apache/commons/configuration2/io/ConfigurationLogger.java:66:12
+              Adding constructor signature (CtConstructorImpl) <init> @ src/main/java/org/apache/commons/configuration2/io/ConfigurationLogger.java:66:12
+                Adding parameter (CtParameterImpl) loggerName @ src/main/java/org/apache/commons/configuration2/io/ConfigurationLogger.java:66:39
+                  Resolved as new parameter (CtParameterImpl) loggerName @ src/main/java/org/apache/commons/configuration2/io/ConfigurationLogger.java:66:39
+                Resolved as new constructor signature (CtConstructorImpl) <init> @ src/main/java/org/apache/commons/configuration2/io/ConfigurationLogger.java:66:12
+              Resolved as new constructor (CtConstructorImpl) <init> @ src/main/java/org/apache/commons/configuration2/io/ConfigurationLogger.java:66:12
+            Adding constructor (CtConstructorImpl) <init> @ src/main/java/org/apache/commons/configuration2/io/ConfigurationLogger.java:102:5
+              Adding constructor signature (CtConstructorImpl) <init> @ src/main/java/org/apache/commons/configuration2/io/ConfigurationLogger.java:102:5
+                Adding parameter (CtParameterImpl) wrapped @ src/main/java/org/apache/commons/configuration2/io/ConfigurationLogger.java:102:29
+                  [31mType description did not have a declaration but was not labelled as anonymous: (CtTypeReferenceImpl) org.apache.commons.logging.Log @ src/main/java/org/apache/commons/configuration2/io/ConfigurationLogger.java:102:25
+                  The type likely was an external dependency or some other type not handled by the abstractor so using anyDesc.[0m
+                  Resolved as new parameter (CtParameterImpl) wrapped @ src/main/java/org/apache/commons/configuration2/io/ConfigurationLogger.java:102:29
+                Resolved as new constructor signature (CtConstructorImpl) <init> @ src/main/java/org/apache/commons/configuration2/io/ConfigurationLogger.java:102:5
+              Resolved as new constructor (CtConstructorImpl) <init> @ src/main/java/org/apache/commons/configuration2/io/ConfigurationLogger.java:102:5
+            Adding method (CtMethodImpl) debug @ src/main/java/org/apache/commons/configuration2/io/ConfigurationLogger.java:133:17
+              Adding signature (CtMethodImpl) debug @ src/main/java/org/apache/commons/configuration2/io/ConfigurationLogger.java:133:17
+                Adding parameter (CtParameterImpl) msg @ src/main/java/org/apache/commons/configuration2/io/ConfigurationLogger.java:133:30
+                  Resolved as new parameter (CtParameterImpl) msg @ src/main/java/org/apache/commons/configuration2/io/ConfigurationLogger.java:133:30
+                Resolved as new signature (CtMethodImpl) debug @ src/main/java/org/apache/commons/configuration2/io/ConfigurationLogger.java:133:17
+              Resolved as new method (CtMethodImpl) debug @ src/main/java/org/apache/commons/configuration2/io/ConfigurationLogger.java:133:17
+            Adding method (CtMethodImpl) getLog @ src/main/java/org/apache/commons/configuration2/io/ConfigurationLogger.java:205:9
+              Adding signature (CtMethodImpl) getLog @ src/main/java/org/apache/commons/configuration2/io/ConfigurationLogger.java:205:9
+                Adding parameter <unnamed> org.apache.commons.logging.Log @ src/main/java/org/apache/commons/configuration2/io/ConfigurationLogger.java:205:5
+                  [31mType description did not have a declaration but was not labelled as anonymous: (CtTypeReferenceImpl) org.apache.commons.logging.Log @ src/main/java/org/apache/commons/configuration2/io/ConfigurationLogger.java:205:5
+                  The type likely was an external dependency or some other type not handled by the abstractor so using anyDesc.[0m
+                  Resolved with match parameter <unnamed> org.apache.commons.logging.Log @ src/main/java/org/apache/commons/configuration2/io/ConfigurationLogger.java:205:5
+                Resolved as new signature (CtMethodImpl) getLog @ src/main/java/org/apache/commons/configuration2/io/ConfigurationLogger.java:205:9
+              Resolved as new method (CtMethodImpl) getLog @ src/main/java/org/apache/commons/configuration2/io/ConfigurationLogger.java:205:9
+            Adding method (CtMethodImpl) newDummyLogger @ src/main/java/org/apache/commons/configuration2/io/ConfigurationLogger.java:113:39
+              Adding signature (CtMethodImpl) newDummyLogger @ src/main/java/org/apache/commons/configuration2/io/ConfigurationLogger.java:113:39
+                Adding parameter <unnamed> org.apache.commons.configuration2.io.ConfigurationLogger @ src/main/java/org/apache/commons/configuration2/io/ConfigurationLogger.java:113:19
+                  Resolved with match parameter <unnamed> org.apache.commons.configuration2.io.ConfigurationLogger @ src/main/java/org/apache/commons/configuration2/io/ConfigurationLogger.java:113:19
+                Resolved as new signature (CtMethodImpl) newDummyLogger @ src/main/java/org/apache/commons/configuration2/io/ConfigurationLogger.java:113:39
+              Resolved as new method (CtMethodImpl) newDummyLogger @ src/main/java/org/apache/commons/configuration2/io/ConfigurationLogger.java:113:39
+            Adding method (CtMethodImpl) error @ src/main/java/org/apache/commons/configuration2/io/ConfigurationLogger.java:184:17
+              Adding signature (CtMethodImpl) error @ src/main/java/org/apache/commons/configuration2/io/ConfigurationLogger.java:184:17
+                Adding parameter (CtParameterImpl) msg @ src/main/java/org/apache/commons/configuration2/io/ConfigurationLogger.java:184:30
+                  Resolved with match parameter (CtParameterImpl) msg @ src/main/java/org/apache/commons/configuration2/io/ConfigurationLogger.java:184:30
+                Resolved as new signature (CtMethodImpl) error @ src/main/java/org/apache/commons/configuration2/io/ConfigurationLogger.java:184:17
+              Resolved as new method (CtMethodImpl) error @ src/main/java/org/apache/commons/configuration2/io/ConfigurationLogger.java:184:17
+            Adding method (CtMethodImpl) error @ src/main/java/org/apache/commons/configuration2/io/ConfigurationLogger.java:195:17
+              Adding signature (CtMethodImpl) error @ src/main/java/org/apache/commons/configuration2/io/ConfigurationLogger.java:195:17
+                Adding parameter (CtParameterImpl) msg @ src/main/java/org/apache/commons/configuration2/io/ConfigurationLogger.java:195:30
+                  Resolved with match parameter (CtParameterImpl) msg @ src/main/java/org/apache/commons/configuration2/io/ConfigurationLogger.java:195:30
+                Adding parameter (CtParameterImpl) ex @ src/main/java/org/apache/commons/configuration2/io/ConfigurationLogger.java:195:45
+                  Adding object decl (CtClassImpl) Throwable
+                    Adding struct (CtClassImpl) Throwable
+                      Resolved as new struct (CtClassImpl) Throwable
+                    Resolved as new object decl (CtClassImpl) Throwable
+                  Resolved as new parameter (CtParameterImpl) ex @ src/main/java/org/apache/commons/configuration2/io/ConfigurationLogger.java:195:45
+                Resolved as new signature (CtMethodImpl) error @ src/main/java/org/apache/commons/configuration2/io/ConfigurationLogger.java:195:17
+              Resolved as new method (CtMethodImpl) error @ src/main/java/org/apache/commons/configuration2/io/ConfigurationLogger.java:195:17
+            Adding method (CtMethodImpl) createLoggerForClass @ src/main/java/org/apache/commons/configuration2/io/ConfigurationLogger.java:235:24
+              Adding signature (CtMethodImpl) createLoggerForClass @ src/main/java/org/apache/commons/configuration2/io/ConfigurationLogger.java:235:24
+                Adding parameter (CtParameterImpl) cls @ src/main/java/org/apache/commons/configuration2/io/ConfigurationLogger.java:235:54
+                  Adding object instantiation java.lang.Class @ src/main/java/org/apache/commons/configuration2/io/ConfigurationLogger.java:235:45<? @ src/main/java/org/apache/commons/configuration2/io/ConfigurationLogger.java:235:51>
+                    Resolved with match object instantiation java.lang.Class @ src/main/java/org/apache/commons/configuration2/io/ConfigurationLogger.java:235:45<? @ src/main/java/org/apache/commons/configuration2/io/ConfigurationLogger.java:235:51>
+                  Resolved as new parameter (CtParameterImpl) cls @ src/main/java/org/apache/commons/configuration2/io/ConfigurationLogger.java:235:54
+                Adding parameter <unnamed> org.apache.commons.logging.Log @ src/main/java/org/apache/commons/configuration2/io/ConfigurationLogger.java:235:20
+                  [31mType description did not have a declaration but was not labelled as anonymous: (CtTypeReferenceImpl) org.apache.commons.logging.Log @ src/main/java/org/apache/commons/configuration2/io/ConfigurationLogger.java:235:20
+                  The type likely was an external dependency or some other type not handled by the abstractor so using anyDesc.[0m
+                  Resolved with match parameter <unnamed> org.apache.commons.logging.Log @ src/main/java/org/apache/commons/configuration2/io/ConfigurationLogger.java:235:20
+                Resolved as new signature (CtMethodImpl) createLoggerForClass @ src/main/java/org/apache/commons/configuration2/io/ConfigurationLogger.java:235:24
+              Resolved as new method (CtMethodImpl) createLoggerForClass @ src/main/java/org/apache/commons/configuration2/io/ConfigurationLogger.java:235:24
+            Adding method (CtMethodImpl) warn @ src/main/java/org/apache/commons/configuration2/io/ConfigurationLogger.java:163:17
+              Adding signature (CtMethodImpl) warn @ src/main/java/org/apache/commons/configuration2/io/ConfigurationLogger.java:163:17
+                Adding parameter (CtParameterImpl) msg @ src/main/java/org/apache/commons/configuration2/io/ConfigurationLogger.java:163:29
+                  Resolved with match parameter (CtParameterImpl) msg @ src/main/java/org/apache/commons/configuration2/io/ConfigurationLogger.java:163:29
+                Resolved as new signature (CtMethodImpl) warn @ src/main/java/org/apache/commons/configuration2/io/ConfigurationLogger.java:163:17
+              Resolved as new method (CtMethodImpl) warn @ src/main/java/org/apache/commons/configuration2/io/ConfigurationLogger.java:163:17
+            Adding method (CtMethodImpl) warn @ src/main/java/org/apache/commons/configuration2/io/ConfigurationLogger.java:174:17
+              Adding signature (CtMethodImpl) warn @ src/main/java/org/apache/commons/configuration2/io/ConfigurationLogger.java:174:17
+                Adding parameter (CtParameterImpl) msg @ src/main/java/org/apache/commons/configuration2/io/ConfigurationLogger.java:174:29
+                  Resolved with match parameter (CtParameterImpl) msg @ src/main/java/org/apache/commons/configuration2/io/ConfigurationLogger.java:174:29
+                Adding parameter (CtParameterImpl) ex @ src/main/java/org/apache/commons/configuration2/io/ConfigurationLogger.java:174:44
+                  Resolved with match parameter (CtParameterImpl) ex @ src/main/java/org/apache/commons/configuration2/io/ConfigurationLogger.java:174:44
+                Resolved as new signature (CtMethodImpl) warn @ src/main/java/org/apache/commons/configuration2/io/ConfigurationLogger.java:174:17
+              Resolved as new method (CtMethodImpl) warn @ src/main/java/org/apache/commons/configuration2/io/ConfigurationLogger.java:174:17
+            Adding method (CtMethodImpl) createLoggerForName @ src/main/java/org/apache/commons/configuration2/io/ConfigurationLogger.java:218:24
+              Adding signature (CtMethodImpl) createLoggerForName @ src/main/java/org/apache/commons/configuration2/io/ConfigurationLogger.java:218:24
+                Adding parameter (CtParameterImpl) name @ src/main/java/org/apache/commons/configuration2/io/ConfigurationLogger.java:218:51
+                  Resolved as new parameter (CtParameterImpl) name @ src/main/java/org/apache/commons/configuration2/io/ConfigurationLogger.java:218:51
+                Adding parameter <unnamed> org.apache.commons.logging.Log @ src/main/java/org/apache/commons/configuration2/io/ConfigurationLogger.java:218:20
+                  [31mType description did not have a declaration but was not labelled as anonymous: (CtTypeReferenceImpl) org.apache.commons.logging.Log @ src/main/java/org/apache/commons/configuration2/io/ConfigurationLogger.java:218:20
+                  The type likely was an external dependency or some other type not handled by the abstractor so using anyDesc.[0m
+                  Resolved with match parameter <unnamed> org.apache.commons.logging.Log @ src/main/java/org/apache/commons/configuration2/io/ConfigurationLogger.java:218:20
+                Resolved as new signature (CtMethodImpl) createLoggerForName @ src/main/java/org/apache/commons/configuration2/io/ConfigurationLogger.java:218:24
+              Resolved as new method (CtMethodImpl) createLoggerForName @ src/main/java/org/apache/commons/configuration2/io/ConfigurationLogger.java:218:24
+            Adding method (CtMethodImpl) isInfoEnabled @ src/main/java/org/apache/commons/configuration2/io/ConfigurationLogger.java:143:20
+              Adding signature (CtMethodImpl) isInfoEnabled @ src/main/java/org/apache/commons/configuration2/io/ConfigurationLogger.java:143:20
+                Adding parameter <unnamed> boolean @ src/main/java/org/apache/commons/configuration2/io/ConfigurationLogger.java:143:12
+                  Adding basic (CtTypeReferenceImpl) boolean @ src/main/java/org/apache/commons/configuration2/io/ConfigurationLogger.java:143:12
+                    Resolved with match basic (CtTypeReferenceImpl) boolean @ src/main/java/org/apache/commons/configuration2/io/ConfigurationLogger.java:143:12
+                  Resolved as new parameter <unnamed> boolean @ src/main/java/org/apache/commons/configuration2/io/ConfigurationLogger.java:143:12
+                Resolved as new signature (CtMethodImpl) isInfoEnabled @ src/main/java/org/apache/commons/configuration2/io/ConfigurationLogger.java:143:20
+              Resolved as new method (CtMethodImpl) isInfoEnabled @ src/main/java/org/apache/commons/configuration2/io/ConfigurationLogger.java:143:20
+            Adding method (CtMethodImpl) isDebugEnabled @ src/main/java/org/apache/commons/configuration2/io/ConfigurationLogger.java:123:20
+              Adding signature (CtMethodImpl) isDebugEnabled @ src/main/java/org/apache/commons/configuration2/io/ConfigurationLogger.java:123:20
+                Adding parameter <unnamed> boolean @ src/main/java/org/apache/commons/configuration2/io/ConfigurationLogger.java:123:12
+                  Adding basic (CtTypeReferenceImpl) boolean @ src/main/java/org/apache/commons/configuration2/io/ConfigurationLogger.java:123:12
+                    Resolved with match basic (CtTypeReferenceImpl) boolean @ src/main/java/org/apache/commons/configuration2/io/ConfigurationLogger.java:123:12
+                  Resolved as new parameter <unnamed> boolean @ src/main/java/org/apache/commons/configuration2/io/ConfigurationLogger.java:123:12
+                Resolved as new signature (CtMethodImpl) isDebugEnabled @ src/main/java/org/apache/commons/configuration2/io/ConfigurationLogger.java:123:20
+              Resolved as new method (CtMethodImpl) isDebugEnabled @ src/main/java/org/apache/commons/configuration2/io/ConfigurationLogger.java:123:20
+            Adding method (CtMethodImpl) info @ src/main/java/org/apache/commons/configuration2/io/ConfigurationLogger.java:153:17
+              Adding signature (CtMethodImpl) info @ src/main/java/org/apache/commons/configuration2/io/ConfigurationLogger.java:153:17
+                Adding parameter (CtParameterImpl) msg @ src/main/java/org/apache/commons/configuration2/io/ConfigurationLogger.java:153:29
+                  Resolved with match parameter (CtParameterImpl) msg @ src/main/java/org/apache/commons/configuration2/io/ConfigurationLogger.java:153:29
+                Resolved as new signature (CtMethodImpl) info @ src/main/java/org/apache/commons/configuration2/io/ConfigurationLogger.java:153:17
+              Resolved as new method (CtMethodImpl) info @ src/main/java/org/apache/commons/configuration2/io/ConfigurationLogger.java:153:17
+            Adding abstract (CtMethodImpl) debug @ src/main/java/org/apache/commons/configuration2/io/ConfigurationLogger.java:133:17
+              Resolved as new abstract (CtMethodImpl) debug @ src/main/java/org/apache/commons/configuration2/io/ConfigurationLogger.java:133:17
+            Adding abstract (CtMethodImpl) getLog @ src/main/java/org/apache/commons/configuration2/io/ConfigurationLogger.java:205:9
+              Resolved as new abstract (CtMethodImpl) getLog @ src/main/java/org/apache/commons/configuration2/io/ConfigurationLogger.java:205:9
+            Adding abstract (CtMethodImpl) error @ src/main/java/org/apache/commons/configuration2/io/ConfigurationLogger.java:184:17
+              Resolved as new abstract (CtMethodImpl) error @ src/main/java/org/apache/commons/configuration2/io/ConfigurationLogger.java:184:17
+            Adding abstract (CtMethodImpl) error @ src/main/java/org/apache/commons/configuration2/io/ConfigurationLogger.java:195:17
+              Resolved as new abstract (CtMethodImpl) error @ src/main/java/org/apache/commons/configuration2/io/ConfigurationLogger.java:195:17
+            Adding abstract (CtMethodImpl) warn @ src/main/java/org/apache/commons/configuration2/io/ConfigurationLogger.java:163:17
+              Resolved as new abstract (CtMethodImpl) warn @ src/main/java/org/apache/commons/configuration2/io/ConfigurationLogger.java:163:17
+            Adding abstract (CtMethodImpl) warn @ src/main/java/org/apache/commons/configuration2/io/ConfigurationLogger.java:174:17
+              Resolved as new abstract (CtMethodImpl) warn @ src/main/java/org/apache/commons/configuration2/io/ConfigurationLogger.java:174:17
+            Adding abstract (CtMethodImpl) isInfoEnabled @ src/main/java/org/apache/commons/configuration2/io/ConfigurationLogger.java:143:20
+              Resolved as new abstract (CtMethodImpl) isInfoEnabled @ src/main/java/org/apache/commons/configuration2/io/ConfigurationLogger.java:143:20
+            Adding abstract (CtMethodImpl) isDebugEnabled @ src/main/java/org/apache/commons/configuration2/io/ConfigurationLogger.java:123:20
+              Resolved as new abstract (CtMethodImpl) isDebugEnabled @ src/main/java/org/apache/commons/configuration2/io/ConfigurationLogger.java:123:20
+            Adding abstract (CtMethodImpl) info @ src/main/java/org/apache/commons/configuration2/io/ConfigurationLogger.java:153:17
+              Resolved as new abstract (CtMethodImpl) info @ src/main/java/org/apache/commons/configuration2/io/ConfigurationLogger.java:153:17
+          Resolved as new field (CtFieldImpl) log @ src/main/java/org/apache/commons/configuration2/AbstractConfiguration.java:126:33
+        Adding field (CtFieldImpl) eventListeners @ src/main/java/org/apache/commons/configuration2/event/BaseEventSource.java:70:31
+          Adding object decl (CtClassImpl) EventListenerList @ src/main/java/org/apache/commons/configuration2/event/EventListenerList.java:56:14
+            Pending package org.apache.commons.configuration2.event
+            Adding struct (CtClassImpl) EventListenerList @ src/main/java/org/apache/commons/configuration2/event/EventListenerList.java:56:14
+              Adding field (CtFieldImpl) listeners @ src/main/java/org/apache/commons/configuration2/event/EventListenerList.java:59:58
+                Adding object decl (CtClassImpl) EventListenerRegistrationData @ src/main/java/org/apache/commons/configuration2/event/EventListenerRegistrationData.java:38:20
+                  Adding struct (CtClassImpl) EventListenerRegistrationData @ src/main/java/org/apache/commons/configuration2/event/EventListenerRegistrationData.java:38:20
+                    Adding field (CtFieldImpl) HASH_FACTOR @ src/main/java/org/apache/commons/configuration2/event/EventListenerRegistrationData.java:41:30
+                      Adding basic (CtTypeReferenceImpl) int @ src/main/java/org/apache/commons/configuration2/event/EventListenerRegistrationData.java:41:26
+                        Resolved as new basic (CtTypeReferenceImpl) int @ src/main/java/org/apache/commons/configuration2/event/EventListenerRegistrationData.java:41:26
+                      Resolved as new field (CtFieldImpl) HASH_FACTOR @ src/main/java/org/apache/commons/configuration2/event/EventListenerRegistrationData.java:41:30
+                    Adding field (CtFieldImpl) eventType @ src/main/java/org/apache/commons/configuration2/event/EventListenerRegistrationData.java:44:32
+                      Adding object decl (CtClassImpl) EventType @ src/main/java/org/apache/commons/configuration2/event/EventType.java:47:14
+        >>>>>>          Adding struct (CtClassImpl) EventType @ src/main/java/org/apache/commons/configuration2/event/EventType.java:47:14
+                          Adding field (CtFieldImpl) serialVersionUID @ src/main/java/org/apache/commons/configuration2/event/EventType.java:50:31
+                            Adding basic (CtTypeReferenceImpl) long @ src/main/java/org/apache/commons/configuration2/event/EventType.java:50:26
+                              Resolved as new basic (CtTypeReferenceImpl) long @ src/main/java/org/apache/commons/configuration2/event/EventType.java:50:26
+                            Resolved as new field (CtFieldImpl) serialVersionUID @ src/main/java/org/apache/commons/configuration2/event/EventType.java:50:31
+                          Adding field (CtFieldImpl) FMT_TO_STRING @ src/main/java/org/apache/commons/configuration2/event/EventType.java:53:33
+                            Resolved as new field (CtFieldImpl) FMT_TO_STRING @ src/main/java/org/apache/commons/configuration2/event/EventType.java:53:33
+                          Adding field (CtFieldImpl) superType @ src/main/java/org/apache/commons/configuration2/event/EventType.java:56:40
+                            Adding type params (CtTypeParameterImpl) T @ src/main/java/org/apache/commons/configuration2/event/EventType.java:47:24
+                              Adding object decl (CtClassImpl) Event @ src/main/java/org/apache/commons/configuration2/event/Event.java:36:14
+                                Adding struct (CtClassImpl) Event @ src/main/java/org/apache/commons/configuration2/event/Event.java:36:14
+                                  Adding field (CtFieldImpl) ANY @ src/main/java/org/apache/commons/configuration2/event/Event.java:42:42
+                                    Adding object instantiation org.apache.commons.configuration2.event.EventType @ src/main/java/org/apache/commons/configuration2/event/Event.java:42:25<org.apache.commons.configuration2.event.Event @ src/main/java/org/apache/commons/configuration2/event/Event.java:42:35>
+        >>>>>>                        Adding struct (CtClassImpl) EventType @ src/main/java/org/apache/commons/configuration2/event/EventType.java:47:14
+                                        Adding field (CtFieldImpl) serialVersionUID @ src/main/java/org/apache/commons/configuration2/event/EventType.java:50:31
+                                          Resolved with match field (CtFieldImpl) serialVersionUID @ src/main/java/org/apache/commons/configuration2/event/EventType.java:50:31
+                                        Adding field (CtFieldImpl) FMT_TO_STRING @ src/main/java/org/apache/commons/configuration2/event/EventType.java:53:33
+                                          Resolved with match field (CtFieldImpl) FMT_TO_STRING @ src/main/java/org/apache/commons/configuration2/event/EventType.java:53:33
+                                        Adding field (CtFieldImpl) superType @ src/main/java/org/apache/commons/configuration2/event/EventType.java:56:40
+                                          Adding object instantiation org.apache.commons.configuration2.event.EventType @ src/main/java/org/apache/commons/configuration2/event/EventType.java:56:19<? @ src/main/java/org/apache/commons/configuration2/event/EventType.java:56:29>
+                                            Adding abstract (CtMethodImpl) getName @ src/main/java/org/apache/commons/configuration2/event/EventType.java:93:19
+                                              Adding signature (CtMethodImpl) getName @ src/main/java/org/apache/commons/configuration2/event/EventType.java:93:19
+                                                Adding parameter <unnamed> java.lang.String @ src/main/java/org/apache/commons/configuration2/event/EventType.java:93:12
+                                                  Resolved with match parameter <unnamed> java.lang.String @ src/main/java/org/apache/commons/configuration2/event/EventType.java:93:12
+                                                Resolved as new signature (CtMethodImpl) getName @ src/main/java/org/apache/commons/configuration2/event/EventType.java:93:19
+                                              Resolved as new abstract (CtMethodImpl) getName @ src/main/java/org/apache/commons/configuration2/event/EventType.java:93:19
+                                            Adding abstract (CtMethodImpl) getSuperType @ src/main/java/org/apache/commons/configuration2/event/EventType.java:81:33
+                                              Adding signature (CtMethodImpl) getSuperType @ src/main/java/org/apache/commons/configuration2/event/EventType.java:81:33
+                                                Adding parameter <unnamed> org.apache.commons.configuration2.event.EventType @ src/main/java/org/apache/commons/configuration2/event/EventType.java:81:12<? @ src/main/java/org/apache/commons/configuration2/event/EventType.java:81:22>
+                                                  Adding object instantiation org.apache.commons.configuration2.event.EventType @ src/main/java/org/apache/commons/configuration2/event/EventType.java:81:12<? @ src/main/java/org/apache/commons/configuration2/event/EventType.java:81:22>
+                                                    Adding abstract (CtMethodImpl) toString @ src/main/java/org/apache/commons/configuration2/event/EventType.java:106:19
+                                                      Adding signature (CtMethodImpl) toString @ src/main/java/org/apache/commons/configuration2/event/EventType.java:106:19
+                                                        Adding parameter <unnamed> java.lang.String @ src/main/java/org/apache/commons/configuration2/event/EventType.java:106:12
+                                                          Resolved with match parameter <unnamed> java.lang.String @ src/main/java/org/apache/commons/configuration2/event/EventType.java:106:12
+                                                        Resolved as new signature (CtMethodImpl) toString @ src/main/java/org/apache/commons/configuration2/event/EventType.java:106:19
+                                                      Resolved as new abstract (CtMethodImpl) toString @ src/main/java/org/apache/commons/configuration2/event/EventType.java:106:19
+                                                    Adding interface description (CtInterfaceImpl) Serializable
+                                                      Resolved as new interface description (CtInterfaceImpl) Serializable
+                                                    Resolved as new object instantiation org.apache.commons.configuration2.event.EventType @ src/main/java/org/apache/commons/configuration2/event/EventType.java:81:12<? @ src/main/java/org/apache/commons/configuration2/event/EventType.java:81:22>
+                                                    Adding constructor (CtConstructorImpl) <init> @ src/main/java/org/apache/commons/configuration2/event/EventType.java:69:12
+[34mFinished process pending packages (0.598092s)[0m
 Exception in thread "main" java.lang.Exception: Error while processing package org.apache.commons.configuration2: {
   elem: org.apache.commons.configuration2,
 }
-	at abstractor.core.constructs.Factory.create(Factory.java:132)
-	at abstractor.core.constructs.Factory.create(Factory.java:139)
+	at abstractor.core.constructs.Factory.create(Factory.java:134)
+	at abstractor.core.constructs.Factory.create(Factory.java:141)
 	at abstractor.core.Abstractor.processPackage(Abstractor.java:1352)
 	at abstractor.core.Abstractor.processPendingPackages(Abstractor.java:1346)
 	at abstractor.core.Abstractor.lambda$performAbstraction$40(Abstractor.java:1333)
@@ -68,28 +964,28 @@ Exception in thread "main" java.lang.Exception: Error while processing package o
 Caused by: java.lang.Exception: Error while processing object decl (CtClassImpl) AbstractConfiguration @ src/main/java/org/apache/commons/configuration2/AbstractConfiguration.java:102:23: {
   elem: "(CtClassImpl) AbstractConfiguration @ src/main/java/org/apache/commons/configuration2/AbstractConfiguration.java:102:23",
 }
-	at abstractor.core.constructs.Factory.create(Factory.java:132)
-	at abstractor.core.constructs.Factory.create(Factory.java:139)
+	at abstractor.core.constructs.Factory.create(Factory.java:134)
+	at abstractor.core.constructs.Factory.create(Factory.java:141)
 	at abstractor.core.Abstractor.addObjectDecl(Abstractor.java:985)
 	at abstractor.core.Abstractor.addDeclaration(Abstractor.java:176)
 	at abstractor.core.Abstractor.lambda$processPackage$48(Abstractor.java:1361)
-	at abstractor.core.constructs.Factory.create(Factory.java:127)
+	at abstractor.core.constructs.Factory.create(Factory.java:129)
 	... 8 more
 Caused by: java.lang.Exception: Error while processing struct (CtClassImpl) AbstractConfiguration @ src/main/java/org/apache/commons/configuration2/AbstractConfiguration.java:102:23: {
   elem: "(CtClassImpl) AbstractConfiguration @ src/main/java/org/apache/commons/configuration2/AbstractConfiguration.java:102:23",
 }
-	at abstractor.core.constructs.Factory.create(Factory.java:132)
-	at abstractor.core.constructs.Factory.create(Factory.java:143)
+	at abstractor.core.constructs.Factory.create(Factory.java:134)
+	at abstractor.core.constructs.Factory.create(Factory.java:145)
 	at abstractor.core.Abstractor.addStructDesc(Abstractor.java:757)
 	at abstractor.core.Abstractor.lambda$addObjectDecl$32(Abstractor.java:991)
-	at abstractor.core.constructs.Factory.lambda$create$0(Factory.java:139)
+	at abstractor.core.constructs.Factory.lambda$create$0(Factory.java:141)
 	at abstractor.core.constructs.Factory.create(Factory.java:109)
 	... 13 more
 Caused by: java.lang.Exception: Error while processing field (CtFieldImpl) eventListeners @ src/main/java/org/apache/commons/configuration2/event/BaseEventSource.java:70:31: {
   elem: "(CtFieldImpl) eventListeners @ src/main/java/org/apache/commons/configuration2/event/BaseEventSource.java:70:31",
 }
-	at abstractor.core.constructs.Factory.create(Factory.java:132)
-	at abstractor.core.constructs.Factory.create(Factory.java:139)
+	at abstractor.core.constructs.Factory.create(Factory.java:134)
+	at abstractor.core.constructs.Factory.create(Factory.java:141)
 	at abstractor.core.Abstractor.addField(Abstractor.java:796)
 	at abstractor.core.Abstractor.addField(Abstractor.java:791)
 	at abstractor.core.Abstractor.lambda$addStructDesc$23(Abstractor.java:768)
@@ -98,30 +994,30 @@ Caused by: java.lang.Exception: Error while processing field (CtFieldImpl) event
 Caused by: java.lang.Exception: Error while processing object decl (CtClassImpl) EventListenerList @ src/main/java/org/apache/commons/configuration2/event/EventListenerList.java:56:14: {
   elem: "(CtClassImpl) EventListenerList @ src/main/java/org/apache/commons/configuration2/event/EventListenerList.java:56:14",
 }
-	at abstractor.core.constructs.Factory.create(Factory.java:132)
-	at abstractor.core.constructs.Factory.create(Factory.java:139)
+	at abstractor.core.constructs.Factory.create(Factory.java:134)
+	at abstractor.core.constructs.Factory.create(Factory.java:141)
 	at abstractor.core.Abstractor.addObjectDecl(Abstractor.java:985)
 	at abstractor.core.Abstractor.addObjectInst(Abstractor.java:1069)
 	at abstractor.core.Abstractor.addTypeDesc(Abstractor.java:1230)
 	at abstractor.core.Abstractor.lambda$addField$24(Abstractor.java:800)
-	at abstractor.core.constructs.Factory.lambda$create$0(Factory.java:139)
+	at abstractor.core.constructs.Factory.lambda$create$0(Factory.java:141)
 	at abstractor.core.constructs.Factory.create(Factory.java:109)
 	... 23 more
 Caused by: java.lang.Exception: Error while processing struct (CtClassImpl) EventListenerList @ src/main/java/org/apache/commons/configuration2/event/EventListenerList.java:56:14: {
   elem: "(CtClassImpl) EventListenerList @ src/main/java/org/apache/commons/configuration2/event/EventListenerList.java:56:14",
 }
-	at abstractor.core.constructs.Factory.create(Factory.java:132)
-	at abstractor.core.constructs.Factory.create(Factory.java:143)
+	at abstractor.core.constructs.Factory.create(Factory.java:134)
+	at abstractor.core.constructs.Factory.create(Factory.java:145)
 	at abstractor.core.Abstractor.addStructDesc(Abstractor.java:757)
 	at abstractor.core.Abstractor.lambda$addObjectDecl$32(Abstractor.java:991)
-	at abstractor.core.constructs.Factory.lambda$create$0(Factory.java:139)
+	at abstractor.core.constructs.Factory.lambda$create$0(Factory.java:141)
 	at abstractor.core.constructs.Factory.create(Factory.java:109)
 	... 30 more
 Caused by: java.lang.Exception: Error while processing field (CtFieldImpl) listeners @ src/main/java/org/apache/commons/configuration2/event/EventListenerList.java:59:58: {
   elem: "(CtFieldImpl) listeners @ src/main/java/org/apache/commons/configuration2/event/EventListenerList.java:59:58",
 }
-	at abstractor.core.constructs.Factory.create(Factory.java:132)
-	at abstractor.core.constructs.Factory.create(Factory.java:139)
+	at abstractor.core.constructs.Factory.create(Factory.java:134)
+	at abstractor.core.constructs.Factory.create(Factory.java:141)
 	at abstractor.core.Abstractor.addField(Abstractor.java:796)
 	at abstractor.core.Abstractor.addField(Abstractor.java:791)
 	at abstractor.core.Abstractor.lambda$addStructDesc$23(Abstractor.java:768)
@@ -130,8 +1026,8 @@ Caused by: java.lang.Exception: Error while processing field (CtFieldImpl) liste
 Caused by: java.lang.Exception: Error while processing object decl (CtClassImpl) EventListenerRegistrationData @ src/main/java/org/apache/commons/configuration2/event/EventListenerRegistrationData.java:38:20: {
   elem: "(CtClassImpl) EventListenerRegistrationData @ src/main/java/org/apache/commons/configuration2/event/EventListenerRegistrationData.java:38:20",
 }
-	at abstractor.core.constructs.Factory.create(Factory.java:132)
-	at abstractor.core.constructs.Factory.create(Factory.java:139)
+	at abstractor.core.constructs.Factory.create(Factory.java:134)
+	at abstractor.core.constructs.Factory.create(Factory.java:141)
 	at abstractor.core.Abstractor.addObjectDecl(Abstractor.java:985)
 	at abstractor.core.Abstractor.addObjectInst(Abstractor.java:1069)
 	at abstractor.core.Abstractor.addTypeDesc(Abstractor.java:1230)
@@ -139,24 +1035,24 @@ Caused by: java.lang.Exception: Error while processing object decl (CtClassImpl)
 	at abstractor.core.Abstractor.addInterfaceInst(Abstractor.java:258)
 	at abstractor.core.Abstractor.addTypeDesc(Abstractor.java:1231)
 	at abstractor.core.Abstractor.lambda$addField$24(Abstractor.java:800)
-	at abstractor.core.constructs.Factory.lambda$create$0(Factory.java:139)
+	at abstractor.core.constructs.Factory.lambda$create$0(Factory.java:141)
 	at abstractor.core.constructs.Factory.create(Factory.java:109)
 	... 40 more
 Caused by: java.lang.Exception: Error while processing struct (CtClassImpl) EventListenerRegistrationData @ src/main/java/org/apache/commons/configuration2/event/EventListenerRegistrationData.java:38:20: {
   elem: "(CtClassImpl) EventListenerRegistrationData @ src/main/java/org/apache/commons/configuration2/event/EventListenerRegistrationData.java:38:20",
 }
-	at abstractor.core.constructs.Factory.create(Factory.java:132)
-	at abstractor.core.constructs.Factory.create(Factory.java:143)
+	at abstractor.core.constructs.Factory.create(Factory.java:134)
+	at abstractor.core.constructs.Factory.create(Factory.java:145)
 	at abstractor.core.Abstractor.addStructDesc(Abstractor.java:757)
 	at abstractor.core.Abstractor.lambda$addObjectDecl$32(Abstractor.java:991)
-	at abstractor.core.constructs.Factory.lambda$create$0(Factory.java:139)
+	at abstractor.core.constructs.Factory.lambda$create$0(Factory.java:141)
 	at abstractor.core.constructs.Factory.create(Factory.java:109)
 	... 50 more
 Caused by: java.lang.Exception: Error while processing field (CtFieldImpl) eventType @ src/main/java/org/apache/commons/configuration2/event/EventListenerRegistrationData.java:44:32: {
   elem: "(CtFieldImpl) eventType @ src/main/java/org/apache/commons/configuration2/event/EventListenerRegistrationData.java:44:32",
 }
-	at abstractor.core.constructs.Factory.create(Factory.java:132)
-	at abstractor.core.constructs.Factory.create(Factory.java:139)
+	at abstractor.core.constructs.Factory.create(Factory.java:134)
+	at abstractor.core.constructs.Factory.create(Factory.java:141)
 	at abstractor.core.Abstractor.addField(Abstractor.java:796)
 	at abstractor.core.Abstractor.addField(Abstractor.java:791)
 	at abstractor.core.Abstractor.lambda$addStructDesc$23(Abstractor.java:768)
@@ -165,30 +1061,30 @@ Caused by: java.lang.Exception: Error while processing field (CtFieldImpl) event
 Caused by: java.lang.Exception: Error while processing object decl (CtClassImpl) EventType @ src/main/java/org/apache/commons/configuration2/event/EventType.java:47:14: {
   elem: "(CtClassImpl) EventType @ src/main/java/org/apache/commons/configuration2/event/EventType.java:47:14",
 }
-	at abstractor.core.constructs.Factory.create(Factory.java:132)
-	at abstractor.core.constructs.Factory.create(Factory.java:139)
+	at abstractor.core.constructs.Factory.create(Factory.java:134)
+	at abstractor.core.constructs.Factory.create(Factory.java:141)
 	at abstractor.core.Abstractor.addObjectDecl(Abstractor.java:985)
 	at abstractor.core.Abstractor.addObjectInst(Abstractor.java:1069)
 	at abstractor.core.Abstractor.addTypeDesc(Abstractor.java:1230)
 	at abstractor.core.Abstractor.lambda$addField$24(Abstractor.java:800)
-	at abstractor.core.constructs.Factory.lambda$create$0(Factory.java:139)
+	at abstractor.core.constructs.Factory.lambda$create$0(Factory.java:141)
 	at abstractor.core.constructs.Factory.create(Factory.java:109)
 	... 60 more
 Caused by: java.lang.Exception: Error while processing struct (CtClassImpl) EventType @ src/main/java/org/apache/commons/configuration2/event/EventType.java:47:14: {
   elem: "(CtClassImpl) EventType @ src/main/java/org/apache/commons/configuration2/event/EventType.java:47:14",
 }
-	at abstractor.core.constructs.Factory.create(Factory.java:132)
-	at abstractor.core.constructs.Factory.create(Factory.java:143)
+	at abstractor.core.constructs.Factory.create(Factory.java:134)
+	at abstractor.core.constructs.Factory.create(Factory.java:145)
 	at abstractor.core.Abstractor.addStructDesc(Abstractor.java:757)
 	at abstractor.core.Abstractor.lambda$addObjectDecl$32(Abstractor.java:991)
-	at abstractor.core.constructs.Factory.lambda$create$0(Factory.java:139)
+	at abstractor.core.constructs.Factory.lambda$create$0(Factory.java:141)
 	at abstractor.core.constructs.Factory.create(Factory.java:109)
 	... 67 more
 Caused by: java.lang.Exception: Error while processing field (CtFieldImpl) superType @ src/main/java/org/apache/commons/configuration2/event/EventType.java:56:40: {
   elem: "(CtFieldImpl) superType @ src/main/java/org/apache/commons/configuration2/event/EventType.java:56:40",
 }
-	at abstractor.core.constructs.Factory.create(Factory.java:132)
-	at abstractor.core.constructs.Factory.create(Factory.java:139)
+	at abstractor.core.constructs.Factory.create(Factory.java:134)
+	at abstractor.core.constructs.Factory.create(Factory.java:141)
 	at abstractor.core.Abstractor.addField(Abstractor.java:796)
 	at abstractor.core.Abstractor.addField(Abstractor.java:791)
 	at abstractor.core.Abstractor.lambda$addStructDesc$23(Abstractor.java:768)
@@ -197,43 +1093,43 @@ Caused by: java.lang.Exception: Error while processing field (CtFieldImpl) super
 Caused by: java.lang.Exception: Error while processing type params (CtTypeParameterImpl) T @ src/main/java/org/apache/commons/configuration2/event/EventType.java:47:24: {
   elem: "(CtTypeParameterImpl) T @ src/main/java/org/apache/commons/configuration2/event/EventType.java:47:24",
 }
-	at abstractor.core.constructs.Factory.create(Factory.java:132)
-	at abstractor.core.constructs.Factory.create(Factory.java:147)
+	at abstractor.core.constructs.Factory.create(Factory.java:134)
+	at abstractor.core.constructs.Factory.create(Factory.java:149)
 	at abstractor.core.Abstractor.addTypeParam(Abstractor.java:935)
 	at abstractor.core.Abstractor.addTypeParams(Abstractor.java:924)
 	at abstractor.core.Abstractor.addObjectInst(Abstractor.java:1072)
 	at abstractor.core.Abstractor.addTypeDesc(Abstractor.java:1230)
 	at abstractor.core.Abstractor.lambda$addField$24(Abstractor.java:800)
-	at abstractor.core.constructs.Factory.lambda$create$0(Factory.java:139)
+	at abstractor.core.constructs.Factory.lambda$create$0(Factory.java:141)
 	at abstractor.core.constructs.Factory.create(Factory.java:109)
 	... 77 more
 Caused by: java.lang.Exception: Error while processing object decl (CtClassImpl) Event @ src/main/java/org/apache/commons/configuration2/event/Event.java:36:14: {
   elem: "(CtClassImpl) Event @ src/main/java/org/apache/commons/configuration2/event/Event.java:36:14",
 }
-	at abstractor.core.constructs.Factory.create(Factory.java:132)
-	at abstractor.core.constructs.Factory.create(Factory.java:139)
+	at abstractor.core.constructs.Factory.create(Factory.java:134)
+	at abstractor.core.constructs.Factory.create(Factory.java:141)
 	at abstractor.core.Abstractor.addObjectDecl(Abstractor.java:985)
 	at abstractor.core.Abstractor.addObjectInst(Abstractor.java:1069)
 	at abstractor.core.Abstractor.addTypeDesc(Abstractor.java:1230)
 	at abstractor.core.Abstractor.lambda$addTypeParam$29(Abstractor.java:941)
-	at abstractor.core.constructs.Factory.lambda$create$1(Factory.java:147)
+	at abstractor.core.constructs.Factory.lambda$create$1(Factory.java:149)
 	at abstractor.core.constructs.Factory.create(Factory.java:109)
 	... 85 more
 Caused by: java.lang.Exception: Error while processing struct (CtClassImpl) Event @ src/main/java/org/apache/commons/configuration2/event/Event.java:36:14: {
   elem: "(CtClassImpl) Event @ src/main/java/org/apache/commons/configuration2/event/Event.java:36:14",
 }
-	at abstractor.core.constructs.Factory.create(Factory.java:132)
-	at abstractor.core.constructs.Factory.create(Factory.java:143)
+	at abstractor.core.constructs.Factory.create(Factory.java:134)
+	at abstractor.core.constructs.Factory.create(Factory.java:145)
 	at abstractor.core.Abstractor.addStructDesc(Abstractor.java:757)
 	at abstractor.core.Abstractor.lambda$addObjectDecl$32(Abstractor.java:991)
-	at abstractor.core.constructs.Factory.lambda$create$0(Factory.java:139)
+	at abstractor.core.constructs.Factory.lambda$create$0(Factory.java:141)
 	at abstractor.core.constructs.Factory.create(Factory.java:109)
 	... 92 more
 Caused by: java.lang.Exception: Error while processing field (CtFieldImpl) ANY @ src/main/java/org/apache/commons/configuration2/event/Event.java:42:42: {
   elem: "(CtFieldImpl) ANY @ src/main/java/org/apache/commons/configuration2/event/Event.java:42:42",
 }
-	at abstractor.core.constructs.Factory.create(Factory.java:132)
-	at abstractor.core.constructs.Factory.create(Factory.java:139)
+	at abstractor.core.constructs.Factory.create(Factory.java:134)
+	at abstractor.core.constructs.Factory.create(Factory.java:141)
 	at abstractor.core.Abstractor.addField(Abstractor.java:796)
 	at abstractor.core.Abstractor.addField(Abstractor.java:791)
 	at abstractor.core.Abstractor.lambda$addStructDesc$23(Abstractor.java:768)
@@ -245,11 +1141,11 @@ Caused by: java.lang.Exception: Error while processing object instantiation org.
     { context: "object decl (CtClassImpl) Event @ src/main/java/org/apache/commons/configuration2/event/Event.java:36:14", index: -1, kind: object, ref: true },
   ],
 }
-	at abstractor.core.constructs.Factory.create(Factory.java:132)
+	at abstractor.core.constructs.Factory.create(Factory.java:134)
 	at abstractor.core.Abstractor.addObjectInst(Abstractor.java:1084)
 	at abstractor.core.Abstractor.addTypeDesc(Abstractor.java:1230)
 	at abstractor.core.Abstractor.lambda$addField$24(Abstractor.java:800)
-	at abstractor.core.constructs.Factory.lambda$create$0(Factory.java:139)
+	at abstractor.core.constructs.Factory.lambda$create$0(Factory.java:141)
 	at abstractor.core.constructs.Factory.create(Factory.java:109)
 	... 102 more
 Caused by: java.lang.Exception: Error while processing struct (CtClassImpl) EventType @ src/main/java/org/apache/commons/configuration2/event/EventType.java:47:14: {
@@ -258,8 +1154,8 @@ Caused by: java.lang.Exception: Error while processing struct (CtClassImpl) Even
     { context: "object decl (CtClassImpl) Event @ src/main/java/org/apache/commons/configuration2/event/Event.java:36:14", index: -1, kind: object, ref: true },
   ],
 }
-	at abstractor.core.constructs.Factory.create(Factory.java:132)
-	at abstractor.core.constructs.Factory.create(Factory.java:143)
+	at abstractor.core.constructs.Factory.create(Factory.java:134)
+	at abstractor.core.constructs.Factory.create(Factory.java:145)
 	at abstractor.core.Abstractor.addStructDesc(Abstractor.java:757)
 	at abstractor.core.Abstractor.lambda$addObjectInst$34(Abstractor.java:1087)
 	at abstractor.core.constructs.Factory.create(Factory.java:109)
@@ -270,8 +1166,8 @@ Caused by: java.lang.Exception: Error while processing field (CtFieldImpl) super
     { context: "object decl (CtClassImpl) Event @ src/main/java/org/apache/commons/configuration2/event/Event.java:36:14", index: -1, kind: object, ref: true },
   ],
 }
-	at abstractor.core.constructs.Factory.create(Factory.java:132)
-	at abstractor.core.constructs.Factory.create(Factory.java:139)
+	at abstractor.core.constructs.Factory.create(Factory.java:134)
+	at abstractor.core.constructs.Factory.create(Factory.java:141)
 	at abstractor.core.Abstractor.addField(Abstractor.java:796)
 	at abstractor.core.Abstractor.addField(Abstractor.java:791)
 	at abstractor.core.Abstractor.lambda$addStructDesc$23(Abstractor.java:768)
@@ -283,11 +1179,11 @@ Caused by: java.lang.Exception: Error while processing object instantiation org.
     { context: "object decl (CtClassImpl) Event @ src/main/java/org/apache/commons/configuration2/event/Event.java:36:14", index: -1, kind: object, ref: true },
   ],
 }
-	at abstractor.core.constructs.Factory.create(Factory.java:132)
+	at abstractor.core.constructs.Factory.create(Factory.java:134)
 	at abstractor.core.Abstractor.addObjectInst(Abstractor.java:1084)
 	at abstractor.core.Abstractor.addTypeDesc(Abstractor.java:1230)
 	at abstractor.core.Abstractor.lambda$addField$24(Abstractor.java:800)
-	at abstractor.core.constructs.Factory.lambda$create$0(Factory.java:139)
+	at abstractor.core.constructs.Factory.lambda$create$0(Factory.java:141)
 	at abstractor.core.constructs.Factory.create(Factory.java:109)
 	... 116 more
 Caused by: java.lang.Exception: Error while processing abstract (CtMethodImpl) getSuperType @ src/main/java/org/apache/commons/configuration2/event/EventType.java:81:33: {
@@ -296,8 +1192,8 @@ Caused by: java.lang.Exception: Error while processing abstract (CtMethodImpl) g
     { context: "object decl (CtClassImpl) Event @ src/main/java/org/apache/commons/configuration2/event/Event.java:36:14", index: -1, kind: object, ref: true },
   ],
 }
-	at abstractor.core.constructs.Factory.create(Factory.java:132)
-	at abstractor.core.constructs.Factory.create(Factory.java:147)
+	at abstractor.core.constructs.Factory.create(Factory.java:134)
+	at abstractor.core.constructs.Factory.create(Factory.java:149)
 	at abstractor.core.Abstractor.addAbstract(Abstractor.java:618)
 	at abstractor.core.Abstractor.synthesizeObjectInterface(Abstractor.java:1044)
 	at abstractor.core.Abstractor.lambda$addObjectInst$34(Abstractor.java:1088)
@@ -309,11 +1205,11 @@ Caused by: java.lang.Exception: Error while processing signature (CtMethodImpl) 
     { context: "object decl (CtClassImpl) Event @ src/main/java/org/apache/commons/configuration2/event/Event.java:36:14", index: -1, kind: object, ref: true },
   ],
 }
-	at abstractor.core.constructs.Factory.create(Factory.java:132)
-	at abstractor.core.constructs.Factory.create(Factory.java:147)
+	at abstractor.core.constructs.Factory.create(Factory.java:134)
+	at abstractor.core.constructs.Factory.create(Factory.java:149)
 	at abstractor.core.Abstractor.addSignature(Abstractor.java:644)
 	at abstractor.core.Abstractor.lambda$addAbstract$16(Abstractor.java:622)
-	at abstractor.core.constructs.Factory.lambda$create$1(Factory.java:147)
+	at abstractor.core.constructs.Factory.lambda$create$1(Factory.java:149)
 	at abstractor.core.constructs.Factory.create(Factory.java:109)
 	... 126 more
 Caused by: java.lang.Exception: Error while processing parameter <unnamed> org.apache.commons.configuration2.event.EventType @ src/main/java/org/apache/commons/configuration2/event/EventType.java:81:12<? @ src/main/java/org/apache/commons/configuration2/event/EventType.java:81:22>: {
@@ -322,11 +1218,11 @@ Caused by: java.lang.Exception: Error while processing parameter <unnamed> org.a
     { context: "object decl (CtClassImpl) Event @ src/main/java/org/apache/commons/configuration2/event/Event.java:36:14", index: -1, kind: object, ref: true },
   ],
 }
-	at abstractor.core.constructs.Factory.create(Factory.java:132)
-	at abstractor.core.constructs.Factory.create(Factory.java:147)
+	at abstractor.core.constructs.Factory.create(Factory.java:134)
+	at abstractor.core.constructs.Factory.create(Factory.java:149)
 	at abstractor.core.Abstractor.addArgument(Abstractor.java:742)
 	at abstractor.core.Abstractor.lambda$addSignature$17(Abstractor.java:655)
-	at abstractor.core.constructs.Factory.lambda$create$1(Factory.java:147)
+	at abstractor.core.constructs.Factory.lambda$create$1(Factory.java:149)
 	at abstractor.core.constructs.Factory.create(Factory.java:109)
 	... 131 more
 Caused by: java.lang.Exception: Error while processing object instantiation org.apache.commons.configuration2.event.EventType @ src/main/java/org/apache/commons/configuration2/event/EventType.java:81:12<? @ src/main/java/org/apache/commons/configuration2/event/EventType.java:81:22>: {
@@ -335,22 +1231,22 @@ Caused by: java.lang.Exception: Error while processing object instantiation org.
     { context: "object decl (CtClassImpl) Event @ src/main/java/org/apache/commons/configuration2/event/Event.java:36:14", index: -1, kind: object, ref: true },
   ],
 }
-	at abstractor.core.constructs.Factory.create(Factory.java:132)
+	at abstractor.core.constructs.Factory.create(Factory.java:134)
 	at abstractor.core.Abstractor.addObjectInst(Abstractor.java:1084)
 	at abstractor.core.Abstractor.addTypeDesc(Abstractor.java:1230)
 	at abstractor.core.Abstractor.lambda$addArgument$22(Abstractor.java:745)
-	at abstractor.core.constructs.Factory.lambda$create$1(Factory.java:147)
+	at abstractor.core.constructs.Factory.lambda$create$1(Factory.java:149)
 	at abstractor.core.constructs.Factory.create(Factory.java:109)
 	... 136 more
 Caused by: java.lang.Exception: Error while processing constructor (CtConstructorImpl) <init> @ src/main/java/org/apache/commons/configuration2/event/EventType.java:69:12: {
   elem: "(CtConstructorImpl) <init> @ src/main/java/org/apache/commons/configuration2/event/EventType.java:69:12",
 }
-	at abstractor.core.constructs.Factory.create(Factory.java:132)
-	at abstractor.core.constructs.Factory.create(Factory.java:139)
+	at abstractor.core.constructs.Factory.create(Factory.java:134)
+	at abstractor.core.constructs.Factory.create(Factory.java:141)
 	at abstractor.core.Abstractor.addMethodDeclForConstructor(Abstractor.java:680)
 	at abstractor.core.Abstractor.addMethodInstForObjectInst(Abstractor.java:394)
 	at abstractor.core.Abstractor.lambda$addObjectInst$35(Abstractor.java:1105)
-	at abstractor.core.constructs.Factory.create(Factory.java:127)
+	at abstractor.core.constructs.Factory.create(Factory.java:129)
 	... 141 more
 Caused by: abstractor.core.AbstractorException: Expected the object reference is resolved for {
   context: "object decl (CtClassImpl) EventType @ src/main/java/org/apache/commons/configuration2/event/EventType.java:47:14",
@@ -360,6 +1256,6 @@ Caused by: abstractor.core.AbstractorException: Expected the object reference is
 }
 	at abstractor.core.constructs.Ref.mustGetResolved(Ref.java:38)
 	at abstractor.core.Abstractor.lambda$addMethodDeclForConstructor$18(Abstractor.java:683)
-	at abstractor.core.constructs.Factory.lambda$create$0(Factory.java:139)
+	at abstractor.core.constructs.Factory.lambda$create$0(Factory.java:141)
 	at abstractor.core.constructs.Factory.create(Factory.java:109)
 	... 146 more

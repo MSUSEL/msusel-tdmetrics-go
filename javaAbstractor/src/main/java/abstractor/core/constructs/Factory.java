@@ -11,7 +11,8 @@ import abstractor.core.require.Require;
 import abstractor.core.tools.ElementKey;
 
 public class Factory<T extends Construct> implements Jsonable {
-    static private final boolean logCreate = false;
+    static private final boolean logCreate   = false;
+    static private final boolean logResolved = false;
 
     private final ConstructKind conKind;
 
@@ -120,10 +121,12 @@ public class Factory<T extends Construct> implements Jsonable {
             final T other = this.getExisting(newCon);
             if (other != null) {
                 ref.setResolved(other);
+                if (logResolved) log.log("Resolved with match " + title);
                 if (finisher != null) finisher.finish(ref, other);
             } else {
                 Require.require(this.conSet.add(newCon));
                 ref.setResolved(newCon);
+                if (logResolved) log.log("Resolved as new " + title);
                 if (finisher != null) finisher.finish(ref, newCon);
             }
 
