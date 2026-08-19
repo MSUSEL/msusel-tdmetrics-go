@@ -451,8 +451,12 @@ public class Abstractor {
         // If neither the class nor the method are generic, no MethodInst is useful.
         final List<Ref<TypeParam>> classParams  = this.addTypeParams(declClass);
         final List<Ref<TypeParam>> methodParams = new ArrayList<>();
-        for (CtTypeParameter tp : m.getFormalCtTypeParameters())
-            methodParams.add(this.addTypeParam(tp));
+        for (CtTypeParameter tp : m.getFormalCtTypeParameters()) {
+            Ref<TypeParam> tpRef = this.addTypeParam(tp);
+            Require.notNull(tpRef, "type parameter for " + SpoonUtils.describeElem(tp) +
+                " in method " + SpoonUtils.describeElem(m) + " may not be null");
+            methodParams.add(tpRef);
+        }
         if (classParams.isEmpty() && methodParams.isEmpty()) return this.addDeclaration(m);
 
         // Spoon didn't hand us enough info to bind every param — fall back.
@@ -534,8 +538,12 @@ public class Abstractor {
 
         final List<Ref<TypeParam>> classParams = this.addTypeParams(declClass);
         final List<Ref<TypeParam>> ctorParams  = new ArrayList<>();
-        for (CtTypeParameter tp : ctor.getFormalCtTypeParameters())
-            ctorParams.add(this.addTypeParam(tp));
+        for (CtTypeParameter tp : ctor.getFormalCtTypeParameters()) {
+            Ref<TypeParam> tpRef = this.addTypeParam(tp);
+            Require.notNull(tpRef, "type parameter for " + SpoonUtils.describeElem(tp) +
+                " in constructor " + SpoonUtils.describeElem(ctor) + " may not be null");
+            ctorParams.add(tpRef);
+        }
         if (classParams.isEmpty() && ctorParams.isEmpty()) return this.addMethodDeclForConstructor(ctor);
 
         if (!classParams.isEmpty() && classArgs.size() != classParams.size()) return this.addMethodDeclForConstructor(ctor);
@@ -913,7 +921,11 @@ public class Abstractor {
 
     public ArrayList<Ref<? extends TypeDesc>> addTypeArguments(List<CtTypeReference<?>> trs) throws Exception {
         final ArrayList<Ref<? extends TypeDesc>> result = new ArrayList<>(trs.size());
-        for (CtTypeReference<?> tr : trs) result.add(this.addTypeDesc(tr));
+        for (CtTypeReference<?> tr : trs) {
+            Ref<? extends TypeDesc> trRef = this.addTypeDesc(tr);
+            if (trRef == null) trRef = this.proj.baker.anyDesc();
+            result.add(trRef);
+        }
         return result;
     }
 
@@ -925,7 +937,9 @@ public class Abstractor {
 
         if (elem instanceof CtFormalTypeDeclarer td) {
             for (CtTypeParameter tp : td.getFormalCtTypeParameters()) {
-                Ref<TypeParam> tr = this.addTypeParam(tp); 
+                Ref<TypeParam> tr = this.addTypeParam(tp);
+                Require.notNull(tr, "type parameter may not be null for " +
+                    SpoonUtils.describeElem(tp) + " in " + SpoonUtils.describeElem(elem));
                 result.remove(tr); // remove any prior one
                 result.add(tr);
             }
@@ -1339,7 +1353,6 @@ public class Abstractor {
      */
     public void performAbstraction() throws Exception {
         this.log.measure("process pending packages",     () -> this.processPendingPackages());
-        this.log.measure("process deferred finishes",    () -> this.processDeferredFinishes());
         this.log.measure("short validation",             () -> this.shortValidate());
         this.log.measure("consolidate constructs",       () -> this.consolidateCons());
         this.log.measure("connect nests",                () -> this.connectNests());
@@ -1354,15 +1367,7 @@ public class Abstractor {
             this.pendingPackages.remove(pkg);
             this.processPackage(pkg);
             this.processPendingMetrics();
-        }
-    }
-
-    private void processDeferredFinishes() throws Exception {
-        boolean hasMore = true;
-        while (hasMore) {
-            hasMore = false;
-            for (Factory<?> f : this.proj.factories)
-                hasMore = f.runDeferredFinishes(this.log) | hasMore;
+            this.processDeferredFinishes();
         }
     }
 
@@ -1416,6 +1421,15 @@ public class Abstractor {
                     this.proj.metrics.remove(this.log, met);
                 }
             }
+        }
+    }
+
+    private void processDeferredFinishes() throws Exception {
+        boolean hasMore = true;
+        while (hasMore) {
+            hasMore = false;
+            for (Factory<?> f : this.proj.factories)
+                hasMore = f.runDeferredFinishes(this.log) | hasMore;
         }
     }
 

@@ -70,7 +70,6 @@ public class Validator {
             if (!ref.isResolved()) {
                 this.error("0000", "Expected all references to be resolved but " +
                     this.conToString(ref) + " was not resolved.");
-                return;
             }
         }
     }

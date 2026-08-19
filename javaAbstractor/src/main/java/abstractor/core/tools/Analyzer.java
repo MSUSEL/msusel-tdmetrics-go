@@ -457,7 +457,8 @@ public class Analyzer {
     private void addAssignmentUsage(CtAssignment<?,?> as) throws Exception {
         if (logUsage) this.log.log("addUsage.CtAssignment: " + SpoonUtils.describeElem(as));
         final CtTypeReference<?> tr = as.getType();
-        if (!SpoonUtils.isVoid(tr)) this.addWrite(this.abs.addTypeDesc(tr));
+        if (tr == null) this.addWrite(this.abs.proj.baker.anyDesc());
+        else if (!SpoonUtils.isVoid(tr)) this.addWrite(this.abs.addTypeDesc(tr));
     }
 
     private void addTypeReferenceUsage(CtTypeReference<?> tr) throws Exception {
