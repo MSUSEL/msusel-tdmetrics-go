@@ -1,7 +1,7 @@
 # cmd: java -jar /Users/grantnelson/go/src/github.com/MSUSEL/msusel-tdmetrics-go/javaAbstractor/target/abstractor-0.1-jar-with-dependencies.jar -i /Users/grantnelson/go/src/github.com/apache/commons-configuration/ -o /Users/grantnelson/go/src/github.com/MSUSEL/msusel-tdmetrics-go/tdd/abstractions/commons-configuration.json -v
 # cwd: /Users/grantnelson/go/src/github.com/MSUSEL/msusel-tdmetrics-go/tdd
 # repo: /Users/grantnelson/go/src/github.com/apache/commons-configuration @ 15b4031ba94a60f20b854e6ce2c7964d77086387
-# started: 2026-08-19T17:53:36.343913+00:00
+# started: 2026-08-19T18:14:39.565979+00:00
 # timeout_min: 10
 # ---
 Reading /Users/grantnelson/go/src/github.com/apache/commons-configuration/
@@ -31,18 +31,18 @@ Init pending package org.apache.commons.configuration2.tree
 Init pending package org.apache.commons.configuration2.tree.xpath
 Init pending package org.apache.commons.configuration2.web
 [34mStarting process pending packages...[0m
-[34mFinished process pending packages (0.057834s)[0m
+[34mFinished process pending packages (0.051002s)[0m
 [34mStarting process deferred finishes...[0m
   Pending package java.util
   Pending package java.lang
   Pending package org.apache.commons.lang3.text
   Pending package java.lang.invoke
   Pending package java.util.concurrent.atomic
-  [31mType description did not have a declaration but was not labelled as anonymous: (CtTypeReferenceImpl) org.apache.commons.logging.Log @ src/main/java/org/apache/commons/configuration2/io/ConfigurationLogger.java:57:19
+  [33mType description did not have a declaration but was not labelled as anonymous: (CtTypeReferenceImpl) org.apache.commons.logging.Log @ src/main/java/org/apache/commons/configuration2/io/ConfigurationLogger.java:57:19
   The type likely was an external dependency or some other type not handled by the abstractor so using anyDesc.[0m
   Pending package java.math
   Pending package org.xml.sax
-  [31mType description did not have a declaration but was not labelled as anonymous: (CtTypeReferenceImpl) org.apache.commons.logging.Log @ src/main/java/org/apache/commons/configuration2/ConfigurationUtils.java:92:26
+  [33mType description did not have a declaration but was not labelled as anonymous: (CtTypeReferenceImpl) org.apache.commons.logging.Log @ src/main/java/org/apache/commons/configuration2/ConfigurationUtils.java:92:26
   The type likely was an external dependency or some other type not handled by the abstractor so using anyDesc.[0m
   Pending package javax.sql
   Pending package java.util.concurrent
@@ -53,74 +53,74 @@ Init pending package org.apache.commons.configuration2.web
   Pending package org.apache.commons.lang3.text.translate
   Pending package java.util.regex
   Pending package java.net
-  [31mType description did not have a declaration but was not labelled as anonymous: (CtTypeReferenceImpl) org.apache.commons.logging.Log @ src/main/java/org/apache/commons/configuration2/SystemConfiguration.java:37:20
+  [33mType description did not have a declaration but was not labelled as anonymous: (CtTypeReferenceImpl) org.apache.commons.logging.Log @ src/main/java/org/apache/commons/configuration2/SystemConfiguration.java:37:20
   The type likely was an external dependency or some other type not handled by the abstractor so using anyDesc.[0m
   Pending package javax.xml.parsers
   Pending package org.w3c.dom
-  [31mType description did not have a declaration but was not labelled as anonymous: (CtTypeReferenceImpl) org.springframework.core.io.Resource
+  [33mType description did not have a declaration but was not labelled as anonymous: (CtTypeReferenceImpl) org.springframework.core.io.Resource
   The type likely was an external dependency or some other type not handled by the abstractor so using anyDesc.[0m
-  [31mType description did not have a declaration but was not labelled as anonymous: (CtTypeReferenceImpl) org.springframework.core.env.EnumerablePropertySource @ src/main/java/org/apache/commons/configuration2/spring/ConfigurationPropertySource.java:30:50
+  [33mType description did not have a declaration but was not labelled as anonymous: (CtTypeReferenceImpl) org.springframework.core.env.EnumerablePropertySource @ src/main/java/org/apache/commons/configuration2/spring/ConfigurationPropertySource.java:30:50
   The type likely was an external dependency or some other type not handled by the abstractor so using anyDesc.[0m
   Pending package java.applet
-  [31mType description did not have a declaration but was not labelled as anonymous: (CtTypeReferenceImpl) javax.servlet.ServletConfig @ src/main/java/org/apache/commons/configuration2/web/ServletConfiguration.java:39:15
+  [33mType description did not have a declaration but was not labelled as anonymous: (CtTypeReferenceImpl) javax.servlet.ServletConfig @ src/main/java/org/apache/commons/configuration2/web/ServletConfiguration.java:39:15
   The type likely was an external dependency or some other type not handled by the abstractor so using anyDesc.[0m
-  [31mType description did not have a declaration but was not labelled as anonymous: (CtTypeReferenceImpl) javax.servlet.ServletContext @ src/main/java/org/apache/commons/configuration2/web/ServletContextConfiguration.java:39:15
+  [33mType description did not have a declaration but was not labelled as anonymous: (CtTypeReferenceImpl) javax.servlet.ServletContext @ src/main/java/org/apache/commons/configuration2/web/ServletContextConfiguration.java:39:15
   The type likely was an external dependency or some other type not handled by the abstractor so using anyDesc.[0m
-  [31mType description did not have a declaration but was not labelled as anonymous: (CtTypeReferenceImpl) javax.servlet.FilterConfig @ src/main/java/org/apache/commons/configuration2/web/ServletFilterConfiguration.java:38:15
+  [33mType description did not have a declaration but was not labelled as anonymous: (CtTypeReferenceImpl) javax.servlet.FilterConfig @ src/main/java/org/apache/commons/configuration2/web/ServletFilterConfiguration.java:38:15
   The type likely was an external dependency or some other type not handled by the abstractor so using anyDesc.[0m
-  [31mType description did not have a declaration but was not labelled as anonymous: (CtTypeReferenceImpl) javax.servlet.ServletRequest @ src/main/java/org/apache/commons/configuration2/web/ServletRequestConfiguration.java:39:15
+  [33mType description did not have a declaration but was not labelled as anonymous: (CtTypeReferenceImpl) javax.servlet.ServletRequest @ src/main/java/org/apache/commons/configuration2/web/ServletRequestConfiguration.java:39:15
   The type likely was an external dependency or some other type not handled by the abstractor so using anyDesc.[0m
-  [31mType description did not have a declaration but was not labelled as anonymous: (CtTypeReferenceImpl) org.apache.commons.logging.Log @ src/main/java/org/apache/commons/configuration2/builder/AutoSaveListener.java:52:19
+  [33mType description did not have a declaration but was not labelled as anonymous: (CtTypeReferenceImpl) org.apache.commons.logging.Log @ src/main/java/org/apache/commons/configuration2/builder/AutoSaveListener.java:52:19
   The type likely was an external dependency or some other type not handled by the abstractor so using anyDesc.[0m
-  [31mType description did not have a declaration but was not labelled as anonymous: (CtTypeReferenceImpl) org.apache.commons.beanutils.BeanUtilsBean @ src/main/java/org/apache/commons/configuration2/beanutils/BeanHelper.java:89:26
+  [33mType description did not have a declaration but was not labelled as anonymous: (CtTypeReferenceImpl) org.apache.commons.beanutils.BeanUtilsBean @ src/main/java/org/apache/commons/configuration2/beanutils/BeanHelper.java:89:26
   The type likely was an external dependency or some other type not handled by the abstractor so using anyDesc.[0m
-  [31mType description did not have a declaration but was not labelled as anonymous: (CtTypeReferenceImpl) org.apache.commons.logging.Log @ src/main/java/org/apache/commons/configuration2/beanutils/ConfigurationDynaBean.java:62:26
+  [33mType description did not have a declaration but was not labelled as anonymous: (CtTypeReferenceImpl) org.apache.commons.logging.Log @ src/main/java/org/apache/commons/configuration2/beanutils/ConfigurationDynaBean.java:62:26
   The type likely was an external dependency or some other type not handled by the abstractor so using anyDesc.[0m
-  [31mType description did not have a declaration but was not labelled as anonymous: (CtTypeReferenceImpl) org.apache.commons.logging.Log @ src/main/java/org/apache/commons/configuration2/beanutils/ConfigurationDynaClass.java:43:26
+  [33mType description did not have a declaration but was not labelled as anonymous: (CtTypeReferenceImpl) org.apache.commons.logging.Log @ src/main/java/org/apache/commons/configuration2/beanutils/ConfigurationDynaClass.java:43:26
   The type likely was an external dependency or some other type not handled by the abstractor so using anyDesc.[0m
-  [31mType description did not have a declaration but was not labelled as anonymous: (CtTypeReferenceImpl) org.apache.commons.jxpath.ri.model.NodePointer @ src/main/java/org/apache/commons/configuration2/tree/xpath/ConfigurationAttributePointer.java:37:48
+  [33mType description did not have a declaration but was not labelled as anonymous: (CtTypeReferenceImpl) org.apache.commons.jxpath.ri.model.NodePointer @ src/main/java/org/apache/commons/configuration2/tree/xpath/ConfigurationAttributePointer.java:37:48
   The type likely was an external dependency or some other type not handled by the abstractor so using anyDesc.[0m
-  [31mType description did not have a declaration but was not labelled as anonymous: (CtTypeReferenceImpl) org.apache.commons.jxpath.ri.model.NodePointer @ src/main/java/org/apache/commons/configuration2/tree/xpath/ConfigurationNodePointer.java:41:43
+  [33mType description did not have a declaration but was not labelled as anonymous: (CtTypeReferenceImpl) org.apache.commons.jxpath.ri.model.NodePointer @ src/main/java/org/apache/commons/configuration2/tree/xpath/ConfigurationNodePointer.java:41:43
   The type likely was an external dependency or some other type not handled by the abstractor so using anyDesc.[0m
   Pending package java.lang
-  [31mType description did not have a declaration but was not labelled as anonymous: (CtTypeReferenceImpl) org.apache.commons.logging.Log @ src/main/java/org/apache/commons/configuration2/io/FileLocatorUtils.java:94:26
+  [33mType description did not have a declaration but was not labelled as anonymous: (CtTypeReferenceImpl) org.apache.commons.logging.Log @ src/main/java/org/apache/commons/configuration2/io/FileLocatorUtils.java:94:26
   The type likely was an external dependency or some other type not handled by the abstractor so using anyDesc.[0m
   Pending package java.nio.charset
-  [31mType description did not have a declaration but was not labelled as anonymous: (CtTypeReferenceImpl) org.apache.commons.logging.Log @ src/main/java/org/apache/commons/configuration2/io/VFSFileSystem.java:55:19
+  [33mType description did not have a declaration but was not labelled as anonymous: (CtTypeReferenceImpl) org.apache.commons.logging.Log @ src/main/java/org/apache/commons/configuration2/io/VFSFileSystem.java:55:19
   The type likely was an external dependency or some other type not handled by the abstractor so using anyDesc.[0m
-  [31mType description did not have a declaration but was not labelled as anonymous: (CtTypeReferenceImpl) org.apache.commons.beanutils.DynaClass @ src/main/java/org/apache/commons/configuration2/builder/combined/MultiWrapDynaBean.java:50:19
+  [33mType description did not have a declaration but was not labelled as anonymous: (CtTypeReferenceImpl) org.apache.commons.beanutils.DynaClass @ src/main/java/org/apache/commons/configuration2/builder/combined/MultiWrapDynaBean.java:50:19
   The type likely was an external dependency or some other type not handled by the abstractor so using anyDesc.[0m
-  [31mType description did not have a declaration but was not labelled as anonymous: (CtTypeReferenceImpl) org.apache.commons.beanutils.DynaBean @ src/main/java/org/apache/commons/configuration2/builder/combined/MultiWrapDynaBean.java:53:31
+  [33mType description did not have a declaration but was not labelled as anonymous: (CtTypeReferenceImpl) org.apache.commons.beanutils.DynaBean @ src/main/java/org/apache/commons/configuration2/builder/combined/MultiWrapDynaBean.java:53:31
   The type likely was an external dependency or some other type not handled by the abstractor so using anyDesc.[0m
-  [31mType description did not have a declaration but was not labelled as anonymous: (CtTypeReferenceImpl) org.apache.commons.beanutils.DynaProperty
+  [33mType description did not have a declaration but was not labelled as anonymous: (CtTypeReferenceImpl) org.apache.commons.beanutils.DynaProperty
   The type likely was an external dependency or some other type not handled by the abstractor so using anyDesc.[0m
-  [31mType description did not have a declaration but was not labelled as anonymous: (CtTypeReferenceImpl) org.apache.commons.beanutils.DynaProperty @ src/main/java/org/apache/commons/configuration2/builder/combined/MultiWrapDynaClass.java:43:30
+  [33mType description did not have a declaration but was not labelled as anonymous: (CtTypeReferenceImpl) org.apache.commons.beanutils.DynaProperty @ src/main/java/org/apache/commons/configuration2/builder/combined/MultiWrapDynaClass.java:43:30
   The type likely was an external dependency or some other type not handled by the abstractor so using anyDesc.[0m
-  [31mType description did not have a declaration but was not labelled as anonymous: (CtTypeReferenceImpl) org.apache.commons.beanutils.DynaProperty @ src/main/java/org/apache/commons/configuration2/builder/combined/MultiWrapDynaClass.java:46:31
+  [33mType description did not have a declaration but was not labelled as anonymous: (CtTypeReferenceImpl) org.apache.commons.beanutils.DynaProperty @ src/main/java/org/apache/commons/configuration2/builder/combined/MultiWrapDynaClass.java:46:31
   The type likely was an external dependency or some other type not handled by the abstractor so using anyDesc.[0m
   Pending package java.util.concurrent.locks
-  [31mType description did not have a declaration but was not labelled as anonymous: (CtTypeReferenceImpl) org.apache.commons.logging.Log @ src/main/java/org/apache/commons/configuration2/reloading/ManagedReloadingDetector.java:34:19
+  [33mType description did not have a declaration but was not labelled as anonymous: (CtTypeReferenceImpl) org.apache.commons.logging.Log @ src/main/java/org/apache/commons/configuration2/reloading/ManagedReloadingDetector.java:34:19
   The type likely was an external dependency or some other type not handled by the abstractor so using anyDesc.[0m
-  [31mType description did not have a declaration but was not labelled as anonymous: (CtTypeReferenceImpl) org.apache.commons.logging.Log @ src/main/java/org/apache/commons/configuration2/reloading/VFSFileHandlerReloadingDetector.java:54:19
+  [33mType description did not have a declaration but was not labelled as anonymous: (CtTypeReferenceImpl) org.apache.commons.logging.Log @ src/main/java/org/apache/commons/configuration2/reloading/VFSFileHandlerReloadingDetector.java:54:19
   The type likely was an external dependency or some other type not handled by the abstractor so using anyDesc.[0m
-  [31mType description did not have a declaration but was not labelled as anonymous: (CtTypeReferenceImpl) org.apache.commons.logging.Log @ src/main/java/org/apache/commons/configuration2/interpol/ConstantLookup.java:63:19
+  [33mType description did not have a declaration but was not labelled as anonymous: (CtTypeReferenceImpl) org.apache.commons.logging.Log @ src/main/java/org/apache/commons/configuration2/interpol/ConstantLookup.java:63:19
   The type likely was an external dependency or some other type not handled by the abstractor so using anyDesc.[0m
-  [31mType description did not have a declaration but was not labelled as anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl2.JexlEngine @ src/main/java/org/apache/commons/configuration2/interpol/ExprLookup.java:88:19
+  [33mType description did not have a declaration but was not labelled as anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl2.JexlEngine @ src/main/java/org/apache/commons/configuration2/interpol/ExprLookup.java:88:19
   The type likely was an external dependency or some other type not handled by the abstractor so using anyDesc.[0m
-  [31mType description did not have a declaration but was not labelled as anonymous: (CtTypeReferenceImpl) org.apache.xml.resolver.Catalog @ src/main/java/org/apache/commons/configuration2/resolver/CatalogResolver.java:282:24
+  [33mType description did not have a declaration but was not labelled as anonymous: (CtTypeReferenceImpl) org.apache.xml.resolver.Catalog @ src/main/java/org/apache/commons/configuration2/resolver/CatalogResolver.java:282:24
   The type likely was an external dependency or some other type not handled by the abstractor so using anyDesc.[0m
-  [31mType description did not have a declaration but was not labelled as anonymous: (CtTypeReferenceImpl) org.apache.xml.resolver.CatalogManager @ src/main/java/org/apache/commons/configuration2/resolver/CatalogResolver.java:279:48
+  [33mType description did not have a declaration but was not labelled as anonymous: (CtTypeReferenceImpl) org.apache.xml.resolver.CatalogManager @ src/main/java/org/apache/commons/configuration2/resolver/CatalogResolver.java:279:48
   The type likely was an external dependency or some other type not handled by the abstractor so using anyDesc.[0m
-  [31mType description did not have a declaration but was not labelled as anonymous: (CtTypeReferenceImpl) org.apache.xml.resolver.tools.CatalogResolver @ src/main/java/org/apache/commons/configuration2/resolver/CatalogResolver.java:77:13
+  [33mType description did not have a declaration but was not labelled as anonymous: (CtTypeReferenceImpl) org.apache.xml.resolver.tools.CatalogResolver @ src/main/java/org/apache/commons/configuration2/resolver/CatalogResolver.java:77:13
   The type likely was an external dependency or some other type not handled by the abstractor so using anyDesc.[0m
   getting parent type for (CtInterfaceImpl) IOFactory @ src/main/java/org/apache/commons/configuration2/PropertiesConfiguration.java:1228:22
-  [31mType description did not have a declaration but was not labelled as anonymous: (CtTypeReferenceImpl) org.apache.commons.logging.Log @ src/main/java/org/apache/commons/configuration2/io/ConfigurationLogger.java:102:25
+  [33mType description did not have a declaration but was not labelled as anonymous: (CtTypeReferenceImpl) org.apache.commons.logging.Log @ src/main/java/org/apache/commons/configuration2/io/ConfigurationLogger.java:102:25
   The type likely was an external dependency or some other type not handled by the abstractor so using anyDesc.[0m
-  [31mType description did not have a declaration but was not labelled as anonymous: (CtTypeReferenceImpl) org.apache.commons.logging.Log @ src/main/java/org/apache/commons/configuration2/io/ConfigurationLogger.java:205:5
+  [33mType description did not have a declaration but was not labelled as anonymous: (CtTypeReferenceImpl) org.apache.commons.logging.Log @ src/main/java/org/apache/commons/configuration2/io/ConfigurationLogger.java:205:5
   The type likely was an external dependency or some other type not handled by the abstractor so using anyDesc.[0m
-  [31mType description did not have a declaration but was not labelled as anonymous: (CtTypeReferenceImpl) org.apache.commons.logging.Log @ src/main/java/org/apache/commons/configuration2/io/ConfigurationLogger.java:235:20
+  [33mType description did not have a declaration but was not labelled as anonymous: (CtTypeReferenceImpl) org.apache.commons.logging.Log @ src/main/java/org/apache/commons/configuration2/io/ConfigurationLogger.java:235:20
   The type likely was an external dependency or some other type not handled by the abstractor so using anyDesc.[0m
-  [31mType description did not have a declaration but was not labelled as anonymous: (CtTypeReferenceImpl) org.apache.commons.logging.Log @ src/main/java/org/apache/commons/configuration2/io/ConfigurationLogger.java:218:20
+  [33mType description did not have a declaration but was not labelled as anonymous: (CtTypeReferenceImpl) org.apache.commons.logging.Log @ src/main/java/org/apache/commons/configuration2/io/ConfigurationLogger.java:218:20
   The type likely was an external dependency or some other type not handled by the abstractor so using anyDesc.[0m
   [34mskipping default constructor: org.apache.commons.configuration2.sync.LockMode()[0m
   [34mskipping default constructor: org.apache.commons.configuration2.tree.ConfigurationNodeVisitorAdapter()[0m
@@ -143,44 +143,44 @@ Init pending package org.apache.commons.configuration2.web
   Pending package org.apache.commons.lang3.mutable
   Pending package javax.xml.transform
   Pending package org.xml.sax.helpers
-  [31mType description did not have a declaration but was not labelled as anonymous: (CtTypeReferenceImpl) org.yaml.snakeyaml.LoaderOptions @ src/main/java/org/apache/commons/configuration2/YAMLConfiguration.java:78:33
+  [33mType description did not have a declaration but was not labelled as anonymous: (CtTypeReferenceImpl) org.yaml.snakeyaml.LoaderOptions @ src/main/java/org/apache/commons/configuration2/YAMLConfiguration.java:78:33
   The type likely was an external dependency or some other type not handled by the abstractor so using anyDesc.[0m
-  [31mType description did not have a declaration but was not labelled as anonymous: (CtTypeReferenceImpl) org.yaml.snakeyaml.LoaderOptions @ src/main/java/org/apache/commons/configuration2/YAMLConfiguration.java:130:38
+  [33mType description did not have a declaration but was not labelled as anonymous: (CtTypeReferenceImpl) org.yaml.snakeyaml.LoaderOptions @ src/main/java/org/apache/commons/configuration2/YAMLConfiguration.java:130:38
   The type likely was an external dependency or some other type not handled by the abstractor so using anyDesc.[0m
-  [31mType description did not have a declaration but was not labelled as anonymous: (CtTypeReferenceImpl) org.yaml.snakeyaml.DumperOptions @ src/main/java/org/apache/commons/configuration2/YAMLConfiguration.java:101:34
+  [33mType description did not have a declaration but was not labelled as anonymous: (CtTypeReferenceImpl) org.yaml.snakeyaml.DumperOptions @ src/main/java/org/apache/commons/configuration2/YAMLConfiguration.java:101:34
   The type likely was an external dependency or some other type not handled by the abstractor so using anyDesc.[0m
-  [31mType description did not have a declaration but was not labelled as anonymous: (CtTypeReferenceImpl) org.springframework.core.io.Resource
+  [33mType description did not have a declaration but was not labelled as anonymous: (CtTypeReferenceImpl) org.springframework.core.io.Resource
   The type likely was an external dependency or some other type not handled by the abstractor so using anyDesc.[0m
-  [31mType description did not have a declaration but was not labelled as anonymous: (CtTypeReferenceImpl) org.springframework.core.io.Resource
+  [33mType description did not have a declaration but was not labelled as anonymous: (CtTypeReferenceImpl) org.springframework.core.io.Resource
   The type likely was an external dependency or some other type not handled by the abstractor so using anyDesc.[0m
-  [31mUnhandled super-interface (null) for {
+  [33mUnhandled null super-interface for {
     context: "object decl (CtClassImpl) ConfigurationPropertiesFactoryBean @ src/main/java/org/apache/commons/configuration2/spring/ConfigurationPropertiesFactoryBean.java:47:14",
     index: -1,
     kind: object,
     ref: true,
   }[0m
-  [31mUnhandled super-interface (null) for {
+  [33mUnhandled null super-interface for {
     context: "object decl (CtClassImpl) ConfigurationPropertiesFactoryBean @ src/main/java/org/apache/commons/configuration2/spring/ConfigurationPropertiesFactoryBean.java:47:14",
     index: -1,
     kind: object,
     ref: true,
   }[0m
   [34mskipping default constructor: org.apache.commons.configuration2.web.BaseWebConfiguration()[0m
-  [31mType description did not have a declaration but was not labelled as anonymous: (CtTypeReferenceImpl) javax.servlet.Servlet @ src/main/java/org/apache/commons/configuration2/web/ServletConfiguration.java:47:33
+  [33mType description did not have a declaration but was not labelled as anonymous: (CtTypeReferenceImpl) javax.servlet.Servlet @ src/main/java/org/apache/commons/configuration2/web/ServletConfiguration.java:47:33
   The type likely was an external dependency or some other type not handled by the abstractor so using anyDesc.[0m
-  [31mType description did not have a declaration but was not labelled as anonymous: (CtTypeReferenceImpl) javax.servlet.ServletConfig @ src/main/java/org/apache/commons/configuration2/web/ServletConfiguration.java:57:33
+  [33mType description did not have a declaration but was not labelled as anonymous: (CtTypeReferenceImpl) javax.servlet.ServletConfig @ src/main/java/org/apache/commons/configuration2/web/ServletConfiguration.java:57:33
   The type likely was an external dependency or some other type not handled by the abstractor so using anyDesc.[0m
-  [31mType description did not have a declaration but was not labelled as anonymous: (CtTypeReferenceImpl) javax.servlet.Servlet @ src/main/java/org/apache/commons/configuration2/web/ServletContextConfiguration.java:47:40
+  [33mType description did not have a declaration but was not labelled as anonymous: (CtTypeReferenceImpl) javax.servlet.Servlet @ src/main/java/org/apache/commons/configuration2/web/ServletContextConfiguration.java:47:40
   The type likely was an external dependency or some other type not handled by the abstractor so using anyDesc.[0m
-  [31mType description did not have a declaration but was not labelled as anonymous: (CtTypeReferenceImpl) javax.servlet.ServletContext @ src/main/java/org/apache/commons/configuration2/web/ServletContextConfiguration.java:58:40
+  [33mType description did not have a declaration but was not labelled as anonymous: (CtTypeReferenceImpl) javax.servlet.ServletContext @ src/main/java/org/apache/commons/configuration2/web/ServletContextConfiguration.java:58:40
   The type likely was an external dependency or some other type not handled by the abstractor so using anyDesc.[0m
-  [31mType description did not have a declaration but was not labelled as anonymous: (CtTypeReferenceImpl) javax.servlet.FilterConfig @ src/main/java/org/apache/commons/configuration2/web/ServletFilterConfiguration.java:45:39
+  [33mType description did not have a declaration but was not labelled as anonymous: (CtTypeReferenceImpl) javax.servlet.FilterConfig @ src/main/java/org/apache/commons/configuration2/web/ServletFilterConfiguration.java:45:39
   The type likely was an external dependency or some other type not handled by the abstractor so using anyDesc.[0m
-  [31mType description did not have a declaration but was not labelled as anonymous: (CtTypeReferenceImpl) javax.servlet.ServletRequest @ src/main/java/org/apache/commons/configuration2/web/ServletRequestConfiguration.java:46:40
+  [33mType description did not have a declaration but was not labelled as anonymous: (CtTypeReferenceImpl) javax.servlet.ServletRequest @ src/main/java/org/apache/commons/configuration2/web/ServletRequestConfiguration.java:46:40
   The type likely was an external dependency or some other type not handled by the abstractor so using anyDesc.[0m
-  [31mType description did not have a declaration but was not labelled as anonymous: (CtTypeReferenceImpl) org.apache.commons.beanutils.BeanUtilsBean @ src/main/java/org/apache/commons/configuration2/beanutils/BeanHelper.java:628:20
+  [33mType description did not have a declaration but was not labelled as anonymous: (CtTypeReferenceImpl) org.apache.commons.beanutils.BeanUtilsBean @ src/main/java/org/apache/commons/configuration2/beanutils/BeanHelper.java:628:20
   The type likely was an external dependency or some other type not handled by the abstractor so using anyDesc.[0m
-  [31mType description did not have a declaration but was not labelled as anonymous: (CtTypeReferenceImpl) org.apache.commons.beanutils.DynaBean @ src/main/java/org/apache/commons/configuration2/beanutils/BeanHelper.java:286:19
+  [33mType description did not have a declaration but was not labelled as anonymous: (CtTypeReferenceImpl) org.apache.commons.beanutils.DynaBean @ src/main/java/org/apache/commons/configuration2/beanutils/BeanHelper.java:286:19
   The type likely was an external dependency or some other type not handled by the abstractor so using anyDesc.[0m
   [34mskipping default constructor: org.apache.commons.configuration2.io.FileHandlerListenerAdapter()[0m
   getting parent type for (CtEnumImpl) EventSourceSupport @ src/main/java/org/apache/commons/configuration2/builder/BuilderConfigurationWrapperFactory.java:190:17
@@ -193,104 +193,104 @@ Init pending package org.apache.commons.configuration2.web
   [34mskipping default constructor: org.apache.commons.configuration2.builder.JndiBuilderParametersImpl()[0m
   [34mskipping default constructor: org.apache.commons.configuration2.builder.PropertiesBuilderParametersImpl()[0m
   [34mskipping default constructor: org.apache.commons.configuration2.builder.XMLBuilderParametersImpl()[0m
-  [31mType description did not have a declaration but was not labelled as anonymous: (CtTypeReferenceImpl) org.apache.commons.beanutils.DynaClass @ src/main/java/org/apache/commons/configuration2/beanutils/ConfigurationDynaBean.java:184:12
+  [33mType description did not have a declaration but was not labelled as anonymous: (CtTypeReferenceImpl) org.apache.commons.beanutils.DynaClass @ src/main/java/org/apache/commons/configuration2/beanutils/ConfigurationDynaBean.java:184:12
   The type likely was an external dependency or some other type not handled by the abstractor so using anyDesc.[0m
-  [31mUnhandled super-interface (null) for {
+  [33mUnhandled null super-interface for {
     context: "object decl (CtClassImpl) ConfigurationDynaBean @ src/main/java/org/apache/commons/configuration2/beanutils/ConfigurationDynaBean.java:56:14",
     index: -1,
     kind: object,
     ref: true,
   }[0m
-  [31mType description did not have a declaration but was not labelled as anonymous: (CtTypeReferenceImpl) org.apache.commons.beanutils.DynaProperty @ src/main/java/org/apache/commons/configuration2/beanutils/ConfigurationDynaClass.java:64:12
+  [33mType description did not have a declaration but was not labelled as anonymous: (CtTypeReferenceImpl) org.apache.commons.beanutils.DynaProperty @ src/main/java/org/apache/commons/configuration2/beanutils/ConfigurationDynaClass.java:64:12
   The type likely was an external dependency or some other type not handled by the abstractor so using anyDesc.[0m
-  [31mType description did not have a declaration but was not labelled as anonymous: (CtTypeReferenceImpl) org.apache.commons.beanutils.DynaBean @ src/main/java/org/apache/commons/configuration2/beanutils/ConfigurationDynaClass.java:156:12
+  [33mType description did not have a declaration but was not labelled as anonymous: (CtTypeReferenceImpl) org.apache.commons.beanutils.DynaBean @ src/main/java/org/apache/commons/configuration2/beanutils/ConfigurationDynaClass.java:156:12
   The type likely was an external dependency or some other type not handled by the abstractor so using anyDesc.[0m
-  [31mType description did not have a declaration but was not labelled as anonymous: (CtTypeReferenceImpl) org.apache.commons.beanutils.DynaProperty
+  [33mType description did not have a declaration but was not labelled as anonymous: (CtTypeReferenceImpl) org.apache.commons.beanutils.DynaProperty
   The type likely was an external dependency or some other type not handled by the abstractor so using anyDesc.[0m
-  [31mUnhandled super-interface (null) for {
+  [33mUnhandled null super-interface for {
     context: "object decl (CtClassImpl) ConfigurationDynaClass @ src/main/java/org/apache/commons/configuration2/beanutils/ConfigurationDynaClass.java:40:14",
     index: -1,
     kind: object,
     ref: true,
   }[0m
   getting parent type for (CtClassImpl) NodeData @ src/main/java/org/apache/commons/configuration2/beanutils/XMLBeanDeclaration.java:612:18
-  [31mType description did not have a declaration but was not labelled as anonymous: (CtTypeReferenceImpl) org.apache.commons.jxpath.ri.QName @ src/main/java/org/apache/commons/configuration2/tree/xpath/ConfigurationAttributePointer.java:131:12
+  [33mType description did not have a declaration but was not labelled as anonymous: (CtTypeReferenceImpl) org.apache.commons.jxpath.ri.QName @ src/main/java/org/apache/commons/configuration2/tree/xpath/ConfigurationAttributePointer.java:131:12
   The type likely was an external dependency or some other type not handled by the abstractor so using anyDesc.[0m
-  [31mType description did not have a declaration but was not labelled as anonymous: (CtTypeReferenceImpl) org.apache.commons.jxpath.ri.compiler.NodeTest @ src/main/java/org/apache/commons/configuration2/tree/xpath/ConfigurationAttributePointer.java:205:29
+  [33mType description did not have a declaration but was not labelled as anonymous: (CtTypeReferenceImpl) org.apache.commons.jxpath.ri.compiler.NodeTest @ src/main/java/org/apache/commons/configuration2/tree/xpath/ConfigurationAttributePointer.java:205:29
   The type likely was an external dependency or some other type not handled by the abstractor so using anyDesc.[0m
-  [31mType description did not have a declaration but was not labelled as anonymous: (CtTypeReferenceImpl) org.apache.commons.jxpath.ri.model.NodePointer @ src/main/java/org/apache/commons/configuration2/tree/xpath/ConfigurationAttributePointer.java:86:41
+  [33mType description did not have a declaration but was not labelled as anonymous: (CtTypeReferenceImpl) org.apache.commons.jxpath.ri.model.NodePointer @ src/main/java/org/apache/commons/configuration2/tree/xpath/ConfigurationAttributePointer.java:86:41
   The type likely was an external dependency or some other type not handled by the abstractor so using anyDesc.[0m
-  [31mType description did not have a declaration but was not labelled as anonymous: (CtTypeReferenceImpl) org.apache.commons.jxpath.ri.model.NodePointer @ src/main/java/org/apache/commons/configuration2/tree/xpath/ConfigurationAttributePointer.java:86:57
+  [33mType description did not have a declaration but was not labelled as anonymous: (CtTypeReferenceImpl) org.apache.commons.jxpath.ri.model.NodePointer @ src/main/java/org/apache/commons/configuration2/tree/xpath/ConfigurationAttributePointer.java:86:57
   The type likely was an external dependency or some other type not handled by the abstractor so using anyDesc.[0m
-  [31mType description did not have a declaration but was not labelled as anonymous: (CtTypeReferenceImpl) org.apache.commons.jxpath.ri.QName @ src/main/java/org/apache/commons/configuration2/tree/xpath/ConfigurationNodePointer.java:138:12
+  [33mType description did not have a declaration but was not labelled as anonymous: (CtTypeReferenceImpl) org.apache.commons.jxpath.ri.QName @ src/main/java/org/apache/commons/configuration2/tree/xpath/ConfigurationNodePointer.java:138:12
   The type likely was an external dependency or some other type not handled by the abstractor so using anyDesc.[0m
-  [31mType description did not have a declaration but was not labelled as anonymous: (CtTypeReferenceImpl) org.apache.commons.jxpath.ri.compiler.NodeTest @ src/main/java/org/apache/commons/configuration2/tree/xpath/ConfigurationNodePointer.java:254:29
+  [33mType description did not have a declaration but was not labelled as anonymous: (CtTypeReferenceImpl) org.apache.commons.jxpath.ri.compiler.NodeTest @ src/main/java/org/apache/commons/configuration2/tree/xpath/ConfigurationNodePointer.java:254:29
   The type likely was an external dependency or some other type not handled by the abstractor so using anyDesc.[0m
-  [31mType description did not have a declaration but was not labelled as anonymous: (CtTypeReferenceImpl) org.apache.commons.jxpath.ri.model.NodePointer @ src/main/java/org/apache/commons/configuration2/tree/xpath/ConfigurationNodePointer.java:197:41
+  [33mType description did not have a declaration but was not labelled as anonymous: (CtTypeReferenceImpl) org.apache.commons.jxpath.ri.model.NodePointer @ src/main/java/org/apache/commons/configuration2/tree/xpath/ConfigurationNodePointer.java:197:41
   The type likely was an external dependency or some other type not handled by the abstractor so using anyDesc.[0m
-  [31mType description did not have a declaration but was not labelled as anonymous: (CtTypeReferenceImpl) org.apache.commons.jxpath.ri.model.NodePointer @ src/main/java/org/apache/commons/configuration2/tree/xpath/ConfigurationNodePointer.java:198:13
+  [33mType description did not have a declaration but was not labelled as anonymous: (CtTypeReferenceImpl) org.apache.commons.jxpath.ri.model.NodePointer @ src/main/java/org/apache/commons/configuration2/tree/xpath/ConfigurationNodePointer.java:198:13
   The type likely was an external dependency or some other type not handled by the abstractor so using anyDesc.[0m
-  [31mType description did not have a declaration but was not labelled as anonymous: (CtTypeReferenceImpl) org.apache.commons.jxpath.ri.compiler.NodeTest @ src/main/java/org/apache/commons/configuration2/tree/xpath/ConfigurationNodePointer.java:239:39
+  [33mType description did not have a declaration but was not labelled as anonymous: (CtTypeReferenceImpl) org.apache.commons.jxpath.ri.compiler.NodeTest @ src/main/java/org/apache/commons/configuration2/tree/xpath/ConfigurationNodePointer.java:239:39
   The type likely was an external dependency or some other type not handled by the abstractor so using anyDesc.[0m
-  [31mType description did not have a declaration but was not labelled as anonymous: (CtTypeReferenceImpl) org.apache.commons.jxpath.ri.model.NodePointer @ src/main/java/org/apache/commons/configuration2/tree/xpath/ConfigurationNodePointer.java:240:13
+  [33mType description did not have a declaration but was not labelled as anonymous: (CtTypeReferenceImpl) org.apache.commons.jxpath.ri.model.NodePointer @ src/main/java/org/apache/commons/configuration2/tree/xpath/ConfigurationNodePointer.java:240:13
   The type likely was an external dependency or some other type not handled by the abstractor so using anyDesc.[0m
-  [31mType description did not have a declaration but was not labelled as anonymous: (CtTypeReferenceImpl) org.apache.commons.jxpath.ri.model.NodeIterator @ src/main/java/org/apache/commons/configuration2/tree/xpath/ConfigurationNodePointer.java:239:12
+  [33mType description did not have a declaration but was not labelled as anonymous: (CtTypeReferenceImpl) org.apache.commons.jxpath.ri.model.NodeIterator @ src/main/java/org/apache/commons/configuration2/tree/xpath/ConfigurationNodePointer.java:239:12
   The type likely was an external dependency or some other type not handled by the abstractor so using anyDesc.[0m
-  [31mType description did not have a declaration but was not labelled as anonymous: (CtTypeReferenceImpl) org.apache.commons.jxpath.ri.model.NodePointer @ src/main/java/org/apache/commons/configuration2/tree/xpath/ConfigurationNodePointer.java:293:53
+  [33mType description did not have a declaration but was not labelled as anonymous: (CtTypeReferenceImpl) org.apache.commons.jxpath.ri.model.NodePointer @ src/main/java/org/apache/commons/configuration2/tree/xpath/ConfigurationNodePointer.java:293:53
   The type likely was an external dependency or some other type not handled by the abstractor so using anyDesc.[0m
-  [31mType description did not have a declaration but was not labelled as anonymous: (CtTypeReferenceImpl) org.apache.commons.jxpath.ri.QName @ src/main/java/org/apache/commons/configuration2/tree/xpath/ConfigurationNodePointer.java:225:43
+  [33mType description did not have a declaration but was not labelled as anonymous: (CtTypeReferenceImpl) org.apache.commons.jxpath.ri.QName @ src/main/java/org/apache/commons/configuration2/tree/xpath/ConfigurationNodePointer.java:225:43
   The type likely was an external dependency or some other type not handled by the abstractor so using anyDesc.[0m
-  [31mType description did not have a declaration but was not labelled as anonymous: (CtTypeReferenceImpl) org.apache.commons.jxpath.ri.model.NodeIterator @ src/main/java/org/apache/commons/configuration2/tree/xpath/ConfigurationNodePointer.java:225:12
+  [33mType description did not have a declaration but was not labelled as anonymous: (CtTypeReferenceImpl) org.apache.commons.jxpath.ri.model.NodeIterator @ src/main/java/org/apache/commons/configuration2/tree/xpath/ConfigurationNodePointer.java:225:12
   The type likely was an external dependency or some other type not handled by the abstractor so using anyDesc.[0m
-  [31mType description did not have a declaration but was not labelled as anonymous: (CtTypeReferenceImpl) org.apache.commons.jxpath.ri.model.NodePointer @ src/main/java/org/apache/commons/configuration2/tree/xpath/ConfigurationNodeIteratorBase.java:193:24
+  [33mType description did not have a declaration but was not labelled as anonymous: (CtTypeReferenceImpl) org.apache.commons.jxpath.ri.model.NodePointer @ src/main/java/org/apache/commons/configuration2/tree/xpath/ConfigurationNodeIteratorBase.java:193:24
   The type likely was an external dependency or some other type not handled by the abstractor so using anyDesc.[0m
-  [31mType description did not have a declaration but was not labelled as anonymous: (CtTypeReferenceImpl) org.apache.commons.jxpath.ri.QName @ src/main/java/org/apache/commons/configuration2/tree/xpath/ConfigurationNodeIteratorBase.java:223:43
+  [33mType description did not have a declaration but was not labelled as anonymous: (CtTypeReferenceImpl) org.apache.commons.jxpath.ri.QName @ src/main/java/org/apache/commons/configuration2/tree/xpath/ConfigurationNodeIteratorBase.java:223:43
   The type likely was an external dependency or some other type not handled by the abstractor so using anyDesc.[0m
-  [31mType description did not have a declaration but was not labelled as anonymous: (CtTypeReferenceImpl) org.apache.commons.jxpath.ri.model.NodePointer @ src/main/java/org/apache/commons/configuration2/tree/xpath/ConfigurationNodeIteratorBase.java:103:12
+  [33mType description did not have a declaration but was not labelled as anonymous: (CtTypeReferenceImpl) org.apache.commons.jxpath.ri.model.NodePointer @ src/main/java/org/apache/commons/configuration2/tree/xpath/ConfigurationNodeIteratorBase.java:103:12
   The type likely was an external dependency or some other type not handled by the abstractor so using anyDesc.[0m
-  [31mUnhandled super-interface (null) for {
+  [33mUnhandled null super-interface for {
     context: "object decl (CtClassImpl) ConfigurationNodeIteratorBase @ src/main/java/org/apache/commons/configuration2/tree/xpath/ConfigurationNodeIteratorBase.java:39:16",
     index: -1,
     kind: object,
     ref: true,
   }[0m
-  [31mType description did not have a declaration but was not labelled as anonymous: (CtTypeReferenceImpl) org.apache.commons.jxpath.ri.QName @ src/main/java/org/apache/commons/configuration2/tree/xpath/ConfigurationNodeIteratorAttribute.java:52:49
+  [33mType description did not have a declaration but was not labelled as anonymous: (CtTypeReferenceImpl) org.apache.commons.jxpath.ri.QName @ src/main/java/org/apache/commons/configuration2/tree/xpath/ConfigurationNodeIteratorAttribute.java:52:49
   The type likely was an external dependency or some other type not handled by the abstractor so using anyDesc.[0m
-  [31mType description did not have a declaration but was not labelled as anonymous: (CtTypeReferenceImpl) org.apache.commons.jxpath.ri.QName @ src/main/java/org/apache/commons/configuration2/tree/xpath/ConfigurationNodeIteratorAttribute.java:92:49
+  [33mType description did not have a declaration but was not labelled as anonymous: (CtTypeReferenceImpl) org.apache.commons.jxpath.ri.QName @ src/main/java/org/apache/commons/configuration2/tree/xpath/ConfigurationNodeIteratorAttribute.java:92:49
   The type likely was an external dependency or some other type not handled by the abstractor so using anyDesc.[0m
-  [31mType description did not have a declaration but was not labelled as anonymous: (CtTypeReferenceImpl) org.apache.commons.jxpath.ri.model.NodePointer @ src/main/java/org/apache/commons/configuration2/tree/xpath/ConfigurationNodeIteratorAttribute.java:66:15
+  [33mType description did not have a declaration but was not labelled as anonymous: (CtTypeReferenceImpl) org.apache.commons.jxpath.ri.model.NodePointer @ src/main/java/org/apache/commons/configuration2/tree/xpath/ConfigurationNodeIteratorAttribute.java:66:15
   The type likely was an external dependency or some other type not handled by the abstractor so using anyDesc.[0m
-  [31mType description did not have a declaration but was not labelled as anonymous: (CtTypeReferenceImpl) org.apache.commons.jxpath.ri.compiler.NodeTest @ src/main/java/org/apache/commons/configuration2/tree/xpath/ConfigurationNodeIteratorChildren.java:56:49
+  [33mType description did not have a declaration but was not labelled as anonymous: (CtTypeReferenceImpl) org.apache.commons.jxpath.ri.compiler.NodeTest @ src/main/java/org/apache/commons/configuration2/tree/xpath/ConfigurationNodeIteratorChildren.java:56:49
   The type likely was an external dependency or some other type not handled by the abstractor so using anyDesc.[0m
-  [31mType description did not have a declaration but was not labelled as anonymous: (CtTypeReferenceImpl) org.apache.commons.jxpath.ri.QName @ src/main/java/org/apache/commons/configuration2/tree/xpath/ConfigurationNodeIteratorChildren.java:149:54
+  [33mType description did not have a declaration but was not labelled as anonymous: (CtTypeReferenceImpl) org.apache.commons.jxpath.ri.QName @ src/main/java/org/apache/commons/configuration2/tree/xpath/ConfigurationNodeIteratorChildren.java:149:54
   The type likely was an external dependency or some other type not handled by the abstractor so using anyDesc.[0m
-  [31mType description did not have a declaration but was not labelled as anonymous: (CtTypeReferenceImpl) org.apache.commons.jxpath.ri.compiler.NodeTest @ src/main/java/org/apache/commons/configuration2/tree/xpath/ConfigurationNodeIteratorChildren.java:111:47
+  [33mType description did not have a declaration but was not labelled as anonymous: (CtTypeReferenceImpl) org.apache.commons.jxpath.ri.compiler.NodeTest @ src/main/java/org/apache/commons/configuration2/tree/xpath/ConfigurationNodeIteratorChildren.java:111:47
   The type likely was an external dependency or some other type not handled by the abstractor so using anyDesc.[0m
-  [31mType description did not have a declaration but was not labelled as anonymous: (CtTypeReferenceImpl) org.apache.commons.jxpath.ri.model.NodePointer @ src/main/java/org/apache/commons/configuration2/tree/xpath/ConfigurationNodeIteratorChildren.java:84:15
+  [33mType description did not have a declaration but was not labelled as anonymous: (CtTypeReferenceImpl) org.apache.commons.jxpath.ri.model.NodePointer @ src/main/java/org/apache/commons/configuration2/tree/xpath/ConfigurationNodeIteratorChildren.java:84:15
   The type likely was an external dependency or some other type not handled by the abstractor so using anyDesc.[0m
-  [31mType description did not have a declaration but was not labelled as anonymous: (CtTypeReferenceImpl) org.apache.commons.jxpath.ri.QName @ src/main/java/org/apache/commons/configuration2/tree/xpath/ConfigurationNodeIteratorChildren.java:172:62
+  [33mType description did not have a declaration but was not labelled as anonymous: (CtTypeReferenceImpl) org.apache.commons.jxpath.ri.QName @ src/main/java/org/apache/commons/configuration2/tree/xpath/ConfigurationNodeIteratorChildren.java:172:62
   The type likely was an external dependency or some other type not handled by the abstractor so using anyDesc.[0m
   [34mskipping default constructor: org.apache.commons.configuration2.tree.xpath.ConfigurationNodePointerFactory()[0m
-  [31mType description did not have a declaration but was not labelled as anonymous: (CtTypeReferenceImpl) org.apache.commons.jxpath.ri.QName @ src/main/java/org/apache/commons/configuration2/tree/xpath/ConfigurationNodePointerFactory.java:77:42
+  [33mType description did not have a declaration but was not labelled as anonymous: (CtTypeReferenceImpl) org.apache.commons.jxpath.ri.QName @ src/main/java/org/apache/commons/configuration2/tree/xpath/ConfigurationNodePointerFactory.java:77:42
   The type likely was an external dependency or some other type not handled by the abstractor so using anyDesc.[0m
-  [31mType description did not have a declaration but was not labelled as anonymous: (CtTypeReferenceImpl) org.apache.commons.jxpath.ri.model.NodePointer @ src/main/java/org/apache/commons/configuration2/tree/xpath/ConfigurationNodePointerFactory.java:77:12
+  [33mType description did not have a declaration but was not labelled as anonymous: (CtTypeReferenceImpl) org.apache.commons.jxpath.ri.model.NodePointer @ src/main/java/org/apache/commons/configuration2/tree/xpath/ConfigurationNodePointerFactory.java:77:12
   The type likely was an external dependency or some other type not handled by the abstractor so using anyDesc.[0m
-  [31mType description did not have a declaration but was not labelled as anonymous: (CtTypeReferenceImpl) org.apache.commons.jxpath.ri.model.NodePointer @ src/main/java/org/apache/commons/configuration2/tree/xpath/ConfigurationNodePointerFactory.java:102:42
+  [33mType description did not have a declaration but was not labelled as anonymous: (CtTypeReferenceImpl) org.apache.commons.jxpath.ri.model.NodePointer @ src/main/java/org/apache/commons/configuration2/tree/xpath/ConfigurationNodePointerFactory.java:102:42
   The type likely was an external dependency or some other type not handled by the abstractor so using anyDesc.[0m
-  [31mType description did not have a declaration but was not labelled as anonymous: (CtTypeReferenceImpl) org.apache.commons.jxpath.ri.QName @ src/main/java/org/apache/commons/configuration2/tree/xpath/ConfigurationNodePointerFactory.java:102:62
+  [33mType description did not have a declaration but was not labelled as anonymous: (CtTypeReferenceImpl) org.apache.commons.jxpath.ri.QName @ src/main/java/org/apache/commons/configuration2/tree/xpath/ConfigurationNodePointerFactory.java:102:62
   The type likely was an external dependency or some other type not handled by the abstractor so using anyDesc.[0m
-  [31mType description did not have a declaration but was not labelled as anonymous: (CtTypeReferenceImpl) org.apache.commons.jxpath.ri.model.NodePointer @ src/main/java/org/apache/commons/configuration2/tree/xpath/ConfigurationNodePointerFactory.java:102:12
+  [33mType description did not have a declaration but was not labelled as anonymous: (CtTypeReferenceImpl) org.apache.commons.jxpath.ri.model.NodePointer @ src/main/java/org/apache/commons/configuration2/tree/xpath/ConfigurationNodePointerFactory.java:102:12
   The type likely was an external dependency or some other type not handled by the abstractor so using anyDesc.[0m
-  [31mUnhandled super-interface (null) for {
+  [33mUnhandled null super-interface for {
     context: "object decl (CtClassImpl) ConfigurationNodePointerFactory @ src/main/java/org/apache/commons/configuration2/tree/xpath/ConfigurationNodePointerFactory.java:46:14",
     index: -1,
     kind: object,
     ref: true,
   }[0m
   [34mskipping default constructor: org.apache.commons.configuration2.tree.xpath.XPathContextFactory()[0m
-  [31mType description did not have a declaration but was not labelled as anonymous: (CtTypeReferenceImpl) org.apache.commons.jxpath.JXPathContext @ src/main/java/org/apache/commons/configuration2/tree/xpath/XPathContextFactory.java:42:16
+  [33mType description did not have a declaration but was not labelled as anonymous: (CtTypeReferenceImpl) org.apache.commons.jxpath.JXPathContext @ src/main/java/org/apache/commons/configuration2/tree/xpath/XPathContextFactory.java:42:16
   The type likely was an external dependency or some other type not handled by the abstractor so using anyDesc.[0m
-  [31mType description did not have a declaration but was not labelled as anonymous: (CtTypeReferenceImpl) org.apache.commons.jxpath.JXPathContext @ src/main/java/org/apache/commons/configuration2/tree/xpath/XPathExpressionEngine.java:341:17
+  [33mType description did not have a declaration but was not labelled as anonymous: (CtTypeReferenceImpl) org.apache.commons.jxpath.JXPathContext @ src/main/java/org/apache/commons/configuration2/tree/xpath/XPathExpressionEngine.java:341:17
   The type likely was an external dependency or some other type not handled by the abstractor so using anyDesc.[0m
   [34mskipping default constructor: org.apache.commons.configuration2.tree.AbstractImmutableNodeHandler()[0m
   getting parent type for (CtClassImpl) TrackedNodeData @ src/main/java/org/apache/commons/configuration2/tree/NodeTracker.java:448:26
@@ -318,38 +318,38 @@ Init pending package org.apache.commons.configuration2.web
   [34mskipping default constructor: org.apache.commons.configuration2.io.FileSystemLocationStrategy()[0m
   [34mskipping default constructor: org.apache.commons.configuration2.io.FileUtils()[0m
   [34mskipping default constructor: org.apache.commons.configuration2.io.ProvidedURLLocationStrategy()[0m
-  [31mType description did not have a declaration but was not labelled as anonymous: (CtTypeReferenceImpl) org.apache.commons.vfs2.FileSystemConfigBuilder @ src/main/java/org/apache/commons/configuration2/io/VFSFileSystem.java:334:30
+  [33mType description did not have a declaration but was not labelled as anonymous: (CtTypeReferenceImpl) org.apache.commons.vfs2.FileSystemConfigBuilder @ src/main/java/org/apache/commons/configuration2/io/VFSFileSystem.java:334:30
   The type likely was an external dependency or some other type not handled by the abstractor so using anyDesc.[0m
-  [31mType description did not have a declaration but was not labelled as anonymous: (CtTypeReferenceImpl) org.apache.commons.vfs2.FileSystemOptions @ src/main/java/org/apache/commons/configuration2/io/VFSFileSystem.java:334:63
+  [33mType description did not have a declaration but was not labelled as anonymous: (CtTypeReferenceImpl) org.apache.commons.vfs2.FileSystemOptions @ src/main/java/org/apache/commons/configuration2/io/VFSFileSystem.java:334:63
   The type likely was an external dependency or some other type not handled by the abstractor so using anyDesc.[0m
-  [31mType description did not have a declaration but was not labelled as anonymous: (CtTypeReferenceImpl) org.apache.commons.vfs2.FileSystemOptions @ src/main/java/org/apache/commons/configuration2/io/VFSFileSystem.java:286:13
+  [33mType description did not have a declaration but was not labelled as anonymous: (CtTypeReferenceImpl) org.apache.commons.vfs2.FileSystemOptions @ src/main/java/org/apache/commons/configuration2/io/VFSFileSystem.java:286:13
   The type likely was an external dependency or some other type not handled by the abstractor so using anyDesc.[0m
   [34mskipping default constructor: org.apache.commons.configuration2.io.VerifiableOutputStream()[0m
   getting parent type for (CtClassImpl) ConfigurationSourceData @ src/main/java/org/apache/commons/configuration2/builder/combined/CombinedConfigurationBuilder.java:1394:19
   [34mskipping default constructor: org.apache.commons.configuration2.builder.combined.MultiFileBuilderParametersImpl()[0m
-  [31mType description did not have a declaration but was not labelled as anonymous: (CtTypeReferenceImpl) org.apache.commons.beanutils.DynaBean @ src/main/java/org/apache/commons/configuration2/builder/combined/MultiWrapDynaBean.java:179:20
+  [33mType description did not have a declaration but was not labelled as anonymous: (CtTypeReferenceImpl) org.apache.commons.beanutils.DynaBean @ src/main/java/org/apache/commons/configuration2/builder/combined/MultiWrapDynaBean.java:179:20
   The type likely was an external dependency or some other type not handled by the abstractor so using anyDesc.[0m
-  [31mType description did not have a declaration but was not labelled as anonymous: (CtTypeReferenceImpl) org.apache.commons.beanutils.DynaClass @ src/main/java/org/apache/commons/configuration2/builder/combined/MultiWrapDynaBean.java:120:12
+  [33mType description did not have a declaration but was not labelled as anonymous: (CtTypeReferenceImpl) org.apache.commons.beanutils.DynaClass @ src/main/java/org/apache/commons/configuration2/builder/combined/MultiWrapDynaBean.java:120:12
   The type likely was an external dependency or some other type not handled by the abstractor so using anyDesc.[0m
-  [31mType description did not have a declaration but was not labelled as anonymous: (CtTypeReferenceImpl) org.apache.commons.beanutils.DynaBean @ src/main/java/org/apache/commons/configuration2/builder/combined/MultiWrapDynaBean.java:163:13
+  [33mType description did not have a declaration but was not labelled as anonymous: (CtTypeReferenceImpl) org.apache.commons.beanutils.DynaBean @ src/main/java/org/apache/commons/configuration2/builder/combined/MultiWrapDynaBean.java:163:13
   The type likely was an external dependency or some other type not handled by the abstractor so using anyDesc.[0m
-  [31mUnhandled super-interface (null) for {
+  [33mUnhandled null super-interface for {
     context: "object decl (CtClassImpl) MultiWrapDynaBean @ src/main/java/org/apache/commons/configuration2/builder/combined/MultiWrapDynaBean.java:47:7",
     index: -1,
     kind: object,
     ref: true,
   }[0m
-  [31mType description did not have a declaration but was not labelled as anonymous: (CtTypeReferenceImpl) org.apache.commons.beanutils.DynaClass @ src/main/java/org/apache/commons/configuration2/builder/combined/MultiWrapDynaClass.java:54:52
+  [33mType description did not have a declaration but was not labelled as anonymous: (CtTypeReferenceImpl) org.apache.commons.beanutils.DynaClass @ src/main/java/org/apache/commons/configuration2/builder/combined/MultiWrapDynaClass.java:54:52
   The type likely was an external dependency or some other type not handled by the abstractor so using anyDesc.[0m
-  [31mType description did not have a declaration but was not labelled as anonymous: (CtTypeReferenceImpl) org.apache.commons.beanutils.DynaProperty @ src/main/java/org/apache/commons/configuration2/builder/combined/MultiWrapDynaClass.java:71:12
+  [33mType description did not have a declaration but was not labelled as anonymous: (CtTypeReferenceImpl) org.apache.commons.beanutils.DynaProperty @ src/main/java/org/apache/commons/configuration2/builder/combined/MultiWrapDynaClass.java:71:12
   The type likely was an external dependency or some other type not handled by the abstractor so using anyDesc.[0m
-  [31mType description did not have a declaration but was not labelled as anonymous: (CtTypeReferenceImpl) org.apache.commons.beanutils.DynaClass @ src/main/java/org/apache/commons/configuration2/builder/combined/MultiWrapDynaClass.java:99:54
+  [33mType description did not have a declaration but was not labelled as anonymous: (CtTypeReferenceImpl) org.apache.commons.beanutils.DynaClass @ src/main/java/org/apache/commons/configuration2/builder/combined/MultiWrapDynaClass.java:99:54
   The type likely was an external dependency or some other type not handled by the abstractor so using anyDesc.[0m
-  [31mType description did not have a declaration but was not labelled as anonymous: (CtTypeReferenceImpl) org.apache.commons.beanutils.DynaBean @ src/main/java/org/apache/commons/configuration2/builder/combined/MultiWrapDynaClass.java:87:12
+  [33mType description did not have a declaration but was not labelled as anonymous: (CtTypeReferenceImpl) org.apache.commons.beanutils.DynaBean @ src/main/java/org/apache/commons/configuration2/builder/combined/MultiWrapDynaClass.java:87:12
   The type likely was an external dependency or some other type not handled by the abstractor so using anyDesc.[0m
-  [31mType description did not have a declaration but was not labelled as anonymous: (CtTypeReferenceImpl) org.apache.commons.beanutils.DynaProperty
+  [33mType description did not have a declaration but was not labelled as anonymous: (CtTypeReferenceImpl) org.apache.commons.beanutils.DynaProperty
   The type likely was an external dependency or some other type not handled by the abstractor so using anyDesc.[0m
-  [31mUnhandled super-interface (null) for {
+  [33mUnhandled null super-interface for {
     context: "object decl (CtClassImpl) MultiWrapDynaClass @ src/main/java/org/apache/commons/configuration2/builder/combined/MultiWrapDynaClass.java:37:7",
     index: -1,
     kind: object,
@@ -357,7 +357,7 @@ Init pending package org.apache.commons.configuration2.web
   }[0m
   [34mskipping default constructor: org.apache.commons.configuration2.sync.NoOpSynchronizer()[0m
   [34mskipping default constructor: org.apache.commons.configuration2.reloading.ManagedReloadingDetector()[0m
-  [31mType description did not have a declaration but was not labelled as anonymous: (CtTypeReferenceImpl) org.apache.commons.vfs2.FileObject @ src/main/java/org/apache/commons/configuration2/reloading/VFSFileHandlerReloadingDetector.java:121:15
+  [33mType description did not have a declaration but was not labelled as anonymous: (CtTypeReferenceImpl) org.apache.commons.vfs2.FileObject @ src/main/java/org/apache/commons/configuration2/reloading/VFSFileHandlerReloadingDetector.java:121:15
   The type likely was an external dependency or some other type not handled by the abstractor so using anyDesc.[0m
   [34mskipping default constructor: org.apache.commons.configuration2.interpol.ConstantLookup()[0m
   [34mskipping default constructor: org.apache.commons.configuration2.interpol.DummyLookup()[0m
@@ -365,9 +365,9 @@ Init pending package org.apache.commons.configuration2.web
   getting parent type for (CtClassImpl) Variable @ src/main/java/org/apache/commons/configuration2/interpol/ExprLookup.java:353:25
   getting parent type for (CtClassImpl) Variables @ src/main/java/org/apache/commons/configuration2/interpol/ExprLookup.java:309:25
   Pending package java.util
-  [31mType description did not have a declaration but was not labelled as anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl2.JexlContext @ src/main/java/org/apache/commons/configuration2/interpol/ExprLookup.java:297:36
+  [33mType description did not have a declaration but was not labelled as anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl2.JexlContext @ src/main/java/org/apache/commons/configuration2/interpol/ExprLookup.java:297:36
   The type likely was an external dependency or some other type not handled by the abstractor so using anyDesc.[0m
-  [31mType description did not have a declaration but was not labelled as anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl2.JexlContext @ src/main/java/org/apache/commons/configuration2/interpol/ExprLookup.java:284:13
+  [33mType description did not have a declaration but was not labelled as anonymous: (CtTypeReferenceImpl) org.apache.commons.jexl2.JexlContext @ src/main/java/org/apache/commons/configuration2/interpol/ExprLookup.java:284:13
   The type likely was an external dependency or some other type not handled by the abstractor so using anyDesc.[0m
   [34mskipping default constructor: org.apache.commons.configuration2.interpol.SystemPropertiesLookup()[0m
   getting parent type for (CtClassImpl) DateComponentParser @ src/main/java/org/apache/commons/configuration2/plist/PropertyListConfiguration.java:492:35
@@ -375,13 +375,13 @@ Init pending package org.apache.commons.configuration2.web
   Pending package java.text
   getting parent type for (CtClassImpl) CatalogManager @ src/main/java/org/apache/commons/configuration2/resolver/CatalogResolver.java:279:25
   [34mskipping default constructor: org.apache.commons.configuration2.resolver.CatalogResolver$CatalogManager()[0m
-  [31mType description did not have a declaration but was not labelled as anonymous: (CtTypeReferenceImpl) org.apache.xml.resolver.Catalog @ src/main/java/org/apache/commons/configuration2/resolver/CatalogResolver.java:387:16
+  [33mType description did not have a declaration but was not labelled as anonymous: (CtTypeReferenceImpl) org.apache.xml.resolver.Catalog @ src/main/java/org/apache/commons/configuration2/resolver/CatalogResolver.java:387:16
   The type likely was an external dependency or some other type not handled by the abstractor so using anyDesc.[0m
-  [31mType description did not have a declaration but was not labelled as anonymous: (CtTypeReferenceImpl) org.apache.xml.resolver.Catalog @ src/main/java/org/apache/commons/configuration2/resolver/CatalogResolver.java:352:16
+  [33mType description did not have a declaration but was not labelled as anonymous: (CtTypeReferenceImpl) org.apache.xml.resolver.Catalog @ src/main/java/org/apache/commons/configuration2/resolver/CatalogResolver.java:352:16
   The type likely was an external dependency or some other type not handled by the abstractor so using anyDesc.[0m
-  [31mType description did not have a declaration but was not labelled as anonymous: (CtTypeReferenceImpl) org.apache.xml.resolver.Catalog @ src/main/java/org/apache/commons/configuration2/resolver/CatalogResolver.java:396:41
+  [33mType description did not have a declaration but was not labelled as anonymous: (CtTypeReferenceImpl) org.apache.xml.resolver.Catalog @ src/main/java/org/apache/commons/configuration2/resolver/CatalogResolver.java:396:41
   The type likely was an external dependency or some other type not handled by the abstractor so using anyDesc.[0m
-  [31mType description did not have a declaration but was not labelled as anonymous: (CtTypeReferenceImpl) org.apache.xml.resolver.tools.CatalogResolver @ src/main/java/org/apache/commons/configuration2/resolver/CatalogResolver.java:250:26
+  [33mType description did not have a declaration but was not labelled as anonymous: (CtTypeReferenceImpl) org.apache.xml.resolver.tools.CatalogResolver @ src/main/java/org/apache/commons/configuration2/resolver/CatalogResolver.java:250:26
   The type likely was an external dependency or some other type not handled by the abstractor so using anyDesc.[0m
   [34mskipping default constructor: org.apache.commons.configuration2.resolver.DefaultEntityResolver()[0m
   [34mskipping default constructor: org.apache.commons.configuration2.tree.ConfigurationNodeVisitorAdapter()[0m
@@ -430,7 +430,7 @@ Init pending package org.apache.commons.configuration2.web
   getting parent type for (CtClassImpl) PrintStreamOrWriter
   getting parent type for (CtClassImpl) HttpOutputStream @ src/main/java/org/apache/commons/configuration2/io/DefaultFileSystem.java:287:26
   getting parent type for (CtClassImpl) VFSURLStreamHandler @ src/main/java/org/apache/commons/configuration2/io/VFSFileSystem.java:360:26
-  [31mType description did not have a declaration but was not labelled as anonymous: (CtTypeReferenceImpl) org.apache.commons.vfs2.FileName @ src/main/java/org/apache/commons/configuration2/io/VFSFileSystem.java:365:36
+  [33mType description did not have a declaration but was not labelled as anonymous: (CtTypeReferenceImpl) org.apache.commons.vfs2.FileName @ src/main/java/org/apache/commons/configuration2/io/VFSFileSystem.java:365:36
   The type likely was an external dependency or some other type not handled by the abstractor so using anyDesc.[0m
   Pending package java.net
   getting parent type for (CtClassImpl) WrapperBuilder @ src/main/java/org/apache/commons/configuration2/builder/combined/MultiFileConfigurationBuilderProvider.java:157:26
@@ -451,19 +451,19 @@ Init pending package org.apache.commons.configuration2.web
   [34mskipping default constructor: org.apache.commons.configuration2.resolver.CatalogResolver$Catalog()[0m
   getting parent type for (CtClassImpl) Entry @ src/main/java/org/apache/commons/configuration2/ConfigurationMap.java:123:29
   getting parent type for (CtClassImpl) ConfigurationSetIterator @ src/main/java/org/apache/commons/configuration2/ConfigurationMap.java:157:29
-[34mFinished process deferred finishes (6.877987s)[0m
+[34mFinished process deferred finishes (7.117191s)[0m
 [34mStarting short validation...[0m
   [34mStarting performShortValidation...[0m
     [31mValidation Error 1. [0000] Expected all references to be resolved but { context: "for pending package javax.naming", index: -1, kind: package, ref: true } was not resolved.[0m
-  [34mFinished performShortValidation (0.009321s)[0m
-[34mFinished short validation (0.010338s)[0m
-Exception in thread "main" abstractor.core.AbstractorException: Errors logged before short validation.
-	at abstractor.core.Abstractor.performShortValidation(Abstractor.java:1526)
-	at abstractor.core.Abstractor.lambda$shortValidate$51(Abstractor.java:1518)
+  [34mFinished performShortValidation (0.011543s)[0m
+[34mFinished short validation (0.012588s)[0m
+Exception in thread "main" abstractor.core.AbstractorException: Errors logged during short validation.
+	at abstractor.core.Abstractor.performShortValidation(Abstractor.java:1535)
+	at abstractor.core.Abstractor.lambda$shortValidate$51(Abstractor.java:1526)
 	at abstractor.core.log.Logger.measure(Logger.java:123)
-	at abstractor.core.Abstractor.shortValidate(Abstractor.java:1518)
-	at abstractor.core.Abstractor.lambda$performAbstraction$42(Abstractor.java:1335)
+	at abstractor.core.Abstractor.shortValidate(Abstractor.java:1526)
+	at abstractor.core.Abstractor.lambda$performAbstraction$42(Abstractor.java:1343)
 	at abstractor.core.log.Logger.measure(Logger.java:123)
-	at abstractor.core.Abstractor.performAbstraction(Abstractor.java:1335)
+	at abstractor.core.Abstractor.performAbstraction(Abstractor.java:1343)
 	at abstractor.app.App.run(App.java:26)
 	at abstractor.app.App.main(App.java:17)

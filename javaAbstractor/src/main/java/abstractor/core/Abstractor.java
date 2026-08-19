@@ -321,7 +321,11 @@ public class Abstractor {
                 // Add direct super-interfaces this interface extends.
                 for (CtTypeReference<?> supRef : i.getSuperInterfaces()) {
                     final CtType<?> supDecl = supRef.getTypeDeclaration(); // may be null for shadow/unresolved
-                    if (supDecl == null || !(supDecl instanceof CtInterface<?> supIt)) {
+                    if (supDecl == null) {
+                        this.log.warning("Unhandled null super-interface for " + id);
+                        continue;
+                    }
+                    if (!(supDecl instanceof CtInterface<?> supIt)) {
                         this.log.error("Unhandled super-interface " + SpoonUtils.describeElem(supDecl) + " for " + id);
                         continue;
                     }
@@ -1056,7 +1060,11 @@ public class Abstractor {
         // Add direct super-interfaces this object extends.
         for (CtTypeReference<?> supRef : c.getSuperInterfaces()) {
             final CtType<?> supDecl = supRef.getTypeDeclaration(); // may be null for shadow/unresolved
-            if (supDecl == null || !(supDecl instanceof CtInterface<?> supId)) {
+            if (supDecl == null) {
+                this.log.warning("Unhandled null super-interface for " + pin);
+                continue;
+            }
+            if (!(supDecl instanceof CtInterface<?> supId)) {
                 this.log.error("Unhandled super-interface " + SpoonUtils.describeElem(supDecl) + " for " + pin);
                 continue;
             }
