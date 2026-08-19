@@ -13,6 +13,7 @@ import abstractor.core.tools.ElementKey;
 public class Factory<T extends Construct> implements Jsonable {
     static private final boolean logCreate   = false;
     static private final boolean logResolved = false;
+    static private final boolean logFinish   = false;
 
     private final ConstructKind conKind;
 
@@ -21,6 +22,8 @@ public class Factory<T extends Construct> implements Jsonable {
     private final TreeSet<ElementKey>         elemInProg = new TreeSet<>();
     private final TreeSet<Ref<T>>             refSet     = new TreeSet<>();
     private final TreeSet<T>                  conSet     = new TreeSet<>();
+
+    private final List<DeferredFinish> pendingFinish = new LinkedList<>();
 
     public Factory(ConstructKind kind) { this.conKind = kind; }
 
@@ -64,6 +67,35 @@ public class Factory<T extends Construct> implements Jsonable {
     
     @FunctionalInterface
     public interface Finisher<T extends Construct> { void finish(Ref<T> ref, T con) throws Exception; }
+
+    public class DeferredFinish {
+        private final String title;
+        private final Ref<T> ref;
+        private final T con;
+        private final Finisher<T> finisher;
+
+        public DeferredFinish(String title, Ref<T> ref, T con, Finisher<T> finisher) {
+            this.title    = title;
+            this.ref      = ref;
+            this.con      = con;
+            this.finisher = finisher;
+        }
+
+        public void finish(Logger log) throws Exception {
+            try {
+                if (logFinish) {
+                    log.log("Finishing " + title);
+                    log.push();
+                }
+                finisher.finish(this.ref, this.con);
+            } catch (Exception e) {
+                throw new Exception("Error while finishing " + title, e);
+            }  finally {
+                if (logFinish) log.pop();
+            }
+        }
+    }
+
 
     public Ref<T> create(Logger log, ElementKey elemKey, String title, CreatorWithRef<T> creator, Finisher<T> finisher) throws Exception {
         Require.notNull(elemKey, "factories' create methods require non-null element keys");
@@ -122,12 +154,14 @@ public class Factory<T extends Construct> implements Jsonable {
             if (other != null) {
                 ref.setResolved(other);
                 if (logResolved) log.log("Resolved with match " + title);
-                if (finisher != null) finisher.finish(ref, other);
+                if (finisher != null)
+                    this.pendingFinish.add(new DeferredFinish(title, ref, other, finisher));
             } else {
                 Require.require(this.conSet.add(newCon));
                 ref.setResolved(newCon);
                 if (logResolved) log.log("Resolved as new " + title);
-                if (finisher != null) finisher.finish(ref, newCon);
+                if (finisher != null)
+                    this.pendingFinish.add(new DeferredFinish(title, ref, newCon, finisher));
             }
 
             return ref;
@@ -278,6 +312,16 @@ public class Factory<T extends Construct> implements Jsonable {
     }
 
     //==========================================================================
+
+    public boolean runDeferredFinishes(Logger log) throws Exception {
+        if (this.pendingFinish.isEmpty()) return false;
+        List<DeferredFinish> finish = new LinkedList<>(this.pendingFinish);
+        this.pendingFinish.clear();
+        for (DeferredFinish f : finish) {
+            f.finish(log);
+        }
+        return true;
+    }
 
     public void setIndices() {
         int index = 1;

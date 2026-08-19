@@ -1331,6 +1331,7 @@ public class Abstractor {
      */
     public void performAbstraction() throws Exception {
         this.log.measure("process pending packages",     () -> this.processPendingPackages());
+        this.log.measure("process deferred finishes",    () -> this.processDeferredFinishes());
         this.log.measure("short validation",             () -> this.shortValidate());
         this.log.measure("consolidate constructs",       () -> this.consolidateCons());
         this.log.measure("connect nests",                () -> this.connectNests());
@@ -1345,6 +1346,15 @@ public class Abstractor {
             this.pendingPackages.remove(pkg);
             this.processPackage(pkg);
             this.processPendingMetrics();
+        }
+    }
+
+    private void processDeferredFinishes() throws Exception {
+        boolean hasMore = true;
+        while (hasMore) {
+            hasMore = false;
+            for (Factory<?> f : this.proj.factories)
+                hasMore = f.runDeferredFinishes(this.log) | hasMore;
         }
     }
 
