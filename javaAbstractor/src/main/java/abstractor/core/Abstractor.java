@@ -1208,7 +1208,7 @@ public class Abstractor {
         // Get the actual type declaration that is being referenced.
         final CtType<?> ty = tr.getTypeDeclaration();
         if (ty == null) {
-            this.log.error("Type description did not have a declaration but "+
+            this.log.warning("Type description did not have a declaration but "+
                 "was not labelled as anonymous: " + SpoonUtils.describeElem(tr)+"\n"+
                 "The type likely was an external dependency or some other type not handled by the abstractor so using anyDesc.");
             return this.proj.baker.anyDesc();

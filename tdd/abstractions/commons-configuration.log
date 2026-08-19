@@ -1,7 +1,7 @@
 # cmd: java -jar /Users/grantnelson/go/src/github.com/MSUSEL/msusel-tdmetrics-go/javaAbstractor/target/abstractor-0.1-jar-with-dependencies.jar -i /Users/grantnelson/go/src/github.com/apache/commons-configuration/ -o /Users/grantnelson/go/src/github.com/MSUSEL/msusel-tdmetrics-go/tdd/abstractions/commons-configuration.json -v
 # cwd: /Users/grantnelson/go/src/github.com/MSUSEL/msusel-tdmetrics-go/tdd
 # repo: /Users/grantnelson/go/src/github.com/apache/commons-configuration @ 15b4031ba94a60f20b854e6ce2c7964d77086387
-# started: 2026-08-19T17:48:54.201195+00:00
+# started: 2026-08-19T17:53:36.343913+00:00
 # timeout_min: 10
 # ---
 Reading /Users/grantnelson/go/src/github.com/apache/commons-configuration/
@@ -31,7 +31,7 @@ Init pending package org.apache.commons.configuration2.tree
 Init pending package org.apache.commons.configuration2.tree.xpath
 Init pending package org.apache.commons.configuration2.web
 [34mStarting process pending packages...[0m
-[34mFinished process pending packages (0.051752s)[0m
+[34mFinished process pending packages (0.057834s)[0m
 [34mStarting process deferred finishes...[0m
   Pending package java.util
   Pending package java.lang
@@ -451,3 +451,19 @@ Init pending package org.apache.commons.configuration2.web
   [34mskipping default constructor: org.apache.commons.configuration2.resolver.CatalogResolver$Catalog()[0m
   getting parent type for (CtClassImpl) Entry @ src/main/java/org/apache/commons/configuration2/ConfigurationMap.java:123:29
   getting parent type for (CtClassImpl) ConfigurationSetIterator @ src/main/java/org/apache/commons/configuration2/ConfigurationMap.java:157:29
+[34mFinished process deferred finishes (6.877987s)[0m
+[34mStarting short validation...[0m
+  [34mStarting performShortValidation...[0m
+    [31mValidation Error 1. [0000] Expected all references to be resolved but { context: "for pending package javax.naming", index: -1, kind: package, ref: true } was not resolved.[0m
+  [34mFinished performShortValidation (0.009321s)[0m
+[34mFinished short validation (0.010338s)[0m
+Exception in thread "main" abstractor.core.AbstractorException: Errors logged before short validation.
+	at abstractor.core.Abstractor.performShortValidation(Abstractor.java:1526)
+	at abstractor.core.Abstractor.lambda$shortValidate$51(Abstractor.java:1518)
+	at abstractor.core.log.Logger.measure(Logger.java:123)
+	at abstractor.core.Abstractor.shortValidate(Abstractor.java:1518)
+	at abstractor.core.Abstractor.lambda$performAbstraction$42(Abstractor.java:1335)
+	at abstractor.core.log.Logger.measure(Logger.java:123)
+	at abstractor.core.Abstractor.performAbstraction(Abstractor.java:1335)
+	at abstractor.app.App.run(App.java:26)
+	at abstractor.app.App.main(App.java:17)
