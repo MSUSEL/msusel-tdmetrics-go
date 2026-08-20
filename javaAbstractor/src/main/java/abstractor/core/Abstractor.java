@@ -1158,8 +1158,11 @@ public class Abstractor {
         if (count != typeParams.size()) return null;
 
         final ArrayList<Ref<? extends TypeDesc>> typeArgs = new ArrayList<>();
-        for (CtTypeReference<?> ctTypeArg : ctTypeArgs)
-            typeArgs.add(this.addTypeDesc(ctTypeArg));
+        for (CtTypeReference<?> ctTypeArg : ctTypeArgs) {
+            Ref<? extends TypeDesc> tpRef = this.addTypeDesc(ctTypeArg);
+            if (tpRef == null) tpRef = this.proj.baker.anyDesc();
+            typeArgs.add(tpRef);
+        }
         
         final CmpOptions options = new CmpOptions();
         options.useResolved = true;
