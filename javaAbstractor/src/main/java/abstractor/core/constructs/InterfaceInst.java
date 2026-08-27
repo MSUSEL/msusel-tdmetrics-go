@@ -20,9 +20,15 @@ public class InterfaceInst extends ConstructImp implements TypeDesc {
         this.resolved = resolved;
         
         if (generic.isResolved()) {
-            final int tpSize = generic.getResolved().typeParams.size();
+            final ArrayList<Ref<TypeParam>> tp = generic.getResolved().typeParams;
+            final int tpSize = tp.size();
             final int taSize = instanceTypes != null ? instanceTypes.size() : 0;
-            Require.equal(tpSize, taSize, "The type params count (" + tpSize + ") must match the type arguments (" + taSize + "): " + this);
+            Require.equal(tpSize, taSize, () -> "The interface's type params count (" + tpSize + ") " +
+                "must match the type arguments (" + taSize + "):\n"+
+                "  type params: " + tp + "\n"+
+                "  instance types: " + instanceTypes + "\n"+
+                "  instance: " + this + "\n"+
+                "  generic: " + this.generic.getResolved());
         }
     }
 

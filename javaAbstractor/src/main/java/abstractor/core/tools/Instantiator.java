@@ -4,6 +4,7 @@ import java.util.*;
 
 import abstractor.core.constructs.*;
 import abstractor.core.json.*;
+import abstractor.core.log.*;
 import abstractor.core.require.Require;
 
 public class Instantiator {
@@ -32,9 +33,12 @@ public class Instantiator {
             this.nestCount = this.paramOrder.size();
         }
 
-        private void add(Ref<? extends TypeDesc> param, Ref<? extends TypeDesc> arg) throws Exception {
+        private void add(Ref<? extends TypeDesc> param, Ref<? extends TypeDesc> arg, Logger log) throws Exception {
+            if (log != null) log.log("add(" + param + ", " + arg + ")");
+
             if (this.subst.put(param, arg) != null) {
                 final int index = this.paramOrder.indexOf(param);
+                if (log != null) log.log("  prior found at " + index);
                 if (index >= 0) {
                     this.paramOrder.remove(index);
                     if (index < this.nestCount) this.nestCount--;
@@ -151,13 +155,19 @@ public class Instantiator {
      * for the current type params, shown like <U; T>, where `;` separates
      * the nest from the current.
      */
-    public void add(Ref<? extends TypeDesc> param, Ref<? extends TypeDesc> arg) throws Exception {
+    public void add(Ref<? extends TypeDesc> param, Ref<? extends TypeDesc> arg, Logger log) throws Exception {
         Require.notNull(this.topFrame, "cannot add to an empty instantiator");
         Require.notNull(param, "can not have a null type parameter in an instantiator frame");
         Require.notNull(arg, "can not have a null the argument in an instantiator frame");
-        if (this.topFrame.prior != null)
-            arg = this.topFrame.prior.frame.replace(arg);
-        this.topFrame.frame.add(param, arg);
+
+        // TODO: Is this actually needed? How should we handle pushing a clean frame or from another frame if it is?
+        //if (this.topFrame.prior != null)
+        //    arg = this.topFrame.prior.frame.replace(arg);
+        this.topFrame.frame.add(param, arg, log);
+    }
+
+    public void add(Ref<? extends TypeDesc> param, Ref<? extends TypeDesc> arg) throws Exception {
+        this.add(param, arg, null);
     }
 
     public Ref<? extends TypeDesc> replace(Ref<? extends TypeDesc> con) {

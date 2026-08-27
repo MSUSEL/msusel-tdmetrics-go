@@ -24,11 +24,15 @@ public class ObjectInst extends ConstructImp implements TypeDesc {
         this.resInterface = resInterface;
     
         if (generic.isResolved()) {
-            final int tpSize = generic.getResolved().typeParams.size();
+            final ArrayList<Ref<TypeParam>> tp = generic.getResolved().typeParams;
+            final int tpSize = tp.size();
             final int taSize = instanceTypes != null ? instanceTypes.size() : 0;
-            Require.equal(tpSize, taSize, "The type params count (" + tpSize + ") must match the type arguments (" + taSize + "):\n"+
+            Require.equal(tpSize, taSize, () -> "The object's type params count (" + tpSize + ") " +
+                "must match the type arguments (" + taSize + "):\n"+
+                "  type params: " + tp + "\n"+
+                "  instance types: " + instanceTypes + "\n"+
                 "  instance: " + this + "\n"+
-                "  generic: " + generic.getResolved());
+                "  generic: " + this.generic.getResolved());
         }
     }
 
