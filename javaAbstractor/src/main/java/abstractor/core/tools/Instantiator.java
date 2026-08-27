@@ -9,7 +9,7 @@ import abstractor.core.require.Require;
 
 public class Instantiator {
     public class Frame {
-        final private TreeMap<Ref<? extends TypeDesc>, Ref<? extends TypeDesc>> subst = new TreeMap<>();
+        final private TreeMap<ElementKey, Ref<? extends TypeDesc>> subst = new TreeMap<>();
         final private ArrayList<Ref<? extends TypeDesc>> paramOrder = new ArrayList<>();
         private ArrayList<Ref<? extends TypeDesc>> argOrder = null;
         private int nestCount;
@@ -27,16 +27,19 @@ public class Instantiator {
             for (int i = other.nestCount; i < fullCount; i++) {
                 final Ref<? extends TypeDesc> param = other.paramOrder.get(i);
                 this.paramOrder.add(param);
-                final Ref<? extends TypeDesc> sub = other.subst.get(param);
-                this.subst.put(param, sub);
+                final Ref<? extends TypeDesc> sub = other.subst.get(param.elemKey);
+                this.subst.put(param.elemKey, sub);
             }
             this.nestCount = this.paramOrder.size();
         }
 
         private void add(Ref<? extends TypeDesc> param, Ref<? extends TypeDesc> arg, Logger log) throws Exception {
-            if (log != null) log.log("add(" + param + ", " + arg + ")");
+            if (log != null) {
+                log.log("add(" + param + ", " + arg + ")");
+                log.log("  contained: " + this.subst.containsKey(param.elemKey));
+            }
 
-            if (this.subst.put(param, arg) != null) {
+            if (this.subst.put(param.elemKey, arg) != null) {
                 final int index = this.paramOrder.indexOf(param);
                 if (log != null) log.log("  prior found at " + index);
                 if (index >= 0) {
@@ -49,7 +52,7 @@ public class Instantiator {
         }
 
         public Ref<? extends TypeDesc> replace(Ref<? extends TypeDesc> con) {
-            final Ref<? extends TypeDesc> other = this.subst.get(con);
+            final Ref<? extends TypeDesc> other = this.subst.get(con.elemKey);
             return other != null ? other : con;
         }
 
@@ -58,7 +61,7 @@ public class Instantiator {
 
             this.argOrder = new ArrayList<>(this.paramOrder.size());
             for (Ref<? extends TypeDesc> param : this.paramOrder) {
-                final Ref<? extends TypeDesc> arg = this.subst.get(param);
+                final Ref<? extends TypeDesc> arg = this.subst.get(param.elemKey);
                 Require.notNull(arg, "can not have a null argument for type parameter " + param);
                 this.argOrder.add(arg);
             }
@@ -83,7 +86,7 @@ public class Instantiator {
             List<String> parts = new ArrayList<>(size);
             for (int i = 0; i < size; i++) {
                 final Ref<? extends TypeDesc> param = this.paramOrder.get(i);
-                final Ref<? extends TypeDesc> arg   = this.subst.get(param);
+                final Ref<? extends TypeDesc> arg   = this.subst.get(param.elemKey);
                 final String paramStr = JsonFormat.Inline().format(param.toJson(jh));
                 final String argStr   = JsonFormat.Inline().format(arg.toJson(jh));
                 final String header   = i < this.nestCount
