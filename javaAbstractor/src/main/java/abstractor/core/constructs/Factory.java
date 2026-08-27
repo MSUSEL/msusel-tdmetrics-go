@@ -9,6 +9,7 @@ import abstractor.core.json.*;
 import abstractor.core.log.*;
 import abstractor.core.require.Require;
 import abstractor.core.tools.ElementKey;
+import abstractor.core.tools.Instantiator;
 
 public class Factory<T extends Construct> implements Jsonable {
     static private final boolean logCreate   = true; // TODO: Set to false
@@ -73,31 +74,35 @@ public class Factory<T extends Construct> implements Jsonable {
         private final Ref<T> ref;
         private final T con;
         private final Finisher<T> finisher;
+        private final Instantiator.Frame frame;
 
-        public DeferredFinish(String title, Ref<T> ref, T con, Finisher<T> finisher) {
+        public DeferredFinish(String title, Ref<T> ref, T con, Finisher<T> finisher, Instantiator.Frame frame) {
             this.title    = title;
             this.ref      = ref;
             this.con      = con;
             this.finisher = finisher;
+            this.frame    = frame;
         }
 
-        public void finish(Logger log) throws Exception {
+        public void finish(Logger log, Instantiator instantiator) throws Exception {
             try {
                 if (logFinish) {
                     log.log("Finishing " + title);
                     log.push();
                 }
+                instantiator.pushFrameCopy(this.frame);
                 finisher.finish(this.ref, this.con);
             } catch (Exception e) {
                 throw new Exception("Error while finishing " + title, e);
             }  finally {
                 if (logFinish) log.pop();
+                instantiator.popFrame();
             }
         }
     }
 
 
-    public Ref<T> create(Logger log, ElementKey elemKey, String title, CreatorWithRef<T> creator, Finisher<T> finisher) throws Exception {
+    public Ref<T> create(Logger log, Instantiator instantiator, ElementKey elemKey, String title, CreatorWithRef<T> creator, Finisher<T> finisher) throws Exception {
         Require.notNull(elemKey, "factories' create methods require non-null element keys");
 
         // If already "in progress" then check for if a reference already exists
@@ -155,13 +160,13 @@ public class Factory<T extends Construct> implements Jsonable {
                 ref.setResolved(other);
                 if (logResolved) log.log("Resolved with match " + title);
                 if (finisher != null)
-                    this.pendingFinish.add(new DeferredFinish(title, ref, other, finisher));
+                    this.pendingFinish.add(new DeferredFinish(title, ref, other, finisher, instantiator.copyFrame()));
             } else {
                 Require.require(this.conSet.add(newCon));
                 ref.setResolved(newCon);
                 if (logResolved) log.log("Resolved as new " + title);
                 if (finisher != null)
-                    this.pendingFinish.add(new DeferredFinish(title, ref, newCon, finisher));
+                    this.pendingFinish.add(new DeferredFinish(title, ref, newCon, finisher, instantiator.copyFrame()));
             }
 
             return ref;
@@ -172,16 +177,16 @@ public class Factory<T extends Construct> implements Jsonable {
         }
     }
 
-    public Ref<T> create(Logger log, ElementKey elemKey, String title, Creator<T> creator, Finisher<T> finisher) throws Exception {
-        return this.create(log, elemKey, title, (Ref<T> ref) -> creator.create(), finisher);
+    public Ref<T> create(Logger log, Instantiator instantiator, ElementKey elemKey, String title, Creator<T> creator, Finisher<T> finisher) throws Exception {
+        return this.create(log, instantiator, elemKey, title, (Ref<T> ref) -> creator.create(), finisher);
     }
 
-    public Ref<T> create(Logger log, ElementKey elemKey, String title, CreatorWithRef<T> creator) throws Exception {
-        return this.create(log, elemKey, title, creator, null);
+    public Ref<T> create(Logger log, Instantiator instantiator, ElementKey elemKey, String title, CreatorWithRef<T> creator) throws Exception {
+        return this.create(log, instantiator, elemKey, title, creator, null);
     }
 
-    public Ref<T> create(Logger log, ElementKey elemKey, String title, Creator<T> creator) throws Exception {
-        return this.create(log, elemKey, title, (Ref<T> ref) -> creator.create(), null);
+    public Ref<T> create(Logger log, Instantiator instantiator, ElementKey elemKey, String title, Creator<T> creator) throws Exception {
+        return this.create(log, instantiator, elemKey, title, (Ref<T> ref) -> creator.create(), null);
     }
 
     public void removeIf(Logger log, Predicate<T> predicate) {
@@ -313,12 +318,12 @@ public class Factory<T extends Construct> implements Jsonable {
 
     //==========================================================================
 
-    public boolean runDeferredFinishes(Logger log) throws Exception {
+    public boolean runDeferredFinishes(Logger log, Instantiator instantiator) throws Exception {
         if (this.pendingFinish.isEmpty()) return false;
         List<DeferredFinish> finish = new LinkedList<>(this.pendingFinish);
         this.pendingFinish.clear();
         for (DeferredFinish f : finish) {
-            f.finish(log);
+            f.finish(log, instantiator);
         }
         return true;
     }

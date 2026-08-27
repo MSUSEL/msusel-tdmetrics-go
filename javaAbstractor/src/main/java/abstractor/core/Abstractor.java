@@ -221,7 +221,8 @@ public class Abstractor {
         try {
             // All declarations must be added without type arguments.
             this.instantiator.pushCleanFrame();
-            return this.proj.interfaceDecls.create(this.log, new ElementKey(i),
+            return this.proj.interfaceDecls.create(this.log, this.instantiator,
+                new ElementKey(i),
                 "interface decl " + SpoonUtils.describeElem(i),
                 () -> {
                     final String               name       = i.getSimpleName();
@@ -265,8 +266,8 @@ public class Abstractor {
             for (int j = 0; j < typeParams.size(); j++)
                 this.instantiator.add(typeParams.get(j), typeArgs.get(j));
 
-            final ElementKey key = new ElementKey(tr, this.instantiator.typeArgs());
-            return this.proj.interfaceInsts.create(this.log, key,
+            return this.proj.interfaceInsts.create(this.log, this.instantiator,
+                new ElementKey(tr, this.instantiator.typeArgs()),
                 "interface instantiation "+SpoonUtils.describeGeneric(tr),
                 () -> {
                     final Ref<InterfaceDesc> resolved = this.addInterfaceDesc(i);
@@ -286,8 +287,8 @@ public class Abstractor {
     }
 
     public Ref<InterfaceDesc> addInterfaceDesc(CtInterface<?> i) throws Exception {
-        final ElementKey key = new ElementKey(i, this.instantiator.typeArgs());
-        return this.proj.interfaceDescs.create(this.log, key,
+        return this.proj.interfaceDescs.create(this.log, this.instantiator,
+            new ElementKey(i, this.instantiator.typeArgs()),
             "interface description " + SpoonUtils.describeElem(i),
             (Ref<InterfaceDesc> ref) -> {
                 final TreeSet<Ref<Abstract>> abstracts = new TreeSet<Ref<Abstract>>();
@@ -341,7 +342,8 @@ public class Abstractor {
         try {
             // All declarations must be added without type arguments.
             this.instantiator.pushCleanFrame();
-            return this.proj.methodDecls.create(this.log, new ElementKey(m),
+            return this.proj.methodDecls.create(this.log, this.instantiator,
+                new ElementKey(m),
                 "method " + SpoonUtils.describeElem(m),
                 () -> {
                     final Ref<PackageCon>      pkg        = recv.pkg;
@@ -374,8 +376,8 @@ public class Abstractor {
             for (int i = 0; i < typeParams.size(); i++)
                 this.instantiator.add(typeParams.get(i), typeParams.get(i));
 
-            final ElementKey key = new ElementKey(m, this.instantiator.typeArgs());
-            return this.proj.methodInsts.create(this.log, key,
+            return this.proj.methodInsts.create(this.log, this.instantiator,
+                new ElementKey(m, this.instantiator.typeArgs()),
                 "method for object instantiation " + SpoonUtils.describeElem(m),
                 () -> {
                     final List<Ref<? extends TypeDesc>> instanceTypes = this.instantiator.typeArgs();
@@ -400,8 +402,8 @@ public class Abstractor {
             for (int i = 0; i < typeParams.size(); i++)
                 this.instantiator.add(typeParams.get(i), typeParams.get(i));
 
-            final ElementKey key = new ElementKey(ctor, this.instantiator.typeArgs());
-            return this.proj.methodInsts.create(this.log, key,
+            return this.proj.methodInsts.create(this.log, this.instantiator,
+                new ElementKey(ctor, this.instantiator.typeArgs()),
                 "constructor for object instantiation " + SpoonUtils.describeElem(ctor),
                 () -> {
                     final List<Ref<? extends TypeDesc>> instanceTypes = this.instantiator.typeArgs();
@@ -487,8 +489,8 @@ public class Abstractor {
             for (int i = 0; i < classParams.size();  i++) this.instantiator.add(classParams.get(i),  tdClassArgs.get(i));
             for (int i = 0; i < methodParams.size(); i++) this.instantiator.add(methodParams.get(i), tdMethodArgs.get(i));
 
-            final ElementKey key = new ElementKey(m, this.instantiator.typeArgs());
-            return this.proj.methodInsts.create(this.log, key,
+            return this.proj.methodInsts.create(this.log, this.instantiator,
+                new ElementKey(m, this.instantiator.typeArgs()),
                 "method for call site " + SpoonUtils.describeElem(m),
                 () -> {
                     final Ref<ObjectDecl>               recvDecl      = this.addObjectDecl(declClass);
@@ -568,8 +570,8 @@ public class Abstractor {
             for (int i = 0; i < classParams.size(); i++) this.instantiator.add(classParams.get(i), tdClassArgs.get(i));
             for (int i = 0; i < ctorParams.size();  i++) this.instantiator.add(ctorParams.get(i),  tdCtorArgs.get(i));
 
-            final ElementKey key = new ElementKey(ctor, this.instantiator.typeArgs());
-            return this.proj.methodInsts.create(this.log, key,
+            return this.proj.methodInsts.create(this.log, this.instantiator,
+                new ElementKey(ctor, this.instantiator.typeArgs()),
                 "constructor for call site " + SpoonUtils.describeElem(ctor),
                 () -> {
                     final Ref<ObjectDecl>               recvDecl      = this.addObjectDecl(declClass);
@@ -626,8 +628,8 @@ public class Abstractor {
 
     public Ref<Abstract> addAbstract(CtMethod<?> m) throws Exception {
         Require.notObjectMethod(m);
-        final ElementKey key = new ElementKey(m, this.instantiator.typeArgs());
-        final Ref<Abstract> ref = this.proj.abstracts.create(this.log, key,
+        final Ref<Abstract> ref = this.proj.abstracts.create(this.log, this.instantiator,
+            new ElementKey(m, this.instantiator.typeArgs()),
             "abstract " + SpoonUtils.describeElem(m),
             () -> {
                 final String         name      = m.getSimpleName();
@@ -652,8 +654,8 @@ public class Abstractor {
 
     public Ref<Signature> addSignature(CtMethod<?> m) throws Exception {
         Require.notObjectMethod(m);
-        final ElementKey key = new ElementKey(m, this.instantiator.typeArgs());
-        return this.proj.signatures.create(this.log, key,
+        return this.proj.signatures.create(this.log, this.instantiator,
+            new ElementKey(m, this.instantiator.typeArgs()),
             "signature " + SpoonUtils.describeElem(m),
             () -> {
                 final List<CtParameter<?>> ps = m.getParameters();
@@ -689,7 +691,8 @@ public class Abstractor {
         try {
             // All declarations must be added without type arguments.
             this.instantiator.pushCleanFrame();
-            return this.proj.methodDecls.create(log, new ElementKey(ctor),
+            return this.proj.methodDecls.create(log, this.instantiator,
+                new ElementKey(ctor),
                 "constructor " + SpoonUtils.describeElem(ctor),
                 () -> {
                     final ObjectDecl           recv       = receiver.mustGetResolved();
@@ -716,8 +719,8 @@ public class Abstractor {
     }
 
     public Ref<Signature> addSignatureForConstructor(CtConstructor<?> m) throws Exception {
-        final ElementKey key = new ElementKey(m, this.instantiator.typeArgs());
-        return this.proj.signatures.create(this.log, key,
+        return this.proj.signatures.create(this.log, this.instantiator,
+            new ElementKey(m, this.instantiator.typeArgs()),
             "constructor signature " + SpoonUtils.describeElem(m),
             () -> {
                 final List<CtParameter<?>> ps = m.getParameters();
@@ -734,8 +737,8 @@ public class Abstractor {
     }
 
     public Ref<Argument> addArgument(CtParameter<?> p) throws Exception {
-        final ElementKey key = new ElementKey(p, this.instantiator.typeArgs());
-        return this.proj.arguments.create(this.log, key,
+        return this.proj.arguments.create(this.log, this.instantiator,
+            new ElementKey(p, this.instantiator.typeArgs()),
             "parameter " + SpoonUtils.describeElem(p),
             () -> {
                 final String            name = p.getSimpleName();
@@ -750,8 +753,8 @@ public class Abstractor {
     }
     
     public Ref<Argument> addArgument(CtTypeReference<?> p) throws Exception {
-        final ElementKey key = new ElementKey(p, this.instantiator.typeArgs());
-        return this.proj.arguments.create(this.log, key,
+        return this.proj.arguments.create(this.log, this.instantiator,
+            new ElementKey(p, this.instantiator.typeArgs()),
             "parameter <unnamed> " + SpoonUtils.describeGeneric(p),
             () -> {
                 Ref<? extends TypeDesc> type = this.addTypeDesc(p);
@@ -765,8 +768,8 @@ public class Abstractor {
     }
     
     public Ref<StructDesc> addStructDesc(CtType<?> c) throws Exception {
-        final ElementKey key = new ElementKey(c, this.instantiator.typeArgs());
-        return this.proj.structDescs.create(this.log, key,
+        return this.proj.structDescs.create(this.log, this.instantiator,
+            new ElementKey(c, this.instantiator.typeArgs()),
             "struct " + SpoonUtils.describeElem(c),
             (Ref<StructDesc> ref) -> {
                 final ArrayList<Ref<Field>> fields = new ArrayList<>();
@@ -804,8 +807,8 @@ public class Abstractor {
     }
 
     public Ref<Field> addField(CtField<?> f) throws Exception {
-        final ElementKey key = new ElementKey(f, this.instantiator.typeArgs());
-        return this.proj.fields.create(this.log, key,
+        return this.proj.fields.create(this.log, this.instantiator,
+            new ElementKey(f, this.instantiator.typeArgs()),
             "field " + SpoonUtils.describeElem(f),
             () -> {
                 final String            name = f.getSimpleName();
@@ -823,8 +826,8 @@ public class Abstractor {
     }
 
     public Ref<Field> addField(String name, CtTypeReference<?> f) throws Exception {
-        final ElementKey key = new ElementKey(f, this.instantiator.typeArgs());
-        return this.proj.fields.create(this.log, key,
+        return this.proj.fields.create(this.log, this.instantiator,
+            new ElementKey(f, this.instantiator.typeArgs()),
             "field " + name,
             () -> {
                 final Ref<? extends TypeDesc> type = this.addTypeDesc(f);
@@ -864,8 +867,8 @@ public class Abstractor {
         this.collectActualTypeArgs(receiverRef, receiverArgs);
         final List<Ref<? extends TypeDesc>> keyArgs = this.addTypeArguments(receiverArgs);
 
-        final ElementKey key = new ElementKey(field, keyArgs);
-        final Ref<Selection> selRef = this.proj.selections.create(this.log, key,
+        final Ref<Selection> selRef = this.proj.selections.create(this.log, this.instantiator,
+            new ElementKey(field, keyArgs),
             "select field " + SpoonUtils.describeElem(field),
             () -> new Selection(field.getSimpleName(), origin));
 
@@ -910,7 +913,8 @@ public class Abstractor {
     }
     
     public Ref<Basic> addBasic(CtTypeReference<?> tr) throws Exception {
-        return this.proj.basics.create(this.log, new ElementKey(tr),
+        return this.proj.basics.create(this.log, this.instantiator,
+            new ElementKey(tr),
             "basic " + SpoonUtils.describeElem(tr),
             () -> {
                 if (SpoonUtils.isVoid(tr))
@@ -950,7 +954,8 @@ public class Abstractor {
     public Ref<TypeParam> addTypeParam(CtTypeParameter tp) throws Exception {
         // Do not use type arguments in the ElementKey for typeParams.
         // The typeParams will be replaced by the instantiator later.
-        return this.proj.typeParams.create(this.log, new ElementKey(tp, null),
+        return this.proj.typeParams.create(this.log, this.instantiator,
+            new ElementKey(tp, null),
             "type params " + SpoonUtils.describeElem(tp),
             () -> {
                 final String                  name = tp.getSimpleName();
@@ -965,7 +970,8 @@ public class Abstractor {
         // Do not use type arguments in the ElementKey for typeParams.
         // The typeParams will be replaced by the instantiator later.
         final CtTypeParameter tp = tpr.getDeclaration();
-        return this.proj.typeParams.create(this.log, new ElementKey(tp != null ? tp : tpr, null),
+        return this.proj.typeParams.create(this.log, this.instantiator,
+            new ElementKey(tp != null ? tp : tpr, null),
             "type params reference " + SpoonUtils.describeElem(tpr),
             () -> {
                 final String                  name = tpr.getSimpleName();
@@ -976,8 +982,8 @@ public class Abstractor {
     }
     
     public Ref<Metrics> addMetrics(CtExecutable<?> m) throws Exception {
-        final ElementKey key = new ElementKey(m, this.instantiator.typeArgs());
-        return this.proj.metrics.create(this.log, key,
+        return this.proj.metrics.create(this.log, this.instantiator,
+            new ElementKey(m, this.instantiator.typeArgs()),
             "metrics " + SpoonUtils.describeElem(m),
             () -> {
                 final Location loc = this.proj.locations.create(m.getPosition());
@@ -1000,7 +1006,8 @@ public class Abstractor {
         try {
             // All declarations must be added without type arguments.
             this.instantiator.pushCleanFrame();
-            return this.proj.objectDecls.create(this.log, new ElementKey(c),
+            return this.proj.objectDecls.create(this.log, this.instantiator,
+                new ElementKey(c),
                 "object decl " + SpoonUtils.describeElem(c),
                 () -> {
                     final Ref<PackageCon>      pkg        = this.addPackageFor(c);
@@ -1102,8 +1109,8 @@ public class Abstractor {
             for (int i = 0; i < typeParams.size(); i++)
                 this.instantiator.add(typeParams.get(i), typeArgs.get(i));
 
-            final ElementKey key = new ElementKey(tr, this.instantiator.typeArgs());
-            return this.proj.objectInsts.create(this.log, key,
+            return this.proj.objectInsts.create(this.log, this.instantiator,
+                new ElementKey(tr, this.instantiator.typeArgs()),
                 "object instantiation "+SpoonUtils.describeGeneric(tr),
                 (Ref<ObjectInst> ref) -> {
                     final Ref<StructDesc>    resData      = this.addStructDesc(c);
@@ -1280,14 +1287,16 @@ public class Abstractor {
         try {
             // All declarations must be added without type arguments.
             this.instantiator.pushCleanFrame();
-            return this.proj.objectDecls.create(this.log, new ElementKey(e),
+            return this.proj.objectDecls.create(this.log, this.instantiator,
+                new ElementKey(e),
                 "enum " + SpoonUtils.describeElem(e),
                 () -> {
                     final String             name   = e.getSimpleName();
                     final Ref<PackageCon>    pkg    = this.addPackageFor(e);
                     final Location           loc    = this.proj.locations.create(e.getPosition());
                     final CtTypeReference<?> tr     = e.getSuperclass();
-                    final Ref<StructDesc>    struct = this.proj.structDescs.create(this.log, new ElementKey(tr),
+                    final Ref<StructDesc>    struct = this.proj.structDescs.create(this.log, this.instantiator,
+                        new ElementKey(tr),
                         "enum struct " + SpoonUtils.describeElem(tr),
                         () -> {
                             final ArrayList<Ref<Field>> fields = new ArrayList<>();
@@ -1311,7 +1320,8 @@ public class Abstractor {
 
                         // Finish by adding the "const values" to the package for each enumerator value.
                         for (CtEnumValue<?> ev: e.getEnumValues()) {
-                            this.proj.values.create(this.log, new ElementKey(ev),
+                            this.proj.values.create(this.log, this.instantiator,
+                                new ElementKey(ev),
                                 "enum value "+ SpoonUtils.describeElem(ev),
                                 () -> {
                                     final String   name = ev.getSimpleName();
@@ -1375,7 +1385,8 @@ public class Abstractor {
     }
 
     public Ref<PackageCon> processPackage(CtPackage pkg) throws Exception {
-        return this.proj.packages.create(this.log, new ElementKey(pkg),
+        return this.proj.packages.create(this.log, this.instantiator,
+            new ElementKey(pkg),
            "package " + SpoonUtils.describeElem(pkg),
             () -> {
                 final String name = SpoonUtils.packageName(pkg);
@@ -1432,7 +1443,7 @@ public class Abstractor {
         while (hasMore) {
             hasMore = false;
             for (Factory<?> f : this.proj.factories)
-                hasMore = f.runDeferredFinishes(this.log) | hasMore;
+                hasMore = f.runDeferredFinishes(this.log, this.instantiator) | hasMore;
         }
     }
 
