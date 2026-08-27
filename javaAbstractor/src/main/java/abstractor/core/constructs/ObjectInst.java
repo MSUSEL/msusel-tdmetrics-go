@@ -26,7 +26,9 @@ public class ObjectInst extends ConstructImp implements TypeDesc {
         if (generic.isResolved()) {
             final int tpSize = generic.getResolved().typeParams.size();
             final int taSize = instanceTypes != null ? instanceTypes.size() : 0;
-            Require.equal(tpSize, taSize, "The type params count (" + tpSize + ") must match the type arguments (" + taSize + "): " + this);
+            Require.equal(tpSize, taSize, "The type params count (" + tpSize + ") must match the type arguments (" + taSize + "):\n"+
+                "  instance: " + this + "\n"+
+                "  generic: " + generic.getResolved());
         }
     }
 

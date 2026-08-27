@@ -7,7 +7,7 @@ import abstractor.core.iter.*;
 import abstractor.core.json.*;
 
 public class TypeParam extends ConstructImp implements TypeDesc {
-    public String        name;
+    public String                  name;
     public Ref<? extends TypeDesc> type;
     
     public TypeParam() {}
