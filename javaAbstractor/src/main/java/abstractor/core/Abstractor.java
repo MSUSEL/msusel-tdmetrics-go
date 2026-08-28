@@ -1107,23 +1107,8 @@ public class Abstractor {
 
             if (definedInNest) this.instantiator.pushFrame();
             else this.instantiator.pushCleanFrame();
-
-            this.log.log("===[start]=================="); // TODO: REMOVE
-            this.log.log("tr: " + SpoonUtils.describeElem(tr)); // TODO: REMOVE
-            this.log.log("c: " + SpoonUtils.describeElem(c)); // TODO: REMOVE
-            this.log.log("c.par: " + SpoonUtils.describeElem(c.getParent())); // TODO: REMOVE
-            this.log.log("definedInNest: " + definedInNest); // TODO: REMOVE
-            this.log.log("instantiator': " + this.instantiator); // TODO: REMOVE
-            this.log.log("----------------------------"); // TODO: REMOVE
-            
             for (int i = 0; i < typeParams.size(); i++)
-                this.instantiator.add(typeParams.get(i), typeArgs.get(i), this.log);
-
-            this.log.log("----------------------------"); // TODO: REMOVE
-            this.log.log("typeParams: " + typeParams); // TODO: REMOVE
-            this.log.log("typeArgs: " + typeArgs); // TODO: REMOVE
-            this.log.log("instantiator: " + this.instantiator); // TODO: REMOVE
-            this.log.log("===[end]===================="); // TODO: REMOVE
+                this.instantiator.add(typeParams.get(i), typeArgs.get(i));
 
             return this.proj.objectInsts.create(this.log, this.instantiator,
                 new ElementKey(tr, this.instantiator.typeArgs()),

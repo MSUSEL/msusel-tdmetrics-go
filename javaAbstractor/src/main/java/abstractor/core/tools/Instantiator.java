@@ -4,7 +4,6 @@ import java.util.*;
 
 import abstractor.core.constructs.*;
 import abstractor.core.json.*;
-import abstractor.core.log.*;
 import abstractor.core.require.Require;
 
 public class Instantiator {
@@ -33,31 +32,15 @@ public class Instantiator {
             this.nestCount = this.paramOrder.size();
         }
 
-        private void add(Ref<? extends TypeDesc> param, Ref<? extends TypeDesc> arg, Logger log) throws Exception {
-            if (log != null) { // TODO: REMOVE
-                log.log("add(" + param + ", " + arg + ")");
-                log.log("  1. contained: " + this.subst.containsKey(param.elemKey));
-                log.log("  2. subst: " + this.subst);
-                log.log("  3. paramOrder: " + this.paramOrder);
-                log.log("  4. nestCount: " + this.nestCount);
-            }
-
+        private void add(Ref<? extends TypeDesc> param, Ref<? extends TypeDesc> arg) throws Exception {
             if (this.subst.put(param.elemKey, arg) != null) {
                 final int index = this.paramOrder.indexOf(param);
-                if (log != null) log.log("  prior found at " + index); // TODO: REMOVE
                 if (index >= 0) {
                     this.paramOrder.remove(index);
                     if (index < this.nestCount) this.nestCount--;
                 }
             }
             this.paramOrder.add(param);
-            if (log != null) { // TODO: REMOVE
-                log.log("  5. contained: " + this.subst.containsKey(param.elemKey));
-                log.log("  6. subst: " + this.subst);
-                log.log("  7. paramOrder: " + this.paramOrder);
-                log.log("  8. nestCount: " + this.nestCount);
-            }
-
             this.argOrder = null;
         }
 
@@ -168,19 +151,11 @@ public class Instantiator {
      * for the current type params, shown like <U; T>, where `;` separates
      * the nest from the current.
      */
-    public void add(Ref<? extends TypeDesc> param, Ref<? extends TypeDesc> arg, Logger log) throws Exception {
+    public void add(Ref<? extends TypeDesc> param, Ref<? extends TypeDesc> arg) throws Exception {
         Require.notNull(this.topFrame, "cannot add to an empty instantiator");
         Require.notNull(param, "can not have a null type parameter in an instantiator frame");
         Require.notNull(arg, "can not have a null the argument in an instantiator frame");
-
-        // TODO: Is this actually needed? How should we handle pushing a clean frame or from another frame if it is?
-        //if (this.topFrame.prior != null)
-        //    arg = this.topFrame.prior.frame.replace(arg);
-        this.topFrame.frame.add(param, arg, log);
-    }
-
-    public void add(Ref<? extends TypeDesc> param, Ref<? extends TypeDesc> arg) throws Exception {
-        this.add(param, arg, null);
+        this.topFrame.frame.add(param, arg);
     }
 
     public Ref<? extends TypeDesc> replace(Ref<? extends TypeDesc> con) {
