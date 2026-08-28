@@ -34,6 +34,15 @@ public class InterfaceInst extends ConstructImp implements TypeDesc {
 
     public ConstructKind kind() { return ConstructKind.INTERFACE_INST; }
 
+    public boolean matchesGeneric() {
+        if (!generic.isResolved()) return false;
+        final ArrayList<Ref<TypeParam>> tp = generic.getResolved().typeParams;
+        for (int i = 0; i < tp.size(); i++) {
+            if (!tp.get(i).equals(instanceTypes.get(i))) return false;
+        }
+        return true;
+    }
+
     @Override
     public JsonNode toJson(JsonHelper h) {
         JsonObject obj = (JsonObject)super.toJson(h);

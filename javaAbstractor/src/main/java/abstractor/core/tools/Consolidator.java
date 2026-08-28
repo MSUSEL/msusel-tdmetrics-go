@@ -100,7 +100,7 @@ public class Consolidator {
         conSet.addAll(squeezedList);
         final int collisions = origSize - conSet.size();
 
-        // If there were collsisions (not just sorting), update all the references
+        // If there were collisions (not just sorting), update all the references
         // so they use the unique values. The non-unique values are already be
         // equal to the unique ones so we can just affirm they are using the unique ones.
         if (collisions > 0) {

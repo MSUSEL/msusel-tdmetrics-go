@@ -55,7 +55,7 @@ public class Ref<T extends Construct> extends ConstructImp {
         obj.put("ref",     true);
         obj.put("context", this.context);
 
-        final boolean showExtras = true; // TODO: Set to false;
+        final boolean showExtras = false;
         if (showExtras) {
             obj.put("refHash", this.hashCode());
             obj.put("cmpOptions", String.valueOf(this.getCmpOptions()));

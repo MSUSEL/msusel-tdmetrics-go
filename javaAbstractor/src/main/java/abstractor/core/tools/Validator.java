@@ -7,7 +7,11 @@ import abstractor.core.json.*;
 import abstractor.core.log.*;
 
 public class Validator {
-    static private boolean addBlackLineBetweenErrors = false;
+    static private boolean addBlankLineBetweenErrors = false;
+
+    static private Set<String> demoteErrorIds = new HashSet<>(Arrays.asList(
+        "0620" // TODO: No consolidator currently removes instantiations that match the generic declaration.
+    ));
 
     final public Logger log;
     final public Project proj;
@@ -40,8 +44,11 @@ public class Validator {
     private void error(String id, String text) {
         this.errCount++;
         String prefix = "Validation Error " + this.errCount + ". [" + id + "] ";
-        if (addBlackLineBetweenErrors && this.errCount > 1) prefix = "\n" + prefix;
-        this.log.error(prefix + text);
+        if (addBlankLineBetweenErrors && this.errCount > 1) prefix = "\n" + prefix;
+
+        if (demoteErrorIds.contains(id))
+            this.log.notice(prefix + "(demoted) " + text);
+        else this.log.error(prefix + text);
     }
 
     private String conToString(Construct con) {
