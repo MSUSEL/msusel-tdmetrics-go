@@ -34,20 +34,30 @@ public class Instantiator {
         }
 
         private void add(Ref<? extends TypeDesc> param, Ref<? extends TypeDesc> arg, Logger log) throws Exception {
-            if (log != null) {
+            if (log != null) { // TODO: REMOVE
                 log.log("add(" + param + ", " + arg + ")");
-                log.log("  contained: " + this.subst.containsKey(param.elemKey));
+                log.log("  1. contained: " + this.subst.containsKey(param.elemKey));
+                log.log("  2. subst: " + this.subst);
+                log.log("  3. paramOrder: " + this.paramOrder);
+                log.log("  4. nestCount: " + this.nestCount);
             }
 
             if (this.subst.put(param.elemKey, arg) != null) {
                 final int index = this.paramOrder.indexOf(param);
-                if (log != null) log.log("  prior found at " + index);
+                if (log != null) log.log("  prior found at " + index); // TODO: REMOVE
                 if (index >= 0) {
                     this.paramOrder.remove(index);
                     if (index < this.nestCount) this.nestCount--;
                 }
             }
             this.paramOrder.add(param);
+            if (log != null) { // TODO: REMOVE
+                log.log("  5. contained: " + this.subst.containsKey(param.elemKey));
+                log.log("  6. subst: " + this.subst);
+                log.log("  7. paramOrder: " + this.paramOrder);
+                log.log("  8. nestCount: " + this.nestCount);
+            }
+
             this.argOrder = null;
         }
 

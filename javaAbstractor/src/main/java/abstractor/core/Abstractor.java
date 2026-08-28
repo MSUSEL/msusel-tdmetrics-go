@@ -1105,11 +1105,17 @@ public class Abstractor {
         try {
             final boolean definedInNest = SpoonUtils.inSameNested(tr, c);
 
-            this.log.log("===[start]=================="); // TODO: REMOVE
-            this.log.log("definedInNest: " + definedInNest); // TODO: REMOVE
-
             if (definedInNest) this.instantiator.pushFrame();
             else this.instantiator.pushCleanFrame();
+
+            this.log.log("===[start]=================="); // TODO: REMOVE
+            this.log.log("tr: " + SpoonUtils.describeElem(tr)); // TODO: REMOVE
+            this.log.log("c: " + SpoonUtils.describeElem(c)); // TODO: REMOVE
+            this.log.log("c.par: " + SpoonUtils.describeElem(c.getParent())); // TODO: REMOVE
+            this.log.log("definedInNest: " + definedInNest); // TODO: REMOVE
+            this.log.log("instantiator': " + this.instantiator); // TODO: REMOVE
+            this.log.log("----------------------------"); // TODO: REMOVE
+            
             for (int i = 0; i < typeParams.size(); i++)
                 this.instantiator.add(typeParams.get(i), typeArgs.get(i), this.log);
 

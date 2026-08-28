@@ -156,9 +156,25 @@ final public class SpoonUtils {
     }
     
     static public boolean inSameNested(CtTypeReference<?> tr, CtType<?> t) {
-        final CtElement par = t.getParent();
-        if (par instanceof CtPackage) return false;
-        return tr.hasParent(par);
+        //final CtElement par = t.getParent();
+        //if (par instanceof CtPackage) return false;
+        //return tr.hasParent(par);
+        // TODO: Clean up based on if the following works better than the preceeding.
+        
+        CtType<?> targetType = tr.getTypeDeclaration();
+        if (targetType != null && targetType.equals(t)) {
+            return false;
+        }
+
+        CtType<?> current = t;
+        while (current != null) {
+            if (current.equals(tr.getDeclaration() != null ? tr.getDeclaration() : tr.getTypeDeclaration())) {
+                return true;
+            }
+            CtElement par = current.getParent();
+            current = (par instanceof CtType) ? (CtType<?>) par : null;
+        }
+        return false;
     }
 
     static public boolean isVoid(CtTypeReference<?> tr) {
