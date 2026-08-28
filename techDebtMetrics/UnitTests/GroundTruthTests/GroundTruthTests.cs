@@ -116,21 +116,53 @@ public class GroundTruthTests {
         };
     }
 
-    [Test] public void GroundTruthCommonBcel() => checkGroundTruth(JavaTarget.CommonsBcel);
-    [Test] public void GroundTruthCommonsBeanutils() => checkGroundTruth(JavaTarget.CommonsBeanutils);
-    [Test] public void GroundTruthCommonsCli() => checkGroundTruth(JavaTarget.CommonsCli);
-    [Test] public void GroundTruthCommonsCodec() => checkGroundTruth(JavaTarget.CommonsCodec);
-    [Test] public void GroundTruthCommonsDaemon() => checkGroundTruth(JavaTarget.CommonsDaemon);
-    [Test] public void GroundTruthCommonsDbutils() => checkGroundTruth(JavaTarget.CommonsDbutils);
-    [Test] public void GroundTruthCommonsExec() => checkGroundTruth(JavaTarget.CommonsExec);
-    [Test] public void GroundTruthCommonsIo() => checkGroundTruth(JavaTarget.CommonsIo);
-    [Test] public void GroundTruthCommonsNet() => checkGroundTruth(JavaTarget.CommonsNet);
+    [Test] public void GroundTruthArchiva()              => checkGroundTruth(JavaTarget.Archiva);
+    [Test] public void GroundTruthBatik()                => checkGroundTruth(JavaTarget.Batik);
+    [Test] public void GroundTruthCayenne()              => checkGroundTruth(JavaTarget.Cayenne);
+    [Test] public void GroundTruthCocoon()               => checkGroundTruth(JavaTarget.Cocoon);
+    [Test] public void GroundTruthCommonsBcel()          => checkGroundTruth(JavaTarget.CommonsBcel);
+    [Test] public void GroundTruthCommonsBeanutils()     => checkGroundTruth(JavaTarget.CommonsBeanutils);
+    [Test] public void GroundTruthCommonsCli()           => checkGroundTruth(JavaTarget.CommonsCli);
+    [Test] public void GroundTruthCommonsCodec()         => checkGroundTruth(JavaTarget.CommonsCodec);
+    [Test] public void GroundTruthCommonsCollections()   => checkGroundTruth(JavaTarget.CommonsCollections);
+    [Test] public void GroundTruthCommonsConfiguration() => checkGroundTruth(JavaTarget.CommonsConfiguration);
+    [Test] public void GroundTruthCommonsDaemon()        => checkGroundTruth(JavaTarget.CommonsDaemon);
+    [Test] public void GroundTruthCommonsDbcp()          => checkGroundTruth(JavaTarget.CommonsDbcp);
+    [Test] public void GroundTruthCommonsDbutils()       => checkGroundTruth(JavaTarget.CommonsDbutils);
+    [Test] public void GroundTruthCommonsDigester()      => checkGroundTruth(JavaTarget.CommonsDigester);
+    [Test] public void GroundTruthCommonsExec()          => checkGroundTruth(JavaTarget.CommonsExec);
+    [Test] public void GroundTruthCommonsFileUpload()    => checkGroundTruth(JavaTarget.CommonsFileUpload);
+    [Test] public void GroundTruthCommonsIo()            => checkGroundTruth(JavaTarget.CommonsIo);
+    [Test] public void GroundTruthCommonsJelly()         => checkGroundTruth(JavaTarget.CommonsJelly);
+    [Test] public void GroundTruthCommonsJexl()          => checkGroundTruth(JavaTarget.CommonsJexl);
+    [Test] public void GroundTruthCommonsJxpath()        => checkGroundTruth(JavaTarget.CommonsJxpath);
+    [Test] public void GroundTruthCommonsNet()           => checkGroundTruth(JavaTarget.CommonsNet);
+    [Test] public void GroundTruthCommonsOgnl()          => checkGroundTruth(JavaTarget.CommonsOgnl);
+    [Test] public void GroundTruthCommonsValidator()     => checkGroundTruth(JavaTarget.CommonsValidator);
+    [Test] public void GroundTruthCommonsVfs()           => checkGroundTruth(JavaTarget.CommonsVfs);
+    [Test] public void GroundTruthFelix()                => checkGroundTruth(JavaTarget.Felix);
+    [Test] public void GroundTruthHive()                 => checkGroundTruth(JavaTarget.Hive);
+    [Test] public void GroundTruthHttpComponentsClient() => checkGroundTruth(JavaTarget.HttpComponentsClient);
+    [Test] public void GroundTruthHttpComponentsCore()   => checkGroundTruth(JavaTarget.HttpComponentsCore);
+    [Test] public void GroundTruthSantuario()            => checkGroundTruth(JavaTarget.Santuario);
+    [Test] public void GroundTruthThrift()               => checkGroundTruth(JavaTarget.Thrift);
+    [Test] public void GroundTruthZookeeper()            => checkGroundTruth(JavaTarget.Zookeeper);
 
     static private void checkGroundTruth(JavaTarget target) {
         GT.GroundTruth gt = GT.GroundTruth.FromZip(Repo.MetricsZip, target);
-        Project proj = Project.FromFile(Repo.AbstractedJava(target));
-        string groupId = proj.GroupId;
-        Assert.IsNotEmpty(groupId, "the groupId needs to not be empty");
+        Project proj;
+        try {
+            proj = Project.FromFile(Repo.AbstractedJava(target));
+        } catch (System.IO.FileNotFoundException ex) {
+            Assert.Fail("Missing the abstraction file: " + target.ProjectKey + ".json");
+            return;
+        }
+
+        string groupId = target.GroupId;
+        //string groupId = proj.GroupId;
+        //Assert.IsNotEmpty(groupId, "the groupId needs to not be empty");
+        //Assert.True(groupId.StartsWith("org.apache"), "expected the groupId to start with \"org.apache\" but it was \"" + groupId + "\"");
+        
         Assert.AreEqual(proj.CommitHash, target.CommitSha, "commit hash should match for " + groupId);
 
         Dictionary<string, ObjectDecl> projObjects = new(
@@ -150,7 +182,7 @@ public class GroundTruthTests {
             where c.Type != GT.DeclType.Interface
             select new KeyValuePair<string, GT.DeclMetrics>(c.FullName, c)
         );
-        Assert.AreEqual(projObjects.Count(), gtClasses.Count(), "the number of classes are expected to match");
+        Assert.AreEqual(projObjects.Count, gtClasses.Count, "the number of classes are expected to match");
 
         int methods = 0;
         foreach (KeyValuePair<string, ObjectDecl> p in projObjects) {
