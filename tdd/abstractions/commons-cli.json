@@ -287,7 +287,7 @@
     { "type": "interfaceInst23" },
     { "type": "interfaceInst24" },
     { "type": "interfaceInst27" },
-    { "type": "interfaceInst32" },
+    { "type": "interfaceInst33" },
     { "type": "object2" },
     { "type": "object3" },
     { "type": "object4" },
@@ -366,7 +366,7 @@
     { "name": "arg1", "type": "typeParam8" },
     { "name": "arg2", "type": "basic6" },
     { "name": "arg3", "type": "basic6" },
-    { "name": "arg4", "type": "interfaceInst33" },
+    { "name": "arg4", "type": "interfaceInst32" },
     { "name": "argName", "type": "basic6" },
     { "name": "arguments", "type": "interfaceInst2" },
     { "name": "autoUsage", "type": "basic1" },
@@ -504,7 +504,6 @@
     { "name": "description", "type": "basic6", "vis": "private" },
     { "name": "detailMessage", "type": "basic6", "vis": "private" },
     { "name": "eatTheRest", "type": "basic1", "vis": "private" },
-    { "name": "err", "type": "object49", "vis": "public" },
     { "name": "expectedOpts", "type": "interfaceDecl14", "vis": "protected" },
     { "name": "group", "type": "object41", "vis": "private" },
     { "name": "longOpt", "type": "basic6", "vis": "private" },
@@ -523,7 +522,6 @@
     { "name": "optionalArg", "type": "basic1", "vis": "private" },
     { "name": "options", "type": "interfaceInst24", "vis": "private" },
     { "name": "options", "type": "object43", "vis": "private" },
-    { "name": "out", "type": "object49", "vis": "public" },
     { "name": "required", "type": "basic1", "vis": "private" },
     { "name": "requiredOptions", "type": "interfaceDecl14", "vis": "private" },
     { "name": "requiredOpts", "type": "interfaceInst23", "vis": "private" },
@@ -947,13 +945,13 @@
       "resolved": 36
     },
     {
-      "generic": 23,
-      "instanceTypes": [ "typeParam3" ],
+      "generic": 24,
+      "instanceTypes": [ "object61" ],
       "resolved": 36
     },
     {
       "generic": 24,
-      "instanceTypes": [ "object61" ],
+      "instanceTypes": [ "typeParam3" ],
       "resolved": 36
     }
   ],
@@ -4217,7 +4215,7 @@
       "shadow": true
     },
     {
-      "data": 14,
+      "data": 13,
       "interface": 19,
       "loc": 26,
       "methods": [ 1, 2, 123, 128 ],
@@ -4226,7 +4224,7 @@
       "vis": "public"
     },
     {
-      "data": 15,
+      "data": 14,
       "interface": 13,
       "loc": 112,
       "methods": [ 3, 79, 114 ],
@@ -4282,7 +4280,7 @@
       "vis": "public"
     },
     {
-      "data": 11,
+      "data": 10,
       "interface": 23,
       "loc": 3522,
       "methods": [ 7, 57, 60, 87, 175, 176, 181, 224, 226, 227, 265, 266, 307, 316, 317 ],
@@ -4322,7 +4320,7 @@
       "vis": "public"
     },
     {
-      "data": 13,
+      "data": 12,
       "interface": 21,
       "loc": 234,
       "methods": [ 8, 39, 41, 100, 103, 131, 132, 133, 134, 135, 136, 137, 138, 139, 140, 141, 142, 143, 144, 148, 149, 150, 188, 189, 190, 220, 269 ],
@@ -4438,7 +4436,7 @@
     },
     { "data": 1, "interface": 36, "name": "MalformedURLException", "package": 5, "shadow": true, "vis": "public" },
     {
-      "data": 18,
+      "data": 17,
       "interface": 16,
       "loc": 2612,
       "methods": [ 12, 13, 124 ],
@@ -4447,7 +4445,7 @@
       "vis": "public"
     },
     {
-      "data": 16,
+      "data": 15,
       "interface": 14,
       "loc": 2681,
       "methods": [ 14, 15, 80, 117 ],
@@ -4470,7 +4468,7 @@
       "vis": "public"
     },
     {
-      "data": 10,
+      "data": 9,
       "interface": 36,
       "loc": 3769,
       "methods": [ 20, 72, 73, 74, 178, 179, 183, 184, 193, 194, 195, 212, 213, 268, 318, 319, 320, 321, 322, 323, 324 ],
@@ -4479,7 +4477,7 @@
       "vis": "public"
     },
     {
-      "data": 12,
+      "data": 11,
       "interface": 11,
       "loc": 2570,
       "methods": [ 70 ],
@@ -4489,7 +4487,7 @@
       "vis": "private"
     },
     {
-      "data": 19,
+      "data": 18,
       "interface": 22,
       "loc": 4137,
       "methods": [ 42, 119, 145, 154, 214, 286, 287, 304 ],
@@ -4506,7 +4504,7 @@
       "package": 8
     },
     {
-      "data": 21,
+      "data": 20,
       "interface": 20,
       "loc": 4384,
       "methods": [ 43, 44, 45, 46, 47, 48, 115, 125, 129, 130, 146, 152, 186, 191, 196, 200, 305 ],
@@ -4516,7 +4514,7 @@
     },
     { "data": 1, "interface": 36, "name": "OutputStream", "package": 2, "shadow": true, "vis": "public" },
     {
-      "data": 20,
+      "data": 19,
       "interface": 17,
       "loc": 4721,
       "methods": [ 21 ],
@@ -4543,7 +4541,7 @@
       "vis": "public"
     },
     {
-      "data": 22,
+      "data": 21,
       "interface": 32,
       "loc": 5324,
       "methods": [ 63, 97, 165, 204, 254, 256 ],
@@ -4626,7 +4624,7 @@
       "shadow": true,
       "vis": "public"
     },
-    { "data": 9, "interface": 36, "name": "System", "package": 3, "shadow": true, "vis": "public" },
+    { "data": 1, "interface": 36, "name": "System", "package": 3, "shadow": true, "vis": "public" },
     {
       "data": 1,
       "interface": 36,
@@ -4656,7 +4654,7 @@
       "vis": "public"
     },
     {
-      "data": 17,
+      "data": 16,
       "interface": 15,
       "loc": 5816,
       "methods": [ 33, 34, 126 ],
@@ -5763,67 +5761,64 @@
   "structDescs": [
     { },
     {
-      "fields": [ 18, 13, 12, 17, 16, 14, 15, 11, 50, 45, 44, 49, 47, 48, 46, 43, 68, 59 ]
+      "fields": [ 18, 13, 12, 17, 16, 14, 15, 11, 50, 45, 44, 49, 47, 48, 46, 43, 67, 58 ]
     },
     {
       "fields": [ 28, 26, 25, 10, 9, 20, 22, 21, 34 ]
     },
     {
-      "fields": [ 32, 33, 79, 65, 58, 35, 52, 75, 71, 64, 86, 87, 88 ]
+      "fields": [ 32, 33, 77, 64, 57, 35, 52, 73, 70, 63, 84, 85, 86 ]
     },
     {
-      "fields": [ 39, 73, 76 ]
+      "fields": [ 39, 72, 74 ]
     },
     {
-      "fields": [ 39, 73, 76, 6 ]
+      "fields": [ 39, 72, 74, 6 ]
     },
     {
-      "fields": [ 39, 73, 83, 42, 41, 81, 56 ]
+      "fields": [ 39, 72, 81, 42, 41, 79, 55 ]
     },
     {
       "fields": [ 40, 1 ]
     },
     {
-      "fields": [ 55, 74 ]
+      "fields": [ 60, 52, 35, 73, 63, 84, 70, 86, 23 ]
     },
     {
-      "fields": [ 61, 52, 35, 75, 64, 86, 71, 88, 23 ]
+      "fields": [ 64, 52, 57, 35, 73, 70, 63, 84, 86, 3 ]
     },
     {
-      "fields": [ 65, 52, 58, 35, 75, 71, 64, 86, 88, 3 ]
+      "fields": [ 77, 2 ]
     },
     {
-      "fields": [ 79, 2 ]
+      "fields": [ 77, 36, 71 ]
     },
     {
-      "fields": [ 79, 36, 72 ]
+      "fields": [ 77, 56, 66, 77, 77, 77, 37, 53, 31, 38, 80, 51, 30, 82, 24, 27, 8, 29, 19, 5 ]
     },
     {
-      "fields": [ 79, 57, 67, 79, 79, 79, 37, 53, 31, 38, 82, 51, 30, 84, 24, 27, 8, 29, 19, 5 ]
+      "fields": [ 77, 61, 77, 65, 77, 77, 77, 37, 53, 31, 38, 80, 51, 30, 82, 24, 27, 8, 29, 19, 7 ]
     },
     {
-      "fields": [ 79, 62, 79, 66, 79, 79, 79, 37, 53, 31, 38, 82, 51, 30, 84, 24, 27, 8, 29, 19, 7 ]
+      "fields": [ 77, 62, 77, 77, 77, 37, 53, 31, 38, 80, 51, 30, 82, 24, 27, 8, 29, 19, 5 ]
     },
     {
-      "fields": [ 79, 63, 79, 79, 79, 37, 53, 31, 38, 82, 51, 30, 84, 24, 27, 8, 29, 19, 5 ]
+      "fields": [ 77, 65, 77, 77, 77, 37, 53, 31, 38, 80, 51, 30, 82, 24, 27, 8, 29, 19, 5 ]
     },
     {
-      "fields": [ 79, 66, 79, 79, 79, 37, 53, 31, 38, 82, 51, 30, 84, 24, 27, 8, 29, 19, 5 ]
+      "fields": [ 77, 66, 77, 77, 77, 37, 53, 31, 38, 80, 51, 30, 82, 24, 27, 8, 29, 19, 5 ]
     },
     {
-      "fields": [ 79, 67, 79, 79, 79, 37, 53, 31, 38, 82, 51, 30, 84, 24, 27, 8, 29, 19, 5 ]
+      "fields": [ 77, 69, 76, 73 ]
     },
     {
-      "fields": [ 79, 70, 78, 75 ]
+      "fields": [ 77, 77, 77, 37, 53, 31, 38, 80, 51, 30, 82, 24, 27, 8, 29, 19, 4 ]
     },
     {
-      "fields": [ 79, 79, 79, 37, 53, 31, 38, 82, 51, 30, 84, 24, 27, 8, 29, 19, 4 ]
+      "fields": [ 77, 78, 59, 75, 68 ]
     },
     {
-      "fields": [ 79, 80, 60, 77, 69 ]
-    },
-    {
-      "fields": [ 85, 54, 41, 73, 39, 73, 76, 6 ]
+      "fields": [ 83, 54, 41, 72, 39, 72, 74, 6 ]
     }
   ],
   "typeParams": [

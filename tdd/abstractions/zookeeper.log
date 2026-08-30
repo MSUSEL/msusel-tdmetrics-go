@@ -1,7 +1,7 @@
 # cmd: java -jar /Users/grantnelson/go/src/github.com/MSUSEL/msusel-tdmetrics-go/javaAbstractor/target/abstractor-0.1-jar-with-dependencies.jar -i /Users/grantnelson/go/src/github.com/apache/zookeeper/ -o /Users/grantnelson/go/src/github.com/MSUSEL/msusel-tdmetrics-go/tdd/abstractions/zookeeper.json -v
 # cwd: /Users/grantnelson/go/src/github.com/MSUSEL/msusel-tdmetrics-go/tdd
 # repo: /Users/grantnelson/go/src/github.com/apache/zookeeper @ eac693cc76a34f96b9116ef33d1e92af7129416d
-# started: 2026-08-17T18:32:19.315534+00:00
+# started: 2026-08-30T23:12:13.285758+00:00
 # timeout_min: 10
 # ---
 Input path must be an existing directory containing a pom.xml Maven file.
