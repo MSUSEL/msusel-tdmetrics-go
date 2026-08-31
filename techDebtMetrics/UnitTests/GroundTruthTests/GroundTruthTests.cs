@@ -182,7 +182,40 @@ public class GroundTruthTests {
             where c.Type != GT.DeclType.Interface
             select new KeyValuePair<string, GT.DeclMetrics>(c.FullName, c)
         );
-        Assert.AreEqual(projObjects.Count, gtClasses.Count, "the number of classes are expected to match");
+        if (projObjects.Count != gtClasses.Count) {
+
+            /*
+            // TOTO: Finish
+
+            SortedSet<int> projLines = [.. from m in projObj.Methods select m.Location.LineNo];
+
+            List<string> missing = [..
+                from m in gtMetByLine.Values
+                where !projLines.Contains(m.Line)
+                orderby m.Line
+                select m.Line + ": " + m.Name
+            ];
+            string missingMsg = missing.Count <= 0 ? "" :
+                "\n  Missing (in ground truth but not in objects):\n    " + string.Join("\n    ", missing);
+
+
+            List<string> extra = [..
+                from m in projObj.Methods
+                where !gtMetByLine.ContainsKey(m.Location.LineNo)
+                orderby m.Location.LineNo
+                select m.Location.LineNo + ": " + m.Name
+            ];
+            string extraMsg = extra.Count <= 0 ? "" :
+                "\n  Extra (in objects but not in ground truth):\n    " + string.Join("\n    ", extra);
+
+            Assert.AreEqual(projObjects.Count, gtClasses.Count,
+                "the number of classes are expected to match" +
+                missingMsg + extraMsg);
+            */
+
+            Assert.AreEqual(projObjects.Count, gtClasses.Count,
+                "the number of classes are expected to match");
+        }
 
         int methods = 0;
         foreach (KeyValuePair<string, ObjectDecl> p in projObjects) {
