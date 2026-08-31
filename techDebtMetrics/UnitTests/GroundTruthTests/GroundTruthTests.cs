@@ -153,7 +153,7 @@ public class GroundTruthTests {
         Project proj;
         try {
             proj = Project.FromFile(Repo.AbstractedJava(target));
-        } catch (System.IO.FileNotFoundException ex) {
+        } catch (System.IO.FileNotFoundException) {
             Assert.Fail("Missing the abstraction file: " + target.ProjectKey + ".json");
             return;
         }
@@ -183,27 +183,20 @@ public class GroundTruthTests {
             select new KeyValuePair<string, GT.DeclMetrics>(c.FullName, c)
         );
         if (projObjects.Count != gtClasses.Count) {
-
-            /*
-            // TOTO: Finish
-
-            SortedSet<int> projLines = [.. from m in projObj.Methods select m.Location.LineNo];
-
             List<string> missing = [..
-                from m in gtMetByLine.Values
-                where !projLines.Contains(m.Line)
-                orderby m.Line
-                select m.Line + ": " + m.Name
+                from key in gtClasses.Keys
+                where !projObjects.ContainsKey(key)
+                orderby key
+                select key
             ];
             string missingMsg = missing.Count <= 0 ? "" :
                 "\n  Missing (in ground truth but not in objects):\n    " + string.Join("\n    ", missing);
 
-
             List<string> extra = [..
-                from m in projObj.Methods
-                where !gtMetByLine.ContainsKey(m.Location.LineNo)
-                orderby m.Location.LineNo
-                select m.Location.LineNo + ": " + m.Name
+                from key in projObjects.Keys
+                where !gtClasses.ContainsKey(key)
+                orderby key
+                select key
             ];
             string extraMsg = extra.Count <= 0 ? "" :
                 "\n  Extra (in objects but not in ground truth):\n    " + string.Join("\n    ", extra);
@@ -211,10 +204,6 @@ public class GroundTruthTests {
             Assert.AreEqual(projObjects.Count, gtClasses.Count,
                 "the number of classes are expected to match" +
                 missingMsg + extraMsg);
-            */
-
-            Assert.AreEqual(projObjects.Count, gtClasses.Count,
-                "the number of classes are expected to match");
         }
 
         int methods = 0;
@@ -280,7 +269,7 @@ public class GroundTruthTests {
         int methods = 0;
         foreach (MethodDecl projMet in projObj.Methods) {
             GT.MethodMetrics gtMet = gtMetByLine[projMet.Location.LineNo];
-            Assert.AreEqual(gtMet.Cyclo, projMet.Metrics?.PmdCyclo ?? 1, "Cyclomatic for " + projObj.FullName + ":" + projMet);
+            Assert.AreEqual(gtMet.Cyclo, projMet.Metrics?.PmdCyclo ?? 1, "Cyclomatic for " + gtMet.FullName + ":" + projMet);
             methods++;
         }
         Assert.AreEqual(gtObj.CycloTotal, projObj.PmdWmc, "WMC for " + projObj.FullName + " @ "  + projObj.Location);
