@@ -233,6 +233,29 @@ public class MetricsTests {
     }
 
     @Test
+    public void SimpleNotIf() {
+        final Tester t = Tester.classesFromSource(
+            "public class Foo {",
+            "  public Object bar(final Object source) throws Exception {",
+            "    if (!(source instanceof String)) {",
+            "      throw new EncoderException(\"Parameter not of type java.lang.String\");",
+            "    }",
+            "    return this.bar((String) source);",
+            "  }",
+            "}");
+        t.checkConstruct("metrics1",
+            "{",
+            "  codeCount:  6,", 
+            "  complexity: 2,",
+            "  pmdCyclo:   3,",
+            "  indents:    5,",
+            "  lineCount:  6,",
+            "  reads:   [ basic1, basic2, interfaceDesc2, object1 ],",
+            "  invokes: [ method1 ],",
+            "}");
+    }
+
+    @Test
     public void SimpleIfElse() {
         final Tester t = Tester.classesFromSource(
             "public class Foo {",

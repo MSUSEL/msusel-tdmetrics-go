@@ -1380,8 +1380,12 @@ public class Abstractor {
             final CtPackage pkg = this.pendingPackages.iterator().next();
             this.pendingPackages.remove(pkg);
             this.processPackage(pkg);
-            this.processPendingMetrics();
-            this.processDeferredFinishes();
+
+            boolean hasMore = true;
+            while (hasMore) {
+                hasMore = this.processPendingMetrics();
+                hasMore = this.processDeferredFinishes() || hasMore;
+            }
         }
     }
 
@@ -1401,10 +1405,12 @@ public class Abstractor {
             });
     }
 
-    private void processPendingMetrics() throws Exception {
+    private boolean processPendingMetrics() throws Exception {
         // `addMetrics` may register more methods on `pendingMetrics`
         // so add the current methods, then check if more are pending.
+        boolean hadAny = false;
         while (!this.pendingMetrics.isEmpty()) {
+            hadAny = true;
             final ArrayList<CtExecutable<?>> methods = new ArrayList<>(this.pendingMetrics);
             this.pendingMetrics.clear();
             for (CtExecutable<?> m : methods) {
@@ -1437,15 +1443,22 @@ public class Abstractor {
                 }
             }
         }
+        return hadAny;
     }
 
-    private void processDeferredFinishes() throws Exception {
+    private boolean processDeferredFinishes() throws Exception {
         boolean hasMore = true;
+        boolean hadAny = false;
         while (hasMore) {
             hasMore = false;
-            for (Factory<?> f : this.proj.factories)
-                hasMore = f.runDeferredFinishes(this.log, this.instantiator) | hasMore;
+            for (Factory<?> f : this.proj.factories) {
+                if (f.runDeferredFinishes(this.log, this.instantiator)) {
+                    hasMore = true;
+                    hadAny = true;
+                }
+            }
         }
+        return hadAny;
     }
 
     private void consolidateCons() throws Exception {
