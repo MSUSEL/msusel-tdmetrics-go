@@ -1,7 +1,7 @@
 # cmd: java -jar /Users/grantnelson/go/src/github.com/MSUSEL/msusel-tdmetrics-go/javaAbstractor/target/abstractor-0.1-jar-with-dependencies.jar -i /Users/grantnelson/go/src/github.com/apache/commons-cli/ -o /Users/grantnelson/go/src/github.com/MSUSEL/msusel-tdmetrics-go/tdd/abstractions/commons-cli.json -v
 # cwd: /Users/grantnelson/go/src/github.com/MSUSEL/msusel-tdmetrics-go/tdd
 # repo: /Users/grantnelson/go/src/github.com/apache/commons-cli @ 92f1def0bb3c0345295012e36b7150cfd1d7b6ab
-# started: 2026-08-30T23:09:43.080494+00:00
+# started: 2026-08-31T17:30:48.352368+00:00
 # timeout_min: 10
 # ---
 Reading /Users/grantnelson/go/src/github.com/apache/commons-cli/
@@ -4363,8 +4363,6 @@ Init pending package org.apache.commons.cli
   Finishing method (CtMethodImpl) build @ src/main/java/org/apache/commons/cli/CommandLine.java:543:28
   Finishing method (CtMethodImpl) addOption @ src/main/java/org/apache/commons/cli/CommandLine.java:524:24
   Finishing method (CtMethodImpl) compare @ src/main/java/org/apache/commons/cli/HelpFormatter.java:1088:20
-  Adding package java.lang
-    Resolved as new package java.lang
   Adding metrics (CtMethodImpl) add @ src/main/java/org/apache/commons/cli/Option.java:504:18
     Adding basic (CtTypeReferenceImpl) boolean
       Resolved with match basic (CtTypeReferenceImpl) boolean
@@ -10826,6 +10824,15 @@ Init pending package org.apache.commons.cli
   Finishing object instantiation java.lang.Class @ src/main/java/org/apache/commons/cli/Option.java:220:18<? @ src/main/java/org/apache/commons/cli/Option.java:220:24>
   Finishing object instantiation java.lang.Class<?>
   Finishing object instantiation java.lang.Class<?>
+  Finishing interface description (CtInterfaceImpl) ConstantDesc
+  Finishing interface description (CtInterfaceImpl) RandomAccess
+  Finishing interface description (CtInterfaceImpl) Readable
+  Finishing interface description (CtInterfaceImpl) Readable
+  Finishing interface description (CtInterfaceImpl) Closeable
+  Finishing interface description (CtInterfaceImpl) Flushable
+  Finishing interface description (CtInterfaceImpl) Flushable
+  Adding package java.lang
+    Resolved as new package java.lang
   Finishing package java.lang
     Adding interface decl (CtInterfaceImpl) Cloneable
       Resolved as new interface decl (CtInterfaceImpl) Cloneable
@@ -10842,13 +10849,6 @@ Init pending package org.apache.commons.cli
   Finishing interface decl (CtInterfaceImpl) Cloneable
   Finishing interface decl (CtInterfaceImpl) CharSequence
   Finishing interface decl (CtInterfaceImpl) Readable
-  Finishing interface description (CtInterfaceImpl) ConstantDesc
-  Finishing interface description (CtInterfaceImpl) RandomAccess
-  Finishing interface description (CtInterfaceImpl) Readable
-  Finishing interface description (CtInterfaceImpl) Readable
-  Finishing interface description (CtInterfaceImpl) Closeable
-  Finishing interface description (CtInterfaceImpl) Flushable
-  Finishing interface description (CtInterfaceImpl) Flushable
   Finishing object decl (CtClassImpl) Enum
   Adding package java.lang.invoke
     Resolved as new package java.lang.invoke
@@ -10923,29 +10923,29 @@ Init pending package org.apache.commons.cli
   Adding package java.util
     Resolved with match package java.util
   Finishing package java.util
-[34mFinished process pending packages (3.538642s)[0m
+[34mFinished process pending packages (3.568314s)[0m
 [34mStarting short validation...[0m
   [34mStarting performShortValidation...[0m
-  [34mFinished performShortValidation (0.002801s)[0m
-[34mFinished short validation (0.003804s)[0m
+  [34mFinished performShortValidation (0.003567s)[0m
+[34mFinished short validation (0.005218s)[0m
 [34mStarting consolidate constructs...[0m
   Consolidating all constructs
     Removed 690 collisions
     Removed 0 collisions
-[34mFinished consolidate constructs (0.060504s)[0m
+[34mFinished consolidate constructs (0.066259s)[0m
 [34mStarting connect nests...[0m
-[34mFinished connect nests (0.005892s)[0m
+[34mFinished connect nests (0.004362s)[0m
 [34mStarting collect package declarations...[0m
-[34mFinished collect package declarations (0.358827s)[0m
+[34mFinished collect package declarations (0.367128s)[0m
 [34mStarting addImports from usage...[0m
-[34mFinished addImports from usage (0.001796s)[0m
+[34mFinished addImports from usage (0.004359s)[0m
 [34mStarting remove empty packages...[0m
   Removing { kind: package, name: "<unnamed>" }
   Removing { kind: package, name: org }
   Removing { kind: package, name: org.apache }
   Removing { kind: package, name: org.apache.commons }
-[34mFinished remove empty packages (0.005304s)[0m
+[34mFinished remove empty packages (0.004349s)[0m
 [34mStarting performValidation...[0m
-[34mFinished performValidation (0.877038s)[0m
-[34mFinished Abstraction (13.759135s)[0m
+[34mFinished performValidation (0.926971s)[0m
+[34mFinished Abstraction (13.987257s)[0m
 Success

@@ -203,6 +203,11 @@ public class Abstractor {
         if (decl instanceof CtClass<?>   c) return this.addMethodDecl(this.addObjectDecl(c), m);
         if (decl instanceof CtInterface<?>) return this.addAbstract(m);
 
+        if (decl instanceof CtAnnotationType<?>) {
+            this.log.notice("Ignoring annotation type method: " + SpoonUtils.describeElem(m) + " in " + SpoonUtils.describeElem(decl));
+            return null;
+        }
+
         this.log.error("Method has unhandled declaring type: " + SpoonUtils.describeElem(decl));
         return null;
     }
@@ -788,13 +793,14 @@ public class Abstractor {
 
                 // Add access to nesting class as a "$nest" field.
                 if (SpoonUtils.isNested(c)) {
-                    if (c.getParent() instanceof CtTypeReference<?> nest) {
+                    final CtElement par = c.getParent();
+                    if (par instanceof CtTypeReference<?> nest) {
                         fields.add(this.addField("$nest", nest));
-                    } else if (c.getParent() instanceof CtType<?> nest) {
+                    } else if (par instanceof CtType<?> nest) {
                         fields.add(this.addField("$nest", nest.getReference()));
                     } else {
                         this.log.warning("Unhandled nested object decl " + SpoonUtils.describeElem(c) +
-                            " in " + SpoonUtils.describeElem(c.getParent()));
+                            " in " + SpoonUtils.describeElem(par));
                     }
                 }
 
@@ -830,7 +836,12 @@ public class Abstractor {
             new ElementKey(f, this.instantiator.typeArgs()),
             "field " + name,
             () -> {
-                final Ref<? extends TypeDesc> type = this.addTypeDesc(f);
+                Ref<? extends TypeDesc> type = this.addTypeDesc(f);
+                if (type == null) {
+                    this.log.notice("field " + SpoonUtils.describeElem(f) + " had a null type. The type likely "+
+                        "was an attribute, external dependency, or some other type not handled by the abstractor so using anyDesc.");
+                    type = this.proj.baker.anyDesc();
+                }
                 return new Field(name, type);
             });
     }

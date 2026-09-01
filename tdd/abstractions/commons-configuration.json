@@ -7815,7 +7815,7 @@
     {
       "generic": 212,
       "instanceTypes": [ "typeParam11" ],
-      "receiver": "objectInst177",
+      "receiver": "objectInst176",
       "resolved": 999
     },
     {
@@ -8517,7 +8517,7 @@
     {
       "generic": 845,
       "instanceTypes": [ "typeParam11" ],
-      "receiver": "objectInst177",
+      "receiver": "objectInst176",
       "resolved": 1986
     },
     {
@@ -8721,7 +8721,7 @@
     {
       "generic": 970,
       "instanceTypes": [ "typeParam11" ],
-      "receiver": "objectInst177",
+      "receiver": "objectInst176",
       "resolved": 322
     },
     {
@@ -9267,7 +9267,7 @@
     {
       "generic": 1308,
       "instanceTypes": [ "typeParam11" ],
-      "receiver": "objectInst177",
+      "receiver": "objectInst176",
       "resolved": 18
     },
     {
@@ -10011,7 +10011,7 @@
     {
       "generic": 1999,
       "instanceTypes": [ "typeParam11" ],
-      "receiver": "objectInst177",
+      "receiver": "objectInst176",
       "resolved": 2208
     },
     {
@@ -10311,7 +10311,7 @@
     {
       "generic": 2310,
       "instanceTypes": [ "typeParam11" ],
-      "receiver": "objectInst177",
+      "receiver": "objectInst176",
       "resolved": 2209
     },
     {
@@ -10323,7 +10323,7 @@
     {
       "generic": 2337,
       "instanceTypes": [ "typeParam11" ],
-      "receiver": "objectInst177",
+      "receiver": "objectInst176",
       "resolved": 322
     },
     {
@@ -46007,14 +46007,14 @@
     {
       "generic": 228,
       "instanceTypes": [ "interfaceInst34" ],
-      "methods": [ 171 ],
+      "methods": [ 22, 139, 171, 173, 264, 388, 438, 440 ],
       "resData": 139,
       "resInterface": 123
     },
     {
       "generic": 228,
       "instanceTypes": [ "object396" ],
-      "methods": [ 22, 139, 172, 173, 264, 388, 438, 440 ],
+      "methods": [ 172 ],
       "resData": 139,
       "resInterface": 124
     },

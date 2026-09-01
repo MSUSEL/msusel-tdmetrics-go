@@ -788,13 +788,13 @@
     { "type": "interfaceDecl41" },
     { "type": "interfaceDecl42" },
     { "type": "interfaceDecl57" },
-    { "type": "interfaceDecl58" },
     { "type": "interfaceDecl59" },
     { "type": "interfaceDecl60" },
-    { "type": "interfaceDecl63" },
-    { "type": "interfaceDecl66" },
+    { "type": "interfaceDecl61" },
+    { "type": "interfaceDecl64" },
     { "type": "interfaceDecl67" },
-    { "type": "interfaceDecl70" },
+    { "type": "interfaceDecl68" },
+    { "type": "interfaceDecl71" },
     { "type": "interfaceDesc155" },
     { "type": "interfaceInst3" },
     { "type": "interfaceInst4" },
@@ -1066,8 +1066,8 @@
     { "name": "arg0", "type": "interfaceDecl18" },
     { "name": "arg0", "type": "interfaceDecl41" },
     { "name": "arg0", "type": "interfaceDecl53" },
-    { "name": "arg0", "type": "interfaceDecl58" },
-    { "name": "arg0", "type": "interfaceDecl67" },
+    { "name": "arg0", "type": "interfaceDecl59" },
+    { "name": "arg0", "type": "interfaceDecl68" },
     { "name": "arg0", "type": "interfaceDesc155" },
     { "name": "arg0", "type": "interfaceInst3" },
     { "name": "arg0", "type": "interfaceInst4" },
@@ -1185,7 +1185,7 @@
     { "name": "conf", "type": "object129" },
     { "name": "container", "type": "interfaceDesc155" },
     { "name": "context", "type": "interfaceDecl30" },
-    { "name": "context", "type": "interfaceDecl58" },
+    { "name": "context", "type": "interfaceDecl59" },
     { "name": "copy", "type": "object135" },
     { "name": "counters", "type": "interfaceInst2" },
     { "name": "ctor", "type": "objectInst37" },
@@ -1229,7 +1229,7 @@
     { "name": "expressions", "type": "interfaceInst11" },
     { "name": "extended", "type": "basic1" },
     { "name": "f", "type": "object134" },
-    { "name": "factory", "type": "interfaceDecl60" },
+    { "name": "factory", "type": "interfaceDecl61" },
     { "name": "fdesc", "type": "object134" },
     { "name": "feature", "type": "basic6" },
     { "name": "features", "type": "object134" },
@@ -1280,7 +1280,7 @@
     { "name": "jme", "type": "interfaceDecl32" },
     { "name": "jscript", "type": "interfaceDecl31" },
     { "name": "jscript", "type": "interfaceDecl35" },
-    { "name": "jt", "type": "interfaceDecl66" },
+    { "name": "jt", "type": "interfaceDecl67" },
     { "name": "k", "type": "object166" },
     { "name": "key", "type": "basic6" },
     { "name": "key", "type": "basic9" },
@@ -1441,7 +1441,7 @@
     { "name": "theCaller", "type": "object121" },
     { "name": "theClass", "type": "objectInst14" },
     { "name": "theContainer", "type": "interfaceDesc155" },
-    { "name": "theContext", "type": "interfaceDecl58" },
+    { "name": "theContext", "type": "interfaceDecl59" },
     { "name": "theCtor", "type": "objectInst37" },
     { "name": "theExpr", "type": "interfaceDecl9" },
     { "name": "theExprs", "type": "interfaceInst11" },
@@ -1465,7 +1465,7 @@
     { "name": "theType", "type": "object43" },
     { "name": "theType", "type": "object115" },
     { "name": "theUberspect", "type": "interfaceDecl36" },
-    { "name": "tls", "type": "interfaceDecl67" },
+    { "name": "tls", "type": "interfaceDecl68" },
     { "name": "to", "type": "basic6" },
     { "name": "to", "type": "basic7" },
     { "name": "to", "type": "interfaceDesc155" },
@@ -1698,7 +1698,7 @@
     { "name": "container", "type": "basic9", "vis": "private" },
     { "name": "container", "type": "interfaceDesc155", "vis": "private" },
     { "name": "context", "type": "interfaceDecl30", "vis": "protected" },
-    { "name": "context", "type": "interfaceDecl58", "vis": "protected" },
+    { "name": "context", "type": "interfaceDecl59", "vis": "protected" },
     { "name": "counts", "type": "interfaceInst2", "vis": "private" },
     { "name": "ctor", "type": "objectInst37", "vis": "private" },
     { "name": "current", "type": "basic3", "vis": "private" },
@@ -1784,14 +1784,14 @@
     { "name": "object", "type": "typeParam7", "vis": "private" },
     { "name": "objectClass", "type": "objectInst14", "vis": "protected" },
     { "name": "operatorMap", "type": "interfaceInst64", "vis": "private" },
-    { "name": "operators", "type": "interfaceDecl70", "vis": "protected" },
+    { "name": "operators", "type": "interfaceDecl71", "vis": "protected" },
     { "name": "operators", "type": "object181", "vis": "protected" },
     { "name": "out", "type": "object191", "vis": "public" },
     { "name": "overloads", "type": "interfaceInst70", "vis": "private" },
     { "name": "params", "type": "interfaceInst13", "vis": "private" },
     { "name": "parent", "type": "object136", "vis": "private" },
     { "name": "parent", "type": "object204", "vis": "private" },
-    { "name": "parentFactory", "type": "interfaceDecl60", "vis": "private" },
+    { "name": "parentFactory", "type": "interfaceDecl61", "vis": "private" },
     { "name": "parms", "type": "basic6", "vis": "private" },
     { "name": "parser", "type": "interfaceDesc155", "vis": "protected" },
     { "name": "parsing", "type": "object37", "vis": "protected" },
@@ -1818,7 +1818,7 @@
     { "name": "scope", "type": "object204", "vis": "private" },
     { "name": "script", "type": "interfaceDecl35", "vis": "private" },
     { "name": "script", "type": "object6", "vis": "private" },
-    { "name": "scriptContext", "type": "interfaceDecl58", "vis": "private" },
+    { "name": "scriptContext", "type": "interfaceDecl59", "vis": "private" },
     { "name": "scriptFeatures", "type": "object134", "vis": "protected" },
     { "name": "serialVersionUID", "type": "basic7", "vis": "private" },
     { "name": "set", "type": "interfaceInst68", "vis": "protected" },
@@ -1989,7 +1989,7 @@
       "interface": 61,
       "loc": 1940,
       "name": "JexlContext",
-      "nested": [ "interfaceDecl4", "interfaceDecl45", "interfaceDecl46", "interfaceDecl67" ],
+      "nested": [ "interfaceDecl4", "interfaceDecl45", "interfaceDecl46", "interfaceDecl68" ],
       "package": 21,
       "vis": "public"
     },
@@ -2063,6 +2063,7 @@
     { "interface": 154, "name": "ReadWriteLock", "package": 16, "shadow": true, "vis": "public" },
     { "interface": 155, "name": "Readable", "package": 4, "shadow": true, "vis": "public" },
     { "interface": 17, "loc": 18509, "name": "ResolverStrategy", "nest": "interfaceDecl36", "package": 24, "vis": "public" },
+    { "interface": 155, "name": "Runnable", "package": 4, "shadow": true, "vis": "public" },
     { "interface": 63, "name": "ScriptContext", "package": 20, "shadow": true, "vis": "public" },
     { "interface": 121, "name": "ScriptEngine", "package": 20, "shadow": true, "vis": "public" },
     { "interface": 155, "name": "ScriptEngineFactory", "package": 20, "shadow": true, "vis": "public" },
@@ -2931,53 +2932,48 @@
       "resolved": 155
     },
     {
-      "generic": 62,
+      "generic": 63,
       "instanceTypes": [ "basic9" ],
       "resolved": 155
     },
     {
-      "generic": 62,
+      "generic": 63,
       "instanceTypes": [ "interfaceDecl21" ],
       "resolved": 155
     },
     {
-      "generic": 62,
+      "generic": 63,
       "instanceTypes": [ "interfaceDesc155" ],
       "resolved": 155
     },
     {
-      "generic": 62,
+      "generic": 63,
       "instanceTypes": [ "interfaceInst38" ],
       "resolved": 155
     },
     {
-      "generic": 62,
+      "generic": 63,
       "instanceTypes": [ "object137" ],
       "resolved": 155
     },
     {
-      "generic": 62,
+      "generic": 63,
       "instanceTypes": [ "object233" ],
       "resolved": 155
     },
     {
-      "generic": 62,
+      "generic": 63,
       "instanceTypes": [ "objectInst25" ],
       "resolved": 155
     },
     {
-      "generic": 62,
+      "generic": 63,
       "instanceTypes": [ "typeParam4" ],
       "resolved": 155
     },
     {
-      "generic": 62,
+      "generic": 63,
       "instanceTypes": [ "typeParam7" ],
-      "resolved": 155
-    },
-    {
-      "generic": 64,
-      "instanceTypes": [ "typeParam2" ],
       "resolved": 155
     },
     {
@@ -2986,7 +2982,12 @@
       "resolved": 155
     },
     {
-      "generic": 71,
+      "generic": 66,
+      "instanceTypes": [ "typeParam2" ],
+      "resolved": 155
+    },
+    {
+      "generic": 72,
       "instanceTypes": [ "typeParam2" ],
       "resolved": 155
     }
@@ -3229,7 +3230,7 @@
     },
     {
       "generic": 520,
-      "instanceTypes": [ "interfaceDecl67" ],
+      "instanceTypes": [ "interfaceDecl68" ],
       "receiver": "objectInst65",
       "resolved": 22
     },
@@ -3613,7 +3614,7 @@
     },
     {
       "generic": 1133,
-      "instanceTypes": [ "interfaceDecl67" ],
+      "instanceTypes": [ "interfaceDecl68" ],
       "receiver": "objectInst65",
       "resolved": 229
     },
@@ -6548,7 +6549,7 @@
       "lineCount": 33,
       "loc": 838,
       "pmdCyclo": 11,
-      "reads": [ "basic1", "basic9", "interfaceDecl9", "interfaceDecl12", "interfaceDecl41", "interfaceDecl62", "interfaceDesc155", "interfaceInst19", "interfaceInst58", "interfaceInst68", "object159", "object188" ]
+      "reads": [ "basic1", "basic9", "interfaceDecl9", "interfaceDecl12", "interfaceDecl41", "interfaceDecl63", "interfaceDesc155", "interfaceInst19", "interfaceInst58", "interfaceInst68", "object159", "object188" ]
     },
     {
       "codeCount": 12,
@@ -7179,7 +7180,7 @@
       "lineCount": 3,
       "loc": 2107,
       "pmdCyclo": 1,
-      "reads": [ "interfaceDecl30", "interfaceDecl67", "object132", "object232", "objectInst65", "selection30" ]
+      "reads": [ "interfaceDecl30", "interfaceDecl68", "object132", "object232", "objectInst65", "selection30" ]
     },
     {
       "codeCount": 3,
@@ -7199,7 +7200,7 @@
       "lineCount": 3,
       "loc": 2134,
       "pmdCyclo": 1,
-      "reads": [ "interfaceDecl30", "interfaceDecl67", "interfaceDesc155", "object132", "object232", "objectInst65", "selection30" ]
+      "reads": [ "interfaceDecl30", "interfaceDecl68", "interfaceDesc155", "object132", "object232", "objectInst65", "selection30" ]
     },
     {
       "codeCount": 1,
@@ -7997,7 +7998,7 @@
       "lineCount": 6,
       "loc": 3563,
       "pmdCyclo": 2,
-      "reads": [ "basic1", "basic6", "basic7", "basic9", "interfaceDecl62", "interfaceDesc155", "interfaceInst66", "object134", "selection226", "selection346" ],
+      "reads": [ "basic1", "basic6", "basic7", "basic9", "interfaceDecl63", "interfaceDesc155", "interfaceInst66", "object134", "selection226", "selection346" ],
       "writes": [ "basic6" ]
     },
     {
@@ -8008,7 +8009,7 @@
       "lineCount": 20,
       "loc": 3571,
       "pmdCyclo": 8,
-      "reads": [ "basic1", "basic7", "basic9", "interfaceDecl62", "interfaceDesc155", "interfaceInst66", "object134", "objectInst14", "objectInst24", "selection226", "selection346" ],
+      "reads": [ "basic1", "basic7", "basic9", "interfaceDecl63", "interfaceDesc155", "interfaceInst66", "object134", "objectInst14", "objectInst24", "selection226", "selection346" ],
       "writes": [ "object134" ]
     },
     {
@@ -8028,7 +8029,7 @@
       "lineCount": 9,
       "loc": 3606,
       "pmdCyclo": 3,
-      "reads": [ "basic1", "basic6", "basic9", "interfaceDecl12", "interfaceDecl62", "interfaceDesc155", "interfaceInst18", "interfaceInst66", "interfaceInst74", "object59", "object134", "object237", "objectInst68", "selection118", "selection346", "typeParam2", "typeParam7" ],
+      "reads": [ "basic1", "basic6", "basic9", "interfaceDecl12", "interfaceDecl63", "interfaceDesc155", "interfaceInst18", "interfaceInst66", "interfaceInst74", "object59", "object134", "object237", "objectInst68", "selection118", "selection346", "typeParam2", "typeParam7" ],
       "writes": [ "interfaceInst66", "selection346" ]
     },
     {
@@ -8049,7 +8050,7 @@
       "lineCount": 3,
       "loc": 3628,
       "pmdCyclo": 1,
-      "reads": [ "basic1", "basic9", "interfaceDecl62", "interfaceDesc155", "interfaceInst66", "object134", "selection346" ]
+      "reads": [ "basic1", "basic9", "interfaceDecl63", "interfaceDesc155", "interfaceInst66", "object134", "selection346" ]
     },
     {
       "codeCount": 7,
@@ -8509,7 +8510,7 @@
       "lineCount": 3,
       "loc": 4854,
       "pmdCyclo": 1,
-      "reads": [ "basic9", "interfaceDecl66", "interfaceInst3", "object135", "object144", "object197", "object224" ]
+      "reads": [ "basic9", "interfaceDecl67", "interfaceInst3", "object135", "object144", "object197", "object224" ]
     },
     {
       "codeCount": 3,
@@ -8519,7 +8520,7 @@
       "lineCount": 3,
       "loc": 4865,
       "pmdCyclo": 1,
-      "reads": [ "basic9", "interfaceDecl66", "interfaceDesc155", "interfaceInst3", "object135", "object144", "object197", "object224" ]
+      "reads": [ "basic9", "interfaceDecl67", "interfaceDesc155", "interfaceInst3", "object135", "object144", "object197", "object224" ]
     },
     {
       "codeCount": 3,
@@ -8529,7 +8530,7 @@
       "lineCount": 3,
       "loc": 4877,
       "pmdCyclo": 1,
-      "reads": [ "basic9", "interfaceDecl66", "interfaceDesc155", "interfaceInst3", "object135", "object144", "object197" ]
+      "reads": [ "basic9", "interfaceDecl67", "interfaceDesc155", "interfaceInst3", "object135", "object144", "object197" ]
     },
     {
       "codeCount": 3,
@@ -8539,7 +8540,7 @@
       "lineCount": 3,
       "loc": 4888,
       "pmdCyclo": 1,
-      "reads": [ "basic9", "interfaceDecl66", "interfaceDesc155", "interfaceInst3", "object135", "object144" ]
+      "reads": [ "basic9", "interfaceDecl67", "interfaceDesc155", "interfaceInst3", "object135", "object144" ]
     },
     {
       "codeCount": 3,
@@ -8549,7 +8550,7 @@
       "lineCount": 3,
       "loc": 4898,
       "pmdCyclo": 1,
-      "reads": [ "basic9", "interfaceDecl66", "interfaceDesc155", "object135", "object144" ]
+      "reads": [ "basic9", "interfaceDecl67", "interfaceDesc155", "object135", "object144" ]
     },
     {
       "codeCount": 3,
@@ -10024,8 +10025,8 @@
       "lineCount": 5,
       "loc": 6772,
       "pmdCyclo": 1,
-      "reads": [ "interfaceDecl30", "interfaceDecl67", "interfaceDesc155", "object132", "object232", "objectInst65", "selection30" ],
-      "writes": [ "interfaceDecl67" ]
+      "reads": [ "interfaceDecl30", "interfaceDecl68", "interfaceDesc155", "object132", "object232", "objectInst65", "selection30" ],
+      "writes": [ "interfaceDecl68" ]
     },
     {
       "codeCount": 5,
@@ -10057,7 +10058,7 @@
       "lineCount": 7,
       "loc": 6824,
       "pmdCyclo": 2,
-      "reads": [ "basic1", "basic9", "interfaceDecl37", "interfaceDecl62", "interfaceDesc155", "interfaceInst38", "interfaceInst69", "object29", "object82", "object136", "object243", "objectInst4", "selection344", "selection345", "selection351" ],
+      "reads": [ "basic1", "basic9", "interfaceDecl37", "interfaceDecl63", "interfaceDesc155", "interfaceInst38", "interfaceInst69", "object29", "object82", "object136", "object243", "objectInst4", "selection344", "selection345", "selection351" ],
       "writes": [ "interfaceInst38", "object136", "selection344", "selection351" ]
     },
     {
@@ -10493,8 +10494,8 @@
       "lineCount": 45,
       "loc": 7511,
       "pmdCyclo": 16,
-      "reads": [ "basic1", "basic9", "interfaceDecl30", "interfaceDecl40", "interfaceDecl41", "interfaceDecl67", "interfaceDesc155", "interfaceInst19", "interfaceInst52", "object51", "object82", "object121", "object122", "object132", "object133", "object136", "object186", "object200", "object213", "object231", "object233", "objectInst14", "selection12", "selection173", "selection194", "selection234", "selection251", "selection275" ],
-      "writes": [ "basic1", "interfaceDecl67", "interfaceDesc155", "interfaceInst52", "object132", "selection173", "selection234" ]
+      "reads": [ "basic1", "basic9", "interfaceDecl30", "interfaceDecl40", "interfaceDecl41", "interfaceDecl68", "interfaceDesc155", "interfaceInst19", "interfaceInst52", "object51", "object82", "object121", "object122", "object132", "object133", "object136", "object186", "object200", "object213", "object231", "object233", "objectInst14", "selection12", "selection173", "selection194", "selection234", "selection251", "selection275" ],
+      "writes": [ "basic1", "interfaceDecl68", "interfaceDesc155", "interfaceInst52", "object132", "selection173", "selection234" ]
     },
     {
       "codeCount": 43,
@@ -10943,8 +10944,8 @@
       "lineCount": 12,
       "loc": 8138,
       "pmdCyclo": 4,
-      "reads": [ "basic1", "basic6", "interfaceDecl63", "interfaceDesc155", "object11", "object51", "object121", "object122", "object127", "object133", "object136", "object186", "object213", "selection155" ],
-      "writes": [ "basic6", "interfaceDecl63", "interfaceDesc155" ]
+      "reads": [ "basic1", "basic6", "interfaceDecl64", "interfaceDesc155", "object11", "object51", "object121", "object122", "object127", "object133", "object136", "object186", "object213", "selection155" ],
+      "writes": [ "basic6", "interfaceDecl64", "interfaceDesc155" ]
     },
     {
       "codeCount": 12,
@@ -11962,8 +11963,8 @@
       "lineCount": 6,
       "loc": 9986,
       "pmdCyclo": 1,
-      "reads": [ "interfaceDecl36", "interfaceDecl70", "interfaceDesc155", "object121", "object122", "object127", "object181", "selection155", "selection249", "selection317", "selection388" ],
-      "writes": [ "interfaceDecl36", "interfaceDecl70", "object121", "object127", "selection249", "selection317" ]
+      "reads": [ "interfaceDecl36", "interfaceDecl71", "interfaceDesc155", "object121", "object122", "object127", "object181", "selection155", "selection249", "selection317", "selection388" ],
+      "writes": [ "interfaceDecl36", "interfaceDecl71", "object121", "object127", "selection249", "selection317" ]
     },
     {
       "codeCount": 7,
@@ -11984,7 +11985,7 @@
       "lineCount": 29,
       "loc": 10015,
       "pmdCyclo": 9,
-      "reads": [ "basic1", "basic9", "interfaceDecl32", "interfaceDecl70", "interfaceDesc155", "interfaceInst4", "object88", "object121", "object122", "object127", "object132", "object136", "object137", "object181", "object213", "object233", "selection139", "selection155", "selection166", "selection249", "selection317" ],
+      "reads": [ "basic1", "basic9", "interfaceDecl32", "interfaceDecl71", "interfaceDesc155", "interfaceInst4", "object88", "object121", "object122", "object127", "object132", "object136", "object137", "object181", "object213", "object233", "selection139", "selection155", "selection166", "selection249", "selection317" ],
       "writes": [ "basic1", "interfaceDecl32", "interfaceDesc155", "object127" ]
     },
     {
@@ -11995,7 +11996,7 @@
       "lineCount": 57,
       "loc": 10057,
       "pmdCyclo": 20,
-      "reads": [ "basic1", "basic6", "basic9", "interfaceDecl32", "interfaceDecl70", "interfaceDesc155", "interfaceInst4", "object88", "object111", "object121", "object122", "object127", "object132", "object136", "object137", "object181", "object233", "object242", "selection120", "selection121", "selection122", "selection123", "selection124", "selection125", "selection126", "selection127", "selection139", "selection155", "selection249", "selection317" ],
+      "reads": [ "basic1", "basic6", "basic9", "interfaceDecl32", "interfaceDecl71", "interfaceDesc155", "interfaceInst4", "object88", "object111", "object121", "object122", "object127", "object132", "object136", "object137", "object181", "object233", "object242", "selection120", "selection121", "selection122", "selection123", "selection124", "selection125", "selection126", "selection127", "selection139", "selection155", "selection249", "selection317" ],
       "writes": [ "interfaceDecl32", "interfaceDesc155", "object127", "object137" ]
     },
     {
@@ -12178,7 +12179,7 @@
       "lineCount": 3,
       "loc": 10527,
       "pmdCyclo": 2,
-      "reads": [ "basic1", "basic6", "basic9", "interfaceDecl41", "interfaceDecl62", "interfaceDesc155", "interfaceInst3", "interfaceInst4", "interfaceInst50", "interfaceInst66", "object204", "selection303" ]
+      "reads": [ "basic1", "basic6", "basic9", "interfaceDecl41", "interfaceDecl63", "interfaceDesc155", "interfaceInst3", "interfaceInst4", "interfaceInst50", "interfaceInst66", "object204", "selection303" ]
     },
     {
       "codeCount": 14,
@@ -13393,7 +13394,7 @@
       "lineCount": 3,
       "loc": 11553,
       "pmdCyclo": 1,
-      "reads": [ "basic1", "interfaceDecl62", "interfaceDesc155", "interfaceInst68", "object210", "selection364" ]
+      "reads": [ "basic1", "interfaceDecl63", "interfaceDesc155", "interfaceInst68", "object210", "selection364" ]
     },
     {
       "codeCount": 3,
@@ -13467,7 +13468,7 @@
       "lineCount": 17,
       "loc": 11687,
       "pmdCyclo": 4,
-      "reads": [ "basic1", "basic6", "interfaceDecl21", "interfaceDecl37", "interfaceDecl39", "interfaceDecl41", "interfaceDecl55", "interfaceDecl62", "interfaceDesc155", "interfaceInst39", "interfaceInst67", "object29", "object59", "object214", "object215", "object216", "objectInst5", "objectInst59", "selection273", "selection342", "typeParam4", "typeParam8" ],
+      "reads": [ "basic1", "basic6", "interfaceDecl21", "interfaceDecl37", "interfaceDecl39", "interfaceDecl41", "interfaceDecl55", "interfaceDecl63", "interfaceDesc155", "interfaceInst39", "interfaceInst67", "object29", "object59", "object214", "object215", "object216", "objectInst5", "objectInst59", "selection273", "selection342", "typeParam4", "typeParam8" ],
       "writes": [ "interfaceDecl21", "interfaceDecl41", "interfaceInst39", "interfaceInst67" ]
     },
     {
@@ -13611,7 +13612,7 @@
       "lineCount": 25,
       "loc": 11924,
       "pmdCyclo": 6,
-      "reads": [ "basic1", "basic3", "basic6", "interfaceDecl66", "interfaceDesc155", "interfaceInst11", "object6", "object19", "object69", "object136", "object144", "object213", "object222", "object226", "object227", "object228", "object230", "selection162", "selection174", "selection206", "selection215", "selection245", "selection359", "selection376" ],
+      "reads": [ "basic1", "basic3", "basic6", "interfaceDecl67", "interfaceDesc155", "interfaceInst11", "object6", "object19", "object69", "object136", "object144", "object213", "object222", "object226", "object227", "object228", "object230", "selection162", "selection174", "selection206", "selection215", "selection245", "selection359", "selection376" ],
       "writes": [ "basic6", "interfaceInst11", "object6", "object136", "object230", "selection174", "selection206", "selection215", "selection245", "selection359", "selection376" ]
     },
     {
@@ -15022,7 +15023,7 @@
       "lineCount": 3,
       "loc": 14278,
       "pmdCyclo": 1,
-      "reads": [ "basic6", "basic9", "interfaceDecl41", "interfaceDecl62", "interfaceDesc155", "interfaceInst3", "interfaceInst4", "interfaceInst54", "interfaceInst66", "object56", "object96", "selection225" ]
+      "reads": [ "basic6", "basic9", "interfaceDecl41", "interfaceDecl63", "interfaceDesc155", "interfaceInst3", "interfaceInst4", "interfaceInst54", "interfaceInst66", "object56", "object96", "selection225" ]
     },
     {
       "codeCount": 3,
@@ -15032,7 +15033,7 @@
       "lineCount": 3,
       "loc": 14286,
       "pmdCyclo": 1,
-      "reads": [ "basic6", "basic9", "interfaceDecl41", "interfaceDecl62", "interfaceDesc155", "interfaceInst3", "interfaceInst4", "interfaceInst9", "interfaceInst53", "interfaceInst66", "object56", "object162", "selection164" ]
+      "reads": [ "basic6", "basic9", "interfaceDecl41", "interfaceDecl63", "interfaceDesc155", "interfaceInst3", "interfaceInst4", "interfaceInst9", "interfaceInst53", "interfaceInst66", "object56", "object162", "selection164" ]
     },
     {
       "codeCount": 8,
@@ -15691,7 +15692,7 @@
       "lineCount": 34,
       "loc": 15478,
       "pmdCyclo": 7,
-      "reads": [ "basic1", "basic9", "interfaceDecl21", "interfaceDecl28", "interfaceDecl39", "interfaceDecl41", "interfaceDecl55", "interfaceDecl62", "interfaceDesc155", "interfaceInst35", "interfaceInst57", "interfaceInst59", "interfaceInst62", "interfaceInst67", "object54", "object55", "object56", "object64", "object125", "object166", "objectInst14", "objectInst20", "objectInst37", "selection178", "selection189", "selection190", "selection269", "selection272" ],
+      "reads": [ "basic1", "basic9", "interfaceDecl21", "interfaceDecl28", "interfaceDecl39", "interfaceDecl41", "interfaceDecl55", "interfaceDecl63", "interfaceDesc155", "interfaceInst35", "interfaceInst57", "interfaceInst59", "interfaceInst62", "interfaceInst67", "object54", "object55", "object56", "object64", "object125", "object166", "objectInst14", "objectInst20", "objectInst37", "selection178", "selection189", "selection190", "selection269", "selection272" ],
       "writes": [ "interfaceDecl21", "interfaceInst35", "object55", "objectInst14", "selection269" ]
     },
     {
@@ -16624,7 +16625,7 @@
       "lineCount": 3,
       "loc": 17367,
       "pmdCyclo": 1,
-      "reads": [ "interfaceDecl36", "interfaceDecl70", "object127", "object203", "selection390" ]
+      "reads": [ "interfaceDecl36", "interfaceDecl71", "object127", "object203", "selection390" ]
     },
     {
       "codeCount": 8,
@@ -16840,7 +16841,7 @@
       "lineCount": 5,
       "loc": 17778,
       "pmdCyclo": 3,
-      "reads": [ "basic1", "basic9", "interfaceDecl32", "interfaceDecl62", "interfaceDesc155", "interfaceInst4", "interfaceInst70", "object25", "object127", "object137", "object239", "selection153", "selection319" ]
+      "reads": [ "basic1", "basic9", "interfaceDecl32", "interfaceDecl63", "interfaceDesc155", "interfaceInst4", "interfaceInst70", "object25", "object127", "object137", "object239", "selection153", "selection319" ]
     },
     {
       "codeCount": 3,
@@ -16850,7 +16851,7 @@
       "lineCount": 3,
       "loc": 17785,
       "pmdCyclo": 1,
-      "reads": [ "basic1", "interfaceDecl62", "interfaceDesc155", "interfaceInst70", "object25", "object137", "object239", "selection319" ]
+      "reads": [ "basic1", "interfaceDecl63", "interfaceDesc155", "interfaceInst70", "object25", "object137", "object239", "selection319" ]
     },
     {
       "codeCount": 32,
@@ -16860,8 +16861,8 @@
       "lineCount": 36,
       "loc": 17791,
       "pmdCyclo": 9,
-      "reads": [ "basic1", "basic6", "basic9", "interfaceDecl41", "interfaceDecl62", "interfaceDecl70", "interfaceDesc155", "interfaceInst8", "interfaceInst9", "interfaceInst13", "interfaceInst64", "interfaceInst70", "object25", "object54", "object85", "object127", "object137", "object162", "object171", "object239", "objectInst14", "objectInst21", "objectInst34", "objectInst39", "selection315", "typeParam3" ],
-      "writes": [ "interfaceDecl70", "interfaceInst9", "interfaceInst13", "interfaceInst70", "object137", "object162", "objectInst21" ]
+      "reads": [ "basic1", "basic6", "basic9", "interfaceDecl41", "interfaceDecl63", "interfaceDecl71", "interfaceDesc155", "interfaceInst8", "interfaceInst9", "interfaceInst13", "interfaceInst64", "interfaceInst70", "object25", "object54", "object85", "object127", "object137", "object162", "object171", "object239", "objectInst14", "objectInst21", "objectInst34", "objectInst39", "selection315", "typeParam3" ],
+      "writes": [ "interfaceDecl71", "interfaceInst9", "interfaceInst13", "interfaceInst70", "object137", "object162", "objectInst21" ]
     },
     {
       "codeCount": 3,
@@ -17066,7 +17067,7 @@
       "lineCount": 6,
       "loc": 18191,
       "pmdCyclo": 2,
-      "reads": [ "basic1", "basic9", "interfaceDecl62", "interfaceDesc155", "interfaceInst66", "object41", "object107", "object140", "objectInst46", "selection304" ],
+      "reads": [ "basic1", "basic9", "interfaceDecl63", "interfaceDesc155", "interfaceInst66", "object41", "object107", "object140", "objectInst46", "selection304" ],
       "writes": [ "interfaceInst66", "selection304" ]
     },
     {
@@ -17077,7 +17078,7 @@
       "lineCount": 3,
       "loc": 18199,
       "pmdCyclo": 3,
-      "reads": [ "basic1", "basic9", "interfaceDecl62", "interfaceDesc155", "interfaceInst66", "object41", "object140", "selection304" ]
+      "reads": [ "basic1", "basic9", "interfaceDecl63", "interfaceDesc155", "interfaceInst66", "object41", "object140", "selection304" ]
     },
     {
       "codeCount": 5,
@@ -18658,7 +18659,7 @@
       "lineCount": 20,
       "loc": 20044,
       "pmdCyclo": 7,
-      "reads": [ "basic1", "basic6", "interfaceDecl62", "interfaceDesc155", "interfaceInst72", "object5", "object6", "object36", "object54", "object95", "object133", "object134", "object135", "object136", "object138", "object204", "object213", "objectInst23", "objectInst25", "selection11", "selection72", "selection218", "selection230" ],
+      "reads": [ "basic1", "basic6", "interfaceDecl63", "interfaceDesc155", "interfaceInst72", "object5", "object6", "object36", "object54", "object95", "object133", "object134", "object135", "object136", "object138", "object204", "object213", "objectInst23", "objectInst25", "selection11", "selection72", "selection218", "selection230" ],
       "writes": [ "object6", "object136" ]
     },
     {
@@ -19170,7 +19171,7 @@
       "lineCount": 3,
       "loc": 21084,
       "pmdCyclo": 1,
-      "reads": [ "interfaceDecl60", "object92", "object141", "object142", "selection37" ]
+      "reads": [ "interfaceDecl61", "object92", "object141", "object142", "selection37" ]
     },
     {
       "codeCount": 3,
@@ -19190,7 +19191,7 @@
       "lineCount": 10,
       "loc": 21123,
       "pmdCyclo": 3,
-      "reads": [ "basic1", "interfaceDecl58", "interfaceDesc155", "object17", "object193", "object248", "selection193" ],
+      "reads": [ "basic1", "interfaceDecl59", "interfaceDesc155", "object17", "object193", "object248", "selection193" ],
       "writes": [ "object248" ]
     },
     {
@@ -19201,7 +19202,7 @@
       "lineCount": 10,
       "loc": 21139,
       "pmdCyclo": 3,
-      "reads": [ "basic1", "interfaceDecl58", "interfaceDesc155", "object17", "object193", "object248", "selection193" ],
+      "reads": [ "basic1", "interfaceDecl59", "interfaceDesc155", "object17", "object193", "object248", "selection193" ],
       "writes": [ "object248" ]
     },
     {
@@ -19212,7 +19213,7 @@
       "lineCount": 3,
       "loc": 21155,
       "pmdCyclo": 1,
-      "reads": [ "interfaceDecl58", "object17", "object197", "selection193" ]
+      "reads": [ "interfaceDecl59", "object17", "object197", "selection193" ]
     },
     {
       "codeCount": 3,
@@ -19242,8 +19243,8 @@
       "lineCount": 8,
       "loc": 21185,
       "pmdCyclo": 3,
-      "reads": [ "basic1", "basic9", "interfaceDecl60", "interfaceDesc155", "object17", "object83", "object132", "object141", "object143", "object173", "selection36", "selection255", "selection256", "selection323" ],
-      "writes": [ "interfaceDecl60", "object132", "object143", "selection255", "selection256", "selection323" ]
+      "reads": [ "basic1", "basic9", "interfaceDecl61", "interfaceDesc155", "object17", "object83", "object132", "object141", "object143", "object173", "selection36", "selection255", "selection256", "selection323" ],
+      "writes": [ "interfaceDecl61", "object132", "object143", "selection255", "selection256", "selection323" ]
     },
     {
       "codeCount": 3,
@@ -19263,7 +19264,7 @@
       "lineCount": 7,
       "loc": 21200,
       "pmdCyclo": 4,
-      "reads": [ "basic1", "basic9", "interfaceDecl58", "interfaceDesc155", "object141", "object173", "object197" ]
+      "reads": [ "basic1", "basic9", "interfaceDecl59", "interfaceDesc155", "object141", "object173", "object197" ]
     },
     {
       "codeCount": 13,
@@ -19273,7 +19274,7 @@
       "lineCount": 15,
       "loc": 21209,
       "pmdCyclo": 6,
-      "reads": [ "basic1", "basic6", "basic9", "interfaceDecl30", "interfaceDecl35", "interfaceDecl58", "interfaceDesc155", "object88", "object131", "object132", "object141", "object173", "object206", "object233", "selection31", "selection52", "selection255" ],
+      "reads": [ "basic1", "basic6", "basic9", "interfaceDecl30", "interfaceDecl35", "interfaceDecl59", "interfaceDesc155", "object88", "object131", "object132", "object141", "object173", "object206", "object233", "selection31", "selection52", "selection255" ],
       "writes": [ "interfaceDecl30", "interfaceDecl35" ]
     },
     {
@@ -19284,7 +19285,7 @@
       "lineCount": 3,
       "loc": 21226,
       "pmdCyclo": 1,
-      "reads": [ "interfaceDecl60", "object141", "selection323" ]
+      "reads": [ "interfaceDecl61", "object141", "selection323" ]
     },
     {
       "codeCount": 11,
@@ -19341,8 +19342,8 @@
       "lineCount": 3,
       "loc": 21317,
       "pmdCyclo": 1,
-      "reads": [ "interfaceDecl58", "interfaceDesc155", "object131", "object141", "selection361" ],
-      "writes": [ "interfaceDecl58", "selection361" ]
+      "reads": [ "interfaceDecl59", "interfaceDesc155", "object131", "object141", "selection361" ],
+      "writes": [ "interfaceDecl59", "selection361" ]
     },
     {
       "codeCount": 10,
@@ -19352,7 +19353,7 @@
       "lineCount": 10,
       "loc": 21322,
       "pmdCyclo": 3,
-      "reads": [ "basic1", "basic9", "interfaceDecl40", "interfaceDecl58", "interfaceDesc155", "object131", "object141", "object143", "selection69", "selection82", "selection256", "selection361" ],
+      "reads": [ "basic1", "basic9", "interfaceDecl40", "interfaceDecl59", "interfaceDesc155", "object131", "object141", "object143", "selection69", "selection82", "selection256", "selection361" ],
       "writes": [ "interfaceDesc155" ]
     },
     {
@@ -19363,7 +19364,7 @@
       "lineCount": 7,
       "loc": 21334,
       "pmdCyclo": 2,
-      "reads": [ "basic1", "basic6", "basic9", "interfaceDecl7", "interfaceDecl58", "interfaceDesc155", "object131", "object141", "selection52", "selection361" ],
+      "reads": [ "basic1", "basic6", "basic9", "interfaceDecl7", "interfaceDecl59", "interfaceDesc155", "object131", "object141", "selection52", "selection361" ],
       "writes": [ "basic6" ]
     },
     {
@@ -19374,7 +19375,7 @@
       "lineCount": 4,
       "loc": 21343,
       "pmdCyclo": 1,
-      "reads": [ "basic1", "basic6", "basic9", "interfaceDecl7", "interfaceDecl58", "interfaceDesc155", "object131", "object141", "selection52", "selection361" ],
+      "reads": [ "basic1", "basic6", "basic9", "interfaceDecl7", "interfaceDecl59", "interfaceDesc155", "object131", "object141", "selection52", "selection361" ],
       "writes": [ "interfaceDecl7" ]
     },
     {
@@ -19405,7 +19406,7 @@
       "lineCount": 10,
       "loc": 21372,
       "pmdCyclo": 3,
-      "reads": [ "basic6", "basic9", "interfaceDecl30", "interfaceDecl35", "interfaceDecl58", "interfaceDesc155", "object88", "object130", "object131", "object141", "object206", "object233", "selection31", "selection52", "selection357" ],
+      "reads": [ "basic6", "basic9", "interfaceDecl30", "interfaceDecl35", "interfaceDecl59", "interfaceDesc155", "object88", "object130", "object131", "object141", "object206", "object233", "selection31", "selection52", "selection357" ],
       "writes": [ "interfaceDecl30" ]
     },
     {
@@ -19517,7 +19518,7 @@
       "lineCount": 22,
       "loc": 21497,
       "pmdCyclo": 7,
-      "reads": [ "basic1", "basic9", "interfaceDecl59", "interfaceDesc155", "interfaceInst38", "object142", "selection50", "selection53", "selection73", "selection74", "selection103" ]
+      "reads": [ "basic1", "basic9", "interfaceDecl60", "interfaceDesc155", "interfaceInst38", "object142", "selection50", "selection53", "selection73", "selection74", "selection103" ]
     },
     {
       "codeCount": 10,
@@ -19538,7 +19539,7 @@
       "lineCount": 3,
       "loc": 21533,
       "pmdCyclo": 1,
-      "reads": [ "interfaceDecl60", "object141", "object142" ]
+      "reads": [ "interfaceDecl61", "object141", "object142" ]
     },
     {
       "codeCount": 10,
@@ -19558,8 +19559,8 @@
       "lineCount": 22,
       "loc": 21602,
       "pmdCyclo": 4,
-      "reads": [ "basic1", "basic6", "basic9", "interfaceDecl59", "interfaceDesc155", "interfaceInst3", "object47", "object53", "object142", "object154", "object191", "object197", "object206", "object225", "object233", "selection318" ],
-      "writes": [ "basic9", "interfaceDecl59", "interfaceDesc155", "object47", "object142" ]
+      "reads": [ "basic1", "basic6", "basic9", "interfaceDecl60", "interfaceDesc155", "interfaceInst3", "object47", "object53", "object142", "object154", "object191", "object197", "object206", "object225", "object233", "selection318" ],
+      "writes": [ "basic9", "interfaceDecl60", "interfaceDesc155", "object47", "object142" ]
     }
   ],
   "name": "Apache Commons JEXL",
@@ -19973,7 +19974,7 @@
     },
     {
       "generic": 232,
-      "instanceTypes": [ "interfaceDecl67" ],
+      "instanceTypes": [ "interfaceDecl68" ],
       "methods": [ 25, 89 ],
       "resData": 1,
       "resInterface": 155
@@ -21072,7 +21073,7 @@
       "loc": 56,
       "methods": [ 117, 118, 225, 252, 264, 278, 279, 280, 325, 332, 334, 342, 343, 380, 399, 451, 462, 471, 648, 649, 800, 801, 891, 896, 897, 915, 925, 981, 982, 990, 999, 1005, 1011, 1015, 1018, 1019, 1020, 1021, 1022, 1023, 1027, 1043, 1047, 1048, 1049, 1128, 1146, 1189, 1199, 1213, 1238, 1240, 1241, 1242, 1244, 1245, 1257, 1662 ],
       "name": "JexlArithmetic",
-      "nested": [ "interfaceDecl6", "interfaceDecl42", "interfaceDecl63", "interfaceDecl70", "object172" ],
+      "nested": [ "interfaceDecl6", "interfaceDecl42", "interfaceDecl64", "interfaceDecl71", "object172" ],
       "package": 21,
       "vis": "public"
     },
@@ -21236,7 +21237,7 @@
       "loc": 4537,
       "methods": [ 317, 363, 364, 392, 393, 394, 395, 396, 397, 586 ],
       "name": "JxltEngine",
-      "nested": [ "interfaceDecl23", "interfaceDecl66", "object89" ],
+      "nested": [ "interfaceDecl23", "interfaceDecl67", "object89" ],
       "package": 21,
       "vis": "public"
     },
@@ -22111,14 +22112,14 @@
     },
     {
       "imports": [ 3 ],
-      "interfaces": [ 11, 24, 48, 49, 50, 61 ],
+      "interfaces": [ 11, 24, 48, 49, 50, 62 ],
       "methods": [ 53, 90, 91, 108, 172, 199, 321, 1000, 1001, 1077, 1080, 1090, 1097, 1120, 1247, 1657 ],
       "name": "java.io",
       "objects": [ 47, 99, 100, 108, 116, 117, 178, 179, 191, 193, 197, 224, 248 ]
     },
     {
       "imports": [ 4 ],
-      "interfaces": [ 5, 9, 10, 13, 27, 56 ],
+      "interfaces": [ 5, 9, 10, 13, 27, 56, 58 ],
       "methods": [ 31, 80, 103, 104, 160, 193, 194, 195, 196, 197, 206, 214, 215, 216, 256, 257, 258, 259, 260, 261, 266, 282, 299, 302, 303, 327, 333, 400, 420, 421, 454, 461, 465, 515, 516, 520, 541, 542, 559, 564, 565, 569, 570, 575, 578, 609, 620, 632, 644, 652, 655, 667, 679, 686, 699, 710, 746, 749, 750, 813, 826, 832, 833, 834, 836, 839, 862, 864, 888, 907, 914, 916, 924, 977, 978, 979, 983, 991, 992, 1003, 1009, 1053, 1057, 1059, 1118, 1133, 1147, 1160, 1176, 1198, 1209, 1210, 1243, 1246, 1248, 1249, 1250, 1251, 1252, 1253, 1254, 1284, 1285, 1286, 1322, 1323, 1324, 1325, 1326, 1327, 1328 ],
       "name": "java.lang",
       "objects": [ 19, 23, 44, 48, 52, 54, 55, 57, 77, 84, 87, 88, 101, 110, 111, 112, 118, 119, 123, 152, 160, 171, 173, 174, 175, 182, 192, 202, 208, 211, 219, 220, 221, 222, 225, 231, 232, 233, 242, 246 ]
@@ -22128,7 +22129,7 @@
       "name": "java.lang.annotation"
     },
     {
-      "interfaces": [ 69 ],
+      "interfaces": [ 70 ],
       "name": "java.lang.invoke"
     },
     {
@@ -22137,7 +22138,7 @@
       "objects": [ 199, 216 ]
     },
     {
-      "interfaces": [ 2, 25, 44, 68 ],
+      "interfaces": [ 2, 25, 44, 69 ],
       "methods": [ 466, 467, 523, 524, 543, 544, 545, 579, 580, 581, 627, 680, 681, 682, 687, 688, 701, 702, 737, 773, 814, 841, 895, 918, 934, 1028, 1029, 1134, 1135 ],
       "name": "java.lang.reflect",
       "objects": [ 26, 64, 96, 126, 162, 167, 241 ]
@@ -22165,7 +22166,7 @@
     },
     {
       "imports": [ 13 ],
-      "interfaces": [ 12, 14, 19, 21, 22, 28, 37, 38, 41, 47, 54, 62, 64 ],
+      "interfaces": [ 12, 14, 19, 21, 22, 28, 37, 38, 41, 47, 54, 63, 65 ],
       "methods": [ 36, 37, 95, 96, 97, 98, 99, 100, 139, 140, 158, 159, 210, 211, 223, 224, 238, 268, 350, 417, 418, 457, 458, 459, 470, 525, 610, 889, 890, 937, 1042, 1062, 1084, 1185, 1186, 1187, 1188, 1195, 1233, 1288, 1316, 1317 ],
       "name": "java.util",
       "objects": [ 14, 16, 18, 29, 31, 59, 85, 106, 107, 109, 145, 146, 147, 150, 170, 218, 236, 237, 245 ]
@@ -22188,7 +22189,7 @@
       "objects": [ 198 ]
     },
     {
-      "interfaces": [ 18, 26, 52, 71 ],
+      "interfaces": [ 18, 26, 52, 72 ],
       "name": "java.util.function"
     },
     {
@@ -22198,17 +22199,17 @@
       "objects": [ 159, 188 ]
     },
     {
-      "interfaces": [ 65 ],
+      "interfaces": [ 66 ],
       "name": "java.util.stream"
     },
     {
-      "interfaces": [ 7, 15, 58, 59, 60 ],
+      "interfaces": [ 7, 15, 59, 60, 61 ],
       "methods": [ 182, 183, 186 ],
       "name": "javax.script",
       "objects": [ 17, 60, 206, 212 ]
     },
     {
-      "interfaces": [ 4, 6, 20, 23, 30, 31, 35, 42, 45, 46, 51, 63, 66, 67, 70 ],
+      "interfaces": [ 4, 6, 20, 23, 30, 31, 35, 42, 45, 46, 51, 64, 67, 68, 71 ],
       "methods": [ 28, 30, 43, 52, 56, 64, 74, 75, 81, 85, 86, 117, 118, 122, 123, 124, 125, 126, 127, 128, 131, 132, 145, 146, 149, 150, 161, 162, 167, 168, 173, 174, 178, 209, 217, 225, 252, 253, 254, 262, 263, 264, 265, 276, 278, 279, 280, 285, 286, 288, 289, 297, 298, 304, 305, 310, 311, 312, 316, 317, 325, 332, 334, 342, 343, 351, 361, 362, 363, 364, 372, 373, 376, 377, 378, 380, 381, 382, 383, 384, 385, 386, 387, 388, 389, 390, 392, 393, 394, 395, 396, 397, 399, 403, 404, 422, 423, 424, 425, 426, 427, 428, 429, 430, 431, 432, 451, 462, 471, 472, 484, 511, 512, 527, 528, 529, 546, 550, 554, 557, 560, 566, 583, 584, 585, 586, 598, 616, 617, 623, 628, 648, 649, 653, 656, 668, 689, 694, 696, 719, 720, 721, 734, 751, 770, 771, 781, 784, 786, 800, 801, 803, 804, 805, 815, 857, 870, 885, 891, 896, 897, 915, 919, 921, 925, 926, 933, 976, 981, 982, 984, 985, 986, 987, 988, 989, 990, 996, 999, 1005, 1006, 1007, 1008, 1011, 1015, 1016, 1017, 1018, 1019, 1020, 1021, 1022, 1023, 1027, 1030, 1031, 1032, 1043, 1045, 1047, 1048, 1049, 1060, 1066, 1083, 1099, 1100, 1106, 1119, 1121, 1122, 1128, 1129, 1130, 1131, 1137, 1138, 1139, 1146, 1148, 1152, 1168, 1169, 1179, 1181, 1182, 1183, 1184, 1189, 1199, 1202, 1203, 1204, 1205, 1206, 1208, 1213, 1214, 1215, 1216, 1217, 1218, 1219, 1220, 1221, 1222, 1223, 1224, 1225, 1226, 1227, 1238, 1240, 1241, 1242, 1244, 1245, 1256, 1257, 1258, 1259, 1313, 1314, 1321, 1332, 1662 ],
       "name": "org.apache.commons.jexl3",
       "objects": [ 20, 22, 36, 46, 51, 67, 80, 81, 89, 93, 94, 127, 129, 132, 133, 134, 135, 137, 144, 156, 163, 172, 177, 180, 187, 194, 200, 235, 244 ],
@@ -22300,10 +22301,10 @@
     { "name": "EMPTY_PARAMS", "origin": "object122" },
     { "name": "EMPTY_PARAMS", "origin": "object195" },
     { "name": "ENDSWITH", "origin": "object137" },
-    { "name": "ENGINE", "origin": "interfaceDecl59" },
+    { "name": "ENGINE", "origin": "interfaceDecl60" },
     { "name": "ENGINE", "origin": "object132" },
-    { "name": "ENGINE_SCOPE", "origin": "interfaceDecl58" },
-    { "name": "ENGINE_VERSION", "origin": "interfaceDecl59" },
+    { "name": "ENGINE_SCOPE", "origin": "interfaceDecl59" },
+    { "name": "ENGINE_VERSION", "origin": "interfaceDecl60" },
     { "name": "EQ", "origin": "object137" },
     { "name": "ESCAPE", "origin": "object185" },
     { "name": "FALSE", "origin": "basic1" },
@@ -22323,8 +22324,8 @@
     { "name": "JEXL_STRATEGY", "origin": "interfaceDecl36" },
     { "name": "JXLT_CACHE_SIZE", "origin": "object132" },
     { "name": "LAMBDA", "origin": "object134" },
-    { "name": "LANGUAGE", "origin": "interfaceDecl59" },
-    { "name": "LANGUAGE_VERSION", "origin": "interfaceDecl59" },
+    { "name": "LANGUAGE", "origin": "interfaceDecl60" },
+    { "name": "LANGUAGE_VERSION", "origin": "interfaceDecl60" },
     { "name": "LAST_ASCII", "origin": "object223" },
     { "name": "LESS_SPECIFIC", "origin": "object166" },
     { "name": "LIST", "origin": "object139" },
@@ -22353,7 +22354,7 @@
     { "name": "MOD", "origin": "object137" },
     { "name": "MORE_SPECIFIC", "origin": "object166" },
     { "name": "MULTIPLY", "origin": "object137" },
-    { "name": "NAME", "origin": "interfaceDecl59" },
+    { "name": "NAME", "origin": "interfaceDecl60" },
     { "name": "NEGATE", "origin": "object137" },
     { "name": "NESTED", "origin": "object91" },
     { "name": "NEW_INSTANCE", "origin": "object134" },

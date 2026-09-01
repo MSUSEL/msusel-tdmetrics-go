@@ -1,7 +1,7 @@
 # cmd: java -jar /Users/grantnelson/go/src/github.com/MSUSEL/msusel-tdmetrics-go/javaAbstractor/target/abstractor-0.1-jar-with-dependencies.jar -i /Users/grantnelson/go/src/github.com/apache/commons-dbutils/ -o /Users/grantnelson/go/src/github.com/MSUSEL/msusel-tdmetrics-go/tdd/abstractions/commons-dbutils.json -v
 # cwd: /Users/grantnelson/go/src/github.com/MSUSEL/msusel-tdmetrics-go/tdd
 # repo: /Users/grantnelson/go/src/github.com/apache/commons-dbutils @ 2f48485a82697d9aed060ba36f6d5beb3a58ed8b
-# started: 2026-08-30T23:09:57.059989+00:00
+# started: 2026-08-31T17:31:02.642010+00:00
 # timeout_min: 10
 # ---
 Reading /Users/grantnelson/go/src/github.com/apache/commons-dbutils/
@@ -6574,8 +6574,6 @@ Init pending package org.apache.commons.dbutils.wrappers
   Finishing interface description (CtInterfaceImpl) ObjectOutput
   Finishing interface description (CtInterfaceImpl) ObjectStreamConstants
   Finishing interface description (CtInterfaceImpl) ObjectInput
-  Adding package org.apache.commons.dbutils.handlers
-    Resolved as new package org.apache.commons.dbutils.handlers
   Adding metrics (CtMethodImpl) updateNCharacterStream @ src/main/java/org/apache/commons/dbutils/BaseResultSetHandler.java:1656:26
     Adding abstract (CtMethodImpl) updateNCharacterStream
       Adding signature (CtMethodImpl) updateNCharacterStream
@@ -14351,6 +14349,16 @@ Init pending package org.apache.commons.dbutils.wrappers
   Finishing object instantiation java.lang.Class<?>
   Finishing object instantiation java.lang.Class<?>
   Finishing object instantiation java.lang.Class<?>
+  Finishing interface description (CtInterfaceImpl) ConstantDesc
+  Finishing interface description (CtInterfaceImpl) Member
+  Finishing interface description (CtInterfaceImpl) Deque
+  Finishing interface description (CtInterfaceImpl) MatchResult
+  Finishing interface description (CtInterfaceImpl) RandomAccess
+  Finishing interface description (CtInterfaceImpl) Flushable
+  Finishing interface description (CtInterfaceImpl) Flushable
+  Finishing interface description (CtInterfaceImpl) Appendable
+  Adding package org.apache.commons.dbutils.handlers
+    Resolved as new package org.apache.commons.dbutils.handlers
   Finishing package org.apache.commons.dbutils.handlers
     Adding object decl (CtClassImpl) AbstractKeyedHandler @ src/main/java/org/apache/commons/dbutils/handlers/AbstractKeyedHandler.java:38:23
       Adding struct (CtClassImpl) AbstractKeyedHandler @ src/main/java/org/apache/commons/dbutils/handlers/AbstractKeyedHandler.java:38:23
@@ -14639,14 +14647,6 @@ Init pending package org.apache.commons.dbutils.wrappers
   Finishing field (CtFieldImpl) convert @ src/main/java/org/apache/commons/dbutils/handlers/MapListHandler.java:38:32
   Finishing field (CtFieldImpl) columnIndex @ src/main/java/org/apache/commons/dbutils/handlers/ScalarHandler.java:36:23
   Finishing field (CtFieldImpl) columnName @ src/main/java/org/apache/commons/dbutils/handlers/ScalarHandler.java:42:26
-  Finishing interface description (CtInterfaceImpl) ConstantDesc
-  Finishing interface description (CtInterfaceImpl) Member
-  Finishing interface description (CtInterfaceImpl) Deque
-  Finishing interface description (CtInterfaceImpl) MatchResult
-  Finishing interface description (CtInterfaceImpl) RandomAccess
-  Finishing interface description (CtInterfaceImpl) Flushable
-  Finishing interface description (CtInterfaceImpl) Flushable
-  Finishing interface description (CtInterfaceImpl) Appendable
   Finishing interface description (CtInterfaceImpl) List
   Finishing interface description (CtInterfaceImpl) ResultSetHandler @ src/main/java/org/apache/commons/dbutils/ResultSetHandler.java:27:18
   Finishing interface description (CtInterfaceImpl) Type
@@ -15226,8 +15226,6 @@ Init pending package org.apache.commons.dbutils.wrappers
   Finishing method for object instantiation (CtMethodImpl) createMap @ src/main/java/org/apache/commons/dbutils/handlers/AbstractKeyedHandler.java:65:25
   Finishing method for object instantiation (CtMethodImpl) createKey @ src/main/java/org/apache/commons/dbutils/handlers/AbstractKeyedHandler.java:76:26
   Finishing method for object instantiation (CtMethodImpl) createRow @ src/main/java/org/apache/commons/dbutils/handlers/AbstractKeyedHandler.java:85:26
-  Adding package org.apache.commons.dbutils.handlers.properties
-    Resolved as new package org.apache.commons.dbutils.handlers.properties
   Adding metrics (CtConstructorImpl) <init> @ src/main/java/org/apache/commons/dbutils/handlers/BeanMapHandler.java:89:12
     [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
     [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
@@ -15738,6 +15736,8 @@ Init pending package org.apache.commons.dbutils.wrappers
   Finishing object instantiation java.lang.Class<V>
   Finishing object instantiation java.util.ArrayList @ src/main/java/org/apache/commons/dbutils/handlers/AbstractListHandler.java:46:28<T @ src/main/java/org/apache/commons/dbutils/handlers/AbstractListHandler.java:46:38>
   Finishing object instantiation java.lang.Class<V>
+  Adding package org.apache.commons.dbutils.handlers.properties
+    Resolved as new package org.apache.commons.dbutils.handlers.properties
   Finishing package org.apache.commons.dbutils.handlers.properties
     Adding object decl (CtClassImpl) DatePropertyHandler @ src/main/java/org/apache/commons/dbutils/handlers/properties/DatePropertyHandler.java:23:14
       Adding struct (CtClassImpl) DatePropertyHandler @ src/main/java/org/apache/commons/dbutils/handlers/properties/DatePropertyHandler.java:23:14
@@ -15819,8 +15819,6 @@ Init pending package org.apache.commons.dbutils.wrappers
   Finishing method (CtMethodImpl) match @ src/main/java/org/apache/commons/dbutils/handlers/properties/DatePropertyHandler.java:25:20
   Finishing method (CtMethodImpl) apply @ src/main/java/org/apache/commons/dbutils/handlers/properties/StringEnumPropertyHandler.java:28:19
   Finishing method (CtMethodImpl) match @ src/main/java/org/apache/commons/dbutils/handlers/properties/StringEnumPropertyHandler.java:23:20
-  Adding package java.lang.reflect
-    Resolved as new package java.lang.reflect
   Adding metrics (CtMethodImpl) apply @ src/main/java/org/apache/commons/dbutils/handlers/properties/DatePropertyHandler.java:43:19
     Adding object instantiation java.lang.Class<?>
       Resolved with match object instantiation java.lang.Class<?>
@@ -16112,6 +16110,8 @@ Init pending package org.apache.commons.dbutils.wrappers
   Finishing object instantiation java.lang.Class<U>
   Finishing object instantiation java.lang.Class<?>
   Finishing object instantiation java.lang.Class<?>
+  Adding package java.lang.reflect
+    Resolved as new package java.lang.reflect
   Finishing package java.lang.reflect
     Adding interface decl (CtInterfaceImpl) Type
       Resolved as new interface decl (CtInterfaceImpl) Type
@@ -16128,9 +16128,6 @@ Init pending package org.apache.commons.dbutils.wrappers
   Adding package java.util.function
     Resolved as new package java.util.function
   Finishing package java.util.function
-  Adding package java.lang
-    Resolved as new package java.lang
-  Finishing package java.lang
   Adding package org.apache
     Resolved as new package org.apache
   Finishing package org.apache
@@ -16183,6 +16180,9 @@ Init pending package org.apache.commons.dbutils.wrappers
   Adding package java.util.concurrent
     Resolved as new package java.util.concurrent
   Finishing package java.util.concurrent
+  Adding package java.lang
+    Resolved as new package java.lang
+  Finishing package java.lang
   Adding package java.util
     Resolved with match package java.util
   Finishing package java.util
@@ -16827,8 +16827,6 @@ Init pending package org.apache.commons.dbutils.wrappers
   Finishing constructor (CtConstructorImpl) <init> @ src/main/java/org/apache/commons/dbutils/wrappers/StringTrimmedResultSet.java:77:12
   Finishing method (CtMethodImpl) invoke @ src/main/java/org/apache/commons/dbutils/wrappers/StringTrimmedResultSet.java:95:19
   Finishing method (CtMethodImpl) wrap @ src/main/java/org/apache/commons/dbutils/wrappers/StringTrimmedResultSet.java:63:29
-  Adding package org.apache.commons.dbutils.handlers.columns
-    Resolved as new package org.apache.commons.dbutils.handlers.columns
   Adding metrics (CtMethodImpl) getNullRef @ src/main/java/org/apache/commons/dbutils/wrappers/SqlNullCheckedResultSet.java:315:16
     Adding select field (CtFieldImpl) nullRef @ src/main/java/org/apache/commons/dbutils/wrappers/SqlNullCheckedResultSet.java:131:17
       Resolved as new select field (CtFieldImpl) nullRef @ src/main/java/org/apache/commons/dbutils/wrappers/SqlNullCheckedResultSet.java:131:17
@@ -17194,6 +17192,8 @@ Init pending package org.apache.commons.dbutils.wrappers
   Finishing method (CtMethodImpl) getName
   Finishing method (CtMethodImpl) trim
   Finishing method (CtMethodImpl) arraycopy
+  Adding package org.apache.commons.dbutils.handlers.columns
+    Resolved as new package org.apache.commons.dbutils.handlers.columns
   Finishing package org.apache.commons.dbutils.handlers.columns
     Adding object decl (CtClassImpl) BooleanColumnHandler @ src/main/java/org/apache/commons/dbutils/handlers/columns/BooleanColumnHandler.java:24:14
       Adding struct (CtClassImpl) BooleanColumnHandler @ src/main/java/org/apache/commons/dbutils/handlers/columns/BooleanColumnHandler.java:24:14
@@ -17565,8 +17565,6 @@ Init pending package org.apache.commons.dbutils.wrappers
   Finishing method (CtMethodImpl) match @ src/main/java/org/apache/commons/dbutils/handlers/columns/StringColumnHandler.java:26:20
   Finishing method (CtMethodImpl) apply @ src/main/java/org/apache/commons/dbutils/handlers/columns/TimestampColumnHandler.java:32:19
   Finishing method (CtMethodImpl) match @ src/main/java/org/apache/commons/dbutils/handlers/columns/TimestampColumnHandler.java:27:20
-  Adding package java.math
-    Resolved as new package java.math
   Adding metrics (CtMethodImpl) match @ src/main/java/org/apache/commons/dbutils/handlers/columns/LongColumnHandler.java:26:20
     Adding basic (CtTypeReferenceImpl) boolean
       Resolved with match basic (CtTypeReferenceImpl) boolean
@@ -18089,32 +18087,34 @@ Init pending package org.apache.commons.dbutils.wrappers
   Finishing object instantiation java.lang.Class<?>
   Finishing object instantiation java.lang.Class<java.lang.Integer>
   Finishing object instantiation java.lang.Class<?>
+  Adding package java.math
+    Resolved as new package java.math
   Finishing package java.math
   Adding package java.beans
     Resolved as new package java.beans
   Finishing package java.beans
-[34mFinished process pending packages (4.104302s)[0m
+[34mFinished process pending packages (4.079195s)[0m
 [34mStarting short validation...[0m
   [34mStarting performShortValidation...[0m
-  [34mFinished performShortValidation (0.007848s)[0m
-[34mFinished short validation (0.008874s)[0m
+  [34mFinished performShortValidation (0.007727s)[0m
+[34mFinished short validation (0.008736s)[0m
 [34mStarting consolidate constructs...[0m
   Consolidating all constructs
     Removed 1629 collisions
     Removed 0 collisions
-[34mFinished consolidate constructs (0.097905s)[0m
+[34mFinished consolidate constructs (0.101872s)[0m
 [34mStarting connect nests...[0m
-[34mFinished connect nests (0.005109s)[0m
+[34mFinished connect nests (0.002142s)[0m
 [34mStarting collect package declarations...[0m
-[34mFinished collect package declarations (0.711305s)[0m
+[34mFinished collect package declarations (0.636879s)[0m
 [34mStarting addImports from usage...[0m
-[34mFinished addImports from usage (0.003938s)[0m
+[34mFinished addImports from usage (0.003230s)[0m
 [34mStarting remove empty packages...[0m
   Removing { kind: package, name: "<unnamed>" }
   Removing { kind: package, name: org }
   Removing { kind: package, name: org.apache }
   Removing { kind: package, name: org.apache.commons }
-[34mFinished remove empty packages (0.006362s)[0m
+[34mFinished remove empty packages (0.006301s)[0m
 [34mStarting performValidation...[0m
   [34mValidation Error 1. [0620] (demoted) The declaration { index: 142, kind: method, loc: 6305, name: createKey, package: 17, receiver: 1, signature: 525, typeParams: [ 3, 9 ], vis: protected } and the instance { generic: 142, index: 3, instanceTypes: [ typeParam3, typeParam9 ], kind: methodInst, receiver: objectInst1, resolved: 525 } had the same (2) type parameters.[0m
   [34mValidation Error 2. [0620] (demoted) The declaration { index: 145, kind: method, loc: 6294, metrics: 389, name: createMap, package: 17, receiver: 1, signature: 14, typeParams: [ 3, 9 ], vis: protected } and the instance { generic: 145, index: 4, instanceTypes: [ typeParam3, typeParam9 ], kind: methodInst, receiver: objectInst1, resolved: 14 } had the same (2) type parameters.[0m
@@ -18122,6 +18122,6 @@ Init pending package org.apache.commons.dbutils.wrappers
   [34mValidation Error 4. [0620] (demoted) The declaration { index: 308, kind: method, loc: 6279, metrics: 388, name: handle, package: 17, receiver: 1, signature: 513, typeParams: [ 3, 9 ], vis: public } and the instance { generic: 308, index: 13, instanceTypes: [ typeParam3, typeParam9 ], kind: methodInst, receiver: objectInst1, resolved: 513 } had the same (2) type parameters.[0m
   [34mValidation Error 5. [0620] (demoted) The declaration { index: 309, kind: method, loc: 6359, metrics: 390, name: handle, package: 17, receiver: 2, signature: 519, typeParams: [ 6 ], vis: public } and the instance { generic: 309, index: 14, instanceTypes: [ typeParam6 ], kind: methodInst, receiver: objectInst2, resolved: 519 } had the same (1) type parameters.[0m
   [34mValidation Error 6. [0620] (demoted) The declaration { index: 315, kind: method, loc: 6374, name: handleRow, package: 17, receiver: 2, signature: 526, typeParams: [ 6 ], vis: protected } and the instance { generic: 315, index: 15, instanceTypes: [ typeParam6 ], kind: methodInst, receiver: objectInst2, resolved: 526 } had the same (1) type parameters.[0m
-[34mFinished performValidation (2.058658s)[0m
-[34mFinished Abstraction (16.818152s)[0m
+[34mFinished performValidation (2.022297s)[0m
+[34mFinished Abstraction (16.684395s)[0m
 Success

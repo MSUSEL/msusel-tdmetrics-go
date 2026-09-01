@@ -1,7 +1,7 @@
 # cmd: java -jar /Users/grantnelson/go/src/github.com/MSUSEL/msusel-tdmetrics-go/javaAbstractor/target/abstractor-0.1-jar-with-dependencies.jar -i /Users/grantnelson/go/src/github.com/apache/commons-daemon/ -o /Users/grantnelson/go/src/github.com/MSUSEL/msusel-tdmetrics-go/tdd/abstractions/commons-daemon.json -v
 # cwd: /Users/grantnelson/go/src/github.com/MSUSEL/msusel-tdmetrics-go/tdd
 # repo: /Users/grantnelson/go/src/github.com/apache/commons-daemon @ 1ffa799cb3ddf5a4a918e59e46cd9868ee766b19
-# started: 2026-08-30T23:00:29.114335+00:00
+# started: 2026-08-31T17:21:08.574174+00:00
 # timeout_min: 10
 # ---
 Reading /Users/grantnelson/go/src/github.com/apache/commons-daemon/
@@ -639,8 +639,6 @@ Init pending package org.apache.commons.daemon.support
   Finishing method (CtMethodImpl) getArguments @ src/main/java/org/apache/commons/daemon/support/DaemonLoader.java:412:25
   Finishing method (CtMethodImpl) setArguments @ src/main/java/org/apache/commons/daemon/support/DaemonLoader.java:417:21
   Finishing method (CtMethodImpl) setController @ src/main/java/org/apache/commons/daemon/support/DaemonLoader.java:406:21
-  Adding package org
-    Resolved as new package org
   Adding metrics (CtMethodImpl) version @ src/main/java/org/apache/commons/daemon/support/DaemonLoader.java:43:24
     Adding object decl (CtClassImpl) PrintStream
       Pending package java.io
@@ -2658,7 +2656,6 @@ Init pending package org.apache.commons.daemon.support
   Finishing object instantiation java.util.ArrayList<java.lang.String>
   Finishing object instantiation java.util.ArrayList<java.lang.String>
   Finishing object instantiation java.util.ArrayList<java.lang.String>
-  Finishing package org
   Finishing interface decl (CtInterfaceImpl) Set
   Finishing interface description (CtInterfaceImpl) Appendable
   Finishing interface description (CtInterfaceImpl) Closeable
@@ -2688,35 +2685,35 @@ Init pending package org.apache.commons.daemon.support
   Finishing interface description (CtInterfaceImpl) ObjectOutput
   Finishing interface description (CtInterfaceImpl) ObjectStreamConstants
   Finishing interface description (CtInterfaceImpl) ObjectInput
-  Adding package java.io
-    Resolved as new package java.io
-  Adding metrics (CtMethodImpl) getMessageWithCause @ src/main/java/org/apache/commons/daemon/DaemonInitException.java:41:19
-    Adding basic (CtTypeReferenceImpl) boolean
-      Resolved with match basic (CtTypeReferenceImpl) boolean
+  Adding metrics (CtConstructorImpl) <init> @ src/main/java/org/apache/commons/daemon/DaemonInitException.java:36:12
+    [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+    [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
     Adding select field (CtFieldImpl) cause @ src/main/java/org/apache/commons/daemon/DaemonInitException.java:29:29
       Resolved as new select field (CtFieldImpl) cause @ src/main/java/org/apache/commons/daemon/DaemonInitException.java:29:29
-    Adding method (CtMethodImpl) getMessage
-      Resolved as new method (CtMethodImpl) getMessage
-    Resolved as new metrics (CtMethodImpl) getMessageWithCause @ src/main/java/org/apache/commons/daemon/DaemonInitException.java:41:19
+    Resolved as new metrics (CtConstructorImpl) <init> @ src/main/java/org/apache/commons/daemon/DaemonInitException.java:36:12
   Adding metrics (CtConstructorImpl) <init> @ src/main/java/org/apache/commons/daemon/DaemonInitException.java:31:12
     [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
     [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
     Resolved as new metrics (CtConstructorImpl) <init> @ src/main/java/org/apache/commons/daemon/DaemonInitException.java:31:12
-  Adding metrics (CtConstructorImpl) <init> @ src/main/java/org/apache/commons/daemon/DaemonInitException.java:36:12
-    [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
-    [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
-    Resolved as new metrics (CtConstructorImpl) <init> @ src/main/java/org/apache/commons/daemon/DaemonInitException.java:36:12
+  Adding metrics (CtMethodImpl) getMessageWithCause @ src/main/java/org/apache/commons/daemon/DaemonInitException.java:41:19
+    Adding basic (CtTypeReferenceImpl) boolean
+      Resolved with match basic (CtTypeReferenceImpl) boolean
+    Adding method (CtMethodImpl) getMessage
+      Resolved as new method (CtMethodImpl) getMessage
+    Resolved as new metrics (CtMethodImpl) getMessageWithCause @ src/main/java/org/apache/commons/daemon/DaemonInitException.java:41:19
   Finishing method (CtMethodImpl) getMessage
+  Adding package java.io
+    Resolved as new package java.io
   Finishing package java.io
-    Adding interface decl (CtInterfaceImpl) ObjectOutput
-      Resolved as new interface decl (CtInterfaceImpl) ObjectOutput
-    Adding interface decl (CtInterfaceImpl) ObjectStreamConstants
-      Resolved as new interface decl (CtInterfaceImpl) ObjectStreamConstants
-    Adding interface decl (CtInterfaceImpl) ObjectInput
-      Resolved as new interface decl (CtInterfaceImpl) ObjectInput
-  Finishing interface decl (CtInterfaceImpl) ObjectOutput
-  Finishing interface decl (CtInterfaceImpl) ObjectStreamConstants
-  Finishing interface decl (CtInterfaceImpl) ObjectInput
+    Adding interface decl (CtInterfaceImpl) Serializable
+      Resolved as new interface decl (CtInterfaceImpl) Serializable
+    Adding interface decl (CtInterfaceImpl) Closeable
+      Resolved as new interface decl (CtInterfaceImpl) Closeable
+  Finishing interface decl (CtInterfaceImpl) Serializable
+  Finishing interface decl (CtInterfaceImpl) Closeable
+  Adding package org
+    Resolved as new package org
+  Finishing package org
   Adding package java.util
     Resolved as new package java.util
   Finishing package java.util
@@ -2743,9 +2740,9 @@ Init pending package org.apache.commons.daemon.support
   Adding package <unnamed>
     Resolved as new package <unnamed>
   Finishing package <unnamed>
-  Adding package java.lang
-    Resolved as new package java.lang
-  Finishing package java.lang
+  Adding package java.text
+    Resolved as new package java.text
+  Finishing package java.text
   Adding package org.apache
     Resolved as new package org.apache
   Finishing package org.apache
@@ -2761,9 +2758,9 @@ Init pending package org.apache.commons.daemon.support
   Finishing interface decl (CtInterfaceImpl) Type
   Finishing interface decl (CtInterfaceImpl) GenericDeclaration
   Finishing interface decl (CtInterfaceImpl) AnnotatedElement
-  Adding package java.text
-    Resolved as new package java.text
-  Finishing package java.text
+  Adding package java.lang
+    Resolved as new package java.lang
+  Finishing package java.lang
   Adding package org.apache.commons.daemon
     Resolved as new package org.apache.commons.daemon
   Finishing package org.apache.commons.daemon
@@ -3001,253 +2998,6 @@ Init pending package org.apache.commons.daemon.support
   Finishing method (CtMethodImpl) implies @ src/main/java/org/apache/commons/daemon/DaemonPermission.java:294:20
   Finishing method (CtMethodImpl) toString @ src/main/java/org/apache/commons/daemon/DaemonPermission.java:319:19
   Finishing object decl (CtClassImpl) PermissionCollection
-  Adding package org.apache.commons
-    Resolved as new package org.apache.commons
-  Adding metrics (CtMethodImpl) toString @ src/main/java/org/apache/commons/daemon/DaemonPermission.java:319:19
-    Adding select field (CtFieldImpl) desc @ src/main/java/org/apache/commons/daemon/DaemonPermission.java:167:30
-      Resolved as new select field (CtFieldImpl) desc @ src/main/java/org/apache/commons/daemon/DaemonPermission.java:167:30
-    Resolved as new metrics (CtMethodImpl) toString @ src/main/java/org/apache/commons/daemon/DaemonPermission.java:319:19
-  Adding metrics (CtMethodImpl) implies @ src/main/java/org/apache/commons/daemon/DaemonPermission.java:294:20
-    Adding basic (CtTypeReferenceImpl) boolean
-      Resolved with match basic (CtTypeReferenceImpl) boolean
-    Adding basic (CtTypeReferenceImpl) boolean
-      Resolved with match basic (CtTypeReferenceImpl) boolean
-    Adding basic (CtTypeReferenceImpl) boolean
-      Resolved with match basic (CtTypeReferenceImpl) boolean
-    Adding basic (CtTypeReferenceImpl) boolean
-      Resolved with match basic (CtTypeReferenceImpl) boolean
-    Adding basic (CtTypeReferenceImpl) boolean
-      Resolved with match basic (CtTypeReferenceImpl) boolean
-    Adding basic (CtTypeReferenceImpl) boolean
-      Resolved with match basic (CtTypeReferenceImpl) boolean
-    Adding select field (CtFieldImpl) type @ src/main/java/org/apache/commons/daemon/DaemonPermission.java:163:27
-      Resolved as new select field (CtFieldImpl) type @ src/main/java/org/apache/commons/daemon/DaemonPermission.java:163:27
-    Adding basic (CtTypeReferenceImpl) int
-      Resolved with match basic (CtTypeReferenceImpl) int
-    Adding basic (CtTypeReferenceImpl) int
-      Resolved with match basic (CtTypeReferenceImpl) int
-    Adding basic (CtTypeReferenceImpl) boolean
-      Resolved with match basic (CtTypeReferenceImpl) boolean
-    Adding basic (CtTypeReferenceImpl) boolean
-      Resolved with match basic (CtTypeReferenceImpl) boolean
-    Adding basic (CtTypeReferenceImpl) int
-      Resolved with match basic (CtTypeReferenceImpl) int
-    Adding select field (CtFieldImpl) mask @ src/main/java/org/apache/commons/daemon/DaemonPermission.java:165:27
-      Resolved as new select field (CtFieldImpl) mask @ src/main/java/org/apache/commons/daemon/DaemonPermission.java:165:27
-    Adding basic (CtTypeReferenceImpl) int
-      Resolved with match basic (CtTypeReferenceImpl) int
-    Adding basic (CtTypeReferenceImpl) int
-      Resolved with match basic (CtTypeReferenceImpl) int
-    Adding basic (CtTypeReferenceImpl) int
-      Resolved with match basic (CtTypeReferenceImpl) int
-    Resolved as new metrics (CtMethodImpl) implies @ src/main/java/org/apache/commons/daemon/DaemonPermission.java:294:20
-  Adding metrics (CtMethodImpl) getActions @ src/main/java/org/apache/commons/daemon/DaemonPermission.java:240:19
-    Adding basic (CtTypeReferenceImpl) boolean
-      Resolved with match basic (CtTypeReferenceImpl) boolean
-    Adding basic (CtTypeReferenceImpl) int
-      Resolved with match basic (CtTypeReferenceImpl) int
-    Adding select field (CtFieldImpl) TYPE_CONTROL @ src/main/java/org/apache/commons/daemon/DaemonPermission.java:102:32
-      Resolved as new select field (CtFieldImpl) TYPE_CONTROL @ src/main/java/org/apache/commons/daemon/DaemonPermission.java:102:32
-    Adding basic (CtTypeReferenceImpl) int
-      Resolved with match basic (CtTypeReferenceImpl) int
-    Adding basic (CtTypeReferenceImpl) int
-      Resolved with match basic (CtTypeReferenceImpl) int
-    Adding basic (CtTypeReferenceImpl) int
-      Resolved with match basic (CtTypeReferenceImpl) int
-    Resolved as new metrics (CtMethodImpl) getActions @ src/main/java/org/apache/commons/daemon/DaemonPermission.java:240:19
-  Adding metrics (CtMethodImpl) setupDescription @ src/main/java/org/apache/commons/daemon/DaemonPermission.java:332:18
-    Adding basic (CtTypeReferenceImpl) boolean
-      Resolved with match basic (CtTypeReferenceImpl) boolean
-    [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
-    Adding object instantiation java.lang.Class<?>
-      Adding struct (CtClassImpl) Class
-        Resolved as new struct (CtClassImpl) Class
-      Adding interface description (CtInterfaceImpl) Type
-        Resolved as new interface description (CtInterfaceImpl) Type
-      Adding interface description (CtInterfaceImpl) GenericDeclaration
-        Resolved as new interface description (CtInterfaceImpl) GenericDeclaration
-      Adding interface description (CtInterfaceImpl) OfField
-        Resolved with match interface description (CtInterfaceImpl) OfField
-      Adding interface description (CtInterfaceImpl) AnnotatedElement
-        Resolved as new interface description (CtInterfaceImpl) AnnotatedElement
-      Adding interface description (CtInterfaceImpl) Serializable
-        Resolved as new interface description (CtInterfaceImpl) Serializable
-      Adding interface description (CtInterfaceImpl) Constable
-        Resolved as new interface description (CtInterfaceImpl) Constable
-      Resolved as new object instantiation java.lang.Class<?>
-    Adding method for call site (CtMethodImpl) getName
-      Adding method (CtMethodImpl) getName
-        Adding signature (CtMethodImpl) getName
-          Adding parameter <unnamed> java.lang.String
-            Resolved with match parameter <unnamed> java.lang.String
-          Resolved as new signature (CtMethodImpl) getName
-        Resolved as new method (CtMethodImpl) getName
-      Adding signature (CtMethodImpl) getName
-        Adding parameter <unnamed> java.lang.String
-          Resolved with match parameter <unnamed> java.lang.String
-        Resolved as new signature (CtMethodImpl) getName
-      Resolved as new method for call site (CtMethodImpl) getName
-    [34mUnused type args: [?][0m
-    Adding method (CtMethodImpl) append
-      Adding signature (CtMethodImpl) append
-        Adding parameter (CtParameterImpl) arg0
-          Adding basic (CtTypeReferenceImpl) char
-            Resolved with match basic (CtTypeReferenceImpl) char
-          Resolved as new parameter (CtParameterImpl) arg0
-        Adding parameter <unnamed> java.lang.StringBuffer
-          Resolved with match parameter <unnamed> java.lang.StringBuffer
-        Resolved as new signature (CtMethodImpl) append
-      Resolved as new method (CtMethodImpl) append
-    Adding basic (CtTypeReferenceImpl) char
-      Resolved with match basic (CtTypeReferenceImpl) char
-    Adding basic (CtTypeReferenceImpl) char
-      Resolved with match basic (CtTypeReferenceImpl) char
-    Adding basic (CtTypeReferenceImpl) int
-      Resolved with match basic (CtTypeReferenceImpl) int
-    Adding basic (CtTypeReferenceImpl) int
-      Resolved with match basic (CtTypeReferenceImpl) int
-    Adding select field (CtFieldImpl) CONTROL @ src/main/java/org/apache/commons/daemon/DaemonPermission.java:97:35
-      Resolved as new select field (CtFieldImpl) CONTROL @ src/main/java/org/apache/commons/daemon/DaemonPermission.java:97:35
-    Adding basic (CtTypeReferenceImpl) char
-      Resolved with match basic (CtTypeReferenceImpl) char
-    Adding basic (CtTypeReferenceImpl) char
-      Resolved with match basic (CtTypeReferenceImpl) char
-    Adding basic (CtTypeReferenceImpl) char
-      Resolved with match basic (CtTypeReferenceImpl) char
-    Adding basic (CtTypeReferenceImpl) char
-      Resolved with match basic (CtTypeReferenceImpl) char
-    Resolved as new metrics (CtMethodImpl) setupDescription @ src/main/java/org/apache/commons/daemon/DaemonPermission.java:332:18
-  Adding metrics (CtMethodImpl) equals @ src/main/java/org/apache/commons/daemon/DaemonPermission.java:267:20
-    Adding basic (CtTypeReferenceImpl) boolean
-      Resolved with match basic (CtTypeReferenceImpl) boolean
-    Adding basic (CtTypeReferenceImpl) boolean
-      Resolved with match basic (CtTypeReferenceImpl) boolean
-    Adding basic (CtTypeReferenceImpl) boolean
-      Resolved with match basic (CtTypeReferenceImpl) boolean
-    Adding basic (CtTypeReferenceImpl) boolean
-      Resolved with match basic (CtTypeReferenceImpl) boolean
-    Adding basic (CtTypeReferenceImpl) boolean
-      Resolved with match basic (CtTypeReferenceImpl) boolean
-    Adding basic (CtTypeReferenceImpl) boolean
-      Resolved with match basic (CtTypeReferenceImpl) boolean
-    Adding basic (CtTypeReferenceImpl) int
-      Resolved with match basic (CtTypeReferenceImpl) int
-    Adding basic (CtTypeReferenceImpl) int
-      Resolved with match basic (CtTypeReferenceImpl) int
-    Adding basic (CtTypeReferenceImpl) boolean
-      Resolved with match basic (CtTypeReferenceImpl) boolean
-    Adding basic (CtTypeReferenceImpl) boolean
-      Resolved with match basic (CtTypeReferenceImpl) boolean
-    Adding basic (CtTypeReferenceImpl) int
-      Resolved with match basic (CtTypeReferenceImpl) int
-    Adding basic (CtTypeReferenceImpl) int
-      Resolved with match basic (CtTypeReferenceImpl) int
-    Resolved as new metrics (CtMethodImpl) equals @ src/main/java/org/apache/commons/daemon/DaemonPermission.java:267:20
-  Adding metrics (CtMethodImpl) createControlActions @ src/main/java/org/apache/commons/daemon/DaemonPermission.java:397:20
-    [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
-    Adding basic (CtTypeReferenceImpl) boolean @ src/main/java/org/apache/commons/daemon/DaemonPermission.java:400:9
-      Resolved with match basic (CtTypeReferenceImpl) boolean @ src/main/java/org/apache/commons/daemon/DaemonPermission.java:400:9
-    Adding basic (CtTypeReferenceImpl) boolean
-      Resolved with match basic (CtTypeReferenceImpl) boolean
-    Adding basic (CtTypeReferenceImpl) boolean
-      Resolved with match basic (CtTypeReferenceImpl) boolean
-    Adding basic (CtTypeReferenceImpl) int
-      Resolved with match basic (CtTypeReferenceImpl) int
-    Adding basic (CtTypeReferenceImpl) int
-      Resolved with match basic (CtTypeReferenceImpl) int
-    Adding select field (CtFieldImpl) MASK_CONTROL_START @ src/main/java/org/apache/commons/daemon/DaemonPermission.java:132:32
-      Resolved as new select field (CtFieldImpl) MASK_CONTROL_START @ src/main/java/org/apache/commons/daemon/DaemonPermission.java:132:32
-    Adding basic (CtTypeReferenceImpl) int
-      Resolved with match basic (CtTypeReferenceImpl) int
-    Adding basic (CtTypeReferenceImpl) int
-      Resolved with match basic (CtTypeReferenceImpl) int
-    Adding basic (CtTypeReferenceImpl) boolean
-      Resolved with match basic (CtTypeReferenceImpl) boolean
-    Adding basic (CtTypeReferenceImpl) boolean
-      Resolved with match basic (CtTypeReferenceImpl) boolean
-    Adding basic (CtTypeReferenceImpl) boolean
-      Resolved with match basic (CtTypeReferenceImpl) boolean
-    Adding select field (CtFieldImpl) CONTROL_START @ src/main/java/org/apache/commons/daemon/DaemonPermission.java:108:35
-      Resolved as new select field (CtFieldImpl) CONTROL_START @ src/main/java/org/apache/commons/daemon/DaemonPermission.java:108:35
-    Adding basic (CtTypeReferenceImpl) boolean
-      Resolved with match basic (CtTypeReferenceImpl) boolean
-    Adding basic (CtTypeReferenceImpl) int
-      Resolved with match basic (CtTypeReferenceImpl) int
-    Adding basic (CtTypeReferenceImpl) int
-      Resolved with match basic (CtTypeReferenceImpl) int
-    Adding select field (CtFieldImpl) MASK_CONTROL_STOP @ src/main/java/org/apache/commons/daemon/DaemonPermission.java:138:32
-      Resolved as new select field (CtFieldImpl) MASK_CONTROL_STOP @ src/main/java/org/apache/commons/daemon/DaemonPermission.java:138:32
-    Adding basic (CtTypeReferenceImpl) int
-      Resolved with match basic (CtTypeReferenceImpl) int
-    Adding basic (CtTypeReferenceImpl) int
-      Resolved with match basic (CtTypeReferenceImpl) int
-    Adding basic (CtTypeReferenceImpl) boolean
-      Resolved with match basic (CtTypeReferenceImpl) boolean
-    Adding basic (CtTypeReferenceImpl) boolean
-      Resolved with match basic (CtTypeReferenceImpl) boolean
-    Adding basic (CtTypeReferenceImpl) boolean
-      Resolved with match basic (CtTypeReferenceImpl) boolean
-    Adding basic (CtTypeReferenceImpl) boolean
-      Resolved with match basic (CtTypeReferenceImpl) boolean
-    Adding select field (CtFieldImpl) CONTROL_STOP @ src/main/java/org/apache/commons/daemon/DaemonPermission.java:114:35
-      Resolved as new select field (CtFieldImpl) CONTROL_STOP @ src/main/java/org/apache/commons/daemon/DaemonPermission.java:114:35
-    Adding basic (CtTypeReferenceImpl) boolean
-      Resolved with match basic (CtTypeReferenceImpl) boolean
-    Adding basic (CtTypeReferenceImpl) int
-      Resolved with match basic (CtTypeReferenceImpl) int
-    Adding basic (CtTypeReferenceImpl) int
-      Resolved with match basic (CtTypeReferenceImpl) int
-    Adding select field (CtFieldImpl) MASK_CONTROL_SHUTDOWN @ src/main/java/org/apache/commons/daemon/DaemonPermission.java:144:32
-      Resolved as new select field (CtFieldImpl) MASK_CONTROL_SHUTDOWN @ src/main/java/org/apache/commons/daemon/DaemonPermission.java:144:32
-    Adding basic (CtTypeReferenceImpl) int
-      Resolved with match basic (CtTypeReferenceImpl) int
-    Adding basic (CtTypeReferenceImpl) int
-      Resolved with match basic (CtTypeReferenceImpl) int
-    Adding basic (CtTypeReferenceImpl) boolean
-      Resolved with match basic (CtTypeReferenceImpl) boolean
-    Adding basic (CtTypeReferenceImpl) boolean
-      Resolved with match basic (CtTypeReferenceImpl) boolean
-    Adding basic (CtTypeReferenceImpl) boolean
-      Resolved with match basic (CtTypeReferenceImpl) boolean
-    Adding basic (CtTypeReferenceImpl) boolean
-      Resolved with match basic (CtTypeReferenceImpl) boolean
-    Adding select field (CtFieldImpl) CONTROL_SHUTDOWN @ src/main/java/org/apache/commons/daemon/DaemonPermission.java:120:35
-      Resolved as new select field (CtFieldImpl) CONTROL_SHUTDOWN @ src/main/java/org/apache/commons/daemon/DaemonPermission.java:120:35
-    Adding basic (CtTypeReferenceImpl) boolean
-      Resolved with match basic (CtTypeReferenceImpl) boolean
-    Adding basic (CtTypeReferenceImpl) int
-      Resolved with match basic (CtTypeReferenceImpl) int
-    Adding basic (CtTypeReferenceImpl) int
-      Resolved with match basic (CtTypeReferenceImpl) int
-    Adding select field (CtFieldImpl) MASK_CONTROL_RELOAD @ src/main/java/org/apache/commons/daemon/DaemonPermission.java:150:32
-      Resolved as new select field (CtFieldImpl) MASK_CONTROL_RELOAD @ src/main/java/org/apache/commons/daemon/DaemonPermission.java:150:32
-    Adding basic (CtTypeReferenceImpl) int
-      Resolved with match basic (CtTypeReferenceImpl) int
-    Adding basic (CtTypeReferenceImpl) int
-      Resolved with match basic (CtTypeReferenceImpl) int
-    Adding basic (CtTypeReferenceImpl) boolean
-      Resolved with match basic (CtTypeReferenceImpl) boolean
-    Adding basic (CtTypeReferenceImpl) boolean
-      Resolved with match basic (CtTypeReferenceImpl) boolean
-    Adding basic (CtTypeReferenceImpl) boolean
-      Resolved with match basic (CtTypeReferenceImpl) boolean
-    Adding basic (CtTypeReferenceImpl) boolean
-      Resolved with match basic (CtTypeReferenceImpl) boolean
-    Adding select field (CtFieldImpl) CONTROL_RELOAD @ src/main/java/org/apache/commons/daemon/DaemonPermission.java:126:35
-      Resolved as new select field (CtFieldImpl) CONTROL_RELOAD @ src/main/java/org/apache/commons/daemon/DaemonPermission.java:126:35
-    Resolved as new metrics (CtMethodImpl) createControlActions @ src/main/java/org/apache/commons/daemon/DaemonPermission.java:397:20
-  Adding metrics (CtMethodImpl) hashCode @ src/main/java/org/apache/commons/daemon/DaemonPermission.java:254:16
-    Adding method (CtMethodImpl) hashCode
-      Adding signature (CtMethodImpl) hashCode
-        Adding parameter <unnamed> int
-          Adding basic (CtTypeReferenceImpl) int
-            Resolved with match basic (CtTypeReferenceImpl) int
-          Resolved as new parameter <unnamed> int
-        Resolved as new signature (CtMethodImpl) hashCode
-      Resolved as new method (CtMethodImpl) hashCode
-    Adding basic (CtTypeReferenceImpl) int
-      Resolved with match basic (CtTypeReferenceImpl) int
-    Resolved as new metrics (CtMethodImpl) hashCode @ src/main/java/org/apache/commons/daemon/DaemonPermission.java:254:16
   Adding metrics (CtMethodImpl) createControlMask @ src/main/java/org/apache/commons/daemon/DaemonPermission.java:359:17
     Adding basic (CtTypeReferenceImpl) boolean
       Resolved with match basic (CtTypeReferenceImpl) boolean
@@ -3308,12 +3058,20 @@ Init pending package org.apache.commons.daemon.support
       Resolved with match basic (CtTypeReferenceImpl) int
     Adding basic (CtTypeReferenceImpl) int
       Resolved with match basic (CtTypeReferenceImpl) int
+    Adding select field (CtFieldImpl) MASK_CONTROL_START @ src/main/java/org/apache/commons/daemon/DaemonPermission.java:132:32
+      Resolved as new select field (CtFieldImpl) MASK_CONTROL_START @ src/main/java/org/apache/commons/daemon/DaemonPermission.java:132:32
     Adding basic (CtTypeReferenceImpl) int
       Resolved with match basic (CtTypeReferenceImpl) int
+    Adding select field (CtFieldImpl) MASK_CONTROL_STOP @ src/main/java/org/apache/commons/daemon/DaemonPermission.java:138:32
+      Resolved as new select field (CtFieldImpl) MASK_CONTROL_STOP @ src/main/java/org/apache/commons/daemon/DaemonPermission.java:138:32
     Adding basic (CtTypeReferenceImpl) int
       Resolved with match basic (CtTypeReferenceImpl) int
+    Adding select field (CtFieldImpl) MASK_CONTROL_SHUTDOWN @ src/main/java/org/apache/commons/daemon/DaemonPermission.java:144:32
+      Resolved as new select field (CtFieldImpl) MASK_CONTROL_SHUTDOWN @ src/main/java/org/apache/commons/daemon/DaemonPermission.java:144:32
     Adding basic (CtTypeReferenceImpl) int
       Resolved with match basic (CtTypeReferenceImpl) int
+    Adding select field (CtFieldImpl) MASK_CONTROL_RELOAD @ src/main/java/org/apache/commons/daemon/DaemonPermission.java:150:32
+      Resolved as new select field (CtFieldImpl) MASK_CONTROL_RELOAD @ src/main/java/org/apache/commons/daemon/DaemonPermission.java:150:32
     Adding basic (CtTypeReferenceImpl) int
       Resolved with match basic (CtTypeReferenceImpl) int
     Adding method (CtMethodImpl) equalsIgnoreCase
@@ -3326,6 +3084,8 @@ Init pending package org.apache.commons.daemon.support
           Resolved as new parameter <unnamed> boolean
         Resolved as new signature (CtMethodImpl) equalsIgnoreCase
       Resolved as new method (CtMethodImpl) equalsIgnoreCase
+    Adding select field (CtFieldImpl) CONTROL_START @ src/main/java/org/apache/commons/daemon/DaemonPermission.java:108:35
+      Resolved as new select field (CtFieldImpl) CONTROL_START @ src/main/java/org/apache/commons/daemon/DaemonPermission.java:108:35
     Adding basic (CtTypeReferenceImpl) boolean
       Resolved with match basic (CtTypeReferenceImpl) boolean
     Adding basic (CtTypeReferenceImpl) int
@@ -3338,6 +3098,8 @@ Init pending package org.apache.commons.daemon.support
       Resolved with match basic (CtTypeReferenceImpl) int
     Adding basic (CtTypeReferenceImpl) int
       Resolved with match basic (CtTypeReferenceImpl) int
+    Adding select field (CtFieldImpl) CONTROL_STOP @ src/main/java/org/apache/commons/daemon/DaemonPermission.java:114:35
+      Resolved as new select field (CtFieldImpl) CONTROL_STOP @ src/main/java/org/apache/commons/daemon/DaemonPermission.java:114:35
     Adding basic (CtTypeReferenceImpl) boolean
       Resolved with match basic (CtTypeReferenceImpl) boolean
     Adding basic (CtTypeReferenceImpl) int
@@ -3350,6 +3112,8 @@ Init pending package org.apache.commons.daemon.support
       Resolved with match basic (CtTypeReferenceImpl) int
     Adding basic (CtTypeReferenceImpl) int
       Resolved with match basic (CtTypeReferenceImpl) int
+    Adding select field (CtFieldImpl) CONTROL_SHUTDOWN @ src/main/java/org/apache/commons/daemon/DaemonPermission.java:120:35
+      Resolved as new select field (CtFieldImpl) CONTROL_SHUTDOWN @ src/main/java/org/apache/commons/daemon/DaemonPermission.java:120:35
     Adding basic (CtTypeReferenceImpl) boolean
       Resolved with match basic (CtTypeReferenceImpl) boolean
     Adding basic (CtTypeReferenceImpl) int
@@ -3362,6 +3126,8 @@ Init pending package org.apache.commons.daemon.support
       Resolved with match basic (CtTypeReferenceImpl) int
     Adding basic (CtTypeReferenceImpl) int
       Resolved with match basic (CtTypeReferenceImpl) int
+    Adding select field (CtFieldImpl) CONTROL_RELOAD @ src/main/java/org/apache/commons/daemon/DaemonPermission.java:126:35
+      Resolved as new select field (CtFieldImpl) CONTROL_RELOAD @ src/main/java/org/apache/commons/daemon/DaemonPermission.java:126:35
     Adding basic (CtTypeReferenceImpl) boolean
       Resolved with match basic (CtTypeReferenceImpl) boolean
     Adding basic (CtTypeReferenceImpl) int
@@ -3378,6 +3144,161 @@ Init pending package org.apache.commons.daemon.support
     Adding basic (CtTypeReferenceImpl) int
       Resolved with match basic (CtTypeReferenceImpl) int
     Resolved as new metrics (CtMethodImpl) createControlMask @ src/main/java/org/apache/commons/daemon/DaemonPermission.java:359:17
+  Adding metrics (CtMethodImpl) getActions @ src/main/java/org/apache/commons/daemon/DaemonPermission.java:240:19
+    Adding basic (CtTypeReferenceImpl) boolean
+      Resolved with match basic (CtTypeReferenceImpl) boolean
+    Adding select field (CtFieldImpl) type @ src/main/java/org/apache/commons/daemon/DaemonPermission.java:163:27
+      Resolved as new select field (CtFieldImpl) type @ src/main/java/org/apache/commons/daemon/DaemonPermission.java:163:27
+    Adding basic (CtTypeReferenceImpl) int
+      Resolved with match basic (CtTypeReferenceImpl) int
+    Adding select field (CtFieldImpl) TYPE_CONTROL @ src/main/java/org/apache/commons/daemon/DaemonPermission.java:102:32
+      Resolved as new select field (CtFieldImpl) TYPE_CONTROL @ src/main/java/org/apache/commons/daemon/DaemonPermission.java:102:32
+    Adding basic (CtTypeReferenceImpl) int
+      Resolved with match basic (CtTypeReferenceImpl) int
+    Adding basic (CtTypeReferenceImpl) int
+      Resolved with match basic (CtTypeReferenceImpl) int
+    Adding select field (CtFieldImpl) mask @ src/main/java/org/apache/commons/daemon/DaemonPermission.java:165:27
+      Resolved as new select field (CtFieldImpl) mask @ src/main/java/org/apache/commons/daemon/DaemonPermission.java:165:27
+    Adding basic (CtTypeReferenceImpl) int
+      Resolved with match basic (CtTypeReferenceImpl) int
+    Resolved as new metrics (CtMethodImpl) getActions @ src/main/java/org/apache/commons/daemon/DaemonPermission.java:240:19
+  Adding metrics (CtMethodImpl) toString @ src/main/java/org/apache/commons/daemon/DaemonPermission.java:319:19
+    Adding select field (CtFieldImpl) desc @ src/main/java/org/apache/commons/daemon/DaemonPermission.java:167:30
+      Resolved as new select field (CtFieldImpl) desc @ src/main/java/org/apache/commons/daemon/DaemonPermission.java:167:30
+    Resolved as new metrics (CtMethodImpl) toString @ src/main/java/org/apache/commons/daemon/DaemonPermission.java:319:19
+  Adding metrics (CtConstructorImpl) <init> @ src/main/java/org/apache/commons/daemon/DaemonPermission.java:184:12
+    [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+    [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+    Adding basic (CtTypeReferenceImpl) boolean
+      Resolved with match basic (CtTypeReferenceImpl) boolean
+    [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+    Adding select field (CtFieldImpl) CONTROL @ src/main/java/org/apache/commons/daemon/DaemonPermission.java:97:35
+      Resolved as new select field (CtFieldImpl) CONTROL @ src/main/java/org/apache/commons/daemon/DaemonPermission.java:97:35
+    Adding basic (CtTypeReferenceImpl) boolean
+      Resolved with match basic (CtTypeReferenceImpl) boolean
+    Adding basic (CtTypeReferenceImpl) int
+      Resolved with match basic (CtTypeReferenceImpl) int
+    Adding basic (CtTypeReferenceImpl) int
+      Resolved with match basic (CtTypeReferenceImpl) int
+    Adding basic (CtTypeReferenceImpl) int
+      Resolved with match basic (CtTypeReferenceImpl) int
+    [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+    Resolved as new metrics (CtConstructorImpl) <init> @ src/main/java/org/apache/commons/daemon/DaemonPermission.java:184:12
+  Adding metrics (CtMethodImpl) equals @ src/main/java/org/apache/commons/daemon/DaemonPermission.java:267:20
+    Adding basic (CtTypeReferenceImpl) boolean
+      Resolved with match basic (CtTypeReferenceImpl) boolean
+    Adding basic (CtTypeReferenceImpl) boolean
+      Resolved with match basic (CtTypeReferenceImpl) boolean
+    Adding basic (CtTypeReferenceImpl) boolean
+      Resolved with match basic (CtTypeReferenceImpl) boolean
+    Adding basic (CtTypeReferenceImpl) boolean
+      Resolved with match basic (CtTypeReferenceImpl) boolean
+    Adding basic (CtTypeReferenceImpl) boolean
+      Resolved with match basic (CtTypeReferenceImpl) boolean
+    Adding basic (CtTypeReferenceImpl) boolean
+      Resolved with match basic (CtTypeReferenceImpl) boolean
+    Adding basic (CtTypeReferenceImpl) int
+      Resolved with match basic (CtTypeReferenceImpl) int
+    Adding basic (CtTypeReferenceImpl) int
+      Resolved with match basic (CtTypeReferenceImpl) int
+    Adding basic (CtTypeReferenceImpl) boolean
+      Resolved with match basic (CtTypeReferenceImpl) boolean
+    Adding basic (CtTypeReferenceImpl) boolean
+      Resolved with match basic (CtTypeReferenceImpl) boolean
+    Adding basic (CtTypeReferenceImpl) int
+      Resolved with match basic (CtTypeReferenceImpl) int
+    Adding basic (CtTypeReferenceImpl) int
+      Resolved with match basic (CtTypeReferenceImpl) int
+    Resolved as new metrics (CtMethodImpl) equals @ src/main/java/org/apache/commons/daemon/DaemonPermission.java:267:20
+  Adding metrics (CtMethodImpl) createControlActions @ src/main/java/org/apache/commons/daemon/DaemonPermission.java:397:20
+    [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+    Adding basic (CtTypeReferenceImpl) boolean @ src/main/java/org/apache/commons/daemon/DaemonPermission.java:400:9
+      Resolved with match basic (CtTypeReferenceImpl) boolean @ src/main/java/org/apache/commons/daemon/DaemonPermission.java:400:9
+    Adding basic (CtTypeReferenceImpl) boolean
+      Resolved with match basic (CtTypeReferenceImpl) boolean
+    Adding basic (CtTypeReferenceImpl) boolean
+      Resolved with match basic (CtTypeReferenceImpl) boolean
+    Adding basic (CtTypeReferenceImpl) int
+      Resolved with match basic (CtTypeReferenceImpl) int
+    Adding basic (CtTypeReferenceImpl) int
+      Resolved with match basic (CtTypeReferenceImpl) int
+    Adding basic (CtTypeReferenceImpl) int
+      Resolved with match basic (CtTypeReferenceImpl) int
+    Adding basic (CtTypeReferenceImpl) int
+      Resolved with match basic (CtTypeReferenceImpl) int
+    Adding basic (CtTypeReferenceImpl) boolean
+      Resolved with match basic (CtTypeReferenceImpl) boolean
+    Adding basic (CtTypeReferenceImpl) boolean
+      Resolved with match basic (CtTypeReferenceImpl) boolean
+    Adding basic (CtTypeReferenceImpl) boolean
+      Resolved with match basic (CtTypeReferenceImpl) boolean
+    Adding basic (CtTypeReferenceImpl) boolean
+      Resolved with match basic (CtTypeReferenceImpl) boolean
+    Adding basic (CtTypeReferenceImpl) int
+      Resolved with match basic (CtTypeReferenceImpl) int
+    Adding basic (CtTypeReferenceImpl) int
+      Resolved with match basic (CtTypeReferenceImpl) int
+    Adding basic (CtTypeReferenceImpl) int
+      Resolved with match basic (CtTypeReferenceImpl) int
+    Adding basic (CtTypeReferenceImpl) int
+      Resolved with match basic (CtTypeReferenceImpl) int
+    Adding basic (CtTypeReferenceImpl) boolean
+      Resolved with match basic (CtTypeReferenceImpl) boolean
+    Adding basic (CtTypeReferenceImpl) boolean
+      Resolved with match basic (CtTypeReferenceImpl) boolean
+    Adding basic (CtTypeReferenceImpl) boolean
+      Resolved with match basic (CtTypeReferenceImpl) boolean
+    Adding basic (CtTypeReferenceImpl) boolean
+      Resolved with match basic (CtTypeReferenceImpl) boolean
+    Adding basic (CtTypeReferenceImpl) boolean
+      Resolved with match basic (CtTypeReferenceImpl) boolean
+    Adding basic (CtTypeReferenceImpl) int
+      Resolved with match basic (CtTypeReferenceImpl) int
+    Adding basic (CtTypeReferenceImpl) int
+      Resolved with match basic (CtTypeReferenceImpl) int
+    Adding basic (CtTypeReferenceImpl) int
+      Resolved with match basic (CtTypeReferenceImpl) int
+    Adding basic (CtTypeReferenceImpl) int
+      Resolved with match basic (CtTypeReferenceImpl) int
+    Adding basic (CtTypeReferenceImpl) boolean
+      Resolved with match basic (CtTypeReferenceImpl) boolean
+    Adding basic (CtTypeReferenceImpl) boolean
+      Resolved with match basic (CtTypeReferenceImpl) boolean
+    Adding basic (CtTypeReferenceImpl) boolean
+      Resolved with match basic (CtTypeReferenceImpl) boolean
+    Adding basic (CtTypeReferenceImpl) boolean
+      Resolved with match basic (CtTypeReferenceImpl) boolean
+    Adding basic (CtTypeReferenceImpl) boolean
+      Resolved with match basic (CtTypeReferenceImpl) boolean
+    Adding basic (CtTypeReferenceImpl) int
+      Resolved with match basic (CtTypeReferenceImpl) int
+    Adding basic (CtTypeReferenceImpl) int
+      Resolved with match basic (CtTypeReferenceImpl) int
+    Adding basic (CtTypeReferenceImpl) int
+      Resolved with match basic (CtTypeReferenceImpl) int
+    Adding basic (CtTypeReferenceImpl) int
+      Resolved with match basic (CtTypeReferenceImpl) int
+    Adding basic (CtTypeReferenceImpl) boolean
+      Resolved with match basic (CtTypeReferenceImpl) boolean
+    Adding basic (CtTypeReferenceImpl) boolean
+      Resolved with match basic (CtTypeReferenceImpl) boolean
+    Adding basic (CtTypeReferenceImpl) boolean
+      Resolved with match basic (CtTypeReferenceImpl) boolean
+    Adding basic (CtTypeReferenceImpl) boolean
+      Resolved with match basic (CtTypeReferenceImpl) boolean
+    Resolved as new metrics (CtMethodImpl) createControlActions @ src/main/java/org/apache/commons/daemon/DaemonPermission.java:397:20
+  Adding metrics (CtMethodImpl) hashCode @ src/main/java/org/apache/commons/daemon/DaemonPermission.java:254:16
+    Adding method (CtMethodImpl) hashCode
+      Adding signature (CtMethodImpl) hashCode
+        Adding parameter <unnamed> int
+          Adding basic (CtTypeReferenceImpl) int
+            Resolved with match basic (CtTypeReferenceImpl) int
+          Resolved as new parameter <unnamed> int
+        Resolved as new signature (CtMethodImpl) hashCode
+      Resolved as new method (CtMethodImpl) hashCode
+    Adding basic (CtTypeReferenceImpl) int
+      Resolved with match basic (CtTypeReferenceImpl) int
+    Resolved as new metrics (CtMethodImpl) hashCode @ src/main/java/org/apache/commons/daemon/DaemonPermission.java:254:16
   Adding metrics (CtConstructorImpl) <init> @ src/main/java/org/apache/commons/daemon/DaemonPermission.java:216:12
     [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
     [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
@@ -3394,12 +3315,85 @@ Init pending package org.apache.commons.daemon.support
     Adding basic (CtTypeReferenceImpl) int
       Resolved with match basic (CtTypeReferenceImpl) int
     Resolved as new metrics (CtConstructorImpl) <init> @ src/main/java/org/apache/commons/daemon/DaemonPermission.java:216:12
-  Adding metrics (CtConstructorImpl) <init> @ src/main/java/org/apache/commons/daemon/DaemonPermission.java:184:12
-    [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
-    [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+  Adding metrics (CtMethodImpl) setupDescription @ src/main/java/org/apache/commons/daemon/DaemonPermission.java:332:18
     Adding basic (CtTypeReferenceImpl) boolean
       Resolved with match basic (CtTypeReferenceImpl) boolean
     [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+    Adding object instantiation java.lang.Class<?>
+      Adding struct (CtClassImpl) Class
+        Resolved as new struct (CtClassImpl) Class
+      Adding interface description (CtInterfaceImpl) Type
+        Resolved as new interface description (CtInterfaceImpl) Type
+      Adding interface description (CtInterfaceImpl) GenericDeclaration
+        Resolved as new interface description (CtInterfaceImpl) GenericDeclaration
+      Adding interface description (CtInterfaceImpl) OfField
+        Resolved with match interface description (CtInterfaceImpl) OfField
+      Adding interface description (CtInterfaceImpl) AnnotatedElement
+        Resolved as new interface description (CtInterfaceImpl) AnnotatedElement
+      Adding interface description (CtInterfaceImpl) Serializable
+        Resolved as new interface description (CtInterfaceImpl) Serializable
+      Adding interface description (CtInterfaceImpl) Constable
+        Resolved as new interface description (CtInterfaceImpl) Constable
+      Resolved as new object instantiation java.lang.Class<?>
+    Adding method for call site (CtMethodImpl) getName
+      Adding method (CtMethodImpl) getName
+        Adding signature (CtMethodImpl) getName
+          Adding parameter <unnamed> java.lang.String
+            Resolved with match parameter <unnamed> java.lang.String
+          Resolved as new signature (CtMethodImpl) getName
+        Resolved as new method (CtMethodImpl) getName
+      Adding signature (CtMethodImpl) getName
+        Adding parameter <unnamed> java.lang.String
+          Resolved with match parameter <unnamed> java.lang.String
+        Resolved as new signature (CtMethodImpl) getName
+      Resolved as new method for call site (CtMethodImpl) getName
+    [34mUnused type args: [?][0m
+    Adding method (CtMethodImpl) append
+      Adding signature (CtMethodImpl) append
+        Adding parameter (CtParameterImpl) arg0
+          Adding basic (CtTypeReferenceImpl) char
+            Resolved with match basic (CtTypeReferenceImpl) char
+          Resolved as new parameter (CtParameterImpl) arg0
+        Adding parameter <unnamed> java.lang.StringBuffer
+          Resolved with match parameter <unnamed> java.lang.StringBuffer
+        Resolved as new signature (CtMethodImpl) append
+      Resolved as new method (CtMethodImpl) append
+    Adding basic (CtTypeReferenceImpl) char
+      Resolved with match basic (CtTypeReferenceImpl) char
+    Adding basic (CtTypeReferenceImpl) char
+      Resolved with match basic (CtTypeReferenceImpl) char
+    Adding basic (CtTypeReferenceImpl) int
+      Resolved with match basic (CtTypeReferenceImpl) int
+    Adding basic (CtTypeReferenceImpl) int
+      Resolved with match basic (CtTypeReferenceImpl) int
+    Adding basic (CtTypeReferenceImpl) char
+      Resolved with match basic (CtTypeReferenceImpl) char
+    Adding basic (CtTypeReferenceImpl) char
+      Resolved with match basic (CtTypeReferenceImpl) char
+    Adding basic (CtTypeReferenceImpl) char
+      Resolved with match basic (CtTypeReferenceImpl) char
+    Adding basic (CtTypeReferenceImpl) char
+      Resolved with match basic (CtTypeReferenceImpl) char
+    Resolved as new metrics (CtMethodImpl) setupDescription @ src/main/java/org/apache/commons/daemon/DaemonPermission.java:332:18
+  Adding metrics (CtMethodImpl) implies @ src/main/java/org/apache/commons/daemon/DaemonPermission.java:294:20
+    Adding basic (CtTypeReferenceImpl) boolean
+      Resolved with match basic (CtTypeReferenceImpl) boolean
+    Adding basic (CtTypeReferenceImpl) boolean
+      Resolved with match basic (CtTypeReferenceImpl) boolean
+    Adding basic (CtTypeReferenceImpl) boolean
+      Resolved with match basic (CtTypeReferenceImpl) boolean
+    Adding basic (CtTypeReferenceImpl) boolean
+      Resolved with match basic (CtTypeReferenceImpl) boolean
+    Adding basic (CtTypeReferenceImpl) boolean
+      Resolved with match basic (CtTypeReferenceImpl) boolean
+    Adding basic (CtTypeReferenceImpl) boolean
+      Resolved with match basic (CtTypeReferenceImpl) boolean
+    Adding basic (CtTypeReferenceImpl) int
+      Resolved with match basic (CtTypeReferenceImpl) int
+    Adding basic (CtTypeReferenceImpl) int
+      Resolved with match basic (CtTypeReferenceImpl) int
+    Adding basic (CtTypeReferenceImpl) boolean
+      Resolved with match basic (CtTypeReferenceImpl) boolean
     Adding basic (CtTypeReferenceImpl) boolean
       Resolved with match basic (CtTypeReferenceImpl) boolean
     Adding basic (CtTypeReferenceImpl) int
@@ -3408,37 +3402,25 @@ Init pending package org.apache.commons.daemon.support
       Resolved with match basic (CtTypeReferenceImpl) int
     Adding basic (CtTypeReferenceImpl) int
       Resolved with match basic (CtTypeReferenceImpl) int
-    [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
-    Resolved as new metrics (CtConstructorImpl) <init> @ src/main/java/org/apache/commons/daemon/DaemonPermission.java:184:12
+    Adding basic (CtTypeReferenceImpl) int
+      Resolved with match basic (CtTypeReferenceImpl) int
+    Resolved as new metrics (CtMethodImpl) implies @ src/main/java/org/apache/commons/daemon/DaemonPermission.java:294:20
   Finishing interface description (CtInterfaceImpl) Type
   Finishing interface description (CtInterfaceImpl) GenericDeclaration
   Finishing interface description (CtInterfaceImpl) OfField
   Finishing interface description (CtInterfaceImpl) AnnotatedElement
   Finishing interface description (CtInterfaceImpl) Serializable
   Finishing interface description (CtInterfaceImpl) Constable
-  Finishing method (CtMethodImpl) getName
-  Finishing method (CtMethodImpl) append
-  Finishing method (CtMethodImpl) hashCode
   Finishing constructor (CtConstructorImpl) <init>
   Finishing method (CtMethodImpl) hasMoreTokens
   Finishing method (CtMethodImpl) trim
   Finishing method (CtMethodImpl) nextToken
   Finishing method (CtMethodImpl) equalsIgnoreCase
+  Finishing method (CtMethodImpl) hashCode
+  Finishing method (CtMethodImpl) getName
+  Finishing method (CtMethodImpl) append
   Finishing method for call site (CtMethodImpl) getName
   Finishing object instantiation java.lang.Class<?>
-  Finishing package org.apache.commons
-  Adding package java.util
-    Resolved with match package java.util
-  Finishing package java.util
-  Adding package java.io
-    Resolved with match package java.io
-  Finishing package java.io
-    Adding interface decl (CtInterfaceImpl) Serializable
-      Resolved as new interface decl (CtInterfaceImpl) Serializable
-    Adding interface decl (CtInterfaceImpl) Closeable
-      Resolved as new interface decl (CtInterfaceImpl) Closeable
-  Finishing interface decl (CtInterfaceImpl) Serializable
-  Finishing interface decl (CtInterfaceImpl) Closeable
   Adding package java.security
     Resolved as new package java.security
   Finishing package java.security
@@ -3448,6 +3430,21 @@ Init pending package org.apache.commons.daemon.support
     Adding interface decl (CtInterfaceImpl) Guard
       Resolved as new interface decl (CtInterfaceImpl) Guard
   Finishing interface decl (CtInterfaceImpl) Guard
+  Adding package org.apache.commons
+    Resolved as new package org.apache.commons
+  Finishing package org.apache.commons
+  Adding package java.io
+    Resolved with match package java.io
+  Finishing package java.io
+    Adding interface decl (CtInterfaceImpl) ObjectOutput
+      Resolved as new interface decl (CtInterfaceImpl) ObjectOutput
+    Adding interface decl (CtInterfaceImpl) ObjectStreamConstants
+      Resolved as new interface decl (CtInterfaceImpl) ObjectStreamConstants
+    Adding interface decl (CtInterfaceImpl) ObjectInput
+      Resolved as new interface decl (CtInterfaceImpl) ObjectInput
+  Finishing interface decl (CtInterfaceImpl) ObjectOutput
+  Finishing interface decl (CtInterfaceImpl) ObjectStreamConstants
+  Finishing interface decl (CtInterfaceImpl) ObjectInput
   Adding package java.lang
     Resolved with match package java.lang
   Finishing package java.lang
@@ -3472,29 +3469,32 @@ Init pending package org.apache.commons.daemon.support
   Finishing interface decl (CtInterfaceImpl) Comparable
   Finishing interface decl (CtInterfaceImpl) CharSequence
   Finishing object decl (CtClassImpl) Enum
-[34mFinished process pending packages (2.100139s)[0m
+  Adding package java.util
+    Resolved with match package java.util
+  Finishing package java.util
+[34mFinished process pending packages (2.296415s)[0m
 [34mStarting short validation...[0m
   [34mStarting performShortValidation...[0m
-  [34mFinished performShortValidation (0.006648s)[0m
-[34mFinished short validation (0.007687s)[0m
+  [34mFinished performShortValidation (0.008353s)[0m
+[34mFinished short validation (0.009320s)[0m
 [34mStarting consolidate constructs...[0m
   Consolidating all constructs
     Removed 288 collisions
     Removed 0 collisions
-[34mFinished consolidate constructs (0.030127s)[0m
+[34mFinished consolidate constructs (0.027850s)[0m
 [34mStarting connect nests...[0m
-[34mFinished connect nests (0.000670s)[0m
+[34mFinished connect nests (0.000632s)[0m
 [34mStarting collect package declarations...[0m
-[34mFinished collect package declarations (0.076523s)[0m
+[34mFinished collect package declarations (0.078990s)[0m
 [34mStarting addImports from usage...[0m
-[34mFinished addImports from usage (0.001336s)[0m
+[34mFinished addImports from usage (0.001793s)[0m
 [34mStarting remove empty packages...[0m
   Removing { kind: package, name: "<unnamed>" }
   Removing { kind: package, name: org }
   Removing { kind: package, name: org.apache }
   Removing { kind: package, name: org.apache.commons }
-[34mFinished remove empty packages (0.006445s)[0m
+[34mFinished remove empty packages (0.006459s)[0m
 [34mStarting performValidation...[0m
-[34mFinished performValidation (0.291431s)[0m
-[34mFinished Abstraction (9.775922s)[0m
+[34mFinished performValidation (0.280010s)[0m
+[34mFinished Abstraction (10.176420s)[0m
 Success

@@ -1,7 +1,7 @@
 # cmd: java -jar /Users/grantnelson/go/src/github.com/MSUSEL/msusel-tdmetrics-go/javaAbstractor/target/abstractor-0.1-jar-with-dependencies.jar -i /Users/grantnelson/go/src/github.com/apache/thrift/ -o /Users/grantnelson/go/src/github.com/MSUSEL/msusel-tdmetrics-go/tdd/abstractions/thrift.json -v
 # cwd: /Users/grantnelson/go/src/github.com/MSUSEL/msusel-tdmetrics-go/tdd
 # repo: /Users/grantnelson/go/src/github.com/apache/thrift @ a2123693838410c1e78170419e9bb91cb01151b4
-# started: 2026-08-30T23:14:28.345266+00:00
+# started: 2026-08-31T17:51:10.559157+00:00
 # timeout_min: 10
 # ---
 Input path must be an existing directory containing a pom.xml Maven file.

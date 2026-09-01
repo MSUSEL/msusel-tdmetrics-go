@@ -1,7 +1,7 @@
 # cmd: java -jar /Users/grantnelson/go/src/github.com/MSUSEL/msusel-tdmetrics-go/javaAbstractor/target/abstractor-0.1-jar-with-dependencies.jar -i /Users/grantnelson/go/src/github.com/apache/commons-fileupload/ -o /Users/grantnelson/go/src/github.com/MSUSEL/msusel-tdmetrics-go/tdd/abstractions/commons-fileupload.json -v
 # cwd: /Users/grantnelson/go/src/github.com/MSUSEL/msusel-tdmetrics-go/tdd
 # repo: /Users/grantnelson/go/src/github.com/apache/commons-fileupload @ cae90facebc54803232a0593003914ca77193a73
-# started: 2026-08-30T23:05:37.739248+00:00
+# started: 2026-08-31T17:26:27.828864+00:00
 # timeout_min: 10
 # ---
 Reading /Users/grantnelson/go/src/github.com/apache/commons-fileupload/
@@ -529,8 +529,6 @@ Init pending package org.apache.commons.fileupload.util.mime
   Finishing interface description (CtInterfaceImpl) ObjectOutput
   Finishing interface description (CtInterfaceImpl) ObjectStreamConstants
   Finishing interface description (CtInterfaceImpl) ObjectInput
-  Adding package java.lang
-    Resolved as new package java.lang
   Adding metrics (CtConstructorImpl) <init> @ src/main/java/org/apache/commons/fileupload/util/mime/MimeUtility.java:84:13
     [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
     [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
@@ -1610,6 +1608,13 @@ Init pending package org.apache.commons.fileupload.util.mime
   Finishing object decl (CtClassImpl) IOException
   Finishing object decl (CtClassImpl) StringBuilder
   Finishing object decl (CtClassImpl) Character
+  Finishing interface description (CtInterfaceImpl) ConstantDesc
+  Finishing interface description (CtInterfaceImpl) Comparable
+  Finishing interface description (CtInterfaceImpl) Constable
+  Finishing interface description (CtInterfaceImpl) CharSequence
+  Finishing interface description (CtInterfaceImpl) Cloneable
+  Adding package java.lang
+    Resolved as new package java.lang
   Finishing package java.lang
     Adding object decl (CtClassImpl) Enum
       Adding struct (CtClassImpl) Enum
@@ -1631,11 +1636,6 @@ Init pending package org.apache.commons.fileupload.util.mime
   Finishing interface decl (CtInterfaceImpl) Comparable
   Finishing interface decl (CtInterfaceImpl) CharSequence
   Finishing interface decl (CtInterfaceImpl) Cloneable
-  Finishing interface description (CtInterfaceImpl) ConstantDesc
-  Finishing interface description (CtInterfaceImpl) Comparable
-  Finishing interface description (CtInterfaceImpl) Constable
-  Finishing interface description (CtInterfaceImpl) CharSequence
-  Finishing interface description (CtInterfaceImpl) Cloneable
   Finishing object decl (CtClassImpl) Enum
   Adding package java.util
     Resolved as new package java.util
@@ -4835,8 +4835,6 @@ Init pending package org.apache.commons.fileupload.util.mime
   Finishing method (CtMethodImpl) findSeparator @ src/main/java/org/apache/commons/fileupload/MultipartStream.java:847:22
   Finishing method (CtMethodImpl) skip @ src/main/java/org/apache/commons/fileupload/MultipartStream.java:991:21
   Finishing method (CtMethodImpl) isClosed @ src/main/java/org/apache/commons/fileupload/MultipartStream.java:1054:24
-  Adding package java.util.concurrent.atomic
-    Resolved as new package java.util.concurrent.atomic
   Adding metrics (CtConstructorImpl) <init> @ src/main/java/org/apache/commons/fileupload/FileUploadBase.java:937:9
     [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
     [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
@@ -10065,7 +10063,6 @@ Init pending package org.apache.commons.fileupload.util.mime
   Finishing object instantiation java.util.HashMap<java.lang.String, java.lang.String>
   Finishing object instantiation java.util.HashMap<java.lang.String, java.lang.String>
   Finishing object instantiation java.util.HashMap @ src/main/java/org/apache/commons/fileupload/ParameterParser.java:275:24<java.lang.String @ src/main/java/org/apache/commons/fileupload/ParameterParser.java:275:32, java.lang.String @ src/main/java/org/apache/commons/fileupload/ParameterParser.java:275:40>
-  Finishing package java.util.concurrent.atomic
   Finishing interface description (CtInterfaceImpl) Type
   Finishing interface description (CtInterfaceImpl) GenericDeclaration
   Finishing interface description (CtInterfaceImpl) OfField
@@ -10096,8 +10093,94 @@ Init pending package org.apache.commons.fileupload.util.mime
   Finishing method (CtMethodImpl) copy @ src/main/java/org/apache/commons/fileupload/util/Streams.java:89:24
   Finishing method (CtMethodImpl) asString @ src/main/java/org/apache/commons/fileupload/util/Streams.java:139:26
   Finishing method (CtMethodImpl) asString @ src/main/java/org/apache/commons/fileupload/util/Streams.java:156:26
-  Adding package org.apache.commons.io
-    Resolved as new package org.apache.commons.io
+  Adding metrics (CtConstructorImpl) <init> @ src/main/java/org/apache/commons/fileupload/servlet/ServletRequestContext.java:51:12
+    [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+    [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+    Adding select field (CtFieldImpl) request @ src/main/java/org/apache/commons/fileupload/servlet/ServletRequestContext.java:42:38
+      Resolved as new select field (CtFieldImpl) request @ src/main/java/org/apache/commons/fileupload/servlet/ServletRequestContext.java:42:38
+    [33mType description did not have a declaration but was not labelled as anonymous: (CtTypeReferenceImpl) javax.servlet.http.HttpServletRequest
+    The type likely was an external dependency or some other type not handled by the abstractor so using anyDesc.[0m
+    [33mType description did not have a declaration but was not labelled as anonymous: (CtTypeReferenceImpl) javax.servlet.http.HttpServletRequest
+    The type likely was an external dependency or some other type not handled by the abstractor so using anyDesc.[0m
+    [33mType description did not have a declaration but was not labelled as anonymous: (CtTypeReferenceImpl) javax.servlet.http.HttpServletRequest
+    The type likely was an external dependency or some other type not handled by the abstractor so using anyDesc.[0m
+    [33mType description did not have a declaration but was not labelled as anonymous: (CtTypeReferenceImpl) javax.servlet.http.HttpServletRequest
+    The type likely was an external dependency or some other type not handled by the abstractor so using anyDesc.[0m
+    Resolved as new metrics (CtConstructorImpl) <init> @ src/main/java/org/apache/commons/fileupload/servlet/ServletRequestContext.java:51:12
+  Adding metrics (CtMethodImpl) getInputStream @ src/main/java/org/apache/commons/fileupload/servlet/ServletRequestContext.java:109:24
+    [33mType description did not have a declaration but was not labelled as anonymous: (CtTypeReferenceImpl) javax.servlet.http.HttpServletRequest
+    The type likely was an external dependency or some other type not handled by the abstractor so using anyDesc.[0m
+    [33mType description did not have a declaration but was not labelled as anonymous: (CtTypeReferenceImpl) javax.servlet.http.HttpServletRequest
+    The type likely was an external dependency or some other type not handled by the abstractor so using anyDesc.[0m
+    Resolved as new metrics (CtMethodImpl) getInputStream @ src/main/java/org/apache/commons/fileupload/servlet/ServletRequestContext.java:109:24
+  Adding metrics (CtConstructorImpl) <init> @ src/main/java/org/apache/commons/fileupload/util/Streams.java:36:13
+    [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+    [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+    Resolved as new metrics (CtConstructorImpl) <init> @ src/main/java/org/apache/commons/fileupload/util/Streams.java:36:13
+  Adding metrics (CtMethodImpl) isMultipartContent @ src/main/java/org/apache/commons/fileupload/servlet/ServletFileUpload.java:64:33
+    Adding method (CtMethodImpl) equalsIgnoreCase
+      Adding signature (CtMethodImpl) equalsIgnoreCase
+        Adding parameter (CtParameterImpl) arg0
+          Resolved with match parameter (CtParameterImpl) arg0
+        Adding parameter <unnamed> boolean
+          Adding basic (CtTypeReferenceImpl) boolean
+            Resolved with match basic (CtTypeReferenceImpl) boolean
+          Resolved as new parameter <unnamed> boolean
+        Resolved as new signature (CtMethodImpl) equalsIgnoreCase
+      Resolved as new method (CtMethodImpl) equalsIgnoreCase
+    Adding select field (CtFieldImpl) POST_METHOD @ src/main/java/org/apache/commons/fileupload/servlet/ServletFileUpload.java:51:33
+      Resolved as new select field (CtFieldImpl) POST_METHOD @ src/main/java/org/apache/commons/fileupload/servlet/ServletFileUpload.java:51:33
+    Adding basic (CtTypeReferenceImpl) boolean
+      Resolved with match basic (CtTypeReferenceImpl) boolean
+    [33mType description did not have a declaration but was not labelled as anonymous: (CtTypeReferenceImpl) javax.servlet.http.HttpServletRequest
+    The type likely was an external dependency or some other type not handled by the abstractor so using anyDesc.[0m
+    [33mType description did not have a declaration but was not labelled as anonymous: (CtTypeReferenceImpl) javax.servlet.http.HttpServletRequest
+    The type likely was an external dependency or some other type not handled by the abstractor so using anyDesc.[0m
+    [33mType description did not have a declaration but was not labelled as anonymous: (CtTypeReferenceImpl) javax.servlet.http.HttpServletRequest
+    The type likely was an external dependency or some other type not handled by the abstractor so using anyDesc.[0m
+    [33mType description did not have a declaration but was not labelled as anonymous: (CtTypeReferenceImpl) javax.servlet.http.HttpServletRequest
+    The type likely was an external dependency or some other type not handled by the abstractor so using anyDesc.[0m
+    Adding basic (CtTypeReferenceImpl) boolean
+      Resolved with match basic (CtTypeReferenceImpl) boolean
+    Adding basic (CtTypeReferenceImpl) boolean
+      Resolved with match basic (CtTypeReferenceImpl) boolean
+    [33mType description did not have a declaration but was not labelled as anonymous: (CtTypeReferenceImpl) javax.servlet.http.HttpServletRequest
+    The type likely was an external dependency or some other type not handled by the abstractor so using anyDesc.[0m
+    [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+    [33mType description did not have a declaration but was not labelled as anonymous: (CtTypeReferenceImpl) javax.servlet.http.HttpServletRequest
+    The type likely was an external dependency or some other type not handled by the abstractor so using anyDesc.[0m
+    [33mType description did not have a declaration but was not labelled as anonymous: (CtTypeReferenceImpl) javax.servlet.http.HttpServletRequest
+    The type likely was an external dependency or some other type not handled by the abstractor so using anyDesc.[0m
+    [33mType description did not have a declaration but was not labelled as anonymous: (CtTypeReferenceImpl) javax.servlet.http.HttpServletRequest
+    The type likely was an external dependency or some other type not handled by the abstractor so using anyDesc.[0m
+    [33mType description did not have a declaration but was not labelled as anonymous: (CtTypeReferenceImpl) javax.servlet.http.HttpServletRequest
+    The type likely was an external dependency or some other type not handled by the abstractor so using anyDesc.[0m
+    Resolved as new metrics (CtMethodImpl) isMultipartContent @ src/main/java/org/apache/commons/fileupload/servlet/ServletFileUpload.java:64:33
+  Adding metrics (CtMethodImpl) asString @ src/main/java/org/apache/commons/fileupload/util/Streams.java:139:26
+    [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+    Adding basic (CtTypeReferenceImpl) long
+      Resolved with match basic (CtTypeReferenceImpl) long
+    Adding basic (CtTypeReferenceImpl) boolean
+      Resolved with match basic (CtTypeReferenceImpl) boolean
+    Adding basic (CtTypeReferenceImpl) boolean
+      Resolved with match basic (CtTypeReferenceImpl) boolean
+    Resolved as new metrics (CtMethodImpl) asString @ src/main/java/org/apache/commons/fileupload/util/Streams.java:139:26
+  Adding metrics (CtMethodImpl) parseRequest @ src/main/java/org/apache/commons/fileupload/servlet/ServletFileUpload.java:111:27
+    [34mUnused type args: [org.apache.commons.fileupload.FileItem][0m
+    Adding interface instantiation java.util.List<org.apache.commons.fileupload.FileItem>
+      Resolved with match interface instantiation java.util.List<org.apache.commons.fileupload.FileItem>
+    [33mType description did not have a declaration but was not labelled as anonymous: (CtTypeReferenceImpl) javax.servlet.http.HttpServletRequest
+    The type likely was an external dependency or some other type not handled by the abstractor so using anyDesc.[0m
+    [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+    [33mType description did not have a declaration but was not labelled as anonymous: (CtTypeReferenceImpl) javax.servlet.http.HttpServletRequest
+    The type likely was an external dependency or some other type not handled by the abstractor so using anyDesc.[0m
+    [33mType description did not have a declaration but was not labelled as anonymous: (CtTypeReferenceImpl) javax.servlet.http.HttpServletRequest
+    The type likely was an external dependency or some other type not handled by the abstractor so using anyDesc.[0m
+    [33mType description did not have a declaration but was not labelled as anonymous: (CtTypeReferenceImpl) javax.servlet.http.HttpServletRequest
+    The type likely was an external dependency or some other type not handled by the abstractor so using anyDesc.[0m
+    [33mType description did not have a declaration but was not labelled as anonymous: (CtTypeReferenceImpl) javax.servlet.http.HttpServletRequest
+    The type likely was an external dependency or some other type not handled by the abstractor so using anyDesc.[0m
+    Resolved as new metrics (CtMethodImpl) parseRequest @ src/main/java/org/apache/commons/fileupload/servlet/ServletFileUpload.java:111:27
   Adding metrics (CtMethodImpl) checkLimit @ src/main/java/org/apache/commons/fileupload/util/LimitedInputStream.java:74:18
     Adding basic (CtTypeReferenceImpl) boolean
       Resolved with match basic (CtTypeReferenceImpl) boolean
@@ -10118,10 +10201,186 @@ Init pending package org.apache.commons.fileupload.util.mime
     Adding basic (CtTypeReferenceImpl) long
       Resolved with match basic (CtTypeReferenceImpl) long
     Resolved as new metrics (CtMethodImpl) checkLimit @ src/main/java/org/apache/commons/fileupload/util/LimitedInputStream.java:74:18
-  Adding metrics (CtConstructorImpl) <init> @ src/main/java/org/apache/commons/fileupload/util/Streams.java:36:13
+  Adding metrics (CtMethodImpl) read @ src/main/java/org/apache/commons/fileupload/util/LimitedInputStream.java:98:16
+    Adding basic (CtTypeReferenceImpl) int @ src/main/java/org/apache/commons/fileupload/util/LimitedInputStream.java:99:9
+      Resolved with match basic (CtTypeReferenceImpl) int @ src/main/java/org/apache/commons/fileupload/util/LimitedInputStream.java:99:9
+    Adding method (CtMethodImpl) read
+      Adding signature (CtMethodImpl) read
+        Adding parameter <unnamed> int
+          Adding basic (CtTypeReferenceImpl) int
+            Resolved with match basic (CtTypeReferenceImpl) int
+          Resolved as new parameter <unnamed> int
+        Resolved as new signature (CtMethodImpl) read
+      Resolved as new method (CtMethodImpl) read
+    Adding basic (CtTypeReferenceImpl) int
+      Resolved with match basic (CtTypeReferenceImpl) int
+    Adding basic (CtTypeReferenceImpl) boolean
+      Resolved with match basic (CtTypeReferenceImpl) boolean
+    Adding basic (CtTypeReferenceImpl) int
+      Resolved with match basic (CtTypeReferenceImpl) int
+    Adding basic (CtTypeReferenceImpl) int
+      Resolved with match basic (CtTypeReferenceImpl) int
+    Adding basic (CtTypeReferenceImpl) int
+      Resolved with match basic (CtTypeReferenceImpl) int
+    Adding basic (CtTypeReferenceImpl) long
+      Resolved with match basic (CtTypeReferenceImpl) long
+    Adding basic (CtTypeReferenceImpl) long
+      Resolved with match basic (CtTypeReferenceImpl) long
+    Adding basic (CtTypeReferenceImpl) int
+      Resolved with match basic (CtTypeReferenceImpl) int
+    Resolved as new metrics (CtMethodImpl) read @ src/main/java/org/apache/commons/fileupload/util/LimitedInputStream.java:98:16
+  Adding metrics (CtMethodImpl) copy @ src/main/java/org/apache/commons/fileupload/util/Streams.java:66:24
+    Adding basic (CtTypeReferenceImpl) long
+      Resolved with match basic (CtTypeReferenceImpl) long
+    Adding basic (CtTypeReferenceImpl) boolean
+      Resolved with match basic (CtTypeReferenceImpl) boolean
+    Adding basic (CtTypeReferenceImpl) byte
+      Resolved with match basic (CtTypeReferenceImpl) byte
+    Adding basic (CtTypeReferenceImpl) boolean
+      Resolved with match basic (CtTypeReferenceImpl) boolean
+    Adding basic (CtTypeReferenceImpl) byte @ src/main/java/org/apache/commons/fileupload/util/Streams.java:68:71
+      Resolved with match basic (CtTypeReferenceImpl) byte @ src/main/java/org/apache/commons/fileupload/util/Streams.java:68:71
+    Adding select field (CtFieldImpl) DEFAULT_BUFFER_SIZE @ src/main/java/org/apache/commons/fileupload/util/Streams.java:44:30
+      Resolved as new select field (CtFieldImpl) DEFAULT_BUFFER_SIZE @ src/main/java/org/apache/commons/fileupload/util/Streams.java:44:30
+    Adding basic (CtTypeReferenceImpl) int
+      Resolved with match basic (CtTypeReferenceImpl) int
+    Resolved as new metrics (CtMethodImpl) copy @ src/main/java/org/apache/commons/fileupload/util/Streams.java:66:24
+  Adding metrics (CtMethodImpl) toString @ src/main/java/org/apache/commons/fileupload/servlet/ServletRequestContext.java:119:19
+    Adding basic (CtTypeReferenceImpl) long
+      Resolved with match basic (CtTypeReferenceImpl) long
+    Adding basic (CtTypeReferenceImpl) long
+      Resolved with match basic (CtTypeReferenceImpl) long
+    Resolved as new metrics (CtMethodImpl) toString @ src/main/java/org/apache/commons/fileupload/servlet/ServletRequestContext.java:119:19
+  Adding metrics (CtMethodImpl) getContentType @ src/main/java/org/apache/commons/fileupload/servlet/ServletRequestContext.java:71:19
+    [33mType description did not have a declaration but was not labelled as anonymous: (CtTypeReferenceImpl) javax.servlet.http.HttpServletRequest
+    The type likely was an external dependency or some other type not handled by the abstractor so using anyDesc.[0m
+    [33mType description did not have a declaration but was not labelled as anonymous: (CtTypeReferenceImpl) javax.servlet.http.HttpServletRequest
+    The type likely was an external dependency or some other type not handled by the abstractor so using anyDesc.[0m
+    Resolved as new metrics (CtMethodImpl) getContentType @ src/main/java/org/apache/commons/fileupload/servlet/ServletRequestContext.java:71:19
+  Adding metrics (CtConstructorImpl) <init> @ src/main/java/org/apache/commons/fileupload/servlet/ServletFileUpload.java:81:12
     [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
     [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
-    Resolved as new metrics (CtConstructorImpl) <init> @ src/main/java/org/apache/commons/fileupload/util/Streams.java:36:13
+    Resolved as new metrics (CtConstructorImpl) <init> @ src/main/java/org/apache/commons/fileupload/servlet/ServletFileUpload.java:81:12
+  Adding metrics (CtConstructorImpl) <init> @ src/main/java/org/apache/commons/fileupload/servlet/ServletFileUpload.java:92:12
+    [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+    [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+    Resolved as new metrics (CtConstructorImpl) <init> @ src/main/java/org/apache/commons/fileupload/servlet/ServletFileUpload.java:92:12
+  Adding metrics (CtMethodImpl) asString @ src/main/java/org/apache/commons/fileupload/util/Streams.java:156:26
+    [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+    Adding basic (CtTypeReferenceImpl) long
+      Resolved with match basic (CtTypeReferenceImpl) long
+    Adding basic (CtTypeReferenceImpl) boolean
+      Resolved with match basic (CtTypeReferenceImpl) boolean
+    Adding basic (CtTypeReferenceImpl) boolean
+      Resolved with match basic (CtTypeReferenceImpl) boolean
+    Resolved as new metrics (CtMethodImpl) asString @ src/main/java/org/apache/commons/fileupload/util/Streams.java:156:26
+  Adding metrics (CtMethodImpl) checkFileName @ src/main/java/org/apache/commons/fileupload/util/Streams.java:172:26
+    Adding basic (CtTypeReferenceImpl) boolean
+      Resolved with match basic (CtTypeReferenceImpl) boolean
+    Adding basic (CtTypeReferenceImpl) boolean
+      Resolved with match basic (CtTypeReferenceImpl) boolean
+    Adding basic (CtTypeReferenceImpl) boolean
+      Resolved with match basic (CtTypeReferenceImpl) boolean
+    Adding basic (CtTypeReferenceImpl) int
+      Resolved with match basic (CtTypeReferenceImpl) int
+    Adding basic (CtTypeReferenceImpl) int
+      Resolved with match basic (CtTypeReferenceImpl) int
+    Adding basic (CtTypeReferenceImpl) char
+      Resolved with match basic (CtTypeReferenceImpl) char
+    Adding basic (CtTypeReferenceImpl) int
+      Resolved with match basic (CtTypeReferenceImpl) int
+    Adding basic (CtTypeReferenceImpl) int
+      Resolved with match basic (CtTypeReferenceImpl) int
+    Adding constructor (CtConstructorImpl) <init>
+      Adding constructor signature (CtConstructorImpl) <init>
+        Resolved as new constructor signature (CtConstructorImpl) <init>
+      Resolved as new constructor (CtConstructorImpl) <init>
+    [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+    Adding basic (CtTypeReferenceImpl) int @ src/main/java/org/apache/commons/fileupload/util/Streams.java:176:18
+      Resolved with match basic (CtTypeReferenceImpl) int @ src/main/java/org/apache/commons/fileupload/util/Streams.java:176:18
+    Adding basic (CtTypeReferenceImpl) int
+      Resolved with match basic (CtTypeReferenceImpl) int
+    Adding basic (CtTypeReferenceImpl) boolean
+      Resolved with match basic (CtTypeReferenceImpl) boolean
+    Adding basic (CtTypeReferenceImpl) int
+      Resolved with match basic (CtTypeReferenceImpl) int
+    Adding basic (CtTypeReferenceImpl) int
+      Resolved with match basic (CtTypeReferenceImpl) int
+    Adding basic (CtTypeReferenceImpl) int
+      Resolved with match basic (CtTypeReferenceImpl) int
+    Adding basic (CtTypeReferenceImpl) int
+      Resolved with match basic (CtTypeReferenceImpl) int
+    Adding basic (CtTypeReferenceImpl) char @ src/main/java/org/apache/commons/fileupload/util/Streams.java:177:17
+      Resolved with match basic (CtTypeReferenceImpl) char @ src/main/java/org/apache/commons/fileupload/util/Streams.java:177:17
+    Adding basic (CtTypeReferenceImpl) char
+      Resolved with match basic (CtTypeReferenceImpl) char
+    Adding basic (CtTypeReferenceImpl) int
+      Resolved with match basic (CtTypeReferenceImpl) int
+    Adding basic (CtTypeReferenceImpl) int
+      Resolved with match basic (CtTypeReferenceImpl) int
+    Adding basic (CtTypeReferenceImpl) char
+      Resolved with match basic (CtTypeReferenceImpl) char
+    Adding basic (CtTypeReferenceImpl) int
+      Resolved with match basic (CtTypeReferenceImpl) int
+    Adding method (CtMethodImpl) append
+      Adding signature (CtMethodImpl) append
+        Adding parameter (CtParameterImpl) arg0
+          Adding basic (CtTypeReferenceImpl) char
+            Resolved with match basic (CtTypeReferenceImpl) char
+          Resolved as new parameter (CtParameterImpl) arg0
+        Adding parameter <unnamed> java.lang.StringBuilder
+          Resolved with match parameter <unnamed> java.lang.StringBuilder
+        Resolved as new signature (CtMethodImpl) append
+      Resolved as new method (CtMethodImpl) append
+    Adding basic (CtTypeReferenceImpl) char
+      Resolved with match basic (CtTypeReferenceImpl) char
+    Adding basic (CtTypeReferenceImpl) char
+      Resolved with match basic (CtTypeReferenceImpl) char
+    [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+    Resolved as new metrics (CtMethodImpl) checkFileName @ src/main/java/org/apache/commons/fileupload/util/Streams.java:172:26
+  Adding metrics (CtMethodImpl) close @ src/main/java/org/apache/commons/fileupload/util/LimitedInputStream.java:160:17
+    Adding basic (CtTypeReferenceImpl) boolean
+      Resolved with match basic (CtTypeReferenceImpl) boolean
+    Adding select field (CtFieldImpl) closed @ src/main/java/org/apache/commons/fileupload/util/LimitedInputStream.java:42:21
+      Resolved as new select field (CtFieldImpl) closed @ src/main/java/org/apache/commons/fileupload/util/LimitedInputStream.java:42:21
+    Adding basic (CtTypeReferenceImpl) boolean
+      Resolved with match basic (CtTypeReferenceImpl) boolean
+    Adding basic (CtTypeReferenceImpl) boolean
+      Resolved with match basic (CtTypeReferenceImpl) boolean
+    Adding method (CtMethodImpl) close
+      Adding signature (CtMethodImpl) close
+        Resolved with match signature (CtMethodImpl) close
+      Resolved as new method (CtMethodImpl) close
+    Resolved as new metrics (CtMethodImpl) close @ src/main/java/org/apache/commons/fileupload/util/LimitedInputStream.java:160:17
+  Adding metrics (CtMethodImpl) getContentLength @ src/main/java/org/apache/commons/fileupload/servlet/ServletRequestContext.java:82:16
+    [33mType description did not have a declaration but was not labelled as anonymous: (CtTypeReferenceImpl) javax.servlet.http.HttpServletRequest
+    The type likely was an external dependency or some other type not handled by the abstractor so using anyDesc.[0m
+    [33mType description did not have a declaration but was not labelled as anonymous: (CtTypeReferenceImpl) javax.servlet.http.HttpServletRequest
+    The type likely was an external dependency or some other type not handled by the abstractor so using anyDesc.[0m
+    Adding basic (CtTypeReferenceImpl) int
+      Resolved with match basic (CtTypeReferenceImpl) int
+    Resolved as new metrics (CtMethodImpl) getContentLength @ src/main/java/org/apache/commons/fileupload/servlet/ServletRequestContext.java:82:16
+  Adding metrics (CtMethodImpl) parseParameterMap @ src/main/java/org/apache/commons/fileupload/servlet/ServletFileUpload.java:129:40
+    [34mUnused type args: [java.lang.String, java.util.List][0m
+    Adding interface instantiation java.util.List<org.apache.commons.fileupload.FileItem>
+      Resolved with match interface instantiation java.util.List<org.apache.commons.fileupload.FileItem>
+    Adding interface instantiation java.util.Map<java.lang.String, java.util.List>
+      Adding interface description (CtInterfaceImpl) Map
+        Resolved as new interface description (CtInterfaceImpl) Map
+      Resolved as new interface instantiation java.util.Map<java.lang.String, java.util.List>
+    [34mUnused type args: [org.apache.commons.fileupload.FileItem][0m
+    [33mType description did not have a declaration but was not labelled as anonymous: (CtTypeReferenceImpl) javax.servlet.http.HttpServletRequest
+    The type likely was an external dependency or some other type not handled by the abstractor so using anyDesc.[0m
+    [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+    [33mType description did not have a declaration but was not labelled as anonymous: (CtTypeReferenceImpl) javax.servlet.http.HttpServletRequest
+    The type likely was an external dependency or some other type not handled by the abstractor so using anyDesc.[0m
+    [33mType description did not have a declaration but was not labelled as anonymous: (CtTypeReferenceImpl) javax.servlet.http.HttpServletRequest
+    The type likely was an external dependency or some other type not handled by the abstractor so using anyDesc.[0m
+    [33mType description did not have a declaration but was not labelled as anonymous: (CtTypeReferenceImpl) javax.servlet.http.HttpServletRequest
+    The type likely was an external dependency or some other type not handled by the abstractor so using anyDesc.[0m
+    [33mType description did not have a declaration but was not labelled as anonymous: (CtTypeReferenceImpl) javax.servlet.http.HttpServletRequest
+    The type likely was an external dependency or some other type not handled by the abstractor so using anyDesc.[0m
+    Resolved as new metrics (CtMethodImpl) parseParameterMap @ src/main/java/org/apache/commons/fileupload/servlet/ServletFileUpload.java:129:40
   Adding metrics (CtConstructorImpl) <init> @ src/main/java/org/apache/commons/fileupload/util/LimitedInputStream.java:51:12
     [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
     [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
@@ -10132,21 +10391,109 @@ Init pending package org.apache.commons.fileupload.util.mime
     Adding basic (CtTypeReferenceImpl) long
       Resolved with match basic (CtTypeReferenceImpl) long
     Resolved as new metrics (CtConstructorImpl) <init> @ src/main/java/org/apache/commons/fileupload/util/LimitedInputStream.java:51:12
-  Adding metrics (CtMethodImpl) asString @ src/main/java/org/apache/commons/fileupload/util/Streams.java:139:26
+  Adding metrics (CtMethodImpl) getItemIterator @ src/main/java/org/apache/commons/fileupload/servlet/ServletFileUpload.java:150:29
     [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
-    Adding basic (CtTypeReferenceImpl) long
-      Resolved with match basic (CtTypeReferenceImpl) long
+    [33mType description did not have a declaration but was not labelled as anonymous: (CtTypeReferenceImpl) javax.servlet.http.HttpServletRequest
+    The type likely was an external dependency or some other type not handled by the abstractor so using anyDesc.[0m
+    [33mType description did not have a declaration but was not labelled as anonymous: (CtTypeReferenceImpl) javax.servlet.http.HttpServletRequest
+    The type likely was an external dependency or some other type not handled by the abstractor so using anyDesc.[0m
+    [33mType description did not have a declaration but was not labelled as anonymous: (CtTypeReferenceImpl) javax.servlet.http.HttpServletRequest
+    The type likely was an external dependency or some other type not handled by the abstractor so using anyDesc.[0m
+    [33mType description did not have a declaration but was not labelled as anonymous: (CtTypeReferenceImpl) javax.servlet.http.HttpServletRequest
+    The type likely was an external dependency or some other type not handled by the abstractor so using anyDesc.[0m
+    Resolved as new metrics (CtMethodImpl) getItemIterator @ src/main/java/org/apache/commons/fileupload/servlet/ServletFileUpload.java:150:29
+  Adding metrics (CtMethodImpl) getCharacterEncoding @ src/main/java/org/apache/commons/fileupload/servlet/ServletRequestContext.java:62:19
+    [33mType description did not have a declaration but was not labelled as anonymous: (CtTypeReferenceImpl) javax.servlet.http.HttpServletRequest
+    The type likely was an external dependency or some other type not handled by the abstractor so using anyDesc.[0m
+    [33mType description did not have a declaration but was not labelled as anonymous: (CtTypeReferenceImpl) javax.servlet.http.HttpServletRequest
+    The type likely was an external dependency or some other type not handled by the abstractor so using anyDesc.[0m
+    Resolved as new metrics (CtMethodImpl) getCharacterEncoding @ src/main/java/org/apache/commons/fileupload/servlet/ServletRequestContext.java:62:19
+  Adding metrics (CtMethodImpl) isClosed @ src/main/java/org/apache/commons/fileupload/util/LimitedInputStream.java:146:20
     Adding basic (CtTypeReferenceImpl) boolean
       Resolved with match basic (CtTypeReferenceImpl) boolean
+    Resolved as new metrics (CtMethodImpl) isClosed @ src/main/java/org/apache/commons/fileupload/util/LimitedInputStream.java:146:20
+  Adding metrics (CtMethodImpl) read @ src/main/java/org/apache/commons/fileupload/util/LimitedInputStream.java:131:16
+    Adding basic (CtTypeReferenceImpl) int @ src/main/java/org/apache/commons/fileupload/util/LimitedInputStream.java:132:9
+      Resolved with match basic (CtTypeReferenceImpl) int @ src/main/java/org/apache/commons/fileupload/util/LimitedInputStream.java:132:9
+    Adding method (CtMethodImpl) read
+      Adding signature (CtMethodImpl) read
+        Adding parameter (CtParameterImpl) arg0
+          Adding basic (CtTypeReferenceImpl) byte
+            Resolved with match basic (CtTypeReferenceImpl) byte
+          Resolved with match parameter (CtParameterImpl) arg0
+        Adding parameter (CtParameterImpl) arg1
+          Adding basic (CtTypeReferenceImpl) int
+            Resolved with match basic (CtTypeReferenceImpl) int
+          Resolved as new parameter (CtParameterImpl) arg1
+        Adding parameter (CtParameterImpl) arg2
+          Adding basic (CtTypeReferenceImpl) int
+            Resolved with match basic (CtTypeReferenceImpl) int
+          Resolved as new parameter (CtParameterImpl) arg2
+        Adding parameter <unnamed> int
+          Adding basic (CtTypeReferenceImpl) int
+            Resolved with match basic (CtTypeReferenceImpl) int
+          Resolved as new parameter <unnamed> int
+        Resolved as new signature (CtMethodImpl) read
+      Resolved as new method (CtMethodImpl) read
+    Adding basic (CtTypeReferenceImpl) int
+      Resolved with match basic (CtTypeReferenceImpl) int
+    Adding basic (CtTypeReferenceImpl) byte
+      Resolved with match basic (CtTypeReferenceImpl) byte
+    Adding basic (CtTypeReferenceImpl) int
+      Resolved with match basic (CtTypeReferenceImpl) int
+    Adding basic (CtTypeReferenceImpl) int
+      Resolved with match basic (CtTypeReferenceImpl) int
+    Adding basic (CtTypeReferenceImpl) byte
+      Resolved with match basic (CtTypeReferenceImpl) byte
+    Adding basic (CtTypeReferenceImpl) int
+      Resolved with match basic (CtTypeReferenceImpl) int
+    Adding basic (CtTypeReferenceImpl) int
+      Resolved with match basic (CtTypeReferenceImpl) int
     Adding basic (CtTypeReferenceImpl) boolean
       Resolved with match basic (CtTypeReferenceImpl) boolean
-    Resolved as new metrics (CtMethodImpl) asString @ src/main/java/org/apache/commons/fileupload/util/Streams.java:139:26
-  Adding metrics (CtMethodImpl) toString @ src/main/java/org/apache/commons/fileupload/servlet/ServletRequestContext.java:119:19
+    Adding basic (CtTypeReferenceImpl) int
+      Resolved with match basic (CtTypeReferenceImpl) int
+    Adding basic (CtTypeReferenceImpl) int
+      Resolved with match basic (CtTypeReferenceImpl) int
     Adding basic (CtTypeReferenceImpl) long
       Resolved with match basic (CtTypeReferenceImpl) long
     Adding basic (CtTypeReferenceImpl) long
       Resolved with match basic (CtTypeReferenceImpl) long
-    Resolved as new metrics (CtMethodImpl) toString @ src/main/java/org/apache/commons/fileupload/servlet/ServletRequestContext.java:119:19
+    Adding basic (CtTypeReferenceImpl) int
+      Resolved with match basic (CtTypeReferenceImpl) int
+    Adding basic (CtTypeReferenceImpl) int
+      Resolved with match basic (CtTypeReferenceImpl) int
+    Resolved as new metrics (CtMethodImpl) read @ src/main/java/org/apache/commons/fileupload/util/LimitedInputStream.java:131:16
+  Adding metrics (CtMethodImpl) contentLength @ src/main/java/org/apache/commons/fileupload/servlet/ServletRequestContext.java:92:17
+    Adding basic (CtTypeReferenceImpl) long @ src/main/java/org/apache/commons/fileupload/servlet/ServletRequestContext.java:93:9
+      Resolved with match basic (CtTypeReferenceImpl) long @ src/main/java/org/apache/commons/fileupload/servlet/ServletRequestContext.java:93:9
+    Adding basic (CtTypeReferenceImpl) long
+      Resolved with match basic (CtTypeReferenceImpl) long
+    Adding basic (CtTypeReferenceImpl) long
+      Resolved with match basic (CtTypeReferenceImpl) long
+    Adding basic (CtTypeReferenceImpl) long
+      Resolved with match basic (CtTypeReferenceImpl) long
+    [33mType description did not have a declaration but was not labelled as anonymous: (CtTypeReferenceImpl) javax.servlet.http.HttpServletRequest
+    The type likely was an external dependency or some other type not handled by the abstractor so using anyDesc.[0m
+    [33mType description did not have a declaration but was not labelled as anonymous: (CtTypeReferenceImpl) javax.servlet.http.HttpServletRequest
+    The type likely was an external dependency or some other type not handled by the abstractor so using anyDesc.[0m
+    Adding object decl (CtClassImpl) NumberFormatException
+      Adding struct (CtClassImpl) NumberFormatException
+        Resolved as new struct (CtClassImpl) NumberFormatException
+      Resolved as new object decl (CtClassImpl) NumberFormatException
+    Adding basic (CtTypeReferenceImpl) long
+      Resolved with match basic (CtTypeReferenceImpl) long
+    Adding basic (CtTypeReferenceImpl) long
+      Resolved with match basic (CtTypeReferenceImpl) long
+    [33mType description did not have a declaration but was not labelled as anonymous: (CtTypeReferenceImpl) javax.servlet.http.HttpServletRequest
+    The type likely was an external dependency or some other type not handled by the abstractor so using anyDesc.[0m
+    [33mType description did not have a declaration but was not labelled as anonymous: (CtTypeReferenceImpl) javax.servlet.http.HttpServletRequest
+    The type likely was an external dependency or some other type not handled by the abstractor so using anyDesc.[0m
+    Adding basic (CtTypeReferenceImpl) long
+      Resolved with match basic (CtTypeReferenceImpl) long
+    Adding basic (CtTypeReferenceImpl) long
+      Resolved with match basic (CtTypeReferenceImpl) long
+    Resolved as new metrics (CtMethodImpl) contentLength @ src/main/java/org/apache/commons/fileupload/servlet/ServletRequestContext.java:92:17
   Adding metrics (CtMethodImpl) copy @ src/main/java/org/apache/commons/fileupload/util/Streams.java:89:24
     Adding basic (CtTypeReferenceImpl) long @ src/main/java/org/apache/commons/fileupload/util/Streams.java:96:13
       Resolved with match basic (CtTypeReferenceImpl) long @ src/main/java/org/apache/commons/fileupload/util/Streams.java:96:13
@@ -10229,373 +10576,29 @@ Init pending package org.apache.commons.fileupload.util.mime
     Adding basic (CtTypeReferenceImpl) boolean
       Resolved with match basic (CtTypeReferenceImpl) boolean
     Resolved as new metrics (CtMethodImpl) copy @ src/main/java/org/apache/commons/fileupload/util/Streams.java:89:24
-  Adding metrics (CtMethodImpl) parseRequest @ src/main/java/org/apache/commons/fileupload/servlet/ServletFileUpload.java:111:27
-    [34mUnused type args: [org.apache.commons.fileupload.FileItem][0m
-    Adding interface instantiation java.util.List<org.apache.commons.fileupload.FileItem>
-      Resolved with match interface instantiation java.util.List<org.apache.commons.fileupload.FileItem>
-    [33mType description did not have a declaration but was not labelled as anonymous: (CtTypeReferenceImpl) javax.servlet.http.HttpServletRequest
-    The type likely was an external dependency or some other type not handled by the abstractor so using anyDesc.[0m
-    [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
-    [33mType description did not have a declaration but was not labelled as anonymous: (CtTypeReferenceImpl) javax.servlet.http.HttpServletRequest
-    The type likely was an external dependency or some other type not handled by the abstractor so using anyDesc.[0m
-    [33mType description did not have a declaration but was not labelled as anonymous: (CtTypeReferenceImpl) javax.servlet.http.HttpServletRequest
-    The type likely was an external dependency or some other type not handled by the abstractor so using anyDesc.[0m
-    [33mType description did not have a declaration but was not labelled as anonymous: (CtTypeReferenceImpl) javax.servlet.http.HttpServletRequest
-    The type likely was an external dependency or some other type not handled by the abstractor so using anyDesc.[0m
-    [33mType description did not have a declaration but was not labelled as anonymous: (CtTypeReferenceImpl) javax.servlet.http.HttpServletRequest
-    The type likely was an external dependency or some other type not handled by the abstractor so using anyDesc.[0m
-    Resolved as new metrics (CtMethodImpl) parseRequest @ src/main/java/org/apache/commons/fileupload/servlet/ServletFileUpload.java:111:27
-  Adding metrics (CtMethodImpl) getItemIterator @ src/main/java/org/apache/commons/fileupload/servlet/ServletFileUpload.java:150:29
-    [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
-    [33mType description did not have a declaration but was not labelled as anonymous: (CtTypeReferenceImpl) javax.servlet.http.HttpServletRequest
-    The type likely was an external dependency or some other type not handled by the abstractor so using anyDesc.[0m
-    [33mType description did not have a declaration but was not labelled as anonymous: (CtTypeReferenceImpl) javax.servlet.http.HttpServletRequest
-    The type likely was an external dependency or some other type not handled by the abstractor so using anyDesc.[0m
-    [33mType description did not have a declaration but was not labelled as anonymous: (CtTypeReferenceImpl) javax.servlet.http.HttpServletRequest
-    The type likely was an external dependency or some other type not handled by the abstractor so using anyDesc.[0m
-    [33mType description did not have a declaration but was not labelled as anonymous: (CtTypeReferenceImpl) javax.servlet.http.HttpServletRequest
-    The type likely was an external dependency or some other type not handled by the abstractor so using anyDesc.[0m
-    Resolved as new metrics (CtMethodImpl) getItemIterator @ src/main/java/org/apache/commons/fileupload/servlet/ServletFileUpload.java:150:29
-  Adding metrics (CtMethodImpl) getCharacterEncoding @ src/main/java/org/apache/commons/fileupload/servlet/ServletRequestContext.java:62:19
-    Adding select field (CtFieldImpl) request @ src/main/java/org/apache/commons/fileupload/servlet/ServletRequestContext.java:42:38
-      Resolved as new select field (CtFieldImpl) request @ src/main/java/org/apache/commons/fileupload/servlet/ServletRequestContext.java:42:38
-    [33mType description did not have a declaration but was not labelled as anonymous: (CtTypeReferenceImpl) javax.servlet.http.HttpServletRequest
-    The type likely was an external dependency or some other type not handled by the abstractor so using anyDesc.[0m
-    [33mType description did not have a declaration but was not labelled as anonymous: (CtTypeReferenceImpl) javax.servlet.http.HttpServletRequest
-    The type likely was an external dependency or some other type not handled by the abstractor so using anyDesc.[0m
-    Resolved as new metrics (CtMethodImpl) getCharacterEncoding @ src/main/java/org/apache/commons/fileupload/servlet/ServletRequestContext.java:62:19
-  Adding metrics (CtMethodImpl) getInputStream @ src/main/java/org/apache/commons/fileupload/servlet/ServletRequestContext.java:109:24
-    [33mType description did not have a declaration but was not labelled as anonymous: (CtTypeReferenceImpl) javax.servlet.http.HttpServletRequest
-    The type likely was an external dependency or some other type not handled by the abstractor so using anyDesc.[0m
-    [33mType description did not have a declaration but was not labelled as anonymous: (CtTypeReferenceImpl) javax.servlet.http.HttpServletRequest
-    The type likely was an external dependency or some other type not handled by the abstractor so using anyDesc.[0m
-    Resolved as new metrics (CtMethodImpl) getInputStream @ src/main/java/org/apache/commons/fileupload/servlet/ServletRequestContext.java:109:24
-  Adding metrics (CtMethodImpl) checkFileName @ src/main/java/org/apache/commons/fileupload/util/Streams.java:172:26
-    Adding basic (CtTypeReferenceImpl) boolean
-      Resolved with match basic (CtTypeReferenceImpl) boolean
-    Adding basic (CtTypeReferenceImpl) boolean
-      Resolved with match basic (CtTypeReferenceImpl) boolean
-    Adding basic (CtTypeReferenceImpl) boolean
-      Resolved with match basic (CtTypeReferenceImpl) boolean
-    Adding basic (CtTypeReferenceImpl) int
-      Resolved with match basic (CtTypeReferenceImpl) int
-    Adding basic (CtTypeReferenceImpl) int
-      Resolved with match basic (CtTypeReferenceImpl) int
-    Adding basic (CtTypeReferenceImpl) char
-      Resolved with match basic (CtTypeReferenceImpl) char
-    Adding basic (CtTypeReferenceImpl) int
-      Resolved with match basic (CtTypeReferenceImpl) int
-    Adding basic (CtTypeReferenceImpl) int
-      Resolved with match basic (CtTypeReferenceImpl) int
-    Adding constructor (CtConstructorImpl) <init>
-      Adding constructor signature (CtConstructorImpl) <init>
-        Resolved as new constructor signature (CtConstructorImpl) <init>
-      Resolved as new constructor (CtConstructorImpl) <init>
-    [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
-    Adding basic (CtTypeReferenceImpl) int @ src/main/java/org/apache/commons/fileupload/util/Streams.java:176:18
-      Resolved with match basic (CtTypeReferenceImpl) int @ src/main/java/org/apache/commons/fileupload/util/Streams.java:176:18
-    Adding basic (CtTypeReferenceImpl) int
-      Resolved with match basic (CtTypeReferenceImpl) int
-    Adding basic (CtTypeReferenceImpl) boolean
-      Resolved with match basic (CtTypeReferenceImpl) boolean
-    Adding basic (CtTypeReferenceImpl) int
-      Resolved with match basic (CtTypeReferenceImpl) int
-    Adding basic (CtTypeReferenceImpl) int
-      Resolved with match basic (CtTypeReferenceImpl) int
-    Adding basic (CtTypeReferenceImpl) int
-      Resolved with match basic (CtTypeReferenceImpl) int
-    Adding basic (CtTypeReferenceImpl) int
-      Resolved with match basic (CtTypeReferenceImpl) int
-    Adding basic (CtTypeReferenceImpl) char @ src/main/java/org/apache/commons/fileupload/util/Streams.java:177:17
-      Resolved with match basic (CtTypeReferenceImpl) char @ src/main/java/org/apache/commons/fileupload/util/Streams.java:177:17
-    Adding basic (CtTypeReferenceImpl) char
-      Resolved with match basic (CtTypeReferenceImpl) char
-    Adding basic (CtTypeReferenceImpl) int
-      Resolved with match basic (CtTypeReferenceImpl) int
-    Adding basic (CtTypeReferenceImpl) int
-      Resolved with match basic (CtTypeReferenceImpl) int
-    Adding basic (CtTypeReferenceImpl) char
-      Resolved with match basic (CtTypeReferenceImpl) char
-    Adding basic (CtTypeReferenceImpl) int
-      Resolved with match basic (CtTypeReferenceImpl) int
-    Adding method (CtMethodImpl) append
-      Adding signature (CtMethodImpl) append
-        Adding parameter (CtParameterImpl) arg0
-          Adding basic (CtTypeReferenceImpl) char
-            Resolved with match basic (CtTypeReferenceImpl) char
-          Resolved as new parameter (CtParameterImpl) arg0
-        Adding parameter <unnamed> java.lang.StringBuilder
-          Resolved with match parameter <unnamed> java.lang.StringBuilder
-        Resolved as new signature (CtMethodImpl) append
-      Resolved as new method (CtMethodImpl) append
-    Adding basic (CtTypeReferenceImpl) char
-      Resolved with match basic (CtTypeReferenceImpl) char
-    Adding basic (CtTypeReferenceImpl) char
-      Resolved with match basic (CtTypeReferenceImpl) char
-    [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
-    Resolved as new metrics (CtMethodImpl) checkFileName @ src/main/java/org/apache/commons/fileupload/util/Streams.java:172:26
-  Adding metrics (CtMethodImpl) copy @ src/main/java/org/apache/commons/fileupload/util/Streams.java:66:24
-    Adding basic (CtTypeReferenceImpl) long
-      Resolved with match basic (CtTypeReferenceImpl) long
-    Adding basic (CtTypeReferenceImpl) boolean
-      Resolved with match basic (CtTypeReferenceImpl) boolean
-    Adding basic (CtTypeReferenceImpl) byte
-      Resolved with match basic (CtTypeReferenceImpl) byte
-    Adding basic (CtTypeReferenceImpl) boolean
-      Resolved with match basic (CtTypeReferenceImpl) boolean
-    Adding basic (CtTypeReferenceImpl) byte @ src/main/java/org/apache/commons/fileupload/util/Streams.java:68:71
-      Resolved with match basic (CtTypeReferenceImpl) byte @ src/main/java/org/apache/commons/fileupload/util/Streams.java:68:71
-    Adding select field (CtFieldImpl) DEFAULT_BUFFER_SIZE @ src/main/java/org/apache/commons/fileupload/util/Streams.java:44:30
-      Resolved as new select field (CtFieldImpl) DEFAULT_BUFFER_SIZE @ src/main/java/org/apache/commons/fileupload/util/Streams.java:44:30
-    Adding basic (CtTypeReferenceImpl) int
-      Resolved with match basic (CtTypeReferenceImpl) int
-    Resolved as new metrics (CtMethodImpl) copy @ src/main/java/org/apache/commons/fileupload/util/Streams.java:66:24
-  Adding metrics (CtMethodImpl) contentLength @ src/main/java/org/apache/commons/fileupload/servlet/ServletRequestContext.java:92:17
-    Adding basic (CtTypeReferenceImpl) long @ src/main/java/org/apache/commons/fileupload/servlet/ServletRequestContext.java:93:9
-      Resolved with match basic (CtTypeReferenceImpl) long @ src/main/java/org/apache/commons/fileupload/servlet/ServletRequestContext.java:93:9
-    Adding basic (CtTypeReferenceImpl) long
-      Resolved with match basic (CtTypeReferenceImpl) long
-    Adding basic (CtTypeReferenceImpl) long
-      Resolved with match basic (CtTypeReferenceImpl) long
-    Adding basic (CtTypeReferenceImpl) long
-      Resolved with match basic (CtTypeReferenceImpl) long
-    [33mType description did not have a declaration but was not labelled as anonymous: (CtTypeReferenceImpl) javax.servlet.http.HttpServletRequest
-    The type likely was an external dependency or some other type not handled by the abstractor so using anyDesc.[0m
-    [33mType description did not have a declaration but was not labelled as anonymous: (CtTypeReferenceImpl) javax.servlet.http.HttpServletRequest
-    The type likely was an external dependency or some other type not handled by the abstractor so using anyDesc.[0m
-    Adding object decl (CtClassImpl) NumberFormatException
-      Adding struct (CtClassImpl) NumberFormatException
-        Resolved as new struct (CtClassImpl) NumberFormatException
-      Resolved as new object decl (CtClassImpl) NumberFormatException
-    Adding basic (CtTypeReferenceImpl) long
-      Resolved with match basic (CtTypeReferenceImpl) long
-    Adding basic (CtTypeReferenceImpl) long
-      Resolved with match basic (CtTypeReferenceImpl) long
-    [33mType description did not have a declaration but was not labelled as anonymous: (CtTypeReferenceImpl) javax.servlet.http.HttpServletRequest
-    The type likely was an external dependency or some other type not handled by the abstractor so using anyDesc.[0m
-    [33mType description did not have a declaration but was not labelled as anonymous: (CtTypeReferenceImpl) javax.servlet.http.HttpServletRequest
-    The type likely was an external dependency or some other type not handled by the abstractor so using anyDesc.[0m
-    Adding basic (CtTypeReferenceImpl) long
-      Resolved with match basic (CtTypeReferenceImpl) long
-    Adding basic (CtTypeReferenceImpl) long
-      Resolved with match basic (CtTypeReferenceImpl) long
-    Resolved as new metrics (CtMethodImpl) contentLength @ src/main/java/org/apache/commons/fileupload/servlet/ServletRequestContext.java:92:17
-  Adding metrics (CtMethodImpl) getContentLength @ src/main/java/org/apache/commons/fileupload/servlet/ServletRequestContext.java:82:16
-    [33mType description did not have a declaration but was not labelled as anonymous: (CtTypeReferenceImpl) javax.servlet.http.HttpServletRequest
-    The type likely was an external dependency or some other type not handled by the abstractor so using anyDesc.[0m
-    [33mType description did not have a declaration but was not labelled as anonymous: (CtTypeReferenceImpl) javax.servlet.http.HttpServletRequest
-    The type likely was an external dependency or some other type not handled by the abstractor so using anyDesc.[0m
-    Adding basic (CtTypeReferenceImpl) int
-      Resolved with match basic (CtTypeReferenceImpl) int
-    Resolved as new metrics (CtMethodImpl) getContentLength @ src/main/java/org/apache/commons/fileupload/servlet/ServletRequestContext.java:82:16
-  Adding metrics (CtMethodImpl) asString @ src/main/java/org/apache/commons/fileupload/util/Streams.java:156:26
-    [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
-    Adding basic (CtTypeReferenceImpl) long
-      Resolved with match basic (CtTypeReferenceImpl) long
-    Adding basic (CtTypeReferenceImpl) boolean
-      Resolved with match basic (CtTypeReferenceImpl) boolean
-    Adding basic (CtTypeReferenceImpl) boolean
-      Resolved with match basic (CtTypeReferenceImpl) boolean
-    Resolved as new metrics (CtMethodImpl) asString @ src/main/java/org/apache/commons/fileupload/util/Streams.java:156:26
-  Adding metrics (CtMethodImpl) parseParameterMap @ src/main/java/org/apache/commons/fileupload/servlet/ServletFileUpload.java:129:40
-    [34mUnused type args: [java.lang.String, java.util.List][0m
-    Adding interface instantiation java.util.List<org.apache.commons.fileupload.FileItem>
-      Resolved with match interface instantiation java.util.List<org.apache.commons.fileupload.FileItem>
-    Adding interface instantiation java.util.Map<java.lang.String, java.util.List>
-      Adding interface description (CtInterfaceImpl) Map
-        Resolved as new interface description (CtInterfaceImpl) Map
-      Resolved as new interface instantiation java.util.Map<java.lang.String, java.util.List>
-    [34mUnused type args: [org.apache.commons.fileupload.FileItem][0m
-    [33mType description did not have a declaration but was not labelled as anonymous: (CtTypeReferenceImpl) javax.servlet.http.HttpServletRequest
-    The type likely was an external dependency or some other type not handled by the abstractor so using anyDesc.[0m
-    [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
-    [33mType description did not have a declaration but was not labelled as anonymous: (CtTypeReferenceImpl) javax.servlet.http.HttpServletRequest
-    The type likely was an external dependency or some other type not handled by the abstractor so using anyDesc.[0m
-    [33mType description did not have a declaration but was not labelled as anonymous: (CtTypeReferenceImpl) javax.servlet.http.HttpServletRequest
-    The type likely was an external dependency or some other type not handled by the abstractor so using anyDesc.[0m
-    [33mType description did not have a declaration but was not labelled as anonymous: (CtTypeReferenceImpl) javax.servlet.http.HttpServletRequest
-    The type likely was an external dependency or some other type not handled by the abstractor so using anyDesc.[0m
-    [33mType description did not have a declaration but was not labelled as anonymous: (CtTypeReferenceImpl) javax.servlet.http.HttpServletRequest
-    The type likely was an external dependency or some other type not handled by the abstractor so using anyDesc.[0m
-    Resolved as new metrics (CtMethodImpl) parseParameterMap @ src/main/java/org/apache/commons/fileupload/servlet/ServletFileUpload.java:129:40
-  Adding metrics (CtMethodImpl) getContentType @ src/main/java/org/apache/commons/fileupload/servlet/ServletRequestContext.java:71:19
-    [33mType description did not have a declaration but was not labelled as anonymous: (CtTypeReferenceImpl) javax.servlet.http.HttpServletRequest
-    The type likely was an external dependency or some other type not handled by the abstractor so using anyDesc.[0m
-    [33mType description did not have a declaration but was not labelled as anonymous: (CtTypeReferenceImpl) javax.servlet.http.HttpServletRequest
-    The type likely was an external dependency or some other type not handled by the abstractor so using anyDesc.[0m
-    Resolved as new metrics (CtMethodImpl) getContentType @ src/main/java/org/apache/commons/fileupload/servlet/ServletRequestContext.java:71:19
-  Adding metrics (CtMethodImpl) read @ src/main/java/org/apache/commons/fileupload/util/LimitedInputStream.java:98:16
-    Adding basic (CtTypeReferenceImpl) int @ src/main/java/org/apache/commons/fileupload/util/LimitedInputStream.java:99:9
-      Resolved with match basic (CtTypeReferenceImpl) int @ src/main/java/org/apache/commons/fileupload/util/LimitedInputStream.java:99:9
-    Adding method (CtMethodImpl) read
-      Adding signature (CtMethodImpl) read
-        Adding parameter <unnamed> int
-          Adding basic (CtTypeReferenceImpl) int
-            Resolved with match basic (CtTypeReferenceImpl) int
-          Resolved as new parameter <unnamed> int
-        Resolved as new signature (CtMethodImpl) read
-      Resolved as new method (CtMethodImpl) read
-    Adding basic (CtTypeReferenceImpl) int
-      Resolved with match basic (CtTypeReferenceImpl) int
-    Adding basic (CtTypeReferenceImpl) boolean
-      Resolved with match basic (CtTypeReferenceImpl) boolean
-    Adding basic (CtTypeReferenceImpl) int
-      Resolved with match basic (CtTypeReferenceImpl) int
-    Adding basic (CtTypeReferenceImpl) int
-      Resolved with match basic (CtTypeReferenceImpl) int
-    Adding basic (CtTypeReferenceImpl) int
-      Resolved with match basic (CtTypeReferenceImpl) int
-    Adding basic (CtTypeReferenceImpl) long
-      Resolved with match basic (CtTypeReferenceImpl) long
-    Adding basic (CtTypeReferenceImpl) long
-      Resolved with match basic (CtTypeReferenceImpl) long
-    Adding basic (CtTypeReferenceImpl) int
-      Resolved with match basic (CtTypeReferenceImpl) int
-    Resolved as new metrics (CtMethodImpl) read @ src/main/java/org/apache/commons/fileupload/util/LimitedInputStream.java:98:16
-  Adding metrics (CtConstructorImpl) <init> @ src/main/java/org/apache/commons/fileupload/servlet/ServletRequestContext.java:51:12
-    [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
-    [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
-    [33mType description did not have a declaration but was not labelled as anonymous: (CtTypeReferenceImpl) javax.servlet.http.HttpServletRequest
-    The type likely was an external dependency or some other type not handled by the abstractor so using anyDesc.[0m
-    [33mType description did not have a declaration but was not labelled as anonymous: (CtTypeReferenceImpl) javax.servlet.http.HttpServletRequest
-    The type likely was an external dependency or some other type not handled by the abstractor so using anyDesc.[0m
-    [33mType description did not have a declaration but was not labelled as anonymous: (CtTypeReferenceImpl) javax.servlet.http.HttpServletRequest
-    The type likely was an external dependency or some other type not handled by the abstractor so using anyDesc.[0m
-    [33mType description did not have a declaration but was not labelled as anonymous: (CtTypeReferenceImpl) javax.servlet.http.HttpServletRequest
-    The type likely was an external dependency or some other type not handled by the abstractor so using anyDesc.[0m
-    Resolved as new metrics (CtConstructorImpl) <init> @ src/main/java/org/apache/commons/fileupload/servlet/ServletRequestContext.java:51:12
-  Adding metrics (CtMethodImpl) isMultipartContent @ src/main/java/org/apache/commons/fileupload/servlet/ServletFileUpload.java:64:33
-    Adding method (CtMethodImpl) equalsIgnoreCase
-      Adding signature (CtMethodImpl) equalsIgnoreCase
-        Adding parameter (CtParameterImpl) arg0
-          Resolved with match parameter (CtParameterImpl) arg0
-        Adding parameter <unnamed> boolean
-          Adding basic (CtTypeReferenceImpl) boolean
-            Resolved with match basic (CtTypeReferenceImpl) boolean
-          Resolved as new parameter <unnamed> boolean
-        Resolved as new signature (CtMethodImpl) equalsIgnoreCase
-      Resolved as new method (CtMethodImpl) equalsIgnoreCase
-    Adding select field (CtFieldImpl) POST_METHOD @ src/main/java/org/apache/commons/fileupload/servlet/ServletFileUpload.java:51:33
-      Resolved as new select field (CtFieldImpl) POST_METHOD @ src/main/java/org/apache/commons/fileupload/servlet/ServletFileUpload.java:51:33
-    Adding basic (CtTypeReferenceImpl) boolean
-      Resolved with match basic (CtTypeReferenceImpl) boolean
-    [33mType description did not have a declaration but was not labelled as anonymous: (CtTypeReferenceImpl) javax.servlet.http.HttpServletRequest
-    The type likely was an external dependency or some other type not handled by the abstractor so using anyDesc.[0m
-    [33mType description did not have a declaration but was not labelled as anonymous: (CtTypeReferenceImpl) javax.servlet.http.HttpServletRequest
-    The type likely was an external dependency or some other type not handled by the abstractor so using anyDesc.[0m
-    [33mType description did not have a declaration but was not labelled as anonymous: (CtTypeReferenceImpl) javax.servlet.http.HttpServletRequest
-    The type likely was an external dependency or some other type not handled by the abstractor so using anyDesc.[0m
-    [33mType description did not have a declaration but was not labelled as anonymous: (CtTypeReferenceImpl) javax.servlet.http.HttpServletRequest
-    The type likely was an external dependency or some other type not handled by the abstractor so using anyDesc.[0m
-    Adding basic (CtTypeReferenceImpl) boolean
-      Resolved with match basic (CtTypeReferenceImpl) boolean
-    Adding basic (CtTypeReferenceImpl) boolean
-      Resolved with match basic (CtTypeReferenceImpl) boolean
-    [33mType description did not have a declaration but was not labelled as anonymous: (CtTypeReferenceImpl) javax.servlet.http.HttpServletRequest
-    The type likely was an external dependency or some other type not handled by the abstractor so using anyDesc.[0m
-    [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
-    [33mType description did not have a declaration but was not labelled as anonymous: (CtTypeReferenceImpl) javax.servlet.http.HttpServletRequest
-    The type likely was an external dependency or some other type not handled by the abstractor so using anyDesc.[0m
-    [33mType description did not have a declaration but was not labelled as anonymous: (CtTypeReferenceImpl) javax.servlet.http.HttpServletRequest
-    The type likely was an external dependency or some other type not handled by the abstractor so using anyDesc.[0m
-    [33mType description did not have a declaration but was not labelled as anonymous: (CtTypeReferenceImpl) javax.servlet.http.HttpServletRequest
-    The type likely was an external dependency or some other type not handled by the abstractor so using anyDesc.[0m
-    [33mType description did not have a declaration but was not labelled as anonymous: (CtTypeReferenceImpl) javax.servlet.http.HttpServletRequest
-    The type likely was an external dependency or some other type not handled by the abstractor so using anyDesc.[0m
-    Resolved as new metrics (CtMethodImpl) isMultipartContent @ src/main/java/org/apache/commons/fileupload/servlet/ServletFileUpload.java:64:33
-  Adding metrics (CtConstructorImpl) <init> @ src/main/java/org/apache/commons/fileupload/servlet/ServletFileUpload.java:81:12
-    [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
-    [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
-    Resolved as new metrics (CtConstructorImpl) <init> @ src/main/java/org/apache/commons/fileupload/servlet/ServletFileUpload.java:81:12
-  Adding metrics (CtConstructorImpl) <init> @ src/main/java/org/apache/commons/fileupload/servlet/ServletFileUpload.java:92:12
-    [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
-    [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
-    Resolved as new metrics (CtConstructorImpl) <init> @ src/main/java/org/apache/commons/fileupload/servlet/ServletFileUpload.java:92:12
-  Adding metrics (CtMethodImpl) read @ src/main/java/org/apache/commons/fileupload/util/LimitedInputStream.java:131:16
-    Adding basic (CtTypeReferenceImpl) int @ src/main/java/org/apache/commons/fileupload/util/LimitedInputStream.java:132:9
-      Resolved with match basic (CtTypeReferenceImpl) int @ src/main/java/org/apache/commons/fileupload/util/LimitedInputStream.java:132:9
-    Adding method (CtMethodImpl) read
-      Adding signature (CtMethodImpl) read
-        Adding parameter (CtParameterImpl) arg0
-          Adding basic (CtTypeReferenceImpl) byte
-            Resolved with match basic (CtTypeReferenceImpl) byte
-          Resolved with match parameter (CtParameterImpl) arg0
-        Adding parameter (CtParameterImpl) arg1
-          Adding basic (CtTypeReferenceImpl) int
-            Resolved with match basic (CtTypeReferenceImpl) int
-          Resolved as new parameter (CtParameterImpl) arg1
-        Adding parameter (CtParameterImpl) arg2
-          Adding basic (CtTypeReferenceImpl) int
-            Resolved with match basic (CtTypeReferenceImpl) int
-          Resolved as new parameter (CtParameterImpl) arg2
-        Adding parameter <unnamed> int
-          Adding basic (CtTypeReferenceImpl) int
-            Resolved with match basic (CtTypeReferenceImpl) int
-          Resolved as new parameter <unnamed> int
-        Resolved as new signature (CtMethodImpl) read
-      Resolved as new method (CtMethodImpl) read
-    Adding basic (CtTypeReferenceImpl) int
-      Resolved with match basic (CtTypeReferenceImpl) int
-    Adding basic (CtTypeReferenceImpl) byte
-      Resolved with match basic (CtTypeReferenceImpl) byte
-    Adding basic (CtTypeReferenceImpl) int
-      Resolved with match basic (CtTypeReferenceImpl) int
-    Adding basic (CtTypeReferenceImpl) int
-      Resolved with match basic (CtTypeReferenceImpl) int
-    Adding basic (CtTypeReferenceImpl) byte
-      Resolved with match basic (CtTypeReferenceImpl) byte
-    Adding basic (CtTypeReferenceImpl) int
-      Resolved with match basic (CtTypeReferenceImpl) int
-    Adding basic (CtTypeReferenceImpl) int
-      Resolved with match basic (CtTypeReferenceImpl) int
-    Adding basic (CtTypeReferenceImpl) boolean
-      Resolved with match basic (CtTypeReferenceImpl) boolean
-    Adding basic (CtTypeReferenceImpl) int
-      Resolved with match basic (CtTypeReferenceImpl) int
-    Adding basic (CtTypeReferenceImpl) int
-      Resolved with match basic (CtTypeReferenceImpl) int
-    Adding basic (CtTypeReferenceImpl) long
-      Resolved with match basic (CtTypeReferenceImpl) long
-    Adding basic (CtTypeReferenceImpl) long
-      Resolved with match basic (CtTypeReferenceImpl) long
-    Adding basic (CtTypeReferenceImpl) int
-      Resolved with match basic (CtTypeReferenceImpl) int
-    Adding basic (CtTypeReferenceImpl) int
-      Resolved with match basic (CtTypeReferenceImpl) int
-    Resolved as new metrics (CtMethodImpl) read @ src/main/java/org/apache/commons/fileupload/util/LimitedInputStream.java:131:16
-  Adding metrics (CtMethodImpl) isClosed @ src/main/java/org/apache/commons/fileupload/util/LimitedInputStream.java:146:20
-    Adding select field (CtFieldImpl) closed @ src/main/java/org/apache/commons/fileupload/util/LimitedInputStream.java:42:21
-      Resolved as new select field (CtFieldImpl) closed @ src/main/java/org/apache/commons/fileupload/util/LimitedInputStream.java:42:21
-    Adding basic (CtTypeReferenceImpl) boolean
-      Resolved with match basic (CtTypeReferenceImpl) boolean
-    Resolved as new metrics (CtMethodImpl) isClosed @ src/main/java/org/apache/commons/fileupload/util/LimitedInputStream.java:146:20
-  Adding metrics (CtMethodImpl) close @ src/main/java/org/apache/commons/fileupload/util/LimitedInputStream.java:160:17
-    Adding basic (CtTypeReferenceImpl) boolean
-      Resolved with match basic (CtTypeReferenceImpl) boolean
-    Adding basic (CtTypeReferenceImpl) boolean
-      Resolved with match basic (CtTypeReferenceImpl) boolean
-    Adding basic (CtTypeReferenceImpl) boolean
-      Resolved with match basic (CtTypeReferenceImpl) boolean
-    Adding method (CtMethodImpl) close
-      Adding signature (CtMethodImpl) close
-        Resolved with match signature (CtMethodImpl) close
-      Resolved as new method (CtMethodImpl) close
-    Resolved as new metrics (CtMethodImpl) close @ src/main/java/org/apache/commons/fileupload/util/LimitedInputStream.java:160:17
   Finishing interface description (CtInterfaceImpl) Map
   Finishing interface instantiation java.util.List<org.apache.commons.fileupload.FileItem>
   Finishing interface instantiation java.util.List<org.apache.commons.fileupload.FileItem>
   Finishing interface instantiation java.util.Map<java.lang.String, java.util.List>
+  Finishing method (CtMethodImpl) equalsIgnoreCase
+  Finishing method (CtMethodImpl) read
+  Finishing constructor (CtConstructorImpl) <init>
+  Finishing method (CtMethodImpl) append
+  Finishing method (CtMethodImpl) close
+  Finishing method (CtMethodImpl) read
   Finishing method (CtMethodImpl) read
   Finishing method (CtMethodImpl) write
   Finishing method (CtMethodImpl) close
   Finishing method (CtMethodImpl) flush
-  Finishing constructor (CtConstructorImpl) <init>
-  Finishing method (CtMethodImpl) append
-  Finishing method (CtMethodImpl) read
-  Finishing method (CtMethodImpl) equalsIgnoreCase
-  Finishing method (CtMethodImpl) read
-  Finishing method (CtMethodImpl) close
   Finishing object decl (CtClassImpl) NumberFormatException
+  Adding package java.util.concurrent.atomic
+    Resolved as new package java.util.concurrent.atomic
+  Finishing package java.util.concurrent.atomic
+  Adding package java.lang.invoke
+    Resolved as new package java.lang.invoke
+  Finishing package java.lang.invoke
+  Adding package org.apache.commons.io
+    Resolved as new package org.apache.commons.io
   Finishing package org.apache.commons.io
   Adding package org.apache.commons.io.output
     Resolved as new package org.apache.commons.io.output
@@ -10770,8 +10773,14 @@ Init pending package org.apache.commons.fileupload.util.mime
   Finishing method (CtMethodImpl) getCharacterEncoding @ src/main/java/org/apache/commons/fileupload/portlet/PortletRequestContext.java:64:19
   Finishing method (CtMethodImpl) getContentType @ src/main/java/org/apache/commons/fileupload/portlet/PortletRequestContext.java:73:19
   Finishing method (CtMethodImpl) toString @ src/main/java/org/apache/commons/fileupload/portlet/PortletRequestContext.java:121:19
-  Adding package java.lang.invoke
-    Resolved as new package java.lang.invoke
+  Adding metrics (CtMethodImpl) getInputStream @ src/main/java/org/apache/commons/fileupload/portlet/PortletRequestContext.java:111:24
+    Adding select field (CtFieldImpl) request @ src/main/java/org/apache/commons/fileupload/portlet/PortletRequestContext.java:42:33
+      Resolved as new select field (CtFieldImpl) request @ src/main/java/org/apache/commons/fileupload/portlet/PortletRequestContext.java:42:33
+    [33mType description did not have a declaration but was not labelled as anonymous: (CtTypeReferenceImpl) javax.portlet.ActionRequest
+    The type likely was an external dependency or some other type not handled by the abstractor so using anyDesc.[0m
+    [33mType description did not have a declaration but was not labelled as anonymous: (CtTypeReferenceImpl) javax.portlet.ActionRequest
+    The type likely was an external dependency or some other type not handled by the abstractor so using anyDesc.[0m
+    Resolved as new metrics (CtMethodImpl) getInputStream @ src/main/java/org/apache/commons/fileupload/portlet/PortletRequestContext.java:111:24
   Adding metrics (CtMethodImpl) contentLength @ src/main/java/org/apache/commons/fileupload/portlet/PortletRequestContext.java:94:17
     Adding basic (CtTypeReferenceImpl) long @ src/main/java/org/apache/commons/fileupload/portlet/PortletRequestContext.java:95:9
       Resolved with match basic (CtTypeReferenceImpl) long @ src/main/java/org/apache/commons/fileupload/portlet/PortletRequestContext.java:95:9
@@ -10781,8 +10790,6 @@ Init pending package org.apache.commons.fileupload.util.mime
       Resolved with match basic (CtTypeReferenceImpl) long
     Adding basic (CtTypeReferenceImpl) long
       Resolved with match basic (CtTypeReferenceImpl) long
-    Adding select field (CtFieldImpl) request @ src/main/java/org/apache/commons/fileupload/portlet/PortletRequestContext.java:42:33
-      Resolved as new select field (CtFieldImpl) request @ src/main/java/org/apache/commons/fileupload/portlet/PortletRequestContext.java:42:33
     [33mType description did not have a declaration but was not labelled as anonymous: (CtTypeReferenceImpl) javax.portlet.ActionRequest
     The type likely was an external dependency or some other type not handled by the abstractor so using anyDesc.[0m
     [33mType description did not have a declaration but was not labelled as anonymous: (CtTypeReferenceImpl) javax.portlet.ActionRequest
@@ -10800,7 +10807,8 @@ Init pending package org.apache.commons.fileupload.util.mime
     Adding basic (CtTypeReferenceImpl) long
       Resolved with match basic (CtTypeReferenceImpl) long
     Resolved as new metrics (CtMethodImpl) contentLength @ src/main/java/org/apache/commons/fileupload/portlet/PortletRequestContext.java:94:17
-  Adding metrics (CtMethodImpl) getItemIterator @ src/main/java/org/apache/commons/fileupload/portlet/PortletFileUpload.java:144:29
+  Adding metrics (CtConstructorImpl) <init> @ src/main/java/org/apache/commons/fileupload/portlet/PortletRequestContext.java:52:12
+    [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
     [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
     [33mType description did not have a declaration but was not labelled as anonymous: (CtTypeReferenceImpl) javax.portlet.ActionRequest
     The type likely was an external dependency or some other type not handled by the abstractor so using anyDesc.[0m
@@ -10810,7 +10818,7 @@ Init pending package org.apache.commons.fileupload.util.mime
     The type likely was an external dependency or some other type not handled by the abstractor so using anyDesc.[0m
     [33mType description did not have a declaration but was not labelled as anonymous: (CtTypeReferenceImpl) javax.portlet.ActionRequest
     The type likely was an external dependency or some other type not handled by the abstractor so using anyDesc.[0m
-    Resolved as new metrics (CtMethodImpl) getItemIterator @ src/main/java/org/apache/commons/fileupload/portlet/PortletFileUpload.java:144:29
+    Resolved as new metrics (CtConstructorImpl) <init> @ src/main/java/org/apache/commons/fileupload/portlet/PortletRequestContext.java:52:12
   Adding metrics (CtMethodImpl) parseRequest @ src/main/java/org/apache/commons/fileupload/portlet/PortletFileUpload.java:105:27
     [34mUnused type args: [org.apache.commons.fileupload.FileItem][0m
     Adding interface instantiation java.util.List<org.apache.commons.fileupload.FileItem>
@@ -10827,10 +10835,12 @@ Init pending package org.apache.commons.fileupload.util.mime
     [33mType description did not have a declaration but was not labelled as anonymous: (CtTypeReferenceImpl) javax.portlet.ActionRequest
     The type likely was an external dependency or some other type not handled by the abstractor so using anyDesc.[0m
     Resolved as new metrics (CtMethodImpl) parseRequest @ src/main/java/org/apache/commons/fileupload/portlet/PortletFileUpload.java:105:27
-  Adding metrics (CtConstructorImpl) <init> @ src/main/java/org/apache/commons/fileupload/portlet/PortletFileUpload.java:76:12
-    [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
-    [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
-    Resolved as new metrics (CtConstructorImpl) <init> @ src/main/java/org/apache/commons/fileupload/portlet/PortletFileUpload.java:76:12
+  Adding metrics (CtMethodImpl) getCharacterEncoding @ src/main/java/org/apache/commons/fileupload/portlet/PortletRequestContext.java:64:19
+    [33mType description did not have a declaration but was not labelled as anonymous: (CtTypeReferenceImpl) javax.portlet.ActionRequest
+    The type likely was an external dependency or some other type not handled by the abstractor so using anyDesc.[0m
+    [33mType description did not have a declaration but was not labelled as anonymous: (CtTypeReferenceImpl) javax.portlet.ActionRequest
+    The type likely was an external dependency or some other type not handled by the abstractor so using anyDesc.[0m
+    Resolved as new metrics (CtMethodImpl) getCharacterEncoding @ src/main/java/org/apache/commons/fileupload/portlet/PortletRequestContext.java:64:19
   Adding metrics (CtMethodImpl) parseParameterMap @ src/main/java/org/apache/commons/fileupload/portlet/PortletFileUpload.java:123:40
     [34mUnused type args: [java.lang.String, java.util.List][0m
     Adding interface instantiation java.util.List<org.apache.commons.fileupload.FileItem>
@@ -10852,18 +10862,22 @@ Init pending package org.apache.commons.fileupload.util.mime
     [33mType description did not have a declaration but was not labelled as anonymous: (CtTypeReferenceImpl) javax.portlet.ActionRequest
     The type likely was an external dependency or some other type not handled by the abstractor so using anyDesc.[0m
     Resolved as new metrics (CtMethodImpl) parseParameterMap @ src/main/java/org/apache/commons/fileupload/portlet/PortletFileUpload.java:123:40
-  Adding metrics (CtConstructorImpl) <init> @ src/main/java/org/apache/commons/fileupload/portlet/PortletRequestContext.java:52:12
+  Adding metrics (CtConstructorImpl) <init> @ src/main/java/org/apache/commons/fileupload/portlet/PortletFileUpload.java:76:12
     [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
     [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+    Resolved as new metrics (CtConstructorImpl) <init> @ src/main/java/org/apache/commons/fileupload/portlet/PortletFileUpload.java:76:12
+  Adding metrics (CtConstructorImpl) <init> @ src/main/java/org/apache/commons/fileupload/portlet/PortletFileUpload.java:87:12
+    [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+    [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+    Resolved as new metrics (CtConstructorImpl) <init> @ src/main/java/org/apache/commons/fileupload/portlet/PortletFileUpload.java:87:12
+  Adding metrics (CtMethodImpl) getContentLength @ src/main/java/org/apache/commons/fileupload/portlet/PortletRequestContext.java:84:16
     [33mType description did not have a declaration but was not labelled as anonymous: (CtTypeReferenceImpl) javax.portlet.ActionRequest
     The type likely was an external dependency or some other type not handled by the abstractor so using anyDesc.[0m
     [33mType description did not have a declaration but was not labelled as anonymous: (CtTypeReferenceImpl) javax.portlet.ActionRequest
     The type likely was an external dependency or some other type not handled by the abstractor so using anyDesc.[0m
-    [33mType description did not have a declaration but was not labelled as anonymous: (CtTypeReferenceImpl) javax.portlet.ActionRequest
-    The type likely was an external dependency or some other type not handled by the abstractor so using anyDesc.[0m
-    [33mType description did not have a declaration but was not labelled as anonymous: (CtTypeReferenceImpl) javax.portlet.ActionRequest
-    The type likely was an external dependency or some other type not handled by the abstractor so using anyDesc.[0m
-    Resolved as new metrics (CtConstructorImpl) <init> @ src/main/java/org/apache/commons/fileupload/portlet/PortletRequestContext.java:52:12
+    Adding basic (CtTypeReferenceImpl) int
+      Resolved with match basic (CtTypeReferenceImpl) int
+    Resolved as new metrics (CtMethodImpl) getContentLength @ src/main/java/org/apache/commons/fileupload/portlet/PortletRequestContext.java:84:16
   Adding metrics (CtMethodImpl) isMultipartContent @ src/main/java/org/apache/commons/fileupload/portlet/PortletFileUpload.java:62:33
     Adding basic (CtTypeReferenceImpl) boolean
       Resolved with match basic (CtTypeReferenceImpl) boolean
@@ -10879,47 +10893,33 @@ Init pending package org.apache.commons.fileupload.util.mime
     [33mType description did not have a declaration but was not labelled as anonymous: (CtTypeReferenceImpl) javax.portlet.ActionRequest
     The type likely was an external dependency or some other type not handled by the abstractor so using anyDesc.[0m
     Resolved as new metrics (CtMethodImpl) isMultipartContent @ src/main/java/org/apache/commons/fileupload/portlet/PortletFileUpload.java:62:33
-  Adding metrics (CtMethodImpl) getInputStream @ src/main/java/org/apache/commons/fileupload/portlet/PortletRequestContext.java:111:24
-    [33mType description did not have a declaration but was not labelled as anonymous: (CtTypeReferenceImpl) javax.portlet.ActionRequest
-    The type likely was an external dependency or some other type not handled by the abstractor so using anyDesc.[0m
-    [33mType description did not have a declaration but was not labelled as anonymous: (CtTypeReferenceImpl) javax.portlet.ActionRequest
-    The type likely was an external dependency or some other type not handled by the abstractor so using anyDesc.[0m
-    Resolved as new metrics (CtMethodImpl) getInputStream @ src/main/java/org/apache/commons/fileupload/portlet/PortletRequestContext.java:111:24
-  Adding metrics (CtMethodImpl) getCharacterEncoding @ src/main/java/org/apache/commons/fileupload/portlet/PortletRequestContext.java:64:19
-    [33mType description did not have a declaration but was not labelled as anonymous: (CtTypeReferenceImpl) javax.portlet.ActionRequest
-    The type likely was an external dependency or some other type not handled by the abstractor so using anyDesc.[0m
-    [33mType description did not have a declaration but was not labelled as anonymous: (CtTypeReferenceImpl) javax.portlet.ActionRequest
-    The type likely was an external dependency or some other type not handled by the abstractor so using anyDesc.[0m
-    Resolved as new metrics (CtMethodImpl) getCharacterEncoding @ src/main/java/org/apache/commons/fileupload/portlet/PortletRequestContext.java:64:19
-  Adding metrics (CtMethodImpl) getContentType @ src/main/java/org/apache/commons/fileupload/portlet/PortletRequestContext.java:73:19
-    [33mType description did not have a declaration but was not labelled as anonymous: (CtTypeReferenceImpl) javax.portlet.ActionRequest
-    The type likely was an external dependency or some other type not handled by the abstractor so using anyDesc.[0m
-    [33mType description did not have a declaration but was not labelled as anonymous: (CtTypeReferenceImpl) javax.portlet.ActionRequest
-    The type likely was an external dependency or some other type not handled by the abstractor so using anyDesc.[0m
-    Resolved as new metrics (CtMethodImpl) getContentType @ src/main/java/org/apache/commons/fileupload/portlet/PortletRequestContext.java:73:19
   Adding metrics (CtMethodImpl) toString @ src/main/java/org/apache/commons/fileupload/portlet/PortletRequestContext.java:121:19
     Adding basic (CtTypeReferenceImpl) long
       Resolved with match basic (CtTypeReferenceImpl) long
     Adding basic (CtTypeReferenceImpl) long
       Resolved with match basic (CtTypeReferenceImpl) long
     Resolved as new metrics (CtMethodImpl) toString @ src/main/java/org/apache/commons/fileupload/portlet/PortletRequestContext.java:121:19
-  Adding metrics (CtConstructorImpl) <init> @ src/main/java/org/apache/commons/fileupload/portlet/PortletFileUpload.java:87:12
+  Adding metrics (CtMethodImpl) getItemIterator @ src/main/java/org/apache/commons/fileupload/portlet/PortletFileUpload.java:144:29
     [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
-    [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
-    Resolved as new metrics (CtConstructorImpl) <init> @ src/main/java/org/apache/commons/fileupload/portlet/PortletFileUpload.java:87:12
-  Adding metrics (CtMethodImpl) getContentLength @ src/main/java/org/apache/commons/fileupload/portlet/PortletRequestContext.java:84:16
     [33mType description did not have a declaration but was not labelled as anonymous: (CtTypeReferenceImpl) javax.portlet.ActionRequest
     The type likely was an external dependency or some other type not handled by the abstractor so using anyDesc.[0m
     [33mType description did not have a declaration but was not labelled as anonymous: (CtTypeReferenceImpl) javax.portlet.ActionRequest
     The type likely was an external dependency or some other type not handled by the abstractor so using anyDesc.[0m
-    Adding basic (CtTypeReferenceImpl) int
-      Resolved with match basic (CtTypeReferenceImpl) int
-    Resolved as new metrics (CtMethodImpl) getContentLength @ src/main/java/org/apache/commons/fileupload/portlet/PortletRequestContext.java:84:16
+    [33mType description did not have a declaration but was not labelled as anonymous: (CtTypeReferenceImpl) javax.portlet.ActionRequest
+    The type likely was an external dependency or some other type not handled by the abstractor so using anyDesc.[0m
+    [33mType description did not have a declaration but was not labelled as anonymous: (CtTypeReferenceImpl) javax.portlet.ActionRequest
+    The type likely was an external dependency or some other type not handled by the abstractor so using anyDesc.[0m
+    Resolved as new metrics (CtMethodImpl) getItemIterator @ src/main/java/org/apache/commons/fileupload/portlet/PortletFileUpload.java:144:29
+  Adding metrics (CtMethodImpl) getContentType @ src/main/java/org/apache/commons/fileupload/portlet/PortletRequestContext.java:73:19
+    [33mType description did not have a declaration but was not labelled as anonymous: (CtTypeReferenceImpl) javax.portlet.ActionRequest
+    The type likely was an external dependency or some other type not handled by the abstractor so using anyDesc.[0m
+    [33mType description did not have a declaration but was not labelled as anonymous: (CtTypeReferenceImpl) javax.portlet.ActionRequest
+    The type likely was an external dependency or some other type not handled by the abstractor so using anyDesc.[0m
+    Resolved as new metrics (CtMethodImpl) getContentType @ src/main/java/org/apache/commons/fileupload/portlet/PortletRequestContext.java:73:19
   Finishing interface description (CtInterfaceImpl) Map
   Finishing interface instantiation java.util.List<org.apache.commons.fileupload.FileItem>
   Finishing interface instantiation java.util.List<org.apache.commons.fileupload.FileItem>
   Finishing interface instantiation java.util.Map<java.lang.String, java.util.List>
-  Finishing package java.lang.invoke
   Adding package org.apache.commons.fileupload.servlet
     Resolved as new package org.apache.commons.fileupload.servlet
   Finishing package org.apache.commons.fileupload.servlet
@@ -10982,8 +10982,6 @@ Init pending package org.apache.commons.fileupload.util.mime
   Finishing method (CtMethodImpl) contextInitialized @ src/main/java/org/apache/commons/fileupload/servlet/FileCleanerCleanup.java:71:17
   Finishing method (CtMethodImpl) contextDestroyed @ src/main/java/org/apache/commons/fileupload/servlet/FileCleanerCleanup.java:83:17
   Finishing method (CtMethodImpl) getFileCleaningTracker @ src/main/java/org/apache/commons/fileupload/servlet/FileCleanerCleanup.java:47:13
-  Adding package org.apache.commons.fileupload.util
-    Resolved as new package org.apache.commons.fileupload.util
   Adding metrics (CtMethodImpl) contextDestroyed @ src/main/java/org/apache/commons/fileupload/servlet/FileCleanerCleanup.java:83:17
     [33mType description did not have a declaration but was not labelled as anonymous: (CtTypeReferenceImpl) javax.servlet.ServletContext
     The type likely was an external dependency or some other type not handled by the abstractor so using anyDesc.[0m
@@ -11038,6 +11036,8 @@ Init pending package org.apache.commons.fileupload.util.mime
     [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
     Resolved as new metrics (CtMethodImpl) contextInitialized @ src/main/java/org/apache/commons/fileupload/servlet/FileCleanerCleanup.java:71:17
   Finishing constructor (CtConstructorImpl) <init>
+  Adding package org.apache.commons.fileupload.util
+    Resolved as new package org.apache.commons.fileupload.util
   Finishing package org.apache.commons.fileupload.util
   Adding package java.io
     Resolved with match package java.io
@@ -11057,29 +11057,29 @@ Init pending package org.apache.commons.fileupload.util.mime
   Adding package org
     Resolved as new package org
   Finishing package org
-[34mFinished process pending packages (3.844400s)[0m
+[34mFinished process pending packages (4.094075s)[0m
 [34mStarting short validation...[0m
   [34mStarting performShortValidation...[0m
-  [34mFinished performShortValidation (0.003247s)[0m
-[34mFinished short validation (0.004555s)[0m
+  [34mFinished performShortValidation (0.001967s)[0m
+[34mFinished short validation (0.003333s)[0m
 [34mStarting consolidate constructs...[0m
   Consolidating all constructs
     Removed 644 collisions
     Removed 0 collisions
-[34mFinished consolidate constructs (0.055501s)[0m
+[34mFinished consolidate constructs (0.049226s)[0m
 [34mStarting connect nests...[0m
-[34mFinished connect nests (0.001305s)[0m
+[34mFinished connect nests (0.003699s)[0m
 [34mStarting collect package declarations...[0m
-[34mFinished collect package declarations (0.191349s)[0m
+[34mFinished collect package declarations (0.242589s)[0m
 [34mStarting addImports from usage...[0m
-[34mFinished addImports from usage (0.001625s)[0m
+[34mFinished addImports from usage (0.008564s)[0m
 [34mStarting remove empty packages...[0m
   Removing { kind: package, name: "<unnamed>" }
   Removing { kind: package, name: org }
   Removing { kind: package, name: org.apache }
   Removing { kind: package, name: org.apache.commons }
-[34mFinished remove empty packages (0.005183s)[0m
+[34mFinished remove empty packages (0.005819s)[0m
 [34mStarting performValidation...[0m
-[34mFinished performValidation (0.557065s)[0m
-[34mFinished Abstraction (16.935446s)[0m
+[34mFinished performValidation (0.563344s)[0m
+[34mFinished Abstraction (17.883531s)[0m
 Success

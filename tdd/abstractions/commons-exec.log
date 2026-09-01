@@ -1,7 +1,7 @@
 # cmd: java -jar /Users/grantnelson/go/src/github.com/MSUSEL/msusel-tdmetrics-go/javaAbstractor/target/abstractor-0.1-jar-with-dependencies.jar -i /Users/grantnelson/go/src/github.com/apache/commons-exec/ -o /Users/grantnelson/go/src/github.com/MSUSEL/msusel-tdmetrics-go/tdd/abstractions/commons-exec.json -v
 # cwd: /Users/grantnelson/go/src/github.com/MSUSEL/msusel-tdmetrics-go/tdd
 # repo: /Users/grantnelson/go/src/github.com/apache/commons-exec @ 2da60ab3eefaaa2f8a434ded1eebe1ce17efd34a
-# started: 2026-08-30T23:03:36.387905+00:00
+# started: 2026-08-31T17:24:22.962179+00:00
 # timeout_min: 10
 # ---
 Reading /Users/grantnelson/go/src/github.com/apache/commons-exec/
@@ -720,8 +720,6 @@ Init pending package org.apache.commons.exec.util
   Finishing method (CtMethodImpl) exec @ src/main/java/org/apache/commons/exec/launcher/VmsCommandLauncher.java:61:20
   Finishing constructor (CtConstructorImpl) <init> @ src/main/java/org/apache/commons/exec/launcher/WinNTCommandLauncher.java:34:12
   Finishing method (CtMethodImpl) exec @ src/main/java/org/apache/commons/exec/launcher/WinNTCommandLauncher.java:52:20
-  Adding package java.io
-    Resolved as new package java.io
   Adding metrics (CtMethodImpl) expandArgument @ src/main/java/org/apache/commons/exec/CommandLine.java:324:20
     Adding object decl (CtClassImpl) StringBuffer
       Adding struct (CtClassImpl) StringBuffer
@@ -2613,36 +2611,6 @@ Init pending package org.apache.commons.exec.util
   Finishing object instantiation java.util.Vector<org.apache.commons.exec.CommandLine$Argument>
   Finishing object instantiation java.util.Vector<org.apache.commons.exec.CommandLine$Argument>
   Finishing object instantiation java.util.Vector<org.apache.commons.exec.CommandLine$Argument>
-  Finishing package java.io
-    Adding object decl (CtClassImpl) IOException
-      Adding struct (CtClassImpl) IOException
-        Resolved as new struct (CtClassImpl) IOException
-      Resolved as new object decl (CtClassImpl) IOException
-    Adding object decl (CtClassImpl) InputStream
-      Adding struct (CtClassImpl) InputStream
-        Resolved as new struct (CtClassImpl) InputStream
-      Resolved as new object decl (CtClassImpl) InputStream
-    Adding object decl (CtClassImpl) OutputStream
-      Adding struct (CtClassImpl) OutputStream
-        Resolved as new struct (CtClassImpl) OutputStream
-      Resolved as new object decl (CtClassImpl) OutputStream
-    Adding object decl (CtClassImpl) ByteArrayOutputStream
-      Adding struct (CtClassImpl) ByteArrayOutputStream
-        Resolved as new struct (CtClassImpl) ByteArrayOutputStream
-      Resolved as new object decl (CtClassImpl) ByteArrayOutputStream
-    Adding object decl (CtClassImpl) PipedOutputStream
-      Adding struct (CtClassImpl) PipedOutputStream
-        Resolved as new struct (CtClassImpl) PipedOutputStream
-      Resolved as new object decl (CtClassImpl) PipedOutputStream
-    Adding interface decl (CtInterfaceImpl) Serializable
-      Resolved as new interface decl (CtInterfaceImpl) Serializable
-    Adding interface decl (CtInterfaceImpl) Flushable
-      Resolved as new interface decl (CtInterfaceImpl) Flushable
-    Adding interface decl (CtInterfaceImpl) Closeable
-      Resolved as new interface decl (CtInterfaceImpl) Closeable
-  Finishing interface decl (CtInterfaceImpl) Serializable
-  Finishing interface decl (CtInterfaceImpl) Flushable
-  Finishing interface decl (CtInterfaceImpl) Closeable
   Finishing interface description (CtInterfaceImpl) CharSequence
   Finishing interface description (CtInterfaceImpl) ConstantDesc
   Finishing interface description (CtInterfaceImpl) Constable
@@ -2685,265 +2653,101 @@ Init pending package org.apache.commons.exec.util
   Finishing method (CtMethodImpl) isName @ src/main/java/org/apache/commons/exec/OS.java:157:27
   Finishing method (CtMethodImpl) isFamilyMac @ src/main/java/org/apache/commons/exec/OS.java:106:27
   Finishing object decl (CtClassImpl) BufferedReader
-  Finishing object decl (CtClassImpl) IOException
-  Finishing object decl (CtClassImpl) InputStream
-  Finishing object decl (CtClassImpl) OutputStream
-  Finishing object decl (CtClassImpl) ByteArrayOutputStream
-  Finishing object decl (CtClassImpl) PipedOutputStream
-  Adding package java.lang
-    Resolved as new package java.lang
+  Adding metrics (CtMethodImpl) toString @ src/main/java/org/apache/commons/exec/util/StringUtils.java:199:26
+    [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+    Adding basic (CtTypeReferenceImpl) int @ src/main/java/org/apache/commons/exec/util/StringUtils.java:201:14
+      Resolved with match basic (CtTypeReferenceImpl) int @ src/main/java/org/apache/commons/exec/util/StringUtils.java:201:14
+    Adding basic (CtTypeReferenceImpl) int
+      Resolved with match basic (CtTypeReferenceImpl) int
+    Adding basic (CtTypeReferenceImpl) boolean
+      Resolved with match basic (CtTypeReferenceImpl) boolean
+    Adding basic (CtTypeReferenceImpl) int
+      Resolved with match basic (CtTypeReferenceImpl) int
+    Adding basic (CtTypeReferenceImpl) int
+      Resolved with match basic (CtTypeReferenceImpl) int
+    Adding basic (CtTypeReferenceImpl) int
+      Resolved with match basic (CtTypeReferenceImpl) int
+    Adding basic (CtTypeReferenceImpl) int
+      Resolved with match basic (CtTypeReferenceImpl) int
+    Adding basic (CtTypeReferenceImpl) boolean
+      Resolved with match basic (CtTypeReferenceImpl) boolean
+    Adding basic (CtTypeReferenceImpl) int
+      Resolved with match basic (CtTypeReferenceImpl) int
+    Adding basic (CtTypeReferenceImpl) int
+      Resolved with match basic (CtTypeReferenceImpl) int
+    Adding basic (CtTypeReferenceImpl) int
+      Resolved with match basic (CtTypeReferenceImpl) int
+    Resolved as new metrics (CtMethodImpl) toString @ src/main/java/org/apache/commons/exec/util/StringUtils.java:199:26
+  Adding metrics (CtMethodImpl) getProcEnvCommand @ src/main/java/org/apache/commons/exec/environment/DefaultProcessingEnvironment.java:138:27
+    Resolved as new metrics (CtMethodImpl) getProcEnvCommand @ src/main/java/org/apache/commons/exec/environment/DefaultProcessingEnvironment.java:138:27
+  Adding metrics (CtMethodImpl) isFamily @ src/main/java/org/apache/commons/exec/OS.java:98:28
+    Adding basic (CtTypeReferenceImpl) boolean
+      Resolved with match basic (CtTypeReferenceImpl) boolean
+    Resolved as new metrics (CtMethodImpl) isFamily @ src/main/java/org/apache/commons/exec/OS.java:98:28
   Adding metrics (CtMethodImpl) isFamilyWinNT @ src/main/java/org/apache/commons/exec/OS.java:134:27
     Adding basic (CtTypeReferenceImpl) boolean
       Resolved with match basic (CtTypeReferenceImpl) boolean
     Adding select field (CtFieldImpl) FAMILY_NT @ src/main/java/org/apache/commons/exec/OS.java:48:32
       Resolved as new select field (CtFieldImpl) FAMILY_NT @ src/main/java/org/apache/commons/exec/OS.java:48:32
     Resolved as new metrics (CtMethodImpl) isFamilyWinNT @ src/main/java/org/apache/commons/exec/OS.java:134:27
-  Adding metrics (CtConstructorImpl) <init> @ src/main/java/org/apache/commons/exec/OS.java:88:13
-    [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
-    [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
-    Resolved as new metrics (CtConstructorImpl) <init> @ src/main/java/org/apache/commons/exec/OS.java:88:13
-  Adding metrics (CtConstructorImpl) <init> @ src/main/java/org/apache/commons/exec/environment/EnvironmentUtils.java:48:13
-    [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
-    [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
-    Resolved as new metrics (CtConstructorImpl) <init> @ src/main/java/org/apache/commons/exec/environment/EnvironmentUtils.java:48:13
-  Adding metrics (CtMethodImpl) addVariableToEnvironment @ src/main/java/org/apache/commons/exec/environment/EnvironmentUtils.java:94:24
-    Adding interface instantiation java.util.Map<java.lang.String, java.lang.String>
-      Resolved with match interface instantiation java.util.Map<java.lang.String, java.lang.String>
-    [34mUnused type args: [java.lang.String, java.lang.String][0m
-    Adding basic (CtTypeReferenceImpl) int
-      Resolved with match basic (CtTypeReferenceImpl) int
-    Adding basic (CtTypeReferenceImpl) int
-      Resolved with match basic (CtTypeReferenceImpl) int
-    Resolved as new metrics (CtMethodImpl) addVariableToEnvironment @ src/main/java/org/apache/commons/exec/environment/EnvironmentUtils.java:94:24
-  Adding metrics (CtMethodImpl) isVersion @ src/main/java/org/apache/commons/exec/OS.java:179:27
+  Adding metrics (CtMethodImpl) isFamilyUnix @ src/main/java/org/apache/commons/exec/OS.java:122:27
     Adding basic (CtTypeReferenceImpl) boolean
       Resolved with match basic (CtTypeReferenceImpl) boolean
-    Resolved as new metrics (CtMethodImpl) isVersion @ src/main/java/org/apache/commons/exec/OS.java:179:27
-  Adding metrics (CtMethodImpl) isFamilyNetware @ src/main/java/org/apache/commons/exec/OS.java:110:27
+    Adding select field (CtFieldImpl) FAMILY_UNIX @ src/main/java/org/apache/commons/exec/OS.java:64:32
+      Resolved as new select field (CtFieldImpl) FAMILY_UNIX @ src/main/java/org/apache/commons/exec/OS.java:64:32
+    Resolved as new metrics (CtMethodImpl) isFamilyUnix @ src/main/java/org/apache/commons/exec/OS.java:122:27
+  Adding metrics (CtMethodImpl) createProcEnvironment @ src/main/java/org/apache/commons/exec/environment/DefaultProcessingEnvironment.java:73:35
     Adding basic (CtTypeReferenceImpl) boolean
       Resolved with match basic (CtTypeReferenceImpl) boolean
-    Adding select field (CtFieldImpl) FAMILY_NETWARE @ src/main/java/org/apache/commons/exec/OS.java:44:32
-      Resolved as new select field (CtFieldImpl) FAMILY_NETWARE @ src/main/java/org/apache/commons/exec/OS.java:44:32
-    Resolved as new metrics (CtMethodImpl) isFamilyNetware @ src/main/java/org/apache/commons/exec/OS.java:110:27
-  Adding metrics (CtMethodImpl) getProcEnvironment @ src/main/java/org/apache/commons/exec/environment/EnvironmentUtils.java:83:39
-    Adding select field (CtFieldImpl) PROCESSING_ENVIRONMENT_IMPLEMENTATION @ src/main/java/org/apache/commons/exec/environment/EnvironmentUtils.java:35:55
-      Resolved as new select field (CtFieldImpl) PROCESSING_ENVIRONMENT_IMPLEMENTATION @ src/main/java/org/apache/commons/exec/environment/EnvironmentUtils.java:35:55
+    Adding select field (CtFieldImpl) procEnvironment @ src/main/java/org/apache/commons/exec/environment/DefaultProcessingEnvironment.java:45:35
+      Resolved as new select field (CtFieldImpl) procEnvironment @ src/main/java/org/apache/commons/exec/environment/DefaultProcessingEnvironment.java:45:35
     [34mUnused type args: [java.lang.String, java.lang.String][0m
     Adding interface instantiation java.util.Map<java.lang.String, java.lang.String>
       Resolved with match interface instantiation java.util.Map<java.lang.String, java.lang.String>
-    Resolved as new metrics (CtMethodImpl) getProcEnvironment @ src/main/java/org/apache/commons/exec/environment/EnvironmentUtils.java:83:39
-  Adding metrics (CtMethodImpl) isFamilyWin9x @ src/main/java/org/apache/commons/exec/OS.java:130:27
-    Adding basic (CtTypeReferenceImpl) boolean
-      Resolved with match basic (CtTypeReferenceImpl) boolean
-    Adding select field (CtFieldImpl) FAMILY_9X @ src/main/java/org/apache/commons/exec/OS.java:32:32
-      Resolved as new select field (CtFieldImpl) FAMILY_9X @ src/main/java/org/apache/commons/exec/OS.java:32:32
-    Resolved as new metrics (CtMethodImpl) isFamilyWin9x @ src/main/java/org/apache/commons/exec/OS.java:130:27
-  Adding metrics (CtMethodImpl) isFamilyZOS @ src/main/java/org/apache/commons/exec/OS.java:138:27
-    Adding basic (CtTypeReferenceImpl) boolean
-      Resolved with match basic (CtTypeReferenceImpl) boolean
-    Adding select field (CtFieldImpl) FAMILY_ZOS @ src/main/java/org/apache/commons/exec/OS.java:76:32
-      Resolved as new select field (CtFieldImpl) FAMILY_ZOS @ src/main/java/org/apache/commons/exec/OS.java:76:32
-    Resolved as new metrics (CtMethodImpl) isFamilyZOS @ src/main/java/org/apache/commons/exec/OS.java:138:27
-  Adding metrics (CtMethodImpl) isFamilyOS2 @ src/main/java/org/apache/commons/exec/OS.java:114:27
-    Adding basic (CtTypeReferenceImpl) boolean
-      Resolved with match basic (CtTypeReferenceImpl) boolean
-    Adding select field (CtFieldImpl) FAMILY_OS2 @ src/main/java/org/apache/commons/exec/OS.java:52:32
-      Resolved as new select field (CtFieldImpl) FAMILY_OS2 @ src/main/java/org/apache/commons/exec/OS.java:52:32
-    Resolved as new metrics (CtMethodImpl) isFamilyOS2 @ src/main/java/org/apache/commons/exec/OS.java:114:27
-  Adding metrics (CtMethodImpl) runProcEnvCommand @ src/main/java/org/apache/commons/exec/environment/DefaultProcessingEnvironment.java:120:30
-    Resolved as new metrics (CtMethodImpl) runProcEnvCommand @ src/main/java/org/apache/commons/exec/environment/DefaultProcessingEnvironment.java:120:30
-  Adding metrics (CtMethodImpl) fixFileSeparatorChar @ src/main/java/org/apache/commons/exec/util/StringUtils.java:187:26
-    Adding method (CtMethodImpl) replace
-      Adding signature (CtMethodImpl) replace
+    Adding interface instantiation java.util.Map @ src/main/java/org/apache/commons/exec/environment/DefaultProcessingEnvironment.java:75:19<java.lang.String @ src/main/java/org/apache/commons/exec/environment/DefaultProcessingEnvironment.java:75:23, java.lang.String @ src/main/java/org/apache/commons/exec/environment/DefaultProcessingEnvironment.java:75:31>
+      Resolved with match interface instantiation java.util.Map @ src/main/java/org/apache/commons/exec/environment/DefaultProcessingEnvironment.java:75:19<java.lang.String @ src/main/java/org/apache/commons/exec/environment/DefaultProcessingEnvironment.java:75:23, java.lang.String @ src/main/java/org/apache/commons/exec/environment/DefaultProcessingEnvironment.java:75:31>
+    [34mUnused type args: [java.lang.String @ src/main/java/org/apache/commons/exec/environment/DefaultProcessingEnvironment.java:75:23, java.lang.String @ src/main/java/org/apache/commons/exec/environment/DefaultProcessingEnvironment.java:75:31][0m
+    Adding method (CtMethodImpl) getenv
+      Adding signature (CtMethodImpl) getenv
+        Adding parameter <unnamed> java.util.Map<java.lang.String, java.lang.String>
+          Adding interface instantiation java.util.Map<java.lang.String, java.lang.String>
+            Resolved with match interface instantiation java.util.Map<java.lang.String, java.lang.String>
+          Resolved as new parameter <unnamed> java.util.Map<java.lang.String, java.lang.String>
+        Resolved as new signature (CtMethodImpl) getenv
+      Resolved as new method (CtMethodImpl) getenv
+    [34mUnused type args: [java.lang.String, java.lang.String][0m
+    Adding interface instantiation java.util.Map<java.lang.String, java.lang.String>
+      Resolved with match interface instantiation java.util.Map<java.lang.String, java.lang.String>
+    Adding interface instantiation java.util.Map<java.lang.String, java.lang.String>
+      Resolved with match interface instantiation java.util.Map<java.lang.String, java.lang.String>
+    [34mUnused type args: [java.lang.String, java.lang.String][0m
+    [34mUnused type args: [java.lang.String, java.lang.String][0m
+    Adding interface instantiation java.util.Map<java.lang.String, java.lang.String>
+      Resolved with match interface instantiation java.util.Map<java.lang.String, java.lang.String>
+    [34mUnused type args: [java.lang.String, java.lang.String][0m
+    Adding interface instantiation java.util.Map<java.lang.String, java.lang.String>
+      Resolved with match interface instantiation java.util.Map<java.lang.String, java.lang.String>
+    Adding abstract (CtMethodImpl) putAll
+      Adding signature (CtMethodImpl) putAll
         Adding parameter (CtParameterImpl) arg0
-          Adding basic (CtTypeReferenceImpl) char
-            Resolved with match basic (CtTypeReferenceImpl) char
           Resolved as new parameter (CtParameterImpl) arg0
-        Adding parameter (CtParameterImpl) arg1
-          Adding basic (CtTypeReferenceImpl) char
-            Resolved with match basic (CtTypeReferenceImpl) char
-          Resolved as new parameter (CtParameterImpl) arg1
-        Adding parameter <unnamed> java.lang.String
-          Resolved with match parameter <unnamed> java.lang.String
-        Resolved as new signature (CtMethodImpl) replace
-      Resolved as new method (CtMethodImpl) replace
-    Adding basic (CtTypeReferenceImpl) char
-      Resolved with match basic (CtTypeReferenceImpl) char
-    Adding basic (CtTypeReferenceImpl) char
-      Resolved with match basic (CtTypeReferenceImpl) char
-    Adding select field (CtFieldImpl) SLASH_CHAR @ src/main/java/org/apache/commons/exec/util/StringUtils.java:41:31
-      Resolved as new select field (CtFieldImpl) SLASH_CHAR @ src/main/java/org/apache/commons/exec/util/StringUtils.java:41:31
-    Adding basic (CtTypeReferenceImpl) char
-      Resolved with match basic (CtTypeReferenceImpl) char
-    Adding select field (CtFieldImpl) separatorChar
-      Resolved as new select field (CtFieldImpl) separatorChar
-    Adding field (CtFieldImpl) separatorChar
-      Adding basic (CtTypeReferenceImpl) char
-        Resolved with match basic (CtTypeReferenceImpl) char
-      Resolved as new field (CtFieldImpl) separatorChar
-    Adding basic (CtTypeReferenceImpl) char
-      Resolved with match basic (CtTypeReferenceImpl) char
-    Adding basic (CtTypeReferenceImpl) char
-      Resolved with match basic (CtTypeReferenceImpl) char
-    Adding basic (CtTypeReferenceImpl) char
-      Resolved with match basic (CtTypeReferenceImpl) char
-    Adding select field (CtFieldImpl) BACKSLASH_CHAR @ src/main/java/org/apache/commons/exec/util/StringUtils.java:42:31
-      Resolved as new select field (CtFieldImpl) BACKSLASH_CHAR @ src/main/java/org/apache/commons/exec/util/StringUtils.java:42:31
-    Adding basic (CtTypeReferenceImpl) char
-      Resolved with match basic (CtTypeReferenceImpl) char
-    Adding basic (CtTypeReferenceImpl) char
-      Resolved with match basic (CtTypeReferenceImpl) char
-    Resolved as new metrics (CtMethodImpl) fixFileSeparatorChar @ src/main/java/org/apache/commons/exec/util/StringUtils.java:187:26
-  Adding metrics (CtMethodImpl) isQuoted @ src/main/java/org/apache/commons/exec/util/StringUtils.java:259:27
-    Adding basic (CtTypeReferenceImpl) boolean
-      Resolved with match basic (CtTypeReferenceImpl) boolean
-    Adding basic (CtTypeReferenceImpl) boolean
-      Resolved with match basic (CtTypeReferenceImpl) boolean
-    Adding method (CtMethodImpl) startsWith
-      Adding signature (CtMethodImpl) startsWith
-        Adding parameter (CtParameterImpl) arg0
-          Resolved with match parameter (CtParameterImpl) arg0
-        Adding parameter <unnamed> boolean
-          Adding basic (CtTypeReferenceImpl) boolean
-            Resolved with match basic (CtTypeReferenceImpl) boolean
-          Resolved as new parameter <unnamed> boolean
-        Resolved as new signature (CtMethodImpl) startsWith
-      Resolved as new method (CtMethodImpl) startsWith
-    Adding basic (CtTypeReferenceImpl) boolean
-      Resolved with match basic (CtTypeReferenceImpl) boolean
-    Adding select field (CtFieldImpl) SINGLE_QUOTE @ src/main/java/org/apache/commons/exec/util/StringUtils.java:39:33
-      Resolved as new select field (CtFieldImpl) SINGLE_QUOTE @ src/main/java/org/apache/commons/exec/util/StringUtils.java:39:33
-    Adding method (CtMethodImpl) endsWith
-      Adding signature (CtMethodImpl) endsWith
-        Adding parameter (CtParameterImpl) arg0
-          Resolved with match parameter (CtParameterImpl) arg0
-        Adding parameter <unnamed> boolean
-          Adding basic (CtTypeReferenceImpl) boolean
-            Resolved with match basic (CtTypeReferenceImpl) boolean
-          Resolved as new parameter <unnamed> boolean
-        Resolved as new signature (CtMethodImpl) endsWith
-      Resolved as new method (CtMethodImpl) endsWith
-    Adding basic (CtTypeReferenceImpl) boolean
-      Resolved with match basic (CtTypeReferenceImpl) boolean
-    Adding basic (CtTypeReferenceImpl) boolean
-      Resolved with match basic (CtTypeReferenceImpl) boolean
-    Adding basic (CtTypeReferenceImpl) boolean
-      Resolved with match basic (CtTypeReferenceImpl) boolean
-    Adding select field (CtFieldImpl) DOUBLE_QUOTE @ src/main/java/org/apache/commons/exec/util/StringUtils.java:40:33
-      Resolved as new select field (CtFieldImpl) DOUBLE_QUOTE @ src/main/java/org/apache/commons/exec/util/StringUtils.java:40:33
-    Adding basic (CtTypeReferenceImpl) boolean
-      Resolved with match basic (CtTypeReferenceImpl) boolean
-    Resolved as new metrics (CtMethodImpl) isQuoted @ src/main/java/org/apache/commons/exec/util/StringUtils.java:259:27
-  Adding metrics (CtMethodImpl) isArch @ src/main/java/org/apache/commons/exec/OS.java:168:27
-    Adding basic (CtTypeReferenceImpl) boolean
-      Resolved with match basic (CtTypeReferenceImpl) boolean
-    Resolved as new metrics (CtMethodImpl) isArch @ src/main/java/org/apache/commons/exec/OS.java:168:27
-  Adding metrics (CtMethodImpl) quoteArgument @ src/main/java/org/apache/commons/exec/util/StringUtils.java:222:26
-    Adding basic (CtTypeReferenceImpl) boolean
-      Resolved with match basic (CtTypeReferenceImpl) boolean
-    Adding basic (CtTypeReferenceImpl) boolean
-      Resolved with match basic (CtTypeReferenceImpl) boolean
-    Adding basic (CtTypeReferenceImpl) boolean
-      Resolved with match basic (CtTypeReferenceImpl) boolean
-    Adding method (CtMethodImpl) substring
-      Adding signature (CtMethodImpl) substring
-        Adding parameter (CtParameterImpl) arg0
-          Adding basic (CtTypeReferenceImpl) int
-            Resolved with match basic (CtTypeReferenceImpl) int
-          Resolved as new parameter (CtParameterImpl) arg0
-        Adding parameter <unnamed> java.lang.String
-          Resolved with match parameter <unnamed> java.lang.String
-        Resolved as new signature (CtMethodImpl) substring
-      Resolved as new method (CtMethodImpl) substring
-    Adding basic (CtTypeReferenceImpl) int
-      Resolved with match basic (CtTypeReferenceImpl) int
-    Adding basic (CtTypeReferenceImpl) int
-      Resolved with match basic (CtTypeReferenceImpl) int
-    Adding basic (CtTypeReferenceImpl) boolean
-      Resolved with match basic (CtTypeReferenceImpl) boolean
-    Adding basic (CtTypeReferenceImpl) boolean
-      Resolved with match basic (CtTypeReferenceImpl) boolean
-    Adding basic (CtTypeReferenceImpl) boolean
-      Resolved with match basic (CtTypeReferenceImpl) boolean
-    Adding method (CtMethodImpl) substring
-      Adding signature (CtMethodImpl) substring
-        Adding parameter (CtParameterImpl) arg0
-          Adding basic (CtTypeReferenceImpl) int
-            Resolved with match basic (CtTypeReferenceImpl) int
-          Resolved as new parameter (CtParameterImpl) arg0
-        Adding parameter (CtParameterImpl) arg1
-          Adding basic (CtTypeReferenceImpl) int
-            Resolved with match basic (CtTypeReferenceImpl) int
-          Resolved as new parameter (CtParameterImpl) arg1
-        Adding parameter <unnamed> java.lang.String
-          Resolved with match parameter <unnamed> java.lang.String
-        Resolved as new signature (CtMethodImpl) substring
-      Resolved as new method (CtMethodImpl) substring
-    Adding basic (CtTypeReferenceImpl) int
-      Resolved with match basic (CtTypeReferenceImpl) int
-    Adding basic (CtTypeReferenceImpl) int
-      Resolved with match basic (CtTypeReferenceImpl) int
-    Adding basic (CtTypeReferenceImpl) int
-      Resolved with match basic (CtTypeReferenceImpl) int
-    Adding basic (CtTypeReferenceImpl) int
-      Resolved with match basic (CtTypeReferenceImpl) int
-    Adding basic (CtTypeReferenceImpl) int
-      Resolved with match basic (CtTypeReferenceImpl) int
-    Adding basic (CtTypeReferenceImpl) int
-      Resolved with match basic (CtTypeReferenceImpl) int
-    [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
-    Adding basic (CtTypeReferenceImpl) boolean
-      Resolved with match basic (CtTypeReferenceImpl) boolean
-    Adding method (CtMethodImpl) indexOf
-      Adding signature (CtMethodImpl) indexOf
-        Adding parameter (CtParameterImpl) arg0
-          Resolved with match parameter (CtParameterImpl) arg0
-        Adding parameter <unnamed> int
-          Adding basic (CtTypeReferenceImpl) int
-            Resolved with match basic (CtTypeReferenceImpl) int
-          Resolved as new parameter <unnamed> int
-        Resolved as new signature (CtMethodImpl) indexOf
-      Resolved as new method (CtMethodImpl) indexOf
-    Adding basic (CtTypeReferenceImpl) int
-      Resolved with match basic (CtTypeReferenceImpl) int
-    Adding basic (CtTypeReferenceImpl) int
-      Resolved with match basic (CtTypeReferenceImpl) int
-    Adding basic (CtTypeReferenceImpl) int
-      Resolved with match basic (CtTypeReferenceImpl) int
-    Adding basic (CtTypeReferenceImpl) boolean
-      Resolved with match basic (CtTypeReferenceImpl) boolean
-    Adding basic (CtTypeReferenceImpl) int
-      Resolved with match basic (CtTypeReferenceImpl) int
-    Adding basic (CtTypeReferenceImpl) int
-      Resolved with match basic (CtTypeReferenceImpl) int
-    Adding basic (CtTypeReferenceImpl) int
-      Resolved with match basic (CtTypeReferenceImpl) int
-    [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
-    Adding basic (CtTypeReferenceImpl) boolean
-      Resolved with match basic (CtTypeReferenceImpl) boolean
-    Adding basic (CtTypeReferenceImpl) boolean
-      Resolved with match basic (CtTypeReferenceImpl) boolean
-    Adding basic (CtTypeReferenceImpl) int
-      Resolved with match basic (CtTypeReferenceImpl) int
-    Adding basic (CtTypeReferenceImpl) int
-      Resolved with match basic (CtTypeReferenceImpl) int
-    Adding basic (CtTypeReferenceImpl) int
-      Resolved with match basic (CtTypeReferenceImpl) int
-    Adding basic (CtTypeReferenceImpl) boolean
-      Resolved with match basic (CtTypeReferenceImpl) boolean
-    Adding basic (CtTypeReferenceImpl) int
-      Resolved with match basic (CtTypeReferenceImpl) int
-    Adding basic (CtTypeReferenceImpl) int
-      Resolved with match basic (CtTypeReferenceImpl) int
-    Adding basic (CtTypeReferenceImpl) int
-      Resolved with match basic (CtTypeReferenceImpl) int
-    Resolved as new metrics (CtMethodImpl) quoteArgument @ src/main/java/org/apache/commons/exec/util/StringUtils.java:222:26
-  Adding metrics (CtMethodImpl) isFamilyDOS @ src/main/java/org/apache/commons/exec/OS.java:102:27
-    Adding basic (CtTypeReferenceImpl) boolean
-      Resolved with match basic (CtTypeReferenceImpl) boolean
-    Adding select field (CtFieldImpl) FAMILY_DOS @ src/main/java/org/apache/commons/exec/OS.java:36:32
-      Resolved as new select field (CtFieldImpl) FAMILY_DOS @ src/main/java/org/apache/commons/exec/OS.java:36:32
-    Resolved as new metrics (CtMethodImpl) isFamilyDOS @ src/main/java/org/apache/commons/exec/OS.java:102:27
+        Resolved as new signature (CtMethodImpl) putAll
+      Resolved as new abstract (CtMethodImpl) putAll
+    [34mUnused type args: [java.lang.String, java.lang.String][0m
+    Adding interface instantiation java.util.Map<java.lang.String, java.lang.String>
+      Resolved with match interface instantiation java.util.Map<java.lang.String, java.lang.String>
+    [34mUnused type args: [?, ?][0m
+    Adding type params reference (CtTypeParameterReferenceImpl) K
+      Resolved with match type params reference (CtTypeParameterReferenceImpl) K
+    Adding type params reference (CtTypeParameterReferenceImpl) V
+      Resolved with match type params reference (CtTypeParameterReferenceImpl) V
+    Adding interface instantiation java.util.Map<java.lang.String, java.lang.String>
+      Resolved with match interface instantiation java.util.Map<java.lang.String, java.lang.String>
+    [34mUnused type args: [java.lang.String, java.lang.String][0m
+    [34mUnused type args: [java.lang.String, java.lang.String][0m
+    Adding interface instantiation java.util.Map<java.lang.String, java.lang.String>
+      Resolved with match interface instantiation java.util.Map<java.lang.String, java.lang.String>
+    Resolved as new metrics (CtMethodImpl) createProcEnvironment @ src/main/java/org/apache/commons/exec/environment/DefaultProcessingEnvironment.java:73:35
   Adding metrics (CtMethodImpl) isOs @ src/main/java/org/apache/commons/exec/OS.java:193:27
     Adding basic (CtTypeReferenceImpl) boolean @ src/main/java/org/apache/commons/exec/OS.java:195:9
       Resolved with match basic (CtTypeReferenceImpl) boolean @ src/main/java/org/apache/commons/exec/OS.java:195:9
@@ -3047,6 +2851,8 @@ Init pending package org.apache.commons.exec.util
       Resolved with match basic (CtTypeReferenceImpl) boolean
     Adding basic (CtTypeReferenceImpl) boolean
       Resolved with match basic (CtTypeReferenceImpl) boolean
+    Adding select field (CtFieldImpl) FAMILY_9X @ src/main/java/org/apache/commons/exec/OS.java:32:32
+      Resolved as new select field (CtFieldImpl) FAMILY_9X @ src/main/java/org/apache/commons/exec/OS.java:32:32
     Adding basic (CtTypeReferenceImpl) boolean
       Resolved with match basic (CtTypeReferenceImpl) boolean
     Adding basic (CtTypeReferenceImpl) boolean
@@ -3071,6 +2877,8 @@ Init pending package org.apache.commons.exec.util
       Resolved with match basic (CtTypeReferenceImpl) boolean
     Adding basic (CtTypeReferenceImpl) boolean
       Resolved with match basic (CtTypeReferenceImpl) boolean
+    Adding select field (CtFieldImpl) FAMILY_OS2 @ src/main/java/org/apache/commons/exec/OS.java:52:32
+      Resolved as new select field (CtFieldImpl) FAMILY_OS2 @ src/main/java/org/apache/commons/exec/OS.java:52:32
     Adding basic (CtTypeReferenceImpl) boolean
       Resolved with match basic (CtTypeReferenceImpl) boolean
     Adding basic (CtTypeReferenceImpl) boolean
@@ -3079,6 +2887,8 @@ Init pending package org.apache.commons.exec.util
       Resolved with match basic (CtTypeReferenceImpl) boolean
     Adding basic (CtTypeReferenceImpl) boolean
       Resolved with match basic (CtTypeReferenceImpl) boolean
+    Adding select field (CtFieldImpl) FAMILY_NETWARE @ src/main/java/org/apache/commons/exec/OS.java:44:32
+      Resolved as new select field (CtFieldImpl) FAMILY_NETWARE @ src/main/java/org/apache/commons/exec/OS.java:44:32
     Adding basic (CtTypeReferenceImpl) boolean
       Resolved with match basic (CtTypeReferenceImpl) boolean
     Adding basic (CtTypeReferenceImpl) boolean
@@ -3087,6 +2897,8 @@ Init pending package org.apache.commons.exec.util
       Resolved with match basic (CtTypeReferenceImpl) boolean
     Adding basic (CtTypeReferenceImpl) boolean
       Resolved with match basic (CtTypeReferenceImpl) boolean
+    Adding select field (CtFieldImpl) FAMILY_DOS @ src/main/java/org/apache/commons/exec/OS.java:36:32
+      Resolved as new select field (CtFieldImpl) FAMILY_DOS @ src/main/java/org/apache/commons/exec/OS.java:36:32
     Adding basic (CtTypeReferenceImpl) boolean
       Resolved with match basic (CtTypeReferenceImpl) boolean
     Adding basic (CtTypeReferenceImpl) boolean
@@ -3129,8 +2941,6 @@ Init pending package org.apache.commons.exec.util
       Resolved with match basic (CtTypeReferenceImpl) boolean
     Adding basic (CtTypeReferenceImpl) boolean
       Resolved with match basic (CtTypeReferenceImpl) boolean
-    Adding select field (CtFieldImpl) FAMILY_UNIX @ src/main/java/org/apache/commons/exec/OS.java:64:32
-      Resolved as new select field (CtFieldImpl) FAMILY_UNIX @ src/main/java/org/apache/commons/exec/OS.java:64:32
     Adding basic (CtTypeReferenceImpl) boolean
       Resolved with match basic (CtTypeReferenceImpl) boolean
     Adding basic (CtTypeReferenceImpl) boolean
@@ -3155,12 +2965,24 @@ Init pending package org.apache.commons.exec.util
       Resolved with match basic (CtTypeReferenceImpl) boolean
     Adding basic (CtTypeReferenceImpl) boolean
       Resolved with match basic (CtTypeReferenceImpl) boolean
+    Adding method (CtMethodImpl) endsWith
+      Adding signature (CtMethodImpl) endsWith
+        Adding parameter (CtParameterImpl) arg0
+          Resolved with match parameter (CtParameterImpl) arg0
+        Adding parameter <unnamed> boolean
+          Adding basic (CtTypeReferenceImpl) boolean
+            Resolved with match basic (CtTypeReferenceImpl) boolean
+          Resolved as new parameter <unnamed> boolean
+        Resolved as new signature (CtMethodImpl) endsWith
+      Resolved as new method (CtMethodImpl) endsWith
     Adding basic (CtTypeReferenceImpl) boolean
       Resolved with match basic (CtTypeReferenceImpl) boolean
     Adding basic (CtTypeReferenceImpl) boolean
       Resolved with match basic (CtTypeReferenceImpl) boolean
     Adding basic (CtTypeReferenceImpl) boolean
       Resolved with match basic (CtTypeReferenceImpl) boolean
+    Adding select field (CtFieldImpl) FAMILY_ZOS @ src/main/java/org/apache/commons/exec/OS.java:76:32
+      Resolved as new select field (CtFieldImpl) FAMILY_ZOS @ src/main/java/org/apache/commons/exec/OS.java:76:32
     Adding basic (CtTypeReferenceImpl) boolean
       Resolved with match basic (CtTypeReferenceImpl) boolean
     Adding basic (CtTypeReferenceImpl) boolean
@@ -3251,14 +3073,18 @@ Init pending package org.apache.commons.exec.util
     Adding basic (CtTypeReferenceImpl) boolean
       Resolved with match basic (CtTypeReferenceImpl) boolean
     Resolved as new metrics (CtMethodImpl) isOs @ src/main/java/org/apache/commons/exec/OS.java:193:27
-  Adding metrics (CtMethodImpl) isFamilyMac @ src/main/java/org/apache/commons/exec/OS.java:106:27
+  Adding metrics (CtMethodImpl) isFamilyNetware @ src/main/java/org/apache/commons/exec/OS.java:110:27
     Adding basic (CtTypeReferenceImpl) boolean
       Resolved with match basic (CtTypeReferenceImpl) boolean
-    Resolved as new metrics (CtMethodImpl) isFamilyMac @ src/main/java/org/apache/commons/exec/OS.java:106:27
-  Adding metrics (CtMethodImpl) isFamily @ src/main/java/org/apache/commons/exec/OS.java:98:28
+    Resolved as new metrics (CtMethodImpl) isFamilyNetware @ src/main/java/org/apache/commons/exec/OS.java:110:27
+  Adding metrics (CtMethodImpl) isFamilyOpenVms @ src/main/java/org/apache/commons/exec/OS.java:146:27
     Adding basic (CtTypeReferenceImpl) boolean
       Resolved with match basic (CtTypeReferenceImpl) boolean
-    Resolved as new metrics (CtMethodImpl) isFamily @ src/main/java/org/apache/commons/exec/OS.java:98:28
+    Resolved as new metrics (CtMethodImpl) isFamilyOpenVms @ src/main/java/org/apache/commons/exec/OS.java:146:27
+  Adding metrics (CtMethodImpl) isFamilyZOS @ src/main/java/org/apache/commons/exec/OS.java:138:27
+    Adding basic (CtTypeReferenceImpl) boolean
+      Resolved with match basic (CtTypeReferenceImpl) boolean
+    Resolved as new metrics (CtMethodImpl) isFamilyZOS @ src/main/java/org/apache/commons/exec/OS.java:138:27
   Adding metrics (CtMethodImpl) createEnvironmentMap @ src/main/java/org/apache/commons/exec/environment/DefaultProcessingEnvironment.java:218:33
     Adding basic (CtTypeReferenceImpl) boolean
       Resolved with match basic (CtTypeReferenceImpl) boolean
@@ -3343,50 +3169,193 @@ Init pending package org.apache.commons.exec.util
         Resolved as new struct (CtClassImpl) HashMap
       Resolved as new object instantiation java.util.HashMap @ src/main/java/org/apache/commons/exec/environment/DefaultProcessingEnvironment.java:226:20<java.lang.String @ src/main/java/org/apache/commons/exec/environment/DefaultProcessingEnvironment.java:226:28, java.lang.String @ src/main/java/org/apache/commons/exec/environment/DefaultProcessingEnvironment.java:226:36>
     Resolved as new metrics (CtMethodImpl) createEnvironmentMap @ src/main/java/org/apache/commons/exec/environment/DefaultProcessingEnvironment.java:218:33
-  Adding metrics (CtMethodImpl) getProcEnvironment @ src/main/java/org/apache/commons/exec/environment/DefaultProcessingEnvironment.java:53:45
+  Adding metrics (CtMethodImpl) parseEnvironmentVariable @ src/main/java/org/apache/commons/exec/environment/EnvironmentUtils.java:106:29
+    Adding basic (CtTypeReferenceImpl) int @ src/main/java/org/apache/commons/exec/environment/EnvironmentUtils.java:107:15
+      Resolved with match basic (CtTypeReferenceImpl) int @ src/main/java/org/apache/commons/exec/environment/EnvironmentUtils.java:107:15
+    Adding basic (CtTypeReferenceImpl) int
+      Resolved with match basic (CtTypeReferenceImpl) int
+    Adding basic (CtTypeReferenceImpl) int
+      Resolved with match basic (CtTypeReferenceImpl) int
+    Adding basic (CtTypeReferenceImpl) char
+      Resolved with match basic (CtTypeReferenceImpl) char
     Adding basic (CtTypeReferenceImpl) boolean
       Resolved with match basic (CtTypeReferenceImpl) boolean
-    Adding select field (CtFieldImpl) procEnvironment @ src/main/java/org/apache/commons/exec/environment/DefaultProcessingEnvironment.java:45:35
-      Resolved as new select field (CtFieldImpl) procEnvironment @ src/main/java/org/apache/commons/exec/environment/DefaultProcessingEnvironment.java:45:35
-    [34mUnused type args: [java.lang.String, java.lang.String][0m
-    Adding interface instantiation java.util.Map<java.lang.String, java.lang.String>
-      Resolved with match interface instantiation java.util.Map<java.lang.String, java.lang.String>
-    Adding interface instantiation java.util.Map<java.lang.String, java.lang.String>
-      Resolved with match interface instantiation java.util.Map<java.lang.String, java.lang.String>
-    [34mUnused type args: [java.lang.String, java.lang.String][0m
-    [34mUnused type args: [java.lang.String, java.lang.String][0m
-    Adding interface instantiation java.util.Map<java.lang.String, java.lang.String>
-      Resolved with match interface instantiation java.util.Map<java.lang.String, java.lang.String>
-    [34mUnused type args: [java.lang.String, java.lang.String][0m
-    Adding interface instantiation java.util.Map<java.lang.String, java.lang.String>
-      Resolved with match interface instantiation java.util.Map<java.lang.String, java.lang.String>
-    Adding interface instantiation java.util.Map @ src/main/java/org/apache/commons/exec/environment/DefaultProcessingEnvironment.java:62:15<java.lang.String @ src/main/java/org/apache/commons/exec/environment/DefaultProcessingEnvironment.java:62:19, java.lang.String @ src/main/java/org/apache/commons/exec/environment/DefaultProcessingEnvironment.java:62:27>
-      Resolved with match interface instantiation java.util.Map @ src/main/java/org/apache/commons/exec/environment/DefaultProcessingEnvironment.java:62:15<java.lang.String @ src/main/java/org/apache/commons/exec/environment/DefaultProcessingEnvironment.java:62:19, java.lang.String @ src/main/java/org/apache/commons/exec/environment/DefaultProcessingEnvironment.java:62:27>
-    [34mUnused type args: [java.lang.String @ src/main/java/org/apache/commons/exec/environment/DefaultProcessingEnvironment.java:62:19, java.lang.String @ src/main/java/org/apache/commons/exec/environment/DefaultProcessingEnvironment.java:62:27][0m
-    [34mUnused type args: [java.lang.String, java.lang.String][0m
-    Adding interface instantiation java.util.Map<java.lang.String, java.lang.String>
-      Resolved with match interface instantiation java.util.Map<java.lang.String, java.lang.String>
-    Adding abstract (CtMethodImpl) putAll
-      Adding signature (CtMethodImpl) putAll
+    Adding basic (CtTypeReferenceImpl) int
+      Resolved with match basic (CtTypeReferenceImpl) int
+    Adding basic (CtTypeReferenceImpl) int
+      Resolved with match basic (CtTypeReferenceImpl) int
+    Adding basic (CtTypeReferenceImpl) int
+      Resolved with match basic (CtTypeReferenceImpl) int
+    [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+    Adding basic (CtTypeReferenceImpl) int
+      Resolved with match basic (CtTypeReferenceImpl) int
+    Adding basic (CtTypeReferenceImpl) int
+      Resolved with match basic (CtTypeReferenceImpl) int
+    Adding method (CtMethodImpl) substring
+      Adding signature (CtMethodImpl) substring
         Adding parameter (CtParameterImpl) arg0
+          Adding basic (CtTypeReferenceImpl) int
+            Resolved with match basic (CtTypeReferenceImpl) int
           Resolved as new parameter (CtParameterImpl) arg0
-        Resolved as new signature (CtMethodImpl) putAll
-      Resolved as new abstract (CtMethodImpl) putAll
-    Adding interface instantiation java.util.Map<java.lang.String, java.lang.String>
-      Resolved with match interface instantiation java.util.Map<java.lang.String, java.lang.String>
-    [34mUnused type args: [java.lang.String, java.lang.String][0m
-    [34mUnused type args: [?, ?][0m
-    Adding type params reference (CtTypeParameterReferenceImpl) K
-      Resolved with match type params reference (CtTypeParameterReferenceImpl) K
-    Adding type params reference (CtTypeParameterReferenceImpl) V
-      Resolved with match type params reference (CtTypeParameterReferenceImpl) V
-    [34mUnused type args: [java.lang.String, java.lang.String][0m
-    Adding interface instantiation java.util.Map<java.lang.String, java.lang.String>
-      Resolved with match interface instantiation java.util.Map<java.lang.String, java.lang.String>
-    Adding interface instantiation java.util.Map<java.lang.String, java.lang.String>
-      Resolved with match interface instantiation java.util.Map<java.lang.String, java.lang.String>
-    [34mUnused type args: [java.lang.String, java.lang.String][0m
-    Resolved as new metrics (CtMethodImpl) getProcEnvironment @ src/main/java/org/apache/commons/exec/environment/DefaultProcessingEnvironment.java:53:45
+        Adding parameter (CtParameterImpl) arg1
+          Adding basic (CtTypeReferenceImpl) int
+            Resolved with match basic (CtTypeReferenceImpl) int
+          Resolved as new parameter (CtParameterImpl) arg1
+        Adding parameter <unnamed> java.lang.String
+          Resolved with match parameter <unnamed> java.lang.String
+        Resolved as new signature (CtMethodImpl) substring
+      Resolved as new method (CtMethodImpl) substring
+    Adding basic (CtTypeReferenceImpl) int
+      Resolved with match basic (CtTypeReferenceImpl) int
+    Adding basic (CtTypeReferenceImpl) int
+      Resolved with match basic (CtTypeReferenceImpl) int
+    Adding basic (CtTypeReferenceImpl) int
+      Resolved with match basic (CtTypeReferenceImpl) int
+    Adding basic (CtTypeReferenceImpl) int
+      Resolved with match basic (CtTypeReferenceImpl) int
+    Adding basic (CtTypeReferenceImpl) int
+      Resolved with match basic (CtTypeReferenceImpl) int
+    Adding method (CtMethodImpl) substring
+      Adding signature (CtMethodImpl) substring
+        Adding parameter (CtParameterImpl) arg0
+          Adding basic (CtTypeReferenceImpl) int
+            Resolved with match basic (CtTypeReferenceImpl) int
+          Resolved as new parameter (CtParameterImpl) arg0
+        Adding parameter <unnamed> java.lang.String
+          Resolved with match parameter <unnamed> java.lang.String
+        Resolved as new signature (CtMethodImpl) substring
+      Resolved as new method (CtMethodImpl) substring
+    Adding basic (CtTypeReferenceImpl) int
+      Resolved with match basic (CtTypeReferenceImpl) int
+    Adding basic (CtTypeReferenceImpl) int
+      Resolved with match basic (CtTypeReferenceImpl) int
+    Adding basic (CtTypeReferenceImpl) int
+      Resolved with match basic (CtTypeReferenceImpl) int
+    Adding basic (CtTypeReferenceImpl) int
+      Resolved with match basic (CtTypeReferenceImpl) int
+    Resolved as new metrics (CtMethodImpl) parseEnvironmentVariable @ src/main/java/org/apache/commons/exec/environment/EnvironmentUtils.java:106:29
+  Adding metrics (CtMethodImpl) isFamilyWin9x @ src/main/java/org/apache/commons/exec/OS.java:130:27
+    Adding basic (CtTypeReferenceImpl) boolean
+      Resolved with match basic (CtTypeReferenceImpl) boolean
+    Resolved as new metrics (CtMethodImpl) isFamilyWin9x @ src/main/java/org/apache/commons/exec/OS.java:130:27
+  Adding metrics (CtMethodImpl) isQuoted @ src/main/java/org/apache/commons/exec/util/StringUtils.java:259:27
+    Adding basic (CtTypeReferenceImpl) boolean
+      Resolved with match basic (CtTypeReferenceImpl) boolean
+    Adding basic (CtTypeReferenceImpl) boolean
+      Resolved with match basic (CtTypeReferenceImpl) boolean
+    Adding method (CtMethodImpl) startsWith
+      Adding signature (CtMethodImpl) startsWith
+        Adding parameter (CtParameterImpl) arg0
+          Resolved with match parameter (CtParameterImpl) arg0
+        Adding parameter <unnamed> boolean
+          Adding basic (CtTypeReferenceImpl) boolean
+            Resolved with match basic (CtTypeReferenceImpl) boolean
+          Resolved as new parameter <unnamed> boolean
+        Resolved as new signature (CtMethodImpl) startsWith
+      Resolved as new method (CtMethodImpl) startsWith
+    Adding basic (CtTypeReferenceImpl) boolean
+      Resolved with match basic (CtTypeReferenceImpl) boolean
+    Adding select field (CtFieldImpl) SINGLE_QUOTE @ src/main/java/org/apache/commons/exec/util/StringUtils.java:39:33
+      Resolved as new select field (CtFieldImpl) SINGLE_QUOTE @ src/main/java/org/apache/commons/exec/util/StringUtils.java:39:33
+    Adding basic (CtTypeReferenceImpl) boolean
+      Resolved with match basic (CtTypeReferenceImpl) boolean
+    Adding basic (CtTypeReferenceImpl) boolean
+      Resolved with match basic (CtTypeReferenceImpl) boolean
+    Adding basic (CtTypeReferenceImpl) boolean
+      Resolved with match basic (CtTypeReferenceImpl) boolean
+    Adding select field (CtFieldImpl) DOUBLE_QUOTE @ src/main/java/org/apache/commons/exec/util/StringUtils.java:40:33
+      Resolved as new select field (CtFieldImpl) DOUBLE_QUOTE @ src/main/java/org/apache/commons/exec/util/StringUtils.java:40:33
+    Adding basic (CtTypeReferenceImpl) boolean
+      Resolved with match basic (CtTypeReferenceImpl) boolean
+    Resolved as new metrics (CtMethodImpl) isQuoted @ src/main/java/org/apache/commons/exec/util/StringUtils.java:259:27
+  Adding metrics (CtMethodImpl) isArch @ src/main/java/org/apache/commons/exec/OS.java:168:27
+    Adding basic (CtTypeReferenceImpl) boolean
+      Resolved with match basic (CtTypeReferenceImpl) boolean
+    Resolved as new metrics (CtMethodImpl) isArch @ src/main/java/org/apache/commons/exec/OS.java:168:27
+  Adding metrics (CtMethodImpl) quoteArgument @ src/main/java/org/apache/commons/exec/util/StringUtils.java:222:26
+    Adding basic (CtTypeReferenceImpl) boolean
+      Resolved with match basic (CtTypeReferenceImpl) boolean
+    Adding basic (CtTypeReferenceImpl) boolean
+      Resolved with match basic (CtTypeReferenceImpl) boolean
+    Adding basic (CtTypeReferenceImpl) boolean
+      Resolved with match basic (CtTypeReferenceImpl) boolean
+    Adding basic (CtTypeReferenceImpl) int
+      Resolved with match basic (CtTypeReferenceImpl) int
+    Adding basic (CtTypeReferenceImpl) int
+      Resolved with match basic (CtTypeReferenceImpl) int
+    Adding basic (CtTypeReferenceImpl) boolean
+      Resolved with match basic (CtTypeReferenceImpl) boolean
+    Adding basic (CtTypeReferenceImpl) boolean
+      Resolved with match basic (CtTypeReferenceImpl) boolean
+    Adding basic (CtTypeReferenceImpl) boolean
+      Resolved with match basic (CtTypeReferenceImpl) boolean
+    Adding basic (CtTypeReferenceImpl) int
+      Resolved with match basic (CtTypeReferenceImpl) int
+    Adding basic (CtTypeReferenceImpl) int
+      Resolved with match basic (CtTypeReferenceImpl) int
+    Adding basic (CtTypeReferenceImpl) int
+      Resolved with match basic (CtTypeReferenceImpl) int
+    Adding basic (CtTypeReferenceImpl) int
+      Resolved with match basic (CtTypeReferenceImpl) int
+    Adding basic (CtTypeReferenceImpl) int
+      Resolved with match basic (CtTypeReferenceImpl) int
+    Adding basic (CtTypeReferenceImpl) int
+      Resolved with match basic (CtTypeReferenceImpl) int
+    [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+    Adding basic (CtTypeReferenceImpl) boolean
+      Resolved with match basic (CtTypeReferenceImpl) boolean
+    Adding method (CtMethodImpl) indexOf
+      Adding signature (CtMethodImpl) indexOf
+        Adding parameter (CtParameterImpl) arg0
+          Resolved with match parameter (CtParameterImpl) arg0
+        Adding parameter <unnamed> int
+          Adding basic (CtTypeReferenceImpl) int
+            Resolved with match basic (CtTypeReferenceImpl) int
+          Resolved as new parameter <unnamed> int
+        Resolved as new signature (CtMethodImpl) indexOf
+      Resolved as new method (CtMethodImpl) indexOf
+    Adding basic (CtTypeReferenceImpl) int
+      Resolved with match basic (CtTypeReferenceImpl) int
+    Adding basic (CtTypeReferenceImpl) int
+      Resolved with match basic (CtTypeReferenceImpl) int
+    Adding basic (CtTypeReferenceImpl) int
+      Resolved with match basic (CtTypeReferenceImpl) int
+    Adding basic (CtTypeReferenceImpl) boolean
+      Resolved with match basic (CtTypeReferenceImpl) boolean
+    Adding basic (CtTypeReferenceImpl) int
+      Resolved with match basic (CtTypeReferenceImpl) int
+    Adding basic (CtTypeReferenceImpl) int
+      Resolved with match basic (CtTypeReferenceImpl) int
+    Adding basic (CtTypeReferenceImpl) int
+      Resolved with match basic (CtTypeReferenceImpl) int
+    [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+    Adding basic (CtTypeReferenceImpl) boolean
+      Resolved with match basic (CtTypeReferenceImpl) boolean
+    Adding basic (CtTypeReferenceImpl) boolean
+      Resolved with match basic (CtTypeReferenceImpl) boolean
+    Adding basic (CtTypeReferenceImpl) int
+      Resolved with match basic (CtTypeReferenceImpl) int
+    Adding basic (CtTypeReferenceImpl) int
+      Resolved with match basic (CtTypeReferenceImpl) int
+    Adding basic (CtTypeReferenceImpl) int
+      Resolved with match basic (CtTypeReferenceImpl) int
+    Adding basic (CtTypeReferenceImpl) boolean
+      Resolved with match basic (CtTypeReferenceImpl) boolean
+    Adding basic (CtTypeReferenceImpl) int
+      Resolved with match basic (CtTypeReferenceImpl) int
+    Adding basic (CtTypeReferenceImpl) int
+      Resolved with match basic (CtTypeReferenceImpl) int
+    Adding basic (CtTypeReferenceImpl) int
+      Resolved with match basic (CtTypeReferenceImpl) int
+    Resolved as new metrics (CtMethodImpl) quoteArgument @ src/main/java/org/apache/commons/exec/util/StringUtils.java:222:26
+  Adding metrics (CtMethodImpl) isVersion @ src/main/java/org/apache/commons/exec/OS.java:179:27
+    Adding basic (CtTypeReferenceImpl) boolean
+      Resolved with match basic (CtTypeReferenceImpl) boolean
+    Resolved as new metrics (CtMethodImpl) isVersion @ src/main/java/org/apache/commons/exec/OS.java:179:27
+  Adding metrics (CtConstructorImpl) <init> @ src/main/java/org/apache/commons/exec/environment/EnvironmentUtils.java:48:13
+    [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+    [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+    Resolved as new metrics (CtConstructorImpl) <init> @ src/main/java/org/apache/commons/exec/environment/EnvironmentUtils.java:48:13
   Adding metrics (CtMethodImpl) stringSubstitution @ src/main/java/org/apache/commons/exec/util/StringUtils.java:70:32
     Adding constructor (CtConstructorImpl) <init>
       Adding constructor signature (CtConstructorImpl) <init>
@@ -3640,84 +3609,74 @@ Init pending package org.apache.commons.exec.util
     Adding basic (CtTypeReferenceImpl) int
       Resolved with match basic (CtTypeReferenceImpl) int
     Resolved as new metrics (CtMethodImpl) stringSubstitution @ src/main/java/org/apache/commons/exec/util/StringUtils.java:70:32
-  Adding metrics (CtMethodImpl) isFamilyOpenVms @ src/main/java/org/apache/commons/exec/OS.java:146:27
+  Adding metrics (CtMethodImpl) isFamilyOS2 @ src/main/java/org/apache/commons/exec/OS.java:114:27
     Adding basic (CtTypeReferenceImpl) boolean
       Resolved with match basic (CtTypeReferenceImpl) boolean
-    Resolved as new metrics (CtMethodImpl) isFamilyOpenVms @ src/main/java/org/apache/commons/exec/OS.java:146:27
-  Adding metrics (CtMethodImpl) parseEnvironmentVariable @ src/main/java/org/apache/commons/exec/environment/EnvironmentUtils.java:106:29
-    Adding basic (CtTypeReferenceImpl) int @ src/main/java/org/apache/commons/exec/environment/EnvironmentUtils.java:107:15
-      Resolved with match basic (CtTypeReferenceImpl) int @ src/main/java/org/apache/commons/exec/environment/EnvironmentUtils.java:107:15
-    Adding basic (CtTypeReferenceImpl) int
-      Resolved with match basic (CtTypeReferenceImpl) int
-    Adding basic (CtTypeReferenceImpl) int
-      Resolved with match basic (CtTypeReferenceImpl) int
-    Adding basic (CtTypeReferenceImpl) char
-      Resolved with match basic (CtTypeReferenceImpl) char
+    Resolved as new metrics (CtMethodImpl) isFamilyOS2 @ src/main/java/org/apache/commons/exec/OS.java:114:27
+  Adding metrics (CtMethodImpl) getProcEnvironment @ src/main/java/org/apache/commons/exec/environment/DefaultProcessingEnvironment.java:53:45
     Adding basic (CtTypeReferenceImpl) boolean
       Resolved with match basic (CtTypeReferenceImpl) boolean
-    Adding basic (CtTypeReferenceImpl) int
-      Resolved with match basic (CtTypeReferenceImpl) int
-    Adding basic (CtTypeReferenceImpl) int
-      Resolved with match basic (CtTypeReferenceImpl) int
-    Adding basic (CtTypeReferenceImpl) int
-      Resolved with match basic (CtTypeReferenceImpl) int
+    [34mUnused type args: [java.lang.String, java.lang.String][0m
+    Adding interface instantiation java.util.Map<java.lang.String, java.lang.String>
+      Resolved with match interface instantiation java.util.Map<java.lang.String, java.lang.String>
+    Adding interface instantiation java.util.Map<java.lang.String, java.lang.String>
+      Resolved with match interface instantiation java.util.Map<java.lang.String, java.lang.String>
+    [34mUnused type args: [java.lang.String, java.lang.String][0m
+    [34mUnused type args: [java.lang.String, java.lang.String][0m
+    Adding interface instantiation java.util.Map<java.lang.String, java.lang.String>
+      Resolved with match interface instantiation java.util.Map<java.lang.String, java.lang.String>
+    [34mUnused type args: [java.lang.String, java.lang.String][0m
+    Adding interface instantiation java.util.Map<java.lang.String, java.lang.String>
+      Resolved with match interface instantiation java.util.Map<java.lang.String, java.lang.String>
+    Adding interface instantiation java.util.Map @ src/main/java/org/apache/commons/exec/environment/DefaultProcessingEnvironment.java:62:15<java.lang.String @ src/main/java/org/apache/commons/exec/environment/DefaultProcessingEnvironment.java:62:19, java.lang.String @ src/main/java/org/apache/commons/exec/environment/DefaultProcessingEnvironment.java:62:27>
+      Resolved with match interface instantiation java.util.Map @ src/main/java/org/apache/commons/exec/environment/DefaultProcessingEnvironment.java:62:15<java.lang.String @ src/main/java/org/apache/commons/exec/environment/DefaultProcessingEnvironment.java:62:19, java.lang.String @ src/main/java/org/apache/commons/exec/environment/DefaultProcessingEnvironment.java:62:27>
+    [34mUnused type args: [java.lang.String @ src/main/java/org/apache/commons/exec/environment/DefaultProcessingEnvironment.java:62:19, java.lang.String @ src/main/java/org/apache/commons/exec/environment/DefaultProcessingEnvironment.java:62:27][0m
+    [34mUnused type args: [java.lang.String, java.lang.String][0m
+    Adding interface instantiation java.util.Map<java.lang.String, java.lang.String>
+      Resolved with match interface instantiation java.util.Map<java.lang.String, java.lang.String>
+    Adding interface instantiation java.util.Map<java.lang.String, java.lang.String>
+      Resolved with match interface instantiation java.util.Map<java.lang.String, java.lang.String>
+    [34mUnused type args: [java.lang.String, java.lang.String][0m
+    [34mUnused type args: [?, ?][0m
+    Adding type params reference (CtTypeParameterReferenceImpl) K
+      Resolved with match type params reference (CtTypeParameterReferenceImpl) K
+    Adding type params reference (CtTypeParameterReferenceImpl) V
+      Resolved with match type params reference (CtTypeParameterReferenceImpl) V
+    [34mUnused type args: [java.lang.String, java.lang.String][0m
+    Adding interface instantiation java.util.Map<java.lang.String, java.lang.String>
+      Resolved with match interface instantiation java.util.Map<java.lang.String, java.lang.String>
+    Adding interface instantiation java.util.Map<java.lang.String, java.lang.String>
+      Resolved with match interface instantiation java.util.Map<java.lang.String, java.lang.String>
+    [34mUnused type args: [java.lang.String, java.lang.String][0m
+    Resolved as new metrics (CtMethodImpl) getProcEnvironment @ src/main/java/org/apache/commons/exec/environment/DefaultProcessingEnvironment.java:53:45
+  Adding metrics (CtMethodImpl) isFamilyDOS @ src/main/java/org/apache/commons/exec/OS.java:102:27
+    Adding basic (CtTypeReferenceImpl) boolean
+      Resolved with match basic (CtTypeReferenceImpl) boolean
+    Resolved as new metrics (CtMethodImpl) isFamilyDOS @ src/main/java/org/apache/commons/exec/OS.java:102:27
+  Adding metrics (CtMethodImpl) getProcEnvironment @ src/main/java/org/apache/commons/exec/environment/EnvironmentUtils.java:83:39
+    Adding select field (CtFieldImpl) PROCESSING_ENVIRONMENT_IMPLEMENTATION @ src/main/java/org/apache/commons/exec/environment/EnvironmentUtils.java:35:55
+      Resolved as new select field (CtFieldImpl) PROCESSING_ENVIRONMENT_IMPLEMENTATION @ src/main/java/org/apache/commons/exec/environment/EnvironmentUtils.java:35:55
+    [34mUnused type args: [java.lang.String, java.lang.String][0m
+    Adding interface instantiation java.util.Map<java.lang.String, java.lang.String>
+      Resolved with match interface instantiation java.util.Map<java.lang.String, java.lang.String>
+    Resolved as new metrics (CtMethodImpl) getProcEnvironment @ src/main/java/org/apache/commons/exec/environment/EnvironmentUtils.java:83:39
+  Adding metrics (CtMethodImpl) isFamilyOS400 @ src/main/java/org/apache/commons/exec/OS.java:142:27
+    Adding basic (CtTypeReferenceImpl) boolean
+      Resolved with match basic (CtTypeReferenceImpl) boolean
+    Resolved as new metrics (CtMethodImpl) isFamilyOS400 @ src/main/java/org/apache/commons/exec/OS.java:142:27
+  Adding metrics (CtConstructorImpl) <init> @ src/main/java/org/apache/commons/exec/OS.java:88:13
     [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
-    Adding basic (CtTypeReferenceImpl) int
-      Resolved with match basic (CtTypeReferenceImpl) int
-    Adding basic (CtTypeReferenceImpl) int
-      Resolved with match basic (CtTypeReferenceImpl) int
-    Adding basic (CtTypeReferenceImpl) int
-      Resolved with match basic (CtTypeReferenceImpl) int
-    Adding basic (CtTypeReferenceImpl) int
-      Resolved with match basic (CtTypeReferenceImpl) int
-    Adding basic (CtTypeReferenceImpl) int
-      Resolved with match basic (CtTypeReferenceImpl) int
-    Adding basic (CtTypeReferenceImpl) int
-      Resolved with match basic (CtTypeReferenceImpl) int
-    Adding basic (CtTypeReferenceImpl) int
-      Resolved with match basic (CtTypeReferenceImpl) int
-    Adding basic (CtTypeReferenceImpl) int
-      Resolved with match basic (CtTypeReferenceImpl) int
-    Adding basic (CtTypeReferenceImpl) int
-      Resolved with match basic (CtTypeReferenceImpl) int
-    Adding basic (CtTypeReferenceImpl) int
-      Resolved with match basic (CtTypeReferenceImpl) int
-    Adding basic (CtTypeReferenceImpl) int
-      Resolved with match basic (CtTypeReferenceImpl) int
-    Resolved as new metrics (CtMethodImpl) parseEnvironmentVariable @ src/main/java/org/apache/commons/exec/environment/EnvironmentUtils.java:106:29
-  Adding metrics (CtMethodImpl) isFamilyWindows @ src/main/java/org/apache/commons/exec/OS.java:126:27
-    Adding basic (CtTypeReferenceImpl) boolean
-      Resolved with match basic (CtTypeReferenceImpl) boolean
-    Resolved as new metrics (CtMethodImpl) isFamilyWindows @ src/main/java/org/apache/commons/exec/OS.java:126:27
-  Adding metrics (CtMethodImpl) isFamilyUnix @ src/main/java/org/apache/commons/exec/OS.java:122:27
-    Adding basic (CtTypeReferenceImpl) boolean
-      Resolved with match basic (CtTypeReferenceImpl) boolean
-    Resolved as new metrics (CtMethodImpl) isFamilyUnix @ src/main/java/org/apache/commons/exec/OS.java:122:27
-  Adding metrics (CtMethodImpl) toString @ src/main/java/org/apache/commons/exec/util/StringUtils.java:199:26
     [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
-    Adding basic (CtTypeReferenceImpl) int @ src/main/java/org/apache/commons/exec/util/StringUtils.java:201:14
-      Resolved with match basic (CtTypeReferenceImpl) int @ src/main/java/org/apache/commons/exec/util/StringUtils.java:201:14
-    Adding basic (CtTypeReferenceImpl) int
-      Resolved with match basic (CtTypeReferenceImpl) int
-    Adding basic (CtTypeReferenceImpl) boolean
-      Resolved with match basic (CtTypeReferenceImpl) boolean
-    Adding basic (CtTypeReferenceImpl) int
-      Resolved with match basic (CtTypeReferenceImpl) int
+    Resolved as new metrics (CtConstructorImpl) <init> @ src/main/java/org/apache/commons/exec/OS.java:88:13
+  Adding metrics (CtMethodImpl) addVariableToEnvironment @ src/main/java/org/apache/commons/exec/environment/EnvironmentUtils.java:94:24
+    Adding interface instantiation java.util.Map<java.lang.String, java.lang.String>
+      Resolved with match interface instantiation java.util.Map<java.lang.String, java.lang.String>
+    [34mUnused type args: [java.lang.String, java.lang.String][0m
     Adding basic (CtTypeReferenceImpl) int
       Resolved with match basic (CtTypeReferenceImpl) int
     Adding basic (CtTypeReferenceImpl) int
       Resolved with match basic (CtTypeReferenceImpl) int
-    Adding basic (CtTypeReferenceImpl) int
-      Resolved with match basic (CtTypeReferenceImpl) int
-    Adding basic (CtTypeReferenceImpl) boolean
-      Resolved with match basic (CtTypeReferenceImpl) boolean
-    Adding basic (CtTypeReferenceImpl) int
-      Resolved with match basic (CtTypeReferenceImpl) int
-    Adding basic (CtTypeReferenceImpl) int
-      Resolved with match basic (CtTypeReferenceImpl) int
-    Adding basic (CtTypeReferenceImpl) int
-      Resolved with match basic (CtTypeReferenceImpl) int
-    Resolved as new metrics (CtMethodImpl) toString @ src/main/java/org/apache/commons/exec/util/StringUtils.java:199:26
+    Resolved as new metrics (CtMethodImpl) addVariableToEnvironment @ src/main/java/org/apache/commons/exec/environment/EnvironmentUtils.java:94:24
   Adding metrics (CtMethodImpl) split @ src/main/java/org/apache/commons/exec/util/StringUtils.java:166:28
     Adding constructor (CtConstructorImpl) <init>
       Adding constructor signature (CtConstructorImpl) <init>
@@ -3784,62 +3743,12 @@ Init pending package org.apache.commons.exec.util
     Adding basic (CtTypeReferenceImpl) int
       Resolved with match basic (CtTypeReferenceImpl) int
     Resolved as new metrics (CtMethodImpl) split @ src/main/java/org/apache/commons/exec/util/StringUtils.java:166:28
-  Adding metrics (CtMethodImpl) isFamilyOS400 @ src/main/java/org/apache/commons/exec/OS.java:142:27
-    Adding basic (CtTypeReferenceImpl) boolean
-      Resolved with match basic (CtTypeReferenceImpl) boolean
-    Resolved as new metrics (CtMethodImpl) isFamilyOS400 @ src/main/java/org/apache/commons/exec/OS.java:142:27
-  Adding metrics (CtMethodImpl) createProcEnvironment @ src/main/java/org/apache/commons/exec/environment/DefaultProcessingEnvironment.java:73:35
-    Adding basic (CtTypeReferenceImpl) boolean
-      Resolved with match basic (CtTypeReferenceImpl) boolean
-    [34mUnused type args: [java.lang.String, java.lang.String][0m
-    Adding interface instantiation java.util.Map<java.lang.String, java.lang.String>
-      Resolved with match interface instantiation java.util.Map<java.lang.String, java.lang.String>
-    Adding interface instantiation java.util.Map @ src/main/java/org/apache/commons/exec/environment/DefaultProcessingEnvironment.java:75:19<java.lang.String @ src/main/java/org/apache/commons/exec/environment/DefaultProcessingEnvironment.java:75:23, java.lang.String @ src/main/java/org/apache/commons/exec/environment/DefaultProcessingEnvironment.java:75:31>
-      Resolved with match interface instantiation java.util.Map @ src/main/java/org/apache/commons/exec/environment/DefaultProcessingEnvironment.java:75:19<java.lang.String @ src/main/java/org/apache/commons/exec/environment/DefaultProcessingEnvironment.java:75:23, java.lang.String @ src/main/java/org/apache/commons/exec/environment/DefaultProcessingEnvironment.java:75:31>
-    [34mUnused type args: [java.lang.String @ src/main/java/org/apache/commons/exec/environment/DefaultProcessingEnvironment.java:75:23, java.lang.String @ src/main/java/org/apache/commons/exec/environment/DefaultProcessingEnvironment.java:75:31][0m
-    Adding method (CtMethodImpl) getenv
-      Adding signature (CtMethodImpl) getenv
-        Adding parameter <unnamed> java.util.Map<java.lang.String, java.lang.String>
-          Adding interface instantiation java.util.Map<java.lang.String, java.lang.String>
-            Resolved with match interface instantiation java.util.Map<java.lang.String, java.lang.String>
-          Resolved as new parameter <unnamed> java.util.Map<java.lang.String, java.lang.String>
-        Resolved as new signature (CtMethodImpl) getenv
-      Resolved as new method (CtMethodImpl) getenv
-    [34mUnused type args: [java.lang.String, java.lang.String][0m
-    Adding interface instantiation java.util.Map<java.lang.String, java.lang.String>
-      Resolved with match interface instantiation java.util.Map<java.lang.String, java.lang.String>
-    Adding interface instantiation java.util.Map<java.lang.String, java.lang.String>
-      Resolved with match interface instantiation java.util.Map<java.lang.String, java.lang.String>
-    [34mUnused type args: [java.lang.String, java.lang.String][0m
-    [34mUnused type args: [java.lang.String, java.lang.String][0m
-    Adding interface instantiation java.util.Map<java.lang.String, java.lang.String>
-      Resolved with match interface instantiation java.util.Map<java.lang.String, java.lang.String>
-    [34mUnused type args: [java.lang.String, java.lang.String][0m
-    Adding interface instantiation java.util.Map<java.lang.String, java.lang.String>
-      Resolved with match interface instantiation java.util.Map<java.lang.String, java.lang.String>
-    [34mUnused type args: [java.lang.String, java.lang.String][0m
-    Adding interface instantiation java.util.Map<java.lang.String, java.lang.String>
-      Resolved with match interface instantiation java.util.Map<java.lang.String, java.lang.String>
-    [34mUnused type args: [?, ?][0m
-    Adding type params reference (CtTypeParameterReferenceImpl) K
-      Resolved with match type params reference (CtTypeParameterReferenceImpl) K
-    Adding type params reference (CtTypeParameterReferenceImpl) V
-      Resolved with match type params reference (CtTypeParameterReferenceImpl) V
-    Adding interface instantiation java.util.Map<java.lang.String, java.lang.String>
-      Resolved with match interface instantiation java.util.Map<java.lang.String, java.lang.String>
-    [34mUnused type args: [java.lang.String, java.lang.String][0m
-    [34mUnused type args: [java.lang.String, java.lang.String][0m
-    Adding interface instantiation java.util.Map<java.lang.String, java.lang.String>
-      Resolved with match interface instantiation java.util.Map<java.lang.String, java.lang.String>
-    Resolved as new metrics (CtMethodImpl) createProcEnvironment @ src/main/java/org/apache/commons/exec/environment/DefaultProcessingEnvironment.java:73:35
+  Adding metrics (CtMethodImpl) runProcEnvCommand @ src/main/java/org/apache/commons/exec/environment/DefaultProcessingEnvironment.java:120:30
+    Resolved as new metrics (CtMethodImpl) runProcEnvCommand @ src/main/java/org/apache/commons/exec/environment/DefaultProcessingEnvironment.java:120:30
   Adding metrics (CtMethodImpl) isName @ src/main/java/org/apache/commons/exec/OS.java:157:27
     Adding basic (CtTypeReferenceImpl) boolean
       Resolved with match basic (CtTypeReferenceImpl) boolean
     Resolved as new metrics (CtMethodImpl) isName @ src/main/java/org/apache/commons/exec/OS.java:157:27
-  Adding metrics (CtMethodImpl) isFamilyTandem @ src/main/java/org/apache/commons/exec/OS.java:118:27
-    Adding basic (CtTypeReferenceImpl) boolean
-      Resolved with match basic (CtTypeReferenceImpl) boolean
-    Resolved as new metrics (CtMethodImpl) isFamilyTandem @ src/main/java/org/apache/commons/exec/OS.java:118:27
   Adding metrics (CtMethodImpl) toStrings @ src/main/java/org/apache/commons/exec/environment/EnvironmentUtils.java:59:28
     Adding basic (CtTypeReferenceImpl) boolean
       Resolved with match basic (CtTypeReferenceImpl) boolean
@@ -3884,8 +3793,60 @@ Init pending package org.apache.commons.exec.util
     Adding basic (CtTypeReferenceImpl) int
       Resolved with match basic (CtTypeReferenceImpl) int
     Resolved as new metrics (CtMethodImpl) toStrings @ src/main/java/org/apache/commons/exec/environment/EnvironmentUtils.java:59:28
-  Adding metrics (CtMethodImpl) getProcEnvCommand @ src/main/java/org/apache/commons/exec/environment/DefaultProcessingEnvironment.java:138:27
-    Resolved as new metrics (CtMethodImpl) getProcEnvCommand @ src/main/java/org/apache/commons/exec/environment/DefaultProcessingEnvironment.java:138:27
+  Adding metrics (CtMethodImpl) isFamilyMac @ src/main/java/org/apache/commons/exec/OS.java:106:27
+    Adding basic (CtTypeReferenceImpl) boolean
+      Resolved with match basic (CtTypeReferenceImpl) boolean
+    Resolved as new metrics (CtMethodImpl) isFamilyMac @ src/main/java/org/apache/commons/exec/OS.java:106:27
+  Adding metrics (CtMethodImpl) fixFileSeparatorChar @ src/main/java/org/apache/commons/exec/util/StringUtils.java:187:26
+    Adding method (CtMethodImpl) replace
+      Adding signature (CtMethodImpl) replace
+        Adding parameter (CtParameterImpl) arg0
+          Adding basic (CtTypeReferenceImpl) char
+            Resolved with match basic (CtTypeReferenceImpl) char
+          Resolved as new parameter (CtParameterImpl) arg0
+        Adding parameter (CtParameterImpl) arg1
+          Adding basic (CtTypeReferenceImpl) char
+            Resolved with match basic (CtTypeReferenceImpl) char
+          Resolved as new parameter (CtParameterImpl) arg1
+        Adding parameter <unnamed> java.lang.String
+          Resolved with match parameter <unnamed> java.lang.String
+        Resolved as new signature (CtMethodImpl) replace
+      Resolved as new method (CtMethodImpl) replace
+    Adding basic (CtTypeReferenceImpl) char
+      Resolved with match basic (CtTypeReferenceImpl) char
+    Adding basic (CtTypeReferenceImpl) char
+      Resolved with match basic (CtTypeReferenceImpl) char
+    Adding select field (CtFieldImpl) SLASH_CHAR @ src/main/java/org/apache/commons/exec/util/StringUtils.java:41:31
+      Resolved as new select field (CtFieldImpl) SLASH_CHAR @ src/main/java/org/apache/commons/exec/util/StringUtils.java:41:31
+    Adding basic (CtTypeReferenceImpl) char
+      Resolved with match basic (CtTypeReferenceImpl) char
+    Adding select field (CtFieldImpl) separatorChar
+      Resolved as new select field (CtFieldImpl) separatorChar
+    Adding field (CtFieldImpl) separatorChar
+      Adding basic (CtTypeReferenceImpl) char
+        Resolved with match basic (CtTypeReferenceImpl) char
+      Resolved as new field (CtFieldImpl) separatorChar
+    Adding basic (CtTypeReferenceImpl) char
+      Resolved with match basic (CtTypeReferenceImpl) char
+    Adding basic (CtTypeReferenceImpl) char
+      Resolved with match basic (CtTypeReferenceImpl) char
+    Adding basic (CtTypeReferenceImpl) char
+      Resolved with match basic (CtTypeReferenceImpl) char
+    Adding select field (CtFieldImpl) BACKSLASH_CHAR @ src/main/java/org/apache/commons/exec/util/StringUtils.java:42:31
+      Resolved as new select field (CtFieldImpl) BACKSLASH_CHAR @ src/main/java/org/apache/commons/exec/util/StringUtils.java:42:31
+    Adding basic (CtTypeReferenceImpl) char
+      Resolved with match basic (CtTypeReferenceImpl) char
+    Adding basic (CtTypeReferenceImpl) char
+      Resolved with match basic (CtTypeReferenceImpl) char
+    Resolved as new metrics (CtMethodImpl) fixFileSeparatorChar @ src/main/java/org/apache/commons/exec/util/StringUtils.java:187:26
+  Adding metrics (CtMethodImpl) isFamilyTandem @ src/main/java/org/apache/commons/exec/OS.java:118:27
+    Adding basic (CtTypeReferenceImpl) boolean
+      Resolved with match basic (CtTypeReferenceImpl) boolean
+    Resolved as new metrics (CtMethodImpl) isFamilyTandem @ src/main/java/org/apache/commons/exec/OS.java:118:27
+  Adding metrics (CtMethodImpl) isFamilyWindows @ src/main/java/org/apache/commons/exec/OS.java:126:27
+    Adding basic (CtTypeReferenceImpl) boolean
+      Resolved with match basic (CtTypeReferenceImpl) boolean
+    Resolved as new metrics (CtMethodImpl) isFamilyWindows @ src/main/java/org/apache/commons/exec/OS.java:126:27
   Finishing field (CtFieldImpl) separatorChar
   Finishing interface decl (CtInterfaceImpl) CharSequence
   Finishing interface decl (CtInterfaceImpl) Comparator
@@ -3898,28 +3859,6 @@ Init pending package org.apache.commons.exec.util
   Finishing interface description (CtInterfaceImpl) Comparator
   Finishing interface description (CtInterfaceImpl) Comparator
   Finishing interface instantiation java.util.Map<java.lang.String, java.lang.String>
-  Finishing interface instantiation java.util.Map<java.lang.String, java.lang.String>
-  Finishing interface instantiation java.util.Comparator<?>
-  Finishing interface instantiation java.util.Comparator<?>
-  Finishing interface instantiation java.util.Comparator @ src/main/java/org/apache/commons/exec/environment/DefaultProcessingEnvironment.java:220:52<java.lang.String @ src/main/java/org/apache/commons/exec/environment/DefaultProcessingEnvironment.java:220:63>
-  Finishing interface instantiation java.util.Comparator<java.lang.String>
-  Finishing interface instantiation java.util.Map<java.lang.String, java.lang.String>
-  Finishing interface instantiation java.util.Map<java.lang.String, java.lang.String>
-  Finishing interface instantiation java.util.Map<java.lang.String, java.lang.String>
-  Finishing interface instantiation java.util.Map<java.lang.String, java.lang.String>
-  Finishing interface instantiation java.util.Map @ src/main/java/org/apache/commons/exec/environment/DefaultProcessingEnvironment.java:62:15<java.lang.String @ src/main/java/org/apache/commons/exec/environment/DefaultProcessingEnvironment.java:62:19, java.lang.String @ src/main/java/org/apache/commons/exec/environment/DefaultProcessingEnvironment.java:62:27>
-  Finishing interface instantiation java.util.Map<java.lang.String, java.lang.String>
-  Finishing interface instantiation java.util.Map<java.lang.String, java.lang.String>
-  Finishing interface instantiation java.util.Map<java.lang.String, java.lang.String>
-  Finishing interface instantiation java.util.Map<java.lang.String, java.lang.String>
-  Finishing interface instantiation java.util.Map<?, ?>
-  Finishing interface instantiation java.util.Map<?, ?>
-  Finishing interface instantiation java.util.Map<?, ?>
-  Finishing interface instantiation java.util.List @ src/main/java/org/apache/commons/exec/util/StringUtils.java:168:15<java.lang.String @ src/main/java/org/apache/commons/exec/util/StringUtils.java:168:20>
-  Finishing interface instantiation java.util.List<java.lang.String>
-  Finishing interface instantiation java.util.List<java.lang.String>
-  Finishing interface instantiation java.util.List<java.lang.String>
-  Finishing interface instantiation java.util.Map<java.lang.String, java.lang.String>
   Finishing interface instantiation java.util.Map @ src/main/java/org/apache/commons/exec/environment/DefaultProcessingEnvironment.java:75:19<java.lang.String @ src/main/java/org/apache/commons/exec/environment/DefaultProcessingEnvironment.java:75:23, java.lang.String @ src/main/java/org/apache/commons/exec/environment/DefaultProcessingEnvironment.java:75:31>
   Finishing interface instantiation java.util.Map<java.lang.String, java.lang.String>
   Finishing interface instantiation java.util.Map<java.lang.String, java.lang.String>
@@ -3929,27 +3868,49 @@ Init pending package org.apache.commons.exec.util
   Finishing interface instantiation java.util.Map<java.lang.String, java.lang.String>
   Finishing interface instantiation java.util.Map<java.lang.String, java.lang.String>
   Finishing interface instantiation java.util.Map<java.lang.String, java.lang.String>
+  Finishing interface instantiation java.util.Comparator<?>
+  Finishing interface instantiation java.util.Comparator<?>
+  Finishing interface instantiation java.util.Comparator @ src/main/java/org/apache/commons/exec/environment/DefaultProcessingEnvironment.java:220:52<java.lang.String @ src/main/java/org/apache/commons/exec/environment/DefaultProcessingEnvironment.java:220:63>
+  Finishing interface instantiation java.util.Comparator<java.lang.String>
+  Finishing interface instantiation java.util.Map<?, ?>
+  Finishing interface instantiation java.util.Map<?, ?>
+  Finishing interface instantiation java.util.Map<?, ?>
+  Finishing interface instantiation java.util.Map<java.lang.String, java.lang.String>
+  Finishing interface instantiation java.util.Map<java.lang.String, java.lang.String>
+  Finishing interface instantiation java.util.Map<java.lang.String, java.lang.String>
+  Finishing interface instantiation java.util.Map<java.lang.String, java.lang.String>
+  Finishing interface instantiation java.util.Map @ src/main/java/org/apache/commons/exec/environment/DefaultProcessingEnvironment.java:62:15<java.lang.String @ src/main/java/org/apache/commons/exec/environment/DefaultProcessingEnvironment.java:62:19, java.lang.String @ src/main/java/org/apache/commons/exec/environment/DefaultProcessingEnvironment.java:62:27>
+  Finishing interface instantiation java.util.Map<java.lang.String, java.lang.String>
+  Finishing interface instantiation java.util.Map<java.lang.String, java.lang.String>
+  Finishing interface instantiation java.util.Map<java.lang.String, java.lang.String>
+  Finishing interface instantiation java.util.Map<java.lang.String, java.lang.String>
+  Finishing interface instantiation java.util.Map<java.lang.String, java.lang.String>
+  Finishing interface instantiation java.util.Map<java.lang.String, java.lang.String>
+  Finishing interface instantiation java.util.List @ src/main/java/org/apache/commons/exec/util/StringUtils.java:168:15<java.lang.String @ src/main/java/org/apache/commons/exec/util/StringUtils.java:168:20>
+  Finishing interface instantiation java.util.List<java.lang.String>
+  Finishing interface instantiation java.util.List<java.lang.String>
+  Finishing interface instantiation java.util.List<java.lang.String>
   Finishing interface instantiation java.util.Map<java.lang.String, java.lang.String>
   Finishing interface instantiation java.util.Map<java.lang.String, java.lang.String>
   Finishing interface instantiation java.util.Map<java.lang.String, java.lang.String>
   Finishing interface instantiation java.util.Set<java.util.Map$Entry>
-  Finishing method (CtMethodImpl) replace
-  Finishing method (CtMethodImpl) startsWith
-  Finishing method (CtMethodImpl) endsWith
-  Finishing method (CtMethodImpl) substring
-  Finishing method (CtMethodImpl) substring
-  Finishing method (CtMethodImpl) indexOf
+  Finishing method (CtMethodImpl) getenv
   Finishing method (CtMethodImpl) contains
+  Finishing method (CtMethodImpl) endsWith
   Finishing constructor (CtConstructorImpl) <init>
   Finishing constructor (CtConstructorImpl) <init>
   Finishing method (CtMethodImpl) compareToIgnoreCase
+  Finishing method (CtMethodImpl) substring
+  Finishing method (CtMethodImpl) substring
+  Finishing method (CtMethodImpl) startsWith
+  Finishing method (CtMethodImpl) indexOf
   Finishing constructor (CtConstructorImpl) <init>
   Finishing method (CtMethodImpl) append
   Finishing method (CtMethodImpl) isLetterOrDigit
   Finishing method (CtMethodImpl) append
   Finishing constructor (CtConstructorImpl) <init>
-  Finishing method (CtMethodImpl) getenv
   Finishing method (CtMethodImpl) toString
+  Finishing method (CtMethodImpl) replace
   Finishing object decl (CtClassImpl) RuntimeException
   Finishing object decl (CtClassImpl) TreeMap
     Adding interface description (CtInterfaceImpl) NavigableMap
@@ -3958,6 +3919,46 @@ Init pending package org.apache.commons.exec.util
   Finishing object instantiation java.util.TreeMap @ src/main/java/org/apache/commons/exec/environment/DefaultProcessingEnvironment.java:220:24<java.lang.String @ src/main/java/org/apache/commons/exec/environment/DefaultProcessingEnvironment.java:220:32, java.lang.String @ src/main/java/org/apache/commons/exec/environment/DefaultProcessingEnvironment.java:220:40>
   Finishing object instantiation java.util.HashMap @ src/main/java/org/apache/commons/exec/environment/DefaultProcessingEnvironment.java:226:20<java.lang.String @ src/main/java/org/apache/commons/exec/environment/DefaultProcessingEnvironment.java:226:28, java.lang.String @ src/main/java/org/apache/commons/exec/environment/DefaultProcessingEnvironment.java:226:36>
   Finishing object instantiation java.util.ArrayList @ src/main/java/org/apache/commons/exec/util/StringUtils.java:168:42<java.lang.String @ src/main/java/org/apache/commons/exec/util/StringUtils.java:168:52>
+  Finishing interface description (CtInterfaceImpl) NavigableMap
+  Adding package java.io
+    Resolved as new package java.io
+  Finishing package java.io
+    Adding object decl (CtClassImpl) IOException
+      Adding struct (CtClassImpl) IOException
+        Resolved as new struct (CtClassImpl) IOException
+      Resolved as new object decl (CtClassImpl) IOException
+    Adding object decl (CtClassImpl) InputStream
+      Adding struct (CtClassImpl) InputStream
+        Resolved as new struct (CtClassImpl) InputStream
+      Resolved as new object decl (CtClassImpl) InputStream
+    Adding object decl (CtClassImpl) OutputStream
+      Adding struct (CtClassImpl) OutputStream
+        Resolved as new struct (CtClassImpl) OutputStream
+      Resolved as new object decl (CtClassImpl) OutputStream
+    Adding object decl (CtClassImpl) ByteArrayOutputStream
+      Adding struct (CtClassImpl) ByteArrayOutputStream
+        Resolved as new struct (CtClassImpl) ByteArrayOutputStream
+      Resolved as new object decl (CtClassImpl) ByteArrayOutputStream
+    Adding object decl (CtClassImpl) PipedOutputStream
+      Adding struct (CtClassImpl) PipedOutputStream
+        Resolved as new struct (CtClassImpl) PipedOutputStream
+      Resolved as new object decl (CtClassImpl) PipedOutputStream
+    Adding interface decl (CtInterfaceImpl) Serializable
+      Resolved as new interface decl (CtInterfaceImpl) Serializable
+    Adding interface decl (CtInterfaceImpl) Flushable
+      Resolved as new interface decl (CtInterfaceImpl) Flushable
+    Adding interface decl (CtInterfaceImpl) Closeable
+      Resolved as new interface decl (CtInterfaceImpl) Closeable
+  Finishing interface decl (CtInterfaceImpl) Serializable
+  Finishing interface decl (CtInterfaceImpl) Flushable
+  Finishing interface decl (CtInterfaceImpl) Closeable
+  Finishing object decl (CtClassImpl) IOException
+  Finishing object decl (CtClassImpl) InputStream
+  Finishing object decl (CtClassImpl) OutputStream
+  Finishing object decl (CtClassImpl) ByteArrayOutputStream
+  Finishing object decl (CtClassImpl) PipedOutputStream
+  Adding package java.lang
+    Resolved as new package java.lang
   Finishing package java.lang
     Adding object decl (CtClassImpl) Enum
       Adding struct (CtClassImpl) Enum
@@ -3976,7 +3977,6 @@ Init pending package org.apache.commons.exec.util
   Finishing interface decl (CtInterfaceImpl) Cloneable
   Finishing interface decl (CtInterfaceImpl) Comparable
   Finishing interface decl (CtInterfaceImpl) Appendable
-  Finishing interface description (CtInterfaceImpl) NavigableMap
   Finishing object decl (CtClassImpl) Enum
   Adding package <unnamed>
     Resolved as new package <unnamed>
@@ -4004,9 +4004,6 @@ Init pending package org.apache.commons.exec.util
   Finishing interface decl (CtInterfaceImpl) RandomAccess
   Finishing interface decl (CtInterfaceImpl) NavigableMap
   Finishing object decl (CtClassImpl) Locale
-  Adding package java.util
-    Resolved with match package java.util
-  Finishing package java.util
   Adding package org.apache.commons.exec.environment
     Resolved as new package org.apache.commons.exec.environment
   Finishing package org.apache.commons.exec.environment
@@ -4018,6 +4015,9 @@ Init pending package org.apache.commons.exec.util
       Resolved as new object decl (CtClassImpl) OpenVmsProcessingEnvironment @ src/main/java/org/apache/commons/exec/environment/OpenVmsProcessingEnvironment.java:35:14
   Finishing object decl (CtClassImpl) OpenVmsProcessingEnvironment @ src/main/java/org/apache/commons/exec/environment/OpenVmsProcessingEnvironment.java:35:14
     [34mskipping default constructor: org.apache.commons.exec.environment.OpenVmsProcessingEnvironment()[0m
+  Adding package java.util
+    Resolved with match package java.util
+  Finishing package java.util
   Adding package org.apache.commons.exec
     Resolved as new package org.apache.commons.exec
   Finishing package org.apache.commons.exec
@@ -6288,8 +6288,6 @@ Init pending package org.apache.commons.exec.util
   Finishing interface description (CtInterfaceImpl) ObjectOutput
   Finishing interface description (CtInterfaceImpl) ObjectStreamConstants
   Finishing interface description (CtInterfaceImpl) ObjectInput
-  Adding package sun.nio.ch
-    Resolved as new package sun.nio.ch
   Adding metrics (CtMethodImpl) run @ src/main/java/org/apache/commons/exec/ShutdownHookProcessDestroyer.java:54:21
     Adding select field (CtFieldImpl) shouldDestroy @ src/main/java/org/apache/commons/exec/ShutdownHookProcessDestroyer.java:47:25
       Resolved as new select field (CtFieldImpl) shouldDestroy @ src/main/java/org/apache/commons/exec/ShutdownHookProcessDestroyer.java:47:25
@@ -8296,11 +8294,8 @@ Init pending package org.apache.commons.exec.util
   Finishing object instantiation java.util.Vector<java.lang.Process>
   Finishing object instantiation java.util.Vector<java.lang.Process>
   Finishing object instantiation java.util.Vector<org.apache.commons.exec.TimeoutObserver>
-  Finishing package sun.nio.ch
   Finishing method (CtMethodImpl) isLenientEnabled @ src/main/java/org/apache/commons/exec/util/DebugUtils.java:81:27
   Finishing method (CtMethodImpl) isDebugEnabled @ src/main/java/org/apache/commons/exec/util/DebugUtils.java:71:27
-  Adding package java.lang
-    Resolved with match package java.lang
   Adding metrics (CtMethodImpl) isDebugEnabled @ src/main/java/org/apache/commons/exec/util/DebugUtils.java:71:27
     Adding method (CtMethodImpl) getProperty
       Adding signature (CtMethodImpl) getProperty
@@ -8341,12 +8336,6 @@ Init pending package org.apache.commons.exec.util
     Adding basic (CtTypeReferenceImpl) boolean
       Resolved with match basic (CtTypeReferenceImpl) boolean
     Resolved as new metrics (CtMethodImpl) isDebugEnabled @ src/main/java/org/apache/commons/exec/util/DebugUtils.java:71:27
-  Adding metrics (CtMethodImpl) isLenientEnabled @ src/main/java/org/apache/commons/exec/util/DebugUtils.java:81:27
-    Adding select field (CtFieldImpl) COMMONS_EXEC_LENIENT @ src/main/java/org/apache/commons/exec/util/DebugUtils.java:34:32
-      Resolved as new select field (CtFieldImpl) COMMONS_EXEC_LENIENT @ src/main/java/org/apache/commons/exec/util/DebugUtils.java:34:32
-    Adding basic (CtTypeReferenceImpl) boolean
-      Resolved with match basic (CtTypeReferenceImpl) boolean
-    Resolved as new metrics (CtMethodImpl) isLenientEnabled @ src/main/java/org/apache/commons/exec/util/DebugUtils.java:81:27
   Adding metrics (CtMethodImpl) handleException @ src/main/java/org/apache/commons/exec/util/DebugUtils.java:49:24
     Adding basic (CtTypeReferenceImpl) boolean
       Resolved with match basic (CtTypeReferenceImpl) boolean
@@ -8360,11 +8349,22 @@ Init pending package org.apache.commons.exec.util
       Resolved with match basic (CtTypeReferenceImpl) boolean
     [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
     Resolved as new metrics (CtMethodImpl) handleException @ src/main/java/org/apache/commons/exec/util/DebugUtils.java:49:24
+  Adding metrics (CtMethodImpl) isLenientEnabled @ src/main/java/org/apache/commons/exec/util/DebugUtils.java:81:27
+    Adding select field (CtFieldImpl) COMMONS_EXEC_LENIENT @ src/main/java/org/apache/commons/exec/util/DebugUtils.java:34:32
+      Resolved as new select field (CtFieldImpl) COMMONS_EXEC_LENIENT @ src/main/java/org/apache/commons/exec/util/DebugUtils.java:34:32
+    Adding basic (CtTypeReferenceImpl) boolean
+      Resolved with match basic (CtTypeReferenceImpl) boolean
+    Resolved as new metrics (CtMethodImpl) isLenientEnabled @ src/main/java/org/apache/commons/exec/util/DebugUtils.java:81:27
   Finishing method (CtMethodImpl) getProperty
   Finishing method (CtMethodImpl) toString
   Finishing method (CtMethodImpl) equalsIgnoreCase
   Finishing method (CtMethodImpl) printStackTrace
   Finishing object decl (CtClassImpl) Boolean
+  Adding package sun.nio.ch
+    Resolved as new package sun.nio.ch
+  Finishing package sun.nio.ch
+  Adding package java.lang
+    Resolved with match package java.lang
   Finishing package java.lang
   Adding package java.security
     Resolved as new package java.security
@@ -8427,8 +8427,6 @@ Init pending package org.apache.commons.exec.util
   Finishing method (CtMethodImpl) prefix @ src/main/java/org/apache/commons/exec/util/MapUtils.java:68:41
   Finishing method (CtMethodImpl) merge @ src/main/java/org/apache/commons/exec/util/MapUtils.java:98:36
   Finishing method (CtMethodImpl) copy @ src/main/java/org/apache/commons/exec/util/MapUtils.java:43:35
-  Adding package java.lang
-    Resolved with match package java.lang
   Adding metrics (CtMethodImpl) copy @ src/main/java/org/apache/commons/exec/util/MapUtils.java:43:35
     Adding basic (CtTypeReferenceImpl) boolean
       Resolved with match basic (CtTypeReferenceImpl) boolean
@@ -8531,6 +8529,8 @@ Init pending package org.apache.commons.exec.util
   Finishing interface instantiation java.util.Map<java.lang.String, V>
   Finishing interface instantiation java.util.Map<java.lang.String, V>
   Finishing object instantiation java.util.HashMap @ src/main/java/org/apache/commons/exec/util/MapUtils.java:74:43<java.lang.String @ src/main/java/org/apache/commons/exec/util/MapUtils.java:74:51, V @ src/main/java/org/apache/commons/exec/util/MapUtils.java:74:59>
+  Adding package java.lang
+    Resolved with match package java.lang
   Finishing package java.lang
   Adding package java.io
     Resolved with match package java.io
@@ -8553,29 +8553,29 @@ Init pending package org.apache.commons.exec.util
   Adding package org
     Resolved as new package org
   Finishing package org
-[34mFinished process pending packages (2.789477s)[0m
+[34mFinished process pending packages (3.140190s)[0m
 [34mStarting short validation...[0m
   [34mStarting performShortValidation...[0m
-  [34mFinished performShortValidation (0.008109s)[0m
-[34mFinished short validation (0.009336s)[0m
+  [34mFinished performShortValidation (0.008360s)[0m
+[34mFinished short validation (0.009750s)[0m
 [34mStarting consolidate constructs...[0m
   Consolidating all constructs
-    Removed 565 collisions
+    Removed 564 collisions
     Removed 0 collisions
-[34mFinished consolidate constructs (0.060499s)[0m
+[34mFinished consolidate constructs (0.055364s)[0m
 [34mStarting connect nests...[0m
-[34mFinished connect nests (0.003265s)[0m
+[34mFinished connect nests (0.003897s)[0m
 [34mStarting collect package declarations...[0m
-[34mFinished collect package declarations (0.191878s)[0m
+[34mFinished collect package declarations (0.246868s)[0m
 [34mStarting addImports from usage...[0m
-[34mFinished addImports from usage (0.001044s)[0m
+[34mFinished addImports from usage (0.002425s)[0m
 [34mStarting remove empty packages...[0m
   Removing { kind: package, name: "<unnamed>" }
   Removing { kind: package, name: org }
   Removing { kind: package, name: org.apache }
   Removing { kind: package, name: org.apache.commons }
-[34mFinished remove empty packages (0.006622s)[0m
+[34mFinished remove empty packages (0.006949s)[0m
 [34mStarting performValidation...[0m
-[34mFinished performValidation (0.484715s)[0m
-[34mFinished Abstraction (11.990589s)[0m
+[34mFinished performValidation (0.454918s)[0m
+[34mFinished Abstraction (12.321107s)[0m
 Success

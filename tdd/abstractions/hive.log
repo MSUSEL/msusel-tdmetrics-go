@@ -1,7 +1,7 @@
 # cmd: java -jar /Users/grantnelson/go/src/github.com/MSUSEL/msusel-tdmetrics-go/javaAbstractor/target/abstractor-0.1-jar-with-dependencies.jar -i /Users/grantnelson/go/src/github.com/apache/hive/ -o /Users/grantnelson/go/src/github.com/MSUSEL/msusel-tdmetrics-go/tdd/abstractions/hive.json -v
 # cwd: /Users/grantnelson/go/src/github.com/MSUSEL/msusel-tdmetrics-go/tdd
 # repo: /Users/grantnelson/go/src/github.com/apache/hive @ a4d91eaf2925239aa29342f7e5b0f8680c842390
-# started: 2026-08-30T23:12:13.498708+00:00
+# started: 2026-09-01T02:06:58.340864+00:00
 # timeout_min: 10
 # ---
 Reading /Users/grantnelson/go/src/github.com/apache/hive/
@@ -35,7 +35,7 @@ The method public static HashMap<K,V> newHashMap()  is wrongly tagged as contain
 The method public static HashMap<K,V> newHashMap()  is wrongly tagged as containing missing types
 The method public static ArrayList<E> newArrayList()  is wrongly tagged as containing missing types
 The method public static ArrayList<E> newArrayListWithCapacity(int)  is wrongly tagged as containing missing types
-26/08/30 17:14:14 WARN util.NativeCodeLoader: Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
+26/08/31 20:07:41 WARN util.NativeCodeLoader: Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
 Init pending package <unnamed>
 Init pending package org
 Init pending package org.apache
@@ -1511,8 +1511,6 @@ Init pending package io.netty.util.concurrent
   Finishing interface description (CtInterfaceImpl) ObjectStreamConstants
   Finishing interface description (CtInterfaceImpl) ObjectInput
   Finishing interface description (CtInterfaceImpl) Cloneable
-  Adding package org.apache.hadoop.hive.ql.optimizer.calcite.stats
-    Resolved as new package org.apache.hadoop.hive.ql.optimizer.calcite.stats
   Adding metrics (CtMethodImpl) getColumnType @ accumulo-handler/src/java/org/apache/hadoop/hive/accumulo/columns/ColumnMapping.java:92:17
     Adding select field (CtFieldImpl) columnType @ accumulo-handler/src/java/org/apache/hadoop/hive/accumulo/columns/ColumnMapping.java:40:26
       Resolved as new select field (CtFieldImpl) columnType @ accumulo-handler/src/java/org/apache/hadoop/hive/accumulo/columns/ColumnMapping.java:40:26
@@ -3579,6 +3577,55 @@ Init pending package io.netty.util.concurrent
   Finishing object instantiation java.util.HashMap<java.lang.String, org.apache.hadoop.hive.accumulo.columns.ColumnEncoding>
   Finishing object instantiation java.util.HashMap<java.lang.String, org.apache.hadoop.hive.accumulo.columns.ColumnEncoding>
   Finishing object instantiation java.util.HashMap<java.lang.String, org.apache.hadoop.hive.accumulo.columns.ColumnEncoding>
+  Finishing interface description (CtInterfaceImpl) ConstantDesc
+  Finishing interface description (CtInterfaceImpl) CharSequence
+  Finishing interface description (CtInterfaceImpl) Type
+  Finishing interface description (CtInterfaceImpl) GenericDeclaration
+  Finishing interface description (CtInterfaceImpl) OfField
+  Finishing interface description (CtInterfaceImpl) AnnotatedElement
+  Finishing interface description (CtInterfaceImpl) AppenderAttachable
+  Finishing interface description (CtInterfaceImpl) RandomAccess
+  Finishing constructor (CtConstructorImpl) <init> @ serde/src/java/org/apache/hadoop/hive/serde2/SerDeException.java:29:10
+  Finishing constructor (CtConstructorImpl) <init> @ serde/src/java/org/apache/hadoop/hive/serde2/SerDeException.java:33:10
+  Finishing constructor (CtConstructorImpl) <init> @ serde/src/java/org/apache/hadoop/hive/serde2/SerDeException.java:41:10
+  Finishing constructor (CtConstructorImpl) <init> @ serde/src/java/org/apache/hadoop/hive/serde2/SerDeException.java:37:10
+  Finishing constructor (CtConstructorImpl) <init> @ accumulo-handler/src/java/org/apache/hadoop/hive/accumulo/serde/TooManyAccumuloColumnsException.java:28:10
+  Finishing constructor (CtConstructorImpl) <init> @ accumulo-handler/src/java/org/apache/hadoop/hive/accumulo/serde/TooManyAccumuloColumnsException.java:32:10
+  Finishing constructor (CtConstructorImpl) <init> @ accumulo-handler/src/java/org/apache/hadoop/hive/accumulo/serde/TooManyAccumuloColumnsException.java:40:10
+  Adding metrics (CtConstructorImpl) <init> @ serde/src/java/org/apache/hadoop/hive/serde2/SerDeException.java:37:10
+    [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+    [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+    Resolved as new metrics (CtConstructorImpl) <init> @ serde/src/java/org/apache/hadoop/hive/serde2/SerDeException.java:37:10
+  Adding metrics (CtConstructorImpl) <init> @ serde/src/java/org/apache/hadoop/hive/serde2/SerDeException.java:41:10
+    [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+    [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+    Resolved as new metrics (CtConstructorImpl) <init> @ serde/src/java/org/apache/hadoop/hive/serde2/SerDeException.java:41:10
+  Adding metrics (CtConstructorImpl) <init> @ accumulo-handler/src/java/org/apache/hadoop/hive/accumulo/serde/TooManyAccumuloColumnsException.java:36:10
+    [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+    [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+    Resolved as new metrics (CtConstructorImpl) <init> @ accumulo-handler/src/java/org/apache/hadoop/hive/accumulo/serde/TooManyAccumuloColumnsException.java:36:10
+  Adding metrics (CtConstructorImpl) <init> @ accumulo-handler/src/java/org/apache/hadoop/hive/accumulo/serde/TooManyAccumuloColumnsException.java:28:10
+    [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+    [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+    Resolved as new metrics (CtConstructorImpl) <init> @ accumulo-handler/src/java/org/apache/hadoop/hive/accumulo/serde/TooManyAccumuloColumnsException.java:28:10
+  Adding metrics (CtConstructorImpl) <init> @ serde/src/java/org/apache/hadoop/hive/serde2/SerDeException.java:29:10
+    [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+    [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+    Resolved as new metrics (CtConstructorImpl) <init> @ serde/src/java/org/apache/hadoop/hive/serde2/SerDeException.java:29:10
+  Adding metrics (CtConstructorImpl) <init> @ accumulo-handler/src/java/org/apache/hadoop/hive/accumulo/serde/TooManyAccumuloColumnsException.java:40:10
+    [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+    [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+    Resolved as new metrics (CtConstructorImpl) <init> @ accumulo-handler/src/java/org/apache/hadoop/hive/accumulo/serde/TooManyAccumuloColumnsException.java:40:10
+  Adding metrics (CtConstructorImpl) <init> @ accumulo-handler/src/java/org/apache/hadoop/hive/accumulo/serde/TooManyAccumuloColumnsException.java:32:10
+    [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+    [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+    Resolved as new metrics (CtConstructorImpl) <init> @ accumulo-handler/src/java/org/apache/hadoop/hive/accumulo/serde/TooManyAccumuloColumnsException.java:32:10
+  Adding metrics (CtConstructorImpl) <init> @ serde/src/java/org/apache/hadoop/hive/serde2/SerDeException.java:33:10
+    [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+    [34mIgnoring implicit executable reference: (CtExecutableReferenceImpl) <init>[0m
+    Resolved as new metrics (CtConstructorImpl) <init> @ serde/src/java/org/apache/hadoop/hive/serde2/SerDeException.java:33:10
+  Adding package org.apache.hadoop.hive.ql.optimizer.calcite.stats
+    Resolved as new package org.apache.hadoop.hive.ql.optimizer.calcite.stats
   Finishing package org.apache.hadoop.hive.ql.optimizer.calcite.stats
     Adding object decl (CtClassImpl) FilterSelectivityEstimator @ ql/src/java/org/apache/hadoop/hive/ql/optimizer/calcite/stats/FilterSelectivityEstimator.java:37:14
       Adding struct (CtClassImpl) FilterSelectivityEstimator @ ql/src/java/org/apache/hadoop/hive/ql/optimizer/calcite/stats/FilterSelectivityEstimator.java:37:14
@@ -3658,22 +3705,7 @@ Init pending package io.netty.util.concurrent
   Finishing field (CtFieldImpl) SOURCE @ ql/src/java/org/apache/hadoop/hive/ql/optimizer/calcite/stats/HiveRelMdSelectivity.java:43:43
   Finishing field (CtFieldImpl) SOURCE @ ql/src/java/org/apache/hadoop/hive/ql/optimizer/calcite/stats/HiveRelMdUniqueKeys.java:50:43
   Finishing interface decl (CtInterfaceImpl) Log
-  Finishing interface description (CtInterfaceImpl) ConstantDesc
-  Finishing interface description (CtInterfaceImpl) CharSequence
-  Finishing interface description (CtInterfaceImpl) Type
-  Finishing interface description (CtInterfaceImpl) GenericDeclaration
-  Finishing interface description (CtInterfaceImpl) OfField
-  Finishing interface description (CtInterfaceImpl) AnnotatedElement
-  Finishing interface description (CtInterfaceImpl) AppenderAttachable
-  Finishing interface description (CtInterfaceImpl) RandomAccess
   Finishing interface description (CtInterfaceImpl) Log
-  Finishing constructor (CtConstructorImpl) <init> @ serde/src/java/org/apache/hadoop/hive/serde2/SerDeException.java:29:10
-  Finishing constructor (CtConstructorImpl) <init> @ serde/src/java/org/apache/hadoop/hive/serde2/SerDeException.java:33:10
-  Finishing constructor (CtConstructorImpl) <init> @ serde/src/java/org/apache/hadoop/hive/serde2/SerDeException.java:41:10
-  Finishing constructor (CtConstructorImpl) <init> @ serde/src/java/org/apache/hadoop/hive/serde2/SerDeException.java:37:10
-  Finishing constructor (CtConstructorImpl) <init> @ accumulo-handler/src/java/org/apache/hadoop/hive/accumulo/serde/TooManyAccumuloColumnsException.java:28:10
-  Finishing constructor (CtConstructorImpl) <init> @ accumulo-handler/src/java/org/apache/hadoop/hive/accumulo/serde/TooManyAccumuloColumnsException.java:32:10
-  Finishing constructor (CtConstructorImpl) <init> @ accumulo-handler/src/java/org/apache/hadoop/hive/accumulo/serde/TooManyAccumuloColumnsException.java:40:10
   Finishing object decl (CtClassImpl) FilterSelectivityEstimator @ ql/src/java/org/apache/hadoop/hive/ql/optimizer/calcite/stats/FilterSelectivityEstimator.java:37:14
     Adding constructor (CtConstructorImpl) <init> @ ql/src/java/org/apache/hadoop/hive/ql/optimizer/calcite/stats/FilterSelectivityEstimator.java:41:13
       Adding constructor signature (CtConstructorImpl) <init> @ ql/src/java/org/apache/hadoop/hive/ql/optimizer/calcite/stats/FilterSelectivityEstimator.java:41:13
@@ -43582,13 +43614,13 @@ Init pending package io.netty.util.concurrent
     Adding abstract (CtMethodImpl) addResource
       Adding signature (CtMethodImpl) addResource
         Adding parameter (CtParameterImpl) arg0
-          Resolved with match parameter (CtParameterImpl) arg0
+          Resolved as new parameter (CtParameterImpl) arg0
         Resolved as new signature (CtMethodImpl) addResource
       Resolved as new abstract (CtMethodImpl) addResource
     Adding abstract (CtMethodImpl) addResource
       Adding signature (CtMethodImpl) addResource
         Adding parameter (CtParameterImpl) arg0
-          Resolved as new parameter (CtParameterImpl) arg0
+          Resolved with match parameter (CtParameterImpl) arg0
         Resolved as new signature (CtMethodImpl) addResource
       Resolved as new abstract (CtMethodImpl) addResource
     Adding abstract (CtMethodImpl) addResource
@@ -43611,8 +43643,6 @@ Init pending package io.netty.util.concurrent
       Adding signature (CtMethodImpl) get
         Adding parameter (CtParameterImpl) arg0
           Resolved with match parameter (CtParameterImpl) arg0
-        Adding parameter (CtParameterImpl) arg1
-          Resolved with match parameter (CtParameterImpl) arg1
         Adding parameter <unnamed> java.lang.String
           Resolved with match parameter <unnamed> java.lang.String
         Resolved as new signature (CtMethodImpl) get
@@ -43621,6 +43651,8 @@ Init pending package io.netty.util.concurrent
       Adding signature (CtMethodImpl) get
         Adding parameter (CtParameterImpl) arg0
           Resolved with match parameter (CtParameterImpl) arg0
+        Adding parameter (CtParameterImpl) arg1
+          Resolved with match parameter (CtParameterImpl) arg1
         Adding parameter <unnamed> java.lang.String
           Resolved with match parameter <unnamed> java.lang.String
         Resolved as new signature (CtMethodImpl) get
@@ -44075,8 +44107,6 @@ Init pending package io.netty.util.concurrent
       Adding signature (CtMethodImpl) getStrings
         Adding parameter (CtParameterImpl) arg0
           Resolved with match parameter (CtParameterImpl) arg0
-        Adding parameter (CtParameterImpl) arg1
-          Resolved with match parameter (CtParameterImpl) arg1
         Adding parameter <unnamed> java.lang.String[]
           Resolved with match parameter <unnamed> java.lang.String[]
         Resolved as new signature (CtMethodImpl) getStrings
@@ -44085,6 +44115,8 @@ Init pending package io.netty.util.concurrent
       Adding signature (CtMethodImpl) getStrings
         Adding parameter (CtParameterImpl) arg0
           Resolved with match parameter (CtParameterImpl) arg0
+        Adding parameter (CtParameterImpl) arg1
+          Resolved with match parameter (CtParameterImpl) arg1
         Adding parameter <unnamed> java.lang.String[]
           Resolved with match parameter <unnamed> java.lang.String[]
         Resolved as new signature (CtMethodImpl) getStrings
@@ -78458,15 +78490,15 @@ Init pending package io.netty.util.concurrent
     [34mskipping default constructor: org.apache.hadoop.hive.ql.udf.generic.GenericUDAFEvaluator$Mode()[0m
   Finishing object decl (CtClassImpl) GenericUDAFEvaluator @ ql/src/java/org/apache/hadoop/hive/ql/udf/generic/GenericUDAFEvaluator.java:44:23
     [34mIgnoring annotation type: (CtAnnotationTypeImpl) AggregationType @ ql/src/java/org/apache/hadoop/hive/ql/udf/generic/GenericUDAFEvaluator.java:46:28[0m
-[34mFinished process pending packages (8.601673s)[0m
+[34mFinished process pending packages (9.462306s)[0m
 Exception in thread "main" java.lang.Exception: Error while finishing object decl (CtClassImpl) GenericUDAFEvaluator @ ql/src/java/org/apache/hadoop/hive/ql/udf/generic/GenericUDAFEvaluator.java:44:23
 	at abstractor.core.constructs.Factory$DeferredFinish.finish(Factory.java:96)
 	at abstractor.core.constructs.Factory.runDeferredFinishes(Factory.java:326)
-	at abstractor.core.Abstractor.processDeferredFinishes(Abstractor.java:1447)
-	at abstractor.core.Abstractor.processPendingPackages(Abstractor.java:1384)
-	at abstractor.core.Abstractor.lambda$performAbstraction$40(Abstractor.java:1369)
+	at abstractor.core.Abstractor.processDeferredFinishes(Abstractor.java:1466)
+	at abstractor.core.Abstractor.processPendingPackages(Abstractor.java:1398)
+	at abstractor.core.Abstractor.lambda$performAbstraction$40(Abstractor.java:1380)
 	at abstractor.core.log.Logger.measure(Logger.java:123)
-	at abstractor.core.Abstractor.performAbstraction(Abstractor.java:1369)
+	at abstractor.core.Abstractor.performAbstraction(Abstractor.java:1380)
 	at abstractor.app.App.run(App.java:26)
 	at abstractor.app.App.main(App.java:17)
 Caused by: java.lang.NullPointerException: Cannot invoke "java.lang.Comparable.compareTo(Object)" because "k1" is null
@@ -78475,6 +78507,6 @@ Caused by: java.lang.NullPointerException: Cannot invoke "java.lang.Comparable.c
 	at java.base/java.util.TreeMap.put(TreeMap.java:785)
 	at java.base/java.util.TreeMap.put(TreeMap.java:534)
 	at java.base/java.util.TreeSet.add(TreeSet.java:255)
-	at abstractor.core.Abstractor.lambda$addObjectDecl$33(Abstractor.java:1031)
+	at abstractor.core.Abstractor.lambda$addObjectDecl$33(Abstractor.java:1042)
 	at abstractor.core.constructs.Factory$DeferredFinish.finish(Factory.java:94)
 	... 8 more

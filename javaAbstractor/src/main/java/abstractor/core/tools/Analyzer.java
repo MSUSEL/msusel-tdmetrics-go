@@ -364,64 +364,68 @@ public class Analyzer {
     }
 
     private boolean addUsage(CtElement elem) throws Exception {
-        // Skip these and their children.
-        if (elem instanceof CtAnnotation) return false;
+        try {
+            // Skip these and their children.
+            if (elem instanceof CtAnnotation) return false;
 
-        // Skip these but their children will still be checked.
-        if (elem instanceof CtBinaryOperator ) return true;
-        if (elem instanceof CtBlock          ) return true;
-        if (elem instanceof CtCase           ) return true;
-        if (elem instanceof CtFor            ) return true;
-        if (elem instanceof CtForEach        ) return true;
-        if (elem instanceof CtDo             ) return true;
-        if (elem instanceof CtWhile          ) return true;
-        if (elem instanceof CtBreak          ) return true;
-        if (elem instanceof CtContinue       ) return true;
-        if (elem instanceof CtIfImpl         ) return true;
-        if (elem instanceof CtReturn         ) return true;
-        if (elem instanceof CtSwitch         ) return true;
-        if (elem instanceof CtThisAccess     ) return true;
-        if (elem instanceof CtUnaryOperator  ) return true;
-        if (elem instanceof CtSynchronized   ) return true;
-        if (elem instanceof CtThrow          ) return true;
-        if (elem instanceof CtTry            ) return true;
-        if (elem instanceof CtTryWithResource) return true;
-        if (elem instanceof CtCatch          ) return true;
-        if (elem instanceof CtCatchVariable  ) return true;
-        if (elem instanceof CtCatchVariableReference       ) return true;
-        if (elem instanceof CtExecutableReferenceExpression) return true;
-        if (elem instanceof CtConditional    ) return true;
-        if (elem instanceof CtLambda         ) return true;
-        if (elem instanceof CtParameter      ) return true;
-       
-        // Process these and their children.
-        if (elem instanceof CtAssignment             as) { this.addAssignmentUsage(as);             return true; }
-        if (elem instanceof CtClass                  cl) { this.addClassUsage(cl);                  return true; }
-        if (elem instanceof CtConstructor            cc) { this.addConstructorUsage(cc);            return true; }
-        if (elem instanceof CtConstructorCall        cc) { this.addConstructorCallUsage(cc);        return true; }
-        if (elem instanceof CtExecutableReference    er) { this.addExecutableReferenceUsage(er);    return true; }
-        if (elem instanceof CtFieldRead              fr) { this.addFieldReadUsage(fr);              return true; }
-        if (elem instanceof CtFieldReference         fr) { this.addFieldReferenceUsage(fr);         return true; }
-        if (elem instanceof CtFieldWrite             fw) { this.addFieldWriteUsage(fw);             return true; }
-        if (elem instanceof CtInvocation             in) { this.addInvocationUsage(in);             return true; }
-        if (elem instanceof CtLiteral                lt) { this.addLiteralUsage(lt);                return true; }
-        if (elem instanceof CtLocalVariable          lv) { this.addLocalVariableUsage(lv);          return true; }
-        if (elem instanceof CtLocalVariableReference lr) { this.addLocalVariableReferenceUsage(lr); return true; }
-        if (elem instanceof CtMethod                 mt) { this.addMethodUsage(mt);                 return true; }
-        if (elem instanceof CtPackageReference       pr) { this.addPackageReferenceUsage(pr);       return true; }
-        if (elem instanceof CtParameterReference     pr) { this.addParameterReferenceUsage(pr);     return true; }
-        if (elem instanceof CtTypeAccess             ta) { this.addTypeAccessUsage(ta);             return true; }
-        if (elem instanceof CtTypeReference          tr) { this.addTypeReferenceUsage(tr);          return true; }
-        if (elem instanceof CtVariableRead           vr) { this.addVariableReadUsage(vr);           return true; }
-        if (elem instanceof CtVariableWrite          vw) { this.addVariableWrite(vw);               return true; }
-        if (elem instanceof CtNewArray               na) { this.addNewArray(na);                    return true; }
-        if (elem instanceof CtArrayRead              ar) { this.addArrayRead(ar);                   return true; }
-        if (elem instanceof CtArrayWrite             aw) { this.addArrayWrite(aw);                  return true; }
-        if (elem instanceof CtField                  fd) { this.addField(fd);                       return true; }
+            // Skip these but their children will still be checked.
+            if (elem instanceof CtBinaryOperator ) return true;
+            if (elem instanceof CtBlock          ) return true;
+            if (elem instanceof CtCase           ) return true;
+            if (elem instanceof CtFor            ) return true;
+            if (elem instanceof CtForEach        ) return true;
+            if (elem instanceof CtDo             ) return true;
+            if (elem instanceof CtWhile          ) return true;
+            if (elem instanceof CtBreak          ) return true;
+            if (elem instanceof CtContinue       ) return true;
+            if (elem instanceof CtIfImpl         ) return true;
+            if (elem instanceof CtReturn         ) return true;
+            if (elem instanceof CtSwitch         ) return true;
+            if (elem instanceof CtThisAccess     ) return true;
+            if (elem instanceof CtUnaryOperator  ) return true;
+            if (elem instanceof CtSynchronized   ) return true;
+            if (elem instanceof CtThrow          ) return true;
+            if (elem instanceof CtTry            ) return true;
+            if (elem instanceof CtTryWithResource) return true;
+            if (elem instanceof CtCatch          ) return true;
+            if (elem instanceof CtCatchVariable  ) return true;
+            if (elem instanceof CtCatchVariableReference       ) return true;
+            if (elem instanceof CtExecutableReferenceExpression) return true;
+            if (elem instanceof CtConditional    ) return true;
+            if (elem instanceof CtLambda         ) return true;
+            if (elem instanceof CtParameter      ) return true;
+        
+            // Process these and their children.
+            if (elem instanceof CtAssignment             as) { this.addAssignmentUsage(as);             return true; }
+            if (elem instanceof CtClass                  cl) { this.addClassUsage(cl);                  return true; }
+            if (elem instanceof CtConstructor            cc) { this.addConstructorUsage(cc);            return true; }
+            if (elem instanceof CtConstructorCall        cc) { this.addConstructorCallUsage(cc);        return true; }
+            if (elem instanceof CtExecutableReference    er) { this.addExecutableReferenceUsage(er);    return true; }
+            if (elem instanceof CtFieldRead              fr) { this.addFieldReadUsage(fr);              return true; }
+            if (elem instanceof CtFieldReference         fr) { this.addFieldReferenceUsage(fr);         return true; }
+            if (elem instanceof CtFieldWrite             fw) { this.addFieldWriteUsage(fw);             return true; }
+            if (elem instanceof CtInvocation             in) { this.addInvocationUsage(in);             return true; }
+            if (elem instanceof CtLiteral                lt) { this.addLiteralUsage(lt);                return true; }
+            if (elem instanceof CtLocalVariable          lv) { this.addLocalVariableUsage(lv);          return true; }
+            if (elem instanceof CtLocalVariableReference lr) { this.addLocalVariableReferenceUsage(lr); return true; }
+            if (elem instanceof CtMethod                 mt) { this.addMethodUsage(mt);                 return true; }
+            if (elem instanceof CtPackageReference       pr) { this.addPackageReferenceUsage(pr);       return true; }
+            if (elem instanceof CtParameterReference     pr) { this.addParameterReferenceUsage(pr);     return true; }
+            if (elem instanceof CtTypeAccess             ta) { this.addTypeAccessUsage(ta);             return true; }
+            if (elem instanceof CtTypeReference          tr) { this.addTypeReferenceUsage(tr);          return true; }
+            if (elem instanceof CtVariableRead           vr) { this.addVariableReadUsage(vr);           return true; }
+            if (elem instanceof CtVariableWrite          vw) { this.addVariableWrite(vw);               return true; }
+            if (elem instanceof CtNewArray               na) { this.addNewArray(na);                    return true; }
+            if (elem instanceof CtArrayRead              ar) { this.addArrayRead(ar);                   return true; }
+            if (elem instanceof CtArrayWrite             aw) { this.addArrayWrite(aw);                  return true; }
+            if (elem instanceof CtField                  fd) { this.addField(fd);                       return true; }
 
-        // Use to see elements (may produce a lot of output).
-        this.log.notice("unimplemented addUsage: " + SpoonUtils.describeElem(elem));
-        return true;
+            // Use to see elements (may produce a lot of output).
+            this.log.notice("unimplemented addUsage: " + SpoonUtils.describeElem(elem));
+            return true;
+        } catch(Exception ex) {
+            throw new Exception("Error while adding usage for " + SpoonUtils.describeElem(elem), ex);
+        }
     }
 
     private void addInvocationUsage(CtInvocation<?> in) throws Exception {
@@ -451,7 +455,9 @@ public class Analyzer {
 
     private void addTypeAccessUsage(CtTypeAccess<?> ta) throws Exception {
         if (logUsage) this.log.log("addUsage.CtTypeAccess: " + SpoonUtils.describeElem(ta));
-        this.addRead(this.abs.addTypeDesc(ta.getAccessedType()));
+        final CtTypeReference<?> tr = ta.getAccessedType();
+        if (SpoonUtils.isVoid(tr)) return;
+        this.addRead(this.abs.addTypeDesc(tr));
     }
 
     private void addAssignmentUsage(CtAssignment<?,?> as) throws Exception {
@@ -539,10 +545,13 @@ public class Analyzer {
         if (logUsage) this.log.log("addUsage.CtConstructorCall: " + SpoonUtils.describeElem(cc));
         final CtExecutableReference<?> execRef = cc.getExecutable();
 
+        // Check for `new Object()` and skip in that case.
+        final CtTypeReference<?> dt = execRef.getDeclaringType();
+        if (SpoonUtils.isObject(dt)) return;
+
         final CtExecutable<?> exec = execRef.getExecutableDeclaration();
         if (exec instanceof CtConstructor<?> ctor) {
             if (ctor.isImplicit()) { // default constructor called.
-                final CtTypeReference<?> dt = execRef.getDeclaringType();
                 final Ref<? extends TypeDesc> td = this.abs.addTypeDesc(dt);
                 if (td != null) this.writes.add(td);
             } else {

@@ -194,7 +194,7 @@ def main() -> int:
     _log("")
     _log(f"summary: {len(ok)} ok / {len(fail)} failed / {len(results)} total")
     for r in results:
-        status = "OK " if r.get("exit_code") == 0 else f"FAIL({r.get('exit_code')})"
+        status = "OK " if r.get("exit_code") == 0 else f"FAIL({r.get('exit_code')}) "
         _log(f"  {status}  {r['project_key']:<24} {r.get('elapsed_sec', '?'):>6}s")
     _log(f"wrote {summary_path}")
 
