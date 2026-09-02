@@ -222,58 +222,58 @@ public class GroundTruthTests {
             where !isPmdProblem(m)
             select new KeyValuePair<int, GT.MethodMetrics>(m.Line, m)
         );
+        SortedSet<int> projLines = [.. from m in projObj.Methods select m.Location.LineNo];
+        List<string> missing = [..
+            from m in gtMetByLine.Values
+            where !projLines.Contains(m.Line)
+            orderby m.Line
+            select m.Line + ": " + m.Name
+        ];
+        List<string> extra = [..
+            from m in projObj.Methods
+            where !gtMetByLine.ContainsKey(m.Location.LineNo)
+            orderby m.Location.LineNo
+            select m.Location.LineNo + ": " + m.Name
+        ];
+        List<string> gtMethodLines = [..
+            from m in gtObj.Methods
+            where !m.Name.StartsWith("(initializer ")
+            orderby m.Line
+            select m.Line + ": " + m.Name
+        ];
+        List<string> projMethodLines = [..
+            from m in projObj.Methods
+            orderby m.Location.LineNo
+            select m.Location.LineNo + ": " + m.Name
+        ];
 
-        if (projObj.Methods.Count != gtMetByLine.Count) {
-            SortedSet<int> projLines = [.. from m in projObj.Methods select m.Location.LineNo];
+        string missingMsg = missing.Count <= 0 ? "" :
+            "\n  Missing (in ground truth but not in objects):\n    " + string.Join("\n    ", missing);
+        string extraMsg = extra.Count <= 0 ? "" :
+            "\n  Extra (in objects but not in ground truth):\n    " + string.Join("\n    ", extra);
+        string getMethodsMsg = gtMethodLines.Count <= 0 ? "":
+            "\n  Methods in ground truth were:\n    " + string.Join("\n    ", gtMethodLines);
+        string projMethodsMsg = projMethodLines.Count <= 0 ? "":
+            "\n  Methods in objects were:\n    " + string.Join("\n    ", projMethodLines);
 
-            List<string> missing = [..
-                from m in gtMetByLine.Values
-                where !projLines.Contains(m.Line)
-                orderby m.Line
-                select m.Line + ": " + m.Name
-            ];
-            string missingMsg = missing.Count <= 0 ? "" :
-                "\n  Missing (in ground truth but not in objects):\n    " + string.Join("\n    ", missing);
-
-            List<string> extra = [..
-                from m in projObj.Methods
-                where !gtMetByLine.ContainsKey(m.Location.LineNo)
-                orderby m.Location.LineNo
-                select m.Location.LineNo + ": " + m.Name
-            ];
-            string extraMsg = extra.Count <= 0 ? "" :
-                "\n  Extra (in objects but not in ground truth):\n    " + string.Join("\n    ", extra);
-
-            List<string> gtMethodLines = [..
-                from m in gtObj.Methods
-                where !m.Name.StartsWith("(initializer ")
-                orderby m.Line
-                select m.Line + ": " + m.Name
-            ];
-            string getMethodsMsg = gtMethodLines.Count <= 0 ? "":
-                "\n  Methods in ground truth were:\n    " + string.Join("\n    ", gtMethodLines);
-
-            List<string> projMethodLines = [..
-                from m in projObj.Methods
-                orderby m.Location.LineNo
-                select m.Location.LineNo + ": " + m.Name
-            ];
-            string projMethodsMsg = projMethodLines.Count <= 0 ? "":
-                "\n  Methods in objects were:\n    " + string.Join("\n    ", projMethodLines);
-
+        if ((missing.Count > 0) || (extra.Count > 0)) {
             Assert.AreEqual(projObj.Methods.Count, gtMetByLine.Count,
                 "The number of methods in " + projObj.FullName + " are expected to match" + 
                 missingMsg + extraMsg + getMethodsMsg + projMethodsMsg);
         }
+
+        Assert.Zero(missing.Count, "missing.Count");
+        Assert.Zero(extra.Count, "extra.Count");
 
         int methods = 0;
         foreach (MethodDecl projMet in projObj.Methods) {
             if (gtMetByLine.TryGetValue(projMet.Location.LineNo, out GT.MethodMetrics? gtMet)) {
                 Assert.AreEqual(gtMet.Cyclo, projMet.Metrics?.PmdCyclo ?? 1, "Cyclomatic for " + gtMet.FullName + ":" + projMet);
                 methods++;
-            } else {
-                Assert.Fail("Failed to find " + projMet + " in the ground truth.");
+                continue;
             }
+            Assert.Fail("Failed to find " + projMet.Location.LineNo + ", for " + projMet + ", in ground truth methods by line number" + 
+                missingMsg + extraMsg + getMethodsMsg + projMethodsMsg);
         }
         Assert.AreEqual(gtObj.CycloTotal, projObj.PmdWmc, "WMC for " + projObj.FullName + " @ "  + projObj.Location);
         return methods;
