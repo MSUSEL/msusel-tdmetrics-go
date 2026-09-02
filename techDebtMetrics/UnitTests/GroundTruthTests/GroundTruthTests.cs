@@ -160,17 +160,17 @@ public class GroundTruthTests {
 
         string groupId = target.GroupId;
         //string groupId = proj.GroupId;
-        //Assert.IsNotEmpty(groupId, "the groupId needs to not be empty");
-        //Assert.True(groupId.StartsWith("org.apache"), "expected the groupId to start with \"org.apache\" but it was \"" + groupId + "\"");
+        //Assert.IsNotEmpty(groupId, "The groupId needs to not be empty");
+        //Assert.True(groupId.StartsWith("org.apache"), "Expected the groupId to start with \"org.apache\" but it was \"" + groupId + "\"");
         
-        Assert.AreEqual(proj.CommitHash, target.CommitSha, "commit hash should match for " + groupId);
+        Assert.AreEqual(proj.CommitHash, target.CommitSha, "Commit hash should match for " + groupId);
 
         Dictionary<string, ObjectDecl> projObjects = new(
             from c in proj.ObjectDecls
             where c.Package.Name.StartsWith(groupId)
             select new KeyValuePair<string, ObjectDecl>(c.FullName, c)
         );
-        Assert.IsNotEmpty(projObjects, "must check at least one class for " + groupId + "\n" +
+        Assert.IsNotEmpty(projObjects, "Must check at least one class for " + groupId + "\n" +
             "   NOTICE: If projObjects is empty, check that the groupId is the the root package name "+
             "(e.g. \"commons-codec\" needs to be \"org.apache.commons.codec\")");
 
@@ -202,7 +202,7 @@ public class GroundTruthTests {
                 "\n  Extra (in objects but not in ground truth):\n    " + string.Join("\n    ", extra);
 
             Assert.AreEqual(projObjects.Count, gtClasses.Count,
-                "the number of classes are expected to match" +
+                "The number of classes are expected to match" +
                 missingMsg + extraMsg);
         }
 
@@ -210,11 +210,11 @@ public class GroundTruthTests {
         foreach (KeyValuePair<string, ObjectDecl> p in projObjects) {
             methods += checkGroundTruth(gtClasses[p.Key], p.Value);
         }
-        Assert.NotZero(methods, "must check at least one method");
+        Assert.NotZero(methods, "Must check at least one method");
     }
 
     static private int checkGroundTruth(GT.DeclMetrics gtObj, ObjectDecl projObj) {
-        Assert.AreEqual(gtObj.FullName, projObj.FullName, "the objects should match");
+        Assert.AreEqual(gtObj.FullName, projObj.FullName, "The objects should match");
 
         Dictionary<int, GT.MethodMetrics> gtMetByLine = new(
             from m in gtObj.Methods
@@ -251,7 +251,7 @@ public class GroundTruthTests {
                 select m.Line + ": " + m.Name
             ];
             string getMethodsMsg = gtMethodLines.Count <= 0 ? "":
-                "\n Methods in ground truth were:\n    " + string.Join("\n    ", gtMethodLines);
+                "\n  Methods in ground truth were:\n    " + string.Join("\n    ", gtMethodLines);
 
             List<string> projMethodLines = [..
                 from m in projObj.Methods
@@ -259,18 +259,21 @@ public class GroundTruthTests {
                 select m.Location.LineNo + ": " + m.Name
             ];
             string projMethodsMsg = projMethodLines.Count <= 0 ? "":
-                "\n Methods in objects were:\n    " + string.Join("\n    ", projMethodLines);
+                "\n  Methods in objects were:\n    " + string.Join("\n    ", projMethodLines);
 
             Assert.AreEqual(projObj.Methods.Count, gtMetByLine.Count,
-                "the number of methods in " + projObj.FullName + " are expected to match" + 
+                "The number of methods in " + projObj.FullName + " are expected to match" + 
                 missingMsg + extraMsg + getMethodsMsg + projMethodsMsg);
         }
 
         int methods = 0;
         foreach (MethodDecl projMet in projObj.Methods) {
-            GT.MethodMetrics gtMet = gtMetByLine[projMet.Location.LineNo];
-            Assert.AreEqual(gtMet.Cyclo, projMet.Metrics?.PmdCyclo ?? 1, "Cyclomatic for " + gtMet.FullName + ":" + projMet);
-            methods++;
+            if (gtMetByLine.TryGetValue(projMet.Location.LineNo, out GT.MethodMetrics? gtMet)) {
+                Assert.AreEqual(gtMet.Cyclo, projMet.Metrics?.PmdCyclo ?? 1, "Cyclomatic for " + gtMet.FullName + ":" + projMet);
+                methods++;
+            } else {
+                Assert.Fail("Failed to find " + projMet + " in the ground truth.");
+            }
         }
         Assert.AreEqual(gtObj.CycloTotal, projObj.PmdWmc, "WMC for " + projObj.FullName + " @ "  + projObj.Location);
         return methods;
