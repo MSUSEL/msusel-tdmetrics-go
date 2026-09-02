@@ -257,13 +257,9 @@ public class GroundTruthTests {
             "\n  Methods in objects were:\n    " + string.Join("\n    ", projMethodLines);
 
         if ((missing.Count > 0) || (extra.Count > 0)) {
-            Assert.AreEqual(projObj.Methods.Count, gtMetByLine.Count,
-                "The number of methods in " + projObj.FullName + " are expected to match" + 
+            Assert.Fail("The methods in " + projObj.FullName + " are expected to match" + 
                 missingMsg + extraMsg + getMethodsMsg + projMethodsMsg);
         }
-
-        Assert.Zero(missing.Count, "missing.Count");
-        Assert.Zero(extra.Count, "extra.Count");
 
         int methods = 0;
         foreach (MethodDecl projMet in projObj.Methods) {
