@@ -53,7 +53,7 @@ public class Method(Source source) :
 
     /// <summary>
     /// Normalizes this method so that the participation from this method sum up to one.
-    /// This adjusts the participation values and removes any that are too smal.
+    /// This adjusts the participation values and removes any that are too small.
     /// </summary>
     public void Normalize() {
         if (this.Participation.Count <= 0) throw new NoParticipationException(this);
