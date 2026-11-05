@@ -14,16 +14,16 @@ public class Project : IConstruct, IKeyResolver {
     /// <summary>Returns 1 since there is only one project.</summary>
     public int Index => 1;
 
-    /// <summary>The name of the langauge that this project was created from.</summary>
+    /// <summary>The name of the language that this project was created from.</summary>
     public readonly string Language;
 
     /// <summary>Optional group identifier that may have been set in the data.</summary>
     public readonly string GroupId;
 
-    /// <summary>Optional atrifact identifier that may have been set in the data.</summary>
+    /// <summary>Optional artifact identifier that may have been set in the data.</summary>
     public readonly string ArtifactId;
 
-    /// <summary>Optional project vaersion that may have been set in the data.</summary>
+    /// <summary>Optional project version that may have been set in the data.</summary>
     public readonly string Version;
 
     /// <summary>Optional project name that may have been set in the data.</summary>
