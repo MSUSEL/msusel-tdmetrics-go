@@ -45,8 +45,8 @@ public class Metrics : IConstruct, IInitializable<Project> {
     public bool Setter { get; private set; }
 
     /// <summary>List of methods that were invoked in the method.</summary>
-    public IReadOnlyList<IConstruct> Invokess => this.inInvokess.AsReadOnly();
-    private readonly List<IConstruct> inInvokess = [];
+    public IReadOnlyList<IConstruct> Invokes => this.inInvokes.AsReadOnly();
+    private readonly List<IConstruct> inInvokes = [];
 
     /// <summary>List of types that were read from in the method.</summary>
     public IReadOnlyList<IConstruct> Reads => this.inReads.AsReadOnly();
@@ -67,10 +67,10 @@ public class Metrics : IConstruct, IInitializable<Project> {
         this.Complexity = obj.TryReadInt("complexity");
         this.PmdCyclo = obj.TryReadInt("pmdCyclo", 1);
         this.Indents = obj.TryReadInt("indents");
-        this.LineCount = obj.TryReadInt("lineCounr");
+        this.LineCount = obj.TryReadInt("lineCount");
         this.Getter = obj.TryReadBool("getter");
         this.Setter = obj.TryReadBool("setter");
-        obj.TryReadKeyList(project, "invokes", this.inInvokess);
+        obj.TryReadKeyList(project, "invokes", this.inInvokes);
         obj.TryReadKeyList(project, "reads", this.inReads);
         obj.TryReadKeyList(project, "writes", this.inWrites);
     }

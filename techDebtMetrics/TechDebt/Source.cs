@@ -16,7 +16,7 @@ public readonly record struct Source(string Name, Location Location) : System.IC
     public override string ToString() => this.Name + " @ " + this.Location;
 
     public int CompareTo(Source other) {
-        int cmp = this.Path.CompareTo(other.Path);
-        return cmp != 0 ? cmp : this.Location.CompareTo(other.Location);
+        int cmp = this.Location.CompareTo(other.Location);
+        return cmp != 0 ? cmp : string.CompareOrdinal(this.Name, other.Name);
     }
 }
