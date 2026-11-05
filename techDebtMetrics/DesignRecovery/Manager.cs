@@ -4,7 +4,7 @@ using TechDebt;
 
 namespace DesignRecovery;
 
-/// <summary>Assists algorithms by containing containing the input and output project.</summary>
+/// <summary>Assists algorithms by containing the input and output project.</summary>
 public class Manager {
     public readonly Constructs.Project Project;
     public readonly TechDebt.Project Tech;
